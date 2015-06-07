@@ -1,0 +1,58 @@
+<resources>
+    <string name="app_name">هم‌پی</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_intro">IntroActivity</string>
+
+
+    <string name="intro_1">هم پی \n پرداخت مدرن، ساده و مطمئن</string>
+    <string name="intro_2">پرداخت به دوستان با یک شماره موبایل</string>
+    <string name="intro_3">پرداخت به هر عضو شبکه هم پی با یک شماره موبایل</string>
+    <string name="intro_4">مشاهده حساب های مرتبط</string>
+    <string name="intro_5">نمایش پرداخت ها و دریافت های گذشته</string>
+
+
+    <string name="action_search">Search</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
+    <string name="nav_item_account_detail">جزئیات حساب</string>
+    <string name="nav_item_transactions">تراکنش ها</string>
+    <string name="nav_item_pay_to_one">پرداخت به فرد</string>
+    <string name="nav_item_pay_to_business">پرداخت به کسب و کار</string>
+    <string name="nav_item_settings">تنظیمات</string>
+    <string name="nav_item_contacts_us">تماس با ما</string>
+    <string name="nav_item_help">راهنما</string>
+    <string name="nav_item_exit">خروج</string>
+
+
+    <!-- navigation drawer item labels  -->
+    <string-array name="nav_drawer_labels">
+        <item>@string/nav_item_account_detail</item>
+        <item>@string/nav_item_transactions</item>
+        <item>@string/nav_item_pay_to_one</item>
+        <item>@string/nav_item_pay_to_business</item>
+        <item>@string/nav_item_settings</item>
+        <item>@string/nav_item_contacts_us</item>
+        <item>@string/nav_item_help</item>
+        <item>@string/nav_item_exit</item>
+    </string-array>
+
+    <string name="title_account_detail">جزئیات حساب</string>
+    <string name="title_transactions">تراکنش ها</string>
+    <string name="title_pay_to_one">پرداخت به فرد</string>
+    <string name="title_pay_to_business">پرداخت به کسب و کار</string>
+    <string name="title_settings">تنظیمات</string>
+    <string name="title_contacts_us">تماس با ما</string>
+    <string name="title_help">راهنما</string>
+    <string name="title_exit">خروج</string>
+
+
+    <string name="some_people_at_hampay">بعضی از دوستان شما در هم پی</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="register">ثبت نام</string>
+
+
+
+</resources>
