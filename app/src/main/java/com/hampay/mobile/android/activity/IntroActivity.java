@@ -1,5 +1,6 @@
 package com.hampay.mobile.android.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
@@ -20,7 +21,7 @@ import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.adapter.IntroAdapter;
 import com.hampay.mobile.android.component.FacedTextView;
 
-public class IntroActivity extends ActionBarActivity {
+public class IntroActivity extends Activity {
 
     ViewPager introViewPager;
     IntroAdapter introAdapter;

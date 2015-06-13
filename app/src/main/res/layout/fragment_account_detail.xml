@@ -31,7 +31,7 @@
                 android:textSize="22sp"
                 android:gravity="center"
                 android:layout_marginRight="8dp"
-                android:text="هومن امینی"/>
+                android:text=""/>
 
             <com.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/user_account_no_text"
@@ -42,10 +42,11 @@
                 android:textSize="22sp"
                 android:gravity="center"
                 android:layout_marginRight="8dp"
-                android:text="شماره حساب: ۱۲۳۴۵-۵۵۴۴"/>
+                android:text=""/>
 
 
             <com.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/user_bank_name"
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -53,34 +54,34 @@
                 android:textSize="22sp"
                 android:gravity="center"
                 android:layout_marginRight="8dp"
-                android:text="بانک تجارت"/>
+                android:text=""/>
 
             <com.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/user_mobile_no"
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="22sp"
                 android:gravity="center"
-                android:layout_marginRight="8dp"
-                android:text="شماره همراه: ۰۹۱۲۱۲۱۲۳۴۳"/>
+                android:layout_marginRight="8dp" />
 
             <com.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/user_account_type"
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="22sp"
                 android:gravity="center"
-                android:layout_marginRight="8dp"
-                android:text="نوع عضویت:"/>
+                android:layout_marginRight="8dp" />
 
         </LinearLayout>
 
         <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="#323232"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@drawable/user_icon_blak"
             android:layout_margin="8dp"/>
 
 
@@ -109,7 +110,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_margin="4dp">
+        android:layout_margin="8dp">
 
         <LinearLayout
             android:layout_width="0dip"
@@ -120,18 +121,19 @@
             <ImageView
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:background="#323232" />
+                android:background="@drawable/user_icon_blak" />
 
             <com.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/hampay_2"
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:textSize="26sp"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="20sp"
                 android:gravity="center"
                 android:layout_marginLeft="4dp"
                 android:layout_gravity="center_horizontal"
-                android:text="امیر شرف کار"
+                android:text="سعید کارخانه"
                 />
 
         </LinearLayout>
@@ -144,21 +146,22 @@
 
 
             <com.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/hampay_1"
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:textSize="26sp"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="20sp"
                 android:gravity="center"
                 android:layout_marginTop="12dp"
                 android:layout_gravity="center_horizontal"
-                android:text="امیر شرف کار"
+                android:text=""
                 android:layout_marginRight="4dp"/>
 
             <ImageView
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:background="#323232" />
+                android:background="@drawable/user_icon_blue" />
 
 
         </LinearLayout>
@@ -169,7 +172,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_margin="4dp">
+        android:layout_margin="8dp">
 
         <LinearLayout
             android:layout_width="0dip"
@@ -180,18 +183,19 @@
             <ImageView
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:background="#323232" />
+                android:background="@drawable/user_icon_blue" />
 
             <com.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/hampay_4"
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:textSize="26sp"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="20sp"
                 android:gravity="center"
                 android:layout_marginLeft="4dp"
                 android:layout_gravity="center_horizontal"
-                android:text="امیر شرف کار"
+                android:text="هم‌پی‌یار تجارت"
                 />
 
         </LinearLayout>
@@ -204,21 +208,22 @@
 
 
             <com.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/hampay_3"
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:textSize="26sp"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="20sp"
                 android:gravity="center"
                 android:layout_marginTop="12dp"
                 android:layout_gravity="center_horizontal"
-                android:text="امیر شرف کار"
+                android:text="مجید زمانی"
                 android:layout_marginRight="4dp"/>
 
             <ImageView
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:background="#323232" />
+                android:background="@drawable/user_icon_blue" />
 
 
         </LinearLayout>
@@ -232,6 +237,7 @@
         android:layout_marginTop="25dp"/>
 
     <com.hampay.mobile.android.component.FacedTextView
+        android:id="@+id/user_last_login"
         geekui:customTypeface="fonts/iran_sans.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

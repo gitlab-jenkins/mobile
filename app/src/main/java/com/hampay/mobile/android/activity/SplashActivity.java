@@ -1,12 +1,13 @@
 package com.hampay.mobile.android.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
 import com.hampay.mobile.android.R;
 
-public class SplashActivity extends ActionBarActivity {
+public class SplashActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +19,7 @@ public class SplashActivity extends ActionBarActivity {
                 try {
                     sleep(2 * 1000);
 
-                    Intent i=new Intent(getBaseContext(), IntroActivity.class);
+                    Intent i=new Intent(getBaseContext(), IntroSliderActivity.class);
                     startActivity(i);
 
                     finish();

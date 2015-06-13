@@ -37,10 +37,11 @@ public class FragmentDrawer extends Fragment {
     private NavigationDrawerAdapter adapter;
     private View containerView;
     private static String[] titles;
-    private static int icons[] = {R.mipmap.ic_launcher, R.mipmap.ic_launcher,
-            R.mipmap.ic_launcher, R.mipmap.ic_launcher,
-            R.mipmap.ic_launcher, R.mipmap.ic_launcher,
-            R.mipmap.ic_launcher, R.mipmap.ic_launcher};
+    private static int icons[] = {
+            R.drawable.account_settings, R.drawable.transactions_settings,
+            R.drawable.pay_settings, R.drawable.bussines_settings,
+            R.drawable.settings, R.drawable.contact_us,
+            R.drawable.help, R.drawable.exit};
     private FragmentDrawerListener drawerListener;
 
     public FragmentDrawer() {
@@ -122,7 +123,7 @@ public class FragmentDrawer extends Fragment {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
-                toolbar.setAlpha(1 - slideOffset / 2);
+                //toolbar.setAlpha(1 - slideOffset / 2);
             }
         };
 

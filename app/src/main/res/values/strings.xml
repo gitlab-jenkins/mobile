@@ -5,6 +5,8 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_intro">IntroActivity</string>
 
+    <string name="hampay_network">شبکه پرداخت هم‌پی </string>
+
 
     <string name="intro_1">هم پی \n پرداخت مدرن، ساده و مطمئن</string>
     <string name="intro_2">پرداخت به دوستان با یک شماره موبایل</string>
@@ -45,14 +47,107 @@
     <string name="title_pay_to_business">پرداخت به کسب و کار</string>
     <string name="title_settings">تنظیمات</string>
     <string name="title_contacts_us">تماس با ما</string>
+    <string name="login">ورود</string>
     <string name="title_help">راهنما</string>
     <string name="title_exit">خروج</string>
+
+    <string name="payment">پرداخت</string>
+    <string name="message">پیام</string>
+    <string name="call">تماس</string>
 
 
     <string name="some_people_at_hampay">بعضی از دوستان شما در هم پی</string>
     <string name="title_activity_splash">SplashActivity</string>
     <string name="register">ثبت نام</string>
+    <string name="start">شروع</string>
+    <string name="title_activity_intro_slider">IntroSliderActivity</string>
+    <string name="title_activity_detail_transaction">DetailTransactionActivity</string>
 
 
+    <string name="detail_transaction">جزئیات تراکنش</string>
+    <string name="account_no">شماره حساب: </string>
+    <string name="mobile_no">شماره همراه: </string>
+    <string name="account_type">نوع حساب: </string>
+    <string name="last_login">آخرین زمان ورود به سامانه: </string>
+    <string name="title_activity_start">StartActivity</string>
+
+
+    <string name="start_activity_title">شبکه پرداخت هم پی</string>
+    <string name="start_activity_text_1">۱. پرداخت به دوستان یا کسب و کار</string>
+    <string name="start_activity_text_2">۲. بدون نیاز به کارت بانکی</string>
+    <string name="start_activity_text_3">۳. با نرم افزار ایمن و ساده هم پی</string>
+    <string name="title_activity_post_start">PostStartActivity</string>
+
+    <string name="user_profile">مشخصات فردی</string>
+    <string name="user_info_for_hampy">اطلاعات مورد نیاز برای استفاده از هم پی</string>
+    <string name="phone_number">۱. شماره همراه</string>
+    <string name="credit_info">۲. نام بانک، شماره حساب و کد ملی</string>
+    <string name="keep_on">ادامه</string>
+    <string name="title_activity_profile_entry">ProfileEntryActivity</string>
+    <string name="profile_entry">ورود مشخصات</string>
+    <string name="please_entry_info">لطفا اطلاعات خود را وارد نمایید.</string>
+    <string name="phone_entry">لطفا شماره همراه خود را وارد نمایید</string>
+    <string name="bank_account_info">اطلاعات حساب بانکی</string>
+    <string name="bank_account_info_detail">لطفا شماره حسابی را که مایل به اتصال شبکه هم پی هستید را همراه با نام بانک و کد ملی را وارد نمایید</string>
+    <string name="title_activity_verification">VerificationActivity</string>
+
+    <string name="sms_verification_text">یک کد فعال سازی ۵ رقمی برای شما پیامک خواهد شد.</string>
+    <string name="title_activity_post_verification">PostVerificationActivity</string>
+    <string name="mobile_no_verification">تایید شماره همراه</string>
+    <string name="deliver_verification">کد ۵ رقمی برای شما پیامک شد. در صورت عدم دریافت پیامک تا ۵ دقیقه، دکمه ارسال مجدد را فشار دهید.</string>
+    <string name="verification">بررسی</string>
+
+    <string name="resend">ارسال مجدد</string>
+    <string name="title_activity_confirm_account_no">ConfirmAccountNoActivity</string>
+    <string name="confirm_account_no_text">در این بخش اطلاعات حساب با نام شما مطابقت داده می شود.</string>
+    <string name="confirm_account_no">تایید شماره حساب</string>
+
+    <string name="title_activity_confirm_info">ConfirmInfoActivity</string>
+    <string name="confirm_information">تایید اطلاعات</string>
+    <string name="confirm_information_text">لطفا از صحت اطلاعات زیر اطمینان حاصل فرمایید.\n در غیر اینصورت اطلاعات را تصحیح کنید.</string>
+
+    <string name="name_family">نام و نام خانوادگی</string>
+    <string name="account_id">شماره حساب</string>
+    <string name="iter_code">کد ملی</string>
+    <string name="correct_data">اطلاعات بالا صحیح است</string>
+    <string name="correct_info">تصحیح اطلاعات</string>
+    <string name="title_activity_verify_account_no">VerifyAccountNoActivity</string>
+    <string name="verify_account_no">بررسی شماره حساب</string>
+
+    <string name="verify_account_no_text_1">انتقال وجه زیر را خارج از برنامه هم پی و از طریق یکی از روش های اینترنت بانک، همراه بانک و یا عابر بانک انجام دهید</string>
+    <string name="verify_account_no_text_2">برای بررسی صحت شماره حساب شما مبلغ ۲۱۴۱ ریال از حساب هم پی ۸۰۰۰۴۵۹ به حساب شما ۱۲۳۴۵۶۷۷ واریز شد.</string>
+    <string name="verify_account_no_text_3">لطفا جهت تکمیل بررسی، مبلغ فوق(۲۱۴۱ ریال( را از حساب خود(۱۳۴۵۴) به یکی از روش های بالا به حساب هم پی (۸۰۰۰۴۵۹) باز گردانید.</string>
+    <string name="verify_account_no_keep_on">پس از انجام واریز، دکمه ادامه را کلیک کنید.</string>
+    <string name="title_activity_pre_password">PrePasswordActivity</string>
+
+    <string name="get_password">دریافت رمز  عبور</string>
+    <string name="get_password_text_1">مالکیت حساب شما احراز شد</string>
+    <string name="get_password_text_2">حساب کاربری شما به حساب عادی ارتقا یافت</string>
+    <string name="get_password_text_3">در مرحله بعد یک رمز عبور برای ورود به سیستم انتخاب خواهید کرد.</string>
+    <string name="title_activity_password_entry">PasswordEntryActivity</string>
+    <string name="get_password_text_4">لطفا رمز عبوری پنج رقمی را به انتخاب خود وارد نمایید.
+    \n
+        (دقت کنید که بیش از دو عدد تکراری قابل قبول نمی‌باشد .
+    </string>
+
+    <string name="confirm">تایید</string>
+    <string name="title_activity_remember_phrase">RememberPhraseActivity</string>
+
+    <string name="remember_phrase">دریافت کلمه یادآوری</string>
+    <string name="remember_phrase_text">لطفا یک کلمه کوتاه به عنوان یادآوری رمز عبور وارد نمایید.</string>
+    <string name="title_activity_complete_registration">CompleteRegistrationActivity</string>
+    <string name="complete_registarion">تکمیل ثبت نام</string>
+    <string name="complete_registarion_text_1">آفرین شما عضو تازه شبکه هم‌پی هستید.</string>
+    <string name="complete_registarion_text_2">حالا دوستانتان در شبکه هم‌پی تنها با شماره موبایلتان به شما پول می دهند.</string>
+
+    <string name="login_hampay">ورود به شبکه هم‌پی </string>
+    <string name="title_activity_ham_pay_login">HamPayLoginActivity</string>
+
+    <string name="hampay_login_text">لطفا کد پنج رقمی خود را برای ورود به شبکه هم‌پی را وارد کنید. </string>
+    <string name="title_activity_transaction_detail">TransactionDetailActivity</string>
+
+    <string name="select">انتخاب</string>
+    <string name="recent_pay_one">تازه ترین پرداخت ها</string>
+    <string name="title_activity_pay_one">PayOneActivity</string>
 
 </resources>

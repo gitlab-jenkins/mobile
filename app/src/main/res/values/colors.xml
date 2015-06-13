@@ -10,6 +10,9 @@
 
     <color name="splash_bg_color">#ef3220</color>
     <color name="register_btn_color">#36ac3f</color>
+    <color name="entry_field_color">#e9eaea</color>
+    <color name="normal_text">#6e6f71</color>
+    <color name="keyword_btn_color">#6c6d71</color>
 
 
 </resources>

@@ -8,10 +8,10 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/MyMaterialTheme"
-        android:largeHeap="true">
+        android:largeHeap="true"
+        android:theme="@style/MyMaterialTheme" >
         <activity
-            android:name=".activity.SplashActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,12 +20,81 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.IntroActivity"
+            android:name=".activity.SplashActivity"
             android:label="@string/title_activity_intro" >
         </activity>
         <activity
-            android:name=".activity.MainActivity"
-            android:label="@string/title_activity_splash" >
+            android:name=".activity.IntroActivity"
+            android:label="@string/title_activity_splash"
+            android:theme="@style/MyMaterialTheme" >
+        </activity>
+        <activity
+            android:name=".activity.IntroSliderActivity"
+            android:label="@string/title_activity_intro_slider" >
+        </activity>
+        <activity
+            android:name=".activity.DetailTransactionActivity"
+            android:label="@string/title_activity_detail_transaction" >
+        </activity>
+        <activity
+            android:name=".activity.StartActivity"
+            android:label="@string/title_activity_start" >
+        </activity>
+        <activity
+            android:name=".activity.PostStartActivity"
+            android:label="@string/title_activity_post_start" >
+        </activity>
+        <activity
+            android:name=".activity.ProfileEntryActivity"
+            android:label="@string/title_activity_profile_entry" >
+        </activity>
+        <activity
+            android:name=".activity.VerificationActivity"
+            android:label="@string/title_activity_verification" >
+        </activity>
+        <activity
+            android:name=".activity.PostVerificationActivity"
+            android:label="@string/title_activity_post_verification" >
+        </activity>
+        <activity
+            android:name=".activity.ConfirmAccountNoActivity"
+            android:label="@string/title_activity_confirm_account_no" >
+        </activity>
+        <activity
+            android:name=".activity.ConfirmInfoActivity"
+            android:label="@string/title_activity_confirm_info" >
+        </activity>
+        <activity
+            android:name=".activity.VerifyAccountNoActivity"
+            android:label="@string/title_activity_verify_account_no" >
+        </activity>
+        <activity
+            android:name=".activity.PrePasswordActivity"
+            android:label="@string/title_activity_pre_password" >
+        </activity>
+        <activity
+            android:name=".activity.PasswordEntryActivity"
+            android:label="@string/title_activity_password_entry" >
+        </activity>
+        <activity
+            android:name=".activity.RememberPhraseActivity"
+            android:label="@string/title_activity_remember_phrase" >
+        </activity>
+        <activity
+            android:name=".activity.CompleteRegistrationActivity"
+            android:label="@string/title_activity_complete_registration" >
+        </activity>
+        <activity
+            android:name=".activity.HamPayLoginActivity"
+            android:label="@string/title_activity_ham_pay_login" >
+        </activity>
+        <activity
+            android:name=".activity.TransactionDetailActivity"
+            android:label="@string/title_activity_transaction_detail" >
+        </activity>
+        <activity
+            android:name=".activity.PayOneActivity"
+            android:label="@string/title_activity_pay_one" >
         </activity>
     </application>
 

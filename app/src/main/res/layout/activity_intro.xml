@@ -18,16 +18,16 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="18dp"
         android:orientation="vertical"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            >
+            android:layout_marginBottom="5dp">
 
             <ImageView
                 android:id="@+id/circle_1"
@@ -71,13 +71,12 @@
             android:id="@+id/register_CardView"
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:layout_width="180dp"
-            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             card_view:cardBackgroundColor="@color/register_btn_color"
             card_view:cardCornerRadius="2dp"
             card_view:cardElevation="10dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="12dp">
+            android:layout_gravity="center">
 
             <com.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
@@ -88,7 +87,10 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:text="@string/register"
-                />
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"/>
 
             
 
