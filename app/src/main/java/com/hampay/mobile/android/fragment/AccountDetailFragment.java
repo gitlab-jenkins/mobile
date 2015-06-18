@@ -102,23 +102,26 @@ public class AccountDetailFragment extends Fragment {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-            user_name_text.setText(userProfileResponse.getService().getUserProfile().getFullName());
-            user_account_no_text.setText(getString(R.string.account_no) + userProfileResponse.getService().getUserProfile().getAccountNumber());
-            user_bank_name.setText(userProfileResponse.getService().getUserProfile().getBankName());
-            user_mobile_no.setText(getString(R.string.mobile_no) + userProfileResponse.getService().getUserProfile().getCellNumber());
-            user_account_type.setText(getString(R.string.account_type) + userProfileResponse.getService().getUserProfile().getVerificationStatus().name());
+            if (userProfileResponse != null) {
 
-            user_last_login.setText(getString(R.string.last_login) + userProfileResponse.getService().getUserProfile().getLastLoginDate());
+                user_name_text.setText(userProfileResponse.getService().getUserProfile().getFullName());
+                user_account_no_text.setText(getString(R.string.account_no) + userProfileResponse.getService().getUserProfile().getAccountNumber());
+                user_bank_name.setText(userProfileResponse.getService().getUserProfile().getBankName());
+                user_mobile_no.setText(getString(R.string.mobile_no) + userProfileResponse.getService().getUserProfile().getCellNumber());
+                user_account_type.setText(getString(R.string.account_type) + userProfileResponse.getService().getUserProfile().getVerificationStatus().name());
 
-            List<ContactDTO> contactDTOs = userProfileResponse.getService().getUserProfile().getSelectedContacts();
+                user_last_login.setText(getString(R.string.last_login) + userProfileResponse.getService().getUserProfile().getLastLoginDate());
 
-            hampay_1.setText(contactDTOs.get(0).getDisplayName());
-            hampay_2.setText(contactDTOs.get(1).getDisplayName());
-            hampay_3.setText(contactDTOs.get(2).getDisplayName());
-            hampay_4.setText(contactDTOs.get(3).getDisplayName());
+                List<ContactDTO> contactDTOs = userProfileResponse.getService().getUserProfile().getSelectedContacts();
 
-            Toast.makeText(getActivity(), contactDTOs.size() + "", Toast.LENGTH_SHORT).show();
+                hampay_1.setText(contactDTOs.get(0).getDisplayName());
+                hampay_2.setText(contactDTOs.get(1).getDisplayName());
+                hampay_3.setText(contactDTOs.get(2).getDisplayName());
+                hampay_4.setText(contactDTOs.get(3).getDisplayName());
 
+//            Toast.makeText(getActivity(), contactDTOs.size() + "", Toast.LENGTH_SHORT).show();
+
+            }
         }
     }
 }

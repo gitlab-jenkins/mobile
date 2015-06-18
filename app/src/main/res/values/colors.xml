@@ -13,6 +13,8 @@
     <color name="entry_field_color">#e9eaea</color>
     <color name="normal_text">#6e6f71</color>
     <color name="keyword_btn_color">#6c6d71</color>
-
+    
+    <color name="confirmation">#36ac3f</color>
+    <color name="dis_confirmation">#ef3220</color>
 
 </resources>

@@ -1,5 +1,8 @@
 package com.hampay.mobile.android.activity;
 
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,9 +23,14 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.account.AccountGeneral;
+import com.hampay.mobile.android.account.ContactsManager;
+import com.hampay.mobile.android.account.HamPayContact;
 import com.hampay.mobile.android.fragment.AccountDetailFragment;
 import com.hampay.mobile.android.fragment.FragmentDrawer;
+import com.hampay.mobile.android.fragment.PayToBusinessFragment;
 import com.hampay.mobile.android.fragment.PayToOneFragment;
+import com.hampay.mobile.android.fragment.SettingFragment;
 import com.hampay.mobile.android.fragment.TransactionFragment;
 import com.hampay.mobile.android.webservice.WebServices;
 
@@ -42,6 +51,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
          setContentView(R.layout.activity_main);
+
+//        addNewAccount(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
+//        ContactsManager.addContact(MainActivity.this, new HamPayContact("Hooman", "Amini"));
 
         //new HttpBanks().execute();
 
@@ -173,6 +185,15 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 fragment = new PayToOneFragment();
                 title = getString(R.string.title_pay_to_one);
                 break;
+            case 3:
+                fragment = new PayToBusinessFragment();
+                title = getString(R.string.title_pay_to_business);
+                break;
+            case 4:
+                fragment = new SettingFragment();
+                title = getString(R.string.title_pay_to_business);
+
+                break;
             default:
                 break;
         }
@@ -210,7 +231,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
             WebServices webServices = new WebServices();
             //webServices.testBankList1();
-            webServices.getUserProfile();
+            //webServices.getUserProfile();
 
             return null;
         }
@@ -224,5 +245,22 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
         }
+    }
+
+
+
+
+    private void addNewAccount(String accountType, String authTokenType) {
+        final AccountManagerFuture<Bundle> future = AccountManager.get(this).addAccount(accountType, authTokenType, null, null, this, new AccountManagerCallback<Bundle>() {
+            @Override
+            public void run(AccountManagerFuture<Bundle> future) {
+                try {
+                    Bundle bnd = future.getResult();
+                    Log.i("", "Account was created");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, null);
     }
 }

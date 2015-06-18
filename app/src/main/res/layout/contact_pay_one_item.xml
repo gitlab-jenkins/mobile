@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:geekui="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="18dp">
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="right"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true">
+
+        <com.hampay.mobile.android.component.FacedTextView
+            android:id="@+id/contact_name"
+            geekui:customTypeface="fonts/iran_sans.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_marginRight="8dp"
+            android:text="مجید زمانی"/>
+
+        <com.hampay.mobile.android.component.FacedTextView
+            android:id="@+id/contact_phone_no"
+            geekui:customTypeface="fonts/iran_sans.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_marginRight="8dp"
+            android:text="09126157905"/>
+
+
+    </LinearLayout>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/pay_to_one"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="85dp"
+        android:layout_height="48dp"
+        card_view:cardBackgroundColor="@color/register_btn_color"
+        card_view:cardCornerRadius="2dp"
+        card_view:cardElevation="4dp"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="25dp">
+
+        <com.hampay.mobile.android.component.FacedTextView
+            geekui:customTypeface="fonts/iran_sans.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="@string/select" />
+
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>

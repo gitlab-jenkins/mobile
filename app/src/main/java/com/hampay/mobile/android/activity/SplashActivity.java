@@ -17,7 +17,7 @@ public class SplashActivity extends Activity {
             public void run() {
 
                 try {
-                    sleep(2 * 1000);
+                    sleep(3 * 1000);
 
                     Intent i=new Intent(getBaseContext(), IntroSliderActivity.class);
                     startActivity(i);

@@ -64,7 +64,7 @@ public class TransactionFragment extends Fragment {
             }
         });
 
-        new HttpUserTransaction().execute();
+       new HttpUserTransaction().execute();
 
         // Inflate the layout for this fragment
         return rootView;

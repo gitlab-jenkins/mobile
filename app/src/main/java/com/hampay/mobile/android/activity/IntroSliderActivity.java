@@ -90,16 +90,6 @@ public class IntroSliderActivity extends ActionBarActivity implements BaseSlider
         mDemoSlider.setCustomAnimation(new DescriptionAnimation());
         mDemoSlider.setDuration(4000);
         mDemoSlider.addOnPageChangeListener(this);
-        //ListView l = (ListView)findViewById(R.id.transformers);
-//        l.setAdapter(new TransformerAdapter(this));
-//        l.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                mDemoSlider.setPresetTransformer(((TextView) view).getText().toString());
-//                Toast.makeText(IntroSliderActivity.this, ((TextView) view).getText().toString(), Toast.LENGTH_SHORT).show();
-//            }
-//        });
-
 
     }
 
@@ -149,10 +139,10 @@ public class IntroSliderActivity extends ActionBarActivity implements BaseSlider
 
     int[] m‌Icons = {
             R.drawable.logo_hampay,
-            R.drawable.logo_hampay,
             R.drawable.pay_icon,
             R.drawable.bussines_icon,
-            R.drawable.account_icon
+            R.drawable.account_icon,
+            R.drawable.transactions_icon
     };
 
     int[] m‌Intor = {

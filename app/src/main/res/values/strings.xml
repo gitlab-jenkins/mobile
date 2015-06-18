@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">هم‌پی</string>
 
+    <string name="provider_name">TV Shows</string>
+
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_intro">IntroActivity</string>
@@ -53,7 +55,11 @@
 
     <string name="payment">پرداخت</string>
     <string name="message">پیام</string>
+    <string name="insert_message">پیام خود را بنویسید...</string>
+    <string name="insert_price">مبلغ دلخواه خود را به ریال وارد کنید</string>
     <string name="call">تماس</string>
+    <string name="pay_to">پرداخت به:   </string>
+    <string name="price">مبلغ</string>
 
 
     <string name="some_people_at_hampay">بعضی از دوستان شما در هم پی</string>
@@ -65,11 +71,14 @@
 
 
     <string name="detail_transaction">جزئیات تراکنش</string>
-    <string name="account_no">شماره حساب: </string>
-    <string name="mobile_no">شماره همراه: </string>
-    <string name="account_type">نوع حساب: </string>
-    <string name="last_login">آخرین زمان ورود به سامانه: </string>
+    <string name="account_no">شماره حساب </string>
+    <string name="mobile_no">شماره همراه </string>
+    <string name="account_type">نوع حساب </string>
+    <string name="last_login">آخرین زمان ورود به سامانه </string>
     <string name="title_activity_start">StartActivity</string>
+
+    <string name="bank_name">نام بانک</string>
+
 
 
     <string name="start_activity_title">شبکه پرداخت هم پی</string>
@@ -149,5 +158,26 @@
     <string name="select">انتخاب</string>
     <string name="recent_pay_one">تازه ترین پرداخت ها</string>
     <string name="title_activity_pay_one">PayOneActivity</string>
+
+
+    <string name="signup_title">Create new account</string>
+    <string name="login_label">Log in</string>
+    <string name="title_activity_pay_business">PayBusinessActivity</string>
+    <string name="title_activity_setting">SettingActivity</string>
+
+
+    <string-array name="setting_list">
+        <item>تغییر رمز عبور</item>
+        <item>تغییر کلمه یادآوری</item>
+    </string-array>
+
+
+    <string name="pay_one_confirm">واریز مبلغ %1$s ریال به %2$s در %3$s</string>
+    <string name="pay_one_comment">لطفا از صحت نام و مبلغ واریزی مطمئن شوید.</string>
+    <string name="pay_one_question">آیا موافق هستید؟</string>
+    <string name="confirmation">موافقم</string>
+    <string name="disConfirmation">منصرف شدم</string>
+    <string name="pay_one_ref">واریز وجه شما با کد پیگیری %1$s ثبت شد.</string>
+
 
 </resources>

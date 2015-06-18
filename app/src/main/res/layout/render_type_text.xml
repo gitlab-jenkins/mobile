@@ -5,7 +5,9 @@
     <ImageView
         android:id="@+id/daimajia_slider_image"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:src="@drawable/wireframe_1"
+        android:scaleType="fitXY"/>
     <!--<ProgressBar-->
         <!--android:id="@+id/loading_bar"-->
         <!--android:layout_centerInParent="true"-->

@@ -23,7 +23,7 @@
                 android:textSize="24sp"
                 android:text="@string/mobile_no_verification"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="30dp"/>
+                android:layout_marginLeft="20dp"/>
 
             <com.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
@@ -34,7 +34,74 @@
                 android:text="@string/title_contacts_us"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="30dp"/>
+                android:layout_marginRight="20dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp">
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="12dp"
+                android:id="@+id/layoutContainer"
+                android:orientation="horizontal"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="24dp"
+                android:layout_marginLeft="20dp"
+                android:gravity="center">
+
+
+
+                <RelativeLayout
+                    android:layout_width="0dip"
+                    android:layout_height="12dp"
+                    android:layout_weight="0.65">
+
+                    <ImageView
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:src="@drawable/step_arrow"
+                        />
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="6dp"
+                        android:layout_weight="0.65"
+                        android:background="@color/normal_text"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp">
+                    </RelativeLayout>
+
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dip"
+                    android:layout_height="6dp"
+                    android:layout_weight="0.35"
+                    android:background="@color/register_btn_color">
+                </RelativeLayout>
+
+            </LinearLayout>
+
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/step_mobile_icon_g"
+                android:layout_alignParentRight="true"/>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/step_pay_icon"
+                android:layout_alignParentLeft="true"/>
+
 
         </RelativeLayout>
 
@@ -54,7 +121,7 @@
                 android:id="@+id/step_icon"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/step_icon"
+                android:src="@drawable/step_icon_mob"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"/>
 
@@ -79,37 +146,44 @@
             android:orientation="horizontal"
             android:gravity="center">
 
-            <EditText
+            <ImageView
+                android:id="@+id/input_digit_1"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:background="#323232"
-                android:layout_margin="4dp"/>
+                android:layout_margin="4dp"
+                android:src="@drawable/pass_icon_2"/>
 
-            <EditText
+            <ImageView
+                android:id="@+id/input_digit_2"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:background="#323232"
-                android:layout_margin="4dp"/>
+                android:layout_margin="4dp"
+                android:src="@drawable/pass_icon_2"/>
 
-            <EditText
+            <ImageView
+                android:id="@+id/input_digit_3"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:background="#323232"
-                android:layout_margin="4dp"/>
+                android:layout_margin="4dp"
+                android:src="@drawable/pass_icon_2"/>
 
-            <EditText
+            <ImageView
+                android:id="@+id/input_digit_4"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:background="#323232"
-                android:layout_margin="4dp"/>
+                android:layout_margin="4dp"
+                android:src="@drawable/pass_icon_2"/>
 
-            <EditText
+            <ImageView
+                android:id="@+id/input_digit_5"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:background="#323232"
-                android:layout_margin="4dp"/>
+                android:layout_margin="4dp"
+                android:src="@drawable/pass_icon_2"/>
 
         </LinearLayout>
+
+
 
         <android.support.v7.widget.CardView
             android:id="@+id/verification_CardView"
@@ -159,6 +233,7 @@
             android:layout_margin="4dp">
 
             <com.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/digit_1"
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="0dip"
                 android:layout_height="45dp"
@@ -172,6 +247,7 @@
                 android:layout_marginRight="2dp"/>
 
             <com.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/digit_2"
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="0dip"
                 android:layout_height="45dp"
@@ -185,6 +261,7 @@
                 android:layout_marginRight="2dp"/>
 
             <com.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/digit_3"
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="0dip"
                 android:layout_height="45dp"
@@ -207,6 +284,7 @@
             android:layout_margin="4dp">
 
             <com.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/digit_4"
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="0dip"
                 android:layout_height="45dp"
@@ -220,6 +298,7 @@
                 android:layout_marginRight="2dp"/>
 
             <com.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/digit_5"
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="0dip"
                 android:layout_height="45dp"
@@ -233,6 +312,7 @@
                 android:layout_marginRight="2dp"/>
 
             <com.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/digit_6"
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="0dip"
                 android:layout_height="45dp"
@@ -255,6 +335,7 @@
             android:layout_margin="4dp">
 
             <com.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/digit_7"
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="0dip"
                 android:layout_height="45dp"
@@ -268,6 +349,7 @@
                 android:layout_marginRight="2dp"/>
 
             <com.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/digit_8"
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="0dip"
                 android:layout_height="45dp"
@@ -281,6 +363,7 @@
                 android:layout_marginRight="2dp"/>
 
             <com.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/digit_9"
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="0dip"
                 android:layout_height="45dp"
@@ -303,6 +386,7 @@
             android:layout_margin="4dp">
 
             <com.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/resend_active_code"
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="0dip"
                 android:layout_height="45dp"
@@ -316,6 +400,7 @@
                 android:layout_marginRight="2dp"/>
 
             <com.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/digit_0"
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="0dip"
                 android:layout_height="45dp"
@@ -329,6 +414,7 @@
                 android:layout_marginRight="2dp"/>
 
             <com.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/backspace"
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="0dip"
                 android:layout_height="45dp"
