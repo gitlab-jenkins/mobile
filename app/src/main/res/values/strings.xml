@@ -100,6 +100,8 @@
     <string name="bank_account_info_detail">لطفا شماره حسابی را که مایل به اتصال شبکه هم پی هستید را همراه با نام بانک و کد ملی را وارد نمایید</string>
     <string name="title_activity_verification">VerificationActivity</string>
 
+    <string name="user_status_verification">بررسی صحت حساب</string>
+
     <string name="sms_verification_text">یک کد فعال سازی ۵ رقمی برای شما پیامک خواهد شد.</string>
     <string name="title_activity_post_verification">PostVerificationActivity</string>
     <string name="mobile_no_verification">تایید شماره همراه</string>
@@ -142,7 +144,7 @@
     <string name="confirm">تایید</string>
     <string name="title_activity_remember_phrase">RememberPhraseActivity</string>
 
-    <string name="remember_phrase">دریافت کلمه یادآوری</string>
+    <string name="remember_phrase">یادآوری</string>
     <string name="remember_phrase_text">لطفا یک کلمه کوتاه به عنوان یادآوری رمز عبور وارد نمایید.</string>
     <string name="title_activity_complete_registration">CompleteRegistrationActivity</string>
     <string name="complete_registarion">تکمیل ثبت نام</string>
@@ -157,6 +159,7 @@
 
     <string name="select">انتخاب</string>
     <string name="recent_pay_one">تازه ترین پرداخت ها</string>
+    <string name="hampay_contacts">لیست مخاطبین هم‌پی </string>
     <string name="title_activity_pay_one">PayOneActivity</string>
 
 
@@ -179,5 +182,24 @@
     <string name="disConfirmation">منصرف شدم</string>
     <string name="pay_one_ref">واریز وجه شما با کد پیگیری %1$s ثبت شد.</string>
 
+    <string name="attention">توجه</string>
+    <string name="confirm_info_text">بدون بررسی صحت حساب، شما قادر به واریز وجه به سایر دوستان خود در شبکه هم‌پی نبوده ولی میتوانید از دوستان خود وجه دریافت نمایید.</string>
+    <string name="confirm_info_question">آیا مایل به بررسی صحت حساب خود هستید؟</string>
+    <string name="confirm_info_check">بررسی کن</string>
+    <string name="confirm_info_uncheck">ادامه بدون بررسی</string>
+
+
+    <string name="user_status_text">کاربر محدود شبکه هم‌پی می تواند از اعضای عادی پول دریافت کند
+    \n
+        برای امکان واریز وجه به دوستانتان، کلیک کنید.
+    </string>
+
+
+    <string name="debit">پرداخت</string>
+    <string name="credit">دریافت</string>
+    <string name="fail">ناموفق</string>
+
+
+    <string name="pay_one_search_hint">نام یا شماره همراه دریافت کننده را وارد کنید</string>
 
 </resources>

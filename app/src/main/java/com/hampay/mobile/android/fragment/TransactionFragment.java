@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
@@ -30,6 +31,7 @@ public class TransactionFragment extends Fragment {
 
     ListView transationListView;
     TransactionAdapter transactionAdapter;
+    RelativeLayout loading_rl;
 
     public static ResponseMessage<TransactionListResponse> transactionListResponse;
 
@@ -50,6 +52,7 @@ public class TransactionFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_transaction, container, false);
 
+        loading_rl = (RelativeLayout)rootView.findViewById(R.id.loading_rl);
 
         transationListView = (ListView)rootView.findViewById(R.id.transationListView);
 
@@ -106,9 +109,14 @@ public class TransactionFragment extends Fragment {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-            transactionAdapter = new TransactionAdapter(getActivity(), transactionListResponse);
+            if (transactionListResponse != null) {
 
-            transationListView.setAdapter(transactionAdapter);
+                transactionAdapter = new TransactionAdapter(getActivity(), transactionListResponse);
+
+                transationListView.setAdapter(transactionAdapter);
+
+                loading_rl.setVisibility(View.GONE);
+            }
 
         }
     }

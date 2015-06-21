@@ -1,0 +1,146 @@
+package com.hampay.mobile.android.adapter;
+
+import android.content.Context;
+import android.support.v7.widget.CardView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+
+import com.hampay.common.core.model.dto.ContactDTO;
+import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.component.FacedTextView;
+import com.hampay.mobile.android.component.sectionlist.SectionedBaseAdapter;
+import com.hampay.mobile.android.model.RecentPay;
+
+import java.util.List;
+
+/**
+ * Created by amir on 6/21/15.
+ */
+public class PayOneAdapter extends SectionedBaseAdapter{
+
+    Context mContext;
+    //    private List<ContactDTO> contactDTOs1;
+    private List<RecentPay> recentPays;
+    private List<ContactDTO> contactDTOs2;
+
+    public  PayOneAdapter(Context context, List<RecentPay> recentPays, List<ContactDTO> contactDTOs2){
+        mContext = context;
+
+        this.recentPays = recentPays;
+        this.contactDTOs2 = contactDTOs2;
+
+    }
+
+    @Override
+    public Object getItem(int section, int position) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public long getItemId(int section, int position) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public int getSectionCount() {
+        return 2;
+    }
+
+    @Override
+    public int getCountForSection(int section) {
+        if(section == 0) {
+            return recentPays.size();
+        }else if (section == 1){
+            return contactDTOs2.size();
+        }
+        return 0;
+    }
+
+
+    @Override
+    public View getItemView(int section, int position, View convertView, ViewGroup parent) {
+        RelativeLayout layout = null;
+        if (convertView == null) {
+            LayoutInflater inflator = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            layout = (RelativeLayout) inflator.inflate(R.layout.contact_pay_one_item, null);
+        } else {
+            layout = (RelativeLayout) convertView;
+        }
+        //((TextView) layout.findViewById(R.id.textItem)).setText("Section " + section + " Item " + position);
+
+        RelativeLayout contact_rl = (RelativeLayout)layout.findViewById(R.id.contact_rl);
+
+        RelativeLayout recent_rl = (RelativeLayout)layout.findViewById(R.id.recent_rl);
+
+        if (section == 0){
+            contact_rl.setVisibility(View.GONE);
+            recent_rl.setVisibility(View.VISIBLE);
+        }
+        else {
+            contact_rl.setVisibility(View.VISIBLE);
+            recent_rl.setVisibility(View.GONE);
+        }
+
+
+        ImageView status_icon = (ImageView)layout.findViewById(R.id.status_icon);
+        FacedTextView user_name = (FacedTextView)layout.findViewById(R.id.user_name);
+        FacedTextView user_phone = (FacedTextView)layout.findViewById(R.id.user_phone);
+        FacedTextView message = (FacedTextView)layout.findViewById(R.id.message);
+
+
+        FacedTextView contact_name = (FacedTextView)layout.findViewById(R.id.contact_name);
+        FacedTextView contact_phone_no = (FacedTextView)layout.findViewById(R.id.contact_phone_no);
+        CardView pay_to_one = (CardView)layout.findViewById(R.id.pay_to_one);
+
+
+
+
+        if(section == 0) {
+
+            RecentPay recentPay = recentPays.get(position);
+            user_name.setText(recentPay.getName());
+            user_phone.setText(recentPay.getPhone());
+            message.setText(recentPay.getMessage());
+
+        }else{
+            ContactDTO contactDTO = contactDTOs2.get(position);
+            contact_name.setText(contactDTO.getDisplayName());
+            contact_phone_no.setText(contactDTO.getCellNumber());
+        }
+
+        return layout;
+    }
+
+    @Override
+    public View getSectionHeaderView(int section, View convertView, ViewGroup parent) {
+        LinearLayout layout = null;
+        if (convertView == null) {
+            LayoutInflater inflator = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            layout = (LinearLayout) inflator.inflate(R.layout.pay_one_header, null);
+        } else {
+            layout = (LinearLayout) convertView;
+        }
+        //((TextView) layout.findViewById(R.id.textItem)).setText("Header for section " + section);
+
+        FacedTextView pinned_header_text = (FacedTextView) layout.findViewById(R.id.pinned_header_text);
+        //textView.setText("Header for section " + section);
+        if(section == 0) {
+            pinned_header_text.setBackgroundColor(mContext.getResources().getColor(R.color.confirmation));
+            pinned_header_text.setText(mContext.getResources().getString(R.string.recent_pay_one));
+        }else{
+            pinned_header_text.setBackgroundColor(mContext.getResources().getColor(R.color.confirmation));
+            pinned_header_text.setText(mContext.getResources().getString(R.string.hampay_contacts));
+        }
+
+
+
+        return layout;
+    }
+
+}

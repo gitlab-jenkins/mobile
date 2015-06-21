@@ -19,7 +19,7 @@
             android:textSize="24sp"
             android:text="@string/verify_account_no"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="30dp"/>
+            android:layout_marginLeft="20dp"/>
 
         <com.hampay.mobile.android.component.FacedTextView
             geekui:customTypeface="fonts/iran_sans.ttf"
@@ -30,7 +30,7 @@
             android:text="@string/title_contacts_us"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="30dp"/>
+            android:layout_marginRight="20dp"/>
 
     </RelativeLayout>
 
@@ -47,6 +47,15 @@
         android:background="@drawable/stroke_bg">
 
 
+
+        <ImageView
+            android:id="@+id/step_icon"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/step_icon_acc"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"/>
+
         <com.hampay.mobile.android.component.FacedTextView
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="wrap_content"
@@ -56,9 +65,12 @@
             android:text="@string/verify_account_no_text_1"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/step_icon"
-            android:layout_marginRight="4dp"/>
+            android:layout_marginRight="4dp"
+            android:padding="4dp"/>
 
     </RelativeLayout>
+
+
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -100,7 +112,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/normal_text"
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     android:text="@string/verify_account_no_keep_on" />
 
 

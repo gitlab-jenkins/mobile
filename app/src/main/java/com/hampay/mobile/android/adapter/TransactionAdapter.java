@@ -80,17 +80,28 @@ public class TransactionAdapter extends BaseAdapter  {
 
         TransactionDTO transaction = transactionListResponse.getService().getTransactions().get(position);
 
+        if (transaction.getTransactionStatus().ordinal() == 0){
 
-//        if ((position % 2) == 0){
-//            viewHolder.dateTime.setTextColor(Color.RED);
-//        }else {
-//            viewHolder.dateTime.setTextColor(Color.BLACK);
-//        }
+            if (transaction.getTransactionType().ordinal() == 0){
+                viewHolder.status_text.setText(context.getString(R.string.credit));
+                viewHolder.status_text.setTextColor(convertView.getResources().getColor(R.color.register_btn_color));
+                viewHolder.status_icon.setImageResource(R.drawable.arrow_r);
+            }
+            else if (transaction.getTransactionType().ordinal() == 1){
+                viewHolder.status_text.setText(context.getString(R.string.debit));
+                viewHolder.status_text.setTextColor(convertView.getResources().getColor(R.color.user_change_status));
+                viewHolder.status_icon.setImageResource(R.drawable.arrow_p);
+            }
 
-        //viewHolder.status_icon = (ImageView)convertView.findViewById(R.id.status_icon);
-        viewHolder.status_text.setText(transaction.getTransactionType().name());
+        }else {
+            viewHolder.status_text.setText(context.getString(R.string.fail));
+            viewHolder.status_text.setTextColor(convertView.getResources().getColor(R.color.colorPrimary));
+            viewHolder.status_icon.setImageResource(R.drawable.arrow_f);
+        }
+
+
         viewHolder.user_name.setText(transaction.getPersonName());
-        viewHolder.date_time.setText(transaction.getTransactionDate().getDate() + " " + transaction.getTransactionDate().getTime());
+        viewHolder.date_time.setText(transaction.getTransactionDate().getTime() + "");
         viewHolder.message.setText(transaction.getMessage());
         viewHolder.price_pay.setText(transaction.getAmount() + "");
 

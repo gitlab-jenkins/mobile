@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
@@ -21,7 +22,9 @@ import com.hampay.mobile.android.Helper.DatabaseHelper;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.activity.PayOneActivity;
 import com.hampay.mobile.android.adapter.HamPayContactAdapter;
+import com.hampay.mobile.android.adapter.PayOneAdapter;
 import com.hampay.mobile.android.adapter.RecentPayOneAdapter;
+import com.hampay.mobile.android.component.sectionlist.PinnedHeaderListView;
 import com.hampay.mobile.android.model.RecentPay;
 import com.hampay.mobile.android.webservice.WebServices;
 
@@ -34,14 +37,13 @@ public class PayToOneFragment extends Fragment {
 
     DatabaseHelper dbHelper;
     List<RecentPay> recentPays;
-    ListView recent_payListView;
-    RecentPayOneAdapter recentPayOneAdapter;
-    HamPayContactAdapter hamPayContactAdapter;
+    RelativeLayout loading_rl;
 
     ResponseMessage<ContactsHampayEnabledResponse> contactsHampayEnabledResponse;
 
+    PinnedHeaderListView pinnedHeaderListView;
+
     public PayToOneFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -59,9 +61,9 @@ public class PayToOneFragment extends Fragment {
 
         recentPays = dbHelper.getAllRecentPays();
 
-//        for (RecentPay pay : recentPays){
-//            Log.e("PAY", pay.getId() + ": " + pay.getName());
-//        }
+        for (RecentPay pay : recentPays){
+            Log.e("PAY", pay.getId() + ": " + pay.getName());
+        }
 
     }
 
@@ -72,27 +74,36 @@ public class PayToOneFragment extends Fragment {
 
         new HttpHamPayContact().execute();
 
-        recent_payListView = (ListView)rootView.findViewById(R.id.recent_payListView);
+        loading_rl = (RelativeLayout)rootView.findViewById(R.id.loading_rl);
 
-        recent_payListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        pinnedHeaderListView = (PinnedHeaderListView)rootView.findViewById(R.id.pinnedListView);
+        pinnedHeaderListView.setOnItemClickListener(new PinnedHeaderListView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent();
-                intent.setClass(getActivity(), PayOneActivity.class);
-                intent.putExtra("contact_name", contactsHampayEnabledResponse.getService().getContacts().get(position).getDisplayName());
-                intent.putExtra("contact_phone_no", contactsHampayEnabledResponse.getService().getContacts().get(position).getCellNumber());
-                startActivity(intent);
+            public void onItemClick(AdapterView<?> adapterView, View view, int section, int position, long id) {
+
+                if (section == 0){
+                    Intent intent = new Intent();
+                    intent.setClass(getActivity(), PayOneActivity.class);
+                    intent.putExtra("contact_name", recentPays.get(position).getName());
+                    intent.putExtra("contact_phone_no", recentPays.get(position).getPhone());
+                    startActivity(intent);
+                }else if(section == 1){
+                    Intent intent = new Intent();
+                    intent.setClass(getActivity(), PayOneActivity.class);
+                    intent.putExtra("contact_name", contactsHampayEnabledResponse.getService().getContacts().get(position).getDisplayName());
+                    intent.putExtra("contact_phone_no", contactsHampayEnabledResponse.getService().getContacts().get(position).getCellNumber());
+                    startActivity(intent);
+                }
+
+            }
+
+            @Override
+            public void onSectionClick(AdapterView<?> adapterView, View view, int section, long id) {
+
             }
         });
 
 
-
-//
-//        recentPayOneAdapter = new RecentPayOneAdapter(getActivity(), recentPays);
-//
-//        recent_payListView.setAdapter(recentPayOneAdapter);
-
-        // Inflate the layout for this fragment
         return rootView;
     }
 
@@ -129,9 +140,13 @@ public class PayToOneFragment extends Fragment {
 
             if (contactsHampayEnabledResponse != null) {
 
-                hamPayContactAdapter = new HamPayContactAdapter(getActivity(), contactsHampayEnabledResponse.getService().getContacts());
+                PayOneAdapter sectionedAdapter = new PayOneAdapter(getActivity(),
+                        recentPays,
+                        contactsHampayEnabledResponse.getService().getContacts());
+                pinnedHeaderListView.setAdapter(sectionedAdapter);
 
-                recent_payListView.setAdapter(hamPayContactAdapter);
+
+                loading_rl.setVisibility(View.GONE);
 
             }
 

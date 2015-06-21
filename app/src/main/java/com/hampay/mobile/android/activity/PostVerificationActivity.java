@@ -151,7 +151,7 @@ public class PostVerificationActivity extends ActionBarActivity implements View.
             }
         }
         else {
-            if (inputStringValue.length() <= 5) {
+            if (inputStringValue.length() <= 4) {
                 inputStringValue += digit;
             }
         }

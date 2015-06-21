@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
-                android:textSize="22sp"
+                android:textSize="20sp"
                 android:gravity="center"
                 android:layout_marginRight="8dp"
                 android:text="دریافت"/>
@@ -38,8 +38,8 @@
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="22sp"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
                 android:gravity="center"
                 android:layout_marginRight="8dp"
                 android:text="هومن امینی"/>
@@ -50,8 +50,8 @@
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="22sp"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
                 android:gravity="center"
                 android:layout_marginRight="8dp"
                 android:text="۱۲/۳/۹۴  ۲۲:۴۳"/>
@@ -61,8 +61,8 @@
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="22sp"
+                android:textColor="@color/normal_text"
+                android:textSize="18sp"
                 android:gravity="center"
                 android:layout_marginRight="8dp"
                 android:text="متن پیام"/>
@@ -73,9 +73,10 @@
 
         <ImageView
             android:id="@+id/status_icon"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@drawable/arrow_r"/>
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/arrow_r"
+            android:layout_gravity="center_vertical"/>
 
     </LinearLayout>
 
@@ -93,7 +94,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
-            android:textSize="22sp"
+            android:textSize="20sp"
             android:gravity="center"
             android:layout_marginRight="8dp"
             android:text="۱۵۰.۰۰۰.۰۰۰"/>
@@ -102,8 +103,8 @@
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="22sp"
+            android:textColor="@color/normal_text"
+            android:textSize="18sp"
             android:gravity="center"
             android:layout_marginRight="8dp"
             android:text="ریال"/>

@@ -120,7 +120,7 @@ public class ProfileEntryActivity extends ActionBarActivity {
             super.onPostExecute(s);
 
             if (bankListResponse != null) {
-
+                selected_bank_title.setText(bankListResponse.getService().getBanks().get(0).getTitle());
             }
 
 

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:geekui="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="right"
+    android:background="@drawable/dialog_pay_theme"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <com.hampay.mobile.android.component.FacedTextView
+        geekui:customTypeface="fonts/iran_sans.ttf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="22sp"
+        android:text="@string/attention"/>
+
+    <com.hampay.mobile.android.component.FacedTextView
+        geekui:customTypeface="fonts/iran_sans.ttf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/normal_text"
+        android:textSize="20sp"
+        android:text="@string/confirm_info_text"
+        android:layout_marginTop="15dp"/>
+
+
+    <com.hampay.mobile.android.component.FacedTextView
+        geekui:customTypeface="fonts/iran_sans.ttf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/normal_text"
+        android:textSize="20sp"
+        android:text="@string/confirm_info_question"
+        android:layout_marginTop="15dp"/>
+
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp">
+
+        <com.hampay.mobile.android.component.FacedTextView
+            android:id="@+id/uncheck_account"
+            geekui:customTypeface="fonts/iran_sans.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/dis_confirmation"
+            android:textSize="24sp"
+            android:text="@string/confirm_info_uncheck" />
+
+        <com.hampay.mobile.android.component.FacedTextView
+            android:id="@+id/check_account"
+            geekui:customTypeface="fonts/iran_sans.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/confirmation"
+            android:textSize="24sp"
+            android:text="@string/confirm_info_check"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

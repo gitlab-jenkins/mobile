@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:geekui="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -6,247 +6,344 @@
     android:orientation="vertical"
     android:background="@android:color/white">
 
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="right"
-        android:gravity="right"
-        android:layout_margin="8dp">
-
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="right">
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="right"
+                android:gravity="right"
+                android:layout_margin="8dp">
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="right">
+
+                    <com.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/user_name_text"
+                        geekui:customTypeface="fonts/iran_sans.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:textSize="20sp"
+                        android:gravity="center"
+                        android:layout_marginRight="4dp"
+                        android:text=""/>
+
+                    <com.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/user_account_no_text"
+                        geekui:customTypeface="fonts/iran_sans.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/normal_text"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:layout_marginRight="4dp"
+                        android:text=""/>
+
+
+                    <com.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/user_bank_name"
+                        geekui:customTypeface="fonts/iran_sans.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/normal_text"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:layout_marginRight="4dp"
+                        android:text=""/>
+
+                    <com.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/user_mobile_no"
+                        geekui:customTypeface="fonts/iran_sans.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/normal_text"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:layout_marginRight="4dp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginRight="4dp">
+
+
+                        <com.hampay.mobile.android.component.FacedTextView
+                            android:id="@+id/user_account_type"
+                            geekui:customTypeface="fonts/iran_sans.ttf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/black"
+                            android:textSize="18sp"
+                            android:gravity="center" />
+
+
+                        <com.hampay.mobile.android.component.FacedTextView
+                            android:id="@+id/user_account_title"
+                            geekui:customTypeface="fonts/iran_sans.ttf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/normal_text"
+                            android:textSize="18sp"
+                            android:gravity="center"/>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/user_image"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@drawable/user_icon_blak"
+                    android:layout_margin="2dp"/>
+
+
+            </LinearLayout>
 
             <com.hampay.mobile.android.component.FacedTextView
-                android:id="@+id/user_name_text"
+                android:id="@+id/user_status_text"
+                geekui:customTypeface="fonts/iran_sans.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:gravity="right"
+                android:layout_marginRight="80dp"
+                android:layout_marginLeft="4dp"
+                android:text="@string/user_status_text"/>
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/keepOn_CardView"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                card_view:cardBackgroundColor="@color/user_change_status"
+                card_view:cardCornerRadius="2dp"
+                card_view:cardElevation="4dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp">
+
+                <com.hampay.mobile.android.component.FacedTextView
+                    geekui:customTypeface="fonts/iran_sans.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:text="@string/user_status_verification"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"/>
+
+            </android.support.v7.widget.CardView>
+
+
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/normal_text"
+                android:layout_marginTop="15dp"/>
+
+
+            <com.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
                 android:textSize="22sp"
                 android:gravity="center"
-                android:layout_marginRight="8dp"
-                android:text=""/>
-
-            <com.hampay.mobile.android.component.FacedTextView
-                android:id="@+id/user_account_no_text"
-                geekui:customTypeface="fonts/iran_sans.ttf"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="22sp"
-                android:gravity="center"
-                android:layout_marginRight="8dp"
-                android:text=""/>
-
-
-            <com.hampay.mobile.android.component.FacedTextView
-                android:id="@+id/user_bank_name"
-                geekui:customTypeface="fonts/iran_sans.ttf"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="22sp"
-                android:gravity="center"
-                android:layout_marginRight="8dp"
-                android:text=""/>
-
-            <com.hampay.mobile.android.component.FacedTextView
-                android:id="@+id/user_mobile_no"
-                geekui:customTypeface="fonts/iran_sans.ttf"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="22sp"
-                android:gravity="center"
-                android:layout_marginRight="8dp" />
-
-            <com.hampay.mobile.android.component.FacedTextView
-                android:id="@+id/user_account_type"
-                geekui:customTypeface="fonts/iran_sans.ttf"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="22sp"
-                android:gravity="center"
-                android:layout_marginRight="8dp" />
-
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:src="@drawable/user_icon_blak"
-            android:layout_margin="8dp"/>
-
-
-    </LinearLayout>
-    
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray"
-        android:layout_marginTop="25dp"/>
-
-
-    <com.hampay.mobile.android.component.FacedTextView
-        geekui:customTypeface="fonts/iran_sans.ttf"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
-        android:textSize="26sp"
-        android:gravity="center"
-        android:layout_marginTop="12dp"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/some_people_at_hampay"/>
-
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="8dp">
-
-        <LinearLayout
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="@drawable/user_icon_blak" />
-
-            <com.hampay.mobile.android.component.FacedTextView
-                android:id="@+id/hampay_2"
-                geekui:customTypeface="fonts/iran_sans.ttf"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="20sp"
-                android:gravity="center"
-                android:layout_marginLeft="4dp"
+                android:layout_marginTop="10dp"
                 android:layout_gravity="center_horizontal"
-                android:text="سعید کارخانه"
-                />
+                android:text="@string/some_people_at_hampay"/>
 
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:gravity="right">
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="8dp">
 
+                <LinearLayout
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/hampay_image_2"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/user_icon_blak" />
+
+                    <com.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/hampay_2"
+                        geekui:customTypeface="fonts/iran_sans.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/normal_text"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:layout_marginLeft="4dp"
+                        android:layout_gravity="center_horizontal"
+                        android:text="سعید کارخانه"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="right">
+
+
+                    <com.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/hampay_1"
+                        geekui:customTypeface="fonts/iran_sans.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/normal_text"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:layout_marginTop="12dp"
+                        android:layout_gravity="center_horizontal"
+                        android:text=""
+                        android:layout_marginRight="4dp"/>
+
+                    <ImageView
+                        android:id="@+id/hampay_image_1"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/user_icon_blue" />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="8dp">
+
+                <LinearLayout
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/hampay_image_4"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/user_icon_blue" />
+
+                    <com.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/hampay_4"
+                        geekui:customTypeface="fonts/iran_sans.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/normal_text"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:layout_marginLeft="4dp"
+                        android:layout_gravity="center_horizontal"
+                        android:text="هم‌پی‌یار تجارت"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dip"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:gravity="right">
+
+
+                    <com.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/hampay_3"
+                        geekui:customTypeface="fonts/iran_sans.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/normal_text"
+                        android:textSize="18sp"
+                        android:gravity="center"
+                        android:layout_marginTop="12dp"
+                        android:layout_gravity="center_horizontal"
+                        android:text="مجید زمانی"
+                        android:layout_marginRight="4dp"/>
+
+                    <ImageView
+                        android:id="@+id/hampay_image_3"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/user_icon_blue" />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/normal_text"
+                android:layout_marginTop="5dp"/>
 
             <com.hampay.mobile.android.component.FacedTextView
-                android:id="@+id/hampay_1"
+                android:id="@+id/user_last_login"
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="20sp"
-                android:gravity="center"
-                android:layout_marginTop="12dp"
-                android:layout_gravity="center_horizontal"
-                android:text=""
-                android:layout_marginRight="4dp"/>
-
-            <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="@drawable/user_icon_blue" />
-
+                android:textColor="@color/normal_text"
+                android:textSize="18sp"
+                android:layout_margin="8dp"
+                android:gravity="right"
+                android:layout_gravity="right"
+                android:text="آخرین ورودبه سیستم، "/>
 
         </LinearLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="8dp">
-
-        <LinearLayout
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="@drawable/user_icon_blue" />
-
-            <com.hampay.mobile.android.component.FacedTextView
-                android:id="@+id/hampay_4"
-                geekui:customTypeface="fonts/iran_sans.ttf"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="20sp"
-                android:gravity="center"
-                android:layout_marginLeft="4dp"
-                android:layout_gravity="center_horizontal"
-                android:text="هم‌پی‌یار تجارت"
-                />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:gravity="right">
+    </ScrollView>
 
 
-            <com.hampay.mobile.android.component.FacedTextView
-                android:id="@+id/hampay_3"
-                geekui:customTypeface="fonts/iran_sans.ttf"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="20sp"
-                android:gravity="center"
-                android:layout_marginTop="12dp"
-                android:layout_gravity="center_horizontal"
-                android:text="مجید زمانی"
-                android:layout_marginRight="4dp"/>
-
-            <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="@drawable/user_icon_blue" />
+    <RelativeLayout
+        android:visibility="visible"
+        android:id="@+id/loading_rl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
 
 
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:background="@android:color/darker_gray"
-        android:layout_marginTop="25dp"/>
-
-    <com.hampay.mobile.android.component.FacedTextView
-        android:id="@+id/user_last_login"
-        geekui:customTypeface="fonts/iran_sans.ttf"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="22sp"
-        android:layout_margin="8dp"
-        android:gravity="right"
-        android:layout_gravity="right"
-        android:text="آخرین ورودبه سیستم، "/>
+        <ProgressBar
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:indeterminateDrawable="@drawable/fragment_progress"
+            android:layout_centerInParent="true"/>
 
 
-</LinearLayout>
+    </RelativeLayout>
+
+
+</RelativeLayout>

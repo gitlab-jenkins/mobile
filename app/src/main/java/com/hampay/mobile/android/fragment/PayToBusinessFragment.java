@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.response.BusinessListResponse;
@@ -35,6 +36,8 @@ public class PayToBusinessFragment extends Fragment {
     private ListView businessListView;
     private HamPayBusinessAdapter hamPayBusinessAdapter;
 
+    RelativeLayout loading_rl;
+
     public PayToBusinessFragment() {
 
     }
@@ -53,6 +56,8 @@ public class PayToBusinessFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_pay_to_business, container, false);
 
         new HttpHamPay‌Business().execute();
+
+        loading_rl = (RelativeLayout)rootView.findViewById(R.id.loading_rl);
 
         businessListView = (ListView)rootView.findViewById(R.id.businessListView);
 
@@ -111,6 +116,8 @@ public class PayToBusinessFragment extends Fragment {
                 hamPayBusinessAdapter = new HamPayBusinessAdapter(getActivity(), businessListResponse.getService().getBusinesses());
 
                 businessListView.setAdapter(hamPayBusinessAdapter);
+
+                loading_rl.setVisibility(View.GONE);
 
             }
 
