@@ -3,6 +3,7 @@ package com.hampay.mobile.android.activity;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -10,6 +11,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,12 +22,16 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
+import com.hampay.common.core.model.request.RegistrationEntryRequest;
 import com.hampay.common.core.model.response.BankListResponse;
 import com.hampay.common.core.model.response.BusinessListResponse;
+import com.hampay.common.core.model.response.RegistrationEntryResponse;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.adapter.BankListAdapter;
 import com.hampay.mobile.android.adapter.HamPayBusinessAdapter;
+import com.hampay.mobile.android.component.FacedEditText;
 import com.hampay.mobile.android.component.FacedTextView;
+import com.hampay.mobile.android.util.DeviceInfo;
 import com.hampay.mobile.android.webservice.WebServices;
 
 public class ProfileEntryActivity extends ActionBarActivity {
@@ -34,7 +40,12 @@ public class ProfileEntryActivity extends ActionBarActivity {
     CardView keepOn_CardView;
     RelativeLayout bankSelection;
     Dialog bankSelectionDialog;
-    FacedTextView selected_bank_title;
+
+    FacedEditText cellNumberValue;
+    FacedEditText nationalCodeValue;
+    FacedEditText accountNumberValue;
+    FacedTextView selectedBankTitle;
+    String selectedBankValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +53,10 @@ public class ProfileEntryActivity extends ActionBarActivity {
         setContentView(R.layout.activity_profile_entry);
 
 
-        selected_bank_title = (FacedTextView)findViewById(R.id.selected_bank_title);
+        cellNumberValue = (FacedEditText)findViewById(R.id.cellNumberValue);
+        nationalCodeValue = (FacedEditText)findViewById(R.id.nationalCodeValue);
+        accountNumberValue = (FacedEditText)findViewById(R.id.accountNumberValue);
+        selectedBankTitle = (FacedTextView)findViewById(R.id.selectedBankText);
 
         bankSelection = (RelativeLayout)findViewById(R.id.bankSelection);
         bankSelection.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +78,8 @@ public class ProfileEntryActivity extends ActionBarActivity {
                 bankListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        selected_bank_title.setText(bankListResponse.getService().getBanks().get(position).getTitle());
+                        selectedBankTitle.setText(bankListResponse.getService().getBanks().get(position).getTitle());
+                        selectedBankValue = bankListResponse.getService().getBanks().get(position).getCode();
                         bankSelectionDialog.dismiss();
                     }
                 });
@@ -88,9 +103,20 @@ public class ProfileEntryActivity extends ActionBarActivity {
         keepOn_CardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(ProfileEntryActivity.this, VerificationActivity.class);
-                startActivity(intent);
+
+                RegistrationEntryRequest registrationEntryRequest = new RegistrationEntryRequest();
+
+
+
+                registrationEntryRequest.setCellNumber(cellNumberValue.getText().toString());
+                registrationEntryRequest.setAccountNumber(accountNumberValue.getText().toString());
+                registrationEntryRequest.setBankCode(selectedBankValue);
+                registrationEntryRequest.setNationalCode(nationalCodeValue.getText().toString());
+                registrationEntryRequest.setImei(new DeviceInfo(getApplicationContext()).getIMEI());
+
+                new HttpRegistrationEntry().execute(registrationEntryRequest);
+
+
             }
         });
     }
@@ -99,7 +125,6 @@ public class ProfileEntryActivity extends ActionBarActivity {
     private ResponseMessage<BankListResponse> bankListResponse;
 
     public class HttpBankList extends AsyncTask<Void, Void, String> {
-
 
         @Override
         protected String doInBackground(Void... params) {
@@ -120,10 +145,52 @@ public class ProfileEntryActivity extends ActionBarActivity {
             super.onPostExecute(s);
 
             if (bankListResponse != null) {
-                selected_bank_title.setText(bankListResponse.getService().getBanks().get(0).getTitle());
+                selectedBankTitle.setText(bankListResponse.getService().getBanks().get(0).getTitle());
+                selectedBankValue = bankListResponse.getService().getBanks().get(0).getTitle();
             }
 
 
         }
     }
+
+    private ResponseMessage<RegistrationEntryResponse> registrationEntryResponse;
+
+    public class HttpRegistrationEntry extends AsyncTask<RegistrationEntryRequest, Void, String> {
+
+        @Override
+        protected String doInBackground(RegistrationEntryRequest... params) {
+
+            WebServices webServices = new WebServices(getApplicationContext());
+            registrationEntryResponse = webServices.registrationEntry(params[0]);
+
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if (registrationEntryResponse.getService().getUserIdToken() != null) {
+
+                SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
+                editor.putString("UserIdToken", registrationEntryResponse.getService().getUserIdToken());
+                editor.commit();
+
+                Intent intent = new Intent();
+                intent.setClass(ProfileEntryActivity.this, VerificationActivity.class);
+                startActivity(intent);
+
+            }
+            else {
+
+            }
+        }
+
+    }
 }
+

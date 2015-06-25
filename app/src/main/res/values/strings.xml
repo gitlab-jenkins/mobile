@@ -187,6 +187,7 @@
     <string name="confirm_info_question">آیا مایل به بررسی صحت حساب خود هستید؟</string>
     <string name="confirm_info_check">بررسی کن</string>
     <string name="confirm_info_uncheck">ادامه بدون بررسی</string>
+    <string name="confirm_account_check">بررسی صورت حساب</string>
 
 
     <string name="user_status_text">کاربر محدود شبکه هم‌پی می تواند از اعضای عادی پول دریافت کند

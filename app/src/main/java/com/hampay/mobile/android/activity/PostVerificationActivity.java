@@ -2,6 +2,8 @@ package com.hampay.mobile.android.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -11,8 +13,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.hampay.common.common.response.ResponseMessage;
+import com.hampay.common.core.model.request.RegistrationEntryRequest;
+import com.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
+import com.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
+import com.hampay.common.core.model.response.RegistrationEntryResponse;
+import com.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
+import com.hampay.common.core.model.response.RegistrationVerifyMobileResponse;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.component.FacedTextView;
+import com.hampay.mobile.android.webservice.WebServices;
 
 public class PostVerificationActivity extends ActionBarActivity implements View.OnClickListener{
 
@@ -81,12 +91,54 @@ public class PostVerificationActivity extends ActionBarActivity implements View.
         verification_CardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(PostVerificationActivity.this, ConfirmAccountNoActivity.class);
-                startActivity(intent);
+
+                RegistrationVerifyMobileRequest registrationVerifyMobileRequest = new RegistrationVerifyMobileRequest();
+                SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+
+                registrationVerifyMobileRequest.setUserIdToken(prefs.getString("UserIdToken", ""));
+                registrationVerifyMobileRequest.setSmsToken(inputStringValue);
+
+                new HttpRegistrationSendSmsToken().execute(registrationVerifyMobileRequest);
             }
         });
     }
+
+
+    private ResponseMessage<RegistrationVerifyMobileResponse> registrationVerifyMobileResponse;
+
+    public class HttpRegistrationSendSmsToken extends AsyncTask<RegistrationVerifyMobileRequest, Void, String> {
+
+        @Override
+        protected String doInBackground(RegistrationVerifyMobileRequest... params) {
+
+            WebServices webServices = new WebServices(getApplicationContext());
+            registrationVerifyMobileResponse = webServices.registrationVerifyMobileResponse(params[0]);
+
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if (registrationVerifyMobileResponse.getService().getResultStatus() != null) {
+
+                Intent intent = new Intent();
+                intent.setClass(PostVerificationActivity.this, ConfirmAccountNoActivity.class);
+                startActivity(intent);
+
+            }
+            else {
+            }
+        }
+
+    }
+
 
     @Override
     public void onClick(View v) {

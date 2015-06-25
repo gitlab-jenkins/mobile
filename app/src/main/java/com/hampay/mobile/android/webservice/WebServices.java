@@ -17,6 +17,11 @@ import com.hampay.common.core.model.request.BusinessPaymentRequest;
 import com.hampay.common.core.model.request.ContactsHampayEnabledRequest;
 import com.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
 import com.hampay.common.core.model.request.IndividualPaymentRequest;
+import com.hampay.common.core.model.request.RegistrationConfirmUserDataRequest;
+import com.hampay.common.core.model.request.RegistrationEntryRequest;
+import com.hampay.common.core.model.request.RegistrationFetchUserDataRequest;
+import com.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
+import com.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
 import com.hampay.common.core.model.request.TransactionListRequest;
 import com.hampay.common.core.model.request.UserProfileRequest;
 import com.hampay.common.core.model.response.BankListResponse;
@@ -26,6 +31,11 @@ import com.hampay.common.core.model.response.BusinessPaymentResponse;
 import com.hampay.common.core.model.response.ContactsHampayEnabledResponse;
 import com.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
 import com.hampay.common.core.model.response.IndividualPaymentResponse;
+import com.hampay.common.core.model.response.RegistrationConfirmUserDataResponse;
+import com.hampay.common.core.model.response.RegistrationEntryResponse;
+import com.hampay.common.core.model.response.RegistrationFetchUserDataResponse;
+import com.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
+import com.hampay.common.core.model.response.RegistrationVerifyMobileResponse;
 import com.hampay.common.core.model.response.TransactionListResponse;
 import com.hampay.common.core.model.response.UserProfileResponse;
 import com.hampay.mobile.android.util.Constant;
@@ -119,19 +129,346 @@ public class WebServices  {
 
     }
 
-    public ResponseMessage<UserProfileResponse>  getUserProfile(){
 
-        ResponseMessage<UserProfileResponse> userProfileResponse = null;
+    public ResponseMessage<RegistrationEntryResponse>  registrationEntry(RegistrationEntryRequest registrationEntryRequest){
 
+        ResponseMessage<RegistrationEntryResponse> registrationEntryResponse = null;
         HttpParams httpParameters = new BasicHttpParams();
-
         int timeoutConnection = 30000;
         HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
-
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
+        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpRequest request = new HttpPost("/users/reg-entry");
 
+
+        HttpResponse response;
+        try {
+            StringEntity entity = new StringEntity(createRegistrationEntry(registrationEntryRequest), "UTF-8");
+            entity.setContentType("application/json");
+            ((HttpPost) request).setEntity(entity);
+
+            response = httpClient.execute(host, request);
+
+            HttpEntity responseEntity = response.getEntity();
+            StatusLine responseStatus = response.getStatusLine();
+            int statusCode = responseStatus != null ? responseStatus.getStatusCode() : 0;
+            String result = EntityUtils.toString(responseEntity);
+
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                }
+            });
+            Gson gson = builder.create();
+
+
+            Type responseType = new com.google.gson.reflect.TypeToken<ResponseMessage<RegistrationEntryResponse>>() {}.getType();
+            registrationEntryResponse = gson.fromJson(result, responseType);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            httpClient.getConnectionManager().shutdown();
+        }
+
+        return registrationEntryResponse;
+
+    }
+
+    private String createRegistrationEntry(RegistrationEntryRequest registrationEntryRequest) {
+        RequestHeader header = new RequestHeader();
+        header.setAuthToken("008ewe");
+        header.setVersion("1.0-PA");
+
+        RequestMessage<RegistrationEntryRequest> message = new RequestMessage<RegistrationEntryRequest>();
+        message.setRequestHeader(header);
+        RegistrationEntryRequest request = registrationEntryRequest;
+        request.setRequestUUID("1234");
+
+        message.setService(request);
+
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationEntryRequest>>() {}.getType();
+        return new Gson().toJson(message, requestType);
+    }
+
+
+
+    public ResponseMessage<RegistrationSendSmsTokenResponse>  registrationSendSmsToken(RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest){
+
+        ResponseMessage<RegistrationSendSmsTokenResponse> registrationSendSmsTokenResponse = null;
+        HttpParams httpParameters = new BasicHttpParams();
+        int timeoutConnection = 30000;
+        HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+        int timeoutSocket = 30000;
+        HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+        HttpClient httpClient = new DefaultHttpClient(httpParameters);
+        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpRequest request = new HttpPost("/users/reg-entry");
+
+
+        HttpResponse response;
+        try {
+            StringEntity entity = new StringEntity(createRegistrationSendSmsToken(registrationSendSmsTokenRequest), "UTF-8");
+            entity.setContentType("application/json");
+            ((HttpPost) request).setEntity(entity);
+
+            response = httpClient.execute(host, request);
+
+            HttpEntity responseEntity = response.getEntity();
+            StatusLine responseStatus = response.getStatusLine();
+            int statusCode = responseStatus != null ? responseStatus.getStatusCode() : 0;
+            String result = EntityUtils.toString(responseEntity);
+
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                }
+            });
+            Gson gson = builder.create();
+
+
+            Type responseType = new com.google.gson.reflect.TypeToken<ResponseMessage<RegistrationSendSmsTokenResponse>>() {}.getType();
+            registrationSendSmsTokenResponse = gson.fromJson(result, responseType);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            httpClient.getConnectionManager().shutdown();
+        }
+
+        return registrationSendSmsTokenResponse;
+
+    }
+
+
+    private String createRegistrationSendSmsToken(RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest) {
+        RequestHeader header = new RequestHeader();
+        header.setAuthToken("008ewe");
+        header.setVersion("1.0-PA");
+
+        RequestMessage<RegistrationSendSmsTokenRequest> message = new RequestMessage<RegistrationSendSmsTokenRequest>();
+        message.setRequestHeader(header);
+        RegistrationSendSmsTokenRequest request = registrationSendSmsTokenRequest;
+        request.setRequestUUID("1234");
+
+        message.setService(request);
+
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationSendSmsTokenRequest>>() {}.getType();
+        return new Gson().toJson(message, requestType);
+    }
+
+
+
+    public ResponseMessage<RegistrationVerifyMobileResponse>  registrationVerifyMobileResponse(RegistrationVerifyMobileRequest registrationVerifyMobileRequest){
+
+        ResponseMessage<RegistrationVerifyMobileResponse> registrationVerifyMobileResponse = null;
+        HttpParams httpParameters = new BasicHttpParams();
+        int timeoutConnection = 30000;
+        HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+        int timeoutSocket = 30000;
+        HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+        HttpClient httpClient = new DefaultHttpClient(httpParameters);
+        HttpHost host = new HttpHost("176.58.104.158", 9093);
+
+        HttpRequest request = new HttpPost("/users/reg-verify-mobile");
+
+        HttpResponse response;
+        try {
+            StringEntity entity = new StringEntity(createRegistrationVerifyMobileResponse(registrationVerifyMobileRequest), "UTF-8");
+            entity.setContentType("application/json");
+            ((HttpPost) request).setEntity(entity);
+
+            response = httpClient.execute(host, request);
+
+            HttpEntity responseEntity = response.getEntity();
+            StatusLine responseStatus = response.getStatusLine();
+            int statusCode = responseStatus != null ? responseStatus.getStatusCode() : 0;
+            String result = EntityUtils.toString(responseEntity);
+
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                }
+            });
+            Gson gson = builder.create();
+
+
+            Type responseType = new com.google.gson.reflect.TypeToken<ResponseMessage<RegistrationVerifyMobileResponse>>() {}.getType();
+            registrationVerifyMobileResponse = gson.fromJson(result, responseType);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            httpClient.getConnectionManager().shutdown();
+        }
+
+        return registrationVerifyMobileResponse;
+
+    }
+
+
+    private String createRegistrationVerifyMobileResponse(RegistrationVerifyMobileRequest registrationVerifyMobileRequest) {
+        RequestHeader header = new RequestHeader();
+        header.setAuthToken("008ewe");
+        header.setVersion("1.0-PA");
+
+        RequestMessage<RegistrationVerifyMobileRequest> message = new RequestMessage<RegistrationVerifyMobileRequest>();
+        message.setRequestHeader(header);
+        RegistrationVerifyMobileRequest request = registrationVerifyMobileRequest;
+        request.setRequestUUID("1234");
+
+        message.setService(request);
+
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationVerifyMobileRequest>>() {}.getType();
+        return new Gson().toJson(message, requestType);
+    }
+
+    public ResponseMessage<RegistrationFetchUserDataResponse>  registrationFetchUserDataResponse(RegistrationFetchUserDataRequest registrationFetchUserDataRequest){
+
+        ResponseMessage<RegistrationFetchUserDataResponse> registrationFetchUserDataResponse = null;
+        HttpParams httpParameters = new BasicHttpParams();
+        int timeoutConnection = 30000;
+        HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+        int timeoutSocket = 30000;
+        HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+        HttpClient httpClient = new DefaultHttpClient(httpParameters);
+        HttpHost host = new HttpHost("176.58.104.158", 9093);
+
+        HttpRequest request = new HttpPost("/users/reg-fetch-user-data");
+
+        HttpResponse response;
+        try {
+            StringEntity entity = new StringEntity(createregistrationFetchUserDataRequest(registrationFetchUserDataRequest), "UTF-8");
+            entity.setContentType("application/json");
+            ((HttpPost) request).setEntity(entity);
+
+            response = httpClient.execute(host, request);
+
+            HttpEntity responseEntity = response.getEntity();
+            StatusLine responseStatus = response.getStatusLine();
+            int statusCode = responseStatus != null ? responseStatus.getStatusCode() : 0;
+            String result = EntityUtils.toString(responseEntity);
+
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                }
+            });
+            Gson gson = builder.create();
+
+
+            Type responseType = new com.google.gson.reflect.TypeToken<ResponseMessage<RegistrationFetchUserDataResponse>>() {}.getType();
+            registrationFetchUserDataResponse = gson.fromJson(result, responseType);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            httpClient.getConnectionManager().shutdown();
+        }
+
+        return registrationFetchUserDataResponse;
+
+    }
+
+    private String createregistrationFetchUserDataRequest(RegistrationFetchUserDataRequest registrationFetchUserDataRequest) {
+        RequestHeader header = new RequestHeader();
+        header.setAuthToken("008ewe");
+        header.setVersion("1.0-PA");
+
+        RequestMessage<RegistrationFetchUserDataRequest> message = new RequestMessage<RegistrationFetchUserDataRequest>();
+        message.setRequestHeader(header);
+        RegistrationFetchUserDataRequest request = registrationFetchUserDataRequest;
+        request.setRequestUUID("1234");
+
+        message.setService(request);
+
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationFetchUserDataRequest>>() {}.getType();
+        return new Gson().toJson(message, requestType);
+    }
+
+
+    public ResponseMessage<RegistrationConfirmUserDataResponse>
+        registrationConfirmUserDataResponse(RegistrationConfirmUserDataRequest registrationConfirmUserDataRequest){
+
+        ResponseMessage<RegistrationConfirmUserDataResponse> registrationConfirmUserDataResponse = null;
+        HttpParams httpParameters = new BasicHttpParams();
+        int timeoutConnection = 30000;
+        HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+        int timeoutSocket = 30000;
+        HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+        HttpClient httpClient = new DefaultHttpClient(httpParameters);
+        HttpHost host = new HttpHost("176.58.104.158", 9093);
+
+        HttpRequest request = new HttpPost("/users/reg-fetch-user-data");
+
+        HttpResponse response;
+        try {
+            StringEntity entity = new StringEntity(createRegistrationConfirmUserDataRequest(registrationConfirmUserDataRequest), "UTF-8");
+            entity.setContentType("application/json");
+            ((HttpPost) request).setEntity(entity);
+
+            response = httpClient.execute(host, request);
+
+            HttpEntity responseEntity = response.getEntity();
+            StatusLine responseStatus = response.getStatusLine();
+            int statusCode = responseStatus != null ? responseStatus.getStatusCode() : 0;
+            String result = EntityUtils.toString(responseEntity);
+
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                }
+            });
+            Gson gson = builder.create();
+
+
+            Type responseType = new com.google.gson.reflect.TypeToken<ResponseMessage<RegistrationConfirmUserDataResponse>>() {}.getType();
+            registrationConfirmUserDataResponse = gson.fromJson(result, responseType);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            httpClient.getConnectionManager().shutdown();
+        }
+
+        return registrationConfirmUserDataResponse;
+
+    }
+
+    private String createRegistrationConfirmUserDataRequest(RegistrationConfirmUserDataRequest registrationConfirmUserDataRequest) {
+        RequestHeader header = new RequestHeader();
+        header.setAuthToken("008ewe");
+        header.setVersion("1.0-PA");
+
+        RequestMessage<RegistrationConfirmUserDataRequest> message = new RequestMessage<RegistrationConfirmUserDataRequest>();
+        message.setRequestHeader(header);
+        RegistrationConfirmUserDataRequest request = registrationConfirmUserDataRequest;
+        request.setRequestUUID("1234");
+
+
+
+        message.setService(request);
+
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationConfirmUserDataRequest>>() {}.getType();
+        return new Gson().toJson(message, requestType);
+    }
+
+    public ResponseMessage<UserProfileResponse>  getUserProfile(){
+
+        ResponseMessage<UserProfileResponse> userProfileResponse = null;
+        HttpParams httpParameters = new BasicHttpParams();
+        int timeoutConnection = 30000;
+        HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+        int timeoutSocket = 30000;
+        HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+        HttpClient httpClient = new DefaultHttpClient(httpParameters);
         HttpHost host = new HttpHost("176.58.104.158", 9093);
         HttpRequest request = new HttpPost("/users/profile");
 
@@ -148,8 +485,6 @@ public class WebServices  {
             int statusCode = responseStatus != null ? responseStatus.getStatusCode() : 0;
             String result = EntityUtils.toString(responseEntity);
 
-            System.out.println("User profile response, status  : " + String.valueOf(statusCode) + " , payload : " + result);
-
             GsonBuilder builder = new GsonBuilder();
             builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
                 public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -161,7 +496,6 @@ public class WebServices  {
             Type responseType = new com.google.gson.reflect.TypeToken<ResponseMessage<UserProfileResponse>>() {}.getType();
             userProfileResponse = gson.fromJson(result, responseType);
 
-
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -171,6 +505,8 @@ public class WebServices  {
         return userProfileResponse;
 
     }
+
+
 
 
     public ResponseMessage<ContactsHampayEnabledResponse>  getHamPayContacts(){

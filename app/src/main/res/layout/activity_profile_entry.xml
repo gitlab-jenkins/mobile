@@ -166,6 +166,7 @@
                 android:layout_marginTop="6dp">
                 
                <com.hampay.mobile.android.component.FacedEditText
+                   android:id="@+id/cellNumberValue"
                    android:layout_width="fill_parent"
                    android:layout_height="fill_parent"
                    android:background="@android:color/transparent"
@@ -217,7 +218,7 @@
                 android:layout_marginTop="6dp">
 
                 <com.hampay.mobile.android.component.FacedTextView
-                    android:id="@+id/selected_bank_title"
+                    android:id="@+id/selectedBankText"
                     geekui:customTypeface="fonts/iran_sans.ttf"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
@@ -245,6 +246,7 @@
                 android:layout_marginTop="6dp">
 
                 <com.hampay.mobile.android.component.FacedEditText
+                    android:id="@+id/accountNumberValue"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:background="@android:color/transparent"
@@ -274,6 +276,7 @@
                 android:layout_marginTop="6dp">
 
                 <com.hampay.mobile.android.component.FacedEditText
+                    android:id="@+id/nationalCodeValue"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:background="@android:color/transparent"
