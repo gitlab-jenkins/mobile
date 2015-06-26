@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:geekui="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+
+    <com.hampay.mobile.android.component.FacedTextView
+        android:id="@+id/guide_item"
+        geekui:customTypeface="fonts/iran_sans.ttf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/normal_text"
+        android:textSize="20sp"
+        android:text="@string/title_settings"
+        android:layout_margin="12dp"
+        android:layout_alignParentRight="true"/>
+
+    <ImageView
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:src="@drawable/bank_arrow"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="12dp"/>
+
+</RelativeLayout>

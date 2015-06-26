@@ -2,21 +2,25 @@ package com.hampay.mobile.android.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
-import android.support.v7.widget.CardView;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
+import com.hampay.common.common.response.ResponseMessage;
+import com.hampay.common.core.model.request.RegistrationPassCodeEntryRequest;
+import com.hampay.common.core.model.response.RegistrationPassCodeEntryResponse;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.component.FacedTextView;
+import com.hampay.mobile.android.webservice.WebServices;
 
 public class PasswordEntryActivity extends ActionBarActivity implements View.OnClickListener{
 
-    CardView confirm_CardView;
+//    CardView confirm_CardView;
 
     FacedTextView digit_1;
     FacedTextView digit_2;
@@ -29,9 +33,10 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
     FacedTextView digit_9;
     FacedTextView digit_0;
     FacedTextView resend_active_code;
-    FacedTextView backspace;
+    RelativeLayout backspace;
 
-    String inputStringValue = "";
+    String inputPasswordValue = "";
+    String inputRePasswordValue = "";
 
     ImageView input_digit_1;
     ImageView input_digit_2;
@@ -39,11 +44,21 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
     ImageView input_digit_4;
     ImageView input_digit_5;
 
+    SharedPreferences prefs;
+
+    RelativeLayout password_1_rl, password_2_rl;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password_entry);
+
+        prefs = getPreferences(MODE_PRIVATE);
+
+        password_1_rl = (RelativeLayout)findViewById(R.id.password_1_rl);
+        password_2_rl = (RelativeLayout)findViewById(R.id.password_2_rl);
 
 
         digit_1 = (FacedTextView)findViewById(R.id.digit_1);
@@ -68,7 +83,7 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
         digit_0.setOnClickListener(this);
         resend_active_code = (FacedTextView)findViewById(R.id.resend_active_code);
         resend_active_code.setOnClickListener(this);
-        backspace = (FacedTextView)findViewById(R.id.backspace);
+        backspace = (RelativeLayout)findViewById(R.id.backspace);
         backspace.setOnClickListener(this);
 
         input_digit_1 = (ImageView)findViewById(R.id.input_digit_1);
@@ -78,15 +93,61 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
         input_digit_5 = (ImageView)findViewById(R.id.input_digit_5);
 
 
-        confirm_CardView = (CardView)findViewById(R.id.confirm_CardView);
-        confirm_CardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+//        confirm_CardView = (CardView)findViewById(R.id.confirm_CardView);
+//        confirm_CardView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//
+//
+//            }
+//        });
+    }
+
+
+    private ResponseMessage<RegistrationPassCodeEntryResponse> registrationPassCodeEntryResponse;
+
+    public class HttpRegistrationPassCodeEntryResponse extends AsyncTask<RegistrationPassCodeEntryRequest, Void, String> {
+
+        @Override
+        protected String doInBackground(RegistrationPassCodeEntryRequest... params) {
+
+            WebServices webServices = new WebServices(getApplicationContext());
+            registrationPassCodeEntryResponse = webServices.registrationPassCodeEntryResponse(params[0]);
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if (registrationPassCodeEntryResponse.getService().getResultStatus() != null) {
+
+                password_1_rl.setVisibility(View.VISIBLE);
+                password_2_rl.setVisibility(View.INVISIBLE);
+
+                inputPasswordValue = "";
+                inputRePasswordValue = "";
+
+                input_digit_1.setImageResource(R.drawable.pass_icon_2);
+                input_digit_2.setImageResource(R.drawable.pass_icon_2);
+                input_digit_3.setImageResource(R.drawable.pass_icon_2);
+                input_digit_4.setImageResource(R.drawable.pass_icon_2);
+                input_digit_5.setImageResource(R.drawable.pass_icon_2);
+
                 Intent intent = new Intent();
                 intent.setClass(PasswordEntryActivity.this, RememberPhraseActivity.class);
                 startActivity(intent);
+
             }
-        });
+        }
     }
 
     @Override
@@ -144,71 +205,178 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
 
         Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
+        if (password_1_rl.getVisibility() == View.VISIBLE) {
 
-        if (digit.contains("d")){
-            if (inputStringValue.length() > 0) {
-                inputStringValue = inputStringValue.substring(0, inputStringValue.length() - 1);
+
+            if (inputPasswordValue.length() <= 4) {
+
+                if (digit.contains("d")) {
+                    if (inputPasswordValue.length() > 0) {
+                        inputPasswordValue = inputPasswordValue.substring(0, inputPasswordValue.length() - 1);
+                    }
+                } else {
+                    if (inputPasswordValue.length() <= 4) {
+                        inputPasswordValue += digit;
+                    }
+                }
+
+
+                switch (inputPasswordValue.length()) {
+
+                    case 0:
+                        input_digit_1.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_2.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_3.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_4.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        vibrator.vibrate(20);
+                        break;
+
+                    case 1:
+                        input_digit_1.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_2.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_3.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_4.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        vibrator.vibrate(20);
+
+                        break;
+                    case 2:
+                        input_digit_1.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_2.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_3.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_4.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        vibrator.vibrate(20);
+                        break;
+                    case 3:
+                        input_digit_1.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_2.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_3.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_4.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        vibrator.vibrate(20);
+                        break;
+                    case 4:
+                        input_digit_1.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_2.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_3.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_4.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        vibrator.vibrate(20);
+                        break;
+                    case 5:
+                        input_digit_1.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_2.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_3.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_4.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_5.setImageResource(R.drawable.pass_icon_1);
+                        vibrator.vibrate(20);
+
+                        password_1_rl.setVisibility(View.INVISIBLE);
+
+                        password_2_rl.setVisibility(View.VISIBLE);
+
+                        input_digit_1.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_2.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_3.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_4.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+
+
+                        break;
+                }
             }
-        }
-        else {
-            if (inputStringValue.length() <= 4) {
-                inputStringValue += digit;
+        }else {
+
+            if (inputRePasswordValue.length() <= 4) {
+
+                if (digit.contains("d")) {
+                    if (inputRePasswordValue.length() > 0) {
+                        inputRePasswordValue = inputRePasswordValue.substring(0, inputRePasswordValue.length() - 1);
+                    }
+                } else {
+                    if (inputRePasswordValue.length() <= 4) {
+                        inputRePasswordValue += digit;
+                    }
+                }
+
+
+                switch (inputRePasswordValue.length()) {
+
+                    case 0:
+                        input_digit_1.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_2.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_3.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_4.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        vibrator.vibrate(20);
+                        break;
+
+                    case 1:
+                        input_digit_1.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_2.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_3.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_4.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        vibrator.vibrate(20);
+
+                        break;
+                    case 2:
+                        input_digit_1.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_2.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_3.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_4.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        vibrator.vibrate(20);
+                        break;
+                    case 3:
+                        input_digit_1.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_2.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_3.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_4.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        vibrator.vibrate(20);
+                        break;
+                    case 4:
+                        input_digit_1.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_2.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_3.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_4.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        vibrator.vibrate(20);
+                        break;
+                    case 5:
+                        input_digit_1.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_2.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_3.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_4.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_5.setImageResource(R.drawable.pass_icon_1);
+                        vibrator.vibrate(20);
+
+                        if (inputPasswordValue.equalsIgnoreCase(inputRePasswordValue)) {
+                            RegistrationPassCodeEntryRequest registrationPassCodeEntryRequest = new RegistrationPassCodeEntryRequest();
+                            registrationPassCodeEntryRequest.setUserIdToken(prefs.getString("UserIdToken", ""));
+                            registrationPassCodeEntryRequest.setPassCode(inputPasswordValue);
+                            new HttpRegistrationPassCodeEntryResponse().execute(registrationPassCodeEntryRequest);
+                        } else {
+
+                            password_1_rl.setVisibility(View.VISIBLE);
+                            password_2_rl.setVisibility(View.INVISIBLE);
+
+                            inputPasswordValue = "";
+                            inputRePasswordValue = "";
+
+                            input_digit_1.setImageResource(R.drawable.pass_icon_2);
+                            input_digit_2.setImageResource(R.drawable.pass_icon_2);
+                            input_digit_3.setImageResource(R.drawable.pass_icon_2);
+                            input_digit_4.setImageResource(R.drawable.pass_icon_2);
+                            input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        }
+
+                        break;
+                }
             }
-        }
-
-
-        switch (inputStringValue.length()){
-
-            case 0:
-                input_digit_1.setImageResource(R.drawable.pass_icon_2);
-                input_digit_2.setImageResource(R.drawable.pass_icon_2);
-                input_digit_3.setImageResource(R.drawable.pass_icon_2);
-                input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                input_digit_5.setImageResource(R.drawable.pass_icon_2);
-                vibrator.vibrate(20);
-                break;
-
-            case 1:
-                input_digit_1.setImageResource(R.drawable.pass_icon_1);
-                input_digit_2.setImageResource(R.drawable.pass_icon_2);
-                input_digit_3.setImageResource(R.drawable.pass_icon_2);
-                input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                input_digit_5.setImageResource(R.drawable.pass_icon_2);
-                vibrator.vibrate(20);
-
-                break;
-            case 2:
-                input_digit_1.setImageResource(R.drawable.pass_icon_1);
-                input_digit_2.setImageResource(R.drawable.pass_icon_1);
-                input_digit_3.setImageResource(R.drawable.pass_icon_2);
-                input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                input_digit_5.setImageResource(R.drawable.pass_icon_2);
-                vibrator.vibrate(20);
-                break;
-            case 3:
-                input_digit_1.setImageResource(R.drawable.pass_icon_1);
-                input_digit_2.setImageResource(R.drawable.pass_icon_1);
-                input_digit_3.setImageResource(R.drawable.pass_icon_1);
-                input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                input_digit_5.setImageResource(R.drawable.pass_icon_2);
-                vibrator.vibrate(20);
-                break;
-            case 4:
-                input_digit_1.setImageResource(R.drawable.pass_icon_1);
-                input_digit_2.setImageResource(R.drawable.pass_icon_1);
-                input_digit_3.setImageResource(R.drawable.pass_icon_1);
-                input_digit_4.setImageResource(R.drawable.pass_icon_1);
-                input_digit_5.setImageResource(R.drawable.pass_icon_2);
-                vibrator.vibrate(20);
-                break;
-            case 5:
-                input_digit_1.setImageResource(R.drawable.pass_icon_1);
-                input_digit_2.setImageResource(R.drawable.pass_icon_1);
-                input_digit_3.setImageResource(R.drawable.pass_icon_1);
-                input_digit_4.setImageResource(R.drawable.pass_icon_1);
-                input_digit_5.setImageResource(R.drawable.pass_icon_1);
-                vibrator.vibrate(20);
-                break;
         }
 
     }

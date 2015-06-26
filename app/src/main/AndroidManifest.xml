@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -30,7 +30,6 @@
             android:name=".activity.MainActivity"
             android:label="@string/title_activity_intro" >
         </activity>
-
         <activity
             android:name=".activity.IntroSliderActivity"
             android:label="@string/title_activity_intro_slider" >
@@ -46,7 +45,7 @@
         <activity
             android:name=".activity.ProfileEntryActivity"
             android:label="@string/title_activity_profile_entry"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name=".activity.VerificationActivity"
@@ -63,7 +62,7 @@
         <activity
             android:name=".activity.ConfirmInfoActivity"
             android:label="@string/title_activity_confirm_info"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name=".activity.VerifyAccountNoActivity"
@@ -80,13 +79,12 @@
         <activity
             android:name=".activity.RememberPhraseActivity"
             android:label="@string/title_activity_remember_phrase"
-            android:windowSoftInputMode="stateHidden">
+            android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name=".activity.CompleteRegistrationActivity"
             android:label="@string/title_activity_complete_registration" >
         </activity>
-
         <activity
             android:name=".activity.HamPayLoginActivity"
             android:label="@string/title_activity_transaction_detail" >
@@ -142,6 +140,10 @@
 
                 <data android:mimeType="vnd.android.cursor.item/com.hampay.mobile" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.ChangePasswordActivity"
+            android:label="@string/title_activity_change_password" >
         </activity>
 
     </application>

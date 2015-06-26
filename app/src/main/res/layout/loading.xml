@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.hampay.mobile.android.component.progressbar.ContentLoadingSmoothProgressBar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.hampay.mobile.android"
+    android:id="@+id/loading"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:indeterminate="true"
+    android:background="@android:color/transparent"
+    app:spb_color="@color/register_btn_color"
+    app:spb_speed="0.7"
+    android:layout_marginBottom="15dp"
+    android:layout_marginTop="15dp"
+    app:spb_interpolator="spb_interpolator_accelerate" />

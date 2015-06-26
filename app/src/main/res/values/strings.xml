@@ -50,7 +50,7 @@
     <string name="title_settings">تنظیمات</string>
     <string name="title_contacts_us">تماس با ما</string>
     <string name="login">ورود</string>
-    <string name="title_help">راهنما</string>
+    <string name="title_guide">راهنما</string>
     <string name="title_exit">خروج</string>
 
     <string name="payment">پرداخت</string>
@@ -140,6 +140,8 @@
     \n
         (دقت کنید که بیش از دو عدد تکراری قابل قبول نمی‌باشد .
     </string>
+    <string name="get_password_text_5">لطفا کلمه عبور مورد نظر خود را مجدد تکرار نمایید.</string>
+    <string name="current_password">لطفا رمز عبور جاری خود را وارد نمایید.</string>
 
     <string name="confirm">تایید</string>
     <string name="title_activity_remember_phrase">RememberPhraseActivity</string>
@@ -174,6 +176,16 @@
         <item>تغییر کلمه یادآوری</item>
     </string-array>
 
+    <string-array name="guide_list">
+        <item>ثبت نام</item>
+        <item>ثبت نام VIP</item>
+        <item>پرداخت به فرد</item>
+        <item>پرداخت به کسب و کار</item>
+        <item>جستجو در تراکنش ها</item>
+        <item>تغییر کلمه یادآوری</item>
+        <item>تغییر رمز عبور</item>
+    </string-array>
+
 
     <string name="pay_one_confirm">واریز مبلغ %1$s ریال به %2$s در %3$s</string>
     <string name="pay_one_comment">لطفا از صحت نام و مبلغ واریزی مطمئن شوید.</string>
@@ -202,5 +214,13 @@
 
 
     <string name="pay_one_search_hint">نام یا شماره همراه دریافت کننده را وارد کنید</string>
+
+    <string name="keyboard_help">راهنما</string>
+    <string name="title_activity_change_password">ChangePasswordActivity</string>
+    <string name="title_activity_guide">GuideActivity</string>
+
+    <string name="exit_app_text">آیا مایل به خروج از هم‌پی هستید؟</string>
+    <string name="exit_app_yes">خروج</string>
+    <string name="exit_app_no">انصراف</string>
 
 </resources>

@@ -15,6 +15,7 @@ import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.dto.ContactDTO;
 import com.hampay.common.core.model.response.UserProfileResponse;
 import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.activity.MainActivity;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.webservice.WebServices;
 
@@ -128,6 +129,7 @@ public class AccountDetailFragment extends Fragment {
                     user_image.setImageResource(R.drawable.user_icon_blue);
                 }
                 user_name_text.setText(userProfileResponse.getService().getUserProfile().getFullName());
+                MainActivity.user_account_name.setText(userProfileResponse.getService().getUserProfile().getFullName());
                 user_account_no_text.setText(getString(R.string.account_no) + ": " + userProfileResponse.getService().getUserProfile().getAccountNumber());
                 user_bank_name.setText(userProfileResponse.getService().getUserProfile().getBankName());
                 user_mobile_no.setText(getString(R.string.mobile_no) + ": " + userProfileResponse.getService().getUserProfile().getCellNumber());

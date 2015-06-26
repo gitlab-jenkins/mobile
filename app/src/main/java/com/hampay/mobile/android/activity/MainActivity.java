@@ -3,6 +3,11 @@ package com.hampay.mobile.android.activity;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
+import android.app.Activity;
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,6 +23,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -26,8 +32,10 @@ import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.account.AccountGeneral;
 import com.hampay.mobile.android.account.ContactsManager;
 import com.hampay.mobile.android.account.HamPayContact;
+import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.fragment.AccountDetailFragment;
 import com.hampay.mobile.android.fragment.FragmentDrawer;
+import com.hampay.mobile.android.fragment.GuideFragment;
 import com.hampay.mobile.android.fragment.PayToBusinessFragment;
 import com.hampay.mobile.android.fragment.PayToOneFragment;
 import com.hampay.mobile.android.fragment.SettingFragment;
@@ -47,11 +55,20 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     ImageView nav_icon;
 
+    FacedTextView fragment_title;
+
+    public static  FacedTextView user_account_name;
+
+    Dialog dialogExitApp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
          setContentView(R.layout.activity_main);
 
+        fragment_title = (FacedTextView)findViewById(R.id.fragment_title);
+
+        user_account_name = (FacedTextView)findViewById(R.id.user_account_name);
 //        addNewAccount(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
 //        ContactsManager.addContact(MainActivity.this, new HamPayContact("Hooman", "Amini"));
 
@@ -73,26 +90,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         drawerFragment.setDrawerListener(this);
 
 
-//        mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-//                R.drawable.ic_profile, R.string.drawer_open,
-//                R.string.drawer_close) {
-//
-//            @Override
-//            public boolean onOptionsItemSelected(MenuItem item) {
-//                if (item != null && item.getItemId() == android.R.id.home) {
-//                    if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
-//                        drawerLayout.closeDrawer(Gravity.RIGHT);
-//                    } else {
-//                        drawerLayout.openDrawer(Gravity.RIGHT);
-//                    }
-//                }
-//                return false;
-//            }
-//        };
-
-
-
-//some other code
         mDrawerToggle = new ActionBarDrawerToggle(
                 this, drawerLayout,
                 R.string.drawer_open,
@@ -130,9 +127,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         };
 
-        //drawerFragment.setDrawerListener(mDrawerToggle);
-
-        // display the first navigation drawer view on app launch
         displayView(0);
     }
 
@@ -176,6 +170,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             case 0:
                 fragment = new AccountDetailFragment();
                 title = getString(R.string.title_account_detail);
+
                 break;
             case 1:
                 fragment = new TransactionFragment();
@@ -191,9 +186,16 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 break;
             case 4:
                 fragment = new SettingFragment();
-                title = getString(R.string.title_pay_to_business);
-
+                title = getString(R.string.title_settings);
                 break;
+            case 6:
+                fragment = new GuideFragment();
+                title = getString(R.string.title_guide);
+                break;
+            case 7:
+                showExitDialog();
+                break;
+
             default:
                 break;
         }
@@ -204,9 +206,49 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             fragmentTransaction.replace(R.id.container_body, fragment);
             fragmentTransaction.commit();
 
-            // set the toolbar title
-            //getSupportActionBar().setTitle(title);
+            fragment_title.setText(title);
+
         }
+    }
+
+    private void showExitDialog(){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) MainActivity.this;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = getLayoutInflater().inflate(R.layout.dialog_exit_app, null);
+
+        FacedTextView exit_app_yes = (FacedTextView) view.findViewById(R.id.exit_app_yes);
+        FacedTextView exit_app_no = (FacedTextView) view.findViewById(R.id.exit_app_no);
+
+        exit_app_yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               dialogExitApp.dismiss();
+                finish();
+            }
+        });
+
+
+        exit_app_no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogExitApp.dismiss();
+            }
+        });
+
+
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialogExitApp = new Dialog(MainActivity.this);
+        dialogExitApp.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogExitApp.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogExitApp.setContentView(view);
+        dialogExitApp.setTitle(null);
+        dialogExitApp.setCanceledOnTouchOutside(false);
+
+        dialogExitApp.show();
     }
 
     @Override
@@ -249,7 +291,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
 
 
-
     private void addNewAccount(String accountType, String authTokenType) {
         final AccountManagerFuture<Bundle> future = AccountManager.get(this).addAccount(accountType, authTokenType, null, null, this, new AccountManagerCallback<Bundle>() {
             @Override
@@ -262,5 +303,13 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 }
             }
         }, null);
+    }
+
+    @Override
+    public void onBackPressed() {
+//        moveTaskToBack(true);
+
+        showExitDialog();
+
     }
 }

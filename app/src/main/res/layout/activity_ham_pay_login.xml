@@ -160,7 +160,8 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp">
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp">
 
             <com.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/digit_1"
@@ -211,7 +212,9 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp">
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="4dp">
 
             <com.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/digit_4"
@@ -262,7 +265,9 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="4dp">
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="4dp">
 
             <com.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/digit_7"
@@ -324,7 +329,7 @@
                 android:textColor="@android:color/white"
                 android:background="@color/keyword_btn_color"
                 android:textSize="20sp"
-                android:text="@string/resend"
+                android:text="@string/keyboard_help"
                 android:gravity="center"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"/>
@@ -343,18 +348,24 @@
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"/>
 
-            <com.hampay.mobile.android.component.FacedTextView
+
+            <RelativeLayout
                 android:id="@+id/backspace"
-                geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="0dip"
                 android:layout_height="45dp"
                 android:layout_weight="0.3"
-                android:textColor="@android:color/white"
                 android:background="@color/keyword_btn_color"
-                android:textSize="26sp"
-                android:gravity="center"
                 android:layout_marginLeft="2dp"
-                android:layout_marginRight="2dp"/>
+                android:layout_marginRight="2dp">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="24dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/backsplace"
+                    />
+
+            </RelativeLayout>
 
 
 

@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.request.RegistrationEntryRequest;
@@ -39,7 +40,7 @@ public class PostVerificationActivity extends ActionBarActivity implements View.
     FacedTextView digit_9;
     FacedTextView digit_0;
     FacedTextView resend_active_code;
-    FacedTextView backspace;
+    RelativeLayout backspace;
 
     String inputStringValue = "";
 
@@ -77,7 +78,7 @@ public class PostVerificationActivity extends ActionBarActivity implements View.
         digit_0.setOnClickListener(this);
         resend_active_code = (FacedTextView)findViewById(R.id.resend_active_code);
         resend_active_code.setOnClickListener(this);
-        backspace = (FacedTextView)findViewById(R.id.backspace);
+        backspace = (RelativeLayout)findViewById(R.id.backspace);
         backspace.setOnClickListener(this);
 
         input_digit_1 = (ImageView)findViewById(R.id.input_digit_1);

@@ -51,6 +51,16 @@
     </LinearLayout>
 
 
+    <com.hampay.mobile.android.component.FacedTextView
+        geekui:customTypeface="fonts/iran_sans.ttf"
+        android:id="@+id/noItems"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:visibility="gone"
+        android:textColor="#363636"/>
+
     <RelativeLayout
         android:visibility="visible"
         android:id="@+id/loading_rl"

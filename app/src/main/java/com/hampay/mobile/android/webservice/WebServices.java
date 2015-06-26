@@ -14,28 +14,36 @@ import com.hampay.common.core.model.request.BankListRequest;
 import com.hampay.common.core.model.request.BusinessListRequest;
 import com.hampay.common.core.model.request.BusinessPaymentConfirmRequest;
 import com.hampay.common.core.model.request.BusinessPaymentRequest;
+import com.hampay.common.core.model.request.ChangePassCodeRequest;
 import com.hampay.common.core.model.request.ContactsHampayEnabledRequest;
 import com.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
 import com.hampay.common.core.model.request.IndividualPaymentRequest;
 import com.hampay.common.core.model.request.RegistrationConfirmUserDataRequest;
 import com.hampay.common.core.model.request.RegistrationEntryRequest;
 import com.hampay.common.core.model.request.RegistrationFetchUserDataRequest;
+import com.hampay.common.core.model.request.RegistrationMemorableWordEntryRequest;
+import com.hampay.common.core.model.request.RegistrationPassCodeEntryRequest;
 import com.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
 import com.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
+import com.hampay.common.core.model.request.TACRequest;
 import com.hampay.common.core.model.request.TransactionListRequest;
 import com.hampay.common.core.model.request.UserProfileRequest;
 import com.hampay.common.core.model.response.BankListResponse;
 import com.hampay.common.core.model.response.BusinessListResponse;
 import com.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
 import com.hampay.common.core.model.response.BusinessPaymentResponse;
+import com.hampay.common.core.model.response.ChangePassCodeResponse;
 import com.hampay.common.core.model.response.ContactsHampayEnabledResponse;
 import com.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
 import com.hampay.common.core.model.response.IndividualPaymentResponse;
 import com.hampay.common.core.model.response.RegistrationConfirmUserDataResponse;
 import com.hampay.common.core.model.response.RegistrationEntryResponse;
 import com.hampay.common.core.model.response.RegistrationFetchUserDataResponse;
+import com.hampay.common.core.model.response.RegistrationMemorableWordEntryResponse;
+import com.hampay.common.core.model.response.RegistrationPassCodeEntryResponse;
 import com.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
 import com.hampay.common.core.model.response.RegistrationVerifyMobileResponse;
+import com.hampay.common.core.model.response.TACResponse;
 import com.hampay.common.core.model.response.TransactionListResponse;
 import com.hampay.common.core.model.response.UserProfileResponse;
 import com.hampay.mobile.android.util.Constant;
@@ -129,6 +137,8 @@ public class WebServices  {
 
     }
 
+
+    //Here
 
     public ResponseMessage<RegistrationEntryResponse>  registrationEntry(RegistrationEntryRequest registrationEntryRequest){
 
@@ -405,7 +415,7 @@ public class WebServices  {
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
         HttpHost host = new HttpHost("176.58.104.158", 9093);
 
-        HttpRequest request = new HttpPost("/users/reg-fetch-user-data");
+        HttpRequest request = new HttpPost("/users/reg-confirm-user-data");
 
         HttpResponse response;
         try {
@@ -459,6 +469,272 @@ public class WebServices  {
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationConfirmUserDataRequest>>() {}.getType();
         return new Gson().toJson(message, requestType);
     }
+
+    public ResponseMessage<RegistrationPassCodeEntryResponse>
+    registrationPassCodeEntryResponse(RegistrationPassCodeEntryRequest registrationPassCodeEntryRequest){
+
+        ResponseMessage<RegistrationPassCodeEntryResponse> registrationPassCodeEntryResponse = null;
+        HttpParams httpParameters = new BasicHttpParams();
+        int timeoutConnection = 30000;
+        HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+        int timeoutSocket = 30000;
+        HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+        HttpClient httpClient = new DefaultHttpClient(httpParameters);
+        HttpHost host = new HttpHost("176.58.104.158", 9093);
+
+        HttpRequest request = new HttpPost("/users/reg-pass-code-entry");
+
+        HttpResponse response;
+        try {
+            StringEntity entity = new StringEntity(createRegistrationPassCodeEntryRequest(registrationPassCodeEntryRequest), "UTF-8");
+            entity.setContentType("application/json");
+            ((HttpPost) request).setEntity(entity);
+
+            response = httpClient.execute(host, request);
+
+            HttpEntity responseEntity = response.getEntity();
+            StatusLine responseStatus = response.getStatusLine();
+            int statusCode = responseStatus != null ? responseStatus.getStatusCode() : 0;
+            String result = EntityUtils.toString(responseEntity);
+
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                }
+            });
+            Gson gson = builder.create();
+
+
+            Type responseType = new com.google.gson.reflect.TypeToken<ResponseMessage<RegistrationPassCodeEntryResponse>>() {}.getType();
+            registrationPassCodeEntryResponse = gson.fromJson(result, responseType);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            httpClient.getConnectionManager().shutdown();
+        }
+
+        return registrationPassCodeEntryResponse;
+
+    }
+
+    private String createRegistrationPassCodeEntryRequest(RegistrationPassCodeEntryRequest registrationPassCodeEntryRequest) {
+        RequestHeader header = new RequestHeader();
+        header.setAuthToken("008ewe");
+        header.setVersion("1.0-PA");
+
+        RequestMessage<RegistrationPassCodeEntryRequest> message = new RequestMessage<RegistrationPassCodeEntryRequest>();
+        message.setRequestHeader(header);
+        RegistrationPassCodeEntryRequest request = registrationPassCodeEntryRequest;
+        request.setRequestUUID("1234");
+
+
+        message.setService(request);
+
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationPassCodeEntryRequest>>() {}.getType();
+        return new Gson().toJson(message, requestType);
+    }
+
+
+    public ResponseMessage<ChangePassCodeResponse> changePassCodeResponse(ChangePassCodeRequest changePassCodeRequest){
+
+        ResponseMessage<ChangePassCodeResponse> changePassCodeResponseResponseMessage = null;
+        HttpParams httpParameters = new BasicHttpParams();
+        int timeoutConnection = 30000;
+        HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+        int timeoutSocket = 30000;
+        HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+        HttpClient httpClient = new DefaultHttpClient(httpParameters);
+        HttpHost host = new HttpHost("176.58.104.158", 9093);
+
+        HttpRequest request = new HttpPost("/users/passcode");
+
+        HttpResponse response;
+        try {
+            StringEntity entity = new StringEntity(createChangePassCodeRequest(changePassCodeRequest), "UTF-8");
+            entity.setContentType("application/json");
+            ((HttpPost) request).setEntity(entity);
+
+            response = httpClient.execute(host, request);
+
+            HttpEntity responseEntity = response.getEntity();
+            StatusLine responseStatus = response.getStatusLine();
+            int statusCode = responseStatus != null ? responseStatus.getStatusCode() : 0;
+            String result = EntityUtils.toString(responseEntity);
+
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                }
+            });
+            Gson gson = builder.create();
+
+
+            Type responseType = new com.google.gson.reflect.TypeToken<ResponseMessage<ChangePassCodeResponse>>() {}.getType();
+            changePassCodeResponseResponseMessage = gson.fromJson(result, responseType);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            httpClient.getConnectionManager().shutdown();
+        }
+
+        return changePassCodeResponseResponseMessage;
+
+    }
+
+    private String createChangePassCodeRequest(ChangePassCodeRequest changePassCodeRequest) {
+        RequestHeader header = new RequestHeader();
+        header.setAuthToken("008ewe");
+        header.setVersion("1.0-PA");
+
+        RequestMessage<ChangePassCodeRequest> message = new RequestMessage<ChangePassCodeRequest>();
+        message.setRequestHeader(header);
+        ChangePassCodeRequest request = changePassCodeRequest;
+        request.setRequestUUID("1234");
+
+
+        message.setService(request);
+
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<ChangePassCodeRequest>>() {}.getType();
+        return new Gson().toJson(message, requestType);
+    }
+
+
+
+    public ResponseMessage<RegistrationMemorableWordEntryResponse>
+    registrationMemorableWordEntryResponse(RegistrationMemorableWordEntryRequest registrationMemorableWordEntryRequest){
+
+        ResponseMessage<RegistrationMemorableWordEntryResponse> registrationMemorableWordEntryResponse = null;
+        HttpParams httpParameters = new BasicHttpParams();
+        int timeoutConnection = 30000;
+        HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+        int timeoutSocket = 30000;
+        HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+        HttpClient httpClient = new DefaultHttpClient(httpParameters);
+        HttpHost host = new HttpHost("176.58.104.158", 9093);
+
+        HttpRequest request = new HttpPost("/users/reg-memorable-word-entry");
+
+        HttpResponse response;
+        try {
+            StringEntity entity = new StringEntity(createRegistrationMemorableWordEntryRequest(registrationMemorableWordEntryRequest), "UTF-8");
+            entity.setContentType("application/json");
+            ((HttpPost) request).setEntity(entity);
+
+            response = httpClient.execute(host, request);
+
+            HttpEntity responseEntity = response.getEntity();
+            StatusLine responseStatus = response.getStatusLine();
+            int statusCode = responseStatus != null ? responseStatus.getStatusCode() : 0;
+            String result = EntityUtils.toString(responseEntity);
+
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                }
+            });
+            Gson gson = builder.create();
+
+
+            Type responseType = new com.google.gson.reflect.TypeToken<ResponseMessage<RegistrationMemorableWordEntryResponse>>() {}.getType();
+            registrationMemorableWordEntryResponse = gson.fromJson(result, responseType);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            httpClient.getConnectionManager().shutdown();
+        }
+
+        return registrationMemorableWordEntryResponse;
+
+    }
+
+    private String createRegistrationMemorableWordEntryRequest(RegistrationMemorableWordEntryRequest registrationMemorableWordEntryRequest) {
+        RequestHeader header = new RequestHeader();
+        header.setAuthToken("008ewe");
+        header.setVersion("1.0-PA");
+
+        RequestMessage<RegistrationMemorableWordEntryRequest> message = new RequestMessage<RegistrationMemorableWordEntryRequest>();
+        message.setRequestHeader(header);
+        RegistrationMemorableWordEntryRequest request = registrationMemorableWordEntryRequest;
+        request.setRequestUUID("1234");
+
+
+        message.setService(request);
+
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationMemorableWordEntryRequest>>() {}.getType();
+        return new Gson().toJson(message, requestType);
+    }
+
+    public ResponseMessage<TACResponse> tACResponse(TACRequest tacRequest){
+
+        ResponseMessage<TACResponse> tACResponse = null;
+        HttpParams httpParameters = new BasicHttpParams();
+        int timeoutConnection = 30000;
+        HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+        int timeoutSocket = 30000;
+        HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+        HttpClient httpClient = new DefaultHttpClient(httpParameters);
+        HttpHost host = new HttpHost("176.58.104.158", 9093);
+
+        HttpRequest request = new HttpPost("/users/tac");
+
+        HttpResponse response;
+        try {
+            StringEntity entity = new StringEntity(createTACResponse(tacRequest), "UTF-8");
+            entity.setContentType("application/json");
+            ((HttpPost) request).setEntity(entity);
+
+            response = httpClient.execute(host, request);
+
+            HttpEntity responseEntity = response.getEntity();
+            StatusLine responseStatus = response.getStatusLine();
+            int statusCode = responseStatus != null ? responseStatus.getStatusCode() : 0;
+            String result = EntityUtils.toString(responseEntity);
+
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                }
+            });
+            Gson gson = builder.create();
+
+
+            Type responseType = new com.google.gson.reflect.TypeToken<ResponseMessage<TACResponse>>() {}.getType();
+            tACResponse = gson.fromJson(result, responseType);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            httpClient.getConnectionManager().shutdown();
+        }
+
+        return tACResponse;
+
+    }
+
+    private String createTACResponse(TACRequest tacRequest) {
+        RequestHeader header = new RequestHeader();
+        header.setAuthToken("008ewe");
+        header.setVersion("1.0-PA");
+
+        RequestMessage<TACRequest> message = new RequestMessage<TACRequest>();
+        message.setRequestHeader(header);
+        TACRequest request = tacRequest;
+        request.setRequestUUID("1234");
+
+
+        message.setService(request);
+
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<TACRequest>>() {}.getType();
+        return new Gson().toJson(message, requestType);
+    }
+
 
     public ResponseMessage<UserProfileResponse>  getUserProfile(){
 

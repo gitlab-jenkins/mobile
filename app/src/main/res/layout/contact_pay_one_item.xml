@@ -3,13 +3,13 @@
     xmlns:geekui="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="18dp">
+    android:padding="4dp">
 
     <RelativeLayout
         android:id="@+id/contact_rl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -36,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:gravity="center"
                 android:layout_marginRight="8dp"
                 android:text="09126157905"/>
@@ -48,8 +48,8 @@
             android:id="@+id/pay_to_one"
             xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:layout_width="85dp"
-            android:layout_height="48dp"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
             card_view:cardBackgroundColor="@color/register_btn_color"
             card_view:cardCornerRadius="2dp"
             card_view:cardElevation="4dp"
@@ -76,7 +76,7 @@
         xmlns:geekui="http://schemas.android.com/apk/res-auto"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp">
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -97,7 +97,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/black"
-                    android:textSize="22sp"
+                    android:textSize="18sp"
                     android:gravity="center"
                     android:layout_marginRight="8dp"
                     android:text="دریافت"/>
@@ -108,7 +108,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/black"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:gravity="center"
                     android:layout_marginRight="8dp"
                     android:text="هومن امینی"/>
@@ -120,7 +120,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/normal_text"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:gravity="center"
                     android:layout_marginRight="8dp"
                     android:text="متن پیام"/>

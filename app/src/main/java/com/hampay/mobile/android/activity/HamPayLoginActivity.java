@@ -2,17 +2,23 @@ package com.hampay.mobile.android.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
+import com.hampay.common.common.response.ResponseMessage;
+import com.hampay.common.core.model.request.RegistrationMemorableWordEntryRequest;
+import com.hampay.common.core.model.request.TACRequest;
+import com.hampay.common.core.model.response.RegistrationMemorableWordEntryResponse;
+import com.hampay.common.core.model.response.TACResponse;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.component.FacedTextView;
+import com.hampay.mobile.android.webservice.WebServices;
 
 public class HamPayLoginActivity extends ActionBarActivity implements View.OnClickListener {
 
@@ -29,7 +35,7 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
     FacedTextView digit_9;
     FacedTextView digit_0;
     FacedTextView resend_active_code;
-    FacedTextView backspace;
+    RelativeLayout backspace;
 
     String inputStringValue = "";
 
@@ -66,7 +72,7 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
         digit_0.setOnClickListener(this);
         resend_active_code = (FacedTextView)findViewById(R.id.resend_active_code);
         resend_active_code.setOnClickListener(this);
-        backspace = (FacedTextView)findViewById(R.id.backspace);
+        backspace = (RelativeLayout)findViewById(R.id.backspace);
         backspace.setOnClickListener(this);
 
         input_digit_1 = (ImageView)findViewById(R.id.input_digit_1);
@@ -81,8 +87,47 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
             @Override
             public void onClick(View v) {
 
+                TACRequest tacRequest = new TACRequest();
+                tacRequest.setRequestUUID("");
+                new HttpTACResponse().execute(tacRequest);
             }
         });
+    }
+
+    private ResponseMessage<TACResponse> tACResponse;
+
+    public class HttpTACResponse extends AsyncTask<TACRequest, Void, String> {
+
+        @Override
+        protected String doInBackground(TACRequest... params) {
+
+            WebServices webServices = new WebServices(getApplicationContext());
+            tACResponse = webServices.tACResponse(params[0]);
+
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if (tACResponse.getService().getResultStatus() != null) {
+
+                Intent intent = new Intent();
+                intent.setClass(HamPayLoginActivity.this, MainActivity.class);
+//                intent.addCategory(Intent.CATEGORY_HOME);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+
+            }
+        }
     }
 
     @Override
@@ -149,11 +194,16 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
         else {
             if (inputStringValue.length() <= 4) {
                 inputStringValue += digit;
-            }else {
-                Intent intent = new Intent();
-                intent.setClass(HamPayLoginActivity.this, MainActivity.class);
-                startActivity(intent);
             }
+        }
+
+        if (inputStringValue.length() == 5){
+            Intent intent = new Intent();
+            intent.setClass(HamPayLoginActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+
         }
 
 
