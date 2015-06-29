@@ -58,6 +58,7 @@
     <string name="insert_message">پیام خود را بنویسید...</string>
     <string name="insert_price">مبلغ دلخواه خود را به ریال وارد کنید</string>
     <string name="call">تماس</string>
+    <string name="hampay_contact">ارتباط با هم پی</string>
     <string name="pay_to">پرداخت به:   </string>
     <string name="price">مبلغ</string>
 
@@ -79,6 +80,11 @@
 
     <string name="bank_name">نام بانک</string>
 
+    <string name="contact_us">ارتباط با ما</string>
+    <string name="user_mail">ایمیل شما</string>
+    <string name="user_text_contact">پیام خود را بنویسید</string>
+    <string name="send_message">ارسال پیام</string>
+    <string name="call_message">تماس یا اپراتور</string>
 
 
     <string name="start_activity_title">شبکه پرداخت هم پی</string>
@@ -146,12 +152,19 @@
     <string name="confirm">تایید</string>
     <string name="title_activity_remember_phrase">RememberPhraseActivity</string>
 
+    <string name="get_current_memorable">دریافت کلمه یادآوری جاری</string>
+    <string name="get_new_memorable">دریافت کلمه یادآوری جدید</string>
+
     <string name="remember_phrase">یادآوری</string>
     <string name="remember_phrase_text">لطفا یک کلمه کوتاه به عنوان یادآوری رمز عبور وارد نمایید.</string>
     <string name="title_activity_complete_registration">CompleteRegistrationActivity</string>
     <string name="complete_registarion">تکمیل ثبت نام</string>
     <string name="complete_registarion_text_1">آفرین شما عضو تازه شبکه هم‌پی هستید.</string>
     <string name="complete_registarion_text_2">حالا دوستانتان در شبکه هم‌پی تنها با شماره موبایلتان به شما پول می دهند.</string>
+
+
+    <string name="current_memorable">کلمه یادآوری جاری خود را وارد کنید.</string>
+    <string name="new_memorable">کلمه یادآوری جدید خود را وارد کنید.</string>
 
     <string name="login_hampay">ورود به شبکه هم‌پی </string>
     <string name="title_activity_ham_pay_login">HamPayLoginActivity</string>
@@ -222,5 +235,7 @@
     <string name="exit_app_text">آیا مایل به خروج از هم‌پی هستید؟</string>
     <string name="exit_app_yes">خروج</string>
     <string name="exit_app_no">انصراف</string>
+    <string name="title_activity_change_memorable">ChangeMemorableActivity</string>
+    <string name="title_activity_change_memorable_pass">ChangeMemorablePassActivity</string>
 
 </resources>

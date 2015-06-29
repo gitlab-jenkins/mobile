@@ -14,7 +14,10 @@ import com.hampay.common.core.model.request.BankListRequest;
 import com.hampay.common.core.model.request.BusinessListRequest;
 import com.hampay.common.core.model.request.BusinessPaymentConfirmRequest;
 import com.hampay.common.core.model.request.BusinessPaymentRequest;
+import com.hampay.common.core.model.request.BusinessSearchRequest;
+import com.hampay.common.core.model.request.ChangeMemorableWordRequest;
 import com.hampay.common.core.model.request.ChangePassCodeRequest;
+import com.hampay.common.core.model.request.ContactUsRequest;
 import com.hampay.common.core.model.request.ContactsHampayEnabledRequest;
 import com.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
 import com.hampay.common.core.model.request.IndividualPaymentRequest;
@@ -32,7 +35,9 @@ import com.hampay.common.core.model.response.BankListResponse;
 import com.hampay.common.core.model.response.BusinessListResponse;
 import com.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
 import com.hampay.common.core.model.response.BusinessPaymentResponse;
+import com.hampay.common.core.model.response.ChangeMemorableWordResponse;
 import com.hampay.common.core.model.response.ChangePassCodeResponse;
+import com.hampay.common.core.model.response.ContactUsResponse;
 import com.hampay.common.core.model.response.ContactsHampayEnabledResponse;
 import com.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
 import com.hampay.common.core.model.response.IndividualPaymentResponse;
@@ -201,6 +206,74 @@ public class WebServices  {
         message.setService(request);
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationEntryRequest>>() {}.getType();
+        return new Gson().toJson(message, requestType);
+    }
+
+
+    public ResponseMessage<ContactUsResponse>  contactUsResponse(ContactUsRequest contactUsRequest){
+
+        ResponseMessage<ContactUsResponse> contactUsResponseResponseMessage = null;
+        HttpParams httpParameters = new BasicHttpParams();
+        int timeoutConnection = 30000;
+        HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+        int timeoutSocket = 30000;
+        HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+        HttpClient httpClient = new DefaultHttpClient(httpParameters);
+        HttpHost host = new HttpHost("176.58.104.158", 9093);
+
+
+        HttpRequest request = new HttpPost("/contactus");
+
+
+        HttpResponse response;
+        try {
+            StringEntity entity = new StringEntity(createContactUsRequest(contactUsRequest), "UTF-8");
+            entity.setContentType("application/json");
+            ((HttpPost) request).setEntity(entity);
+
+            response = httpClient.execute(host, request);
+
+            HttpEntity responseEntity = response.getEntity();
+            StatusLine responseStatus = response.getStatusLine();
+            int statusCode = responseStatus != null ? responseStatus.getStatusCode() : 0;
+            String result = EntityUtils.toString(responseEntity);
+
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                }
+            });
+            Gson gson = builder.create();
+
+
+            Type responseType = new com.google.gson.reflect.TypeToken<ResponseMessage<ContactUsResponse>>() {}.getType();
+            contactUsResponseResponseMessage = gson.fromJson(result, responseType);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            httpClient.getConnectionManager().shutdown();
+        }
+
+        return contactUsResponseResponseMessage;
+
+    }
+
+
+    private String createContactUsRequest(ContactUsRequest contactUsRequest) {
+        RequestHeader header = new RequestHeader();
+        header.setAuthToken("008ewe");
+        header.setVersion("1.0-PA");
+
+        RequestMessage<ContactUsRequest> message = new RequestMessage<ContactUsRequest>();
+        message.setRequestHeader(header);
+        ContactUsRequest request = contactUsRequest;
+        request.setRequestUUID("1234");
+
+        message.setService(request);
+
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<ContactUsRequest>>() {}.getType();
         return new Gson().toJson(message, requestType);
     }
 
@@ -537,71 +610,134 @@ public class WebServices  {
     }
 
 
-    public ResponseMessage<ChangePassCodeResponse> changePassCodeResponse(ChangePassCodeRequest changePassCodeRequest){
+    public ResponseMessage<ChangePassCodeResponse> changePassCodeResponse(ChangePassCodeRequest changePassCodeRequest) {
 
-        ResponseMessage<ChangePassCodeResponse> changePassCodeResponseResponseMessage = null;
-        HttpParams httpParameters = new BasicHttpParams();
-        int timeoutConnection = 30000;
-        HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
-        int timeoutSocket = 30000;
-        HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
-        HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        ResponseMessage<ChangePassCodeResponse> responseMessage = null;
 
-        HttpRequest request = new HttpPost("/users/passcode");
-
-        HttpResponse response;
+        HttpURLConnection connection = null;
         try {
-            StringEntity entity = new StringEntity(createChangePassCodeRequest(changePassCodeRequest), "UTF-8");
-            entity.setContentType("application/json");
-            ((HttpPost) request).setEntity(entity);
 
-            response = httpClient.execute(host, request);
+            RequestHeader header = new RequestHeader();
+            header.setAuthToken("008ewe");
+            header.setVersion("1.0-PA");
 
-            HttpEntity responseEntity = response.getEntity();
-            StatusLine responseStatus = response.getStatusLine();
-            int statusCode = responseStatus != null ? responseStatus.getStatusCode() : 0;
-            String result = EntityUtils.toString(responseEntity);
+            RequestMessage<ChangePassCodeRequest> message = new RequestMessage<ChangePassCodeRequest>();
+            message.setRequestHeader(header);
+            ChangePassCodeRequest request = changePassCodeRequest;
+            request.setRequestUUID("1234");
+            message.setService(request);
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
-            Gson gson = builder.create();
+            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<ChangePassCodeRequest>>() {}.getType();
+            String jsonRequest = new Gson().toJson(message, requestType);
 
+            URL url = new URL(Constant.SERVICE_URL + "/users/passcode");
 
-            Type responseType = new com.google.gson.reflect.TypeToken<ResponseMessage<ChangePassCodeResponse>>() {}.getType();
-            changePassCodeResponseResponseMessage = gson.fromJson(result, responseType);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setDoOutput(true);
+            connection.setRequestMethod("PUT");
+            connection.setRequestProperty("Content-Type", "application/json");
+            OutputStream outputStream = connection.getOutputStream();
+            outputStream.write(jsonRequest.getBytes());
+            outputStream.flush();
+
+            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            Gson gson = new Gson();
+            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<ChangePassCodeResponse>>() {
+            }.getType());
+
+            if( responseMessage != null && responseMessage.getService() != null ) {
+                System.out.println("Response requestUUID : " + responseMessage.getService().getRequestUUID());
+                System.out.println("Response bank list size : " + responseMessage.getService());
+            } else {
+                System.out.println("Response is null...");
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            httpClient.getConnectionManager().shutdown();
+            if (connection != null)
+                connection.disconnect();
         }
 
-        return changePassCodeResponseResponseMessage;
+        return responseMessage;
 
     }
 
-    private String createChangePassCodeRequest(ChangePassCodeRequest changePassCodeRequest) {
-        RequestHeader header = new RequestHeader();
-        header.setAuthToken("008ewe");
-        header.setVersion("1.0-PA");
-
-        RequestMessage<ChangePassCodeRequest> message = new RequestMessage<ChangePassCodeRequest>();
-        message.setRequestHeader(header);
-        ChangePassCodeRequest request = changePassCodeRequest;
-        request.setRequestUUID("1234");
 
 
-        message.setService(request);
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<ChangePassCodeRequest>>() {}.getType();
-        return new Gson().toJson(message, requestType);
+
+//    private String createChangePassCodeRequest(ChangePassCodeRequest changePassCodeRequest) {
+//        RequestHeader header = new RequestHeader();
+//        header.setAuthToken("008ewe");
+//        header.setVersion("1.0-PA");
+//
+//        RequestMessage<ChangePassCodeRequest> message = new RequestMessage<ChangePassCodeRequest>();
+//        message.setRequestHeader(header);
+//        ChangePassCodeRequest request = changePassCodeRequest;
+//        request.setRequestUUID("1234");
+//
+//
+//        message.setService(request);
+//
+//        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<ChangePassCodeRequest>>() {}.getType();
+//        return new Gson().toJson(message, requestType);
+//    }
+
+
+    public ResponseMessage<ChangeMemorableWordResponse> changeMemorableWordResponse(ChangeMemorableWordRequest changeMemorableWordRequest) {
+
+        ResponseMessage<ChangeMemorableWordResponse> responseMessage = null;
+
+        HttpURLConnection connection = null;
+        try {
+
+            RequestHeader header = new RequestHeader();
+            header.setAuthToken("008ewe");
+            header.setVersion("1.0-PA");
+
+            RequestMessage<ChangeMemorableWordRequest> message = new RequestMessage<ChangeMemorableWordRequest>();
+            message.setRequestHeader(header);
+            ChangeMemorableWordRequest request = changeMemorableWordRequest;
+            request.setRequestUUID("1234");
+            message.setService(request);
+
+            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<ChangeMemorableWordRequest>>() {}.getType();
+            String jsonRequest = new Gson().toJson(message, requestType);
+
+
+            URL url = new URL(Constant.SERVICE_URL + "/users/memorable-word");
+
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setDoOutput(true);
+            connection.setRequestMethod("PUT");
+            connection.setRequestProperty("Content-Type", "application/json");
+            OutputStream outputStream = connection.getOutputStream();
+            outputStream.write(jsonRequest.getBytes());
+            outputStream.flush();
+
+            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            Gson gson = new Gson();
+            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<ChangeMemorableWordResponse>>() {
+            }.getType());
+
+            if( responseMessage != null && responseMessage.getService() != null ) {
+                System.out.println("Response requestUUID : " + responseMessage.getService().getRequestUUID());
+                System.out.println("Response bank list size : " + responseMessage.getService());
+            } else {
+                System.out.println("Response is null...");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null)
+                connection.disconnect();
+        }
+
+        return responseMessage;
+
     }
-
 
 
     public ResponseMessage<RegistrationMemorableWordEntryResponse>
@@ -1110,6 +1246,96 @@ public class WebServices  {
 
     }
 
+    private String createHamPayBusinessJsonMessage() {
+        RequestHeader header = new RequestHeader();
+        header.setAuthToken("008ewe");
+        header.setVersion("1.0-PA");
+
+        RequestMessage<BusinessListRequest> message = new RequestMessage<BusinessListRequest>();
+        message.setRequestHeader(header);
+        BusinessListRequest request = new BusinessListRequest();
+
+        request.setPageNumber(2);
+        request.setPageSize(10);
+
+        request.setRequestUUID("1234");
+        message.setService(request);
+
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<BusinessListRequest>>() {}.getType();
+        return new Gson().toJson(message, requestType);
+    }
+
+    public ResponseMessage<BusinessListResponse>  searchBusinessList(BusinessSearchRequest businessSearchRequest){
+
+        ResponseMessage<BusinessListResponse> businessListResponse = null;
+
+        HttpParams httpParameters = new BasicHttpParams();
+
+        int timeoutConnection = 30000;
+        HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+        int timeoutSocket = 30000;
+        HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+
+        HttpClient httpClient = new DefaultHttpClient(httpParameters);
+
+        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpRequest request = new HttpPost("/search");
+
+        HttpResponse response;
+        try {
+            StringEntity entity = new StringEntity(createSearchBusinessJsonMessage(businessSearchRequest), "UTF-8");
+            entity.setContentType("application/json");
+            ((HttpPost) request).setEntity(entity);
+
+            response = httpClient.execute(host, request);
+
+            HttpEntity responseEntity = response.getEntity();
+            StatusLine responseStatus = response.getStatusLine();
+            int statusCode = responseStatus != null ? responseStatus.getStatusCode() : 0;
+            String result = EntityUtils.toString(responseEntity);
+
+
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                }
+            });
+            Gson gson = builder.create();
+
+            Type responseType = new com.google.gson.reflect.TypeToken<ResponseMessage<BusinessListResponse>>() {}.getType();
+            businessListResponse = gson.fromJson(result, responseType);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            httpClient.getConnectionManager().shutdown();
+        }
+
+        return businessListResponse;
+
+    }
+
+
+    private String createSearchBusinessJsonMessage(BusinessSearchRequest businessSearchRequest) {
+        RequestHeader header = new RequestHeader();
+        header.setAuthToken("008ewe");
+        header.setVersion("1.0-PA");
+
+        RequestMessage<BusinessSearchRequest> message = new RequestMessage<BusinessSearchRequest>();
+        message.setRequestHeader(header);
+        BusinessSearchRequest request = businessSearchRequest;
+
+        request.setRequestUUID("1234");
+
+        message.setService(request);
+
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<BusinessSearchRequest>>() {}.getType();
+        return new Gson().toJson(message, requestType);
+    }
+
+
 
     public ResponseMessage<TransactionListResponse>  getUserTransaction(){
 
@@ -1188,6 +1414,7 @@ public class WebServices  {
         RequestMessage<ContactsHampayEnabledRequest> message = new RequestMessage<ContactsHampayEnabledRequest>();
         message.setRequestHeader(header);
         ContactsHampayEnabledRequest request = new ContactsHampayEnabledRequest();
+
 
         List<ContactDTO> contactDTOs = new ArrayList<ContactDTO>();
 
@@ -1288,24 +1515,7 @@ public class WebServices  {
     }
 
 
-    private String createHamPayBusinessJsonMessage() {
-        RequestHeader header = new RequestHeader();
-        header.setAuthToken("008ewe");
-        header.setVersion("1.0-PA");
 
-        RequestMessage<BusinessListRequest> message = new RequestMessage<BusinessListRequest>();
-        message.setRequestHeader(header);
-        BusinessListRequest request = new BusinessListRequest();
-
-        request.setPageNumber(2);
-        request.setPageSize(10);
-
-        request.setRequestUUID("1234");
-        message.setService(request);
-
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<BusinessListRequest>>() {}.getType();
-        return new Gson().toJson(message, requestType);
-    }
 
     private String createUserTransaction() {
         RequestHeader header = new RequestHeader();

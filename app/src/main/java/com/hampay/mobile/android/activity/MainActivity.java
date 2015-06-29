@@ -5,9 +5,11 @@ import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,10 +30,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.hampay.common.common.response.ResponseMessage;
+import com.hampay.common.core.model.request.ContactUsRequest;
+import com.hampay.common.core.model.response.ContactUsResponse;
+import com.hampay.common.core.model.response.UserProfileResponse;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.account.AccountGeneral;
 import com.hampay.mobile.android.account.ContactsManager;
 import com.hampay.mobile.android.account.HamPayContact;
+import com.hampay.mobile.android.component.FacedEditText;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.fragment.AccountDetailFragment;
 import com.hampay.mobile.android.fragment.FragmentDrawer;
@@ -64,7 +71,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-         setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
 
         fragment_title = (FacedTextView)findViewById(R.id.fragment_title);
 
@@ -188,6 +195,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 fragment = new SettingFragment();
                 title = getString(R.string.title_settings);
                 break;
+            case 5:
+                showContactUs();
+                break;
             case 6:
                 fragment = new GuideFragment();
                 title = getString(R.string.title_guide);
@@ -225,11 +235,10 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         exit_app_yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               dialogExitApp.dismiss();
+                dialogExitApp.dismiss();
                 finish();
             }
         });
-
 
         exit_app_no.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -237,8 +246,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 dialogExitApp.dismiss();
             }
         });
-
-
 
         view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
         dialogExitApp = new Dialog(MainActivity.this);
@@ -249,6 +256,58 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         dialogExitApp.setCanceledOnTouchOutside(false);
 
         dialogExitApp.show();
+    }
+
+
+    private void showContactUs(){
+
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) MainActivity.this;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = getLayoutInflater().inflate(R.layout.dialog_contact_us, null);
+
+        FacedTextView send_message = (FacedTextView) view.findViewById(R.id.send_message);
+        FacedTextView call_message = (FacedTextView) view.findViewById(R.id.call_message);
+
+        ContactUsRequest contactUsRequest = new ContactUsRequest();
+        contactUsRequest.setRequestUUID("");
+        new HttpContactUs().execute(contactUsRequest);
+
+        send_message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogExitApp.dismiss();
+
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                        "mailto", contactUsMail, null));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+                emailIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.insert_message));
+                startActivity(Intent.createChooser(emailIntent, getString(R.string.hampay_contact)));
+            }
+        });
+
+        call_message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogExitApp.dismiss();
+
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + contactUsPhone));
+                startActivity(intent);
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialogExitApp = new Dialog(MainActivity.this);
+        dialogExitApp.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogExitApp.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialogExitApp.setContentView(view);
+        dialogExitApp.setTitle(null);
+        dialogExitApp.setCanceledOnTouchOutside(false);
+
+        dialogExitApp.show();
+
     }
 
     @Override
@@ -265,15 +324,18 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         }
     }
 
+    String contactUsMail = "";
+    String contactUsPhone = "";
 
-    public class HttpBanks extends AsyncTask<Void, Void, String>{
+    ResponseMessage<ContactUsResponse> contactUsResponseResponseMessage = null;
+
+    public class HttpContactUs extends AsyncTask<ContactUsRequest, Void, String>{
 
         @Override
-        protected String doInBackground(Void... params) {
+        protected String doInBackground(ContactUsRequest... params) {
 
             WebServices webServices = new WebServices();
-            //webServices.testBankList1();
-            //webServices.getUserProfile();
+            contactUsResponseResponseMessage = webServices.contactUsResponse(params[0]);
 
             return null;
         }
@@ -286,6 +348,13 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+
+            if (contactUsResponseResponseMessage.getService() != null){
+                contactUsMail = contactUsResponseResponseMessage.getService().getEmailAddress();
+                contactUsPhone = contactUsResponseResponseMessage.getService().getPhoneNumber();
+            }
+
+
         }
     }
 

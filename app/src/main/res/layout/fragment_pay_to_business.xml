@@ -19,6 +19,7 @@
 
 
             <ImageView
+                android:id="@+id/searchImage"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_centerVertical="true"
@@ -26,6 +27,7 @@
                 android:layout_margin="12dp"/>
 
             <com.hampay.mobile.android.component.FacedEditText
+                android:id="@+id/searchPhraseText"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:background="@android:color/transparent"
@@ -34,7 +36,8 @@
                 android:textColor="@color/normal_text"
                 android:hint="@string/pay_one_search_hint"
                 android:singleLine="true"
-                android:layout_marginLeft="48dp"/>
+                android:layout_marginLeft="48dp"
+                android:imeOptions="actionSearch"/>
 
 
         </RelativeLayout>

@@ -1,23 +1,34 @@
 package com.hampay.mobile.android.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
+import com.hampay.common.core.model.request.BusinessSearchRequest;
 import com.hampay.common.core.model.response.BusinessListResponse;
 import com.hampay.common.core.model.response.dto.BusinessDTO;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.activity.PayBusinessActivity;
 import com.hampay.mobile.android.adapter.HamPayBusinessesAdapter;
+import com.hampay.mobile.android.component.FacedEditText;
 import com.hampay.mobile.android.component.doblist.DobList;
 import com.hampay.mobile.android.component.doblist.events.OnLoadMoreListener;
 import com.hampay.mobile.android.component.doblist.exceptions.NoEmptyViewException;
@@ -47,6 +58,12 @@ public class PayToBusinessFragment extends Fragment {
 
     View rootView;
 
+    ImageView searchImage;
+    FacedEditText searchPhraseText;
+    BusinessSearchRequest businessSearchRequest;
+
+    InputMethodManager inputMethodManager;
+
     public PayToBusinessFragment() {
 
     }
@@ -63,6 +80,54 @@ public class PayToBusinessFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_pay_to_business, container, false);
 
+        inputMethodManager = (InputMethodManager)getActivity().getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+
+        searchImage = (ImageView)rootView.findViewById(R.id.searchImage);
+        searchImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (searchPhraseText.getText().toString().length() > 0){
+                    performBusinessSearch(true);
+                }
+            }
+        });
+
+        searchPhraseText = (FacedEditText)rootView.findViewById(R.id.searchPhraseText);
+
+        searchPhraseText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if (count == 0){
+                    performBusinessSearch(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        searchPhraseText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+
+
+
+                    performBusinessSearch(true);
+                    return true;
+                }
+                return false;
+            }
+        });
 
         businessListResponse = new ResponseMessage<BusinessListResponse>();
         businessDTOs = new ArrayList<BusinessDTO>();
@@ -83,7 +148,7 @@ public class PayToBusinessFragment extends Fragment {
             }
         });
 
-        new HttpHamPay‌Business().execute();
+        new HttpHamPay‌Business().execute(false);
 
         return rootView;
     }
@@ -99,21 +164,46 @@ public class PayToBusinessFragment extends Fragment {
     }
 
 
+    private void performBusinessSearch(boolean search){
+
+        businessSearchRequest = new BusinessSearchRequest();
+        businessSearchRequest.setPageNumber(1);
+        businessSearchRequest.setPageSize(10);
+        businessSearchRequest.setTerm(searchPhraseText.getText().toString());
+        inputMethodManager.hideSoftInputFromWindow(searchPhraseText.getWindowToken(), 0);
+
+        hamPayBusinessesAdapter.clear();
+        businessDTOs.clear();
+        loading_rl.setVisibility(View.VISIBLE);
+
+        new HttpHamPay‌Business().execute(search);
+
+    }
 
     private boolean onLoadMore = false;
+    private boolean searchEnable = false;
 
-    public class HttpHamPay‌Business extends AsyncTask<Void, Void, String> {
+    public class HttpHamPay‌Business extends AsyncTask<Boolean, Void, String> {
 
         List<BusinessDTO> newBusinessDTOs;
 
 
         @Override
-        protected String doInBackground(Void... params) {
+        protected String doInBackground(Boolean... params) {
 
             WebServices webServices = new WebServices(getActivity());
-            newBusinessDTOs = webServices.getHamPayBusiness().getService().getBusinesses();
 
-            businessDTOs.addAll(newBusinessDTOs);
+            searchEnable = params[0];
+
+            if (params[0]) {
+
+                newBusinessDTOs = webServices.searchBusinessList(businessSearchRequest).getService().getBusinesses();
+                businessDTOs.addAll(newBusinessDTOs);
+
+            }else {
+                newBusinessDTOs = webServices.getHamPayBusiness().getService().getBusinesses();
+                businessDTOs.addAll(newBusinessDTOs);
+            }
 
             return null;
         }
@@ -164,7 +254,7 @@ public class PayToBusinessFragment extends Fragment {
                     onLoadMore = true;
 
                     if(!FINISHED_SCROLLING)
-                        new HttpHamPay‌Business().execute();
+                        new HttpHamPay‌Business().execute(searchEnable);
                     else
                         dobList.finishLoading();
 

@@ -147,7 +147,6 @@ public class ChangePasswordActivity extends ActionBarActivity implements View.On
 
     private void inputDigit(String digit){
 
-
         Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         if (password_0_rl.getVisibility() == View.VISIBLE) {

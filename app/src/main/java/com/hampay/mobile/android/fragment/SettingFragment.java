@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.response.TransactionListResponse;
 import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.activity.ChangeMemorableActivity;
 import com.hampay.mobile.android.activity.ChangePasswordActivity;
 import com.hampay.mobile.android.activity.TransactionDetailActivity;
 import com.hampay.mobile.android.adapter.SettingAdapter;
@@ -65,7 +66,9 @@ public class SettingFragment extends Fragment {
                         break;
 
                     case 1:
-                        Toast.makeText(getActivity(), position + "", Toast.LENGTH_SHORT).show();
+                        intent = new Intent();
+                        intent.setClass(getActivity(), ChangeMemorableActivity.class);
+                        startActivity(intent);
                         break;
                 }
             }

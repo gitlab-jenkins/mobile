@@ -33,6 +33,7 @@ public class RememberPhraseActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remember_phrase);
 
+
         memorable_value = (FacedEditText)findViewById(R.id.memorable_value);
 
         prefs = getPreferences(MODE_PRIVATE);

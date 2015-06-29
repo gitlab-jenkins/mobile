@@ -1,6 +1,8 @@
 package com.hampay.mobile.android.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,9 +10,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.hampay.common.core.model.dto.ContactDTO;
 import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.activity.PayOneActivity;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.sectionlist.SectionedBaseAdapter;
 import com.hampay.mobile.android.model.RecentPay;
@@ -64,7 +68,7 @@ public class PayOneAdapter extends SectionedBaseAdapter{
 
 
     @Override
-    public View getItemView(int section, int position, View convertView, ViewGroup parent) {
+    public View getItemView(int section, final int position, View convertView, ViewGroup parent) {
         RelativeLayout layout = null;
         if (convertView == null) {
             LayoutInflater inflator = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -89,6 +93,9 @@ public class PayOneAdapter extends SectionedBaseAdapter{
 
 
         ImageView status_icon = (ImageView)layout.findViewById(R.id.status_icon);
+
+        ImageView call_icon = (ImageView)layout.findViewById(R.id.call_icon);
+        ImageView pay_icon = (ImageView)layout.findViewById(R.id.pay_icon);
         FacedTextView user_name = (FacedTextView)layout.findViewById(R.id.user_name);
         FacedTextView user_phone = (FacedTextView)layout.findViewById(R.id.user_phone);
         FacedTextView message = (FacedTextView)layout.findViewById(R.id.message);
@@ -103,10 +110,27 @@ public class PayOneAdapter extends SectionedBaseAdapter{
 
         if(section == 0) {
 
-            RecentPay recentPay = recentPays.get(position);
+            final RecentPay recentPay = recentPays.get(position);
             user_name.setText(recentPay.getName());
             user_phone.setText(recentPay.getPhone());
             message.setText(recentPay.getMessage());
+            call_icon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + recentPay.getPhone()));
+                    mContext.startActivity(intent);
+                }
+            });
+            pay_icon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.setClass(mContext, PayOneActivity.class);
+                    intent.putExtra("contact_name", recentPay.getName());
+                    intent.putExtra("contact_phone_no", recentPay.getPhone());
+                    mContext.startActivity(intent);
+                }
+            });
 
         }else{
             ContactDTO contactDTO = contactDTOs2.get(position);
