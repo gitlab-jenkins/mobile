@@ -27,10 +27,14 @@ import com.hampay.common.core.model.request.RegistrationFetchUserDataRequest;
 import com.hampay.common.core.model.request.RegistrationMemorableWordEntryRequest;
 import com.hampay.common.core.model.request.RegistrationPassCodeEntryRequest;
 import com.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
+import com.hampay.common.core.model.request.RegistrationVerifyAccountRequest;
 import com.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
+import com.hampay.common.core.model.request.RegistrationVerifyTransferMoneyRequest;
 import com.hampay.common.core.model.request.TACRequest;
 import com.hampay.common.core.model.request.TransactionListRequest;
 import com.hampay.common.core.model.request.UserProfileRequest;
+import com.hampay.common.core.model.request.VerifyAccountRequest;
+import com.hampay.common.core.model.request.VerifyTransferMoneyRequest;
 import com.hampay.common.core.model.response.BankListResponse;
 import com.hampay.common.core.model.response.BusinessListResponse;
 import com.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
@@ -47,10 +51,14 @@ import com.hampay.common.core.model.response.RegistrationFetchUserDataResponse;
 import com.hampay.common.core.model.response.RegistrationMemorableWordEntryResponse;
 import com.hampay.common.core.model.response.RegistrationPassCodeEntryResponse;
 import com.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
+import com.hampay.common.core.model.response.RegistrationVerifyAccountResponse;
 import com.hampay.common.core.model.response.RegistrationVerifyMobileResponse;
+import com.hampay.common.core.model.response.RegistrationVerifyTransferMoneyResponse;
 import com.hampay.common.core.model.response.TACResponse;
 import com.hampay.common.core.model.response.TransactionListResponse;
 import com.hampay.common.core.model.response.UserProfileResponse;
+import com.hampay.common.core.model.response.VerifyAccountResponse;
+import com.hampay.common.core.model.response.VerifyTransferMoneyResponse;
 import com.hampay.mobile.android.util.Constant;
 
 import org.apache.http.*;
@@ -113,6 +121,8 @@ public class WebServices  {
 
             connection = (HttpURLConnection) url.openConnection();
             connection.setDoOutput(true);
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(5000);
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
@@ -807,7 +817,6 @@ public class WebServices  {
     }
 
     public ResponseMessage<TACResponse> tACResponse(TACRequest tacRequest){
-
         ResponseMessage<TACResponse> tACResponse = null;
         HttpParams httpParameters = new BasicHttpParams();
         int timeoutConnection = 30000;
@@ -816,22 +825,17 @@ public class WebServices  {
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
         HttpHost host = new HttpHost("176.58.104.158", 9093);
-
         HttpRequest request = new HttpPost("/users/tac");
-
         HttpResponse response;
         try {
             StringEntity entity = new StringEntity(createTACResponse(tacRequest), "UTF-8");
             entity.setContentType("application/json");
             ((HttpPost) request).setEntity(entity);
-
             response = httpClient.execute(host, request);
-
             HttpEntity responseEntity = response.getEntity();
             StatusLine responseStatus = response.getStatusLine();
             int statusCode = responseStatus != null ? responseStatus.getStatusCode() : 0;
             String result = EntityUtils.toString(responseEntity);
-
             GsonBuilder builder = new GsonBuilder();
             builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
                 public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -839,37 +843,239 @@ public class WebServices  {
                 }
             });
             Gson gson = builder.create();
-
-
             Type responseType = new com.google.gson.reflect.TypeToken<ResponseMessage<TACResponse>>() {}.getType();
             tACResponse = gson.fromJson(result, responseType);
-
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             httpClient.getConnectionManager().shutdown();
         }
-
         return tACResponse;
-
     }
 
     private String createTACResponse(TACRequest tacRequest) {
         RequestHeader header = new RequestHeader();
         header.setAuthToken("008ewe");
         header.setVersion("1.0-PA");
-
         RequestMessage<TACRequest> message = new RequestMessage<TACRequest>();
         message.setRequestHeader(header);
         TACRequest request = tacRequest;
         request.setRequestUUID("1234");
-
-
         message.setService(request);
-
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<TACRequest>>() {}.getType();
         return new Gson().toJson(message, requestType);
     }
+
+
+    public ResponseMessage<VerifyAccountResponse> verifyAccountResponse(VerifyAccountRequest verifyAccountRequest){
+        ResponseMessage<VerifyAccountResponse> verifyAccountResponse = null;
+        HttpParams httpParameters = new BasicHttpParams();
+        int timeoutConnection = 30000;
+        HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+        int timeoutSocket = 30000;
+        HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+        HttpClient httpClient = new DefaultHttpClient(httpParameters);
+        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpRequest request = new HttpPost("/customers/verify-account");
+        HttpResponse response;
+        try {
+            StringEntity entity = new StringEntity(createVerifyAccountRequest(verifyAccountRequest), "UTF-8");
+            entity.setContentType("application/json");
+            ((HttpPost) request).setEntity(entity);
+            response = httpClient.execute(host, request);
+            HttpEntity responseEntity = response.getEntity();
+            StatusLine responseStatus = response.getStatusLine();
+            int statusCode = responseStatus != null ? responseStatus.getStatusCode() : 0;
+            String result = EntityUtils.toString(responseEntity);
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                }
+            });
+            Gson gson = builder.create();
+            Type responseType = new com.google.gson.reflect.TypeToken<ResponseMessage<VerifyAccountResponse>>() {}.getType();
+            verifyAccountResponse = gson.fromJson(result, responseType);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            httpClient.getConnectionManager().shutdown();
+        }
+        return verifyAccountResponse;
+    }
+
+
+    private String createVerifyAccountRequest(VerifyAccountRequest verifyAccountRequest) {
+        RequestHeader header = new RequestHeader();
+        header.setAuthToken("008ewe");
+        header.setVersion("1.0-PA");
+        RequestMessage<VerifyAccountRequest> message = new RequestMessage<VerifyAccountRequest>();
+        message.setRequestHeader(header);
+        VerifyAccountRequest request = verifyAccountRequest;
+        request.setRequestUUID("1234");
+        message.setService(request);
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<VerifyAccountRequest>>() {}.getType();
+        return new Gson().toJson(message, requestType);
+    }
+
+
+
+    public ResponseMessage<VerifyTransferMoneyResponse> verifyTransferMoneyResponse(VerifyTransferMoneyRequest verifyTransferMoneyRequest){
+        ResponseMessage<VerifyTransferMoneyResponse> verifyTransferMoneyResponse = null;
+        HttpParams httpParameters = new BasicHttpParams();
+        int timeoutConnection = 30000;
+        HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+        int timeoutSocket = 30000;
+        HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+        HttpClient httpClient = new DefaultHttpClient(httpParameters);
+        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpRequest request = new HttpPost("/customers/verify-xfer");
+        HttpResponse response;
+        try {
+            StringEntity entity = new StringEntity(createVerifyTransferMoneyRequest(verifyTransferMoneyRequest), "UTF-8");
+            entity.setContentType("application/json");
+            ((HttpPost) request).setEntity(entity);
+            response = httpClient.execute(host, request);
+            HttpEntity responseEntity = response.getEntity();
+            StatusLine responseStatus = response.getStatusLine();
+            int statusCode = responseStatus != null ? responseStatus.getStatusCode() : 0;
+            String result = EntityUtils.toString(responseEntity);
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                }
+            });
+            Gson gson = builder.create();
+            Type responseType = new com.google.gson.reflect.TypeToken<ResponseMessage<VerifyTransferMoneyResponse>>() {}.getType();
+            verifyTransferMoneyResponse = gson.fromJson(result, responseType);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            httpClient.getConnectionManager().shutdown();
+        }
+        return verifyTransferMoneyResponse;
+    }
+
+
+    private String createVerifyTransferMoneyRequest(VerifyTransferMoneyRequest verifyTransferMoneyRequest) {
+        RequestHeader header = new RequestHeader();
+        header.setAuthToken("008ewe");
+        header.setVersion("1.0-PA");
+        RequestMessage<VerifyTransferMoneyRequest> message = new RequestMessage<VerifyTransferMoneyRequest>();
+        message.setRequestHeader(header);
+        VerifyTransferMoneyRequest request = verifyTransferMoneyRequest;
+        request.setRequestUUID("1234");
+        message.setService(request);
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<VerifyTransferMoneyRequest>>() {}.getType();
+        return new Gson().toJson(message, requestType);
+    }
+
+
+
+    public ResponseMessage<RegistrationVerifyAccountResponse> registrationVerifyAccountResponse(RegistrationVerifyAccountRequest registrationVerifyAccountRequest){
+        ResponseMessage<RegistrationVerifyAccountResponse> registrationVerifyAccountResponse = null;
+        HttpParams httpParameters = new BasicHttpParams();
+        int timeoutConnection = 30000;
+        HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+        int timeoutSocket = 30000;
+        HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+        HttpClient httpClient = new DefaultHttpClient(httpParameters);
+        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpRequest request = new HttpPost("/customers/reg-verify-account");
+        HttpResponse response;
+        try {
+            StringEntity entity = new StringEntity(createRegistrationVerifyAccountRequest(registrationVerifyAccountRequest), "UTF-8");
+            entity.setContentType("application/json");
+            ((HttpPost) request).setEntity(entity);
+            response = httpClient.execute(host, request);
+            HttpEntity responseEntity = response.getEntity();
+            StatusLine responseStatus = response.getStatusLine();
+            int statusCode = responseStatus != null ? responseStatus.getStatusCode() : 0;
+            String result = EntityUtils.toString(responseEntity);
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                }
+            });
+            Gson gson = builder.create();
+            Type responseType = new com.google.gson.reflect.TypeToken<ResponseMessage<RegistrationVerifyAccountResponse>>() {}.getType();
+            registrationVerifyAccountResponse = gson.fromJson(result, responseType);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            httpClient.getConnectionManager().shutdown();
+        }
+        return registrationVerifyAccountResponse;
+    }
+
+    private String createRegistrationVerifyAccountRequest(RegistrationVerifyAccountRequest registrationVerifyAccountRequest) {
+        RequestHeader header = new RequestHeader();
+        header.setAuthToken("008ewe");
+        header.setVersion("1.0-PA");
+        RequestMessage<RegistrationVerifyAccountRequest> message = new RequestMessage<RegistrationVerifyAccountRequest>();
+        message.setRequestHeader(header);
+        RegistrationVerifyAccountRequest request = registrationVerifyAccountRequest;
+        request.setRequestUUID("1234");
+        message.setService(request);
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationVerifyAccountRequest>>() {}.getType();
+        return new Gson().toJson(message, requestType);
+    }
+
+
+
+    public ResponseMessage<RegistrationVerifyTransferMoneyResponse> registrationVerifyTransferMoneyResponse(RegistrationVerifyTransferMoneyRequest registrationVerifyTransferMoneyRequest){
+        ResponseMessage<RegistrationVerifyTransferMoneyResponse> registrationVerifyTransferMoneyResponse = null;
+        HttpParams httpParameters = new BasicHttpParams();
+        int timeoutConnection = 30000;
+        HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+        int timeoutSocket = 30000;
+        HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+        HttpClient httpClient = new DefaultHttpClient(httpParameters);
+        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpRequest request = new HttpPost("/customers/reg-verify-xfer");
+        HttpResponse response;
+        try {
+            StringEntity entity = new StringEntity(createRegistrationVerifyTransferMoneyResponse(registrationVerifyTransferMoneyRequest), "UTF-8");
+            entity.setContentType("application/json");
+            ((HttpPost) request).setEntity(entity);
+            response = httpClient.execute(host, request);
+            HttpEntity responseEntity = response.getEntity();
+            StatusLine responseStatus = response.getStatusLine();
+            int statusCode = responseStatus != null ? responseStatus.getStatusCode() : 0;
+            String result = EntityUtils.toString(responseEntity);
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                }
+            });
+            Gson gson = builder.create();
+            Type responseType = new com.google.gson.reflect.TypeToken<ResponseMessage<RegistrationVerifyTransferMoneyResponse>>() {}.getType();
+            registrationVerifyTransferMoneyResponse = gson.fromJson(result, responseType);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            httpClient.getConnectionManager().shutdown();
+        }
+        return registrationVerifyTransferMoneyResponse;
+    }
+
+
+    private String createRegistrationVerifyTransferMoneyResponse(RegistrationVerifyTransferMoneyRequest registrationVerifyTransferMoneyRequest) {
+        RequestHeader header = new RequestHeader();
+        header.setAuthToken("008ewe");
+        header.setVersion("1.0-PA");
+        RequestMessage<RegistrationVerifyTransferMoneyRequest> message = new RequestMessage<RegistrationVerifyTransferMoneyRequest>();
+        message.setRequestHeader(header);
+        RegistrationVerifyTransferMoneyRequest request = registrationVerifyTransferMoneyRequest;
+        request.setRequestUUID("1234");
+        message.setService(request);
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationVerifyTransferMoneyRequest>>() {}.getType();
+        return new Gson().toJson(message, requestType);
+    }
+
 
 
     public ResponseMessage<UserProfileResponse>  getUserProfile(){
@@ -1419,15 +1625,26 @@ public class WebServices  {
         List<ContactDTO> contactDTOs = new ArrayList<ContactDTO>();
 
         Cursor phones = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null,null, null);
+
+
+        int count = 0;
+
         while (phones.moveToNext()) {
             String contact_name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             String contact_phone_no = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
 
             ContactDTO contactDTO = new ContactDTO();
             contactDTO.setCellNumber(contact_phone_no);
             contactDTO.setDisplayName(contact_name);
 
             contactDTOs.add(contactDTO);
+
+            count++;
+
+            if(count > 26){
+                break;
+            }
 
         }
         phones.close();

@@ -76,7 +76,7 @@
             android:layout_margin="18dp">
 
 
-            <com.hampay.mobile.android.component.FacedEditText
+            <com.hampay.mobile.android.component.edittext.FacedEditText
                 android:id="@+id/memorable_value"
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"

@@ -35,318 +35,523 @@
     </RelativeLayout>
 
 
+
+
+
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right|center_vertical"
-        android:layout_margin="12dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:background="@drawable/stroke_bg">
-
-
-
-        <ImageView
-            android:id="@+id/step_icon"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:src="@drawable/step_icon_acc"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"/>
-
-        <com.hampay.mobile.android.component.FacedTextView
-            geekui:customTypeface="fonts/iran_sans.ttf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/register_btn_color"
-            android:textSize="18sp"
-            android:text="@string/confirm_information_text"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/step_icon"
-            android:layout_marginRight="4dp"/>
-
-    </RelativeLayout>
-
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="18dp">
-
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="48dp"
-                android:background="@drawable/entry_field_bg"
-                android:layout_marginTop="6dp">
-
-                <com.hampay.mobile.android.component.FacedEditText
-                    android:id="@+id/user_phone"
-                    android:layout_width="120dp"
-                    android:layout_height="fill_parent"
-                    android:background="@android:color/transparent"
-                    android:textSize="20dp"
-                    android:inputType="number"
-                    android:focusable="false"
-                    android:maxLength="11"
-                    android:textColor="@android:color/black"
-                    android:gravity="center_vertical"
-                    android:padding="8dp" />
-
-
-                <com.hampay.mobile.android.component.FacedTextView
-                    geekui:customTypeface="fonts/iran_sans.ttf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:textColor="@color/normal_text"
-                    android:textSize="21sp"
-                    android:text="@string/mobile_no"
-                    android:layout_alignParentRight="true"
-                    android:padding="8dp"
-                    android:gravity="center_vertical"/>
-
-            </RelativeLayout>
-
-
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="48dp"
-                android:background="@drawable/entry_field_bg"
-                android:layout_marginTop="6dp">
-
-                <com.hampay.mobile.android.component.FacedEditText
-                    android:id="@+id/user_family"
-                    android:layout_width="120dp"
-                    android:layout_height="fill_parent"
-                    android:background="@android:color/transparent"
-                    android:textSize="20dp"
-                    android:inputType="phone"
-                    android:focusable="false"
-                    android:maxLength="11"
-                    android:textColor="@android:color/black"
-                    android:gravity="center_vertical"
-                    android:padding="8dp" />
-
-
-                <com.hampay.mobile.android.component.FacedTextView
-                    geekui:customTypeface="fonts/iran_sans.ttf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:textColor="@color/normal_text"
-                    android:textSize="21sp"
-                    android:text="@string/name_family"
-                    android:layout_alignParentRight="true"
-                    android:padding="8dp"
-                    android:gravity="center_vertical"/>
-
-            </RelativeLayout>
-
-
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="48dp"
-                android:background="@drawable/entry_field_bg"
-                android:layout_marginTop="6dp">
-
-                <com.hampay.mobile.android.component.FacedEditText
-                    android:id="@+id/user_account_no"
-                    android:layout_width="120dp"
-                    android:layout_height="fill_parent"
-                    android:background="@android:color/transparent"
-                    android:textSize="20dp"
-                    android:inputType="phone"
-                    android:focusable="false"
-                    android:maxLength="11"
-                    android:textColor="@android:color/black"
-                    android:gravity="center_vertical"
-                    android:padding="8dp" />
-
-
-                <com.hampay.mobile.android.component.FacedTextView
-                    geekui:customTypeface="fonts/iran_sans.ttf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:textColor="@color/normal_text"
-                    android:textSize="21sp"
-                    android:text="@string/account_id"
-                    android:layout_alignParentRight="true"
-                    android:padding="8dp"
-                    android:gravity="center_vertical"/>
-
-            </RelativeLayout>
-
-
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="48dp"
-                android:background="@drawable/entry_field_bg"
-                android:layout_marginTop="6dp">
-
-                <com.hampay.mobile.android.component.FacedEditText
-                    android:id="@+id/user_national_code"
-                    android:layout_width="120dp"
-                    android:layout_height="fill_parent"
-                    android:background="@android:color/transparent"
-                    android:textSize="21dp"
-                    android:inputType="phone"
-                    android:focusable="false"
-                    android:maxLength="11"
-                    android:textColor="@android:color/black"
-                    android:gravity="center_vertical"
-                    android:padding="8dp" />
-
-
-                <com.hampay.mobile.android.component.FacedTextView
-                    geekui:customTypeface="fonts/iran_sans.ttf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
-                    android:textColor="@color/normal_text"
-                    android:textSize="21sp"
-                    android:text="@string/iter_code"
-                    android:layout_alignParentRight="true"
-                    android:padding="8dp"
-                    android:gravity="center_vertical"/>
-
-            </RelativeLayout>
-
-
+            android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/confirm_check_ll"
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:id="@+id/layoutContainer"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp">
+
+
+                <LinearLayout
+                    android:layout_width="0dip"
+                    android:layout_height="20dp"
+                    android:layout_weight="0.4"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/step_pass_con"
+                        android:layout_centerVertical="true"/>
+
+                    <RelativeLayout
+                        android:layout_width="0dip"
+                        android:layout_height="30dp"
+                        android:layout_weight="0.6">
+
+
+
+                        <View
+                            android:layout_width="fill_parent"
+                            android:layout_height="6dp"
+                            android:background="@color/normal_text"
+                            android:layout_centerInParent="true" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/triangle_gray"
+                            android:layout_centerVertical="true"
+                            android:background="@android:color/white"/>
+
+
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dip"
+                        android:layout_height="20dp"
+                        android:layout_weight="0.4">
+
+                        <View
+                            android:layout_width="fill_parent"
+                            android:layout_height="6dp"
+                            android:background="@color/normal_text"
+                            android:layout_centerInParent="true" />
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/step_pay_icon"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:background="@android:color/white"
+                            />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dip"
+                    android:layout_height="20dp"
+                    android:layout_weight="0.3"
+                    android:gravity="center_vertical">
+
+                    <RelativeLayout
+                        android:layout_width="0dip"
+                        android:layout_height="30dp"
+                        android:layout_weight="0.3">
+
+                        <View
+                            android:layout_width="fill_parent"
+                            android:layout_height="6dp"
+                            android:background="@color/normal_text"
+                            android:layout_centerInParent="true" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/triangle_gray"
+                            android:layout_centerVertical="true"
+                            android:background="@android:color/white"/>
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dip"
+                        android:layout_height="20dp"
+                        android:layout_weight="0.7">
+
+                        <View
+                            android:layout_width="fill_parent"
+                            android:layout_height="6dp"
+                            android:background="@color/register_btn_color"
+                            android:layout_centerInParent="true" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/step_mobile_icon_g"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:background="@android:color/white"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dip"
+                    android:layout_height="20dp"
+                    android:layout_weight="0.3"
+                    android:gravity="center_vertical">
+
+                    <RelativeLayout
+                        android:layout_width="0dip"
+                        android:layout_height="30dp"
+                        android:layout_weight="0.5">
+
+                        <View
+                            android:layout_width="fill_parent"
+                            android:layout_height="6dp"
+                            android:background="@color/register_btn_color"
+                            android:layout_centerInParent="true" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/triangle_green"
+                            android:layout_centerVertical="true"
+                            android:background="@android:color/white"/>
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dip"
+                        android:layout_height="20dp"
+                        android:layout_weight="0.5">
+
+                        <View
+                            android:layout_width="fill_parent"
+                            android:layout_height="6dp"
+                            android:background="@color/register_btn_color"
+                            android:layout_centerInParent="true" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/step_account_icon"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:background="@android:color/white"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_margin="12dp">
+                android:gravity="right|center_vertical"
+                android:layout_margin="12dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:background="@drawable/stroke_bg">
 
-                <com.hampay.mobile.android.component.FacedTextView
-                    geekui:customTypeface="fonts/iran_sans.ttf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/normal_text"
-                    android:textSize="22sp"
-                    android:text="@string/correct_data" />
+
 
                 <ImageView
-                    android:id="@+id/confirm_check_img"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:background="@drawable/entry_field_bg"
-                    android:layout_margin="4dp"
-                    android:padding="4dp"/>
-
-
-
-            </LinearLayout>
-
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/correct_CardView"
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                card_view:cardBackgroundColor="@color/normal_text"
-                card_view:cardCornerRadius="2dp"
-                card_view:cardElevation="4dp"
-                android:layout_gravity="center"
-                android:layout_centerHorizontal="true"
-                android:layout_alignParentBottom="true"
-                android:layout_margin="20dp">
+                    android:id="@+id/step_icon"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/step_icon_acc"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="12dp"/>
 
                 <com.hampay.mobile.android.component.FacedTextView
                     geekui:customTypeface="fonts/iran_sans.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
-                    android:textSize="20sp"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:text="@string/correct_info"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginBottom="2dp"/>
+                    android:textColor="@color/register_btn_color"
+                    android:textSize="18sp"
+                    android:text="@string/confirm_information_text"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@id/step_icon"
+                    android:layout_marginRight="4dp"/>
 
-            </android.support.v7.widget.CardView>
+            </RelativeLayout>
 
-            <LinearLayout
-                android:id="@+id/confirm_layout"
+            <ScrollView
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="30dp"
-                android:gravity="center"
-                android:visibility="gone">
+                android:layout_height="wrap_content">
 
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/keeOn_without_cardView"
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                    android:layout_width="0dip"
+                <LinearLayout
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    card_view:cardBackgroundColor="@color/register_btn_color"
-                    card_view:cardCornerRadius="2dp"
-                    card_view:cardElevation="4dp"
-                    android:layout_gravity="center"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginRight="5dp">
+                    android:orientation="vertical"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginRight="18dp">
 
-                    <com.hampay.mobile.android.component.FacedTextView
-                        geekui:customTypeface="fonts/iran_sans.ttf"
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/entry_field_bg"
+                        android:layout_marginTop="6dp">
+
+                        <com.hampay.mobile.android.component.edittext.FacedEditText
+                            android:id="@+id/user_phone"
+                            android:layout_width="120dp"
+                            android:layout_height="fill_parent"
+                            android:background="@android:color/transparent"
+                            android:textSize="20dp"
+                            android:inputType="number"
+                            android:focusable="false"
+                            android:maxLength="11"
+                            android:textColor="@android:color/black"
+                            android:gravity="center_vertical"
+                            android:padding="8dp" />
+
+
+                        <com.hampay.mobile.android.component.FacedTextView
+                            geekui:customTypeface="fonts/iran_sans.ttf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="fill_parent"
+                            android:textColor="@color/normal_text"
+                            android:textSize="21sp"
+                            android:text="@string/mobile_no"
+                            android:layout_alignParentRight="true"
+                            android:padding="8dp"
+                            android:gravity="center_vertical"/>
+
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/entry_field_bg"
+                        android:layout_marginTop="6dp">
+
+                        <com.hampay.mobile.android.component.edittext.FacedEditText
+                            android:id="@+id/user_family"
+                            android:layout_width="120dp"
+                            android:layout_height="fill_parent"
+                            android:background="@android:color/transparent"
+                            android:textSize="20dp"
+                            android:inputType="phone"
+                            android:focusable="false"
+                            android:maxLength="11"
+                            android:textColor="@android:color/black"
+                            android:gravity="center_vertical"
+                            android:padding="8dp" />
+
+
+                        <com.hampay.mobile.android.component.FacedTextView
+                            geekui:customTypeface="fonts/iran_sans.ttf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="fill_parent"
+                            android:textColor="@color/normal_text"
+                            android:textSize="21sp"
+                            android:text="@string/name_family"
+                            android:layout_alignParentRight="true"
+                            android:padding="8dp"
+                            android:gravity="center_vertical"/>
+
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/entry_field_bg"
+                        android:layout_marginTop="6dp">
+
+                        <com.hampay.mobile.android.component.edittext.FacedEditText
+                            android:id="@+id/user_account_no"
+                            android:layout_width="120dp"
+                            android:layout_height="fill_parent"
+                            android:background="@android:color/transparent"
+                            android:textSize="20dp"
+                            android:inputType="phone"
+                            android:focusable="false"
+                            android:maxLength="11"
+                            android:textColor="@android:color/black"
+                            android:gravity="center_vertical"
+                            android:padding="8dp" />
+
+
+                        <com.hampay.mobile.android.component.FacedTextView
+                            geekui:customTypeface="fonts/iran_sans.ttf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="fill_parent"
+                            android:textColor="@color/normal_text"
+                            android:textSize="21sp"
+                            android:text="@string/account_id"
+                            android:layout_alignParentRight="true"
+                            android:padding="8dp"
+                            android:gravity="center_vertical"/>
+
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/entry_field_bg"
+                        android:layout_marginTop="6dp">
+
+                        <com.hampay.mobile.android.component.edittext.FacedEditText
+                            android:id="@+id/user_national_code"
+                            android:layout_width="120dp"
+                            android:layout_height="fill_parent"
+                            android:background="@android:color/transparent"
+                            android:textSize="21dp"
+                            android:inputType="phone"
+                            android:focusable="false"
+                            android:maxLength="11"
+                            android:textColor="@android:color/black"
+                            android:gravity="center_vertical"
+                            android:padding="8dp" />
+
+
+                        <com.hampay.mobile.android.component.FacedTextView
+                            geekui:customTypeface="fonts/iran_sans.ttf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="fill_parent"
+                            android:textColor="@color/normal_text"
+                            android:textSize="21sp"
+                            android:text="@string/iter_code"
+                            android:layout_alignParentRight="true"
+                            android:padding="8dp"
+                            android:gravity="center_vertical"/>
+
+                    </RelativeLayout>
+
+
+
+                    <LinearLayout
+                        android:id="@+id/confirm_check_ll"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_margin="12dp">
+
+                        <com.hampay.mobile.android.component.FacedTextView
+                            geekui:customTypeface="fonts/iran_sans.ttf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/normal_text"
+                            android:textSize="22sp"
+                            android:text="@string/correct_data" />
+
+                        <ImageView
+                            android:id="@+id/confirm_check_img"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:background="@drawable/entry_field_bg"
+                            android:layout_margin="4dp"
+                            android:padding="4dp"/>
+
+
+
+                    </LinearLayout>
+
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/correct_CardView"
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:card_view="http://schemas.android.com/apk/res-auto"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
-                        android:gravity="center"
+                        card_view:cardBackgroundColor="@color/normal_text"
+                        card_view:cardCornerRadius="2dp"
+                        card_view:cardElevation="4dp"
                         android:layout_gravity="center"
-                        android:text="@string/confirm_info_uncheck"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"/>
+                        android:layout_centerHorizontal="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_margin="20dp">
 
-                </android.support.v7.widget.CardView>
+                        <com.hampay.mobile.android.component.FacedTextView
+                            geekui:customTypeface="fonts/iran_sans.ttf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/white"
+                            android:textSize="20sp"
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            android:text="@string/correct_info"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginBottom="2dp"/>
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/keeOn_with_cardView"
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                    android:layout_width="0dip"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    card_view:cardBackgroundColor="@color/user_change_status"
-                    card_view:cardCornerRadius="2dp"
-                    card_view:cardElevation="4dp"
-                    android:layout_gravity="center"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="5dp">
+                    </android.support.v7.widget.CardView>
 
-                    <com.hampay.mobile.android.component.FacedTextView
-                        geekui:customTypeface="fonts/iran_sans.ttf"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/confirm_layout"
+                        android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="30dp"
                         android:gravity="center"
-                        android:layout_gravity="center"
-                        android:text="@string/confirm_account_check"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"/>
+                        android:visibility="gone">
 
-                </android.support.v7.widget.CardView>
 
-            </LinearLayout>
+                        <android.support.v7.widget.CardView
+                            android:id="@+id/keeOn_without_cardView"
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            card_view:cardBackgroundColor="@color/register_btn_color"
+                            card_view:cardCornerRadius="2dp"
+                            card_view:cardElevation="4dp"
+                            android:layout_gravity="center"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginRight="5dp">
+
+                            <com.hampay.mobile.android.component.FacedTextView
+                                geekui:customTypeface="fonts/iran_sans.ttf"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@android:color/white"
+                                android:textSize="18sp"
+                                android:gravity="center"
+                                android:layout_gravity="center"
+                                android:text="@string/confirm_info_uncheck"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"/>
+
+                        </android.support.v7.widget.CardView>
+
+                        <android.support.v7.widget.CardView
+                            android:id="@+id/keeOn_with_cardView"
+                            xmlns:android="http://schemas.android.com/apk/res/android"
+                            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                            android:layout_width="0dip"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0.5"
+                            card_view:cardBackgroundColor="@color/user_change_status"
+                            card_view:cardCornerRadius="2dp"
+                            card_view:cardElevation="4dp"
+                            android:layout_gravity="center"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginLeft="5dp">
+
+                            <com.hampay.mobile.android.component.FacedTextView
+                                geekui:customTypeface="fonts/iran_sans.ttf"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@android:color/white"
+                                android:textSize="18sp"
+                                android:gravity="center"
+                                android:layout_gravity="center"
+                                android:text="@string/confirm_account_check"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp"/>
+
+                        </android.support.v7.widget.CardView>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </ScrollView>
 
 
         </LinearLayout>
 
-    </ScrollView>
+        <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/loading_rl"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/loading_transparent_color">
 
+            <ProgressBar
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:indeterminateDrawable="@drawable/fragment_progress"
+                android:layout_centerInParent="true"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
 
 </LinearLayout>

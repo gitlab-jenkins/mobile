@@ -42,7 +42,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority,
         ContentProviderClient provider, SyncResult syncResult) {
     	Log.i("Sync adapter called");
-    	ContactsManager.addContact(getContext(), new HamPayContact("Hooman", "Amini"));
+//    	ContactsManager.addContact(getContext(), new HamPayContact("Hooman", "Amini"));
     }
     
 

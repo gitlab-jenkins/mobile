@@ -25,7 +25,7 @@
                 android:src="@drawable/search_icon"
                 android:layout_margin="12dp"/>
 
-            <com.hampay.mobile.android.component.FacedEditText
+            <com.hampay.mobile.android.component.edittext.FacedEditText
                 android:id="@+id/searchPhraseText"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"

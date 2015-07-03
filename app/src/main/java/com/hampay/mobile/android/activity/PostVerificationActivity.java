@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.request.RegistrationEntryRequest;
@@ -22,7 +23,11 @@ import com.hampay.common.core.model.response.RegistrationEntryResponse;
 import com.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
 import com.hampay.common.core.model.response.RegistrationVerifyMobileResponse;
 import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import com.hampay.mobile.android.async.RequestRegistrationSendSmsToken;
+import com.hampay.mobile.android.async.RequestVerifyMobile;
 import com.hampay.mobile.android.component.FacedTextView;
+import com.hampay.mobile.android.util.NetworkConnectivity;
 import com.hampay.mobile.android.webservice.WebServices;
 
 public class PostVerificationActivity extends ActionBarActivity implements View.OnClickListener{
@@ -50,11 +55,16 @@ public class PostVerificationActivity extends ActionBarActivity implements View.
     ImageView input_digit_4;
     ImageView input_digit_5;
 
+    NetworkConnectivity networkConnectivity;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_verification);
+
+        networkConnectivity = new NetworkConnectivity(this);
+        context = this;
 
         digit_1 = (FacedTextView)findViewById(R.id.digit_1);
         digit_1.setOnClickListener(this);
@@ -93,53 +103,44 @@ public class PostVerificationActivity extends ActionBarActivity implements View.
             @Override
             public void onClick(View v) {
 
-                RegistrationVerifyMobileRequest registrationVerifyMobileRequest = new RegistrationVerifyMobileRequest();
-                SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+                if (networkConnectivity.isNetworkConnected()) {
 
-                registrationVerifyMobileRequest.setUserIdToken(prefs.getString("UserIdToken", ""));
-                registrationVerifyMobileRequest.setSmsToken(inputStringValue);
+                    RegistrationVerifyMobileRequest registrationVerifyMobileRequest = new RegistrationVerifyMobileRequest();
+                    SharedPreferences prefs = getPreferences(MODE_PRIVATE);
 
-                new HttpRegistrationSendSmsToken().execute(registrationVerifyMobileRequest);
+                    registrationVerifyMobileRequest.setUserIdToken(prefs.getString("UserIdToken", ""));
+                    registrationVerifyMobileRequest.setSmsToken(inputStringValue);
+
+                    new RequestVerifyMobile(context, new RequestRegistrationVerifyMobileTaskCompleteListener()).execute(registrationVerifyMobileRequest);
+                }else {
+                    Toast.makeText(context, getString(R.string.no_network), Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }
 
 
-    private ResponseMessage<RegistrationVerifyMobileResponse> registrationVerifyMobileResponse;
 
-    public class HttpRegistrationSendSmsToken extends AsyncTask<RegistrationVerifyMobileRequest, Void, String> {
-
+    public class RequestRegistrationVerifyMobileTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationVerifyMobileResponse>>
+    {
         @Override
-        protected String doInBackground(RegistrationVerifyMobileRequest... params) {
+        public void onTaskComplete(ResponseMessage<RegistrationVerifyMobileResponse> registrationVerifyMobileResponseMessage)
+        {
 
-            WebServices webServices = new WebServices(getApplicationContext());
-            registrationVerifyMobileResponse = webServices.registrationVerifyMobileResponse(params[0]);
-
-            return null;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            if (registrationVerifyMobileResponse.getService().getResultStatus() != null) {
-
+            if (registrationVerifyMobileResponseMessage != null) {
                 Intent intent = new Intent();
                 intent.setClass(PostVerificationActivity.this, ConfirmAccountNoActivity.class);
                 startActivity(intent);
-
-            }
-            else {
+            }else {
+                Toast.makeText(context, getString(R.string.no_network), Toast.LENGTH_SHORT).show();
             }
         }
 
+        @Override
+        public void onTaskPreRun() {
+        }
     }
-
 
     @Override
     public void onClick(View v) {

@@ -1,21 +1,24 @@
 package com.hampay.mobile.android.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.dto.ContactDTO;
 import com.hampay.common.core.model.response.UserProfileResponse;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.activity.MainActivity;
+import com.hampay.mobile.android.activity.RegVerifyAccountNoActivity;
+import com.hampay.mobile.android.activity.VerifyAccountActivity;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.webservice.WebServices;
 
@@ -44,6 +47,8 @@ public class AccountDetailFragment extends Fragment {
     ImageView hampay_image_4;
     RelativeLayout loading_rl;
 
+    CardView verify_account_CardView;
+
     public AccountDetailFragment() {
         // Required empty public constructor
     }
@@ -60,6 +65,17 @@ public class AccountDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_account_detail, container, false);
+
+
+        verify_account_CardView = (CardView)rootView.findViewById(R.id.verify_account_CardView);
+        verify_account_CardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), VerifyAccountActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         loading_rl = (RelativeLayout)rootView.findViewById(R.id.loading_rl);

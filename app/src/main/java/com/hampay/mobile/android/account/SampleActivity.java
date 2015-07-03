@@ -25,7 +25,7 @@ public class SampleActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				addNewAccount(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
-				ContactsManager.addContact(SampleActivity.this, new HamPayContact("Hooman", "Amini"));
+//				ContactsManager.addContact(SampleActivity.this, new HamPayContact("Hooman", "Amini"));
 				/*if (serviceIntent == null)
 					serviceIntent = new Intent(SampleActivity.this, ContactUpdateService.class);
 				stopService(serviceIntent);

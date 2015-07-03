@@ -62,6 +62,8 @@
     <string name="pay_to">پرداخت به:   </string>
     <string name="price">مبلغ</string>
 
+    <string name="fill_data">اطلاعات را کامل و دقیق وارد کنید.</string>
+
 
     <string name="some_people_at_hampay">بعضی از دوستان شما در هم پی</string>
     <string name="title_activity_splash">SplashActivity</string>
@@ -70,6 +72,12 @@
     <string name="title_activity_intro_slider">IntroSliderActivity</string>
     <string name="title_activity_detail_transaction">DetailTransactionActivity</string>
 
+
+
+    <string name="no_network">عدم اتصال به اینترنت
+    \n
+        مجدد تلاش کنید
+    </string>
 
     <string name="detail_transaction">جزئیات تراکنش</string>
     <string name="account_no">شماره حساب </string>
@@ -88,9 +96,9 @@
 
 
     <string name="start_activity_title">شبکه پرداخت هم پی</string>
-    <string name="start_activity_text_1">۱. پرداخت به دوستان یا کسب و کار</string>
-    <string name="start_activity_text_2">۲. بدون نیاز به کارت بانکی</string>
-    <string name="start_activity_text_3">۳. با نرم افزار ایمن و ساده هم پی</string>
+    <string name="start_activity_text_1"> پرداخت به دوستان یا کسب و کار</string>
+    <string name="start_activity_text_2"> بدون نیاز به کارت بانکی</string>
+    <string name="start_activity_text_3"> با نرم افزار ایمن و ساده هم پی</string>
     <string name="title_activity_post_start">PostStartActivity</string>
 
     <string name="user_profile">مشخصات فردی</string>
@@ -105,8 +113,19 @@
     <string name="bank_account_info">اطلاعات حساب بانکی</string>
     <string name="bank_account_info_detail">لطفا شماره حسابی را که مایل به اتصال شبکه هم پی هستید را همراه با نام بانک و کد ملی را وارد نمایید</string>
     <string name="title_activity_verification">VerificationActivity</string>
+    <string name="progress_dialog_message">در حال دريافت اطلاعات...</string>
 
     <string name="user_status_verification">بررسی صحت حساب</string>
+    <string name="currency_rials">ريال</string>
+    <string name="return_button">بازگشت</string>
+    <string name="ok_button">تاييد</string>
+    <string name="cancel_button">انصراف</string>
+    <string name="alert_error_title">خطا</string>
+    <string name="alert_server_no_response">پاسخی از سرور دريافت نگرديد. لطفا بعدا دوباره تلاش نماييد.</string>
+    <string name="alert_connection_error_title">خطای اتصال</string>
+    <string name="alert_server_is_down_error">در حال حاضر سرور قادر به پاسخگويی نمی باشد. لطفا بعدا دوباره تلاش نماييد.</string>
+    <string name="alert_connection_error_message">خطا در ارتباط با اينترنت. لطفا تنظيمات مربوط به شبکه را بازبينی کرده و دوباره تلاش نماييد.</string>
+
 
     <string name="sms_verification_text">یک کد فعال سازی ۵ رقمی برای شما پیامک خواهد شد.</string>
     <string name="title_activity_post_verification">PostVerificationActivity</string>
@@ -118,6 +137,12 @@
     <string name="title_activity_confirm_account_no">ConfirmAccountNoActivity</string>
     <string name="confirm_account_no_text">در این بخش اطلاعات حساب با نام شما مطابقت داده می شود.</string>
     <string name="confirm_account_no">تایید شماره حساب</string>
+
+    <string name="congrats_account">تبریک!
+    \n
+        تایید حساب شما با موفقیت انجام شد.
+    </string>
+    <string name="wait_callcentre">منتظر تماس هم پی یارتان برای ارتقا به کاربر عادی باشید.</string>
 
     <string name="title_activity_confirm_info">ConfirmInfoActivity</string>
     <string name="confirm_information">تایید اطلاعات</string>
@@ -131,10 +156,10 @@
     <string name="title_activity_verify_account_no">VerifyAccountNoActivity</string>
     <string name="verify_account_no">بررسی شماره حساب</string>
 
-    <string name="verify_account_no_text_1">انتقال وجه زیر را خارج از برنامه هم پی و از طریق یکی از روش های اینترنت بانک، همراه بانک و یا عابر بانک انجام دهید</string>
-    <string name="verify_account_no_text_2">برای بررسی صحت شماره حساب شما مبلغ ۲۱۴۱ ریال از حساب هم پی ۸۰۰۰۴۵۹ به حساب شما ۱۲۳۴۵۶۷۷ واریز شد.</string>
-    <string name="verify_account_no_text_3">لطفا جهت تکمیل بررسی، مبلغ فوق(۲۱۴۱ ریال( را از حساب خود(۱۳۴۵۴) به یکی از روش های بالا به حساب هم پی (۸۰۰۰۴۵۹) باز گردانید.</string>
-    <string name="verify_account_no_keep_on">پس از انجام واریز، دکمه ادامه را کلیک کنید.</string>
+    <string name="reg_verify_account_no_text_1">انتقال وجه زیر را خارج از برنامه هم پی و از طریق یکی از روش های اینترنت بانک، همراه بانک و یا عابر بانک انجام دهید</string>
+    <string name="reg_verify_account_no_text_2">برای بررسی صحت شماره حساب شما مبلغ ۲۱۴۱ ریال از حساب هم پی ۸۰۰۰۴۵۹ به حساب شما ۱۲۳۴۵۶۷۷ واریز شد.</string>
+    <string name="reg_verify_account_no_text_3">لطفا جهت تکمیل بررسی، مبلغ فوق(۲۱۴۱ ریال) را از حساب خود(۱۳۴۵۴) به یکی از روش های بالا به حساب هم پی (۸۰۰۰۴۵۹) باز گردانید.</string>
+    <string name="reg_verify_account_no_keep_on">پس از انجام واریز، دکمه ادامه را کلیک کنید.</string>
     <string name="title_activity_pre_password">PrePasswordActivity</string>
 
     <string name="get_password">دریافت رمز  عبور</string>
@@ -237,5 +262,7 @@
     <string name="exit_app_no">انصراف</string>
     <string name="title_activity_change_memorable">ChangeMemorableActivity</string>
     <string name="title_activity_change_memorable_pass">ChangeMemorablePassActivity</string>
+    <string name="title_activity_verify_account">VerifyAccountActivity</string>
+    <string name="title_activity_congrats_account">CongratsAccountActivity</string>
 
 </resources>

@@ -2,52 +2,119 @@ package com.hampay.mobile.android.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.CardView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.EditText;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
 import com.hampay.common.core.model.response.IndividualPaymentResponse;
+import com.hampay.mobile.android.Helper.DatabaseHelper;
 import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.FacedTextView;
+import com.hampay.mobile.android.model.RecentPay;
 import com.hampay.mobile.android.webservice.WebServices;
 
 public class PayOneActivity extends ActionBarActivity {
 
-    FacedTextView contact_name;
     CardView pay_to_one;
-    EditText credit_value;
 
     Dialog dialog_pay_one;
-
-
     Bundle bundle;
+
+
+    DatabaseHelper dbHelper;
+
+    RecentPay recentPay;
+
+    private String contactPhoneNo;
+    private String contactName;
+    private String contactMesage;
+
+    FacedTextView contact_name;
+    FacedEditText contact_message;
+    FacedEditText credit_value;
+
+    String number = "";
+
+    boolean intentContact = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay_one);
 
+        dbHelper = new DatabaseHelper(this);
+
+        credit_value = (FacedEditText)findViewById(R.id.credit_value);
+        contact_message = (FacedEditText)findViewById(R.id.contact_message);
+        contact_name = (FacedTextView)findViewById(R.id.contact_name);
+
+
         bundle = getIntent().getExtras();
 
-        credit_value = (EditText)findViewById(R.id.credit_value);
+        if (bundle != null) {
+            contactPhoneNo = bundle.getString("contact_phone_no");
+            contactName = bundle.getString("contact_name");
 
-        contact_name = (FacedTextView)findViewById(R.id.contact_name);
-        contact_name.setText(bundle.getString("contact_name"));
+        }else {
+
+            intentContact = true;
+
+            Uri uri = getIntent().getData();
+
+            Cursor phonesCursor = getContentResolver().query(uri, null, null, null,
+                    ContactsContract.CommonDataKinds.Phone.IS_PRIMARY + " DESC");
+            if (phonesCursor != null) {
+                if (phonesCursor.moveToNext()) {
+                    String id = phonesCursor.getString(phonesCursor
+                            .getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
+                    Cursor pCur = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", new String[]{id}, null);
+                    while (pCur.moveToNext()) {
+                        contactPhoneNo = pCur.getString(pCur
+                                .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        contactName = pCur.getString(pCur
+                                .getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                        if (TextUtils.isEmpty(contactPhoneNo)) continue;
+                        if (!number.equals("")) number = number + "&";
+//                        contactPhoneNo = PhoneNumberUtils.stripSeparators(contactPhoneNo);
+
+                        //number = number + searchReplaceNumber(getApplicationContext(), n);
+                    }
+                    pCur.close();
+                }
+                phonesCursor.close();
+
+                Log.e("URL", contactPhoneNo);
+
+            }
+        }
+
+        contact_name.setText(contactName);
+
 
         pay_to_one = (CardView)findViewById(R.id.pay_to_one);
         pay_to_one.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new HttpConfirmIndividualPayment().execute(bundle.getString("contact_phone_no"));
+                new HttpConfirmIndividualPayment().execute(contactPhoneNo);
+                contactName = contact_name.getText().toString();
+                contactMesage = contact_message.getText().toString();
+
             }
         });
 
@@ -94,7 +161,8 @@ public class PayOneActivity extends ActionBarActivity {
                     @Override
                     public void onClick(View v) {
                         dialog_pay_one.dismiss();
-                        new HttpIndividualPayment().execute(bundle.getString("contact_phone_no"));
+//                        new HttpIndividualPayment().execute(bundle.getString("contact_phone_no"));
+                        new HttpIndividualPayment().execute(contactPhoneNo);
                     }
                 });
 
@@ -165,10 +233,33 @@ public class PayOneActivity extends ActionBarActivity {
                     @Override
                     public void onClick(View v) {
                         dialog_pay_one.dismiss();
+//                        finish();
+                        onBackPressed();
                     }
                 });
 
                 pay_one_confirm_ref.setText(getString(R.string.pay_one_ref, individualPaymentResponse.getService().getRefCode()));
+
+                recentPay = new RecentPay();
+
+
+                if (!dbHelper.getExistRecentPay(contactPhoneNo)) {
+
+                    recentPay = new RecentPay();
+                    recentPay.setName(contactName);
+                    recentPay.setPhone(contactPhoneNo);
+                    recentPay.setMessage(contactMesage);
+                    dbHelper.createRecentPAy(recentPay);
+
+                }else {
+                    recentPay = new RecentPay();
+                    recentPay = dbHelper.getRecentPay(contactPhoneNo);
+
+                    recentPay.setMessage(contactMesage);
+                    dbHelper.updateRecentPay(recentPay);
+                }
+
+
 
 
                 view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
@@ -185,5 +276,19 @@ public class PayOneActivity extends ActionBarActivity {
 
         }
     }
+
+    @Override
+    public void onBackPressed() {
+
+        if (intentContact){
+            Intent intent = new Intent();
+            intent.setClass(this, MainActivity.class);
+            startActivity(intent);
+        }
+
+        finish();
+
+    }
+
 
 }

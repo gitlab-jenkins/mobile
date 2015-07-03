@@ -13,8 +13,12 @@ import android.widget.RelativeLayout;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.request.RegistrationPassCodeEntryRequest;
+import com.hampay.common.core.model.response.RegistrationFetchUserDataResponse;
 import com.hampay.common.core.model.response.RegistrationPassCodeEntryResponse;
 import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import com.hampay.mobile.android.async.RequestFetchUserData;
+import com.hampay.mobile.android.async.RequestPassCodeEntry;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.webservice.WebServices;
 
@@ -48,6 +52,7 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
 
     RelativeLayout password_1_rl, password_2_rl;
 
+    Context context;
 
 
     @Override
@@ -56,6 +61,8 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
         setContentView(R.layout.activity_password_entry);
 
         prefs = getPreferences(MODE_PRIVATE);
+
+        context = this;
 
         password_1_rl = (RelativeLayout)findViewById(R.id.password_1_rl);
         password_2_rl = (RelativeLayout)findViewById(R.id.password_2_rl);
@@ -105,31 +112,63 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
     }
 
 
-    private ResponseMessage<RegistrationPassCodeEntryResponse> registrationPassCodeEntryResponse;
+//    private ResponseMessage<RegistrationPassCodeEntryResponse> registrationPassCodeEntryResponse;
+//
+//    public class HttpRegistrationPassCodeEntryResponse extends AsyncTask<RegistrationPassCodeEntryRequest, Void, String> {
+//
+//        @Override
+//        protected String doInBackground(RegistrationPassCodeEntryRequest... params) {
+//
+//            WebServices webServices = new WebServices(getApplicationContext());
+//            registrationPassCodeEntryResponse = webServices.registrationPassCodeEntryResponse(params[0]);
+//
+//
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String s) {
+//            super.onPostExecute(s);
+//
+//            if (registrationPassCodeEntryResponse.getService().getResultStatus() != null) {
+//
+//                password_1_rl.setVisibility(View.VISIBLE);
+//                password_2_rl.setVisibility(View.INVISIBLE);
+//
+//                inputPasswordValue = "";
+//                inputRePasswordValue = "";
+//
+//                input_digit_1.setImageResource(R.drawable.pass_icon_2);
+//                input_digit_2.setImageResource(R.drawable.pass_icon_2);
+//                input_digit_3.setImageResource(R.drawable.pass_icon_2);
+//                input_digit_4.setImageResource(R.drawable.pass_icon_2);
+//                input_digit_5.setImageResource(R.drawable.pass_icon_2);
+//
+//                Intent intent = new Intent();
+//                intent.setClass(PasswordEntryActivity.this, RememberPhraseActivity.class);
+//                startActivity(intent);
+//
+//            }
+//        }
+//    }
 
-    public class HttpRegistrationPassCodeEntryResponse extends AsyncTask<RegistrationPassCodeEntryRequest, Void, String> {
-
-        @Override
-        protected String doInBackground(RegistrationPassCodeEntryRequest... params) {
-
-            WebServices webServices = new WebServices(getApplicationContext());
-            registrationPassCodeEntryResponse = webServices.registrationPassCodeEntryResponse(params[0]);
 
 
-            return null;
+    public class RequestPassCodeEntryResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationPassCodeEntryResponse>>
+    {
+        public RequestPassCodeEntryResponseTaskCompleteListener(){
         }
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
+        public void onTaskComplete(ResponseMessage<RegistrationPassCodeEntryResponse> passCodeEntryResponseMessage)
+        {
 
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            if (registrationPassCodeEntryResponse.getService().getResultStatus() != null) {
-
+            if (passCodeEntryResponseMessage != null) {
                 password_1_rl.setVisibility(View.VISIBLE);
                 password_2_rl.setVisibility(View.INVISIBLE);
 
@@ -145,10 +184,14 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
                 Intent intent = new Intent();
                 intent.setClass(PasswordEntryActivity.this, RememberPhraseActivity.class);
                 startActivity(intent);
-
             }
         }
+
+        @Override
+        public void onTaskPreRun() {
+        }
     }
+
 
     @Override
     public void onClick(View v) {
@@ -358,7 +401,8 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
                             RegistrationPassCodeEntryRequest registrationPassCodeEntryRequest = new RegistrationPassCodeEntryRequest();
                             registrationPassCodeEntryRequest.setUserIdToken(prefs.getString("UserIdToken", ""));
                             registrationPassCodeEntryRequest.setPassCode(inputPasswordValue);
-                            new HttpRegistrationPassCodeEntryResponse().execute(registrationPassCodeEntryRequest);
+                            new RequestPassCodeEntry(context, new RequestPassCodeEntryResponseTaskCompleteListener()).execute(registrationPassCodeEntryRequest);
+
                         } else {
 
                             password_1_rl.setVisibility(View.VISIBLE);

@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -27,18 +26,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.request.ContactUsRequest;
 import com.hampay.common.core.model.response.ContactUsResponse;
-import com.hampay.common.core.model.response.UserProfileResponse;
 import com.hampay.mobile.android.R;
-import com.hampay.mobile.android.account.AccountGeneral;
-import com.hampay.mobile.android.account.ContactsManager;
-import com.hampay.mobile.android.account.HamPayContact;
-import com.hampay.mobile.android.component.FacedEditText;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.fragment.AccountDetailFragment;
 import com.hampay.mobile.android.fragment.FragmentDrawer;
@@ -76,8 +69,10 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         fragment_title = (FacedTextView)findViewById(R.id.fragment_title);
 
         user_account_name = (FacedTextView)findViewById(R.id.user_account_name);
+
 //        addNewAccount(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
-//        ContactsManager.addContact(MainActivity.this, new HamPayContact("Hooman", "Amini"));
+//        ContactsManager.addContact(MainActivity.this, new HamPayContact("", "Sharafkar", "", "09122020200"));
+//        ContactsManager.addContact(MainActivity.this, new HamPayContact("", "Sharafkar", "", "09122020200"));
 
         //new HttpBanks().execute();
 
@@ -376,7 +371,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     @Override
     public void onBackPressed() {
-//        moveTaskToBack(true);
+
+
 
         showExitDialog();
 

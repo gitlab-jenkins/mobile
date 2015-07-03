@@ -1,5 +1,8 @@
 package com.hampay.mobile.android.fragment;
 
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -17,22 +20,20 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.dto.ContactDTO;
 import com.hampay.common.core.model.response.ContactsHampayEnabledResponse;
-import com.hampay.common.core.model.response.UserProfileResponse;
 import com.hampay.mobile.android.Helper.DatabaseHelper;
 import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.account.AccountGeneral;
+import com.hampay.mobile.android.account.ContactsManager;
+import com.hampay.mobile.android.account.HamPayContact;
 import com.hampay.mobile.android.activity.PayOneActivity;
-import com.hampay.mobile.android.adapter.HamPayContactAdapter;
 import com.hampay.mobile.android.adapter.PayOneAdapter;
-import com.hampay.mobile.android.adapter.RecentPayOneAdapter;
-import com.hampay.mobile.android.component.FacedEditText;
+import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.sectionlist.PinnedHeaderListView;
 import com.hampay.mobile.android.model.RecentPay;
 import com.hampay.mobile.android.webservice.WebServices;
@@ -71,22 +72,15 @@ public class PayToOneFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         dbHelper = new DatabaseHelper(getActivity());
-        RecentPay recentPay = new RecentPay();
-        recentPay.setName("امیر");
-        recentPay.setPhone("۰۹۱۲۶۱۵۷۹۰۵");
-        recentPay.setMessage("مرامی پول ریختم");
-        recentPay.setStatus("واریز");
-
-        dbHelper.createRecentPAy(recentPay);
 
         recentPays = dbHelper.getAllRecentPays();
 
         searchRecentPays = new ArrayList<RecentPay>();
         searchContactDTOs = new ArrayList<ContactDTO>();
 
-        for (RecentPay pay : recentPays){
-            Log.e("PAY", pay.getId() + ": " + pay.getName());
-        }
+//        for (RecentPay pay : recentPays){
+//            Log.e("PAY", pay.getId() + ": " + pay.getName());
+//        }
 
     }
 
@@ -198,6 +192,27 @@ public class PayToOneFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+//        recentPays = dbHelper.getAllRecentPays();
+
+//        if (contactsHampayEnabledResponse != null && contactsHampayEnabledResponse.getService().getContacts().size() > 0){
+//
+//            PayOneAdapter sectionedAdapter = new PayOneAdapter(getActivity(),
+//                    recentPays,
+//                    contactsHampayEnabledResponse.getService().getContacts());
+//            pinnedHeaderListView.setAdapter(sectionedAdapter);
+
+//            loading_rl.setVisibility(View.GONE);
+//        }
+//        else {
+//            new HttpHamPayContact().execute();
+//        }
+
+    }
+
     private void performPayToOneSearch(String searchPhrase, boolean searchEnabled){
 
         inputMethodManager.hideSoftInputFromWindow(searchPhraseText.getWindowToken(), 0);
@@ -255,7 +270,34 @@ public class PayToOneFragment extends Fragment {
             WebServices webServices = new WebServices(getActivity());
             contactsHampayEnabledResponse = webServices.getHamPayContacts();
 
+            for (ContactDTO contactDTO : contactsHampayEnabledResponse.getService().getContacts()){
+
+                addNewAccount(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
+                ContactsManager.addContact(getActivity(), new HamPayContact("",
+                        contactDTO.getDisplayName(),
+                        "",
+                        contactDTO.getCellNumber()));
+
+                Log.e("Create", contactDTO.getDisplayName());
+
+            }
+
             return null;
+        }
+
+        private void addNewAccount(String accountType, String authTokenType) {
+            final AccountManagerFuture<Bundle> future = AccountManager.get(getActivity())
+                    .addAccount(accountType, authTokenType, null, null, getActivity(), new AccountManagerCallback<Bundle>() {
+                @Override
+                public void run(AccountManagerFuture<Bundle> future) {
+                    try {
+                        Bundle bnd = future.getResult();
+                        Log.i("", "Account was created");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, null);
         }
 
         @Override

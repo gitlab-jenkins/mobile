@@ -2,35 +2,33 @@ package com.hampay.mobile.android.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
-import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.CardView;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.request.RegistrationConfirmUserDataRequest;
 import com.hampay.common.core.model.request.RegistrationFetchUserDataRequest;
-import com.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
 import com.hampay.common.core.model.response.RegistrationConfirmUserDataResponse;
 import com.hampay.common.core.model.response.RegistrationFetchUserDataResponse;
-import com.hampay.common.core.model.response.RegistrationVerifyMobileResponse;
 import com.hampay.mobile.android.R;
-import com.hampay.mobile.android.component.FacedEditText;
+import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import com.hampay.mobile.android.async.RequestConfirmUserData;
+import com.hampay.mobile.android.async.RequestFetchUserData;
 import com.hampay.mobile.android.component.FacedTextView;
+import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.util.DeviceInfo;
-import com.hampay.mobile.android.webservice.WebServices;
 
 public class ConfirmInfoActivity extends ActionBarActivity implements View.OnClickListener {
 
@@ -50,18 +48,28 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
 
     SharedPreferences prefs;
 
+    Context context;
+
+    RelativeLayout loading_rl;
+
+    private ResponseMessage<RegistrationConfirmUserDataResponse> registrationConfirmUserDataResponse;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_info);
 
+        loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
+
         prefs = getPreferences(MODE_PRIVATE);
 
+        context = this;
 
         keeOn_without_cardView = (CardView)findViewById(R.id.keeOn_without_cardView);
         keeOn_without_cardView.setOnClickListener(this);
 
         keeOn_with_cardView = (CardView)findViewById(R.id.keeOn_with_cardView);
+        keeOn_with_cardView.setOnClickListener(this);
         confirm_layout = (LinearLayout)findViewById(R.id.confirm_layout);
         confirm_check_ll = (LinearLayout)findViewById(R.id.confirm_check_ll);
         confirm_check_img = (ImageView)findViewById(R.id.confirm_check_img);
@@ -73,13 +81,12 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
         user_national_code = (FacedEditText)findViewById(R.id.user_national_code);
 
 
-
         RegistrationFetchUserDataRequest registrationFetchUserDataRequest = new RegistrationFetchUserDataRequest();
         registrationFetchUserDataRequest.setUserIdToken(prefs.getString("UserIdToken", ""));
         correct_CardView = (CardView)findViewById(R.id.correct_CardView);
         correct_CardView.setOnClickListener(this);
 
-        new HttpRegistrationFetchUserDataResponse().execute(registrationFetchUserDataRequest);
+        new RequestFetchUserData(context, new RequestFetchUserDataTaskCompleteListener()).execute(registrationFetchUserDataRequest);
 
     }
 
@@ -102,6 +109,11 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                     @Override
                     public void onClick(View v) {
                         confirm_info_dialog.dismiss();
+
+                        Intent intent = new Intent();
+                        intent.setClass(ConfirmInfoActivity.this, RegVerifyAccountNoActivity.class);
+                        startActivity(intent);
+
                     }
                 });
 
@@ -128,6 +140,12 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
 
                 break;
 
+            case R.id.keeOn_with_cardView:
+                Intent intent = new Intent();
+                intent.setClass(ConfirmInfoActivity.this, RegVerifyAccountNoActivity.class);
+                startActivity(intent);
+                break;
+
             case R.id.correct_CardView:
 
                 user_phone.setFocusableInTouchMode(true);
@@ -149,7 +167,8 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                     registrationConfirmUserDataRequest.setIp("192.168.1.1");
                     registrationConfirmUserDataRequest.setDeviceId(new DeviceInfo(getApplicationContext()).getDeviceId());
 
-                    new HttpRegistrationConfirmUserDataResponse().execute(registrationConfirmUserDataRequest);
+                    new RequestConfirmUserData(context, new RequestConfirmUserDataTaskCompleteListener()).execute(registrationConfirmUserDataRequest);
+
                 }
                 else {
                     confirm_check_img.setImageDrawable(null);
@@ -161,61 +180,45 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
     }
 
 
-    private ResponseMessage<RegistrationFetchUserDataResponse> registrationFetchUserDataResponse;
-
-    public class HttpRegistrationFetchUserDataResponse extends AsyncTask<RegistrationFetchUserDataRequest, Void, String> {
-
-        @Override
-        protected String doInBackground(RegistrationFetchUserDataRequest... params) {
-
-            WebServices webServices = new WebServices(getApplicationContext());
-            registrationFetchUserDataResponse = webServices.registrationFetchUserDataResponse(params[0]);
-
-            return null;
+    public class RequestFetchUserDataTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationFetchUserDataResponse>>
+    {
+        public RequestFetchUserDataTaskCompleteListener(){
         }
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            if (registrationFetchUserDataResponse.getService().getResultStatus() != null) {
-                user_phone.setText(registrationFetchUserDataResponse.getService().getCellNumber());
-                user_family.setText(registrationFetchUserDataResponse.getService().getFulName());
-                user_account_no.setText(registrationFetchUserDataResponse.getService().getAccountNumber());
-                user_national_code.setText(registrationFetchUserDataResponse.getService().getNationalCode());
+        public void onTaskComplete(ResponseMessage<RegistrationFetchUserDataResponse> registrationFetchUserDataResponseMessage)
+        {
+            loading_rl.setVisibility(View.GONE);
+            if (registrationFetchUserDataResponseMessage.getService().getResultStatus() != null) {
+                user_phone.setText(registrationFetchUserDataResponseMessage.getService().getCellNumber());
+                user_family.setText(registrationFetchUserDataResponseMessage.getService().getFulName());
+                user_account_no.setText(registrationFetchUserDataResponseMessage.getService().getAccountNumber());
+                user_national_code.setText(registrationFetchUserDataResponseMessage.getService().getNationalCode());
             }
+
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            loading_rl.setVisibility(View.VISIBLE);
         }
     }
 
-    private ResponseMessage<RegistrationConfirmUserDataResponse> registrationConfirmUserDataResponse;
 
-    public class HttpRegistrationConfirmUserDataResponse extends AsyncTask<RegistrationConfirmUserDataRequest, Void, String> {
 
-        @Override
-        protected String doInBackground(RegistrationConfirmUserDataRequest... params) {
+    public class RequestConfirmUserDataTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationConfirmUserDataResponse>>
+    {
 
-            WebServices webServices = new WebServices(getApplicationContext());
-            registrationConfirmUserDataResponse = webServices.registrationConfirmUserDataResponse(params[0]);
-
-            return null;
+        public RequestConfirmUserDataTaskCompleteListener(){
         }
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
+        public void onTaskComplete(ResponseMessage<RegistrationConfirmUserDataResponse> registrationConfirmUserDataResponseMessage)
+        {
+            loading_rl.setVisibility(View.GONE);
 
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            if (registrationConfirmUserDataResponse.getService().getResultStatus() != null) {
-
+            registrationConfirmUserDataResponse = registrationConfirmUserDataResponseMessage;
+            if (registrationConfirmUserDataResponseMessage.getService().getResultStatus() != null) {
                 confirm_check_img.setImageResource(R.drawable.tick_icon);
                 correct_CardView.setVisibility(View.GONE);
                 user_phone.setFocusable(false);
@@ -223,10 +226,14 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                 user_account_no.setFocusable(false);
                 user_national_code.setFocusable(false);
                 confirm_layout.setVisibility(View.VISIBLE);
-
             }
+
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            loading_rl.setVisibility(View.VISIBLE);
         }
     }
-
 
 }

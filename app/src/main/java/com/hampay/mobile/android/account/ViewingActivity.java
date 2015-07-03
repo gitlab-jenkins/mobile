@@ -32,9 +32,6 @@ public class ViewingActivity extends Activity {
 
 		Uri uri = getIntent().getData();
 
-
-
-
 		Cursor phonesCursor = getContentResolver().query(uri, null, null, null,
 				ContactsContract.CommonDataKinds.Phone.IS_PRIMARY + " DESC");
 		if (phonesCursor != null) {

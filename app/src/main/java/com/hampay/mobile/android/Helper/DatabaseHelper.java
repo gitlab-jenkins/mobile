@@ -84,19 +84,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public RecentPay getRecentPay(long recent_pay_id) {
+    public RecentPay getRecentPay(String phone_no) {
         SQLiteDatabase db = this.getReadableDatabase();
-
         String selectQuery = "SELECT  * FROM " + TABLE_RECENT_PAY + " WHERE "
-                + KEY_ID + " = " + recent_pay_id;
-
+                + KEY_PHONE + " = '" + phone_no + "'";
         Log.e(LOG, selectQuery);
-
         Cursor c = db.rawQuery(selectQuery, null);
-
         if (c != null)
             c.moveToFirst();
-
         RecentPay recentPay = new RecentPay();
         recentPay.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         recentPay.setStatus((c.getString(c.getColumnIndex(KEY_STATUS))));
@@ -107,6 +102,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return recentPay;
     }
 
+    public boolean getExistRecentPay(String phone_no) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT  * FROM " + TABLE_RECENT_PAY + " WHERE "
+                + KEY_PHONE + " = '" + phone_no + "'";
+        Log.e(LOG, selectQuery);
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.getCount() > 0)
+            return true;
+        else
+            return false;
+
+    }
+
+
+    public int updateRecentPay(RecentPay recentPay) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_MESSAGE, recentPay.getMessage());
+        return db.update(TABLE_RECENT_PAY, values, KEY_PHONE + " = ?",
+                new String[] { recentPay.getPhone() });
+    }
 
     public List<RecentPay> getAllRecentPays() {
         List<RecentPay> recentPays = new ArrayList<RecentPay>();

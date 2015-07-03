@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.request.BusinessSearchRequest;
@@ -28,7 +27,7 @@ import com.hampay.common.core.model.response.dto.BusinessDTO;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.activity.PayBusinessActivity;
 import com.hampay.mobile.android.adapter.HamPayBusinessesAdapter;
-import com.hampay.mobile.android.component.FacedEditText;
+import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.doblist.DobList;
 import com.hampay.mobile.android.component.doblist.events.OnLoadMoreListener;
 import com.hampay.mobile.android.component.doblist.exceptions.NoEmptyViewException;

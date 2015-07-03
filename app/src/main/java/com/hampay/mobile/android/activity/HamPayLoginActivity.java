@@ -12,12 +12,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.hampay.common.common.response.ResponseMessage;
-import com.hampay.common.core.model.request.RegistrationMemorableWordEntryRequest;
 import com.hampay.common.core.model.request.TACRequest;
-import com.hampay.common.core.model.response.RegistrationMemorableWordEntryResponse;
 import com.hampay.common.core.model.response.TACResponse;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.component.FacedTextView;
+import com.hampay.mobile.android.dialog.AlertUtils;
+import com.hampay.mobile.android.functions.DeviceUuidFactory;
+import com.hampay.mobile.android.messaging.SecurityUtils;
+import com.hampay.mobile.android.service.LoginService;
 import com.hampay.mobile.android.webservice.WebServices;
 
 public class HamPayLoginActivity extends ActionBarActivity implements View.OnClickListener {
@@ -37,7 +39,7 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
     FacedTextView resend_active_code;
     RelativeLayout backspace;
 
-    String inputStringValue = "";
+    String inputPassValue = "";
 
     ImageView input_digit_1;
     ImageView input_digit_2;
@@ -187,17 +189,17 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
 
 
         if (digit.contains("d")){
-            if (inputStringValue.length() > 0) {
-                inputStringValue = inputStringValue.substring(0, inputStringValue.length() - 1);
+            if (inputPassValue.length() > 0) {
+                inputPassValue = inputPassValue.substring(0, inputPassValue.length() - 1);
             }
         }
         else {
-            if (inputStringValue.length() <= 4) {
-                inputStringValue += digit;
+            if (inputPassValue.length() <= 4) {
+                inputPassValue += digit;
             }
         }
 
-        if (inputStringValue.length() == 5){
+        if (inputPassValue.length() == 5){
             Intent intent = new Intent();
             intent.setClass(HamPayLoginActivity.this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -207,7 +209,7 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
         }
 
 
-        switch (inputStringValue.length()){
+        switch (inputPassValue.length()){
 
             case 0:
                 input_digit_1.setImageResource(R.drawable.pass_icon_2);
@@ -261,5 +263,30 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
                 break;
         }
 
+    }
+
+
+    private void sendLoginRequest() {
+
+
+        AlertUtils.getInstance().showProgressDialog(this);
+
+
+        LoginService service = new LoginService(this);
+//        service.sendLoginRequest("87378fbf3a67463dac9829256f26270a", passCode);
+        String memorableWord = "";
+
+        String userId = "";
+
+        String installationToken = "";
+
+
+        String password = SecurityUtils.getInstance(this).
+                generatePassword(inputPassValue,
+                        memorableWord,
+                        new DeviceUuidFactory(this).getDeviceUuid().toString(),
+                        installationToken);
+
+        service.sendLoginRequest(userId, password);
     }
 }
