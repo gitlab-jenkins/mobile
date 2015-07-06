@@ -30,6 +30,13 @@
     <string name="nav_item_help">راهنما</string>
     <string name="nav_item_exit">خروج</string>
 
+    <string name="transaction_to">به: </string>
+    <string name="transaction_from">از: </string>
+    <string name="transaction_in">در: </string>
+    <string name="transaction_date">تاریخ</string>
+    <string name="transaction_tacking_code">کد پیگیری: </string>
+    <string name="transaction_price">مبلغ: </string>
+    <string name="transaction_message">پیام: </string>
 
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">
@@ -71,6 +78,7 @@
     <string name="start">شروع</string>
     <string name="title_activity_intro_slider">IntroSliderActivity</string>
     <string name="title_activity_detail_transaction">DetailTransactionActivity</string>
+
 
 
 

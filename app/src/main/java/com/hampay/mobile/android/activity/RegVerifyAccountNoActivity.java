@@ -20,11 +20,13 @@ import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestRegisterVerifyAccount;
 import com.hampay.mobile.android.async.RequestRegistrationVerifyTransferMoney;
 import com.hampay.mobile.android.component.FacedTextView;
+import com.hampay.mobile.android.component.material.ButtonFlat;
+import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.util.NetworkConnectivity;
 
 public class RegVerifyAccountNoActivity extends ActionBarActivity {
 
-    CardView keepOn_CardView;
+    ButtonRectangle keepOn_button;
 
     FacedTextView verification_response_text;
 
@@ -49,8 +51,8 @@ public class RegVerifyAccountNoActivity extends ActionBarActivity {
 
         verification_response_text = (FacedTextView)findViewById(R.id.verification_response_text);
 
-        keepOn_CardView = (CardView)findViewById(R.id.keepOn_CardView);
-        keepOn_CardView.setOnClickListener(new View.OnClickListener() {
+        keepOn_button = (ButtonRectangle)findViewById(R.id.keepOn_button);
+        keepOn_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

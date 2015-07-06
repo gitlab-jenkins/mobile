@@ -15,11 +15,14 @@ import android.widget.RelativeLayout;
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.dto.ContactDTO;
 import com.hampay.common.core.model.response.UserProfileResponse;
+import com.hampay.common.core.model.response.dto.UserProfileDTO;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.activity.MainActivity;
 import com.hampay.mobile.android.activity.RegVerifyAccountNoActivity;
 import com.hampay.mobile.android.activity.VerifyAccountActivity;
 import com.hampay.mobile.android.component.FacedTextView;
+import com.hampay.mobile.android.component.material.ButtonRectangle;
+import com.hampay.mobile.android.util.JalaliConvert;
 import com.hampay.mobile.android.webservice.WebServices;
 
 import java.util.List;
@@ -47,7 +50,7 @@ public class AccountDetailFragment extends Fragment {
     ImageView hampay_image_4;
     RelativeLayout loading_rl;
 
-    CardView verify_account_CardView;
+    ButtonRectangle verify_account_button;
 
     public AccountDetailFragment() {
         // Required empty public constructor
@@ -67,8 +70,8 @@ public class AccountDetailFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_account_detail, container, false);
 
 
-        verify_account_CardView = (CardView)rootView.findViewById(R.id.verify_account_CardView);
-        verify_account_CardView.setOnClickListener(new View.OnClickListener() {
+        verify_account_button = (ButtonRectangle)rootView.findViewById(R.id.verify_account_button);
+        verify_account_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -118,6 +121,10 @@ public class AccountDetailFragment extends Fragment {
 
         ResponseMessage<UserProfileResponse> userProfileResponse = null;
 
+        UserProfileDTO userProfileDTO;
+
+        JalaliConvert jalaliConvert;
+
         @Override
         protected String doInBackground(Void... params) {
 
@@ -139,30 +146,35 @@ public class AccountDetailFragment extends Fragment {
 
             if (userProfileResponse != null) {
 
-                if (userProfileResponse.getService().getUserProfile().getVerificationStatus().ordinal() == 0){
+                jalaliConvert = new JalaliConvert();
+
+                userProfileDTO = userProfileResponse.getService().getUserProfile();
+
+                if (userProfileDTO.getVerificationStatus().ordinal() == 0){
                     user_image.setImageResource(R.drawable.user_icon_blak);
                 }else {
                     user_image.setImageResource(R.drawable.user_icon_blue);
                 }
-                user_name_text.setText(userProfileResponse.getService().getUserProfile().getFullName());
-                MainActivity.user_account_name.setText(userProfileResponse.getService().getUserProfile().getFullName());
-                user_account_no_text.setText(getString(R.string.account_no) + ": " + userProfileResponse.getService().getUserProfile().getAccountNumber());
-                user_bank_name.setText(userProfileResponse.getService().getUserProfile().getBankName());
-                user_mobile_no.setText(getString(R.string.mobile_no) + ": " + userProfileResponse.getService().getUserProfile().getCellNumber());
+                user_name_text.setText(userProfileDTO.getFullName());
+                MainActivity.user_account_name.setText(userProfileDTO.getFullName());
+                user_account_no_text.setText(getString(R.string.account_no) + ": " + userProfileDTO.getAccountNumber());
+                user_bank_name.setText(userProfileDTO.getBankName());
+                user_mobile_no.setText(getString(R.string.mobile_no) + ": " + userProfileDTO.getCellNumber());
 
                 user_account_title.setText(getString(R.string.account_type));
 
-                if (userProfileResponse.getService().getUserProfile().getVerificationStatus().name().equalsIgnoreCase("UNVERIFIED")) {
+                if (userProfileDTO.getVerificationStatus().name().equalsIgnoreCase("UNVERIFIED")) {
                     user_account_type.setText(": " + "محدود");
                 }else {
                     user_account_type.setText(": " + "عادی");
                 }
 
-                user_last_login.setText(getString(R.string.last_login) + userProfileResponse.getService().getUserProfile().getLastLoginDate());
+                user_last_login.setText(getString(R.string.last_login) + ": "
+                        + jalaliConvert.GregorianToPersian(userProfileDTO.getLastLoginDate()));
 
 
 
-                List<ContactDTO> contactDTOs = userProfileResponse.getService().getUserProfile().getSelectedContacts();
+                List<ContactDTO> contactDTOs = userProfileDTO.getSelectedContacts();
 
                 hampay_1.setText(contactDTOs.get(0).getDisplayName());
                 hampay_2.setText(contactDTOs.get(1).getDisplayName());

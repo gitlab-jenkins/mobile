@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:text="@string/mobile_no_verification"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"/>
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:text="@string/title_contacts_us"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
@@ -58,7 +58,7 @@
 
                 <LinearLayout
                     android:layout_width="0dip"
-                    android:layout_height="20dp"
+                    android:layout_height="30dp"
                     android:layout_weight="0.4"
                     android:gravity="center_vertical">
 
@@ -95,7 +95,7 @@
 
                     <RelativeLayout
                         android:layout_width="0dip"
-                        android:layout_height="20dp"
+                        android:layout_height="30dp"
                         android:layout_weight="0.4">
 
                         <View
@@ -119,7 +119,7 @@
 
                 <LinearLayout
                     android:layout_width="0dip"
-                    android:layout_height="20dp"
+                    android:layout_height="30dp"
                     android:layout_weight="0.3"
                     android:gravity="center_vertical">
 
@@ -146,7 +146,7 @@
 
                     <RelativeLayout
                         android:layout_width="0dip"
-                        android:layout_height="20dp"
+                        android:layout_height="30dp"
                         android:layout_weight="0.5">
 
                         <View
@@ -169,7 +169,7 @@
 
                 <LinearLayout
                     android:layout_width="0dip"
-                    android:layout_height="20dp"
+                    android:layout_height="30dp"
                     android:layout_weight="0.3"
                     android:gravity="center_vertical">
 
@@ -196,7 +196,7 @@
 
                     <RelativeLayout
                         android:layout_width="0dip"
-                        android:layout_height="20dp"
+                        android:layout_height="30dp"
                         android:layout_weight="0.5">
 
                         <View
@@ -223,17 +223,17 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="80dp">
+                android:layout_marginTop="70dp">
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="30dp">
+                    android:layout_marginBottom="10dp">
 
                     <ImageView
-                        android:layout_width="190dp"
-                        android:layout_height="190dp"
+                        android:layout_width="180dp"
+                        android:layout_height="180dp"
                         android:src="@drawable/step_circle_3"/>
 
                     <LinearLayout
@@ -279,35 +279,35 @@
                 android:text="@string/sms_verification_text"
                 android:layout_alignParentBottom="true"/>
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/keepOn_CardView"
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                card_view:cardBackgroundColor="@color/register_btn_color"
-                card_view:cardCornerRadius="2dp"
-                card_view:cardElevation="4dp"
-                android:layout_gravity="center"
-                android:layout_centerHorizontal="true"
+            <RelativeLayout
+                android:layout_width="150dp"
+                android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
                 android:layout_marginBottom="25dp">
+
+
+                <com.hampay.mobile.android.component.material.ButtonRectangle
+                    android:id="@+id/keepOn_button"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/register_btn_color"
+                    android:textSize="20sp" />
 
                 <com.hampay.mobile.android.component.FacedTextView
                     geekui:customTypeface="fonts/iran_sans.ttf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
                     android:textColor="@android:color/white"
-                    android:textSize="26sp"
+                    android:textSize="24sp"
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:text="@string/keep_on"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="50dp"
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="2dp"/>
 
-            </android.support.v7.widget.CardView>
+            </RelativeLayout>
 
         </RelativeLayout>
 

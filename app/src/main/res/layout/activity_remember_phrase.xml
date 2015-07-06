@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:text="@string/remember_phrase"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"/>
@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:text="@string/title_contacts_us"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
@@ -47,7 +47,7 @@
 
         <LinearLayout
             android:layout_width="0dip"
-            android:layout_height="20dp"
+            android:layout_height="30dp"
             android:layout_weight="0.4"
             android:gravity="center_vertical">
 
@@ -84,7 +84,7 @@
 
             <RelativeLayout
                 android:layout_width="0dip"
-                android:layout_height="20dp"
+                android:layout_height="30dp"
                 android:layout_weight="0.7">
 
                 <View
@@ -108,57 +108,7 @@
 
         <LinearLayout
             android:layout_width="0dip"
-            android:layout_height="20dp"
-            android:layout_weight="0.3"
-            android:gravity="center_vertical">
-
-            <RelativeLayout
-                android:layout_width="0dip"
-                android:layout_height="30dp"
-                android:layout_weight="0.2">
-
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="6dp"
-                    android:background="@color/normal_text"
-                    android:layout_centerInParent="true" />
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/triangle_green"
-                    android:layout_centerVertical="true"
-                    android:background="@android:color/white"/>
-
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="0dip"
-                android:layout_height="20dp"
-                android:layout_weight="0.8">
-
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="6dp"
-                    android:background="@color/register_btn_color"
-                    android:layout_centerInParent="true" />
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/step_mobile_icon_g"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentRight="true"
-                    android:background="@android:color/white"/>
-
-            </RelativeLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dip"
-            android:layout_height="20dp"
+            android:layout_height="30dp"
             android:layout_weight="0.3"
             android:gravity="center_vertical">
 
@@ -185,7 +135,57 @@
 
             <RelativeLayout
                 android:layout_width="0dip"
-                android:layout_height="20dp"
+                android:layout_height="30dp"
+                android:layout_weight="0.5">
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="6dp"
+                    android:background="@color/register_btn_color"
+                    android:layout_centerInParent="true" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/step_mobile_icon_g"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:background="@android:color/white"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dip"
+            android:layout_height="30dp"
+            android:layout_weight="0.3"
+            android:gravity="center_vertical">
+
+            <RelativeLayout
+                android:layout_width="0dip"
+                android:layout_height="30dp"
+                android:layout_weight="0.5">
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="6dp"
+                    android:background="@color/register_btn_color"
+                    android:layout_centerInParent="true" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/triangle_green"
+                    android:layout_centerVertical="true"
+                    android:background="@android:color/white"/>
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dip"
+                android:layout_height="30dp"
                 android:layout_weight="0.5">
 
                 <View
@@ -234,6 +234,7 @@
             android:textSize="18sp"
             android:text="@string/remember_phrase_text"
             android:layout_centerVertical="true"
+            android:gravity="right"
             android:layout_alignParentRight="true"
             android:layout_marginRight="48dp"
             android:layout_marginTop="8dp"
@@ -268,37 +269,66 @@
                 android:background="@drawable/remember_edittext_bg"/>
 
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/keepOn_CardView"
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                card_view:cardBackgroundColor="@color/register_btn_color"
-                card_view:cardCornerRadius="2dp"
-                card_view:cardElevation="4dp"
-                android:layout_gravity="center"
-                android:layout_centerHorizontal="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginTop="25dp"
-                android:layout_marginBottom="25dp">
+            <!--<android.support.v7.widget.CardView-->
+                <!--android:id="@+id/keepOn_CardView"-->
+                <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+                <!--xmlns:card_view="http://schemas.android.com/apk/res-auto"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--card_view:cardBackgroundColor="@color/register_btn_color"-->
+                <!--card_view:cardCornerRadius="2dp"-->
+                <!--card_view:cardElevation="4dp"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:layout_marginTop="25dp"-->
+                <!--android:layout_marginBottom="25dp">-->
+
+                <!--<com.hampay.mobile.android.component.FacedTextView-->
+                    <!--geekui:customTypeface="fonts/iran_sans.ttf"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textColor="@android:color/white"-->
+                    <!--android:textSize="26sp"-->
+                    <!--android:gravity="center"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:text="@string/confirm"-->
+                    <!--android:layout_marginLeft="50dp"-->
+                    <!--android:layout_marginRight="50dp"-->
+                    <!--android:layout_marginTop="2dp"-->
+                    <!--android:layout_marginBottom="2dp"/>-->
+
+            <!--</android.support.v7.widget.CardView>-->
+
+
+            <RelativeLayout
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp">
+
+
+                <com.hampay.mobile.android.component.material.ButtonRectangle
+                    android:id="@+id/keepOn_button"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/register_btn_color"
+                    android:textSize="20sp" />
 
                 <com.hampay.mobile.android.component.FacedTextView
                     geekui:customTypeface="fonts/iran_sans.ttf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
                     android:textColor="@android:color/white"
-                    android:textSize="26sp"
+                    android:textSize="24sp"
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:text="@string/confirm"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="50dp"
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="2dp"/>
 
-            </android.support.v7.widget.CardView>
-
+            </RelativeLayout>
 
         </LinearLayout>
 

@@ -20,7 +20,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:text="@string/title_contacts_us"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="30dp"/>
@@ -30,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:text="@string/login"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
@@ -40,7 +40,7 @@
 
 
         <com.hampay.mobile.android.component.FacedTextView
-            geekui:customTypeface="fonts/iran_sans.ttf"
+            geekui:customTypeface="fonts/iran_sans_bold.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/register_btn_color"
@@ -66,42 +66,41 @@
             android:layout_height="wrap_content"
             android:textColor="@color/normal_text"
             android:textSize="20sp"
+            android:gravity="right"
             android:text="@string/hampay_login_text"
             android:layout_marginRight="25dp"
             android:layout_gravity="right"/>
 
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/hampay_login_CardView"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            card_view:cardBackgroundColor="@android:color/white"
-            card_view:cardCornerRadius="2dp"
-            card_view:cardElevation="4dp"
-            android:layout_gravity="center"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="25dp"
+
+        <RelativeLayout
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
             android:layout_marginBottom="25dp">
+
+
+            <com.hampay.mobile.android.component.material.ButtonRectangle
+                android:id="@+id/hampay_login_button"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_centerHorizontal="true"
+                android:background="@android:color/white"
+                android:textSize="20sp" />
 
             <com.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:textColor="@color/normal_text"
-                android:textSize="26sp"
+                android:textSize="24sp"
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:text="@string/remember_phrase"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
                 android:layout_marginTop="2dp"
                 android:layout_marginBottom="2dp"/>
 
-        </android.support.v7.widget.CardView>
-
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="fill_parent"

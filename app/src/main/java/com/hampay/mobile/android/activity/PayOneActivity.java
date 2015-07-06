@@ -13,7 +13,9 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.CardView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -23,14 +25,16 @@ import com.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
 import com.hampay.common.core.model.response.IndividualPaymentResponse;
 import com.hampay.mobile.android.Helper.DatabaseHelper;
 import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.component.edittext.CurrencyFormatter;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.FacedTextView;
+import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.model.RecentPay;
 import com.hampay.mobile.android.webservice.WebServices;
 
 public class PayOneActivity extends ActionBarActivity {
 
-    CardView pay_to_one;
+    ButtonRectangle pay_to_one_button;
 
     Dialog dialog_pay_one;
     Bundle bundle;
@@ -60,6 +64,9 @@ public class PayOneActivity extends ActionBarActivity {
         dbHelper = new DatabaseHelper(this);
 
         credit_value = (FacedEditText)findViewById(R.id.credit_value);
+        credit_value.addTextChangedListener(new CurrencyFormatter(credit_value));
+
+
         contact_message = (FacedEditText)findViewById(R.id.contact_message);
         contact_name = (FacedTextView)findViewById(R.id.contact_name);
 
@@ -107,8 +114,8 @@ public class PayOneActivity extends ActionBarActivity {
         contact_name.setText(contactName);
 
 
-        pay_to_one = (CardView)findViewById(R.id.pay_to_one);
-        pay_to_one.setOnClickListener(new View.OnClickListener() {
+        pay_to_one_button = (ButtonRectangle)findViewById(R.id.pay_to_one_button);
+        pay_to_one_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new HttpConfirmIndividualPayment().execute(contactPhoneNo);

@@ -16,6 +16,7 @@ import com.hampay.common.core.model.dto.ContactDTO;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.activity.PayOneActivity;
 import com.hampay.mobile.android.component.FacedTextView;
+import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.component.sectionlist.SectionedBaseAdapter;
 import com.hampay.mobile.android.model.RecentPay;
 
@@ -103,7 +104,7 @@ public class PayOneAdapter extends SectionedBaseAdapter{
 
         FacedTextView contact_name = (FacedTextView)layout.findViewById(R.id.contact_name);
         FacedTextView contact_phone_no = (FacedTextView)layout.findViewById(R.id.contact_phone_no);
-        CardView pay_to_one = (CardView)layout.findViewById(R.id.pay_to_one);
+        ButtonRectangle pay_to_one_button = (ButtonRectangle)layout.findViewById(R.id.pay_to_one_button);
 
 
 
@@ -133,9 +134,23 @@ public class PayOneAdapter extends SectionedBaseAdapter{
             });
 
         }else{
-            ContactDTO contactDTO = contactDTOs2.get(position);
+
+            final ContactDTO contactDTO = contactDTOs2.get(position);
             contact_name.setText(contactDTO.getDisplayName());
             contact_phone_no.setText(contactDTO.getCellNumber());
+
+            pay_to_one_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.setClass(mContext, PayOneActivity.class);
+                    intent.putExtra("contact_name", contactDTO.getDisplayName());
+                    intent.putExtra("contact_phone_no", contactDTO.getCellNumber());
+                    mContext.startActivity(intent);
+                }
+            });
+
+
         }
 
         return layout;

@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:allowBackup="true"
@@ -62,7 +63,7 @@
             android:label="@string/title_activity_confirm_account_no" >
         </activity>
         <activity
-            android:name=".activity.ConfirmInfoActivity"
+            android:name=".activity.PasswordEntryActivity"
             android:label="@string/title_activity_confirm_info"
             android:windowSoftInputMode="stateHidden" >
         </activity>
@@ -75,7 +76,7 @@
             android:label="@string/title_activity_pre_password" >
         </activity>
         <activity
-            android:name=".activity.PasswordEntryActivity"
+            android:name=".activity.ConfirmInfoActivity"
             android:label="@string/title_activity_password_entry" >
         </activity>
         <activity

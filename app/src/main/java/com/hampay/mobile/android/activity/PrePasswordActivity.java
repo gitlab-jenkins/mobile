@@ -21,11 +21,12 @@ import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestRegisterVerifyAccount;
 import com.hampay.mobile.android.async.RequestRegistrationVerifyTransferMoney;
+import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.webservice.WebServices;
 
 public class PrePasswordActivity extends ActionBarActivity {
 
-    CardView keepOn_CardView;
+    ButtonRectangle keepOn_button;
 
     RelativeLayout loading_rl;
 
@@ -41,8 +42,8 @@ public class PrePasswordActivity extends ActionBarActivity {
         prefs = getPreferences(MODE_PRIVATE);
 
 
-        keepOn_CardView = (CardView) findViewById(R.id.keepOn_CardView);
-        keepOn_CardView.setOnClickListener(new View.OnClickListener() {
+        keepOn_button = (ButtonRectangle) findViewById(R.id.keepOn_button);
+        keepOn_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();

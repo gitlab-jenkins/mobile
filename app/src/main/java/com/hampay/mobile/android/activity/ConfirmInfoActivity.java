@@ -28,18 +28,22 @@ import com.hampay.mobile.android.async.RequestConfirmUserData;
 import com.hampay.mobile.android.async.RequestFetchUserData;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
+import com.hampay.mobile.android.component.material.ButtonFlat;
+import com.hampay.mobile.android.component.material.ButtonRectangle;
+import com.hampay.mobile.android.component.material.CheckBox;
 import com.hampay.mobile.android.util.DeviceInfo;
 
 public class ConfirmInfoActivity extends ActionBarActivity implements View.OnClickListener {
 
-    CardView correct_CardView;
-    CardView keeOn_without_cardView;
-    CardView keeOn_with_cardView;
+    ButtonRectangle correct_button;
+    RelativeLayout correct_button_rl;
+    ButtonRectangle keeOn_without_button;
+    ButtonRectangle keeOn_with_button;
 
     Dialog confirm_info_dialog;
     LinearLayout confirm_check_ll;
     boolean confirm_check_value = false;
-    ImageView confirm_check_img;
+    CheckBox confirm_check;
     FacedEditText user_phone;
     FacedEditText user_family;
     FacedEditText user_account_no;
@@ -65,14 +69,39 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
 
         context = this;
 
-        keeOn_without_cardView = (CardView)findViewById(R.id.keeOn_without_cardView);
-        keeOn_without_cardView.setOnClickListener(this);
+        keeOn_without_button = (ButtonRectangle)findViewById(R.id.keeOn_without_button);
+        keeOn_without_button.setOnClickListener(this);
 
-        keeOn_with_cardView = (CardView)findViewById(R.id.keeOn_with_cardView);
-        keeOn_with_cardView.setOnClickListener(this);
+        keeOn_with_button = (ButtonRectangle)findViewById(R.id.keeOn_with_button);
+        keeOn_with_button.setOnClickListener(this);
         confirm_layout = (LinearLayout)findViewById(R.id.confirm_layout);
         confirm_check_ll = (LinearLayout)findViewById(R.id.confirm_check_ll);
-        confirm_check_img = (ImageView)findViewById(R.id.confirm_check_img);
+        confirm_check = (CheckBox)findViewById(R.id.confirm_check);
+        confirm_check.setOncheckListener(new CheckBox.OnCheckListener() {
+            @Override
+            public void onCheck(CheckBox view, boolean check) {
+//                confirm_check_value = !confirm_check_value;
+
+                if (check) {
+
+                    RegistrationConfirmUserDataRequest registrationConfirmUserDataRequest = new RegistrationConfirmUserDataRequest();
+                    registrationConfirmUserDataRequest.setUserIdToken(prefs.getString("UserIdToken", ""));
+                    registrationConfirmUserDataRequest.setImei(new DeviceInfo(getApplicationContext()).getIMEI());
+                    registrationConfirmUserDataRequest.setIsVerified(confirm_check_value);
+                    registrationConfirmUserDataRequest.setIp("192.168.1.1");
+                    registrationConfirmUserDataRequest.setDeviceId(new DeviceInfo(getApplicationContext()).getDeviceId());
+
+                    new RequestConfirmUserData(context, new RequestConfirmUserDataTaskCompleteListener()).execute(registrationConfirmUserDataRequest);
+
+                } else {
+//                    confirm_check_img.setImageDrawable(null);
+                    confirm_check.setChecked(false);
+                    correct_button.setVisibility(View.VISIBLE);
+                    correct_button_rl.setVisibility(View.VISIBLE);
+                    confirm_layout.setVisibility(View.GONE);
+                }
+            }
+        });
         confirm_check_ll.setOnClickListener(this);
 
         user_phone = (FacedEditText)findViewById(R.id.user_phone);
@@ -83,8 +112,9 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
 
         RegistrationFetchUserDataRequest registrationFetchUserDataRequest = new RegistrationFetchUserDataRequest();
         registrationFetchUserDataRequest.setUserIdToken(prefs.getString("UserIdToken", ""));
-        correct_CardView = (CardView)findViewById(R.id.correct_CardView);
-        correct_CardView.setOnClickListener(this);
+        correct_button = (ButtonRectangle)findViewById(R.id.correct_button);
+        correct_button_rl = (RelativeLayout)findViewById(R.id.correct_button_rl);
+        correct_button.setOnClickListener(this);
 
         new RequestFetchUserData(context, new RequestFetchUserDataTaskCompleteListener()).execute(registrationFetchUserDataRequest);
 
@@ -93,7 +123,7 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.keeOn_without_cardView:
+            case R.id.keeOn_without_button:
 
                 Rect displayRectangle = new Rect();
                 Activity parent = (Activity) ConfirmInfoActivity.this;
@@ -102,8 +132,8 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
 
                 View view = getLayoutInflater().inflate(R.layout.dialog_confirm_info, null);
 
-                FacedTextView check_account = (FacedTextView) view.findViewById(R.id.check_account);
-                FacedTextView uncheck_account = (FacedTextView) view.findViewById(R.id.uncheck_account);
+                ButtonFlat check_account = (ButtonFlat) view.findViewById(R.id.check_account);
+                ButtonFlat uncheck_account = (ButtonFlat) view.findViewById(R.id.uncheck_account);
 
                 check_account.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -140,13 +170,13 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
 
                 break;
 
-            case R.id.keeOn_with_cardView:
+            case R.id.keeOn_with_button:
                 Intent intent = new Intent();
                 intent.setClass(ConfirmInfoActivity.this, RegVerifyAccountNoActivity.class);
                 startActivity(intent);
                 break;
 
-            case R.id.correct_CardView:
+            case R.id.correct_button:
 
                 user_phone.setFocusableInTouchMode(true);
                 user_family.setFocusableInTouchMode(true);
@@ -171,8 +201,10 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
 
                 }
                 else {
-                    confirm_check_img.setImageDrawable(null);
-                    correct_CardView.setVisibility(View.VISIBLE);
+//                    confirm_check_img.setImageDrawable(null);
+                    confirm_check.setChecked(false);
+                    correct_button.setVisibility(View.VISIBLE);
+                    correct_button_rl.setVisibility(View.VISIBLE);
                     confirm_layout.setVisibility(View.GONE);
                 }
                 break;
@@ -219,8 +251,10 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
 
             registrationConfirmUserDataResponse = registrationConfirmUserDataResponseMessage;
             if (registrationConfirmUserDataResponseMessage.getService().getResultStatus() != null) {
-                confirm_check_img.setImageResource(R.drawable.tick_icon);
-                correct_CardView.setVisibility(View.GONE);
+//                confirm_check_img.setImageResource(R.drawable.tick_icon);
+                confirm_check.setChecked(true);
+                correct_button.setVisibility(View.GONE);
+                correct_button_rl.setVisibility(View.GONE);
                 user_phone.setFocusable(false);
                 user_family.setFocusable(false);
                 user_account_no.setFocusable(false);

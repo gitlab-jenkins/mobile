@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
-                android:gravity="center"
+                android:gravity="right"
                 android:layout_marginRight="8dp"
                 android:text="۱۲/۳/۹۴  ۲۲:۴۳"/>
 
@@ -86,7 +86,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_centerVertical="true">
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dp">
 
         <com.hampay.mobile.android.component.FacedTextView
             android:id="@+id/price_pay"

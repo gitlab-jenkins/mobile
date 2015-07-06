@@ -27,12 +27,13 @@ import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestRegistrationSendSmsToken;
 import com.hampay.mobile.android.async.RequestVerifyMobile;
 import com.hampay.mobile.android.component.FacedTextView;
+import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.util.NetworkConnectivity;
 import com.hampay.mobile.android.webservice.WebServices;
 
 public class PostVerificationActivity extends ActionBarActivity implements View.OnClickListener{
 
-    CardView verification_CardView;
+    ButtonRectangle verify_button;
 
     FacedTextView digit_1;
     FacedTextView digit_2;
@@ -98,8 +99,8 @@ public class PostVerificationActivity extends ActionBarActivity implements View.
         input_digit_5 = (ImageView)findViewById(R.id.input_digit_5);
 
 
-        verification_CardView = (CardView)findViewById(R.id.verification_CardView);
-        verification_CardView.setOnClickListener(new View.OnClickListener() {
+        verify_button = (ButtonRectangle)findViewById(R.id.verify_button);
+        verify_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

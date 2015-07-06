@@ -33,13 +33,14 @@ import com.hampay.mobile.android.async.RequestBankList;
 import com.hampay.mobile.android.async.RequestRegistrationEntry;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
+import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.util.DeviceInfo;
 import com.hampay.mobile.android.util.NetworkConnectivity;
 
 public class ProfileEntryActivity extends ActionBarActivity {
 
 
-    CardView keepOn_CardView;
+    ButtonRectangle keepOn_button;
     RelativeLayout bankSelection;
     Dialog bankSelectionDialog;
 
@@ -182,8 +183,8 @@ public class ProfileEntryActivity extends ActionBarActivity {
             new RequestBankList(this, new RequestBanksTaskCompleteListener()).execute(bankListRequest);
         }
 
-        keepOn_CardView = (CardView) findViewById(R.id.keepOn_CardView);
-        keepOn_CardView.setOnClickListener(new View.OnClickListener() {
+        keepOn_button = (ButtonRectangle) findViewById(R.id.keepOn_button);
+        keepOn_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

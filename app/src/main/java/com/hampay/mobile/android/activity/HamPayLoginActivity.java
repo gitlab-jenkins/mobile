@@ -16,6 +16,7 @@ import com.hampay.common.core.model.request.TACRequest;
 import com.hampay.common.core.model.response.TACResponse;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.component.FacedTextView;
+import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.AlertUtils;
 import com.hampay.mobile.android.functions.DeviceUuidFactory;
 import com.hampay.mobile.android.messaging.SecurityUtils;
@@ -24,7 +25,7 @@ import com.hampay.mobile.android.webservice.WebServices;
 
 public class HamPayLoginActivity extends ActionBarActivity implements View.OnClickListener {
 
-    CardView hampay_login_CardView;
+    ButtonRectangle hampay_login_button;
 
     FacedTextView digit_1;
     FacedTextView digit_2;
@@ -84,8 +85,8 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
         input_digit_5 = (ImageView)findViewById(R.id.input_digit_5);
 
 
-        hampay_login_CardView = (CardView)findViewById(R.id.hampay_login_CardView);
-        hampay_login_CardView.setOnClickListener(new View.OnClickListener() {
+        hampay_login_button = (ButtonRectangle)findViewById(R.id.hampay_login_button);
+        hampay_login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

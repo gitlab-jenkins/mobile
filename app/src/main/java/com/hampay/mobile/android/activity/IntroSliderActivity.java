@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.adapter.TransformerAdapter;
 import com.hampay.mobile.android.component.FacedTextView;
+import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.component.slider.Animations.DescriptionAnimation;
 import com.hampay.mobile.android.component.slider.SliderLayout;
 import com.hampay.mobile.android.component.slider.SliderTypes.BaseSliderView;
@@ -31,7 +32,7 @@ import java.util.HashMap;
 public class IntroSliderActivity extends ActionBarActivity implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener{
 
     private SliderLayout mDemoSlider;
-    private CardView register_CardView;
+    private ButtonRectangle register_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +47,8 @@ public class IntroSliderActivity extends ActionBarActivity implements BaseSlider
         intro_text.setText(m‌Intor[0]);
 
 
-        register_CardView = (CardView)findViewById(R.id.register_CardView);
-        register_CardView.setOnClickListener(new View.OnClickListener() {
+        register_button = (ButtonRectangle)findViewById(R.id.register_button);
+        register_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -73,7 +74,7 @@ public class IntroSliderActivity extends ActionBarActivity implements BaseSlider
             TextSliderView textSliderView = new TextSliderView(this);
             // initialize a SliderLayout
             textSliderView
-                    .description(name)
+                    .description(/*name*/"")
                     .image(file_maps.get(name))
                     .setScaleType(BaseSliderView.ScaleType.Fit)
                     .setOnSliderClickListener(this);

@@ -48,11 +48,13 @@
                 android:layout_marginLeft="25dp">
 
                 <ImageView
+                    android:id="@+id/first_shortcut"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:src="@drawable/pay_ic_wit"/>
 
                 <ImageView
+                    android:id="@+id/second_shortcut"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:src="@drawable/businnes_ic_wit"
@@ -61,17 +63,6 @@
             </LinearLayout>
 
         </RelativeLayout>
-
-        <!--<LinearLayout-->
-        <!--android:id="@+id/container_toolbar"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="vertical">-->
-
-        <!--<include-->
-        <!--android:id="@+id/toolbar"-->
-        <!--layout="@layout/toolbar" />-->
-        <!--</LinearLayout>-->
 
         <FrameLayout
             android:id="@+id/container_body"

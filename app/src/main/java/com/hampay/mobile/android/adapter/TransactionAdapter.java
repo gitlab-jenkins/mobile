@@ -13,7 +13,9 @@ import com.hampay.common.core.model.response.TransactionListResponse;
 import com.hampay.common.core.model.response.dto.TransactionDTO;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.component.FacedTextView;
+import com.hampay.mobile.android.util.JalaliConvert;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 
@@ -101,9 +103,10 @@ public class TransactionAdapter extends BaseAdapter  {
 
 
         viewHolder.user_name.setText(transaction.getPersonName());
-        viewHolder.date_time.setText(transaction.getTransactionDate().getTime() + "");
+        viewHolder.date_time.setText((new JalaliConvert()).GregorianToPersian(transaction.getTransactionDate()));
         viewHolder.message.setText(transaction.getMessage());
-        viewHolder.price_pay.setText(transaction.getAmount() + "");
+
+        viewHolder.price_pay.setText(String.format("%,d", transaction.getAmount()).replace(",", "."));
 
         return convertView;
 

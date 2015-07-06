@@ -156,27 +156,27 @@ public class PayToOneFragment extends Fragment {
 //                        intent.putExtra("contact_phone_no", searchRecentPays.get(position).getPhone());
 //                        startActivity(intent);
                     } else if (section == 1) {
-                        Intent intent = new Intent();
-                        intent.setClass(getActivity(), PayOneActivity.class);
-                        intent.putExtra("contact_name", searchContactDTOs.get(position).getDisplayName());
-                        intent.putExtra("contact_phone_no", searchContactDTOs.get(position).getCellNumber());
-                        startActivity(intent);
+//                        Intent intent = new Intent();
+//                        intent.setClass(getActivity(), PayOneActivity.class);
+//                        intent.putExtra("contact_name", searchContactDTOs.get(position).getDisplayName());
+//                        intent.putExtra("contact_phone_no", searchContactDTOs.get(position).getCellNumber());
+//                        startActivity(intent);
                     }
 
                 }else {
 
                     if (section == 0) {
-                        Intent intent = new Intent();
-                        intent.setClass(getActivity(), PayOneActivity.class);
-                        intent.putExtra("contact_name", recentPays.get(position).getName());
-                        intent.putExtra("contact_phone_no", recentPays.get(position).getPhone());
-                        startActivity(intent);
+//                        Intent intent = new Intent();
+//                        intent.setClass(getActivity(), PayOneActivity.class);
+//                        intent.putExtra("contact_name", recentPays.get(position).getName());
+//                        intent.putExtra("contact_phone_no", recentPays.get(position).getPhone());
+//                        startActivity(intent);
                     } else if (section == 1) {
-                        Intent intent = new Intent();
-                        intent.setClass(getActivity(), PayOneActivity.class);
-                        intent.putExtra("contact_name", contactsHampayEnabledResponse.getService().getContacts().get(position).getDisplayName());
-                        intent.putExtra("contact_phone_no", contactsHampayEnabledResponse.getService().getContacts().get(position).getCellNumber());
-                        startActivity(intent);
+//                        Intent intent = new Intent();
+//                        intent.setClass(getActivity(), PayOneActivity.class);
+//                        intent.putExtra("contact_name", contactsHampayEnabledResponse.getService().getContacts().get(position).getDisplayName());
+//                        intent.putExtra("contact_phone_no", contactsHampayEnabledResponse.getService().getContacts().get(position).getCellNumber());
+//                        startActivity(intent);
                     }
                 }
 

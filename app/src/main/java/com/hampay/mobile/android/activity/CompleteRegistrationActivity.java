@@ -9,18 +9,19 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.component.material.ButtonRectangle;
 
 public class CompleteRegistrationActivity extends ActionBarActivity {
 
-    CardView hampay_login_CardView;
+    ButtonRectangle hampay_login_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_complete_registration);
 
-        hampay_login_CardView = (CardView)findViewById(R.id.hampay_login_CardView);
-        hampay_login_CardView.setOnClickListener(new View.OnClickListener() {
+        hampay_login_button = (ButtonRectangle)findViewById(R.id.hampay_login_button);
+        hampay_login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();

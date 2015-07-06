@@ -60,7 +60,7 @@
     </LinearLayout>
 
     <RelativeLayout
-        android:visibility="visible"
+        android:visibility="gone"
         android:id="@+id/loading_rl"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

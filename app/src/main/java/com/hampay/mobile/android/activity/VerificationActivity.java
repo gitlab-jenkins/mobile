@@ -21,12 +21,13 @@ import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestBankList;
 import com.hampay.mobile.android.async.RequestRegistrationSendSmsToken;
+import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.util.NetworkConnectivity;
 import com.hampay.mobile.android.webservice.WebServices;
 
 public class VerificationActivity extends ActionBarActivity {
 
-    CardView keepOn_CardView;
+    ButtonRectangle keepOn_button;
     Context context;
 
     NetworkConnectivity networkConnectivity;
@@ -42,8 +43,8 @@ public class VerificationActivity extends ActionBarActivity {
         context = this;
         networkConnectivity = new NetworkConnectivity(context);
 
-        keepOn_CardView = (CardView)findViewById(R.id.keepOn_CardView);
-        keepOn_CardView.setOnClickListener(new View.OnClickListener() {
+        keepOn_button = (ButtonRectangle)findViewById(R.id.keepOn_button);
+        keepOn_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

@@ -18,6 +18,7 @@ import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestMemorableWordEntry;
 import com.hampay.mobile.android.async.RequestPassCodeEntry;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
+import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.util.DeviceInfo;
 import com.hampay.mobile.android.webservice.WebServices;
 
@@ -25,7 +26,7 @@ import java.util.UUID;
 
 public class RememberPhraseActivity extends ActionBarActivity {
 
-    CardView keepOn_CardView;
+    ButtonRectangle keepOn_button;
     SharedPreferences prefs;
     FacedEditText memorable_value;
 
@@ -43,8 +44,8 @@ public class RememberPhraseActivity extends ActionBarActivity {
 
         prefs = getPreferences(MODE_PRIVATE);
 
-        keepOn_CardView = (CardView) findViewById(R.id.keepOn_CardView);
-        keepOn_CardView.setOnClickListener(new View.OnClickListener() {
+        keepOn_button = (ButtonRectangle) findViewById(R.id.keepOn_button);
+        keepOn_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
