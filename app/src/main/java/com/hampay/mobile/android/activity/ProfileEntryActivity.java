@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -32,10 +33,15 @@ import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestBankList;
 import com.hampay.mobile.android.async.RequestRegistrationEntry;
 import com.hampay.mobile.android.component.FacedTextView;
+import com.hampay.mobile.android.component.edittext.AccountNoFormat;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
+import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.DeviceInfo;
+import com.hampay.mobile.android.util.NationalCodeVerification;
 import com.hampay.mobile.android.util.NetworkConnectivity;
+
+import java.util.Arrays;
 
 public class ProfileEntryActivity extends ActionBarActivity {
 
@@ -81,81 +87,47 @@ public class ProfileEntryActivity extends ActionBarActivity {
 
         cellNumberValue = (FacedEditText)findViewById(R.id.cellNumberValue);
         cellNumberIcon = (ImageView)findViewById(R.id.cellNumberIcon);
-        cellNumberValue.addTextChangedListener(new TextWatcher() {
+        cellNumberValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                if (s.length() == 11 && cellNumberValue.getText().toString().startsWith("09")){
-                    cellNumberIcon.setImageResource(R.drawable.right_icon);
-                    cellNumberIsValid = true;
-                }
-                else {
-                    cellNumberIcon.setImageResource(R.drawable.false_icon);
-                    cellNumberIsValid = false;
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus){
+                    if (cellNumberValue.getText().toString().length() == 11
+                            && cellNumberValue.getText().toString().startsWith("09")){
+                        cellNumberIcon.setImageResource(R.drawable.right_icon);
+                        cellNumberIsValid = true;
+                    }
+                    else {
+                        cellNumberIcon.setImageResource(R.drawable.false_icon);
+                        cellNumberIsValid = false;
+                    }
                 }
             }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
         });
 
 
         nationalCodeValue = (FacedEditText)findViewById(R.id.nationalCodeValue);
         nationalCodeIcon = (ImageView)findViewById(R.id.nationalCodeIcon);
-        nationalCodeValue.addTextChangedListener(new TextWatcher() {
+        nationalCodeValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus){
 
-            }
+                    if (new NationalCodeVerification(nationalCodeValue.getText().toString()).isValidCode()){
+                        nationalCodeIcon.setImageResource(R.drawable.right_icon);
+                        nationalCodeIsValid = true;
+                    }
+                    else {
+                        nationalCodeIcon.setImageResource(R.drawable.false_icon);
+                        nationalCodeIsValid = false;
+                    }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length() == 10){
-                    nationalCodeIsValid = true;
-                    nationalCodeIcon.setImageResource(R.drawable.right_icon);
-                }else {
-                    nationalCodeIsValid = false;
-                    nationalCodeIcon.setImageResource(R.drawable.false_icon);
                 }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
             }
         });
 
         accountNumberValue = (FacedEditText)findViewById(R.id.accountNumberValue);
         accountNumberIcon = (ImageView)findViewById(R.id.accountNumberIcon);
-        accountNumberValue.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                if (s.length() > 1){
-                    accountNumberIsValid = true;
-                    accountNumberIcon.setImageResource(R.drawable.right_icon);
-                }else {
-                    accountNumberIsValid = false;
-                    accountNumberIcon.setImageResource(R.drawable.false_icon);
-                }
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-//        accountNumberValue.addTextChangedListener(new AccountNoFormat(accountNumberValue));
+        accountNumberValue.addTextChangedListener(new AccountNoFormat(accountNumberValue));
 
         selectedBankTitle = (FacedTextView)findViewById(R.id.selectedBankText);
 
@@ -213,6 +185,10 @@ public class ProfileEntryActivity extends ActionBarActivity {
 
             }
         });
+    }
+
+    public void contactUs(View view){
+        new HamPayDialog(this).showContactUsDialog();
     }
 
 
@@ -300,7 +276,7 @@ public class ProfileEntryActivity extends ActionBarActivity {
 
                 SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
                 editor.putString("UserIdToken", registrationEntryResponse.getService().getUserIdToken());
-                editor.commit();
+                editor.apply();
                 Intent intent = new Intent();
                 intent.setClass(ProfileEntryActivity.this, VerificationActivity.class);
                 startActivity(intent);

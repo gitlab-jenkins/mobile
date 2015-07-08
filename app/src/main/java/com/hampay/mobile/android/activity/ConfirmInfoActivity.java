@@ -16,21 +16,26 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.request.RegistrationConfirmUserDataRequest;
 import com.hampay.common.core.model.request.RegistrationFetchUserDataRequest;
+import com.hampay.common.core.model.request.RegistrationVerifyAccountRequest;
 import com.hampay.common.core.model.response.RegistrationConfirmUserDataResponse;
 import com.hampay.common.core.model.response.RegistrationFetchUserDataResponse;
+import com.hampay.common.core.model.response.RegistrationVerifyAccountResponse;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestConfirmUserData;
 import com.hampay.mobile.android.async.RequestFetchUserData;
+import com.hampay.mobile.android.async.RequestRegisterVerifyAccount;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.material.ButtonFlat;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.component.material.CheckBox;
+import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.DeviceInfo;
 
 public class ConfirmInfoActivity extends ActionBarActivity implements View.OnClickListener {
@@ -57,6 +62,12 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
     RelativeLayout loading_rl;
 
     private ResponseMessage<RegistrationConfirmUserDataResponse> registrationConfirmUserDataResponse;
+
+    public void contactUs(View view){
+        new HamPayDialog(this).showContactUsDialog();
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +107,7 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                 } else {
 //                    confirm_check_img.setImageDrawable(null);
                     confirm_check.setChecked(false);
+                    correct_button.setBackgroundColor(getResources().getColor(R.color.register_btn_color));
                     correct_button.setVisibility(View.VISIBLE);
                     correct_button_rl.setVisibility(View.VISIBLE);
                     confirm_layout.setVisibility(View.GONE);
@@ -140,9 +152,10 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                     public void onClick(View v) {
                         confirm_info_dialog.dismiss();
 
-                        Intent intent = new Intent();
-                        intent.setClass(ConfirmInfoActivity.this, RegVerifyAccountNoActivity.class);
-                        startActivity(intent);
+                        RegistrationVerifyAccountRequest registrationVerifyAccountRequest = new RegistrationVerifyAccountRequest();
+                        registrationVerifyAccountRequest.setUserIdToken(prefs.getString("UserIdToken", ""));
+
+                        new RequestRegisterVerifyAccount(context, new RequestRegistrationVerifyAccountResponseTaskCompleteListener()).execute(registrationVerifyAccountRequest);
 
                     }
                 });
@@ -171,14 +184,17 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                 break;
 
             case R.id.keeOn_with_button:
-                Intent intent = new Intent();
-                intent.setClass(ConfirmInfoActivity.this, RegVerifyAccountNoActivity.class);
-                startActivity(intent);
+
+                RegistrationVerifyAccountRequest registrationVerifyAccountRequest = new RegistrationVerifyAccountRequest();
+                registrationVerifyAccountRequest.setUserIdToken(prefs.getString("UserIdToken", ""));
+
+                new RequestRegisterVerifyAccount(this, new RequestRegistrationVerifyAccountResponseTaskCompleteListener()).execute(registrationVerifyAccountRequest);
+
                 break;
 
             case R.id.correct_button:
-
-                user_phone.setFocusableInTouchMode(true);
+                correct_button.setBackgroundColor(getResources().getColor(R.color.normal_text));
+//                user_phone.setFocusableInTouchMode(true);
                 user_family.setFocusableInTouchMode(true);
                 user_account_no.setFocusableInTouchMode(true);
                 user_national_code.setFocusableInTouchMode(true);
@@ -203,6 +219,7 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                 else {
 //                    confirm_check_img.setImageDrawable(null);
                     confirm_check.setChecked(false);
+                    correct_button.setBackgroundColor(getResources().getColor(R.color.register_btn_color));
                     correct_button.setVisibility(View.VISIBLE);
                     correct_button_rl.setVisibility(View.VISIBLE);
                     confirm_layout.setVisibility(View.GONE);
@@ -211,6 +228,36 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
         }
     }
 
+
+    public class RequestRegistrationVerifyAccountResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationVerifyAccountResponse>>
+    {
+        public RequestRegistrationVerifyAccountResponseTaskCompleteListener(){
+        }
+
+        @Override
+        public void onTaskComplete(ResponseMessage<RegistrationVerifyAccountResponse> verifyAccountResponseMessage)
+        {
+            loading_rl.setVisibility(View.GONE);
+            if (verifyAccountResponseMessage.getService().getResultStatus() != null) {
+
+                if (verifyAccountResponseMessage.getService().getTransferMoneyComment().length() > 0 ) {
+                    Intent intent = new Intent();
+                    intent.setClass(ConfirmInfoActivity.this, RegVerifyAccountNoActivity.class);
+                    intent.putExtra("TransferMoneyComment", verifyAccountResponseMessage.getService().getTransferMoneyComment());
+                    startActivity(intent);
+                }
+            }
+            else {
+                Toast.makeText(context, getString(R.string.no_network), Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            loading_rl.setVisibility(View.VISIBLE);
+        }
+    }
 
     public class RequestFetchUserDataTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationFetchUserDataResponse>>
     {
@@ -255,7 +302,7 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                 confirm_check.setChecked(true);
                 correct_button.setVisibility(View.GONE);
                 correct_button_rl.setVisibility(View.GONE);
-                user_phone.setFocusable(false);
+//                user_phone.setFocusable(false);
                 user_family.setFocusable(false);
                 user_account_no.setFocusable(false);
                 user_national_code.setFocusable(false);

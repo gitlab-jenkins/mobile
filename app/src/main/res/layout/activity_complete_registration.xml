@@ -319,7 +319,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:textColor="@android:color/white"
-                    android:textSize="24sp"
+                    android:textSize="20sp"
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:text="@string/login_hampay"

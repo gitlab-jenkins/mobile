@@ -22,6 +22,7 @@ import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestBankList;
 import com.hampay.mobile.android.async.RequestRegistrationSendSmsToken;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
+import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.NetworkConnectivity;
 import com.hampay.mobile.android.webservice.WebServices;
 
@@ -32,6 +33,10 @@ public class VerificationActivity extends ActionBarActivity {
 
     NetworkConnectivity networkConnectivity;
     RelativeLayout loading_rl;
+
+    public void contactUs(View view){
+        new HamPayDialog(this).showContactUsDialog();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

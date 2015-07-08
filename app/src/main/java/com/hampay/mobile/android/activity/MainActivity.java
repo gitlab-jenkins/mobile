@@ -392,52 +392,52 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     private void showContactUs(){
 
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) MainActivity.this;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-
-        View view = getLayoutInflater().inflate(R.layout.dialog_contact_us, null);
-
-        FacedTextView send_message = (FacedTextView) view.findViewById(R.id.send_message);
-        FacedTextView call_message = (FacedTextView) view.findViewById(R.id.call_message);
-
-        ContactUsRequest contactUsRequest = new ContactUsRequest();
-        contactUsRequest.setRequestUUID("");
-        new HttpContactUs().execute(contactUsRequest);
-
-        send_message.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogExitApp.dismiss();
-
-                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                        "mailto", contactUsMail, null));
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
-                emailIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.insert_message));
-                startActivity(Intent.createChooser(emailIntent, getString(R.string.hampay_contact)));
-            }
-        });
-
-        call_message.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogExitApp.dismiss();
-
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + contactUsPhone));
-                startActivity(intent);
-            }
-        });
-
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialogExitApp = new Dialog(MainActivity.this);
-        dialogExitApp.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogExitApp.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialogExitApp.setContentView(view);
-        dialogExitApp.setTitle(null);
-        dialogExitApp.setCanceledOnTouchOutside(false);
-
-        dialogExitApp.show();
+//        Rect displayRectangle = new Rect();
+//        Activity parent = (Activity) MainActivity.this;
+//        Window window = parent.getWindow();
+//        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+//
+//        View view = getLayoutInflater().inflate(R.layout.dialog_contact_us, null);
+//
+//        FacedTextView send_message = (FacedTextView) view.findViewById(R.id.send_message);
+//        FacedTextView call_message = (FacedTextView) view.findViewById(R.id.call_message);
+//
+//        ContactUsRequest contactUsRequest = new ContactUsRequest();
+//        contactUsRequest.setRequestUUID("");
+//        new HttpContactUs().execute(contactUsRequest);
+//
+//        send_message.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialogExitApp.dismiss();
+//
+//                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+//                        "mailto", contactUsMail, null));
+//                emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+//                emailIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.insert_message));
+//                startActivity(Intent.createChooser(emailIntent, getString(R.string.hampay_contact)));
+//            }
+//        });
+//
+//        call_message.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialogExitApp.dismiss();
+//
+//                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + contactUsPhone));
+//                startActivity(intent);
+//            }
+//        });
+//
+//        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+//        dialogExitApp = new Dialog(MainActivity.this);
+//        dialogExitApp.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialogExitApp.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        dialogExitApp.setContentView(view);
+//        dialogExitApp.setTitle(null);
+//        dialogExitApp.setCanceledOnTouchOutside(false);
+//
+//        dialogExitApp.show();
 
     }
 
@@ -454,41 +454,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 break;
         }
     }
-
-    String contactUsMail = "";
-    String contactUsPhone = "";
-
-    ResponseMessage<ContactUsResponse> contactUsResponseResponseMessage = null;
-
-    public class HttpContactUs extends AsyncTask<ContactUsRequest, Void, String>{
-
-        @Override
-        protected String doInBackground(ContactUsRequest... params) {
-
-            WebServices webServices = new WebServices();
-            contactUsResponseResponseMessage = webServices.contactUsResponse(params[0]);
-
-            return null;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            if (contactUsResponseResponseMessage.getService() != null){
-                contactUsMail = contactUsResponseResponseMessage.getService().getEmailAddress();
-                contactUsPhone = contactUsResponseResponseMessage.getService().getPhoneNumber();
-            }
-
-
-        }
-    }
-
 
 
     private void addNewAccount(String accountType, String authTokenType) {

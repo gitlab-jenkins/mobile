@@ -19,6 +19,9 @@ import com.hampay.mobile.android.async.RequestMemorableWordEntry;
 import com.hampay.mobile.android.async.RequestPassCodeEntry;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
+import com.hampay.mobile.android.dialog.HamPayDialog;
+import com.hampay.mobile.android.util.Constant;
+import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.DeviceInfo;
 import com.hampay.mobile.android.webservice.WebServices;
 
@@ -28,21 +31,27 @@ public class RememberPhraseActivity extends ActionBarActivity {
 
     ButtonRectangle keepOn_button;
     SharedPreferences prefs;
+    SharedPreferences.Editor editor;
     FacedEditText memorable_value;
 
     Context context;
+
+    public void contactUs(View view){
+        new HamPayDialog(this).showContactUsDialog();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remember_phrase);
 
+        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
 
         context = this;
 
         memorable_value = (FacedEditText)findViewById(R.id.memorable_value);
 
-        prefs = getPreferences(MODE_PRIVATE);
+        editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
         keepOn_button = (ButtonRectangle) findViewById(R.id.keepOn_button);
         keepOn_button.setOnClickListener(new View.OnClickListener() {
@@ -71,6 +80,9 @@ public class RememberPhraseActivity extends ActionBarActivity {
 
 
             if (registrationMemorableWordEntryResponseMessage.getService().getResultStatus() != null) {
+
+                editor.putString(Constants.MEMORABLE_WORD, memorable_value.getText().toString());
+                editor.commit();
 
                 Intent intent = new Intent();
                 intent.setClass(RememberPhraseActivity.this, CompleteRegistrationActivity.class);

@@ -2,6 +2,7 @@ package com.hampay.mobile.android.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -21,11 +22,15 @@ import com.hampay.mobile.android.dialog.AlertUtils;
 import com.hampay.mobile.android.functions.DeviceUuidFactory;
 import com.hampay.mobile.android.messaging.SecurityUtils;
 import com.hampay.mobile.android.service.LoginService;
+import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.webservice.WebServices;
 
 public class HamPayLoginActivity extends ActionBarActivity implements View.OnClickListener {
 
-    ButtonRectangle hampay_login_button;
+
+    SharedPreferences prefs;
+    FacedTextView hampay_memorableword_text;
+    String MemorableWord;
 
     FacedTextView digit_1;
     FacedTextView digit_2;
@@ -85,16 +90,24 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
         input_digit_5 = (ImageView)findViewById(R.id.input_digit_5);
 
 
-        hampay_login_button = (ButtonRectangle)findViewById(R.id.hampay_login_button);
-        hampay_login_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        hampay_memorableword_text = (FacedTextView)findViewById(R.id.hampay_memorableword_text);
+        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+        MemorableWord = prefs.getString(Constants.MEMORABLE_WORD, null);
 
-                TACRequest tacRequest = new TACRequest();
-                tacRequest.setRequestUUID("");
-                new HttpTACResponse().execute(tacRequest);
-            }
-        });
+        if (MemorableWord != null) {
+            hampay_memorableword_text.setText(MemorableWord);
+        }
+
+
+//        hampay_memorableword_text.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                TACRequest tacRequest = new TACRequest();
+//                tacRequest.setRequestUUID("");
+//                new HttpTACResponse().execute(tacRequest);
+//            }
+//        });
     }
 
     private ResponseMessage<TACResponse> tACResponse;

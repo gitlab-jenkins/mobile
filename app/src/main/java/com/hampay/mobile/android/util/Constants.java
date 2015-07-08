@@ -3,6 +3,9 @@ package com.hampay.mobile.android.util;
 
 public class Constants {
 
+    public static final String MEMORABLE_WORD = "MemorableWord";
+    public static final String APP_PREFERENCE_NAME = "HamPay_Preferences";
+
     public static final String ARGS_URI = "com.pooyabyte.varadid.android.messaging.ARGS_URI";
     public static final String ARGS_PARAMS = "com.pooyabyte.varadid.android.messaging.ARGS_PARAMS";
     //    public static final String SERVICE_NAMESPACE = "/ws/";

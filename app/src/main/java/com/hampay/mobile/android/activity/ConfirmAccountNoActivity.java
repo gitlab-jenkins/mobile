@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
+import com.hampay.mobile.android.dialog.HamPayDialog;
 
 public class ConfirmAccountNoActivity extends ActionBarActivity {
 
@@ -29,6 +30,11 @@ public class ConfirmAccountNoActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
+    }
+
+
+    public void contactUs(View view){
+        new HamPayDialog(this).showContactUsDialog();
     }
 
 

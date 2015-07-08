@@ -1642,7 +1642,7 @@ public class WebServices  {
 
             count++;
 
-            if(count > 26){
+            if(count > 10){
                 break;
             }
 

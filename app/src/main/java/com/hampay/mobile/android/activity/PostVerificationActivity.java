@@ -11,7 +11,10 @@ import android.support.v7.widget.CardView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -28,6 +31,7 @@ import com.hampay.mobile.android.async.RequestRegistrationSendSmsToken;
 import com.hampay.mobile.android.async.RequestVerifyMobile;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
+import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.NetworkConnectivity;
 import com.hampay.mobile.android.webservice.WebServices;
 
@@ -35,68 +39,79 @@ public class PostVerificationActivity extends ActionBarActivity implements View.
 
     ButtonRectangle verify_button;
 
-    FacedTextView digit_1;
-    FacedTextView digit_2;
-    FacedTextView digit_3;
-    FacedTextView digit_4;
-    FacedTextView digit_5;
-    FacedTextView digit_6;
-    FacedTextView digit_7;
-    FacedTextView digit_8;
-    FacedTextView digit_9;
-    FacedTextView digit_0;
-    FacedTextView resend_active_code;
-    RelativeLayout backspace;
+    ButtonRectangle digit_1;
+    ButtonRectangle digit_2;
+    ButtonRectangle digit_3;
+    ButtonRectangle digit_4;
+    ButtonRectangle digit_5;
+    ButtonRectangle digit_6;
+    ButtonRectangle digit_7;
+    ButtonRectangle digit_8;
+    ButtonRectangle digit_9;
+    ButtonRectangle digit_0;
+    ButtonRectangle resend_active_code;
+    ButtonRectangle backspace;
 
     String inputStringValue = "";
 
-    ImageView input_digit_1;
-    ImageView input_digit_2;
-    ImageView input_digit_3;
-    ImageView input_digit_4;
-    ImageView input_digit_5;
+    FacedTextView input_digit_1;
+    FacedTextView input_digit_2;
+    FacedTextView input_digit_3;
+    FacedTextView input_digit_4;
+    FacedTextView input_digit_5;
 
     NetworkConnectivity networkConnectivity;
     Context context;
+
+    LinearLayout keyboard;
+    LinearLayout activation_holder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_verification);
 
+
+        keyboard = (LinearLayout)findViewById(R.id.keyboard);
+        activation_holder = (LinearLayout)findViewById(R.id.activation_holder);
+        activation_holder.setOnClickListener(this);
+
+
+
+
         networkConnectivity = new NetworkConnectivity(this);
         context = this;
 
-        digit_1 = (FacedTextView)findViewById(R.id.digit_1);
+        digit_1 = (ButtonRectangle)findViewById(R.id.digit_1);
         digit_1.setOnClickListener(this);
-        digit_2 = (FacedTextView)findViewById(R.id.digit_2);
+        digit_2 = (ButtonRectangle)findViewById(R.id.digit_2);
         digit_2.setOnClickListener(this);
-        digit_3 = (FacedTextView)findViewById(R.id.digit_3);
+        digit_3 = (ButtonRectangle)findViewById(R.id.digit_3);
         digit_3.setOnClickListener(this);
-        digit_4 = (FacedTextView)findViewById(R.id.digit_4);
+        digit_4 = (ButtonRectangle)findViewById(R.id.digit_4);
         digit_4.setOnClickListener(this);
-        digit_5 = (FacedTextView)findViewById(R.id.digit_5);
+        digit_5 = (ButtonRectangle)findViewById(R.id.digit_5);
         digit_5.setOnClickListener(this);
-        digit_6 = (FacedTextView)findViewById(R.id.digit_6);
+        digit_6 = (ButtonRectangle)findViewById(R.id.digit_6);
         digit_6.setOnClickListener(this);
-        digit_7 = (FacedTextView)findViewById(R.id.digit_7);
+        digit_7 = (ButtonRectangle)findViewById(R.id.digit_7);
         digit_7.setOnClickListener(this);
-        digit_8 = (FacedTextView)findViewById(R.id.digit_8);
+        digit_8 = (ButtonRectangle)findViewById(R.id.digit_8);
         digit_8.setOnClickListener(this);
-        digit_9 = (FacedTextView)findViewById(R.id.digit_9);
+        digit_9 = (ButtonRectangle)findViewById(R.id.digit_9);
         digit_9.setOnClickListener(this);
-        digit_0 = (FacedTextView)findViewById(R.id.digit_0);
+        digit_0 = (ButtonRectangle)findViewById(R.id.digit_0);
         digit_0.setOnClickListener(this);
-        resend_active_code = (FacedTextView)findViewById(R.id.resend_active_code);
+        resend_active_code = (ButtonRectangle)findViewById(R.id.resend_active_code);
         resend_active_code.setOnClickListener(this);
-        backspace = (RelativeLayout)findViewById(R.id.backspace);
+        backspace = (ButtonRectangle)findViewById(R.id.backspace);
         backspace.setOnClickListener(this);
 
-        input_digit_1 = (ImageView)findViewById(R.id.input_digit_1);
-        input_digit_2 = (ImageView)findViewById(R.id.input_digit_2);
-        input_digit_3 = (ImageView)findViewById(R.id.input_digit_3);
-        input_digit_4 = (ImageView)findViewById(R.id.input_digit_4);
-        input_digit_5 = (ImageView)findViewById(R.id.input_digit_5);
+        input_digit_1 = (FacedTextView)findViewById(R.id.input_digit_1);
+        input_digit_2 = (FacedTextView)findViewById(R.id.input_digit_2);
+        input_digit_3 = (FacedTextView)findViewById(R.id.input_digit_3);
+        input_digit_4 = (FacedTextView)findViewById(R.id.input_digit_4);
+        input_digit_5 = (FacedTextView)findViewById(R.id.input_digit_5);
 
 
         verify_button = (ButtonRectangle)findViewById(R.id.verify_button);
@@ -122,6 +137,9 @@ public class PostVerificationActivity extends ActionBarActivity implements View.
     }
 
 
+    public void contactUs(View view){
+        new HamPayDialog(this).showContactUsDialog();
+    }
 
     public class RequestRegistrationVerifyMobileTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationVerifyMobileResponse>>
     {
@@ -146,6 +164,17 @@ public class PostVerificationActivity extends ActionBarActivity implements View.
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+
+            case R.id.activation_holder:
+                keyboard.setVisibility(LinearLayout.VISIBLE);
+                Animation animation   =    AnimationUtils.loadAnimation(this, R.anim.keyboard);
+                animation.setDuration(400);
+                keyboard.setAnimation(animation);
+                keyboard.animate();
+                animation.start();
+                keyboard.setVisibility(View.VISIBLE);
+                break;
+
             case R.id.digit_1:
                 inputDigit("1");
                 break;
@@ -199,71 +228,113 @@ public class PostVerificationActivity extends ActionBarActivity implements View.
 
         Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
+        if (inputStringValue.length() <= 4) {
+
+            switch (inputStringValue.length()) {
+
+                case 0:
+                    if (digit.equalsIgnoreCase("d")) {
+                        input_digit_1.setText("");
+                    } else {
+                        input_digit_1.setText(digit);
+                    }
+                    input_digit_2.setText("");
+                    input_digit_3.setText("");
+                    input_digit_4.setText("");
+                    input_digit_5.setText("");
+                    vibrator.vibrate(20);
+                    break;
+
+                case 1:
+//                    input_digit_1.setText("");
+                    if (digit.equalsIgnoreCase("d")) {
+                        input_digit_2.setText("");
+                    } else {
+                        input_digit_2.setText(digit);
+                    }
+                    input_digit_3.setText("");
+                    input_digit_4.setText("");
+                    input_digit_5.setText("");
+                    vibrator.vibrate(20);
+
+                    break;
+                case 2:
+//                input_digit_1.setText("");
+//                input_digit_2.setText("");
+                    if (digit.equalsIgnoreCase("d")) {
+                        input_digit_3.setText("");
+                    } else {
+                        input_digit_3.setText(digit);
+                    }
+                    input_digit_4.setText("");
+                    input_digit_5.setText("");
+                    vibrator.vibrate(20);
+                    break;
+                case 3:
+//                input_digit_1.setText("");
+//                input_digit_2.setText("");
+//                    input_digit_3.setText("");
+                    if (digit.equalsIgnoreCase("d")) {
+                        input_digit_4.setText("");
+                    } else {
+                        input_digit_4.setText(digit);
+                    }
+//                    input_digit_4.setText("");
+//                    input_digit_5.setText("");
+                    vibrator.vibrate(20);
+                    break;
+                case 4:
+//                input_digit_1.setText("");
+//                input_digit_2.setText("");
+//                input_digit_3.setText("");
+//                    input_digit_4.setText("");
+                    if (digit.equalsIgnoreCase("d")) {
+                        input_digit_5.setText("");
+                    } else {
+                        input_digit_5.setText(digit);
+                    }
+                    vibrator.vibrate(20);
+                    break;
+                case 5:
+//                input_digit_1.setText("");
+//                input_digit_2.setText("");
+//                input_digit_3.setText("");
+//                input_digit_4.setText("");
+                    if (digit.equalsIgnoreCase("d")) {
+                        input_digit_5.setText("");
+                    } else {
+                        input_digit_5.setText(digit);
+                    }
+                    vibrator.vibrate(20);
+                    break;
+            }
+
+        }
 
         if (digit.contains("d")){
             if (inputStringValue.length() > 0) {
                 inputStringValue = inputStringValue.substring(0, inputStringValue.length() - 1);
+                if (inputStringValue.length() == 4){
+                    input_digit_5.setText("");
+                }
+                else if (inputStringValue.length() == 3){
+                    input_digit_4.setText("");
+                }
+                else if (inputStringValue.length() == 2){
+                    input_digit_3.setText("");
+                }
+                else if (inputStringValue.length() == 1){
+                    input_digit_2.setText("");
+                }
+                else if (inputStringValue.length() == 0){
+                    input_digit_1.setText("");
+                }
             }
         }
         else {
             if (inputStringValue.length() <= 4) {
                 inputStringValue += digit;
             }
-        }
-
-
-        switch (inputStringValue.length()){
-
-            case 0:
-                input_digit_1.setImageResource(R.drawable.pass_icon_2);
-                input_digit_2.setImageResource(R.drawable.pass_icon_2);
-                input_digit_3.setImageResource(R.drawable.pass_icon_2);
-                input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                input_digit_5.setImageResource(R.drawable.pass_icon_2);
-                vibrator.vibrate(20);
-                break;
-
-            case 1:
-                input_digit_1.setImageResource(R.drawable.pass_icon_1);
-                input_digit_2.setImageResource(R.drawable.pass_icon_2);
-                input_digit_3.setImageResource(R.drawable.pass_icon_2);
-                input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                input_digit_5.setImageResource(R.drawable.pass_icon_2);
-                vibrator.vibrate(20);
-
-                break;
-            case 2:
-                input_digit_1.setImageResource(R.drawable.pass_icon_1);
-                input_digit_2.setImageResource(R.drawable.pass_icon_1);
-                input_digit_3.setImageResource(R.drawable.pass_icon_2);
-                input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                input_digit_5.setImageResource(R.drawable.pass_icon_2);
-                vibrator.vibrate(20);
-                break;
-            case 3:
-                input_digit_1.setImageResource(R.drawable.pass_icon_1);
-                input_digit_2.setImageResource(R.drawable.pass_icon_1);
-                input_digit_3.setImageResource(R.drawable.pass_icon_1);
-                input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                input_digit_5.setImageResource(R.drawable.pass_icon_2);
-                vibrator.vibrate(20);
-                break;
-            case 4:
-                input_digit_1.setImageResource(R.drawable.pass_icon_1);
-                input_digit_2.setImageResource(R.drawable.pass_icon_1);
-                input_digit_3.setImageResource(R.drawable.pass_icon_1);
-                input_digit_4.setImageResource(R.drawable.pass_icon_1);
-                input_digit_5.setImageResource(R.drawable.pass_icon_2);
-                vibrator.vibrate(20);
-                break;
-            case 5:
-                input_digit_1.setImageResource(R.drawable.pass_icon_1);
-                input_digit_2.setImageResource(R.drawable.pass_icon_1);
-                input_digit_3.setImageResource(R.drawable.pass_icon_1);
-                input_digit_4.setImageResource(R.drawable.pass_icon_1);
-                input_digit_5.setImageResource(R.drawable.pass_icon_1);
-                vibrator.vibrate(20);
-                break;
         }
 
     }

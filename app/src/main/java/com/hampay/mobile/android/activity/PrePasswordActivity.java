@@ -22,6 +22,7 @@ import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestRegisterVerifyAccount;
 import com.hampay.mobile.android.async.RequestRegistrationVerifyTransferMoney;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
+import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.webservice.WebServices;
 
 public class PrePasswordActivity extends ActionBarActivity {
@@ -31,6 +32,10 @@ public class PrePasswordActivity extends ActionBarActivity {
     RelativeLayout loading_rl;
 
     SharedPreferences prefs;
+
+    public void contactUs(View view){
+        new HamPayDialog(this).showContactUsDialog();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +56,8 @@ public class PrePasswordActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
-
-
-
-
     }
+
 
 }
 

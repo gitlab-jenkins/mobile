@@ -30,7 +30,8 @@
             android:text="@string/title_contacts_us"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"/>
+            android:layout_marginRight="20dp"
+            android:onClick="contactUs"/>
 
     </RelativeLayout>
 
@@ -217,28 +218,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="74dp"
-                android:gravity="right|center_vertical"
-                android:layout_margin="8dp"
-                android:background="@drawable/stroke_bg">
 
-                <com.hampay.mobile.android.component.FacedTextView
-                    geekui:customTypeface="fonts/iran_sans.ttf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/register_btn_color"
-                    android:textSize="21sp"
-                    android:text="@string/please_entry_info" />
-
-                <ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:src="@drawable/step_icon"
-                    android:layout_margin="12dp"/>
-
-            </LinearLayout>
 
             <ScrollView
                 android:layout_width="fill_parent"
@@ -249,6 +229,28 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="74dp"
+                        android:gravity="right|center_vertical"
+                        android:background="@drawable/stroke_bg">
+
+                        <com.hampay.mobile.android.component.FacedTextView
+                            geekui:customTypeface="fonts/iran_sans.ttf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/register_btn_color"
+                            android:textSize="21sp"
+                            android:text="@string/please_entry_info" />
+
+                        <ImageView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:src="@drawable/step_icon"
+                            android:layout_margin="12dp"/>
+
+                    </LinearLayout>
 
                     <com.hampay.mobile.android.component.FacedTextView
                         geekui:customTypeface="fonts/iran_sans.ttf"
@@ -283,7 +285,7 @@
                             android:background="@android:color/transparent"
                             android:layout_marginLeft="48dp"
                             android:textSize="21dp"
-                            android:inputType="phone"
+                            android:inputType="number"
                             android:hint="@string/mobile_no"
                             android:maxLength="11"
                             android:textColor="@android:color/black"
@@ -294,7 +296,6 @@
                             android:id="@+id/cellNumberIcon"
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:src="@drawable/false_icon"
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="12dp"/>
 
@@ -366,7 +367,6 @@
                             android:textSize="21dp"
                             android:inputType="number"
                             android:hint="@string/account_no"
-                            android:maxLength="20"
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
                             android:padding="8dp"/>
@@ -375,7 +375,6 @@
                             android:id="@+id/accountNumberIcon"
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:src="@drawable/false_icon"
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="12dp"/>
 
@@ -406,7 +405,6 @@
                             android:id="@+id/nationalCodeIcon"
                             android:layout_width="25dp"
                             android:layout_height="25dp"
-                            android:src="@drawable/false_icon"
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="12dp"/>
 

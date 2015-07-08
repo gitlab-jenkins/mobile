@@ -31,7 +31,9 @@
             android:text="@string/title_contacts_us"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"/>
+            android:layout_marginRight="20dp"
+            android:clickable="true"
+            android:onClick="contactUs"/>
 
     </RelativeLayout>
 
@@ -221,41 +223,7 @@
 
             </LinearLayout>
 
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:gravity="right|center_vertical"
-                android:layout_margin="12dp"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
-                android:paddingTop="16dp"
-                android:paddingBottom="16dp"
-                android:background="@drawable/stroke_bg">
 
-
-
-                <ImageView
-                    android:id="@+id/step_icon"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:src="@drawable/step_icon_acc"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_margin="12dp"/>
-
-                <com.hampay.mobile.android.component.FacedTextView
-                    geekui:customTypeface="fonts/iran_sans.ttf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/register_btn_color"
-                    android:textSize="18sp"
-                    android:gravity="right"
-                    android:text="@string/confirm_information_text"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@id/step_icon"
-                    android:layout_marginRight="4dp"/>
-
-            </RelativeLayout>
 
             <ScrollView
                 android:layout_width="fill_parent"
@@ -267,6 +235,41 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right|center_vertical"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp"
+                        android:background="@drawable/stroke_bg">
+
+
+
+                        <ImageView
+                            android:id="@+id/step_icon"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:src="@drawable/step_icon_acc"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_margin="12dp"/>
+
+                        <com.hampay.mobile.android.component.FacedTextView
+                            geekui:customTypeface="fonts/iran_sans.ttf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/register_btn_color"
+                            android:textSize="18sp"
+                            android:gravity="right"
+                            android:text="@string/confirm_information_text"
+                            android:layout_centerVertical="true"
+                            android:layout_toLeftOf="@id/step_icon"
+                            android:layout_marginRight="4dp"/>
+
+                    </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="fill_parent"
@@ -314,7 +317,6 @@
                             android:layout_height="fill_parent"
                             android:background="@android:color/transparent"
                             android:textSize="20dp"
-                            android:inputType="phone"
                             android:focusable="false"
                             android:maxLength="11"
                             android:textColor="@android:color/black"
@@ -443,7 +445,7 @@
                             android:layout_width="fill_parent"
                             android:layout_height="fill_parent"
                             android:layout_centerHorizontal="true"
-                            android:background="@color/normal_text"
+                            android:background="@color/register_btn_color"
                             android:textSize="20sp" />
 
                         <com.hampay.mobile.android.component.FacedTextView

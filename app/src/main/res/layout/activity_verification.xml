@@ -31,7 +31,8 @@
             android:text="@string/title_contacts_us"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"/>
+            android:layout_marginRight="20dp"
+            android:onClick="contactUs"/>
 
     </RelativeLayout>
 
@@ -223,13 +224,12 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="70dp">
+                android:layout_centerInParent="true">
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="10dp">
+                    android:layout_gravity="center">
 
                     <ImageView
                         android:layout_width="180dp"
@@ -262,22 +262,24 @@
 
                 </RelativeLayout>
 
+
+
+                <com.hampay.mobile.android.component.FacedTextView
+                    geekui:customTypeface="fonts/iran_sans.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/normal_text"
+                    android:textSize="22sp"
+                    android:gravity="center"
+                    android:layout_margin="12dp"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/sms_verification_text"
+                    android:layout_alignParentBottom="true"/>
+
             </LinearLayout>
 
 
-            <com.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/iran_sans.ttf"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/normal_text"
-                android:textSize="22sp"
-                android:gravity="center"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginBottom="80dp"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/sms_verification_text"
-                android:layout_alignParentBottom="true"/>
+
 
             <RelativeLayout
                 android:layout_width="150dp"

@@ -30,7 +30,9 @@
             android:text="@string/title_contacts_us"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"/>
+            android:layout_marginRight="20dp"
+            android:onClick="contactUs"
+            android:clickable="true"/>
 
     </RelativeLayout>
 
@@ -216,35 +218,7 @@
 
         </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right|center_vertical"
-            android:layout_margin="8dp"
-            android:background="@drawable/stroke_bg">
 
-            <ImageView
-                android:id="@+id/step_icon"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/step_icon_acc"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_margin="8dp"/>
-
-            <com.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/iran_sans.ttf"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/register_btn_color"
-                android:textSize="18sp"
-                android:text="@string/reg_verify_account_no_text_1"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@id/step_icon"
-                android:layout_marginRight="4dp"
-                android:padding="4dp"/>
-
-        </RelativeLayout>
 
 
         <ScrollView
@@ -256,6 +230,35 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_margin="12dp">
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right|center_vertical"
+                    android:background="@drawable/stroke_bg">
+
+                    <ImageView
+                        android:id="@+id/step_icon"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:src="@drawable/step_icon_acc"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="8dp"/>
+
+                    <com.hampay.mobile.android.component.FacedTextView
+                        geekui:customTypeface="fonts/iran_sans.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/register_btn_color"
+                        android:textSize="18sp"
+                        android:text="@string/reg_verify_account_no_text_1"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@id/step_icon"
+                        android:layout_marginRight="4dp"
+                        android:padding="4dp"/>
+
+                </RelativeLayout>
 
                 <com.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/verification_response_text"

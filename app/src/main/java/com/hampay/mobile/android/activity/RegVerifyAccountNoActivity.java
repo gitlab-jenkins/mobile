@@ -22,6 +22,7 @@ import com.hampay.mobile.android.async.RequestRegistrationVerifyTransferMoney;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.material.ButtonFlat;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
+import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.NetworkConnectivity;
 
 public class RegVerifyAccountNoActivity extends ActionBarActivity {
@@ -37,6 +38,13 @@ public class RegVerifyAccountNoActivity extends ActionBarActivity {
     RelativeLayout loading_rl;
     NetworkConnectivity networkConnectivity;
 
+    Bundle bundle;
+    String TransferMoneyComment;
+
+    public void contactUs(View view){
+        new HamPayDialog(this).showContactUsDialog();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,12 +52,16 @@ public class RegVerifyAccountNoActivity extends ActionBarActivity {
 
         prefs = getPreferences(MODE_PRIVATE);
 
+        bundle = getIntent().getExtras();
+        TransferMoneyComment = bundle.getString("TransferMoneyComment");
+
         loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
         networkConnectivity = new NetworkConnectivity(this);
 
         context = this;
 
         verification_response_text = (FacedTextView)findViewById(R.id.verification_response_text);
+        verification_response_text.setText(TransferMoneyComment);
 
         keepOn_button = (ButtonRectangle)findViewById(R.id.keepOn_button);
         keepOn_button.setOnClickListener(new View.OnClickListener() {
@@ -60,7 +72,7 @@ public class RegVerifyAccountNoActivity extends ActionBarActivity {
                     RegistrationVerifyTransferMoneyRequest registrationVerifyTransferMoneyRequest = new RegistrationVerifyTransferMoneyRequest();
                     registrationVerifyTransferMoneyRequest.setUserIdToken(prefs.getString("UserIdToken", ""));
                     new RequestRegistrationVerifyTransferMoney(context, new RequestRegistrationVerifyTransferMoneyTaskCompleteListener()).execute(registrationVerifyTransferMoneyRequest);
-                }else {
+                } else {
                     Toast.makeText(context, getString(R.string.no_network), Toast.LENGTH_SHORT).show();
                 }
 
@@ -68,34 +80,11 @@ public class RegVerifyAccountNoActivity extends ActionBarActivity {
         });
 
 
-        RegistrationVerifyAccountRequest registrationVerifyAccountRequest = new RegistrationVerifyAccountRequest();
-        registrationVerifyAccountRequest.setUserIdToken(prefs.getString("UserIdToken", ""));
 
-        new RequestRegisterVerifyAccount(this, new RequestRegistrationVerifyAccountResponseTaskCompleteListener()).execute(registrationVerifyAccountRequest);
 
     }
 
-    public class RequestRegistrationVerifyAccountResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationVerifyAccountResponse>>
-    {
-        public RequestRegistrationVerifyAccountResponseTaskCompleteListener(){
-        }
 
-        @Override
-        public void onTaskComplete(ResponseMessage<RegistrationVerifyAccountResponse> verifyAccountResponseMessage)
-        {
-//            loading_rl.setVisibility(View.GONE);
-            if (verifyAccountResponseMessage.getService().getResultStatus() != null) {
-                verification_response_text.setText(
-                        verifyAccountResponseMessage.getService().getTransferMoneyComment());
-            }
-
-        }
-
-        @Override
-        public void onTaskPreRun() {
-//            loading_rl.setVisibility(View.VISIBLE);
-        }
-    }
 
 
     public class RequestRegistrationVerifyTransferMoneyTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationVerifyTransferMoneyResponse>>

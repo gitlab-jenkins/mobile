@@ -67,7 +67,7 @@
     <string name="call">تماس</string>
     <string name="hampay_contact">ارتباط با هم پی</string>
     <string name="pay_to">پرداخت به:   </string>
-    <string name="price">مبلغ</string>
+    <string name="price">مبلغ(ریال)</string>
 
     <string name="fill_data">اطلاعات را کامل و دقیق وارد کنید.</string>
 
@@ -100,7 +100,13 @@
     <string name="user_mail">ایمیل شما</string>
     <string name="user_text_contact">پیام خود را بنویسید</string>
     <string name="send_message">ارسال پیام</string>
-    <string name="call_message">تماس یا اپراتور</string>
+    <string name="call_message">تماس با اپراتور</string>
+
+    <string name="dismatch_password">اشتباه در انتخاب رمزعبور
+    \n
+        مجدد تلاش کنید
+    </string>
+    <string name="retry_password">قبول</string>
 
 
     <string name="start_activity_title">شبکه پرداخت هم پی</string>
@@ -154,7 +160,7 @@
 
     <string name="title_activity_confirm_info">ConfirmInfoActivity</string>
     <string name="confirm_information">تایید اطلاعات</string>
-    <string name="confirm_information_text">لطفا از صحت اطلاعات زیر اطمینان حاصل فرمایید.\n در غیر اینصورت اطلاعات را تصحیح کنید.</string>
+    <string name="confirm_information_text">لطفا از صحت اطلاعات زیر اطمینان حاصل فرمایید. در غیر اینصورت اطلاعات را تصحیح کنید.</string>
 
     <string name="name_family">نام و نام خانوادگی</string>
     <string name="account_id">شماره حساب</string>
@@ -172,13 +178,10 @@
 
     <string name="get_password">دریافت رمز  عبور</string>
     <string name="get_password_text_1">مالکیت حساب شما احراز شد</string>
-    <string name="get_password_text_2">حساب کاربری شما به حساب عادی ارتقا یافت</string>
+    <string name="get_password_text_2">منتظر تماس هم پی یارتان برای ارتقا به کاربر عادی باشید</string>
     <string name="get_password_text_3">در مرحله بعد یک رمز عبور برای ورود به سیستم انتخاب خواهید کرد.</string>
     <string name="title_activity_password_entry">PasswordEntryActivity</string>
-    <string name="get_password_text_4">لطفا رمز عبوری پنج رقمی را به انتخاب خود وارد نمایید.
-    \n
-        (دقت کنید که بیش از دو عدد تکراری قابل قبول نمی‌باشد .
-    </string>
+    <string name="get_password_text_4">لطفا رمز عبوری پنج رقمی را به انتخاب خود وارد نمایید.دقت کنید که بیش از دو عدد تکراری قابل قبول نمی‌باشد.</string>
     <string name="get_password_text_5">لطفا کلمه عبور مورد نظر خود را مجدد تکرار نمایید.</string>
     <string name="current_password">لطفا رمز عبور جاری خود را وارد نمایید.</string>
 
