@@ -69,6 +69,8 @@
     <string name="pay_to">پرداخت به:   </string>
     <string name="price">مبلغ(ریال)</string>
 
+    <string name="payment_message">پیام(اختیاری)</string>
+
     <string name="fill_data">اطلاعات را کامل و دقیق وارد کنید.</string>
 
 
@@ -107,6 +109,18 @@
         مجدد تلاش کنید
     </string>
     <string name="retry_password">قبول</string>
+
+    <string name="tac_title">شرایط استفاده سرویس</string>
+    <string name="tac_accept">قبول دارم</string>
+    <string name="tac_reject">قبول ندارم</string>
+
+
+    <string name="no_result_search">جستجوی مورد نظر نتیجه ای در بر نداشت!</string>
+    <string name="retry_search">باشه</string>
+
+    <string name="incorrect_price">برای پرداخت خود مبلغ صحیحی را وارد نمایید</string>
+    <string name="retry_price">باشه</string>
+
 
 
     <string name="start_activity_title">شبکه پرداخت هم پی</string>
@@ -269,8 +283,8 @@
     <string name="title_activity_guide">GuideActivity</string>
 
     <string name="exit_app_text">آیا مایل به خروج از هم‌پی هستید؟</string>
-    <string name="exit_app_yes">خروج</string>
-    <string name="exit_app_no">انصراف</string>
+    <string name="exit_app_yes">خارج می‌شوم </string>
+    <string name="exit_app_no">ادامه می‌دهم</string>
     <string name="title_activity_change_memorable">ChangeMemorableActivity</string>
     <string name="title_activity_change_memorable_pass">ChangeMemorablePassActivity</string>
     <string name="title_activity_verify_account">VerifyAccountActivity</string>

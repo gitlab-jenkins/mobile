@@ -13,24 +13,26 @@
 
         <ImageView
             android:id="@+id/nav_icon"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:src="@drawable/line"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/back_actionbar"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="12dp"
-            android:padding="4dp"/>
+            android:padding="12dp"
+            android:clickable="true"
+            android:onClick="backActionBar"/>
 
         <com.hampay.mobile.android.component.FacedTextView
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:text="@string/detail_transaction"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="60dp"/>
+            android:layout_marginRight="64dp"/>
 
 
     </RelativeLayout>

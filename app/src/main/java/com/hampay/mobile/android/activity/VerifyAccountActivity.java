@@ -18,22 +18,36 @@ import com.hampay.common.core.model.response.VerifyAccountResponse;
 import com.hampay.common.core.model.response.VerifyTransferMoneyResponse;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.component.FacedTextView;
+import com.hampay.mobile.android.component.material.ButtonRectangle;
+import com.hampay.mobile.android.dialog.HamPayDialog;
+import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.webservice.WebServices;
 
 public class VerifyAccountActivity extends ActionBarActivity {
 
 
-    VerifyAccountRequest verifyAccountRequest;
     FacedTextView verification_response_text;
-    CardView verify_account_CardView;
+    ButtonRectangle verify_account_button;
+    Bundle bundle;
+    String TransferMoneyComment = "";
+
+    public void contactUs(View view){
+        (new HamPayDialog(this)).showContactUsDialog();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_account);
 
-        verify_account_CardView = (CardView)findViewById(R.id.verify_account_CardView);
-        verify_account_CardView.setOnClickListener(new View.OnClickListener() {
+        bundle = getIntent().getExtras();
+        TransferMoneyComment = bundle.getString(Constants.TRANSFER_MONEY_COMMENT, "");
+        verification_response_text = (FacedTextView)findViewById(R.id.verification_response_text);
+        verification_response_text.setText(TransferMoneyComment);
+
+
+        verify_account_button = (ButtonRectangle)findViewById(R.id.verify_account_button);
+        verify_account_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 VerifyTransferMoneyRequest verifyTransferMoneyRequest = new VerifyTransferMoneyRequest();
@@ -42,43 +56,7 @@ public class VerifyAccountActivity extends ActionBarActivity {
             }
         });
 
-        verification_response_text = (FacedTextView)findViewById(R.id.verification_response_text);
 
-        verifyAccountRequest = new VerifyAccountRequest();
-
-        new HttpVerifyAccountResponse().execute(verifyAccountRequest);
-
-
-    }
-
-    private ResponseMessage<VerifyAccountResponse> verifyAccountResponse;
-
-    public class HttpVerifyAccountResponse extends AsyncTask<VerifyAccountRequest, Void, String> {
-
-        @Override
-        protected String doInBackground(VerifyAccountRequest... params) {
-
-            WebServices webServices = new WebServices(getApplicationContext());
-            verifyAccountResponse = webServices.verifyAccountResponse(params[0]);
-
-            return null;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            if (verifyAccountResponse.getService().getResultStatus() != null) {
-
-                verification_response_text.setText(
-                        verifyAccountResponse.getService().getTransferMoneyComment());
-            }
-        }
     }
 
 

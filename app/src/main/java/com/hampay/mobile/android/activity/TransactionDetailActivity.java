@@ -35,6 +35,9 @@ public class TransactionDetailActivity extends ActionBarActivity implements View
     LinearLayout send_message;
     LinearLayout user_call;
 
+    public void backActionBar(View view){
+        finish();
+    }
 
 
     @Override

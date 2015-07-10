@@ -5,6 +5,10 @@ public class Constants {
 
     public static final String MEMORABLE_WORD = "MemorableWord";
     public static final String APP_PREFERENCE_NAME = "HamPay_Preferences";
+    public static final String TRANSFER_MONEY_COMMENT = "TransferMoneyComment";
+    public static final String USER_PROFILE = "UserProfile";
+    public static final String CONTACT_PHONE_NO = "contact_phone_no";
+    public static final String CONTACT_NAME = "contact_name";
 
     public static final String ARGS_URI = "com.pooyabyte.varadid.android.messaging.ARGS_URI";
     public static final String ARGS_PARAMS = "com.pooyabyte.varadid.android.messaging.ARGS_PARAMS";

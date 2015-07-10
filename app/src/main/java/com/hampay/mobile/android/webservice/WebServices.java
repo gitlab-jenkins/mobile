@@ -30,6 +30,7 @@ import com.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
 import com.hampay.common.core.model.request.RegistrationVerifyAccountRequest;
 import com.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
 import com.hampay.common.core.model.request.RegistrationVerifyTransferMoneyRequest;
+import com.hampay.common.core.model.request.TACAcceptRequest;
 import com.hampay.common.core.model.request.TACRequest;
 import com.hampay.common.core.model.request.TransactionListRequest;
 import com.hampay.common.core.model.request.UserProfileRequest;
@@ -54,6 +55,7 @@ import com.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
 import com.hampay.common.core.model.response.RegistrationVerifyAccountResponse;
 import com.hampay.common.core.model.response.RegistrationVerifyMobileResponse;
 import com.hampay.common.core.model.response.RegistrationVerifyTransferMoneyResponse;
+import com.hampay.common.core.model.response.TACAcceptResponse;
 import com.hampay.common.core.model.response.TACResponse;
 import com.hampay.common.core.model.response.TransactionListResponse;
 import com.hampay.common.core.model.response.UserProfileResponse;
@@ -866,6 +868,56 @@ public class WebServices  {
         return new Gson().toJson(message, requestType);
     }
 
+
+    public ResponseMessage<TACAcceptResponse> tACAcceptResponse(TACAcceptRequest tacAcceptRequest){
+        ResponseMessage<TACAcceptResponse> tACAcceptResponse = null;
+        HttpParams httpParameters = new BasicHttpParams();
+        int timeoutConnection = 30000;
+        HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+        int timeoutSocket = 30000;
+        HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+        HttpClient httpClient = new DefaultHttpClient(httpParameters);
+        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpRequest request = new HttpPost("/users/tacaccept");
+        HttpResponse response;
+        try {
+            StringEntity entity = new StringEntity(createTACAcceptResponse(tacAcceptRequest), "UTF-8");
+            entity.setContentType("application/json");
+            ((HttpPost) request).setEntity(entity);
+            response = httpClient.execute(host, request);
+            HttpEntity responseEntity = response.getEntity();
+            StatusLine responseStatus = response.getStatusLine();
+            int statusCode = responseStatus != null ? responseStatus.getStatusCode() : 0;
+            String result = EntityUtils.toString(responseEntity);
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                }
+            });
+            Gson gson = builder.create();
+            Type responseType = new com.google.gson.reflect.TypeToken<ResponseMessage<TACAcceptResponse>>() {}.getType();
+            tACAcceptResponse = gson.fromJson(result, responseType);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            httpClient.getConnectionManager().shutdown();
+        }
+        return tACAcceptResponse;
+    }
+
+    private String createTACAcceptResponse(TACAcceptRequest tACAcceptRequest) {
+        RequestHeader header = new RequestHeader();
+        header.setAuthToken("008ewe");
+        header.setVersion("1.0-PA");
+        RequestMessage<TACAcceptRequest> message = new RequestMessage<TACAcceptRequest>();
+        message.setRequestHeader(header);
+        TACAcceptRequest request = tACAcceptRequest;
+        request.setRequestUUID("1234");
+        message.setService(request);
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<TACAcceptRequest>>() {}.getType();
+        return new Gson().toJson(message, requestType);
+    }
 
     public ResponseMessage<VerifyAccountResponse> verifyAccountResponse(VerifyAccountRequest verifyAccountRequest){
         ResponseMessage<VerifyAccountResponse> verifyAccountResponse = null;

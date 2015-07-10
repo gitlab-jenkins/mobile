@@ -8,14 +8,28 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.view.Window;
+import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.request.ContactUsRequest;
+import com.hampay.common.core.model.request.TACAcceptRequest;
 import com.hampay.common.core.model.response.ContactUsResponse;
+import com.hampay.common.core.model.response.TACAcceptResponse;
+import com.hampay.common.core.model.response.TACResponse;
+import com.hampay.common.core.model.response.dto.UserProfileDTO;
 import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.activity.HamPayLoginActivity;
+import com.hampay.mobile.android.activity.MainActivity;
+import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import com.hampay.mobile.android.async.RequestTAC;
+import com.hampay.mobile.android.async.RequestTACAccept;
 import com.hampay.mobile.android.component.FacedTextView;
+import com.hampay.mobile.android.serialize.UserProfile;
+import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.webservice.WebServices;
 
 /**
@@ -44,15 +58,12 @@ public class HamPayDialog {
 
         FacedTextView retry_password = (FacedTextView) view.findViewById(R.id.retry_password);
 
-
-
         retry_password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 contactUsDialog.dismiss();
             }
         });
-
 
         view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
         contactUsDialog = new Dialog(activity);
@@ -61,9 +72,67 @@ public class HamPayDialog {
         contactUsDialog.setContentView(view);
         contactUsDialog.setTitle(null);
         contactUsDialog.setCanceledOnTouchOutside(false);
-
         contactUsDialog.show();
     }
+
+    public void showNoResultSearchDialog(){
+
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_no_result, null);
+
+        FacedTextView retry_search = (FacedTextView) view.findViewById(R.id.retry_search);
+
+        retry_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                contactUsDialog.dismiss();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        contactUsDialog = new Dialog(activity);
+        contactUsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        contactUsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        contactUsDialog.setContentView(view);
+        contactUsDialog.setTitle(null);
+        contactUsDialog.setCanceledOnTouchOutside(false);
+        contactUsDialog.show();
+    }
+
+
+    public void showIncorrectPrice(){
+
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_incorrect, null);
+
+        FacedTextView retry_price = (FacedTextView) view.findViewById(R.id.retry_price);
+
+        retry_price.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                contactUsDialog.dismiss();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        contactUsDialog = new Dialog(activity);
+        contactUsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        contactUsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        contactUsDialog.setContentView(view);
+        contactUsDialog.setTitle(null);
+        contactUsDialog.setCanceledOnTouchOutside(false);
+        contactUsDialog.show();
+    }
+
+
 
     public void showContactUsDialog(){
 
@@ -146,6 +215,99 @@ public class HamPayDialog {
             }
 
 
+        }
+    }
+
+    TACAcceptRequest tacAcceptRequest;
+
+    public void showTACAcceptDialog(String accept_term){
+
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_tac_accept, null);
+
+        FacedTextView tac_term = (FacedTextView)view.findViewById(R.id.tac_term);
+        FacedTextView tac_accept = (FacedTextView) view.findViewById(R.id.tac_accept);
+        FacedTextView tac_reject = (FacedTextView) view.findViewById(R.id.tac_reject);
+
+        tac_term.setText(accept_term);
+
+        tacAcceptRequest = new TACAcceptRequest();
+
+        tac_reject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                contactUsDialog.dismiss();
+                activity.finish();
+            }
+        });
+
+        tac_accept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new RequestTACAccept(activity, new RequestTACAcceptResponseTaskCompleteListener()).execute(tacAcceptRequest);
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        contactUsDialog = new Dialog(activity);
+        contactUsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        contactUsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        contactUsDialog.setContentView(view);
+        contactUsDialog.setTitle(null);
+        contactUsDialog.setCanceledOnTouchOutside(false);
+
+        contactUsDialog.show();
+    }
+
+    private ResponseMessage<TACAcceptResponse> tACAcceptResponse;
+    public static UserProfileDTO userProfileDTO;
+
+    public class RequestTACAcceptResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<TACAcceptResponse>>
+    {
+        public RequestTACAcceptResponseTaskCompleteListener(){
+        }
+
+        @Override
+        public void onTaskComplete(ResponseMessage<TACAcceptResponse> tacAcceptResponseMessage)
+        {
+            if (tacAcceptResponseMessage.getService().getResultStatus() != null) {
+
+                userProfileDTO = tacAcceptResponseMessage.getService().getUserProfile();
+
+                Intent intent = new Intent();
+                intent.setClass(activity, MainActivity.class);
+                activity.startActivity(intent);
+
+                activity.finish();
+
+                if (contactUsDialog != null && contactUsDialog.isShowing()){
+                    contactUsDialog.dismiss();
+                }
+
+//                Intent intent = new Intent(activity, MainActivity.class);
+//                intent.putExtra("userProfileDTO", userProfileDTO);
+//                activity.startActivity(intent);
+
+//                if (tacAcceptResponseMessage.getService().getShouldAcceptTAC()){
+//
+//                    (new HamPayDialog(activity)).showTACAcceptDialog(tacAcceptResponseMessage.getService().getTac());
+//
+//                }
+
+            }
+            else {
+                Toast.makeText(activity, activity.getString(R.string.no_network), Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+        @Override
+        public void onTaskPreRun() {
+//            loading_rl.setVisibility(View.VISIBLE);
         }
     }
 

@@ -8,11 +8,16 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.component.material.ButtonRectangle;
+import com.hampay.mobile.android.dialog.HamPayDialog;
 
 public class CongratsAccountActivity extends ActionBarActivity {
 
-    CardView keepOn_CardView;
+    ButtonRectangle keepOn_button;
 
+    public void contactUs(View view){
+        (new HamPayDialog(this)).showContactUsDialog();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,8 +25,8 @@ public class CongratsAccountActivity extends ActionBarActivity {
         setContentView(R.layout.activity_congrats_account);
 
 
-        keepOn_CardView = (CardView)findViewById(R.id.keepOn_CardView);
-        keepOn_CardView.setOnClickListener(new View.OnClickListener() {
+        keepOn_button = (ButtonRectangle)findViewById(R.id.keepOn_button);
+        keepOn_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();

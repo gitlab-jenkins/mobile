@@ -1,34 +1,26 @@
 package com.hampay.mobile.android.component.edittext;
 
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.widget.EditText;
 
 /**
  * Created by amir on 7/2/15.
  */
 public class AccountNoFormat implements TextWatcher {
 
-    private DecimalFormat df;
-    private DecimalFormat dfnd;
-    private boolean hasFractionalPart;
+    FacedEditText accountNumberValue;
+    String accountNumberFormat;
 
-    private EditText et;
+    String rawAccountNumberValue = "";
+    int rawAccountNumberValueLength = 0;
+    int rawAccountNumberValueLengthOffset = 0;
+    String procAccountNumberValue = "";
 
-    public AccountNoFormat(EditText et)
+    public AccountNoFormat(FacedEditText accountNumberValue, String accountNumberFormat)
     {
-        df = new DecimalFormat("###,##,###,#########");
-        df.setDecimalSeparatorAlwaysShown(true);
-        dfnd = new DecimalFormat("###,##,###,#########");
-        this.et = et;
-        hasFractionalPart = false;
+        this.accountNumberValue = accountNumberValue;
+        this.accountNumberFormat = accountNumberFormat;
     }
 
     @SuppressWarnings("unused")
@@ -37,50 +29,47 @@ public class AccountNoFormat implements TextWatcher {
     @Override
     public void afterTextChanged(Editable s)
     {
-        et.removeTextChangedListener(this);
+        accountNumberValue.removeTextChangedListener(this);
 
-        try {
-            int inilen, endlen;
-            inilen = et.getText().length();
+        Log.e("FORMAT", accountNumberFormat);
 
-            String v = s.toString().replace(String.valueOf(df.getDecimalFormatSymbols().getGroupingSeparator()), "");
-            Number n = df.parse(v);
-            int cp = et.getSelectionStart();
-            if (hasFractionalPart) {
-                et.setText(df.format(n));
-            } else {
-                et.setText(dfnd.format(n));
+        rawAccountNumberValue = s.toString().replace("/", "");
+        rawAccountNumberValueLength = rawAccountNumberValue.length();
+        rawAccountNumberValueLengthOffset = 0;
+
+        procAccountNumberValue = "";
+
+
+        if (rawAccountNumberValue.length() > 0) {
+
+            for (int i = 0; i < rawAccountNumberValueLength; i++) {
+
+                if (accountNumberFormat.charAt(i + rawAccountNumberValueLengthOffset) == '/') {
+                    procAccountNumberValue += "/" + rawAccountNumberValue.charAt(i);
+                    rawAccountNumberValueLengthOffset++;
+                } else {
+                    procAccountNumberValue += rawAccountNumberValue.charAt(i);
+                }
+
             }
-            endlen = et.getText().length();
-            int sel = (cp + (endlen - inilen));
-            if (sel > 0 && sel <= et.getText().length()) {
-                et.setSelection(sel);
-            } else {
-                // place cursor at the end?
-                et.setSelection(et.getText().length() - 1);
-            }
-        } catch (NumberFormatException nfe) {
-            // do nothing?
-        } catch (ParseException e) {
-            // do nothing?
+
+            accountNumberValue.setText(procAccountNumberValue);
+            accountNumberValue.setSelection(accountNumberValue.getText().toString().length());
         }
 
-        et.addTextChangedListener(this);
+        accountNumberValue.addTextChangedListener(this);
     }
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after)
     {
+        accountNumberValue.removeTextChangedListener(this);
+        accountNumberValue.addTextChangedListener(this);
     }
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count)
     {
-        if (s.toString().contains(String.valueOf(df.getDecimalFormatSymbols().getDecimalSeparator())))
-        {
-            hasFractionalPart = true;
-        } else {
-            hasFractionalPart = false;
-        }
+
     }
 }

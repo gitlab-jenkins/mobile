@@ -35,6 +35,7 @@ import com.hampay.mobile.android.activity.PayOneActivity;
 import com.hampay.mobile.android.adapter.PayOneAdapter;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.sectionlist.PinnedHeaderListView;
+import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.model.RecentPay;
 import com.hampay.mobile.android.webservice.WebServices;
 
@@ -235,10 +236,14 @@ public class PayToOneFragment extends Fragment {
                 }
             }
 
-            PayOneAdapter sectionedAdapter = new PayOneAdapter(getActivity(),
-                    searchRecentPays,
-                    searchContactDTOs);
-            pinnedHeaderListView.setAdapter(sectionedAdapter);
+            if (searchRecentPays.size() == 0 && searchContactDTOs.size() == 0){
+                (new HamPayDialog(getActivity())).showNoResultSearchDialog();
+            }else {
+                PayOneAdapter sectionedAdapter = new PayOneAdapter(getActivity(),
+                        searchRecentPays,
+                        searchContactDTOs);
+                pinnedHeaderListView.setAdapter(sectionedAdapter);
+            }
 
         }else {
 
@@ -288,16 +293,16 @@ public class PayToOneFragment extends Fragment {
         private void addNewAccount(String accountType, String authTokenType) {
             final AccountManagerFuture<Bundle> future = AccountManager.get(getActivity())
                     .addAccount(accountType, authTokenType, null, null, getActivity(), new AccountManagerCallback<Bundle>() {
-                @Override
-                public void run(AccountManagerFuture<Bundle> future) {
-                    try {
-                        Bundle bnd = future.getResult();
-                        Log.i("", "Account was created");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }, null);
+                        @Override
+                        public void run(AccountManagerFuture<Bundle> future) {
+                            try {
+                                Bundle bnd = future.getResult();
+                                Log.i("", "Account was created");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, null);
         }
 
         @Override
@@ -309,13 +314,16 @@ public class PayToOneFragment extends Fragment {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-            if (contactsHampayEnabledResponse != null) {
+            if (isAdded()){
 
-                PayOneAdapter sectionedAdapter = new PayOneAdapter(getActivity(),
-                        recentPays,
-                        contactsHampayEnabledResponse.getService().getContacts());
-                pinnedHeaderListView.setAdapter(sectionedAdapter);
+                if (contactsHampayEnabledResponse != null) {
 
+                    PayOneAdapter sectionedAdapter = new PayOneAdapter(getActivity(),
+                            recentPays,
+                            contactsHampayEnabledResponse.getService().getContacts());
+                    pinnedHeaderListView.setAdapter(sectionedAdapter);
+
+                }
 
                 loading_rl.setVisibility(View.GONE);
 

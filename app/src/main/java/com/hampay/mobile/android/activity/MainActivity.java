@@ -31,8 +31,10 @@ import android.widget.Toast;
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.request.ContactUsRequest;
 import com.hampay.common.core.model.response.ContactUsResponse;
+import com.hampay.common.core.model.response.dto.UserProfileDTO;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.component.FacedTextView;
+import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.fragment.AccountDetailFragment;
 import com.hampay.mobile.android.fragment.FragmentDrawer;
 import com.hampay.mobile.android.fragment.GuideFragment;
@@ -40,6 +42,8 @@ import com.hampay.mobile.android.fragment.PayToBusinessFragment;
 import com.hampay.mobile.android.fragment.PayToOneFragment;
 import com.hampay.mobile.android.fragment.SettingFragment;
 import com.hampay.mobile.android.fragment.TransactionFragment;
+import com.hampay.mobile.android.serialize.UserProfile;
+import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.webservice.WebServices;
 
 
@@ -66,10 +70,16 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     ImageView first_shortcut;
     ImageView second_shortcut;
 
+    UserProfileDTO userProfileDTO;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (HamPayDialog.userProfileDTO != null){
+            userProfileDTO = HamPayDialog.userProfileDTO;
+        }
 
         fragment_title = (FacedTextView)findViewById(R.id.fragment_title);
 
@@ -98,12 +108,12 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                         currentFragmet = 2;
                         break;
                     case 2:
-                        fragment = new AccountDetailFragment();
+                        fragment = new AccountDetailFragment(userProfileDTO);
                         title = getString(R.string.title_account_detail);
                         currentFragmet = 0;
                         break;
                     case 3:
-                        fragment = new AccountDetailFragment();
+                        fragment = new AccountDetailFragment(userProfileDTO);
                         title = getString(R.string.title_account_detail);
                         currentFragmet = 0;
                         break;
@@ -138,7 +148,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
                         break;
                     case 1:
-                        fragment = new AccountDetailFragment();
+                        fragment = new AccountDetailFragment(userProfileDTO);
                         title = getString(R.string.title_account_detail);
                         currentFragmet = 0;
                         break;
@@ -271,7 +281,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         String title = getString(R.string.app_name);
         switch (position) {
             case 0:
-                fragment = new AccountDetailFragment();
+                fragment = new AccountDetailFragment(userProfileDTO);
                 title = getString(R.string.title_account_detail);
 
                 break;

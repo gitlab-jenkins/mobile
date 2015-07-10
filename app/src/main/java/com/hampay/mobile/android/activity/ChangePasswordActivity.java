@@ -10,7 +10,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.hampay.common.common.response.ResponseMessage;
@@ -20,23 +23,25 @@ import com.hampay.common.core.model.response.ChangePassCodeResponse;
 import com.hampay.common.core.model.response.RegistrationPassCodeEntryResponse;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.component.FacedTextView;
+import com.hampay.mobile.android.component.material.ButtonRectangle;
+import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.webservice.WebServices;
 
 public class ChangePasswordActivity extends ActionBarActivity implements View.OnClickListener {
 
 
-    FacedTextView digit_1;
-    FacedTextView digit_2;
-    FacedTextView digit_3;
-    FacedTextView digit_4;
-    FacedTextView digit_5;
-    FacedTextView digit_6;
-    FacedTextView digit_7;
-    FacedTextView digit_8;
-    FacedTextView digit_9;
-    FacedTextView digit_0;
-    FacedTextView resend_active_code;
-    RelativeLayout backspace;
+    ButtonRectangle digit_1;
+    ButtonRectangle digit_2;
+    ButtonRectangle digit_3;
+    ButtonRectangle digit_4;
+    ButtonRectangle digit_5;
+    ButtonRectangle digit_6;
+    ButtonRectangle digit_7;
+    ButtonRectangle digit_8;
+    ButtonRectangle digit_9;
+    ButtonRectangle digit_0;
+    ButtonRectangle guideKey;
+    ButtonRectangle backspace;
 
     String currentPassword = "";
     String inputPasswordValue = "";
@@ -52,39 +57,50 @@ public class ChangePasswordActivity extends ActionBarActivity implements View.On
 
     RelativeLayout password_0_rl, password_1_rl, password_2_rl;
 
+    LinearLayout keyboard;
+    LinearLayout password_holder;
+
+    public void contactUs(View view){
+        new HamPayDialog(this).showContactUsDialog();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
+
+        keyboard = (LinearLayout)findViewById(R.id.keyboard);
+        password_holder = (LinearLayout)findViewById(R.id.password_holder);
+        password_holder.setOnClickListener(this);
 
         password_0_rl = (RelativeLayout)findViewById(R.id.password_0_rl);
         password_1_rl = (RelativeLayout)findViewById(R.id.password_1_rl);
         password_2_rl = (RelativeLayout)findViewById(R.id.password_2_rl);
 
 
-        digit_1 = (FacedTextView)findViewById(R.id.digit_1);
+        digit_1 = (ButtonRectangle)findViewById(R.id.digit_1);
         digit_1.setOnClickListener(this);
-        digit_2 = (FacedTextView)findViewById(R.id.digit_2);
+        digit_2 = (ButtonRectangle)findViewById(R.id.digit_2);
         digit_2.setOnClickListener(this);
-        digit_3 = (FacedTextView)findViewById(R.id.digit_3);
+        digit_3 = (ButtonRectangle)findViewById(R.id.digit_3);
         digit_3.setOnClickListener(this);
-        digit_4 = (FacedTextView)findViewById(R.id.digit_4);
+        digit_4 = (ButtonRectangle)findViewById(R.id.digit_4);
         digit_4.setOnClickListener(this);
-        digit_5 = (FacedTextView)findViewById(R.id.digit_5);
+        digit_5 = (ButtonRectangle)findViewById(R.id.digit_5);
         digit_5.setOnClickListener(this);
-        digit_6 = (FacedTextView)findViewById(R.id.digit_6);
+        digit_6 = (ButtonRectangle)findViewById(R.id.digit_6);
         digit_6.setOnClickListener(this);
-        digit_7 = (FacedTextView)findViewById(R.id.digit_7);
+        digit_7 = (ButtonRectangle)findViewById(R.id.digit_7);
         digit_7.setOnClickListener(this);
-        digit_8 = (FacedTextView)findViewById(R.id.digit_8);
+        digit_8 = (ButtonRectangle)findViewById(R.id.digit_8);
         digit_8.setOnClickListener(this);
-        digit_9 = (FacedTextView)findViewById(R.id.digit_9);
+        digit_9 = (ButtonRectangle)findViewById(R.id.digit_9);
         digit_9.setOnClickListener(this);
-        digit_0 = (FacedTextView)findViewById(R.id.digit_0);
+        digit_0 = (ButtonRectangle)findViewById(R.id.digit_0);
         digit_0.setOnClickListener(this);
-        resend_active_code = (FacedTextView)findViewById(R.id.resend_active_code);
-        resend_active_code.setOnClickListener(this);
-        backspace = (RelativeLayout)findViewById(R.id.backspace);
+        guideKey = (ButtonRectangle)findViewById(R.id.resend_active_code);
+        guideKey.setOnClickListener(this);
+        backspace = (ButtonRectangle)findViewById(R.id.backspace);
         backspace.setOnClickListener(this);
 
         input_digit_1 = (ImageView)findViewById(R.id.input_digit_1);
@@ -99,6 +115,15 @@ public class ChangePasswordActivity extends ActionBarActivity implements View.On
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+            case R.id.password_holder:
+                keyboard.setVisibility(LinearLayout.VISIBLE);
+                Animation animation   =    AnimationUtils.loadAnimation(this, R.anim.keyboard);
+                animation.setDuration(400);
+                keyboard.setAnimation(animation);
+                keyboard.animate();
+                animation.start();
+                keyboard.setVisibility(View.VISIBLE);
+                break;
             case R.id.digit_1:
                 inputDigit("1");
                 break;
@@ -388,10 +413,13 @@ public class ChangePasswordActivity extends ActionBarActivity implements View.On
                             new HttpChangePassCodeResponse().execute(changePassCodeRequest);
                         } else {
 
+                            (new HamPayDialog(this)).showDisMatchPasswordDialog();
+
                             password_0_rl.setVisibility(View.VISIBLE);
                             password_1_rl.setVisibility(View.INVISIBLE);
                             password_2_rl.setVisibility(View.INVISIBLE);
 
+                            currentPassword = "";
                             inputPasswordValue = "";
                             inputRePasswordValue = "";
 

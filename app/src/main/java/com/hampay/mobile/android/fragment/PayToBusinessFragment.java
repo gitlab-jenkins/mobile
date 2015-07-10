@@ -118,9 +118,6 @@ public class PayToBusinessFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-
-
-
                     performBusinessSearch(true);
                     return true;
                 }
@@ -135,17 +132,17 @@ public class PayToBusinessFragment extends Fragment {
 
         businessListView = (ListView)rootView.findViewById(R.id.businessListView);
 
-        businessListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent();
-                intent.setClass(getActivity(), PayBusinessActivity.class);
-                intent.putExtra("business_name", businessDTOs.get(position).getTitle());
-                intent.putExtra("business_code", businessDTOs.get(position).getCode());
-                startActivity(intent);
-
-            }
-        });
+//        businessListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Intent intent = new Intent();
+//                intent.setClass(getActivity(), PayBusinessActivity.class);
+//                intent.putExtra("business_name", businessDTOs.get(position).getTitle());
+//                intent.putExtra("business_code", businessDTOs.get(position).getCode());
+//                startActivity(intent);
+//
+//            }
+//        });
 
         new HttpHamPay‌Business().execute(false);
 
@@ -218,14 +215,17 @@ public class PayToBusinessFragment extends Fragment {
 
             loading_rl.setVisibility(View.GONE);
 
-            if(businessDTOs != null) {
+            if (isAdded()) {
 
-                if(onLoadMore){
-                    if (newBusinessDTOs != null)
-                        addDummyData(newBusinessDTOs.size());
-                }else {
-                    initDobList(rootView, businessListView);
-                    businessListView.setAdapter(hamPayBusinessesAdapter);
+                if (businessDTOs != null) {
+
+                    if (onLoadMore) {
+                        if (newBusinessDTOs != null)
+                            addDummyData(newBusinessDTOs.size());
+                    } else {
+                        initDobList(rootView, businessListView);
+                        businessListView.setAdapter(hamPayBusinessesAdapter);
+                    }
                 }
             }
         }

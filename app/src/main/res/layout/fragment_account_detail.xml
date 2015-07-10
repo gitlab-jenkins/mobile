@@ -186,6 +186,7 @@
                 android:layout_margin="8dp">
 
                 <LinearLayout
+                    android:id="@+id/hampay_2_ll"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
@@ -213,11 +214,11 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/hampay_1_ll"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:gravity="right">
-
 
                     <com.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/hampay_1"
@@ -250,6 +251,7 @@
                 android:layout_margin="8dp">
 
                 <LinearLayout
+                    android:id="@+id/hampay_4_ll"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
@@ -277,6 +279,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/hampay_3_ll"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
@@ -331,7 +334,7 @@
 
 
     <RelativeLayout
-        android:visibility="visible"
+        android:visibility="gone"
         android:id="@+id/loading_rl"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

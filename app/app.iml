@@ -100,5 +100,6 @@
     <orderEntry type="library" exported="" name="support-annotations-22.1.1" level="project" />
     <orderEntry type="library" exported="" name="support-v4-22.1.1" level="project" />
     <orderEntry type="library" exported="" name="common-core-0.0.1" level="project" />
+    <orderEntry type="library" exported="" name="acra-4.6.2" level="project" />
   </component>
 </module>

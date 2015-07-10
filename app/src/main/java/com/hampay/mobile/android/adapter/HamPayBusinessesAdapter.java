@@ -1,12 +1,15 @@
 package com.hampay.mobile.android.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.ViewGroup;
 import com.hampay.common.core.model.response.dto.BusinessDTO;
 import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.activity.PayBusinessActivity;
 import com.hampay.mobile.android.component.FacedTextView;
+import com.hampay.mobile.android.component.material.ButtonRectangle;
 
 /**
  * Created by amir on 6/26/15.
@@ -14,8 +17,13 @@ import com.hampay.mobile.android.component.FacedTextView;
 public class HamPayBusinessesAdapter extends GenericAdapter<BusinessDTO> {
 
 
+    Context context;
+
     public HamPayBusinessesAdapter(Context context) {
         super(context);
+
+
+        this.context = context;
     }
 
     private ViewHolder viewHolder;
@@ -30,7 +38,8 @@ public class HamPayBusinessesAdapter extends GenericAdapter<BusinessDTO> {
             viewHolder.business_description = (FacedTextView)convertView.findViewById(R.id.business_description);
             viewHolder.business_phone_no = (FacedTextView)convertView.findViewById(R.id.business_phone_no);
             viewHolder.business_hampay_id = (FacedTextView)convertView.findViewById(R.id.business_hampay_id);
-            viewHolder.pay_to_business = (CardView)convertView.findViewById(R.id.pay_to_business);
+            viewHolder.pay_to_business_button = (ButtonRectangle)convertView.findViewById(R.id.pay_to_business_button);
+
 
             convertView.setTag(viewHolder);
         }
@@ -38,13 +47,23 @@ public class HamPayBusinessesAdapter extends GenericAdapter<BusinessDTO> {
             viewHolder = (ViewHolder)convertView.getTag();
         }
 
-        BusinessDTO businessDTO = getItem(position);
+        final BusinessDTO businessDTO = getItem(position);
 
 
         viewHolder.business_name.setText(businessDTO.getTitle());
         viewHolder.business_description.setText(businessDTO.getCategory());
         viewHolder.business_phone_no.setText("تلفن: " + businessDTO.getDefaultPhoneNumber());
         viewHolder.business_hampay_id.setText(businessDTO.getCode());
+        viewHolder.pay_to_business_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(context, PayBusinessActivity.class);
+                intent.putExtra("business_name", businessDTO.getTitle());
+                intent.putExtra("business_code", businessDTO.getCode());
+                context.startActivity(intent);
+            }
+        });
 
         return convertView;
     }
@@ -59,7 +78,7 @@ public class HamPayBusinessesAdapter extends GenericAdapter<BusinessDTO> {
         FacedTextView business_description;
         FacedTextView business_phone_no;
         FacedTextView business_hampay_id;
-        CardView pay_to_business;
+        ButtonRectangle pay_to_business_button;
     }
 
 }

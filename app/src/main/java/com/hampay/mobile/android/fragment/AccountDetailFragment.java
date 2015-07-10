@@ -10,18 +10,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.dto.ContactDTO;
+import com.hampay.common.core.model.request.VerifyAccountRequest;
 import com.hampay.common.core.model.response.UserProfileResponse;
+import com.hampay.common.core.model.response.VerifyAccountResponse;
 import com.hampay.common.core.model.response.dto.UserProfileDTO;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.activity.MainActivity;
+import com.hampay.mobile.android.activity.PayOneActivity;
 import com.hampay.mobile.android.activity.RegVerifyAccountNoActivity;
 import com.hampay.mobile.android.activity.VerifyAccountActivity;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
+import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.JalaliConvert;
 import com.hampay.mobile.android.webservice.WebServices;
 
@@ -30,7 +35,7 @@ import java.util.List;
 /**
  * Created by amir on 6/5/15.
  */
-public class AccountDetailFragment extends Fragment {
+public class AccountDetailFragment extends Fragment implements View.OnClickListener {
 
     ImageView user_image;
     FacedTextView user_name_text;
@@ -48,12 +53,20 @@ public class AccountDetailFragment extends Fragment {
     ImageView hampay_image_2;
     ImageView hampay_image_3;
     ImageView hampay_image_4;
+    LinearLayout hampay_1_ll;
+    LinearLayout hampay_2_ll;
+    LinearLayout hampay_3_ll;
+    LinearLayout hampay_4_ll;
+
     RelativeLayout loading_rl;
 
     ButtonRectangle verify_account_button;
 
-    public AccountDetailFragment() {
+    UserProfileDTO userProfileDTO;
+
+    public AccountDetailFragment(UserProfileDTO userProfileDTO) {
         // Required empty public constructor
+        this.userProfileDTO = userProfileDTO;
     }
 
     @Override
@@ -69,14 +82,24 @@ public class AccountDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_account_detail, container, false);
 
+        hampay_1_ll = (LinearLayout)rootView.findViewById(R.id.hampay_1_ll);
+        hampay_2_ll = (LinearLayout)rootView.findViewById(R.id.hampay_2_ll);
+        hampay_3_ll = (LinearLayout)rootView.findViewById(R.id.hampay_3_ll);
+        hampay_4_ll = (LinearLayout)rootView.findViewById(R.id.hampay_4_ll);
+        hampay_1_ll.setOnClickListener(this);
+        hampay_2_ll.setOnClickListener(this);
+        hampay_3_ll.setOnClickListener(this);
+        hampay_4_ll.setOnClickListener(this);
 
         verify_account_button = (ButtonRectangle)rootView.findViewById(R.id.verify_account_button);
         verify_account_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(getActivity(), VerifyAccountActivity.class);
-                startActivity(intent);
+
+                VerifyAccountRequest verifyAccountRequest = new VerifyAccountRequest();
+
+                loading_rl.setVisibility(View.VISIBLE);
+                new HttpVerifyAccountResponse().execute(verifyAccountRequest);
             }
         });
 
@@ -116,21 +139,54 @@ public class AccountDetailFragment extends Fragment {
         super.onDetach();
     }
 
+    @Override
+    public void onClick(View v) {
+
+        Intent intent;
+
+        switch (v.getId()){
+            case R.id.hampay_1_ll:
+                intent = new Intent(getActivity(), PayOneActivity.class);
+                intent.putExtra(Constants.CONTACT_PHONE_NO, userProfileDTO.getAccountNumber());
+                intent.putExtra(Constants.CONTACT_NAME, userProfileDTO.getFullName());
+                startActivity(intent);
+                break;
+            case R.id.hampay_2_ll:
+                intent = new Intent(getActivity(), PayOneActivity.class);
+                intent.putExtra(Constants.CONTACT_PHONE_NO, userProfileDTO.getAccountNumber());
+                intent.putExtra(Constants.CONTACT_NAME, userProfileDTO.getFullName());
+                startActivity(intent);
+                break;
+            case R.id.hampay_3_ll:
+                intent = new Intent(getActivity(), PayOneActivity.class);
+                intent.putExtra(Constants.CONTACT_PHONE_NO, userProfileDTO.getAccountNumber());
+                intent.putExtra(Constants.CONTACT_NAME, userProfileDTO.getFullName());
+                startActivity(intent);
+                break;
+            case R.id.hampay_4_ll:
+                intent = new Intent(getActivity(), PayOneActivity.class);
+                intent.putExtra(Constants.CONTACT_PHONE_NO, userProfileDTO.getAccountNumber());
+                intent.putExtra(Constants.CONTACT_NAME, userProfileDTO.getFullName());
+                startActivity(intent);
+                break;
+        }
+    }
+
 
     public class HttpUserProfile extends AsyncTask<Void, Void, String> {
 
-        ResponseMessage<UserProfileResponse> userProfileResponse = null;
+//        ResponseMessage<UserProfileResponse> userProfileResponse = null;
 
-        UserProfileDTO userProfileDTO;
+//        UserProfileDTO userProfileDTO;
 
         JalaliConvert jalaliConvert;
 
         @Override
         protected String doInBackground(Void... params) {
 
-            WebServices webServices = new WebServices();
+//            WebServices webServices = new WebServices();
             //webServices.testBankList1();
-            userProfileResponse = webServices.getUserProfile();
+//            userProfileResponse = webServices.getUserProfile();
 
             return null;
         }
@@ -144,11 +200,13 @@ public class AccountDetailFragment extends Fragment {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-            if (userProfileResponse != null) {
+            if (userProfileDTO != null) {
+
+
 
                 jalaliConvert = new JalaliConvert();
 
-                userProfileDTO = userProfileResponse.getService().getUserProfile();
+//                userProfileDTO = userProfileResponse.getService().getUserProfile();
 
                 if (userProfileDTO.getVerificationStatus().ordinal() == 0){
                     user_image.setImageResource(R.drawable.user_icon_blak);
@@ -209,6 +267,47 @@ public class AccountDetailFragment extends Fragment {
 
                 loading_rl.setVisibility(View.GONE);
 
+            }
+        }
+    }
+
+
+    private ResponseMessage<VerifyAccountResponse> verifyAccountResponse;
+
+    public class HttpVerifyAccountResponse extends AsyncTask<VerifyAccountRequest, Void, String> {
+
+        @Override
+        protected String doInBackground(VerifyAccountRequest... params) {
+
+            WebServices webServices = new WebServices(getActivity());
+            verifyAccountResponse = webServices.verifyAccountResponse(params[0]);
+
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            loading_rl.setVisibility(View.GONE);
+
+            if (isAdded()) {
+
+                if (verifyAccountResponse.getService().getResultStatus() != null) {
+
+                    Intent intent = new Intent();
+                    intent.setClass(getActivity(), VerifyAccountActivity.class);
+                    intent.putExtra(Constants.TRANSFER_MONEY_COMMENT, verifyAccountResponse.getService().getTransferMoneyComment());
+                    startActivity(intent);
+
+//                verification_response_text.setText(
+//                        verifyAccountResponse.getService().getTransferMoneyComment());
+                }
             }
         }
     }

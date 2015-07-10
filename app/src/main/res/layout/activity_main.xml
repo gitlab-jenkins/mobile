@@ -20,13 +20,13 @@
 
             <ImageView
                 android:id="@+id/nav_icon"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:src="@drawable/line"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="12dp"
-                android:padding="4dp"/>
+                android:padding="13dp"/>
 
             <com.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/fragment_title"
@@ -34,11 +34,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:text="@string/title_account_detail"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="60dp"/>
+                android:layout_marginRight="64dp"/>
 
 
             <LinearLayout

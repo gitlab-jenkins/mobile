@@ -1,5 +1,6 @@
 package com.hampay.mobile.android.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,16 +10,25 @@ import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.CardView;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.request.TACRequest;
+import com.hampay.common.core.model.response.RegistrationVerifyAccountResponse;
 import com.hampay.common.core.model.response.TACResponse;
 import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import com.hampay.mobile.android.async.RequestConfirmUserData;
+import com.hampay.mobile.android.async.RequestTAC;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.AlertUtils;
+import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.functions.DeviceUuidFactory;
 import com.hampay.mobile.android.messaging.SecurityUtils;
 import com.hampay.mobile.android.service.LoginService;
@@ -32,18 +42,18 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
     FacedTextView hampay_memorableword_text;
     String MemorableWord;
 
-    FacedTextView digit_1;
-    FacedTextView digit_2;
-    FacedTextView digit_3;
-    FacedTextView digit_4;
-    FacedTextView digit_5;
-    FacedTextView digit_6;
-    FacedTextView digit_7;
-    FacedTextView digit_8;
-    FacedTextView digit_9;
-    FacedTextView digit_0;
-    FacedTextView resend_active_code;
-    RelativeLayout backspace;
+    ButtonRectangle digit_1;
+    ButtonRectangle digit_2;
+    ButtonRectangle digit_3;
+    ButtonRectangle digit_4;
+    ButtonRectangle digit_5;
+    ButtonRectangle digit_6;
+    ButtonRectangle digit_7;
+    ButtonRectangle digit_8;
+    ButtonRectangle digit_9;
+    ButtonRectangle digit_0;
+    ButtonRectangle guide_key;
+    ButtonRectangle backspace;
 
     String inputPassValue = "";
 
@@ -53,34 +63,52 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
     ImageView input_digit_4;
     ImageView input_digit_5;
 
+    LinearLayout keyboard;
+    LinearLayout password_holder;
+
+    Context context;
+    Activity activity;
+
+    public void contactUs(View view){
+        (new HamPayDialog(this)).showContactUsDialog();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ham_pay_login);
 
-        digit_1 = (FacedTextView)findViewById(R.id.digit_1);
+        context = this;
+        activity = HamPayLoginActivity.this;
+
+        keyboard = (LinearLayout)findViewById(R.id.keyboard);
+        password_holder = (LinearLayout)findViewById(R.id.password_holder);
+        password_holder.setOnClickListener(this);
+
+
+        digit_1 = (ButtonRectangle)findViewById(R.id.digit_1);
         digit_1.setOnClickListener(this);
-        digit_2 = (FacedTextView)findViewById(R.id.digit_2);
+        digit_2 = (ButtonRectangle)findViewById(R.id.digit_2);
         digit_2.setOnClickListener(this);
-        digit_3 = (FacedTextView)findViewById(R.id.digit_3);
+        digit_3 = (ButtonRectangle)findViewById(R.id.digit_3);
         digit_3.setOnClickListener(this);
-        digit_4 = (FacedTextView)findViewById(R.id.digit_4);
+        digit_4 = (ButtonRectangle)findViewById(R.id.digit_4);
         digit_4.setOnClickListener(this);
-        digit_5 = (FacedTextView)findViewById(R.id.digit_5);
+        digit_5 = (ButtonRectangle)findViewById(R.id.digit_5);
         digit_5.setOnClickListener(this);
-        digit_6 = (FacedTextView)findViewById(R.id.digit_6);
+        digit_6 = (ButtonRectangle)findViewById(R.id.digit_6);
         digit_6.setOnClickListener(this);
-        digit_7 = (FacedTextView)findViewById(R.id.digit_7);
+        digit_7 = (ButtonRectangle)findViewById(R.id.digit_7);
         digit_7.setOnClickListener(this);
-        digit_8 = (FacedTextView)findViewById(R.id.digit_8);
+        digit_8 = (ButtonRectangle)findViewById(R.id.digit_8);
         digit_8.setOnClickListener(this);
-        digit_9 = (FacedTextView)findViewById(R.id.digit_9);
+        digit_9 = (ButtonRectangle)findViewById(R.id.digit_9);
         digit_9.setOnClickListener(this);
-        digit_0 = (FacedTextView)findViewById(R.id.digit_0);
+        digit_0 = (ButtonRectangle)findViewById(R.id.digit_0);
         digit_0.setOnClickListener(this);
-        resend_active_code = (FacedTextView)findViewById(R.id.resend_active_code);
-        resend_active_code.setOnClickListener(this);
-        backspace = (RelativeLayout)findViewById(R.id.backspace);
+        guide_key = (ButtonRectangle)findViewById(R.id.resend_active_code);
+        guide_key.setOnClickListener(this);
+        backspace = (ButtonRectangle)findViewById(R.id.backspace);
         backspace.setOnClickListener(this);
 
         input_digit_1 = (ImageView)findViewById(R.id.input_digit_1);
@@ -99,56 +127,100 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
         }
 
 
-//        hampay_memorableword_text.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                TACRequest tacRequest = new TACRequest();
-//                tacRequest.setRequestUUID("");
-//                new HttpTACResponse().execute(tacRequest);
-//            }
-//        });
+        TACRequest tacRequest = new TACRequest();
+
+        new RequestTAC(context, new RequestTACResponseTaskCompleteListener()).execute(tacRequest);
+
     }
 
     private ResponseMessage<TACResponse> tACResponse;
 
-    public class HttpTACResponse extends AsyncTask<TACRequest, Void, String> {
-
-        @Override
-        protected String doInBackground(TACRequest... params) {
-
-            WebServices webServices = new WebServices(getApplicationContext());
-            tACResponse = webServices.tACResponse(params[0]);
-
-            return null;
+    public class RequestTACResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<TACResponse>>
+    {
+        public RequestTACResponseTaskCompleteListener(){
         }
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
+        public void onTaskComplete(ResponseMessage<TACResponse> tacResponseMessage)
+        {
+//            loading_rl.setVisibility(View.GONE);
+            if (tacResponseMessage.getService().getResultStatus() != null) {
 
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+                if (tacResponseMessage.getService().getShouldAcceptTAC()){
 
-            if (tACResponse.getService().getResultStatus() != null) {
+                    (new HamPayDialog(activity)).showTACAcceptDialog(tacResponseMessage.getService().getTac());
 
-                Intent intent = new Intent();
-                intent.setClass(HamPayLoginActivity.this, MainActivity.class);
-//                intent.addCategory(Intent.CATEGORY_HOME);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
+                }
+                else {
+                    Intent intent = new Intent();
+                    intent.setClass(activity, MainActivity.class);
+                    startActivity(intent);
+                }
 
             }
+            else {
+                Toast.makeText(context, getString(R.string.no_network), Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+        @Override
+        public void onTaskPreRun() {
+//            loading_rl.setVisibility(View.VISIBLE);
         }
     }
+
+
+//
+//    public class HttpTACResponse extends AsyncTask<TACRequest, Void, String> {
+//
+//        @Override
+//        protected String doInBackground(TACRequest... params) {
+//
+//            WebServices webServices = new WebServices(getApplicationContext());
+//            tACResponse = webServices.tACResponse(params[0]);
+//
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String s) {
+//            super.onPostExecute(s);
+//
+//            if (tACResponse.getService().getResultStatus() != null) {
+//
+//
+//                Intent intent = new Intent();
+//                intent.setClass(HamPayLoginActivity.this, MainActivity.class);
+////                intent.addCategory(Intent.CATEGORY_HOME);
+////                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+//                startActivity(intent);
+//                finish();
+//
+//            }
+//        }
+//    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+
+            case R.id.password_holder:
+                keyboard.setVisibility(LinearLayout.VISIBLE);
+                Animation animation   =    AnimationUtils.loadAnimation(this, R.anim.keyboard);
+                animation.setDuration(400);
+                keyboard.setAnimation(animation);
+                keyboard.animate();
+                animation.start();
+                keyboard.setVisibility(View.VISIBLE);
+                break;
+
             case R.id.digit_1:
                 inputDigit("1");
                 break;
@@ -214,11 +286,13 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
         }
 
         if (inputPassValue.length() == 5){
-            Intent intent = new Intent();
-            intent.setClass(HamPayLoginActivity.this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
+
+            //Unremark Here
+//            Intent intent = new Intent();
+//            intent.setClass(HamPayLoginActivity.this, MainActivity.class);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//            startActivity(intent);
+//            finish();
 
         }
 

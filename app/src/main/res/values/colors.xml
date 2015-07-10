@@ -20,9 +20,12 @@
     <color name="me_list_titles_text">#808184</color>
     <color name="me_action_bar_icon_unselected">#f7931d</color>
 
+    <color name="tac_accept">#36ac3f</color>
+    <color name="tac_reject">#ef3220</color>
+    <color name="tac_title">#0095ff</color>
     
-    <color name="confirmation">#36ac3f</color>
-    <color name="dis_confirmation">#ef3220</color>
+    <color name="confirmation">#0095ff</color>
+    <color name="dis_confirmation">#36ac3f</color>
 
     <color name="spb_default_color">#33b5e5</color>
     <dimen name="spb_default_stroke_separator_length">4dp</dimen>

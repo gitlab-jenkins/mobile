@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.CardView;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -59,7 +60,12 @@ public class ProfileEntryActivity extends ActionBarActivity {
     boolean nationalCodeIsValid;
 
     FacedEditText accountNumberValue;
-    boolean accountNumberIsValid = false;
+    boolean accountNumberIsValid = true;
+    String accountNumberFormat;
+    String preAccountNumberValue = "";
+    String currentAccountNumberValue = "";
+
+
 
     ImageView accountNumberIcon;
     FacedTextView selectedBankTitle;
@@ -69,6 +75,11 @@ public class ProfileEntryActivity extends ActionBarActivity {
     Context context;
 
     NetworkConnectivity networkConnectivity;
+
+    String rawAccountNumberValue = "";
+    int rawAccountNumberValueLength = 0;
+    int rawAccountNumberValueLengthOffset = 0;
+    String procAccountNumberValue = "";
 
     private ResponseMessage<BankListResponse> bankListResponse;
     private ResponseMessage<RegistrationEntryResponse> registrationEntryResponseMessage;
@@ -90,6 +101,7 @@ public class ProfileEntryActivity extends ActionBarActivity {
         cellNumberValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
+
                 if (!hasFocus){
                     if (cellNumberValue.getText().toString().length() == 11
                             && cellNumberValue.getText().toString().startsWith("09")){
@@ -100,6 +112,8 @@ public class ProfileEntryActivity extends ActionBarActivity {
                         cellNumberIcon.setImageResource(R.drawable.false_icon);
                         cellNumberIsValid = false;
                     }
+                }else {
+                    cellNumberIcon.setImageDrawable(null);
                 }
             }
         });
@@ -122,12 +136,85 @@ public class ProfileEntryActivity extends ActionBarActivity {
                     }
 
                 }
+                else {
+                    nationalCodeIcon.setImageDrawable(null);
+                }
             }
         });
 
         accountNumberValue = (FacedEditText)findViewById(R.id.accountNumberValue);
         accountNumberIcon = (ImageView)findViewById(R.id.accountNumberIcon);
-        accountNumberValue.addTextChangedListener(new AccountNoFormat(accountNumberValue));
+        accountNumberValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+                accountNumberIsValid = true;
+
+                if (!hasFocus){
+
+                    String splitedFormat[] = accountNumberFormat.split("/");
+                    String splitedAccountNo[] = accountNumberValue.getText().toString().split("/");
+
+                    if (splitedAccountNo.length != splitedFormat.length){
+                        accountNumberIsValid = false;
+
+                    }else{
+                        for (int i = 0; i < splitedAccountNo.length; i++){
+                            if (splitedAccountNo[i].length() != splitedFormat[i].length()){
+                                accountNumberIsValid = false;
+                            }
+                        }
+                    }
+
+                    if (accountNumberIsValid){
+                        accountNumberIcon.setImageResource(R.drawable.right_icon);
+                    }else {
+                        accountNumberIcon.setImageResource(R.drawable.false_icon);
+                    }
+
+                }
+                else {
+                    accountNumberIcon.setImageDrawable(null);
+                }
+            }
+        });
+
+
+//        accountNumberValue.addTextChangedListener(new AccountNoFormat(accountNumberValue));
+        accountNumberValue.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                accountNumberValue.removeTextChangedListener(this);
+                accountNumberValue.addTextChangedListener(this);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                accountNumberValue.removeTextChangedListener(this);
+                rawAccountNumberValue = s.toString().replace("/", "");
+                rawAccountNumberValueLength = rawAccountNumberValue.length();
+                rawAccountNumberValueLengthOffset = 0;
+                procAccountNumberValue = "";
+                if (rawAccountNumberValue.length() > 0) {
+                    for (int i = 0; i < rawAccountNumberValueLength; i++) {
+                        if (accountNumberFormat.charAt(i + rawAccountNumberValueLengthOffset) == '/') {
+                            procAccountNumberValue += "/" + rawAccountNumberValue.charAt(i);
+                            rawAccountNumberValueLengthOffset++;
+                        } else {
+                            procAccountNumberValue += rawAccountNumberValue.charAt(i);
+                        }
+                    }
+                    accountNumberValue.setText(procAccountNumberValue);
+                    accountNumberValue.setSelection(accountNumberValue.getText().toString().length());
+                }
+                accountNumberValue.addTextChangedListener(this);
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                accountNumberValue.removeTextChangedListener(this);
+                accountNumberValue.addTextChangedListener(this);
+            }
+        });
 
         selectedBankTitle = (FacedTextView)findViewById(R.id.selectedBankText);
 
@@ -159,6 +246,10 @@ public class ProfileEntryActivity extends ActionBarActivity {
         keepOn_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+//                cellNumberValue.clearFocus();
+                nationalCodeValue.clearFocus();
+//                accountNumberValue.clearFocus();
 
                 if (networkConnectivity.isNetworkConnected()) {
 
@@ -210,7 +301,13 @@ public class ProfileEntryActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectedBankTitle.setText(bankListResponse.getService().getBanks().get(position).getTitle());
                 selectedBankValue = bankListResponse.getService().getBanks().get(position).getCode();
-//                        accountNumberValue.setHint(bankListResponse.getService().getBanks().get(position).getAccountFormat());
+                if (accountNumberValue.getText().toString().length() > 0)
+                    accountNumberValue.setText("");
+                accountNumberFormat = bankListResponse.getService().getBanks().get(position).getAccountFormat();
+                accountNumberIsValid = false;
+                accountNumberIcon.setImageDrawable(null);
+                accountNumberValue.setFilters(new InputFilter[]{new InputFilter.LengthFilter(accountNumberFormat.length())});
+//                accountNumberHint.setHint(bankListResponse.getService().getBanks().get(position).getAccountFormat());
                 bankSelectionDialog.dismiss();
             }
         });
@@ -246,6 +343,10 @@ public class ProfileEntryActivity extends ActionBarActivity {
             if (bankListResponseMessage != null) {
                 selectedBankTitle.setText(bankListResponseMessage.getService().getBanks().get(0).getTitle());
                 selectedBankValue = bankListResponseMessage.getService().getBanks().get(0).getTitle();
+                accountNumberFormat = bankListResponse.getService().getBanks().get(0).getAccountFormat();
+                accountNumberValue.setFilters(new InputFilter[]{new InputFilter.LengthFilter(accountNumberFormat.length())});
+
+//                accountNumberHint.setHint(bankListResponse.getService().getBanks().get(0).getAccountFormat());
                 loading_rl.setVisibility(View.GONE);
             }
             if (bankListResponse != null) {

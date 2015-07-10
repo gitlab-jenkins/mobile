@@ -109,13 +109,14 @@ public class TransactionFragment extends Fragment {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-            if (transactionListResponse != null) {
+            loading_rl.setVisibility(View.GONE);
 
-                transactionAdapter = new TransactionAdapter(getActivity(), transactionListResponse);
+            if (isAdded()) {
 
-                transationListView.setAdapter(transactionAdapter);
-
-                loading_rl.setVisibility(View.GONE);
+                if (transactionListResponse != null) {
+                    transactionAdapter = new TransactionAdapter(getActivity(), transactionListResponse);
+                    transationListView.setAdapter(transactionAdapter);
+                }
             }
 
         }

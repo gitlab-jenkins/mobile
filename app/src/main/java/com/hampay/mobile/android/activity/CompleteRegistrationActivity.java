@@ -11,12 +11,17 @@ import android.view.View;
 
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
+import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
 
 public class CompleteRegistrationActivity extends ActionBarActivity {
 
     ButtonRectangle hampay_login_button;
 
+
+    public void contactUs(View view){
+        (new HamPayDialog(this)).showContactUsDialog();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

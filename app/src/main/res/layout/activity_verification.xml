@@ -32,7 +32,8 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="20dp"
-            android:onClick="contactUs"/>
+            android:onClick="contactUs"
+            android:clickable="true"/>
 
     </RelativeLayout>
 

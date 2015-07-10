@@ -10,6 +10,7 @@ import android.view.View;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.FacedTextView;
+import com.hampay.mobile.android.dialog.HamPayDialog;
 
 public class ChangeMemorableActivity extends ActionBarActivity {
 
@@ -22,6 +23,10 @@ public class ChangeMemorableActivity extends ActionBarActivity {
 
     FacedTextView memorable_text;
     FacedTextView keepOn_text;
+
+    public void contactUs(View view){
+        (new HamPayDialog(this)).showContactUsDialog();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

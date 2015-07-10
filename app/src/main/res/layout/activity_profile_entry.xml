@@ -31,7 +31,8 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="20dp"
-            android:onClick="contactUs"/>
+            android:onClick="contactUs"
+            android:clickable="true"/>
 
     </RelativeLayout>
 
@@ -357,6 +358,21 @@
                         android:layout_height="48dp"
                         android:background="@drawable/entry_field_bg"
                         android:layout_marginTop="6dp">
+
+                        <!--<com.hampay.mobile.android.component.edittext.FacedEditText-->
+                            <!--android:id="@+id/accountNumberHint"-->
+                            <!--android:layout_width="fill_parent"-->
+                            <!--android:layout_height="fill_parent"-->
+                            <!--android:background="@android:color/transparent"-->
+                            <!--android:layout_marginLeft="48dp"-->
+                            <!--android:textSize="21dp"-->
+                            <!--android:inputType="number"-->
+                            <!--android:hint="@string/account_no"-->
+                            <!--android:textColor="@android:color/black"-->
+                            <!--android:gravity="center_vertical"-->
+                            <!--android:padding="8dp"-->
+                            <!--/>-->
+
 
                         <com.hampay.mobile.android.component.edittext.FacedEditText
                             android:id="@+id/accountNumberValue"
