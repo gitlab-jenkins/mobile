@@ -67,6 +67,8 @@ public class PayToOneFragment extends Fragment {
 
     boolean searchEnabled = false;
 
+    boolean onResume = false;
+
     public PayToOneFragment() {
     }
 
@@ -199,17 +201,21 @@ public class PayToOneFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-//        recentPays = dbHelper.getAllRecentPays();
+        if (onResume) {
 
-//        if (contactsHampayEnabledResponse != null && contactsHampayEnabledResponse.getService().getContacts().size() > 0){
-//
-//            PayOneAdapter sectionedAdapter = new PayOneAdapter(getActivity(),
-//                    recentPays,
-//                    contactsHampayEnabledResponse.getService().getContacts());
-//            pinnedHeaderListView.setAdapter(sectionedAdapter);
+            recentPays = dbHelper.getAllRecentPays();
 
-//            loading_rl.setVisibility(View.GONE);
-//        }
+            if (contactsHampayEnabledResponse != null &&
+                    contactsHampayEnabledResponse.getService().getContacts().size() > 0) {
+
+                PayOneAdapter sectionedAdapter = new PayOneAdapter(getActivity(),
+                        recentPays,
+                        contactsHampayEnabledResponse.getService().getContacts());
+                pinnedHeaderListView.setAdapter(sectionedAdapter);
+
+                loading_rl.setVisibility(View.GONE);
+            }
+        }
 //        else {
 //            new HttpHamPayContact().execute();
 //        }
@@ -227,13 +233,15 @@ public class PayToOneFragment extends Fragment {
             searchContactDTOs.clear();
 
             for (RecentPay recentPay : recentPays) {
-                if (recentPay.getName().contains(searchPhrase) || recentPay.getPhone().contains(searchPhrase)) {
+                if (recentPay.getName().toLowerCase().contains(searchPhrase.toLowerCase())
+                        || recentPay.getPhone().toLowerCase().contains(searchPhrase.toLowerCase())) {
                     searchRecentPays.add(recentPay);
                 }
             }
 
             for (ContactDTO contactDTO : contactsHampayEnabledResponse.getService().getContacts()) {
-                if (contactDTO.getDisplayName().contains(searchPhrase) || contactDTO.getCellNumber().contains(searchPhrase)) {
+                if (contactDTO.getDisplayName().toLowerCase().contains(searchPhrase.toLowerCase())
+                        || contactDTO.getCellNumber().toLowerCase().contains(searchPhrase.toLowerCase())) {
                     searchContactDTOs.add(contactDTO);
                 }
             }
@@ -335,6 +343,8 @@ public class PayToOneFragment extends Fragment {
                 loading_rl.setVisibility(View.GONE);
 
             }
+
+            onResume = true;
 
 
         }

@@ -39,6 +39,7 @@ import com.hampay.mobile.android.component.edittext.AccountNoFormat;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
+import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.DeviceInfo;
 import com.hampay.mobile.android.util.NationalCodeVerification;
 import com.hampay.mobile.android.util.NetworkConnectivity;
@@ -63,14 +64,10 @@ public class ProfileEntryActivity extends ActionBarActivity {
     FacedEditText accountNumberValue;
     boolean accountNumberIsValid = true;
     String accountNumberFormat;
-    String preAccountNumberValue = "";
-    String currentAccountNumberValue = "";
-
-
 
     ImageView accountNumberIcon;
     FacedTextView selectedBankTitle;
-    String selectedBankValue;
+    String selectedBankCode;
     RelativeLayout loading_rl;
 
     Context context;
@@ -83,7 +80,9 @@ public class ProfileEntryActivity extends ActionBarActivity {
     String procAccountNumberValue = "";
 
     private ResponseMessage<BankListResponse> bankListResponse;
-    private ResponseMessage<RegistrationEntryResponse> registrationEntryResponseMessage;
+
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +90,8 @@ public class ProfileEntryActivity extends ActionBarActivity {
         setContentView(R.layout.activity_profile_entry);
 
         context = this;
+
+        editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
         networkConnectivity = new NetworkConnectivity(this);
 
@@ -113,9 +114,10 @@ public class ProfileEntryActivity extends ActionBarActivity {
                         cellNumberIcon.setImageResource(R.drawable.false_icon);
                         cellNumberIsValid = false;
                     }
-                }else {
-                    cellNumberIcon.setImageDrawable(null);
                 }
+//                else {
+//                    cellNumberIcon.setImageDrawable(null);
+//                }
             }
         });
 
@@ -137,9 +139,9 @@ public class ProfileEntryActivity extends ActionBarActivity {
                     }
 
                 }
-                else {
-                    nationalCodeIcon.setImageDrawable(null);
-                }
+//                else {
+//                    nationalCodeIcon.setImageDrawable(null);
+//                }
             }
         });
 
@@ -148,8 +150,6 @@ public class ProfileEntryActivity extends ActionBarActivity {
         accountNumberValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-
-
 
                 if (!hasFocus){
 
@@ -176,14 +176,13 @@ public class ProfileEntryActivity extends ActionBarActivity {
                     }
 
                 }
-                else {
-                    accountNumberIcon.setImageDrawable(null);
-                }
+//                else {
+//                    accountNumberIcon.setImageDrawable(null);
+//                }
             }
         });
 
 
-//        accountNumberValue.addTextChangedListener(new AccountNoFormat(accountNumberValue));
         accountNumberValue.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -267,7 +266,7 @@ public class ProfileEntryActivity extends ActionBarActivity {
 
                         registrationEntryRequest.setCellNumber(cellNumberValue.getText().toString());
                         registrationEntryRequest.setAccountNumber(accountNumberValue.getText().toString());
-                        registrationEntryRequest.setBankCode(selectedBankValue);
+                        registrationEntryRequest.setBankCode(selectedBankCode);
                         registrationEntryRequest.setNationalCode(nationalCodeValue.getText().toString());
                         registrationEntryRequest.setImei(new DeviceInfo(getApplicationContext()).getIMEI());
 
@@ -276,12 +275,32 @@ public class ProfileEntryActivity extends ActionBarActivity {
                         new RequestRegistrationEntry(context, new RequestRegistrationEntryTaskCompleteListener()).execute(registrationEntryRequest);
 
                     } else {
-                        Toast.makeText(getApplicationContext(), getString(R.string.fill_data), Toast.LENGTH_LONG).show();
+
+                        if (cellNumberValue.getText().toString().length() == 0 || !cellNumberIsValid){
+                            Toast.makeText(context, getString(R.string.msg_cellNumber_invalid), Toast.LENGTH_SHORT).show();
+                            cellNumberIcon.setImageResource(R.drawable.false_icon);
+                            cellNumberValue.requestFocus();
+                        }
+
+
+                        else if (accountNumberValue.getText().toString().length() == 0 || !accountNumberIsValid){
+                            Toast.makeText(context, getString(R.string.msg_accountNo_invalid), Toast.LENGTH_SHORT).show();
+                            accountNumberIcon.setImageResource(R.drawable.false_icon);
+                            accountNumberValue.requestFocus();
+                        }
+
+                        else if (nationalCodeValue.getText().toString().length() == 0 || !nationalCodeIsValid){
+                            Toast.makeText(context, getString(R.string.msg_nationalCode_invalid), Toast.LENGTH_SHORT).show();
+                            nationalCodeIcon.setImageResource(R.drawable.false_icon);
+                            nationalCodeValue.requestFocus();
+                        }
                     }
                 }
                 else {
                     Toast.makeText(getApplicationContext(), getString(R.string.no_network), Toast.LENGTH_LONG).show();
                 }
+
+                keepOn_button.requestFocus();
 
             }
         });
@@ -309,7 +328,7 @@ public class ProfileEntryActivity extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectedBankTitle.setText(bankListResponse.getService().getBanks().get(position).getTitle());
-                selectedBankValue = bankListResponse.getService().getBanks().get(position).getCode();
+                selectedBankCode = bankListResponse.getService().getBanks().get(position).getCode();
                 if (accountNumberValue.getText().toString().length() > 0)
                     accountNumberValue.setText("");
                 accountNumberFormat = bankListResponse.getService().getBanks().get(position).getAccountFormat();
@@ -351,7 +370,7 @@ public class ProfileEntryActivity extends ActionBarActivity {
             bankListResponse = bankListResponseMessage;
             if (bankListResponseMessage != null) {
                 selectedBankTitle.setText(bankListResponseMessage.getService().getBanks().get(0).getTitle());
-                selectedBankValue = bankListResponseMessage.getService().getBanks().get(0).getTitle();
+                selectedBankCode = bankListResponseMessage.getService().getBanks().get(0).getCode();
                 accountNumberFormat = bankListResponse.getService().getBanks().get(0).getAccountFormat();
                 accountNumberValue.setFilters(new InputFilter[]{new InputFilter.LengthFilter(accountNumberFormat.length())});
 
@@ -381,12 +400,18 @@ public class ProfileEntryActivity extends ActionBarActivity {
         @Override
         public void onTaskComplete(ResponseMessage<RegistrationEntryResponse> registrationEntryResponse)
         {
-            registrationEntryResponseMessage = registrationEntryResponse;
             if (registrationEntryResponse != null) {
 
-                SharedPreferences.Editor editor = getPreferences(MODE_PRIVATE).edit();
-                editor.putString("UserIdToken", registrationEntryResponse.getService().getUserIdToken());
-                editor.apply();
+
+                editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ProfileEntryActivity.class.toString());
+                editor.putString(Constants.REGISTERED_CELL_NUMBER, cellNumberValue.getText().toString());
+                editor.putString(Constants.REGISTERED_BANK_ID, selectedBankCode);
+                editor.putString(Constants.REGISTERED_BANK_ACCOUNT_NO_FORMAT, accountNumberFormat);
+                editor.putString(Constants.REGISTERED_ACCOUNT_NO, accountNumberValue.getText().toString());
+                editor.putString(Constants.REGISTERED_NATIONAL_CODE, nationalCodeValue.getText().toString());
+                editor.putString(Constants.REGISTERED_USER_ID_TOKEN, registrationEntryResponse.getService().getUserIdToken());
+                editor.commit();
+
                 Intent intent = new Intent();
                 intent.setClass(ProfileEntryActivity.this, VerificationActivity.class);
                 startActivity(intent);

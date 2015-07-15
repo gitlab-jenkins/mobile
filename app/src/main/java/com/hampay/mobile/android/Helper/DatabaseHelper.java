@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.hampay.mobile.android.model.RecentPay;
+import com.hampay.mobile.android.util.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,7 +127,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public List<RecentPay> getAllRecentPays() {
         List<RecentPay> recentPays = new ArrayList<RecentPay>();
-        String selectQuery = "SELECT  * FROM " + TABLE_RECENT_PAY;
+        String selectQuery = "SELECT  * FROM " + TABLE_RECENT_PAY + " LIMIT " + Constants.RECENT_PAY_TO_ONE_LIMIT;
 
         Log.e(LOG, selectQuery);
 

@@ -56,7 +56,7 @@
             android:label="@string/title_activity_verification" >
         </activity>
         <activity
-            android:name=".activity.PostVerificationActivity"
+            android:name=".activity.SMSVerificationActivity"
             android:label="@string/title_activity_post_verification" >
         </activity>
         <activity

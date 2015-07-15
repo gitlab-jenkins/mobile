@@ -72,6 +72,11 @@
     <string name="payment_message">پیام(اختیاری)</string>
 
     <string name="fill_data">اطلاعات را کامل و دقیق وارد کنید.</string>
+    <string name="msg_cellNumber_invalid">شماره همراه خود را صحیح وارد کنید</string>
+    <string name="msg_accountNo_invalid">شماره حساب خود را صحیح وارد کنید</string>
+    <string name="msg_nationalCode_invalid">کد ملی خود را صحیح وارد کنید</string>
+    <string name="msg_family_invalid">نام و نام خانوادگی خود را صحیح وارد کنید</string>
+
 
 
     <string name="some_people_at_hampay">بعضی از دوستان شما در هم پی</string>

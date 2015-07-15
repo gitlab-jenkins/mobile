@@ -11,6 +11,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.CardView;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -36,7 +39,11 @@ import com.hampay.mobile.android.component.material.ButtonFlat;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.component.material.CheckBox;
 import com.hampay.mobile.android.dialog.HamPayDialog;
+import com.hampay.mobile.android.util.Constant;
+import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.DeviceInfo;
+import com.hampay.mobile.android.util.NationalCodeVerification;
+import com.hampay.mobile.android.util.NetworkConnectivity;
 
 public class ConfirmInfoActivity extends ActionBarActivity implements View.OnClickListener {
 
@@ -47,15 +54,26 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
 
     Dialog confirm_info_dialog;
     LinearLayout confirm_check_ll;
-    boolean confirm_check_value = false;
+    boolean confirm_check_value = true;
     CheckBox confirm_check;
-    FacedEditText user_phone;
-    FacedEditText user_family;
-    FacedEditText user_account_no;
-    FacedEditText user_national_code;
-    LinearLayout confirm_layout;
+    FacedEditText cellNumberValue;
+    FacedEditText userFamilyValue;
+    FacedEditText accountNumberValue;
+    boolean accountNumberIsValid = true;
+    String accountNumberFormat;
+    String rawAccountNumberValue = "";
+    int rawAccountNumberValueLength = 0;
+    int rawAccountNumberValueLengthOffset = 0;
+    String procAccountNumberValue = "";
 
-    SharedPreferences prefs;
+
+    FacedEditText nationalCodeValue;
+    ImageView userFamilyIcon;
+    boolean userFamilyIsValid = true;
+    ImageView accountNumberIcon;
+    ImageView nationalCodeIcon;
+    boolean nationalCodeIsValid = true;
+    LinearLayout confirm_layout;
 
     Context context;
 
@@ -67,6 +85,10 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
         new HamPayDialog(this).showContactUsDialog();
     }
 
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
+
+    NetworkConnectivity networkConnectivity;
 
 
     @Override
@@ -76,9 +98,14 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
 
         loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
 
-        prefs = getPreferences(MODE_PRIVATE);
+        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+        editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+
+        accountNumberFormat = prefs.getString(Constants.REGISTERED_BANK_ACCOUNT_NO_FORMAT, "");
 
         context = this;
+
+        networkConnectivity = new NetworkConnectivity(context);
 
         keeOn_without_button = (ButtonRectangle)findViewById(R.id.keeOn_without_button);
         keeOn_without_button.setOnClickListener(this);
@@ -88,42 +115,149 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
         confirm_layout = (LinearLayout)findViewById(R.id.confirm_layout);
         confirm_check_ll = (LinearLayout)findViewById(R.id.confirm_check_ll);
         confirm_check = (CheckBox)findViewById(R.id.confirm_check);
-        confirm_check.setOncheckListener(new CheckBox.OnCheckListener() {
+//        confirm_check.setEnabled(false);
+//        confirm_check.setOncheckListener(new CheckBox.OnCheckListener() {
+//            @Override
+//            public void onCheck(CheckBox view, boolean check) {
+//
+//                if (check) {
+//
+//                    RegistrationConfirmUserDataRequest registrationConfirmUserDataRequest = new RegistrationConfirmUserDataRequest();
+//                    registrationConfirmUserDataRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
+//                    registrationConfirmUserDataRequest.setImei(new DeviceInfo(getApplicationContext()).getIMEI());
+//                    registrationConfirmUserDataRequest.setIsVerified(confirm_check_value);
+//                    registrationConfirmUserDataRequest.setIp("192.168.1.1");
+//                    registrationConfirmUserDataRequest.setDeviceId(new DeviceInfo(getApplicationContext()).getDeviceId());
+//
+//                    new RequestConfirmUserData(context, new RequestConfirmUserDataTaskCompleteListener()).execute(registrationConfirmUserDataRequest);
+//
+//                } else {
+////                    confirm_check_img.setImageDrawable(null);
+//                    confirm_check.setChecked(false);
+//                    correct_button.setBackgroundColor(getResources().getColor(R.color.register_btn_color));
+//                    correct_button.setVisibility(View.VISIBLE);
+//                    correct_button_rl.setVisibility(View.VISIBLE);
+//                    confirm_layout.setVisibility(View.GONE);
+//                }
+//            }
+//        });
+        confirm_check_ll.setOnClickListener(this);
+
+        cellNumberValue = (FacedEditText)findViewById(R.id.cellNumberValue);
+        userFamilyValue = (FacedEditText)findViewById(R.id.userFamilyValue);
+        userFamilyIcon = (ImageView)findViewById(R.id.userFamilyIcon);
+        userFamilyValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onCheck(CheckBox view, boolean check) {
-//                confirm_check_value = !confirm_check_value;
+            public void onFocusChange(View v, boolean hasFocus) {
 
-                if (check) {
-
-                    RegistrationConfirmUserDataRequest registrationConfirmUserDataRequest = new RegistrationConfirmUserDataRequest();
-                    registrationConfirmUserDataRequest.setUserIdToken(prefs.getString("UserIdToken", ""));
-                    registrationConfirmUserDataRequest.setImei(new DeviceInfo(getApplicationContext()).getIMEI());
-                    registrationConfirmUserDataRequest.setIsVerified(confirm_check_value);
-                    registrationConfirmUserDataRequest.setIp("192.168.1.1");
-                    registrationConfirmUserDataRequest.setDeviceId(new DeviceInfo(getApplicationContext()).getDeviceId());
-
-                    new RequestConfirmUserData(context, new RequestConfirmUserDataTaskCompleteListener()).execute(registrationConfirmUserDataRequest);
-
-                } else {
-//                    confirm_check_img.setImageDrawable(null);
-                    confirm_check.setChecked(false);
-                    correct_button.setBackgroundColor(getResources().getColor(R.color.register_btn_color));
-                    correct_button.setVisibility(View.VISIBLE);
-                    correct_button_rl.setVisibility(View.VISIBLE);
-                    confirm_layout.setVisibility(View.GONE);
+                if (!hasFocus){
+                    if (userFamilyValue.getText().toString().length() > 0){
+                        userFamilyIcon.setImageResource(R.drawable.right_icon);
+                        userFamilyIsValid = true;
+                    }
+                    else {
+                        userFamilyIcon.setImageResource(R.drawable.false_icon);
+                        userFamilyIsValid = false;
+                    }
                 }
             }
         });
-        confirm_check_ll.setOnClickListener(this);
 
-        user_phone = (FacedEditText)findViewById(R.id.user_phone);
-        user_family = (FacedEditText)findViewById(R.id.user_family);
-        user_account_no = (FacedEditText)findViewById(R.id.user_account_no);
-        user_national_code = (FacedEditText)findViewById(R.id.user_national_code);
+
+        accountNumberValue = (FacedEditText)findViewById(R.id.accountNumberValue);
+        accountNumberValue.setFilters(new InputFilter[]{new InputFilter.LengthFilter(accountNumberFormat.length())});
+        accountNumberIcon = (ImageView)findViewById(R.id.accountNumberIcon);
+        accountNumberValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+                if (!hasFocus){
+
+                    accountNumberIsValid = true;
+
+                    String splitedFormat[] = accountNumberFormat.split("/");
+                    String splitedAccountNo[] = accountNumberValue.getText().toString().split("/");
+
+                    if (splitedAccountNo.length != splitedFormat.length){
+                        accountNumberIsValid = false;
+
+                    }else{
+                        for (int i = 0; i < splitedAccountNo.length; i++){
+                            if (splitedAccountNo[i].length() != splitedFormat[i].length()){
+                                accountNumberIsValid = false;
+                            }
+                        }
+                    }
+
+                    if (accountNumberIsValid){
+                        accountNumberIcon.setImageResource(R.drawable.right_icon);
+                    }else {
+                        accountNumberIcon.setImageResource(R.drawable.false_icon);
+                    }
+                }
+            }
+        });
+
+        accountNumberValue.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                accountNumberValue.removeTextChangedListener(this);
+                accountNumberValue.addTextChangedListener(this);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                accountNumberValue.removeTextChangedListener(this);
+                rawAccountNumberValue = s.toString().replace("/", "");
+                rawAccountNumberValueLength = rawAccountNumberValue.length();
+                rawAccountNumberValueLengthOffset = 0;
+                procAccountNumberValue = "";
+                if (rawAccountNumberValue.length() > 0) {
+                    for (int i = 0; i < rawAccountNumberValueLength; i++) {
+                        if (accountNumberFormat.charAt(i + rawAccountNumberValueLengthOffset) == '/') {
+                            procAccountNumberValue += "/" + rawAccountNumberValue.charAt(i);
+                            rawAccountNumberValueLengthOffset++;
+                        } else {
+                            procAccountNumberValue += rawAccountNumberValue.charAt(i);
+                        }
+                    }
+                    accountNumberValue.setText(procAccountNumberValue);
+                    accountNumberValue.setSelection(accountNumberValue.getText().toString().length());
+                }
+                accountNumberValue.addTextChangedListener(this);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                accountNumberValue.removeTextChangedListener(this);
+                accountNumberValue.addTextChangedListener(this);
+            }
+        });
+
+
+        nationalCodeValue = (FacedEditText)findViewById(R.id.nationalCodeValue);
+        nationalCodeIcon = (ImageView)findViewById(R.id.nationalCodeIcon);
+        nationalCodeValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus){
+
+                    if (new NationalCodeVerification(nationalCodeValue.getText().toString()).isValidCode()){
+                        nationalCodeIcon.setImageResource(R.drawable.right_icon);
+                        nationalCodeIsValid = true;
+                    }
+                    else {
+                        nationalCodeIcon.setImageResource(R.drawable.false_icon);
+                        nationalCodeIsValid = false;
+                    }
+
+                }
+            }
+        });
 
 
         RegistrationFetchUserDataRequest registrationFetchUserDataRequest = new RegistrationFetchUserDataRequest();
-        registrationFetchUserDataRequest.setUserIdToken(prefs.getString("UserIdToken", ""));
+        registrationFetchUserDataRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
         correct_button = (ButtonRectangle)findViewById(R.id.correct_button);
         correct_button_rl = (RelativeLayout)findViewById(R.id.correct_button_rl);
         correct_button.setOnClickListener(this);
@@ -150,10 +284,18 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                 check_account.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+
+                        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ConfirmInfoActivity.class.toString());
+                        editor.putString(Constants.REGISTERED_CELL_NUMBER, cellNumberValue.getText().toString());
+                        editor.putString(Constants.REGISTERED_USER_FAMILY, userFamilyValue.getText().toString());
+                        editor.putString(Constants.REGISTERED_ACCOUNT_NO, accountNumberValue.getText().toString());
+                        editor.putString(Constants.REGISTERED_NATIONAL_CODE, nationalCodeValue.getText().toString());
+
                         confirm_info_dialog.dismiss();
 
                         RegistrationVerifyAccountRequest registrationVerifyAccountRequest = new RegistrationVerifyAccountRequest();
-                        registrationVerifyAccountRequest.setUserIdToken(prefs.getString("UserIdToken", ""));
+                        registrationVerifyAccountRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
 
                         new RequestRegisterVerifyAccount(context, new RequestRegistrationVerifyAccountResponseTaskCompleteListener()).execute(registrationVerifyAccountRequest);
 
@@ -164,6 +306,14 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                 uncheck_account.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ConfirmInfoActivity.class.toString());
+                        editor.putString(Constants.REGISTERED_CELL_NUMBER, cellNumberValue.getText().toString());
+                        editor.putString(Constants.REGISTERED_USER_FAMILY, userFamilyValue.getText().toString());
+                        editor.putString(Constants.REGISTERED_ACCOUNT_NO, accountNumberValue.getText().toString());
+                        editor.putString(Constants.REGISTERED_NATIONAL_CODE, nationalCodeValue.getText().toString());
+                        editor.commit();
+
                         confirm_info_dialog.dismiss();
                         Intent intent = new Intent();
                         intent.setClass(ConfirmInfoActivity.this, PasswordEntryActivity.class);
@@ -186,7 +336,7 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
             case R.id.keeOn_with_button:
 
                 RegistrationVerifyAccountRequest registrationVerifyAccountRequest = new RegistrationVerifyAccountRequest();
-                registrationVerifyAccountRequest.setUserIdToken(prefs.getString("UserIdToken", ""));
+                registrationVerifyAccountRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
 
                 new RequestRegisterVerifyAccount(this, new RequestRegistrationVerifyAccountResponseTaskCompleteListener()).execute(registrationVerifyAccountRequest);
 
@@ -195,35 +345,82 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
             case R.id.correct_button:
                 correct_button.setBackgroundColor(getResources().getColor(R.color.normal_text));
 //                user_phone.setFocusableInTouchMode(true);
-                user_family.setFocusableInTouchMode(true);
-                user_account_no.setFocusableInTouchMode(true);
-                user_national_code.setFocusableInTouchMode(true);
+                userFamilyValue.setFocusableInTouchMode(true);
+                accountNumberValue.setFocusableInTouchMode(true);
+                nationalCodeValue.setFocusableInTouchMode(true);
 
                 break;
 
             case R.id.confirm_check_ll:
-                confirm_check_value = !confirm_check_value;
 
-                if (confirm_check_value) {
 
-                    RegistrationConfirmUserDataRequest registrationConfirmUserDataRequest = new RegistrationConfirmUserDataRequest();
-                    registrationConfirmUserDataRequest.setUserIdToken(prefs.getString("UserIdToken", ""));
-                    registrationConfirmUserDataRequest.setImei(new DeviceInfo(getApplicationContext()).getIMEI());
-                    registrationConfirmUserDataRequest.setIsVerified(confirm_check_value);
-                    registrationConfirmUserDataRequest.setIp("192.168.1.1");
-                    registrationConfirmUserDataRequest.setDeviceId(new DeviceInfo(getApplicationContext()).getDeviceId());
+                userFamilyValue.clearFocus();
+                nationalCodeValue.clearFocus();
+                accountNumberValue.clearFocus();
 
-                    new RequestConfirmUserData(context, new RequestConfirmUserDataTaskCompleteListener()).execute(registrationConfirmUserDataRequest);
 
+
+                if (networkConnectivity.isNetworkConnected()) {
+
+
+
+                    if (confirm_check_value) {
+
+
+                        if (userFamilyIsValid && nationalCodeIsValid && accountNumberIsValid
+                                && userFamilyValue.getText().toString().length() > 0
+                                && nationalCodeValue.getText().toString().length() > 0
+                                && accountNumberValue.getText().toString().length() > 0) {
+
+
+
+                            RegistrationConfirmUserDataRequest registrationConfirmUserDataRequest = new RegistrationConfirmUserDataRequest();
+                            registrationConfirmUserDataRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
+                            registrationConfirmUserDataRequest.setImei(new DeviceInfo(getApplicationContext()).getIMEI());
+                            registrationConfirmUserDataRequest.setIsVerified(confirm_check_value);
+                            registrationConfirmUserDataRequest.setIp("192.168.1.1");
+                            registrationConfirmUserDataRequest.setDeviceId(new DeviceInfo(getApplicationContext()).getDeviceId());
+
+                            new RequestConfirmUserData(context, new RequestConfirmUserDataTaskCompleteListener()).execute(registrationConfirmUserDataRequest);
+
+
+                            confirm_check_value = !confirm_check_value;
+
+                        }else {
+
+                            if (userFamilyValue.getText().toString().length() == 0 || !userFamilyIsValid){
+                                Toast.makeText(context, getString(R.string.msg_family_invalid), Toast.LENGTH_SHORT).show();
+                                userFamilyIcon.setImageResource(R.drawable.false_icon);
+                                userFamilyValue.requestFocus();
+                            }
+
+
+                            else if (accountNumberValue.getText().toString().length() == 0 || !accountNumberIsValid){
+                                Toast.makeText(context, getString(R.string.msg_accountNo_invalid), Toast.LENGTH_SHORT).show();
+                                accountNumberIcon.setImageResource(R.drawable.false_icon);
+                                accountNumberValue.requestFocus();
+                            }
+
+                            else if (nationalCodeValue.getText().toString().length() == 0 || !nationalCodeIsValid){
+                                Toast.makeText(context, getString(R.string.msg_nationalCode_invalid), Toast.LENGTH_SHORT).show();
+                                nationalCodeIcon.setImageResource(R.drawable.false_icon);
+                                nationalCodeValue.requestFocus();
+                            }
+                        }
+                    } else {
+                        confirm_check.setChecked(false);
+                        correct_button.setBackgroundColor(getResources().getColor(R.color.register_btn_color));
+                        correct_button.setVisibility(View.VISIBLE);
+                        correct_button_rl.setVisibility(View.VISIBLE);
+                        confirm_layout.setVisibility(View.GONE);
+                        confirm_check_value = !confirm_check_value;
+                    }
+                }else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.no_network), Toast.LENGTH_LONG).show();
                 }
-                else {
-//                    confirm_check_img.setImageDrawable(null);
-                    confirm_check.setChecked(false);
-                    correct_button.setBackgroundColor(getResources().getColor(R.color.register_btn_color));
-                    correct_button.setVisibility(View.VISIBLE);
-                    correct_button_rl.setVisibility(View.VISIBLE);
-                    confirm_layout.setVisibility(View.GONE);
-                }
+
+                confirm_check_ll.requestFocus();
+
                 break;
         }
     }
@@ -269,10 +466,10 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
         {
             loading_rl.setVisibility(View.GONE);
             if (registrationFetchUserDataResponseMessage.getService().getResultStatus() != null) {
-                user_phone.setText(registrationFetchUserDataResponseMessage.getService().getCellNumber());
-                user_family.setText(registrationFetchUserDataResponseMessage.getService().getFulName());
-                user_account_no.setText(registrationFetchUserDataResponseMessage.getService().getAccountNumber());
-                user_national_code.setText(registrationFetchUserDataResponseMessage.getService().getNationalCode());
+                cellNumberValue.setText(registrationFetchUserDataResponseMessage.getService().getCellNumber());
+                userFamilyValue.setText(registrationFetchUserDataResponseMessage.getService().getFulName());
+                accountNumberValue.setText(registrationFetchUserDataResponseMessage.getService().getAccountNumber());
+                nationalCodeValue.setText(registrationFetchUserDataResponseMessage.getService().getNationalCode());
             }
 
         }
@@ -303,9 +500,9 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                 correct_button.setVisibility(View.GONE);
                 correct_button_rl.setVisibility(View.GONE);
 //                user_phone.setFocusable(false);
-                user_family.setFocusable(false);
-                user_account_no.setFocusable(false);
-                user_national_code.setFocusable(false);
+                userFamilyValue.setFocusable(false);
+                accountNumberValue.setFocusable(false);
+                nationalCodeValue.setFocusable(false);
                 confirm_layout.setVisibility(View.VISIBLE);
             }
 

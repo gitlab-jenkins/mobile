@@ -277,18 +277,26 @@
                         android:background="@drawable/entry_field_bg"
                         android:layout_marginTop="6dp">
 
+                        <ImageView
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="8dp"
+                            android:src="@drawable/right_icon"/>
+
                         <com.hampay.mobile.android.component.edittext.FacedEditText
-                            android:id="@+id/user_phone"
+                            android:id="@+id/cellNumberValue"
                             android:layout_width="120dp"
                             android:layout_height="fill_parent"
                             android:background="@android:color/transparent"
-                            android:textSize="20dp"
+                            android:textSize="18dp"
                             android:inputType="number"
                             android:focusable="false"
                             android:maxLength="11"
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
-                            android:padding="8dp" />
+                            android:padding="8dp"
+                            android:layout_marginLeft="32dp"/>
 
 
                         <com.hampay.mobile.android.component.FacedTextView
@@ -296,7 +304,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="fill_parent"
                             android:textColor="@color/normal_text"
-                            android:textSize="21sp"
+                            android:textSize="18sp"
                             android:text="@string/mobile_no"
                             android:layout_alignParentRight="true"
                             android:padding="8dp"
@@ -311,17 +319,26 @@
                         android:background="@drawable/entry_field_bg"
                         android:layout_marginTop="6dp">
 
+                        <ImageView
+                            android:id="@+id/userFamilyIcon"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="8dp"
+                            android:src="@drawable/right_icon"/>
+
                         <com.hampay.mobile.android.component.edittext.FacedEditText
-                            android:id="@+id/user_family"
+                            android:id="@+id/userFamilyValue"
                             android:layout_width="120dp"
                             android:layout_height="fill_parent"
                             android:background="@android:color/transparent"
-                            android:textSize="20dp"
+                            android:textSize="18dp"
                             android:focusable="false"
                             android:maxLength="11"
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
-                            android:padding="8dp" />
+                            android:padding="8dp"
+                            android:layout_marginLeft="32dp"/>
 
 
                         <com.hampay.mobile.android.component.FacedTextView
@@ -329,7 +346,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="fill_parent"
                             android:textColor="@color/normal_text"
-                            android:textSize="21sp"
+                            android:textSize="18sp"
                             android:text="@string/name_family"
                             android:layout_alignParentRight="true"
                             android:padding="8dp"
@@ -344,18 +361,26 @@
                         android:background="@drawable/entry_field_bg"
                         android:layout_marginTop="6dp">
 
+                        <ImageView
+                            android:id="@+id/accountNumberIcon"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="8dp"
+                            android:src="@drawable/right_icon"/>
+
                         <com.hampay.mobile.android.component.edittext.FacedEditText
-                            android:id="@+id/user_account_no"
-                            android:layout_width="120dp"
+                            android:id="@+id/accountNumberValue"
+                            android:layout_width="200dp"
                             android:layout_height="fill_parent"
                             android:background="@android:color/transparent"
-                            android:textSize="20dp"
+                            android:textSize="18dp"
                             android:inputType="phone"
                             android:focusable="false"
-                            android:maxLength="11"
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
-                            android:padding="8dp" />
+                            android:padding="8dp"
+                            android:layout_marginLeft="32dp"/>
 
 
                         <com.hampay.mobile.android.component.FacedTextView
@@ -363,7 +388,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="fill_parent"
                             android:textColor="@color/normal_text"
-                            android:textSize="21sp"
+                            android:textSize="18sp"
                             android:text="@string/account_id"
                             android:layout_alignParentRight="true"
                             android:padding="8dp"
@@ -378,18 +403,27 @@
                         android:background="@drawable/entry_field_bg"
                         android:layout_marginTop="6dp">
 
+                        <ImageView
+                            android:id="@+id/nationalCodeIcon"
+                            android:layout_width="22dp"
+                            android:layout_height="22dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="8dp"
+                            android:src="@drawable/right_icon"/>
+
                         <com.hampay.mobile.android.component.edittext.FacedEditText
-                            android:id="@+id/user_national_code"
+                            android:id="@+id/nationalCodeValue"
                             android:layout_width="120dp"
                             android:layout_height="fill_parent"
                             android:background="@android:color/transparent"
-                            android:textSize="21dp"
+                            android:textSize="18dp"
                             android:inputType="phone"
                             android:focusable="false"
                             android:maxLength="11"
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
-                            android:padding="8dp" />
+                            android:padding="8dp"
+                            android:layout_marginLeft="32dp" />
 
 
                         <com.hampay.mobile.android.component.FacedTextView
@@ -397,7 +431,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="fill_parent"
                             android:textColor="@color/normal_text"
-                            android:textSize="21sp"
+                            android:textSize="18sp"
                             android:text="@string/iter_code"
                             android:layout_alignParentRight="true"
                             android:padding="8dp"
@@ -427,7 +461,8 @@
                             android:id="@+id/confirm_check"
                             android:layout_width="38dp"
                             android:layout_height="38dp"
-                            android:background="@color/register_btn_color" />
+                            android:background="@color/register_btn_color"
+                            android:clickable="false"/>
 
 
                     </LinearLayout>
