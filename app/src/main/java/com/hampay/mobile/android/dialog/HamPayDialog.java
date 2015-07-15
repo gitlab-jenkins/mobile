@@ -264,7 +264,7 @@ public class HamPayDialog {
     }
 
     private ResponseMessage<TACAcceptResponse> tACAcceptResponse;
-    public static UserProfileDTO userProfileDTO;
+    private UserProfileDTO userProfileDTO;
 
     public class RequestTACAcceptResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<TACAcceptResponse>>
     {
@@ -280,6 +280,7 @@ public class HamPayDialog {
 
                 Intent intent = new Intent();
                 intent.setClass(activity, MainActivity.class);
+                intent.putExtra(Constants.USER_PROFILE_DTO, userProfileDTO);
                 activity.startActivity(intent);
 
                 activity.finish();

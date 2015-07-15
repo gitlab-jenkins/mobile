@@ -4,10 +4,12 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -275,7 +277,12 @@ public class PayToOneFragment extends Fragment {
             WebServices webServices = new WebServices(getActivity());
             contactsHampayEnabledResponse = webServices.getHamPayContacts();
 
+            ContentResolver resolver = getActivity().getContentResolver();
+            resolver.delete(ContactsContract.RawContacts.CONTENT_URI, ContactsContract.RawContacts.ACCOUNT_TYPE + " = ?", new String[]{AccountGeneral.ACCOUNT_TYPE});
+
             for (ContactDTO contactDTO : contactsHampayEnabledResponse.getService().getContacts()){
+
+
 
                 addNewAccount(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
                 ContactsManager.addContact(getActivity(), new HamPayContact("",

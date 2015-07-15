@@ -77,9 +77,12 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (HamPayDialog.userProfileDTO != null){
-            userProfileDTO = HamPayDialog.userProfileDTO;
-        }
+
+        Intent intent = getIntent();;
+
+//        if (HamPayDialog.userProfileDTO != null){
+            userProfileDTO = (UserProfileDTO) intent.getSerializableExtra(Constants.USER_PROFILE_DTO);
+//        }
 
         fragment_title = (FacedTextView)findViewById(R.id.fragment_title);
 

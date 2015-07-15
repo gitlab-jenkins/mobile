@@ -1694,7 +1694,7 @@ public class WebServices  {
 
             count++;
 
-            if(count > 10){
+            if(count > 30){
                 break;
             }
 
@@ -1795,6 +1795,8 @@ public class WebServices  {
         RequestMessage<TransactionListRequest> message = new RequestMessage<TransactionListRequest>();
         message.setRequestHeader(header);
         TransactionListRequest request = new TransactionListRequest();
+        request.setPageSize(10);
+        request.setPageNumber(0);
         request.setRequestUUID("1234");
         message.setService(request);
 

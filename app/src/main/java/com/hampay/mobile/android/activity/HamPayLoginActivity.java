@@ -153,8 +153,12 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
                 }
                 else {
                     Intent intent = new Intent();
+
                     intent.setClass(activity, MainActivity.class);
+                    intent.putExtra(Constants.USER_PROFILE_DTO, tacResponseMessage.getService().getUserProfile());
                     startActivity(intent);
+
+                    finish();
                 }
 
             }

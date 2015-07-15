@@ -28,6 +28,7 @@ import com.hampay.common.core.model.request.BankListRequest;
 import com.hampay.common.core.model.request.RegistrationEntryRequest;
 import com.hampay.common.core.model.response.BankListResponse;
 import com.hampay.common.core.model.response.RegistrationEntryResponse;
+import com.hampay.common.core.model.response.dto.UserProfileDTO;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.adapter.BankListAdapter;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
@@ -148,9 +149,11 @@ public class ProfileEntryActivity extends ActionBarActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
 
-                accountNumberIsValid = true;
+
 
                 if (!hasFocus){
+
+                    accountNumberIsValid = true;
 
                     String splitedFormat[] = accountNumberFormat.split("/");
                     String splitedAccountNo[] = accountNumberValue.getText().toString().split("/");
@@ -242,18 +245,23 @@ public class ProfileEntryActivity extends ActionBarActivity {
             new RequestBankList(this, new RequestBanksTaskCompleteListener()).execute(bankListRequest);
         }
 
+
+
         keepOn_button = (ButtonRectangle) findViewById(R.id.keepOn_button);
         keepOn_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-//                cellNumberValue.clearFocus();
+                cellNumberValue.clearFocus();
                 nationalCodeValue.clearFocus();
-//                accountNumberValue.clearFocus();
+                accountNumberValue.clearFocus();
 
                 if (networkConnectivity.isNetworkConnected()) {
 
-                    if (cellNumberIsValid && nationalCodeIsValid && accountNumberIsValid) {
+                    if (cellNumberIsValid && nationalCodeIsValid && accountNumberIsValid
+                            && cellNumberValue.getText().toString().length() > 0
+                            && nationalCodeValue.getText().toString().length() > 0
+                            && accountNumberValue.getText().toString().length() > 0) {
 
                         RegistrationEntryRequest registrationEntryRequest = new RegistrationEntryRequest();
 
@@ -262,6 +270,7 @@ public class ProfileEntryActivity extends ActionBarActivity {
                         registrationEntryRequest.setBankCode(selectedBankValue);
                         registrationEntryRequest.setNationalCode(nationalCodeValue.getText().toString());
                         registrationEntryRequest.setImei(new DeviceInfo(getApplicationContext()).getIMEI());
+
 
 
                         new RequestRegistrationEntry(context, new RequestRegistrationEntryTaskCompleteListener()).execute(registrationEntryRequest);

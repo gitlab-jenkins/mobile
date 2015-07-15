@@ -58,7 +58,7 @@ public class VerificationActivity extends ActionBarActivity {
                     RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest = new RegistrationSendSmsTokenRequest();
                     SharedPreferences prefs = getPreferences(MODE_PRIVATE);
 
-                    registrationSendSmsTokenRequest.setUserId(prefs.getString("UserIdToken", ""));
+                    registrationSendSmsTokenRequest.setUserIdToken(prefs.getString("UserIdToken", ""));
 
                     new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener()).execute(registrationSendSmsTokenRequest);
                 }else {
