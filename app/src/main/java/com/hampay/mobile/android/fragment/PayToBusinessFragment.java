@@ -2,7 +2,6 @@ package com.hampay.mobile.android.fragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -25,13 +23,12 @@ import com.hampay.common.core.model.request.BusinessSearchRequest;
 import com.hampay.common.core.model.response.BusinessListResponse;
 import com.hampay.common.core.model.response.dto.BusinessDTO;
 import com.hampay.mobile.android.R;
-import com.hampay.mobile.android.activity.PayBusinessActivity;
 import com.hampay.mobile.android.adapter.HamPayBusinessesAdapter;
-import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.doblist.DobList;
 import com.hampay.mobile.android.component.doblist.events.OnLoadMoreListener;
 import com.hampay.mobile.android.component.doblist.exceptions.NoEmptyViewException;
 import com.hampay.mobile.android.component.doblist.exceptions.NoListviewException;
+import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.webservice.WebServices;
 
 import java.util.ArrayList;
@@ -131,18 +128,6 @@ public class PayToBusinessFragment extends Fragment {
         loading_rl = (RelativeLayout)rootView.findViewById(R.id.loading_rl);
 
         businessListView = (ListView)rootView.findViewById(R.id.businessListView);
-
-//        businessListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Intent intent = new Intent();
-//                intent.setClass(getActivity(), PayBusinessActivity.class);
-//                intent.putExtra("business_name", businessDTOs.get(position).getTitle());
-//                intent.putExtra("business_code", businessDTOs.get(position).getCode());
-//                startActivity(intent);
-//
-//            }
-//        });
 
         new HttpHamPay‌Business().execute(false);
 

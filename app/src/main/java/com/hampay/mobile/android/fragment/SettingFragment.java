@@ -2,7 +2,6 @@ package com.hampay.mobile.android.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,17 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.hampay.common.common.response.ResponseMessage;
-import com.hampay.common.core.model.response.TransactionListResponse;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.activity.ChangeMemorableActivity;
 import com.hampay.mobile.android.activity.ChangePasswordActivity;
-import com.hampay.mobile.android.activity.TransactionDetailActivity;
 import com.hampay.mobile.android.adapter.SettingAdapter;
-import com.hampay.mobile.android.adapter.TransactionAdapter;
-import com.hampay.mobile.android.webservice.WebServices;
 
 /**
  * Created by amir on 6/5/15.

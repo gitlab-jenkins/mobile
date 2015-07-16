@@ -29,8 +29,6 @@ import com.hampay.mobile.android.webservice.WebServices;
 
 public class PasswordEntryActivity extends ActionBarActivity implements View.OnClickListener{
 
-//    CardView confirm_CardView;
-
     ButtonRectangle digit_1;
     ButtonRectangle digit_2;
     ButtonRectangle digit_3;

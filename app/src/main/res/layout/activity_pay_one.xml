@@ -36,118 +36,66 @@
 
     </RelativeLayout>
 
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_margin="20dp"
-            android:gravity="right">
+            android:orientation="vertical">
 
-            <com.hampay.mobile.android.component.FacedTextView
-                android:id="@+id/contact_name"
-                geekui:customTypeface="fonts/iran_sans.ttf"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:textSize="20sp"
-                android:gravity="right"
-                android:layout_marginRight="4dp"
-                android:text="ssss"/>
-
-            <com.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/iran_sans.ttf"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/normal_text"
-                android:textSize="20sp"
-                android:text="@string/pay_to"
-                android:gravity="right"
-                android:layout_gravity="right"
-                />
-
-        </LinearLayout>
-
-
-        <com.hampay.mobile.android.component.FacedTextView
-            geekui:customTypeface="fonts/iran_sans.ttf"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:text="@string/payment_message"
-            android:layout_marginRight="20dp"/>
-
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="96dp"
-            android:background="@drawable/entry_field_bg"
-            android:layout_marginLeft="18dp"
-            android:layout_marginRight="18dp">
-
-
-            <com.hampay.mobile.android.component.edittext.FacedEditText
-                android:id="@+id/contact_message"
+            <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="@android:color/transparent"
-                android:textSize="18sp"
-                android:padding="6dp"
-                android:textColor="@color/normal_text"
-                android:singleLine="true"
-                android:hint="@string/insert_message"
-                android:gravity="top"/>
-
-
-        </RelativeLayout>
-
-
-
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="right"
-            android:gravity="right"
-            android:layout_margin="20dp">
-
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="20dp"
+                android:gravity="right">
 
                 <com.hampay.mobile.android.component.FacedTextView
+                    android:id="@+id/contact_name"
                     geekui:customTypeface="fonts/iran_sans.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/black"
                     android:textSize="20sp"
-                    android:text="@string/price"
-                    android:layout_alignParentRight="true"/>
+                    android:gravity="right"
+                    android:layout_marginRight="4dp"
+                    android:text="ssss"/>
 
-                <ImageView
-                    android:id="@+id/credit_value_icon"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp" />
+                <com.hampay.mobile.android.component.FacedTextView
+                    geekui:customTypeface="fonts/iran_sans.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/normal_text"
+                    android:textSize="20sp"
+                    android:text="@string/pay_to"
+                    android:gravity="right"
+                    android:layout_gravity="right"
+                    />
 
-            </RelativeLayout>
+            </LinearLayout>
 
 
-
+            <com.hampay.mobile.android.component.FacedTextView
+                geekui:customTypeface="fonts/iran_sans.ttf"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:text="@string/payment_message"
+                android:layout_marginRight="20dp"/>
 
             <RelativeLayout
                 android:layout_width="fill_parent"
-                android:layout_height="48dp"
-                android:background="@drawable/entry_field_bg">
+                android:layout_height="96dp"
+                android:background="@drawable/entry_field_bg"
+                android:layout_marginLeft="18dp"
+                android:layout_marginRight="18dp">
 
 
                 <com.hampay.mobile.android.component.edittext.FacedEditText
-                    android:id="@+id/credit_value"
+                    android:id="@+id/contact_message"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:background="@android:color/transparent"
@@ -155,54 +103,112 @@
                     android:padding="6dp"
                     android:textColor="@color/normal_text"
                     android:singleLine="true"
-                    android:hint="@string/insert_price"
-                    android:inputType="number"
-                    android:lines="1"/>
+                    android:hint="@string/insert_message"
+                    android:gravity="top"/>
 
 
             </RelativeLayout>
 
-            <!--<com.hampay.mobile.android.component.edittext.FacedEditText-->
-            <!--android:id="@+id/credit_value"-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:hint="@string/insert_price"-->
-            <!--android:gravity="top"-->
-            <!--android:inputType="number"-->
-            <!--android:textColor="@android:color/black"/>-->
+
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="right"
+                android:gravity="right"
+                android:layout_margin="20dp">
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.hampay.mobile.android.component.FacedTextView
+                        geekui:customTypeface="fonts/iran_sans.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:textSize="20sp"
+                        android:text="@string/price"
+                        android:layout_alignParentRight="true"/>
+
+                    <ImageView
+                        android:id="@+id/credit_value_icon"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp" />
+
+                </RelativeLayout>
+
+
+
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="48dp"
+                    android:background="@drawable/entry_field_bg">
+
+
+                    <com.hampay.mobile.android.component.edittext.FacedEditText
+                        android:id="@+id/credit_value"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:background="@android:color/transparent"
+                        android:textSize="18sp"
+                        android:padding="6dp"
+                        android:textColor="@color/normal_text"
+                        android:singleLine="true"
+                        android:hint="@string/insert_price"
+                        android:inputType="number"
+                        android:lines="1"/>
+
+
+                </RelativeLayout>
+
+                <!--<com.hampay.mobile.android.component.edittext.FacedEditText-->
+                <!--android:id="@+id/credit_value"-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:hint="@string/insert_price"-->
+                <!--android:gravity="top"-->
+                <!--android:inputType="number"-->
+                <!--android:textColor="@android:color/black"/>-->
+
+            </LinearLayout>
+
+
+            <RelativeLayout
+                android:layout_width="120dp"
+                android:layout_height="50dp"
+                android:layout_margin="20dp">
+
+
+                <com.hampay.mobile.android.component.material.ButtonRectangle
+                    android:id="@+id/pay_to_one_button"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/register_btn_color"
+                    android:textSize="20sp" />
+
+                <com.hampay.mobile.android.component.FacedTextView
+                    geekui:customTypeface="fonts/iran_sans.ttf"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:text="@string/payment"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="2dp"/>
+
+            </RelativeLayout>
+
 
         </LinearLayout>
 
 
-        <RelativeLayout
-            android:layout_width="120dp"
-            android:layout_height="50dp"
-            android:layout_margin="20dp">
-
-
-            <com.hampay.mobile.android.component.material.ButtonRectangle
-                android:id="@+id/pay_to_one_button"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_centerHorizontal="true"
-                android:background="@color/register_btn_color"
-                android:textSize="20sp" />
-
-            <com.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/iran_sans.ttf"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:textColor="@android:color/white"
-                android:textSize="20sp"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:text="@string/payment"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"/>
-
-        </RelativeLayout>
-
-
-    </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

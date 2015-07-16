@@ -8,8 +8,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
@@ -19,16 +17,12 @@ import com.hampay.common.core.model.request.ContactUsRequest;
 import com.hampay.common.core.model.request.TACAcceptRequest;
 import com.hampay.common.core.model.response.ContactUsResponse;
 import com.hampay.common.core.model.response.TACAcceptResponse;
-import com.hampay.common.core.model.response.TACResponse;
 import com.hampay.common.core.model.response.dto.UserProfileDTO;
 import com.hampay.mobile.android.R;
-import com.hampay.mobile.android.activity.HamPayLoginActivity;
 import com.hampay.mobile.android.activity.MainActivity;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import com.hampay.mobile.android.async.RequestTAC;
 import com.hampay.mobile.android.async.RequestTACAccept;
 import com.hampay.mobile.android.component.FacedTextView;
-import com.hampay.mobile.android.serialize.UserProfile;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.webservice.WebServices;
 
@@ -38,7 +32,7 @@ import com.hampay.mobile.android.webservice.WebServices;
 public class HamPayDialog {
 
     Activity activity;
-    Dialog contactUsDialog;
+    Dialog dialog;
 
     public HamPayDialog(Activity activity){
 
@@ -61,18 +55,18 @@ public class HamPayDialog {
         retry_password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                contactUsDialog.dismiss();
+                dialog.dismiss();
             }
         });
 
         view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        contactUsDialog = new Dialog(activity);
-        contactUsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        contactUsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        contactUsDialog.setContentView(view);
-        contactUsDialog.setTitle(null);
-        contactUsDialog.setCanceledOnTouchOutside(false);
-        contactUsDialog.show();
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
     }
 
     public void showNoResultSearchDialog(){
@@ -89,18 +83,18 @@ public class HamPayDialog {
         retry_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                contactUsDialog.dismiss();
+                dialog.dismiss();
             }
         });
 
         view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        contactUsDialog = new Dialog(activity);
-        contactUsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        contactUsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        contactUsDialog.setContentView(view);
-        contactUsDialog.setTitle(null);
-        contactUsDialog.setCanceledOnTouchOutside(false);
-        contactUsDialog.show();
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
     }
 
 
@@ -118,18 +112,18 @@ public class HamPayDialog {
         retry_price.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                contactUsDialog.dismiss();
+                dialog.dismiss();
             }
         });
 
         view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        contactUsDialog = new Dialog(activity);
-        contactUsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        contactUsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        contactUsDialog.setContentView(view);
-        contactUsDialog.setTitle(null);
-        contactUsDialog.setCanceledOnTouchOutside(false);
-        contactUsDialog.show();
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
     }
 
 
@@ -153,7 +147,7 @@ public class HamPayDialog {
         send_message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                contactUsDialog.dismiss();
+                dialog.dismiss();
 
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                         "mailto", contactUsMail, null));
@@ -166,7 +160,7 @@ public class HamPayDialog {
         call_message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                contactUsDialog.dismiss();
+                dialog.dismiss();
 
                 Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + contactUsPhone));
                 activity.startActivity(intent);
@@ -174,14 +168,14 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        contactUsDialog = new Dialog(activity);
-        contactUsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        contactUsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        contactUsDialog.setContentView(view);
-        contactUsDialog.setTitle(null);
-        contactUsDialog.setCanceledOnTouchOutside(false);
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
 
-        contactUsDialog.show();
+        dialog.show();
     }
 
 
@@ -240,7 +234,7 @@ public class HamPayDialog {
         tac_reject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                contactUsDialog.dismiss();
+                dialog.dismiss();
                 activity.finish();
             }
         });
@@ -253,14 +247,14 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        contactUsDialog = new Dialog(activity);
-        contactUsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        contactUsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        contactUsDialog.setContentView(view);
-        contactUsDialog.setTitle(null);
-        contactUsDialog.setCanceledOnTouchOutside(false);
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
 
-        contactUsDialog.show();
+        dialog.show();
     }
 
     private ResponseMessage<TACAcceptResponse> tACAcceptResponse;
@@ -285,8 +279,8 @@ public class HamPayDialog {
 
                 activity.finish();
 
-                if (contactUsDialog != null && contactUsDialog.isShowing()){
-                    contactUsDialog.dismiss();
+                if (dialog != null && dialog.isShowing()){
+                    dialog.dismiss();
                 }
 
 //                Intent intent = new Intent(activity, MainActivity.class);
@@ -310,6 +304,44 @@ public class HamPayDialog {
         public void onTaskPreRun() {
 //            loading_rl.setVisibility(View.VISIBLE);
         }
+    }
+
+
+    public void showExitDialog(){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_exit_app, null);
+
+        FacedTextView exit_app_yes = (FacedTextView) view.findViewById(R.id.exit_app_yes);
+        FacedTextView exit_app_no = (FacedTextView) view.findViewById(R.id.exit_app_no);
+
+        exit_app_yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                activity.finish();
+            }
+        });
+
+        exit_app_no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
+
+        dialog.show();
     }
 
 

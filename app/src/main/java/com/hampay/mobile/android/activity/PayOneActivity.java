@@ -18,12 +18,15 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
 import com.hampay.common.core.model.response.IndividualPaymentResponse;
+import com.hampay.common.core.model.response.TACResponse;
 import com.hampay.mobile.android.Helper.DatabaseHelper;
 import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.edittext.CurrencyFormatter;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
@@ -242,6 +245,48 @@ public class PayOneActivity extends ActionBarActivity {
         }
     }
 
+
+
+//
+//    public class RequestTACResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<TACResponse>>
+//    {
+//        public RequestTACResponseTaskCompleteListener(){
+//        }
+//
+//        @Override
+//        public void onTaskComplete(ResponseMessage<TACResponse> tacResponseMessage)
+//        {
+////            loading_rl.setVisibility(View.GONE);
+//            if (tacResponseMessage.getService().getResultStatus() != null) {
+//
+//                if (tacResponseMessage.getService().getShouldAcceptTAC()){
+//
+//                    (new HamPayDialog(activity)).showTACAcceptDialog(tacResponseMessage.getService().getTac());
+//
+//                }
+//                else {
+//                    Intent intent = new Intent();
+//
+//                    intent.setClass(activity, MainActivity.class);
+//                    intent.putExtra(Constants.USER_PROFILE_DTO, tacResponseMessage.getService().getUserProfile());
+//                    startActivity(intent);
+//
+//                    finish();
+//                }
+//
+//            }
+//            else {
+//                Toast.makeText(context, getString(R.string.no_network), Toast.LENGTH_SHORT).show();
+//            }
+//
+//        }
+//
+//        @Override
+//        public void onTaskPreRun() {
+////            loading_rl.setVisibility(View.VISIBLE);
+//        }
+//    }
+
     ResponseMessage<IndividualPaymentResponse> individualPaymentResponse;
 
     public class HttpIndividualPayment  extends AsyncTask<String, Void, String> {
@@ -290,7 +335,6 @@ public class PayOneActivity extends ActionBarActivity {
 
                 recentPay = new RecentPay();
 
-
                 if (!dbHelper.getExistRecentPay(contactPhoneNo)) {
 
                     recentPay = new RecentPay();
@@ -307,9 +351,6 @@ public class PayOneActivity extends ActionBarActivity {
                     dbHelper.updateRecentPay(recentPay);
                 }
 
-
-
-
                 view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
                 dialog_pay_one = new Dialog(PayOneActivity.this);
                 dialog_pay_one.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -320,8 +361,6 @@ public class PayOneActivity extends ActionBarActivity {
 
                 dialog_pay_one.show();
             }
-
-
         }
     }
 

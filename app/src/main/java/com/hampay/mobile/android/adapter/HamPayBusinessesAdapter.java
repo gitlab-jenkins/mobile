@@ -2,7 +2,6 @@ package com.hampay.mobile.android.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.ViewGroup;
 import com.hampay.common.core.model.response.dto.BusinessDTO;
@@ -14,15 +13,14 @@ import com.hampay.mobile.android.component.material.ButtonRectangle;
 /**
  * Created by amir on 6/26/15.
  */
-public class HamPayBusinessesAdapter extends GenericAdapter<BusinessDTO> {
+public class HamPayBusinessesAdapter extends HamPayBusinessesGenericAdapter<BusinessDTO> {
 
 
     Context context;
+    BusinessDTO businessDTO;
 
     public HamPayBusinessesAdapter(Context context) {
         super(context);
-
-
         this.context = context;
     }
 
@@ -47,7 +45,7 @@ public class HamPayBusinessesAdapter extends GenericAdapter<BusinessDTO> {
             viewHolder = (ViewHolder)convertView.getTag();
         }
 
-        final BusinessDTO businessDTO = getItem(position);
+        businessDTO = getItem(position);
 
 
         viewHolder.business_name.setText(businessDTO.getTitle());

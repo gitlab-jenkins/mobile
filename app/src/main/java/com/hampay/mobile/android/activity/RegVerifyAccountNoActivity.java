@@ -23,6 +23,7 @@ import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.material.ButtonFlat;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
+import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.NetworkConnectivity;
 
 public class RegVerifyAccountNoActivity extends ActionBarActivity {
@@ -53,7 +54,7 @@ public class RegVerifyAccountNoActivity extends ActionBarActivity {
         prefs = getPreferences(MODE_PRIVATE);
 
         bundle = getIntent().getExtras();
-        TransferMoneyComment = bundle.getString("TransferMoneyComment");
+        TransferMoneyComment = bundle.getString(Constants.TRANSFER_MONEY_COMMENT);
 
         loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
         networkConnectivity = new NetworkConnectivity(this);

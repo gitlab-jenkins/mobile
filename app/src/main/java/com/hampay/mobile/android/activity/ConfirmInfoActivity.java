@@ -440,7 +440,7 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                 if (verifyAccountResponseMessage.getService().getTransferMoneyComment().length() > 0 ) {
                     Intent intent = new Intent();
                     intent.setClass(ConfirmInfoActivity.this, RegVerifyAccountNoActivity.class);
-                    intent.putExtra("TransferMoneyComment", verifyAccountResponseMessage.getService().getTransferMoneyComment());
+                    intent.putExtra(Constants.TRANSFER_MONEY_COMMENT, verifyAccountResponseMessage.getService().getTransferMoneyComment());
                     startActivity(intent);
                 }
             }

@@ -67,9 +67,9 @@
     <string name="call">تماس</string>
     <string name="hampay_contact">ارتباط با هم پی</string>
     <string name="pay_to">پرداخت به:   </string>
-    <string name="price">مبلغ(ریال)</string>
+    <string name="price">مبلغ (ریال)</string>
 
-    <string name="payment_message">پیام(اختیاری)</string>
+    <string name="payment_message">پیام (اختیاری)</string>
 
     <string name="fill_data">اطلاعات را کامل و دقیق وارد کنید.</string>
     <string name="msg_cellNumber_invalid">شماره همراه خود را صحیح وارد کنید</string>

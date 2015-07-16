@@ -175,41 +175,6 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
     }
 
 
-//
-//    public class HttpTACResponse extends AsyncTask<TACRequest, Void, String> {
-//
-//        @Override
-//        protected String doInBackground(TACRequest... params) {
-//
-//            WebServices webServices = new WebServices(getApplicationContext());
-//            tACResponse = webServices.tACResponse(params[0]);
-//
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//        }
-//
-//        @Override
-//        protected void onPostExecute(String s) {
-//            super.onPostExecute(s);
-//
-//            if (tACResponse.getService().getResultStatus() != null) {
-//
-//
-//                Intent intent = new Intent();
-//                intent.setClass(HamPayLoginActivity.this, MainActivity.class);
-////                intent.addCategory(Intent.CATEGORY_HOME);
-////                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-//                startActivity(intent);
-//                finish();
-//
-//            }
-//        }
-//    }
 
     @Override
     public void onClick(View v) {

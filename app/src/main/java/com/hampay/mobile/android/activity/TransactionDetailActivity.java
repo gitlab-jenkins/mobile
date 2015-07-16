@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -13,7 +11,7 @@ import android.widget.LinearLayout;
 import com.hampay.common.core.model.response.dto.TransactionDTO;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.component.FacedTextView;
-import com.hampay.mobile.android.fragment.TransactionFragment;
+import com.hampay.mobile.android.fragment.UserTransactionFragment;
 import com.hampay.mobile.android.util.JalaliConvert;
 
 public class TransactionDetailActivity extends ActionBarActivity implements View.OnClickListener{
@@ -67,7 +65,7 @@ public class TransactionDetailActivity extends ActionBarActivity implements View
 
         index = bundle.getInt("index", 0);
 
-        transaction = TransactionFragment.transactionListResponse.getService().getTransactions().get(index);
+        transaction = UserTransactionFragment.transactionDTOs.get(index);
 
         if (transaction.getTransactionStatus().ordinal() == 0){
 
