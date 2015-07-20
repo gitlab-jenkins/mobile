@@ -1,5 +1,6 @@
 package com.hampay.mobile.android.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -28,11 +29,11 @@ import java.util.List;
  */
 public class PayOneAdapter extends SectionedBaseAdapter{
 
-    Context mContext;
+    Activity mContext;
     private List<RecentPay> recentPays;
     private List<EnabledHamPay> enabledHamPays;
 
-    public  PayOneAdapter(Context context, List<RecentPay> recentPays, List<EnabledHamPay> enabledHamPays){
+    public  PayOneAdapter(Activity context, List<RecentPay> recentPays, List<EnabledHamPay> enabledHamPays){
         mContext = context;
 
         this.recentPays = recentPays;
@@ -129,7 +130,7 @@ public class PayOneAdapter extends SectionedBaseAdapter{
                     intent.setClass(mContext, PayOneActivity.class);
                     intent.putExtra("contact_name", recentPay.getName());
                     intent.putExtra("contact_phone_no", recentPay.getPhone());
-                    mContext.startActivity(intent);
+                    mContext.startActivityForResult(intent, 111);
                 }
             });
 
@@ -146,7 +147,7 @@ public class PayOneAdapter extends SectionedBaseAdapter{
                     intent.setClass(mContext, PayOneActivity.class);
                     intent.putExtra("contact_name", enabledHamPay.getDisplayName());
                     intent.putExtra("contact_phone_no", enabledHamPay.getCellNumber());
-                    mContext.startActivity(intent);
+                    mContext.startActivityForResult(intent, 111);
                 }
             });
 

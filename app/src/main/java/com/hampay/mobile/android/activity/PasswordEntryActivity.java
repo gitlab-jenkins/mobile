@@ -63,6 +63,8 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
 
     Context context;
 
+    RelativeLayout loading_rl;
+
     public void contactUs(View view){
         new HamPayDialog(this).showContactUsDialog();
     }
@@ -74,6 +76,8 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
         setContentView(R.layout.activity_password_entry);
 
         activity = PasswordEntryActivity.this;
+
+        loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
 
         keyboard = (LinearLayout)findViewById(R.id.keyboard);
         password_holder = (LinearLayout)findViewById(R.id.password_holder);
@@ -118,65 +122,7 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
         input_digit_4 = (ImageView)findViewById(R.id.input_digit_4);
         input_digit_5 = (ImageView)findViewById(R.id.input_digit_5);
 
-
-//        confirm_CardView = (CardView)findViewById(R.id.confirm_CardView);
-//        confirm_CardView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//
-//
-//            }
-//        });
     }
-
-
-//    private ResponseMessage<RegistrationPassCodeEntryResponse> registrationPassCodeEntryResponse;
-//
-//    public class HttpRegistrationPassCodeEntryResponse extends AsyncTask<RegistrationPassCodeEntryRequest, Void, String> {
-//
-//        @Override
-//        protected String doInBackground(RegistrationPassCodeEntryRequest... params) {
-//
-//            WebServices webServices = new WebServices(getApplicationContext());
-//            registrationPassCodeEntryResponse = webServices.registrationPassCodeEntryResponse(params[0]);
-//
-//
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//        }
-//
-//        @Override
-//        protected void onPostExecute(String s) {
-//            super.onPostExecute(s);
-//
-//            if (registrationPassCodeEntryResponse.getService().getResultStatus() != null) {
-//
-//                password_1_rl.setVisibility(View.VISIBLE);
-//                password_2_rl.setVisibility(View.INVISIBLE);
-//
-//                inputPasswordValue = "";
-//                inputRePasswordValue = "";
-//
-//                input_digit_1.setImageResource(R.drawable.pass_icon_2);
-//                input_digit_2.setImageResource(R.drawable.pass_icon_2);
-//                input_digit_3.setImageResource(R.drawable.pass_icon_2);
-//                input_digit_4.setImageResource(R.drawable.pass_icon_2);
-//                input_digit_5.setImageResource(R.drawable.pass_icon_2);
-//
-//                Intent intent = new Intent();
-//                intent.setClass(PasswordEntryActivity.this, RememberPhraseActivity.class);
-//                startActivity(intent);
-//
-//            }
-//        }
-//    }
-
-
 
     public class RequestPassCodeEntryResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationPassCodeEntryResponse>>
     {
@@ -186,6 +132,8 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
         @Override
         public void onTaskComplete(ResponseMessage<RegistrationPassCodeEntryResponse> passCodeEntryResponseMessage)
         {
+
+            loading_rl.setVisibility(View.GONE);
 
             if (passCodeEntryResponseMessage != null) {
                 password_1_rl.setVisibility(View.VISIBLE);
@@ -210,6 +158,7 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
 
         @Override
         public void onTaskPreRun() {
+            loading_rl.setVisibility(View.VISIBLE);
         }
     }
 
@@ -433,6 +382,7 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
                             RegistrationPassCodeEntryRequest registrationPassCodeEntryRequest = new RegistrationPassCodeEntryRequest();
                             registrationPassCodeEntryRequest.setUserIdToken(prefs.getString("UserIdToken", ""));
                             registrationPassCodeEntryRequest.setPassCode(inputPasswordValue);
+
                             new RequestPassCodeEntry(context, new RequestPassCodeEntryResponseTaskCompleteListener()).execute(registrationPassCodeEntryRequest);
 
                         } else {

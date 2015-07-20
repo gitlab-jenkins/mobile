@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.request.RegistrationMemorableWordEntryRequest;
@@ -39,6 +40,8 @@ public class RememberPhraseActivity extends ActionBarActivity {
 
     Activity activity;
 
+    RelativeLayout loading_rl;
+
     public void contactUs(View view){
         new HamPayDialog(this).showContactUsDialog();
     }
@@ -49,6 +52,8 @@ public class RememberPhraseActivity extends ActionBarActivity {
         setContentView(R.layout.activity_remember_phrase);
 
         activity = RememberPhraseActivity.this;
+
+        loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
 
@@ -83,6 +88,7 @@ public class RememberPhraseActivity extends ActionBarActivity {
         @Override
         public void onTaskComplete(ResponseMessage<RegistrationMemorableWordEntryResponse> registrationMemorableWordEntryResponseMessage) {
 
+            loading_rl.setVisibility(View.GONE);
 
             if (registrationMemorableWordEntryResponseMessage.getService().getResultStatus() != null) {
 
@@ -99,7 +105,7 @@ public class RememberPhraseActivity extends ActionBarActivity {
 
         @Override
         public void onTaskPreRun() {
-
+            loading_rl.setVisibility(View.VISIBLE);
         }
     }
 

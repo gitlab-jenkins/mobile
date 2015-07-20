@@ -49,7 +49,6 @@ public class SplashActivity extends Activity {
 
                     Intent intent = new Intent(getBaseContext(), IntroSliderActivity.class);
                     startActivity(intent);
-                    overridePendingTransition(R.anim.activity_left_right_transition, R.anim.activity_right_left_transition);
 
                     finish();
 

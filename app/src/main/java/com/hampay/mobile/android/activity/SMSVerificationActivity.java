@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
@@ -61,10 +62,14 @@ public class SMSVerificationActivity extends ActionBarActivity implements View.O
 
     SharedPreferences.Editor editor;
 
+    RelativeLayout loading_rl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sms_verification);
+
+        loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
 
         activity = SMSVerificationActivity.this;
 
@@ -155,6 +160,7 @@ public class SMSVerificationActivity extends ActionBarActivity implements View.O
         {
 
             verify_button.setEnabled(true);
+            loading_rl.setVisibility(View.GONE);
             if (registrationVerifyMobileResponseMessage != null) {
                 Intent intent = new Intent();
                 intent.setClass(SMSVerificationActivity.this, ConfirmAccountNoActivity.class);
@@ -168,6 +174,8 @@ public class SMSVerificationActivity extends ActionBarActivity implements View.O
 
         @Override
         public void onTaskPreRun() {
+            keyboard.setVisibility(View.GONE);
+            loading_rl.setVisibility(View.VISIBLE);
         }
     }
 

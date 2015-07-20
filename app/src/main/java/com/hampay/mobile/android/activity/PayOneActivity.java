@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -32,6 +33,7 @@ import com.hampay.mobile.android.component.edittext.CurrencyFormatter;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
+import com.hampay.mobile.android.fragment.PayToOneFragment;
 import com.hampay.mobile.android.model.RecentPay;
 import com.hampay.mobile.android.util.Constant;
 import com.hampay.mobile.android.util.Constants;
@@ -364,13 +366,17 @@ public class PayOneActivity extends ActionBarActivity {
         }
     }
 
+
+
     @Override
     public void onBackPressed() {
 
+        PayToOneFragment.updatePayments();
+
         if (intentContact){
-            Intent intent = new Intent();
-            intent.setClass(this, MainActivity.class);
-            startActivity(intent);
+            Intent i = new Intent();
+            i.setClass(this, MainActivity.class);
+            startActivity(i);
         }
 
         finish();

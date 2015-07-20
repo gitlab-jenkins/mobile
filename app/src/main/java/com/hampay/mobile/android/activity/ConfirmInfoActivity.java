@@ -81,6 +81,8 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
 
     String validIpAddress = "";
 
+    LinearLayout correct_info;
+
     private ResponseMessage<RegistrationConfirmUserDataResponse> registrationConfirmUserDataResponse;
 
     public void contactUs(View view){
@@ -99,6 +101,8 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
         setContentView(R.layout.activity_confirm_info);
 
         activity = ConfirmInfoActivity.this;
+
+        correct_info = (LinearLayout)findViewById(R.id.correct_info);
 
         new RequestIpProvider(context, new RequestValidIpTaskCompleteListener()).execute();
 
@@ -457,7 +461,9 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
         public void onTaskComplete(ResponseMessage<RegistrationFetchUserDataResponse> registrationFetchUserDataResponseMessage)
         {
             loading_rl.setVisibility(View.GONE);
+
             if (registrationFetchUserDataResponseMessage.getService().getResultStatus() != null) {
+                correct_info.setVisibility(View.VISIBLE);
                 cellNumberValue.setText(registrationFetchUserDataResponseMessage.getService().getCellNumber());
                 userFamilyValue.setText(registrationFetchUserDataResponseMessage.getService().getFulName());
                 accountNumberValue.setText(registrationFetchUserDataResponseMessage.getService().getAccountNumber());

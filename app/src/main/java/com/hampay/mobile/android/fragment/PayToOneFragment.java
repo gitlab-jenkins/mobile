@@ -57,9 +57,9 @@ import java.util.List;
  */
 public class PayToOneFragment extends Fragment {
 
-    DatabaseHelper dbHelper;
-    List<RecentPay> recentPays;
-    List<EnabledHamPay> enabledHamPays;
+    static DatabaseHelper dbHelper;
+    static List<RecentPay> recentPays;
+    static List<EnabledHamPay> enabledHamPays;
     List<RecentPay> searchRecentPays;
     List<EnabledHamPay> searchEnabledHamPay;
     RelativeLayout loading_rl;
@@ -67,7 +67,7 @@ public class PayToOneFragment extends Fragment {
 //    ResponseMessage<ContactsHampayEnabledResponse> contactsHampayEnabledResponse;
     List<ContactDTO> contactDTOs;
 
-    PinnedHeaderListView pinnedHeaderListView;
+    static PinnedHeaderListView pinnedHeaderListView;
 
     FacedEditText searchPhraseText;
 
@@ -77,13 +77,31 @@ public class PayToOneFragment extends Fragment {
 
     boolean searchEnabled = false;
 
-    boolean onResume = false;
+//    boolean onResume = false;
 
-    Activity context;
+    static Activity context;
 
-    PayOneAdapter payOneAdapter;
+    static PayOneAdapter payOneAdapter;
 
     public PayToOneFragment() {
+    }
+
+
+    public static void updatePayments(){
+
+        recentPays = dbHelper.getAllRecentPays();
+        enabledHamPays = dbHelper.getAllEnabledHamPay();
+
+        if (enabledHamPays.size() > 0) {
+
+            if (enabledHamPays.size() > 0) {
+                payOneAdapter = new PayOneAdapter(context,
+                        recentPays,
+                        enabledHamPays);
+                pinnedHeaderListView.setAdapter(payOneAdapter);
+            }
+        }
+
     }
 
     @Override
@@ -107,7 +125,7 @@ public class PayToOneFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_pay_to_one, container, false);
 
-        onResume = false;
+//        onResume = false;
 
         inputMethodManager = (InputMethodManager)getActivity().getSystemService(
                 Context.INPUT_METHOD_SERVICE);
@@ -227,30 +245,6 @@ public class PayToOneFragment extends Fragment {
         return rootView;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (onResume) {
-
-            recentPays = dbHelper.getAllRecentPays();
-            enabledHamPays = dbHelper.getAllEnabledHamPay();
-
-            if (enabledHamPays != null && enabledHamPays.size() > 0) {
-
-                payOneAdapter = new PayOneAdapter(getActivity(),
-                        recentPays,
-                        enabledHamPays);
-                pinnedHeaderListView.setAdapter(payOneAdapter);
-
-                loading_rl.setVisibility(View.GONE);
-            } else {
-                new HttpHamPayContact().execute();
-            }
-        }
-
-    }
-
     private void performPayToOneSearch(String searchPhrase, boolean searchEnabled){
 
         inputMethodManager.hideSoftInputFromWindow(searchPhraseText.getWindowToken(), 0);
@@ -296,6 +290,8 @@ public class PayToOneFragment extends Fragment {
         }
 
     }
+
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -344,12 +340,17 @@ public class PayToOneFragment extends Fragment {
 
                 }
 
-                new RequestUpdateEnabledHamPay(context, new RequestUpdateEnableHamPayTaskCompleteListener()).execute(enabledHamPays);
+//                new RequestUpdateEnabledHamPay(context, new RequestUpdateEnableHamPayTaskCompleteListener()).execute(enabledHamPays);
 
             }
 
             return null;
+
+
         }
+
+
+
 
         private void addNewAccount(String accountType, String authTokenType) {
             final AccountManagerFuture<Bundle> future = AccountManager.get(getActivity())
@@ -401,7 +402,7 @@ public class PayToOneFragment extends Fragment {
 //                    pinnedHeaderListView.setAdapter(sectionedAdapter);
 //                }
 
-                onResume = true;
+//                onResume = true;
 
 //                new RequestUpdateEnabledHamPay(context, new RequestUpdateEnableHamPayTaskCompleteListener()).execute(enabledHamPays);
 
@@ -417,10 +418,6 @@ public class PayToOneFragment extends Fragment {
                 loading_rl.setVisibility(View.GONE);
 
             }
-
-
-
-
         }
     }
 
