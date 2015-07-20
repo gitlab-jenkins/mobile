@@ -1,5 +1,6 @@
 package com.hampay.mobile.android.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
@@ -20,10 +21,14 @@ public class ConfirmAccountNoActivity extends ActionBarActivity {
 
     SharedPreferences.Editor editor;
 
+    Activity activity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_account_no);
+
+        activity = ConfirmAccountNoActivity.this;
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ConfirmAccountNoActivity.class.toString());
@@ -47,5 +52,10 @@ public class ConfirmAccountNoActivity extends ActionBarActivity {
         new HamPayDialog(this).showContactUsDialog();
     }
 
+
+    @Override
+    public void onBackPressed() {
+        new HamPayDialog(activity).showExitRegistrationDialog();
+    }
 
 }

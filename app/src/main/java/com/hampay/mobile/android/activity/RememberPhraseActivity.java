@@ -1,5 +1,6 @@
 package com.hampay.mobile.android.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -36,6 +37,8 @@ public class RememberPhraseActivity extends ActionBarActivity {
 
     Context context;
 
+    Activity activity;
+
     public void contactUs(View view){
         new HamPayDialog(this).showContactUsDialog();
     }
@@ -44,6 +47,8 @@ public class RememberPhraseActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_remember_phrase);
+
+        activity = RememberPhraseActivity.this;
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
 
@@ -97,4 +102,10 @@ public class RememberPhraseActivity extends ActionBarActivity {
 
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        new HamPayDialog(activity).showExitRegistrationDialog();
+    }
+
 }

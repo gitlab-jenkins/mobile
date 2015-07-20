@@ -1,5 +1,6 @@
 package com.hampay.mobile.android.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
@@ -18,6 +19,7 @@ public class CompleteRegistrationActivity extends ActionBarActivity {
 
     ButtonRectangle hampay_login_button;
 
+    Activity activity;
 
     public void contactUs(View view){
         (new HamPayDialog(this)).showContactUsDialog();
@@ -28,7 +30,7 @@ public class CompleteRegistrationActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_complete_registration);
 
-
+        activity = CompleteRegistrationActivity.this;
 
         hampay_login_button = (ButtonRectangle)findViewById(R.id.hampay_login_button);
         hampay_login_button.setOnClickListener(new View.OnClickListener() {
@@ -41,5 +43,9 @@ public class CompleteRegistrationActivity extends ActionBarActivity {
         });
     }
 
+//    @Override
+//    public void onBackPressed() {
+//        new HamPayDialog(activity).showExitRegistrationDialog();
+//    }
 
 }

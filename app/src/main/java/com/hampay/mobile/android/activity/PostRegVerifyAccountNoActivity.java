@@ -1,5 +1,6 @@
 package com.hampay.mobile.android.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
@@ -12,6 +13,8 @@ import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 
 public class PostRegVerifyAccountNoActivity extends ActionBarActivity {
+
+    Activity activity;
 
     ButtonRectangle keepOn_button;
 
@@ -26,7 +29,9 @@ public class PostRegVerifyAccountNoActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pre_password);
+        setContentView(R.layout.activity_post_reg_verify_account);
+
+        activity = PostRegVerifyAccountNoActivity.this;
 
         loading_rl = (RelativeLayout) findViewById(R.id.loading_rl);
 
@@ -46,6 +51,11 @@ public class PostRegVerifyAccountNoActivity extends ActionBarActivity {
         });
     }
 
+
+    @Override
+    public void onBackPressed() {
+        new HamPayDialog(activity).showExitRegistrationDialog();
+    }
 
 }
 

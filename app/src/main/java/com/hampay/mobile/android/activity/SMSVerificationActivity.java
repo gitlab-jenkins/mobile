@@ -1,5 +1,6 @@
 package com.hampay.mobile.android.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,6 +26,9 @@ import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.NetworkConnectivity;
 
 public class SMSVerificationActivity extends ActionBarActivity implements View.OnClickListener{
+
+
+    Activity activity;
 
     ButtonRectangle verify_button;
 
@@ -340,6 +344,11 @@ public class SMSVerificationActivity extends ActionBarActivity implements View.O
                 receivedSmsValue += digit;
             }
         }
-
     }
+
+    @Override
+    public void onBackPressed() {
+        new HamPayDialog(activity).showExitRegistrationDialog();
+    }
+
 }

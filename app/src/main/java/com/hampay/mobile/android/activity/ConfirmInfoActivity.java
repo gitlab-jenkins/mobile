@@ -45,6 +45,8 @@ import com.hampay.mobile.android.util.NetworkConnectivity;
 
 public class ConfirmInfoActivity extends ActionBarActivity implements View.OnClickListener {
 
+    Activity activity;
+
     ButtonRectangle correct_button;
     RelativeLayout correct_button_rl;
     ButtonRectangle keeOn_without_button;
@@ -95,6 +97,8 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_info);
+
+        activity = ConfirmInfoActivity.this;
 
         new RequestIpProvider(context, new RequestValidIpTaskCompleteListener()).execute();
 
@@ -517,6 +521,11 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
         @Override
         public void onTaskPreRun() {
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        new HamPayDialog(activity).showExitRegistrationDialog();
     }
 
 }

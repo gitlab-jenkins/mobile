@@ -43,6 +43,7 @@ import com.hampay.mobile.android.util.NetworkConnectivity;
 
 public class ProfileEntryActivity extends ActionBarActivity {
 
+    Activity activity;
 
     ButtonRectangle keepOn_button;
     RelativeLayout bankSelection;
@@ -85,6 +86,8 @@ public class ProfileEntryActivity extends ActionBarActivity {
         setContentView(R.layout.activity_profile_entry);
 
         context = this;
+
+        activity = this;
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
@@ -434,6 +437,11 @@ public class ProfileEntryActivity extends ActionBarActivity {
             keepOn_button.setEnabled(false);
             loading_rl.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        new HamPayDialog(activity).showExitRegistrationDialog();
     }
 
 }

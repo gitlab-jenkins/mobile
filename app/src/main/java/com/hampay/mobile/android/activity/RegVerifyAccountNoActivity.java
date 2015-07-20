@@ -1,5 +1,6 @@
 package com.hampay.mobile.android.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -37,6 +38,8 @@ public class RegVerifyAccountNoActivity extends ActionBarActivity {
     Bundle bundle;
     String TransferMoneyComment;
 
+    Activity activity;
+
     public void contactUs(View view){
         new HamPayDialog(this).showContactUsDialog();
     }
@@ -45,6 +48,8 @@ public class RegVerifyAccountNoActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reg_verify_account_no);
+
+        activity = RegVerifyAccountNoActivity.this;
 
         prefs = getPreferences(MODE_PRIVATE);
 
@@ -111,5 +116,10 @@ public class RegVerifyAccountNoActivity extends ActionBarActivity {
         public void onTaskPreRun() {
             loading_rl.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        new HamPayDialog(activity).showExitRegistrationDialog();
     }
 }

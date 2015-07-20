@@ -1,5 +1,6 @@
 package com.hampay.mobile.android.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,6 +29,8 @@ import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.webservice.WebServices;
 
 public class PasswordEntryActivity extends ActionBarActivity implements View.OnClickListener{
+
+    Activity activity;
 
     ButtonRectangle digit_1;
     ButtonRectangle digit_2;
@@ -69,6 +72,8 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password_entry);
+
+        activity = PasswordEntryActivity.this;
 
         keyboard = (LinearLayout)findViewById(R.id.keyboard);
         password_holder = (LinearLayout)findViewById(R.id.password_holder);
@@ -447,11 +452,14 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
                             input_digit_4.setImageResource(R.drawable.pass_icon_2);
                             input_digit_5.setImageResource(R.drawable.pass_icon_2);
                         }
-
                         break;
                 }
             }
         }
+    }
 
+    @Override
+    public void onBackPressed() {
+        new HamPayDialog(activity).showExitRegistrationDialog();
     }
 }

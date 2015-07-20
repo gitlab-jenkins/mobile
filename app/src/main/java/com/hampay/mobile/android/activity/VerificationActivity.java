@@ -1,5 +1,6 @@
 package com.hampay.mobile.android.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,6 +32,8 @@ public class VerificationActivity extends ActionBarActivity {
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
+    Activity activity;
+
     public void contactUs(View view){
         new HamPayDialog(this).showContactUsDialog();
     }
@@ -39,6 +42,8 @@ public class VerificationActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verification);
+
+        activity = VerificationActivity.this;
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
@@ -96,6 +101,11 @@ public class VerificationActivity extends ActionBarActivity {
             keepOn_button.setEnabled(false);
             loading_rl.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        new HamPayDialog(activity).showExitRegistrationDialog();
     }
 
 }
