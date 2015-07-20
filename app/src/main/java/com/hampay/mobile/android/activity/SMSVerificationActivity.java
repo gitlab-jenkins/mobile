@@ -66,6 +66,8 @@ public class SMSVerificationActivity extends ActionBarActivity implements View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sms_verification);
 
+        activity = SMSVerificationActivity.this;
+
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         editor.putString(Constants.REGISTERED_ACTIVITY_DATA, SMSVerificationActivity.class.toString());
         editor.commit();

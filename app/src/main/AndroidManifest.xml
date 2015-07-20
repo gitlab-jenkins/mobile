@@ -36,8 +36,8 @@
         </activity>
         <activity
             android:name=".activity.IntroSliderActivity"
-            android:label="@string/title_activity_intro_slider"
-            android:hardwareAccelerated="true">
+            android:hardwareAccelerated="true"
+            android:label="@string/title_activity_intro_slider" >
         </activity>
         <activity
             android:name=".activity.StartActivity"
@@ -54,7 +54,7 @@
         </activity>
         <activity
             android:name=".activity.VerificationActivity"
-            android:label="@string/title_activity_verification">
+            android:label="@string/title_activity_verification" >
         </activity>
         <activity
             android:name=".activity.SMSVerificationActivity"

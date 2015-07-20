@@ -385,7 +385,8 @@
                             android:hint="@string/account_no"
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
-                            android:padding="8dp"/>
+                            android:padding="8dp"
+                            android:focusable="false"/>
 
                         <ImageView
                             android:id="@+id/accountNumberIcon"

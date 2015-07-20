@@ -347,6 +347,7 @@ public class ProfileEntryActivity extends ActionBarActivity {
                 accountNumberValue.setFilters(new InputFilter[]{new InputFilter.LengthFilter(accountNumberFormat.length())});
 //                accountNumberHint.setHint(bankListResponse.getService().getBanks().get(position).getAccountFormat());
                 bankSelectionDialog.dismiss();
+                accountNumberValue.setFocusableInTouchMode(true);
             }
         });
 
@@ -379,10 +380,10 @@ public class ProfileEntryActivity extends ActionBarActivity {
         {
             bankListResponse = bankListResponseMessage;
             if (bankListResponseMessage != null) {
-                selectedBankTitle.setText(bankListResponseMessage.getService().getBanks().get(0).getTitle());
-                selectedBankCode = bankListResponseMessage.getService().getBanks().get(0).getCode();
-                accountNumberFormat = bankListResponse.getService().getBanks().get(0).getAccountFormat();
-                accountNumberValue.setFilters(new InputFilter[]{new InputFilter.LengthFilter(accountNumberFormat.length())});
+//                selectedBankTitle.setText(bankListResponseMessage.getService().getBanks().get(0).getTitle());
+//                selectedBankCode = bankListResponseMessage.getService().getBanks().get(0).getCode();
+//                accountNumberFormat = bankListResponse.getService().getBanks().get(0).getAccountFormat();
+//                accountNumberValue.setFilters(new InputFilter[]{new InputFilter.LengthFilter(accountNumberFormat.length())});
 
 //                accountNumberHint.setHint(bankListResponse.getService().getBanks().get(0).getAccountFormat());
                 loading_rl.setVisibility(View.GONE);

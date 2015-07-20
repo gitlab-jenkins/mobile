@@ -111,7 +111,7 @@
     <string name="last_login">آخرین زمان ورود به سامانه </string>
     <string name="title_activity_start">StartActivity</string>
 
-    <string name="bank_name">نام بانک</string>
+    <string name="bank_name">انتخاب بانک</string>
 
     <string name="contact_us">ارتباط با ما</string>
     <string name="user_mail">ایمیل شما</string>
@@ -318,5 +318,6 @@
     <string name="title_activity_congrats_account">CongratsAccountActivity</string>
     <string name="title_activity_animation_start">AnimationStartActivity</string>
     <string name="title_activity_animation_detail">AnimationDetailActivity</string>
+    <string name="title_activity_slider">SliderActivity</string>
 
 </resources>
