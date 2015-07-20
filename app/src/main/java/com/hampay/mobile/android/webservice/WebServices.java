@@ -1179,7 +1179,7 @@ public class WebServices  {
 
 
 
-    public ResponseMessage<ContactsHampayEnabledResponse>  getHamPayContacts(){
+    public ResponseMessage<ContactsHampayEnabledResponse>  getEnabledHamPayContacts(){
 
         ResponseMessage<ContactsHampayEnabledResponse> contactsHampayEnabledResponse = null;
 
@@ -1678,25 +1678,19 @@ public class WebServices  {
 
         Cursor phones = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null,null, null);
 
-
-        int count = 0;
+        int index = 0;
 
         while (phones.moveToNext()) {
             String contact_name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             String contact_phone_no = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
-
             ContactDTO contactDTO = new ContactDTO();
             contactDTO.setCellNumber(contact_phone_no);
             contactDTO.setDisplayName(contact_name);
 
             contactDTOs.add(contactDTO);
 
-            count++;
-
-            if(count > 30){
-                break;
-            }
+            index++;
+            if (index > 10) break;
 
         }
         phones.close();

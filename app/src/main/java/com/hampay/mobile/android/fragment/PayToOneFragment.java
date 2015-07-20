@@ -24,21 +24,29 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.dto.ContactDTO;
 import com.hampay.common.core.model.response.ContactsHampayEnabledResponse;
+import com.hampay.common.core.model.response.TACResponse;
 import com.hampay.mobile.android.Helper.DatabaseHelper;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.account.AccountGeneral;
 import com.hampay.mobile.android.account.ContactsManager;
 import com.hampay.mobile.android.account.HamPayContact;
+import com.hampay.mobile.android.activity.MainActivity;
 import com.hampay.mobile.android.activity.PayOneActivity;
 import com.hampay.mobile.android.adapter.PayOneAdapter;
+import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import com.hampay.mobile.android.async.RequestTAC;
+import com.hampay.mobile.android.async.RequestUpdateEnabledHamPay;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.sectionlist.PinnedHeaderListView;
 import com.hampay.mobile.android.dialog.HamPayDialog;
+import com.hampay.mobile.android.model.EnabledHamPay;
 import com.hampay.mobile.android.model.RecentPay;
+import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.webservice.WebServices;
 
 import java.util.ArrayList;
@@ -51,11 +59,13 @@ public class PayToOneFragment extends Fragment {
 
     DatabaseHelper dbHelper;
     List<RecentPay> recentPays;
+    List<EnabledHamPay> enabledHamPays;
     List<RecentPay> searchRecentPays;
-    List<ContactDTO> searchContactDTOs;
+    List<EnabledHamPay> searchEnabledHamPay;
     RelativeLayout loading_rl;
 
-    ResponseMessage<ContactsHampayEnabledResponse> contactsHampayEnabledResponse;
+//    ResponseMessage<ContactsHampayEnabledResponse> contactsHampayEnabledResponse;
+    List<ContactDTO> contactDTOs;
 
     PinnedHeaderListView pinnedHeaderListView;
 
@@ -69,6 +79,10 @@ public class PayToOneFragment extends Fragment {
 
     boolean onResume = false;
 
+    Activity context;
+
+    PayOneAdapter payOneAdapter;
+
     public PayToOneFragment() {
     }
 
@@ -78,10 +92,9 @@ public class PayToOneFragment extends Fragment {
 
         dbHelper = new DatabaseHelper(getActivity());
 
-        recentPays = dbHelper.getAllRecentPays();
 
         searchRecentPays = new ArrayList<RecentPay>();
-        searchContactDTOs = new ArrayList<ContactDTO>();
+        searchEnabledHamPay = new ArrayList<EnabledHamPay>();
 
 //        for (RecentPay pay : recentPays){
 //            Log.e("PAY", pay.getId() + ": " + pay.getName());
@@ -94,10 +107,12 @@ public class PayToOneFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_pay_to_one, container, false);
 
+        onResume = false;
+
         inputMethodManager = (InputMethodManager)getActivity().getSystemService(
                 Context.INPUT_METHOD_SERVICE);
 
-        new HttpHamPayContact().execute();
+        context = getActivity();
 
         loading_rl = (RelativeLayout)rootView.findViewById(R.id.loading_rl);
 
@@ -148,51 +163,66 @@ public class PayToOneFragment extends Fragment {
         });
 
         pinnedHeaderListView = (PinnedHeaderListView)rootView.findViewById(R.id.pinnedListView);
-        pinnedHeaderListView.setOnItemClickListener(new PinnedHeaderListView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int section, int position, long id) {
-
-                if (searchEnabled){
-
-                    if (section == 0) {
+//        pinnedHeaderListView.setOnItemClickListener(new PinnedHeaderListView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int section, int position, long id) {
+//
+//                if (searchEnabled){
+//
+//                    if (section == 0) {
 //                        Intent intent = new Intent();
 //                        intent.setClass(getActivity(), PayOneActivity.class);
 //                        intent.putExtra("contact_name", searchRecentPays.get(position).getName());
 //                        intent.putExtra("contact_phone_no", searchRecentPays.get(position).getPhone());
 //                        startActivity(intent);
-                    } else if (section == 1) {
+//                    } else if (section == 1) {
 //                        Intent intent = new Intent();
 //                        intent.setClass(getActivity(), PayOneActivity.class);
 //                        intent.putExtra("contact_name", searchContactDTOs.get(position).getDisplayName());
 //                        intent.putExtra("contact_phone_no", searchContactDTOs.get(position).getCellNumber());
 //                        startActivity(intent);
-                    }
-
-                }else {
-
-                    if (section == 0) {
+//                    }
+//
+//                }else {
+//
+//                    if (section == 0) {
 //                        Intent intent = new Intent();
 //                        intent.setClass(getActivity(), PayOneActivity.class);
 //                        intent.putExtra("contact_name", recentPays.get(position).getName());
 //                        intent.putExtra("contact_phone_no", recentPays.get(position).getPhone());
 //                        startActivity(intent);
-                    } else if (section == 1) {
+//                    } else if (section == 1) {
 //                        Intent intent = new Intent();
 //                        intent.setClass(getActivity(), PayOneActivity.class);
 //                        intent.putExtra("contact_name", contactsHampayEnabledResponse.getService().getContacts().get(position).getDisplayName());
 //                        intent.putExtra("contact_phone_no", contactsHampayEnabledResponse.getService().getContacts().get(position).getCellNumber());
 //                        startActivity(intent);
-                    }
-                }
+//                    }
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onSectionClick(AdapterView<?> adapterView, View view, int section, long id) {
+//
+//            }
+//        });
 
+        recentPays = dbHelper.getAllRecentPays();
+        enabledHamPays = dbHelper.getAllEnabledHamPay();
+
+        if (enabledHamPays.size() > 0) {
+
+            if (enabledHamPays.size() > 0) {
+                payOneAdapter = new PayOneAdapter(getActivity(),
+                        recentPays,
+                        enabledHamPays);
+                pinnedHeaderListView.setAdapter(payOneAdapter);
             }
+            loading_rl.setVisibility(View.GONE);
+        }
 
-            @Override
-            public void onSectionClick(AdapterView<?> adapterView, View view, int section, long id) {
-
-            }
-        });
-
+        new HttpHamPayContact().execute();
 
         return rootView;
     }
@@ -204,21 +234,20 @@ public class PayToOneFragment extends Fragment {
         if (onResume) {
 
             recentPays = dbHelper.getAllRecentPays();
+            enabledHamPays = dbHelper.getAllEnabledHamPay();
 
-            if (contactsHampayEnabledResponse != null &&
-                    contactsHampayEnabledResponse.getService().getContacts().size() > 0) {
+            if (enabledHamPays != null && enabledHamPays.size() > 0) {
 
-                PayOneAdapter sectionedAdapter = new PayOneAdapter(getActivity(),
+                payOneAdapter = new PayOneAdapter(getActivity(),
                         recentPays,
-                        contactsHampayEnabledResponse.getService().getContacts());
-                pinnedHeaderListView.setAdapter(sectionedAdapter);
+                        enabledHamPays);
+                pinnedHeaderListView.setAdapter(payOneAdapter);
 
                 loading_rl.setVisibility(View.GONE);
+            } else {
+                new HttpHamPayContact().execute();
             }
         }
-//        else {
-//            new HttpHamPayContact().execute();
-//        }
 
     }
 
@@ -230,7 +259,7 @@ public class PayToOneFragment extends Fragment {
         if (searchEnabled) {
 
             searchRecentPays.clear();
-            searchContactDTOs.clear();
+            searchEnabledHamPay.clear();
 
             for (RecentPay recentPay : recentPays) {
                 if (recentPay.getName().toLowerCase().contains(searchPhrase.toLowerCase())
@@ -239,28 +268,30 @@ public class PayToOneFragment extends Fragment {
                 }
             }
 
-            for (ContactDTO contactDTO : contactsHampayEnabledResponse.getService().getContacts()) {
-                if (contactDTO.getDisplayName().toLowerCase().contains(searchPhrase.toLowerCase())
-                        || contactDTO.getCellNumber().toLowerCase().contains(searchPhrase.toLowerCase())) {
-                    searchContactDTOs.add(contactDTO);
+
+
+            for (EnabledHamPay enabledHamPay : enabledHamPays) {
+                if (enabledHamPay.getDisplayName().toLowerCase().contains(searchPhrase.toLowerCase())
+                        || enabledHamPay.getCellNumber().toLowerCase().contains(searchPhrase.toLowerCase())) {
+                    searchEnabledHamPay.add(enabledHamPay);
                 }
             }
 
-            if (searchRecentPays.size() == 0 && searchContactDTOs.size() == 0){
+            if (searchRecentPays.size() == 0 && searchEnabledHamPay.size() == 0){
                 (new HamPayDialog(getActivity())).showNoResultSearchDialog();
             }else {
-                PayOneAdapter sectionedAdapter = new PayOneAdapter(getActivity(),
+                payOneAdapter = new PayOneAdapter(getActivity(),
                         searchRecentPays,
-                        searchContactDTOs);
-                pinnedHeaderListView.setAdapter(sectionedAdapter);
+                        searchEnabledHamPay);
+                pinnedHeaderListView.setAdapter(payOneAdapter);
             }
 
         }else {
 
-            PayOneAdapter sectionedAdapter = new PayOneAdapter(getActivity(),
+            payOneAdapter = new PayOneAdapter(getActivity(),
                     recentPays,
-                    contactsHampayEnabledResponse.getService().getContacts());
-            pinnedHeaderListView.setAdapter(sectionedAdapter);
+                    enabledHamPays);
+            pinnedHeaderListView.setAdapter(payOneAdapter);
 
         }
 
@@ -283,22 +314,37 @@ public class PayToOneFragment extends Fragment {
         protected String doInBackground(Void... params) {
 
             WebServices webServices = new WebServices(getActivity());
-            contactsHampayEnabledResponse = webServices.getHamPayContacts();
+//            contactsHampayEnabledResponse = webServices.getEnabledHamPayContacts();
 
-            ContentResolver resolver = getActivity().getContentResolver();
-            resolver.delete(ContactsContract.RawContacts.CONTENT_URI, ContactsContract.RawContacts.ACCOUNT_TYPE + " = ?", new String[]{AccountGeneral.ACCOUNT_TYPE});
-
-            for (ContactDTO contactDTO : contactsHampayEnabledResponse.getService().getContacts()){
+            contactDTOs = webServices.getEnabledHamPayContacts().getService().getContacts();
 
 
+            if (contactDTOs.size() > 0) {
 
-                addNewAccount(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
-                ContactsManager.addContact(getActivity(), new HamPayContact("",
-                        contactDTO.getDisplayName(),
-                        "",
-                        contactDTO.getCellNumber()));
+                ContentResolver resolver = getActivity().getContentResolver();
+                resolver.delete(ContactsContract.RawContacts.CONTENT_URI, ContactsContract.RawContacts.ACCOUNT_TYPE + " = ?", new String[]{AccountGeneral.ACCOUNT_TYPE});
 
-                Log.e("Create", contactDTO.getDisplayName());
+                dbHelper.deleteEnabledHamPays();
+
+                for (ContactDTO contactDTO : contactDTOs) {
+
+                    EnabledHamPay enabledHamPay = new EnabledHamPay();
+                    enabledHamPay.setCellNumber(contactDTO.getCellNumber());
+                    enabledHamPay.setDisplayName(contactDTO.getDisplayName());
+
+                    dbHelper.createEnabledHamPay(enabledHamPay);
+
+//                addNewAccount(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
+//                ContactsManager.addContact(getActivity(), new HamPayContact("",
+//                        contactDTO.getDisplayName(),
+//                        "",
+//                        contactDTO.getCellNumber()));
+//
+//                Log.e("Create", contactDTO.getDisplayName());
+
+                }
+
+                new RequestUpdateEnabledHamPay(context, new RequestUpdateEnableHamPayTaskCompleteListener()).execute(enabledHamPays);
 
             }
 
@@ -331,21 +377,68 @@ public class PayToOneFragment extends Fragment {
 
             if (isAdded()){
 
-                if (contactsHampayEnabledResponse != null) {
 
-                    PayOneAdapter sectionedAdapter = new PayOneAdapter(getActivity(),
+                if (payOneAdapter == null){
+                    enabledHamPays = dbHelper.getAllEnabledHamPay();
+                    payOneAdapter = new PayOneAdapter(getActivity(),
                             recentPays,
-                            contactsHampayEnabledResponse.getService().getContacts());
-                    pinnedHeaderListView.setAdapter(sectionedAdapter);
-
+                            enabledHamPays);
+                    pinnedHeaderListView.setAdapter(payOneAdapter);
                 }
+
+//                enabledHamPays = dbHelper.getAllEnabledHamPay();
+//
+//                Log.e("Enabled Length:", enabledHamPays.size() + "");
+//
+//                for (EnabledHamPay enabledHamPay : enabledHamPays){
+//                    Log.e("Display Name", enabledHamPay.getDisplayName());
+//                }
+
+//                if (enabledHamPays.size() > 0){
+//                    PayOneAdapter sectionedAdapter = new PayOneAdapter(getActivity(),
+//                            recentPays,
+//                            enabledHamPays);
+//                    pinnedHeaderListView.setAdapter(sectionedAdapter);
+//                }
+
+                onResume = true;
+
+//                new RequestUpdateEnabledHamPay(context, new RequestUpdateEnableHamPayTaskCompleteListener()).execute(enabledHamPays);
+
+//                if (contactsHampayEnabledResponse != null) {
+//
+//                    PayOneAdapter sectionedAdapter = new PayOneAdapter(getActivity(),
+//                            recentPays,
+//                            contactsHampayEnabledResponse.getService().getContacts());
+//                    pinnedHeaderListView.setAdapter(sectionedAdapter);
+//
+//                }
 
                 loading_rl.setVisibility(View.GONE);
 
             }
 
-            onResume = true;
 
+
+
+        }
+    }
+
+
+
+    public class RequestUpdateEnableHamPayTaskCompleteListener implements AsyncTaskCompleteListener<List<EnabledHamPay>>
+    {
+        public RequestUpdateEnableHamPayTaskCompleteListener(){
+        }
+
+        @Override
+        public void onTaskComplete(List<EnabledHamPay> enabledHamPays)
+        {
+            Log.e("length", enabledHamPays.size() + "");
+        }
+
+        @Override
+        public void onTaskPreRun() {
 
         }
     }

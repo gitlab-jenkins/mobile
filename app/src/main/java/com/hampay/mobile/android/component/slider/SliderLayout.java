@@ -559,11 +559,12 @@ public class SliderLayout extends RelativeLayout{
 
     public enum PresetIndicators{
         Center_Bottom("Center_Bottom",R.id.default_center_bottom_indicator),
-        Right_Bottom("Right_Bottom",R.id.default_bottom_right_indicator),
-        Left_Bottom("Left_Bottom",R.id.default_bottom_left_indicator),
-        Center_Top("Center_Top",R.id.default_center_top_indicator),
-        Right_Top("Right_Top",R.id.default_center_top_right_indicator),
-        Left_Top("Left_Top",R.id.default_center_top_left_indicator);
+//        Right_Bottom("Right_Bottom",R.id.default_bottom_right_indicator),
+//        Left_Bottom("Left_Bottom",R.id.default_bottom_left_indicator),
+//        Center_Top("Center_Top",R.id.default_center_top_indicator),
+//        Right_Top("Right_Top",R.id.default_center_top_right_indicator),
+//        Left_Top("Left_Top",R.id.default_center_top_left_indicator)
+        ;
 
         private final String name;
         private final int id;

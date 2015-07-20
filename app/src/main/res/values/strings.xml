@@ -1,4 +1,5 @@
 <resources>
+
     <string name="app_name">هم‌پی</string>
 
     <string name="provider_name">TV Shows</string>
@@ -16,6 +17,8 @@
     <string name="intro_4">مشاهده حساب های مرتبط</string>
     <string name="intro_5">نمایش پرداخت ها و دریافت های گذشته</string>
 
+
+    <string name="msg_fail_sms_verification">کد ۵ رقمی را کامل وارد کنید</string>
 
     <string name="action_search">Search</string>
     <string name="drawer_open">Open</string>
@@ -64,7 +67,9 @@
     <string name="message">پیام</string>
     <string name="insert_message">پیام خود را بنویسید...</string>
     <string name="insert_price">مبلغ دلخواه خود را به ریال وارد کنید</string>
-    <string name="call">تماس</string>
+    <string name="transaction_user_call">تماس</string>
+    <string name="transaction_user_message">پیامک</string>
+
     <string name="hampay_contact">ارتباط با هم پی</string>
     <string name="pay_to">پرداخت به:   </string>
     <string name="price">مبلغ (ریال)</string>
@@ -94,6 +99,11 @@
         مجدد تلاش کنید
     </string>
 
+
+    <string name="lorm">[32] But I must explain to you how all this mistaken idea of denouncing of a pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?
+
+[33] On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammeled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains.</string>
+
     <string name="detail_transaction">جزئیات تراکنش</string>
     <string name="account_no">شماره حساب </string>
     <string name="mobile_no">شماره همراه </string>
@@ -109,15 +119,16 @@
     <string name="send_message">ارسال پیام</string>
     <string name="call_message">تماس با اپراتور</string>
 
-    <string name="dismatch_password">اشتباه در انتخاب رمزعبور
-    \n
-        مجدد تلاش کنید
-    </string>
-    <string name="retry_password">قبول</string>
+    <string name="dismatch_password">تغییر رمزعبور با مشکل مواجه شد. لطفا مجدد تلاش کنید</string>
+    <string name="retry_password">باشه</string>
 
     <string name="tac_title">شرایط استفاده سرویس</string>
     <string name="tac_accept">قبول دارم</string>
     <string name="tac_reject">قبول ندارم</string>
+
+    <string name="remove_password_text">برای حذف رمزعبور نیاز به ثبت نام مجدد می باشد.</string>
+    <string name="re_registeration">ثبت نام مجدد</string>
+    <string name="cancel_remove_password">انصراف</string>
 
 
     <string name="no_result_search">جستجوی مورد نظر نتیجه ای در بر نداشت!</string>
@@ -210,6 +221,8 @@
     <string name="get_current_memorable">دریافت کلمه یادآوری جاری</string>
     <string name="get_new_memorable">دریافت کلمه یادآوری جدید</string>
 
+    <string name="remove_password">حذف رمزعبور</string>
+
     <string name="remember_phrase">یادآوری</string>
     <string name="remember_phrase_text">لطفا یک کلمه کوتاه به عنوان یادآوری رمز عبور وارد نمایید.</string>
     <string name="title_activity_complete_registration">CompleteRegistrationActivity</string>
@@ -262,6 +275,10 @@
     <string name="disConfirmation">منصرف شدم</string>
     <string name="pay_one_ref">واریز وجه شما با کد پیگیری %1$s ثبت شد.</string>
 
+    <string name="pay_confirm">انجام</string>
+    <string name="pay_disconfirm">منصرف شدم</string>
+    <string name="pay_ok">باشه</string>
+
     <string name="attention">توجه</string>
     <string name="confirm_info_text">بدون بررسی صحت حساب، شما قادر به واریز وجه به سایر دوستان خود در شبکه هم‌پی نبوده ولی میتوانید از دوستان خود وجه دریافت نمایید.</string>
     <string name="confirm_info_question">آیا مایل به بررسی صحت حساب خود هستید؟</string>
@@ -294,5 +311,7 @@
     <string name="title_activity_change_memorable_pass">ChangeMemorablePassActivity</string>
     <string name="title_activity_verify_account">VerifyAccountActivity</string>
     <string name="title_activity_congrats_account">CongratsAccountActivity</string>
+    <string name="title_activity_animation_start">AnimationStartActivity</string>
+    <string name="title_activity_animation_detail">AnimationDetailActivity</string>
 
 </resources>

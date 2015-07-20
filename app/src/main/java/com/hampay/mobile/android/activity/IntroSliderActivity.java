@@ -2,23 +2,13 @@ package com.hampay.mobile.android.activity;
 
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.CardView;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hampay.mobile.android.R;
-import com.hampay.mobile.android.adapter.TransformerAdapter;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.component.slider.Animations.DescriptionAnimation;
@@ -53,6 +43,7 @@ public class IntroSliderActivity extends ActionBarActivity implements BaseSlider
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClass(IntroSliderActivity.this, StartActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
             }
         });
@@ -80,9 +71,9 @@ public class IntroSliderActivity extends ActionBarActivity implements BaseSlider
                     .setOnSliderClickListener(this);
 
             //add your extra information
-            textSliderView.bundle(new Bundle());
-            textSliderView.getBundle()
-                    .putString("extra", name);
+//            textSliderView.bundle(new Bundle());
+//            textSliderView.getBundle()
+//                    .putString("extra", name);
 
             mDemoSlider.addSlider(textSliderView);
         }
@@ -105,34 +96,6 @@ public class IntroSliderActivity extends ActionBarActivity implements BaseSlider
     public void onSliderClick(BaseSliderView slider) {
         //Toast.makeText(this,slider.getBundle().get("extra") + "",Toast.LENGTH_SHORT).show();
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater menuInflater = getMenuInflater();
-//        menuInflater.inflate(R.menu.main,menu);
-//        return super.onCreateOptionsMenu(menu);
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()){
-//            case R.id.action_custom_indicator:
-//                mDemoSlider.setCustomIndicator((PagerIndicator) findViewById(R.id.custom_indicator));
-//                break;
-//            case R.id.action_custom_child_animation:
-//                mDemoSlider.setCustomAnimation(new ChildAnimationExample());
-//                break;
-//            case R.id.action_restore_default:
-//                mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
-//                mDemoSlider.setCustomAnimation(new DescriptionAnimation());
-//                break;
-//            case R.id.action_github:
-//                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/daimajia/AndroidImageSlider"));
-//                startActivity(browserIntent);
-//                break;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
 
 
     ImageView intro_icon;

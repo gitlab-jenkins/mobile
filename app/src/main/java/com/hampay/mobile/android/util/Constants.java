@@ -18,7 +18,9 @@ public class Constants {
     public static final String REGISTERED_USER_ID_TOKEN = "registeredUserIdToken";
     public static final String REGISTERED_USER_FAMILY = "registeredUserFamily";
 
-    public static final String RECENT_PAY_TO_ONE_LIMIT = "20";
+    public static final String RECENT_PAY_TO_ONE_LIMIT = "10";
+
+    public static final String VALID_IP_ADDRESS_SERVICE = "http://www.telize.com/ip";
 
     public static final String ARGS_URI = "com.pooyabyte.varadid.android.messaging.ARGS_URI";
     public static final String ARGS_PARAMS = "com.pooyabyte.varadid.android.messaging.ARGS_PARAMS";

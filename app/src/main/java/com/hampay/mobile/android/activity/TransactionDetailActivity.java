@@ -90,7 +90,7 @@ public class TransactionDetailActivity extends ActionBarActivity implements View
         user_name.setText(transaction.getPersonName());
         date_time.setText((new JalaliConvert()).GregorianToPersian(transaction.getTransactionDate()));
         message.setText(transaction.getMessage());
-        price_pay.setText(getString(R.string.price) + ": "+ String.format("%,d", transaction.getAmount()).replace(",", ".") + " "+ getString(R.string.currency_rials));
+        price_pay.setText(String.format("%,d", transaction.getAmount()).replace(",", "."));
         user_mobile_no.setText(transaction.getMobileNumber());
         date_time.setText(getString(R.string.transaction_date) + " " + (new JalaliConvert()).GregorianToPersian(transaction.getTransactionDate()));
         tracking_code.setText(transaction.getReference());

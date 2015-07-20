@@ -18,6 +18,7 @@ import com.hampay.mobile.android.activity.PayOneActivity;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.component.sectionlist.SectionedBaseAdapter;
+import com.hampay.mobile.android.model.EnabledHamPay;
 import com.hampay.mobile.android.model.RecentPay;
 
 import java.util.List;
@@ -28,15 +29,14 @@ import java.util.List;
 public class PayOneAdapter extends SectionedBaseAdapter{
 
     Context mContext;
-    //    private List<ContactDTO> contactDTOs1;
     private List<RecentPay> recentPays;
-    private List<ContactDTO> contactDTOs2;
+    private List<EnabledHamPay> enabledHamPays;
 
-    public  PayOneAdapter(Context context, List<RecentPay> recentPays, List<ContactDTO> contactDTOs2){
+    public  PayOneAdapter(Context context, List<RecentPay> recentPays, List<EnabledHamPay> enabledHamPays){
         mContext = context;
 
         this.recentPays = recentPays;
-        this.contactDTOs2 = contactDTOs2;
+        this.enabledHamPays = enabledHamPays;
 
     }
 
@@ -62,7 +62,7 @@ public class PayOneAdapter extends SectionedBaseAdapter{
         if(section == 0) {
             return recentPays.size();
         }else if (section == 1){
-            return contactDTOs2.size();
+            return enabledHamPays.size();
         }
         return 0;
     }
@@ -135,17 +135,17 @@ public class PayOneAdapter extends SectionedBaseAdapter{
 
         }else{
 
-            final ContactDTO contactDTO = contactDTOs2.get(position);
-            contact_name.setText(contactDTO.getDisplayName());
-            contact_phone_no.setText(contactDTO.getCellNumber());
+            final EnabledHamPay enabledHamPay = enabledHamPays.get(position);
+            contact_name.setText(enabledHamPay.getDisplayName());
+            contact_phone_no.setText(enabledHamPay.getCellNumber());
 
             pay_to_one_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent();
                     intent.setClass(mContext, PayOneActivity.class);
-                    intent.putExtra("contact_name", contactDTO.getDisplayName());
-                    intent.putExtra("contact_phone_no", contactDTO.getCellNumber());
+                    intent.putExtra("contact_name", enabledHamPay.getDisplayName());
+                    intent.putExtra("contact_phone_no", enabledHamPay.getCellNumber());
                     mContext.startActivity(intent);
                 }
             });

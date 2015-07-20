@@ -247,6 +247,7 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        view.setMinimumHeight((int) (displayRectangle.height() * 0.5f));
         dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -327,6 +328,43 @@ public class HamPayDialog {
         });
 
         exit_app_no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
+
+        dialog.show();
+    }
+
+    public void showRemovePasswordDialog(){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_remove_password, null);
+
+        FacedTextView re_registeration = (FacedTextView) view.findViewById(R.id.re_registeration);
+        FacedTextView cancel_remove_password = (FacedTextView) view.findViewById(R.id.cancel_remove_password);
+
+        re_registeration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                activity.finish();
+            }
+        });
+
+        cancel_remove_password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();

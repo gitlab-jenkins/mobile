@@ -41,7 +41,7 @@ public class SMSVerificationActivity extends ActionBarActivity implements View.O
     ButtonRectangle resend_active_code;
     ButtonRectangle backspace;
 
-    String inputStringValue = "";
+    String receivedSmsValue = "";
 
     FacedTextView input_digit_1;
     FacedTextView input_digit_2;
@@ -70,8 +70,6 @@ public class SMSVerificationActivity extends ActionBarActivity implements View.O
         activation_holder = (LinearLayout)findViewById(R.id.activation_holder);
         activation_holder.setOnClickListener(this);
 
-
-        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, VerificationActivity.class.toString());
         editor.commit();
 
 
@@ -116,17 +114,23 @@ public class SMSVerificationActivity extends ActionBarActivity implements View.O
             @Override
             public void onClick(View v) {
 
-                if (networkConnectivity.isNetworkConnected()) {
+                if (receivedSmsValue.length() == 5) {
 
-                    RegistrationVerifyMobileRequest registrationVerifyMobileRequest = new RegistrationVerifyMobileRequest();
-                    SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+                    if (networkConnectivity.isNetworkConnected()) {
 
-                    registrationVerifyMobileRequest.setUserIdToken(prefs.getString("UserIdToken", ""));
-                    registrationVerifyMobileRequest.setSmsToken(inputStringValue);
+                        RegistrationVerifyMobileRequest registrationVerifyMobileRequest = new RegistrationVerifyMobileRequest();
+                        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
 
-                    new RequestVerifyMobile(context, new RequestRegistrationVerifyMobileTaskCompleteListener()).execute(registrationVerifyMobileRequest);
+                        registrationVerifyMobileRequest.setUserIdToken(prefs.getString("UserIdToken", ""));
+                        registrationVerifyMobileRequest.setSmsToken(receivedSmsValue);
+
+                        verify_button.setEnabled(false);
+                        new RequestVerifyMobile(context, new RequestRegistrationVerifyMobileTaskCompleteListener()).execute(registrationVerifyMobileRequest);
+                    } else {
+                        Toast.makeText(context, getString(R.string.no_network), Toast.LENGTH_SHORT).show();
+                    }
                 }else {
-                    Toast.makeText(context, getString(R.string.no_network), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, getString(R.string.msg_fail_sms_verification), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -144,10 +148,13 @@ public class SMSVerificationActivity extends ActionBarActivity implements View.O
         public void onTaskComplete(ResponseMessage<RegistrationVerifyMobileResponse> registrationVerifyMobileResponseMessage)
         {
 
+            verify_button.setEnabled(true);
             if (registrationVerifyMobileResponseMessage != null) {
                 Intent intent = new Intent();
                 intent.setClass(SMSVerificationActivity.this, ConfirmAccountNoActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
+                finish();
             }else {
                 Toast.makeText(context, getString(R.string.no_network), Toast.LENGTH_SHORT).show();
             }
@@ -225,9 +232,9 @@ public class SMSVerificationActivity extends ActionBarActivity implements View.O
 
         Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
-        if (inputStringValue.length() <= 4) {
+        if (receivedSmsValue.length() <= 4) {
 
-            switch (inputStringValue.length()) {
+            switch (receivedSmsValue.length()) {
 
                 case 0:
                     if (digit.equalsIgnoreCase("d")) {
@@ -309,28 +316,28 @@ public class SMSVerificationActivity extends ActionBarActivity implements View.O
         }
 
         if (digit.contains("d")){
-            if (inputStringValue.length() > 0) {
-                inputStringValue = inputStringValue.substring(0, inputStringValue.length() - 1);
-                if (inputStringValue.length() == 4){
+            if (receivedSmsValue.length() > 0) {
+                receivedSmsValue = receivedSmsValue.substring(0, receivedSmsValue.length() - 1);
+                if (receivedSmsValue.length() == 4){
                     input_digit_5.setText("");
                 }
-                else if (inputStringValue.length() == 3){
+                else if (receivedSmsValue.length() == 3){
                     input_digit_4.setText("");
                 }
-                else if (inputStringValue.length() == 2){
+                else if (receivedSmsValue.length() == 2){
                     input_digit_3.setText("");
                 }
-                else if (inputStringValue.length() == 1){
+                else if (receivedSmsValue.length() == 1){
                     input_digit_2.setText("");
                 }
-                else if (inputStringValue.length() == 0){
+                else if (receivedSmsValue.length() == 0){
                     input_digit_1.setText("");
                 }
             }
         }
         else {
-            if (inputStringValue.length() <= 4) {
-                inputStringValue += digit;
+            if (receivedSmsValue.length() <= 4) {
+                receivedSmsValue += digit;
             }
         }
 

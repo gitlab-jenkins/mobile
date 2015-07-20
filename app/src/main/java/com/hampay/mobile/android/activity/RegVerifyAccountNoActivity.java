@@ -5,22 +5,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
-import com.hampay.common.core.model.request.RegistrationVerifyAccountRequest;
 import com.hampay.common.core.model.request.RegistrationVerifyTransferMoneyRequest;
-import com.hampay.common.core.model.response.RegistrationVerifyAccountResponse;
 import com.hampay.common.core.model.response.RegistrationVerifyTransferMoneyResponse;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import com.hampay.mobile.android.async.RequestRegisterVerifyAccount;
 import com.hampay.mobile.android.async.RequestRegistrationVerifyTransferMoney;
 import com.hampay.mobile.android.component.FacedTextView;
-import com.hampay.mobile.android.component.material.ButtonFlat;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
@@ -103,9 +98,10 @@ public class RegVerifyAccountNoActivity extends ActionBarActivity {
 
                 if (verifyTransferMoneyResponseMessage.getService().getIsVerified()){
                     Intent intent = new Intent();
-                    intent.setClass(RegVerifyAccountNoActivity.this, PrePasswordActivity.class);
+                    intent.setClass(RegVerifyAccountNoActivity.this, PostRegVerifyAccountNoActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(intent);
-
+                    finish();
                 }
             }
 

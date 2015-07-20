@@ -440,30 +440,34 @@
                     </RelativeLayout>
 
 
-
                     <LinearLayout
-                        android:id="@+id/confirm_check_ll"
-                        android:layout_width="fill_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:orientation="horizontal"
                         android:gravity="center"
-                        android:layout_margin="12dp">
+                        android:layout_margin="12dp"
+                        android:layout_gravity="center_horizontal">
 
-                        <com.hampay.mobile.android.component.FacedTextView
-                            geekui:customTypeface="fonts/iran_sans.ttf"
+                        <LinearLayout
+                            android:id="@+id/confirm_check_ll"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/normal_text"
-                            android:textSize="22sp"
-                            android:text="@string/correct_data" />
+                            android:layout_height="wrap_content">
 
+                            <com.hampay.mobile.android.component.FacedTextView
+                                geekui:customTypeface="fonts/iran_sans.ttf"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/normal_text"
+                                android:textSize="22sp"
+                                android:text="@string/correct_data" />
+
+                        </LinearLayout>
 
                         <com.hampay.mobile.android.component.material.CheckBox
                             android:id="@+id/confirm_check"
                             android:layout_width="38dp"
                             android:layout_height="38dp"
-                            android:background="@color/register_btn_color"
-                            android:clickable="false"/>
-
+                            android:background="@color/register_btn_color" />
 
                     </LinearLayout>
 

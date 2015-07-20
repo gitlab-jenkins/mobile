@@ -86,7 +86,8 @@
                 android:gravity="center"
                 android:textColor="@android:color/black"
                 android:layout_gravity="center_horizontal"
-                android:background="@drawable/remember_edittext_bg"/>
+                android:background="@drawable/remember_edittext_bg"
+                android:singleLine="true"/>
 
 
 

@@ -10,13 +10,12 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -28,14 +27,12 @@ import com.hampay.common.core.model.request.BankListRequest;
 import com.hampay.common.core.model.request.RegistrationEntryRequest;
 import com.hampay.common.core.model.response.BankListResponse;
 import com.hampay.common.core.model.response.RegistrationEntryResponse;
-import com.hampay.common.core.model.response.dto.UserProfileDTO;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.adapter.BankListAdapter;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestBankList;
 import com.hampay.mobile.android.async.RequestRegistrationEntry;
 import com.hampay.mobile.android.component.FacedTextView;
-import com.hampay.mobile.android.component.edittext.AccountNoFormat;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
@@ -43,8 +40,6 @@ import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.DeviceInfo;
 import com.hampay.mobile.android.util.NationalCodeVerification;
 import com.hampay.mobile.android.util.NetworkConnectivity;
-
-import java.util.Arrays;
 
 public class ProfileEntryActivity extends ActionBarActivity {
 
@@ -225,6 +220,11 @@ public class ProfileEntryActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
+                cellNumberValue.clearFocus();
+                accountNumberValue.clearFocus();
+                nationalCodeValue.clearFocus();
+                bankSelection.requestFocus();
+
                 if (bankListResponse != null && bankListResponse.getService().getBanks().size() > 0) {
                     showListBankDialog();
                 }else {
@@ -251,6 +251,13 @@ public class ProfileEntryActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
+                View view = getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(
+                            Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+
                 cellNumberValue.clearFocus();
                 nationalCodeValue.clearFocus();
                 accountNumberValue.clearFocus();
@@ -262,6 +269,8 @@ public class ProfileEntryActivity extends ActionBarActivity {
                             && nationalCodeValue.getText().toString().length() > 0
                             && accountNumberValue.getText().toString().length() > 0) {
 
+                        keepOn_button.setEnabled(false);
+
                         RegistrationEntryRequest registrationEntryRequest = new RegistrationEntryRequest();
 
                         registrationEntryRequest.setCellNumber(cellNumberValue.getText().toString());
@@ -269,8 +278,6 @@ public class ProfileEntryActivity extends ActionBarActivity {
                         registrationEntryRequest.setBankCode(selectedBankCode);
                         registrationEntryRequest.setNationalCode(nationalCodeValue.getText().toString());
                         registrationEntryRequest.setImei(new DeviceInfo(getApplicationContext()).getIMEI());
-
-
 
                         new RequestRegistrationEntry(context, new RequestRegistrationEntryTaskCompleteListener()).execute(registrationEntryRequest);
 
@@ -414,14 +421,17 @@ public class ProfileEntryActivity extends ActionBarActivity {
 
                 Intent intent = new Intent();
                 intent.setClass(ProfileEntryActivity.this, VerificationActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
 
+                keepOn_button.setEnabled(true);
                 loading_rl.setVisibility(View.GONE);
             }
         }
 
         @Override
         public void onTaskPreRun() {
+            keepOn_button.setEnabled(false);
             loading_rl.setVisibility(View.VISIBLE);
         }
     }

@@ -37,6 +37,7 @@ import com.hampay.mobile.android.webservice.WebServices;
 
 public class HamPayLoginActivity extends ActionBarActivity implements View.OnClickListener {
 
+    ButtonRectangle remove_pass_button;
 
     SharedPreferences prefs;
     FacedTextView hampay_memorableword_text;
@@ -77,6 +78,9 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ham_pay_login);
+
+        remove_pass_button = (ButtonRectangle)findViewById(R.id.remove_pass_button);
+        remove_pass_button.setOnClickListener(this);
 
         context = this;
         activity = HamPayLoginActivity.this;
@@ -179,6 +183,13 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+
+            case R.id.remove_pass_button:
+
+
+                new HamPayDialog(activity).showRemovePasswordDialog();
+
+                break;
 
             case R.id.password_holder:
                 keyboard.setVisibility(LinearLayout.VISIBLE);

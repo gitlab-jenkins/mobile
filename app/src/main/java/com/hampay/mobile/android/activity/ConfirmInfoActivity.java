@@ -10,7 +10,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.CardView;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -32,14 +31,13 @@ import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestConfirmUserData;
 import com.hampay.mobile.android.async.RequestFetchUserData;
+import com.hampay.mobile.android.async.RequestIpProvider;
 import com.hampay.mobile.android.async.RequestRegisterVerifyAccount;
-import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.material.ButtonFlat;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.component.material.CheckBox;
 import com.hampay.mobile.android.dialog.HamPayDialog;
-import com.hampay.mobile.android.util.Constant;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.DeviceInfo;
 import com.hampay.mobile.android.util.NationalCodeVerification;
@@ -79,6 +77,8 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
 
     RelativeLayout loading_rl;
 
+    String validIpAddress = "";
+
     private ResponseMessage<RegistrationConfirmUserDataResponse> registrationConfirmUserDataResponse;
 
     public void contactUs(View view){
@@ -95,6 +95,8 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_info);
+
+        new RequestIpProvider(context, new RequestValidIpTaskCompleteListener()).execute();
 
         loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
 
@@ -116,52 +118,37 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
         confirm_check_ll = (LinearLayout)findViewById(R.id.confirm_check_ll);
         confirm_check = (CheckBox)findViewById(R.id.confirm_check);
 //        confirm_check.setEnabled(false);
-//        confirm_check.setOncheckListener(new CheckBox.OnCheckListener() {
-//            @Override
-//            public void onCheck(CheckBox view, boolean check) {
-//
-//                if (check) {
-//
-//                    RegistrationConfirmUserDataRequest registrationConfirmUserDataRequest = new RegistrationConfirmUserDataRequest();
-//                    registrationConfirmUserDataRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
-//                    registrationConfirmUserDataRequest.setImei(new DeviceInfo(getApplicationContext()).getIMEI());
-//                    registrationConfirmUserDataRequest.setIsVerified(confirm_check_value);
-//                    registrationConfirmUserDataRequest.setIp("192.168.1.1");
-//                    registrationConfirmUserDataRequest.setDeviceId(new DeviceInfo(getApplicationContext()).getDeviceId());
-//
-//                    new RequestConfirmUserData(context, new RequestConfirmUserDataTaskCompleteListener()).execute(registrationConfirmUserDataRequest);
-//
-//                } else {
-////                    confirm_check_img.setImageDrawable(null);
-//                    confirm_check.setChecked(false);
-//                    correct_button.setBackgroundColor(getResources().getColor(R.color.register_btn_color));
-//                    correct_button.setVisibility(View.VISIBLE);
-//                    correct_button_rl.setVisibility(View.VISIBLE);
-//                    confirm_layout.setVisibility(View.GONE);
-//                }
-//            }
-//        });
+        confirm_check.setOncheckListener(new CheckBox.OnCheckListener() {
+            @Override
+            public void onCheck(CheckBox view, boolean check) {
+
+                confirm_check.setChecked(false);
+
+                confirmUserData();
+
+            }
+        });
         confirm_check_ll.setOnClickListener(this);
 
         cellNumberValue = (FacedEditText)findViewById(R.id.cellNumberValue);
         userFamilyValue = (FacedEditText)findViewById(R.id.userFamilyValue);
         userFamilyIcon = (ImageView)findViewById(R.id.userFamilyIcon);
-        userFamilyValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-
-                if (!hasFocus){
-                    if (userFamilyValue.getText().toString().length() > 0){
-                        userFamilyIcon.setImageResource(R.drawable.right_icon);
-                        userFamilyIsValid = true;
-                    }
-                    else {
-                        userFamilyIcon.setImageResource(R.drawable.false_icon);
-                        userFamilyIsValid = false;
-                    }
-                }
-            }
-        });
+//        userFamilyValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//
+//                if (!hasFocus){
+//                    if (userFamilyValue.getText().toString().length() > 0){
+//                        userFamilyIcon.setImageResource(R.drawable.right_icon);
+//                        userFamilyIsValid = true;
+//                    }
+//                    else {
+//                        userFamilyIcon.setImageResource(R.drawable.false_icon);
+//                        userFamilyIsValid = false;
+//                    }
+//                }
+//            }
+//        });
 
 
         accountNumberValue = (FacedEditText)findViewById(R.id.accountNumberValue);
@@ -237,23 +224,23 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
 
         nationalCodeValue = (FacedEditText)findViewById(R.id.nationalCodeValue);
         nationalCodeIcon = (ImageView)findViewById(R.id.nationalCodeIcon);
-        nationalCodeValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus){
-
-                    if (new NationalCodeVerification(nationalCodeValue.getText().toString()).isValidCode()){
-                        nationalCodeIcon.setImageResource(R.drawable.right_icon);
-                        nationalCodeIsValid = true;
-                    }
-                    else {
-                        nationalCodeIcon.setImageResource(R.drawable.false_icon);
-                        nationalCodeIsValid = false;
-                    }
-
-                }
-            }
-        });
+//        nationalCodeValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if (!hasFocus){
+//
+//                    if (new NationalCodeVerification(nationalCodeValue.getText().toString()).isValidCode()){
+//                        nationalCodeIcon.setImageResource(R.drawable.right_icon);
+//                        nationalCodeIsValid = true;
+//                    }
+//                    else {
+//                        nationalCodeIcon.setImageResource(R.drawable.false_icon);
+//                        nationalCodeIsValid = false;
+//                    }
+//
+//                }
+//            }
+//        });
 
 
         RegistrationFetchUserDataRequest registrationFetchUserDataRequest = new RegistrationFetchUserDataRequest();
@@ -317,7 +304,9 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                         confirm_info_dialog.dismiss();
                         Intent intent = new Intent();
                         intent.setClass(ConfirmInfoActivity.this, PasswordEntryActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                         startActivity(intent);
+                        finish();
                     }
                 });
 
@@ -345,84 +334,81 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
             case R.id.correct_button:
                 correct_button.setBackgroundColor(getResources().getColor(R.color.normal_text));
 //                user_phone.setFocusableInTouchMode(true);
-                userFamilyValue.setFocusableInTouchMode(true);
+//                userFamilyValue.setFocusableInTouchMode(true);
                 accountNumberValue.setFocusableInTouchMode(true);
-                nationalCodeValue.setFocusableInTouchMode(true);
+//                nationalCodeValue.setFocusableInTouchMode(true);
 
                 break;
 
             case R.id.confirm_check_ll:
 
-
-                userFamilyValue.clearFocus();
-                nationalCodeValue.clearFocus();
-                accountNumberValue.clearFocus();
-
-
-
-                if (networkConnectivity.isNetworkConnected()) {
-
-
-
-                    if (confirm_check_value) {
-
-
-                        if (userFamilyIsValid && nationalCodeIsValid && accountNumberIsValid
-                                && userFamilyValue.getText().toString().length() > 0
-                                && nationalCodeValue.getText().toString().length() > 0
-                                && accountNumberValue.getText().toString().length() > 0) {
-
-
-
-                            RegistrationConfirmUserDataRequest registrationConfirmUserDataRequest = new RegistrationConfirmUserDataRequest();
-                            registrationConfirmUserDataRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
-                            registrationConfirmUserDataRequest.setImei(new DeviceInfo(getApplicationContext()).getIMEI());
-                            registrationConfirmUserDataRequest.setIsVerified(confirm_check_value);
-                            registrationConfirmUserDataRequest.setIp("192.168.1.1");
-                            registrationConfirmUserDataRequest.setDeviceId(new DeviceInfo(getApplicationContext()).getDeviceId());
-
-                            new RequestConfirmUserData(context, new RequestConfirmUserDataTaskCompleteListener()).execute(registrationConfirmUserDataRequest);
-
-
-                            confirm_check_value = !confirm_check_value;
-
-                        }else {
-
-                            if (userFamilyValue.getText().toString().length() == 0 || !userFamilyIsValid){
-                                Toast.makeText(context, getString(R.string.msg_family_invalid), Toast.LENGTH_SHORT).show();
-                                userFamilyIcon.setImageResource(R.drawable.false_icon);
-                                userFamilyValue.requestFocus();
-                            }
-
-
-                            else if (accountNumberValue.getText().toString().length() == 0 || !accountNumberIsValid){
-                                Toast.makeText(context, getString(R.string.msg_accountNo_invalid), Toast.LENGTH_SHORT).show();
-                                accountNumberIcon.setImageResource(R.drawable.false_icon);
-                                accountNumberValue.requestFocus();
-                            }
-
-                            else if (nationalCodeValue.getText().toString().length() == 0 || !nationalCodeIsValid){
-                                Toast.makeText(context, getString(R.string.msg_nationalCode_invalid), Toast.LENGTH_SHORT).show();
-                                nationalCodeIcon.setImageResource(R.drawable.false_icon);
-                                nationalCodeValue.requestFocus();
-                            }
-                        }
-                    } else {
-                        confirm_check.setChecked(false);
-                        correct_button.setBackgroundColor(getResources().getColor(R.color.register_btn_color));
-                        correct_button.setVisibility(View.VISIBLE);
-                        correct_button_rl.setVisibility(View.VISIBLE);
-                        confirm_layout.setVisibility(View.GONE);
-                        confirm_check_value = !confirm_check_value;
-                    }
-                }else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.no_network), Toast.LENGTH_LONG).show();
-                }
-
-                confirm_check_ll.requestFocus();
+                confirmUserData();
 
                 break;
         }
+    }
+
+
+    private void confirmUserData(){
+
+//                userFamilyValue.clearFocus();
+//                nationalCodeValue.clearFocus();
+        accountNumberValue.clearFocus();
+
+        if (networkConnectivity.isNetworkConnected()) {
+
+            if (confirm_check_value) {
+
+                if (/*userFamilyIsValid &&*/ /*nationalCodeIsValid &&*/ accountNumberIsValid
+                               /* && userFamilyValue.getText().toString().length() > 0*/
+                                /*&& nationalCodeValue.getText().toString().length() > 0*/
+                        && accountNumberValue.getText().toString().length() > 0) {
+
+                    RegistrationConfirmUserDataRequest registrationConfirmUserDataRequest = new RegistrationConfirmUserDataRequest();
+                    registrationConfirmUserDataRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
+                    registrationConfirmUserDataRequest.setImei(new DeviceInfo(getApplicationContext()).getIMEI());
+                    registrationConfirmUserDataRequest.setIsVerified(confirm_check_value);
+                    registrationConfirmUserDataRequest.setIp(validIpAddress);
+                    registrationConfirmUserDataRequest.setDeviceId(new DeviceInfo(getApplicationContext()).getDeviceId());
+
+                    new RequestConfirmUserData(context, new RequestConfirmUserDataTaskCompleteListener()).execute(registrationConfirmUserDataRequest);
+
+                    confirm_check_value = !confirm_check_value;
+
+                }else {
+
+                    if (userFamilyValue.getText().toString().length() == 0 || !userFamilyIsValid){
+                        Toast.makeText(context, getString(R.string.msg_family_invalid), Toast.LENGTH_SHORT).show();
+                        userFamilyIcon.setImageResource(R.drawable.false_icon);
+                        userFamilyValue.requestFocus();
+                    }
+
+
+                    else if (accountNumberValue.getText().toString().length() == 0 || !accountNumberIsValid){
+                        Toast.makeText(context, getString(R.string.msg_accountNo_invalid), Toast.LENGTH_SHORT).show();
+                        accountNumberIcon.setImageResource(R.drawable.false_icon);
+                        accountNumberValue.requestFocus();
+                    }
+
+                    else if (nationalCodeValue.getText().toString().length() == 0 || !nationalCodeIsValid){
+                        Toast.makeText(context, getString(R.string.msg_nationalCode_invalid), Toast.LENGTH_SHORT).show();
+                        nationalCodeIcon.setImageResource(R.drawable.false_icon);
+                        nationalCodeValue.requestFocus();
+                    }
+                }
+            } else {
+                confirm_check.setChecked(false);
+                correct_button.setBackgroundColor(getResources().getColor(R.color.register_btn_color));
+                correct_button.setVisibility(View.VISIBLE);
+                correct_button_rl.setVisibility(View.VISIBLE);
+                confirm_layout.setVisibility(View.GONE);
+                confirm_check_value = !confirm_check_value;
+            }
+        }else {
+            Toast.makeText(getApplicationContext(), getString(R.string.no_network), Toast.LENGTH_LONG).show();
+        }
+
+        confirm_check_ll.requestFocus();
     }
 
 
@@ -440,8 +426,10 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                 if (verifyAccountResponseMessage.getService().getTransferMoneyComment().length() > 0 ) {
                     Intent intent = new Intent();
                     intent.setClass(ConfirmInfoActivity.this, RegVerifyAccountNoActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     intent.putExtra(Constants.TRANSFER_MONEY_COMMENT, verifyAccountResponseMessage.getService().getTransferMoneyComment());
                     startActivity(intent);
+                    finish();
                 }
             }
             else {
@@ -500,9 +488,9 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                 correct_button.setVisibility(View.GONE);
                 correct_button_rl.setVisibility(View.GONE);
 //                user_phone.setFocusable(false);
-                userFamilyValue.setFocusable(false);
+//                userFamilyValue.setFocusable(false);
                 accountNumberValue.setFocusable(false);
-                nationalCodeValue.setFocusable(false);
+//                nationalCodeValue.setFocusable(false);
                 confirm_layout.setVisibility(View.VISIBLE);
             }
 
@@ -511,6 +499,23 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
         @Override
         public void onTaskPreRun() {
             loading_rl.setVisibility(View.VISIBLE);
+        }
+    }
+
+
+    public class RequestValidIpTaskCompleteListener implements AsyncTaskCompleteListener<String>
+    {
+        public RequestValidIpTaskCompleteListener(){
+        }
+
+        @Override
+        public void onTaskComplete(String validIp)
+        {
+            validIpAddress = validIp;
+        }
+
+        @Override
+        public void onTaskPreRun() {
         }
     }
 

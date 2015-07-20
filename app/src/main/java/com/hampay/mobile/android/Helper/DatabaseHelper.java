@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.hampay.mobile.android.model.EnabledHamPay;
 import com.hampay.mobile.android.model.RecentPay;
 import com.hampay.mobile.android.util.Constants;
 
@@ -30,6 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Table Names
     private static final String TABLE_RECENT_PAY = "recent_pay";
+    private static final String TABLE_ENABLED_HAMPAY = "enabled_hampay";
 
     // Recent Pay Table - column names
     private static final String KEY_ID = "id";
@@ -38,7 +40,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_PHONE = "phone";
     private static final String KEY_MESSAGE = "message";
 
-    // Todo table create statement
+    //Enabled HamPay Table - column names
+    private static final String KEY_DISPLAY_NAME = "display_name";
+    private static final String KEY_CELL_NUMBER = "cell_number";
+
+    // recent pay table create statement
     private static final String CREATE_TABLE_RECENT_PAY = "CREATE TABLE "
             + TABLE_RECENT_PAY + "("
             + KEY_ID + " INTEGER PRIMARY KEY,"
@@ -46,6 +52,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_NAME + " TEXT,"
             + KEY_PHONE + " TEXT,"
             + KEY_MESSAGE + " TEXT"
+            + ")";
+
+    // enabled hampay table create statement
+    private static final String CREATE_TABLE_HAMPAY_ENABLED = "CREATE TABLE "
+            + TABLE_ENABLED_HAMPAY + "("
+            + KEY_DISPLAY_NAME + " TEXT,"
+            + KEY_CELL_NUMBER + " TEXT"
             + ")";
 
 
@@ -57,13 +70,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         db.execSQL(CREATE_TABLE_RECENT_PAY);
-
+        db.execSQL(CREATE_TABLE_HAMPAY_ENABLED);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECENT_PAY);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ENABLED_HAMPAY);
 
         // create new tables
         onCreate(db);
@@ -82,6 +96,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long recent_pay_id = db.insert(TABLE_RECENT_PAY, null, values);
 
         return recent_pay_id;
+    }
+
+    public long createEnabledHamPay(EnabledHamPay enabledHamPay) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_DISPLAY_NAME, enabledHamPay.getDisplayName());
+        values.put(KEY_CELL_NUMBER, enabledHamPay.getCellNumber());
+
+        // insert row
+        long enabled_hampay_id = db.insert(TABLE_ENABLED_HAMPAY, null, values);
+
+        return enabled_hampay_id;
+    }
+
+    public void deleteEnabledHamPays() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_ENABLED_HAMPAY, null, null);
     }
 
 
@@ -103,10 +135,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return recentPay;
     }
 
+
+    public EnabledHamPay getEnabledHamPay(String cellNamber) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT  * FROM " + TABLE_ENABLED_HAMPAY + " WHERE "
+                + KEY_CELL_NUMBER + " = '" + cellNamber + "'";
+        Log.e(LOG, selectQuery);
+        Cursor c = db.rawQuery(selectQuery, null);
+        if (c != null)
+            c.moveToFirst();
+        EnabledHamPay enabledHamPay = new EnabledHamPay();
+        enabledHamPay.setCellNumber(c.getString(c.getColumnIndex(KEY_CELL_NUMBER)));
+        enabledHamPay.setDisplayName(c.getString(c.getColumnIndex(KEY_DISPLAY_NAME)));
+
+        return enabledHamPay;
+    }
+
     public boolean getExistRecentPay(String phone_no) {
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "SELECT  * FROM " + TABLE_RECENT_PAY + " WHERE "
                 + KEY_PHONE + " = '" + phone_no + "'";
+        Log.e(LOG, selectQuery);
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.getCount() > 0)
+            return true;
+        else
+            return false;
+
+    }
+
+    public boolean getExistEnabledHamPay(String cellNember) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT  * FROM " + TABLE_ENABLED_HAMPAY + " WHERE "
+                + KEY_CELL_NUMBER + " = '" + cellNember + "'";
         Log.e(LOG, selectQuery);
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.getCount() > 0)
@@ -150,6 +211,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         return recentPays;
+    }
+
+    public List<EnabledHamPay> getAllEnabledHamPay() {
+        List<EnabledHamPay> enabledHamPays = new ArrayList<EnabledHamPay>();
+        String selectQuery = "SELECT  * FROM " + TABLE_ENABLED_HAMPAY;
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (c.moveToFirst()) {
+            do {
+                EnabledHamPay enabledHamPay = new EnabledHamPay();
+                enabledHamPay.setCellNumber(c.getString(c.getColumnIndex(KEY_CELL_NUMBER)));
+                enabledHamPay.setDisplayName(c.getString(c.getColumnIndex(KEY_DISPLAY_NAME)));
+
+                // adding to todo list
+                enabledHamPays.add(enabledHamPay);
+            } while (c.moveToNext());
+        }
+
+        return enabledHamPays;
     }
 
 }

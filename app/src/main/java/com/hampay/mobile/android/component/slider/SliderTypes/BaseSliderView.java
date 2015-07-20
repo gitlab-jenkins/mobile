@@ -241,9 +241,9 @@ public abstract class BaseSliderView {
         rq.into(targetImageView,new Callback() {
             @Override
             public void onSuccess() {
-//                if(v.findViewById(R.id.loading_bar) != null){
-//                    v.findViewById(R.id.loading_bar).setVisibility(View.INVISIBLE);
-//                }
+                if(v.findViewById(R.id.loading_bar) != null){
+                    v.findViewById(R.id.loading_bar).setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
@@ -251,9 +251,9 @@ public abstract class BaseSliderView {
                 if(mLoadListener != null){
                     mLoadListener.onEnd(false,me);
                 }
-//                if(v.findViewById(R.id.loading_bar) != null){
-//                    v.findViewById(R.id.loading_bar).setVisibility(View.INVISIBLE);
-//                }
+                if(v.findViewById(R.id.loading_bar) != null){
+                    v.findViewById(R.id.loading_bar).setVisibility(View.INVISIBLE);
+                }
             }
         });
    }

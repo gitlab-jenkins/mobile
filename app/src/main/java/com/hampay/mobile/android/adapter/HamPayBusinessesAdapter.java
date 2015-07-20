@@ -51,7 +51,7 @@ public class HamPayBusinessesAdapter extends HamPayBusinessesGenericAdapter<Busi
         viewHolder.business_name.setText(businessDTO.getTitle());
         viewHolder.business_description.setText(businessDTO.getCategory());
         viewHolder.business_phone_no.setText("تلفن: " + businessDTO.getDefaultPhoneNumber());
-        viewHolder.business_hampay_id.setText(businessDTO.getCode());
+        viewHolder.business_hampay_id.setText("شناسه: " + businessDTO.getCode());
         viewHolder.pay_to_business_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

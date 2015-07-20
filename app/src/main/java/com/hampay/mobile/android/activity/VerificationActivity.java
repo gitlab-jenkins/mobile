@@ -74,6 +74,7 @@ public class VerificationActivity extends ActionBarActivity {
         public void onTaskComplete(ResponseMessage<RegistrationSendSmsTokenResponse> registrationSendSmsTokenResponse)
         {
 
+            keepOn_button.setEnabled(true);
             loading_rl.setVisibility(View.GONE);
 
             if (registrationSendSmsTokenResponse != null) {
@@ -82,7 +83,9 @@ public class VerificationActivity extends ActionBarActivity {
 
                 Intent intent = new Intent();
                 intent.setClass(VerificationActivity.this, SMSVerificationActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
+                finish();
             }else {
                 Toast.makeText(context, getString(R.string.no_network), Toast.LENGTH_SHORT).show();
             }
@@ -90,6 +93,7 @@ public class VerificationActivity extends ActionBarActivity {
 
         @Override
         public void onTaskPreRun() {
+            keepOn_button.setEnabled(false);
             loading_rl.setVisibility(View.VISIBLE);
         }
     }
