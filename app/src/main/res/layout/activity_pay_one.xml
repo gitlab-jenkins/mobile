@@ -36,13 +36,18 @@
 
     </RelativeLayout>
 
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <LinearLayout
@@ -210,5 +215,23 @@
 
 
     </ScrollView>
+
+        <RelativeLayout
+            android:visibility="gone"
+            android:id="@+id/loading_rl"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/loading_transparent_color">
+
+            <ProgressBar
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:indeterminateDrawable="@drawable/fragment_progress"
+                android:layout_centerInParent="true"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
 
 </LinearLayout>

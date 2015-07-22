@@ -6,6 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.daimajia.slider.demo.MainActivity">
+
+
+
     <com.hampay.mobile.android.component.slider.SliderLayout
         android:id="@+id/slider"
         android:layout_width="match_parent"
@@ -15,71 +18,45 @@
         custom:pager_animation_span="1100"
         android:layout_height="fill_parent"/>
 
-    <!--<com.hampay.mobile.android.component.slider.Indicators.PagerIndicator-->
-        <!--android:id="@+id/custom_indicator"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:gravity="center"-->
-        <!--custom:selected_color="#0095BF"-->
-        <!--custom:unselected_color="#55333333"-->
-        <!--custom:shape="oval"-->
-        <!--custom:selected_padding_left="5dp"-->
-        <!--custom:selected_padding_right="5dp"-->
-        <!--custom:unselected_padding_left="5dp"-->
-        <!--custom:unselected_padding_right="5dp"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--custom:selected_width="6dp"-->
-        <!--custom:selected_height="6dp"-->
-        <!--custom:unselected_width="6dp"-->
-        <!--custom:unselected_height="6dp"-->
-        <!--android:layout_marginBottom="20dp"-->
-        <!--/>-->
-    <!--<com.hampay.mobile.android.component.slider.Indicators.PagerIndicator-->
-        <!--android:id="@+id/custom_indicator2"-->
-        <!--style="@style/AndroidImageSlider_Corner_Oval_Orange"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_marginBottom="20dp"-->
-        <!--/>-->
-
-    <!--<ImageView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:id="@+id/intro_background"-->
-        <!--android:scaleType="fitXY"/>-->
-
-    <ImageView
-        android:id="@+id/intro_icon"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_centerInParent="true"/>
-
     <LinearLayout
-        android:id="@+id/intro_title"
+        android:id="@+id/animate_logo"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:orientation="vertical"
-        android:gravity="center"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/intro_icon">
+        android:visibility="invisible">
 
+        <ImageView
+            android:id="@+id/intro_icon"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_centerInParent="true"/>
 
-
-        <com.hampay.mobile.android.component.FacedTextView
-            android:id="@+id/intro_text"
-            geekui:customTypeface="fonts/iran_sans.ttf"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/intro_title"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:textSize="24sp"
+            android:orientation="vertical"
             android:gravity="center"
-            android:layout_margin="8dp" />
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/intro_icon">
 
+
+            <com.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/intro_text"
+                geekui:customTypeface="fonts/iran_sans.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="24sp"
+                android:gravity="center"
+                android:layout_margin="8dp" />
+
+
+        </LinearLayout>
 
     </LinearLayout>
-
-
 
     <RelativeLayout
         android:layout_width="150dp"
@@ -111,5 +88,62 @@
 
     </RelativeLayout>
 
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/image_splash"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/splash_bg_color"/>
+
+
+        <LinearLayout
+            android:id="@+id/animate_logo_1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/intro_icon_1"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/logo_hampay"/>
+
+            <LinearLayout
+                android:id="@+id/intro_title_1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/intro_icon_1">
+
+
+                <com.hampay.mobile.android.component.FacedTextView
+                    android:id="@+id/intro_text_1"
+                    geekui:customTypeface="fonts/iran_sans.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:textSize="24sp"
+                    android:gravity="center"
+                    android:layout_margin="8dp"
+                    android:text="@string/intro_1"
+                    android:visibility="invisible"/>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>

@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
@@ -68,6 +69,8 @@ public class PayOneActivity extends ActionBarActivity {
     Context context;
     Activity activity;
 
+    RelativeLayout loading_rl;
+
     public void backActionBar(View view){
         finish();
     }
@@ -76,6 +79,8 @@ public class PayOneActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay_one);
+
+        loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
 
         context = this;
         activity = PayOneActivity.this;
@@ -191,11 +196,14 @@ public class PayOneActivity extends ActionBarActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            loading_rl.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+
+            loading_rl.setVisibility(View.GONE);
 
             if (individualPaymentConfirmResponse != null) {
 
@@ -305,11 +313,14 @@ public class PayOneActivity extends ActionBarActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            loading_rl.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+
+            loading_rl.setVisibility(View.GONE);
 
             if (individualPaymentResponse != null) {
 

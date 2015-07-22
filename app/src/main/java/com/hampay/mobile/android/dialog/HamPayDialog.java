@@ -8,6 +8,12 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
@@ -25,6 +31,10 @@ import com.hampay.mobile.android.async.RequestTACAccept;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.webservice.WebServices;
+
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by amir on 7/8/15.
@@ -214,7 +224,7 @@ public class HamPayDialog {
 
     TACAcceptRequest tacAcceptRequest;
 
-    public void showTACAcceptDialog(String accept_term){
+    public void showTACAcceptDialog(String accept_term) {
 
         Rect displayRectangle = new Rect();
         Activity parent = (Activity) activity;
@@ -223,13 +233,52 @@ public class HamPayDialog {
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_tac_accept, null);
 
-        FacedTextView tac_term = (FacedTextView)view.findViewById(R.id.tac_term);
+        FacedTextView tac_term = (FacedTextView) view.findViewById(R.id.tac_term);
         FacedTextView tac_accept = (FacedTextView) view.findViewById(R.id.tac_accept);
         FacedTextView tac_reject = (FacedTextView) view.findViewById(R.id.tac_reject);
 
-        tac_term.setText(accept_term);
+        Pattern p = Pattern.compile(Constants.WEB_URL_REGEX);
+        Matcher m = p.matcher(accept_term);
+        while (m.find()) {
+            final String urlStr = m.group();
 
-        tacAcceptRequest = new TACAcceptRequest();
+            Spannable WordtoSpan = new SpannableString(accept_term);
+
+            ClickableSpan privacySpan = new ClickableSpan() {
+                @Override
+                public void onClick(View textView) {
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    if(urlStr.toLowerCase().contains("http://")) {
+                        i.setData(Uri.parse(urlStr));
+                    }else {
+                        i.setData(Uri.parse("http://" + urlStr));
+                    }
+                    activity.startActivity(i);
+                }
+            };
+
+            WordtoSpan.setSpan(privacySpan, accept_term.indexOf(urlStr), accept_term.indexOf(urlStr) + urlStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            tac_term.setText(WordtoSpan);
+
+            tac_term.setMovementMethod(LinkMovementMethod.getInstance());
+
+//            char[] stringArray1 = urlStr.toCharArray();
+//
+//            if (urlStr.startsWith("(") && urlStr.endsWith(")")) {
+//
+//                char[] stringArray = urlStr.toCharArray();
+//
+//                char[] newArray = new char[stringArray.length - 2];
+//                System.arraycopy(stringArray, 1, newArray, 0, stringArray.length - 2);
+//                urlStr = new String(newArray);
+//                System.out.println("Finally Url =" + newArray.toString());
+//
+//            }
+        }
+
+
+            tacAcceptRequest = new TACAcceptRequest();
 
         tac_reject.setOnClickListener(new View.OnClickListener() {
             @Override

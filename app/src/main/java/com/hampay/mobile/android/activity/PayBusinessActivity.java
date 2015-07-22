@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
@@ -41,16 +42,18 @@ public class PayBusinessActivity extends ActionBarActivity {
     Context context;
     Activity activity;
 
+    RelativeLayout loading_rl;
+
     public void backActionBar(View view){
         finish();
     }
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay_business);
+
+        loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
 
         context = this;
         activity = PayBusinessActivity.this;
@@ -117,11 +120,14 @@ public class PayBusinessActivity extends ActionBarActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            loading_rl.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+
+            loading_rl.setVisibility(View.GONE);
 
             if (businessPaymentConfirmResponse != null) {
 
@@ -190,11 +196,14 @@ public class PayBusinessActivity extends ActionBarActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            loading_rl.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+
+            loading_rl.setVisibility(View.GONE);
 
             if (businessPaymentResponse != null) {
 

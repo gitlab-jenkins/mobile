@@ -20,6 +20,8 @@ public class Constants {
 
     public static final String RECENT_PAY_TO_ONE_LIMIT = "10";
 
+    public static final String WEB_URL_REGEX = "\\(?\\b(http://|https://|www[.]|app[.])[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]";
+
     public static final String VALID_IP_ADDRESS_SERVICE = "http://www.telize.com/ip";
 
     public static final String ARGS_URI = "com.pooyabyte.varadid.android.messaging.ARGS_URI";

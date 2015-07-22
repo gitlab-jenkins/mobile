@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.component.FacedTextView;
@@ -24,11 +27,47 @@ public class IntroSliderActivity extends ActionBarActivity implements BaseSlider
     private SliderLayout mDemoSlider;
     private ButtonRectangle register_button;
 
+    private ImageView image_splash;
+
+    LinearLayout animate_logo;
+    LinearLayout animate_logo_1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro_slider);
         mDemoSlider = (SliderLayout)findViewById(R.id.slider);
+
+        animate_logo = (LinearLayout)findViewById(R.id.animate_logo);
+        animate_logo_1 = (LinearLayout)findViewById(R.id.animate_logo_1);
+
+        Animation a = AnimationUtils.loadAnimation(this, R.anim.splash_logo);
+        a.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                animate_logo_1.setVisibility(View.GONE);
+                animate_logo.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        animate_logo_1.startAnimation(a);
+
+        image_splash = (ImageView)findViewById(R.id.image_splash);
+
+        Animation fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.splash_fadein);
+        fadeInAnimation.setFillAfter(false);
+        fadeInAnimation.setRepeatMode(0);
+        fadeInAnimation.setFillAfter(true);
+        image_splash.startAnimation(fadeInAnimation);
 
         intro_icon = (ImageView)findViewById(R.id.intro_icon);
         intro_text = (FacedTextView)findViewById(R.id.intro_text);
@@ -80,7 +119,7 @@ public class IntroSliderActivity extends ActionBarActivity implements BaseSlider
         mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Default);
         mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
         mDemoSlider.setCustomAnimation(new DescriptionAnimation());
-        mDemoSlider.setDuration(4000);
+        mDemoSlider.setDuration(10000);
         mDemoSlider.addOnPageChangeListener(this);
 
     }

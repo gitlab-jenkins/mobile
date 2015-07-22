@@ -148,7 +148,7 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
         public void onTaskComplete(ResponseMessage<TACResponse> tacResponseMessage)
         {
 //            loading_rl.setVisibility(View.GONE);
-            if (tacResponseMessage.getService().getResultStatus() != null) {
+            if (tacResponseMessage != null) {
 
                 if (tacResponseMessage.getService().getShouldAcceptTAC()){
 
