@@ -281,8 +281,7 @@
                             android:layout_width="22dp"
                             android:layout_height="22dp"
                             android:layout_centerVertical="true"
-                            android:layout_marginLeft="8dp"
-                            android:src="@drawable/right_icon"/>
+                            android:layout_marginLeft="8dp" />
 
                         <com.hampay.mobile.android.component.edittext.FacedEditText
                             android:id="@+id/cellNumberValue"
@@ -324,8 +323,7 @@
                             android:layout_width="22dp"
                             android:layout_height="22dp"
                             android:layout_centerVertical="true"
-                            android:layout_marginLeft="8dp"
-                            android:src="@drawable/right_icon"/>
+                            android:layout_marginLeft="8dp" />
 
                         <com.hampay.mobile.android.component.edittext.FacedEditText
                             android:id="@+id/userFamilyValue"
@@ -366,8 +364,7 @@
                             android:layout_width="22dp"
                             android:layout_height="22dp"
                             android:layout_centerVertical="true"
-                            android:layout_marginLeft="8dp"
-                            android:src="@drawable/right_icon"/>
+                            android:layout_marginLeft="8dp" />
 
                         <com.hampay.mobile.android.component.edittext.FacedEditText
                             android:id="@+id/accountNumberValue"
@@ -408,8 +405,7 @@
                             android:layout_width="22dp"
                             android:layout_height="22dp"
                             android:layout_centerVertical="true"
-                            android:layout_marginLeft="8dp"
-                            android:src="@drawable/right_icon"/>
+                            android:layout_marginLeft="8dp" />
 
                         <com.hampay.mobile.android.component.edittext.FacedEditText
                             android:id="@+id/nationalCodeValue"

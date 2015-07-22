@@ -24,6 +24,12 @@ public class Constants {
 
     public static final String VALID_IP_ADDRESS_SERVICE = "http://www.telize.com/ip";
 
+    public static final String OPENAM_LOGIN_URL = "http://176.58.104.158:8080/openam/json/authenticate";
+    public static final String OPENAM_LOGOUT_URL = "http://176.58.104.158:8080/openam/json/sessions/?_action=logout";
+
+    public static final String TOKEN_ID = "TokenId";
+
+
     public static final String ARGS_URI = "com.pooyabyte.varadid.android.messaging.ARGS_URI";
     public static final String ARGS_PARAMS = "com.pooyabyte.varadid.android.messaging.ARGS_PARAMS";
     //    public static final String SERVICE_NAMESPACE = "/ws/";

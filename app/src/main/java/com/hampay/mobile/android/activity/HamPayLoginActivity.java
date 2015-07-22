@@ -24,6 +24,7 @@ import com.hampay.common.core.model.response.TACResponse;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestConfirmUserData;
+import com.hampay.mobile.android.async.RequestLogin;
 import com.hampay.mobile.android.async.RequestTAC;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
@@ -31,17 +32,25 @@ import com.hampay.mobile.android.dialog.AlertUtils;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.functions.DeviceUuidFactory;
 import com.hampay.mobile.android.messaging.SecurityUtils;
+import com.hampay.mobile.android.model.LoginData;
+import com.hampay.mobile.android.model.LoginResponse;
 import com.hampay.mobile.android.service.LoginService;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.webservice.WebServices;
+
 
 public class HamPayLoginActivity extends ActionBarActivity implements View.OnClickListener {
 
     ButtonRectangle remove_pass_button;
 
     SharedPreferences prefs;
+
+    SharedPreferences.Editor editor;
+
     FacedTextView hampay_memorableword_text;
     String MemorableWord;
+
+
 
     ButtonRectangle digit_1;
     ButtonRectangle digit_2;
@@ -70,6 +79,9 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
     Context context;
     Activity activity;
 
+    RelativeLayout loading_rl;
+
+
     public void contactUs(View view){
         (new HamPayDialog(this)).showContactUsDialog();
     }
@@ -78,6 +90,8 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ham_pay_login);
+
+        loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
 
         remove_pass_button = (ButtonRectangle)findViewById(R.id.remove_pass_button);
         remove_pass_button.setOnClickListener(this);
@@ -130,11 +144,6 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
             hampay_memorableword_text.setText(MemorableWord);
         }
 
-
-        TACRequest tacRequest = new TACRequest();
-
-        new RequestTAC(context, new RequestTACResponseTaskCompleteListener()).execute(tacRequest);
-
     }
 
     private ResponseMessage<TACResponse> tACResponse;
@@ -147,7 +156,7 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
         @Override
         public void onTaskComplete(ResponseMessage<TACResponse> tacResponseMessage)
         {
-//            loading_rl.setVisibility(View.GONE);
+            loading_rl.setVisibility(View.GONE);
             if (tacResponseMessage != null) {
 
                 if (tacResponseMessage.getService().getShouldAcceptTAC()){
@@ -174,7 +183,40 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
 
         @Override
         public void onTaskPreRun() {
-//            loading_rl.setVisibility(View.VISIBLE);
+            loading_rl.setVisibility(View.VISIBLE);
+        }
+    }
+
+
+    public class RequestLoginResponseTaskCompleteListener implements AsyncTaskCompleteListener<LoginResponse>
+    {
+        public RequestLoginResponseTaskCompleteListener(){
+        }
+
+        @Override
+        public void onTaskComplete(LoginResponse loginResponse)
+        {
+            loading_rl.setVisibility(View.GONE);
+            if (loginResponse != null) {
+
+                editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+                editor.putString(Constants.TOKEN_ID, loginResponse.getTokenId());
+                editor.commit();
+
+                TACRequest tacRequest = new TACRequest();
+                new RequestTAC(context, new RequestTACResponseTaskCompleteListener()).execute(tacRequest);
+
+
+            }
+            else {
+                Toast.makeText(context, getString(R.string.no_network), Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            loading_rl.setVisibility(View.VISIBLE);
         }
     }
 
@@ -266,6 +308,8 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
         }
 
         if (inputPassValue.length() == 5){
+            LoginData loginData = new LoginData();
+            new RequestLogin(context, new RequestLoginResponseTaskCompleteListener()).execute(loginData);
 
             //Unremark Here
 //            Intent intent = new Intent();

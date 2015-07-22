@@ -61,7 +61,12 @@ import com.hampay.common.core.model.response.TransactionListResponse;
 import com.hampay.common.core.model.response.UserProfileResponse;
 import com.hampay.common.core.model.response.VerifyAccountResponse;
 import com.hampay.common.core.model.response.VerifyTransferMoneyResponse;
+import com.hampay.mobile.android.model.LoginData;
+import com.hampay.mobile.android.model.LoginResponse;
+import com.hampay.mobile.android.model.LogoutData;
+import com.hampay.mobile.android.model.LogoutResponse;
 import com.hampay.mobile.android.util.Constant;
+import com.hampay.mobile.android.util.Constants;
 
 import org.apache.http.*;
 import org.apache.http.client.HttpClient;
@@ -72,10 +77,14 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -97,6 +106,94 @@ public class WebServices  {
         this.context = context;
 
     }
+
+
+    public LoginResponse sendLoginRequest(LoginData loginData)throws Exception {
+
+        URL urlConnection = new URL(Constants.OPENAM_LOGIN_URL);
+        HttpURLConnection httpURLConnection = (HttpURLConnection) urlConnection.openConnection();
+
+        httpURLConnection.setRequestMethod("POST");
+        httpURLConnection.setConnectTimeout(20 * 1000);
+        httpURLConnection.setReadTimeout(20 * 1000);
+
+        httpURLConnection.setDoOutput(true);
+
+        httpURLConnection.setRequestProperty("X-OpenAM-Username", "amAdmin");
+        httpURLConnection.setRequestProperty("X-OpenAM-Password", "5p0rtlife");
+        httpURLConnection.setRequestProperty("Content-Type", "application/json");
+        httpURLConnection.setRequestProperty("Accept-Encoding", "UTF-8");
+
+        BufferedWriter output = new BufferedWriter(new OutputStreamWriter(httpURLConnection.getOutputStream()));
+        output.write(/*body*/"{}");
+        output.flush();
+        output.close();
+
+        int responseCode = httpURLConnection.getResponseCode();
+
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(httpURLConnection.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+
+        Gson gson = new Gson();
+
+        Type listType = new TypeToken<LoginResponse>(){}.getType();
+
+        JsonParser jsonParser = new JsonParser();
+        JsonElement responseElement = jsonParser.parse(response.toString());
+
+        return (LoginResponse) gson.fromJson(responseElement.toString(), listType);
+    }
+
+
+    public LogoutResponse sendLogoutRequest(LogoutData logoutData)throws Exception {
+
+        URL urlConnection = new URL(Constants.OPENAM_LOGOUT_URL);
+        HttpURLConnection httpURLConnection = (HttpURLConnection) urlConnection.openConnection();
+
+        httpURLConnection.setRequestMethod("POST");
+        httpURLConnection.setConnectTimeout(20 * 1000);
+        httpURLConnection.setReadTimeout(20 * 1000);
+
+        httpURLConnection.setDoOutput(true);
+
+        httpURLConnection.setRequestProperty("iplanetDirectoryPro", logoutData.getIplanetDirectoryPro());
+        httpURLConnection.setRequestProperty("Content-Type", "application/json");
+        httpURLConnection.setRequestProperty("Accept-Encoding", "UTF-8");
+
+        BufferedWriter output = new BufferedWriter(new OutputStreamWriter(httpURLConnection.getOutputStream()));
+        output.write("");
+        output.flush();
+        output.close();
+
+        int responseCode = httpURLConnection.getResponseCode();
+
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(httpURLConnection.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
+
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+
+        Gson gson = new Gson();
+
+        Type listType = new TypeToken<LogoutResponse>(){}.getType();
+
+        JsonParser jsonParser = new JsonParser();
+        JsonElement responseElement = jsonParser.parse(response.toString());
+
+        return (LogoutResponse) gson.fromJson(responseElement.toString(), listType);
+    }
+
 
 
     public ResponseMessage<BankListResponse> getBankList() {

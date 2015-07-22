@@ -21,14 +21,21 @@ import android.widget.Toast;
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.request.ContactUsRequest;
 import com.hampay.common.core.model.request.TACAcceptRequest;
+import com.hampay.common.core.model.request.TACRequest;
 import com.hampay.common.core.model.response.ContactUsResponse;
 import com.hampay.common.core.model.response.TACAcceptResponse;
 import com.hampay.common.core.model.response.dto.UserProfileDTO;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.activity.MainActivity;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import com.hampay.mobile.android.async.RequestLogin;
+import com.hampay.mobile.android.async.RequestLogout;
+import com.hampay.mobile.android.async.RequestTAC;
 import com.hampay.mobile.android.async.RequestTACAccept;
 import com.hampay.mobile.android.component.FacedTextView;
+import com.hampay.mobile.android.model.LoginResponse;
+import com.hampay.mobile.android.model.LogoutData;
+import com.hampay.mobile.android.model.LogoutResponse;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.webservice.WebServices;
 
@@ -357,7 +364,7 @@ public class HamPayDialog {
     }
 
 
-    public void showExitDialog(){
+    public void showExitDialog(final LogoutData logoutData){
         Rect displayRectangle = new Rect();
         Activity parent = (Activity) activity;
         Window window = parent.getWindow();
@@ -373,6 +380,9 @@ public class HamPayDialog {
             public void onClick(View v) {
                 dialog.dismiss();
                 activity.finish();
+
+                new RequestLogout(activity, new RequestLogoutResponseTaskCompleteListener()).execute(logoutData);
+
             }
         });
 
@@ -392,6 +402,28 @@ public class HamPayDialog {
         dialog.setCanceledOnTouchOutside(false);
 
         dialog.show();
+    }
+
+    public class RequestLogoutResponseTaskCompleteListener implements AsyncTaskCompleteListener<LogoutResponse>
+    {
+        public RequestLogoutResponseTaskCompleteListener(){
+        }
+
+        @Override
+        public void onTaskComplete(LogoutResponse logoutResponse)
+        {
+            if (logoutResponse != null) {
+
+            }
+            else {
+
+            }
+
+        }
+
+        @Override
+        public void onTaskPreRun() {
+        }
     }
 
     public void showRemovePasswordDialog(){

@@ -1,6 +1,4 @@
 package com.hampay.mobile.android.activity;
-
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -10,6 +8,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.component.FacedTextView;
@@ -32,11 +31,27 @@ public class IntroSliderActivity extends ActionBarActivity implements BaseSlider
     LinearLayout animate_logo;
     LinearLayout animate_logo_1;
 
+    ImageView wireframe_1;
+    ImageView wireframe_2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro_slider);
         mDemoSlider = (SliderLayout)findViewById(R.id.slider);
+
+        fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.slide_fadein);
+        fadeInAnimation.setFillAfter(false);
+        fadeInAnimation.setRepeatMode(0);
+        fadeInAnimation.setFillAfter(true);
+
+        fadeOutAnimation = AnimationUtils.loadAnimation(this, R.anim.slide_fadeout);
+        fadeOutAnimation.setFillAfter(false);
+        fadeOutAnimation.setRepeatMode(0);
+        fadeOutAnimation.setFillAfter(true);
+
+        wireframe_1 = (ImageView)findViewById(R.id.wireframe_1);
+        wireframe_2 = (ImageView)findViewById(R.id.wireframe_2);
 
         animate_logo = (LinearLayout)findViewById(R.id.animate_logo);
         animate_logo_1 = (LinearLayout)findViewById(R.id.animate_logo_1);
@@ -52,6 +67,7 @@ public class IntroSliderActivity extends ActionBarActivity implements BaseSlider
             public void onAnimationEnd(Animation animation) {
                 animate_logo_1.setVisibility(View.GONE);
                 animate_logo.setVisibility(View.VISIBLE);
+//                intro_text.startAnimation(fadeOutAnimation);
             }
 
             @Override
@@ -119,7 +135,7 @@ public class IntroSliderActivity extends ActionBarActivity implements BaseSlider
         mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Default);
         mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
         mDemoSlider.setCustomAnimation(new DescriptionAnimation());
-        mDemoSlider.setDuration(10000);
+//        mDemoSlider.setDuration(100);
         mDemoSlider.addOnPageChangeListener(this);
 
     }
@@ -156,12 +172,55 @@ public class IntroSliderActivity extends ActionBarActivity implements BaseSlider
             R.string.intro_5
     };
 
+    Animation fadeInAnimation;
+    Animation fadeOutAnimation;
+
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+
+    int selected = 0;
 
     @Override
     public void onPageSelected(int position) {
         Log.d("Slider Demo", "Page Changed: " + position);
+
+        selected = position;
+
+
+
+        switch (position){
+            case 0:
+                wireframe_1.setImageResource(R.drawable.wireframe_1);
+                wireframe_2.setImageResource(R.drawable.wireframe_2);
+                wireframe_1.startAnimation(fadeInAnimation);
+                wireframe_2.startAnimation(fadeOutAnimation);
+                break;
+            case 1:
+                wireframe_1.setImageResource(R.drawable.wireframe_2);
+                wireframe_2.setImageResource(R.drawable.wireframe_3);
+                wireframe_2.startAnimation(fadeOutAnimation);
+                wireframe_1.startAnimation(fadeInAnimation);
+                break;
+            case 2:
+                wireframe_1.setImageResource(R.drawable.wireframe_3);
+                wireframe_2.setImageResource(R.drawable.wireframe_4);
+                wireframe_1.startAnimation(fadeInAnimation);
+                wireframe_2.startAnimation(fadeOutAnimation);
+                break;
+            case 3:
+                wireframe_1.setImageResource(R.drawable.wireframe_4);
+                wireframe_2.setImageResource(R.drawable.wireframe_5);
+                wireframe_2.startAnimation(fadeOutAnimation);
+                wireframe_1.startAnimation(fadeInAnimation);
+                break;
+            case 4:
+                wireframe_1.setImageResource(R.drawable.wireframe_5);
+                wireframe_2.setImageResource(R.drawable.wireframe_1);
+                wireframe_1.startAnimation(fadeInAnimation);
+                wireframe_2.startAnimation(fadeOutAnimation);
+                break;
+        }
 
         intro_icon = (ImageView)findViewById(R.id.intro_icon);
         intro_text = (FacedTextView)findViewById(R.id.intro_text);

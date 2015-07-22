@@ -7,7 +7,21 @@
     android:layout_height="match_parent"
     tools:context="com.daimajia.slider.demo.MainActivity">
 
+    <ImageView
+        android:id="@+id/wireframe_1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/wireframe_1"
+        android:scaleType="fitXY"
+        android:visibility="visible"/>
 
+    <ImageView
+        android:id="@+id/wireframe_2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/wireframe_2"
+        android:scaleType="fitXY"
+        android:visibility="visible"/>
 
     <com.hampay.mobile.android.component.slider.SliderLayout
         android:id="@+id/slider"
@@ -16,7 +30,8 @@
         custom:auto_cycle="true"
         custom:indicator_visibility="visible"
         custom:pager_animation_span="1100"
-        android:layout_height="fill_parent"/>
+        android:layout_height="fill_parent"
+        android:background="@android:color/transparent"/>
 
     <LinearLayout
         android:id="@+id/animate_logo"
@@ -123,8 +138,8 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@id/intro_icon_1">
-
+                android:layout_below="@id/intro_icon_1"
+                android:visibility="invisible">
 
                 <com.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/intro_text_1"

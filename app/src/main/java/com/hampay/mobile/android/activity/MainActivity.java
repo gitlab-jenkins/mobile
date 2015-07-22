@@ -6,6 +6,7 @@ import android.accounts.AccountManagerFuture;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -31,6 +32,7 @@ import com.hampay.mobile.android.fragment.PayToBusinessFragment;
 import com.hampay.mobile.android.fragment.PayToOneFragment;
 import com.hampay.mobile.android.fragment.SettingFragment;
 import com.hampay.mobile.android.fragment.UserTransactionFragment;
+import com.hampay.mobile.android.model.LogoutData;
 import com.hampay.mobile.android.util.Constants;
 
 
@@ -272,7 +274,13 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 title = getString(R.string.title_guide);
                 break;
             case 7:
-                new HamPayDialog(activity).showExitDialog();
+
+                SharedPreferences prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+
+                LogoutData logoutData = new LogoutData();
+                logoutData.setIplanetDirectoryPro(prefs.getString(Constants.TOKEN_ID, null));
+
+                new HamPayDialog(activity).showExitDialog(logoutData);
                 break;
 
             default:
@@ -357,6 +365,10 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     @Override
     public void onBackPressed() {
-        new HamPayDialog(activity).showExitDialog();
+        SharedPreferences prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+
+        LogoutData logoutData = new LogoutData();
+        logoutData.setIplanetDirectoryPro(prefs.getString(Constants.TOKEN_ID, null));
+        new HamPayDialog(activity).showExitDialog(logoutData);
     }
 }
