@@ -42,6 +42,7 @@ import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.DeviceInfo;
 import com.hampay.mobile.android.util.NationalCodeVerification;
 import com.hampay.mobile.android.util.NetworkConnectivity;
+import com.hampay.mobile.android.util.Utils;
 
 public class ConfirmInfoActivity extends ActionBarActivity implements View.OnClickListener {
 
@@ -79,7 +80,6 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
 
     RelativeLayout loading_rl;
 
-    String validIpAddress = "";
 
     LinearLayout correct_info;
 
@@ -104,7 +104,6 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
 
         correct_info = (LinearLayout)findViewById(R.id.correct_info);
 
-        new RequestIpProvider(context, new RequestValidIpTaskCompleteListener()).execute();
 
         loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
 
@@ -376,7 +375,7 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                     registrationConfirmUserDataRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
                     registrationConfirmUserDataRequest.setImei(new DeviceInfo(getApplicationContext()).getIMEI());
                     registrationConfirmUserDataRequest.setIsVerified(confirm_check_value);
-                    registrationConfirmUserDataRequest.setIp(validIpAddress);
+                    registrationConfirmUserDataRequest.setIp(new Utils(context).getNetworkIp());
                     registrationConfirmUserDataRequest.setDeviceId(new DeviceInfo(getApplicationContext()).getDeviceId());
 
                     new RequestConfirmUserData(context, new RequestConfirmUserDataTaskCompleteListener()).execute(registrationConfirmUserDataRequest);
@@ -510,28 +509,6 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
         public void onTaskPreRun() {
             loading_rl.setVisibility(View.VISIBLE);
         }
-    }
-
-
-    public class RequestValidIpTaskCompleteListener implements AsyncTaskCompleteListener<String>
-    {
-        public RequestValidIpTaskCompleteListener(){
-        }
-
-        @Override
-        public void onTaskComplete(String validIp)
-        {
-            validIpAddress = validIp;
-        }
-
-        @Override
-        public void onTaskPreRun() {
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        new HamPayDialog(activity).showExitRegistrationDialog();
     }
 
 }

@@ -1,0 +1,339 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:geekui="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:background="@color/colorPrimary">
+
+        <com.hampay.mobile.android.component.FacedTextView
+            geekui:customTypeface="fonts/iran_sans.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="22sp"
+            android:text="@string/remember_phrase"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"/>
+
+        <com.hampay.mobile.android.component.FacedTextView
+            geekui:customTypeface="fonts/iran_sans.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="22sp"
+            android:text="@string/title_contacts_us"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:clickable="true"
+            android:onClick="contactUs"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
+            android:id="@+id/layoutContainer"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp">
+
+
+            <LinearLayout
+                android:layout_width="0dip"
+                android:layout_height="30dp"
+                android:layout_weight="0.4"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/step_pass_con"
+                    android:layout_centerVertical="true"/>
+
+                <RelativeLayout
+                    android:layout_width="0dip"
+                    android:layout_height="30dp"
+                    android:layout_weight="0.3">
+
+
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="6dp"
+                        android:background="@color/normal_text"
+                        android:layout_centerInParent="true" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/triangle_gray"
+                        android:layout_centerVertical="true"
+                        android:background="@android:color/white"/>
+
+
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dip"
+                    android:layout_height="30dp"
+                    android:layout_weight="0.7">
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="6dp"
+                        android:background="@color/register_btn_color"
+                        android:layout_centerInParent="true" />
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/step_pay_icon_g"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:background="@android:color/white"
+                        />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dip"
+                android:layout_height="30dp"
+                android:layout_weight="0.3"
+                android:gravity="center_vertical">
+
+                <RelativeLayout
+                    android:layout_width="0dip"
+                    android:layout_height="30dp"
+                    android:layout_weight="0.5">
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="6dp"
+                        android:background="@color/register_btn_color"
+                        android:layout_centerInParent="true" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/triangle_green"
+                        android:layout_centerVertical="true"
+                        android:background="@android:color/white"/>
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dip"
+                    android:layout_height="30dp"
+                    android:layout_weight="0.5">
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="6dp"
+                        android:background="@color/register_btn_color"
+                        android:layout_centerInParent="true" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/step_mobile_icon_g"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:background="@android:color/white"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dip"
+                android:layout_height="30dp"
+                android:layout_weight="0.3"
+                android:gravity="center_vertical">
+
+                <RelativeLayout
+                    android:layout_width="0dip"
+                    android:layout_height="30dp"
+                    android:layout_weight="0.5">
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="6dp"
+                        android:background="@color/register_btn_color"
+                        android:layout_centerInParent="true" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/triangle_green"
+                        android:layout_centerVertical="true"
+                        android:background="@android:color/white"/>
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dip"
+                    android:layout_height="30dp"
+                    android:layout_weight="0.5">
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="6dp"
+                        android:background="@color/register_btn_color"
+                        android:layout_centerInParent="true" />
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/step_account_icon"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:background="@android:color/white"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginRight="18dp">
+
+                    <RelativeLayout
+                        android:id="@+id/password_2_rl"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="right|center_vertical"
+                        android:background="@drawable/stroke_bg"
+                        android:visibility="visible">
+
+
+                        <ImageView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:src="@drawable/step_icon_pass"
+                            android:layout_margin="8dp"
+                            android:layout_alignParentRight="true"/>
+
+                        <com.hampay.mobile.android.component.FacedTextView
+                            geekui:customTypeface="fonts/iran_sans.ttf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/register_btn_color"
+                            android:textSize="18sp"
+                            android:text="@string/remember_phrase_text"
+                            android:layout_centerVertical="true"
+                            android:gravity="right"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="48dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"/>
+
+
+                    </RelativeLayout>
+
+
+                    <com.hampay.mobile.android.component.edittext.FacedEditText
+                        android:id="@+id/memorable_value"
+                        android:layout_width="180dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="22dp"
+                        android:gravity="center"
+                        android:textColor="@android:color/black"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/remember_edittext_bg"
+                        android:layout_marginTop="12dp"
+                        android:lines="1"/>
+
+
+
+                    <RelativeLayout
+                        android:layout_width="150dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="18dp">
+
+
+                        <com.hampay.mobile.android.component.material.ButtonRectangle
+                            android:id="@+id/keepOn_button"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_centerHorizontal="true"
+                            android:background="@color/register_btn_color"
+                            android:textSize="20sp" />
+
+                        <com.hampay.mobile.android.component.FacedTextView
+                            geekui:customTypeface="fonts/iran_sans.ttf"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:textColor="@android:color/white"
+                            android:textSize="24sp"
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            android:text="@string/confirm"
+                            android:layout_marginTop="2dp"
+                            android:layout_marginBottom="2dp"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </ScrollView>
+
+            <RelativeLayout
+                android:visibility="gone"
+                android:id="@+id/loading_rl"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="@color/loading_transparent_color">
+
+                <ProgressBar
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:indeterminateDrawable="@drawable/fragment_progress"
+                    android:layout_centerInParent="true"/>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

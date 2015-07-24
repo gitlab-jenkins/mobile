@@ -26,6 +26,7 @@ import com.hampay.common.core.model.response.ContactUsResponse;
 import com.hampay.common.core.model.response.TACAcceptResponse;
 import com.hampay.common.core.model.response.dto.UserProfileDTO;
 import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.activity.AppSliderActivity;
 import com.hampay.mobile.android.activity.MainActivity;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestLogin;
@@ -441,6 +442,10 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+
+                Intent intent = new Intent(activity, AppSliderActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                activity.startActivity(intent);
                 activity.finish();
             }
         });
@@ -479,6 +484,9 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                Intent intent = new Intent();
+                intent.setClass(activity, AppSliderActivity.class);
+                activity.startActivity(intent);
                 activity.finish();
             }
         });
@@ -487,6 +495,43 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
+
+        dialog.show();
+    }
+
+    public void showLoginFailDialog(){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_login_fail, null);
+
+        FacedTextView login_retry = (FacedTextView) view.findViewById(R.id.login_retry);
+        FacedTextView remove_password = (FacedTextView) view.findViewById(R.id.remove_password);
+
+        login_retry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        remove_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                showRemovePasswordDialog();
             }
         });
 

@@ -21,6 +21,8 @@ public class CompleteRegistrationActivity extends ActionBarActivity {
 
     Activity activity;
 
+    SharedPreferences.Editor editor;
+
     public void contactUs(View view){
         (new HamPayDialog(this)).showContactUsDialog();
     }
@@ -29,6 +31,10 @@ public class CompleteRegistrationActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_complete_registration);
+
+        editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+        editor.putBoolean(Constants.REGISTERED_USER, true);
+        editor.commit();
 
         activity = CompleteRegistrationActivity.this;
 
@@ -39,6 +45,7 @@ public class CompleteRegistrationActivity extends ActionBarActivity {
                 Intent intent = new Intent();
                 intent.setClass(CompleteRegistrationActivity.this, HamPayLoginActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

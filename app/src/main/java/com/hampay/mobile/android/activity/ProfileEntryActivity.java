@@ -414,6 +414,7 @@ public class ProfileEntryActivity extends ActionBarActivity {
             if (registrationEntryResponse != null) {
 
 
+
                 editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ProfileEntryActivity.class.toString());
                 editor.putString(Constants.REGISTERED_CELL_NUMBER, cellNumberValue.getText().toString());
                 editor.putString(Constants.REGISTERED_BANK_ID, selectedBankCode);
@@ -426,6 +427,7 @@ public class ProfileEntryActivity extends ActionBarActivity {
                 Intent intent = new Intent();
                 intent.setClass(ProfileEntryActivity.this, VerificationActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                finish();
                 startActivity(intent);
 
                 keepOn_button.setEnabled(true);

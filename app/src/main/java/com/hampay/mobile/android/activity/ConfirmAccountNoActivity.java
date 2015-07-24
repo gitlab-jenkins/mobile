@@ -41,8 +41,9 @@ public class ConfirmAccountNoActivity extends ActionBarActivity {
                 Intent intent = new Intent();
                 intent.setClass(ConfirmAccountNoActivity.this, ConfirmInfoActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(intent);
                 finish();
+                startActivity(intent);
+
             }
         });
     }

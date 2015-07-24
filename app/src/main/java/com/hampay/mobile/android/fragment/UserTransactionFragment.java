@@ -99,9 +99,11 @@ public class UserTransactionFragment extends Fragment {
         @Override
         protected String doInBackground(Void... params) {
 
-            WebServices webServices = new WebServices();
-            newTransactionDTOs = webServices.getUserTransaction().getService().getTransactions();
-            transactionDTOs.addAll(newTransactionDTOs);
+            if (isAdded()) {
+                WebServices webServices = new WebServices();
+                newTransactionDTOs = webServices.getUserTransaction().getService().getTransactions();
+                transactionDTOs.addAll(newTransactionDTOs);
+            }
 
             return null;
         }

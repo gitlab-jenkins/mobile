@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
@@ -17,16 +16,12 @@ import android.widget.RelativeLayout;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.request.RegistrationPassCodeEntryRequest;
-import com.hampay.common.core.model.response.RegistrationFetchUserDataResponse;
 import com.hampay.common.core.model.response.RegistrationPassCodeEntryResponse;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import com.hampay.mobile.android.async.RequestFetchUserData;
 import com.hampay.mobile.android.async.RequestPassCodeEntry;
-import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
-import com.hampay.mobile.android.webservice.WebServices;
 
 public class PasswordEntryActivity extends ActionBarActivity implements View.OnClickListener{
 
@@ -149,10 +144,10 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
                 input_digit_5.setImageResource(R.drawable.pass_icon_2);
 
                 Intent intent = new Intent();
-                intent.setClass(PasswordEntryActivity.this, RememberPhraseActivity.class);
+                intent.setClass(PasswordEntryActivity.this, MemorableWordEntryActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(intent);
                 finish();
+                startActivity(intent);
             }
         }
 

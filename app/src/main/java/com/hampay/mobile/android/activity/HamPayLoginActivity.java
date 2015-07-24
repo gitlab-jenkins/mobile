@@ -36,19 +36,22 @@ import com.hampay.mobile.android.model.LoginData;
 import com.hampay.mobile.android.model.LoginResponse;
 import com.hampay.mobile.android.service.LoginService;
 import com.hampay.mobile.android.util.Constants;
+import com.hampay.mobile.android.util.DeviceInfo;
 import com.hampay.mobile.android.webservice.WebServices;
+
+import java.util.UUID;
 
 
 public class HamPayLoginActivity extends ActionBarActivity implements View.OnClickListener {
-
-    ButtonRectangle remove_pass_button;
 
     SharedPreferences prefs;
 
     SharedPreferences.Editor editor;
 
     FacedTextView hampay_memorableword_text;
-    String MemorableWord;
+    String cellNumber = "";
+    String memorableWord;
+    String installationToken;
 
 
 
@@ -93,9 +96,6 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
 
         loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
 
-        remove_pass_button = (ButtonRectangle)findViewById(R.id.remove_pass_button);
-        remove_pass_button.setOnClickListener(this);
-
         context = this;
         activity = HamPayLoginActivity.this;
 
@@ -138,11 +138,15 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
 
         hampay_memorableword_text = (FacedTextView)findViewById(R.id.hampay_memorableword_text);
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
-        MemorableWord = prefs.getString(Constants.MEMORABLE_WORD, null);
 
-        if (MemorableWord != null) {
-            hampay_memorableword_text.setText(MemorableWord);
+        cellNumber = prefs.getString(Constants.REGISTERED_CELL_NUMBER, "");
+        memorableWord = prefs.getString(Constants.MEMORABLE_WORD, "");
+
+        if (memorableWord != null) {
+            hampay_memorableword_text.setText(memorableWord);
         }
+
+        installationToken = UUID.randomUUID().toString();
 
     }
 
@@ -199,12 +203,17 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
             loading_rl.setVisibility(View.GONE);
             if (loginResponse != null) {
 
-                editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-                editor.putString(Constants.TOKEN_ID, loginResponse.getTokenId());
-                editor.commit();
+                if ((loginResponse.getSuccessUrl().length() > 0)) {
 
-                TACRequest tacRequest = new TACRequest();
-                new RequestTAC(context, new RequestTACResponseTaskCompleteListener()).execute(tacRequest);
+                    editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+                    editor.putString(Constants.TOKEN_ID, loginResponse.getTokenId());
+                    editor.commit();
+
+                    TACRequest tacRequest = new TACRequest();
+                    new RequestTAC(context, new RequestTACResponseTaskCompleteListener()).execute(tacRequest);
+                }else {
+                    new HamPayDialog(activity).showLoginFailDialog();
+                }
 
 
             }
@@ -225,13 +234,6 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-
-            case R.id.remove_pass_button:
-
-
-                new HamPayDialog(activity).showRemovePasswordDialog();
-
-                break;
 
             case R.id.password_holder:
                 keyboard.setVisibility(LinearLayout.VISIBLE);
@@ -308,15 +310,20 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
         }
 
         if (inputPassValue.length() == 5){
-            LoginData loginData = new LoginData();
-            new RequestLogin(context, new RequestLoginResponseTaskCompleteListener()).execute(loginData);
 
-            //Unremark Here
-//            Intent intent = new Intent();
-//            intent.setClass(HamPayLoginActivity.this, MainActivity.class);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(intent);
-//            finish();
+            String password = SecurityUtils.getInstance(this).
+                    generatePassword(inputPassValue,
+                            memorableWord,
+//                            new DeviceUuidFactory(this).getDeviceUuid().toString(),
+                            new DeviceInfo(this).getIMEI(),
+                            installationToken);
+
+            LoginData loginData = new LoginData();
+
+            loginData.setUserPassword(password);
+            loginData.setUserName(cellNumber);
+
+            new RequestLogin(context, new RequestLoginResponseTaskCompleteListener()).execute(loginData);
 
         }
 
@@ -381,24 +388,25 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
     private void sendLoginRequest() {
 
 
-        AlertUtils.getInstance().showProgressDialog(this);
-
-
-        LoginService service = new LoginService(this);
-//        service.sendLoginRequest("87378fbf3a67463dac9829256f26270a", passCode);
-        String memorableWord = "";
-
-        String userId = "";
-
-        String installationToken = "";
-
-
-        String password = SecurityUtils.getInstance(this).
-                generatePassword(inputPassValue,
-                        memorableWord,
-                        new DeviceUuidFactory(this).getDeviceUuid().toString(),
-                        installationToken);
-
-        service.sendLoginRequest(userId, password);
+//        AlertUtils.getInstance().showProgressDialog(this);
+//
+//
+//        LoginService service = new LoginService(this);
+////        service.sendLoginRequest("87378fbf3a67463dac9829256f26270a", passCode);
+//        String memorableWord = "";
+//
+//        String userId = "";
+//
+//        String installationToken = "";
+//
+//        cls
+//
+//        String password = SecurityUtils.getInstance(this).
+//                generatePassword(inputPassValue,
+//                        memorableWord,
+//                        new DeviceUuidFactory(this).getDeviceUuid().toString(),
+//                        installationToken);
+//
+//        service.sendLoginRequest(userId, password);
     }
 }

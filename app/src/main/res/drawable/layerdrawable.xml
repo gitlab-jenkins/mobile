@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item>
+        <bitmap
+            android:id="@+id/Idofbg5"
+            android:gravity="fill"
+            android:src="@drawable/p05_1" />
+    </item>
+    <item>
+        <bitmap
+            android:id="@+id/Idofbg4"
+            android:gravity="fill"
+            android:src="@drawable/p04_1" />
+    </item>
+
+    <item>
+        <bitmap
+            android:id="@+id/Idofbg3"
+            android:gravity="fill"
+            android:src="@drawable/p03_1" />
+    </item>
+    <item>
+        <bitmap
+            android:id="@+id/Idofbg2"
+            android:gravity="fill"
+            android:src="@drawable/p02_1" />
+    </item>
+    <item>
+        <bitmap
+            android:id="@+id/Idofbg1"
+            android:gravity="fill"
+            android:src="@drawable/p01_1" />
+    </item>
+
+</layer-list>

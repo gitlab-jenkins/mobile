@@ -1,0 +1,157 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.hampay.mobile.android.activity.AppSliderActivity"
+    android:background="#FFFFFF"
+    xmlns:geekui="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/sliding_into_app"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/layerdrawable"
+        android:visibility="visible"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="25dp"
+        android:gravity="center">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_margin="4dp">
+
+            <ImageView
+                android:id="@+id/indicator_1"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:src="@drawable/circle_indicator_transparency"
+                android:layout_margin="4dp"/>
+
+            <ImageView
+                android:id="@+id/indicator_2"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:src="@drawable/circle_indicator"
+                android:layout_margin="4dp"/>
+
+
+            <ImageView
+                android:id="@+id/indicator_3"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:src="@drawable/circle_indicator"
+                android:layout_margin="4dp"/>
+
+            <ImageView
+                android:id="@+id/indicator_4"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:src="@drawable/circle_indicator"
+                android:layout_margin="4dp"/>
+
+            <ImageView
+                android:id="@+id/indicator_5"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:src="@drawable/circle_indicator"
+                android:layout_margin="4dp"/>
+
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:layout_width="150dp"
+            android:layout_height="50dp">
+
+            <com.hampay.mobile.android.component.material.ButtonRectangle
+                android:id="@+id/register_button"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_centerHorizontal="true"
+                android:background="@color/register_btn_color"
+                android:textSize="20sp" />
+
+            <com.hampay.mobile.android.component.FacedTextView
+                geekui:customTypeface="fonts/iran_sans.ttf"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textColor="@android:color/white"
+                android:textSize="24sp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="@string/register"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+        <ImageView
+            android:id="@+id/image_splash"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/splash_bg_color"/>
+
+
+        <LinearLayout
+            android:id="@+id/animate_logo_1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_centerInParent="true"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/intro_icon"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/logo_hampay"/>
+
+            <LinearLayout
+                android:id="@+id/intro_title_1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/intro_icon"
+                android:visibility="invisible">
+
+                <com.hampay.mobile.android.component.FacedTextView
+                    android:id="@+id/intro_text_1"
+                    geekui:customTypeface="fonts/iran_sans.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/white"
+                    android:textSize="24sp"
+                    android:gravity="center"
+                    android:layout_margin="8dp"
+                    android:text="@string/intro_1"
+                    android:visibility="invisible"/>
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

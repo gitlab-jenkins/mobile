@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:geekui="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="right"
+    android:background="@drawable/dialog_pay_theme"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+
+    <com.hampay.mobile.android.component.FacedTextView
+        geekui:customTypeface="fonts/iran_sans.ttf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/normal_text"
+        android:textSize="22sp"
+        android:text="@string/login_fail_text"
+        android:layout_marginTop="15dp"/>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp">
+
+        <com.hampay.mobile.android.component.FacedTextView
+            android:id="@+id/remove_password"
+            geekui:customTypeface="fonts/iran_sans.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/exit_confirmation"
+            android:textSize="20sp"
+            android:text="@string/remove_password" />
+
+        <com.hampay.mobile.android.component.FacedTextView
+            android:id="@+id/login_retry"
+            geekui:customTypeface="fonts/iran_sans.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/exit_dis_confirmation"
+            android:textSize="20sp"
+            android:text="@string/login_retry"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

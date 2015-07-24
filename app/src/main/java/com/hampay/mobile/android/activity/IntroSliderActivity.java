@@ -110,11 +110,11 @@ public class IntroSliderActivity extends ActionBarActivity implements BaseSlider
 //        url_maps.put("Game of Thrones", "http://images.boomsbeat.com/data/images/full/19640/game-of-thrones-season-4-jpg.jpg");
 
         HashMap<String,Integer> file_maps = new HashMap<String, Integer>();
-        file_maps.put("wireframe_1", R.drawable.wireframe_1);
-        file_maps.put("wireframe_2", R.drawable.wireframe_2);
-        file_maps.put("wireframe_3", R.drawable.wireframe_3);
-        file_maps.put("wireframe_4", R.drawable.wireframe_4);
-        file_maps.put("wireframe_5", R.drawable.wireframe_5);
+//        file_maps.put("wireframe_1", R.drawable.wireframe_1);
+//        file_maps.put("wireframe_2", R.drawable.wireframe_2);
+//        file_maps.put("wireframe_3", R.drawable.wireframe_3);
+//        file_maps.put("wireframe_4", R.drawable.wireframe_4);
+//        file_maps.put("wireframe_5", R.drawable.wireframe_5);
 
         for(String name : file_maps.keySet()){
             TextSliderView textSliderView = new TextSliderView(this);
@@ -187,40 +187,38 @@ public class IntroSliderActivity extends ActionBarActivity implements BaseSlider
 
         selected = position;
 
-
-
-        switch (position){
-            case 0:
-                wireframe_1.setImageResource(R.drawable.wireframe_1);
-                wireframe_2.setImageResource(R.drawable.wireframe_2);
-                wireframe_1.startAnimation(fadeInAnimation);
-                wireframe_2.startAnimation(fadeOutAnimation);
-                break;
-            case 1:
-                wireframe_1.setImageResource(R.drawable.wireframe_2);
-                wireframe_2.setImageResource(R.drawable.wireframe_3);
-                wireframe_2.startAnimation(fadeOutAnimation);
-                wireframe_1.startAnimation(fadeInAnimation);
-                break;
-            case 2:
-                wireframe_1.setImageResource(R.drawable.wireframe_3);
-                wireframe_2.setImageResource(R.drawable.wireframe_4);
-                wireframe_1.startAnimation(fadeInAnimation);
-                wireframe_2.startAnimation(fadeOutAnimation);
-                break;
-            case 3:
-                wireframe_1.setImageResource(R.drawable.wireframe_4);
-                wireframe_2.setImageResource(R.drawable.wireframe_5);
-                wireframe_2.startAnimation(fadeOutAnimation);
-                wireframe_1.startAnimation(fadeInAnimation);
-                break;
-            case 4:
-                wireframe_1.setImageResource(R.drawable.wireframe_5);
-                wireframe_2.setImageResource(R.drawable.wireframe_1);
-                wireframe_1.startAnimation(fadeInAnimation);
-                wireframe_2.startAnimation(fadeOutAnimation);
-                break;
-        }
+//        switch (position){
+//            case 0:
+//                wireframe_1.setImageResource(R.drawable.wireframe_1);
+//                wireframe_2.setImageResource(R.drawable.wireframe_2);
+//                wireframe_1.startAnimation(fadeInAnimation);
+//                wireframe_2.startAnimation(fadeOutAnimation);
+//                break;
+//            case 1:
+//                wireframe_1.setImageResource(R.drawable.wireframe_2);
+//                wireframe_2.setImageResource(R.drawable.wireframe_3);
+//                wireframe_2.startAnimation(fadeOutAnimation);
+//                wireframe_1.startAnimation(fadeInAnimation);
+//                break;
+//            case 2:
+//                wireframe_1.setImageResource(R.drawable.wireframe_3);
+//                wireframe_2.setImageResource(R.drawable.wireframe_4);
+//                wireframe_1.startAnimation(fadeInAnimation);
+//                wireframe_2.startAnimation(fadeOutAnimation);
+//                break;
+//            case 3:
+//                wireframe_1.setImageResource(R.drawable.wireframe_4);
+//                wireframe_2.setImageResource(R.drawable.wireframe_5);
+//                wireframe_2.startAnimation(fadeOutAnimation);
+//                wireframe_1.startAnimation(fadeInAnimation);
+//                break;
+//            case 4:
+//                wireframe_1.setImageResource(R.drawable.wireframe_5);
+//                wireframe_2.setImageResource(R.drawable.wireframe_1);
+//                wireframe_1.startAnimation(fadeInAnimation);
+//                wireframe_2.startAnimation(fadeOutAnimation);
+//                break;
+//        }
 
         intro_icon = (ImageView)findViewById(R.id.intro_icon);
         intro_text = (FacedTextView)findViewById(R.id.intro_text);

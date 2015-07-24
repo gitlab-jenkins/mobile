@@ -99,14 +99,16 @@ public class RegVerifyAccountNoActivity extends ActionBarActivity {
 
             if (verifyTransferMoneyResponseMessage.getService().getResultStatus() != null) {
 
+
+
                 loading_rl.setVisibility(View.GONE);
 
                 if (verifyTransferMoneyResponseMessage.getService().getIsVerified()){
                     Intent intent = new Intent();
                     intent.setClass(RegVerifyAccountNoActivity.this, PostRegVerifyAccountNoActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                    startActivity(intent);
                     finish();
+                    startActivity(intent);
                 }
             }
 

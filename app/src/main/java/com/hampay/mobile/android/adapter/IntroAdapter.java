@@ -18,11 +18,11 @@ public class IntroAdapter extends PagerAdapter{
 
 
     int[] m‌Background = {
-            R.drawable.wireframe_1,
-            R.drawable.wireframe_2,
-            R.drawable.wireframe_3,
-            R.drawable.wireframe_4,
-            R.drawable.wireframe_5,
+//            R.drawable.wireframe_1,
+//            R.drawable.wireframe_2,
+//            R.drawable.wireframe_3,
+//            R.drawable.wireframe_4,
+//            R.drawable.wireframe_5,
     };
 
     int[] m‌Icons = {

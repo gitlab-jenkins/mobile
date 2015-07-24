@@ -221,7 +221,7 @@
     <string name="get_current_memorable">دریافت کلمه یادآوری جاری</string>
     <string name="get_new_memorable">دریافت کلمه یادآوری جدید</string>
 
-    <string name="remove_password">حذف رمزعبور</string>
+
 
     <string name="remember_phrase">یادآوری</string>
     <string name="remember_phrase_text">لطفا یک کلمه کوتاه به عنوان یادآوری رمز عبور وارد نمایید.</string>
@@ -312,6 +312,10 @@
     <string name="exit_registration_yes">خارج می‌شوم </string>
     <string name="exit_registration_no">ادامه می‌دهم</string>
 
+    <string name="login_fail_text">رمزعبور خود را صحیح وارد کنید</string>
+    <string name="remove_password">حذف رمزعبور</string>
+    <string name="login_retry">تلاش مجدد</string>
+
     <string name="title_activity_change_memorable">ChangeMemorableActivity</string>
     <string name="title_activity_change_memorable_pass">ChangeMemorablePassActivity</string>
     <string name="title_activity_verify_account">VerifyAccountActivity</string>
@@ -319,5 +323,7 @@
     <string name="title_activity_animation_start">AnimationStartActivity</string>
     <string name="title_activity_animation_detail">AnimationDetailActivity</string>
     <string name="title_activity_slider">SliderActivity</string>
+    <string name="title_activity_app_slider">AppSliderActivity</string>
+    <string name="title_activity_entry">EntryActivity</string>
 
 </resources>
