@@ -1,6 +1,7 @@
 package com.hampay.mobile.android.webservice;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.provider.ContactsContract;
 
@@ -61,6 +62,7 @@ import com.hampay.common.core.model.response.TransactionListResponse;
 import com.hampay.common.core.model.response.UserProfileResponse;
 import com.hampay.common.core.model.response.VerifyAccountResponse;
 import com.hampay.common.core.model.response.VerifyTransferMoneyResponse;
+import com.hampay.mobile.android.account.Log;
 import com.hampay.mobile.android.model.LoginData;
 import com.hampay.mobile.android.model.LoginResponse;
 import com.hampay.mobile.android.model.LogoutData;
@@ -101,9 +103,13 @@ public class WebServices  {
 
     Context context;
 
+    SharedPreferences prefs;
+
     public WebServices(Context context){
 
         this.context = context;
+
+        prefs =  context.getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
 
     }
 
@@ -119,15 +125,21 @@ public class WebServices  {
 
         httpURLConnection.setDoOutput(true);
 
-        httpURLConnection.setRequestProperty("X-OpenAM-Username", "amAdmin");
-        httpURLConnection.setRequestProperty("X-OpenAM-Password", "5p0rtlife");
+        httpURLConnection.setRequestProperty("X-OpenAM-Username", loginData.getUserName());
+        httpURLConnection.setRequestProperty("X-OpenAM-Password", loginData.getUserPassword());
         httpURLConnection.setRequestProperty("Content-Type", "application/json");
         httpURLConnection.setRequestProperty("Accept-Encoding", "UTF-8");
 
-        BufferedWriter output = new BufferedWriter(new OutputStreamWriter(httpURLConnection.getOutputStream()));
-        output.write(/*body*/"{}");
-        output.flush();
-        output.close();
+
+        try {
+
+            BufferedWriter output = new BufferedWriter(new OutputStreamWriter(httpURLConnection.getOutputStream()));
+            output.write(/*body*/"{}");
+            output.flush();
+            output.close();
+        }catch (Exception e){
+            Log.i("ddd");
+        }
 
         int responseCode = httpURLConnection.getResponseCode();
 
@@ -263,7 +275,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpHost host = new HttpHost("176.58.104.158", 9090);
         HttpRequest request = new HttpPost("/users/reg-entry");
 
 
@@ -328,7 +340,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpHost host = new HttpHost("176.58.104.158", 9090);
 
 
         HttpRequest request = new HttpPost("/contactus");
@@ -397,8 +409,8 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9093);
-        HttpRequest request = new HttpPost("/users/reg-entry");
+        HttpHost host = new HttpHost("176.58.104.158", 9090);
+        HttpRequest request = new HttpPost("/users/reg-sms-token");
 
 
         HttpResponse response;
@@ -464,7 +476,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpHost host = new HttpHost("176.58.104.158", 9090);
 
         HttpRequest request = new HttpPost("/users/reg-verify-mobile");
 
@@ -529,7 +541,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpHost host = new HttpHost("176.58.104.158", 9090);
 
         HttpRequest request = new HttpPost("/users/reg-fetch-user-data");
 
@@ -595,7 +607,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpHost host = new HttpHost("176.58.104.158", 9090);
 
         HttpRequest request = new HttpPost("/users/reg-confirm-user-data");
 
@@ -662,7 +674,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpHost host = new HttpHost("176.58.104.158", 9090);
 
         HttpRequest request = new HttpPost("/users/reg-pass-code-entry");
 
@@ -859,7 +871,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpHost host = new HttpHost("176.58.104.158", 9090);
 
         HttpRequest request = new HttpPost("/users/reg-memorable-word-entry");
 
@@ -923,7 +935,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpHost host = new HttpHost("176.58.104.158", 9090);
         HttpRequest request = new HttpPost("/users/tac");
         HttpResponse response;
         try {
@@ -954,7 +966,8 @@ public class WebServices  {
 
     private String createTACResponse(TACRequest tacRequest) {
         RequestHeader header = new RequestHeader();
-        header.setAuthToken("008ewe");
+//        header.setAuthToken("008ewe");
+        header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
         RequestMessage<TACRequest> message = new RequestMessage<TACRequest>();
         message.setRequestHeader(header);
@@ -974,7 +987,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpHost host = new HttpHost("176.58.104.158", 9090);
         HttpRequest request = new HttpPost("/users/tacaccept");
         HttpResponse response;
         try {
@@ -1005,7 +1018,8 @@ public class WebServices  {
 
     private String createTACAcceptResponse(TACAcceptRequest tACAcceptRequest) {
         RequestHeader header = new RequestHeader();
-        header.setAuthToken("008ewe");
+//        header.setAuthToken("008ewe");
+        header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
         RequestMessage<TACAcceptRequest> message = new RequestMessage<TACAcceptRequest>();
         message.setRequestHeader(header);
@@ -1024,7 +1038,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpHost host = new HttpHost("176.58.104.158", 9090);
         HttpRequest request = new HttpPost("/customers/verify-account");
         HttpResponse response;
         try {
@@ -1056,7 +1070,8 @@ public class WebServices  {
 
     private String createVerifyAccountRequest(VerifyAccountRequest verifyAccountRequest) {
         RequestHeader header = new RequestHeader();
-        header.setAuthToken("008ewe");
+//        header.setAuthToken("008ewe");
+        header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
         RequestMessage<VerifyAccountRequest> message = new RequestMessage<VerifyAccountRequest>();
         message.setRequestHeader(header);
@@ -1077,7 +1092,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpHost host = new HttpHost("176.58.104.158", 9090);
         HttpRequest request = new HttpPost("/customers/verify-xfer");
         HttpResponse response;
         try {
@@ -1109,7 +1124,8 @@ public class WebServices  {
 
     private String createVerifyTransferMoneyRequest(VerifyTransferMoneyRequest verifyTransferMoneyRequest) {
         RequestHeader header = new RequestHeader();
-        header.setAuthToken("008ewe");
+//        header.setAuthToken("008ewe");
+        header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
         RequestMessage<VerifyTransferMoneyRequest> message = new RequestMessage<VerifyTransferMoneyRequest>();
         message.setRequestHeader(header);
@@ -1130,7 +1146,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpHost host = new HttpHost("176.58.104.158", 9090);
         HttpRequest request = new HttpPost("/customers/reg-verify-account");
         HttpResponse response;
         try {
@@ -1161,7 +1177,8 @@ public class WebServices  {
 
     private String createRegistrationVerifyAccountRequest(RegistrationVerifyAccountRequest registrationVerifyAccountRequest) {
         RequestHeader header = new RequestHeader();
-        header.setAuthToken("008ewe");
+//        header.setAuthToken("008ewe");
+        header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
         RequestMessage<RegistrationVerifyAccountRequest> message = new RequestMessage<RegistrationVerifyAccountRequest>();
         message.setRequestHeader(header);
@@ -1182,7 +1199,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpHost host = new HttpHost("176.58.104.158", 9090);
         HttpRequest request = new HttpPost("/customers/reg-verify-xfer");
         HttpResponse response;
         try {
@@ -1214,7 +1231,8 @@ public class WebServices  {
 
     private String createRegistrationVerifyTransferMoneyResponse(RegistrationVerifyTransferMoneyRequest registrationVerifyTransferMoneyRequest) {
         RequestHeader header = new RequestHeader();
-        header.setAuthToken("008ewe");
+//        header.setAuthToken("008ewe");
+        header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
         RequestMessage<RegistrationVerifyTransferMoneyRequest> message = new RequestMessage<RegistrationVerifyTransferMoneyRequest>();
         message.setRequestHeader(header);
@@ -1236,7 +1254,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpHost host = new HttpHost("176.58.104.158", 9090);
         HttpRequest request = new HttpPost("/users/profile");
 
         HttpResponse response;
@@ -1289,7 +1307,7 @@ public class WebServices  {
 
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
 
-        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpHost host = new HttpHost("176.58.104.158", 9090);
         HttpRequest request = new HttpPost("/customer/contacts/hp-enabled");
 
         HttpResponse response;
@@ -1342,7 +1360,7 @@ public class WebServices  {
 
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
 
-        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpHost host = new HttpHost("176.58.104.158", 9090);
         HttpRequest request = new HttpPost("/customers/individual-payment-confirm");
 
         HttpResponse response;
@@ -1395,7 +1413,7 @@ public class WebServices  {
 
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
 
-        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpHost host = new HttpHost("176.58.104.158", 9090);
         HttpRequest request = new HttpPost("/customers/individual-payment");
 
         HttpResponse response;
@@ -1451,7 +1469,7 @@ public class WebServices  {
 
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
 
-        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpHost host = new HttpHost("176.58.104.158", 9090);
         HttpRequest request = new HttpPost("/businesses/business-payment-confirm");
 
         HttpResponse response;
@@ -1506,7 +1524,7 @@ public class WebServices  {
 
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
 
-        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpHost host = new HttpHost("176.58.104.158", 9090);
         HttpRequest request = new HttpPost("/customers/business-payment");
 
         HttpResponse response;
@@ -1561,7 +1579,7 @@ public class WebServices  {
 
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
 
-        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpHost host = new HttpHost("176.58.104.158", 9090);
         HttpRequest request = new HttpPost("/businesses");
 
         HttpResponse response;
@@ -1603,7 +1621,8 @@ public class WebServices  {
 
     private String createHamPayBusinessJsonMessage() {
         RequestHeader header = new RequestHeader();
-        header.setAuthToken("008ewe");
+//        header.setAuthToken("008ewe");
+        header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
 
         RequestMessage<BusinessListRequest> message = new RequestMessage<BusinessListRequest>();
@@ -1633,7 +1652,7 @@ public class WebServices  {
 
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
 
-        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpHost host = new HttpHost("176.58.104.158", 9090);
         HttpRequest request = new HttpPost("/search");
 
         HttpResponse response;
@@ -1675,7 +1694,8 @@ public class WebServices  {
 
     private String createSearchBusinessJsonMessage(BusinessSearchRequest businessSearchRequest) {
         RequestHeader header = new RequestHeader();
-        header.setAuthToken("008ewe");
+//        header.setAuthToken("008ewe");
+        header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
 
         RequestMessage<BusinessSearchRequest> message = new RequestMessage<BusinessSearchRequest>();
@@ -1705,7 +1725,7 @@ public class WebServices  {
 
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
 
-        HttpHost host = new HttpHost("176.58.104.158", 9093);
+        HttpHost host = new HttpHost("176.58.104.158", 9090);
         HttpRequest request = new HttpPost("/transactions");
 
         HttpResponse response;
@@ -1747,7 +1767,8 @@ public class WebServices  {
 
     private String createUserProfileJsonMessage() {
         RequestHeader header = new RequestHeader();
-        header.setAuthToken("008ewe");
+//        header.setAuthToken("008ewe");
+        header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
 
 
@@ -1763,7 +1784,8 @@ public class WebServices  {
 
     private String createHamPayContactsJsonMessage() {
         RequestHeader header = new RequestHeader();
-        header.setAuthToken("008ewe");
+//        header.setAuthToken("008ewe");
+        header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
 
         RequestMessage<ContactsHampayEnabledRequest> message = new RequestMessage<ContactsHampayEnabledRequest>();
@@ -1803,7 +1825,8 @@ public class WebServices  {
 
     private String createIndividualConfirmJsonMessage(String phoneNumber) {
         RequestHeader header = new RequestHeader();
-        header.setAuthToken("008ewe");
+//        header.setAuthToken("008ewe");
+        header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
 
         RequestMessage<IndividualPaymentConfirmRequest> message = new RequestMessage<IndividualPaymentConfirmRequest>();
@@ -1821,7 +1844,8 @@ public class WebServices  {
 
     private String createIndividualJsonMessage(String phoneNumber) {
         RequestHeader header = new RequestHeader();
-        header.setAuthToken("008ewe");
+//        header.setAuthToken("008ewe");
+        header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
 
         RequestMessage<IndividualPaymentRequest> message = new RequestMessage<IndividualPaymentRequest>();
@@ -1840,7 +1864,8 @@ public class WebServices  {
 
     private String createBusinessConfirmJsonMessage(String businessCode) {
         RequestHeader header = new RequestHeader();
-        header.setAuthToken("008ewe");
+//        header.setAuthToken("008ewe");
+        header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
 
         RequestMessage<BusinessPaymentConfirmRequest> message = new RequestMessage<BusinessPaymentConfirmRequest>();
@@ -1858,7 +1883,8 @@ public class WebServices  {
 
     private String createBusinessJsonMessage(String businessCode) {
         RequestHeader header = new RequestHeader();
-        header.setAuthToken("008ewe");
+//        header.setAuthToken("008ewe");
+        header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
 
         RequestMessage<BusinessPaymentRequest> message = new RequestMessage<BusinessPaymentRequest>();
@@ -1879,7 +1905,8 @@ public class WebServices  {
 
     private String createUserTransaction() {
         RequestHeader header = new RequestHeader();
-        header.setAuthToken("008ewe");
+//        header.setAuthToken("008ewe");
+        header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
 
 

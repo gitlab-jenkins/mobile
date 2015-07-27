@@ -2,30 +2,24 @@
 
     <string name="app_name">هم‌پی</string>
 
-    <string name="provider_name">TV Shows</string>
-
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_intro">IntroActivity</string>
-
     <string name="hampay_network">شبکه پرداخت هم‌پی </string>
 
 
-    <string name="intro_1">هم پی \n پرداخت مدرن، ساده و مطمئن</string>
+    <string name="intro_1">هم‌پی \n پرداخت مدرن، ساده و مطمئن</string>
     <string name="intro_2">پرداخت به دوستان با یک شماره موبایل</string>
-    <string name="intro_3">پرداخت به هر عضو شبکه هم پی با یک شماره موبایل</string>
-    <string name="intro_4">مشاهده حساب های مرتبط</string>
-    <string name="intro_5">نمایش پرداخت ها و دریافت های گذشته</string>
+    <string name="intro_3">پرداخت به هر عضو شبکه هم‌پی با یک شماره موبایل</string>
+    <string name="intro_4">مشاهده حساب‌های مرتبط</string>
+    <string name="intro_5">نمایش پرداخت‌ها و دریافت‌های گذشته</string>
 
 
-    <string name="msg_fail_sms_verification">کد ۵ رقمی را کامل وارد کنید</string>
+    <string name="msg_fail_sms_verification">کد ۵ رقمی را کامل وارد کنید.</string>
 
     <string name="action_search">Search</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
 
     <string name="nav_item_account_detail">جزئیات حساب</string>
-    <string name="nav_item_transactions">تراکنش ها</string>
+    <string name="nav_item_transactions">تراکنش‌ها</string>
     <string name="nav_item_pay_to_one">پرداخت به فرد</string>
     <string name="nav_item_pay_to_business">پرداخت به کسب و کار</string>
     <string name="nav_item_settings">تنظیمات</string>
@@ -54,7 +48,7 @@
     </string-array>
 
     <string name="title_account_detail">جزئیات حساب</string>
-    <string name="title_transactions">تراکنش ها</string>
+    <string name="title_transactions">تراکنش‌ها</string>
     <string name="title_pay_to_one">پرداخت به فرد</string>
     <string name="title_pay_to_business">پرداخت به کسب و کار</string>
     <string name="title_settings">تنظیمات</string>
@@ -70,7 +64,7 @@
     <string name="transaction_user_call">تماس</string>
     <string name="transaction_user_message">پیامک</string>
 
-    <string name="hampay_contact">ارتباط با هم پی</string>
+    <string name="hampay_contact">ارتباط با هم‌پی</string>
     <string name="pay_to">پرداخت به:   </string>
     <string name="price">مبلغ (ریال)</string>
 
@@ -84,32 +78,20 @@
 
 
 
-    <string name="some_people_at_hampay">بعضی از دوستان شما در هم پی</string>
-    <string name="title_activity_splash">SplashActivity</string>
+    <string name="some_people_at_hampay">بعضی از دوستان شما در هم‌پی</string>
     <string name="register">ثبت نام</string>
     <string name="start">شروع</string>
-    <string name="title_activity_intro_slider">IntroSliderActivity</string>
-    <string name="title_activity_detail_transaction">DetailTransactionActivity</string>
-
-
-
 
     <string name="no_network">عدم اتصال به اینترنت
     \n
         مجدد تلاش کنید
     </string>
 
-
-    <string name="lorm">[32] But I must explain to you how all this mistaken idea of denouncing of a pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?
-
-[33] On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammeled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains.</string>
-
     <string name="detail_transaction">جزئیات تراکنش</string>
     <string name="account_no">شماره حساب </string>
     <string name="mobile_no">شماره همراه </string>
     <string name="account_type">نوع حساب </string>
     <string name="last_login">آخرین زمان ورود به سامانه </string>
-    <string name="title_activity_start">StartActivity</string>
 
     <string name="bank_name">انتخاب بانک</string>
 
@@ -126,37 +108,36 @@
     <string name="tac_accept">قبول دارم</string>
     <string name="tac_reject">قبول ندارم</string>
 
-    <string name="remove_password_text">برای حذف رمزعبور نیاز به ثبت نام مجدد می باشد.</string>
+    <string name="remove_password_text">برای حذف رمزعبور نیاز به ثبت نام مجدد می‌باشد.</string>
     <string name="re_registeration">ثبت نام مجدد</string>
     <string name="cancel_remove_password">انصراف</string>
 
 
-    <string name="no_result_search">جستجوی مورد نظر نتیجه ای در بر نداشت!</string>
+    <string name="no_result_search">جستجوی مورد نظر نتیجه‌ای در بر نداشت!</string>
     <string name="retry_search">باشه</string>
 
     <string name="incorrect_price">برای پرداخت خود مبلغ صحیحی را وارد نمایید</string>
     <string name="retry_price">باشه</string>
 
+    <string name="fail_sms_verification">شماره اعتبار سنجی وارد شده صحیح نمی‌باشد. لطفا از صحت شماره اطمینان حاصل کرده و شماره را مجدد وارد کنید.</string>
 
 
-    <string name="start_activity_title">شبکه پرداخت هم پی</string>
+
+    <string name="start_activity_title">شبکه پرداخت هم‌پی</string>
     <string name="start_activity_text_1"> پرداخت به دوستان یا کسب و کار</string>
     <string name="start_activity_text_2"> بدون نیاز به کارت بانکی</string>
-    <string name="start_activity_text_3"> با نرم افزار ایمن و ساده هم پی</string>
-    <string name="title_activity_post_start">PostStartActivity</string>
+    <string name="start_activity_text_3"> با نرم افزار ایمن و ساده هم‌پی</string>
 
     <string name="user_profile">مشخصات فردی</string>
-    <string name="user_info_for_hampy">اطلاعات مورد نیاز برای استفاده از هم پی</string>
+    <string name="user_info_for_hampy">اطلاعات مورد نیاز برای استفاده از هم‌پی</string>
     <string name="phone_number">۱. شماره همراه</string>
     <string name="credit_info">۲. نام بانک، شماره حساب و کد ملی</string>
     <string name="keep_on">ادامه</string>
-    <string name="title_activity_profile_entry">ProfileEntryActivity</string>
     <string name="profile_entry">ورود مشخصات</string>
     <string name="please_entry_info">لطفا اطلاعات خود را وارد نمایید.</string>
     <string name="phone_entry">لطفا شماره همراه خود را وارد نمایید</string>
     <string name="bank_account_info">اطلاعات حساب بانکی</string>
-    <string name="bank_account_info_detail">لطفا شماره حسابی را که مایل به اتصال شبکه هم پی هستید را همراه با نام بانک و کد ملی را وارد نمایید</string>
-    <string name="title_activity_verification">VerificationActivity</string>
+    <string name="bank_account_info_detail">لطفا شماره حسابی را که مایل به اتصال شبکه هم‌پی هستید را همراه با نام بانک و کد ملی را وارد نمایید.</string>
     <string name="progress_dialog_message">در حال دريافت اطلاعات...</string>
 
     <string name="user_status_verification">بررسی صحت حساب</string>
@@ -172,23 +153,20 @@
 
 
     <string name="sms_verification_text">یک کد فعال سازی ۵ رقمی برای شما پیامک خواهد شد.</string>
-    <string name="title_activity_post_verification">PostVerificationActivity</string>
     <string name="mobile_no_verification">تایید شماره همراه</string>
     <string name="deliver_verification">کد ۵ رقمی برای شما پیامک شد. در صورت عدم دریافت پیامک تا ۵ دقیقه، دکمه ارسال مجدد را فشار دهید.</string>
     <string name="verification">بررسی</string>
 
     <string name="resend">ارسال مجدد</string>
-    <string name="title_activity_confirm_account_no">ConfirmAccountNoActivity</string>
-    <string name="confirm_account_no_text">در این بخش اطلاعات حساب با نام شما مطابقت داده می شود.</string>
+    <string name="confirm_account_no_text">در این بخش اطلاعات حساب با نام شما مطابقت داده می‌شود.</string>
     <string name="confirm_account_no">تایید شماره حساب</string>
 
     <string name="congrats_account">تبریک!
     \n
         تایید حساب شما با موفقیت انجام شد.
     </string>
-    <string name="wait_callcentre">منتظر تماس هم پی یارتان برای ارتقا به کاربر عادی باشید.</string>
+    <string name="wait_callcentre">منتظر تماس هم‌پی یارتان برای ارتقا به کاربر عادی باشید.</string>
 
-    <string name="title_activity_confirm_info">ConfirmInfoActivity</string>
     <string name="confirm_information">تایید اطلاعات</string>
     <string name="confirm_information_text">لطفا از صحت اطلاعات زیر اطمینان حاصل فرمایید. در غیر اینصورت اطلاعات را تصحیح کنید.</string>
 
@@ -197,26 +175,22 @@
     <string name="iter_code">کد ملی</string>
     <string name="correct_data">اطلاعات بالا صحیح است</string>
     <string name="correct_info">تصحیح اطلاعات</string>
-    <string name="title_activity_verify_account_no">VerifyAccountNoActivity</string>
     <string name="verify_account_no">بررسی شماره حساب</string>
 
-    <string name="reg_verify_account_no_text_1">انتقال وجه زیر را خارج از برنامه هم پی و از طریق یکی از روش های اینترنت بانک، همراه بانک و یا عابر بانک انجام دهید</string>
-    <string name="reg_verify_account_no_text_2">برای بررسی صحت شماره حساب شما مبلغ ۲۱۴۱ ریال از حساب هم پی ۸۰۰۰۴۵۹ به حساب شما ۱۲۳۴۵۶۷۷ واریز شد.</string>
-    <string name="reg_verify_account_no_text_3">لطفا جهت تکمیل بررسی، مبلغ فوق(۲۱۴۱ ریال) را از حساب خود(۱۳۴۵۴) به یکی از روش های بالا به حساب هم پی (۸۰۰۰۴۵۹) باز گردانید.</string>
+    <string name="reg_verify_account_no_text_1">انتقال وجه زیر را خارج از برنامه هم‌پی و از طریق یکی از روش‌های اینترنت بانک، همراه بانک و یا عابر بانک انجام دهید.</string>
+    <string name="reg_verify_account_no_text_2">برای بررسی صحت شماره حساب شما مبلغ ۲۱۴۱ ریال از حساب هم‌پی ۸۰۰۰۴۵۹ به حساب شما ۱۲۳۴۵۶۷۷ واریز شد.</string>
+    <string name="reg_verify_account_no_text_3">لطفا جهت تکمیل بررسی، مبلغ فوق(۲۱۴۱ ریال) را از حساب خود(۱۳۴۵۴) به یکی از روش‌های بالا به حساب هم‌پی (۸۰۰۰۴۵۹) باز گردانید.</string>
     <string name="reg_verify_account_no_keep_on">پس از انجام واریز، دکمه ادامه را کلیک کنید.</string>
-    <string name="title_activity_pre_password">PrePasswordActivity</string>
 
     <string name="get_password">دریافت رمز  عبور</string>
     <string name="get_password_text_1">مالکیت حساب شما احراز شد</string>
-    <string name="get_password_text_2">منتظر تماس هم پی یارتان برای ارتقا به کاربر عادی باشید</string>
+    <string name="get_password_text_2">منتظر تماس هم‌پی یارتان برای ارتقا به کاربر عادی باشید.</string>
     <string name="get_password_text_3">در مرحله بعد یک رمز عبور برای ورود به سیستم انتخاب خواهید کرد.</string>
-    <string name="title_activity_password_entry">PasswordEntryActivity</string>
     <string name="get_password_text_4">لطفا رمز عبوری پنج رقمی را به انتخاب خود وارد نمایید.دقت کنید که بیش از دو عدد تکراری قابل قبول نمی‌باشد.</string>
     <string name="get_password_text_5">لطفا کلمه عبور مورد نظر خود را مجدد تکرار نمایید.</string>
     <string name="current_password">لطفا رمز عبور جاری خود را وارد نمایید.</string>
 
     <string name="confirm">تایید</string>
-    <string name="title_activity_remember_phrase">RememberPhraseActivity</string>
 
     <string name="get_current_memorable">دریافت کلمه یادآوری جاری</string>
     <string name="get_new_memorable">دریافت کلمه یادآوری جدید</string>
@@ -225,32 +199,24 @@
 
     <string name="remember_phrase">یادآوری</string>
     <string name="remember_phrase_text">لطفا یک کلمه کوتاه به عنوان یادآوری رمز عبور وارد نمایید.</string>
-    <string name="title_activity_complete_registration">CompleteRegistrationActivity</string>
     <string name="complete_registarion">تکمیل ثبت نام</string>
     <string name="complete_registarion_text_1">آفرین شما عضو تازه شبکه هم‌پی هستید.</string>
-    <string name="complete_registarion_text_2">حالا دوستانتان در شبکه هم‌پی تنها با شماره موبایلتان به شما پول می دهند.</string>
+    <string name="complete_registarion_text_2">حالا دوستانتان در شبکه هم‌پی تنها با شماره موبایلتان به شما پول می‌دهند.</string>
 
 
     <string name="current_memorable">کلمه یادآوری جاری خود را وارد کنید.</string>
     <string name="new_memorable">کلمه یادآوری جدید خود را وارد کنید.</string>
 
     <string name="login_hampay">ورود به شبکه هم‌پی </string>
-    <string name="title_activity_ham_pay_login">HamPayLoginActivity</string>
 
     <string name="hampay_login_text">لطفا کد پنج رقمی خود را برای ورود به شبکه هم‌پی را وارد کنید. </string>
-    <string name="title_activity_transaction_detail">TransactionDetailActivity</string>
 
     <string name="select">انتخاب</string>
     <string name="recent_pay_one">تازه ترین پرداخت ها</string>
     <string name="hampay_contacts">لیست مخاطبین هم‌پی </string>
-    <string name="title_activity_pay_one">PayOneActivity</string>
-
 
     <string name="signup_title">Create new account</string>
     <string name="login_label">Log in</string>
-    <string name="title_activity_pay_business">PayBusinessActivity</string>
-    <string name="title_activity_setting">SettingActivity</string>
-
 
     <string-array name="setting_list">
         <item>تغییر رمز عبور</item>
@@ -301,8 +267,6 @@
     <string name="pay_one_search_hint">نام یا شماره همراه دریافت کننده را وارد کنید</string>
 
     <string name="keyboard_help">راهنما</string>
-    <string name="title_activity_change_password">ChangePasswordActivity</string>
-    <string name="title_activity_guide">GuideActivity</string>
 
     <string name="exit_app_text">آیا مایل به خروج از هم‌پی هستید؟</string>
     <string name="exit_app_yes">خارج می‌شوم </string>
@@ -315,15 +279,16 @@
     <string name="login_fail_text">رمزعبور خود را صحیح وارد کنید</string>
     <string name="remove_password">حذف رمزعبور</string>
     <string name="login_retry">تلاش مجدد</string>
-
-    <string name="title_activity_change_memorable">ChangeMemorableActivity</string>
-    <string name="title_activity_change_memorable_pass">ChangeMemorablePassActivity</string>
-    <string name="title_activity_verify_account">VerifyAccountActivity</string>
-    <string name="title_activity_congrats_account">CongratsAccountActivity</string>
-    <string name="title_activity_animation_start">AnimationStartActivity</string>
-    <string name="title_activity_animation_detail">AnimationDetailActivity</string>
-    <string name="title_activity_slider">SliderActivity</string>
-    <string name="title_activity_app_slider">AppSliderActivity</string>
-    <string name="title_activity_entry">EntryActivity</string>
+    
+    
+    <string name="msg_fail_fetch_bank_list">لیست بانک‌ها دریافت نشد. لطفا مجدد تلاش کنید.</string>
+    <string name="msg_fail_registration_entry">ثبت اطلاعات شخصی شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
+    <string name="mgs_fail_registration_send_sms_token">درخواست پیامک فعالسازی با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
+    <string name="msg_fail_registration_verify_mobile">ارسال کد فعالسازی با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
+    <string name="msg_fail_verify_account">درخواست بررسی حساب شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
+    <string name="msg_fail_registration_fetch_user_data">دریافت اطلاعات کاربری شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
+    <string name="msg_fail_registration_confirm_user_data">تایید اطلاعات کاربری شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
+    <string name="mgs_fail_verify_transfer_money">درخواست شما برای بررسی انتقال وجه با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
+    <string name="msg_fail_pass_code_entry">ثبت رمزعبور شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
 
 </resources>

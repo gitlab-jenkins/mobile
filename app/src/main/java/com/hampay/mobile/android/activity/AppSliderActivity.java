@@ -1,6 +1,7 @@
 package com.hampay.mobile.android.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import com.hampay.mobile.android.fragment.AppSliderFragmentB;
 import com.hampay.mobile.android.fragment.AppSliderFragmentC;
 import com.hampay.mobile.android.fragment.AppSliderFragmentD;
 import com.hampay.mobile.android.fragment.AppSliderFragmentE;
+import com.hampay.mobile.android.util.Constants;
 
 
 public class AppSliderActivity extends ActionBarActivity {
@@ -40,14 +42,26 @@ public class AppSliderActivity extends ActionBarActivity {
     private ImageView indicator_4;
     private ImageView indicator_5;
 
-    Handler handler;
-    Runnable runnable;
-    int slideIndex = 0;
+    private SharedPreferences prefs;
+
+    private Intent intent;
+
+
+//    Handler handler;
+//    Runnable runnable;
+//    int slideIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_slider);
+
+        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+
+        intent = new Intent();
+
+
+
 
         register_button = (ButtonRectangle)findViewById(R.id.register_button);
         register_button.setOnClickListener(new View.OnClickListener() {
@@ -122,7 +136,7 @@ public class AppSliderActivity extends ActionBarActivity {
 
             @Override
             public void onPageSelected(int position) {
-                switch (position){
+                switch (position) {
                     case 0:
                         indicator_1.setImageResource(R.drawable.circle_indicator_transparency);
                         indicator_2.setImageResource(R.drawable.circle_indicator);
@@ -168,51 +182,73 @@ public class AppSliderActivity extends ActionBarActivity {
         });
 
 
-        image_splash = (ImageView)findViewById(R.id.image_splash);
-        intro_icon = (ImageView)findViewById(R.id.intro_icon);
+        if (prefs.getBoolean(Constants.REGISTERED_USER, false)){
 
-        fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.splash_fadein);
-        splashLogoAnimation = AnimationUtils.loadAnimation(this, R.anim.splash_logo);
-        fadeInAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
+            Thread thread = new Thread() {
+                public void run() {
 
-            }
+                    try {
+                        sleep(3 * 1000);
 
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                intro_icon.setVisibility(View.GONE);
-                sliding_into_app.setOnTouchListener(null);
-            }
+                        intent.setClass(AppSliderActivity.this, HamPayLoginActivity.class);
+                        startActivity(intent);
 
-            @Override
-            public void onAnimationRepeat(Animation animation) {
+                        finish();
 
-            }
-        });
-        fadeInAnimation.setFillAfter(false);
-        fadeInAnimation.setRepeatMode(0);
-        fadeInAnimation.setFillAfter(true);
-        image_splash.startAnimation(fadeInAnimation);
+                    } catch (Exception e) {
 
-        splashLogoAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
+                    }
+                }
+            };
+            thread.start();
 
-            }
+        }else {
 
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                intro_icon.setVisibility(View.GONE);
-            }
+            image_splash = (ImageView) findViewById(R.id.image_splash);
+            intro_icon = (ImageView) findViewById(R.id.intro_icon);
 
-            @Override
-            public void onAnimationRepeat(Animation animation) {
+            fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.splash_fadein);
+            splashLogoAnimation = AnimationUtils.loadAnimation(this, R.anim.splash_logo);
+            fadeInAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
 
-            }
-        });
-        intro_icon.startAnimation(splashLogoAnimation);
+                }
 
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    intro_icon.setVisibility(View.GONE);
+                    sliding_into_app.setOnTouchListener(null);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            fadeInAnimation.setFillAfter(false);
+            fadeInAnimation.setRepeatMode(0);
+            fadeInAnimation.setFillAfter(true);
+            image_splash.startAnimation(fadeInAnimation);
+
+            splashLogoAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    intro_icon.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            intro_icon.startAnimation(splashLogoAnimation);
+        }
     }
 
 

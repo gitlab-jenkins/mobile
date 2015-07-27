@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
+import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
 import com.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
 import com.hampay.mobile.android.R;
@@ -83,17 +84,22 @@ public class VerificationActivity extends ActionBarActivity {
             loading_rl.setVisibility(View.GONE);
 
             if (registrationSendSmsTokenResponse != null) {
-                editor.putString(Constants.REGISTERED_ACTIVITY_DATA, VerificationActivity.class.toString());
-                editor.commit();
+                if (registrationSendSmsTokenResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
-                Intent intent = new Intent();
-                intent.setClass(VerificationActivity.this, SMSVerificationActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                finish();
-                startActivity(intent);
+                    editor.putString(Constants.REGISTERED_ACTIVITY_DATA, VerificationActivity.class.toString());
+                    editor.commit();
+
+                    Intent intent = new Intent();
+                    intent.setClass(VerificationActivity.this, SMSVerificationActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    finish();
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(context, getString(R.string.mgs_fail_registration_send_sms_token), Toast.LENGTH_LONG).show();
+                }
 
             }else {
-                Toast.makeText(context, getString(R.string.no_network), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, getString(R.string.mgs_fail_registration_send_sms_token), Toast.LENGTH_SHORT).show();
             }
         }
 

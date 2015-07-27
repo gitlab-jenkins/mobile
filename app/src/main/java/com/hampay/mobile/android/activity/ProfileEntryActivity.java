@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
+import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.BankListRequest;
 import com.hampay.common.core.model.request.RegistrationEntryRequest;
 import com.hampay.common.core.model.response.BankListResponse;
@@ -79,6 +80,9 @@ public class ProfileEntryActivity extends ActionBarActivity {
 
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
+
+    RegistrationEntryRequest registrationEntryRequest;
+    RequestRegistrationEntry requestRegistrationEntry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -228,8 +232,9 @@ public class ProfileEntryActivity extends ActionBarActivity {
                 nationalCodeValue.clearFocus();
                 bankSelection.requestFocus();
 
-                if (bankListResponse != null && bankListResponse.getService().getBanks().size() > 0) {
-                    showListBankDialog();
+                if (bankListResponse != null) {
+                    if (bankListResponse.getService().getBanks().size() > 0)
+                        showListBankDialog();
                 }else {
                     if (networkConnectivity.isNetworkConnected()) {
                         loading_rl.setVisibility(View.VISIBLE);
@@ -265,50 +270,54 @@ public class ProfileEntryActivity extends ActionBarActivity {
                 nationalCodeValue.clearFocus();
                 accountNumberValue.clearFocus();
 
-                if (networkConnectivity.isNetworkConnected()) {
+//                if (networkConnectivity.isNetworkConnected()) {
 
-                    if (cellNumberIsValid && nationalCodeIsValid && accountNumberIsValid
-                            && cellNumberValue.getText().toString().length() > 0
-                            && nationalCodeValue.getText().toString().length() > 0
-                            && accountNumberValue.getText().toString().length() > 0) {
+                if (cellNumberIsValid && nationalCodeIsValid && accountNumberIsValid
+                        && cellNumberValue.getText().toString().length() > 0
+                        && nationalCodeValue.getText().toString().length() > 0
+                        && accountNumberValue.getText().toString().length() > 0) {
 
-                        keepOn_button.setEnabled(false);
+                    keepOn_button.setEnabled(false);
 
-                        RegistrationEntryRequest registrationEntryRequest = new RegistrationEntryRequest();
+                    registrationEntryRequest = new RegistrationEntryRequest();
 
-                        registrationEntryRequest.setCellNumber(cellNumberValue.getText().toString());
-                        registrationEntryRequest.setAccountNumber(accountNumberValue.getText().toString());
-                        registrationEntryRequest.setBankCode(selectedBankCode);
-                        registrationEntryRequest.setNationalCode(nationalCodeValue.getText().toString());
-                        registrationEntryRequest.setImei(new DeviceInfo(getApplicationContext()).getIMEI());
+                    registrationEntryRequest.setCellNumber(cellNumberValue.getText().toString());
+                    registrationEntryRequest.setAccountNumber(accountNumberValue.getText().toString());
+                    registrationEntryRequest.setBankCode(selectedBankCode);
+                    registrationEntryRequest.setNationalCode(nationalCodeValue.getText().toString());
+                    registrationEntryRequest.setImei(new DeviceInfo(getApplicationContext()).getIMEI());
 
-                        new RequestRegistrationEntry(context, new RequestRegistrationEntryTaskCompleteListener()).execute(registrationEntryRequest);
+//                    new RequestRegistrationEntry(context, new RequestRegistrationEntryTaskCompleteListener()).execute(registrationEntryRequest);
 
-                    } else {
+                    requestRegistrationEntry = new RequestRegistrationEntry(context, new RequestRegistrationEntryTaskCompleteListener());
 
-                        if (cellNumberValue.getText().toString().length() == 0 || !cellNumberIsValid){
-                            Toast.makeText(context, getString(R.string.msg_cellNumber_invalid), Toast.LENGTH_SHORT).show();
-                            cellNumberIcon.setImageResource(R.drawable.false_icon);
-                            cellNumberValue.requestFocus();
-                        }
+                    requestRegistrationEntry.execute(registrationEntryRequest);
+
+                } else {
+
+                    if (cellNumberValue.getText().toString().length() == 0 || !cellNumberIsValid){
+                        Toast.makeText(context, getString(R.string.msg_cellNumber_invalid), Toast.LENGTH_SHORT).show();
+                        cellNumberIcon.setImageResource(R.drawable.false_icon);
+                        cellNumberValue.requestFocus();
+                    }
 
 
-                        else if (accountNumberValue.getText().toString().length() == 0 || !accountNumberIsValid){
-                            Toast.makeText(context, getString(R.string.msg_accountNo_invalid), Toast.LENGTH_SHORT).show();
-                            accountNumberIcon.setImageResource(R.drawable.false_icon);
-                            accountNumberValue.requestFocus();
-                        }
+                    else if (accountNumberValue.getText().toString().length() == 0 || !accountNumberIsValid){
+                        Toast.makeText(context, getString(R.string.msg_accountNo_invalid), Toast.LENGTH_SHORT).show();
+                        accountNumberIcon.setImageResource(R.drawable.false_icon);
+                        accountNumberValue.requestFocus();
+                    }
 
-                        else if (nationalCodeValue.getText().toString().length() == 0 || !nationalCodeIsValid){
-                            Toast.makeText(context, getString(R.string.msg_nationalCode_invalid), Toast.LENGTH_SHORT).show();
-                            nationalCodeIcon.setImageResource(R.drawable.false_icon);
-                            nationalCodeValue.requestFocus();
-                        }
+                    else if (nationalCodeValue.getText().toString().length() == 0 || !nationalCodeIsValid){
+                        Toast.makeText(context, getString(R.string.msg_nationalCode_invalid), Toast.LENGTH_SHORT).show();
+                        nationalCodeIcon.setImageResource(R.drawable.false_icon);
+                        nationalCodeValue.requestFocus();
                     }
                 }
-                else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.no_network), Toast.LENGTH_LONG).show();
-                }
+//                }
+//                else {
+//                    Toast.makeText(getApplicationContext(), getString(R.string.no_network), Toast.LENGTH_LONG).show();
+//                }
 
                 keepOn_button.requestFocus();
 
@@ -378,15 +387,17 @@ public class ProfileEntryActivity extends ActionBarActivity {
         @Override
         public void onTaskComplete(ResponseMessage<BankListResponse> bankListResponseMessage)
         {
-            bankListResponse = bankListResponseMessage;
-            if (bankListResponseMessage != null) {
-//                selectedBankTitle.setText(bankListResponseMessage.getService().getBanks().get(0).getTitle());
-//                selectedBankCode = bankListResponseMessage.getService().getBanks().get(0).getCode();
-//                accountNumberFormat = bankListResponse.getService().getBanks().get(0).getAccountFormat();
-//                accountNumberValue.setFilters(new InputFilter[]{new InputFilter.LengthFilter(accountNumberFormat.length())});
 
-//                accountNumberHint.setHint(bankListResponse.getService().getBanks().get(0).getAccountFormat());
-                loading_rl.setVisibility(View.GONE);
+            loading_rl.setVisibility(View.GONE);
+
+
+            if (bankListResponseMessage != null) {
+
+                if (bankListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
+                    bankListResponse = bankListResponseMessage;
+                }else {
+                    Toast.makeText(context, getString(R.string.msg_fail_fetch_bank_list), Toast.LENGTH_LONG).show();
+                }
             }
             if (bankListResponse != null) {
                 if (bankListResponse.getService().getBanks().size() > 0)
@@ -394,7 +405,7 @@ public class ProfileEntryActivity extends ActionBarActivity {
                         showListBankDialog();
                     }
             }else {
-                Toast.makeText(context, getString(R.string.no_network), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, getString(R.string.msg_fail_fetch_bank_list), Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -411,27 +422,36 @@ public class ProfileEntryActivity extends ActionBarActivity {
         @Override
         public void onTaskComplete(ResponseMessage<RegistrationEntryResponse> registrationEntryResponse)
         {
+
+            keepOn_button.setEnabled(true);
+            loading_rl.setVisibility(View.GONE);
+
             if (registrationEntryResponse != null) {
 
+                if (registrationEntryResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
+                    editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ProfileEntryActivity.class.toString());
+                    editor.putString(Constants.REGISTERED_CELL_NUMBER, cellNumberValue.getText().toString());
+                    editor.putString(Constants.REGISTERED_BANK_ID, selectedBankCode);
+                    editor.putString(Constants.REGISTERED_BANK_ACCOUNT_NO_FORMAT, accountNumberFormat);
+                    editor.putString(Constants.REGISTERED_ACCOUNT_NO, accountNumberValue.getText().toString());
+                    editor.putString(Constants.REGISTERED_NATIONAL_CODE, nationalCodeValue.getText().toString());
+                    editor.putString(Constants.REGISTERED_USER_ID_TOKEN, registrationEntryResponse.getService().getUserIdToken());
+                    editor.commit();
 
-                editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ProfileEntryActivity.class.toString());
-                editor.putString(Constants.REGISTERED_CELL_NUMBER, cellNumberValue.getText().toString());
-                editor.putString(Constants.REGISTERED_BANK_ID, selectedBankCode);
-                editor.putString(Constants.REGISTERED_BANK_ACCOUNT_NO_FORMAT, accountNumberFormat);
-                editor.putString(Constants.REGISTERED_ACCOUNT_NO, accountNumberValue.getText().toString());
-                editor.putString(Constants.REGISTERED_NATIONAL_CODE, nationalCodeValue.getText().toString());
-                editor.putString(Constants.REGISTERED_USER_ID_TOKEN, registrationEntryResponse.getService().getUserIdToken());
-                editor.commit();
-
-                Intent intent = new Intent();
-                intent.setClass(ProfileEntryActivity.this, VerificationActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                finish();
-                startActivity(intent);
-
-                keepOn_button.setEnabled(true);
-                loading_rl.setVisibility(View.GONE);
+                    Intent intent = new Intent();
+                    intent.setClass(ProfileEntryActivity.this, VerificationActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    finish();
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(context, getString(R.string.msg_fail_registration_entry), Toast.LENGTH_LONG).show();
+//                    new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest);
+//                    cls
+                }
+            }else {
+//                new HamPayDialog(activity).showFailRegistrationEntryDialog();
+                Toast.makeText(context, getString(R.string.msg_fail_registration_entry), Toast.LENGTH_LONG).show();
             }
         }
 

@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
+import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.RegistrationVerifyTransferMoneyRequest;
 import com.hampay.common.core.model.response.RegistrationVerifyTransferMoneyResponse;
 import com.hampay.mobile.android.R;
@@ -51,7 +52,7 @@ public class RegVerifyAccountNoActivity extends ActionBarActivity {
 
         activity = RegVerifyAccountNoActivity.this;
 
-        prefs = getPreferences(MODE_PRIVATE);
+        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
 
         bundle = getIntent().getExtras();
         TransferMoneyComment = bundle.getString(Constants.TRANSFER_MONEY_COMMENT);
@@ -71,7 +72,7 @@ public class RegVerifyAccountNoActivity extends ActionBarActivity {
 
                 if (networkConnectivity.isNetworkConnected()) {
                     RegistrationVerifyTransferMoneyRequest registrationVerifyTransferMoneyRequest = new RegistrationVerifyTransferMoneyRequest();
-                    registrationVerifyTransferMoneyRequest.setUserIdToken(prefs.getString("UserIdToken", ""));
+                    registrationVerifyTransferMoneyRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
                     new RequestRegistrationVerifyTransferMoney(context, new RequestRegistrationVerifyTransferMoneyTaskCompleteListener()).execute(registrationVerifyTransferMoneyRequest);
                 } else {
                     Toast.makeText(context, getString(R.string.no_network), Toast.LENGTH_SHORT).show();
@@ -79,9 +80,6 @@ public class RegVerifyAccountNoActivity extends ActionBarActivity {
 
             }
         });
-
-
-
 
     }
 
@@ -97,19 +95,24 @@ public class RegVerifyAccountNoActivity extends ActionBarActivity {
         public void onTaskComplete(ResponseMessage<RegistrationVerifyTransferMoneyResponse> verifyTransferMoneyResponseMessage)
         {
 
-            if (verifyTransferMoneyResponseMessage.getService().getResultStatus() != null) {
+            loading_rl.setVisibility(View.GONE);
 
+            if (verifyTransferMoneyResponseMessage != null) {
 
+                if (verifyTransferMoneyResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
-                loading_rl.setVisibility(View.GONE);
-
-                if (verifyTransferMoneyResponseMessage.getService().getIsVerified()){
-                    Intent intent = new Intent();
-                    intent.setClass(RegVerifyAccountNoActivity.this, PostRegVerifyAccountNoActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                    finish();
-                    startActivity(intent);
+                    if (verifyTransferMoneyResponseMessage.getService().getIsVerified()) {
+                        Intent intent = new Intent();
+                        intent.setClass(RegVerifyAccountNoActivity.this, PostRegVerifyAccountNoActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        finish();
+                        startActivity(intent);
+                    }
+                }else {
+                    Toast.makeText(context, getString(R.string.mgs_fail_verify_transfer_money), Toast.LENGTH_SHORT).show();
                 }
+            }else {
+                Toast.makeText(context, getString(R.string.mgs_fail_verify_transfer_money), Toast.LENGTH_SHORT).show();
             }
 
         }

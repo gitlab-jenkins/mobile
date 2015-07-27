@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
+import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.RegistrationConfirmUserDataRequest;
 import com.hampay.common.core.model.request.RegistrationFetchUserDataRequest;
 import com.hampay.common.core.model.request.RegistrationVerifyAccountRequest;
@@ -31,7 +32,6 @@ import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestConfirmUserData;
 import com.hampay.mobile.android.async.RequestFetchUserData;
-import com.hampay.mobile.android.async.RequestIpProvider;
 import com.hampay.mobile.android.async.RequestRegisterVerifyAccount;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.material.ButtonFlat;
@@ -40,7 +40,6 @@ import com.hampay.mobile.android.component.material.CheckBox;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.DeviceInfo;
-import com.hampay.mobile.android.util.NationalCodeVerification;
 import com.hampay.mobile.android.util.NetworkConnectivity;
 import com.hampay.mobile.android.util.Utils;
 
@@ -83,8 +82,6 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
 
     LinearLayout correct_info;
 
-    private ResponseMessage<RegistrationConfirmUserDataResponse> registrationConfirmUserDataResponse;
-
     public void contactUs(View view){
         new HamPayDialog(this).showContactUsDialog();
     }
@@ -93,7 +90,6 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
     SharedPreferences.Editor editor;
 
     NetworkConnectivity networkConnectivity;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -428,9 +424,10 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
         public void onTaskComplete(ResponseMessage<RegistrationVerifyAccountResponse> verifyAccountResponseMessage)
         {
             loading_rl.setVisibility(View.GONE);
-            if (verifyAccountResponseMessage.getService().getResultStatus() != null) {
+            if (verifyAccountResponseMessage != null) {
 
-                if (verifyAccountResponseMessage.getService().getTransferMoneyComment().length() > 0 ) {
+                if (verifyAccountResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
+
                     Intent intent = new Intent();
                     intent.setClass(ConfirmInfoActivity.this, RegVerifyAccountNoActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -438,9 +435,12 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                     startActivity(intent);
                     finish();
                 }
+                else{
+                    Toast.makeText(context, getString(R.string.msg_fail_verify_account), Toast.LENGTH_SHORT).show();
+                }
             }
             else {
-                Toast.makeText(context, getString(R.string.no_network), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, getString(R.string.msg_fail_verify_account), Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -461,12 +461,18 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
         {
             loading_rl.setVisibility(View.GONE);
 
-            if (registrationFetchUserDataResponseMessage.getService().getResultStatus() != null) {
-                correct_info.setVisibility(View.VISIBLE);
-                cellNumberValue.setText(registrationFetchUserDataResponseMessage.getService().getCellNumber());
-                userFamilyValue.setText(registrationFetchUserDataResponseMessage.getService().getFulName());
-                accountNumberValue.setText(registrationFetchUserDataResponseMessage.getService().getAccountNumber());
-                nationalCodeValue.setText(registrationFetchUserDataResponseMessage.getService().getNationalCode());
+            if (registrationFetchUserDataResponseMessage != null) {
+                if (registrationFetchUserDataResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    correct_info.setVisibility(View.VISIBLE);
+                    cellNumberValue.setText(registrationFetchUserDataResponseMessage.getService().getCellNumber());
+                    userFamilyValue.setText(registrationFetchUserDataResponseMessage.getService().getFulName());
+                    accountNumberValue.setText(registrationFetchUserDataResponseMessage.getService().getAccountNumber());
+                    nationalCodeValue.setText(registrationFetchUserDataResponseMessage.getService().getNationalCode());
+                }else {
+                    Toast.makeText(context, getString(R.string.msg_fail_registration_fetch_user_data), Toast.LENGTH_SHORT).show();
+                }
+            }else {
+                Toast.makeText(context, getString(R.string.msg_fail_registration_fetch_user_data), Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -490,17 +496,24 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
         {
             loading_rl.setVisibility(View.GONE);
 
-            registrationConfirmUserDataResponse = registrationConfirmUserDataResponseMessage;
-            if (registrationConfirmUserDataResponseMessage.getService().getResultStatus() != null) {
+            if (registrationConfirmUserDataResponseMessage!= null) {
+
+                if (registrationConfirmUserDataResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+
 //                confirm_check_img.setImageResource(R.drawable.tick_icon);
-                confirm_check.setChecked(true);
-                correct_button.setVisibility(View.GONE);
-                correct_button_rl.setVisibility(View.GONE);
+                    confirm_check.setChecked(true);
+                    correct_button.setVisibility(View.GONE);
+                    correct_button_rl.setVisibility(View.GONE);
 //                user_phone.setFocusable(false);
 //                userFamilyValue.setFocusable(false);
-                accountNumberValue.setFocusable(false);
+                    accountNumberValue.setFocusable(false);
 //                nationalCodeValue.setFocusable(false);
-                confirm_layout.setVisibility(View.VISIBLE);
+                    confirm_layout.setVisibility(View.VISIBLE);
+                }else {
+                    Toast.makeText(context, getString(R.string.msg_fail_registration_confirm_user_data), Toast.LENGTH_SHORT).show();
+                }
+            }else {
+                Toast.makeText(context, getString(R.string.msg_fail_registration_confirm_user_data), Toast.LENGTH_SHORT).show();
             }
 
         }

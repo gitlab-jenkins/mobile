@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.dto.ContactDTO;
+import com.hampay.common.core.model.dto.UserVerificationStatus;
 import com.hampay.common.core.model.request.VerifyAccountRequest;
 import com.hampay.common.core.model.response.UserProfileResponse;
 import com.hampay.common.core.model.response.VerifyAccountResponse;
@@ -36,6 +37,8 @@ import java.util.List;
  * Created by amir on 6/5/15.
  */
 public class AccountDetailFragment extends Fragment implements View.OnClickListener {
+
+    LinearLayout verification_status_ll;
 
     ImageView user_image;
     FacedTextView user_name_text;
@@ -81,6 +84,8 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_account_detail, container, false);
+
+        verification_status_ll = (LinearLayout)rootView.findViewById(R.id.verification_status_ll);
 
         hampay_1_ll = (LinearLayout)rootView.findViewById(R.id.hampay_1_ll);
         hampay_2_ll = (LinearLayout)rootView.findViewById(R.id.hampay_2_ll);
@@ -203,7 +208,11 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
             if (userProfileDTO != null) {
 
 
-
+                if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.VERIFIED) {
+                    verification_status_ll.setVisibility(View.VISIBLE);
+                }else {
+                    verification_status_ll.setVisibility(View.GONE);
+                }
                 jalaliConvert = new JalaliConvert();
 
 //                userProfileDTO = userProfileResponse.getService().getUserProfile();
@@ -235,9 +244,9 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                 List<ContactDTO> contactDTOs = userProfileDTO.getSelectedContacts();
 
                 hampay_1.setText(contactDTOs.get(0).getDisplayName());
-                hampay_2.setText(contactDTOs.get(1).getDisplayName());
-                hampay_3.setText(contactDTOs.get(2).getDisplayName());
-                hampay_4.setText(contactDTOs.get(3).getDisplayName());
+//                hampay_2.setText(contactDTOs.get(1).getDisplayName());
+//                hampay_3.setText(contactDTOs.get(2).getDisplayName());
+//                hampay_4.setText(contactDTOs.get(3).getDisplayName());
 
                 if (contactDTOs.get(0).getUserVerificationStatus().ordinal() == 0){
                     hampay_image_1.setImageResource(R.drawable.user_icon_blak_s);
@@ -245,23 +254,23 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                     hampay_image_1.setImageResource(R.drawable.user_icon_blue_s);
                 }
 
-                if (contactDTOs.get(1).getUserVerificationStatus().ordinal() == 0){
-                    hampay_image_2.setImageResource(R.drawable.user_icon_blak_s);
-                }else {
-                    hampay_image_2.setImageResource(R.drawable.user_icon_blue_s);
-                }
-
-                if (contactDTOs.get(2).getUserVerificationStatus().ordinal() == 0){
-                    hampay_image_3.setImageResource(R.drawable.user_icon_blak_s);
-                }else {
-                    hampay_image_3.setImageResource(R.drawable.user_icon_blue_s);
-                }
-
-                if (contactDTOs.get(3).getUserVerificationStatus().ordinal() == 0){
-                    hampay_image_4.setImageResource(R.drawable.user_icon_blak_s);
-                }else {
-                    hampay_image_4.setImageResource(R.drawable.user_icon_blue_s);
-                }
+//                if (contactDTOs.get(1).getUserVerificationStatus().ordinal() == 0){
+//                    hampay_image_2.setImageResource(R.drawable.user_icon_blak_s);
+//                }else {
+//                    hampay_image_2.setImageResource(R.drawable.user_icon_blue_s);
+//                }
+//
+//                if (contactDTOs.get(2).getUserVerificationStatus().ordinal() == 0){
+//                    hampay_image_3.setImageResource(R.drawable.user_icon_blak_s);
+//                }else {
+//                    hampay_image_3.setImageResource(R.drawable.user_icon_blue_s);
+//                }
+//
+//                if (contactDTOs.get(3).getUserVerificationStatus().ordinal() == 0){
+//                    hampay_image_4.setImageResource(R.drawable.user_icon_blak_s);
+//                }else {
+//                    hampay_image_4.setImageResource(R.drawable.user_icon_blue_s);
+//                }
 
 
 
@@ -298,7 +307,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
             if (isAdded()) {
 
-                if (verifyAccountResponse.getService().getResultStatus() != null) {
+                if (verifyAccountResponse != null) {
 
                     Intent intent = new Intent();
                     intent.setClass(getActivity(), VerifyAccountActivity.class);

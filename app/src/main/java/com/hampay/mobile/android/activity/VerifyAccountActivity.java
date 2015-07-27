@@ -76,7 +76,7 @@ public class VerifyAccountActivity extends ActionBarActivity {
         @Override
         public void onTaskComplete(ResponseMessage<VerifyTransferMoneyResponse> verifyTransferMoneyResponseMessage)
         {
-            if (verifyTransferMoneyResponseMessage.getService().getResultStatus() != null) {
+            if (verifyTransferMoneyResponseMessage != null) {
                 if (verifyTransferMoneyResponseMessage.getService().getIsVerified()){
                     Intent intent = new Intent();
                     intent.setClass(VerifyAccountActivity.this, CongratsAccountActivity.class);

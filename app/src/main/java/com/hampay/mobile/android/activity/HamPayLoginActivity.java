@@ -49,7 +49,7 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
     SharedPreferences.Editor editor;
 
     FacedTextView hampay_memorableword_text;
-    String cellNumber = "";
+    String nationalCode = "";
     String memorableWord;
     String installationToken;
 
@@ -139,14 +139,14 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
         hampay_memorableword_text = (FacedTextView)findViewById(R.id.hampay_memorableword_text);
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
 
-        cellNumber = prefs.getString(Constants.REGISTERED_CELL_NUMBER, "");
+        nationalCode = prefs.getString(Constants.REGISTERED_NATIONAL_CODE, "");
         memorableWord = prefs.getString(Constants.MEMORABLE_WORD, "");
 
         if (memorableWord != null) {
             hampay_memorableword_text.setText(memorableWord);
         }
 
-        installationToken = UUID.randomUUID().toString();
+        installationToken = prefs.getString("UUID", "");
 
     }
 
@@ -206,10 +206,14 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
                 if ((loginResponse.getSuccessUrl().length() > 0)) {
 
                     editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-                    editor.putString(Constants.TOKEN_ID, loginResponse.getTokenId());
+
+                    editor.putString(Constants.LOGIN_TOKEN_ID, loginResponse.getTokenId());
+
                     editor.commit();
 
                     TACRequest tacRequest = new TACRequest();
+
+
                     new RequestTAC(context, new RequestTACResponseTaskCompleteListener()).execute(tacRequest);
                 }else {
                     new HamPayDialog(activity).showLoginFailDialog();
@@ -314,14 +318,15 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
             String password = SecurityUtils.getInstance(this).
                     generatePassword(inputPassValue,
                             memorableWord,
+                            new DeviceUuidFactory(this).getAndroidId(),
 //                            new DeviceUuidFactory(this).getDeviceUuid().toString(),
-                            new DeviceInfo(this).getIMEI(),
+//                            new DeviceInfo(this).getIMEI(),
                             installationToken);
 
             LoginData loginData = new LoginData();
 
             loginData.setUserPassword(password);
-            loginData.setUserName(cellNumber);
+            loginData.setUserName(nationalCode);
 
             new RequestLogin(context, new RequestLoginResponseTaskCompleteListener()).execute(loginData);
 

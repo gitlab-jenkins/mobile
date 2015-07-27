@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
+import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
 import com.hampay.common.core.model.response.RegistrationVerifyMobileResponse;
 import com.hampay.mobile.android.R;
@@ -63,6 +64,8 @@ public class SMSVerificationActivity extends ActionBarActivity implements View.O
     SharedPreferences.Editor editor;
 
     RelativeLayout loading_rl;
+
+    SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,9 +133,10 @@ public class SMSVerificationActivity extends ActionBarActivity implements View.O
                     if (networkConnectivity.isNetworkConnected()) {
 
                         RegistrationVerifyMobileRequest registrationVerifyMobileRequest = new RegistrationVerifyMobileRequest();
-                        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
 
-                        registrationVerifyMobileRequest.setUserIdToken(prefs.getString("UserIdToken", ""));
+                        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+
+                        registrationVerifyMobileRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
                         registrationVerifyMobileRequest.setSmsToken(receivedSmsValue);
 
                         verify_button.setEnabled(false);
@@ -162,14 +166,25 @@ public class SMSVerificationActivity extends ActionBarActivity implements View.O
             verify_button.setEnabled(true);
             loading_rl.setVisibility(View.GONE);
             if (registrationVerifyMobileResponseMessage != null) {
-                Intent intent = new Intent();
-                intent.setClass(SMSVerificationActivity.this, ConfirmAccountNoActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                finish();
-                startActivity(intent);
+
+                if (registrationVerifyMobileResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+
+                    if (registrationVerifyMobileResponseMessage.getService().getIsVerified()) {
+                        Intent intent = new Intent();
+                        intent.setClass(SMSVerificationActivity.this, ConfirmAccountNoActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        finish();
+                        startActivity(intent);
+
+                    } else {
+                        new HamPayDialog(activity).showIncorrectSMSVerification();
+                    }
+                }else {
+                    Toast.makeText(context, getString(R.string.msg_fail_registration_verify_mobile), Toast.LENGTH_LONG).show();
+                }
 
             }else {
-                Toast.makeText(context, getString(R.string.no_network), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, getString(R.string.msg_fail_registration_verify_mobile), Toast.LENGTH_SHORT).show();
             }
         }
 

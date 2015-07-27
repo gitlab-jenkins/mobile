@@ -285,13 +285,12 @@
 
                         <com.hampay.mobile.android.component.edittext.FacedEditText
                             android:id="@+id/cellNumberValue"
-                            android:layout_width="120dp"
+                            android:layout_width="150dp"
                             android:layout_height="fill_parent"
                             android:background="@android:color/transparent"
                             android:textSize="18dp"
                             android:inputType="number"
                             android:focusable="false"
-                            android:maxLength="11"
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
                             android:padding="8dp"
@@ -327,12 +326,11 @@
 
                         <com.hampay.mobile.android.component.edittext.FacedEditText
                             android:id="@+id/userFamilyValue"
-                            android:layout_width="120dp"
+                            android:layout_width="150dp"
                             android:layout_height="fill_parent"
                             android:background="@android:color/transparent"
                             android:textSize="18dp"
                             android:focusable="false"
-                            android:maxLength="11"
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
                             android:padding="8dp"
@@ -409,13 +407,12 @@
 
                         <com.hampay.mobile.android.component.edittext.FacedEditText
                             android:id="@+id/nationalCodeValue"
-                            android:layout_width="120dp"
+                            android:layout_width="150dp"
                             android:layout_height="fill_parent"
                             android:background="@android:color/transparent"
                             android:textSize="18dp"
                             android:inputType="phone"
                             android:focusable="false"
-                            android:maxLength="11"
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
                             android:padding="8dp"

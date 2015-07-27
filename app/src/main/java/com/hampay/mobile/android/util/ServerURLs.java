@@ -21,7 +21,7 @@ public class ServerURLs {
 //    public static final int SERVER_PORT = 9000;
 //    public static final int SERVER_PORT = 80;
 //    public static final int SERVER_PORT = 443;
-        public static final int SERVER_PORT = 9093;
+        public static final int SERVER_PORT = 9090;
 
 //    public static final String SERVER_BASE_URL = "http://192.168.1.113:9090/";
 //    public static final String SERVER_BASE_URL = "http://192.168.1.245:9090/";s

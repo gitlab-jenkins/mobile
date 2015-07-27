@@ -21,9 +21,10 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:theme="@style/MyMaterialTheme" >
+        android:theme="@style/MyMaterialTheme"
+        android:launchMode="singleTask">
         <activity
-            android:name=".activity.EntryActivity"
+            android:name=".activity.AppSliderActivity"
             android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
@@ -35,108 +36,108 @@
         </activity>
         <activity
             android:name=".activity.IntroSliderActivity"
-            android:label="@string/title_activity_intro"
+            android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.MainActivity"
             android:hardwareAccelerated="true"
-            android:label="@string/title_activity_intro_slider"
+            android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.StartActivity"
-            android:label="@string/title_activity_start"
+            android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.PostStartActivity"
-            android:label="@string/title_activity_post_start"
+            android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.ProfileEntryActivity"
-            android:label="@string/title_activity_profile_entry"
+            android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.VerificationActivity"
-            android:label="@string/title_activity_verification"
+            android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.SMSVerificationActivity"
-            android:label="@string/title_activity_post_verification"
+            android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.ConfirmAccountNoActivity"
-            android:label="@string/title_activity_confirm_account_no"
+            android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.ConfirmInfoActivity"
-            android:label="@string/title_activity_confirm_info"
+            android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.RegVerifyAccountNoActivity"
-            android:label="@string/title_activity_verify_account_no"
+            android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.PostRegVerifyAccountNoActivity"
-            android:label="@string/title_activity_pre_password"
+            android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.PasswordEntryActivity"
-            android:label="@string/title_activity_password_entry"
+            android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.MemorableWordEntryActivity"
-            android:label="@string/title_activity_remember_phrase"
+            android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.CompleteRegistrationActivity"
-            android:label="@string/title_activity_complete_registration"
+            android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.SplashActivity"
-            android:label="@string/title_activity_transaction_detail"
+            android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.TransactionDetailActivity"
-            android:label="@string/title_activity_transaction_detail"
+            android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.PayOneActivity"
             android:exported="true"
-            android:label="@string/title_activity_pay_one"
+            android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait">
@@ -150,7 +151,7 @@
         </activity>
         <activity
             android:name=".activity.PayBusinessActivity"
-            android:label="@string/title_activity_pay_one"
+            android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait">
@@ -203,44 +204,40 @@
         <!-- </activity> -->
         <activity
             android:name=".activity.ChangePasswordActivity"
-            android:label="@string/title_activity_change_password"
+            android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.ChangeMemorableActivity"
-            android:label="@string/title_activity_change_memorable"
+            android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.ChangeMemorablePassActivity"
-            android:label="@string/title_activity_change_memorable_pass"
+            android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.VerifyAccountActivity"
-            android:label="@string/title_activity_verify_account"
+            android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.CongratsAccountActivity"
-            android:label="@string/title_activity_congrats_account"
+            android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activity.HamPayLoginActivity"
-            android:label="@string/title_activity_app_slider"
+            android:label="@string/app_name"
             android:screenOrientation="portrait">
         </activity>
-        <activity
-            android:name=".activity.AppSliderActivity"
-            android:label="@string/title_activity_entry"
-            android:screenOrientation="portrait">
-        </activity>
+
     </application>
 
 </manifest>

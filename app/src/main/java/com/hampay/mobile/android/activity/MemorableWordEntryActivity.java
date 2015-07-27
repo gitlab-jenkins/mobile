@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.hampay.common.common.response.ResponseMessage;
+import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.RegistrationMemorableWordEntryRequest;
 import com.hampay.common.core.model.response.RegistrationMemorableWordEntryResponse;
 import com.hampay.mobile.android.R;
@@ -35,6 +36,8 @@ public class MemorableWordEntryActivity extends ActionBarActivity {
     Activity activity;
 
     RelativeLayout loading_rl;
+
+    String Uuid = "";
 
     public void contactUs(View view){
         new HamPayDialog(this).showContactUsDialog();
@@ -63,15 +66,22 @@ public class MemorableWordEntryActivity extends ActionBarActivity {
             public void onClick(View v) {
 
                 RegistrationMemorableWordEntryRequest registrationMemorableWordEntryRequest = new RegistrationMemorableWordEntryRequest();
-                registrationMemorableWordEntryRequest.setUserIdToken(prefs.getString("UserIdToken", ""));
+                registrationMemorableWordEntryRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
                 registrationMemorableWordEntryRequest.setDeviceId(new DeviceInfo(getApplicationContext()).getDeviceId());
-                registrationMemorableWordEntryRequest.setInstallationToken(UUID.randomUUID().toString());
+
+                Uuid = UUID.randomUUID().toString();
+
+                registrationMemorableWordEntryRequest.setInstallationToken(Uuid);
+                editor.putString("UUID", Uuid);
+                editor.commit();
                 registrationMemorableWordEntryRequest.setMemorableWord(memorable_value.getText().toString());
                 new RequestMemorableWordEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener()).execute(registrationMemorableWordEntryRequest);
 
             }
         });
     }
+
+
 
 
     public class RequestMemorableWordEntryResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationMemorableWordEntryResponse>>
@@ -84,17 +94,22 @@ public class MemorableWordEntryActivity extends ActionBarActivity {
 
             loading_rl.setVisibility(View.GONE);
 
-            if (registrationMemorableWordEntryResponseMessage.getService().getResultStatus() != null) {
-                
+            ResultStatus resultStatus;
 
-                editor.putString(Constants.MEMORABLE_WORD, memorable_value.getText().toString());
-                editor.commit();
+            if (registrationMemorableWordEntryResponseMessage != null) {
 
-                Intent intent = new Intent();
-                intent.setClass(MemorableWordEntryActivity.this, CompleteRegistrationActivity.class);
-                finish();
-                startActivity(intent);
+                resultStatus = registrationMemorableWordEntryResponseMessage.getService().getResultStatus();
 
+                if (resultStatus == ResultStatus.SUCCESS) {
+
+                    editor.putString(Constants.MEMORABLE_WORD, memorable_value.getText().toString());
+                    editor.commit();
+
+                    Intent intent = new Intent();
+                    intent.setClass(MemorableWordEntryActivity.this, CompleteRegistrationActivity.class);
+                    finish();
+                    startActivity(intent);
+                }
             }
 
         }

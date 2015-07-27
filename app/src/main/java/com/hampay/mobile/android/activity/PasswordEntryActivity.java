@@ -13,8 +13,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
+import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.RegistrationPassCodeEntryRequest;
 import com.hampay.common.core.model.response.RegistrationPassCodeEntryResponse;
 import com.hampay.mobile.android.R;
@@ -22,6 +24,7 @@ import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestPassCodeEntry;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
+import com.hampay.mobile.android.util.Constants;
 
 public class PasswordEntryActivity extends ActionBarActivity implements View.OnClickListener{
 
@@ -78,7 +81,7 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
         password_holder = (LinearLayout)findViewById(R.id.password_holder);
         password_holder.setOnClickListener(this);
 
-        prefs = getPreferences(MODE_PRIVATE);
+        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
 
         context = this;
 
@@ -131,23 +134,31 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
             loading_rl.setVisibility(View.GONE);
 
             if (passCodeEntryResponseMessage != null) {
-                password_1_rl.setVisibility(View.VISIBLE);
-                password_2_rl.setVisibility(View.INVISIBLE);
 
-                inputPasswordValue = "";
-                inputRePasswordValue = "";
+                if (passCodeEntryResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
-                input_digit_1.setImageResource(R.drawable.pass_icon_2);
-                input_digit_2.setImageResource(R.drawable.pass_icon_2);
-                input_digit_3.setImageResource(R.drawable.pass_icon_2);
-                input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                    password_1_rl.setVisibility(View.VISIBLE);
+                    password_2_rl.setVisibility(View.INVISIBLE);
 
-                Intent intent = new Intent();
-                intent.setClass(PasswordEntryActivity.this, MemorableWordEntryActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                finish();
-                startActivity(intent);
+                    inputPasswordValue = "";
+                    inputRePasswordValue = "";
+
+                    input_digit_1.setImageResource(R.drawable.pass_icon_2);
+                    input_digit_2.setImageResource(R.drawable.pass_icon_2);
+                    input_digit_3.setImageResource(R.drawable.pass_icon_2);
+                    input_digit_4.setImageResource(R.drawable.pass_icon_2);
+                    input_digit_5.setImageResource(R.drawable.pass_icon_2);
+
+                    Intent intent = new Intent();
+                    intent.setClass(PasswordEntryActivity.this, MemorableWordEntryActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    finish();
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(context, getString(R.string.msg_fail_pass_code_entry), Toast.LENGTH_SHORT).show();
+                }
+            }else {
+                Toast.makeText(context, getString(R.string.msg_fail_pass_code_entry), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -375,7 +386,7 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
 
                         if (inputPasswordValue.equalsIgnoreCase(inputRePasswordValue)) {
                             RegistrationPassCodeEntryRequest registrationPassCodeEntryRequest = new RegistrationPassCodeEntryRequest();
-                            registrationPassCodeEntryRequest.setUserIdToken(prefs.getString("UserIdToken", ""));
+                            registrationPassCodeEntryRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
                             registrationPassCodeEntryRequest.setPassCode(inputPasswordValue);
 
                             new RequestPassCodeEntry(context, new RequestPassCodeEntryResponseTaskCompleteListener()).execute(registrationPassCodeEntryRequest);

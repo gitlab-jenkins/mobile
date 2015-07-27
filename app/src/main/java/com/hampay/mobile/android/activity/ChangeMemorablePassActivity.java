@@ -133,7 +133,7 @@ public class ChangeMemorablePassActivity extends ActionBarActivity implements Vi
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-            if (changeMemorableWordResponse.getService().getResultStatus() != null) {
+            if (changeMemorableWordResponse != null) {
 
                 finish();
 
