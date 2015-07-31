@@ -82,15 +82,16 @@
 
 
             <RelativeLayout
-                android:layout_width="150dp"
-                android:layout_height="50dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="25dp">
+                android:layout_marginBottom="25dp"
+                android:padding="10dp">
 
 
                 <com.hampay.mobile.android.component.material.ButtonRectangle
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:background="@android:color/white"
                     android:textSize="20sp"
@@ -99,13 +100,12 @@
                 <com.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/hampay_memorableword_text"
                     geekui:customTypeface="fonts/iran_sans.ttf"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:textColor="@color/normal_text"
                     android:textSize="20sp"
-                    android:gravity="center"
-                    android:layout_gravity="center"
-                    android:text="@string/remember_phrase"
+                    android:layout_centerInParent="true"
+                    android:text="dcvdfsbgdfhbfdbsdfbsfdbfdbsrfb"
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="2dp"/>
 

@@ -33,6 +33,7 @@ import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestConfirmUserData;
 import com.hampay.mobile.android.async.RequestFetchUserData;
 import com.hampay.mobile.android.async.RequestRegisterVerifyAccount;
+import com.hampay.mobile.android.async.RequestRegistrationEntry;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.material.ButtonFlat;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
@@ -90,6 +91,13 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
     SharedPreferences.Editor editor;
 
     NetworkConnectivity networkConnectivity;
+
+
+    RequestFetchUserData requestFetchUserData;
+    RegistrationFetchUserDataRequest registrationFetchUserDataRequest;
+
+    RequestRegisterVerifyAccount requestRegisterVerifyAccount;
+    RegistrationVerifyAccountRequest registrationVerifyAccountRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -246,13 +254,14 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
 //        });
 
 
-        RegistrationFetchUserDataRequest registrationFetchUserDataRequest = new RegistrationFetchUserDataRequest();
+        registrationFetchUserDataRequest = new RegistrationFetchUserDataRequest();
         registrationFetchUserDataRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
         correct_button = (ButtonRectangle)findViewById(R.id.correct_button);
         correct_button_rl = (RelativeLayout)findViewById(R.id.correct_button_rl);
         correct_button.setOnClickListener(this);
 
-        new RequestFetchUserData(context, new RequestFetchUserDataTaskCompleteListener()).execute(registrationFetchUserDataRequest);
+        requestFetchUserData = new RequestFetchUserData(context, new RequestFetchUserDataTaskCompleteListener());
+        requestFetchUserData.execute(registrationFetchUserDataRequest);
 
     }
 
@@ -284,10 +293,11 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
 
                         confirm_info_dialog.dismiss();
 
-                        RegistrationVerifyAccountRequest registrationVerifyAccountRequest = new RegistrationVerifyAccountRequest();
+                        registrationVerifyAccountRequest = new RegistrationVerifyAccountRequest();
                         registrationVerifyAccountRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
 
-                        new RequestRegisterVerifyAccount(context, new RequestRegistrationVerifyAccountResponseTaskCompleteListener()).execute(registrationVerifyAccountRequest);
+                        requestRegisterVerifyAccount = new RequestRegisterVerifyAccount(context, new RequestRegistrationVerifyAccountResponseTaskCompleteListener());
+                        requestRegisterVerifyAccount.execute(registrationVerifyAccountRequest);
 
                     }
                 });
@@ -327,11 +337,11 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
 
             case R.id.keeOn_with_button:
 
-                RegistrationVerifyAccountRequest registrationVerifyAccountRequest = new RegistrationVerifyAccountRequest();
+                registrationVerifyAccountRequest = new RegistrationVerifyAccountRequest();
                 registrationVerifyAccountRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
 
-                new RequestRegisterVerifyAccount(this, new RequestRegistrationVerifyAccountResponseTaskCompleteListener()).execute(registrationVerifyAccountRequest);
-
+                requestRegisterVerifyAccount = new RequestRegisterVerifyAccount(context, new RequestRegistrationVerifyAccountResponseTaskCompleteListener());
+                requestRegisterVerifyAccount.execute(registrationVerifyAccountRequest);
                 break;
 
             case R.id.correct_button:
@@ -436,11 +446,13 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                     finish();
                 }
                 else{
-                    Toast.makeText(context, getString(R.string.msg_fail_verify_account), Toast.LENGTH_SHORT).show();
+                    requestRegisterVerifyAccount = new RequestRegisterVerifyAccount(context, new RequestRegistrationVerifyAccountResponseTaskCompleteListener());
+                    new HamPayDialog(activity).showFailRegisterVerifyAccountDialog(requestRegisterVerifyAccount, registrationVerifyAccountRequest);
                 }
             }
             else {
-                Toast.makeText(context, getString(R.string.msg_fail_verify_account), Toast.LENGTH_SHORT).show();
+                requestRegisterVerifyAccount = new RequestRegisterVerifyAccount(context, new RequestRegistrationVerifyAccountResponseTaskCompleteListener());
+                new HamPayDialog(activity).showFailRegisterVerifyAccountDialog(requestRegisterVerifyAccount, registrationVerifyAccountRequest);
             }
 
         }
@@ -469,10 +481,12 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                     accountNumberValue.setText(registrationFetchUserDataResponseMessage.getService().getAccountNumber());
                     nationalCodeValue.setText(registrationFetchUserDataResponseMessage.getService().getNationalCode());
                 }else {
-                    Toast.makeText(context, getString(R.string.msg_fail_registration_fetch_user_data), Toast.LENGTH_SHORT).show();
+                    requestFetchUserData = new RequestFetchUserData(context, new RequestFetchUserDataTaskCompleteListener());
+                    new HamPayDialog(activity).showFailFetchUserDataDialog(requestFetchUserData, registrationFetchUserDataRequest);
                 }
             }else {
-                Toast.makeText(context, getString(R.string.msg_fail_registration_fetch_user_data), Toast.LENGTH_SHORT).show();
+                requestFetchUserData = new RequestFetchUserData(context, new RequestFetchUserDataTaskCompleteListener());
+                new HamPayDialog(activity).showFailFetchUserDataDialog(requestFetchUserData, registrationFetchUserDataRequest);
             }
 
         }

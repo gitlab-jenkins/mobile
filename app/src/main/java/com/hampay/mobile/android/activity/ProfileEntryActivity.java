@@ -287,12 +287,8 @@ public class ProfileEntryActivity extends ActionBarActivity {
                     registrationEntryRequest.setNationalCode(nationalCodeValue.getText().toString());
                     registrationEntryRequest.setImei(new DeviceInfo(getApplicationContext()).getIMEI());
 
-//                    new RequestRegistrationEntry(context, new RequestRegistrationEntryTaskCompleteListener()).execute(registrationEntryRequest);
-
                     requestRegistrationEntry = new RequestRegistrationEntry(context, new RequestRegistrationEntryTaskCompleteListener());
-
                     requestRegistrationEntry.execute(registrationEntryRequest);
-
                 } else {
 
                     if (cellNumberValue.getText().toString().length() == 0 || !cellNumberIsValid){
@@ -412,7 +408,6 @@ public class ProfileEntryActivity extends ActionBarActivity {
 
         @Override
         public void onTaskPreRun() {
-//            loading_rl.setVisibility(View.VISIBLE);
         }
     }
 
@@ -445,13 +440,12 @@ public class ProfileEntryActivity extends ActionBarActivity {
                     finish();
                     startActivity(intent);
                 }else {
-                    Toast.makeText(context, getString(R.string.msg_fail_registration_entry), Toast.LENGTH_LONG).show();
-//                    new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest);
-//                    cls
+                    requestRegistrationEntry = new RequestRegistrationEntry(context, new RequestRegistrationEntryTaskCompleteListener());
+                    new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest);
                 }
             }else {
-//                new HamPayDialog(activity).showFailRegistrationEntryDialog();
-                Toast.makeText(context, getString(R.string.msg_fail_registration_entry), Toast.LENGTH_LONG).show();
+                requestRegistrationEntry = new RequestRegistrationEntry(context, new RequestRegistrationEntryTaskCompleteListener());
+                new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest);
             }
         }
 

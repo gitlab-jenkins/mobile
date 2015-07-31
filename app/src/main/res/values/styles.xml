@@ -112,15 +112,15 @@
         <item name="rd_maskType">rectangle</item>
         <item name="rd_cornerRadius">2dp</item>
         <item name="rd_padding">0dp</item>
-        <item name="rd_delayClick">none</item>
+        <item name="rd_delayClick">0</item>
     </style>
 
     <style name="Material.Drawable.Ripple.Touch" parent="Material.Drawable.Ripple">
         <item name="rd_backgroundColor">#26CCCCCC</item>
-        <item name="rd_backgroundAnimDuration">200</item>
+        <item name="rd_backgroundAnimDuration">50</item>
         <item name="rd_maxRippleRadius">48dp</item>
         <item name="rd_rippleColor">#19CCCCCC</item>
-        <item name="rd_rippleAnimDuration">300</item>
+        <item name="rd_rippleAnimDuration">100</item>
         <item name="rd_rippleType">touch</item>
     </style>
 

@@ -1,9 +1,10 @@
 package com.hampay.mobile.android.activity;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -11,15 +12,15 @@ import android.widget.LinearLayout;
 import com.hampay.common.core.model.response.dto.TransactionDTO;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.component.FacedTextView;
-import com.hampay.mobile.android.fragment.UserTransactionFragment;
+import com.hampay.mobile.android.dialog.HamPayDialog;
+import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.JalaliConvert;
 
 public class TransactionDetailActivity extends ActionBarActivity implements View.OnClickListener{
 
     Bundle bundle;
-    int index = 0;
 
-    TransactionDTO transaction;
+    TransactionDTO transactionDTO;
 
     ImageView status_icon;
     FacedTextView status_text;
@@ -32,6 +33,8 @@ public class TransactionDetailActivity extends ActionBarActivity implements View
     LinearLayout pay_to_one_ll;
     LinearLayout send_message;
     LinearLayout user_call;
+    Context context;
+    Activity activity;
 
     public void backActionBar(View view){
         finish();
@@ -43,6 +46,8 @@ public class TransactionDetailActivity extends ActionBarActivity implements View
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction_detail);
 
+        context = this;
+        activity = TransactionDetailActivity.this;
 
         status_icon = (ImageView)findViewById(R.id.status_icon);
         status_text = (FacedTextView)findViewById(R.id.status_text);
@@ -63,18 +68,18 @@ public class TransactionDetailActivity extends ActionBarActivity implements View
 
         bundle = getIntent().getExtras();
 
-        index = bundle.getInt("index", 0);
+        Intent intent = getIntent();
 
-        transaction = UserTransactionFragment.transactionDTOs.get(index);
+        transactionDTO = (TransactionDTO)intent.getSerializableExtra(Constants.USER_TRANSACTION_DTO);
 
-        if (transaction.getTransactionStatus().ordinal() == 0){
+        if (transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.SUCCESS){
 
-            if (transaction.getTransactionType().ordinal() == 0){
+            if (transactionDTO.getTransactionType() == TransactionDTO.TransactionType.CREDIT){
                 status_text.setText(getString(R.string.credit));
                 status_text.setTextColor(getResources().getColor(R.color.register_btn_color));
                 status_icon.setImageResource(R.drawable.arrow_r);
             }
-            else if (transaction.getTransactionType().ordinal() == 1){
+            else if (transactionDTO.getTransactionType() == TransactionDTO.TransactionType.DEBIT){
                 status_text.setText(getString(R.string.debit));
                 status_text.setTextColor(getResources().getColor(R.color.user_change_status));
                 status_icon.setImageResource(R.drawable.arrow_p);
@@ -87,21 +92,12 @@ public class TransactionDetailActivity extends ActionBarActivity implements View
         }
 
 
-        user_name.setText(transaction.getPersonName());
-        date_time.setText((new JalaliConvert()).GregorianToPersian(transaction.getTransactionDate()));
-        message.setText(transaction.getMessage());
-        price_pay.setText(String.format("%,d", transaction.getAmount()).replace(",", "."));
-        user_mobile_no.setText(transaction.getMobileNumber());
-        date_time.setText(getString(R.string.transaction_date) + " " + (new JalaliConvert()).GregorianToPersian(transaction.getTransactionDate()));
-        tracking_code.setText(transaction.getReference());
-
-
-//        status_text.setText(transaction.getTransactionType().name());
-//        user_name.setText(transaction.getPersonName());
-
-
-//        message.setText(transaction.getMessage());
-//        price_pay.setText(transaction.getAmount() + "");
+        user_name.setText(transactionDTO.getPersonName());
+        message.setText(transactionDTO.getMessage());
+        price_pay.setText(String.format("%,d", transactionDTO.getAmount()).replace(",", "."));
+        user_mobile_no.setText(transactionDTO.getMobileNumber());
+        date_time.setText((new JalaliConvert()).GregorianToPersian(transactionDTO.getTransactionDate()));
+        tracking_code.setText(transactionDTO.getReference());
 
 
     }
@@ -114,19 +110,20 @@ public class TransactionDetailActivity extends ActionBarActivity implements View
             case R.id.pay_to_one_ll:
                 Intent intent = new Intent();
                 intent.setClass(TransactionDetailActivity.this, PayOneActivity.class);
-                intent.putExtra("contact_phone_no", transaction.getMobileNumber());
-                intent.putExtra("contact_name", transaction.getPersonName());
+                intent.putExtra("contact_phone_no", transactionDTO.getMobileNumber());
+                intent.putExtra("contact_name", transactionDTO.getPersonName());
                 startActivity(intent);
                 break;
 
             case R.id.send_message:
-                if (transaction.getMobileNumber() != null)
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", transaction.getMobileNumber(), null)));
+
+                if (transactionDTO.getMobileNumber() != null)
+                    new HamPayDialog(activity).showCommunicateDialog(0, transactionDTO.getMobileNumber());
                 break;
 
             case R.id.user_call:
-                if (transaction.getMobileNumber() != null)
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("tel", transaction.getMobileNumber(), null)));
+                if (transactionDTO.getMobileNumber() != null)
+                    new HamPayDialog(activity).showCommunicateDialog(1, transactionDTO.getMobileNumber());
                 break;
         }
 

@@ -95,11 +95,15 @@
 
     <string name="bank_name">انتخاب بانک</string>
 
-    <string name="contact_us">ارتباط با ما</string>
+    <string name="contact_us">تماس با ما</string>
     <string name="user_mail">ایمیل شما</string>
     <string name="user_text_contact">پیام خود را بنویسید</string>
     <string name="send_message">ارسال پیام</string>
     <string name="call_message">تماس با اپراتور</string>
+
+    <string name="msg_communicate_confirm">برای انجام این عملیات از هم‌پی خارج خواهید شد و ممکن است به ورود مجدد نیاز داشته باشید.</string>
+    <string name="communicate_confirm">باشه</string>
+    <string name="communicate_disconfirm">منصرف شدم</string>
 
     <string name="dismatch_password">تغییر رمزعبور با مشکل مواجه شد. لطفا مجدد تلاش کنید</string>
     <string name="retry_password">باشه</string>
@@ -152,13 +156,17 @@
     <string name="alert_connection_error_message">خطا در ارتباط با اينترنت. لطفا تنظيمات مربوط به شبکه را بازبينی کرده و دوباره تلاش نماييد.</string>
 
 
-    <string name="sms_verification_text">یک کد فعال سازی ۵ رقمی برای شما پیامک خواهد شد.</string>
+    <string name="sms_verification_text">کد فعال سازی پنج رقمی
+\n
+برای شما پیامک خواهد شد.</string>
     <string name="mobile_no_verification">تایید شماره همراه</string>
     <string name="deliver_verification">کد ۵ رقمی برای شما پیامک شد. در صورت عدم دریافت پیامک تا ۵ دقیقه، دکمه ارسال مجدد را فشار دهید.</string>
     <string name="verification">بررسی</string>
 
     <string name="resend">ارسال مجدد</string>
-    <string name="confirm_account_no_text">در این بخش اطلاعات حساب با نام شما مطابقت داده می‌شود.</string>
+    <string name="confirm_account_no_text">در این بخش اطلاعات حساب
+\n
+ با نام شما مطابقت داده می‌شود.</string>
     <string name="confirm_account_no">تایید شماره حساب</string>
 
     <string name="congrats_account">تبریک!
@@ -168,7 +176,7 @@
     <string name="wait_callcentre">منتظر تماس هم‌پی یارتان برای ارتقا به کاربر عادی باشید.</string>
 
     <string name="confirm_information">تایید اطلاعات</string>
-    <string name="confirm_information_text">لطفا از صحت اطلاعات زیر اطمینان حاصل فرمایید. در غیر اینصورت اطلاعات را تصحیح کنید.</string>
+    <string name="confirm_information_text">لطفا از صحت شماره حساب زیر اطمینان حاصل فرمایید. در غیر اینصورت اطلاعات را تصحیح کنید.</string>
 
     <string name="name_family">نام و نام خانوادگی</string>
     <string name="account_id">شماره حساب</string>
@@ -200,7 +208,7 @@
     <string name="remember_phrase">یادآوری</string>
     <string name="remember_phrase_text">لطفا یک کلمه کوتاه به عنوان یادآوری رمز عبور وارد نمایید.</string>
     <string name="complete_registarion">تکمیل ثبت نام</string>
-    <string name="complete_registarion_text_1">آفرین شما عضو تازه شبکه هم‌پی هستید.</string>
+    <string name="complete_registarion_text_1">تبریک، شما عضو تازه شبکه هم‌پی هستید.</string>
     <string name="complete_registarion_text_2">حالا دوستانتان در شبکه هم‌پی تنها با شماره موبایلتان به شما پول می‌دهند.</string>
 
 
@@ -225,10 +233,20 @@
 
     <string-array name="guide_list">
         <item>ثبت نام</item>
-        <item>ثبت نام VIP</item>
+        <item>ثبت اطلاعات کاربری</item>
+        <item>فعالسازی پیامکی</item>
+        <item>بررسی اطلاعات کاربری</item>
+        <item>بررسی صحت حساب</item>
+        <item>دریافت رمزعبور</item>
+        <item>دریافت کلمه یادآوری</item>
+        <item>جزییات حساب</item>
+        <item>حساب محدود</item>
+        <item>پرداخت</item>
         <item>پرداخت به فرد</item>
         <item>پرداخت به کسب و کار</item>
-        <item>جستجو در تراکنش ها</item>
+        <item>تماس با ما</item>
+        <item>خروج از هم‌پی</item>
+        <item>تنظیمات</item>
         <item>تغییر کلمه یادآوری</item>
         <item>تغییر رمز عبور</item>
     </string-array>
@@ -290,5 +308,14 @@
     <string name="msg_fail_registration_confirm_user_data">تایید اطلاعات کاربری شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="mgs_fail_verify_transfer_money">درخواست شما برای بررسی انتقال وجه با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_pass_code_entry">ثبت رمزعبور شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
+    <string name="msg_fail_memorable_entry">ثبت کلمه یادآوری با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
+    <string name="msg_fail_user_transation">بارگیری تراکنش‌ها با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
+
+    <string name="retry_registration_entry">مجدد تلاش می‌کنم</string>
+    <string name="title_activity_server_select">ServerSelectActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_guide_detail">GuideDetailActivity</string>
 
 </resources>

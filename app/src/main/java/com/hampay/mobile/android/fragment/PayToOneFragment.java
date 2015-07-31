@@ -27,7 +27,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
+import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.dto.ContactDTO;
+import com.hampay.common.core.model.request.ContactsHampayEnabledRequest;
 import com.hampay.common.core.model.response.ContactsHampayEnabledResponse;
 import com.hampay.common.core.model.response.TACResponse;
 import com.hampay.mobile.android.Helper.DatabaseHelper;
@@ -64,7 +66,7 @@ public class PayToOneFragment extends Fragment {
     List<EnabledHamPay> searchEnabledHamPay;
     RelativeLayout loading_rl;
 
-//    ResponseMessage<ContactsHampayEnabledResponse> contactsHampayEnabledResponse;
+    //    ResponseMessage<ContactsHampayEnabledResponse> contactsHampayEnabledResponse;
     List<ContactDTO> contactDTOs;
 
     static PinnedHeaderListView pinnedHeaderListView;
@@ -304,31 +306,36 @@ public class PayToOneFragment extends Fragment {
     }
 
 
+    ResponseMessage<ContactsHampayEnabledResponse> contactsHampayEnabledResponse;
+
     public class HttpHamPayContact extends AsyncTask<Void, Void, String> {
 
         @Override
         protected String doInBackground(Void... params) {
 
             WebServices webServices = new WebServices(getActivity());
-//            contactsHampayEnabledResponse = webServices.getEnabledHamPayContacts();
+            contactsHampayEnabledResponse = webServices.getEnabledHamPayContacts();
 
-            contactDTOs = webServices.getEnabledHamPayContacts().getService().getContacts();
+            if (contactsHampayEnabledResponse != null){
 
+                if (contactsHampayEnabledResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
-            if (contactDTOs.size() > 0) {
+                    contactDTOs = webServices.getEnabledHamPayContacts().getService().getContacts();
 
-                ContentResolver resolver = getActivity().getContentResolver();
-                resolver.delete(ContactsContract.RawContacts.CONTENT_URI, ContactsContract.RawContacts.ACCOUNT_TYPE + " = ?", new String[]{AccountGeneral.ACCOUNT_TYPE});
+                    if (contactDTOs.size() > 0) {
 
-                dbHelper.deleteEnabledHamPays();
+                        ContentResolver resolver = getActivity().getContentResolver();
+                        resolver.delete(ContactsContract.RawContacts.CONTENT_URI, ContactsContract.RawContacts.ACCOUNT_TYPE + " = ?", new String[]{AccountGeneral.ACCOUNT_TYPE});
 
-                for (ContactDTO contactDTO : contactDTOs) {
+                        dbHelper.deleteEnabledHamPays();
 
-                    EnabledHamPay enabledHamPay = new EnabledHamPay();
-                    enabledHamPay.setCellNumber(contactDTO.getCellNumber());
-                    enabledHamPay.setDisplayName(contactDTO.getDisplayName());
+                        for (ContactDTO contactDTO : contactDTOs) {
 
-                    dbHelper.createEnabledHamPay(enabledHamPay);
+                            EnabledHamPay enabledHamPay = new EnabledHamPay();
+                            enabledHamPay.setCellNumber(contactDTO.getCellNumber());
+                            enabledHamPay.setDisplayName(contactDTO.getDisplayName());
+
+                            dbHelper.createEnabledHamPay(enabledHamPay);
 
 //                addNewAccount(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
 //                ContactsManager.addContact(getActivity(), new HamPayContact("",
@@ -338,11 +345,14 @@ public class PayToOneFragment extends Fragment {
 //
 //                Log.e("Create", contactDTO.getDisplayName());
 
-                }
+                        }
 
 //                new RequestUpdateEnabledHamPay(context, new RequestUpdateEnableHamPayTaskCompleteListener()).execute(enabledHamPays);
 
+                    }
+                }
             }
+
 
             return null;
 

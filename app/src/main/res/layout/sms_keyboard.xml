@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ripple="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -15,19 +17,16 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp">
 
-        <RelativeLayout
+        <com.hampay.mobile.android.component.material.RippleView
+            android:id="@+id/digit_1"
             android:layout_width="0dip"
-            android:layout_height="45dp"
+            android:layout_height="36dp"
             android:layout_weight="0.3"
-            android:layout_gravity="center_horizontal">
-
-            <com.hampay.mobile.android.component.material.ButtonRectangle
-                android:id="@+id/digit_1"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_centerHorizontal="true"
-                android:background="@color/keyword_btn_color"
-                android:textSize="20sp" />
+            android:layout_gravity="center_horizontal"
+            ripple:rv_type="rectangle"
+            android:background="@drawable/selector_row"
+            ripple:rv_zoom="true"
+            android:layout_margin="1dp">
 
             <com.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
@@ -37,23 +36,21 @@
                 android:textSize="24sp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:text="1" />
+                android:text="1"
+                android:background="@color/keyword_btn_color"/>
 
-        </RelativeLayout>
+        </com.hampay.mobile.android.component.material.RippleView>
 
-        <RelativeLayout
+        <com.hampay.mobile.android.component.material.RippleView
+            android:id="@+id/digit_2"
             android:layout_width="0dip"
-            android:layout_height="45dp"
+            android:layout_height="36dp"
             android:layout_weight="0.3"
-            android:layout_gravity="center_horizontal">
-
-            <com.hampay.mobile.android.component.material.ButtonRectangle
-                android:id="@+id/digit_2"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_centerHorizontal="true"
-                android:background="@color/keyword_btn_color"
-                android:textSize="20sp" />
+            android:layout_gravity="center_horizontal"
+            ripple:rv_type="rectangle"
+            android:background="@drawable/selector_row"
+            ripple:rv_zoom="true"
+            android:layout_margin="1dp">
 
             <com.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
@@ -63,23 +60,21 @@
                 android:textSize="24sp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:text="2" />
+                android:text="2"
+                android:background="@color/keyword_btn_color"/>
 
-        </RelativeLayout>
+        </com.hampay.mobile.android.component.material.RippleView>
 
-        <RelativeLayout
+        <com.hampay.mobile.android.component.material.RippleView
+            android:id="@+id/digit_3"
             android:layout_width="0dip"
-            android:layout_height="45dp"
+            android:layout_height="36dp"
             android:layout_weight="0.3"
-            android:layout_gravity="center_horizontal">
-
-            <com.hampay.mobile.android.component.material.ButtonRectangle
-                android:id="@+id/digit_3"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_centerHorizontal="true"
-                android:background="@color/keyword_btn_color"
-                android:textSize="20sp" />
+            android:layout_gravity="center_horizontal"
+            ripple:rv_type="rectangle"
+            android:background="@drawable/selector_row"
+            ripple:rv_zoom="true"
+            android:layout_margin="1dp">
 
             <com.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
@@ -89,9 +84,10 @@
                 android:textSize="24sp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:text="3" />
+                android:text="3"
+                android:background="@color/keyword_btn_color"/>
 
-        </RelativeLayout>
+        </com.hampay.mobile.android.component.material.RippleView>
 
 
     </LinearLayout>
@@ -102,20 +98,16 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp">
 
-
-        <RelativeLayout
+        <com.hampay.mobile.android.component.material.RippleView
+            android:id="@+id/digit_4"
             android:layout_width="0dip"
-            android:layout_height="45dp"
+            android:layout_height="36dp"
             android:layout_weight="0.3"
-            android:layout_gravity="center_horizontal">
-
-            <com.hampay.mobile.android.component.material.ButtonRectangle
-                android:id="@+id/digit_4"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_centerHorizontal="true"
-                android:background="@color/keyword_btn_color"
-                android:textSize="20sp" />
+            android:layout_gravity="center_horizontal"
+            ripple:rv_type="rectangle"
+            android:background="@drawable/selector_row"
+            ripple:rv_zoom="true"
+            android:layout_margin="1dp">
 
             <com.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
@@ -125,23 +117,21 @@
                 android:textSize="24sp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:text="4" />
+                android:text="4"
+                android:background="@color/keyword_btn_color"/>
 
-        </RelativeLayout>
+        </com.hampay.mobile.android.component.material.RippleView>
 
-        <RelativeLayout
+        <com.hampay.mobile.android.component.material.RippleView
+            android:id="@+id/digit_5"
             android:layout_width="0dip"
-            android:layout_height="45dp"
+            android:layout_height="36dp"
             android:layout_weight="0.3"
-            android:layout_gravity="center_horizontal">
-
-            <com.hampay.mobile.android.component.material.ButtonRectangle
-                android:id="@+id/digit_5"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_centerHorizontal="true"
-                android:background="@color/keyword_btn_color"
-                android:textSize="20sp" />
+            android:layout_gravity="center_horizontal"
+            ripple:rv_type="rectangle"
+            android:background="@drawable/selector_row"
+            ripple:rv_zoom="true"
+            android:layout_margin="1dp">
 
             <com.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
@@ -151,23 +141,21 @@
                 android:textSize="24sp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:text="5" />
+                android:text="5"
+                android:background="@color/keyword_btn_color"/>
 
-        </RelativeLayout>
+        </com.hampay.mobile.android.component.material.RippleView>
 
-        <RelativeLayout
+        <com.hampay.mobile.android.component.material.RippleView
+            android:id="@+id/digit_6"
             android:layout_width="0dip"
-            android:layout_height="45dp"
+            android:layout_height="36dp"
             android:layout_weight="0.3"
-            android:layout_gravity="center_horizontal">
-
-            <com.hampay.mobile.android.component.material.ButtonRectangle
-                android:id="@+id/digit_6"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_centerHorizontal="true"
-                android:background="@color/keyword_btn_color"
-                android:textSize="20sp" />
+            android:layout_gravity="center_horizontal"
+            ripple:rv_type="rectangle"
+            android:background="@drawable/selector_row"
+            ripple:rv_zoom="true"
+            android:layout_margin="1dp">
 
             <com.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
@@ -177,9 +165,10 @@
                 android:textSize="24sp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:text="6" />
+                android:text="6"
+                android:background="@color/keyword_btn_color"/>
 
-        </RelativeLayout>
+        </com.hampay.mobile.android.component.material.RippleView>
 
 
     </LinearLayout>
@@ -190,19 +179,16 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp">
 
-        <RelativeLayout
+        <com.hampay.mobile.android.component.material.RippleView
+            android:id="@+id/digit_7"
             android:layout_width="0dip"
-            android:layout_height="45dp"
+            android:layout_height="36dp"
             android:layout_weight="0.3"
-            android:layout_gravity="center_horizontal">
-
-            <com.hampay.mobile.android.component.material.ButtonRectangle
-                android:id="@+id/digit_7"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_centerHorizontal="true"
-                android:background="@color/keyword_btn_color"
-                android:textSize="20sp" />
+            android:layout_gravity="center_horizontal"
+            ripple:rv_type="rectangle"
+            android:background="@drawable/selector_row"
+            ripple:rv_zoom="true"
+            android:layout_margin="1dp">
 
             <com.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
@@ -212,23 +198,21 @@
                 android:textSize="24sp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:text="7" />
+                android:text="7"
+                android:background="@color/keyword_btn_color"/>
 
-        </RelativeLayout>
+        </com.hampay.mobile.android.component.material.RippleView>
 
-        <RelativeLayout
+        <com.hampay.mobile.android.component.material.RippleView
+            android:id="@+id/digit_8"
             android:layout_width="0dip"
-            android:layout_height="45dp"
+            android:layout_height="36dp"
             android:layout_weight="0.3"
-            android:layout_gravity="center_horizontal">
-
-            <com.hampay.mobile.android.component.material.ButtonRectangle
-                android:id="@+id/digit_8"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_centerHorizontal="true"
-                android:background="@color/keyword_btn_color"
-                android:textSize="20sp" />
+            android:layout_gravity="center_horizontal"
+            ripple:rv_type="rectangle"
+            android:background="@drawable/selector_row"
+            ripple:rv_zoom="true"
+            android:layout_margin="1dp">
 
             <com.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
@@ -238,23 +222,21 @@
                 android:textSize="24sp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:text="8" />
+                android:text="8"
+                android:background="@color/keyword_btn_color"/>
 
-        </RelativeLayout>
+        </com.hampay.mobile.android.component.material.RippleView>
 
-        <RelativeLayout
+        <com.hampay.mobile.android.component.material.RippleView
+            android:id="@+id/digit_9"
             android:layout_width="0dip"
-            android:layout_height="45dp"
+            android:layout_height="36dp"
             android:layout_weight="0.3"
-            android:layout_gravity="center_horizontal">
-
-            <com.hampay.mobile.android.component.material.ButtonRectangle
-                android:id="@+id/digit_9"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_centerHorizontal="true"
-                android:background="@color/keyword_btn_color"
-                android:textSize="20sp" />
+            android:layout_gravity="center_horizontal"
+            ripple:rv_type="rectangle"
+            android:background="@drawable/selector_row"
+            ripple:rv_zoom="true"
+            android:layout_margin="1dp">
 
             <com.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
@@ -264,13 +246,14 @@
                 android:textSize="24sp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:text="9" />
+                android:text="9"
+                android:background="@color/keyword_btn_color"/>
 
-        </RelativeLayout>
-
+        </com.hampay.mobile.android.component.material.RippleView>
 
 
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -278,46 +261,16 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp">
 
-        <RelativeLayout
+        <com.hampay.mobile.android.component.material.RippleView
+            android:id="@+id/resend_active_code"
             android:layout_width="0dip"
-            android:layout_height="45dp"
+            android:layout_height="36dp"
             android:layout_weight="0.3"
-            android:layout_gravity="center_horizontal">
-
-            <com.hampay.mobile.android.component.material.ButtonRectangle
-                android:id="@+id/resend_active_code"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_centerHorizontal="true"
-                android:background="@color/keyword_btn_color"
-                android:textSize="20sp" />
-
-            <com.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/iran_sans.ttf"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:textColor="@android:color/white"
-                android:textSize="18sp"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:text="@string/resend" />
-
-        </RelativeLayout>
-
-
-        <RelativeLayout
-            android:layout_width="0dip"
-            android:layout_height="45dp"
-            android:layout_weight="0.3"
-            android:layout_gravity="center_horizontal">
-
-            <com.hampay.mobile.android.component.material.ButtonRectangle
-                android:id="@+id/digit_0"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_centerHorizontal="true"
-                android:background="@color/keyword_btn_color"
-                android:textSize="20sp" />
+            android:layout_gravity="center_horizontal"
+            ripple:rv_type="rectangle"
+            android:background="@drawable/selector_row"
+            ripple:rv_zoom="true"
+            android:layout_margin="1dp">
 
             <com.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
@@ -327,68 +280,57 @@
                 android:textSize="24sp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:text="0" />
+                android:text="@string/resend"
+                android:background="@color/keyword_btn_color"/>
 
-        </RelativeLayout>
+        </com.hampay.mobile.android.component.material.RippleView>
 
-
-        <!--<com.hampay.mobile.android.component.FacedTextView-->
-        <!--android:id="@+id/digit_0"-->
-        <!--geekui:customTypeface="fonts/iran_sans.ttf"-->
-        <!--android:layout_width="0dip"-->
-        <!--android:layout_height="45dp"-->
-        <!--android:layout_weight="0.3"-->
-        <!--android:textColor="@android:color/white"-->
-        <!--android:background="@color/keyword_btn_color"-->
-        <!--android:textSize="26sp"-->
-        <!--android:text="0"-->
-        <!--android:gravity="center"-->
-        <!--android:layout_marginLeft="2dp"-->
-        <!--android:layout_marginRight="2dp"/>-->
-
-
-        <!--<RelativeLayout-->
-        <!--android:id="@+id/backspace"-->
-        <!--android:layout_width="0dip"-->
-        <!--android:layout_height="45dp"-->
-        <!--android:layout_weight="0.3"-->
-        <!--android:background="@color/keyword_btn_color"-->
-        <!--android:layout_marginLeft="2dp"-->
-        <!--android:layout_marginRight="2dp">-->
-
-        <!--<ImageView-->
-        <!--android:layout_width="48dp"-->
-        <!--android:layout_height="24dp"-->
-        <!--android:layout_centerInParent="true"-->
-        <!--android:src="@drawable/backsplace"-->
-        <!--/>-->
-
-        <!--</RelativeLayout>-->
-
-
-        <RelativeLayout
+        <com.hampay.mobile.android.component.material.RippleView
+            android:id="@+id/digit_0"
             android:layout_width="0dip"
-            android:layout_height="45dp"
+            android:layout_height="36dp"
             android:layout_weight="0.3"
-            android:layout_gravity="center_horizontal">
+            android:layout_gravity="center_horizontal"
+            ripple:rv_type="rectangle"
+            android:background="@drawable/selector_row"
+            ripple:rv_zoom="true"
+            android:layout_margin="1dp">
 
-            <com.hampay.mobile.android.component.material.ButtonRectangle
-                android:id="@+id/backspace"
+            <com.hampay.mobile.android.component.FacedTextView
+                geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_centerHorizontal="true"
-                android:background="@color/keyword_btn_color"
-                android:textSize="20sp" />
+                android:textColor="@android:color/white"
+                android:textSize="24sp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="0"
+                android:background="@color/keyword_btn_color"/>
+
+        </com.hampay.mobile.android.component.material.RippleView>
+
+        <com.hampay.mobile.android.component.material.RippleView
+            android:id="@+id/backspace"
+            android:layout_width="0dip"
+            android:layout_height="36dp"
+            android:layout_weight="0.3"
+            android:layout_gravity="center_horizontal"
+            ripple:rv_type="rectangle"
+            android:background="@color/keyword_btn_color"
+            ripple:rv_zoom="true"
+            android:layout_margin="1dp">
 
             <ImageView
-                android:layout_width="40dp"
+                android:layout_width="36dp"
                 android:layout_height="15dp"
                 android:layout_centerInParent="true"
                 android:src="@drawable/backsplace" />
 
-        </RelativeLayout>
+        </com.hampay.mobile.android.component.material.RippleView>
 
 
     </LinearLayout>
+
+
 
 </LinearLayout>

@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
@@ -17,6 +19,7 @@ import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestMemorableWordEntry;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
+import com.hampay.mobile.android.component.edittext.MemorableTextWatcher;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
@@ -39,6 +42,9 @@ public class MemorableWordEntryActivity extends ActionBarActivity {
 
     String Uuid = "";
 
+    RequestMemorableWordEntry requestMemorableWordEntry;
+    RegistrationMemorableWordEntryRequest registrationMemorableWordEntryRequest;
+
     public void contactUs(View view){
         new HamPayDialog(this).showContactUsDialog();
     }
@@ -57,6 +63,7 @@ public class MemorableWordEntryActivity extends ActionBarActivity {
         context = this;
 
         memorable_value = (FacedEditText)findViewById(R.id.memorable_value);
+        memorable_value.addTextChangedListener(new MemorableTextWatcher(memorable_value));
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
@@ -64,18 +71,16 @@ public class MemorableWordEntryActivity extends ActionBarActivity {
         keepOn_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                RegistrationMemorableWordEntryRequest registrationMemorableWordEntryRequest = new RegistrationMemorableWordEntryRequest();
+                registrationMemorableWordEntryRequest = new RegistrationMemorableWordEntryRequest();
                 registrationMemorableWordEntryRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
                 registrationMemorableWordEntryRequest.setDeviceId(new DeviceInfo(getApplicationContext()).getDeviceId());
-
                 Uuid = UUID.randomUUID().toString();
-
                 registrationMemorableWordEntryRequest.setInstallationToken(Uuid);
                 editor.putString("UUID", Uuid);
                 editor.commit();
                 registrationMemorableWordEntryRequest.setMemorableWord(memorable_value.getText().toString());
-                new RequestMemorableWordEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener()).execute(registrationMemorableWordEntryRequest);
+                requestMemorableWordEntry = new RequestMemorableWordEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
+                requestMemorableWordEntry.execute(registrationMemorableWordEntryRequest);
 
             }
         });
@@ -109,7 +114,13 @@ public class MemorableWordEntryActivity extends ActionBarActivity {
                     intent.setClass(MemorableWordEntryActivity.this, CompleteRegistrationActivity.class);
                     finish();
                     startActivity(intent);
+                }else {
+                    requestMemorableWordEntry = new RequestMemorableWordEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
+                    new HamPayDialog(activity).showFailMemorableEntryDialog(requestMemorableWordEntry, registrationMemorableWordEntryRequest);
                 }
+            }else {
+                requestMemorableWordEntry = new RequestMemorableWordEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
+                new HamPayDialog(activity).showFailMemorableEntryDialog(requestMemorableWordEntry, registrationMemorableWordEntryRequest);
             }
 
         }

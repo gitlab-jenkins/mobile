@@ -77,7 +77,10 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
         viewHolder.date_time.setText((new JalaliConvert()).GregorianToPersian(transactionDTO.getTransactionDate()));
         viewHolder.message.setText(transactionDTO.getMessage());
 
-        viewHolder.price_pay.setText(String.format("%,d", transactionDTO.getAmount()).replace(",", "."));
+        viewHolder.price_pay.setText(String.format("%,d", transactionDTO.getAmount()).replace(",", ".")
+                        + "\n"
+                + context.getString(R.string.currency_rials)
+        );
 
         return convertView;
     }

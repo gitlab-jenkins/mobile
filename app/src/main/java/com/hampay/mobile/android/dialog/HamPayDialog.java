@@ -13,7 +13,6 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
@@ -21,8 +20,15 @@ import android.widget.Toast;
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.request.ContactUsRequest;
 import com.hampay.common.core.model.request.RegistrationEntryRequest;
+import com.hampay.common.core.model.request.RegistrationFetchUserDataRequest;
+import com.hampay.common.core.model.request.RegistrationMemorableWordEntryRequest;
+import com.hampay.common.core.model.request.RegistrationPassCodeEntryRequest;
+import com.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
+import com.hampay.common.core.model.request.RegistrationVerifyAccountRequest;
+import com.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
+import com.hampay.common.core.model.request.RegistrationVerifyTransferMoneyRequest;
 import com.hampay.common.core.model.request.TACAcceptRequest;
-import com.hampay.common.core.model.request.TACRequest;
+import com.hampay.common.core.model.request.TransactionListRequest;
 import com.hampay.common.core.model.response.ContactUsResponse;
 import com.hampay.common.core.model.response.TACAcceptResponse;
 import com.hampay.common.core.model.response.dto.UserProfileDTO;
@@ -30,19 +36,23 @@ import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.activity.AppSliderActivity;
 import com.hampay.mobile.android.activity.MainActivity;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import com.hampay.mobile.android.async.RequestLogin;
+import com.hampay.mobile.android.async.RequestFetchUserData;
 import com.hampay.mobile.android.async.RequestLogout;
+import com.hampay.mobile.android.async.RequestMemorableWordEntry;
+import com.hampay.mobile.android.async.RequestPassCodeEntry;
+import com.hampay.mobile.android.async.RequestRegisterVerifyAccount;
 import com.hampay.mobile.android.async.RequestRegistrationEntry;
-import com.hampay.mobile.android.async.RequestTAC;
+import com.hampay.mobile.android.async.RequestRegistrationSendSmsToken;
+import com.hampay.mobile.android.async.RequestRegistrationVerifyTransferMoney;
 import com.hampay.mobile.android.async.RequestTACAccept;
+import com.hampay.mobile.android.async.RequestUserTransaction;
+import com.hampay.mobile.android.async.RequestVerifyMobile;
 import com.hampay.mobile.android.component.FacedTextView;
-import com.hampay.mobile.android.model.LoginResponse;
 import com.hampay.mobile.android.model.LogoutData;
 import com.hampay.mobile.android.model.LogoutResponse;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.webservice.WebServices;
 
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,6 +60,7 @@ import java.util.regex.Pattern;
  * Created by amir on 7/8/15.
  */
 public class HamPayDialog {
+
 
     Activity activity;
     Dialog dialog;
@@ -86,6 +97,49 @@ public class HamPayDialog {
         dialog.setContentView(view);
         dialog.setTitle(null);
         dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
+    public void showCommunicateDialog(final int type, final String cellNumber){
+
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_communicate_confirm, null);
+
+        FacedTextView communicate_confirm = (FacedTextView) view.findViewById(R.id.communicate_confirm);
+        FacedTextView communicate_disconfirm = (FacedTextView) view.findViewById(R.id.communicate_disconfirm);
+
+        communicate_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+                if (type == 0){
+                    activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", cellNumber, null)));
+                }else if (type == 1){
+                    activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("tel", cellNumber, null)));
+                }
+            }
+        });
+
+        communicate_disconfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
+
         dialog.show();
     }
 
@@ -169,11 +223,14 @@ public class HamPayDialog {
             public void onClick(View v) {
                 dialog.dismiss();
 
-                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                        "mailto", contactUsMail, null));
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, activity.getString(R.string.app_name));
-                emailIntent.putExtra(Intent.EXTRA_TEXT, activity.getString(R.string.insert_message));
-                activity.startActivity(Intent.createChooser(emailIntent, activity.getString(R.string.hampay_contact)));
+                if (contactUsMail.length() != 0) {
+
+                    Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                            "mailto", contactUsMail, null));
+                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, activity.getString(R.string.app_name));
+                    emailIntent.putExtra(Intent.EXTRA_TEXT, activity.getString(R.string.insert_message));
+                    activity.startActivity(Intent.createChooser(emailIntent, activity.getString(R.string.hampay_contact)));
+                }
             }
         });
 
@@ -182,8 +239,11 @@ public class HamPayDialog {
             public void onClick(View v) {
                 dialog.dismiss();
 
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + contactUsPhone));
-                activity.startActivity(intent);
+                if (contactUsPhone.length() != 0) {
+
+                    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + contactUsPhone));
+                    activity.startActivity(intent);
+                }
             }
         });
 
@@ -223,7 +283,7 @@ public class HamPayDialog {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-            if (contactUsResponseResponseMessage.getService() != null){
+            if (contactUsResponseResponseMessage != null){
                 contactUsMail = contactUsResponseResponseMessage.getService().getEmailAddress();
                 contactUsPhone = contactUsResponseResponseMessage.getService().getPhoneNumber();
             }
@@ -577,8 +637,7 @@ public class HamPayDialog {
         dialog.show();
     }
 
-    public void showFailRegistrationEntryDialog(final RequestRegistrationEntry requestRegistrationEntry
-            , final RegistrationEntryRequest registrationEntryRequest){
+    public void showFailRegistrationEntryDialog(final RequestRegistrationEntry requestRegistrationEntry, final RegistrationEntryRequest registrationEntryRequest){
 
         Rect displayRectangle = new Rect();
         Activity parent = (Activity) activity;
@@ -592,10 +651,246 @@ public class HamPayDialog {
         retry_registration_entry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                dialog.dismiss();
                 requestRegistrationEntry.execute(registrationEntryRequest);
+            }
+        });
 
-//                dialog.dismiss();
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
+    public void showFailRegistrationSendSmsTokenDialog(final RequestRegistrationSendSmsToken requestRegistrationSendSmsToken,
+                                                       final RegistrationSendSmsTokenRequest registrationEntryRequest){
+
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_registration_send_sms_token, null);
+
+        FacedTextView retry_registration_sms_token = (FacedTextView) view.findViewById(R.id.retry_registration_sms_token);
+
+        retry_registration_sms_token.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                requestRegistrationSendSmsToken.execute(registrationEntryRequest);
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
+
+    public void showFailRegistrationVerifyMobileDialog(final RequestVerifyMobile requestVerifyMobile,
+                                                       final RegistrationVerifyMobileRequest registrationVerifyMobileRequest){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_registration_verify_mobile_request, null);
+
+        FacedTextView retry_registration_verify_mobile = (FacedTextView) view.findViewById(R.id.retry_registration_verify_mobile);
+
+        retry_registration_verify_mobile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                requestVerifyMobile.execute(registrationVerifyMobileRequest);
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
+    public void showFailFetchUserDataDialog(final RequestFetchUserData requestFetchUserData,
+                                            final RegistrationFetchUserDataRequest registrationFetchUserDataRequest){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_fetch_user_data, null);
+
+        FacedTextView retry_fetch_user_data = (FacedTextView) view.findViewById(R.id.retry_fetch_user_data);
+
+        retry_fetch_user_data.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                requestFetchUserData.execute(registrationFetchUserDataRequest);
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
+    public void showFailRegisterVerifyAccountDialog(final RequestRegisterVerifyAccount requestRegisterVerifyAccount,
+                                                    final RegistrationVerifyAccountRequest registrationVerifyAccountRequest){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_request_register_verify_account, null);
+
+        FacedTextView retry_verify_account = (FacedTextView) view.findViewById(R.id.retry_verify_account);
+
+        retry_verify_account.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                requestRegisterVerifyAccount.execute(registrationVerifyAccountRequest);
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
+
+    public void showFailVerifyTransferMoneyDialog(final RequestRegistrationVerifyTransferMoney requestRegistrationVerifyTransferMoney,
+                                                    final RegistrationVerifyTransferMoneyRequest registrationVerifyTransferMoneyRequest){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_request_verify_transfer_money, null);
+
+        FacedTextView retry_verify_transfer_money = (FacedTextView) view.findViewById(R.id.retry_verify_transfer_money);
+
+        retry_verify_transfer_money.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                requestRegistrationVerifyTransferMoney.execute(registrationVerifyTransferMoneyRequest);
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
+
+    public void showFailPasswordEntryDialog(final RequestPassCodeEntry requestPassCodeEntry,
+                                                  final RegistrationPassCodeEntryRequest registrationPassCodeEntryRequest){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_password_entry, null);
+
+        FacedTextView retry_pass_code_entry = (FacedTextView) view.findViewById(R.id.retry_pass_code_entry);
+
+        retry_pass_code_entry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                requestPassCodeEntry.execute(registrationPassCodeEntryRequest);
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
+
+    public void showFailMemorableEntryDialog(final RequestMemorableWordEntry requestMemorableWordEntry,
+                                            final RegistrationMemorableWordEntryRequest registrationMemorableWordEntryRequest){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_memorable_entry, null);
+
+        FacedTextView retry_memorable_entry = (FacedTextView) view.findViewById(R.id.retry_memorable_entry);
+
+        retry_memorable_entry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                requestMemorableWordEntry.execute(registrationMemorableWordEntryRequest);
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
+
+    public void showFailUserTransactionDialog(final RequestUserTransaction requestUserTransaction,
+                                             final TransactionListRequest transactionListRequest){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_user_transaction, null);
+
+        FacedTextView retry_user_transation = (FacedTextView) view.findViewById(R.id.retry_user_transation);
+
+        retry_user_transation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                requestUserTransaction.execute(transactionListRequest);
             }
         });
 

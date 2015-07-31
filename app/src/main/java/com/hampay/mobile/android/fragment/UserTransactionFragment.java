@@ -2,7 +2,6 @@ package com.hampay.mobile.android.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,15 +11,23 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.hampay.common.common.response.ResponseMessage;
+import com.hampay.common.common.response.ResultStatus;
+import com.hampay.common.core.model.request.TransactionListRequest;
+import com.hampay.common.core.model.response.TransactionListResponse;
 import com.hampay.common.core.model.response.dto.TransactionDTO;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.activity.TransactionDetailActivity;
 import com.hampay.mobile.android.adapter.UserTransactionAdapter;
+import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import com.hampay.mobile.android.async.RequestUserTransaction;
 import com.hampay.mobile.android.component.doblist.DobList;
 import com.hampay.mobile.android.component.doblist.events.OnLoadMoreListener;
 import com.hampay.mobile.android.component.doblist.exceptions.NoEmptyViewException;
 import com.hampay.mobile.android.component.doblist.exceptions.NoListviewException;
-import com.hampay.mobile.android.webservice.WebServices;
+import com.hampay.mobile.android.dialog.HamPayDialog;
+import com.hampay.mobile.android.util.Constant;
+import com.hampay.mobile.android.util.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,12 +37,22 @@ import java.util.List;
  */
 public class UserTransactionFragment extends Fragment {
 
+
+
     View rootView;
 
     ListView transationListView;
     UserTransactionAdapter userTransactionAdapter;
     private boolean FINISHED_SCROLLING = false;
     RelativeLayout loading_rl;
+
+    private boolean onLoadMore = false;
+
+    private List<TransactionDTO> transactionDTOs;
+
+    RequestUserTransaction requestUserTransaction;
+    TransactionListRequest transactionListRequest;
+    int requestPageNumber = 0;
 
     public UserTransactionFragment() {
         // Required empty public constructor
@@ -64,14 +81,20 @@ public class UserTransactionFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), TransactionDetailActivity.class);
-                intent.putExtra("index", position);
+                intent.putExtra(Constants.USER_TRANSACTION_DTO, transactionDTOs.get(position));
                 startActivity(intent);
             }
         });
 
-       new HttpUserTransaction().execute();
+        requestPageNumber = 0;
 
-        // Inflate the layout for this fragment
+        transactionListRequest = new TransactionListRequest();
+        transactionListRequest.setPageNumber(requestPageNumber);
+        transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+
+        requestUserTransaction = new RequestUserTransaction(getActivity(), new RequestUserTransactionsTaskCompleteListener());
+        requestUserTransaction.execute(transactionListRequest);
+
         return rootView;
     }
 
@@ -86,56 +109,58 @@ public class UserTransactionFragment extends Fragment {
     }
 
 
-    private boolean onLoadMore = false;
-    private boolean searchEnable = false;
-
-    public static List<TransactionDTO> transactionDTOs;
-
-    public class HttpUserTransaction extends AsyncTask<Void, Void, String> {
-
+    public class RequestUserTransactionsTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<TransactionListResponse>> {
 
         List<TransactionDTO> newTransactionDTOs;
 
         @Override
-        protected String doInBackground(Void... params) {
-
-            if (isAdded()) {
-                WebServices webServices = new WebServices();
-                newTransactionDTOs = webServices.getUserTransaction().getService().getTransactions();
-                transactionDTOs.addAll(newTransactionDTOs);
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        public void onTaskComplete(ResponseMessage<TransactionListResponse> transactionListResponseMessage) {
 
             loading_rl.setVisibility(View.GONE);
 
-            if (isAdded()) {
+            if (transactionListResponseMessage != null) {
 
-                if (transactionDTOs != null) {
+                if (transactionListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
-                    if (onLoadMore) {
-                        if (newTransactionDTOs != null)
-                            addDummyData(newTransactionDTOs.size());
-                    } else {
-                        initDobList(rootView, transationListView);
-                        transationListView.setAdapter(userTransactionAdapter);
+                    newTransactionDTOs = transactionListResponseMessage.getService().getTransactions();
+                    transactionDTOs.addAll(newTransactionDTOs);
+
+                    if (transactionDTOs != null) {
+
+                        if (newTransactionDTOs.size() == 0 || newTransactionDTOs.size() < Constants.DEFAULT_PAGE_SIZE){
+                            FINISHED_SCROLLING = true;
+                        }
+
+                        if (transactionDTOs.size() > 0) {
+
+                            requestPageNumber++;
+
+                            if (onLoadMore) {
+                                if (newTransactionDTOs != null)
+                                    addDummyData(newTransactionDTOs.size());
+                            } else {
+                                initDobList(rootView, transationListView);
+                                transationListView.setAdapter(userTransactionAdapter);
+                            }
+                        }
+
                     }
+
+                } else {
+                    transactionListRequest.setPageNumber(requestPageNumber);
+                    requestUserTransaction = new RequestUserTransaction(getActivity(), new RequestUserTransactionsTaskCompleteListener());
+                    new HamPayDialog(getActivity()).showFailUserTransactionDialog(requestUserTransaction, transactionListRequest);
                 }
-
+            } else {
+                transactionListRequest.setPageNumber(requestPageNumber);
+                requestUserTransaction = new RequestUserTransaction(getActivity(), new RequestUserTransactionsTaskCompleteListener());
+                new HamPayDialog(getActivity()).showFailUserTransactionDialog(requestUserTransaction, transactionListRequest);
             }
+        }
 
+
+        @Override
+        public void onTaskPreRun() {
         }
     }
 
@@ -161,9 +186,12 @@ public class UserTransactionFragment extends Fragment {
 
                     onLoadMore = true;
 
-                    if(!FINISHED_SCROLLING)
-                        new HttpUserTransaction().execute();
-                    else
+                    if (!FINISHED_SCROLLING) {
+                        transactionListRequest.setPageNumber(requestPageNumber);
+                        requestUserTransaction = new RequestUserTransaction(getActivity(), new RequestUserTransactionsTaskCompleteListener());
+                        requestUserTransaction.execute(transactionListRequest);
+
+                    } else
                         dobList.finishLoading();
 
                 }

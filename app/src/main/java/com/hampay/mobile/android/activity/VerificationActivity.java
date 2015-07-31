@@ -35,6 +35,9 @@ public class VerificationActivity extends ActionBarActivity {
 
     Activity activity;
 
+    RequestRegistrationSendSmsToken requestRegistrationSendSmsToken;
+    RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest;
+
     public void contactUs(View view){
         new HamPayDialog(this).showContactUsDialog();
     }
@@ -58,18 +61,11 @@ public class VerificationActivity extends ActionBarActivity {
         keepOn_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                registrationSendSmsTokenRequest = new RegistrationSendSmsTokenRequest();
+                registrationSendSmsTokenRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
 
-                if (networkConnectivity.isNetworkConnected()) {
-
-                    RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest = new RegistrationSendSmsTokenRequest();
-
-
-                    registrationSendSmsTokenRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
-
-                    new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener()).execute(registrationSendSmsTokenRequest);
-                }else {
-                    Toast.makeText(context, getString(R.string.no_network), Toast.LENGTH_SHORT).show();
-                }
+                requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
+                requestRegistrationSendSmsToken.execute(registrationSendSmsTokenRequest);
             }
         });
     }
@@ -91,15 +87,18 @@ public class VerificationActivity extends ActionBarActivity {
 
                     Intent intent = new Intent();
                     intent.setClass(VerificationActivity.this, SMSVerificationActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                    finish();
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//                    finish();
                     startActivity(intent);
                 }else {
-                    Toast.makeText(context, getString(R.string.mgs_fail_registration_send_sms_token), Toast.LENGTH_LONG).show();
+
+                    requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
+                    new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest);
                 }
 
             }else {
-                Toast.makeText(context, getString(R.string.mgs_fail_registration_send_sms_token), Toast.LENGTH_SHORT).show();
+                requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
+                new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest);
             }
         }
 

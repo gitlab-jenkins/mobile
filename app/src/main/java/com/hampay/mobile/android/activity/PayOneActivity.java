@@ -58,7 +58,9 @@ public class PayOneActivity extends ActionBarActivity {
 
     FacedTextView contact_name;
     FacedEditText contact_message;
+    String contactMssage = "";
     FacedEditText credit_value;
+    Long creditValue;
     boolean creditValueValidation = false;
     ImageView credit_value_icon;
 
@@ -223,6 +225,8 @@ public class PayOneActivity extends ActionBarActivity {
                     public void onClick(View v) {
                         dialog_pay_one.dismiss();
 //                        new HttpIndividualPayment().execute(bundle.getString("contact_phone_no"));
+                        contactMesage = contact_message.getText().toString();
+                        creditValue = Long.parseLong(credit_value.getText().toString().replace(",", ""));
                         new HttpIndividualPayment().execute(contactPhoneNo);
                     }
                 });
@@ -305,8 +309,9 @@ public class PayOneActivity extends ActionBarActivity {
         protected String doInBackground(String... params) {
 
             WebServices webServices = new WebServices(getApplicationContext());
-            individualPaymentResponse = webServices.individualPayment(params[0]);
+            individualPaymentResponse = webServices.individualPayment(params[0], contactMesage, creditValue);
 
+//            individualPaymentResponse.getService().
             return null;
         }
 

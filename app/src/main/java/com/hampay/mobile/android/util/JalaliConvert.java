@@ -127,7 +127,7 @@ public class JalaliConvert {
         }
     }
 
-    String[] persianDay = {"دوشنبه", "سه شنبه", "چهارشنبه", "پنج شنبه", "جمعه", "شنبه", "یک شنبه"};
+    String[] persianDay = { "یک شنبه", "دوشنبه", "سه شنبه", "چهارشنبه", "پنج شنبه", "جمعه", "شنبه"};
 
     public String toString() {
 
@@ -151,7 +151,7 @@ public class JalaliConvert {
         Calendar calendar = dateToCalendar(date);
 
         int jd = JG2JD(calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.MONTH) + 1,
                 calendar.get(Calendar.DAY_OF_MONTH),
                 0);
 

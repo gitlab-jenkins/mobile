@@ -23,6 +23,7 @@ import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestPassCodeEntry;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
+import com.hampay.mobile.android.component.material.RippleView;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
 
@@ -30,18 +31,18 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
 
     Activity activity;
 
-    ButtonRectangle digit_1;
-    ButtonRectangle digit_2;
-    ButtonRectangle digit_3;
-    ButtonRectangle digit_4;
-    ButtonRectangle digit_5;
-    ButtonRectangle digit_6;
-    ButtonRectangle digit_7;
-    ButtonRectangle digit_8;
-    ButtonRectangle digit_9;
-    ButtonRectangle digit_0;
-    ButtonRectangle guide_key;
-    ButtonRectangle backspace;
+    RippleView digit_1;
+    RippleView digit_2;
+    RippleView digit_3;
+    RippleView digit_4;
+    RippleView digit_5;
+    RippleView digit_6;
+    RippleView digit_7;
+    RippleView digit_8;
+    RippleView digit_9;
+    RippleView digit_0;
+    RippleView keyboard_help;
+    RippleView backspace;
 
     String inputPasswordValue = "";
     String inputRePasswordValue = "";
@@ -62,6 +63,9 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
     Context context;
 
     RelativeLayout loading_rl;
+
+    RequestPassCodeEntry requestPassCodeEntry;
+    RegistrationPassCodeEntryRequest registrationPassCodeEntryRequest;
 
     public void contactUs(View view){
         new HamPayDialog(this).showContactUsDialog();
@@ -89,29 +93,29 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
         password_2_rl = (RelativeLayout)findViewById(R.id.password_2_rl);
 
 
-        digit_1 = (ButtonRectangle)findViewById(R.id.digit_1);
+        digit_1 = (RippleView)findViewById(R.id.digit_1);
         digit_1.setOnClickListener(this);
-        digit_2 = (ButtonRectangle)findViewById(R.id.digit_2);
+        digit_2 = (RippleView)findViewById(R.id.digit_2);
         digit_2.setOnClickListener(this);
-        digit_3 = (ButtonRectangle)findViewById(R.id.digit_3);
+        digit_3 = (RippleView)findViewById(R.id.digit_3);
         digit_3.setOnClickListener(this);
-        digit_4 = (ButtonRectangle)findViewById(R.id.digit_4);
+        digit_4 = (RippleView)findViewById(R.id.digit_4);
         digit_4.setOnClickListener(this);
-        digit_5 = (ButtonRectangle)findViewById(R.id.digit_5);
+        digit_5 = (RippleView)findViewById(R.id.digit_5);
         digit_5.setOnClickListener(this);
-        digit_6 = (ButtonRectangle)findViewById(R.id.digit_6);
+        digit_6 = (RippleView)findViewById(R.id.digit_6);
         digit_6.setOnClickListener(this);
-        digit_7 = (ButtonRectangle)findViewById(R.id.digit_7);
+        digit_7 = (RippleView)findViewById(R.id.digit_7);
         digit_7.setOnClickListener(this);
-        digit_8 = (ButtonRectangle)findViewById(R.id.digit_8);
+        digit_8 = (RippleView)findViewById(R.id.digit_8);
         digit_8.setOnClickListener(this);
-        digit_9 = (ButtonRectangle)findViewById(R.id.digit_9);
+        digit_9 = (RippleView)findViewById(R.id.digit_9);
         digit_9.setOnClickListener(this);
-        digit_0 = (ButtonRectangle)findViewById(R.id.digit_0);
+        digit_0 = (RippleView)findViewById(R.id.digit_0);
         digit_0.setOnClickListener(this);
-        guide_key = (ButtonRectangle)findViewById(R.id.resend_active_code);
-        guide_key.setOnClickListener(this);
-        backspace = (ButtonRectangle)findViewById(R.id.backspace);
+        keyboard_help = (RippleView)findViewById(R.id.keyboard_help);
+        keyboard_help.setOnClickListener(this);
+        backspace = (RippleView)findViewById(R.id.backspace);
         backspace.setOnClickListener(this);
 
         input_digit_1 = (ImageView)findViewById(R.id.input_digit_1);
@@ -155,10 +159,12 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
                     finish();
                     startActivity(intent);
                 }else {
-                    Toast.makeText(context, getString(R.string.msg_fail_pass_code_entry), Toast.LENGTH_SHORT).show();
+                    requestPassCodeEntry = new RequestPassCodeEntry(context, new RequestPassCodeEntryResponseTaskCompleteListener());
+                    new HamPayDialog(activity).showFailPasswordEntryDialog(requestPassCodeEntry, registrationPassCodeEntryRequest);
                 }
             }else {
-                Toast.makeText(context, getString(R.string.msg_fail_pass_code_entry), Toast.LENGTH_SHORT).show();
+                requestPassCodeEntry = new RequestPassCodeEntry(context, new RequestPassCodeEntryResponseTaskCompleteListener());
+                new HamPayDialog(activity).showFailPasswordEntryDialog(requestPassCodeEntry, registrationPassCodeEntryRequest);
             }
         }
 
@@ -319,7 +325,7 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
             }
         }else {
 
-            if (inputRePasswordValue.length() <= 4) {
+            if (inputRePasswordValue.length() <= 5) {
 
                 if (digit.contains("d")) {
                     if (inputRePasswordValue.length() > 0) {
@@ -385,11 +391,14 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
                         vibrator.vibrate(20);
 
                         if (inputPasswordValue.equalsIgnoreCase(inputRePasswordValue)) {
-                            RegistrationPassCodeEntryRequest registrationPassCodeEntryRequest = new RegistrationPassCodeEntryRequest();
+
+
+                            registrationPassCodeEntryRequest = new RegistrationPassCodeEntryRequest();
                             registrationPassCodeEntryRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
                             registrationPassCodeEntryRequest.setPassCode(inputPasswordValue);
 
-                            new RequestPassCodeEntry(context, new RequestPassCodeEntryResponseTaskCompleteListener()).execute(registrationPassCodeEntryRequest);
+                            requestPassCodeEntry = new RequestPassCodeEntry(context, new RequestPassCodeEntryResponseTaskCompleteListener());
+                            requestPassCodeEntry.execute(registrationPassCodeEntryRequest);
 
                         } else {
 

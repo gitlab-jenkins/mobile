@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +16,11 @@ import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.dto.ContactDTO;
 import com.hampay.common.core.model.dto.UserVerificationStatus;
 import com.hampay.common.core.model.request.VerifyAccountRequest;
-import com.hampay.common.core.model.response.UserProfileResponse;
 import com.hampay.common.core.model.response.VerifyAccountResponse;
 import com.hampay.common.core.model.response.dto.UserProfileDTO;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.activity.MainActivity;
 import com.hampay.mobile.android.activity.PayOneActivity;
-import com.hampay.mobile.android.activity.RegVerifyAccountNoActivity;
 import com.hampay.mobile.android.activity.VerifyAccountActivity;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
@@ -208,7 +205,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
             if (userProfileDTO != null) {
 
 
-                if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.VERIFIED) {
+                if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.UNVERIFIED) {
                     verification_status_ll.setVisibility(View.VISIBLE);
                 }else {
                     verification_status_ll.setVisibility(View.GONE);
@@ -230,49 +227,64 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
                 user_account_title.setText(getString(R.string.account_type));
 
-                if (userProfileDTO.getVerificationStatus().name().equalsIgnoreCase("UNVERIFIED")) {
-                    user_account_type.setText(": " + "محدود");
-                }else {
+                if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.DELEGATED) {
                     user_account_type.setText(": " + "عادی");
+                }else {
+                    user_account_type.setText(": " + "محدود");
                 }
 
-                user_last_login.setText(getString(R.string.last_login) + ": "
-                        + jalaliConvert.GregorianToPersian(userProfileDTO.getLastLoginDate()));
-
+                if (userProfileDTO.getLastLoginDate() != null) {
+                    user_last_login.setText(getString(R.string.last_login) + ": "
+                            + jalaliConvert.GregorianToPersian(userProfileDTO.getLastLoginDate()));
+                }else {
+                    user_last_login.setText("");
+                }
 
 
                 List<ContactDTO> contactDTOs = userProfileDTO.getSelectedContacts();
 
-                hampay_1.setText(contactDTOs.get(0).getDisplayName());
-//                hampay_2.setText(contactDTOs.get(1).getDisplayName());
-//                hampay_3.setText(contactDTOs.get(2).getDisplayName());
-//                hampay_4.setText(contactDTOs.get(3).getDisplayName());
 
-                if (contactDTOs.get(0).getUserVerificationStatus().ordinal() == 0){
-                    hampay_image_1.setImageResource(R.drawable.user_icon_blak_s);
-                }else {
-                    hampay_image_1.setImageResource(R.drawable.user_icon_blue_s);
+                for (int contact = 0; contact < contactDTOs.size(); contact++){
+                    switch (contact){
+                        case 0:
+                            hampay_1_ll.setVisibility(View.VISIBLE);
+                            hampay_1.setText(contactDTOs.get(0).getDisplayName());
+//                            if (contactDTOs.get(0).getUserVerificationStatus() == UserVerificationStatus.VERIFIED){
+                                hampay_image_1.setImageResource(R.drawable.user_icon_blue_s);
+//                            }else {
+//                                hampay_image_1.setImageResource(R.drawable.user_icon_blak_s);
+//                            }
+                            break;
+                        case 1:
+                            hampay_2_ll.setVisibility(View.VISIBLE);
+                            hampay_2.setText(contactDTOs.get(1).getDisplayName());
+//                            if (contactDTOs.get(1).getUserVerificationStatus() == UserVerificationStatus.VERIFIED){
+                                hampay_image_2.setImageResource(R.drawable.user_icon_blue_s);
+//                            }else {
+//                                hampay_image_2.setImageResource(R.drawable.user_icon_blak_s);
+//                            }
+                            break;
+                        case 2:
+                            hampay_3_ll.setVisibility(View.VISIBLE);
+                            hampay_3.setText(contactDTOs.get(2).getDisplayName());
+//                            if (contactDTOs.get(2).getUserVerificationStatus() == UserVerificationStatus.VERIFIED){
+                                hampay_image_3.setImageResource(R.drawable.user_icon_blue_s);
+//                            }else {
+//                                hampay_image_3.setImageResource(R.drawable.user_icon_blak_s);
+//                            }
+                            break;
+                        case 3:
+                            hampay_4_ll.setVisibility(View.VISIBLE);
+                            hampay_4.setText(contactDTOs.get(3).getDisplayName());
+//                            if (contactDTOs.get(3).getUserVerificationStatus() == UserVerificationStatus.VERIFIED){
+                                hampay_image_4.setImageResource(R.drawable.user_icon_blue_s);
+//                            }else {
+//                                hampay_image_4.setImageResource(R.drawable.user_icon_blak_s);
+//                            }
+                            break;
+
+                    }
                 }
-
-//                if (contactDTOs.get(1).getUserVerificationStatus().ordinal() == 0){
-//                    hampay_image_2.setImageResource(R.drawable.user_icon_blak_s);
-//                }else {
-//                    hampay_image_2.setImageResource(R.drawable.user_icon_blue_s);
-//                }
-//
-//                if (contactDTOs.get(2).getUserVerificationStatus().ordinal() == 0){
-//                    hampay_image_3.setImageResource(R.drawable.user_icon_blak_s);
-//                }else {
-//                    hampay_image_3.setImageResource(R.drawable.user_icon_blue_s);
-//                }
-//
-//                if (contactDTOs.get(3).getUserVerificationStatus().ordinal() == 0){
-//                    hampay_image_4.setImageResource(R.drawable.user_icon_blak_s);
-//                }else {
-//                    hampay_image_4.setImageResource(R.drawable.user_icon_blue_s);
-//                }
-
-
 
                 loading_rl.setVisibility(View.GONE);
 

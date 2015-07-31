@@ -5,6 +5,6 @@ package com.hampay.mobile.android.util;
  */
 public  class Constant {
 
-   public static String SERVICE_URL = "http://176.58.104.158:9090";
+//
 
 }

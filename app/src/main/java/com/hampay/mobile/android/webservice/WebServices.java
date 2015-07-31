@@ -228,7 +228,7 @@ public class WebServices  {
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<BankListRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
 
-            URL url = new URL(Constant.SERVICE_URL + "/banks");
+            URL url = new URL(Constants.SERVICE_URL + "/banks");
 
             connection = (HttpURLConnection) url.openConnection();
             connection.setDoOutput(true);
@@ -275,7 +275,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9090);
+        HttpHost host = new HttpHost(Constants.SERVER_IP, Constants.SERVER_PORT);
         HttpRequest request = new HttpPost("/users/reg-entry");
 
 
@@ -340,7 +340,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9090);
+        HttpHost host = new HttpHost(Constants.SERVER_IP, Constants.SERVER_PORT);
 
 
         HttpRequest request = new HttpPost("/contactus");
@@ -409,7 +409,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9090);
+        HttpHost host = new HttpHost(Constants.SERVER_IP, Constants.SERVER_PORT);
         HttpRequest request = new HttpPost("/users/reg-sms-token");
 
 
@@ -476,7 +476,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9090);
+        HttpHost host = new HttpHost(Constants.SERVER_IP, Constants.SERVER_PORT);
 
         HttpRequest request = new HttpPost("/users/reg-verify-mobile");
 
@@ -541,7 +541,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9090);
+        HttpHost host = new HttpHost(Constants.SERVER_IP, Constants.SERVER_PORT);
 
         HttpRequest request = new HttpPost("/users/reg-fetch-user-data");
 
@@ -607,7 +607,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9090);
+        HttpHost host = new HttpHost(Constants.SERVER_IP, Constants.SERVER_PORT);
 
         HttpRequest request = new HttpPost("/users/reg-confirm-user-data");
 
@@ -674,7 +674,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9090);
+        HttpHost host = new HttpHost(Constants.SERVER_IP, Constants.SERVER_PORT);
 
         HttpRequest request = new HttpPost("/users/reg-pass-code-entry");
 
@@ -751,7 +751,7 @@ public class WebServices  {
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<ChangePassCodeRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
 
-            URL url = new URL(Constant.SERVICE_URL + "/users/passcode");
+            URL url = new URL(Constants.SERVICE_URL + "/users/passcode");
 
             connection = (HttpURLConnection) url.openConnection();
             connection.setDoOutput(true);
@@ -827,7 +827,7 @@ public class WebServices  {
             String jsonRequest = new Gson().toJson(message, requestType);
 
 
-            URL url = new URL(Constant.SERVICE_URL + "/users/memorable-word");
+            URL url = new URL(Constants.SERVICE_URL + "/users/memorable-word");
 
             connection = (HttpURLConnection) url.openConnection();
             connection.setDoOutput(true);
@@ -871,7 +871,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9090);
+        HttpHost host = new HttpHost(Constants.SERVER_IP, Constants.SERVER_PORT);
 
         HttpRequest request = new HttpPost("/users/reg-memorable-word-entry");
 
@@ -935,7 +935,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9090);
+        HttpHost host = new HttpHost(Constants.SERVER_IP, Constants.SERVER_PORT);
         HttpRequest request = new HttpPost("/users/tac");
         HttpResponse response;
         try {
@@ -987,7 +987,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9090);
+        HttpHost host = new HttpHost(Constants.SERVER_IP, Constants.SERVER_PORT);
         HttpRequest request = new HttpPost("/users/tacaccept");
         HttpResponse response;
         try {
@@ -1038,7 +1038,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9090);
+        HttpHost host = new HttpHost(Constants.SERVER_IP, Constants.SERVER_PORT);
         HttpRequest request = new HttpPost("/customers/verify-account");
         HttpResponse response;
         try {
@@ -1092,7 +1092,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9090);
+        HttpHost host = new HttpHost(Constants.SERVER_IP, Constants.SERVER_PORT);
         HttpRequest request = new HttpPost("/customers/verify-xfer");
         HttpResponse response;
         try {
@@ -1146,7 +1146,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9090);
+        HttpHost host = new HttpHost(Constants.SERVER_IP, Constants.SERVER_PORT);
         HttpRequest request = new HttpPost("/customers/reg-verify-account");
         HttpResponse response;
         try {
@@ -1199,7 +1199,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9090);
+        HttpHost host = new HttpHost(Constants.SERVER_IP, Constants.SERVER_PORT);
         HttpRequest request = new HttpPost("/customers/reg-verify-xfer");
         HttpResponse response;
         try {
@@ -1254,7 +1254,7 @@ public class WebServices  {
         int timeoutSocket = 30000;
         HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
-        HttpHost host = new HttpHost("176.58.104.158", 9090);
+        HttpHost host = new HttpHost(Constants.SERVER_IP, Constants.SERVER_PORT);
         HttpRequest request = new HttpPost("/users/profile");
 
         HttpResponse response;
@@ -1291,9 +1291,6 @@ public class WebServices  {
 
     }
 
-
-
-
     public ResponseMessage<ContactsHampayEnabledResponse>  getEnabledHamPayContacts(){
 
         ResponseMessage<ContactsHampayEnabledResponse> contactsHampayEnabledResponse = null;
@@ -1307,7 +1304,7 @@ public class WebServices  {
 
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
 
-        HttpHost host = new HttpHost("176.58.104.158", 9090);
+        HttpHost host = new HttpHost(Constants.SERVER_IP, Constants.SERVER_PORT);
         HttpRequest request = new HttpPost("/customer/contacts/hp-enabled");
 
         HttpResponse response;
@@ -1360,13 +1357,13 @@ public class WebServices  {
 
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
 
-        HttpHost host = new HttpHost("176.58.104.158", 9090);
+        HttpHost host = new HttpHost(Constants.SERVER_IP, Constants.SERVER_PORT);
         HttpRequest request = new HttpPost("/customers/individual-payment-confirm");
 
         HttpResponse response;
         try {
 
-            String req = createIndividualJsonMessage(phoneNumber);
+//            String req = createIndividualJsonMessage(phoneNumber);
 
             StringEntity entity = new StringEntity(createIndividualConfirmJsonMessage(phoneNumber), "UTF-8");
             entity.setContentType("application/json");
@@ -1400,7 +1397,7 @@ public class WebServices  {
 
     }
 
-    public ResponseMessage<IndividualPaymentResponse>  individualPayment(String phoneNumber){
+    public ResponseMessage<IndividualPaymentResponse>  individualPayment(String phoneNumber, String userMessage, Long amount){
 
         ResponseMessage<IndividualPaymentResponse> individualPaymentResponse = null;
 
@@ -1413,15 +1410,15 @@ public class WebServices  {
 
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
 
-        HttpHost host = new HttpHost("176.58.104.158", 9090);
+        HttpHost host = new HttpHost(Constants.SERVER_IP, Constants.SERVER_PORT);
         HttpRequest request = new HttpPost("/customers/individual-payment");
 
         HttpResponse response;
         try {
 
-            String req = createIndividualJsonMessage(phoneNumber);
+//            String req = createIndividualJsonMessage(phoneNumber);
 
-            StringEntity entity = new StringEntity(createIndividualJsonMessage(phoneNumber), "UTF-8");
+            StringEntity entity = new StringEntity(createIndividualJsonMessage(phoneNumber, userMessage, amount), "UTF-8");
             entity.setContentType("application/json");
             ((HttpPost) request).setEntity(entity);
 
@@ -1469,13 +1466,13 @@ public class WebServices  {
 
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
 
-        HttpHost host = new HttpHost("176.58.104.158", 9090);
+        HttpHost host = new HttpHost(Constants.SERVER_IP, Constants.SERVER_PORT);
         HttpRequest request = new HttpPost("/businesses/business-payment-confirm");
 
         HttpResponse response;
         try {
 
-            String req = createIndividualJsonMessage(phoneNumber);
+            String req = createIndividualJsonMessage(phoneNumber, "", 0L);
 
             StringEntity entity = new StringEntity(createBusinessConfirmJsonMessage(phoneNumber), "UTF-8");
             entity.setContentType("application/json");
@@ -1524,13 +1521,13 @@ public class WebServices  {
 
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
 
-        HttpHost host = new HttpHost("176.58.104.158", 9090);
+        HttpHost host = new HttpHost(Constants.SERVER_IP, Constants.SERVER_PORT);
         HttpRequest request = new HttpPost("/customers/business-payment");
 
         HttpResponse response;
         try {
 
-            String req = createIndividualJsonMessage(phoneNumber);
+//            String req = createIndividualJsonMessage(phoneNumber);
 
             StringEntity entity = new StringEntity(createBusinessJsonMessage(phoneNumber), "UTF-8");
             entity.setContentType("application/json");
@@ -1579,7 +1576,7 @@ public class WebServices  {
 
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
 
-        HttpHost host = new HttpHost("176.58.104.158", 9090);
+        HttpHost host = new HttpHost(Constants.SERVER_IP, Constants.SERVER_PORT);
         HttpRequest request = new HttpPost("/businesses");
 
         HttpResponse response;
@@ -1629,7 +1626,7 @@ public class WebServices  {
         message.setRequestHeader(header);
         BusinessListRequest request = new BusinessListRequest();
 
-        request.setPageNumber(2);
+        request.setPageNumber(0);
         request.setPageSize(10);
 
         request.setRequestUUID("1234");
@@ -1652,7 +1649,7 @@ public class WebServices  {
 
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
 
-        HttpHost host = new HttpHost("176.58.104.158", 9090);
+        HttpHost host = new HttpHost(Constants.SERVER_IP, Constants.SERVER_PORT);
         HttpRequest request = new HttpPost("/search");
 
         HttpResponse response;
@@ -1712,7 +1709,7 @@ public class WebServices  {
 
 
 
-    public ResponseMessage<TransactionListResponse>  getUserTransaction(){
+    public ResponseMessage<TransactionListResponse>  getUserTransaction(TransactionListRequest transactionListRequest){
 
         ResponseMessage<TransactionListResponse> transactionListResponse = null;
 
@@ -1725,12 +1722,12 @@ public class WebServices  {
 
         HttpClient httpClient = new DefaultHttpClient(httpParameters);
 
-        HttpHost host = new HttpHost("176.58.104.158", 9090);
+        HttpHost host = new HttpHost(Constants.SERVER_IP, Constants.SERVER_PORT);
         HttpRequest request = new HttpPost("/transactions");
 
         HttpResponse response;
         try {
-            StringEntity entity = new StringEntity(createUserTransaction(), "UTF-8");
+            StringEntity entity = new StringEntity(createUserTransaction(transactionListRequest), "UTF-8");
             entity.setContentType("application/json");
             ((HttpPost) request).setEntity(entity);
 
@@ -1763,6 +1760,24 @@ public class WebServices  {
 
         return transactionListResponse;
 
+    }
+
+    private String createUserTransaction(TransactionListRequest transactionListRequest) {
+        RequestHeader header = new RequestHeader();
+        header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+        header.setVersion("1.0-PA");
+
+        RequestMessage<TransactionListRequest> message = new RequestMessage<TransactionListRequest>();
+        message.setRequestHeader(header);
+        TransactionListRequest request = new TransactionListRequest();
+        request.setUserId(prefs.getString(Constants.REGISTERED_NATIONAL_CODE, ""));
+        request.setPageSize(transactionListRequest.getPageSize());
+        request.setPageNumber(transactionListRequest.getPageNumber());
+        request.setRequestUUID("1234");
+        message.setService(request);
+
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<TransactionListRequest>>() {}.getType();
+        return new Gson().toJson(message, requestType);
     }
 
     private String createUserProfileJsonMessage() {
@@ -1808,9 +1823,6 @@ public class WebServices  {
 
             contactDTOs.add(contactDTO);
 
-            index++;
-            if (index > 10) break;
-
         }
         phones.close();
 
@@ -1842,7 +1854,7 @@ public class WebServices  {
         return new Gson().toJson(message, requestType);
     }
 
-    private String createIndividualJsonMessage(String phoneNumber) {
+    private String createIndividualJsonMessage(String phoneNumber, String userMeaage, Long amount) {
         RequestHeader header = new RequestHeader();
 //        header.setAuthToken("008ewe");
         header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
@@ -1853,6 +1865,8 @@ public class WebServices  {
         IndividualPaymentRequest request = new IndividualPaymentRequest();
 
         request.setCellNumber(phoneNumber);
+        request.setAmount(amount);
+        request.setMessage(userMeaage);
 
         request.setRequestUUID("1234");
         message.setService(request);
@@ -1897,28 +1911,6 @@ public class WebServices  {
         message.setService(request);
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<BusinessPaymentRequest>>() {}.getType();
-        return new Gson().toJson(message, requestType);
-    }
-
-
-
-
-    private String createUserTransaction() {
-        RequestHeader header = new RequestHeader();
-//        header.setAuthToken("008ewe");
-        header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-        header.setVersion("1.0-PA");
-
-
-        RequestMessage<TransactionListRequest> message = new RequestMessage<TransactionListRequest>();
-        message.setRequestHeader(header);
-        TransactionListRequest request = new TransactionListRequest();
-        request.setPageSize(10);
-        request.setPageNumber(0);
-        request.setRequestUUID("1234");
-        message.setService(request);
-
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<TransactionListRequest>>() {}.getType();
         return new Gson().toJson(message, requestType);
     }
 

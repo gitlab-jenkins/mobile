@@ -41,6 +41,10 @@ public class RegVerifyAccountNoActivity extends ActionBarActivity {
 
     Activity activity;
 
+    RequestRegistrationVerifyTransferMoney requestRegistrationVerifyTransferMoney;
+    RegistrationVerifyTransferMoneyRequest registrationVerifyTransferMoneyRequest;
+
+
     public void contactUs(View view){
         new HamPayDialog(this).showContactUsDialog();
     }
@@ -70,20 +74,15 @@ public class RegVerifyAccountNoActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
-                if (networkConnectivity.isNetworkConnected()) {
-                    RegistrationVerifyTransferMoneyRequest registrationVerifyTransferMoneyRequest = new RegistrationVerifyTransferMoneyRequest();
-                    registrationVerifyTransferMoneyRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
-                    new RequestRegistrationVerifyTransferMoney(context, new RequestRegistrationVerifyTransferMoneyTaskCompleteListener()).execute(registrationVerifyTransferMoneyRequest);
-                } else {
-                    Toast.makeText(context, getString(R.string.no_network), Toast.LENGTH_SHORT).show();
-                }
+                registrationVerifyTransferMoneyRequest = new RegistrationVerifyTransferMoneyRequest();
+                registrationVerifyTransferMoneyRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
+                requestRegistrationVerifyTransferMoney = new RequestRegistrationVerifyTransferMoney(context, new RequestRegistrationVerifyTransferMoneyTaskCompleteListener());
+                requestRegistrationVerifyTransferMoney.execute(registrationVerifyTransferMoneyRequest);
 
             }
         });
 
     }
-
-
 
 
     public class RequestRegistrationVerifyTransferMoneyTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationVerifyTransferMoneyResponse>>
@@ -109,10 +108,12 @@ public class RegVerifyAccountNoActivity extends ActionBarActivity {
                         startActivity(intent);
                     }
                 }else {
-                    Toast.makeText(context, getString(R.string.mgs_fail_verify_transfer_money), Toast.LENGTH_SHORT).show();
+                    requestRegistrationVerifyTransferMoney = new RequestRegistrationVerifyTransferMoney(context, new RequestRegistrationVerifyTransferMoneyTaskCompleteListener());
+                    new HamPayDialog(activity).showFailVerifyTransferMoneyDialog(requestRegistrationVerifyTransferMoney, registrationVerifyTransferMoneyRequest);
                 }
             }else {
-                Toast.makeText(context, getString(R.string.mgs_fail_verify_transfer_money), Toast.LENGTH_SHORT).show();
+                requestRegistrationVerifyTransferMoney = new RequestRegistrationVerifyTransferMoney(context, new RequestRegistrationVerifyTransferMoneyTaskCompleteListener());
+                new HamPayDialog(activity).showFailVerifyTransferMoneyDialog(requestRegistrationVerifyTransferMoney, registrationVerifyTransferMoneyRequest);
             }
 
         }
