@@ -297,7 +297,8 @@
     <string name="login_fail_text">رمزعبور خود را صحیح وارد کنید</string>
     <string name="remove_password">حذف رمزعبور</string>
     <string name="login_retry">تلاش مجدد</string>
-    
+
+    <string name="msg_rooted_device">دستگاه شما به دلیل روت شدن مجوز استفاده از این اپ را نخواهد داشت!</string>
     
     <string name="msg_fail_fetch_bank_list">لیست بانک‌ها دریافت نشد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_registration_entry">ثبت اطلاعات شخصی شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>

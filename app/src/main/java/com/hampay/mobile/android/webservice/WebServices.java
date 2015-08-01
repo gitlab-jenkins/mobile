@@ -67,7 +67,6 @@ import com.hampay.mobile.android.model.LoginData;
 import com.hampay.mobile.android.model.LoginResponse;
 import com.hampay.mobile.android.model.LogoutData;
 import com.hampay.mobile.android.model.LogoutResponse;
-import com.hampay.mobile.android.util.Constant;
 import com.hampay.mobile.android.util.Constants;
 
 import org.apache.http.*;

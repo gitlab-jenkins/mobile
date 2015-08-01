@@ -8,8 +8,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.util.RootUtil;
 
 public class SplashActivity extends Activity {
 
@@ -17,6 +19,7 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
 
         Animation a = AnimationUtils.loadAnimation(this, R.anim.splash_logo);
         ((LinearLayout) findViewById(R.id.logoImage)).startAnimation(a);

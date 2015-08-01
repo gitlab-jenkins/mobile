@@ -36,7 +36,6 @@ import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.fragment.PayToOneFragment;
 import com.hampay.mobile.android.model.RecentPay;
-import com.hampay.mobile.android.util.Constant;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.webservice.WebServices;
 

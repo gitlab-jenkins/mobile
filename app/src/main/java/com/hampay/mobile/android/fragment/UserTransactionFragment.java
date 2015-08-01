@@ -26,7 +26,6 @@ import com.hampay.mobile.android.component.doblist.events.OnLoadMoreListener;
 import com.hampay.mobile.android.component.doblist.exceptions.NoEmptyViewException;
 import com.hampay.mobile.android.component.doblist.exceptions.NoListviewException;
 import com.hampay.mobile.android.dialog.HamPayDialog;
-import com.hampay.mobile.android.util.Constant;
 import com.hampay.mobile.android.util.Constants;
 
 import java.util.ArrayList;
