@@ -382,7 +382,7 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                     registrationConfirmUserDataRequest.setImei(new DeviceInfo(getApplicationContext()).getIMEI());
                     registrationConfirmUserDataRequest.setIsVerified(confirm_check_value);
                     registrationConfirmUserDataRequest.setIp(new Utils(context).getNetworkIp());
-                    registrationConfirmUserDataRequest.setDeviceId(new DeviceInfo(getApplicationContext()).getDeviceId());
+                    registrationConfirmUserDataRequest.setDeviceId(new DeviceInfo(getApplicationContext()).getAndroidId());
 
                     new RequestConfirmUserData(context, new RequestConfirmUserDataTaskCompleteListener()).execute(registrationConfirmUserDataRequest);
 

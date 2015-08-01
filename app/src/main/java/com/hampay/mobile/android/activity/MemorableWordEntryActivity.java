@@ -73,7 +73,7 @@ public class MemorableWordEntryActivity extends ActionBarActivity {
             public void onClick(View v) {
                 registrationMemorableWordEntryRequest = new RegistrationMemorableWordEntryRequest();
                 registrationMemorableWordEntryRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
-                registrationMemorableWordEntryRequest.setDeviceId(new DeviceInfo(getApplicationContext()).getDeviceId());
+                registrationMemorableWordEntryRequest.setDeviceId(new DeviceInfo(getApplicationContext()).getAndroidId());
                 Uuid = UUID.randomUUID().toString();
                 registrationMemorableWordEntryRequest.setInstallationToken(Uuid);
                 editor.putString("UUID", Uuid);

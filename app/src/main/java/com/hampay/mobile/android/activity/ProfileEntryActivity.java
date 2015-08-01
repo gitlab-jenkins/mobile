@@ -8,11 +8,13 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
@@ -24,6 +26,7 @@ import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
+import com.hampay.common.core.model.dto.DeviceDTO;
 import com.hampay.common.core.model.request.BankListRequest;
 import com.hampay.common.core.model.request.RegistrationEntryRequest;
 import com.hampay.common.core.model.response.BankListResponse;
@@ -37,6 +40,8 @@ import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
+import com.hampay.mobile.android.location.BestLocationListener;
+import com.hampay.mobile.android.location.BestLocationProvider;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.DeviceInfo;
 import com.hampay.mobile.android.util.NationalCodeVerification;
@@ -84,6 +89,13 @@ public class ProfileEntryActivity extends ActionBarActivity {
     RegistrationEntryRequest registrationEntryRequest;
     RequestRegistrationEntry requestRegistrationEntry;
 
+    double latitute = 0.0;
+    double longitude = 0.0;
+
+    private static String TAG = "BestLocationProvider";
+    private BestLocationProvider mBestLocationProvider;
+    private BestLocationListener mBestLocationListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +104,8 @@ public class ProfileEntryActivity extends ActionBarActivity {
         context = this;
 
         activity = this;
+
+        initLocation();
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
@@ -285,7 +299,31 @@ public class ProfileEntryActivity extends ActionBarActivity {
                     registrationEntryRequest.setAccountNumber(accountNumberValue.getText().toString());
                     registrationEntryRequest.setBankCode(selectedBankCode);
                     registrationEntryRequest.setNationalCode(nationalCodeValue.getText().toString());
-                    registrationEntryRequest.setImei(new DeviceInfo(getApplicationContext()).getIMEI());
+
+                    DeviceInfo deviceInfo = new DeviceInfo(context);
+
+                    DeviceDTO deviceDTO = new DeviceDTO();
+                    deviceDTO.setImei(deviceInfo.getIMEI());
+                    deviceDTO.setImsi(deviceInfo.getIMSI());
+                    deviceDTO.setAndroidId(deviceInfo.getAndroidId());
+                    deviceDTO.setSimcardSerial(deviceInfo.getSimcardSerial());
+                    deviceDTO.setNetworkOperatorName(deviceInfo.getNetworkOperator());
+                    deviceDTO.setDeviceModel(deviceInfo.getDeviceModel());
+                    deviceDTO.setManufacture(deviceInfo.getManufacture());
+                    deviceDTO.setBrand(deviceInfo.getBrand());
+                    deviceDTO.setCpu_abi(deviceInfo.getCpu_abi());
+                    deviceDTO.setDeviceAPI(deviceInfo.getDeviceAPI());
+                    deviceDTO.setOsVersion(deviceInfo.getOsVersion());
+                    deviceDTO.setDisplaySize(deviceInfo.getDisplaySize());
+                    deviceDTO.setDisplayMetrics(deviceInfo.getDisplaymetrics());
+                    deviceDTO.setSimState(deviceInfo.getSimState());
+                    deviceDTO.setAppNames(deviceInfo.getAppNames());
+                    deviceDTO.setDeviceEmailAccount(deviceInfo.getDeviceEmailAccount());
+                    deviceDTO.setLocale(deviceInfo.getLocale());
+                    deviceDTO.setMacAddress(deviceInfo.getMacAddress());
+                    deviceDTO.setUserLocation(latitute + "," + longitude);
+
+                    registrationEntryRequest.setDeviceDTO(deviceDTO);
 
                     requestRegistrationEntry = new RequestRegistrationEntry(context, new RequestRegistrationEntryTaskCompleteListener());
                     requestRegistrationEntry.execute(registrationEntryRequest);
@@ -459,6 +497,63 @@ public class ProfileEntryActivity extends ActionBarActivity {
     @Override
     public void onBackPressed() {
         new HamPayDialog(activity).showExitRegistrationDialog();
+    }
+
+
+    @Override
+    protected void onResume() {
+        initLocation();
+        mBestLocationProvider.startLocationUpdatesWithListener(mBestLocationListener);
+
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        initLocation();
+        mBestLocationProvider.stopLocationUpdates();
+
+        super.onPause();
+    }
+
+
+    private void initLocation(){
+        if(mBestLocationListener == null){
+            mBestLocationListener = new BestLocationListener() {
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+                    Log.i(TAG, "onStatusChanged PROVIDER:" + provider + " STATUS:" + String.valueOf(status));
+                }
+
+                @Override
+                public void onProviderEnabled(String provider) {
+                    Log.i(TAG, "onProviderEnabled PROVIDER:" + provider);
+                }
+
+                @Override
+                public void onProviderDisabled(String provider) {
+                    Log.i(TAG, "onProviderDisabled PROVIDER:" + provider);
+                }
+
+                @Override
+                public void onLocationUpdateTimeoutExceeded(BestLocationProvider.LocationType type) {
+                    Log.w(TAG, "onLocationUpdateTimeoutExceeded PROVIDER:" + type);
+                }
+
+                @Override
+                public void onLocationUpdate(Location location, BestLocationProvider.LocationType type,
+                                             boolean isFresh) {
+                    latitute = location.getLatitude();
+                    longitude = location.getLongitude();
+
+                }
+            };
+
+            if(mBestLocationProvider == null){
+                mBestLocationProvider = new BestLocationProvider(this, true, true, 0, 0, 0, 0);
+            }
+        }
     }
 
 }
