@@ -4,22 +4,23 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.hampay.mobile.android.model.LoginData;
-import com.hampay.mobile.android.model.LoginResponse;
+import com.hampay.mobile.android.model.SuccessLoginResponse;
+import com.hampay.mobile.android.webservice.LoginStream;
 import com.hampay.mobile.android.webservice.WebServices;
 
 /**
  * Created by amir on 7/23/15.
  */
-public class RequestLogin extends AsyncTask<LoginData, Void, LoginResponse> {
+public class RequestLogin extends AsyncTask<LoginData, Void, String> {
 
     private static final String TAG = "RequestLogin";
 
     private Context context;
-    private AsyncTaskCompleteListener<LoginResponse> listener;
-    private LoginResponse loginResponse;
+    private AsyncTaskCompleteListener<String> listener;
+    private String loginResponse;
 
 
-    public RequestLogin(Context context, AsyncTaskCompleteListener<LoginResponse> listener)
+    public RequestLogin(Context context, AsyncTaskCompleteListener<String> listener)
     {
         this.context = context;
         this.listener = listener;
@@ -33,23 +34,46 @@ public class RequestLogin extends AsyncTask<LoginData, Void, LoginResponse> {
     }
 
     @Override
-    protected LoginResponse doInBackground(LoginData... params) {
+    protected String doInBackground(LoginData... params) {
 
-        WebServices webServices = new WebServices(context);
+
+        LoginStream loginStream = new LoginStream(params[0]);
+
+        String resultLogin = "";
 
         try {
-            loginResponse = webServices.sendLoginRequest(params[0]);
+            switch (loginStream.resultCode()){
+
+                case 200:
+                    resultLogin = loginStream.successLogin();
+                    break;
+
+                case 401:
+                    resultLogin = loginStream.failLogin();
+                    break;
+
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return loginResponse;
+        return resultLogin;
+
+//        WebServices webServices = new WebServices(context);
+//
+//        try {
+//            loginResponse = webServices.sendLoginRequest(params[0]);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return loginResponse;
 
     }
 
 
     @Override
-    protected void onPostExecute(LoginResponse loginResponse)
+    protected void onPostExecute(String loginResponse)
     {
         super.onPostExecute(loginResponse);
         listener.onTaskComplete(loginResponse);

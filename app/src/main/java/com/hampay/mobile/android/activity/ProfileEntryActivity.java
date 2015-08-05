@@ -300,32 +300,10 @@ public class ProfileEntryActivity extends ActionBarActivity {
                     registrationEntryRequest.setBankCode(selectedBankCode);
                     registrationEntryRequest.setNationalCode(nationalCodeValue.getText().toString());
 
-                    DeviceInfo deviceInfo = new DeviceInfo(context);
+                    requestRegistrationEntry = new RequestRegistrationEntry(context,
+                            new RequestRegistrationEntryTaskCompleteListener(),
+                            latitute + "," + longitude);
 
-                    DeviceDTO deviceDTO = new DeviceDTO();
-                    deviceDTO.setImei(deviceInfo.getIMEI());
-                    deviceDTO.setImsi(deviceInfo.getIMSI());
-                    deviceDTO.setAndroidId(deviceInfo.getAndroidId());
-                    deviceDTO.setSimcardSerial(deviceInfo.getSimcardSerial());
-                    deviceDTO.setNetworkOperatorName(deviceInfo.getNetworkOperator());
-                    deviceDTO.setDeviceModel(deviceInfo.getDeviceModel());
-                    deviceDTO.setManufacture(deviceInfo.getManufacture());
-                    deviceDTO.setBrand(deviceInfo.getBrand());
-                    deviceDTO.setCpu_abi(deviceInfo.getCpu_abi());
-                    deviceDTO.setDeviceAPI(deviceInfo.getDeviceAPI());
-                    deviceDTO.setOsVersion(deviceInfo.getOsVersion());
-                    deviceDTO.setDisplaySize(deviceInfo.getDisplaySize());
-                    deviceDTO.setDisplayMetrics(deviceInfo.getDisplaymetrics());
-                    deviceDTO.setSimState(deviceInfo.getSimState());
-                    deviceDTO.setAppNames(deviceInfo.getAppNames());
-                    deviceDTO.setDeviceEmailAccount(deviceInfo.getDeviceEmailAccount());
-                    deviceDTO.setLocale(deviceInfo.getLocale());
-                    deviceDTO.setMacAddress(deviceInfo.getMacAddress());
-                    deviceDTO.setUserLocation(latitute + "," + longitude);
-
-                    registrationEntryRequest.setDeviceDTO(deviceDTO);
-
-                    requestRegistrationEntry = new RequestRegistrationEntry(context, new RequestRegistrationEntryTaskCompleteListener());
                     requestRegistrationEntry.execute(registrationEntryRequest);
                 } else {
 
@@ -450,8 +428,7 @@ public class ProfileEntryActivity extends ActionBarActivity {
     }
 
 
-    public class RequestRegistrationEntryTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationEntryResponse>>
-    {
+    public class RequestRegistrationEntryTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationEntryResponse>> {
         @Override
         public void onTaskComplete(ResponseMessage<RegistrationEntryResponse> registrationEntryResponse)
         {
@@ -478,11 +455,14 @@ public class ProfileEntryActivity extends ActionBarActivity {
                     finish();
                     startActivity(intent);
                 }else {
-                    requestRegistrationEntry = new RequestRegistrationEntry(context, new RequestRegistrationEntryTaskCompleteListener());
+                    requestRegistrationEntry = new RequestRegistrationEntry(context,
+                            new RequestRegistrationEntryTaskCompleteListener(),
+                            latitute + "," + longitude);
                     new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest);
                 }
             }else {
-                requestRegistrationEntry = new RequestRegistrationEntry(context, new RequestRegistrationEntryTaskCompleteListener());
+                requestRegistrationEntry = new RequestRegistrationEntry(context, new RequestRegistrationEntryTaskCompleteListener(),
+                        latitute + "," + longitude);
                 new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest);
             }
         }

@@ -3,7 +3,7 @@ package com.hampay.mobile.android.model;
 /**
  * Created by amir on 7/23/15.
  */
-public class LoginResponse {
+public class SuccessLoginResponse {
 
     private String tokenId;
     private String successUrl;

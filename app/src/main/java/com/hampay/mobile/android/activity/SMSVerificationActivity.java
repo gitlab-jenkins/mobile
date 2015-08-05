@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -19,15 +20,19 @@ import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
+import com.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
 import com.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
+import com.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
 import com.hampay.common.core.model.response.RegistrationVerifyMobileResponse;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.account.Log;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import com.hampay.mobile.android.async.RequestRegistrationSendSmsToken;
 import com.hampay.mobile.android.async.RequestVerifyMobile;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.component.material.RippleView;
+import com.hampay.mobile.android.component.numericalprogressbar.NumberProgressBar;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.NetworkConnectivity;
@@ -63,6 +68,9 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
     NetworkConnectivity networkConnectivity;
     Context context;
 
+    RequestRegistrationSendSmsToken requestRegistrationSendSmsToken;
+    RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest;
+
     LinearLayout keyboard;
     LinearLayout activation_holder;
 
@@ -76,6 +84,13 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
     RegistrationVerifyMobileRequest registrationVerifyMobileRequest;
 
     private BroadcastReceiver mIntentReceiver;
+
+    private NumberProgressBar numberProgressBar;
+
+    CountDownTimer countDownTimer;
+
+    boolean sendSmsPermision = false;
+    int sendSmsCounter = 0;
 
     @Override
     protected void onResume() {
@@ -95,6 +110,9 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
                 String pNumber = msg.substring(0, msg.lastIndexOf(":"));
 
                 receivedSmsValue = body;
+
+                numberProgressBar.setVisibility(View.INVISIBLE);
+                countDownTimer.cancel();
 
                 input_digit_1.setText(receivedSmsValue.substring(0, 1));
                 input_digit_1.setBackgroundColor(Color.TRANSPARENT);
@@ -121,6 +139,38 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sms_verification);
 
+        context = this;
+
+        numberProgressBar = (NumberProgressBar)findViewById(R.id.numberProgressBar);
+
+        countDownTimer = new CountDownTimer(101000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                numberProgressBar.incrementProgressBy(1);
+            }
+
+            public void onFinish() {
+
+                sendSmsCounter++;
+
+                if (sendSmsCounter < 3) {
+                    sendSmsPermision = true;
+                    Toast.makeText(context, getString(R.string.msg_fail_receive_sms), Toast.LENGTH_LONG).show();
+                }else {
+                    sendSmsPermision = false;
+                    Toast.makeText(context, getString(R.string.sms_upper_reach_sms), Toast.LENGTH_LONG).show();
+                }
+
+                keyboard.setVisibility(LinearLayout.VISIBLE);
+                Animation animation   =    AnimationUtils.loadAnimation(context, R.anim.keyboard);
+                animation.setDuration(400);
+                keyboard.setAnimation(animation);
+                keyboard.animate();
+                animation.start();
+                keyboard.setVisibility(View.VISIBLE);
+            }
+        }.start();
+
         loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
 
         activity = SMSVerificationActivity.this;
@@ -138,7 +188,7 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
 
 
         networkConnectivity = new NetworkConnectivity(this);
-        context = this;
+
 
         digit_1 = (RippleView)findViewById(R.id.digit_1);
         digit_1.setOnClickListener(this);
@@ -174,6 +224,9 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
         input_digit_5 = (FacedTextView)findViewById(R.id.input_digit_5);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+
+        registrationSendSmsTokenRequest = new RegistrationSendSmsTokenRequest();
+        registrationSendSmsTokenRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
 
         verify_button = (ButtonRectangle)findViewById(R.id.verify_button);
         verify_button.setOnClickListener(new View.OnClickListener() {
@@ -306,13 +359,21 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
                 inputDigit("d");
                 break;
 
+            case R.id.resend_active_code:
+                if (sendSmsPermision){
+                    sendSmsPermision = false;
+
+                    requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
+                    requestRegistrationSendSmsToken.execute(registrationSendSmsTokenRequest);
+
+                }
+                break;
+
 
         }
     }
 
     private void inputDigit(String digit){
-
-
         Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
         if (receivedSmsValue.length() <= 4) {
@@ -439,5 +500,71 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
 //    public void onBackPressed() {
 //        new HamPayDialog(activity).showExitRegistrationDialog();
 //    }
+
+
+    public class RequestRegistrationSendSmsTokenTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationSendSmsTokenResponse>> {
+        @Override
+        public void onTaskComplete(ResponseMessage<RegistrationSendSmsTokenResponse> registrationSendSmsTokenResponse)
+        {
+
+
+            loading_rl.setVisibility(View.GONE);
+
+            if (registrationSendSmsTokenResponse != null) {
+                if (registrationSendSmsTokenResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
+
+                    editor.putString(Constants.REGISTERED_ACTIVITY_DATA, VerificationActivity.class.toString());
+                    editor.commit();
+
+
+                    numberProgressBar.setProgress(0);
+
+                    countDownTimer = new CountDownTimer(101000, 1000) {
+
+                        public void onTick(long millisUntilFinished) {
+                            numberProgressBar.incrementProgressBy(1);
+                        }
+
+                        public void onFinish() {
+
+                            sendSmsCounter++;
+
+                            if (sendSmsCounter < 3) {
+                                sendSmsPermision = true;
+                                Toast.makeText(context, getString(R.string.msg_fail_receive_sms), Toast.LENGTH_LONG).show();
+                            }else {
+                                sendSmsPermision = false;
+                                Toast.makeText(context, getString(R.string.sms_upper_reach_sms), Toast.LENGTH_LONG).show();
+                            }
+
+                            keyboard.setVisibility(LinearLayout.VISIBLE);
+                            Animation animation   =    AnimationUtils.loadAnimation(context, R.anim.keyboard);
+                            animation.setDuration(400);
+                            keyboard.setAnimation(animation);
+                            keyboard.animate();
+                            animation.start();
+                            keyboard.setVisibility(View.VISIBLE);
+                        }
+                    }.start();
+
+
+                }else {
+
+                    requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
+                    new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest);
+                }
+
+            }else {
+                requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
+                new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest);
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            loading_rl.setVisibility(View.VISIBLE);
+        }
+    }
+
 
 }

@@ -10,13 +10,15 @@
 
 
     <com.hampay.mobile.android.component.FacedTextView
+        android:id="@+id/failedLoginText"
         geekui:customTypeface="fonts/iran_sans.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/normal_text"
         android:textSize="22sp"
         android:text="@string/login_fail_text"
-        android:layout_marginTop="15dp"/>
+        android:layout_marginTop="15dp"
+        android:gravity="right"/>
 
     <RelativeLayout
         android:layout_width="fill_parent"

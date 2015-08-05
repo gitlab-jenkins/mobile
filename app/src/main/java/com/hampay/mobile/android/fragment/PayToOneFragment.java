@@ -1,55 +1,37 @@
 package com.hampay.mobile.android.fragment;
 
-import android.accounts.AccountManager;
-import android.accounts.AccountManagerCallback;
-import android.accounts.AccountManagerFuture;
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.dto.ContactDTO;
 import com.hampay.common.core.model.request.ContactsHampayEnabledRequest;
 import com.hampay.common.core.model.response.ContactsHampayEnabledResponse;
-import com.hampay.common.core.model.response.TACResponse;
+import com.hampay.common.core.model.response.RegistrationEntryResponse;
 import com.hampay.mobile.android.Helper.DatabaseHelper;
 import com.hampay.mobile.android.R;
-import com.hampay.mobile.android.account.AccountGeneral;
-import com.hampay.mobile.android.account.ContactsManager;
-import com.hampay.mobile.android.account.HamPayContact;
-import com.hampay.mobile.android.activity.MainActivity;
-import com.hampay.mobile.android.activity.PayOneActivity;
 import com.hampay.mobile.android.adapter.PayOneAdapter;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import com.hampay.mobile.android.async.RequestTAC;
-import com.hampay.mobile.android.async.RequestUpdateEnabledHamPay;
+import com.hampay.mobile.android.async.RequestContactHampayEnabled;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.sectionlist.PinnedHeaderListView;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.model.EnabledHamPay;
 import com.hampay.mobile.android.model.RecentPay;
-import com.hampay.mobile.android.util.Constants;
-import com.hampay.mobile.android.webservice.WebServices;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,6 +66,9 @@ public class PayToOneFragment extends Fragment {
     static Activity context;
 
     static PayOneAdapter payOneAdapter;
+
+    ContactsHampayEnabledRequest contactsHampayEnabledRequest;
+    RequestContactHampayEnabled requestContactHampayEnabled;
 
     public PayToOneFragment() {
     }
@@ -242,7 +227,13 @@ public class PayToOneFragment extends Fragment {
             loading_rl.setVisibility(View.GONE);
         }
 
-        new HttpHamPayContact().execute();
+//        new HttpHamPayContact().execute();
+
+        contactsHampayEnabledRequest = new ContactsHampayEnabledRequest();
+
+        requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());
+        requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
+
 
         return rootView;
     }
@@ -306,29 +297,147 @@ public class PayToOneFragment extends Fragment {
     }
 
 
-    ResponseMessage<ContactsHampayEnabledResponse> contactsHampayEnabledResponse;
+//    ResponseMessage<ContactsHampayEnabledResponse> contactsHampayEnabledResponse;
+//
+//    public class HttpHamPayContact extends AsyncTask<Void, Void, String> {
+//
+//        @Override
+//        protected String doInBackground(Void... params) {
+//
+//            WebServices webServices = new WebServices(getActivity());
+//            contactsHampayEnabledResponse = webServices.getEnabledHamPayContacts();
+//
+//            if (contactsHampayEnabledResponse != null){
+//
+//                if (contactsHampayEnabledResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
+//
+//                    contactDTOs = webServices.getEnabledHamPayContacts().getService().getContacts();
+//
+//                    if (contactDTOs.size() > 0) {
+//
+//                        ContentResolver resolver = getActivity().getContentResolver();
+//                        resolver.delete(ContactsContract.RawContacts.CONTENT_URI, ContactsContract.RawContacts.ACCOUNT_TYPE + " = ?", new String[]{AccountGeneral.ACCOUNT_TYPE});
+//
+//                        dbHelper.deleteEnabledHamPays();
+//
+//                        for (ContactDTO contactDTO : contactDTOs) {
+//
+//                            EnabledHamPay enabledHamPay = new EnabledHamPay();
+//                            enabledHamPay.setCellNumber(contactDTO.getCellNumber());
+//                            enabledHamPay.setDisplayName(contactDTO.getDisplayName());
+//
+//                            dbHelper.createEnabledHamPay(enabledHamPay);
+//
+////                addNewAccount(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
+////                ContactsManager.addContact(getActivity(), new HamPayContact("",
+////                        contactDTO.getDisplayName(),
+////                        "",
+////                        contactDTO.getCellNumber()));
+////
+////                Log.e("Create", contactDTO.getDisplayName());
+//
+//                        }
+//
+////                new RequestUpdateEnabledHamPay(context, new RequestUpdateEnableHamPayTaskCompleteListener()).execute(enabledHamPays);
+//
+//                    }
+//                }
+//            }
+//
+//
+//            return null;
+//
+//
+//        }
+//
+//
+//
+//
+//        private void addNewAccount(String accountType, String authTokenType) {
+//            final AccountManagerFuture<Bundle> future = AccountManager.get(getActivity())
+//                    .addAccount(accountType, authTokenType, null, null, getActivity(), new AccountManagerCallback<Bundle>() {
+//                        @Override
+//                        public void run(AccountManagerFuture<Bundle> future) {
+//                            try {
+//                                Bundle bnd = future.getResult();
+//                                Log.i("", "Account was created");
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    }, null);
+//        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String s) {
+//            super.onPostExecute(s);
+//
+//            if (isAdded()){
+//
+//
+//                if (payOneAdapter == null){
+//                    enabledHamPays = dbHelper.getAllEnabledHamPay();
+//                    payOneAdapter = new PayOneAdapter(getActivity(),
+//                            recentPays,
+//                            enabledHamPays);
+//                    pinnedHeaderListView.setAdapter(payOneAdapter);
+//                }
+//
+////                enabledHamPays = dbHelper.getAllEnabledHamPay();
+////
+////                Log.e("Enabled Length:", enabledHamPays.size() + "");
+////
+////                for (EnabledHamPay enabledHamPay : enabledHamPays){
+////                    Log.e("Display Name", enabledHamPay.getDisplayName());
+////                }
+//
+////                if (enabledHamPays.size() > 0){
+////                    PayOneAdapter sectionedAdapter = new PayOneAdapter(getActivity(),
+////                            recentPays,
+////                            enabledHamPays);
+////                    pinnedHeaderListView.setAdapter(sectionedAdapter);
+////                }
+//
+////                onResume = true;
+//
+////                new RequestUpdateEnabledHamPay(context, new RequestUpdateEnableHamPayTaskCompleteListener()).execute(enabledHamPays);
+//
+////                if (contactsHampayEnabledResponse != null) {
+////
+////                    PayOneAdapter sectionedAdapter = new PayOneAdapter(getActivity(),
+////                            recentPays,
+////                            contactsHampayEnabledResponse.getService().getContacts());
+////                    pinnedHeaderListView.setAdapter(sectionedAdapter);
+////
+////                }
+//
+//                loading_rl.setVisibility(View.GONE);
+//
+//            }
+//        }
+//    }
+//
 
-    public class HttpHamPayContact extends AsyncTask<Void, Void, String> {
 
+
+    public class RequestContactHampayEnabledTaskCompleteListener implements
+            AsyncTaskCompleteListener<ResponseMessage<ContactsHampayEnabledResponse>> {
         @Override
-        protected String doInBackground(Void... params) {
+        public void onTaskComplete(ResponseMessage<ContactsHampayEnabledResponse> contactsHampayEnabledResponseMessage) {
 
-            WebServices webServices = new WebServices(getActivity());
-            contactsHampayEnabledResponse = webServices.getEnabledHamPayContacts();
-
-            if (contactsHampayEnabledResponse != null){
-
-                if (contactsHampayEnabledResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
-
-                    contactDTOs = webServices.getEnabledHamPayContacts().getService().getContacts();
+            if (contactsHampayEnabledResponseMessage != null){
+                if (contactsHampayEnabledResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
+                    contactDTOs = contactsHampayEnabledResponseMessage.getService().getContacts();
 
                     if (contactDTOs.size() > 0) {
 
-                        ContentResolver resolver = getActivity().getContentResolver();
-                        resolver.delete(ContactsContract.RawContacts.CONTENT_URI, ContactsContract.RawContacts.ACCOUNT_TYPE + " = ?", new String[]{AccountGeneral.ACCOUNT_TYPE});
-
                         dbHelper.deleteEnabledHamPays();
-
+//
                         for (ContactDTO contactDTO : contactDTOs) {
 
                             EnabledHamPay enabledHamPay = new EnabledHamPay();
@@ -337,117 +446,33 @@ public class PayToOneFragment extends Fragment {
 
                             dbHelper.createEnabledHamPay(enabledHamPay);
 
-//                addNewAccount(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
-//                ContactsManager.addContact(getActivity(), new HamPayContact("",
-//                        contactDTO.getDisplayName(),
-//                        "",
-//                        contactDTO.getCellNumber()));
-//
-//                Log.e("Create", contactDTO.getDisplayName());
-
                         }
-
-//                new RequestUpdateEnabledHamPay(context, new RequestUpdateEnableHamPayTaskCompleteListener()).execute(enabledHamPays);
-
                     }
                 }
+                else {
+                    requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());
+                    new HamPayDialog(context).showFailContactsHamPayEnabledDialog(requestContactHampayEnabled, contactsHampayEnabledRequest);
+                }
+            }else {
+                requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());
+                new HamPayDialog(context).showFailContactsHamPayEnabledDialog(requestContactHampayEnabled, contactsHampayEnabledRequest);
             }
 
+            if (isAdded()) {
 
-            return null;
-
-
-        }
-
-
-
-
-        private void addNewAccount(String accountType, String authTokenType) {
-            final AccountManagerFuture<Bundle> future = AccountManager.get(getActivity())
-                    .addAccount(accountType, authTokenType, null, null, getActivity(), new AccountManagerCallback<Bundle>() {
-                        @Override
-                        public void run(AccountManagerFuture<Bundle> future) {
-                            try {
-                                Bundle bnd = future.getResult();
-                                Log.i("", "Account was created");
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }, null);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            if (isAdded()){
-
-
-                if (payOneAdapter == null){
+                if (payOneAdapter == null) {
                     enabledHamPays = dbHelper.getAllEnabledHamPay();
                     payOneAdapter = new PayOneAdapter(getActivity(),
                             recentPays,
                             enabledHamPays);
                     pinnedHeaderListView.setAdapter(payOneAdapter);
                 }
-
-//                enabledHamPays = dbHelper.getAllEnabledHamPay();
-//
-//                Log.e("Enabled Length:", enabledHamPays.size() + "");
-//
-//                for (EnabledHamPay enabledHamPay : enabledHamPays){
-//                    Log.e("Display Name", enabledHamPay.getDisplayName());
-//                }
-
-//                if (enabledHamPays.size() > 0){
-//                    PayOneAdapter sectionedAdapter = new PayOneAdapter(getActivity(),
-//                            recentPays,
-//                            enabledHamPays);
-//                    pinnedHeaderListView.setAdapter(sectionedAdapter);
-//                }
-
-//                onResume = true;
-
-//                new RequestUpdateEnabledHamPay(context, new RequestUpdateEnableHamPayTaskCompleteListener()).execute(enabledHamPays);
-
-//                if (contactsHampayEnabledResponse != null) {
-//
-//                    PayOneAdapter sectionedAdapter = new PayOneAdapter(getActivity(),
-//                            recentPays,
-//                            contactsHampayEnabledResponse.getService().getContacts());
-//                    pinnedHeaderListView.setAdapter(sectionedAdapter);
-//
-//                }
-
-                loading_rl.setVisibility(View.GONE);
-
             }
-        }
-    }
-
-
-
-    public class RequestUpdateEnableHamPayTaskCompleteListener implements AsyncTaskCompleteListener<List<EnabledHamPay>>
-    {
-        public RequestUpdateEnableHamPayTaskCompleteListener(){
+            loading_rl.setVisibility(View.GONE);
         }
 
         @Override
-        public void onTaskComplete(List<EnabledHamPay> enabledHamPays)
-        {
-            Log.e("length", enabledHamPays.size() + "");
-        }
+        public void onTaskPreRun() { }
 
-        @Override
-        public void onTaskPreRun() {
-
-        }
     }
-
 }

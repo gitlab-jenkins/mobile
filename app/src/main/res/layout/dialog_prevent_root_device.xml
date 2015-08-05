@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/normal_text"
         android:textSize="20sp"
-        android:text="@string/msg_fail_registration_entry"
+        android:text="@string/msg_rooted_device"
         android:gravity="center"
         android:layout_gravity="center"
         android:layout_margin="8dp"/>
@@ -28,7 +28,7 @@
         android:layout_margin="15dp">
 
         <com.hampay.mobile.android.component.FacedTextView
-            android:id="@+id/retry_registration_entry"
+            android:id="@+id/prevent_rooted_device"
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
             android:textSize="20sp"
             android:gravity="center"
             android:layout_centerInParent="true"
-            android:text="@string/retry_registration_entry" />
+            android:text="@string/prevent_rooted_device" />
 
     </RelativeLayout>
 

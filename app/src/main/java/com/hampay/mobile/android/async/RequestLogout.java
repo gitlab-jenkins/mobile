@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import com.hampay.mobile.android.model.LogoutData;
-import com.hampay.mobile.android.model.LoginResponse;
 import com.hampay.mobile.android.model.LogoutResponse;
 import com.hampay.mobile.android.webservice.WebServices;
 

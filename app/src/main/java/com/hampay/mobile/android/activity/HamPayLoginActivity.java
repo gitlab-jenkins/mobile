@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -17,35 +15,31 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.request.TACRequest;
-import com.hampay.common.core.model.response.RegistrationVerifyAccountResponse;
 import com.hampay.common.core.model.response.TACResponse;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import com.hampay.mobile.android.async.RequestConfirmUserData;
 import com.hampay.mobile.android.async.RequestLogin;
 import com.hampay.mobile.android.async.RequestTAC;
 import com.hampay.mobile.android.component.FacedTextView;
-import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.component.material.RippleView;
-import com.hampay.mobile.android.dialog.AlertUtils;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.functions.DeviceUuidFactory;
 import com.hampay.mobile.android.messaging.SecurityUtils;
+import com.hampay.mobile.android.model.FailedLoginResponse;
 import com.hampay.mobile.android.model.LoginData;
-import com.hampay.mobile.android.model.LoginResponse;
-import com.hampay.mobile.android.service.LoginService;
+import com.hampay.mobile.android.model.SuccessLoginResponse;
 import com.hampay.mobile.android.util.Constants;
-import com.hampay.mobile.android.util.DeviceInfo;
-import com.hampay.mobile.android.webservice.WebServices;
 
-import java.util.UUID;
+import java.lang.reflect.Type;
 
 
 public class HamPayLoginActivity extends ActionBarActivity implements View.OnClickListener {
-
-    SharedPreferences prefs;
 
     SharedPreferences.Editor editor;
 
@@ -83,7 +77,10 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
     Context context;
     Activity activity;
 
+    SharedPreferences prefs;
+
     RelativeLayout loading_rl;
+    FacedTextView user_name;
 
 
     public void contactUs(View view){
@@ -94,6 +91,11 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ham_pay_login);
+
+        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+
+        user_name = (FacedTextView)findViewById(R.id.user_name);
+        user_name.setText("سلام: " + prefs.getString(Constants.REGISTERED_USER_FAMILY, ""));
 
         loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
 
@@ -138,7 +140,6 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
 
 
         hampay_memorableword_text = (FacedTextView)findViewById(R.id.hampay_memorableword_text);
-        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
 
         nationalCode = prefs.getString(Constants.REGISTERED_NATIONAL_CODE, "");
         memorableWord = prefs.getString(Constants.MEMORABLE_WORD, "");
@@ -193,32 +194,46 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
     }
 
 
-    public class RequestLoginResponseTaskCompleteListener implements AsyncTaskCompleteListener<LoginResponse>
+    public class RequestLoginResponseTaskCompleteListener implements AsyncTaskCompleteListener<String>
     {
         public RequestLoginResponseTaskCompleteListener(){
         }
 
         @Override
-        public void onTaskComplete(LoginResponse loginResponse)
+        public void onTaskComplete(String loginResponse)
         {
+
+            SuccessLoginResponse successLoginResponse;
+            FailedLoginResponse failedLoginResponse;
+
             loading_rl.setVisibility(View.GONE);
             if (loginResponse != null) {
 
-                if ((loginResponse.getSuccessUrl().length() > 0)) {
+                Gson gson = new Gson();
+                    Type listType = new TypeToken<SuccessLoginResponse>() {
+                    }.getType();
+                    JsonParser jsonParser = new JsonParser();
+                    JsonElement responseElement = jsonParser.parse(loginResponse.toString());
+                    successLoginResponse = gson.fromJson(responseElement.toString(), listType);
 
-                    editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+                if (successLoginResponse.getSuccessUrl() == null) {
 
-                    editor.putString(Constants.LOGIN_TOKEN_ID, loginResponse.getTokenId());
-
-                    editor.commit();
-
-                    TACRequest tacRequest = new TACRequest();
-
-
-                    new RequestTAC(context, new RequestTACResponseTaskCompleteListener()).execute(tacRequest);
+                    listType = new TypeToken<FailedLoginResponse>() {
+                    }.getType();
+                    jsonParser = new JsonParser();
+                    responseElement = jsonParser.parse(loginResponse.toString());
+                    failedLoginResponse = gson.fromJson(responseElement.toString(), listType);
+                    new HamPayDialog(activity).showLoginFailDialog(failedLoginResponse);
                 }else {
-                    new HamPayDialog(activity).showLoginFailDialog();
+                    editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+                    editor.putString(Constants.LOGIN_TOKEN_ID, successLoginResponse.getTokenId());
+                    editor.commit();
+                    TACRequest tacRequest = new TACRequest();
+                    new RequestTAC(context, new RequestTACResponseTaskCompleteListener()).execute(tacRequest);
                 }
+//                }else {
+//                    new HamPayDialog(activity).showLoginFailDialog();
+//                }
 
 
             }
@@ -320,8 +335,6 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
                     generatePassword(inputPassValue,
                             memorableWord,
                             new DeviceUuidFactory(this).getAndroidId(),
-//                            new DeviceUuidFactory(this).getDeviceUuid().toString(),
-//                            new DeviceInfo(this).getIMEI(),
                             installationToken);
 
             LoginData loginData = new LoginData();

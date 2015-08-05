@@ -311,9 +311,15 @@
     <string name="msg_fail_pass_code_entry">ثبت رمزعبور شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_memorable_entry">ثبت کلمه یادآوری با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_user_transation">بارگیری تراکنش‌ها با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
+    <string name="msg_fail_contacts_enabled">دریافت مخاطبین هم‌پی شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
+    <string name="msg_fail_business_list">دریافت لیست کسب و کار با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
+
+    <string name="msg_fail_receive_sms">دریافت پیامک فعالسازی با مشکل مواجه شد. لطفا دکمه ارسال مجدد را انتخاب کنید.</string>
+    <string name="sms_upper_reach_sms">حداکثر درخواست برای ارسال مجدد پیامک فعالسازی به اتمام رسید. لطفا در ساعات دیگر تلاش کنید.</string>
 
     <string name="retry_registration_entry">مجدد تلاش می‌کنم</string>
     <string name="title_activity_server_select">ServerSelectActivity</string>
+    <string name="prevent_rooted_device">باشه</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>

@@ -409,7 +409,7 @@ public class ChangePasswordActivity extends ActionBarActivity implements View.On
                         if (inputPasswordValue.equalsIgnoreCase(inputRePasswordValue)) {
                             ChangePassCodeRequest changePassCodeRequest = new ChangePassCodeRequest();
                             changePassCodeRequest.setCurrentPassCode(currentPassword);
-                            changePassCodeRequest.setMemorableCode("");
+                            changePassCodeRequest.setMemorableCode("sa");
                             changePassCodeRequest.setNewPassCode(inputPasswordValue);
                             new HttpChangePassCodeResponse().execute(changePassCodeRequest);
                         } else {
@@ -461,7 +461,7 @@ public class ChangePasswordActivity extends ActionBarActivity implements View.On
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
-            if (changePassCodeResponseResponseMessage.getService().getResultStatus() != null) {
+            if (changePassCodeResponseResponseMessage != null) {
 
 
                 password_0_rl.setVisibility(View.VISIBLE);

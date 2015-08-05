@@ -12,6 +12,7 @@ import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
+import com.hampay.mobile.android.util.Constants;
 
 public class ChangeMemorableActivity extends ActionBarActivity {
 
@@ -39,7 +40,7 @@ public class ChangeMemorableActivity extends ActionBarActivity {
 
         memorable_value = (FacedEditText)findViewById(R.id.memorable_value);
 
-        prefs = getPreferences(MODE_PRIVATE);
+        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
 
         keepOn_button = (ButtonRectangle) findViewById(R.id.keepOn_button);
         keepOn_button.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +63,7 @@ public class ChangeMemorableActivity extends ActionBarActivity {
 
                     Intent intent = new Intent();
                     intent.setClass(ChangeMemorableActivity.this, ChangeMemorablePassActivity.class);
-                    intent.putExtra("currentMemorable", currentMemorable);
+                    intent.putExtra("currentMemorable", prefs.getString(Constants.MEMORABLE_WORD, ""));
                     intent.putExtra("newMemorable", newMemorable);
                     startActivity(intent);
                     finish();

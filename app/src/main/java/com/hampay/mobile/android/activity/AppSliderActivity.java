@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
+import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.fragment.AppSliderFragmentA;
 import com.hampay.mobile.android.fragment.AppSliderFragmentB;
 import com.hampay.mobile.android.fragment.AppSliderFragmentC;
@@ -58,11 +59,10 @@ public class AppSliderActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_slider);
 
-        if (!new RootUtil().checkRootedDevice()){
-            Toast.makeText(this, getString(R.string.msg_rooted_device), Toast.LENGTH_LONG).show();
-            finish();
-            return;
-        }
+//        if (new RootUtil().checkRootedDevice()){
+//            new HamPayDialog(this).showPreventRootDeviceDialog();
+//            return;
+//        }
 
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);

@@ -62,9 +62,8 @@ import com.hampay.common.core.model.response.TransactionListResponse;
 import com.hampay.common.core.model.response.UserProfileResponse;
 import com.hampay.common.core.model.response.VerifyAccountResponse;
 import com.hampay.common.core.model.response.VerifyTransferMoneyResponse;
-import com.hampay.mobile.android.account.Log;
 import com.hampay.mobile.android.model.LoginData;
-import com.hampay.mobile.android.model.LoginResponse;
+import com.hampay.mobile.android.model.SuccessLoginResponse;
 import com.hampay.mobile.android.model.LogoutData;
 import com.hampay.mobile.android.model.LogoutResponse;
 import com.hampay.mobile.android.util.Constants;
@@ -78,7 +77,6 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -113,54 +111,31 @@ public class WebServices  {
     }
 
 
-    public LoginResponse sendLoginRequest(LoginData loginData)throws Exception {
-
-        URL urlConnection = new URL(Constants.OPENAM_LOGIN_URL);
-        HttpURLConnection httpURLConnection = (HttpURLConnection) urlConnection.openConnection();
-
-        httpURLConnection.setRequestMethod("POST");
-        httpURLConnection.setConnectTimeout(20 * 1000);
-        httpURLConnection.setReadTimeout(20 * 1000);
-
-        httpURLConnection.setDoOutput(true);
-
-        httpURLConnection.setRequestProperty("X-OpenAM-Username", loginData.getUserName());
-        httpURLConnection.setRequestProperty("X-OpenAM-Password", loginData.getUserPassword());
-        httpURLConnection.setRequestProperty("Content-Type", "application/json");
-        httpURLConnection.setRequestProperty("Accept-Encoding", "UTF-8");
-
-
-        try {
-
-            BufferedWriter output = new BufferedWriter(new OutputStreamWriter(httpURLConnection.getOutputStream()));
-            output.write(/*body*/"{}");
-            output.flush();
-            output.close();
-        }catch (Exception e){
-            Log.i("ddd");
-        }
-
-        int responseCode = httpURLConnection.getResponseCode();
-
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(httpURLConnection.getInputStream()));
-        String inputLine;
-        StringBuffer response = new StringBuffer();
-
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
-
-        Gson gson = new Gson();
-
-        Type listType = new TypeToken<LoginResponse>(){}.getType();
-
-        JsonParser jsonParser = new JsonParser();
-        JsonElement responseElement = jsonParser.parse(response.toString());
-
-        return (LoginResponse) gson.fromJson(responseElement.toString(), listType);
-    }
+//    public SuccessLoginResponse sendLoginRequest(LoginData loginData)throws Exception {
+//
+//
+//
+//
+//        BufferedReader in = new BufferedReader(
+//                new InputStreamReader(httpURLConnection.getInputStream()));
+//
+//        String inputLine;
+//        StringBuffer response = new StringBuffer();
+//
+//        while ((inputLine = in.readLine()) != null) {
+//            response.append(inputLine);
+//        }
+//        in.close();
+//
+//        Gson gson = new Gson();
+//
+//        Type listType = new TypeToken<SuccessLoginResponse>(){}.getType();
+//
+//        JsonParser jsonParser = new JsonParser();
+//        JsonElement responseElement = jsonParser.parse(response.toString());
+//
+//        return (SuccessLoginResponse) gson.fromJson(responseElement.toString(), listType);
+//    }
 
 
     public LogoutResponse sendLogoutRequest(LogoutData logoutData)throws Exception {
@@ -738,13 +713,14 @@ public class WebServices  {
         try {
 
             RequestHeader header = new RequestHeader();
-            header.setAuthToken("008ewe");
             header.setVersion("1.0-PA");
+            header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
 
             RequestMessage<ChangePassCodeRequest> message = new RequestMessage<ChangePassCodeRequest>();
             message.setRequestHeader(header);
             ChangePassCodeRequest request = changePassCodeRequest;
             request.setRequestUUID("1234");
+
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<ChangePassCodeRequest>>() {}.getType();
@@ -813,7 +789,8 @@ public class WebServices  {
         try {
 
             RequestHeader header = new RequestHeader();
-            header.setAuthToken("008ewe");
+            header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+
             header.setVersion("1.0-PA");
 
             RequestMessage<ChangeMemorableWordRequest> message = new RequestMessage<ChangeMemorableWordRequest>();
@@ -1290,7 +1267,7 @@ public class WebServices  {
 
     }
 
-    public ResponseMessage<ContactsHampayEnabledResponse>  getEnabledHamPayContacts(){
+    public ResponseMessage<ContactsHampayEnabledResponse>  getEnabledHamPayContacts(ContactsHampayEnabledRequest contactsHampayEnabledRequest){
 
         ResponseMessage<ContactsHampayEnabledResponse> contactsHampayEnabledResponse = null;
 
@@ -1343,7 +1320,7 @@ public class WebServices  {
 
     }
 
-    public ResponseMessage<IndividualPaymentConfirmResponse>  individualPaymentConfirm(String phoneNumber){
+    public ResponseMessage<IndividualPaymentConfirmResponse>  individualPaymentConfirm(IndividualPaymentConfirmRequest individualPaymentConfirmRequest){
 
         ResponseMessage<IndividualPaymentConfirmResponse> individualPaymentConfirmResponse = null;
 
@@ -1361,10 +1338,7 @@ public class WebServices  {
 
         HttpResponse response;
         try {
-
-//            String req = createIndividualJsonMessage(phoneNumber);
-
-            StringEntity entity = new StringEntity(createIndividualConfirmJsonMessage(phoneNumber), "UTF-8");
+            StringEntity entity = new StringEntity(createIndividualConfirmJsonMessage(individualPaymentConfirmRequest), "UTF-8");
             entity.setContentType("application/json");
             ((HttpPost) request).setEntity(entity);
 
@@ -1396,7 +1370,7 @@ public class WebServices  {
 
     }
 
-    public ResponseMessage<IndividualPaymentResponse>  individualPayment(String phoneNumber, String userMessage, Long amount){
+    public ResponseMessage<IndividualPaymentResponse>  individualPayment(IndividualPaymentRequest individualPaymentRequest){
 
         ResponseMessage<IndividualPaymentResponse> individualPaymentResponse = null;
 
@@ -1415,9 +1389,7 @@ public class WebServices  {
         HttpResponse response;
         try {
 
-//            String req = createIndividualJsonMessage(phoneNumber);
-
-            StringEntity entity = new StringEntity(createIndividualJsonMessage(phoneNumber, userMessage, amount), "UTF-8");
+            StringEntity entity = new StringEntity(createIndividualJsonMessage(individualPaymentRequest), "UTF-8");
             entity.setContentType("application/json");
             ((HttpPost) request).setEntity(entity);
 
@@ -1452,7 +1424,7 @@ public class WebServices  {
 
 
 
-    public ResponseMessage<BusinessPaymentConfirmResponse>  businessPaymentConfirm(String phoneNumber){
+    public ResponseMessage<BusinessPaymentConfirmResponse>  businessPaymentConfirm(BusinessPaymentConfirmRequest businessPaymentConfirmRequest){
 
         ResponseMessage<BusinessPaymentConfirmResponse> businessPaymentConfirmResponse = null;
 
@@ -1471,9 +1443,7 @@ public class WebServices  {
         HttpResponse response;
         try {
 
-            String req = createIndividualJsonMessage(phoneNumber, "", 0L);
-
-            StringEntity entity = new StringEntity(createBusinessConfirmJsonMessage(phoneNumber), "UTF-8");
+            StringEntity entity = new StringEntity(createBusinessConfirmJsonMessage(businessPaymentConfirmRequest), "UTF-8");
             entity.setContentType("application/json");
             ((HttpPost) request).setEntity(entity);
 
@@ -1507,7 +1477,7 @@ public class WebServices  {
 
     }
 
-    public ResponseMessage<BusinessPaymentResponse>  businessPayment(String phoneNumber){
+    public ResponseMessage<BusinessPaymentResponse>  businessPayment(BusinessPaymentRequest businessPaymentRequest){
 
         ResponseMessage<BusinessPaymentResponse> businessPaymentResponse = null;
 
@@ -1526,9 +1496,7 @@ public class WebServices  {
         HttpResponse response;
         try {
 
-//            String req = createIndividualJsonMessage(phoneNumber);
-
-            StringEntity entity = new StringEntity(createBusinessJsonMessage(phoneNumber), "UTF-8");
+            StringEntity entity = new StringEntity(createBusinessJsonMessage(businessPaymentRequest), "UTF-8");
             entity.setContentType("application/json");
             ((HttpPost) request).setEntity(entity);
 
@@ -1562,7 +1530,7 @@ public class WebServices  {
     }
 
 
-    public ResponseMessage<BusinessListResponse>  getHamPayBusiness(){
+    public ResponseMessage<BusinessListResponse>  getHamPayBusiness(BusinessListRequest businessListRequest){
 
         ResponseMessage<BusinessListResponse> businessListResponse = null;
 
@@ -1580,7 +1548,7 @@ public class WebServices  {
 
         HttpResponse response;
         try {
-            StringEntity entity = new StringEntity(createHamPayBusinessJsonMessage(), "UTF-8");
+            StringEntity entity = new StringEntity(createHamPayBusinessJsonMessage(businessListRequest), "UTF-8");
             entity.setContentType("application/json");
             ((HttpPost) request).setEntity(entity);
 
@@ -1615,7 +1583,7 @@ public class WebServices  {
 
     }
 
-    private String createHamPayBusinessJsonMessage() {
+    private String createHamPayBusinessJsonMessage(BusinessListRequest businessListRequest) {
         RequestHeader header = new RequestHeader();
 //        header.setAuthToken("008ewe");
         header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
@@ -1625,10 +1593,11 @@ public class WebServices  {
         message.setRequestHeader(header);
         BusinessListRequest request = new BusinessListRequest();
 
-        request.setPageNumber(0);
-        request.setPageSize(10);
+        request.setPageNumber(businessListRequest.getPageNumber());
+        request.setPageSize(businessListRequest.getPageSize());
 
         request.setRequestUUID("1234");
+
         message.setService(request);
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<BusinessListRequest>>() {}.getType();
@@ -1834,7 +1803,7 @@ public class WebServices  {
         return new Gson().toJson(message, requestType);
     }
 
-    private String createIndividualConfirmJsonMessage(String phoneNumber) {
+    private String createIndividualConfirmJsonMessage(IndividualPaymentConfirmRequest individualPaymentConfirmRequest) {
         RequestHeader header = new RequestHeader();
 //        header.setAuthToken("008ewe");
         header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
@@ -1844,8 +1813,7 @@ public class WebServices  {
         message.setRequestHeader(header);
         IndividualPaymentConfirmRequest request = new IndividualPaymentConfirmRequest();
 
-        request.setCellNumber(phoneNumber);
-
+        request.setCellNumber(individualPaymentConfirmRequest.getCellNumber());
         request.setRequestUUID("1234");
         message.setService(request);
 
@@ -1853,7 +1821,7 @@ public class WebServices  {
         return new Gson().toJson(message, requestType);
     }
 
-    private String createIndividualJsonMessage(String phoneNumber, String userMeaage, Long amount) {
+    private String createIndividualJsonMessage(IndividualPaymentRequest individualPaymentRequest) {
         RequestHeader header = new RequestHeader();
 //        header.setAuthToken("008ewe");
         header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
@@ -1863,9 +1831,9 @@ public class WebServices  {
         message.setRequestHeader(header);
         IndividualPaymentRequest request = new IndividualPaymentRequest();
 
-        request.setCellNumber(phoneNumber);
-        request.setAmount(amount);
-        request.setMessage(userMeaage);
+        request.setCellNumber(individualPaymentRequest.getCellNumber());
+        request.setAmount(individualPaymentRequest.getAmount());
+        request.setMessage(individualPaymentRequest.getMessage());
 
         request.setRequestUUID("1234");
         message.setService(request);
@@ -1875,9 +1843,8 @@ public class WebServices  {
     }
 
 
-    private String createBusinessConfirmJsonMessage(String businessCode) {
+    private String createBusinessConfirmJsonMessage(BusinessPaymentConfirmRequest businessPaymentConfirmRequest) {
         RequestHeader header = new RequestHeader();
-//        header.setAuthToken("008ewe");
         header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
 
@@ -1885,7 +1852,7 @@ public class WebServices  {
         message.setRequestHeader(header);
         BusinessPaymentConfirmRequest request = new BusinessPaymentConfirmRequest();
 
-        request.setBusinessCode(businessCode);
+        request.setBusinessCode(businessPaymentConfirmRequest.getBusinessCode());
 
         request.setRequestUUID("1234");
         message.setService(request);
@@ -1894,7 +1861,8 @@ public class WebServices  {
         return new Gson().toJson(message, requestType);
     }
 
-    private String createBusinessJsonMessage(String businessCode) {
+    private String createBusinessJsonMessage(BusinessPaymentRequest businessPaymentRequest) {
+        //cls
         RequestHeader header = new RequestHeader();
 //        header.setAuthToken("008ewe");
         header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
@@ -1904,8 +1872,9 @@ public class WebServices  {
         message.setRequestHeader(header);
         BusinessPaymentRequest request = new BusinessPaymentRequest();
 
-        request.setBusinessCode(businessCode);
-
+        request.setBusinessCode(businessPaymentRequest.getBusinessCode());
+        request.setAmount(businessPaymentRequest.getAmount());
+        request.setMessage(businessPaymentRequest.getMessage());
         request.setRequestUUID("1234");
         message.setService(request);
 

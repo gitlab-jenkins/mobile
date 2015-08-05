@@ -1,65 +1,51 @@
 package com.hampay.mobile.android.activity;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
+import com.hampay.common.common.response.ResultStatus;
+import com.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
 import com.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
-import com.hampay.common.core.model.response.IndividualPaymentResponse;
-import com.hampay.common.core.model.response.TACResponse;
 import com.hampay.mobile.android.Helper.DatabaseHelper;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import com.hampay.mobile.android.async.RequestIndividualPaymentConfirm;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.edittext.CurrencyFormatter;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.fragment.PayToOneFragment;
-import com.hampay.mobile.android.model.RecentPay;
 import com.hampay.mobile.android.util.Constants;
-import com.hampay.mobile.android.webservice.WebServices;
 
 public class PayOneActivity extends ActionBarActivity {
 
     ButtonRectangle pay_to_one_button;
 
-    Dialog dialog_pay_one;
     Bundle bundle;
-
 
     DatabaseHelper dbHelper;
 
-    RecentPay recentPay;
-
     private String contactPhoneNo;
     private String contactName;
-    private String contactMesage;
 
     FacedTextView contact_name;
     FacedEditText contact_message;
     String contactMssage = "";
     FacedEditText credit_value;
-    Long creditValue;
+    Long amountValue;
     boolean creditValueValidation = false;
     ImageView credit_value_icon;
 
@@ -71,6 +57,9 @@ public class PayOneActivity extends ActionBarActivity {
     Activity activity;
 
     RelativeLayout loading_rl;
+
+    RequestIndividualPaymentConfirm requestIndividualPaymentConfirm;
+    IndividualPaymentConfirmRequest individualPaymentConfirmRequest;
 
     public void backActionBar(View view){
         finish();
@@ -109,8 +98,6 @@ public class PayOneActivity extends ActionBarActivity {
 
             }
         });
-
-
 
         contact_message = (FacedEditText)findViewById(R.id.contact_message);
         contact_name = (FacedTextView)findViewById(R.id.contact_name);
@@ -167,9 +154,15 @@ public class PayOneActivity extends ActionBarActivity {
                 credit_value.clearFocus();
 
                 if (creditValueValidation) {
-                    new HttpConfirmIndividualPayment().execute(contactPhoneNo);
-                    contactName = contact_name.getText().toString();
-                    contactMesage = contact_message.getText().toString();
+                    contactMssage = contact_message.getText().toString();
+                    amountValue = Long.parseLong(credit_value.getText().toString().replace(",", ""));
+
+                    individualPaymentConfirmRequest = new IndividualPaymentConfirmRequest();
+                    individualPaymentConfirmRequest.setCellNumber(contactPhoneNo);
+
+                    requestIndividualPaymentConfirm = new RequestIndividualPaymentConfirm(context, new RequestIndividualPaymentConfirmTaskCompleteListener());
+                    requestIndividualPaymentConfirm.execute(individualPaymentConfirmRequest);
+
                 }else {
                     (new HamPayDialog(activity)).showIncorrectPrice();
                 }
@@ -179,208 +172,6 @@ public class PayOneActivity extends ActionBarActivity {
 
 
     }
-
-    ResponseMessage<IndividualPaymentConfirmResponse> individualPaymentConfirmResponse;
-
-
-    public class HttpConfirmIndividualPayment extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            WebServices webServices = new WebServices(getApplicationContext());
-            individualPaymentConfirmResponse = webServices.individualPaymentConfirm(params[0]);
-
-            return null;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            loading_rl.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            loading_rl.setVisibility(View.GONE);
-
-            if (individualPaymentConfirmResponse != null) {
-
-                Rect displayRectangle = new Rect();
-                Activity parent = (Activity) PayOneActivity.this;
-                Window window = parent.getWindow();
-                window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-
-                View view = getLayoutInflater().inflate(R.layout.dialog_pay_one, null);
-
-                FacedTextView pay_one_confirm = (FacedTextView) view.findViewById(R.id.pay_one_confirm);
-                FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
-                FacedTextView dis_confirmation = (FacedTextView) view.findViewById(R.id.dis_confirmation);
-
-                confirmation.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog_pay_one.dismiss();
-//                        new HttpIndividualPayment().execute(bundle.getString("contact_phone_no"));
-                        contactMesage = contact_message.getText().toString();
-                        creditValue = Long.parseLong(credit_value.getText().toString().replace(",", ""));
-                        new HttpIndividualPayment().execute(contactPhoneNo);
-                    }
-                });
-
-
-                dis_confirmation.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog_pay_one.dismiss();
-                    }
-                });
-
-                pay_one_confirm.setText(getString(R.string.pay_one_confirm, credit_value.getText().toString(),
-                        individualPaymentConfirmResponse.getService().getFullName(),
-                        individualPaymentConfirmResponse.getService().getBankName()));
-
-
-                view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
-                dialog_pay_one = new Dialog(PayOneActivity.this);
-                dialog_pay_one.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog_pay_one.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog_pay_one.setContentView(view);
-                dialog_pay_one.setTitle(null);
-                dialog_pay_one.setCanceledOnTouchOutside(false);
-
-                dialog_pay_one.show();
-            }
-
-
-        }
-    }
-
-
-
-//
-//    public class RequestTACResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<TACResponse>>
-//    {
-//        public RequestTACResponseTaskCompleteListener(){
-//        }
-//
-//        @Override
-//        public void onTaskComplete(ResponseMessage<TACResponse> tacResponseMessage)
-//        {
-////            loading_rl.setVisibility(View.GONE);
-//            if (tacResponseMessage.getService().getResultStatus() != null) {
-//
-//                if (tacResponseMessage.getService().getShouldAcceptTAC()){
-//
-//                    (new HamPayDialog(activity)).showTACAcceptDialog(tacResponseMessage.getService().getTac());
-//
-//                }
-//                else {
-//                    Intent intent = new Intent();
-//
-//                    intent.setClass(activity, MainActivity.class);
-//                    intent.putExtra(Constants.USER_PROFILE_DTO, tacResponseMessage.getService().getUserProfile());
-//                    startActivity(intent);
-//
-//                    finish();
-//                }
-//
-//            }
-//            else {
-//                Toast.makeText(context, getString(R.string.no_network), Toast.LENGTH_SHORT).show();
-//            }
-//
-//        }
-//
-//        @Override
-//        public void onTaskPreRun() {
-////            loading_rl.setVisibility(View.VISIBLE);
-//        }
-//    }
-
-    ResponseMessage<IndividualPaymentResponse> individualPaymentResponse;
-
-    public class HttpIndividualPayment  extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-
-            WebServices webServices = new WebServices(getApplicationContext());
-            individualPaymentResponse = webServices.individualPayment(params[0], contactMesage, creditValue);
-
-//            individualPaymentResponse.getService().
-            return null;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            loading_rl.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            loading_rl.setVisibility(View.GONE);
-
-            if (individualPaymentResponse != null) {
-
-                Rect displayRectangle = new Rect();
-                Activity parent = (Activity) PayOneActivity.this;
-                Window window = parent.getWindow();
-                window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-
-                View view = getLayoutInflater().inflate(R.layout.dialog_pay_one_ref, null);
-
-                FacedTextView pay_one_confirm_ref = (FacedTextView) view.findViewById(R.id.pay_one_confirm_ref);
-                FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
-
-
-                confirmation.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog_pay_one.dismiss();
-                        finish();
-                        onBackPressed();
-                    }
-                });
-
-                pay_one_confirm_ref.setText(getString(R.string.pay_one_ref, individualPaymentResponse.getService().getRefCode()));
-
-                recentPay = new RecentPay();
-
-                if (!dbHelper.getExistRecentPay(contactPhoneNo)) {
-
-                    recentPay = new RecentPay();
-                    recentPay.setName(contactName);
-                    recentPay.setPhone(contactPhoneNo);
-                    recentPay.setMessage(contactMesage);
-                    dbHelper.createRecentPAy(recentPay);
-
-                }else {
-                    recentPay = new RecentPay();
-                    recentPay = dbHelper.getRecentPay(contactPhoneNo);
-
-                    recentPay.setMessage(contactMesage);
-                    dbHelper.updateRecentPay(recentPay);
-                }
-
-                view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
-                dialog_pay_one = new Dialog(PayOneActivity.this);
-                dialog_pay_one.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog_pay_one.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog_pay_one.setContentView(view);
-                dialog_pay_one.setTitle(null);
-                dialog_pay_one.setCanceledOnTouchOutside(false);
-
-                dialog_pay_one.show();
-            }
-        }
-    }
-
 
 
     @Override
@@ -398,5 +189,21 @@ public class PayOneActivity extends ActionBarActivity {
 
     }
 
+
+    public class RequestIndividualPaymentConfirmTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<IndividualPaymentConfirmResponse>> {
+
+        @Override
+        public void onTaskComplete(ResponseMessage<IndividualPaymentConfirmResponse> individualPaymentConfirmResponseMessage) {
+
+            if (individualPaymentConfirmResponseMessage != null){
+                if (individualPaymentConfirmResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
+                    new HamPayDialog(activity).individualPaymentConfirmDialog(individualPaymentConfirmResponseMessage.getService(), amountValue, contactMssage);
+                }
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() { }
+    }
 
 }

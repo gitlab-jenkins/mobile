@@ -52,13 +52,14 @@ public class HamPayBusinessesAdapter extends HamPayBusinessesGenericAdapter<Busi
         viewHolder.business_description.setText(businessDTO.getCategory());
         viewHolder.business_phone_no.setText("تلفن: " + businessDTO.getDefaultPhoneNumber());
         viewHolder.business_hampay_id.setText("شناسه: " + businessDTO.getCode());
+
         viewHolder.pay_to_business_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClass(context, PayBusinessActivity.class);
-                intent.putExtra("business_name", businessDTO.getTitle());
-                intent.putExtra("business_code", businessDTO.getCode());
+                intent.putExtra("business_name", getItem(position).getTitle());
+                intent.putExtra("business_code", getItem(position).getCode());
                 context.startActivity(intent);
             }
         });

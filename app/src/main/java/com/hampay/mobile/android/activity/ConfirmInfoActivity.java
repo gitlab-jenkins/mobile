@@ -289,7 +289,8 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                         editor.putString(Constants.REGISTERED_CELL_NUMBER, cellNumberValue.getText().toString());
                         editor.putString(Constants.REGISTERED_USER_FAMILY, userFamilyValue.getText().toString());
                         editor.putString(Constants.REGISTERED_ACCOUNT_NO, accountNumberValue.getText().toString());
-                        editor.putString(Constants.REGISTERED_NATIONAL_CODE, nationalCodeValue.getText().toString());
+//                        editor.putString(Constants.REGISTERED_NATIONAL_CODE, nationalCodeValue.getText().toString());
+                        editor.commit();
 
                         confirm_info_dialog.dismiss();
 
@@ -311,7 +312,7 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                         editor.putString(Constants.REGISTERED_CELL_NUMBER, cellNumberValue.getText().toString());
                         editor.putString(Constants.REGISTERED_USER_FAMILY, userFamilyValue.getText().toString());
                         editor.putString(Constants.REGISTERED_ACCOUNT_NO, accountNumberValue.getText().toString());
-                        editor.putString(Constants.REGISTERED_NATIONAL_CODE, nationalCodeValue.getText().toString());
+//                        editor.putString(Constants.REGISTERED_NATIONAL_CODE, nationalCodeValue.getText().toString());
                         editor.commit();
 
                         confirm_info_dialog.dismiss();
@@ -336,6 +337,14 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                 break;
 
             case R.id.keeOn_with_button:
+
+
+                editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ConfirmInfoActivity.class.toString());
+                editor.putString(Constants.REGISTERED_CELL_NUMBER, cellNumberValue.getText().toString());
+                editor.putString(Constants.REGISTERED_USER_FAMILY, userFamilyValue.getText().toString());
+                editor.putString(Constants.REGISTERED_ACCOUNT_NO, accountNumberValue.getText().toString());
+//                editor.putString(Constants.REGISTERED_NATIONAL_CODE, nationalCodeValue.getText().toString());
+                editor.commit();
 
                 registrationVerifyAccountRequest = new RegistrationVerifyAccountRequest();
                 registrationVerifyAccountRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
@@ -362,6 +371,10 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
     }
 
 
+
+    RegistrationConfirmUserDataRequest registrationConfirmUserDataRequest;
+    RequestConfirmUserData requestConfirmUserData;
+
     private void confirmUserData(){
 
 //                userFamilyValue.clearFocus();
@@ -377,14 +390,16 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                                 /*&& nationalCodeValue.getText().toString().length() > 0*/
                         && accountNumberValue.getText().toString().length() > 0) {
 
-                    RegistrationConfirmUserDataRequest registrationConfirmUserDataRequest = new RegistrationConfirmUserDataRequest();
+                    registrationConfirmUserDataRequest = new RegistrationConfirmUserDataRequest();
                     registrationConfirmUserDataRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
                     registrationConfirmUserDataRequest.setImei(new DeviceInfo(getApplicationContext()).getIMEI());
                     registrationConfirmUserDataRequest.setIsVerified(confirm_check_value);
                     registrationConfirmUserDataRequest.setIp(new Utils(context).getNetworkIp());
                     registrationConfirmUserDataRequest.setDeviceId(new DeviceInfo(getApplicationContext()).getAndroidId());
 
-                    new RequestConfirmUserData(context, new RequestConfirmUserDataTaskCompleteListener()).execute(registrationConfirmUserDataRequest);
+
+                    requestConfirmUserData = new RequestConfirmUserData(context, new RequestConfirmUserDataTaskCompleteListener());
+                    requestConfirmUserData.execute(registrationConfirmUserDataRequest);
 
                     confirm_check_value = !confirm_check_value;
 
@@ -524,10 +539,12 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
 //                nationalCodeValue.setFocusable(false);
                     confirm_layout.setVisibility(View.VISIBLE);
                 }else {
-                    Toast.makeText(context, getString(R.string.msg_fail_registration_confirm_user_data), Toast.LENGTH_SHORT).show();
+                    requestConfirmUserData = new RequestConfirmUserData(context, new RequestConfirmUserDataTaskCompleteListener());
+                    new HamPayDialog(activity).showFailConfirmUserDataDialog(requestConfirmUserData, registrationConfirmUserDataRequest);
                 }
             }else {
-                Toast.makeText(context, getString(R.string.msg_fail_registration_confirm_user_data), Toast.LENGTH_SHORT).show();
+                requestConfirmUserData = new RequestConfirmUserData(context, new RequestConfirmUserDataTaskCompleteListener());
+                new HamPayDialog(activity).showFailConfirmUserDataDialog(requestConfirmUserData, registrationConfirmUserDataRequest);
             }
 
         }
