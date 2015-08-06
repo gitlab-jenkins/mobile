@@ -281,12 +281,16 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
                     }
                 }else {
                     requestVerifyMobile = new RequestVerifyMobile(context, new RequestRegistrationVerifyMobileTaskCompleteListener());
-                    new HamPayDialog(activity).showFailRegistrationVerifyMobileDialog(requestVerifyMobile, registrationVerifyMobileRequest);
+                    new HamPayDialog(activity).showFailRegistrationVerifyMobileDialog(requestVerifyMobile, registrationVerifyMobileRequest,
+                            registrationVerifyMobileResponseMessage.getService().getResultStatus().getCode(),
+                            registrationVerifyMobileResponseMessage.getService().getResultStatus().getDescription());
                 }
 
             }else {
                 requestVerifyMobile = new RequestVerifyMobile(context, new RequestRegistrationVerifyMobileTaskCompleteListener());
-                new HamPayDialog(activity).showFailRegistrationVerifyMobileDialog(requestVerifyMobile, registrationVerifyMobileRequest);
+                new HamPayDialog(activity).showFailRegistrationVerifyMobileDialog(requestVerifyMobile, registrationVerifyMobileRequest,
+                        registrationVerifyMobileResponseMessage.getService().getResultStatus().getCode(),
+                        registrationVerifyMobileResponseMessage.getService().getResultStatus().getDescription());
             }
         }
 
@@ -496,10 +500,10 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
         }
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        new HamPayDialog(activity).showExitRegistrationDialog();
-//    }
+    @Override
+    public void onBackPressed() {
+        new HamPayDialog(activity).showExitRegistrationDialog();
+    }
 
 
     public class RequestRegistrationSendSmsTokenTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationSendSmsTokenResponse>> {
@@ -551,12 +555,16 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
                 }else {
 
                     requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
-                    new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest);
+                    new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
+                            registrationSendSmsTokenResponse.getService().getResultStatus().getCode(),
+                            registrationSendSmsTokenResponse.getService().getResultStatus().getDescription());
                 }
 
             }else {
                 requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
-                new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest);
+                new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
+                        "200",
+                        getString(R.string.mgs_fail_registration_send_sms_token));
             }
         }
 

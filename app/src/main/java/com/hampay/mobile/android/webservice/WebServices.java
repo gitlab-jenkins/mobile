@@ -888,7 +888,7 @@ public class WebServices  {
 
     private String createRegistrationMemorableWordEntryRequest(RegistrationMemorableWordEntryRequest registrationMemorableWordEntryRequest) {
         RequestHeader header = new RequestHeader();
-        header.setAuthToken("008ewe");
+        header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
 
         RequestMessage<RegistrationMemorableWordEntryRequest> message = new RequestMessage<RegistrationMemorableWordEntryRequest>();
@@ -942,7 +942,6 @@ public class WebServices  {
 
     private String createTACResponse(TACRequest tacRequest) {
         RequestHeader header = new RequestHeader();
-//        header.setAuthToken("008ewe");
         header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
         RequestMessage<TACRequest> message = new RequestMessage<TACRequest>();
@@ -994,7 +993,6 @@ public class WebServices  {
 
     private String createTACAcceptResponse(TACAcceptRequest tACAcceptRequest) {
         RequestHeader header = new RequestHeader();
-//        header.setAuthToken("008ewe");
         header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
         RequestMessage<TACAcceptRequest> message = new RequestMessage<TACAcceptRequest>();
@@ -1046,7 +1044,6 @@ public class WebServices  {
 
     private String createVerifyAccountRequest(VerifyAccountRequest verifyAccountRequest) {
         RequestHeader header = new RequestHeader();
-//        header.setAuthToken("008ewe");
         header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
         RequestMessage<VerifyAccountRequest> message = new RequestMessage<VerifyAccountRequest>();
@@ -1100,7 +1097,6 @@ public class WebServices  {
 
     private String createVerifyTransferMoneyRequest(VerifyTransferMoneyRequest verifyTransferMoneyRequest) {
         RequestHeader header = new RequestHeader();
-//        header.setAuthToken("008ewe");
         header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
         RequestMessage<VerifyTransferMoneyRequest> message = new RequestMessage<VerifyTransferMoneyRequest>();
@@ -1153,7 +1149,6 @@ public class WebServices  {
 
     private String createRegistrationVerifyAccountRequest(RegistrationVerifyAccountRequest registrationVerifyAccountRequest) {
         RequestHeader header = new RequestHeader();
-//        header.setAuthToken("008ewe");
         header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
         RequestMessage<RegistrationVerifyAccountRequest> message = new RequestMessage<RegistrationVerifyAccountRequest>();
@@ -1207,7 +1202,6 @@ public class WebServices  {
 
     private String createRegistrationVerifyTransferMoneyResponse(RegistrationVerifyTransferMoneyRequest registrationVerifyTransferMoneyRequest) {
         RequestHeader header = new RequestHeader();
-//        header.setAuthToken("008ewe");
         header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
         RequestMessage<RegistrationVerifyTransferMoneyRequest> message = new RequestMessage<RegistrationVerifyTransferMoneyRequest>();
@@ -1585,7 +1579,6 @@ public class WebServices  {
 
     private String createHamPayBusinessJsonMessage(BusinessListRequest businessListRequest) {
         RequestHeader header = new RequestHeader();
-//        header.setAuthToken("008ewe");
         header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
 
@@ -1659,7 +1652,6 @@ public class WebServices  {
 
     private String createSearchBusinessJsonMessage(BusinessSearchRequest businessSearchRequest) {
         RequestHeader header = new RequestHeader();
-//        header.setAuthToken("008ewe");
         header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
 
@@ -1750,7 +1742,6 @@ public class WebServices  {
 
     private String createUserProfileJsonMessage() {
         RequestHeader header = new RequestHeader();
-//        header.setAuthToken("008ewe");
         header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
 
@@ -1767,7 +1758,6 @@ public class WebServices  {
 
     private String createHamPayContactsJsonMessage() {
         RequestHeader header = new RequestHeader();
-//        header.setAuthToken("008ewe");
         header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
 
@@ -1780,16 +1770,22 @@ public class WebServices  {
 
         Cursor phones = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null,null, null);
 
-        int index = 0;
+
 
         while (phones.moveToNext()) {
             String contact_name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
             String contact_phone_no = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-            ContactDTO contactDTO = new ContactDTO();
-            contactDTO.setCellNumber(contact_phone_no);
-            contactDTO.setDisplayName(contact_name);
 
-            contactDTOs.add(contactDTO);
+            if (contact_phone_no.trim().replace(" ", "").startsWith("00989")
+                    || contact_phone_no.trim().replace(" ", "").startsWith("+989")
+                    || contact_phone_no.trim().replace(" ", "").startsWith("09")) {
+
+                ContactDTO contactDTO = new ContactDTO();
+                contactDTO.setCellNumber(contact_phone_no);
+                contactDTO.setDisplayName(contact_name);
+
+                contactDTOs.add(contactDTO);
+            }
 
         }
         phones.close();
@@ -1805,7 +1801,6 @@ public class WebServices  {
 
     private String createIndividualConfirmJsonMessage(IndividualPaymentConfirmRequest individualPaymentConfirmRequest) {
         RequestHeader header = new RequestHeader();
-//        header.setAuthToken("008ewe");
         header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
 
@@ -1823,7 +1818,6 @@ public class WebServices  {
 
     private String createIndividualJsonMessage(IndividualPaymentRequest individualPaymentRequest) {
         RequestHeader header = new RequestHeader();
-//        header.setAuthToken("008ewe");
         header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
 
@@ -1864,7 +1858,6 @@ public class WebServices  {
     private String createBusinessJsonMessage(BusinessPaymentRequest businessPaymentRequest) {
         //cls
         RequestHeader header = new RequestHeader();
-//        header.setAuthToken("008ewe");
         header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         header.setVersion("1.0-PA");
 

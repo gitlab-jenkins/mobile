@@ -1,13 +1,12 @@
 package com.hampay.mobile.android.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -16,13 +15,18 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.hampay.common.common.response.ResponseMessage;
+import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.ChangeMemorableWordRequest;
 import com.hampay.common.core.model.request.ChangePassCodeRequest;
 import com.hampay.common.core.model.response.ChangeMemorableWordResponse;
+import com.hampay.common.core.model.response.ChangePassCodeResponse;
 import com.hampay.mobile.android.R;
-import com.hampay.mobile.android.component.FacedTextView;
-import com.hampay.mobile.android.component.material.ButtonRectangle;
+import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import com.hampay.mobile.android.async.RequestChangeMemorableWord;
+import com.hampay.mobile.android.async.RequestChangePassCode;
 import com.hampay.mobile.android.component.material.RippleView;
+import com.hampay.mobile.android.dialog.HamPayDialog;
+import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.webservice.WebServices;
 
 public class ChangeMemorablePassActivity extends ActionBarActivity implements View.OnClickListener{
@@ -61,11 +65,24 @@ public class ChangeMemorablePassActivity extends ActionBarActivity implements Vi
     LinearLayout keyboard;
     LinearLayout password_holder;
 
+    RequestChangeMemorableWord requestChangeMemorableWord;
+    ChangeMemorableWordRequest changeMemorableWordRequest;
+
+    Context context;
+    Activity activity;
+
+    SharedPreferences.Editor editor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_memorable_pass);
+
+        editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+
+        context = this;
+        activity = ChangeMemorablePassActivity.this;
 
         keyboard = (LinearLayout)findViewById(R.id.keyboard);
         password_holder = (LinearLayout)findViewById(R.id.password_holder);
@@ -137,11 +154,6 @@ public class ChangeMemorablePassActivity extends ActionBarActivity implements Vi
             if (changeMemorableWordResponse != null) {
 
                 finish();
-
-//                Intent intent = new Intent();
-//                intent.setClass(RememberPhraseActivity.this, CompleteRegistrationActivity.class);
-//                startActivity(intent);
-
             }
         }
     }
@@ -281,13 +293,13 @@ public class ChangeMemorablePassActivity extends ActionBarActivity implements Vi
                     input_digit_4.setImageResource(R.drawable.pass_icon_2);
                     input_digit_5.setImageResource(R.drawable.pass_icon_2);
 
-
-                    ChangeMemorableWordRequest changeMemorableWordRequest = new ChangeMemorableWordRequest();
+                    changeMemorableWordRequest = new ChangeMemorableWordRequest();
+                    changeMemorableWordRequest.setPassCode(inputPasswordValue);
                     changeMemorableWordRequest.setCurrentMemorableWord(currentMemorable);
                     changeMemorableWordRequest.setNewMemorableWord(newMemorable);
-                    changeMemorableWordRequest.setPassCode(inputPasswordValue);
 
-                    new HttpChangeMemorableWordRequest().execute(changeMemorableWordRequest);
+                    requestChangeMemorableWord = new RequestChangeMemorableWord(context, new RequestChangeMemorableWordTaskCompleteListener());
+                    requestChangeMemorableWord.execute(changeMemorableWordRequest);
 
 
                     break;
@@ -295,6 +307,35 @@ public class ChangeMemorablePassActivity extends ActionBarActivity implements Vi
         }
     }
 
+
+    public class RequestChangeMemorableWordTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<ChangeMemorableWordResponse>> {
+        @Override
+        public void onTaskComplete(ResponseMessage<ChangeMemorableWordResponse> changeMemorableWordResponseMessage)
+        {
+
+            if (changeMemorableWordResponseMessage != null) {
+                if (changeMemorableWordResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+
+
+                    editor.putString(Constants.MEMORABLE_WORD, newMemorable);
+                    editor.commit();
+
+                    finish();
+                }
+
+                requestChangeMemorableWord = new RequestChangeMemorableWord(context, new RequestChangeMemorableWordTaskCompleteListener());
+                new HamPayDialog(activity).showFailChangeMemorableWordDialog(requestChangeMemorableWord, changeMemorableWordRequest);
+
+            }else {
+                requestChangeMemorableWord = new RequestChangeMemorableWord(context, new RequestChangeMemorableWordTaskCompleteListener());
+                new HamPayDialog(activity).showFailChangeMemorableWordDialog(requestChangeMemorableWord, changeMemorableWordRequest);
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+        }
+    }
 
 
 }

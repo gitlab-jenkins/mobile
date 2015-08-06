@@ -462,12 +462,16 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                 }
                 else{
                     requestRegisterVerifyAccount = new RequestRegisterVerifyAccount(context, new RequestRegistrationVerifyAccountResponseTaskCompleteListener());
-                    new HamPayDialog(activity).showFailRegisterVerifyAccountDialog(requestRegisterVerifyAccount, registrationVerifyAccountRequest);
+                    new HamPayDialog(activity).showFailRegisterVerifyAccountDialog(requestRegisterVerifyAccount, registrationVerifyAccountRequest,
+                            verifyAccountResponseMessage.getService().getResultStatus().getCode(),
+                            verifyAccountResponseMessage.getService().getResultStatus().getDescription());
                 }
             }
             else {
                 requestRegisterVerifyAccount = new RequestRegisterVerifyAccount(context, new RequestRegistrationVerifyAccountResponseTaskCompleteListener());
-                new HamPayDialog(activity).showFailRegisterVerifyAccountDialog(requestRegisterVerifyAccount, registrationVerifyAccountRequest);
+                new HamPayDialog(activity).showFailRegisterVerifyAccountDialog(requestRegisterVerifyAccount, registrationVerifyAccountRequest,
+                        "2000",
+                        getString(R.string.msg_fail_verify_account));
             }
 
         }
@@ -497,11 +501,15 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                     nationalCodeValue.setText(registrationFetchUserDataResponseMessage.getService().getNationalCode());
                 }else {
                     requestFetchUserData = new RequestFetchUserData(context, new RequestFetchUserDataTaskCompleteListener());
-                    new HamPayDialog(activity).showFailFetchUserDataDialog(requestFetchUserData, registrationFetchUserDataRequest);
+                    new HamPayDialog(activity).showFailFetchUserDataDialog(requestFetchUserData, registrationFetchUserDataRequest,
+                            registrationFetchUserDataResponseMessage.getService().getResultStatus().getCode(),
+                            registrationFetchUserDataResponseMessage.getService().getResultStatus().getDescription());
                 }
             }else {
                 requestFetchUserData = new RequestFetchUserData(context, new RequestFetchUserDataTaskCompleteListener());
-                new HamPayDialog(activity).showFailFetchUserDataDialog(requestFetchUserData, registrationFetchUserDataRequest);
+                new HamPayDialog(activity).showFailFetchUserDataDialog(requestFetchUserData, registrationFetchUserDataRequest,
+                        "2000",
+                        getString(R.string.msg_fail_registration_fetch_user_data));
             }
 
         }
@@ -525,7 +533,7 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
         {
             loading_rl.setVisibility(View.GONE);
 
-            if (registrationConfirmUserDataResponseMessage!= null) {
+            if (registrationConfirmUserDataResponseMessage != null) {
 
                 if (registrationConfirmUserDataResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
@@ -540,11 +548,15 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                     confirm_layout.setVisibility(View.VISIBLE);
                 }else {
                     requestConfirmUserData = new RequestConfirmUserData(context, new RequestConfirmUserDataTaskCompleteListener());
-                    new HamPayDialog(activity).showFailConfirmUserDataDialog(requestConfirmUserData, registrationConfirmUserDataRequest);
+                    new HamPayDialog(activity).showFailConfirmUserDataDialog(requestConfirmUserData, registrationConfirmUserDataRequest,
+                    registrationConfirmUserDataResponseMessage.getService().getResultStatus().getCode(),
+                            registrationConfirmUserDataResponseMessage.getService().getResultStatus().getDescription());
                 }
             }else {
                 requestConfirmUserData = new RequestConfirmUserData(context, new RequestConfirmUserDataTaskCompleteListener());
-                new HamPayDialog(activity).showFailConfirmUserDataDialog(requestConfirmUserData, registrationConfirmUserDataRequest);
+                new HamPayDialog(activity).showFailConfirmUserDataDialog(requestConfirmUserData, registrationConfirmUserDataRequest,
+                        "2000",
+                        getString(R.string.msg_fail_registration_confirm_user_data));
             }
 
         }

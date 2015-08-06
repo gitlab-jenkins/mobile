@@ -86,18 +86,22 @@ public class VerificationActivity extends ActionBarActivity {
 
                     Intent intent = new Intent();
                     intent.setClass(VerificationActivity.this, SMSVerificationActivity.class);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-//                    finish();
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    finish();
                     startActivity(intent);
                 }else {
 
                     requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
-                    new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest);
+                    new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
+                            registrationSendSmsTokenResponse.getService().getResultStatus().getCode(),
+                            registrationSendSmsTokenResponse.getService().getResultStatus().getDescription());
                 }
 
             }else {
                 requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
-                new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest);
+                new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
+                        "200",
+                        getString(R.string.mgs_fail_registration_send_sms_token));
             }
         }
 

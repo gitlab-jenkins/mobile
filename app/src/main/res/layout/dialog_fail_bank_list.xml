@@ -8,6 +8,7 @@
     android:orientation="vertical"
     android:padding="8dp">
 
+
     <com.hampay.mobile.android.component.FacedTextView
         android:id="@+id/responseCode"
         geekui:customTypeface="fonts/iran_sans.ttf"
@@ -20,7 +21,6 @@
         android:layout_gravity="right"
         android:layout_margin="8dp"/>
 
-
     <com.hampay.mobile.android.component.FacedTextView
         android:id="@+id/responseMessage"
         geekui:customTypeface="fonts/iran_sans.ttf"
@@ -28,9 +28,9 @@
         android:layout_height="wrap_content"
         android:textColor="@color/normal_text"
         android:textSize="20sp"
-        android:text="@string/mgs_fail_registration_send_sms_token"
-        android:gravity="center"
-        android:layout_gravity="center"
+        android:text="@string/msg_fail_fetch_bank_list"
+        android:gravity="right"
+        android:layout_gravity="right"
         android:layout_margin="8dp"/>
 
 
@@ -41,7 +41,7 @@
         android:layout_margin="15dp">
 
         <com.hampay.mobile.android.component.FacedTextView
-            android:id="@+id/retry_registration_sms_token"
+            android:id="@+id/retry_fetch_bank_list"
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="120dp"
             android:layout_height="wrap_content"

@@ -4,7 +4,7 @@ package com.hampay.mobile.android.util;
 public class Constants {
 
     public static String SERVER_IP = "176.58.104.158";//England Server
-//    public static final String SERVER_IP = "192.168.1.132";//Sima Server
+//    public static final String SERVER_IP = "192.168.1.102";//Sima Server
     public static final int SERVER_PORT = 9090;
     public static String SERVICE_URL = "http://" + SERVER_IP  + ":9090";
     public static final String OPENAM_LOGIN_URL = "http://"+ SERVER_IP + ":8080/openam/json/authenticate";

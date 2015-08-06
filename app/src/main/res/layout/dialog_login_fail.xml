@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/exit_confirmation"
             android:textSize="20sp"
-            android:text="@string/remove_password" />
+            android:text="@string/re_registeration" />
 
         <com.hampay.mobile.android.component.FacedTextView
             android:id="@+id/login_retry"

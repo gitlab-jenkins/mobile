@@ -160,11 +160,15 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
                     startActivity(intent);
                 }else {
                     requestPassCodeEntry = new RequestPassCodeEntry(context, new RequestPassCodeEntryResponseTaskCompleteListener());
-                    new HamPayDialog(activity).showFailPasswordEntryDialog(requestPassCodeEntry, registrationPassCodeEntryRequest);
+                    new HamPayDialog(activity).showFailPasswordEntryDialog(requestPassCodeEntry, registrationPassCodeEntryRequest,
+                            passCodeEntryResponseMessage.getService().getResultStatus().getCode(),
+                            passCodeEntryResponseMessage.getService().getResultStatus().getDescription());
                 }
             }else {
                 requestPassCodeEntry = new RequestPassCodeEntry(context, new RequestPassCodeEntryResponseTaskCompleteListener());
-                new HamPayDialog(activity).showFailPasswordEntryDialog(requestPassCodeEntry, registrationPassCodeEntryRequest);
+                new HamPayDialog(activity).showFailPasswordEntryDialog(requestPassCodeEntry, registrationPassCodeEntryRequest,
+                        "2000",
+                        getString(R.string.msg_fail_pass_code_entry));
             }
         }
 

@@ -1,14 +1,11 @@
 package com.hampay.mobile.android.activity;
 
+import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -17,16 +14,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.hampay.common.common.response.ResponseMessage;
+import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.ChangePassCodeRequest;
-import com.hampay.common.core.model.request.RegistrationPassCodeEntryRequest;
 import com.hampay.common.core.model.response.ChangePassCodeResponse;
-import com.hampay.common.core.model.response.RegistrationPassCodeEntryResponse;
 import com.hampay.mobile.android.R;
-import com.hampay.mobile.android.component.FacedTextView;
-import com.hampay.mobile.android.component.material.ButtonRectangle;
+import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import com.hampay.mobile.android.async.RequestChangePassCode;
 import com.hampay.mobile.android.component.material.RippleView;
 import com.hampay.mobile.android.dialog.HamPayDialog;
-import com.hampay.mobile.android.webservice.WebServices;
+import com.hampay.mobile.android.util.Constants;
 
 public class ChangePasswordActivity extends ActionBarActivity implements View.OnClickListener {
 
@@ -61,6 +57,12 @@ public class ChangePasswordActivity extends ActionBarActivity implements View.On
     LinearLayout keyboard;
     LinearLayout password_holder;
 
+    RequestChangePassCode requestChangePassCode;
+    ChangePassCodeRequest changePassCodeRequest;
+
+    Context context;
+    Activity activity;
+
     public void contactUs(View view){
         new HamPayDialog(this).showContactUsDialog();
     }
@@ -69,6 +71,11 @@ public class ChangePasswordActivity extends ActionBarActivity implements View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_password);
+
+        context = this;
+        activity = ChangePasswordActivity.this;
+
+        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
 
         keyboard = (LinearLayout)findViewById(R.id.keyboard);
         password_holder = (LinearLayout)findViewById(R.id.password_holder);
@@ -407,11 +414,16 @@ public class ChangePasswordActivity extends ActionBarActivity implements View.On
                         vibrator.vibrate(20);
 
                         if (inputPasswordValue.equalsIgnoreCase(inputRePasswordValue)) {
-                            ChangePassCodeRequest changePassCodeRequest = new ChangePassCodeRequest();
+
+                            changePassCodeRequest = new ChangePassCodeRequest();
                             changePassCodeRequest.setCurrentPassCode(currentPassword);
-                            changePassCodeRequest.setMemorableCode("sa");
                             changePassCodeRequest.setNewPassCode(inputPasswordValue);
-                            new HttpChangePassCodeResponse().execute(changePassCodeRequest);
+                            changePassCodeRequest.setMemorableCode(prefs.getString(Constants.MEMORABLE_WORD, ""));
+
+                            requestChangePassCode = new RequestChangePassCode(context, new RequestChangePassCodeTaskCompleteListener());
+                            requestChangePassCode.execute(changePassCodeRequest);
+
+
                         } else {
 
                             (new HamPayDialog(this)).showDisMatchPasswordDialog();
@@ -438,49 +450,40 @@ public class ChangePasswordActivity extends ActionBarActivity implements View.On
     }
 
 
-    private ResponseMessage<ChangePassCodeResponse> changePassCodeResponseResponseMessage;
-
-    public class HttpChangePassCodeResponse extends AsyncTask<ChangePassCodeRequest, Void, String> {
-
+    public class RequestChangePassCodeTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<ChangePassCodeResponse>> {
         @Override
-        protected String doInBackground(ChangePassCodeRequest... params) {
+        public void onTaskComplete(ResponseMessage<ChangePassCodeResponse> changePassCodeResponseMessage)
+        {
 
-            WebServices webServices = new WebServices(getApplicationContext());
-            changePassCodeResponseResponseMessage = webServices.changePassCodeResponse(params[0]);
+            if (changePassCodeResponseMessage != null) {
+                if (changePassCodeResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
+                    password_0_rl.setVisibility(View.VISIBLE);
+                    password_1_rl.setVisibility(View.INVISIBLE);
+                    password_2_rl.setVisibility(View.INVISIBLE);
+                    currentPassword = "";
+                    inputPasswordValue = "";
+                    inputRePasswordValue = "";
+                    input_digit_1.setImageResource(R.drawable.pass_icon_2);
+                    input_digit_2.setImageResource(R.drawable.pass_icon_2);
+                    input_digit_3.setImageResource(R.drawable.pass_icon_2);
+                    input_digit_4.setImageResource(R.drawable.pass_icon_2);
+                    input_digit_5.setImageResource(R.drawable.pass_icon_2);
 
-            return null;
-        }
+                    finish();
+                }
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
+                requestChangePassCode = new RequestChangePassCode(context, new RequestChangePassCodeTaskCompleteListener());
+                new HamPayDialog(activity).showFailChangePassCodeDialog(requestChangePassCode, changePassCodeRequest);
 
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            if (changePassCodeResponseResponseMessage != null) {
-
-
-                password_0_rl.setVisibility(View.VISIBLE);
-                password_1_rl.setVisibility(View.INVISIBLE);
-                password_2_rl.setVisibility(View.INVISIBLE);
-
-                currentPassword = "";
-                inputPasswordValue = "";
-                inputRePasswordValue = "";
-
-                input_digit_1.setImageResource(R.drawable.pass_icon_2);
-                input_digit_2.setImageResource(R.drawable.pass_icon_2);
-                input_digit_3.setImageResource(R.drawable.pass_icon_2);
-                input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                input_digit_5.setImageResource(R.drawable.pass_icon_2);
-
-                finish();
-
+            }else {
+                requestChangePassCode = new RequestChangePassCode(context, new RequestChangePassCodeTaskCompleteListener());
+                new HamPayDialog(activity).showFailChangePassCodeDialog(requestChangePassCode, changePassCodeRequest);
             }
+        }
+
+        @Override
+        public void onTaskPreRun() {
         }
     }
 }

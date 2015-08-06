@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
+import com.hampay.mobile.android.component.material.progressbar.ProgressView;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 
 public class StartActivity extends ActionBarActivity {
@@ -16,12 +17,17 @@ public class StartActivity extends ActionBarActivity {
 
     Activity activity;
 
+//    ProgressView waitingProgress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
         activity = StartActivity.this;
+
+//        waitingProgress = (ProgressView)findViewById(R.id.waitingProgress);
+//        waitingProgress.start();
 
         start_button = (ButtonRectangle)findViewById(R.id.start_button);
         start_button.setOnClickListener(new View.OnClickListener() {

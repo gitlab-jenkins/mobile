@@ -31,4 +31,5 @@ dependencies {
     compile files('libs/common-core-0.0.1.jar')
     compile files('libs/gson-2.2.4.jar')
     compile files('libs/acra-4.6.2.jar')
+    compile files('libs/common-common-0.0.1.jar')
 }

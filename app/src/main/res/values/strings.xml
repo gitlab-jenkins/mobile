@@ -112,8 +112,12 @@
     <string name="tac_accept">قبول دارم</string>
     <string name="tac_reject">قبول ندارم</string>
 
-    <string name="remove_password_text">برای حذف رمزعبور نیاز به ثبت نام مجدد می‌باشد.</string>
+    <string name="remove_password_text">اطلاعات هم‌پی شما پاک خواهد شد و نیاز به ثبت نام مجدد دارید
+        \n
+        مطمئنی؟
+    </string>
     <string name="re_registeration">ثبت نام مجدد</string>
+    <string name="re_registration_done">انجام می‌دم</string>
     <string name="cancel_remove_password">انصراف</string>
 
 
@@ -184,6 +188,7 @@
     <string name="correct_data">اطلاعات بالا صحیح است</string>
     <string name="correct_info">تصحیح اطلاعات</string>
     <string name="verify_account_no">بررسی شماره حساب</string>
+
 
     <string name="reg_verify_account_no_text_1">انتقال وجه زیر را خارج از برنامه هم‌پی و از طریق یکی از روش‌های اینترنت بانک، همراه بانک و یا عابر بانک انجام دهید.</string>
     <string name="reg_verify_account_no_text_2">برای بررسی صحت شماره حساب شما مبلغ ۲۱۴۱ ریال از حساب هم‌پی ۸۰۰۰۴۵۹ به حساب شما ۱۲۳۴۵۶۷۷ واریز شد.</string>
@@ -263,6 +268,9 @@
     <string name="pay_disconfirm">منصرف شدم</string>
     <string name="pay_ok">باشه</string>
 
+
+    <string name="error_code">کد خطا:  %1$s</string>
+
     <string name="attention">توجه</string>
     <string name="confirm_info_text">بدون بررسی صحت حساب، شما قادر به واریز وجه به سایر دوستان خود در شبکه هم‌پی نبوده ولی میتوانید از دوستان خود وجه دریافت نمایید.</string>
     <string name="confirm_info_question">آیا مایل به بررسی صحت حساب خود هستید؟</string>
@@ -310,12 +318,17 @@
     <string name="mgs_fail_verify_transfer_money">درخواست شما برای بررسی انتقال وجه با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_pass_code_entry">ثبت رمزعبور شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_memorable_entry">ثبت کلمه یادآوری با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
+    <string name="msg_fail_tac_request">درخواست قوانین استفاده با اشکال مواجه شد. لطفا مجدد تلاش کنید.</string>
+    <string name="msg_fail_tac_accept_request">درخواست تایید قوانین استفاده با اشکال مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_user_transation">بارگیری تراکنش‌ها با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_contacts_enabled">دریافت مخاطبین هم‌پی شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_business_list">دریافت لیست کسب و کار با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
-
+    <string name="msg_fail_hampay_server">اطلاعاتی از سامانه هم‌پی دریافت نشد. لطفا مجدد تلاش کنید.</string>
+    <string name="msg_fail_hampay_login">کلمه عبور صحیح نمی باشد. لطفا با دقت کلمه عبور خود را وارد کنید.</string>
     <string name="msg_fail_receive_sms">دریافت پیامک فعالسازی با مشکل مواجه شد. لطفا دکمه ارسال مجدد را انتخاب کنید.</string>
     <string name="sms_upper_reach_sms">حداکثر درخواست برای ارسال مجدد پیامک فعالسازی به اتمام رسید. لطفا در ساعات دیگر تلاش کنید.</string>
+    <string name="msg_fail_change_pass_code">تغییر رمز عبور با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
+    <string name="msg_fail_change_memorable_word">تغییر کلمه یادآوری با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
 
     <string name="retry_registration_entry">مجدد تلاش می‌کنم</string>
     <string name="title_activity_server_select">ServerSelectActivity</string>

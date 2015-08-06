@@ -20,6 +20,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.hampay.common.common.response.ResponseMessage;
+import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.TACRequest;
 import com.hampay.common.core.model.response.TACResponse;
 import com.hampay.mobile.android.R;
@@ -81,6 +82,9 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
 
     RelativeLayout loading_rl;
     FacedTextView user_name;
+
+    TACRequest tacRequest;
+    RequestTAC requestTAC;
 
 
     public void contactUs(View view){
@@ -165,24 +169,33 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
             loading_rl.setVisibility(View.GONE);
             if (tacResponseMessage != null) {
 
-                if (tacResponseMessage.getService().getShouldAcceptTAC()){
+                if (tacResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
-                    (new HamPayDialog(activity)).showTACAcceptDialog(tacResponseMessage.getService().getTac());
+                    if (tacResponseMessage.getService().getShouldAcceptTAC()) {
 
+                        (new HamPayDialog(activity)).showTACAcceptDialog(tacResponseMessage.getService().getTac());
+
+                    } else {
+                        Intent intent = new Intent();
+
+                        intent.setClass(activity, MainActivity.class);
+                        intent.putExtra(Constants.USER_PROFILE_DTO, tacResponseMessage.getService().getUserProfile());
+                        startActivity(intent);
+
+                        finish();
+                    }
+                }else {
+                    requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
+                    new HamPayDialog(activity).showFailTCRequestDialog(requestTAC, tacRequest,
+                            tacResponseMessage.getService().getResultStatus().getCode(),
+                            tacResponseMessage.getService().getResultStatus().getDescription());
                 }
-                else {
-                    Intent intent = new Intent();
-
-                    intent.setClass(activity, MainActivity.class);
-                    intent.putExtra(Constants.USER_PROFILE_DTO, tacResponseMessage.getService().getUserProfile());
-                    startActivity(intent);
-
-                    finish();
-                }
-
             }
             else {
-                Toast.makeText(context, getString(R.string.no_network), Toast.LENGTH_SHORT).show();
+                requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
+                new HamPayDialog(activity).showFailTCRequestDialog(requestTAC, tacRequest,
+                        "2000",
+                        getString(R.string.msg_fail_tac_request));
             }
 
         }
@@ -208,46 +221,47 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
 
             loading_rl.setVisibility(View.GONE);
             if (loginResponse != null) {
-
                 Gson gson = new Gson();
-                    Type listType = new TypeToken<SuccessLoginResponse>() {
-                    }.getType();
-                    JsonParser jsonParser = new JsonParser();
-                    JsonElement responseElement = jsonParser.parse(loginResponse.toString());
-                    successLoginResponse = gson.fromJson(responseElement.toString(), listType);
+                Type listType = new TypeToken<SuccessLoginResponse>() {}.getType();
+                JsonParser jsonParser = new JsonParser();
+                JsonElement responseElement = jsonParser.parse(loginResponse.toString());
+                successLoginResponse = gson.fromJson(responseElement.toString(), listType);
 
-                if (successLoginResponse.getSuccessUrl() == null) {
-
-                    listType = new TypeToken<FailedLoginResponse>() {
-                    }.getType();
+                if (successLoginResponse == null || successLoginResponse.getSuccessUrl() == null) {
+                    listType = new TypeToken<FailedLoginResponse>() {}.getType();
                     jsonParser = new JsonParser();
                     responseElement = jsonParser.parse(loginResponse.toString());
                     failedLoginResponse = gson.fromJson(responseElement.toString(), listType);
-                    new HamPayDialog(activity).showLoginFailDialog(failedLoginResponse);
+                    if (failedLoginResponse != null) {
+                        failedLoginResponse.setMessage(getString(R.string.msg_fail_hampay_login));
+                        new HamPayDialog(activity).showLoginFailDialog(failedLoginResponse);
+                    }else {
+                        failedLoginResponse = new FailedLoginResponse();
+                        failedLoginResponse.setCode(-1);
+                        failedLoginResponse.setMessage(getString(R.string.msg_fail_hampay_server));
+                        new HamPayDialog(activity).showLoginFailDialog(failedLoginResponse);
+                    }
                 }else {
                     editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
                     editor.putString(Constants.LOGIN_TOKEN_ID, successLoginResponse.getTokenId());
                     editor.commit();
-                    TACRequest tacRequest = new TACRequest();
-                    new RequestTAC(context, new RequestTACResponseTaskCompleteListener()).execute(tacRequest);
+                    tacRequest = new TACRequest();
+                    requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
+                    requestTAC.execute(tacRequest);
                 }
-//                }else {
-//                    new HamPayDialog(activity).showLoginFailDialog();
-//                }
-
-
+            }else {
+                failedLoginResponse = new FailedLoginResponse();
+                failedLoginResponse.setCode(-1);
+                failedLoginResponse.setMessage(getString(R.string.msg_fail_hampay_server));
+                new HamPayDialog(activity).showLoginFailDialog(failedLoginResponse);
             }
-            else {
-                Toast.makeText(context, getString(R.string.no_network), Toast.LENGTH_SHORT).show();
-            }
-
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            loading_rl.setVisibility(View.VISIBLE);
-        }
     }
+
+    @Override
+    public void onTaskPreRun() {
+        loading_rl.setVisibility(View.VISIBLE);
+    }
+}
 
 
 
@@ -343,6 +357,14 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
             loginData.setUserName(nationalCode);
 
             new RequestLogin(context, new RequestLoginResponseTaskCompleteListener()).execute(loginData);
+
+
+            inputPassValue = "";
+            input_digit_1.setImageResource(R.drawable.pass_icon_2);
+            input_digit_2.setImageResource(R.drawable.pass_icon_2);
+            input_digit_3.setImageResource(R.drawable.pass_icon_2);
+            input_digit_4.setImageResource(R.drawable.pass_icon_2);
+            input_digit_5.setImageResource(R.drawable.pass_icon_2);
 
         }
 

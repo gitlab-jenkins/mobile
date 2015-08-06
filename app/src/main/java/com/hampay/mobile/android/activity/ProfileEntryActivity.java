@@ -26,7 +26,6 @@ import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
-import com.hampay.common.core.model.dto.DeviceDTO;
 import com.hampay.common.core.model.request.BankListRequest;
 import com.hampay.common.core.model.request.RegistrationEntryRequest;
 import com.hampay.common.core.model.response.BankListResponse;
@@ -43,7 +42,6 @@ import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.location.BestLocationListener;
 import com.hampay.mobile.android.location.BestLocationProvider;
 import com.hampay.mobile.android.util.Constants;
-import com.hampay.mobile.android.util.DeviceInfo;
 import com.hampay.mobile.android.util.NationalCodeVerification;
 import com.hampay.mobile.android.util.NetworkConnectivity;
 
@@ -74,14 +72,14 @@ public class ProfileEntryActivity extends ActionBarActivity {
 
     Context context;
 
-    NetworkConnectivity networkConnectivity;
+//    NetworkConnectivity networkConnectivity;
 
     String rawAccountNumberValue = "";
     int rawAccountNumberValueLength = 0;
     int rawAccountNumberValueLengthOffset = 0;
     String procAccountNumberValue = "";
 
-    private ResponseMessage<BankListResponse> bankListResponse;
+    private BankListResponse bankListResponse;
 
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
@@ -96,6 +94,9 @@ public class ProfileEntryActivity extends ActionBarActivity {
     private BestLocationProvider mBestLocationProvider;
     private BestLocationListener mBestLocationListener;
 
+    BankListRequest bankListRequest;
+    RequestBankList requestBankList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,7 +110,7 @@ public class ProfileEntryActivity extends ActionBarActivity {
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
-        networkConnectivity = new NetworkConnectivity(this);
+//        networkConnectivity = new NetworkConnectivity(this);
 
         loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
 
@@ -247,24 +248,26 @@ public class ProfileEntryActivity extends ActionBarActivity {
                 bankSelection.requestFocus();
 
                 if (bankListResponse != null) {
-                    if (bankListResponse.getService().getBanks().size() > 0)
+                    if (bankListResponse.getBanks().size() > 0)
                         showListBankDialog();
                 }else {
-                    if (networkConnectivity.isNetworkConnected()) {
-                        loading_rl.setVisibility(View.VISIBLE);
-                        BankListRequest bankListRequest = new BankListRequest();
-                        new RequestBankList(context, new RequestBanksTaskCompleteListener(true)).execute(bankListRequest);
-                    }else {
-                        Toast.makeText(context, getString(R.string.no_network), Toast.LENGTH_LONG).show();
-                    }
+//                    if (networkConnectivity.isNetworkConnected()) {
+                    loading_rl.setVisibility(View.VISIBLE);
+                    bankListRequest = new BankListRequest();
+                    requestBankList = new RequestBankList(context, new RequestBanksTaskCompleteListener(true));
+                    requestBankList.execute(bankListRequest);
+//                    }else {
+//                        Toast.makeText(context, getString(R.string.no_network), Toast.LENGTH_LONG).show();
+//                    }
                 }
             }
         });
 
-        if (networkConnectivity.isNetworkConnected()) {
-            BankListRequest bankListRequest = new BankListRequest();
-            new RequestBankList(this, new RequestBanksTaskCompleteListener()).execute(bankListRequest);
-        }
+//        if (networkConnectivity.isNetworkConnected()) {
+        bankListRequest = new BankListRequest();
+        requestBankList = new RequestBankList(this, new RequestBanksTaskCompleteListener(false));
+        requestBankList.execute(bankListRequest);
+//        }
 
 
 
@@ -352,17 +355,17 @@ public class ProfileEntryActivity extends ActionBarActivity {
 
         ListView bankListView = (ListView) view.findViewById(R.id.bankListView);
 
-        BankListAdapter bankListAdapter = new BankListAdapter(getApplicationContext(), bankListResponse.getService().getBanks());
+        BankListAdapter bankListAdapter = new BankListAdapter(getApplicationContext(), bankListResponse.getBanks());
 
         bankListView.setAdapter(bankListAdapter);
         bankListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedBankTitle.setText(bankListResponse.getService().getBanks().get(position).getTitle());
-                selectedBankCode = bankListResponse.getService().getBanks().get(position).getCode();
+                selectedBankTitle.setText(bankListResponse.getBanks().get(position).getTitle());
+                selectedBankCode = bankListResponse.getBanks().get(position).getCode();
                 if (accountNumberValue.getText().toString().length() > 0)
                     accountNumberValue.setText("");
-                accountNumberFormat = bankListResponse.getService().getBanks().get(position).getAccountFormat();
+                accountNumberFormat = bankListResponse.getBanks().get(position).getAccountFormat();
                 accountNumberIsValid = false;
                 accountNumberIcon.setImageDrawable(null);
                 accountNumberValue.setFilters(new InputFilter[]{new InputFilter.LengthFilter(accountNumberFormat.length())});
@@ -388,9 +391,6 @@ public class ProfileEntryActivity extends ActionBarActivity {
     {
         boolean showBankList = false;
 
-        public RequestBanksTaskCompleteListener(){
-        }
-
         public RequestBanksTaskCompleteListener(boolean showBankList){
             this.showBankList = showBankList;
         }
@@ -406,25 +406,27 @@ public class ProfileEntryActivity extends ActionBarActivity {
             if (bankListResponseMessage != null) {
 
                 if (bankListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-                    bankListResponse = bankListResponseMessage;
-                }else {
-                    Toast.makeText(context, getString(R.string.msg_fail_fetch_bank_list), Toast.LENGTH_LONG).show();
-                }
-            }
-            if (bankListResponse != null) {
-                if (bankListResponse.getService().getBanks().size() > 0)
+                    bankListResponse = bankListResponseMessage.getService();
                     if (showBankList) {
                         showListBankDialog();
                     }
+                }else {
+                    bankListResponseMessage.getService().getResultStatus().getDescription();
+                    requestBankList = new RequestBankList(context, new RequestBanksTaskCompleteListener(true));
+                    new HamPayDialog(activity).showFailBankListDialog(requestBankList, bankListRequest,
+                            bankListResponse.getResultStatus().getCode(),
+                            bankListResponse.getResultStatus().getDescription());
+                }
             }else {
-                Toast.makeText(context, getString(R.string.msg_fail_fetch_bank_list), Toast.LENGTH_SHORT).show();
+                requestBankList = new RequestBankList(context, new RequestBanksTaskCompleteListener(true));
+                new HamPayDialog(activity).showFailBankListDialog(requestBankList, bankListRequest,
+                        "2000",
+                        getString(R.string.msg_fail_fetch_bank_list));
             }
-
         }
 
         @Override
-        public void onTaskPreRun() {
-        }
+        public void onTaskPreRun() {}
     }
 
 
@@ -458,12 +460,16 @@ public class ProfileEntryActivity extends ActionBarActivity {
                     requestRegistrationEntry = new RequestRegistrationEntry(context,
                             new RequestRegistrationEntryTaskCompleteListener(),
                             latitute + "," + longitude);
-                    new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest);
+                    new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest,
+                            registrationEntryResponse.getService().getResultStatus().getCode(),
+                            registrationEntryResponse.getService().getResultStatus().getDescription());
                 }
             }else {
                 requestRegistrationEntry = new RequestRegistrationEntry(context, new RequestRegistrationEntryTaskCompleteListener(),
                         latitute + "," + longitude);
-                new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest);
+                new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest,
+                        "2000",
+                        getString(R.string.msg_fail_registration_entry));
             }
         }
 

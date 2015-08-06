@@ -63,23 +63,23 @@ public class HttpClientHelper {
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
 //            AssetManager.AssetInputStream tbAssetInputStream = (AssetManager.AssetInputStream) context.getResources().openRawResource(R.raw.tbcert);
 //            AssetManager.AssetInputStream tbAssetInputStream = (AssetManager.AssetInputStream) context.getResources().openRawResource(R.raw.server);
-            AssetManager.AssetInputStream tbAssetInputStream = (AssetManager.AssetInputStream) context.getResources().openRawResource(R.raw.menginx);
-            InputStream tbCaInput = new BufferedInputStream(tbAssetInputStream);
+//            AssetManager.AssetInputStream tbAssetInputStream = (AssetManager.AssetInputStream) context.getResources().openRawResource(R.raw.menginx);
+//            InputStream tbCaInput = new BufferedInputStream(tbAssetInputStream);
             X509Certificate tbCa;
             try {
-                tbCa = (X509Certificate)cf.generateCertificate(tbCaInput);
+//                tbCa = (X509Certificate)cf.generateCertificate(tbCaInput);
 //                Log.d(TAG, "Tejarat Bourse Certificate SubjectDN : " + tbCa.getSubjectDN());
 //                Log.d(TAG, "ME Bourse Certificate SubjectDN : " + tbCa.getSubjectDN());
             } finally {
-                tbCaInput.close();
-                tbAssetInputStream.close();
+//                tbCaInput.close();
+//                tbAssetInputStream.close();
             }
 
             // Create a KeyStore containing our trusted CAs
             String keyStoreType = KeyStore.getDefaultType();
             KeyStore keyStore = KeyStore.getInstance(keyStoreType);
             keyStore.load(null, null);
-            keyStore.setCertificateEntry("ca", tbCa);
+//            keyStore.setCertificateEntry("ca", tbCa);
 
             // Create an SSLContext that uses our TrustManager
 //            SSLContext ctx = SSLContext.getInstance("TLS");

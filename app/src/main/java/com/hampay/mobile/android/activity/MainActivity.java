@@ -235,7 +235,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     @Override
     public void onDrawerItemSelected(View view, int position) {
-        if (currentFragmet != position || position == 1) {
+        if (currentFragmet != position || position == 1 || position == 7) {
             currentFragmet = position;
             displayView(position);
         }
@@ -276,10 +276,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             case 7:
 
                 SharedPreferences prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
-
                 LogoutData logoutData = new LogoutData();
                 logoutData.setIplanetDirectoryPro(prefs.getString(Constants.TOKEN_ID, null));
-
                 new HamPayDialog(activity).showExitDialog(logoutData);
                 break;
 

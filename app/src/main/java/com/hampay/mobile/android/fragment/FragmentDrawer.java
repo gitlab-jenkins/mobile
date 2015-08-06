@@ -38,10 +38,14 @@ public class FragmentDrawer extends Fragment {
     private View containerView;
     private static String[] titles;
     private static int icons[] = {
-            R.drawable.account_settings, R.drawable.transactions_settings,
-            R.drawable.pay_settings, R.drawable.bussines_settings,
-            R.drawable.settings, R.drawable.contact_us,
-            R.drawable.help, R.drawable.exit};
+            R.drawable.account_settings,
+            R.drawable.transactions_settings,
+            R.drawable.pay_settings,
+            R.drawable.bussines_settings,
+            R.drawable.settings,
+            R.drawable.contact_us,
+            R.drawable.help,
+            R.drawable.exit};
     private FragmentDrawerListener drawerListener;
 
     public FragmentDrawer() {

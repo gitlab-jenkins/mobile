@@ -116,11 +116,15 @@ public class MemorableWordEntryActivity extends ActionBarActivity {
                     startActivity(intent);
                 }else {
                     requestMemorableWordEntry = new RequestMemorableWordEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
-                    new HamPayDialog(activity).showFailMemorableEntryDialog(requestMemorableWordEntry, registrationMemorableWordEntryRequest);
+                    new HamPayDialog(activity).showFailMemorableEntryDialog(requestMemorableWordEntry, registrationMemorableWordEntryRequest,
+                            registrationMemorableWordEntryResponseMessage.getService().getResultStatus().getCode(),
+                            registrationMemorableWordEntryResponseMessage.getService().getResultStatus().getDescription());
                 }
             }else {
                 requestMemorableWordEntry = new RequestMemorableWordEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
-                new HamPayDialog(activity).showFailMemorableEntryDialog(requestMemorableWordEntry, registrationMemorableWordEntryRequest);
+                new HamPayDialog(activity).showFailMemorableEntryDialog(requestMemorableWordEntry, registrationMemorableWordEntryRequest,
+                        "2000",
+                        getString(R.string.msg_fail_memorable_entry));
             }
 
         }
