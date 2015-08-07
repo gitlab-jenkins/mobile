@@ -64,14 +64,23 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
     UserProfileDTO userProfileDTO;
 
-    public AccountDetailFragment(UserProfileDTO userProfileDTO) {
-        // Required empty public constructor
-        this.userProfileDTO = userProfileDTO;
-    }
+    Bundle bundle;
+
+//    public AccountDetailFragment() {
+//    }
+
+//    public AccountDetailFragment(UserProfileDTO userProfileDTO) {
+//        // Required empty public constructor
+//        this.userProfileDTO = userProfileDTO;
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        bundle = getArguments();
+
+        this.userProfileDTO = (UserProfileDTO)bundle.getSerializable(Constants.USER_PROFILE_DTO);
 
         new HttpUserProfile().execute();
 

@@ -13,7 +13,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -30,12 +29,12 @@ import com.hampay.mobile.android.async.RequestTAC;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.material.RippleView;
 import com.hampay.mobile.android.dialog.HamPayDialog;
-import com.hampay.mobile.android.functions.DeviceUuidFactory;
-import com.hampay.mobile.android.messaging.SecurityUtils;
 import com.hampay.mobile.android.model.FailedLoginResponse;
 import com.hampay.mobile.android.model.LoginData;
 import com.hampay.mobile.android.model.SuccessLoginResponse;
 import com.hampay.mobile.android.util.Constants;
+import com.hampay.mobile.android.util.DeviceInfo;
+import com.hampay.mobile.android.util.SecurityUtils;
 
 import java.lang.reflect.Type;
 
@@ -348,7 +347,7 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
             String password = SecurityUtils.getInstance(this).
                     generatePassword(inputPassValue,
                             memorableWord,
-                            new DeviceUuidFactory(this).getAndroidId(),
+                            new DeviceInfo(context).getAndroidId(),
                             installationToken);
 
             LoginData loginData = new LoginData();

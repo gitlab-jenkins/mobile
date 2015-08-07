@@ -61,18 +61,20 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     Activity activity;
 
+    Bundle bundle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        bundle = new Bundle();
+
         activity = MainActivity.this;
 
         Intent intent = getIntent();
 
-//        if (HamPayDialog.userProfileDTO != null){
-            userProfileDTO = (UserProfileDTO) intent.getSerializableExtra(Constants.USER_PROFILE_DTO);
-//        }
+        userProfileDTO = (UserProfileDTO) intent.getSerializableExtra(Constants.USER_PROFILE_DTO);
 
         fragment_title = (FacedTextView)findViewById(R.id.fragment_title);
 
@@ -101,12 +103,16 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                         currentFragmet = 2;
                         break;
                     case 2:
-                        fragment = new AccountDetailFragment(userProfileDTO);
+                        fragment = new AccountDetailFragment();
+                        bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
+                        fragment.setArguments(bundle);
                         title = getString(R.string.title_account_detail);
                         currentFragmet = 0;
                         break;
                     case 3:
-                        fragment = new AccountDetailFragment(userProfileDTO);
+                        fragment = new AccountDetailFragment();
+                        bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
+                        fragment.setArguments(bundle);
                         title = getString(R.string.title_account_detail);
                         currentFragmet = 0;
                         break;
@@ -141,7 +147,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
                         break;
                     case 1:
-                        fragment = new AccountDetailFragment(userProfileDTO);
+                        fragment = new AccountDetailFragment();
+                        bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
+                        fragment.setArguments(bundle);
                         title = getString(R.string.title_account_detail);
                         currentFragmet = 0;
                         break;
@@ -246,7 +254,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         String title = getString(R.string.app_name);
         switch (position) {
             case 0:
-                fragment = new AccountDetailFragment(userProfileDTO);
+                fragment = new AccountDetailFragment();
+                bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
+                fragment.setArguments(bundle);
                 title = getString(R.string.title_account_detail);
 
                 break;
