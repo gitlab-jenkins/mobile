@@ -198,7 +198,13 @@ public class PayOneActivity extends ActionBarActivity {
             if (individualPaymentConfirmResponseMessage != null){
                 if (individualPaymentConfirmResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
                     new HamPayDialog(activity).individualPaymentConfirmDialog(individualPaymentConfirmResponseMessage.getService(), amountValue, contactMssage);
+                }else {
+                    new HamPayDialog(activity).showFailPaymentDialog(individualPaymentConfirmResponseMessage.getService().getResultStatus().getCode(),
+                            individualPaymentConfirmResponseMessage.getService().getResultStatus().getDescription());
                 }
+            }else {
+                new HamPayDialog(activity).showFailPaymentDialog("2000",
+                        getString(R.string.msg_fail_payment));
             }
         }
 

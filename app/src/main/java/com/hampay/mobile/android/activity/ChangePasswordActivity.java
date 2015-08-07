@@ -469,16 +469,19 @@ public class ChangePasswordActivity extends ActionBarActivity implements View.On
                     input_digit_3.setImageResource(R.drawable.pass_icon_2);
                     input_digit_4.setImageResource(R.drawable.pass_icon_2);
                     input_digit_5.setImageResource(R.drawable.pass_icon_2);
-
-                    finish();
+                    new HamPayDialog(activity).showSuccessChangeSettingDialog(changePassCodeResponseMessage.getService().getResultStatus().getDescription());
                 }
 
                 requestChangePassCode = new RequestChangePassCode(context, new RequestChangePassCodeTaskCompleteListener());
-                new HamPayDialog(activity).showFailChangePassCodeDialog(requestChangePassCode, changePassCodeRequest);
+                new HamPayDialog(activity).showFailChangePassCodeDialog(requestChangePassCode, changePassCodeRequest,
+                        changePassCodeResponseMessage.getService().getResultStatus().getCode(),
+                        changePassCodeResponseMessage.getService().getResultStatus().getDescription());
 
             }else {
                 requestChangePassCode = new RequestChangePassCode(context, new RequestChangePassCodeTaskCompleteListener());
-                new HamPayDialog(activity).showFailChangePassCodeDialog(requestChangePassCode, changePassCodeRequest);
+                new HamPayDialog(activity).showFailChangePassCodeDialog(requestChangePassCode, changePassCodeRequest,
+                        "2000",
+                        getString(R.string.msg_fail_change_pass_code));
             }
         }
 

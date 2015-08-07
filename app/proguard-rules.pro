@@ -113,6 +113,12 @@
 -keep class com.hampay.common.common.**{ *; }
 -dontwarn com.hampay.common.common.**
 
+-keep class org.acra.**{ *; }
+-dontwarn org.acra.**
+
+-keep class com.hampay.common.core.model.**{ *; }
+-dontwarn com.hampay.common.core.model.**
+
 -keep class com.squareup.picasso.*{ *; }
  #### -- Picasso --
  -dontwarn com.squareup.picasso.**

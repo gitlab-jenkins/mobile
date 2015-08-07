@@ -8,18 +8,6 @@
     android:orientation="vertical"
     android:padding="8dp">
 
-    <com.hampay.mobile.android.component.FacedTextView
-        android:id="@+id/responseCode"
-        geekui:customTypeface="fonts/iran_sans.ttf"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/normal_text"
-        android:textSize="20sp"
-        android:text="@string/msg_fail_fetch_bank_list"
-        android:gravity="right"
-        android:layout_gravity="right"
-        android:layout_margin="8dp"/>
-
 
     <com.hampay.mobile.android.component.FacedTextView
         android:id="@+id/responseMessage"
@@ -28,7 +16,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/normal_text"
         android:textSize="20sp"
-        android:text="@string/msg_fail_change_pass_code"
+        android:text="@string/msg_success_change_setting"
         android:gravity="center"
         android:layout_gravity="center"
         android:layout_margin="8dp"/>
@@ -41,7 +29,7 @@
         android:layout_margin="15dp">
 
         <com.hampay.mobile.android.component.FacedTextView
-            android:id="@+id/retry_change_pass_code"
+            android:id="@+id/success_change_setting"
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
@@ -49,7 +37,7 @@
             android:textSize="20sp"
             android:gravity="center"
             android:layout_centerInParent="true"
-            android:text="@string/retry_registration_entry" />
+            android:text="@string/success_setting" />
 
     </RelativeLayout>
 

@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_centerInParent="true">
-        
+
         <!--<com.hampay.mobile.android.component.material.progressbar.ProgressView-->
             <!--android:id="@+id/waitingProgress"-->
             <!--android:layout_width="match_parent"-->
@@ -104,9 +104,9 @@
                         android:text="@string/start_activity_text_1" />
 
                     <ImageView
-                        android:layout_width="6dp"
-                        android:layout_height="6dp"
-                        android:src="@drawable/bullet"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/icon_check"
                         android:layout_margin="4dp"/>
 
                 </LinearLayout>
@@ -128,9 +128,9 @@
                         android:text="@string/start_activity_text_2" />
 
                     <ImageView
-                        android:layout_width="6dp"
-                        android:layout_height="6dp"
-                        android:src="@drawable/bullet"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/icon_check"
                         android:layout_margin="4dp"/>
 
                 </LinearLayout>
@@ -152,9 +152,9 @@
                         android:text="@string/start_activity_text_3" />
 
                     <ImageView
-                        android:layout_width="6dp"
-                        android:layout_height="6dp"
-                        android:src="@drawable/bullet"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/icon_check"
                         android:layout_margin="4dp"/>
 
                 </LinearLayout>

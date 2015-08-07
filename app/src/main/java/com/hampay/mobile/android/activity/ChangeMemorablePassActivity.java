@@ -315,20 +315,20 @@ public class ChangeMemorablePassActivity extends ActionBarActivity implements Vi
 
             if (changeMemorableWordResponseMessage != null) {
                 if (changeMemorableWordResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-
-
                     editor.putString(Constants.MEMORABLE_WORD, newMemorable);
                     editor.commit();
-
-                    finish();
+                    new HamPayDialog(activity).showSuccessChangeSettingDialog(changeMemorableWordResponseMessage.getService().getResultStatus().getDescription());
                 }
-
                 requestChangeMemorableWord = new RequestChangeMemorableWord(context, new RequestChangeMemorableWordTaskCompleteListener());
-                new HamPayDialog(activity).showFailChangeMemorableWordDialog(requestChangeMemorableWord, changeMemorableWordRequest);
+                new HamPayDialog(activity).showFailChangeMemorableWordDialog(requestChangeMemorableWord, changeMemorableWordRequest,
+                        changeMemorableWordResponseMessage.getService().getResultStatus().getCode(),
+                        changeMemorableWordResponseMessage.getService().getResultStatus().getDescription());
 
             }else {
                 requestChangeMemorableWord = new RequestChangeMemorableWord(context, new RequestChangeMemorableWordTaskCompleteListener());
-                new HamPayDialog(activity).showFailChangeMemorableWordDialog(requestChangeMemorableWord, changeMemorableWordRequest);
+                new HamPayDialog(activity).showFailChangeMemorableWordDialog(requestChangeMemorableWord, changeMemorableWordRequest,
+                        "2000",
+                        getString(R.string.msg_fail_change_memorable_word));
             }
         }
 

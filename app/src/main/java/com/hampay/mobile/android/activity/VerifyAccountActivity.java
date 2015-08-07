@@ -2,32 +2,21 @@ package com.hampay.mobile.android.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
-import com.hampay.common.core.model.request.ChangeMemorableWordRequest;
-import com.hampay.common.core.model.request.VerifyAccountRequest;
 import com.hampay.common.core.model.request.VerifyTransferMoneyRequest;
-import com.hampay.common.core.model.response.ChangeMemorableWordResponse;
-import com.hampay.common.core.model.response.TACResponse;
-import com.hampay.common.core.model.response.VerifyAccountResponse;
 import com.hampay.common.core.model.response.VerifyTransferMoneyResponse;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import com.hampay.mobile.android.async.RequestTAC;
 import com.hampay.mobile.android.async.RequestVerifyTransferMoney;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
-import com.hampay.mobile.android.webservice.WebServices;
 
 public class VerifyAccountActivity extends ActionBarActivity {
 

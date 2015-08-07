@@ -148,12 +148,16 @@ public class UserTransactionFragment extends Fragment {
                 } else {
                     transactionListRequest.setPageNumber(requestPageNumber);
                     requestUserTransaction = new RequestUserTransaction(getActivity(), new RequestUserTransactionsTaskCompleteListener());
-                    new HamPayDialog(getActivity()).showFailUserTransactionDialog(requestUserTransaction, transactionListRequest);
+                    new HamPayDialog(getActivity()).showFailUserTransactionDialog(requestUserTransaction, transactionListRequest,
+                            transactionListResponseMessage.getService().getResultStatus().getCode(),
+                            transactionListResponseMessage.getService().getResultStatus().getDescription());
                 }
             } else {
                 transactionListRequest.setPageNumber(requestPageNumber);
                 requestUserTransaction = new RequestUserTransaction(getActivity(), new RequestUserTransactionsTaskCompleteListener());
-                new HamPayDialog(getActivity()).showFailUserTransactionDialog(requestUserTransaction, transactionListRequest);
+                new HamPayDialog(getActivity()).showFailUserTransactionDialog(requestUserTransaction, transactionListRequest,
+                        "2000",
+                        getString(R.string.msg_fail_user_transation));
             }
         }
 

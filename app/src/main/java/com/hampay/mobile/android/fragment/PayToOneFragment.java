@@ -451,11 +451,15 @@ public class PayToOneFragment extends Fragment {
                 }
                 else {
                     requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());
-                    new HamPayDialog(context).showFailContactsHamPayEnabledDialog(requestContactHampayEnabled, contactsHampayEnabledRequest);
+                    new HamPayDialog(context).showFailContactsHamPayEnabledDialog(requestContactHampayEnabled, contactsHampayEnabledRequest,
+                            contactsHampayEnabledResponseMessage.getService().getResultStatus().getCode(),
+                            contactsHampayEnabledResponseMessage.getService().getResultStatus().getDescription());
                 }
             }else {
                 requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());
-                new HamPayDialog(context).showFailContactsHamPayEnabledDialog(requestContactHampayEnabled, contactsHampayEnabledRequest);
+                new HamPayDialog(context).showFailContactsHamPayEnabledDialog(requestContactHampayEnabled, contactsHampayEnabledRequest,
+                        "2000",
+                        getString(R.string.msg_fail_contacts_enabled));
             }
 
             if (isAdded()) {

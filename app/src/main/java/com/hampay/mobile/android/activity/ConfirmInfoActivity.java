@@ -33,7 +33,6 @@ import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestConfirmUserData;
 import com.hampay.mobile.android.async.RequestFetchUserData;
 import com.hampay.mobile.android.async.RequestRegisterVerifyAccount;
-import com.hampay.mobile.android.async.RequestRegistrationEntry;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.material.ButtonFlat;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
@@ -42,7 +41,6 @@ import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.DeviceInfo;
 import com.hampay.mobile.android.util.NetworkConnectivity;
-import com.hampay.mobile.android.util.Utils;
 
 public class ConfirmInfoActivity extends ActionBarActivity implements View.OnClickListener {
 
@@ -394,7 +392,7 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                     registrationConfirmUserDataRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
                     registrationConfirmUserDataRequest.setImei(new DeviceInfo(getApplicationContext()).getIMEI());
                     registrationConfirmUserDataRequest.setIsVerified(confirm_check_value);
-                    registrationConfirmUserDataRequest.setIp(new Utils(context).getNetworkIp());
+                    registrationConfirmUserDataRequest.setIp(new DeviceInfo(context).getNetworkIp());
                     registrationConfirmUserDataRequest.setDeviceId(new DeviceInfo(getApplicationContext()).getAndroidId());
 
 

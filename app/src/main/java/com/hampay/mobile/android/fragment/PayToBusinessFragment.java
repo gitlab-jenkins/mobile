@@ -54,7 +54,6 @@ public class PayToBusinessFragment extends Fragment {
     private boolean onLoadMore = false;
     DobList dobList;
 
-    private ResponseMessage<BusinessListResponse> businessListResponse;
 
     private List<BusinessDTO> businessDTOs;
 
@@ -155,7 +154,6 @@ public class PayToBusinessFragment extends Fragment {
             }
         });
 
-        businessListResponse = new ResponseMessage<BusinessListResponse>();
         businessDTOs = new ArrayList<BusinessDTO>();
 
         loading_rl = (RelativeLayout) rootView.findViewById(R.id.loading_rl);
@@ -247,12 +245,17 @@ public class PayToBusinessFragment extends Fragment {
                         businessListRequest.setPageNumber(requestPageNumber);
                         businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
                         requestHamPayBusiness = new RequestHamPayBusiness(getActivity(), new RequestBusinessListTaskCompleteListener(false));
-                        new HamPayDialog(getActivity()).showFailBusinessListDialog(requestHamPayBusiness, businessListRequest);
+                        new HamPayDialog(getActivity()).showFailBusinessListDialog(requestHamPayBusiness, businessListRequest,
+                                businessListResponseMessage.getService().getResultStatus().getCode(),
+                                businessListResponseMessage.getService().getResultStatus().getDescription());
                     }else {
                         businessSearchRequest.setPageNumber(requestPageNumber);
                         businessSearchRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
                         requestSearchHamPayBusiness = new RequestSearchHamPayBusiness(getActivity(), new RequestBusinessListTaskCompleteListener(true));
-                        requestSearchHamPayBusiness.execute(businessSearchRequest);
+                        new HamPayDialog(getActivity()).showFailBusinessSearchListDialog(requestSearchHamPayBusiness, businessSearchRequest,
+                                businessListResponseMessage.getService().getResultStatus().getCode(),
+                                businessListResponseMessage.getService().getResultStatus().getDescription());
+//                        requestSearchHamPayBusiness.execute(businessSearchRequest);
                     }
                 }
             }else {
@@ -260,12 +263,17 @@ public class PayToBusinessFragment extends Fragment {
                     businessListRequest.setPageNumber(requestPageNumber);
                     businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
                     requestHamPayBusiness = new RequestHamPayBusiness(getActivity(), new RequestBusinessListTaskCompleteListener(false));
-                    new HamPayDialog(getActivity()).showFailBusinessListDialog(requestHamPayBusiness, businessListRequest);
+                    new HamPayDialog(getActivity()).showFailBusinessListDialog(requestHamPayBusiness, businessListRequest,
+                            "2000",
+                            getString(R.string.msg_fail_business_list));
                 }else {
                     businessSearchRequest.setPageNumber(requestPageNumber);
                     businessSearchRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
                     requestSearchHamPayBusiness = new RequestSearchHamPayBusiness(getActivity(), new RequestBusinessListTaskCompleteListener(true));
-                    requestSearchHamPayBusiness.execute(businessSearchRequest);
+                    new HamPayDialog(getActivity()).showFailBusinessSearchListDialog(requestSearchHamPayBusiness, businessSearchRequest,
+                            "2000",
+                            getString(R.string.msg_fail_business_search_list));
+//                    requestSearchHamPayBusiness.execute(businessSearchRequest);
                 }
             }
         }

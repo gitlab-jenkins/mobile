@@ -1,10 +1,7 @@
 package com.hampay.mobile.android.activity;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 
 import com.hampay.mobile.android.R;

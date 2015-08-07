@@ -323,12 +323,17 @@
     <string name="msg_fail_user_transation">بارگیری تراکنش‌ها با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_contacts_enabled">دریافت مخاطبین هم‌پی شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_business_list">دریافت لیست کسب و کار با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
+    <string name="msg_fail_business_search_list">دریافت لیست جستجوی کسب و کار با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
+    <string name="msg_fail_payment">واریز مبلغ مورد نظر شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_hampay_server">اطلاعاتی از سامانه هم‌پی دریافت نشد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_hampay_login">کلمه عبور صحیح نمی باشد. لطفا با دقت کلمه عبور خود را وارد کنید.</string>
     <string name="msg_fail_receive_sms">دریافت پیامک فعالسازی با مشکل مواجه شد. لطفا دکمه ارسال مجدد را انتخاب کنید.</string>
     <string name="sms_upper_reach_sms">حداکثر درخواست برای ارسال مجدد پیامک فعالسازی به اتمام رسید. لطفا در ساعات دیگر تلاش کنید.</string>
     <string name="msg_fail_change_pass_code">تغییر رمز عبور با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_change_memorable_word">تغییر کلمه یادآوری با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
+
+    <string name="msg_success_change_setting">خواسته شما با موفقیت انجام شد.</string>
+    <string name="success_setting">باشه</string>
 
     <string name="retry_registration_entry">مجدد تلاش می‌کنم</string>
     <string name="title_activity_server_select">ServerSelectActivity</string>

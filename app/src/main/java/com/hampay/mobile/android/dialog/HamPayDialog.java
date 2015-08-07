@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
-import android.hardware.camera2.params.Face;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.Spannable;
@@ -16,18 +15,17 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.View;
 import android.view.Window;
-import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.BankListRequest;
 import com.hampay.common.core.model.request.BusinessListRequest;
 import com.hampay.common.core.model.request.BusinessPaymentRequest;
+import com.hampay.common.core.model.request.BusinessSearchRequest;
 import com.hampay.common.core.model.request.ChangeMemorableWordRequest;
 import com.hampay.common.core.model.request.ChangePassCodeRequest;
 import com.hampay.common.core.model.request.ContactUsRequest;
 import com.hampay.common.core.model.request.ContactsHampayEnabledRequest;
-import com.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
 import com.hampay.common.core.model.request.IndividualPaymentRequest;
 import com.hampay.common.core.model.request.RegistrationConfirmUserDataRequest;
 import com.hampay.common.core.model.request.RegistrationEntryRequest;
@@ -41,7 +39,6 @@ import com.hampay.common.core.model.request.RegistrationVerifyTransferMoneyReque
 import com.hampay.common.core.model.request.TACAcceptRequest;
 import com.hampay.common.core.model.request.TACRequest;
 import com.hampay.common.core.model.request.TransactionListRequest;
-import com.hampay.common.core.model.response.BankListResponse;
 import com.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
 import com.hampay.common.core.model.response.BusinessPaymentResponse;
 import com.hampay.common.core.model.response.ContactUsResponse;
@@ -64,7 +61,6 @@ import com.hampay.mobile.android.async.RequestContactHampayEnabled;
 import com.hampay.mobile.android.async.RequestFetchUserData;
 import com.hampay.mobile.android.async.RequestHamPayBusiness;
 import com.hampay.mobile.android.async.RequestIndividualPayment;
-import com.hampay.mobile.android.async.RequestIndividualPaymentConfirm;
 import com.hampay.mobile.android.async.RequestLogout;
 import com.hampay.mobile.android.async.RequestMemorableWordEntry;
 import com.hampay.mobile.android.async.RequestPassCodeEntry;
@@ -72,6 +68,7 @@ import com.hampay.mobile.android.async.RequestRegisterVerifyAccount;
 import com.hampay.mobile.android.async.RequestRegistrationEntry;
 import com.hampay.mobile.android.async.RequestRegistrationSendSmsToken;
 import com.hampay.mobile.android.async.RequestRegistrationVerifyTransferMoney;
+import com.hampay.mobile.android.async.RequestSearchHamPayBusiness;
 import com.hampay.mobile.android.async.RequestTAC;
 import com.hampay.mobile.android.async.RequestTACAccept;
 import com.hampay.mobile.android.async.RequestUserTransaction;
@@ -259,7 +256,6 @@ public class HamPayDialog {
                 dialog.dismiss();
 
                 if (contactUsMail.length() != 0) {
-
                     Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                             "mailto", contactUsMail, null));
                     emailIntent.putExtra(Intent.EXTRA_SUBJECT, activity.getString(R.string.app_name));
@@ -620,11 +616,11 @@ public class HamPayDialog {
         FacedTextView failedLoginText = (FacedTextView)view.findViewById(R.id.failedLoginText);
 
         failedLoginText.setText("کد خطای: " + failedLoginResponse.getCode()
-                + "\n"
+                        + "\n"
 //                + failedLoginResponse.getMessage()
                         + failedLoginResponse.getMessage()
 //                + activity.getString(R.string.msg_fail_hampay_login
-                );
+        );
 
 
         FacedTextView login_retry = (FacedTextView) view.findViewById(R.id.login_retry);
@@ -813,7 +809,13 @@ public class HamPayDialog {
                     new HamPayDialog(activity).individualPaymentDialog(individualPaymentResponseMessage.getService(),
                             individualPaymentRequest,
                             contactName);
+                }else {
+                    showFailPaymentDialog(individualPaymentResponseMessage.getService().getResultStatus().getCode(),
+                            individualPaymentResponseMessage.getService().getResultStatus().getDescription());
                 }
+            }else {
+                new HamPayDialog(activity).showFailPaymentDialog("2000",
+                        activity.getString(R.string.msg_fail_payment));
             }
         }
 
@@ -827,8 +829,8 @@ public class HamPayDialog {
     BusinessPaymentRequest businessPaymentRequest;
 
     public void businessPaymentConfirmDialog(final BusinessPaymentConfirmResponse businessPaymentConfirmResponse,
-                                               final Long amountValue,
-                                               final String userMessage){
+                                             final Long amountValue,
+                                             final String userMessage){
         Rect displayRectangle = new Rect();
         Activity parent = (Activity) activity;
         Window window = parent.getWindow();
@@ -891,11 +893,16 @@ public class HamPayDialog {
 
             if (businessPaymentResponseMessage != null){
                 if (businessPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-
                     new HamPayDialog(activity).businessPaymentDialog(businessPaymentResponseMessage.getService(),
                             businessPaymentRequest,
                             businessName);
+                }else {
+                    showFailPaymentDialog(businessPaymentResponseMessage.getService().getResultStatus().getCode(),
+                            businessPaymentResponseMessage.getService().getResultStatus().getDescription());
                 }
+            }else {
+                new HamPayDialog(activity).showFailPaymentDialog("2000",
+                        activity.getString(R.string.msg_fail_payment));
             }
         }
 
@@ -905,8 +912,8 @@ public class HamPayDialog {
 
 
     public void businessPaymentDialog(final BusinessPaymentResponse businessPaymentResponse,
-                                        final BusinessPaymentRequest businessPaymentRequest,
-                                        final String contactName){
+                                      final BusinessPaymentRequest businessPaymentRequest,
+                                      final String contactName){
         Rect displayRectangle = new Rect();
         Activity parent = (Activity) activity;
         Window window = parent.getWindow();
@@ -1355,9 +1362,9 @@ public class HamPayDialog {
     }
 
     public void showFailTCRequestDialog(final RequestTAC requestTAC,
-                                             final TACRequest tacRequest,
-                                             final String code,
-                                             final String message){
+                                        final TACRequest tacRequest,
+                                        final String code,
+                                        final String message){
         Rect displayRectangle = new Rect();
         Activity parent = (Activity) activity;
         Window window = parent.getWindow();
@@ -1393,9 +1400,9 @@ public class HamPayDialog {
 
 
     public void showFailTACAcceeptRequestDialog(final RequestTACAccept requestTACAccept,
-                                        final TACAcceptRequest tacAcceptRequest,
-                                        final String code,
-                                        final String message){
+                                                final TACAcceptRequest tacAcceptRequest,
+                                                final String code,
+                                                final String message){
         Rect displayRectangle = new Rect();
         Activity parent = (Activity) activity;
         Window window = parent.getWindow();
@@ -1429,15 +1436,54 @@ public class HamPayDialog {
         dialog.show();
     }
 
+    public void showSuccessChangeSettingDialog(final String message){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_success_change_setting, null);
+
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+
+        responseMessage.setText(message);
+
+        FacedTextView success_change_setting = (FacedTextView) view.findViewById(R.id.success_change_setting);
+
+        success_change_setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                activity.finish();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
 
     public void showFailChangePassCodeDialog(final RequestChangePassCode requestChangePassCode,
-                                             final ChangePassCodeRequest changePassCodeRequest){
+                                             final ChangePassCodeRequest changePassCodeRequest,
+                                             final String code,
+                                             final String message){
         Rect displayRectangle = new Rect();
         Activity parent = (Activity) activity;
         Window window = parent.getWindow();
         window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_change_pass_code, null);
+
+        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+
+        responseCode.setText(activity.getString(R.string.error_code, code));
+        responseMessage.setText(message);
 
         FacedTextView retry_change_pass_code = (FacedTextView) view.findViewById(R.id.retry_change_pass_code);
 
@@ -1462,13 +1508,21 @@ public class HamPayDialog {
 
 
     public void showFailChangeMemorableWordDialog(final RequestChangeMemorableWord requestChangeMemorableWord,
-                                             final ChangeMemorableWordRequest changeMemorableWordRequest){
+                                                  final ChangeMemorableWordRequest changeMemorableWordRequest,
+                                                  final String code,
+                                                  final String message){
         Rect displayRectangle = new Rect();
         Activity parent = (Activity) activity;
         Window window = parent.getWindow();
         window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_change_memorable_word, null);
+
+        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+
+        responseCode.setText(activity.getString(R.string.error_code, code));
+        responseMessage.setText(message);
 
         FacedTextView retry_change_memorable_word = (FacedTextView) view.findViewById(R.id.retry_change_memorable_word);
 
@@ -1492,13 +1546,21 @@ public class HamPayDialog {
 
 
     public void showFailUserTransactionDialog(final RequestUserTransaction requestUserTransaction,
-                                              final TransactionListRequest transactionListRequest){
+                                              final TransactionListRequest transactionListRequest,
+                                              final String code,
+                                              final String message){
         Rect displayRectangle = new Rect();
         Activity parent = (Activity) activity;
         Window window = parent.getWindow();
         window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_user_transaction, null);
+
+        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+
+        responseCode.setText(activity.getString(R.string.error_code, code));
+        responseMessage.setText(message);
 
         FacedTextView retry_user_transation = (FacedTextView) view.findViewById(R.id.retry_user_transation);
 
@@ -1521,13 +1583,21 @@ public class HamPayDialog {
     }
 
     public void showFailBusinessListDialog(final RequestHamPayBusiness requestHamPayBusiness,
-                                              final BusinessListRequest businessListRequest){
+                                           final BusinessListRequest businessListRequest,
+                                           final String code,
+                                           final String message){
         Rect displayRectangle = new Rect();
         Activity parent = (Activity) activity;
         Window window = parent.getWindow();
         window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_business_list, null);
+
+        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+
+        responseCode.setText(activity.getString(R.string.error_code, code));
+        responseMessage.setText(message);
 
         FacedTextView retry_business_list = (FacedTextView) view.findViewById(R.id.retry_business_list);
 
@@ -1549,16 +1619,60 @@ public class HamPayDialog {
         dialog.show();
     }
 
+    public void showFailBusinessSearchListDialog(final RequestSearchHamPayBusiness requestSearchHamPayBusiness,
+                                                 final BusinessSearchRequest businessSearchRequest,
+                                                 final String code,
+                                                 final String message){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_business_search_list, null);
+
+        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+
+        responseCode.setText(activity.getString(R.string.error_code, code));
+        responseMessage.setText(message);
+
+        FacedTextView retry_business_search_list = (FacedTextView) view.findViewById(R.id.retry_business_search_list);
+
+        retry_business_search_list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                requestSearchHamPayBusiness.execute(businessSearchRequest);
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
 
 
     public void showFailContactsHamPayEnabledDialog(final RequestContactHampayEnabled requestContactHampayEnabled,
-                                                    final ContactsHampayEnabledRequest contactsHampayEnabledRequest){
+                                                    final ContactsHampayEnabledRequest contactsHampayEnabledRequest,
+                                                    final String code,
+                                                    final String message){
         Rect displayRectangle = new Rect();
         Activity parent = (Activity) activity;
         Window window = parent.getWindow();
         window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_contacts_enabled, null);
+
+        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+
+        responseCode.setText(activity.getString(R.string.error_code, code));
+        responseMessage.setText(message);
 
         FacedTextView retry_contacts_enabled = (FacedTextView) view.findViewById(R.id.retry_contacts_enabled);
 
@@ -1567,6 +1681,41 @@ public class HamPayDialog {
             public void onClick(View v) {
                 dialog.dismiss();
                 requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
+    public void showFailPaymentDialog(final String code,
+                                      final String message){
+
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_payment, null);
+
+        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+
+        responseCode.setText(activity.getString(R.string.error_code, code));
+        responseMessage.setText(message);
+
+        FacedTextView retry_payment = (FacedTextView) view.findViewById(R.id.retry_payment);
+
+        retry_payment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 

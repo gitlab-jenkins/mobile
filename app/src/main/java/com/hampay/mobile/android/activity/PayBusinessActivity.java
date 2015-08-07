@@ -270,7 +270,13 @@ public class PayBusinessActivity extends ActionBarActivity {
             if (businessPaymentConfirmResponseMessage != null){
                 if (businessPaymentConfirmResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
                     new HamPayDialog(activity).businessPaymentConfirmDialog(businessPaymentConfirmResponseMessage.getService(), amountValue, businessMssage);
+                }else {
+                    new HamPayDialog(activity).showFailPaymentDialog(businessPaymentConfirmResponseMessage.getService().getResultStatus().getCode(),
+                            businessPaymentConfirmResponseMessage.getService().getResultStatus().getDescription());
                 }
+            }else {
+                new HamPayDialog(activity).showFailPaymentDialog("2000",
+                        activity.getString(R.string.msg_fail_payment));
             }
         }
 

@@ -4,16 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
-import com.hampay.common.core.model.dto.ContactDTO;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.activity.PayOneActivity;
 import com.hampay.mobile.android.component.FacedTextView;
