@@ -236,11 +236,25 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
                 user_account_title.setText(getString(R.string.account_type));
 
-                if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.DELEGATED) {
-                    user_account_type.setText(": " + "عادی");
-                }else {
-                    user_account_type.setText(": " + "محدود");
+                switch (userProfileDTO.getVerificationStatus()){
+
+                    case DELEGATED:
+                        user_account_type.setText(": " + "عادی");
+                        break;
+
+                    case VERIFIED:
+                        user_account_type.setText(": " + "محدود (در انتظار تایید)");
+                        break;
+
+                    case UNVERIFIED:
+                        user_account_type.setText(": " + "محدود");
+                        break;
+
+                    case PENDING_REVIEW:
+                        user_account_type.setText(": " + "محدود (در انتظار تایید کاربر)");
+                        break;
                 }
+
 
                 if (userProfileDTO.getLastLoginDate() != null) {
                     user_last_login.setText(getString(R.string.last_login) + ": "

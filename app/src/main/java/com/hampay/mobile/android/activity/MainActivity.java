@@ -63,10 +63,14 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     Bundle bundle;
 
+    SharedPreferences prefs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
 
         bundle = new Bundle();
 
@@ -240,6 +244,19 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         displayView(currentFragmet);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)){
+            Intent intent = new Intent();
+            intent.setClass(MainActivity.this, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
+    }
+
 
     @Override
     public void onDrawerItemSelected(View view, int position) {
@@ -285,7 +302,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 break;
             case 7:
 
-                SharedPreferences prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+
                 LogoutData logoutData = new LogoutData();
                 logoutData.setIplanetDirectoryPro(prefs.getString(Constants.TOKEN_ID, null));
                 new HamPayDialog(activity).showExitDialog(logoutData);
@@ -373,8 +390,6 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     @Override
     public void onBackPressed() {
-        SharedPreferences prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
-
         LogoutData logoutData = new LogoutData();
         logoutData.setIplanetDirectoryPro(prefs.getString(Constants.TOKEN_ID, null));
         new HamPayDialog(activity).showExitDialog(logoutData);

@@ -5,13 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.component.material.progressbar.ProgressView;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 
-public class StartActivity extends ActionBarActivity {
+public class StartActivity extends Activity {
 
     ButtonRectangle start_button;
 
@@ -34,13 +35,14 @@ public class StartActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 intent.setClass(StartActivity.this, PostStartActivity.class);
-                startActivity(intent);
                 finish();
+                startActivity(intent);
             }
         });
     }
+
 
     @Override
     public void onBackPressed() {

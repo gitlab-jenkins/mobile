@@ -3,6 +3,7 @@ package com.hampay.mobile.android.dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -89,6 +90,7 @@ import java.util.regex.Pattern;
  */
 public class HamPayDialog {
 
+    SharedPreferences.Editor editor;
 
     Activity activity;
     Dialog dialog;
@@ -98,6 +100,8 @@ public class HamPayDialog {
     public HamPayDialog(Activity activity){
 
         this.activity = activity;
+
+        editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE).edit();
 
         dbHelper = new DatabaseHelper(activity);
 
@@ -412,6 +416,9 @@ public class HamPayDialog {
             if (tacAcceptResponseMessage != null) {
 
                 if (tacAcceptResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+
+                    editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                    editor.commit();
 
                     userProfileDTO = tacAcceptResponseMessage.getService().getUserProfile();
 

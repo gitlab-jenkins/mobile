@@ -96,6 +96,7 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
         setContentView(R.layout.activity_ham_pay_login);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+        editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
         user_name = (FacedTextView)findViewById(R.id.user_name);
         user_name.setText("سلام: " + prefs.getString(Constants.REGISTERED_USER_FAMILY, ""));
@@ -175,12 +176,12 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
                         (new HamPayDialog(activity)).showTACAcceptDialog(tacResponseMessage.getService().getTac());
 
                     } else {
+                        editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                        editor.commit();
                         Intent intent = new Intent();
-
                         intent.setClass(activity, MainActivity.class);
                         intent.putExtra(Constants.USER_PROFILE_DTO, tacResponseMessage.getService().getUserProfile());
                         startActivity(intent);
-
                         finish();
                     }
                 }else {
@@ -241,7 +242,7 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
                         new HamPayDialog(activity).showLoginFailDialog(failedLoginResponse);
                     }
                 }else {
-                    editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+
                     editor.putString(Constants.LOGIN_TOKEN_ID, successLoginResponse.getTokenId());
                     editor.commit();
                     tacRequest = new TACRequest();

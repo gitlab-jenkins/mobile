@@ -31,9 +31,9 @@ public class Constants {
     public static final String RECENT_PAY_TO_ONE_LIMIT = "10";
     public static final int DEFAULT_PAGE_SIZE = 15;
     public static final String WEB_URL_REGEX = "\\(?\\b(http://|https://|www[.]|app[.])[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]";
-//    public static final String VALID_IP_ADDRESS_SERVICE = "http://www.telize.com/ip";
     public static final String REGISTERED_USER = "registeredUser";
     public static final String TOKEN_ID = "TokenId";
-
+    public static final String  MOBILE_TIME_OUT = "mobile_time_out";
+    public static final long MOBILE_TIME_OUT_INTERVAL = 300000;
 
 }
