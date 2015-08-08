@@ -242,7 +242,7 @@
             android:label="@string/title_activity_server_select" >
         </activity>
         <activity
-            android:name=".fragment.GuideDetailActivity"
+            android:name=".activity.GuideDetailActivity"
             android:label="@string/title_activity_guide_detail" >
         </activity>
     </application>

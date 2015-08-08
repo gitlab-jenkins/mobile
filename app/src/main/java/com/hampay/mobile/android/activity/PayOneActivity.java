@@ -3,6 +3,7 @@ package com.hampay.mobile.android.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -56,6 +57,9 @@ public class PayOneActivity extends ActionBarActivity {
     Context context;
     Activity activity;
 
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
+
     RelativeLayout loading_rl;
 
     RequestIndividualPaymentConfirm requestIndividualPaymentConfirm;
@@ -69,6 +73,9 @@ public class PayOneActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay_one);
+
+        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+        editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
         loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
 
@@ -157,11 +164,21 @@ public class PayOneActivity extends ActionBarActivity {
                     contactMssage = contact_message.getText().toString();
                     amountValue = Long.parseLong(credit_value.getText().toString().replace(",", ""));
 
-                    individualPaymentConfirmRequest = new IndividualPaymentConfirmRequest();
-                    individualPaymentConfirmRequest.setCellNumber(contactPhoneNo);
+                    if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+                        Intent intent = new Intent();
+                        intent.setClass(context, HamPayLoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        finish();
+                        startActivity(intent);
+                    }else {
+                        editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                        editor.commit();
 
-                    requestIndividualPaymentConfirm = new RequestIndividualPaymentConfirm(context, new RequestIndividualPaymentConfirmTaskCompleteListener());
-                    requestIndividualPaymentConfirm.execute(individualPaymentConfirmRequest);
+                        individualPaymentConfirmRequest = new IndividualPaymentConfirmRequest();
+                        individualPaymentConfirmRequest.setCellNumber(contactPhoneNo);
+                        requestIndividualPaymentConfirm = new RequestIndividualPaymentConfirm(context, new RequestIndividualPaymentConfirmTaskCompleteListener());
+                        requestIndividualPaymentConfirm.execute(individualPaymentConfirmRequest);
+                    }
 
                 }else {
                     (new HamPayDialog(activity)).showIncorrectPrice();

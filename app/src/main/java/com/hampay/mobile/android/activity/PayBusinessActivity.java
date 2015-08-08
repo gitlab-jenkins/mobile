@@ -3,6 +3,8 @@ package com.hampay.mobile.android.activity;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -23,6 +25,7 @@ import com.hampay.mobile.android.component.edittext.CurrencyFormatter;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
+import com.hampay.mobile.android.util.Constants;
 
 public class PayBusinessActivity extends ActionBarActivity {
 
@@ -49,6 +52,9 @@ public class PayBusinessActivity extends ActionBarActivity {
     Long amountValue = 0l;
     String businessMssage = "";
 
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
+
     RequestBusinessPaymentConfirm requestBusinessPaymentConfirm;
     BusinessPaymentConfirmRequest businessPaymentConfirmRequest;
 
@@ -65,6 +71,10 @@ public class PayBusinessActivity extends ActionBarActivity {
 
         context = this;
         activity = PayBusinessActivity.this;
+
+        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+        editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+
 
         bundle = getIntent().getExtras();
 
@@ -106,11 +116,20 @@ public class PayBusinessActivity extends ActionBarActivity {
                     amountValue = Long.parseLong(credit_value.getText().toString().replace(",", ""));
                     businessMssage = contact_message.getText().toString();
 
-                    businessPaymentConfirmRequest = new BusinessPaymentConfirmRequest();
-                    businessPaymentConfirmRequest.setBusinessCode(bundle.getString("business_code"));
-
-                    requestBusinessPaymentConfirm = new RequestBusinessPaymentConfirm(context, new RequestBusinessPaymentConfirmTaskCompleteListener());
-                    requestBusinessPaymentConfirm.execute(businessPaymentConfirmRequest);
+                    if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+                        Intent intent = new Intent();
+                        intent.setClass(context, HamPayLoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        finish();
+                        startActivity(intent);
+                    }else {
+                        editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                        editor.commit();
+                        businessPaymentConfirmRequest = new BusinessPaymentConfirmRequest();
+                        businessPaymentConfirmRequest.setBusinessCode(bundle.getString("business_code"));
+                        requestBusinessPaymentConfirm = new RequestBusinessPaymentConfirm(context, new RequestBusinessPaymentConfirmTaskCompleteListener());
+                        requestBusinessPaymentConfirm.execute(businessPaymentConfirmRequest);
+                    }
 
                 }else {
                     (new HamPayDialog(activity)).showIncorrectPrice();

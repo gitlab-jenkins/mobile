@@ -2,6 +2,8 @@ package com.hampay.mobile.android.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -24,6 +26,7 @@ import com.hampay.common.core.model.response.ContactsHampayEnabledResponse;
 import com.hampay.common.core.model.response.RegistrationEntryResponse;
 import com.hampay.mobile.android.Helper.DatabaseHelper;
 import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.activity.HamPayLoginActivity;
 import com.hampay.mobile.android.adapter.PayOneAdapter;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestContactHampayEnabled;
@@ -32,6 +35,7 @@ import com.hampay.mobile.android.component.sectionlist.PinnedHeaderListView;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.model.EnabledHamPay;
 import com.hampay.mobile.android.model.RecentPay;
+import com.hampay.mobile.android.util.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +74,9 @@ public class PayToOneFragment extends Fragment {
     ContactsHampayEnabledRequest contactsHampayEnabledRequest;
     RequestContactHampayEnabled requestContactHampayEnabled;
 
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
+
     public PayToOneFragment() {
     }
 
@@ -96,6 +103,9 @@ public class PayToOneFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         dbHelper = new DatabaseHelper(getActivity());
+
+        prefs = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE);
+        editor = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE).edit();
 
 
         searchRecentPays = new ArrayList<RecentPay>();
@@ -227,12 +237,19 @@ public class PayToOneFragment extends Fragment {
             loading_rl.setVisibility(View.GONE);
         }
 
-//        new HttpHamPayContact().execute();
-
-        contactsHampayEnabledRequest = new ContactsHampayEnabledRequest();
-
-        requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());
-        requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            getActivity().finish();
+            startActivity(intent);
+        }else {
+            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            editor.commit();
+            contactsHampayEnabledRequest = new ContactsHampayEnabledRequest();
+            requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());
+            requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
+        }
 
 
         return rootView;

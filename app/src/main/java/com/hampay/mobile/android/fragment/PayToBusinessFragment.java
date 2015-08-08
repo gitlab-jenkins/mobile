@@ -2,6 +2,8 @@ package com.hampay.mobile.android.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,6 +27,7 @@ import com.hampay.common.core.model.request.BusinessSearchRequest;
 import com.hampay.common.core.model.response.BusinessListResponse;
 import com.hampay.common.core.model.response.dto.BusinessDTO;
 import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.activity.HamPayLoginActivity;
 import com.hampay.mobile.android.adapter.HamPayBusinessesAdapter;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestHamPayBusiness;
@@ -46,6 +49,8 @@ import java.util.List;
  */
 public class PayToBusinessFragment extends Fragment {
 
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
 
     private ListView businessListView;
 
@@ -86,6 +91,9 @@ public class PayToBusinessFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        prefs = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE);
+        editor = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE).edit();
 
         hamPayBusinessesAdapter = new HamPayBusinessesAdapter(getActivity());
     }
@@ -160,12 +168,23 @@ public class PayToBusinessFragment extends Fragment {
 
         businessListView = (ListView) rootView.findViewById(R.id.businessListView);
 
-        businessListRequest = new BusinessListRequest();
-        businessListRequest.setPageNumber(requestPageNumber);
-        businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
 
-        requestHamPayBusiness = new RequestHamPayBusiness(getActivity(), new RequestBusinessListTaskCompleteListener(searchEnabled));
-        requestHamPayBusiness.execute(businessListRequest);
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            getActivity().finish();
+            startActivity(intent);
+        }else {
+            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            editor.commit();
+            businessListRequest = new BusinessListRequest();
+            businessListRequest.setPageNumber(requestPageNumber);
+            businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+
+            requestHamPayBusiness = new RequestHamPayBusiness(getActivity(), new RequestBusinessListTaskCompleteListener(searchEnabled));
+            requestHamPayBusiness.execute(businessListRequest);
+        }
 
 
         return rootView;
@@ -188,14 +207,22 @@ public class PayToBusinessFragment extends Fragment {
         FINISHED_SCROLLING = false;
         onLoadMore = false;
 
-
-        businessSearchRequest = new BusinessSearchRequest();
-        businessSearchRequest.setPageNumber(requestPageNumber);
-        businessSearchRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-        businessSearchRequest.setTerm(searchTerm);
-
-        requestSearchHamPayBusiness = new RequestSearchHamPayBusiness(getActivity(), new RequestBusinessListTaskCompleteListener(searchEnabled));
-        requestSearchHamPayBusiness.execute(businessSearchRequest);
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            getActivity().finish();
+            startActivity(intent);
+        }else {
+            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            editor.commit();
+            businessSearchRequest = new BusinessSearchRequest();
+            businessSearchRequest.setPageNumber(requestPageNumber);
+            businessSearchRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+            businessSearchRequest.setTerm(searchTerm);
+            requestSearchHamPayBusiness = new RequestSearchHamPayBusiness(getActivity(), new RequestBusinessListTaskCompleteListener(searchEnabled));
+            requestSearchHamPayBusiness.execute(businessSearchRequest);
+        }
 
 
         inputMethodManager.hideSoftInputFromWindow(searchPhraseText.getWindowToken(), 0);

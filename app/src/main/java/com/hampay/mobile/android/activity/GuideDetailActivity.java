@@ -1,4 +1,4 @@
-package com.hampay.mobile.android.fragment;
+package com.hampay.mobile.android.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;

@@ -64,17 +64,19 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     Bundle bundle;
 
     SharedPreferences prefs;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
-
         bundle = new Bundle();
 
         activity = MainActivity.this;
+
+        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+        editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE).edit();
 
         Intent intent = getIntent();
 
@@ -254,6 +256,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             finish();
             startActivity(intent);
+        }else {
+            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            editor.commit();
         }
     }
 

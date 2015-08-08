@@ -2,6 +2,7 @@ package com.hampay.mobile.android.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -56,7 +57,6 @@ public class ChangeMemorablePassActivity extends ActionBarActivity implements Vi
     ImageView input_digit_4;
     ImageView input_digit_5;
 
-    SharedPreferences prefs;
 
     RelativeLayout password_0_rl;
 
@@ -71,7 +71,9 @@ public class ChangeMemorablePassActivity extends ActionBarActivity implements Vi
     Context context;
     Activity activity;
 
+    SharedPreferences prefs;
     SharedPreferences.Editor editor;
+
 
 
     @Override
@@ -80,6 +82,8 @@ public class ChangeMemorablePassActivity extends ActionBarActivity implements Vi
         setContentView(R.layout.activity_change_memorable_pass);
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+
 
         context = this;
         activity = ChangeMemorablePassActivity.this;
@@ -293,13 +297,23 @@ public class ChangeMemorablePassActivity extends ActionBarActivity implements Vi
                     input_digit_4.setImageResource(R.drawable.pass_icon_2);
                     input_digit_5.setImageResource(R.drawable.pass_icon_2);
 
-                    changeMemorableWordRequest = new ChangeMemorableWordRequest();
-                    changeMemorableWordRequest.setPassCode(inputPasswordValue);
-                    changeMemorableWordRequest.setCurrentMemorableWord(currentMemorable);
-                    changeMemorableWordRequest.setNewMemorableWord(newMemorable);
 
-                    requestChangeMemorableWord = new RequestChangeMemorableWord(context, new RequestChangeMemorableWordTaskCompleteListener());
-                    requestChangeMemorableWord.execute(changeMemorableWordRequest);
+                    if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+                        Intent intent = new Intent();
+                        intent.setClass(context, HamPayLoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        finish();
+                        startActivity(intent);
+                    }else {
+                        editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                        editor.commit();
+                        changeMemorableWordRequest = new ChangeMemorableWordRequest();
+                        changeMemorableWordRequest.setPassCode(inputPasswordValue);
+                        changeMemorableWordRequest.setCurrentMemorableWord(currentMemorable);
+                        changeMemorableWordRequest.setNewMemorableWord(newMemorable);
+                        requestChangeMemorableWord = new RequestChangeMemorableWord(context, new RequestChangeMemorableWordTaskCompleteListener());
+                        requestChangeMemorableWord.execute(changeMemorableWordRequest);
+                    }
 
 
                     break;

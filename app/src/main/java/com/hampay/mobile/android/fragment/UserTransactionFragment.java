@@ -2,6 +2,7 @@ package com.hampay.mobile.android.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.hampay.common.core.model.request.TransactionListRequest;
 import com.hampay.common.core.model.response.TransactionListResponse;
 import com.hampay.common.core.model.response.dto.TransactionDTO;
 import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.activity.HamPayLoginActivity;
 import com.hampay.mobile.android.activity.TransactionDetailActivity;
 import com.hampay.mobile.android.adapter.UserTransactionAdapter;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
@@ -53,6 +55,9 @@ public class UserTransactionFragment extends Fragment {
     TransactionListRequest transactionListRequest;
     int requestPageNumber = 0;
 
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
+
     public UserTransactionFragment() {
         // Required empty public constructor
     }
@@ -60,6 +65,9 @@ public class UserTransactionFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        prefs = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE);
+        editor = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE).edit();
 
         transactionDTOs = new ArrayList<TransactionDTO>();
         userTransactionAdapter = new UserTransactionAdapter(getActivity());
@@ -85,14 +93,22 @@ public class UserTransactionFragment extends Fragment {
             }
         });
 
-        requestPageNumber = 0;
-
-        transactionListRequest = new TransactionListRequest();
-        transactionListRequest.setPageNumber(requestPageNumber);
-        transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-
-        requestUserTransaction = new RequestUserTransaction(getActivity(), new RequestUserTransactionsTaskCompleteListener());
-        requestUserTransaction.execute(transactionListRequest);
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            getActivity().finish();
+            startActivity(intent);
+        }else {
+            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            editor.commit();
+            requestPageNumber = 0;
+            transactionListRequest = new TransactionListRequest();
+            transactionListRequest.setPageNumber(requestPageNumber);
+            transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+            requestUserTransaction = new RequestUserTransaction(getActivity(), new RequestUserTransactionsTaskCompleteListener());
+            requestUserTransaction.execute(transactionListRequest);
+        }
 
         return rootView;
     }

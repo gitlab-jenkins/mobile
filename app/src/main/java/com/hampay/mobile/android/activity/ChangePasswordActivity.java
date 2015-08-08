@@ -2,6 +2,7 @@ package com.hampay.mobile.android.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -51,6 +52,7 @@ public class ChangePasswordActivity extends ActionBarActivity implements View.On
     ImageView input_digit_5;
 
     SharedPreferences prefs;
+    SharedPreferences.Editor editor;
 
     RelativeLayout password_0_rl, password_1_rl, password_2_rl;
 
@@ -76,6 +78,7 @@ public class ChangePasswordActivity extends ActionBarActivity implements View.On
         activity = ChangePasswordActivity.this;
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+        editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
         keyboard = (LinearLayout)findViewById(R.id.keyboard);
         password_holder = (LinearLayout)findViewById(R.id.password_holder);
@@ -415,13 +418,22 @@ public class ChangePasswordActivity extends ActionBarActivity implements View.On
 
                         if (inputPasswordValue.equalsIgnoreCase(inputRePasswordValue)) {
 
-                            changePassCodeRequest = new ChangePassCodeRequest();
-                            changePassCodeRequest.setCurrentPassCode(currentPassword);
-                            changePassCodeRequest.setNewPassCode(inputPasswordValue);
-                            changePassCodeRequest.setMemorableCode(prefs.getString(Constants.MEMORABLE_WORD, ""));
-
-                            requestChangePassCode = new RequestChangePassCode(context, new RequestChangePassCodeTaskCompleteListener());
-                            requestChangePassCode.execute(changePassCodeRequest);
+                            if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+                                Intent intent = new Intent();
+                                intent.setClass(context, HamPayLoginActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                finish();
+                                startActivity(intent);
+                            }else {
+                                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                                editor.commit();
+                                changePassCodeRequest = new ChangePassCodeRequest();
+                                changePassCodeRequest.setCurrentPassCode(currentPassword);
+                                changePassCodeRequest.setNewPassCode(inputPasswordValue);
+                                changePassCodeRequest.setMemorableCode(prefs.getString(Constants.MEMORABLE_WORD, ""));
+                                requestChangePassCode = new RequestChangePassCode(context, new RequestChangePassCodeTaskCompleteListener());
+                                requestChangePassCode.execute(changePassCodeRequest);
+                            }
 
 
                         } else {

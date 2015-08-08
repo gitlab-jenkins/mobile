@@ -9,12 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.hampay.mobile.android.R;
-import com.hampay.mobile.android.activity.ChangePasswordActivity;
+import com.hampay.mobile.android.activity.GuideDetailActivity;
 import com.hampay.mobile.android.adapter.GuideAdapter;
-import com.hampay.mobile.android.adapter.SettingAdapter;
 import com.hampay.mobile.android.util.Constants;
 
 /**
