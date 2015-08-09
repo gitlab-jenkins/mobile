@@ -18,14 +18,20 @@ import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.dto.ContactDTO;
 import com.hampay.common.core.model.dto.UserVerificationStatus;
 import com.hampay.common.core.model.request.VerifyAccountRequest;
+import com.hampay.common.core.model.response.RegistrationVerifyAccountResponse;
 import com.hampay.common.core.model.response.VerifyAccountResponse;
 import com.hampay.common.core.model.response.dto.UserProfileDTO;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.activity.MainActivity;
 import com.hampay.mobile.android.activity.PayOneActivity;
+import com.hampay.mobile.android.activity.RegVerifyAccountNoActivity;
 import com.hampay.mobile.android.activity.VerifyAccountActivity;
+import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import com.hampay.mobile.android.async.RequestRegisterVerifyAccount;
+import com.hampay.mobile.android.async.RequestVerifyAccount;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
+import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.JalaliConvert;
 import com.hampay.mobile.android.webservice.WebServices;
@@ -70,6 +76,9 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
     SharedPreferences.Editor editor;
 
+    RequestVerifyAccount requestVerifyAccount;
+    VerifyAccountRequest verifyAccountRequest;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,10 +115,11 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
             @Override
             public void onClick(View v) {
 
-                VerifyAccountRequest verifyAccountRequest = new VerifyAccountRequest();
-
                 loading_rl.setVisibility(View.VISIBLE);
-                new HttpVerifyAccountResponse().execute(verifyAccountRequest);
+
+                verifyAccountRequest = new VerifyAccountRequest();
+                requestVerifyAccount = new RequestVerifyAccount(getActivity(), new RequestVerifyAccountTaskCompleteListener());
+                requestVerifyAccount.execute(verifyAccountRequest);
             }
         });
 
@@ -193,11 +203,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
         @Override
         protected String doInBackground(Void... params) {
-
-//            WebServices webServices = new WebServices();
-            //webServices.testBankList1();
-//            userProfileResponse = webServices.getUserProfile();
-
             return null;
         }
 
@@ -220,9 +225,8 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                 }
                 jalaliConvert = new JalaliConvert();
 
-//                userProfileDTO = userProfileResponse.getService().getUserProfile();
 
-                if (userProfileDTO.getVerificationStatus().ordinal() == 0){
+                if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.UNVERIFIED){
                     user_image.setImageResource(R.drawable.user_icon_blak);
                 }else {
                     user_image.setImageResource(R.drawable.user_icon_blue);
@@ -276,7 +280,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                             hampay_1_ll.setVisibility(View.VISIBLE);
                             hampay_1.setText(contactDTOs.get(0).getDisplayName());
 //                            if (contactDTOs.get(0).getUserVerificationStatus() == UserVerificationStatus.VERIFIED){
-                                hampay_image_1.setImageResource(R.drawable.user_icon_blue_s);
+                            hampay_image_1.setImageResource(R.drawable.user_icon_blue_s);
 //                            }else {
 //                                hampay_image_1.setImageResource(R.drawable.user_icon_blak_s);
 //                            }
@@ -285,7 +289,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                             hampay_2_ll.setVisibility(View.VISIBLE);
                             hampay_2.setText(contactDTOs.get(1).getDisplayName());
 //                            if (contactDTOs.get(1).getUserVerificationStatus() == UserVerificationStatus.VERIFIED){
-                                hampay_image_2.setImageResource(R.drawable.user_icon_blue_s);
+                            hampay_image_2.setImageResource(R.drawable.user_icon_blue_s);
 //                            }else {
 //                                hampay_image_2.setImageResource(R.drawable.user_icon_blak_s);
 //                            }
@@ -294,7 +298,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                             hampay_3_ll.setVisibility(View.VISIBLE);
                             hampay_3.setText(contactDTOs.get(2).getDisplayName());
 //                            if (contactDTOs.get(2).getUserVerificationStatus() == UserVerificationStatus.VERIFIED){
-                                hampay_image_3.setImageResource(R.drawable.user_icon_blue_s);
+                            hampay_image_3.setImageResource(R.drawable.user_icon_blue_s);
 //                            }else {
 //                                hampay_image_3.setImageResource(R.drawable.user_icon_blak_s);
 //                            }
@@ -303,7 +307,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                             hampay_4_ll.setVisibility(View.VISIBLE);
                             hampay_4.setText(contactDTOs.get(3).getDisplayName());
 //                            if (contactDTOs.get(3).getUserVerificationStatus() == UserVerificationStatus.VERIFIED){
-                                hampay_image_4.setImageResource(R.drawable.user_icon_blue_s);
+                            hampay_image_4.setImageResource(R.drawable.user_icon_blue_s);
 //                            }else {
 //                                hampay_image_4.setImageResource(R.drawable.user_icon_blak_s);
 //                            }
@@ -319,41 +323,42 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     }
 
 
-    private ResponseMessage<VerifyAccountResponse> verifyAccountResponse;
-
-    public class HttpVerifyAccountResponse extends AsyncTask<VerifyAccountRequest, Void, String> {
-
-        @Override
-        protected String doInBackground(VerifyAccountRequest... params) {
-
-            WebServices webServices = new WebServices(getActivity());
-            verifyAccountResponse = webServices.verifyAccountResponse(params[0]);
-
-            return null;
+    public class RequestVerifyAccountTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<VerifyAccountResponse>>
+    {
+        public RequestVerifyAccountTaskCompleteListener(){
         }
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
+        public void onTaskComplete(ResponseMessage<VerifyAccountResponse> verifyAccountResponseMessage)
+        {
             loading_rl.setVisibility(View.GONE);
+            if (verifyAccountResponseMessage != null) {
 
-            if (isAdded()) {
+                if (verifyAccountResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
 
-                if (verifyAccountResponse != null) {
-                    if (verifyAccountResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                        Intent intent = new Intent();
-                        intent.setClass(getActivity(), VerifyAccountActivity.class);
-                        intent.putExtra(Constants.TRANSFER_MONEY_COMMENT, verifyAccountResponse.getService().getTransferMoneyComment());
-                        startActivity(intent);
-                    }
+                    Intent intent = new Intent();
+                    intent.setClass(getActivity(), VerifyAccountActivity.class);
+                    intent.putExtra(Constants.TRANSFER_MONEY_COMMENT, verifyAccountResponseMessage.getService().getTransferMoneyComment());
+                    startActivity(intent);
+                }
+                else{
+                    requestVerifyAccount = new RequestVerifyAccount(getActivity(), new RequestVerifyAccountTaskCompleteListener());
+                    new HamPayDialog(getActivity()).showFailVerifyAccountDialog(requestVerifyAccount, verifyAccountRequest,
+                            verifyAccountResponseMessage.getService().getResultStatus().getCode(),
+                            verifyAccountResponseMessage.getService().getResultStatus().getDescription());
                 }
             }
+            else {
+                requestVerifyAccount = new RequestVerifyAccount(getActivity(), new RequestVerifyAccountTaskCompleteListener());
+                new HamPayDialog(getActivity()).showFailVerifyAccountDialog(requestVerifyAccount, verifyAccountRequest,
+                        "2000",
+                        getString(R.string.msg_fail_verify_account));
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            loading_rl.setVisibility(View.VISIBLE);
         }
     }
 }

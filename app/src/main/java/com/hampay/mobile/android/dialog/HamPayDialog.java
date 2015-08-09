@@ -42,6 +42,8 @@ import com.hampay.common.core.model.request.RegistrationVerifyTransferMoneyReque
 import com.hampay.common.core.model.request.TACAcceptRequest;
 import com.hampay.common.core.model.request.TACRequest;
 import com.hampay.common.core.model.request.TransactionListRequest;
+import com.hampay.common.core.model.request.VerifyAccountRequest;
+import com.hampay.common.core.model.request.VerifyTransferMoneyRequest;
 import com.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
 import com.hampay.common.core.model.response.BusinessPaymentResponse;
 import com.hampay.common.core.model.response.ContactUsResponse;
@@ -76,7 +78,9 @@ import com.hampay.mobile.android.async.RequestSearchHamPayBusiness;
 import com.hampay.mobile.android.async.RequestTAC;
 import com.hampay.mobile.android.async.RequestTACAccept;
 import com.hampay.mobile.android.async.RequestUserTransaction;
+import com.hampay.mobile.android.async.RequestVerifyAccount;
 import com.hampay.mobile.android.async.RequestVerifyMobile;
+import com.hampay.mobile.android.async.RequestVerifyTransferMoney;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.model.FailedLoginResponse;
 import com.hampay.mobile.android.model.LogoutData;
@@ -1306,8 +1310,45 @@ public class HamPayDialog {
         dialog.show();
     }
 
+    public void showFailVerifyAccountDialog(final RequestVerifyAccount requestVerifyAccount,
+                                                    final VerifyAccountRequest verifyAccountRequest,
+                                                    final String code,
+                                                    final String message){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
-    public void showFailVerifyTransferMoneyDialog(final RequestRegistrationVerifyTransferMoney requestRegistrationVerifyTransferMoney,
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_request_register_verify_account, null);
+
+        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+
+        responseCode.setText(activity.getString(R.string.error_code, code));
+        responseMessage.setText(message);
+
+        FacedTextView retry_verify_account = (FacedTextView) view.findViewById(R.id.retry_verify_account);
+
+        retry_verify_account.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                requestVerifyAccount.execute(verifyAccountRequest);
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
+
+    public void showFailRequestVerifyTransferMoneyDialog(final RequestRegistrationVerifyTransferMoney requestRegistrationVerifyTransferMoney,
                                                   final RegistrationVerifyTransferMoneyRequest registrationVerifyTransferMoneyRequest,
                                                   final String code,
                                                   final String message){
@@ -1331,6 +1372,44 @@ public class HamPayDialog {
             public void onClick(View v) {
                 dialog.dismiss();
                 requestRegistrationVerifyTransferMoney.execute(registrationVerifyTransferMoneyRequest);
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
+
+    public void showFailVerifyTransferMoneyDialog(final RequestVerifyTransferMoney requestVerifyTransferMoney,
+                                                         final VerifyTransferMoneyRequest verifyTransferMoneyRequest,
+                                                         final String code,
+                                                         final String message){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_request_verify_transfer_money, null);
+
+        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+
+        responseCode.setText(activity.getString(R.string.error_code, code));
+        responseMessage.setText(message);
+
+        FacedTextView retry_verify_transfer_money = (FacedTextView) view.findViewById(R.id.retry_verify_transfer_money);
+
+        retry_verify_transfer_money.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                requestVerifyTransferMoney.execute(verifyTransferMoneyRequest);
             }
         });
 

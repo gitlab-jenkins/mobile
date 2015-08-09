@@ -110,13 +110,13 @@ public class RegVerifyAccountNoActivity extends ActionBarActivity {
                     }
                 }else {
                     requestRegistrationVerifyTransferMoney = new RequestRegistrationVerifyTransferMoney(context, new RequestRegistrationVerifyTransferMoneyTaskCompleteListener());
-                    new HamPayDialog(activity).showFailVerifyTransferMoneyDialog(requestRegistrationVerifyTransferMoney, registrationVerifyTransferMoneyRequest,
+                    new HamPayDialog(activity).showFailRequestVerifyTransferMoneyDialog(requestRegistrationVerifyTransferMoney, registrationVerifyTransferMoneyRequest,
                             verifyTransferMoneyResponseMessage.getService().getResultStatus().getCode(),
                             verifyTransferMoneyResponseMessage.getService().getResultStatus().getDescription());
                 }
             }else {
                 requestRegistrationVerifyTransferMoney = new RequestRegistrationVerifyTransferMoney(context, new RequestRegistrationVerifyTransferMoneyTaskCompleteListener());
-                new HamPayDialog(activity).showFailVerifyTransferMoneyDialog(requestRegistrationVerifyTransferMoney, registrationVerifyTransferMoneyRequest,
+                new HamPayDialog(activity).showFailRequestVerifyTransferMoneyDialog(requestRegistrationVerifyTransferMoney, registrationVerifyTransferMoneyRequest,
                         "2000",
                         getString(R.string.mgs_fail_verify_transfer_money));
             }

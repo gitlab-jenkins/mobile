@@ -1,18 +1,16 @@
 package com.hampay.mobile.android.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.hampay.common.core.model.response.dto.BusinessDTO;
 import com.hampay.common.core.model.response.dto.TransactionDTO;
 import com.hampay.mobile.android.R;
-import com.hampay.mobile.android.activity.PayBusinessActivity;
 import com.hampay.mobile.android.component.FacedTextView;
-import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.util.JalaliConvert;
+import com.hampay.common.core.model.response.dto.TransactionDTO.TransactionStatus;
+import com.hampay.common.core.model.response.dto.TransactionDTO.TransactionType;
 
 /**
  * Created by amir on 7/16/15.
@@ -53,14 +51,14 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
         transactionDTO = getItem(position);
 
 
-        if (transactionDTO.getTransactionStatus().ordinal() == 0){
+        if (transactionDTO.getTransactionStatus() == TransactionStatus.SUCCESS){
 
-            if (transactionDTO.getTransactionType().ordinal() == 0){
+            if (transactionDTO.getTransactionType() == TransactionType.CREDIT){
                 viewHolder.status_text.setText(context.getString(R.string.credit));
                 viewHolder.status_text.setTextColor(convertView.getResources().getColor(R.color.register_btn_color));
                 viewHolder.status_icon.setImageResource(R.drawable.arrow_r);
             }
-            else if (transactionDTO.getTransactionType().ordinal() == 1){
+            else if (transactionDTO.getTransactionType() == TransactionType.DEBIT){
                 viewHolder.status_text.setText(context.getString(R.string.debit));
                 viewHolder.status_text.setTextColor(convertView.getResources().getColor(R.color.user_change_status));
                 viewHolder.status_icon.setImageResource(R.drawable.arrow_p);

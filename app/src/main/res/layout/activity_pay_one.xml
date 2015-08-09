@@ -107,7 +107,6 @@
                     android:textSize="18sp"
                     android:padding="6dp"
                     android:textColor="@color/normal_text"
-                    android:singleLine="true"
                     android:hint="@string/insert_message"
                     android:gravity="top"/>
 
