@@ -78,7 +78,7 @@ public class AppSliderActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClass(AppSliderActivity.this, StartActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 finish();
                 startActivity(intent);
             }
@@ -200,9 +200,11 @@ public class AppSliderActivity extends ActionBarActivity {
                         sleep(3 * 1000);
 
                         intent.setClass(AppSliderActivity.this, HamPayLoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        finish();
                         startActivity(intent);
 
-                        finish();
+
 
                     } catch (Exception e) {
 

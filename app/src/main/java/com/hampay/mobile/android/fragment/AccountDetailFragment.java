@@ -2,6 +2,7 @@ package com.hampay.mobile.android.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.hampay.common.common.response.ResponseMessage;
+import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.dto.ContactDTO;
 import com.hampay.common.core.model.dto.UserVerificationStatus;
 import com.hampay.common.core.model.request.VerifyAccountRequest;
@@ -66,17 +68,14 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
     Bundle bundle;
 
-//    public AccountDetailFragment() {
-//    }
+    SharedPreferences.Editor editor;
 
-//    public AccountDetailFragment(UserProfileDTO userProfileDTO) {
-//        // Required empty public constructor
-//        this.userProfileDTO = userProfileDTO;
-//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        editor = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE).edit();
 
         bundle = getArguments();
 
@@ -236,22 +235,26 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
                 user_account_title.setText(getString(R.string.account_type));
 
+
+                editor.putInt(Constants.USER_VERIFICATION_STATUS, userProfileDTO.getVerificationStatus().ordinal());
+                editor.commit();
+
                 switch (userProfileDTO.getVerificationStatus()){
 
-                    case DELEGATED:
-                        user_account_type.setText(": " + "عادی");
-                        break;
-
-                    case VERIFIED:
-                        user_account_type.setText(": " + "محدود (در انتظار تایید)");
-                        break;
-
                     case UNVERIFIED:
-                        user_account_type.setText(": " + "محدود");
+                        user_account_type.setText(" " + getString(R.string.unverified_account));
                         break;
 
                     case PENDING_REVIEW:
-                        user_account_type.setText(": " + "محدود (در انتظار تایید کاربر)");
+                        user_account_type.setText(" " + getString(R.string.pending_review_account));
+                        break;
+
+                    case VERIFIED:
+                        user_account_type.setText(" " + getString(R.string.verified_account));
+                        break;
+
+                    case DELEGATED:
+                        user_account_type.setText(" " + getString(R.string.delegate_account));
                         break;
                 }
 
@@ -343,14 +346,12 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
             if (isAdded()) {
 
                 if (verifyAccountResponse != null) {
-
-                    Intent intent = new Intent();
-                    intent.setClass(getActivity(), VerifyAccountActivity.class);
-                    intent.putExtra(Constants.TRANSFER_MONEY_COMMENT, verifyAccountResponse.getService().getTransferMoneyComment());
-                    startActivity(intent);
-
-//                verification_response_text.setText(
-//                        verifyAccountResponse.getService().getTransferMoneyComment());
+                    if (verifyAccountResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                        Intent intent = new Intent();
+                        intent.setClass(getActivity(), VerifyAccountActivity.class);
+                        intent.putExtra(Constants.TRANSFER_MONEY_COMMENT, verifyAccountResponse.getService().getTransferMoneyComment());
+                        startActivity(intent);
+                    }
                 }
             }
         }

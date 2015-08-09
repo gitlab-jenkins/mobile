@@ -90,12 +90,18 @@
     <string name="detail_transaction">جزئیات تراکنش</string>
     <string name="account_no">شماره حساب </string>
     <string name="mobile_no">شماره همراه </string>
-    <string name="account_type">نوع حساب </string>
+    <string name="account_type">نوع حساب: </string>
+    <string name="unverified_account">محدود</string>
+    <string name="pending_review_account">محدود (در انتظار تایید کاربر)</string>
+    <string name="verified_account">محدود (در انتظار تایید)</string>
+    <string name="delegate_account">عادی</string>
+
     <string name="last_login">آخرین زمان ورود به سامانه </string>
 
     <string name="bank_name">انتخاب بانک</string>
 
     <string name="contact_us">تماس با ما</string>
+    <string name="user_help">راهنمای این مرحله از ثبت نام</string>
     <string name="user_mail">ایمیل شما</string>
     <string name="user_text_contact">پیام خود را بنویسید</string>
     <string name="send_message">ارسال پیام</string>
@@ -164,7 +170,7 @@
 \n
 برای شما پیامک خواهد شد.</string>
     <string name="mobile_no_verification">تایید شماره همراه</string>
-    <string name="deliver_verification">کد ۵ رقمی برای شما پیامک شد. در صورت عدم دریافت پیامک تا ۵ دقیقه، دکمه ارسال مجدد را فشار دهید.</string>
+    <string name="deliver_verification">کد ۵ رقمی برای شما پیامک شد. در صورت عدم دریافت پیامک تا ۳ دقیقه، دکمه ارسال مجدد را فشار دهید.</string>
     <string name="verification">بررسی</string>
 
     <string name="resend">ارسال مجدد</string>
@@ -331,6 +337,10 @@
     <string name="sms_upper_reach_sms">حداکثر درخواست برای ارسال مجدد پیامک فعالسازی به اتمام رسید. لطفا در ساعات دیگر تلاش کنید.</string>
     <string name="msg_fail_change_pass_code">تغییر رمز عبور با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_change_memorable_word">تغییر کلمه یادآوری با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
+    <string name="msg_fail_payment_permission">نوع حساب شما %1$s می باشد و برای پرداخت می بایستی به نوع عادی تبدیل شود.
+    \n اما شما کماکان میتونید از اعضای عادی هم‌پی پول دریافت کنید.
+    </string>
+    <string name="action_fail_payment_permission">باشه</string>
 
     <string name="msg_success_change_setting">خواسته شما با موفقیت انجام شد.</string>
     <string name="success_setting">باشه</string>
@@ -338,9 +348,5 @@
     <string name="retry_registration_entry">مجدد تلاش می‌کنم</string>
     <string name="title_activity_server_select">ServerSelectActivity</string>
     <string name="prevent_rooted_device">باشه</string>
-
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_guide_detail">GuideDetailActivity</string>
 
 </resources>

@@ -10,7 +10,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -43,9 +42,8 @@ import com.hampay.mobile.android.location.BestLocationListener;
 import com.hampay.mobile.android.location.BestLocationProvider;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.NationalCodeVerification;
-import com.hampay.mobile.android.util.NetworkConnectivity;
 
-public class ProfileEntryActivity extends ActionBarActivity {
+public class ProfileEntryActivity extends Activity {
 
     Activity activity;
 
@@ -71,8 +69,6 @@ public class ProfileEntryActivity extends ActionBarActivity {
     RelativeLayout loading_rl;
 
     Context context;
-
-//    NetworkConnectivity networkConnectivity;
 
     String rawAccountNumberValue = "";
     int rawAccountNumberValueLength = 0;
@@ -110,8 +106,6 @@ public class ProfileEntryActivity extends ActionBarActivity {
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
-//        networkConnectivity = new NetworkConnectivity(this);
-
         loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
 
 
@@ -132,9 +126,6 @@ public class ProfileEntryActivity extends ActionBarActivity {
                         cellNumberIsValid = false;
                     }
                 }
-//                else {
-//                    cellNumberIcon.setImageDrawable(null);
-//                }
             }
         });
 
@@ -154,11 +145,7 @@ public class ProfileEntryActivity extends ActionBarActivity {
                         nationalCodeIcon.setImageResource(R.drawable.false_icon);
                         nationalCodeIsValid = false;
                     }
-
                 }
-//                else {
-//                    nationalCodeIcon.setImageDrawable(null);
-//                }
             }
         });
 
@@ -191,11 +178,7 @@ public class ProfileEntryActivity extends ActionBarActivity {
                     }else {
                         accountNumberIcon.setImageResource(R.drawable.false_icon);
                     }
-
                 }
-//                else {
-//                    accountNumberIcon.setImageDrawable(null);
-//                }
             }
         });
 
@@ -251,25 +234,17 @@ public class ProfileEntryActivity extends ActionBarActivity {
                     if (bankListResponse.getBanks().size() > 0)
                         showListBankDialog();
                 }else {
-//                    if (networkConnectivity.isNetworkConnected()) {
                     loading_rl.setVisibility(View.VISIBLE);
                     bankListRequest = new BankListRequest();
                     requestBankList = new RequestBankList(context, new RequestBanksTaskCompleteListener(true));
                     requestBankList.execute(bankListRequest);
-//                    }else {
-//                        Toast.makeText(context, getString(R.string.no_network), Toast.LENGTH_LONG).show();
-//                    }
                 }
             }
         });
 
-//        if (networkConnectivity.isNetworkConnected()) {
         bankListRequest = new BankListRequest();
         requestBankList = new RequestBankList(this, new RequestBanksTaskCompleteListener(false));
         requestBankList.execute(bankListRequest);
-//        }
-
-
 
         keepOn_button = (ButtonRectangle) findViewById(R.id.keepOn_button);
         keepOn_button.setOnClickListener(new View.OnClickListener() {
@@ -286,8 +261,6 @@ public class ProfileEntryActivity extends ActionBarActivity {
                 cellNumberValue.clearFocus();
                 nationalCodeValue.clearFocus();
                 accountNumberValue.clearFocus();
-
-//                if (networkConnectivity.isNetworkConnected()) {
 
                 if (cellNumberIsValid && nationalCodeIsValid && accountNumberIsValid
                         && cellNumberValue.getText().toString().length() > 0
@@ -329,10 +302,6 @@ public class ProfileEntryActivity extends ActionBarActivity {
                         nationalCodeValue.requestFocus();
                     }
                 }
-//                }
-//                else {
-//                    Toast.makeText(getApplicationContext(), getString(R.string.no_network), Toast.LENGTH_LONG).show();
-//                }
 
                 keepOn_button.requestFocus();
 
@@ -341,7 +310,8 @@ public class ProfileEntryActivity extends ActionBarActivity {
     }
 
     public void contactUs(View view){
-        new HamPayDialog(this).showContactUsDialog();
+//        new HamPayDialog(this).showContactUsDialog();
+        new HamPayDialog(this).showHelpDialog(Constants.SERVER_IP + ":8080" + "/help/reg-userInfo.html");
     }
 
 
@@ -369,7 +339,6 @@ public class ProfileEntryActivity extends ActionBarActivity {
                 accountNumberIsValid = false;
                 accountNumberIcon.setImageDrawable(null);
                 accountNumberValue.setFilters(new InputFilter[]{new InputFilter.LengthFilter(accountNumberFormat.length())});
-//                accountNumberHint.setHint(bankListResponse.getService().getBanks().get(position).getAccountFormat());
                 bankSelectionDialog.dismiss();
                 accountNumberValue.setFocusableInTouchMode(true);
             }
@@ -453,7 +422,7 @@ public class ProfileEntryActivity extends ActionBarActivity {
 
                     Intent intent = new Intent();
                     intent.setClass(ProfileEntryActivity.this, VerificationActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     finish();
                     startActivity(intent);
                 }else {

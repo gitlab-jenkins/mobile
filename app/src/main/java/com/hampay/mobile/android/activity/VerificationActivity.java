@@ -39,7 +39,8 @@ public class VerificationActivity extends ActionBarActivity {
     RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest;
 
     public void contactUs(View view){
-        new HamPayDialog(this).showContactUsDialog();
+//        new HamPayDialog(this).showContactUsDialog();
+        new HamPayDialog(this).showHelpDialog(Constants.SERVER_IP + ":8080" + "/help/reg-userInfo.html");
     }
 
     @Override

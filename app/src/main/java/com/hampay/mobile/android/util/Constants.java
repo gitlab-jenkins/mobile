@@ -12,6 +12,7 @@ public class Constants {
     public static final String WEB_PAGE_ADDRESS = "web_page_address";
 
     public static final String MEMORABLE_WORD = "MemorableWord";
+    public static final String USER_VERIFICATION_STATUS = "UserVerificationStatus";
 
     public static final String APP_PREFERENCE_NAME = "HamPay_Preferences";
     public static final String TRANSFER_MONEY_COMMENT = "TransferMoneyComment";

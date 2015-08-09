@@ -87,7 +87,8 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
 
 
     public void contactUs(View view){
-        (new HamPayDialog(this)).showContactUsDialog();
+//        (new HamPayDialog(this)).showContactUsDialog();
+        new HamPayDialog(this).showHelpDialog(Constants.SERVER_IP + ":8080" + "/help/logout.html");
     }
 
     @Override

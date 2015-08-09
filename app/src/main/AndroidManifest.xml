@@ -243,7 +243,8 @@
         </activity>
         <activity
             android:name=".activity.GuideDetailActivity"
-            android:label="@string/title_activity_guide_detail" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

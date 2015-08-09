@@ -267,7 +267,7 @@
                 android:layout_margin="20dp"
                 style="@style/NumberProgressBar_Relax_Blue"
                 custom:progress_current="0"
-                custom:progress_max="100"
+                custom:progress_max="180"
                 android:layout_height="wrap_content"
                 custom:progress_text_size="20sp"
                 custom:progress_unreached_bar_height="1.5dp"

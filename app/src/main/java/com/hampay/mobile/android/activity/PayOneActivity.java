@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
+import com.hampay.common.core.model.dto.UserVerificationStatus;
 import com.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
 import com.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
 import com.hampay.mobile.android.Helper.DatabaseHelper;
@@ -69,13 +70,41 @@ public class PayOneActivity extends ActionBarActivity {
         finish();
     }
 
+    UserVerificationStatus userVerificationStatus;
+    String userVerificationMessage = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay_one);
 
+
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+
+        switch (prefs.getInt(Constants.USER_VERIFICATION_STATUS, -1)){
+
+            case 0:
+                userVerificationStatus = UserVerificationStatus.UNVERIFIED;
+                userVerificationMessage = getString(R.string.unverified_account);
+                break;
+
+            case 1:
+                userVerificationStatus = UserVerificationStatus.PENDING_REVIEW;
+                userVerificationMessage = getString(R.string.pending_review_account);
+                break;
+
+            case 2:
+                userVerificationStatus = UserVerificationStatus.VERIFIED;
+                userVerificationMessage = getString(R.string.verified_account);
+                break;
+
+            case 3:
+                userVerificationStatus = UserVerificationStatus.DELEGATED;
+                userVerificationMessage = getString(R.string.delegate_account);
+                break;
+
+        }
 
         loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
 
@@ -173,21 +202,24 @@ public class PayOneActivity extends ActionBarActivity {
                     }else {
                         editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                         editor.commit();
+                        switch (userVerificationStatus){
+                            case DELEGATED:
+                                individualPaymentConfirmRequest = new IndividualPaymentConfirmRequest();
+                                individualPaymentConfirmRequest.setCellNumber(contactPhoneNo);
+                                requestIndividualPaymentConfirm = new RequestIndividualPaymentConfirm(context, new RequestIndividualPaymentConfirmTaskCompleteListener());
+                                requestIndividualPaymentConfirm.execute(individualPaymentConfirmRequest);
+                                break;
 
-                        individualPaymentConfirmRequest = new IndividualPaymentConfirmRequest();
-                        individualPaymentConfirmRequest.setCellNumber(contactPhoneNo);
-                        requestIndividualPaymentConfirm = new RequestIndividualPaymentConfirm(context, new RequestIndividualPaymentConfirmTaskCompleteListener());
-                        requestIndividualPaymentConfirm.execute(individualPaymentConfirmRequest);
+                            default:
+                                new HamPayDialog(activity).showFailPaymentPermissionDialog(userVerificationMessage);
+                                break;
+                        }
                     }
-
                 }else {
                     (new HamPayDialog(activity)).showIncorrectPrice();
                 }
-
             }
         });
-
-
     }
 
 

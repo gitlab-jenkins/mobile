@@ -31,9 +31,9 @@ public class PostStartActivity extends ActionBarActivity {
 
                 Intent intent = new Intent();
                 intent.setClass(PostStartActivity.this, ProfileEntryActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(intent);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 finish();
+                startActivity(intent);
             }
         });
     }

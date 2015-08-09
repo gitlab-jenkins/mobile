@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
+import com.hampay.mobile.android.util.Constants;
 
 public class PostRegVerifyAccountNoActivity extends ActionBarActivity {
 
@@ -23,7 +24,8 @@ public class PostRegVerifyAccountNoActivity extends ActionBarActivity {
     SharedPreferences prefs;
 
     public void contactUs(View view){
-        new HamPayDialog(this).showContactUsDialog();
+//        new HamPayDialog(this).showContactUsDialog();
+        new HamPayDialog(this).showHelpDialog(Constants.SERVER_IP + ":8080" + "/help/accountVerification.html");
     }
 
     @Override

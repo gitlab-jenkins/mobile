@@ -22,7 +22,7 @@ public class NumberProgressBar extends View {
 
     private Context context;
 
-    private int mMaxProgress = 100;
+    private int mMaxProgress = 180;
 
     private int mCurrentProgress = 0;
 
@@ -142,7 +142,7 @@ public class NumberProgressBar extends View {
         }
 
         setProgress(attributes.getInt(R.styleable.NumberProgressBar_progress_current, 0));
-        setMax(attributes.getInt(R.styleable.NumberProgressBar_progress_max, 100));
+        setMax(attributes.getInt(R.styleable.NumberProgressBar_progress_max, 180));
 
         attributes.recycle();
         initializePainters();
@@ -233,7 +233,7 @@ public class NumberProgressBar extends View {
 
     private void calculateDrawRectF() {
 
-        mCurrentDrawText = String.format("%d", getProgress() * 100 / getMax());
+        mCurrentDrawText = String.format("%d", getProgress() * 180 / getMax());
         mCurrentDrawText = mPrefix + mCurrentDrawText + mSuffix;
         mDrawTextWidth = mTextPaint.measureText(mCurrentDrawText);
 

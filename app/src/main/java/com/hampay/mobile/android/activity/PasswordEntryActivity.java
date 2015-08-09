@@ -68,7 +68,8 @@ public class PasswordEntryActivity extends ActionBarActivity implements View.OnC
     RegistrationPassCodeEntryRequest registrationPassCodeEntryRequest;
 
     public void contactUs(View view){
-        new HamPayDialog(this).showContactUsDialog();
+//        new HamPayDialog(this).showContactUsDialog();
+        new HamPayDialog(this).showHelpDialog(Constants.SERVER_IP + ":8080" + "/help/passwordEntry.html");
     }
 
 

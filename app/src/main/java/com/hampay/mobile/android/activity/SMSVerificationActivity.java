@@ -143,7 +143,7 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
 
         numberProgressBar = (NumberProgressBar)findViewById(R.id.numberProgressBar);
 
-        countDownTimer = new CountDownTimer(101000, 1000) {
+        countDownTimer = new CountDownTimer(181000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 numberProgressBar.incrementProgressBy(1);
@@ -254,7 +254,8 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
 
 
     public void contactUs(View view){
-        new HamPayDialog(this).showContactUsDialog();
+//        new HamPayDialog(this).showContactUsDialog();
+        new HamPayDialog(this).showHelpDialog(Constants.SERVER_IP + ":8080" + "/help/reg-smsToken.html");
     }
 
     public class RequestRegistrationVerifyMobileTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationVerifyMobileResponse>>
@@ -523,7 +524,7 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
 
                     numberProgressBar.setProgress(0);
 
-                    countDownTimer = new CountDownTimer(101000, 1000) {
+                    countDownTimer = new CountDownTimer(181000, 1000) {
 
                         public void onTick(long millisUntilFinished) {
                             numberProgressBar.incrementProgressBy(1);

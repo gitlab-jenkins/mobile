@@ -98,7 +98,8 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/normal_text"
                             android:textSize="18sp"
-                            android:gravity="center"/>
+                            android:gravity="center"
+                            android:text="@string/account_type"/>
 
 
                     </LinearLayout>

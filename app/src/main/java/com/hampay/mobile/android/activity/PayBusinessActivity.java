@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
+import com.hampay.common.core.model.dto.UserVerificationStatus;
 import com.hampay.common.core.model.request.BusinessPaymentConfirmRequest;
 import com.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
 import com.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
@@ -58,6 +59,10 @@ public class PayBusinessActivity extends ActionBarActivity {
     RequestBusinessPaymentConfirm requestBusinessPaymentConfirm;
     BusinessPaymentConfirmRequest businessPaymentConfirmRequest;
 
+    UserVerificationStatus userVerificationStatus;
+    String userVerificationMessage = "";
+
+
     public void backActionBar(View view){
         finish();
     }
@@ -74,6 +79,31 @@ public class PayBusinessActivity extends ActionBarActivity {
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+
+
+        switch (prefs.getInt(Constants.USER_VERIFICATION_STATUS, -1)){
+
+            case 0:
+                userVerificationStatus = UserVerificationStatus.UNVERIFIED;
+                userVerificationMessage = getString(R.string.unverified_account);
+                break;
+
+            case 1:
+                userVerificationStatus = UserVerificationStatus.PENDING_REVIEW;
+                userVerificationMessage = getString(R.string.pending_review_account);
+                break;
+
+            case 2:
+                userVerificationStatus = UserVerificationStatus.VERIFIED;
+                userVerificationMessage = getString(R.string.verified_account);
+                break;
+
+            case 3:
+                userVerificationStatus = UserVerificationStatus.DELEGATED;
+                userVerificationMessage = getString(R.string.delegate_account);
+                break;
+
+        }
 
 
         bundle = getIntent().getExtras();
@@ -125,10 +155,18 @@ public class PayBusinessActivity extends ActionBarActivity {
                     }else {
                         editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                         editor.commit();
-                        businessPaymentConfirmRequest = new BusinessPaymentConfirmRequest();
-                        businessPaymentConfirmRequest.setBusinessCode(bundle.getString("business_code"));
-                        requestBusinessPaymentConfirm = new RequestBusinessPaymentConfirm(context, new RequestBusinessPaymentConfirmTaskCompleteListener());
-                        requestBusinessPaymentConfirm.execute(businessPaymentConfirmRequest);
+                        switch (userVerificationStatus) {
+                            case DELEGATED:
+                                businessPaymentConfirmRequest = new BusinessPaymentConfirmRequest();
+                                businessPaymentConfirmRequest.setBusinessCode(bundle.getString("business_code"));
+                                requestBusinessPaymentConfirm = new RequestBusinessPaymentConfirm(context, new RequestBusinessPaymentConfirmTaskCompleteListener());
+                                requestBusinessPaymentConfirm.execute(businessPaymentConfirmRequest);
+                                break;
+
+                            default:
+                                new HamPayDialog(activity).showFailPaymentPermissionDialog(userVerificationMessage);
+                                break;
+                        }
                     }
 
                 }else {
