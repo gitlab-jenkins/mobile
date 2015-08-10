@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
@@ -22,7 +20,7 @@ import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.NetworkConnectivity;
 
-public class VerificationActivity extends ActionBarActivity {
+public class VerificationActivity extends Activity {
 
     ButtonRectangle keepOn_button;
     Context context;
@@ -87,7 +85,7 @@ public class VerificationActivity extends ActionBarActivity {
 
                     Intent intent = new Intent();
                     intent.setClass(VerificationActivity.this, SMSVerificationActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     finish();
                     startActivity(intent);
                 }else {

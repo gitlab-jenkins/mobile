@@ -477,10 +477,11 @@ public class HamPayDialog {
 
                     Intent intent = new Intent();
                     intent.setClass(activity, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.putExtra(Constants.USER_PROFILE_DTO, userProfileDTO);
+                    activity.finish();
                     activity.startActivity(intent);
 
-                    activity.finish();
 
                     if (dialog != null && dialog.isShowing()) {
                         dialog.dismiss();
@@ -535,7 +536,7 @@ public class HamPayDialog {
 
                 Intent intent = new Intent();
                 intent.setClass(activity, HamPayLoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 activity.startActivity(intent);
 
                 new RequestLogout(activity, new RequestLogoutResponseTaskCompleteListener()).execute(logoutData);
@@ -645,8 +646,9 @@ public class HamPayDialog {
                 dialog.dismiss();
                 Intent intent = new Intent();
                 intent.setClass(activity, AppSliderActivity.class);
-                activity.startActivity(intent);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 activity.finish();
+                activity.startActivity(intent);
             }
         });
 

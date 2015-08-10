@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 
 import com.hampay.mobile.android.R;
@@ -12,7 +11,7 @@ import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
 
-public class ConfirmAccountNoActivity extends ActionBarActivity {
+public class ConfirmAccountNoActivity extends Activity {
 
     ButtonRectangle keepOn_button;
 
@@ -37,7 +36,7 @@ public class ConfirmAccountNoActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClass(ConfirmAccountNoActivity.this, ConfirmInfoActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 finish();
                 startActivity(intent);
 

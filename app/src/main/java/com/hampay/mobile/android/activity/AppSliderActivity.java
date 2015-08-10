@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.adapter.AppSliderAdapter;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.fragment.AppSliderFragmentA;
@@ -97,7 +98,7 @@ public class AppSliderActivity extends ActionBarActivity {
             }
         });
 
-        sliding_into_app.setAdapter(new MyAdapter(getSupportFragmentManager()));
+        sliding_into_app.setAdapter(new AppSliderAdapter(getSupportFragmentManager()));
         sliding_into_app.setOffscreenPageLimit(5);
 
 //        handler = new Handler(Looper.getMainLooper());
@@ -265,64 +266,64 @@ public class AppSliderActivity extends ActionBarActivity {
 
 
 
-    class MyAdapter extends FragmentStatePagerAdapter
-    {
-
-        public MyAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int i) {
-            Fragment fragment=null;
-            if(i == 0)
-            {
-                fragment=new AppSliderFragmentA();
-            }
-            if(i==1)
-            {
-                fragment=new AppSliderFragmentB();
-            }
-            if(i==2)
-            {
-                fragment=new AppSliderFragmentC();
-            }
-            if(i==3)
-            {
-                fragment=new AppSliderFragmentD();
-            }
-            if(i==4)
-            {
-                fragment=new AppSliderFragmentE();
-            }
-            return fragment;
-        }
-
-        @Override
-        public int getCount() {
-            return 5;
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            if(object instanceof AppSliderFragmentE){
-                view.setTag(4);
-            }
-            if(object instanceof AppSliderFragmentD){
-                view.setTag(3);
-            }
-            if(object instanceof AppSliderFragmentC){
-                view.setTag(2);
-            }
-            if(object instanceof AppSliderFragmentB){
-                view.setTag(1);
-            }
-            if(object instanceof AppSliderFragmentA){
-                view.setTag(0);
-            }
-            return super.isViewFromObject(view, object);
-        }
-    }
+//    class MyAdapter extends FragmentStatePagerAdapter
+//    {
+//
+//        public MyAdapter(FragmentManager fm) {
+//            super(fm);
+//        }
+//
+//        @Override
+//        public Fragment getItem(int i) {
+//            Fragment fragment=null;
+//            if(i == 0)
+//            {
+//                fragment=new AppSliderFragmentA();
+//            }
+//            if(i==1)
+//            {
+//                fragment=new AppSliderFragmentB();
+//            }
+//            if(i==2)
+//            {
+//                fragment=new AppSliderFragmentC();
+//            }
+//            if(i==3)
+//            {
+//                fragment=new AppSliderFragmentD();
+//            }
+//            if(i==4)
+//            {
+//                fragment=new AppSliderFragmentE();
+//            }
+//            return fragment;
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            return 5;
+//        }
+//
+//        @Override
+//        public boolean isViewFromObject(View view, Object object) {
+//            if(object instanceof AppSliderFragmentE){
+//                view.setTag(4);
+//            }
+//            if(object instanceof AppSliderFragmentD){
+//                view.setTag(3);
+//            }
+//            if(object instanceof AppSliderFragmentC){
+//                view.setTag(2);
+//            }
+//            if(object instanceof AppSliderFragmentB){
+//                view.setTag(1);
+//            }
+//            if(object instanceof AppSliderFragmentA){
+//                view.setTag(0);
+//            }
+//            return super.isViewFromObject(view, object);
+//        }
+//    }
 
 
 }

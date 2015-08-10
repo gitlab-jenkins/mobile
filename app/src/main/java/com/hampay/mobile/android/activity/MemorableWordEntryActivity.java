@@ -4,12 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
@@ -27,7 +24,7 @@ import com.hampay.mobile.android.util.DeviceInfo;
 
 import java.util.UUID;
 
-public class MemorableWordEntryActivity extends ActionBarActivity {
+public class MemorableWordEntryActivity extends Activity {
 
     ButtonRectangle keepOn_button;
     SharedPreferences prefs;
@@ -113,6 +110,7 @@ public class MemorableWordEntryActivity extends ActionBarActivity {
 
                     Intent intent = new Intent();
                     intent.setClass(MemorableWordEntryActivity.this, CompleteRegistrationActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     finish();
                     startActivity(intent);
                 }else {

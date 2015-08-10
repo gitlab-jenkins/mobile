@@ -3,14 +3,13 @@ package com.hampay.mobile.android.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 
-public class PostStartActivity extends ActionBarActivity {
+public class PostStartActivity extends Activity {
 
 
     ButtonRectangle keepOn_button;

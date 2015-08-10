@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -42,7 +41,7 @@ import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.DeviceInfo;
 import com.hampay.mobile.android.util.NetworkConnectivity;
 
-public class ConfirmInfoActivity extends ActionBarActivity implements View.OnClickListener {
+public class ConfirmInfoActivity extends Activity implements View.OnClickListener {
 
     Activity activity;
 
@@ -317,9 +316,9 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
                         confirm_info_dialog.dismiss();
                         Intent intent = new Intent();
                         intent.setClass(ConfirmInfoActivity.this, PasswordEntryActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                        startActivity(intent);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         finish();
+                        startActivity(intent);
                     }
                 });
 
@@ -454,10 +453,10 @@ public class ConfirmInfoActivity extends ActionBarActivity implements View.OnCli
 
                     Intent intent = new Intent();
                     intent.setClass(ConfirmInfoActivity.this, RegVerifyAccountNoActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.putExtra(Constants.TRANSFER_MONEY_COMMENT, verifyAccountResponseMessage.getService().getTransferMoneyComment());
-                    startActivity(intent);
                     finish();
+                    startActivity(intent);
                 }
                 else{
                     requestRegisterVerifyAccount = new RequestRegisterVerifyAccount(context, new RequestRegistrationVerifyAccountResponseTaskCompleteListener());

@@ -1,81 +1,74 @@
 package com.hampay.mobile.android.adapter;
 
-import android.content.Context;
-import android.support.v4.view.PagerAdapter;
-import android.view.LayoutInflater;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
-import com.hampay.mobile.android.R;
-import com.hampay.mobile.android.component.FacedTextView;
-import com.hampay.mobile.android.model.AppSlideInfo;
-
-import java.util.List;
+import com.hampay.mobile.android.fragment.AppSliderFragmentA;
+import com.hampay.mobile.android.fragment.AppSliderFragmentB;
+import com.hampay.mobile.android.fragment.AppSliderFragmentC;
+import com.hampay.mobile.android.fragment.AppSliderFragmentD;
+import com.hampay.mobile.android.fragment.AppSliderFragmentE;
 
 /**
- * Created by amir on 7/23/15.
+ * Created by amir on 8/10/15.
  */
-public class AppSliderAdapter extends PagerAdapter {
+public class AppSliderAdapter extends FragmentStatePagerAdapter {
 
-    private Context context;
-    private List<AppSlideInfo> appSlideInfos;
-
-    public AppSliderAdapter(Context context, List<AppSlideInfo> appSlideInfos){
-
-        this.context = context;
-        this.appSlideInfos = appSlideInfos;
-
+    public AppSliderAdapter(FragmentManager fm) {
+        super(fm);
     }
 
+    @Override
+    public Fragment getItem(int i) {
+        Fragment fragment=null;
+        if(i == 0)
+        {
+            fragment=new AppSliderFragmentA();
+        }
+        if(i==1)
+        {
+            fragment=new AppSliderFragmentB();
+        }
+        if(i==2)
+        {
+            fragment=new AppSliderFragmentC();
+        }
+        if(i==3)
+        {
+            fragment=new AppSliderFragmentD();
+        }
+        if(i==4)
+        {
+            fragment=new AppSliderFragmentE();
+        }
+        return fragment;
+    }
 
     @Override
     public int getCount() {
-        return appSlideInfos.size();
+        return 5;
     }
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
-        return view == object;
+        if(object instanceof AppSliderFragmentE){
+            view.setTag(4);
+        }
+        if(object instanceof AppSliderFragmentD){
+            view.setTag(3);
+        }
+        if(object instanceof AppSliderFragmentC){
+            view.setTag(2);
+        }
+        if(object instanceof AppSliderFragmentB){
+            view.setTag(1);
+        }
+        if(object instanceof AppSliderFragmentA){
+            view.setTag(0);
+        }
+        return super.isViewFromObject(view, object);
     }
-
-
-    @Override
-    public Object instantiateItem(ViewGroup container, final int position) {
-
-        LayoutInflater inflater = (LayoutInflater) container.getContext()
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        View view = inflater.inflate(R.layout.fragment_app_slider_a, null);
-
-        ImageView intro_icon = (ImageView)view.findViewById(R.id.intro_icon);
-        FacedTextView intro_text = (FacedTextView) view.findViewById(R.id.intro_text);
-//        ImageView wireframe = (ImageView)view.findViewById(R.id.wireframe);
-
-        intro_icon.setImageResource(appSlideInfos.get(position).getImageRes());
-        intro_text.setText(appSlideInfos.get(position).getImageDescription());
-//        wireframe.setImageResource(appSlideInfos.get(position).getWallImageRes());
-
-        RelativeLayout layout = new RelativeLayout(context);
-        //layout.setOrientation(LinearLayout.VERTICAL);
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT);
-
-        layout.setLayoutParams(layoutParams);
-
-        layout.addView(view);
-
-        container.addView(layout);
-        return layout;
-
-    }
-
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView((RelativeLayout)object);
-    }
-
-
 
 }

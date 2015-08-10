@@ -42,8 +42,9 @@ public class CompleteRegistrationActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClass(CompleteRegistrationActivity.this, HamPayLoginActivity.class);
-                startActivity(intent);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 finish();
+                startActivity(intent);
             }
         });
     }

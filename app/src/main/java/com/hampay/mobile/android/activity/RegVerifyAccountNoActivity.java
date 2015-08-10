@@ -5,10 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
@@ -23,7 +21,7 @@ import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.NetworkConnectivity;
 
-public class RegVerifyAccountNoActivity extends ActionBarActivity {
+public class RegVerifyAccountNoActivity extends Activity {
 
     ButtonRectangle keepOn_button;
 
@@ -104,7 +102,7 @@ public class RegVerifyAccountNoActivity extends ActionBarActivity {
                     if (verifyTransferMoneyResponseMessage.getService().getIsVerified()) {
                         Intent intent = new Intent();
                         intent.setClass(RegVerifyAccountNoActivity.this, PostRegVerifyAccountNoActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         finish();
                         startActivity(intent);
                     }

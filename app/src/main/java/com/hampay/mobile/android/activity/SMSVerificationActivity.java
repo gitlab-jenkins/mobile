@@ -273,7 +273,7 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
                     if (registrationVerifyMobileResponseMessage.getService().getIsVerified()) {
                         Intent intent = new Intent();
                         intent.setClass(SMSVerificationActivity.this, ConfirmAccountNoActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         finish();
                         startActivity(intent);
 

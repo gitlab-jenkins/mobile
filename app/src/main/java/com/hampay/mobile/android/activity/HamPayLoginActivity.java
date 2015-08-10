@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -39,7 +38,7 @@ import com.hampay.mobile.android.util.SecurityUtils;
 import java.lang.reflect.Type;
 
 
-public class HamPayLoginActivity extends ActionBarActivity implements View.OnClickListener {
+public class HamPayLoginActivity extends Activity implements View.OnClickListener {
 
     SharedPreferences.Editor editor;
 
@@ -181,9 +180,10 @@ public class HamPayLoginActivity extends ActionBarActivity implements View.OnCli
                         editor.commit();
                         Intent intent = new Intent();
                         intent.setClass(activity, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.putExtra(Constants.USER_PROFILE_DTO, tacResponseMessage.getService().getUserProfile());
-                        startActivity(intent);
                         finish();
+                        startActivity(intent);
                     }
                 }else {
                     requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
