@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
@@ -16,8 +17,11 @@ public class CompleteRegistrationActivity extends ActionBarActivity {
 
     ButtonRectangle hampay_login_button;
 
+    ImageView step_circle;
+
     Activity activity;
 
+    SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
     public void contactUs(View view){
@@ -28,11 +32,22 @@ public class CompleteRegistrationActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_complete_registration);
 
+
+        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         editor.putBoolean(Constants.REGISTERED_USER, true);
         editor.commit();
+
+        step_circle = (ImageView)findViewById(R.id.step_circle);
+
+        if (prefs.getBoolean(Constants.VERIFIED_USER, false)){
+            step_circle.setImageResource(R.drawable.step_circle_g_6);
+        }else {
+            step_circle.setImageResource(R.drawable.step_circle_b_6);
+        }
 
         activity = CompleteRegistrationActivity.this;
 

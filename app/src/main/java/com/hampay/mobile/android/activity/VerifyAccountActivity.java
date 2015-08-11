@@ -76,7 +76,7 @@ public class VerifyAccountActivity extends ActionBarActivity {
                     if (verifyTransferMoneyResponseMessage.getService().getIsVerified()) {
                         Intent intent = new Intent();
                         intent.setClass(VerifyAccountActivity.this, CongratsAccountActivity.class);
-                        startActivity(intent);
+                        startActivityForResult(intent, 1023);
                         finish();
                     }
                 }else {

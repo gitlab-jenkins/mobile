@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -25,7 +24,6 @@ import com.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
 import com.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
 import com.hampay.common.core.model.response.RegistrationVerifyMobileResponse;
 import com.hampay.mobile.android.R;
-import com.hampay.mobile.android.account.Log;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestRegistrationSendSmsToken;
 import com.hampay.mobile.android.async.RequestVerifyMobile;
@@ -35,7 +33,6 @@ import com.hampay.mobile.android.component.material.RippleView;
 import com.hampay.mobile.android.component.numericalprogressbar.NumberProgressBar;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
-import com.hampay.mobile.android.util.NetworkConnectivity;
 
 public class SMSVerificationActivity extends Activity implements View.OnClickListener{
 
@@ -65,7 +62,6 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
     FacedTextView input_digit_4;
     FacedTextView input_digit_5;
 
-    NetworkConnectivity networkConnectivity;
     Context context;
 
     RequestRegistrationSendSmsToken requestRegistrationSendSmsToken;
@@ -111,6 +107,10 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
 
                 receivedSmsValue = body;
 
+                editor.putString(Constants.RECEIVED_SMS_ACTIVATION, receivedSmsValue);
+                editor.commit();
+
+                numberProgressBar.setProgress(0);
                 numberProgressBar.setVisibility(View.INVISIBLE);
                 countDownTimer.cancel();
 
@@ -125,10 +125,6 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
                 input_digit_5.setText(receivedSmsValue.substring(4, 5));
                 input_digit_5.setBackgroundColor(Color.TRANSPARENT);
 
-
-                if (body.length() == 4) {
-                }
-
             }
         };
         this.registerReceiver(mIntentReceiver, intentFilter);
@@ -141,6 +137,10 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
 
         context = this;
 
+        editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+        editor.putString(Constants.RECEIVED_SMS_ACTIVATION, "");
+        editor.commit();
+
         numberProgressBar = (NumberProgressBar)findViewById(R.id.numberProgressBar);
 
         countDownTimer = new CountDownTimer(181000, 1000) {
@@ -151,23 +151,28 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
 
             public void onFinish() {
 
-                sendSmsCounter++;
+                numberProgressBar.setProgress(0);
 
-                if (sendSmsCounter < 3) {
-                    sendSmsPermision = true;
-                    Toast.makeText(context, getString(R.string.msg_fail_receive_sms), Toast.LENGTH_LONG).show();
-                }else {
-                    sendSmsPermision = false;
-                    Toast.makeText(context, getString(R.string.sms_upper_reach_sms), Toast.LENGTH_LONG).show();
+                if (prefs.getString(Constants.RECEIVED_SMS_ACTIVATION, "").length() == 0) {
+
+                    sendSmsCounter++;
+
+                    if (sendSmsCounter < 3) {
+                        sendSmsPermision = true;
+                        Toast.makeText(context, getString(R.string.msg_fail_receive_sms), Toast.LENGTH_LONG).show();
+                    } else {
+                        sendSmsPermision = false;
+                        Toast.makeText(context, getString(R.string.sms_upper_reach_sms), Toast.LENGTH_LONG).show();
+                    }
+
+                    keyboard.setVisibility(LinearLayout.VISIBLE);
+                    Animation animation = AnimationUtils.loadAnimation(context, R.anim.keyboard);
+                    animation.setDuration(400);
+                    keyboard.setAnimation(animation);
+                    keyboard.animate();
+                    animation.start();
+                    keyboard.setVisibility(View.VISIBLE);
                 }
-
-                keyboard.setVisibility(LinearLayout.VISIBLE);
-                Animation animation   =    AnimationUtils.loadAnimation(context, R.anim.keyboard);
-                animation.setDuration(400);
-                keyboard.setAnimation(animation);
-                keyboard.animate();
-                animation.start();
-                keyboard.setVisibility(View.VISIBLE);
             }
         }.start();
 
@@ -175,19 +180,9 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
 
         activity = SMSVerificationActivity.this;
 
-        editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, SMSVerificationActivity.class.toString());
-        editor.commit();
-
         keyboard = (LinearLayout)findViewById(R.id.keyboard);
         activation_holder = (LinearLayout)findViewById(R.id.activation_holder);
         activation_holder.setOnClickListener(this);
-
-        editor.commit();
-
-
-
-        networkConnectivity = new NetworkConnectivity(this);
 
 
         digit_1 = (RippleView)findViewById(R.id.digit_1);
@@ -264,6 +259,7 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
         public void onTaskComplete(ResponseMessage<RegistrationVerifyMobileResponse> registrationVerifyMobileResponseMessage)
         {
 
+            numberProgressBar.setProgress(0);
             verify_button.setEnabled(true);
             loading_rl.setVisibility(View.GONE);
             if (registrationVerifyMobileResponseMessage != null) {

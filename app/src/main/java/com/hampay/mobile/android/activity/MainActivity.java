@@ -20,6 +20,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.hampay.common.core.model.response.dto.UserProfileDTO;
 import com.hampay.mobile.android.R;
@@ -260,6 +261,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
             editor.commit();
         }
+
     }
 
 
@@ -391,6 +393,49 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 }
             }
         }, null);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Fragment fragment;
+        String title;
+
+        if (requestCode == 1024) {
+            if(resultCode == 1024){
+//                String result = data.getStringExtra("result");
+                fragment = new PayToOneFragment();
+                title = getString(R.string.title_pay_to_one);
+                currentFragmet = 2;
+                setupActionnBar(currentFragmet);
+                if (fragment != null) {
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.container_body, fragment);
+                    fragmentTransaction.commit();
+                    fragment_title.setText(title);
+                }
+
+            }
+        }else if (requestCode == 1023){
+            if(resultCode == 1023){
+                fragment = new AccountDetailFragment();
+                bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
+                fragment.setArguments(bundle);
+                title = getString(R.string.title_account_detail);
+                currentFragmet = 0;
+                setupActionnBar(currentFragmet);
+                if (fragment != null) {
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.container_body, fragment);
+                    fragmentTransaction.commit();
+                    fragment_title.setText(title);
+                }
+            }
+        }
+
     }
 
     @Override

@@ -90,35 +90,35 @@ public class GuideFragment extends Fragment {
                         intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/limitedAccount.html");
                         break;
 
+//                    case 9:
+//                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/payment.html");
+//                        break;
+
                     case 9:
                         intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/payment.html");
                         break;
 
                     case 10:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/individualPayment.html");
-                        break;
-
-                    case 11:
                         intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/businessPayment.html");
                         break;
 
-                    case 12:
+                    case 11:
                         intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/contactUs.html");
                         break;
 
-                    case 13:
+                    case 12:
                         intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/logout.html");
                         break;
 
-                    case 14:
+                    case 13:
                         intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/setting.html");
                         break;
 
-                    case 15:
+                    case 14:
                         intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/changeMemorableWord.html");
                         break;
 
-                    case 16:
+                    case 15:
                         intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/changePassword.html");
                         break;
 

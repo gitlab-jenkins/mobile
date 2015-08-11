@@ -85,6 +85,8 @@ public class VerificationActivity extends Activity {
 
                     Intent intent = new Intent();
                     intent.setClass(VerificationActivity.this, SMSVerificationActivity.class);
+                    editor.putString(Constants.REGISTERED_ACTIVITY_DATA, SMSVerificationActivity.class.toString());
+                    editor.commit();
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     finish();
                     startActivity(intent);

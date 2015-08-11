@@ -117,7 +117,7 @@ public class PayOneAdapter extends SectionedBaseAdapter{
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + recentPay.getPhone()));
-                    mContext.startActivity(intent);
+                    mContext.startActivityForResult(intent, 1024);
                 }
             });
             pay_icon.setOnClickListener(new View.OnClickListener() {
@@ -127,7 +127,7 @@ public class PayOneAdapter extends SectionedBaseAdapter{
                     intent.setClass(mContext, PayOneActivity.class);
                     intent.putExtra("contact_name", recentPay.getName());
                     intent.putExtra("contact_phone_no", recentPay.getPhone());
-                    mContext.startActivityForResult(intent, 111);
+                    mContext.startActivityForResult(intent, 1024);
                 }
             });
 
@@ -144,7 +144,7 @@ public class PayOneAdapter extends SectionedBaseAdapter{
                     intent.setClass(mContext, PayOneActivity.class);
                     intent.putExtra("contact_name", enabledHamPay.getDisplayName());
                     intent.putExtra("contact_phone_no", enabledHamPay.getCellNumber());
-                    mContext.startActivityForResult(intent, 111);
+                    mContext.startActivityForResult(intent, 1024);
                 }
             });
 

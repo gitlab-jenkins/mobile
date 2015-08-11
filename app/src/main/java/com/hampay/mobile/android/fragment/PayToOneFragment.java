@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,23 +81,21 @@ public class PayToOneFragment extends Fragment {
     public PayToOneFragment() {
     }
 
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        super.startActivityForResult(intent, requestCode);
 
-    public static void updatePayments(){
-
-        recentPays = dbHelper.getAllRecentPays();
-        enabledHamPays = dbHelper.getAllEnabledHamPay();
-
-        if (enabledHamPays.size() > 0) {
-
-            if (enabledHamPays.size() > 0) {
-                payOneAdapter = new PayOneAdapter(context,
-                        recentPays,
-                        enabledHamPays);
-                pinnedHeaderListView.setAdapter(payOneAdapter);
-            }
-        }
+        Log.e("Start", "start");
 
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.e("Start", "start");
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

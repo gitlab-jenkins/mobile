@@ -33,8 +33,13 @@ public class Constants {
     public static final int DEFAULT_PAGE_SIZE = 15;
     public static final String WEB_URL_REGEX = "\\(?\\b(http://|https://|www[.]|app[.])[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]";
     public static final String REGISTERED_USER = "registeredUser";
+    public static final String VERIFIED_USER = "verified_user";
     public static final String TOKEN_ID = "TokenId";
     public static final String  MOBILE_TIME_OUT = "mobile_time_out";
     public static final long MOBILE_TIME_OUT_INTERVAL = 300000;
+    public static final String FORCE_USER_PROFILE = "force_user_profile";
+    public static final String RECEIVED_SMS_ACTIVATION = "received_sms_activation";
+    public static final String MAX_XFER_Amount = "MaxXferAmount";
+    public static final String MIN_XFER_Amount = "MinXferAmount";
 
 }

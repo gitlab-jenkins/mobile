@@ -29,7 +29,6 @@ import com.hampay.mobile.android.component.edittext.CurrencyFormatter;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
-import com.hampay.mobile.android.fragment.PayToOneFragment;
 import com.hampay.mobile.android.util.Constants;
 
 public class PayOneActivity extends ActionBarActivity {
@@ -73,6 +72,10 @@ public class PayOneActivity extends ActionBarActivity {
     UserVerificationStatus userVerificationStatus;
     String userVerificationMessage = "";
 
+    Long MaxXferAmount = 0L;
+    Long MinXferAmount = 0L;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +84,9 @@ public class PayOneActivity extends ActionBarActivity {
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+
+        MaxXferAmount = prefs.getLong(Constants.MAX_XFER_Amount, 0);
+        MinXferAmount = prefs.getLong(Constants.MIN_XFER_Amount, 0);
 
         switch (prefs.getInt(Constants.USER_VERIFICATION_STATUS, -1)){
 
@@ -202,17 +208,21 @@ public class PayOneActivity extends ActionBarActivity {
                     }else {
                         editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                         editor.commit();
-                        switch (userVerificationStatus){
-                            case DELEGATED:
-                                individualPaymentConfirmRequest = new IndividualPaymentConfirmRequest();
-                                individualPaymentConfirmRequest.setCellNumber(contactPhoneNo);
-                                requestIndividualPaymentConfirm = new RequestIndividualPaymentConfirm(context, new RequestIndividualPaymentConfirmTaskCompleteListener());
-                                requestIndividualPaymentConfirm.execute(individualPaymentConfirmRequest);
-                                break;
+                        if (amountValue >= MinXferAmount && amountValue <= MaxXferAmount) {
+                            switch (userVerificationStatus) {
+                                case DELEGATED:
+                                    individualPaymentConfirmRequest = new IndividualPaymentConfirmRequest();
+                                    individualPaymentConfirmRequest.setCellNumber(contactPhoneNo);
+                                    requestIndividualPaymentConfirm = new RequestIndividualPaymentConfirm(context, new RequestIndividualPaymentConfirmTaskCompleteListener());
+                                    requestIndividualPaymentConfirm.execute(individualPaymentConfirmRequest);
+                                    break;
 
-                            default:
-                                new HamPayDialog(activity).showFailPaymentPermissionDialog(userVerificationMessage);
-                                break;
+                                default:
+                                    new HamPayDialog(activity).showFailPaymentPermissionDialog(userVerificationMessage);
+                                    break;
+                            }
+                        }else {
+                            new HamPayDialog(activity).showIncorrectAmountDialog(MinXferAmount, MaxXferAmount);
                         }
                     }
                 }else {
@@ -226,15 +236,19 @@ public class PayOneActivity extends ActionBarActivity {
     @Override
     public void onBackPressed() {
 
-        PayToOneFragment.updatePayments();
-
         if (intentContact){
             Intent i = new Intent();
             i.setClass(this, MainActivity.class);
             startActivity(i);
         }
 
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("result", 1024);
+        setResult(1024);
+
         finish();
+
+
 
     }
 

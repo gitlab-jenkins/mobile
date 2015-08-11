@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +18,10 @@ import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.dto.ContactDTO;
 import com.hampay.common.core.model.dto.UserVerificationStatus;
+import com.hampay.common.core.model.request.UserProfileRequest;
 import com.hampay.common.core.model.request.VerifyAccountRequest;
 import com.hampay.common.core.model.response.RegistrationVerifyAccountResponse;
+import com.hampay.common.core.model.response.UserProfileResponse;
 import com.hampay.common.core.model.response.VerifyAccountResponse;
 import com.hampay.common.core.model.response.dto.UserProfileDTO;
 import com.hampay.mobile.android.R;
@@ -28,6 +31,7 @@ import com.hampay.mobile.android.activity.RegVerifyAccountNoActivity;
 import com.hampay.mobile.android.activity.VerifyAccountActivity;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestRegisterVerifyAccount;
+import com.hampay.mobile.android.async.RequestUserProfile;
 import com.hampay.mobile.android.async.RequestVerifyAccount;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
@@ -74,23 +78,33 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
     Bundle bundle;
 
+    SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
     RequestVerifyAccount requestVerifyAccount;
     VerifyAccountRequest verifyAccountRequest;
+
+    RequestUserProfile requestUserProfile;
+    UserProfileRequest userProfileRequest;
+
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        prefs = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE);
         editor = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE).edit();
+
+
 
         bundle = getArguments();
 
         this.userProfileDTO = (UserProfileDTO)bundle.getSerializable(Constants.USER_PROFILE_DTO);
 
-        new HttpUserProfile().execute();
+        editor.putLong(Constants.MAX_XFER_Amount, this.userProfileDTO.getMaxXferAmount());
+        editor.putLong(Constants.MIN_XFER_Amount, this.userProfileDTO.getMinXferAmount());
+        editor.commit();
 
     }
 
@@ -100,6 +114,9 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         View rootView = inflater.inflate(R.layout.fragment_account_detail, container, false);
 
         verification_status_ll = (LinearLayout)rootView.findViewById(R.id.verification_status_ll);
+
+        loading_rl = (RelativeLayout)rootView.findViewById(R.id.loading_rl);
+
 
         hampay_1_ll = (LinearLayout)rootView.findViewById(R.id.hampay_1_ll);
         hampay_2_ll = (LinearLayout)rootView.findViewById(R.id.hampay_2_ll);
@@ -145,6 +162,17 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         hampay_image_3 = (ImageView)rootView.findViewById(R.id.hampay_image_3);
         hampay_image_4 = (ImageView)rootView.findViewById(R.id.hampay_image_4);
 
+
+        if (prefs.getBoolean(Constants.FORCE_USER_PROFILE, false)){
+            fillUserProfile(userProfileDTO);
+            editor.putBoolean(Constants.FORCE_USER_PROFILE, false);
+            editor.commit();
+        }else {
+            userProfileRequest = new UserProfileRequest();
+            requestUserProfile = new RequestUserProfile(getActivity(), new RequestUserProfileTaskCompleteListener());
+            requestUserProfile.execute(userProfileRequest);
+        }
+
         // Inflate the layout for this fragment
         return rootView;
     }
@@ -167,158 +195,66 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         switch (v.getId()){
             case R.id.hampay_1_ll:
                 intent = new Intent(getActivity(), PayOneActivity.class);
-                intent.putExtra(Constants.CONTACT_PHONE_NO, userProfileDTO.getAccountNumber());
-                intent.putExtra(Constants.CONTACT_NAME, userProfileDTO.getFullName());
+                intent.putExtra(Constants.CONTACT_PHONE_NO, userProfileDTO.getSelectedContacts().get(0).getCellNumber());
+                intent.putExtra(Constants.CONTACT_NAME, userProfileDTO.getSelectedContacts().get(0).getDisplayName());
                 startActivity(intent);
                 break;
             case R.id.hampay_2_ll:
                 intent = new Intent(getActivity(), PayOneActivity.class);
-                intent.putExtra(Constants.CONTACT_PHONE_NO, userProfileDTO.getAccountNumber());
-                intent.putExtra(Constants.CONTACT_NAME, userProfileDTO.getFullName());
+                intent.putExtra(Constants.CONTACT_PHONE_NO, userProfileDTO.getSelectedContacts().get(1).getCellNumber());
+                intent.putExtra(Constants.CONTACT_NAME, userProfileDTO.getSelectedContacts().get(1).getDisplayName());
                 startActivity(intent);
                 break;
             case R.id.hampay_3_ll:
                 intent = new Intent(getActivity(), PayOneActivity.class);
-                intent.putExtra(Constants.CONTACT_PHONE_NO, userProfileDTO.getAccountNumber());
-                intent.putExtra(Constants.CONTACT_NAME, userProfileDTO.getFullName());
+                intent.putExtra(Constants.CONTACT_PHONE_NO, userProfileDTO.getSelectedContacts().get(2).getCellNumber());
+                intent.putExtra(Constants.CONTACT_NAME, userProfileDTO.getSelectedContacts().get(2).getDisplayName());
                 startActivity(intent);
                 break;
             case R.id.hampay_4_ll:
                 intent = new Intent(getActivity(), PayOneActivity.class);
-                intent.putExtra(Constants.CONTACT_PHONE_NO, userProfileDTO.getAccountNumber());
-                intent.putExtra(Constants.CONTACT_NAME, userProfileDTO.getFullName());
+                intent.putExtra(Constants.CONTACT_PHONE_NO, userProfileDTO.getSelectedContacts().get(3).getCellNumber());
+                intent.putExtra(Constants.CONTACT_NAME, userProfileDTO.getSelectedContacts().get(3).getDisplayName());
                 startActivity(intent);
                 break;
         }
     }
 
 
-    public class HttpUserProfile extends AsyncTask<Void, Void, String> {
-
-//        ResponseMessage<UserProfileResponse> userProfileResponse = null;
-
-//        UserProfileDTO userProfileDTO;
-
-        JalaliConvert jalaliConvert;
-
-        @Override
-        protected String doInBackground(Void... params) {
-            return null;
+    public class RequestUserProfileTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<UserProfileResponse>>
+    {
+        public RequestUserProfileTaskCompleteListener(){
         }
 
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
+        public void onTaskComplete(ResponseMessage<UserProfileResponse> userProfileResponseMessage)
+        {
+            loading_rl.setVisibility(View.GONE);
+            if (userProfileResponseMessage != null) {
 
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+                if (userProfileResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
 
-            if (userProfileDTO != null) {
+                    fillUserProfile(userProfileResponseMessage.getService().getUserProfile());
 
-
-                if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.UNVERIFIED) {
-                    verification_status_ll.setVisibility(View.VISIBLE);
-                }else {
-                    verification_status_ll.setVisibility(View.GONE);
                 }
-                jalaliConvert = new JalaliConvert();
-
-
-                if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.UNVERIFIED){
-                    user_image.setImageResource(R.drawable.user_icon_blak);
-                }else {
-                    user_image.setImageResource(R.drawable.user_icon_blue);
+                else{
+                    requestUserProfile = new RequestUserProfile(getActivity(), new RequestUserProfileTaskCompleteListener());
+                    new HamPayDialog(getActivity()).showFailUserProfileDialog(requestUserProfile, userProfileRequest,
+                            userProfileResponseMessage.getService().getResultStatus().getCode(),
+                            userProfileResponseMessage.getService().getResultStatus().getDescription());
                 }
-                user_name_text.setText(userProfileDTO.getFullName());
-                MainActivity.user_account_name.setText(userProfileDTO.getFullName());
-                user_account_no_text.setText(getString(R.string.account_no) + ": " + userProfileDTO.getAccountNumber());
-                user_bank_name.setText(userProfileDTO.getBankName());
-                user_mobile_no.setText(getString(R.string.mobile_no) + ": " + userProfileDTO.getCellNumber());
-
-                user_account_title.setText(getString(R.string.account_type));
-
-
-                editor.putInt(Constants.USER_VERIFICATION_STATUS, userProfileDTO.getVerificationStatus().ordinal());
-                editor.commit();
-
-                switch (userProfileDTO.getVerificationStatus()){
-
-                    case UNVERIFIED:
-                        user_account_type.setText(" " + getString(R.string.unverified_account));
-                        break;
-
-                    case PENDING_REVIEW:
-                        user_account_type.setText(" " + getString(R.string.pending_review_account));
-                        break;
-
-                    case VERIFIED:
-                        user_account_type.setText(" " + getString(R.string.verified_account));
-                        break;
-
-                    case DELEGATED:
-                        user_account_type.setText(" " + getString(R.string.delegate_account));
-                        break;
-                }
-
-
-                if (userProfileDTO.getLastLoginDate() != null) {
-                    user_last_login.setText(getString(R.string.last_login) + ": "
-                            + jalaliConvert.GregorianToPersian(userProfileDTO.getLastLoginDate()));
-                }else {
-                    user_last_login.setText("");
-                }
-
-
-                List<ContactDTO> contactDTOs = userProfileDTO.getSelectedContacts();
-
-
-                for (int contact = 0; contact < contactDTOs.size(); contact++){
-                    switch (contact){
-                        case 0:
-                            hampay_1_ll.setVisibility(View.VISIBLE);
-                            hampay_1.setText(contactDTOs.get(0).getDisplayName());
-//                            if (contactDTOs.get(0).getUserVerificationStatus() == UserVerificationStatus.VERIFIED){
-                            hampay_image_1.setImageResource(R.drawable.user_icon_blue_s);
-//                            }else {
-//                                hampay_image_1.setImageResource(R.drawable.user_icon_blak_s);
-//                            }
-                            break;
-                        case 1:
-                            hampay_2_ll.setVisibility(View.VISIBLE);
-                            hampay_2.setText(contactDTOs.get(1).getDisplayName());
-//                            if (contactDTOs.get(1).getUserVerificationStatus() == UserVerificationStatus.VERIFIED){
-                            hampay_image_2.setImageResource(R.drawable.user_icon_blue_s);
-//                            }else {
-//                                hampay_image_2.setImageResource(R.drawable.user_icon_blak_s);
-//                            }
-                            break;
-                        case 2:
-                            hampay_3_ll.setVisibility(View.VISIBLE);
-                            hampay_3.setText(contactDTOs.get(2).getDisplayName());
-//                            if (contactDTOs.get(2).getUserVerificationStatus() == UserVerificationStatus.VERIFIED){
-                            hampay_image_3.setImageResource(R.drawable.user_icon_blue_s);
-//                            }else {
-//                                hampay_image_3.setImageResource(R.drawable.user_icon_blak_s);
-//                            }
-                            break;
-                        case 3:
-                            hampay_4_ll.setVisibility(View.VISIBLE);
-                            hampay_4.setText(contactDTOs.get(3).getDisplayName());
-//                            if (contactDTOs.get(3).getUserVerificationStatus() == UserVerificationStatus.VERIFIED){
-                            hampay_image_4.setImageResource(R.drawable.user_icon_blue_s);
-//                            }else {
-//                                hampay_image_4.setImageResource(R.drawable.user_icon_blak_s);
-//                            }
-                            break;
-
-                    }
-                }
-
-                loading_rl.setVisibility(View.GONE);
-
             }
+            else {
+                requestUserProfile = new RequestUserProfile(getActivity(), new RequestUserProfileTaskCompleteListener());
+                new HamPayDialog(getActivity()).showFailUserProfileDialog(requestUserProfile, userProfileRequest,
+                        "2000",
+                        getString(R.string.msg_fail_user_profile));
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            loading_rl.setVisibility(View.VISIBLE);
         }
     }
 
@@ -360,5 +296,115 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         public void onTaskPreRun() {
             loading_rl.setVisibility(View.VISIBLE);
         }
+    }
+
+
+    JalaliConvert jalaliConvert;
+
+    private void fillUserProfile(UserProfileDTO userProfileDTO){
+
+
+        editor.putLong(Constants.MAX_XFER_Amount, userProfileDTO.getMaxXferAmount());
+        editor.putLong(Constants.MIN_XFER_Amount, userProfileDTO.getMinXferAmount());
+        editor.commit();
+
+        if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.UNVERIFIED) {
+            verification_status_ll.setVisibility(View.VISIBLE);
+        }else {
+            verification_status_ll.setVisibility(View.GONE);
+        }
+        jalaliConvert = new JalaliConvert();
+
+
+        if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.UNVERIFIED){
+            user_image.setImageResource(R.drawable.user_icon_blak);
+        }else {
+            user_image.setImageResource(R.drawable.user_icon_blue);
+        }
+        user_name_text.setText(userProfileDTO.getFullName());
+        MainActivity.user_account_name.setText(userProfileDTO.getFullName());
+        user_account_no_text.setText(getString(R.string.account_no) + ": " + userProfileDTO.getAccountNumber());
+        user_bank_name.setText(userProfileDTO.getBankName());
+        user_mobile_no.setText(getString(R.string.mobile_no) + ": " + userProfileDTO.getCellNumber());
+
+        user_account_title.setText(getString(R.string.account_type));
+
+
+        editor.putInt(Constants.USER_VERIFICATION_STATUS, userProfileDTO.getVerificationStatus().ordinal());
+        editor.commit();
+
+        switch (userProfileDTO.getVerificationStatus()){
+
+            case UNVERIFIED:
+                user_account_type.setText(" " + getString(R.string.unverified_account));
+                break;
+
+            case PENDING_REVIEW:
+                user_account_type.setText(" " + getString(R.string.pending_review_account));
+                break;
+
+            case VERIFIED:
+                user_account_type.setText(" " + getString(R.string.verified_account));
+                break;
+
+            case DELEGATED:
+                user_account_type.setText(" " + getString(R.string.delegate_account));
+                break;
+        }
+
+
+        if (userProfileDTO.getLastLoginDate() != null) {
+            user_last_login.setText(getString(R.string.last_login) + ": "
+                    + jalaliConvert.GregorianToPersian(userProfileDTO.getLastLoginDate()));
+        }else {
+            user_last_login.setText("");
+        }
+
+
+        List<ContactDTO> contactDTOs = userProfileDTO.getSelectedContacts();
+
+
+        for (int contact = 0; contact < contactDTOs.size(); contact++){
+            switch (contact){
+                case 0:
+                    hampay_1_ll.setVisibility(View.VISIBLE);
+                    hampay_1.setText(contactDTOs.get(0).getDisplayName());
+                    if (contactDTOs.get(0).getUserVerificationStatus() == UserVerificationStatus.DELEGATED){
+                        hampay_image_1.setImageResource(R.drawable.user_icon_blue_s);
+                    }else {
+                        hampay_image_1.setImageResource(R.drawable.user_icon_blak_s);
+                    }
+                    break;
+                case 1:
+                    hampay_2_ll.setVisibility(View.VISIBLE);
+                    hampay_2.setText(contactDTOs.get(1).getDisplayName());
+                    if (contactDTOs.get(1).getUserVerificationStatus() == UserVerificationStatus.DELEGATED){
+                        hampay_image_2.setImageResource(R.drawable.user_icon_blue_s);
+                    }else {
+                        hampay_image_2.setImageResource(R.drawable.user_icon_blak_s);
+                    }
+                    break;
+                case 2:
+                    hampay_3_ll.setVisibility(View.VISIBLE);
+                    hampay_3.setText(contactDTOs.get(2).getDisplayName());
+                    if (contactDTOs.get(2).getUserVerificationStatus() == UserVerificationStatus.DELEGATED){
+                        hampay_image_3.setImageResource(R.drawable.user_icon_blue_s);
+                    }else {
+                        hampay_image_3.setImageResource(R.drawable.user_icon_blak_s);
+                    }
+                    break;
+                case 3:
+                    hampay_4_ll.setVisibility(View.VISIBLE);
+                    hampay_4.setText(contactDTOs.get(3).getDisplayName());
+                    if (contactDTOs.get(3).getUserVerificationStatus() == UserVerificationStatus.DELEGATED){
+                        hampay_image_4.setImageResource(R.drawable.user_icon_blue_s);
+                    }else {
+                        hampay_image_4.setImageResource(R.drawable.user_icon_blak_s);
+                    }
+                    break;
+
+            }
+        }
+
     }
 }

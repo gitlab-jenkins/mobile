@@ -201,8 +201,9 @@
     <string name="reg_verify_account_no_text_3">لطفا جهت تکمیل بررسی، مبلغ فوق(۲۱۴۱ ریال) را از حساب خود(۱۳۴۵۴) به یکی از روش‌های بالا به حساب هم‌پی (۸۰۰۰۴۵۹) باز گردانید.</string>
     <string name="reg_verify_account_no_keep_on">پس از انجام واریز، دکمه ادامه را کلیک کنید.</string>
 
-    <string name="get_password">دریافت رمز  عبور</string>
+    <string name="get_password">ثبت رمزعبور</string>
     <string name="get_password_text_1">مالکیت حساب شما احراز شد</string>
+    <string name="get_password_text_0">تایید مالکیت حساب</string>
     <string name="get_password_text_2">منتظر تماس هم‌پی یارتان برای ارتقا به کاربر عادی باشید.</string>
     <string name="get_password_text_3">در مرحله بعد یک رمز عبور برای ورود به سیستم انتخاب خواهید کرد.</string>
     <string name="get_password_text_4">لطفا رمز عبوری پنج رقمی را به انتخاب خود وارد نمایید.دقت کنید که بیش از دو عدد تکراری قابل قبول نمی‌باشد.</string>
@@ -252,7 +253,6 @@
         <item>دریافت کلمه یادآوری</item>
         <item>جزییات حساب</item>
         <item>حساب محدود</item>
-        <item>پرداخت</item>
         <item>پرداخت به فرد</item>
         <item>پرداخت به کسب و کار</item>
         <item>تماس با ما</item>
@@ -319,6 +319,7 @@
     <string name="mgs_fail_registration_send_sms_token">درخواست پیامک فعالسازی با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_registration_verify_mobile">ارسال کد فعالسازی با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_verify_account">درخواست بررسی حساب شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
+    <string name="msg_fail_user_profile">دریافت جزییات حساب با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_registration_fetch_user_data">دریافت اطلاعات کاربری شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_registration_confirm_user_data">تایید اطلاعات کاربری شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="mgs_fail_verify_transfer_money">درخواست شما برای بررسی انتقال وجه با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
@@ -340,6 +341,9 @@
     <string name="msg_fail_payment_permission">نوع حساب شما %1$s می باشد و برای پرداخت می بایستی به نوع عادی تبدیل شود.
     \n اما شما کماکان میتونید از اعضای عادی هم‌پی پول دریافت کنید.
     </string>
+
+    <string name="msg_incorrect_amount">مبلغ واریزی شما می بایستی بین %1$s ریال و %2$s ریال باشد.</string>
+
     <string name="action_fail_payment_permission">باشه</string>
 
     <string name="msg_success_change_setting">خواسته شما با موفقیت انجام شد.</string>

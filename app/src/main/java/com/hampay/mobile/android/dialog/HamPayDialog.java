@@ -42,6 +42,7 @@ import com.hampay.common.core.model.request.RegistrationVerifyTransferMoneyReque
 import com.hampay.common.core.model.request.TACAcceptRequest;
 import com.hampay.common.core.model.request.TACRequest;
 import com.hampay.common.core.model.request.TransactionListRequest;
+import com.hampay.common.core.model.request.UserProfileRequest;
 import com.hampay.common.core.model.request.VerifyAccountRequest;
 import com.hampay.common.core.model.request.VerifyTransferMoneyRequest;
 import com.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
@@ -77,6 +78,7 @@ import com.hampay.mobile.android.async.RequestRegistrationVerifyTransferMoney;
 import com.hampay.mobile.android.async.RequestSearchHamPayBusiness;
 import com.hampay.mobile.android.async.RequestTAC;
 import com.hampay.mobile.android.async.RequestTACAccept;
+import com.hampay.mobile.android.async.RequestUserProfile;
 import com.hampay.mobile.android.async.RequestUserTransaction;
 import com.hampay.mobile.android.async.RequestVerifyAccount;
 import com.hampay.mobile.android.async.RequestVerifyMobile;
@@ -89,6 +91,7 @@ import com.hampay.mobile.android.model.RecentPay;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.webservice.WebServices;
 
+import java.text.NumberFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -479,6 +482,8 @@ public class HamPayDialog {
                     intent.setClass(activity, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.putExtra(Constants.USER_PROFILE_DTO, userProfileDTO);
+                    editor.putBoolean(Constants.FORCE_USER_PROFILE, true);
+                    editor.commit();
                     activity.finish();
                     activity.startActivity(intent);
 
@@ -818,6 +823,7 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                activity.setResult(1024);
                 activity.finish();
                 activity.onBackPressed();
             }
@@ -871,7 +877,7 @@ public class HamPayDialog {
             if (individualPaymentResponseMessage != null){
                 if (individualPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
 
-                    new HamPayDialog(activity).individualPaymentDialog(individualPaymentResponseMessage.getService(),
+                    individualPaymentDialog(individualPaymentResponseMessage.getService(),
                             individualPaymentRequest,
                             contactName);
                 }else {
@@ -1336,6 +1342,43 @@ public class HamPayDialog {
             public void onClick(View v) {
                 dialog.dismiss();
                 requestVerifyAccount.execute(verifyAccountRequest);
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
+    public void showFailUserProfileDialog(final RequestUserProfile requestUserProfile,
+                                            final UserProfileRequest userProfileRequest,
+                                            final String code,
+                                            final String message){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_user_profile, null);
+
+        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+
+        responseCode.setText(activity.getString(R.string.error_code, code));
+        responseMessage.setText(message);
+
+        FacedTextView retry_user_profile = (FacedTextView) view.findViewById(R.id.retry_user_profile);
+
+        retry_user_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                requestUserProfile.execute(userProfileRequest);
             }
         });
 
@@ -1890,6 +1933,40 @@ public class HamPayDialog {
             public void onClick(View v) {
                 dialog.dismiss();
                 activity.finish();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
+    public void showIncorrectAmountDialog(Long MaxXferAmount, Long MinXferAmount){
+
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_payment_permission, null);
+
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+
+        NumberFormat nf = NumberFormat.getInstance();
+
+        responseMessage.setText(activity.getString(R.string.msg_incorrect_amount, nf.format(MaxXferAmount) + "",  nf.format(MinXferAmount) + ""));
+
+        FacedTextView payment_permission = (FacedTextView) view.findViewById(R.id.payment_permission);
+
+        payment_permission.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 

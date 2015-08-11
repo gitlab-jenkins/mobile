@@ -182,6 +182,8 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
                         intent.setClass(activity, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.putExtra(Constants.USER_PROFILE_DTO, tacResponseMessage.getService().getUserProfile());
+                        editor.putBoolean(Constants.FORCE_USER_PROFILE, true);
+                        editor.commit();
                         finish();
                         startActivity(intent);
                     }

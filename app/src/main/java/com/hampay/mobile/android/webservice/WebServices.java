@@ -1215,7 +1215,7 @@ public class WebServices  {
 
 
 
-    public ResponseMessage<UserProfileResponse>  getUserProfile(){
+    public ResponseMessage<UserProfileResponse>  getUserProfile(UserProfileRequest userProfileRequest){
 
         ResponseMessage<UserProfileResponse> userProfileResponse = null;
         HttpParams httpParameters = new BasicHttpParams();

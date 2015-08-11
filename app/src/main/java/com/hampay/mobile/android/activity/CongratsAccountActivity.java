@@ -1,5 +1,6 @@
 package com.hampay.mobile.android.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -26,6 +27,9 @@ public class CongratsAccountActivity extends ActionBarActivity {
         keepOn_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("result", 1023);
+                setResult(1023);
                 finish();
             }
         });

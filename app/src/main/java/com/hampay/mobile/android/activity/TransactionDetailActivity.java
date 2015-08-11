@@ -95,7 +95,7 @@ public class TransactionDetailActivity extends ActionBarActivity implements View
         user_name.setText(transactionDTO.getPersonName());
         message.setText(transactionDTO.getMessage());
         price_pay.setText(String.format("%,d", transactionDTO.getAmount()).replace(",", "."));
-        user_mobile_no.setText(transactionDTO.getMobileNumber());
+        user_mobile_no.setText(transactionDTO.getPhoneNumber());
         date_time.setText((new JalaliConvert()).GregorianToPersian(transactionDTO.getTransactionDate()));
         tracking_code.setText(transactionDTO.getReference());
 
@@ -110,20 +110,20 @@ public class TransactionDetailActivity extends ActionBarActivity implements View
             case R.id.pay_to_one_ll:
                 Intent intent = new Intent();
                 intent.setClass(TransactionDetailActivity.this, PayOneActivity.class);
-                intent.putExtra("contact_phone_no", transactionDTO.getMobileNumber());
+                intent.putExtra("contact_phone_no", transactionDTO.getPhoneNumber());
                 intent.putExtra("contact_name", transactionDTO.getPersonName());
                 startActivity(intent);
                 break;
 
             case R.id.send_message:
 
-                if (transactionDTO.getMobileNumber() != null)
-                    new HamPayDialog(activity).showCommunicateDialog(0, transactionDTO.getMobileNumber());
+                if (transactionDTO.getPhoneNumber() != null)
+                    new HamPayDialog(activity).showCommunicateDialog(0, transactionDTO.getPhoneNumber());
                 break;
 
             case R.id.user_call:
-                if (transactionDTO.getMobileNumber() != null)
-                    new HamPayDialog(activity).showCommunicateDialog(1, transactionDTO.getMobileNumber());
+                if (transactionDTO.getPhoneNumber() != null)
+                    new HamPayDialog(activity).showCommunicateDialog(1, transactionDTO.getPhoneNumber());
                 break;
         }
 

@@ -36,8 +36,6 @@ public class PayBusinessActivity extends ActionBarActivity {
     FacedTextView business_name_code;
 
     ButtonRectangle pay_to_business_button;
-    
-    Dialog dialog_pay_business;
 
     FacedEditText credit_value;
     boolean creditValueValidation = false;
@@ -62,6 +60,8 @@ public class PayBusinessActivity extends ActionBarActivity {
     UserVerificationStatus userVerificationStatus;
     String userVerificationMessage = "";
 
+    Long MaxXferAmount = 0L;
+    Long MinXferAmount = 0L;
 
     public void backActionBar(View view){
         finish();
@@ -80,6 +80,9 @@ public class PayBusinessActivity extends ActionBarActivity {
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
+
+        MaxXferAmount = prefs.getLong(Constants.MAX_XFER_Amount, 0);
+        MinXferAmount = prefs.getLong(Constants.MIN_XFER_Amount, 0);
 
         switch (prefs.getInt(Constants.USER_VERIFICATION_STATUS, -1)){
 
@@ -155,6 +158,7 @@ public class PayBusinessActivity extends ActionBarActivity {
                     }else {
                         editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                         editor.commit();
+                        if (amountValue >= MinXferAmount && amountValue <= MaxXferAmount) {
                         switch (userVerificationStatus) {
                             case DELEGATED:
                                 businessPaymentConfirmRequest = new BusinessPaymentConfirmRequest();
@@ -166,6 +170,9 @@ public class PayBusinessActivity extends ActionBarActivity {
                             default:
                                 new HamPayDialog(activity).showFailPaymentPermissionDialog(userVerificationMessage);
                                 break;
+                        }
+                        }else {
+                            new HamPayDialog(activity).showIncorrectAmountDialog(MinXferAmount, MaxXferAmount);
                         }
                     }
 
