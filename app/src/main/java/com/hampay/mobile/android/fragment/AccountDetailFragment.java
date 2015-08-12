@@ -3,10 +3,8 @@ package com.hampay.mobile.android.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,17 +18,14 @@ import com.hampay.common.core.model.dto.ContactDTO;
 import com.hampay.common.core.model.dto.UserVerificationStatus;
 import com.hampay.common.core.model.request.UserProfileRequest;
 import com.hampay.common.core.model.request.VerifyAccountRequest;
-import com.hampay.common.core.model.response.RegistrationVerifyAccountResponse;
 import com.hampay.common.core.model.response.UserProfileResponse;
 import com.hampay.common.core.model.response.VerifyAccountResponse;
 import com.hampay.common.core.model.response.dto.UserProfileDTO;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.activity.MainActivity;
 import com.hampay.mobile.android.activity.PayOneActivity;
-import com.hampay.mobile.android.activity.RegVerifyAccountNoActivity;
 import com.hampay.mobile.android.activity.VerifyAccountActivity;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import com.hampay.mobile.android.async.RequestRegisterVerifyAccount;
 import com.hampay.mobile.android.async.RequestUserProfile;
 import com.hampay.mobile.android.async.RequestVerifyAccount;
 import com.hampay.mobile.android.component.FacedTextView;
@@ -38,7 +33,6 @@ import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.JalaliConvert;
-import com.hampay.mobile.android.webservice.WebServices;
 
 import java.util.List;
 
@@ -102,9 +96,11 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
         this.userProfileDTO = (UserProfileDTO)bundle.getSerializable(Constants.USER_PROFILE_DTO);
 
-        editor.putLong(Constants.MAX_XFER_Amount, this.userProfileDTO.getMaxXferAmount());
-        editor.putLong(Constants.MIN_XFER_Amount, this.userProfileDTO.getMinXferAmount());
-        editor.commit();
+        if (userProfileDTO != null) {
+            editor.putLong(Constants.MAX_XFER_Amount, this.userProfileDTO.getMaxXferAmount());
+            editor.putLong(Constants.MIN_XFER_Amount, this.userProfileDTO.getMinXferAmount());
+            editor.commit();
+        }
 
     }
 
@@ -275,6 +271,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                     Intent intent = new Intent();
                     intent.setClass(getActivity(), VerifyAccountActivity.class);
                     intent.putExtra(Constants.TRANSFER_MONEY_COMMENT, verifyAccountResponseMessage.getService().getTransferMoneyComment());
+                    startActivityForResult(intent, 1023);
                     startActivity(intent);
                 }
                 else{

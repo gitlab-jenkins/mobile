@@ -27,14 +27,37 @@ public class CongratsAccountActivity extends ActionBarActivity {
         keepOn_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra("result", 1023);
-                setResult(1023);
+
+                Intent intent = new Intent();
+                intent.setClass(CongratsAccountActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 finish();
+                startActivity(intent);
+
+//                Intent returnIntent = new Intent();
+//                returnIntent.putExtra("result", 1023);
+//                setResult(1023);
+//                finish();
             }
         });
 
     }
 
+
+    @Override
+    public void onBackPressed() {
+
+        Intent intent = new Intent();
+        intent.setClass(CongratsAccountActivity.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
+        startActivity(intent);
+
+//        Intent returnIntent = new Intent();
+//        returnIntent.putExtra("result", 1023);
+//        setResult(1023);
+//
+//        finish();
+    }
 
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
@@ -78,18 +79,29 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.KeyStore;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
+
+import java.security.cert.X509Certificate;
 
 /**
  * Created by amir on 6/6/15.
@@ -181,12 +193,48 @@ public class WebServices  {
     }
 
 
+//    public HttpsURLConnection setUpHttpsURLConnection(String urlString){
+//        try
+//        {
+//
+//            CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
+//            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/nginx.crt"));
+//            Certificate certificate = certificateFactory.generateCertificate(caInput);
+//            Log.e("ca=", ((X509Certificate) certificate).getSubjectDN() + "");
+//            String keyStoreType = KeyStore.getDefaultType();
+//            KeyStore keyStore = KeyStore.getInstance(keyStoreType);
+//            keyStore.load(null, null);
+//            keyStore.setCertificateEntry("ca", certificate);
+//
+//            String defaultAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
+//            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(defaultAlgorithm);
+//            trustManagerFactory.init(keyStore);
+//
+//            SSLContext context = SSLContext.getInstance("TLS");
+//            context.init(null, trustManagerFactory.getTrustManagers(), null);
+//
+//            URL url = new URL(urlString);
+//            HttpsURLConnection urlConnection = (HttpsURLConnection)url.openConnection();
+//            urlConnection.setSSLSocketFactory(context.getSocketFactory());
+//
+//            urlConnection.setHostnameVerifier(new NullHostNameVerifier());
+//
+//            return urlConnection;
+//
+//        }catch (Exception ex)
+//        {
+//            Log.e("CERT FAILD", "Failed to establish SSL connection to server: " + ex.toString());
+//            return null;
+//        }
+//    }
+
 
     public ResponseMessage<BankListResponse> getBankList() {
 
         ResponseMessage<BankListResponse> responseMessage = null;
+        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/banks");
+        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
-        HttpURLConnection connection = null;
         try {
 
             RequestHeader header = new RequestHeader();
@@ -202,10 +250,6 @@ public class WebServices  {
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<BankListRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
 
-            URL url = new URL(Constants.SERVICE_URL + "/banks");
-
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setDoOutput(true);
             connection.setConnectTimeout(5000);
             connection.setReadTimeout(5000);
             connection.setRequestMethod("POST");
@@ -216,15 +260,55 @@ public class WebServices  {
 
             InputStreamReader reader = new InputStreamReader(connection.getInputStream());
             Gson gson = new Gson();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<BankListResponse>>() {
-            }.getType());
+            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<BankListResponse>>() {}.getType());
 
-            if( responseMessage != null && responseMessage.getService() != null ) {
-                System.out.println("Response requestUUID : " + responseMessage.getService().getRequestUUID());
-                System.out.println("Response bank list size : " + responseMessage.getService().getBanks().size());
-            } else {
-                System.out.println("Response is null...");
-            }
+            if( responseMessage != null && responseMessage.getService() != null );
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null)
+                connection.disconnect();
+        }
+
+        return responseMessage;
+
+    }
+
+    public ResponseMessage<RegistrationEntryResponse> newRegistrationEntry(RegistrationEntryRequest registrationEntryRequest){
+
+        ResponseMessage<RegistrationEntryResponse> responseMessage = null;
+        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/reg-entry");
+        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+
+        try {
+
+            RequestHeader header = new RequestHeader();
+            header.setAuthToken("008ewe");
+            header.setVersion("1.0-PA");
+
+            RequestMessage<RegistrationEntryRequest> message = new RequestMessage<RegistrationEntryRequest>();
+            message.setRequestHeader(header);
+            RegistrationEntryRequest request = registrationEntryRequest;
+            request.setRequestUUID("1234");
+            message.setService(request);
+
+            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationEntryRequest>>() {}.getType();
+            String jsonRequest = new Gson().toJson(message, requestType);
+
+            connection.setConnectTimeout(30000);
+            connection.setReadTimeout(30000);
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            OutputStream outputStream = connection.getOutputStream();
+            outputStream.write(jsonRequest.getBytes());
+            outputStream.flush();
+
+            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            Gson gson = new Gson();
+            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegistrationEntryResponse>>() {}.getType());
+
+            if( responseMessage != null && responseMessage.getService() != null );
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -572,7 +656,7 @@ public class WebServices  {
 
 
     public ResponseMessage<RegistrationConfirmUserDataResponse>
-        registrationConfirmUserDataResponse(RegistrationConfirmUserDataRequest registrationConfirmUserDataRequest){
+    registrationConfirmUserDataResponse(RegistrationConfirmUserDataRequest registrationConfirmUserDataRequest){
 
         ResponseMessage<RegistrationConfirmUserDataResponse> registrationConfirmUserDataResponse = null;
         HttpParams httpParameters = new BasicHttpParams();

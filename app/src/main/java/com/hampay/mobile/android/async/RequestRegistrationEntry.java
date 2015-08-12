@@ -66,7 +66,7 @@ public class RequestRegistrationEntry extends AsyncTask<RegistrationEntryRequest
 
 
         WebServices webServices = new WebServices(context);
-        return webServices.registrationEntry(params[0]);
+        return webServices.newRegistrationEntry(params[0]);
     }
 
 
