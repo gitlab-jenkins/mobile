@@ -37,7 +37,7 @@ public class RequestIndividualPaymentConfirm extends AsyncTask<IndividualPayment
     protected ResponseMessage<IndividualPaymentConfirmResponse> doInBackground(IndividualPaymentConfirmRequest... params) {
 
         WebServices webServices = new WebServices(context);
-        return webServices.individualPaymentConfirm(params[0]);
+        return webServices.newIndividualPaymentConfirm(params[0]);
     }
 
 

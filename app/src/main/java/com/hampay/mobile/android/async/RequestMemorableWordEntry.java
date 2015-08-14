@@ -37,7 +37,7 @@ public class RequestMemorableWordEntry extends AsyncTask<RegistrationMemorableWo
 
         WebServices webServices = new WebServices(context);
 
-        return webServices.registrationMemorableWordEntryResponse(params[0]);
+        return webServices.newRegistrationMemorableWordEntryResponse(params[0]);
     }
 
 

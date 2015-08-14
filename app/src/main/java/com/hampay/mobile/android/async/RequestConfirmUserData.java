@@ -37,7 +37,7 @@ public class RequestConfirmUserData extends AsyncTask<RegistrationConfirmUserDat
 
         WebServices webServices = new WebServices(context);
 
-        return webServices.registrationConfirmUserDataResponse(params[0]);
+        return webServices.newRegistrationConfirmUserDataResponse(params[0]);
     }
 
 

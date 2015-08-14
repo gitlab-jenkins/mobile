@@ -3,6 +3,7 @@ package com.hampay.mobile.android.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.hardware.camera2.params.Face;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import com.hampay.mobile.android.activity.TransactionDetailActivity;
 import com.hampay.mobile.android.adapter.UserTransactionAdapter;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestUserTransaction;
+import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.doblist.DobList;
 import com.hampay.mobile.android.component.doblist.events.OnLoadMoreListener;
 import com.hampay.mobile.android.component.doblist.exceptions.NoEmptyViewException;
@@ -47,6 +49,7 @@ public class UserTransactionFragment extends Fragment {
     private boolean FINISHED_SCROLLING = false;
     RelativeLayout loading_rl;
 
+    FacedTextView no_transaction;
     private boolean onLoadMore = false;
 
     private List<TransactionDTO> transactionDTOs;
@@ -79,6 +82,7 @@ public class UserTransactionFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_transaction, container, false);
 
         loading_rl = (RelativeLayout)rootView.findViewById(R.id.loading_rl);
+        no_transaction = (FacedTextView)rootView.findViewById(R.id.no_transaction);
 
         transationListView = (ListView)rootView.findViewById(R.id.transationListView);
 
@@ -133,12 +137,18 @@ public class UserTransactionFragment extends Fragment {
 
             loading_rl.setVisibility(View.GONE);
 
+
             if (transactionListResponseMessage != null) {
 
                 if (transactionListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
                     newTransactionDTOs = transactionListResponseMessage.getService().getTransactions();
                     transactionDTOs.addAll(newTransactionDTOs);
+
+                    if (transactionDTOs.size() == 0){
+                        no_transaction.setVisibility(View.VISIBLE);
+                        transationListView.setVisibility(View.GONE);
+                    }
 
                     if (transactionDTOs != null) {
 

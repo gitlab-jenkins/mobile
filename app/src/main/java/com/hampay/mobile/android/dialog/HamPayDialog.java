@@ -359,8 +359,8 @@ public class HamPayDialog {
         @Override
         protected String doInBackground(ContactUsRequest... params) {
 
-            WebServices webServices = new WebServices();
-            contactUsResponseResponseMessage = webServices.contactUsResponse(params[0]);
+            WebServices webServices = new WebServices(activity);
+            contactUsResponseResponseMessage = webServices.newContactUsResponse(params[0]);
 
             return null;
         }
@@ -1850,6 +1850,8 @@ public class HamPayDialog {
         window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_contacts_enabled, null);
+
+
 
         FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
         FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);

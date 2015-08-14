@@ -37,7 +37,7 @@ public class RequestFetchUserData extends AsyncTask<RegistrationFetchUserDataReq
 
         WebServices webServices = new WebServices(context);
 
-        return webServices.registrationFetchUserDataResponse(params[0]);
+        return webServices.newRegistrationFetchUserDataResponse(params[0]);
     }
 
 

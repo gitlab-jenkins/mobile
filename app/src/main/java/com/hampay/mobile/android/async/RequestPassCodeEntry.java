@@ -37,7 +37,7 @@ public class RequestPassCodeEntry extends AsyncTask<RegistrationPassCodeEntryReq
 
         WebServices webServices = new WebServices(context);
 
-        return webServices.registrationPassCodeEntryResponse(params[0]);
+        return webServices.newRegistrationPassCodeEntryResponse(params[0]);
     }
 
 

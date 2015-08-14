@@ -36,7 +36,7 @@ public class RequestContactHampayEnabled extends AsyncTask<ContactsHampayEnabled
 
 
         WebServices webServices = new WebServices(context);
-        return webServices.getEnabledHamPayContacts(params[0]);
+        return webServices.newGetEnabledHamPayContacts(params[0]);
     }
 
 

@@ -37,7 +37,7 @@ public class RequestRegistrationVerifyTransferMoney extends AsyncTask<Registrati
 
         WebServices webServices = new WebServices(context);
 
-        return webServices.registrationVerifyTransferMoneyResponse(params[0]);
+        return webServices.newRegistrationVerifyTransferMoneyResponse(params[0]);
     }
 
 

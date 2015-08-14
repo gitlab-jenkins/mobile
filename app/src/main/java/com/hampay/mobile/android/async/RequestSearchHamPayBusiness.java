@@ -37,7 +37,7 @@ public class RequestSearchHamPayBusiness extends AsyncTask<BusinessSearchRequest
 
         WebServices webServices = new WebServices(context);
 
-        return webServices.searchBusinessList(params[0]);
+        return webServices.newSearchBusinessList(params[0]);
     }
 
 

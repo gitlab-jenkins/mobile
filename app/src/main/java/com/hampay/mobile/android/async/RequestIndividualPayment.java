@@ -37,7 +37,7 @@ public class RequestIndividualPayment extends AsyncTask<IndividualPaymentRequest
 
         WebServices webServices = new WebServices(context);
 
-        return webServices.individualPayment(params[0]);
+        return webServices.newIndividualPayment(params[0]);
     }
 
 

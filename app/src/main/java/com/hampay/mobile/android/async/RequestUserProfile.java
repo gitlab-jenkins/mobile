@@ -36,7 +36,7 @@ public class RequestUserProfile extends AsyncTask<UserProfileRequest, Void, Resp
 
 
         WebServices webServices = new WebServices(context);
-        return webServices.getUserProfile(params[0]);
+        return webServices.newGetUserProfile(params[0]);
     }
 
 

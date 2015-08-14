@@ -34,7 +34,7 @@ public class RequestBusinessPaymentConfirm extends AsyncTask<BusinessPaymentConf
     protected ResponseMessage<BusinessPaymentConfirmResponse> doInBackground(BusinessPaymentConfirmRequest... params) {
 
         WebServices webServices = new WebServices(context);
-        return webServices.businessPaymentConfirm(params[0]);
+        return webServices.newBusinessPaymentConfirm(params[0]);
     }
 
 

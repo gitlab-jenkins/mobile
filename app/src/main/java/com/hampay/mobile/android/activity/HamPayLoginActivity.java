@@ -359,6 +359,8 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
             loginData.setUserPassword(password);
             loginData.setUserName(nationalCode);
 
+            keyboard.setEnabled(false);
+
             new RequestLogin(context, new RequestLoginResponseTaskCompleteListener()).execute(loginData);
 
 

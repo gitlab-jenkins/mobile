@@ -353,4 +353,8 @@
     <string name="title_activity_server_select">ServerSelectActivity</string>
     <string name="prevent_rooted_device">باشه</string>
 
+
+
+    <string name="no_transaction">در حال حاضر هیچ تراکنشی برای شما ثبت نشده است.لطفا بعد از تراکنش پرداخت به این بخش رجوع کنید.</string>
+
 </resources>

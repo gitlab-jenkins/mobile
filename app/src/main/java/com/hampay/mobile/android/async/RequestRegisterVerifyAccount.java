@@ -37,7 +37,7 @@ public class RequestRegisterVerifyAccount extends AsyncTask<RegistrationVerifyAc
 
         WebServices webServices = new WebServices(context);
 
-        return webServices.registrationVerifyAccountResponse(params[0]);
+        return webServices.newRegistrationVerifyAccountResponse(params[0]);
     }
 
 

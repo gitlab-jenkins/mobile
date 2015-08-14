@@ -112,7 +112,7 @@ public class PayBusinessActivity extends ActionBarActivity {
         bundle = getIntent().getExtras();
 
         business_name_code = (FacedTextView)findViewById(R.id.business_name_code);
-        business_name_code.setText(bundle.getString("business_name") + "(" + bundle.getString("business_code") + ")");
+        business_name_code.setText(bundle.getString("business_name") + " " + "(" + bundle.getString("business_code") + ")");
 
         contact_message = (FacedEditText)findViewById(R.id.contact_message);
 

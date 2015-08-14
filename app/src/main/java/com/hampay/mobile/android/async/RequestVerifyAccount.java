@@ -37,7 +37,7 @@ public class RequestVerifyAccount extends AsyncTask<VerifyAccountRequest, Void, 
 
         WebServices webServices = new WebServices(context);
 
-        return webServices.verifyAccountResponse(params[0]);
+        return webServices.newVerifyAccountResponse(params[0]);
     }
 
 

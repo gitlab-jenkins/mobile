@@ -37,7 +37,7 @@ public class RequestVerifyTransferMoney extends AsyncTask<VerifyTransferMoneyReq
 
         WebServices webServices = new WebServices(context);
 
-        return webServices.verifyTransferMoneyResponse(params[0]);
+        return webServices.newVerifyTransferMoneyResponse(params[0]);
     }
 
 

@@ -1,5 +1,7 @@
 package com.hampay.mobile.android.webservice;
 
+import android.content.Context;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -16,46 +18,54 @@ import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import javax.net.ssl.HttpsURLConnection;
+
 /**
  * Created by amir on 8/4/15.
  */
 public class LoginStream {
 
+    Context context;
     LoginData loginData;
+    SSLConnection sslConnection;
+    HttpsURLConnection connection;
 
-    HttpURLConnection httpURLConnection;
 
-    public LoginStream(LoginData loginData) {
+    public LoginStream(Context context, LoginData loginData) {
+        this.context = context;
         this.loginData = loginData;
     }
 
     public int resultCode() throws Exception {
 
+        sslConnection = new SSLConnection(context, Constants.HTTPS_OPENAM_LOGIN_URL);
+        connection = sslConnection.setUpHttpsURLConnection();
 
-        URL urlConnection = new URL(Constants.OPENAM_LOGIN_URL);
-        httpURLConnection = (HttpURLConnection) urlConnection.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setConnectTimeout(20 * 1000);
+        connection.setReadTimeout(20 * 1000);
 
-        httpURLConnection.setRequestMethod("POST");
-        httpURLConnection.setConnectTimeout(20 * 1000);
-        httpURLConnection.setReadTimeout(20 * 1000);
+        connection.setDoOutput(true);
 
-        httpURLConnection.setDoOutput(true);
+        connection.setRequestMethod("POST");
 
-        httpURLConnection.setRequestProperty("X-OpenAM-Username", loginData.getUserName());
-        httpURLConnection.setRequestProperty("X-OpenAM-Password", loginData.getUserPassword());
-        httpURLConnection.setRequestProperty("Content-Type", "application/json");
-        httpURLConnection.setRequestProperty("Accept-Encoding", "UTF-8");
+        connection.setConnectTimeout(30000);
+        connection.setReadTimeout(30000);
+        connection.setRequestProperty("username", loginData.getUserName());
+        connection.setRequestProperty("password", loginData.getUserPassword());
+        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty("Accept-Encoding", "UTF-8");
 
         try {
 
-            BufferedWriter output = new BufferedWriter(new OutputStreamWriter(httpURLConnection.getOutputStream()));
+            BufferedWriter output = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
             output.write("{}");
             output.flush();
             output.close();
         } catch (Exception e) {
         }
 
-        return httpURLConnection.getResponseCode();
+        return connection.getResponseCode();
 
     }
 
@@ -65,7 +75,7 @@ public class LoginStream {
         StringBuffer response;
 
         BufferedReader in = new BufferedReader(
-                new InputStreamReader(httpURLConnection.getInputStream()));
+                new InputStreamReader(connection.getInputStream()));
 
         response = new StringBuffer();
 
@@ -84,7 +94,7 @@ public class LoginStream {
         StringBuffer response;
 
         BufferedReader in = new BufferedReader(
-                new InputStreamReader(httpURLConnection.getErrorStream()));
+                new InputStreamReader(connection.getErrorStream()));
 
         response = new StringBuffer();
 

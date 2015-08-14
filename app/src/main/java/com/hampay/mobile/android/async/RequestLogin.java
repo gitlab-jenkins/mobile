@@ -37,7 +37,7 @@ public class RequestLogin extends AsyncTask<LoginData, Void, String> {
     protected String doInBackground(LoginData... params) {
 
 
-        LoginStream loginStream = new LoginStream(params[0]);
+        LoginStream loginStream = new LoginStream(context, params[0]);
 
         String resultLogin = "";
 
@@ -49,6 +49,10 @@ public class RequestLogin extends AsyncTask<LoginData, Void, String> {
                     break;
 
                 case 401:
+                    resultLogin = loginStream.failLogin();
+                    break;
+
+                case 404:
                     resultLogin = loginStream.failLogin();
                     break;
 

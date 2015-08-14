@@ -406,7 +406,6 @@ public class ProfileEntryActivity extends Activity {
 
             keepOn_button.setEnabled(true);
             loading_rl.setVisibility(View.GONE);
-
             if (registrationEntryResponse != null) {
 
                 if (registrationEntryResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {

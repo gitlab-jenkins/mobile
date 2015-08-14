@@ -34,7 +34,7 @@ public class SSLConnection  {
             CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
             InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/nginx.crt"));
             Certificate certificate = certificateFactory.generateCertificate(caInput);
-            Log.e("ca=", ((X509Certificate) certificate).getSubjectDN() + "");
+//            Log.e("ca=", ((X509Certificate) certificate).getSubjectDN() + "");
             String keyStoreType = KeyStore.getDefaultType();
             KeyStore keyStore = KeyStore.getInstance(keyStoreType);
             keyStore.load(null, null);

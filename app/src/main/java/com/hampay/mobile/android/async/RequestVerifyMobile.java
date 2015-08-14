@@ -37,7 +37,7 @@ public class RequestVerifyMobile extends AsyncTask<RegistrationVerifyMobileReque
 
         WebServices webServices = new WebServices(context);
 
-        return webServices.registrationVerifyMobileResponse(params[0]);
+        return webServices.newRegistrationVerifyMobileResponse(params[0]);
     }
 
 

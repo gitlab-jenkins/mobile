@@ -37,7 +37,7 @@ public class RequestBusinessPayment extends AsyncTask<BusinessPaymentRequest, Vo
 
         WebServices webServices = new WebServices(context);
 
-        return webServices.businessPayment(params[0]);
+        return webServices.newBusinessPayment(params[0]);
     }
 
 

@@ -36,7 +36,7 @@ public class RequestRegistrationSendSmsToken extends AsyncTask<RegistrationSendS
 
         WebServices webServices = new WebServices(context);
 
-        return webServices.registrationSendSmsToken(params[0]);
+        return webServices.newRegistrationSendSmsToken(params[0]);
     }
 
 

@@ -37,7 +37,7 @@ public class RequestUserTransaction extends AsyncTask<TransactionListRequest, Vo
 
         WebServices webServices = new WebServices(context);
 
-        return webServices.getUserTransaction(params[0]);
+        return webServices.newGetUserTransaction(params[0]);
     }
 
 

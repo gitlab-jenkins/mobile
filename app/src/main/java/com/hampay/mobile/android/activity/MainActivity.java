@@ -441,7 +441,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     @Override
     public void onBackPressed() {
         LogoutData logoutData = new LogoutData();
-        logoutData.setIplanetDirectoryPro(prefs.getString(Constants.TOKEN_ID, null));
+        logoutData.setIplanetDirectoryPro(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         new HamPayDialog(activity).showExitDialog(logoutData);
     }
 }
