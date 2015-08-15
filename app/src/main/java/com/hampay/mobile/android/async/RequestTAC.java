@@ -48,6 +48,18 @@ public class RequestTAC extends AsyncTask<TACRequest, Void, ResponseMessage<TACR
         listener.onTaskComplete(tacResponseMessage);
     }
 
+    @Override
+    protected void onCancelled(ResponseMessage<TACResponse> tacResponseResponseMessage) {
+        super.onCancelled(tacResponseResponseMessage);
+        cancel(true);
+    }
+
+    @Override
+    protected void onCancelled() {
+        super.onCancelled();
+        cancel(true);
+    }
+
 
 }
 

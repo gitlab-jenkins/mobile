@@ -48,5 +48,17 @@ public class RequestVerifyAccount extends AsyncTask<VerifyAccountRequest, Void, 
         listener.onTaskComplete(registrationVerifyMobileResponseMessage);
     }
 
+    @Override
+    protected void onCancelled(ResponseMessage<VerifyAccountResponse> verifyAccountResponseResponseMessage) {
+        super.onCancelled(verifyAccountResponseResponseMessage);
+        cancel(true);
+    }
+
+    @Override
+    protected void onCancelled() {
+        super.onCancelled();
+        cancel(true);
+    }
+
 
 }

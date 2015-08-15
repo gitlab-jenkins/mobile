@@ -83,6 +83,18 @@ public class RequestLogin extends AsyncTask<LoginData, Void, String> {
         listener.onTaskComplete(loginResponse);
     }
 
+    @Override
+    protected void onCancelled(String s) {
+        super.onCancelled(s);
+        cancel(true);
+    }
+
+    @Override
+    protected void onCancelled() {
+        super.onCancelled();
+        cancel(true);
+    }
+
 
 }
 

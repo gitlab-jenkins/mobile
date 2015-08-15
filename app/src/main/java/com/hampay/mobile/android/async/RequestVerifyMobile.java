@@ -48,5 +48,17 @@ public class RequestVerifyMobile extends AsyncTask<RegistrationVerifyMobileReque
         listener.onTaskComplete(registrationVerifyMobileResponseMessage);
     }
 
+    @Override
+    protected void onCancelled(ResponseMessage<RegistrationVerifyMobileResponse> registrationVerifyMobileResponseResponseMessage) {
+        super.onCancelled(registrationVerifyMobileResponseResponseMessage);
+        cancel(true);
+    }
+
+    @Override
+    protected void onCancelled() {
+        super.onCancelled();
+        cancel(true);
+    }
+
 
 }

@@ -48,5 +48,17 @@ public class RequestUserTransaction extends AsyncTask<TransactionListRequest, Vo
         listener.onTaskComplete(registrationEntryResponseMessage);
     }
 
+    @Override
+    protected void onCancelled(ResponseMessage<TransactionListResponse> transactionListResponseResponseMessage) {
+        super.onCancelled(transactionListResponseResponseMessage);
+        cancel(true);
+    }
+
+    @Override
+    protected void onCancelled() {
+        super.onCancelled();
+        cancel(true);
+    }
+
 }
 

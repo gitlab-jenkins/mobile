@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
@@ -174,6 +176,22 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+
+        if (requestUserProfile != null) {
+            if (!requestUserProfile.isCancelled())
+                requestUserProfile.cancel(true);
+        }
+        if (requestVerifyAccount != null){
+            if (!requestVerifyAccount.isCancelled()){
+                requestVerifyAccount.cancel(true);
+            }
+        }
+
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
     }
@@ -225,6 +243,9 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         @Override
         public void onTaskComplete(ResponseMessage<UserProfileResponse> userProfileResponseMessage)
         {
+
+            Log.e("FINISH", "FINISH");
+
             loading_rl.setVisibility(View.GONE);
             if (userProfileResponseMessage != null) {
 
@@ -320,6 +341,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         }
         user_name_text.setText(userProfileDTO.getFullName());
         MainActivity.user_account_name.setText(userProfileDTO.getFullName());
+        //CLS
         user_account_no_text.setText(getString(R.string.account_no) + ": " + userProfileDTO.getAccountNumber());
         user_bank_name.setText(userProfileDTO.getBankName());
         user_mobile_no.setText(getString(R.string.mobile_no) + ": " + userProfileDTO.getCellNumber());

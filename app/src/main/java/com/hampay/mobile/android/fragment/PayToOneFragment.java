@@ -254,6 +254,15 @@ public class PayToOneFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (requestContactHampayEnabled != null){
+            if (!requestContactHampayEnabled.isCancelled())
+                requestContactHampayEnabled.cancel(true);
+        }
+    }
+
     private void performPayToOneSearch(String searchPhrase, boolean searchEnabled){
 
         inputMethodManager.hideSoftInputFromWindow(searchPhraseText.getWindowToken(), 0);

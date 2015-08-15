@@ -48,5 +48,17 @@ public class RequestHamPayBusiness extends AsyncTask<BusinessListRequest, Void, 
         listener.onTaskComplete(businessListResponseMessage);
     }
 
+    @Override
+    protected void onCancelled(ResponseMessage<BusinessListResponse> businessListResponseResponseMessage) {
+        super.onCancelled(businessListResponseResponseMessage);
+        cancel(true);
+    }
+
+    @Override
+    protected void onCancelled() {
+        super.onCancelled();
+        cancel(true);
+    }
+
 }
 

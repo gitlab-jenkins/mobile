@@ -118,6 +118,15 @@ public class UserTransactionFragment extends Fragment {
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        if (requestUserTransaction != null){
+            if (!requestUserTransaction.isCancelled())
+                requestUserTransaction.cancel(true);
+        }
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
     }

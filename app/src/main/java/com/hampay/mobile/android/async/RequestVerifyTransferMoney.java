@@ -48,6 +48,18 @@ public class RequestVerifyTransferMoney extends AsyncTask<VerifyTransferMoneyReq
         listener.onTaskComplete(verifyTransferMoneyResponseMessage);
     }
 
+    @Override
+    protected void onCancelled(ResponseMessage<VerifyTransferMoneyResponse> verifyTransferMoneyResponseResponseMessage) {
+        super.onCancelled(verifyTransferMoneyResponseResponseMessage);
+        cancel(true);
+    }
+
+    @Override
+    protected void onCancelled() {
+        super.onCancelled();
+        cancel(true);
+    }
+
 
 }
 

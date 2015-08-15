@@ -131,6 +131,20 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+
+        if (countDownTimer != null)
+            countDownTimer.cancel();
+
+        if (requestVerifyMobile != null){
+            if (!requestVerifyMobile.isCancelled())
+                requestVerifyMobile.cancel(true);
+        }
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sms_verification);

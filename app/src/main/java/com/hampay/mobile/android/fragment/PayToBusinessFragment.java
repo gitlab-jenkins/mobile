@@ -191,6 +191,21 @@ public class PayToBusinessFragment extends Fragment {
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        if (requestHamPayBusiness != null){
+            if (!requestHamPayBusiness.isCancelled())
+                requestHamPayBusiness.cancel(true);
+        }
+
+        if (requestSearchHamPayBusiness != null){
+            if (!requestSearchHamPayBusiness.isCancelled())
+                requestSearchHamPayBusiness.cancel(true);
+        }
+
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
     }

@@ -47,4 +47,16 @@ public class RequestUserProfile extends AsyncTask<UserProfileRequest, Void, Resp
         listener.onTaskComplete(registrationEntryResponseMessage);
     }
 
+    @Override
+    protected void onCancelled(ResponseMessage<UserProfileResponse> userProfileResponseResponseMessage) {
+        super.onCancelled(userProfileResponseResponseMessage);
+        cancel(true);
+    }
+
+    @Override
+    protected void onCancelled() {
+        super.onCancelled();
+        cancel(true);
+    }
+
 }

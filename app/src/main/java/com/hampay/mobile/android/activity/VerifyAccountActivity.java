@@ -61,6 +61,16 @@ public class VerifyAccountActivity extends ActionBarActivity {
         });
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (requestVerifyTransferMoney != null){
+            if (!requestVerifyTransferMoney.isCancelled()){
+                requestVerifyTransferMoney.cancel(true);
+            }
+        }
+    }
+
 
     public class RequestVerifyTransferMoneyTaskCompleteListener implements
             AsyncTaskCompleteListener<ResponseMessage<VerifyTransferMoneyResponse>>

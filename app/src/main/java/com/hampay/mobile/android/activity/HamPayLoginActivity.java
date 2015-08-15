@@ -42,6 +42,8 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
 
     SharedPreferences.Editor editor;
 
+    RequestLogin requestLogin;
+
     FacedTextView hampay_memorableword_text;
     String nationalCode = "";
     String memorableWord;
@@ -154,6 +156,20 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
 
         installationToken = prefs.getString("UUID", "");
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (requestLogin != null){
+            if (!requestLogin.isCancelled()){
+                requestLogin.cancel(true);
+            }
+        }
+        if (requestTAC != null){
+            if (!requestTAC.isCancelled())
+                requestTAC.cancel(true);
+        }
     }
 
     private ResponseMessage<TACResponse> tACResponse;
@@ -361,7 +377,8 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
 
             keyboard.setEnabled(false);
 
-            new RequestLogin(context, new RequestLoginResponseTaskCompleteListener()).execute(loginData);
+            requestLogin = new RequestLogin(context, new RequestLoginResponseTaskCompleteListener());
+            requestLogin.execute(loginData);
 
 
             inputPassValue = "";

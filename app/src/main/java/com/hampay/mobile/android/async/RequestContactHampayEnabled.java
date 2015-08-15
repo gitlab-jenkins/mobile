@@ -47,4 +47,16 @@ public class RequestContactHampayEnabled extends AsyncTask<ContactsHampayEnabled
         listener.onTaskComplete(registrationEntryResponseMessage);
     }
 
+    @Override
+    protected void onCancelled(ResponseMessage<ContactsHampayEnabledResponse> contactsHampayEnabledResponseResponseMessage) {
+        super.onCancelled(contactsHampayEnabledResponseResponseMessage);
+        cancel(true);
+    }
+
+    @Override
+    protected void onCancelled() {
+        super.onCancelled();
+        cancel(true);
+    }
+
 }
