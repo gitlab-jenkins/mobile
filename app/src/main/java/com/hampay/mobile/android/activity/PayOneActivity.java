@@ -195,6 +195,8 @@ public class PayOneActivity extends ActionBarActivity {
 
                 credit_value.clearFocus();
 
+                pay_to_one_button.setEnabled(false);
+
                 if (creditValueValidation) {
                     contactMssage = contact_message.getText().toString();
                     amountValue = Long.parseLong(credit_value.getText().toString().replace(",", ""));
@@ -219,14 +221,17 @@ public class PayOneActivity extends ActionBarActivity {
 
                                 default:
                                     new HamPayDialog(activity).showFailPaymentPermissionDialog(userVerificationMessage);
+                                    pay_to_one_button.setEnabled(true);
                                     break;
                             }
                         }else {
                             new HamPayDialog(activity).showIncorrectAmountDialog(MinXferAmount, MaxXferAmount);
+                            pay_to_one_button.setEnabled(true);
                         }
                     }
                 }else {
                     (new HamPayDialog(activity)).showIncorrectPrice();
+                    pay_to_one_button.setEnabled(true);
                 }
             }
         });
@@ -269,10 +274,12 @@ public class PayOneActivity extends ActionBarActivity {
                 new HamPayDialog(activity).showFailPaymentDialog("2000",
                         getString(R.string.msg_fail_payment));
             }
+
+            pay_to_one_button.setEnabled(true);
         }
 
         @Override
-        public void onTaskPreRun() { }
+        public void onTaskPreRun() {}
     }
 
 }

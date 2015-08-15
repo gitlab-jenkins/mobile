@@ -1,7 +1,6 @@
 package com.hampay.mobile.android.activity;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,12 +14,10 @@ import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.dto.UserVerificationStatus;
 import com.hampay.common.core.model.request.BusinessPaymentConfirmRequest;
-import com.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
 import com.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestBusinessPaymentConfirm;
-import com.hampay.mobile.android.async.RequestIndividualPaymentConfirm;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.edittext.CurrencyFormatter;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
@@ -144,6 +141,9 @@ public class PayBusinessActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 credit_value.clearFocus();
+
+                pay_to_business_button.setEnabled(false);
+
                 if (creditValueValidation) {
 
                     amountValue = Long.parseLong(credit_value.getText().toString().replace(",", ""));
@@ -169,15 +169,18 @@ public class PayBusinessActivity extends ActionBarActivity {
 
                             default:
                                 new HamPayDialog(activity).showFailPaymentPermissionDialog(userVerificationMessage);
+                                pay_to_business_button.setEnabled(true);
                                 break;
                         }
                         }else {
                             new HamPayDialog(activity).showIncorrectAmountDialog(MinXferAmount, MaxXferAmount);
+                            pay_to_business_button.setEnabled(true);
                         }
                     }
 
                 }else {
                     (new HamPayDialog(activity)).showIncorrectPrice();
+                    pay_to_business_button.setEnabled(true);
                 }
             }
         });
@@ -201,6 +204,7 @@ public class PayBusinessActivity extends ActionBarActivity {
                 new HamPayDialog(activity).showFailPaymentDialog("2000",
                         activity.getString(R.string.msg_fail_payment));
             }
+            pay_to_business_button.setEnabled(true);
         }
 
         @Override
