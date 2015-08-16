@@ -75,7 +75,9 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
 
     Context context;
 
-    RelativeLayout loading_rl;
+//    RelativeLayout loading_rl;
+
+    HamPayDialog hamPayDialog;
 
 
     LinearLayout correct_info;
@@ -107,10 +109,14 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
         correct_info = (LinearLayout)findViewById(R.id.correct_info);
 
 
-        loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
+//        loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
+
+        hamPayDialog = new HamPayDialog(activity);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ConfirmInfoActivity.class.toString());
+        editor.commit();
 
         accountNumberFormat = prefs.getString(Constants.REGISTERED_BANK_ACCOUNT_NO_FORMAT, "");
 
@@ -283,9 +289,10 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
                     public void onClick(View v) {
 
 
-                        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ConfirmInfoActivity.class.toString());
+
                         editor.putString(Constants.REGISTERED_CELL_NUMBER, cellNumberValue.getText().toString());
                         editor.putString(Constants.REGISTERED_USER_FAMILY, userFamilyValue.getText().toString());
+                        editor.putString(Constants.REGISTERED_USER_NAME, userFamilyValue.getText().toString().split(" ")[0]);
                         editor.putString(Constants.REGISTERED_ACCOUNT_NO, accountNumberValue.getText().toString());
 //                        editor.putString(Constants.REGISTERED_NATIONAL_CODE, nationalCodeValue.getText().toString());
                         editor.commit();
@@ -309,6 +316,7 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
                         editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ConfirmInfoActivity.class.toString());
                         editor.putString(Constants.REGISTERED_CELL_NUMBER, cellNumberValue.getText().toString());
                         editor.putString(Constants.REGISTERED_USER_FAMILY, userFamilyValue.getText().toString());
+                        editor.putString(Constants.REGISTERED_USER_NAME, userFamilyValue.getText().toString().split(" ")[0]);
                         editor.putString(Constants.REGISTERED_ACCOUNT_NO, accountNumberValue.getText().toString());
 //                        editor.putString(Constants.REGISTERED_NATIONAL_CODE, nationalCodeValue.getText().toString());
                         editor.commit();
@@ -340,6 +348,7 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
                 editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ConfirmInfoActivity.class.toString());
                 editor.putString(Constants.REGISTERED_CELL_NUMBER, cellNumberValue.getText().toString());
                 editor.putString(Constants.REGISTERED_USER_FAMILY, userFamilyValue.getText().toString());
+                editor.putString(Constants.REGISTERED_USER_NAME, userFamilyValue.getText().toString().split(" ")[0]);
                 editor.putString(Constants.REGISTERED_ACCOUNT_NO, accountNumberValue.getText().toString());
 //                editor.putString(Constants.REGISTERED_NATIONAL_CODE, nationalCodeValue.getText().toString());
                 editor.commit();
@@ -446,7 +455,8 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
         @Override
         public void onTaskComplete(ResponseMessage<RegistrationVerifyAccountResponse> verifyAccountResponseMessage)
         {
-            loading_rl.setVisibility(View.GONE);
+//            loading_rl.setVisibility(View.GONE);
+            hamPayDialog.dismisWaitingDialog();
             if (verifyAccountResponseMessage != null) {
 
                 if (verifyAccountResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
@@ -476,7 +486,8 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
 
         @Override
         public void onTaskPreRun() {
-            loading_rl.setVisibility(View.VISIBLE);
+//            loading_rl.setVisibility(View.VISIBLE);
+            hamPayDialog.showWaitingdDialog("");
         }
     }
 
@@ -488,7 +499,9 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
         @Override
         public void onTaskComplete(ResponseMessage<RegistrationFetchUserDataResponse> registrationFetchUserDataResponseMessage)
         {
-            loading_rl.setVisibility(View.GONE);
+//            loading_rl.setVisibility(View.GONE);
+
+            hamPayDialog.dismisWaitingDialog();
 
             if (registrationFetchUserDataResponseMessage != null) {
                 if (registrationFetchUserDataResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
@@ -514,7 +527,8 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
 
         @Override
         public void onTaskPreRun() {
-            loading_rl.setVisibility(View.VISIBLE);
+//            loading_rl.setVisibility(View.VISIBLE);
+            hamPayDialog.showWaitingdDialog("");
         }
     }
 
@@ -529,7 +543,9 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
         @Override
         public void onTaskComplete(ResponseMessage<RegistrationConfirmUserDataResponse> registrationConfirmUserDataResponseMessage)
         {
-            loading_rl.setVisibility(View.GONE);
+//            loading_rl.setVisibility(View.GONE);
+
+            hamPayDialog.dismisWaitingDialog();
 
             if (registrationConfirmUserDataResponseMessage != null) {
 
@@ -561,7 +577,8 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
 
         @Override
         public void onTaskPreRun() {
-            loading_rl.setVisibility(View.VISIBLE);
+//            loading_rl.setVisibility(View.VISIBLE);
+            hamPayDialog.showWaitingdDialog("");
         }
     }
 

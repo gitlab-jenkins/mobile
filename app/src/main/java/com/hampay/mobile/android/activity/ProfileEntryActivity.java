@@ -66,7 +66,6 @@ public class ProfileEntryActivity extends Activity {
     ImageView accountNumberIcon;
     FacedTextView selectedBankTitle;
     String selectedBankCode;
-    RelativeLayout loading_rl;
 
     Context context;
 
@@ -93,6 +92,8 @@ public class ProfileEntryActivity extends Activity {
     BankListRequest bankListRequest;
     RequestBankList requestBankList;
 
+    HamPayDialog hamPayDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,9 +106,10 @@ public class ProfileEntryActivity extends Activity {
         initLocation();
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ProfileEntryActivity.class.getName());
+        editor.commit();
 
-        loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
-
+        hamPayDialog = new HamPayDialog(activity);
 
         cellNumberValue = (FacedEditText)findViewById(R.id.cellNumberValue);
         cellNumberIcon = (ImageView)findViewById(R.id.cellNumberIcon);
@@ -234,7 +236,7 @@ public class ProfileEntryActivity extends Activity {
                     if (bankListResponse.getBanks().size() > 0)
                         showListBankDialog();
                 }else {
-                    loading_rl.setVisibility(View.VISIBLE);
+                    hamPayDialog.showWaitingdDialog("");
                     bankListRequest = new BankListRequest();
                     requestBankList = new RequestBankList(context, new RequestBanksTaskCompleteListener(true));
                     requestBankList.execute(bankListRequest);
@@ -369,8 +371,7 @@ public class ProfileEntryActivity extends Activity {
         public void onTaskComplete(ResponseMessage<BankListResponse> bankListResponseMessage)
         {
 
-            loading_rl.setVisibility(View.GONE);
-
+            hamPayDialog.dismisWaitingDialog();
 
             if (bankListResponseMessage != null) {
 
@@ -405,12 +406,12 @@ public class ProfileEntryActivity extends Activity {
         {
 
             keepOn_button.setEnabled(true);
-            loading_rl.setVisibility(View.GONE);
+            hamPayDialog.dismisWaitingDialog();
             if (registrationEntryResponse != null) {
 
                 if (registrationEntryResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
-                    editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ProfileEntryActivity.class.toString());
+//                    editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ProfileEntryActivity.class.getName());
                     editor.putString(Constants.REGISTERED_CELL_NUMBER, cellNumberValue.getText().toString());
                     editor.putString(Constants.REGISTERED_BANK_ID, selectedBankCode);
                     editor.putString(Constants.REGISTERED_BANK_ACCOUNT_NO_FORMAT, accountNumberFormat);
@@ -444,7 +445,8 @@ public class ProfileEntryActivity extends Activity {
         @Override
         public void onTaskPreRun() {
             keepOn_button.setEnabled(false);
-            loading_rl.setVisibility(View.VISIBLE);
+//            loading_rl.setVisibility(View.VISIBLE);
+            hamPayDialog.showWaitingdDialog("");
         }
     }
 

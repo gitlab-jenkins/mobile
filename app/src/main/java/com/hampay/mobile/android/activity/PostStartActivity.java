@@ -2,17 +2,21 @@ package com.hampay.mobile.android.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
+import com.hampay.mobile.android.util.Constants;
 
 public class PostStartActivity extends Activity {
 
 
     ButtonRectangle keepOn_button;
+
+    SharedPreferences.Editor editor;
 
     Activity activity;
 
@@ -22,6 +26,10 @@ public class PostStartActivity extends Activity {
         setContentView(R.layout.activity_post_start);
 
         activity = PostStartActivity.this;
+
+        editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, PostStartActivity.class.getName());
+        editor.commit();
 
         keepOn_button = (ButtonRectangle)findViewById(R.id.keepOn_button);
         keepOn_button.setOnClickListener(new View.OnClickListener() {

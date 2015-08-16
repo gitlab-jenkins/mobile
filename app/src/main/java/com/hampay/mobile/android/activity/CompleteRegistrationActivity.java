@@ -64,9 +64,9 @@ public class CompleteRegistrationActivity extends ActionBarActivity {
         });
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        new HamPayDialog(activity).showExitRegistrationDialog();
-//    }
+    @Override
+    public void onBackPressed() {
+        new HamPayDialog(activity).showExitRegistrationDialog();
+    }
 
 }

@@ -2,6 +2,7 @@ package com.hampay.mobile.android.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -11,12 +12,14 @@ import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.component.material.progressbar.ProgressView;
 import com.hampay.mobile.android.dialog.HamPayDialog;
+import com.hampay.mobile.android.util.Constants;
 
 public class StartActivity extends Activity {
 
     ButtonRectangle start_button;
 
     Activity activity;
+    SharedPreferences.Editor editor;
 
 //    ProgressView waitingProgress;
 
@@ -26,6 +29,10 @@ public class StartActivity extends Activity {
         setContentView(R.layout.activity_start);
 
         activity = StartActivity.this;
+
+        editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, StartActivity.class.getName());
+        editor.commit();
 
 //        waitingProgress = (ProgressView)findViewById(R.id.waitingProgress);
 //        waitingProgress.start();

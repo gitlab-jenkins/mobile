@@ -35,7 +35,8 @@ public class MemorableWordEntryActivity extends Activity {
 
     Activity activity;
 
-    RelativeLayout loading_rl;
+
+    HamPayDialog hamPayDialog;
 
     String Uuid = "";
 
@@ -54,7 +55,7 @@ public class MemorableWordEntryActivity extends Activity {
 
         activity = MemorableWordEntryActivity.this;
 
-        loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
+        hamPayDialog = new HamPayDialog(activity);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
 
@@ -64,6 +65,8 @@ public class MemorableWordEntryActivity extends Activity {
         memorable_value.addTextChangedListener(new MemorableTextWatcher(memorable_value));
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, MemorableWordEntryActivity.class.getName());
+        editor.commit();
 
         keepOn_button = (ButtonRectangle) findViewById(R.id.keepOn_button);
         keepOn_button.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +98,7 @@ public class MemorableWordEntryActivity extends Activity {
         @Override
         public void onTaskComplete(ResponseMessage<RegistrationMemorableWordEntryResponse> registrationMemorableWordEntryResponseMessage) {
 
-            loading_rl.setVisibility(View.GONE);
+            hamPayDialog.dismisWaitingDialog();
 
             ResultStatus resultStatus;
 
@@ -130,7 +133,7 @@ public class MemorableWordEntryActivity extends Activity {
 
         @Override
         public void onTaskPreRun() {
-            loading_rl.setVisibility(View.VISIBLE);
+            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 

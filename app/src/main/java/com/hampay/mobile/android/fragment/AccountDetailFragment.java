@@ -66,7 +66,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     LinearLayout hampay_3_ll;
     LinearLayout hampay_4_ll;
 
-    RelativeLayout loading_rl;
+    HamPayDialog hamPayDialog;
 
     ButtonRectangle verify_account_button;
 
@@ -113,8 +113,8 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
         verification_status_ll = (LinearLayout)rootView.findViewById(R.id.verification_status_ll);
 
-        loading_rl = (RelativeLayout)rootView.findViewById(R.id.loading_rl);
 
+        hamPayDialog = new HamPayDialog(getActivity());
 
         hampay_1_ll = (LinearLayout)rootView.findViewById(R.id.hampay_1_ll);
         hampay_2_ll = (LinearLayout)rootView.findViewById(R.id.hampay_2_ll);
@@ -130,7 +130,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
             @Override
             public void onClick(View v) {
 
-                loading_rl.setVisibility(View.VISIBLE);
+                hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
 
                 verifyAccountRequest = new VerifyAccountRequest();
                 requestVerifyAccount = new RequestVerifyAccount(getActivity(), new RequestVerifyAccountTaskCompleteListener());
@@ -138,8 +138,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
             }
         });
 
-
-        loading_rl = (RelativeLayout)rootView.findViewById(R.id.loading_rl);
 
 
         user_image = (ImageView)rootView.findViewById(R.id.user_image);
@@ -246,7 +244,8 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
             Log.e("FINISH", "FINISH");
 
-            loading_rl.setVisibility(View.GONE);
+            hamPayDialog.dismisWaitingDialog();
+
             if (userProfileResponseMessage != null) {
 
                 if (userProfileResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
@@ -271,7 +270,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
         @Override
         public void onTaskPreRun() {
-            loading_rl.setVisibility(View.VISIBLE);
+            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 
@@ -284,7 +283,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         @Override
         public void onTaskComplete(ResponseMessage<VerifyAccountResponse> verifyAccountResponseMessage)
         {
-            loading_rl.setVisibility(View.GONE);
+            hamPayDialog.dismisWaitingDialog();
             if (verifyAccountResponseMessage != null) {
 
                 if (verifyAccountResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
@@ -312,7 +311,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
         @Override
         public void onTaskPreRun() {
-            loading_rl.setVisibility(View.VISIBLE);
+            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 

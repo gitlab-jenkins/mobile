@@ -18,7 +18,9 @@ public class PostRegVerifyAccountNoActivity extends Activity {
 
     ButtonRectangle keepOn_button;
 
-    RelativeLayout loading_rl;
+//    RelativeLayout loading_rl;
+
+    HamPayDialog hamPayDialog;
 
     SharedPreferences.Editor editor;
 
@@ -34,7 +36,9 @@ public class PostRegVerifyAccountNoActivity extends Activity {
 
         activity = PostRegVerifyAccountNoActivity.this;
 
-        loading_rl = (RelativeLayout) findViewById(R.id.loading_rl);
+//        loading_rl = (RelativeLayout) findViewById(R.id.loading_rl);
+
+        hamPayDialog = new HamPayDialog(activity);
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         editor.putBoolean(Constants.VERIFIED_USER, true);

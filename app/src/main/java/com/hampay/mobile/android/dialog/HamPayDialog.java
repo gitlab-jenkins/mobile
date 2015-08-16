@@ -58,6 +58,7 @@ import com.hampay.mobile.android.activity.AppSliderActivity;
 import com.hampay.mobile.android.activity.GuideDetailActivity;
 import com.hampay.mobile.android.activity.HamPayLoginActivity;
 import com.hampay.mobile.android.activity.MainActivity;
+import com.hampay.mobile.android.activity.StartActivity;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestBankList;
 import com.hampay.mobile.android.async.RequestBusinessPayment;
@@ -100,6 +101,7 @@ import java.util.regex.Pattern;
  */
 public class HamPayDialog {
 
+    SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
     Activity activity;
@@ -111,12 +113,47 @@ public class HamPayDialog {
 
         this.activity = activity;
 
+        prefs = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE);
         editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE).edit();
+
 
         dbHelper = new DatabaseHelper(activity);
 
     }
 
+
+    public void showWaitingdDialog(String hampayUser){
+
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_waiting, null);
+
+        FacedTextView wating_text = (FacedTextView)view.findViewById(R.id.wating_text);
+
+        if (hampayUser.length() != 0){
+            wating_text.setText(activity.getString(R.string.dialog_hampay_user_waiting, hampayUser));
+        }
+
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
+    public void dismisWaitingDialog(){
+        if (dialog != null){
+            if (dialog.isShowing())
+                dialog.dismiss();
+        }
+    }
 
     public void showDisMatchPasswordDialog(){
 
@@ -649,11 +686,11 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                Intent intent = new Intent();
-                intent.setClass(activity, AppSliderActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                Intent intent = new Intent();
+//                intent.setClass(activity, AppSliderActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 activity.finish();
-                activity.startActivity(intent);
+//                activity.startActivity(intent);
             }
         });
 
@@ -687,9 +724,7 @@ public class HamPayDialog {
 
         failedLoginText.setText("کد خطای: " + failedLoginResponse.getCode()
                         + "\n"
-//                + failedLoginResponse.getMessage()
                         + failedLoginResponse.getMessage()
-//                + activity.getString(R.string.msg_fail_hampay_login
         );
 
 
@@ -718,6 +753,55 @@ public class HamPayDialog {
         dialog.setContentView(view);
         dialog.setTitle(null);
         dialog.setCanceledOnTouchOutside(true);
+
+        dialog.show();
+    }
+
+
+    public void showResumeRegisterationDialog(final Activity destinationActivity){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_resume_registeration, null);
+
+        FacedTextView confrim_resume_register = (FacedTextView)view.findViewById(R.id.confrim_resume_register);
+        FacedTextView disconfrim_resume_register = (FacedTextView)view.findViewById(R.id.disconfrim_resume_register);
+
+
+        confrim_resume_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent intent = new Intent();
+                intent.setClass(activity, destinationActivity.getClass());
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                activity.finish();
+                activity.startActivity(intent);
+            }
+        });
+
+        disconfrim_resume_register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent intent = new Intent();
+                intent.setClass(activity, StartActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                activity.finish();
+                activity.startActivity(intent);
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
 
         dialog.show();
     }
@@ -772,6 +856,7 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                 individualPaymentRequest = new IndividualPaymentRequest();
                 individualPaymentRequest.setAmount(amountValue);
                 individualPaymentRequest.setCellNumber(individualPaymentConfirmResponse.getCellNumber());
@@ -874,6 +959,7 @@ public class HamPayDialog {
         @Override
         public void onTaskComplete(ResponseMessage<IndividualPaymentResponse> individualPaymentResponseMessage) {
 
+            dismisWaitingDialog();
             if (individualPaymentResponseMessage != null){
                 if (individualPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
 
@@ -915,6 +1001,7 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                 businessPaymentRequest = new BusinessPaymentRequest();
                 businessPaymentRequest.setAmount(amountValue);
                 businessPaymentRequest.setBusinessCode(businessPaymentConfirmResponse.getBusinessCode());
@@ -961,6 +1048,8 @@ public class HamPayDialog {
 
         @Override
         public void onTaskComplete(ResponseMessage<BusinessPaymentResponse> businessPaymentResponseMessage) {
+
+            dismisWaitingDialog();
 
             if (businessPaymentResponseMessage != null){
                 if (businessPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){

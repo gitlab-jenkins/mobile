@@ -96,6 +96,9 @@
     <string name="verified_account">محدود (در انتظار تایید)</string>
     <string name="delegate_account">عادی</string>
 
+    <string name="dialog_user_waiting">کاربر گرامی لطفا منتظر بمانید.</string>
+    <string name="dialog_hampay_user_waiting">%1$s عزیز، لطفا منتظر باش</string>
+
     <string name="last_login">آخرین زمان ورود به سامانه </string>
 
     <string name="bank_name">انتخاب بانک</string>
@@ -305,6 +308,10 @@
     <string name="exit_registration_text">آیا مایل به خروج از ثبت نام هم‌پی هستید؟</string>
     <string name="exit_registration_yes">خارج می‌شوم </string>
     <string name="exit_registration_no">ادامه می‌دهم</string>
+
+    <string name="resume_register">کاربر گرامی مایل به ادامه ثبت نام هستید یا از ابتدا ثبت نام می کنید؟</string>
+    <string name="confrim_resume_register">ادامه از قبل</string>
+    <string name="disconfrim_resume_register">ثبت نام از ابتدا</string>
 
     <string name="login_fail_text">رمزعبور خود را صحیح وارد کنید</string>
     <string name="remove_password">حذف رمزعبور</string>

@@ -27,7 +27,7 @@ public class ConfirmAccountNoActivity extends Activity {
         activity = ConfirmAccountNoActivity.this;
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ConfirmAccountNoActivity.class.toString());
+        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ConfirmAccountNoActivity.class.getName());
         editor.commit();
 
         keepOn_button = (ButtonRectangle)findViewById(R.id.keepOn_button);

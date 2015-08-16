@@ -26,7 +26,6 @@ public class VerificationActivity extends Activity {
     Context context;
 
     NetworkConnectivity networkConnectivity;
-    RelativeLayout loading_rl;
 
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
@@ -35,6 +34,8 @@ public class VerificationActivity extends Activity {
 
     RequestRegistrationSendSmsToken requestRegistrationSendSmsToken;
     RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest;
+
+    HamPayDialog hamPayDialog;
 
     public void contactUs(View view){
 //        new HamPayDialog(this).showContactUsDialog();
@@ -50,8 +51,10 @@ public class VerificationActivity extends Activity {
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, VerificationActivity.class.getName());
+        editor.commit();
 
-        loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
+        hamPayDialog = new HamPayDialog(activity);
 
         context = this;
         networkConnectivity = new NetworkConnectivity(context);
@@ -75,7 +78,9 @@ public class VerificationActivity extends Activity {
         {
 
             keepOn_button.setEnabled(true);
-            loading_rl.setVisibility(View.GONE);
+//            loading_rl.setVisibility(View.GONE);
+
+            hamPayDialog.dismisWaitingDialog();
 
             if (registrationSendSmsTokenResponse != null) {
                 if (registrationSendSmsTokenResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
@@ -109,7 +114,8 @@ public class VerificationActivity extends Activity {
         @Override
         public void onTaskPreRun() {
             keepOn_button.setEnabled(false);
-            loading_rl.setVisibility(View.VISIBLE);
+//            loading_rl.setVisibility(View.VISIBLE);
+            hamPayDialog.showWaitingdDialog("");
         }
     }
 

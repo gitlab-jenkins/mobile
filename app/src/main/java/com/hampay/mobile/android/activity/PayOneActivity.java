@@ -60,7 +60,6 @@ public class PayOneActivity extends ActionBarActivity {
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
-    RelativeLayout loading_rl;
 
     RequestIndividualPaymentConfirm requestIndividualPaymentConfirm;
     IndividualPaymentConfirmRequest individualPaymentConfirmRequest;
@@ -75,6 +74,7 @@ public class PayOneActivity extends ActionBarActivity {
     Long MaxXferAmount = 0L;
     Long MinXferAmount = 0L;
 
+    HamPayDialog hamPayDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,10 +112,10 @@ public class PayOneActivity extends ActionBarActivity {
 
         }
 
-        loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
-
         context = this;
         activity = PayOneActivity.this;
+
+        hamPayDialog = new HamPayDialog(activity);
 
         dbHelper = new DatabaseHelper(this);
 
@@ -213,6 +213,7 @@ public class PayOneActivity extends ActionBarActivity {
                         if (amountValue >= MinXferAmount && amountValue <= MaxXferAmount) {
                             switch (userVerificationStatus) {
                                 case DELEGATED:
+                                    hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                                     individualPaymentConfirmRequest = new IndividualPaymentConfirmRequest();
                                     individualPaymentConfirmRequest.setCellNumber(contactPhoneNo);
                                     requestIndividualPaymentConfirm = new RequestIndividualPaymentConfirm(context, new RequestIndividualPaymentConfirmTaskCompleteListener());
@@ -262,6 +263,8 @@ public class PayOneActivity extends ActionBarActivity {
 
         @Override
         public void onTaskComplete(ResponseMessage<IndividualPaymentConfirmResponse> individualPaymentConfirmResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
 
             if (individualPaymentConfirmResponseMessage != null){
                 if (individualPaymentConfirmResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){

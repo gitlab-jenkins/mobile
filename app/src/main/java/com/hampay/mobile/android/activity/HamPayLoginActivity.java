@@ -80,7 +80,8 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
 
     SharedPreferences prefs;
 
-    RelativeLayout loading_rl;
+    HamPayDialog hamPayDialog;
+
     FacedTextView user_name;
 
     TACRequest tacRequest;
@@ -103,10 +104,11 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
         user_name = (FacedTextView)findViewById(R.id.user_name);
         user_name.setText("سلام: " + prefs.getString(Constants.REGISTERED_USER_FAMILY, ""));
 
-        loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
 
         context = this;
         activity = HamPayLoginActivity.this;
+
+        hamPayDialog = new HamPayDialog(activity);
 
         keyboard = (LinearLayout)findViewById(R.id.keyboard);
         password_holder = (LinearLayout)findViewById(R.id.password_holder);
@@ -182,7 +184,7 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
         @Override
         public void onTaskComplete(ResponseMessage<TACResponse> tacResponseMessage)
         {
-            loading_rl.setVisibility(View.GONE);
+            hamPayDialog.dismisWaitingDialog();
             if (tacResponseMessage != null) {
 
                 if (tacResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
@@ -221,7 +223,7 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
 
         @Override
         public void onTaskPreRun() {
-            loading_rl.setVisibility(View.VISIBLE);
+            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 
@@ -238,7 +240,7 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
             SuccessLoginResponse successLoginResponse;
             FailedLoginResponse failedLoginResponse;
 
-            loading_rl.setVisibility(View.GONE);
+            hamPayDialog.dismisWaitingDialog();
             if (loginResponse != null) {
                 Gson gson = new Gson();
                 Type listType = new TypeToken<SuccessLoginResponse>() {}.getType();
@@ -278,7 +280,8 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
 
     @Override
     public void onTaskPreRun() {
-        loading_rl.setVisibility(View.VISIBLE);
+//        loading_rl.setVisibility(View.VISIBLE);
+        hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
     }
 }
 

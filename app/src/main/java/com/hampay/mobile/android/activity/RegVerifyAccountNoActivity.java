@@ -31,7 +31,10 @@ public class RegVerifyAccountNoActivity extends Activity {
 
     Context context;
 
-    RelativeLayout loading_rl;
+//    RelativeLayout loading_rl;
+
+    HamPayDialog hamPayDialog;
+
     NetworkConnectivity networkConnectivity;
 
     Bundle bundle;
@@ -60,7 +63,8 @@ public class RegVerifyAccountNoActivity extends Activity {
         bundle = getIntent().getExtras();
         TransferMoneyComment = bundle.getString(Constants.TRANSFER_MONEY_COMMENT);
 
-        loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
+//        loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
+        hamPayDialog = new HamPayDialog(activity);
         networkConnectivity = new NetworkConnectivity(this);
 
         context = this;
@@ -93,7 +97,9 @@ public class RegVerifyAccountNoActivity extends Activity {
         public void onTaskComplete(ResponseMessage<RegistrationVerifyTransferMoneyResponse> verifyTransferMoneyResponseMessage)
         {
 
-            loading_rl.setVisibility(View.GONE);
+//            loading_rl.setVisibility(View.GONE);
+
+            hamPayDialog.dismisWaitingDialog();
 
             if (verifyTransferMoneyResponseMessage != null) {
 
@@ -123,7 +129,8 @@ public class RegVerifyAccountNoActivity extends Activity {
 
         @Override
         public void onTaskPreRun() {
-            loading_rl.setVisibility(View.VISIBLE);
+//            loading_rl.setVisibility(View.VISIBLE);
+            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 

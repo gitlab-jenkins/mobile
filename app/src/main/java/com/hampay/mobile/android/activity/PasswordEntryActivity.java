@@ -51,6 +51,7 @@ public class PasswordEntryActivity extends Activity implements View.OnClickListe
     ImageView input_digit_5;
 
     SharedPreferences prefs;
+    SharedPreferences.Editor editor;
 
     RelativeLayout password_1_rl, password_2_rl;
 
@@ -59,7 +60,7 @@ public class PasswordEntryActivity extends Activity implements View.OnClickListe
 
     Context context;
 
-    RelativeLayout loading_rl;
+    HamPayDialog hamPayDialog;
 
     RequestPassCodeEntry requestPassCodeEntry;
     RegistrationPassCodeEntryRequest registrationPassCodeEntryRequest;
@@ -77,13 +78,15 @@ public class PasswordEntryActivity extends Activity implements View.OnClickListe
 
         activity = PasswordEntryActivity.this;
 
-        loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
+        hamPayDialog = new HamPayDialog(activity);
 
         keyboard = (LinearLayout)findViewById(R.id.keyboard);
         password_holder = (LinearLayout)findViewById(R.id.password_holder);
         password_holder.setOnClickListener(this);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, PasswordEntryActivity.class.getName());
+        editor.commit();
 
         context = this;
 
@@ -133,7 +136,9 @@ public class PasswordEntryActivity extends Activity implements View.OnClickListe
         public void onTaskComplete(ResponseMessage<RegistrationPassCodeEntryResponse> passCodeEntryResponseMessage)
         {
 
-            loading_rl.setVisibility(View.GONE);
+//            loading_rl.setVisibility(View.GONE);
+
+            hamPayDialog.dismisWaitingDialog();
 
             if (passCodeEntryResponseMessage != null) {
 
@@ -172,7 +177,8 @@ public class PasswordEntryActivity extends Activity implements View.OnClickListe
 
         @Override
         public void onTaskPreRun() {
-            loading_rl.setVisibility(View.VISIBLE);
+//            loading_rl.setVisibility(View.VISIBLE);
+            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 

@@ -1,5 +1,6 @@
 package com.hampay.mobile.android.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -48,6 +49,10 @@ public class AppSliderActivity extends ActionBarActivity {
 
     private SharedPreferences prefs;
 
+    private Activity activity;
+    private Activity destinationActivity;
+    private String registeredActivityData = "";
+
     private Intent intent;
 
 
@@ -59,6 +64,8 @@ public class AppSliderActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_slider);
+
+        activity = AppSliderActivity.this;
 
 //        if (new RootUtil().checkRootedDevice()){
 //            new HamPayDialog(this).showPreventRootDeviceDialog();
@@ -192,74 +199,118 @@ public class AppSliderActivity extends ActionBarActivity {
         });
 
 
-        if (prefs.getBoolean(Constants.REGISTERED_USER, false)){
+        registeredActivityData = prefs.getString(Constants.REGISTERED_ACTIVITY_DATA, "");
 
-            Thread thread = new Thread() {
-                public void run() {
+        if (registeredActivityData.length() != 0){
+            if (registeredActivityData.equalsIgnoreCase(StartActivity.class.getName())){
+                destinationActivity = new StartActivity();
+            }else if (registeredActivityData.equalsIgnoreCase(PostStartActivity.class.getName())){
+                destinationActivity = new PostStartActivity();
+            }
+            else if (registeredActivityData.equalsIgnoreCase(ProfileEntryActivity.class.getName())){
+                destinationActivity = new ProfileEntryActivity();
+            }
+            else if (registeredActivityData.equalsIgnoreCase(VerificationActivity.class.getName())){
+                destinationActivity = new VerificationActivity();
+            }
+            else if (registeredActivityData.equalsIgnoreCase(SMSVerificationActivity.class.getName())){
+                destinationActivity = new SMSVerificationActivity();
+            }
+            else if (registeredActivityData.equalsIgnoreCase(ConfirmAccountNoActivity.class.getName())){
+                destinationActivity = new ConfirmAccountNoActivity();
+            }
+            else if (registeredActivityData.equalsIgnoreCase(ConfirmInfoActivity.class.getName())){
+                destinationActivity = new ConfirmInfoActivity();
+            }
+            else if (registeredActivityData.equalsIgnoreCase(PasswordEntryActivity.class.getName())){
+                destinationActivity = new PasswordEntryActivity();
+            }
+            else if (registeredActivityData.equalsIgnoreCase(MemorableWordEntryActivity.class.getName())){
+                destinationActivity = new MemorableWordEntryActivity();
+            }
 
-                    try {
-                        sleep(3 * 1000);
 
-                        intent.setClass(AppSliderActivity.this, HamPayLoginActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        finish();
-                        startActivity(intent);
+            new HamPayDialog(activity).showResumeRegisterationDialog(destinationActivity);
 
 
+        }
 
-                    } catch (Exception e) {
+//        if (registeredActivityData.equalsIgnoreCase(ProfileEntryActivity.class.getName())){
+//            intent.setClass(AppSliderActivity.this, ProfileEntryActivity.class);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            finish();
+//            startActivity(intent);
+//        }
+
+        else {
+            if (prefs.getBoolean(Constants.REGISTERED_USER, false)) {
+
+                Thread thread = new Thread() {
+                    public void run() {
+
+                        try {
+                            sleep(3 * 1000);
+
+                            intent.setClass(AppSliderActivity.this, HamPayLoginActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            finish();
+                            startActivity(intent);
+
+
+                        } catch (Exception e) {
+
+                        }
+                    }
+                };
+                thread.start();
+
+            } else {
+
+                image_splash = (ImageView) findViewById(R.id.image_splash);
+                intro_icon = (ImageView) findViewById(R.id.intro_icon);
+
+                fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.splash_fadein);
+                splashLogoAnimation = AnimationUtils.loadAnimation(this, R.anim.splash_logo);
+                fadeInAnimation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
 
                     }
-                }
-            };
-            thread.start();
 
-        }else {
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        intro_icon.setVisibility(View.GONE);
+                        sliding_into_app.setOnTouchListener(null);
+                    }
 
-            image_splash = (ImageView) findViewById(R.id.image_splash);
-            intro_icon = (ImageView) findViewById(R.id.intro_icon);
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
 
-            fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.splash_fadein);
-            splashLogoAnimation = AnimationUtils.loadAnimation(this, R.anim.splash_logo);
-            fadeInAnimation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
+                    }
+                });
+                fadeInAnimation.setFillAfter(false);
+                fadeInAnimation.setRepeatMode(0);
+                fadeInAnimation.setFillAfter(true);
+                image_splash.startAnimation(fadeInAnimation);
 
-                }
+                splashLogoAnimation.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
 
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    intro_icon.setVisibility(View.GONE);
-                    sliding_into_app.setOnTouchListener(null);
-                }
+                    }
 
-                @Override
-                public void onAnimationRepeat(Animation animation) {
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        intro_icon.setVisibility(View.GONE);
+                    }
 
-                }
-            });
-            fadeInAnimation.setFillAfter(false);
-            fadeInAnimation.setRepeatMode(0);
-            fadeInAnimation.setFillAfter(true);
-            image_splash.startAnimation(fadeInAnimation);
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
 
-            splashLogoAnimation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    intro_icon.setVisibility(View.GONE);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
-            intro_icon.startAnimation(splashLogoAnimation);
+                    }
+                });
+                intro_icon.startAnimation(splashLogoAnimation);
+            }
         }
     }
 

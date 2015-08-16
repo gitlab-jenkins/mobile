@@ -72,7 +72,8 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
 
     SharedPreferences.Editor editor;
 
-    RelativeLayout loading_rl;
+//    RelativeLayout loading_rl;
+    HamPayDialog hamPayDialog;
 
     SharedPreferences prefs;
 
@@ -153,6 +154,7 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         editor.putString(Constants.RECEIVED_SMS_ACTIVATION, "");
+        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, SMSVerificationActivity.class.getName());
         editor.commit();
 
         numberProgressBar = (NumberProgressBar)findViewById(R.id.numberProgressBar);
@@ -190,9 +192,11 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
             }
         }.start();
 
-        loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
+//        loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
 
         activity = SMSVerificationActivity.this;
+
+        hamPayDialog = new HamPayDialog(activity);
 
         keyboard = (LinearLayout)findViewById(R.id.keyboard);
         activation_holder = (LinearLayout)findViewById(R.id.activation_holder);
@@ -275,7 +279,8 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
 
             numberProgressBar.setProgress(0);
             verify_button.setEnabled(true);
-            loading_rl.setVisibility(View.GONE);
+//            loading_rl.setVisibility(View.GONE);
+            hamPayDialog.dismisWaitingDialog();
             if (registrationVerifyMobileResponseMessage != null) {
 
                 if (registrationVerifyMobileResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
@@ -308,7 +313,8 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
         @Override
         public void onTaskPreRun() {
             keyboard.setVisibility(View.GONE);
-            loading_rl.setVisibility(View.VISIBLE);
+//            loading_rl.setVisibility(View.VISIBLE);
+            hamPayDialog.showWaitingdDialog("");
         }
     }
 
@@ -523,7 +529,9 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
         {
 
 
-            loading_rl.setVisibility(View.GONE);
+//            loading_rl.setVisibility(View.GONE);
+
+            hamPayDialog.dismisWaitingDialog();
 
             if (registrationSendSmsTokenResponse != null) {
                 if (registrationSendSmsTokenResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
@@ -581,7 +589,8 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
 
         @Override
         public void onTaskPreRun() {
-            loading_rl.setVisibility(View.VISIBLE);
+//            loading_rl.setVisibility(View.VISIBLE);
+            hamPayDialog.showWaitingdDialog("");
         }
     }
 

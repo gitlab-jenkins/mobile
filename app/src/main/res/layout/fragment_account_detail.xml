@@ -346,22 +346,4 @@
     </ScrollView>
 
 
-    <RelativeLayout
-        android:visibility="gone"
-        android:id="@+id/loading_rl"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white">
-
-
-        <ProgressBar
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:indeterminateDrawable="@drawable/fragment_progress"
-            android:layout_centerInParent="true"/>
-
-
-    </RelativeLayout>
-
-
 </RelativeLayout>

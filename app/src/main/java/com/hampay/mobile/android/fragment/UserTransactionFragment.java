@@ -47,7 +47,8 @@ public class UserTransactionFragment extends Fragment {
     ListView transationListView;
     UserTransactionAdapter userTransactionAdapter;
     private boolean FINISHED_SCROLLING = false;
-    RelativeLayout loading_rl;
+
+    HamPayDialog hamPayDialog;
 
     FacedTextView no_transaction;
     private boolean onLoadMore = false;
@@ -81,7 +82,9 @@ public class UserTransactionFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_transaction, container, false);
 
-        loading_rl = (RelativeLayout)rootView.findViewById(R.id.loading_rl);
+        hamPayDialog = new HamPayDialog(getActivity());
+        hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+
         no_transaction = (FacedTextView)rootView.findViewById(R.id.no_transaction);
 
         transationListView = (ListView)rootView.findViewById(R.id.transationListView);
@@ -144,8 +147,8 @@ public class UserTransactionFragment extends Fragment {
         @Override
         public void onTaskComplete(ResponseMessage<TransactionListResponse> transactionListResponseMessage) {
 
-            loading_rl.setVisibility(View.GONE);
 
+            hamPayDialog.dismisWaitingDialog();
 
             if (transactionListResponseMessage != null) {
 

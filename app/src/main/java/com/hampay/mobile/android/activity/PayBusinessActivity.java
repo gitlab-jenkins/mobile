@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
@@ -43,8 +42,6 @@ public class PayBusinessActivity extends ActionBarActivity {
     Context context;
     Activity activity;
 
-    RelativeLayout loading_rl;
-
     Long amountValue = 0l;
     String businessMssage = "";
 
@@ -60,6 +57,8 @@ public class PayBusinessActivity extends ActionBarActivity {
     Long MaxXferAmount = 0L;
     Long MinXferAmount = 0L;
 
+    HamPayDialog hamPayDialog;
+
     public void backActionBar(View view){
         finish();
     }
@@ -69,10 +68,10 @@ public class PayBusinessActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay_business);
 
-        loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
-
         context = this;
         activity = PayBusinessActivity.this;
+
+        hamPayDialog = new HamPayDialog(activity);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
@@ -159,19 +158,20 @@ public class PayBusinessActivity extends ActionBarActivity {
                         editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                         editor.commit();
                         if (amountValue >= MinXferAmount && amountValue <= MaxXferAmount) {
-                        switch (userVerificationStatus) {
-                            case DELEGATED:
-                                businessPaymentConfirmRequest = new BusinessPaymentConfirmRequest();
-                                businessPaymentConfirmRequest.setBusinessCode(bundle.getString("business_code"));
-                                requestBusinessPaymentConfirm = new RequestBusinessPaymentConfirm(context, new RequestBusinessPaymentConfirmTaskCompleteListener());
-                                requestBusinessPaymentConfirm.execute(businessPaymentConfirmRequest);
-                                break;
+                            switch (userVerificationStatus) {
+                                case DELEGATED:
+                                    hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+                                    businessPaymentConfirmRequest = new BusinessPaymentConfirmRequest();
+                                    businessPaymentConfirmRequest.setBusinessCode(bundle.getString("business_code"));
+                                    requestBusinessPaymentConfirm = new RequestBusinessPaymentConfirm(context, new RequestBusinessPaymentConfirmTaskCompleteListener());
+                                    requestBusinessPaymentConfirm.execute(businessPaymentConfirmRequest);
+                                    break;
 
-                            default:
-                                new HamPayDialog(activity).showFailPaymentPermissionDialog(userVerificationMessage);
-                                pay_to_business_button.setEnabled(true);
-                                break;
-                        }
+                                default:
+                                    new HamPayDialog(activity).showFailPaymentPermissionDialog(userVerificationMessage);
+                                    pay_to_business_button.setEnabled(true);
+                                    break;
+                            }
                         }else {
                             new HamPayDialog(activity).showIncorrectAmountDialog(MinXferAmount, MaxXferAmount);
                             pay_to_business_button.setEnabled(true);
@@ -192,6 +192,8 @@ public class PayBusinessActivity extends ActionBarActivity {
 
         @Override
         public void onTaskComplete(ResponseMessage<BusinessPaymentConfirmResponse> businessPaymentConfirmResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
 
             if (businessPaymentConfirmResponseMessage != null){
                 if (businessPaymentConfirmResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){

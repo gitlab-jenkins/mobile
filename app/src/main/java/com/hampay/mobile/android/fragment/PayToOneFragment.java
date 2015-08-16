@@ -51,7 +51,8 @@ public class PayToOneFragment extends Fragment {
     static List<EnabledHamPay> enabledHamPays;
     List<RecentPay> searchRecentPays;
     List<EnabledHamPay> searchEnabledHamPay;
-    RelativeLayout loading_rl;
+
+    HamPayDialog hamPayDialog;
 
     //    ResponseMessage<ContactsHampayEnabledResponse> contactsHampayEnabledResponse;
     List<ContactDTO> contactDTOs;
@@ -121,14 +122,13 @@ public class PayToOneFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_pay_to_one, container, false);
 
-//        onResume = false;
-
         inputMethodManager = (InputMethodManager)getActivity().getSystemService(
                 Context.INPUT_METHOD_SERVICE);
 
         context = getActivity();
 
-        loading_rl = (RelativeLayout)rootView.findViewById(R.id.loading_rl);
+        hamPayDialog = new HamPayDialog(getActivity());
+        hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
 
         searchPhraseText = (FacedEditText)rootView.findViewById(R.id.searchPhraseText);
 
@@ -233,7 +233,8 @@ public class PayToOneFragment extends Fragment {
                         enabledHamPays);
                 pinnedHeaderListView.setAdapter(payOneAdapter);
             }
-            loading_rl.setVisibility(View.GONE);
+
+            hamPayDialog.dismisWaitingDialog();
         }
 
         if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
@@ -441,7 +442,6 @@ public class PayToOneFragment extends Fragment {
 ////
 ////                }
 //
-//                loading_rl.setVisibility(View.GONE);
 //
 //            }
 //        }
@@ -497,7 +497,7 @@ public class PayToOneFragment extends Fragment {
                     pinnedHeaderListView.setAdapter(payOneAdapter);
                 }
             }
-            loading_rl.setVisibility(View.GONE);
+            hamPayDialog.dismisWaitingDialog();
         }
 
         @Override

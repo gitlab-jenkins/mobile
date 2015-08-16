@@ -54,7 +54,7 @@ public class PayToBusinessFragment extends Fragment {
 
     private ListView businessListView;
 
-    RelativeLayout loading_rl;
+    HamPayDialog hamPayDialog;
 
     private boolean onLoadMore = false;
     DobList dobList;
@@ -141,7 +141,9 @@ public class PayToBusinessFragment extends Fragment {
 
                     hamPayBusinessesAdapter.clear();
                     businessDTOs.clear();
-                    loading_rl.setVisibility(View.VISIBLE);
+
+                    hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+
                 }
             }
 
@@ -164,7 +166,9 @@ public class PayToBusinessFragment extends Fragment {
 
         businessDTOs = new ArrayList<BusinessDTO>();
 
-        loading_rl = (RelativeLayout) rootView.findViewById(R.id.loading_rl);
+        hamPayDialog = new HamPayDialog(getActivity());
+        hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+
 
         businessListView = (ListView) rootView.findViewById(R.id.businessListView);
 
@@ -244,7 +248,8 @@ public class PayToBusinessFragment extends Fragment {
 
         hamPayBusinessesAdapter.clear();
         businessDTOs.clear();
-        loading_rl.setVisibility(View.VISIBLE);
+
+        hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
 
     }
 
@@ -261,7 +266,7 @@ public class PayToBusinessFragment extends Fragment {
         @Override
         public void onTaskComplete(ResponseMessage<BusinessListResponse> businessListResponseMessage) {
 
-            loading_rl.setVisibility(View.GONE);
+            hamPayDialog.dismisWaitingDialog();
 
             if (businessListResponseMessage != null) {
                 if (businessListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
