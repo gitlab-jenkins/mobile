@@ -1158,12 +1158,20 @@ public class HamPayDialog {
         responseMessage.setText(message);
 
         FacedTextView retry_fetch_bank_list = (FacedTextView) view.findViewById(R.id.retry_fetch_bank_list);
+        FacedTextView cancel_request = (FacedTextView)view.findViewById(R.id.cancel_request);
 
         retry_fetch_bank_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
                 requestBankList.execute(bankListRequest);
+            }
+        });
+
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
@@ -1196,12 +1204,21 @@ public class HamPayDialog {
         responseMessage.setText(message);
 
         FacedTextView retry_registration_entry = (FacedTextView) view.findViewById(R.id.retry_registration_entry);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
 
         retry_registration_entry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
                 requestRegistrationEntry.execute(registrationEntryRequest);
+            }
+        });
+
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
@@ -1234,12 +1251,20 @@ public class HamPayDialog {
         responseMessage.setText(message);
 
         FacedTextView retry_registration_sms_token = (FacedTextView) view.findViewById(R.id.retry_registration_sms_token);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
 
         retry_registration_sms_token.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
                 requestRegistrationSendSmsToken.execute(registrationEntryRequest);
+            }
+        });
+
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
@@ -1272,12 +1297,21 @@ public class HamPayDialog {
         responseMessage.setText(message);
 
         FacedTextView retry_registration_verify_mobile = (FacedTextView) view.findViewById(R.id.retry_registration_verify_mobile);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
 
         retry_registration_verify_mobile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
                 requestVerifyMobile.execute(registrationVerifyMobileRequest);
+            }
+        });
+
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
@@ -1309,12 +1343,20 @@ public class HamPayDialog {
         responseMessage.setText(message);
 
         FacedTextView retry_confirm_user_data = (FacedTextView) view.findViewById(R.id.retry_confirm_user_data);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
 
         retry_confirm_user_data.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
                 requestConfirmUserData.execute(registrationConfirmUserDataRequest);
+            }
+        });
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
@@ -1346,15 +1388,21 @@ public class HamPayDialog {
         responseCode.setText(activity.getString(R.string.error_code, code));
         responseMessage.setText(message);
 
-        FacedTextView retry_confirm_user_data = (FacedTextView) view.findViewById(R.id.retry_confirm_user_data);
-
         FacedTextView retry_fetch_user_data = (FacedTextView) view.findViewById(R.id.retry_fetch_user_data);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
 
         retry_fetch_user_data.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
                 requestFetchUserData.execute(registrationFetchUserDataRequest);
+            }
+        });
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
@@ -1388,12 +1436,20 @@ public class HamPayDialog {
         responseMessage.setText(message);
 
         FacedTextView retry_verify_account = (FacedTextView) view.findViewById(R.id.retry_verify_account);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
 
         retry_verify_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
                 requestRegisterVerifyAccount.execute(registrationVerifyAccountRequest);
+            }
+        });
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
@@ -1425,12 +1481,21 @@ public class HamPayDialog {
         responseMessage.setText(message);
 
         FacedTextView retry_verify_account = (FacedTextView) view.findViewById(R.id.retry_verify_account);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
 
         retry_verify_account.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
                 requestVerifyAccount.execute(verifyAccountRequest);
+            }
+        });
+
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
@@ -1462,12 +1527,20 @@ public class HamPayDialog {
         responseMessage.setText(message);
 
         FacedTextView retry_user_profile = (FacedTextView) view.findViewById(R.id.retry_user_profile);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
 
         retry_user_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
                 requestUserProfile.execute(userProfileRequest);
+            }
+        });
+
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
@@ -1500,12 +1573,20 @@ public class HamPayDialog {
         responseMessage.setText(message);
 
         FacedTextView retry_verify_transfer_money = (FacedTextView) view.findViewById(R.id.retry_verify_transfer_money);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
 
         retry_verify_transfer_money.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
                 requestRegistrationVerifyTransferMoney.execute(registrationVerifyTransferMoneyRequest);
+            }
+        });
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
@@ -1538,12 +1619,20 @@ public class HamPayDialog {
         responseMessage.setText(message);
 
         FacedTextView retry_verify_transfer_money = (FacedTextView) view.findViewById(R.id.retry_verify_transfer_money);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
 
         retry_verify_transfer_money.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
                 requestVerifyTransferMoney.execute(verifyTransferMoneyRequest);
+            }
+        });
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
@@ -1576,12 +1665,19 @@ public class HamPayDialog {
         responseMessage.setText(message);
 
         FacedTextView retry_pass_code_entry = (FacedTextView) view.findViewById(R.id.retry_pass_code_entry);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
 
         retry_pass_code_entry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
                 requestPassCodeEntry.execute(registrationPassCodeEntryRequest);
+            }
+        });
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
@@ -1614,12 +1710,20 @@ public class HamPayDialog {
         responseMessage.setText(message);
 
         FacedTextView retry_memorable_entry = (FacedTextView) view.findViewById(R.id.retry_memorable_entry);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
 
         retry_memorable_entry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
                 requestMemorableWordEntry.execute(registrationMemorableWordEntryRequest);
+            }
+        });
+
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
@@ -1651,12 +1755,20 @@ public class HamPayDialog {
         responseMessage.setText(message);
 
         FacedTextView retry_tac_request = (FacedTextView) view.findViewById(R.id.retry_tac_request);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
 
         retry_tac_request.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
                 requestTAC.execute(tacRequest);
+            }
+        });
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
@@ -1689,12 +1801,20 @@ public class HamPayDialog {
         responseMessage.setText(message);
 
         FacedTextView retry_tac_accept_request = (FacedTextView) view.findViewById(R.id.retry_tac_accept_request);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
 
         retry_tac_accept_request.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
                 requestTACAccept.execute(tacAcceptRequest);
+            }
+        });
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
@@ -1758,12 +1878,20 @@ public class HamPayDialog {
         responseMessage.setText(message);
 
         FacedTextView retry_change_pass_code = (FacedTextView) view.findViewById(R.id.retry_change_pass_code);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
 
         retry_change_pass_code.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
                 requestChangePassCode.execute(changePassCodeRequest);
+            }
+        });
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
@@ -1797,12 +1925,19 @@ public class HamPayDialog {
         responseMessage.setText(message);
 
         FacedTextView retry_change_memorable_word = (FacedTextView) view.findViewById(R.id.retry_change_memorable_word);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
 
         retry_change_memorable_word.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
                 requestChangeMemorableWord.execute(changeMemorableWordRequest);
+            }
+        });
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
@@ -1835,12 +1970,19 @@ public class HamPayDialog {
         responseMessage.setText(message);
 
         FacedTextView retry_user_transation = (FacedTextView) view.findViewById(R.id.retry_user_transation);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
 
         retry_user_transation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
                 requestUserTransaction.execute(transactionListRequest);
+            }
+        });
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
@@ -1872,12 +2014,20 @@ public class HamPayDialog {
         responseMessage.setText(message);
 
         FacedTextView retry_business_list = (FacedTextView) view.findViewById(R.id.retry_business_list);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
 
         retry_business_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
                 requestHamPayBusiness.execute(businessListRequest);
+            }
+        });
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
@@ -1909,12 +2059,20 @@ public class HamPayDialog {
         responseMessage.setText(message);
 
         FacedTextView retry_business_search_list = (FacedTextView) view.findViewById(R.id.retry_business_search_list);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
 
         retry_business_search_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
                 requestSearchHamPayBusiness.execute(businessSearchRequest);
+            }
+        });
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
@@ -1949,12 +2107,20 @@ public class HamPayDialog {
         responseMessage.setText(message);
 
         FacedTextView retry_contacts_enabled = (FacedTextView) view.findViewById(R.id.retry_contacts_enabled);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
 
         retry_contacts_enabled.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
                 requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
+            }
+        });
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
             }
         });
 
@@ -1985,11 +2151,20 @@ public class HamPayDialog {
         responseMessage.setText(message);
 
         FacedTextView retry_payment = (FacedTextView) view.findViewById(R.id.retry_payment);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
 
         retry_payment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+            }
+        });
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                activity.finish();
             }
         });
 

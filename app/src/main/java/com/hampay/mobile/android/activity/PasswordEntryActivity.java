@@ -85,6 +85,7 @@ public class PasswordEntryActivity extends Activity implements View.OnClickListe
         password_holder.setOnClickListener(this);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+        editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         editor.putString(Constants.REGISTERED_ACTIVITY_DATA, PasswordEntryActivity.class.getName());
         editor.commit();
 

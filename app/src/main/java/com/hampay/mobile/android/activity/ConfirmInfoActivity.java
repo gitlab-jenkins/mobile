@@ -115,7 +115,7 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ConfirmInfoActivity.class.toString());
+        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ConfirmInfoActivity.class.getName());
         editor.commit();
 
         accountNumberFormat = prefs.getString(Constants.REGISTERED_BANK_ACCOUNT_NO_FORMAT, "");
@@ -313,7 +313,7 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
                     @Override
                     public void onClick(View v) {
 
-                        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ConfirmInfoActivity.class.toString());
+                        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ConfirmInfoActivity.class.getName());
                         editor.putString(Constants.REGISTERED_CELL_NUMBER, cellNumberValue.getText().toString());
                         editor.putString(Constants.REGISTERED_USER_FAMILY, userFamilyValue.getText().toString());
                         editor.putString(Constants.REGISTERED_USER_NAME, userFamilyValue.getText().toString().split(" ")[0]);
@@ -345,7 +345,7 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
             case R.id.keeOn_with_button:
 
 
-                editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ConfirmInfoActivity.class.toString());
+                editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ConfirmInfoActivity.class.getName());
                 editor.putString(Constants.REGISTERED_CELL_NUMBER, cellNumberValue.getText().toString());
                 editor.putString(Constants.REGISTERED_USER_FAMILY, userFamilyValue.getText().toString());
                 editor.putString(Constants.REGISTERED_USER_NAME, userFamilyValue.getText().toString().split(" ")[0]);

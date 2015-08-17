@@ -222,12 +222,18 @@ public class AppSliderActivity extends ActionBarActivity {
             else if (registeredActivityData.equalsIgnoreCase(ConfirmInfoActivity.class.getName())){
                 destinationActivity = new ConfirmInfoActivity();
             }
+            else if (registeredActivityData.equalsIgnoreCase(RegVerifyAccountNoActivity.class.getName())){
+                destinationActivity = new RegVerifyAccountNoActivity();
+            }
             else if (registeredActivityData.equalsIgnoreCase(PasswordEntryActivity.class.getName())){
                 destinationActivity = new PasswordEntryActivity();
             }
             else if (registeredActivityData.equalsIgnoreCase(MemorableWordEntryActivity.class.getName())){
                 destinationActivity = new MemorableWordEntryActivity();
             }
+
+
+
 
 
             new HamPayDialog(activity).showResumeRegisterationDialog(destinationActivity);

@@ -39,6 +39,7 @@ public class CompleteRegistrationActivity extends ActionBarActivity {
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         editor.putBoolean(Constants.REGISTERED_USER, true);
+        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, "");
         editor.commit();
 
         step_circle = (ImageView)findViewById(R.id.step_circle);

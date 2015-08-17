@@ -29,7 +29,7 @@
         android:textColor="@color/normal_text"
         android:textSize="20sp"
         android:text="@string/msg_fail_verify_account"
-        android:gravity="center"
+        android:gravity="right"
         android:layout_gravity="center"
         android:layout_margin="8dp"/>
 
@@ -38,7 +38,8 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp">
+        android:layout_margin="8dp"
+        android:padding="8dp">
 
         <com.hampay.mobile.android.component.FacedTextView
             android:id="@+id/retry_verify_account"
@@ -48,8 +49,17 @@
             android:textColor="@color/pay_confirm"
             android:textSize="20sp"
             android:gravity="center"
-            android:layout_centerInParent="true"
+            android:layout_alignParentRight="true"
             android:text="@string/retry_registration_entry" />
+
+        <com.hampay.mobile.android.component.FacedTextView
+            android:id="@+id/cancel_request"
+            geekui:customTypeface="fonts/iran_sans.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp"
+            android:text="@string/cancel_registration_entry" />
 
     </RelativeLayout>
 

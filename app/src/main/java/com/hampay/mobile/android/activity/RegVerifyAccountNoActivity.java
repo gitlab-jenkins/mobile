@@ -28,10 +28,9 @@ public class RegVerifyAccountNoActivity extends Activity {
     FacedTextView verification_response_text;
 
     SharedPreferences prefs;
+    SharedPreferences.Editor editor;
 
     Context context;
-
-//    RelativeLayout loading_rl;
 
     HamPayDialog hamPayDialog;
 
@@ -59,6 +58,9 @@ public class RegVerifyAccountNoActivity extends Activity {
         activity = RegVerifyAccountNoActivity.this;
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, RegVerifyAccountNoActivity.class.getName());
+        editor.commit();
+
 
         bundle = getIntent().getExtras();
         TransferMoneyComment = bundle.getString(Constants.TRANSFER_MONEY_COMMENT);

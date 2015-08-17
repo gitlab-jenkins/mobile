@@ -319,7 +319,7 @@
 
     <string name="msg_rooted_device">دستگاه شما به دلیل روت شدن مجوز استفاده از این اپ را نخواهد داشت!</string>
     
-    <string name="msg_fail_fetch_bank_list">لیست بانک‌ها دریافت نشد. لطفا مجدد تلاش کنید.</string>
+    <string name="msg_fail_fetch_bank_list">لیست بانک‌ها دریافت نشد.</string>
     <string name="msg_fail_registration_entry">ثبت اطلاعات شخصی شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="mgs_fail_registration_send_sms_token">درخواست پیامک فعالسازی با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_registration_verify_mobile">ارسال کد فعالسازی با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
@@ -355,7 +355,7 @@
     <string name="success_setting">باشه</string>
 
     <string name="retry_registration_entry">مجدد تلاش می‌کنم</string>
-    <string name="title_activity_server_select">ServerSelectActivity</string>
+    <string name="cancel_registration_entry">منصرف شدم</string>
     <string name="prevent_rooted_device">باشه</string>
 
 
