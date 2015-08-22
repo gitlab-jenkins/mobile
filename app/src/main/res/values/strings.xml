@@ -169,7 +169,7 @@
     <string name="alert_connection_error_message">خطا در ارتباط با اينترنت. لطفا تنظيمات مربوط به شبکه را بازبينی کرده و دوباره تلاش نماييد.</string>
 
 
-    <string name="sms_verification_text"></string>
+    <string name="sms_verification_text">یک کد فعال سازی ۵ رقمی برای شما پیامک خواهد شد.</string>
     <string name="mobile_no_verification">تایید شماره همراه</string>
     <string name="deliver_verification">کد ۵ رقمی برای شما پیامک شد. در صورت عدم دریافت پیامک تا ۳ دقیقه، دکمه ارسال مجدد را فشار دهید.</string>
     <string name="verification">بررسی</string>
@@ -195,6 +195,8 @@
     <string name="correct_data">اطلاعات بالا صحیح است</string>
     <string name="correct_info">تصحیح اطلاعات</string>
     <string name="verify_account_no">بررسی شماره حساب</string>
+
+
 
 
     <string name="reg_verify_account_no_text_1">انتقال وجه زیر را خارج از برنامه هم‌پی و از طریق یکی از روش‌های اینترنت بانک، همراه بانک و یا عابر بانک انجام دهید.</string>

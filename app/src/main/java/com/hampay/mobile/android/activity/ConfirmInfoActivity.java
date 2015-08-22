@@ -512,12 +512,14 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
                     nationalCodeValue.setText(registrationFetchUserDataResponseMessage.getService().getNationalCode());
                 }else {
                     requestFetchUserData = new RequestFetchUserData(context, new RequestFetchUserDataTaskCompleteListener());
+                    registrationFetchUserDataRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
                     new HamPayDialog(activity).showFailFetchUserDataDialog(requestFetchUserData, registrationFetchUserDataRequest,
                             registrationFetchUserDataResponseMessage.getService().getResultStatus().getCode(),
                             registrationFetchUserDataResponseMessage.getService().getResultStatus().getDescription());
                 }
             }else {
                 requestFetchUserData = new RequestFetchUserData(context, new RequestFetchUserDataTaskCompleteListener());
+                registrationFetchUserDataRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
                 new HamPayDialog(activity).showFailFetchUserDataDialog(requestFetchUserData, registrationFetchUserDataRequest,
                         "2000",
                         getString(R.string.msg_fail_registration_fetch_user_data));

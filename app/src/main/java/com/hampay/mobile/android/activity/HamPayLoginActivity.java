@@ -344,6 +344,10 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
             case R.id.backspace:
                 inputDigit("d");
                 break;
+
+            case R.id.keyboard_help:
+                new HamPayDialog(this).showHelpDialog(Constants.SERVER_IP + ":8080" + "/help/login.html");
+                break;
         }
     }
 

@@ -214,7 +214,7 @@ public class NumberProgressBar extends View {
         mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mTextPaint.setColor(mTextColor);
         mTextPaint.setTextSize(mTextSize);
-        typeface = Typeface.createFromAsset(context.getAssets(),"fonts/iran_sans.ttf");
+        typeface = Typeface.createFromAsset(context.getAssets(), "fonts/iran_sans.ttf");
         mTextPaint.setTypeface(typeface);
     }
 

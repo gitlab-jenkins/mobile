@@ -58,6 +58,7 @@ public class RegVerifyAccountNoActivity extends Activity {
         activity = RegVerifyAccountNoActivity.this;
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+        editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         editor.putString(Constants.REGISTERED_ACTIVITY_DATA, RegVerifyAccountNoActivity.class.getName());
         editor.commit();
 
