@@ -30,6 +30,7 @@ import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
+import com.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class PayOneActivity extends ActionBarActivity {
 
@@ -199,7 +200,7 @@ public class PayOneActivity extends ActionBarActivity {
 
                 if (creditValueValidation) {
                     contactMssage = contact_message.getText().toString();
-                    amountValue = Long.parseLong(credit_value.getText().toString().replace(",", ""));
+                    amountValue = Long.parseLong(new PersianEnglishDigit(credit_value.getText().toString()).P2E().replace(",", ""));
 
                     if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
                         Intent intent = new Intent();

@@ -23,6 +23,7 @@ import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
+import com.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class PayBusinessActivity extends ActionBarActivity {
 
@@ -145,7 +146,7 @@ public class PayBusinessActivity extends ActionBarActivity {
 
                 if (creditValueValidation) {
 
-                    amountValue = Long.parseLong(credit_value.getText().toString().replace(",", ""));
+                    amountValue = Long.parseLong(new PersianEnglishDigit(credit_value.getText().toString()).P2E().replace(",", ""));
                     businessMssage = contact_message.getText().toString();
 
                     if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {

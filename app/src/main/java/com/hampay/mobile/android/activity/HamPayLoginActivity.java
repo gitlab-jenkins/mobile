@@ -33,6 +33,7 @@ import com.hampay.mobile.android.model.LoginData;
 import com.hampay.mobile.android.model.SuccessLoginResponse;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.DeviceInfo;
+import com.hampay.mobile.android.util.PersianEnglishDigit;
 import com.hampay.mobile.android.util.SecurityUtils;
 
 import java.lang.reflect.Type;
@@ -380,7 +381,7 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
             LoginData loginData = new LoginData();
 
             loginData.setUserPassword(password);
-            loginData.setUserName(nationalCode);
+            loginData.setUserName(new PersianEnglishDigit(nationalCode).P2E());
 
             keyboard.setEnabled(false);
 

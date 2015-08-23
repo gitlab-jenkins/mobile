@@ -40,6 +40,7 @@ import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.DeviceInfo;
 import com.hampay.mobile.android.util.NetworkConnectivity;
+import com.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class ConfirmInfoActivity extends Activity implements View.OnClickListener {
 
@@ -153,16 +154,7 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 cellNumberValue.removeTextChangedListener(this);
-                cellNumberValue.setText(s.toString().replace("0", "۰")
-                        .replace("1", "۱")
-                        .replace("2", "۲")
-                        .replace("3", "۳")
-                        .replace("4", "۴")
-                        .replace("5", "۵")
-                        .replace("6", "۶")
-                        .replace("7", "۷")
-                        .replace("8", "۸")
-                        .replace("9", "۹"));
+                cellNumberValue.setText(new PersianEnglishDigit(s.toString()).E2P());
                 cellNumberValue.setSelection(s.toString().length());
                 cellNumberValue.addTextChangedListener(this);
             }
@@ -248,6 +240,9 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
                             procAccountNumberValue += rawAccountNumberValue.charAt(i);
                         }
                     }
+
+                    procAccountNumberValue = new PersianEnglishDigit(procAccountNumberValue).E2P();
+
                     accountNumberValue.setText(procAccountNumberValue);
                     accountNumberValue.setSelection(accountNumberValue.getText().toString().length());
                 }
@@ -271,16 +266,7 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 nationalCodeValue.removeTextChangedListener(this);
-                nationalCodeValue.setText(s.toString().replace("0", "۰")
-                        .replace("1", "۱")
-                        .replace("2", "۲")
-                        .replace("3", "۳")
-                        .replace("4", "۴")
-                        .replace("5", "۵")
-                        .replace("6", "۶")
-                        .replace("7", "۷")
-                        .replace("8", "۸")
-                        .replace("9", "۹"));
+                nationalCodeValue.setText(new PersianEnglishDigit(s.toString()).E2P());
                 nationalCodeValue.setSelection(s.toString().length());
                 nationalCodeValue.addTextChangedListener(this);
             }
@@ -339,10 +325,10 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
 
 
 
-                        editor.putString(Constants.REGISTERED_CELL_NUMBER, cellNumberValue.getText().toString());
-                        editor.putString(Constants.REGISTERED_USER_FAMILY, userFamilyValue.getText().toString());
+                        editor.putString(Constants.REGISTERED_CELL_NUMBER, new PersianEnglishDigit(cellNumberValue.getText().toString()).P2E());
+                        editor.putString(Constants.REGISTERED_USER_FAMILY, new PersianEnglishDigit(userFamilyValue.getText().toString()).P2E());
                         editor.putString(Constants.REGISTERED_USER_NAME, userFamilyValue.getText().toString().split(" ")[0]);
-                        editor.putString(Constants.REGISTERED_ACCOUNT_NO, accountNumberValue.getText().toString());
+                        editor.putString(Constants.REGISTERED_ACCOUNT_NO, new PersianEnglishDigit(accountNumberValue.getText().toString()).P2E());
 //                        editor.putString(Constants.REGISTERED_NATIONAL_CODE, nationalCodeValue.getText().toString());
                         editor.commit();
 

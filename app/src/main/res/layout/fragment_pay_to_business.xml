@@ -31,7 +31,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:background="@android:color/transparent"
-                android:textSize="15dp"
+                android:textSize="12dp"
                 android:padding="6dp"
                 android:textColor="@color/normal_text"
                 android:hint="@string/pay_one_search_hint"

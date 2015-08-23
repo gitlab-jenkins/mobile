@@ -42,6 +42,7 @@ import com.hampay.mobile.android.location.BestLocationListener;
 import com.hampay.mobile.android.location.BestLocationProvider;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.NationalCodeVerification;
+import com.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class ProfileEntryActivity extends Activity {
 
@@ -121,16 +122,7 @@ public class ProfileEntryActivity extends Activity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 cellNumberValue.removeTextChangedListener(this);
-                cellNumberValue.setText(s.toString().replace("0", "۰")
-                        .replace("1", "۱")
-                        .replace("2", "۲")
-                        .replace("3", "۳")
-                        .replace("4", "۴")
-                        .replace("5", "۵")
-                        .replace("6", "۶")
-                        .replace("7", "۷")
-                        .replace("8", "۸")
-                        .replace("9", "۹"));
+                cellNumberValue.setText(new PersianEnglishDigit(s.toString()).E2P());
                 cellNumberValue.setSelection(s.toString().length());
                 cellNumberValue.addTextChangedListener(this);
             }
@@ -169,16 +161,8 @@ public class ProfileEntryActivity extends Activity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 nationalCodeValue.removeTextChangedListener(this);
-                nationalCodeValue.setText(s.toString().replace("0", "۰")
-                        .replace("1", "۱")
-                        .replace("2", "۲")
-                        .replace("3", "۳")
-                        .replace("4", "۴")
-                        .replace("5", "۵")
-                        .replace("6", "۶")
-                        .replace("7", "۷")
-                        .replace("8", "۸")
-                        .replace("9", "۹"));
+
+                nationalCodeValue.setText(new PersianEnglishDigit(s.toString()).E2P());
                 nationalCodeValue.setSelection(s.toString().length());
                 nationalCodeValue.addTextChangedListener(this);
             }
@@ -264,16 +248,7 @@ public class ProfileEntryActivity extends Activity {
                         }
                     }
 
-                    procAccountNumberValue = procAccountNumberValue.replace("0", "۰")
-                            .replace("1", "۱")
-                            .replace("2", "۲")
-                            .replace("3", "۳")
-                            .replace("4", "۴")
-                            .replace("5", "۵")
-                            .replace("6", "۶")
-                            .replace("7", "۷")
-                            .replace("8", "۸")
-                            .replace("9", "۹");
+                    procAccountNumberValue = new PersianEnglishDigit(procAccountNumberValue).E2P();
 
                     accountNumberValue.setText(procAccountNumberValue);
                     accountNumberValue.setSelection(accountNumberValue.getText().toString().length());
@@ -340,10 +315,10 @@ public class ProfileEntryActivity extends Activity {
 
                     registrationEntryRequest = new RegistrationEntryRequest();
 
-                    registrationEntryRequest.setCellNumber(cellNumberValue.getText().toString());
-                    registrationEntryRequest.setAccountNumber(accountNumberValue.getText().toString());
+                    registrationEntryRequest.setCellNumber(new PersianEnglishDigit(cellNumberValue.getText().toString()).P2E());
+                    registrationEntryRequest.setAccountNumber(new PersianEnglishDigit(accountNumberValue.getText().toString()).P2E());
                     registrationEntryRequest.setBankCode(selectedBankCode);
-                    registrationEntryRequest.setNationalCode(nationalCodeValue.getText().toString());
+                    registrationEntryRequest.setNationalCode(new PersianEnglishDigit(nationalCodeValue.getText().toString()).P2E());
 
                     requestRegistrationEntry = new RequestRegistrationEntry(context,
                             new RequestRegistrationEntryTaskCompleteListener(),
@@ -482,7 +457,7 @@ public class ProfileEntryActivity extends Activity {
                     editor.putString(Constants.REGISTERED_BANK_ID, selectedBankCode);
                     editor.putString(Constants.REGISTERED_BANK_ACCOUNT_NO_FORMAT, accountNumberFormat);
                     editor.putString(Constants.REGISTERED_ACCOUNT_NO, accountNumberValue.getText().toString());
-                    editor.putString(Constants.REGISTERED_NATIONAL_CODE, nationalCodeValue.getText().toString());
+                    editor.putString(Constants.REGISTERED_NATIONAL_CODE, new PersianEnglishDigit(nationalCodeValue.getText().toString()).P2E());
                     editor.putString(Constants.REGISTERED_USER_ID_TOKEN, registrationEntryResponse.getService().getUserIdToken());
                     editor.commit();
 

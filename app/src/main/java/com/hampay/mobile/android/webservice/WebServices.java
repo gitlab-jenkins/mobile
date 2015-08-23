@@ -71,6 +71,7 @@ import com.hampay.common.core.model.response.VerifyTransferMoneyResponse;
 import com.hampay.mobile.android.model.LogoutData;
 import com.hampay.mobile.android.model.LogoutResponse;
 import com.hampay.mobile.android.util.Constants;
+import com.hampay.mobile.android.util.PersianEnglishDigit;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -982,7 +983,7 @@ public class WebServices  {
             RequestMessage<TransactionListRequest> message = new RequestMessage<TransactionListRequest>();
             message.setRequestHeader(header);
             TransactionListRequest request = new TransactionListRequest();
-            request.setUserId(prefs.getString(Constants.REGISTERED_NATIONAL_CODE, ""));
+            request.setUserId(new PersianEnglishDigit(prefs.getString(Constants.REGISTERED_NATIONAL_CODE, "")).P2E());
             request.setPageSize(transactionListRequest.getPageSize());
             request.setPageNumber(transactionListRequest.getPageNumber());
             request.setRequestUUID("1234");

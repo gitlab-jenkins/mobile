@@ -8,7 +8,7 @@
         android:id="@+id/contact_rl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:visibility="visible"
         android:padding="12dp">
 
         <LinearLayout
@@ -25,7 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 android:gravity="center"
                 android:layout_marginRight="8dp"
                 android:text="مجید زمانی"/>
@@ -36,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
-                android:textSize="16sp"
+                android:textSize="13sp"
                 android:gravity="center"
                 android:layout_marginRight="8dp"
                 android:text="09126157905"/>
@@ -57,19 +57,17 @@
                 android:layout_height="fill_parent"
                 android:layout_centerHorizontal="true"
                 android:background="@color/register_btn_color"
-                android:textSize="20sp" />
+                android:textSize="16sp" />
 
             <com.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:textColor="@android:color/white"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:text="@string/select"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"/>
+                android:text="@string/select" />
 
         </RelativeLayout>
 
@@ -108,7 +106,7 @@
         xmlns:geekui="http://schemas.android.com/apk/res-auto"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:visibility="gone"
         android:padding="12dp">
 
         <LinearLayout
