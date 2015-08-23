@@ -33,10 +33,10 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:textColor="@android:color/white"
-                android:textSize="24sp"
+                android:textSize="18dp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:text="1"
+                android:text="۱"
                 android:background="@color/keyword_btn_color"/>
 
         </com.hampay.mobile.android.component.material.RippleView>
@@ -57,10 +57,10 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:textColor="@android:color/white"
-                android:textSize="24sp"
+                android:textSize="18dp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:text="2"
+                android:text="۲"
                 android:background="@color/keyword_btn_color"/>
 
         </com.hampay.mobile.android.component.material.RippleView>
@@ -81,10 +81,10 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:textColor="@android:color/white"
-                android:textSize="24sp"
+                android:textSize="18dp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:text="3"
+                android:text="۳"
                 android:background="@color/keyword_btn_color"/>
 
         </com.hampay.mobile.android.component.material.RippleView>
@@ -114,10 +114,10 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:textColor="@android:color/white"
-                android:textSize="24sp"
+                android:textSize="18dp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:text="4"
+                android:text="۴"
                 android:background="@color/keyword_btn_color"/>
 
         </com.hampay.mobile.android.component.material.RippleView>
@@ -138,10 +138,10 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:textColor="@android:color/white"
-                android:textSize="24sp"
+                android:textSize="18dp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:text="5"
+                android:text="۵"
                 android:background="@color/keyword_btn_color"/>
 
         </com.hampay.mobile.android.component.material.RippleView>
@@ -162,10 +162,10 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:textColor="@android:color/white"
-                android:textSize="24sp"
+                android:textSize="18dp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:text="6"
+                android:text="۶"
                 android:background="@color/keyword_btn_color"/>
 
         </com.hampay.mobile.android.component.material.RippleView>
@@ -195,10 +195,10 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:textColor="@android:color/white"
-                android:textSize="24sp"
+                android:textSize="18dp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:text="7"
+                android:text="۷"
                 android:background="@color/keyword_btn_color"/>
 
         </com.hampay.mobile.android.component.material.RippleView>
@@ -219,10 +219,10 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:textColor="@android:color/white"
-                android:textSize="24sp"
+                android:textSize="18dp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:text="8"
+                android:text="۸"
                 android:background="@color/keyword_btn_color"/>
 
         </com.hampay.mobile.android.component.material.RippleView>
@@ -243,10 +243,10 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:textColor="@android:color/white"
-                android:textSize="24sp"
+                android:textSize="18dp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:text="9"
+                android:text="۹"
                 android:background="@color/keyword_btn_color"/>
 
         </com.hampay.mobile.android.component.material.RippleView>
@@ -277,7 +277,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:textColor="@android:color/white"
-                android:textSize="24sp"
+                android:textSize="18dp"
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:text="@string/resend"
@@ -301,10 +301,10 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:textColor="@android:color/white"
-                android:textSize="24sp"
+                android:textSize="18dp"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:text="0"
+                android:text="۰"
                 android:background="@color/keyword_btn_color"/>
 
         </com.hampay.mobile.android.component.material.RippleView>

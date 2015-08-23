@@ -22,7 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
-                android:textSize="22sp"
+                android:textSize="15dp"
                 android:text="@string/title_contacts_us"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
@@ -35,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
-                android:textSize="22sp"
+                android:textSize="15dp"
                 android:text="@string/confirm_account_no"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"/>
@@ -296,7 +296,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/user_change_status"
-            android:textSize="20sp"
+            android:textSize="15dp"
             android:gravity="right"
             android:layout_marginTop="10dp"
             android:layout_gravity="right"
@@ -307,7 +307,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
-            android:textSize="20sp"
+            android:textSize="15dp"
             android:gravity="right"
             android:layout_gravity="right"
             android:text="@string/wait_callcentre" />
@@ -331,14 +331,14 @@
             android:layout_height="fill_parent"
             android:layout_centerHorizontal="true"
             android:background="@color/register_btn_color"
-            android:textSize="20sp" />
+            android:textSize="15dp" />
 
         <com.hampay.mobile.android.component.FacedTextView
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:textColor="@android:color/white"
-            android:textSize="20sp"
+            android:textSize="15dp"
             android:gravity="center"
             android:layout_gravity="center"
             android:text="@string/keep_on"

@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
-            android:textSize="22sp"
+            android:textSize="15dp"
             android:text="@string/confirm_information"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"/>
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
-            android:textSize="22sp"
+            android:textSize="15dp"
             android:text="@string/title_contacts_us"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
@@ -262,7 +262,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/register_btn_color"
-                            android:textSize="18sp"
+                            android:textSize="13dp"
                             android:gravity="right"
                             android:text="@string/confirm_information_text"
                             android:layout_centerVertical="true"
@@ -297,7 +297,7 @@
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@android:color/transparent"
-                                android:textSize="21dp"
+                                android:textSize="15dp"
                                 android:inputType="number"
                                 android:focusable="false"
                                 android:textColor="@android:color/black"
@@ -310,7 +310,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/normal_text"
-                            android:textSize="15sp"
+                            android:textSize="12dp"
                             android:text="@string/mobile_no"
                             android:gravity="center_vertical"
                             android:layout_marginLeft="38dp"/>
@@ -344,8 +344,7 @@
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@android:color/transparent"
-                                android:textSize="21dp"
-                                android:inputType="number"
+                                android:textSize="15dp"
                                 android:focusable="false"
                                 android:textColor="@android:color/black"
                                 android:gravity="left" />
@@ -357,7 +356,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/normal_text"
-                            android:textSize="15sp"
+                            android:textSize="12dp"
                             android:text="@string/name_family"
                             android:gravity="center_vertical"
                             android:layout_marginLeft="38dp"/>
@@ -391,7 +390,7 @@
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@android:color/transparent"
-                                android:textSize="21dp"
+                                android:textSize="15dp"
                                 android:inputType="number"
                                 android:focusable="false"
                                 android:textColor="@android:color/black"
@@ -404,7 +403,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/normal_text"
-                            android:textSize="15sp"
+                            android:textSize="12dp"
                             android:text="@string/account_id"
                             android:gravity="center_vertical"
                             android:layout_marginLeft="38dp"/>
@@ -438,7 +437,7 @@
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@android:color/transparent"
-                                android:textSize="21dp"
+                                android:textSize="15dp"
                                 android:inputType="number"
                                 android:focusable="false"
                                 android:textColor="@android:color/black"
@@ -451,7 +450,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/normal_text"
-                            android:textSize="15sp"
+                            android:textSize="12dp"
                             android:text="@string/iter_code"
                             android:gravity="center_vertical"
                             android:layout_marginLeft="38dp"/>
@@ -479,7 +478,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/normal_text"
-                                android:textSize="22sp"
+                                android:textSize="16dp"
                                 android:text="@string/correct_data" />
 
                         </LinearLayout>
@@ -506,19 +505,17 @@
                             android:layout_height="fill_parent"
                             android:layout_centerHorizontal="true"
                             android:background="@color/register_btn_color"
-                            android:textSize="20sp" />
+                            android:textSize="16dp" />
 
                         <com.hampay.mobile.android.component.FacedTextView
                             geekui:customTypeface="fonts/iran_sans.ttf"
                             android:layout_width="fill_parent"
                             android:layout_height="fill_parent"
                             android:textColor="@android:color/white"
-                            android:textSize="18sp"
+                            android:textSize="16dp"
                             android:gravity="center"
                             android:layout_gravity="center"
-                            android:text="@string/correct_info"
-                            android:layout_marginTop="2dp"
-                            android:layout_marginBottom="2dp"/>
+                            android:text="@string/correct_info" />
 
                     </RelativeLayout>
 
@@ -544,14 +541,14 @@
                                 android:layout_height="fill_parent"
                                 android:layout_centerHorizontal="true"
                                 android:background="@color/register_btn_color"
-                                android:textSize="20sp" />
+                                android:textSize="16dp" />
 
                             <com.hampay.mobile.android.component.FacedTextView
                                 geekui:customTypeface="fonts/iran_sans.ttf"
                                 android:layout_width="fill_parent"
                                 android:layout_height="fill_parent"
                                 android:textColor="@android:color/white"
-                                android:textSize="18sp"
+                                android:textSize="13dp"
                                 android:gravity="center"
                                 android:layout_gravity="center"
                                 android:text="@string/confirm_info_uncheck"
@@ -574,19 +571,17 @@
                                 android:layout_height="fill_parent"
                                 android:layout_centerHorizontal="true"
                                 android:background="@color/user_change_status"
-                                android:textSize="20sp" />
+                                android:textSize="16dp" />
 
                             <com.hampay.mobile.android.component.FacedTextView
                                 geekui:customTypeface="fonts/iran_sans.ttf"
                                 android:layout_width="fill_parent"
                                 android:layout_height="fill_parent"
                                 android:textColor="@android:color/white"
-                                android:textSize="18sp"
+                                android:textSize="16dp"
                                 android:gravity="center"
                                 android:layout_gravity="center"
                                 android:text="@string/confirm_account_check"
-                                android:layout_marginTop="2dp"
-                                android:layout_marginBottom="2dp"
                                 />
 
                         </RelativeLayout>

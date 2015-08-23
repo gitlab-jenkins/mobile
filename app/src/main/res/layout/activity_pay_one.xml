@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
-            android:textSize="22sp"
+            android:textSize="15dp"
             android:text="@string/payment"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
@@ -63,7 +63,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/black"
-                    android:textSize="20sp"
+                    android:textSize="15dp"
                     android:gravity="right"
                     android:layout_marginRight="4dp"
                     android:text="ssss"/>
@@ -73,7 +73,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/normal_text"
-                    android:textSize="20sp"
+                    android:textSize="15dp"
                     android:text="@string/pay_to"
                     android:gravity="right"
                     android:layout_gravity="right"
@@ -87,7 +87,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
-                android:textSize="20sp"
+                android:textSize="15dp"
                 android:text="@string/payment_message"
                 android:layout_marginRight="20dp"/>
 
@@ -104,7 +104,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:background="@android:color/transparent"
-                    android:textSize="18sp"
+                    android:textSize="13dp"
                     android:padding="6dp"
                     android:textColor="@color/normal_text"
                     android:hint="@string/insert_message"
@@ -133,7 +133,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/black"
-                        android:textSize="20sp"
+                        android:textSize="15dp"
                         android:text="@string/price"
                         android:layout_alignParentRight="true"/>
 
@@ -158,7 +158,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:background="@android:color/transparent"
-                        android:textSize="18sp"
+                        android:textSize="13dp"
                         android:padding="6dp"
                         android:textColor="@color/normal_text"
                         android:singleLine="true"
@@ -185,14 +185,14 @@
                     android:layout_height="fill_parent"
                     android:layout_centerHorizontal="true"
                     android:background="@color/register_btn_color"
-                    android:textSize="20sp" />
+                    android:textSize="15dp" />
 
                 <com.hampay.mobile.android.component.FacedTextView
                     geekui:customTypeface="fonts/iran_sans.ttf"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:textColor="@android:color/white"
-                    android:textSize="20sp"
+                    android:textSize="15dp"
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:text="@string/payment"

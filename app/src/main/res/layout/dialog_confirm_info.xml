@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="22sp"
+        android:textSize="15dp"
         android:text="@string/attention"/>
 
     <com.hampay.mobile.android.component.FacedTextView
@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/normal_text"
-        android:textSize="20sp"
+        android:textSize="15dp"
         android:text="@string/confirm_info_text"
         android:layout_marginTop="15dp"/>
 
@@ -31,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/normal_text"
-        android:textSize="20sp"
+        android:textSize="15dp"
         android:text="@string/confirm_info_question"
         android:layout_marginTop="15dp"/>
 
@@ -39,17 +39,7 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp">
-
-        <!--<com.hampay.mobile.android.component.FacedTextView-->
-            <!--android:id="@+id/uncheck_account"-->
-            <!--geekui:customTypeface="fonts/iran_sans.ttf"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:textColor="@color/dis_confirmation"-->
-            <!--android:textSize="24sp"-->
-            <!--android:text="@string/confirm_info_uncheck" />-->
-
+        android:layout_marginTop="18dp">
 
         <RelativeLayout
             android:layout_width="150dp"
@@ -69,7 +59,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:textColor="@color/dis_confirmation"
-                android:textSize="22sp"
+                android:textSize="14dp"
                 android:gravity="left"
                 android:layout_gravity="left"
                 android:text="@string/confirm_info_uncheck"
@@ -96,7 +86,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:textColor="@color/confirmation"
-                android:textSize="22sp"
+                android:textSize="14dp"
                 android:gravity="right"
                 android:layout_gravity="center"
                 android:text="@string/confirm_info_check"

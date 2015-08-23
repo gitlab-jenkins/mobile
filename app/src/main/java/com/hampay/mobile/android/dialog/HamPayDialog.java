@@ -1,5 +1,6 @@
 package com.hampay.mobile.android.dialog;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -341,6 +343,7 @@ public class HamPayDialog {
     }
 
 
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     public void showHelpDialog(final String help_url){
 
         Rect displayRectangle = new Rect();
@@ -375,6 +378,7 @@ public class HamPayDialog {
         dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setDimAmount(0);
         dialog.setContentView(view);
         dialog.setTitle(null);
         dialog.setCanceledOnTouchOutside(true);

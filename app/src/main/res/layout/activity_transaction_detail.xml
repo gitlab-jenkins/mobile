@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
-            android:textSize="22sp"
+            android:textSize="16dp"
             android:text="@string/detail_transaction"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
@@ -70,7 +70,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/black"
-                        android:textSize="20dp"
+                        android:textSize="18dp"
                         android:gravity="center"
                         android:layout_marginRight="8dp"
                         android:text=""/>
@@ -89,7 +89,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@android:color/black"
-                            android:textSize="20sp"
+                            android:textSize="15dp"
                             android:gravity="right"
                             android:layout_gravity="right"
                             android:layout_marginRight="4dp"
@@ -101,7 +101,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/normal_text"
-                            android:textSize="20sp"
+                            android:textSize="15dp"
                             android:text="@string/transaction_to"
                             android:gravity="right"
                             android:layout_gravity="right"/>
@@ -115,7 +115,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/black"
-                        android:textSize="20sp"
+                        android:textSize="15dp"
                         android:gravity="center"
                         android:layout_marginRight="8dp"
                         android:text=""/>
@@ -160,7 +160,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/black"
-                        android:textSize="20sp"
+                        android:textSize="15dp"
                         android:gravity="right"
                         android:layout_marginRight="4dp"
                         android:text="ssss"/>
@@ -170,7 +170,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/normal_text"
-                        android:textSize="20sp"
+                        android:textSize="15dp"
                         android:text="@string/transaction_in"
                         android:gravity="right"
                         android:layout_gravity="right"
@@ -193,7 +193,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/black"
-                        android:textSize="20sp"
+                        android:textSize="15dp"
                         android:gravity="right"
                         android:layout_marginRight="4dp"
                         android:text="ssss"/>
@@ -203,7 +203,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/normal_text"
-                        android:textSize="20sp"
+                        android:textSize="15dp"
                         android:text="@string/transaction_tacking_code"
                         android:gravity="right"
                         android:layout_gravity="right"
@@ -247,7 +247,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/normal_text"
-                        android:textSize="20sp"
+                        android:textSize="15dp"
                         android:text="@string/currency_rials"
                         android:gravity="right"
                         android:layout_gravity="right"
@@ -259,7 +259,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/black"
-                        android:textSize="20sp"
+                        android:textSize="15dp"
                         android:gravity="right"
                         android:layout_marginRight="4dp"
                         android:text="ssss"/>
@@ -269,25 +269,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/normal_text"
-                        android:textSize="20sp"
+                        android:textSize="15dp"
                         android:text="@string/transaction_price"
                         android:gravity="right"
                         android:layout_gravity="right"
                         />
 
                 </LinearLayout>
-
-                <!--<com.hampay.mobile.android.component.FacedTextView-->
-                    <!--android:id="@+id/price_pay"-->
-                    <!--geekui:customTypeface="fonts/iran_sans.ttf"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:textColor="@color/normal_text"-->
-                    <!--android:textSize="18sp"-->
-                    <!--android:gravity="center"-->
-                    <!--android:layout_marginRight="8dp"-->
-                    <!--android:text=""/>-->
-
 
             </LinearLayout>
 
@@ -321,7 +309,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/normal_text"
-                        android:textSize="20sp"
+                        android:textSize="15dp"
                         android:text="@string/transaction_message"
                         android:gravity="right"
                         android:layout_gravity="right"
@@ -333,7 +321,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/black"
-                        android:textSize="20sp"
+                        android:textSize="15dp"
                         android:gravity="right"
                         android:layout_marginRight="4dp"
                         android:text="ssss"/>
@@ -363,7 +351,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/user_change_status"
-                    android:textSize="24sp"
+                    android:textSize="18dp"
                     android:gravity="center"
                     android:layout_marginRight="8dp"
                     android:text="@string/payment"/>
@@ -404,7 +392,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/normal_text"
-                        android:textSize="20sp"
+                        android:textSize="15dp"
                         android:gravity="center"
                         android:text="@string/transaction_user_message"/>
 
@@ -428,7 +416,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/normal_text"
-                        android:textSize="20sp"
+                        android:textSize="15dp"
                         android:gravity="center"
                         android:text="@string/transaction_user_call"/>
 

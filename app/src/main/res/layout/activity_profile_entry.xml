@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
-            android:textSize="22sp"
+            android:textSize="16dp"
             android:text="@string/profile_entry"
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"/>
@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
-            android:textSize="22sp"
+            android:textSize="16dp"
             android:text="@string/title_guide"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
@@ -242,7 +242,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/register_btn_color"
-                            android:textSize="21sp"
+                            android:textSize="15dp"
                             android:text="@string/please_entry_info" />
 
                         <ImageView
@@ -258,7 +258,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/black"
-                        android:textSize="22sp"
+                        android:textSize="15dp"
                         android:text="@string/mobile_no"
                         android:layout_gravity="right" />
 
@@ -268,7 +268,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/normal_text"
-                        android:textSize="18sp"
+                        android:textSize="13dp"
                         android:text="@string/phone_entry"
                         android:layout_gravity="right"/>
 
@@ -285,7 +285,7 @@
                             android:layout_height="fill_parent"
                             android:background="@android:color/transparent"
                             android:layout_marginLeft="48dp"
-                            android:textSize="21dp"
+                            android:textSize="15dp"
                             android:inputType="number"
                             android:hint="@string/mobile_no"
                             android:maxLength="11"
@@ -308,7 +308,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/black"
-                        android:textSize="22sp"
+                        android:textSize="15dp"
                         android:text="@string/bank_account_info"
                         android:layout_gravity="right"
                         android:layout_marginTop="16dp"/>
@@ -318,7 +318,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/normal_text"
-                        android:textSize="18sp"
+                        android:textSize="13dp"
                         android:gravity="right"
                         android:text="@string/bank_account_info_detail"
                         android:layout_gravity="right" />
@@ -338,7 +338,7 @@
                             android:layout_height="fill_parent"
                             android:background="@android:color/transparent"
                             android:layout_marginLeft="48dp"
-                            android:textSize="21dp"
+                            android:textSize="15dp"
                             android:hint="@string/bank_name"
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
@@ -359,28 +359,13 @@
                         android:background="@drawable/entry_field_bg"
                         android:layout_marginTop="6dp">
 
-                        <!--<com.hampay.mobile.android.component.edittext.FacedEditText-->
-                            <!--android:id="@+id/accountNumberHint"-->
-                            <!--android:layout_width="fill_parent"-->
-                            <!--android:layout_height="fill_parent"-->
-                            <!--android:background="@android:color/transparent"-->
-                            <!--android:layout_marginLeft="48dp"-->
-                            <!--android:textSize="21dp"-->
-                            <!--android:inputType="number"-->
-                            <!--android:hint="@string/account_no"-->
-                            <!--android:textColor="@android:color/black"-->
-                            <!--android:gravity="center_vertical"-->
-                            <!--android:padding="8dp"-->
-                            <!--/>-->
-
-
                         <com.hampay.mobile.android.component.edittext.FacedEditText
                             android:id="@+id/accountNumberValue"
                             android:layout_width="fill_parent"
                             android:layout_height="fill_parent"
                             android:background="@android:color/transparent"
                             android:layout_marginLeft="48dp"
-                            android:textSize="21dp"
+                            android:textSize="15dp"
                             android:inputType="number"
                             android:hint="@string/account_no"
                             android:textColor="@android:color/black"
@@ -410,7 +395,7 @@
                             android:layout_height="fill_parent"
                             android:background="@android:color/transparent"
                             android:layout_marginLeft="48dp"
-                            android:textSize="21dp"
+                            android:textSize="15dp"
                             android:inputType="number"
                             android:hint="@string/iter_code"
                             android:maxLength="10"
@@ -442,14 +427,14 @@
                             android:layout_height="fill_parent"
                             android:layout_centerHorizontal="true"
                             android:background="@color/register_btn_color"
-                            android:textSize="20sp" />
+                            android:textSize="16dp" />
 
                         <com.hampay.mobile.android.component.FacedTextView
                             geekui:customTypeface="fonts/iran_sans.ttf"
                             android:layout_width="fill_parent"
                             android:layout_height="fill_parent"
                             android:textColor="@android:color/white"
-                            android:textSize="24sp"
+                            android:textSize="16dp"
                             android:gravity="center"
                             android:layout_gravity="center"
                             android:text="@string/keep_on"

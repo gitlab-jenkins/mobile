@@ -112,6 +112,34 @@ public class ProfileEntryActivity extends Activity {
         hamPayDialog = new HamPayDialog(activity);
 
         cellNumberValue = (FacedEditText)findViewById(R.id.cellNumberValue);
+        cellNumberValue.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                cellNumberValue.removeTextChangedListener(this);
+                cellNumberValue.setText(s.toString().replace("0", "۰")
+                        .replace("1", "۱")
+                        .replace("2", "۲")
+                        .replace("3", "۳")
+                        .replace("4", "۴")
+                        .replace("5", "۵")
+                        .replace("6", "۶")
+                        .replace("7", "۷")
+                        .replace("8", "۸")
+                        .replace("9", "۹"));
+                cellNumberValue.setSelection(s.toString().length());
+                cellNumberValue.addTextChangedListener(this);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         cellNumberIcon = (ImageView)findViewById(R.id.cellNumberIcon);
         cellNumberValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -119,7 +147,7 @@ public class ProfileEntryActivity extends Activity {
 
                 if (!hasFocus){
                     if (cellNumberValue.getText().toString().length() == 11
-                            && cellNumberValue.getText().toString().startsWith("09")){
+                            && cellNumberValue.getText().toString().startsWith("۰۹")){
                         cellNumberIcon.setImageResource(R.drawable.right_icon);
                         cellNumberIsValid = true;
                     }
@@ -134,6 +162,31 @@ public class ProfileEntryActivity extends Activity {
 
         nationalCodeValue = (FacedEditText)findViewById(R.id.nationalCodeValue);
         nationalCodeIcon = (ImageView)findViewById(R.id.nationalCodeIcon);
+        nationalCodeValue.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                nationalCodeValue.removeTextChangedListener(this);
+                nationalCodeValue.setText(s.toString().replace("0", "۰")
+                        .replace("1", "۱")
+                        .replace("2", "۲")
+                        .replace("3", "۳")
+                        .replace("4", "۴")
+                        .replace("5", "۵")
+                        .replace("6", "۶")
+                        .replace("7", "۷")
+                        .replace("8", "۸")
+                        .replace("9", "۹"));
+                nationalCodeValue.setSelection(s.toString().length());
+                nationalCodeValue.addTextChangedListener(this);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
+
         nationalCodeValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -195,6 +248,8 @@ public class ProfileEntryActivity extends Activity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 accountNumberValue.removeTextChangedListener(this);
+
+
                 rawAccountNumberValue = s.toString().replace("/", "");
                 rawAccountNumberValueLength = rawAccountNumberValue.length();
                 rawAccountNumberValueLengthOffset = 0;
@@ -208,6 +263,18 @@ public class ProfileEntryActivity extends Activity {
                             procAccountNumberValue += rawAccountNumberValue.charAt(i);
                         }
                     }
+
+                    procAccountNumberValue = procAccountNumberValue.replace("0", "۰")
+                            .replace("1", "۱")
+                            .replace("2", "۲")
+                            .replace("3", "۳")
+                            .replace("4", "۴")
+                            .replace("5", "۵")
+                            .replace("6", "۶")
+                            .replace("7", "۷")
+                            .replace("8", "۸")
+                            .replace("9", "۹");
+
                     accountNumberValue.setText(procAccountNumberValue);
                     accountNumberValue.setSelection(accountNumberValue.getText().toString().length());
                 }

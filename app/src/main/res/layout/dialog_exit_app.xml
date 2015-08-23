@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/normal_text"
-        android:textSize="22sp"
+        android:textSize="15dp"
         android:text="@string/exit_app_text"
         android:layout_marginTop="15dp"/>
 
@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/exit_confirmation"
-            android:textSize="20sp"
+            android:textSize="14dp"
             android:text="@string/exit_app_yes" />
 
         <com.hampay.mobile.android.component.FacedTextView
@@ -38,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/exit_dis_confirmation"
-            android:textSize="20sp"
+            android:textSize="14dp"
             android:text="@string/exit_app_no"
             android:layout_alignParentRight="true"/>
 

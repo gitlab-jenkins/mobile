@@ -2,46 +2,11 @@
 <items version="2" >
 
     <item
-        jar="/home/amir/.gradle/caches/modules-2/files-2.1/com.squareup.picasso/picasso/2.5.2/7446d06ec8d4f7ffcc53f1da37c95f200dcb9387/picasso-2.5.2.jar"
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/libs/common-core-0.0.1.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/debug/picasso-2.5.2-ca4bb93e1b6962c835d2077fb771d3e326f72ac4.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/libs/common-common-0.0.1.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="d2b1549f7d1484286b3c9d2b0f70ac59990815be">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/debug/common-common-0.0.1-9d258fb2201c655bc4520b21b4836b5789f807f9.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/libs/gson-2.2.4.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="973e832af433b44c3ed11c426f2f390b29f3f3f8">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/debug/gson-2.2.4-138e3dd2093cfb8611c5a2f88e62d50e40bd428d.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="d84409890828e07d344a3b9b1da545dba9897b51">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/debug/classes-f4c6c0d7e9c55afcb1826f9735b963f1536c0b51.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/libs/acra-4.6.2.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="b99297996579b72496c9f81b0c12d8404c74e618">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/debug/acra-4.6.2-81213741f00f066c29eaedae11c2f8ba35aec4c9.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="c95ba8152923e4872e86a82cfcba9a51c0214328">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/debug/classes-158f60a0b33656583d0cbc13553c14cc22515977.jar" />
+        sha1="eb289d43f2476442b379afabaaa5567048beca35">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/debug/common-core-0.0.1-0d2eb0d164b1ccc709daabf560c677110de97c71.jar" />
     </item>
     <item
         jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/22.1.1/jars/classes.jar"
@@ -51,13 +16,6 @@
         <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/debug/classes-fe6e96d443bd7d7a77cf389afa17f0e6f5509f71.jar" />
     </item>
     <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/libs/internal_impl-22.1.1.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/debug/internal_impl-22.1.1-e43e87dcdf0c2df6e8dc811a136a90e17a5891ea.jar" />
-    </item>
-    <item
         jar="/home/amir/android-studio/sdk/extras/android/m2repository/com/android/support/support-annotations/22.1.1/support-annotations-22.1.1.jar"
         jumboMode="false"
         revision="22.0.1"
@@ -65,11 +23,53 @@
         <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/debug/support-annotations-22.1.1-f0b05c12fce91acb407d1c4752cb59d51484c19b.jar" />
     </item>
     <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/libs/common-core-0.0.1.jar"
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/libs/common-common-0.0.1.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="eb289d43f2476442b379afabaaa5567048beca35">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/debug/common-core-0.0.1-0d2eb0d164b1ccc709daabf560c677110de97c71.jar" />
+        sha1="d2b1549f7d1484286b3c9d2b0f70ac59990815be">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/debug/common-common-0.0.1-9d258fb2201c655bc4520b21b4836b5789f807f9.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="d84409890828e07d344a3b9b1da545dba9897b51">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/debug/classes-f4c6c0d7e9c55afcb1826f9735b963f1536c0b51.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/libs/internal_impl-22.1.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/debug/internal_impl-22.1.1-e43e87dcdf0c2df6e8dc811a136a90e17a5891ea.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="c95ba8152923e4872e86a82cfcba9a51c0214328">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/debug/classes-158f60a0b33656583d0cbc13553c14cc22515977.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/libs/acra-4.6.2.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="b99297996579b72496c9f81b0c12d8404c74e618">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/debug/acra-4.6.2-81213741f00f066c29eaedae11c2f8ba35aec4c9.jar" />
+    </item>
+    <item
+        jar="/home/amir/.gradle/caches/modules-2/files-2.1/com.squareup.picasso/picasso/2.5.2/7446d06ec8d4f7ffcc53f1da37c95f200dcb9387/picasso-2.5.2.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/debug/picasso-2.5.2-ca4bb93e1b6962c835d2077fb771d3e326f72ac4.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/libs/gson-2.2.4.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="973e832af433b44c3ed11c426f2f390b29f3f3f8">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/debug/gson-2.2.4-138e3dd2093cfb8611c5a2f88e62d50e40bd428d.jar" />
     </item>
 
 </items>

@@ -12,7 +12,7 @@
         android:id="@+id/pinned_header_text"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:textSize="22dp"
+        android:textSize="15dp"
         geekui:customTypeface="fonts/iran_sans.ttf"
         android:textColor="@android:color/white"
         android:padding="10dp"

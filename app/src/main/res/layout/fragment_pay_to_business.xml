@@ -31,7 +31,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:background="@android:color/transparent"
-                android:textSize="18sp"
+                android:textSize="15dp"
                 android:padding="6dp"
                 android:textColor="@color/normal_text"
                 android:hint="@string/pay_one_search_hint"
@@ -63,6 +63,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:visibility="gone"
+        android:textSize="14dp"
         android:textColor="#363636"/>
 
 

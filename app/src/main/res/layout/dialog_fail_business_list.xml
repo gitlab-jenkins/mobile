@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/normal_text"
-        android:textSize="20sp"
+        android:textSize="15dp"
         android:text="@string/msg_fail_fetch_bank_list"
         android:gravity="right"
         android:layout_gravity="right"
@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/normal_text"
-        android:textSize="20sp"
+        android:textSize="15dp"
         android:text="@string/msg_fail_business_list"
         android:gravity="right"
         android:layout_gravity="center"
@@ -44,10 +44,10 @@
         <com.hampay.mobile.android.component.FacedTextView
             android:id="@+id/retry_business_list"
             geekui:customTypeface="fonts/iran_sans.ttf"
-            android:layout_width="120dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/pay_confirm"
-            android:textSize="20sp"
+            android:textSize="14dp"
             android:gravity="center"
             android:layout_alignParentRight="true"
             android:text="@string/retry_registration_entry" />
@@ -58,7 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimary"
-            android:textSize="20sp"
+            android:textSize="14dp"
             android:text="@string/cancel_registration_entry" />
 
     </RelativeLayout>

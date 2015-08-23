@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/normal_text"
-        android:textSize="20sp"
+        android:textSize="15dp"
         android:text="@string/msg_success_change_setting"
         android:gravity="center"
         android:layout_gravity="center"
@@ -34,7 +34,7 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:textColor="@color/pay_confirm"
-            android:textSize="20sp"
+            android:textSize="14dp"
             android:gravity="center"
             android:layout_centerInParent="true"
             android:text="@string/success_setting" />

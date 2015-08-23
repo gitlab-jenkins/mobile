@@ -14,14 +14,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
-        android:textSize="20sp"
+        android:textSize="14dp"
         android:text="@string/dialog_user_waiting"
         android:layout_margin="6dp"/>
 
 
     <ProgressBar
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
         android:indeterminateDrawable="@drawable/fragment_progress"/>
 
 </LinearLayout>
