@@ -129,9 +129,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         verify_account_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-
                 verifyAccountRequest = new VerifyAccountRequest();
                 requestVerifyAccount = new RequestVerifyAccount(getActivity(), new RequestVerifyAccountTaskCompleteListener());
                 requestVerifyAccount.execute(verifyAccountRequest);
@@ -295,6 +292,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                     startActivity(intent);
                 }
                 else{
+                    hamPayDialog.dismisWaitingDialog();
                     requestVerifyAccount = new RequestVerifyAccount(getActivity(), new RequestVerifyAccountTaskCompleteListener());
                     new HamPayDialog(getActivity()).showFailVerifyAccountDialog(requestVerifyAccount, verifyAccountRequest,
                             verifyAccountResponseMessage.getService().getResultStatus().getCode(),
@@ -302,6 +300,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                 }
             }
             else {
+                hamPayDialog.dismisWaitingDialog();
                 requestVerifyAccount = new RequestVerifyAccount(getActivity(), new RequestVerifyAccountTaskCompleteListener());
                 new HamPayDialog(getActivity()).showFailVerifyAccountDialog(requestVerifyAccount, verifyAccountRequest,
                         "2000",

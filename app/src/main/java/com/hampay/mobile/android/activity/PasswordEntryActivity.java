@@ -66,8 +66,7 @@ public class PasswordEntryActivity extends Activity implements View.OnClickListe
     RegistrationPassCodeEntryRequest registrationPassCodeEntryRequest;
 
     public void contactUs(View view){
-//        new HamPayDialog(this).showContactUsDialog();
-        new HamPayDialog(this).showHelpDialog(Constants.SERVER_IP + ":8080" + "/help/passwordEntry.html");
+        new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/pass-a.html");
     }
 
 

@@ -11,6 +11,19 @@
         android:layout_height="60dp"
         android:background="@color/colorPrimary">
 
+        <com.hampay.mobile.android.component.FacedTextView
+            geekui:customTypeface="fonts/iran_sans.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="16dp"
+            android:text="@string/title_guide"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:onClick="contactUs"
+            android:clickable="true"/>
+
 
         <com.hampay.mobile.android.component.FacedTextView
             geekui:customTypeface="fonts/iran_sans.ttf"
@@ -20,7 +33,6 @@
             android:textSize="15dp"
             android:text="@string/user_profile"
             android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
             android:layout_marginRight="20dp"/>
 
 

@@ -55,71 +55,71 @@ public class GuideFragment extends Fragment {
                 switch (position){
 
                     case 0:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/reg-intro.html");
+                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/reg-intro.html");
                         break;
 
                     case 1:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/reg-userInfo.html");
+                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/reg-userInfo.html");
                         break;
 
                     case 2:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/reg-smsToken.html");
+                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/reg-smsToken.html");
                         break;
 
                     case 3:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/userInfoCheck.html");
+                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/userInfoCheck.html");
                         break;
 
                     case 4:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/accountVerification.html");
+                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/accountVerification.html");
                         break;
 
                     case 5:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/passwordEntry.html");
+                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/pass-a.html");
                         break;
 
                     case 6:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/memorableKey.html");
+                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/memorableKey.html");
                         break;
 
                     case 7:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/accountDetail.html");
+                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/accountDetail.html");
                         break;
 
                     case 8:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/limitedAccount.html");
+                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/limitedAccount.html");
                         break;
 
 //                    case 9:
-//                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/payment.html");
+//                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/payment.html");
 //                        break;
 
                     case 9:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/payment.html");
+                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/payment.html");
                         break;
 
                     case 10:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/businessPayment.html");
+                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/businessPayment.html");
                         break;
 
                     case 11:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/contactUs.html");
+                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/contactUs.html");
                         break;
 
                     case 12:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/logout.html");
+                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/logout.html");
                         break;
 
                     case 13:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/setting.html");
+                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/setting.html");
                         break;
 
                     case 14:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/changeMemorableWord.html");
+                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/changeMemorableWord.html");
                         break;
 
                     case 15:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.SERVER_IP + ":8080" + "/help/changePassword.html");
+                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/changePassword.html");
                         break;
 
                 }

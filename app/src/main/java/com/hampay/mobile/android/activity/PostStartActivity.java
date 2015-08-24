@@ -20,6 +20,10 @@ public class PostStartActivity extends Activity {
 
     Activity activity;
 
+    public void contactUs(View view){
+        new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/user-info.html");
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

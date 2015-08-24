@@ -91,7 +91,7 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
 
     public void contactUs(View view){
 //        (new HamPayDialog(this)).showContactUsDialog();
-        new HamPayDialog(this).showHelpDialog(Constants.SERVER_IP + ":8080" + "/help/logout.html");
+        new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/login.html");
     }
 
     @Override
@@ -347,7 +347,7 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
                 break;
 
             case R.id.keyboard_help:
-                new HamPayDialog(this).showHelpDialog(Constants.SERVER_IP + ":8080" + "/help/login.html");
+                new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/login.html");
                 break;
         }
     }

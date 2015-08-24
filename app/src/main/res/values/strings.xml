@@ -130,6 +130,8 @@
     <string name="cancel_remove_password">انصراف</string>
 
 
+    <string name="back_start_register">برای تصحیح اطلاعات به ثبت نام مجدد نیاز دارید</string>
+
     <string name="no_result_search">جستجوی مورد نظر نتیجه‌ای در بر نداشت!</string>
     <string name="retry_search">باشه</string>
 

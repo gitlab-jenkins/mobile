@@ -674,6 +674,50 @@ public class HamPayDialog {
         dialog.show();
     }
 
+    public void showBackStartRegisterDialog(){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_back_start, null);
+
+        FacedTextView re_registeration = (FacedTextView) view.findViewById(R.id.re_registeration);
+        FacedTextView cancel_re_registeration = (FacedTextView) view.findViewById(R.id.cancel_re_registeration);
+
+        re_registeration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                editor.clear().commit();
+                editor.commit();
+
+                dialog.dismiss();
+                Intent intent = new Intent(activity, AppSliderActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                activity.finish();
+                activity.startActivity(intent);
+            }
+        });
+
+        cancel_re_registeration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(true);
+
+        dialog.show();
+    }
+
 
     public void showExitRegistrationDialog(){
         Rect displayRectangle = new Rect();
