@@ -11,6 +11,7 @@ import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.util.JalaliConvert;
 import com.hampay.common.core.model.response.dto.TransactionDTO.TransactionStatus;
 import com.hampay.common.core.model.response.dto.TransactionDTO.TransactionType;
+import com.hampay.mobile.android.util.PersianEnglishDigit;
 
 /**
  * Created by amir on 7/16/15.
@@ -21,11 +22,14 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
     Context context;
     private ViewHolder viewHolder;
     TransactionDTO transactionDTO;
+    PersianEnglishDigit persianEnglishDigit;
 
     public UserTransactionAdapter(Context context) {
         super(context);
         this.context = context;
+        persianEnglishDigit = new PersianEnglishDigit();
     }
+
 
 
     public View getView(final int position, View convertView, ViewGroup parent) {
@@ -72,10 +76,10 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
 
 
         viewHolder.user_name.setText(transactionDTO.getPersonName());
-        viewHolder.date_time.setText((new JalaliConvert()).GregorianToPersian(transactionDTO.getTransactionDate()));
+        viewHolder.date_time.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(transactionDTO.getTransactionDate())));
         viewHolder.message.setText(transactionDTO.getMessage());
 
-        viewHolder.price_pay.setText(String.format("%,d", transactionDTO.getAmount()).replace(",", ".")
+        viewHolder.price_pay.setText(persianEnglishDigit.E2P(String.format("%,d", transactionDTO.getAmount()).replace(".", ","))
                         + "\n"
                 + context.getString(R.string.currency_rials)
         );

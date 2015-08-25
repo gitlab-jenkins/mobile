@@ -15,12 +15,15 @@ import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.JalaliConvert;
+import com.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class TransactionDetailActivity extends ActionBarActivity implements View.OnClickListener{
 
     Bundle bundle;
 
     TransactionDTO transactionDTO;
+
+    PersianEnglishDigit persianEnglishDigit;
 
     ImageView status_icon;
     FacedTextView status_text;
@@ -45,6 +48,8 @@ public class TransactionDetailActivity extends ActionBarActivity implements View
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction_detail);
+
+        persianEnglishDigit = new PersianEnglishDigit();
 
         context = this;
         activity = TransactionDetailActivity.this;
@@ -94,10 +99,10 @@ public class TransactionDetailActivity extends ActionBarActivity implements View
 
         user_name.setText(transactionDTO.getPersonName());
         message.setText(transactionDTO.getMessage());
-        price_pay.setText(String.format("%,d", transactionDTO.getAmount()).replace(",", "."));
-        user_mobile_no.setText(transactionDTO.getPhoneNumber());
-        date_time.setText((new JalaliConvert()).GregorianToPersian(transactionDTO.getTransactionDate()));
-        tracking_code.setText(transactionDTO.getReference());
+        price_pay.setText(persianEnglishDigit.E2P(String.format("%,d", transactionDTO.getAmount()).replace(",", ".")));
+        user_mobile_no.setText(persianEnglishDigit.E2P(transactionDTO.getPhoneNumber()));
+        date_time.setText(persianEnglishDigit.E2P((new JalaliConvert()).GregorianToPersian(transactionDTO.getTransactionDate())));
+        tracking_code.setText(persianEnglishDigit.E2P(transactionDTO.getReference()));
 
 
     }

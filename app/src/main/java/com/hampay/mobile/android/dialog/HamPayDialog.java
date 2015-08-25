@@ -92,6 +92,7 @@ import com.hampay.mobile.android.model.LogoutData;
 import com.hampay.mobile.android.model.LogoutResponse;
 import com.hampay.mobile.android.model.RecentPay;
 import com.hampay.mobile.android.util.Constants;
+import com.hampay.mobile.android.util.PersianEnglishDigit;
 import com.hampay.mobile.android.webservice.WebServices;
 
 import java.text.NumberFormat;
@@ -928,7 +929,9 @@ public class HamPayDialog {
             }
         });
 
-        pay_one_confirm.setText(activity.getString(R.string.pay_one_confirm, amountValue.toString(),
+        pay_one_confirm.setText(activity.getString(R.string.pay_one_confirm,
+                (new PersianEnglishDigit()).E2P(String.format("%,d", amountValue).replace(".", ",")),
+//                amountValue.toString(),
                 individualPaymentConfirmResponse.getFullName(),
                 individualPaymentConfirmResponse.getBankName()));
 
@@ -967,7 +970,7 @@ public class HamPayDialog {
             }
         });
 
-        pay_one_confirm_ref.setText(activity.getString(R.string.pay_one_ref, individualPaymentResponse.getRefCode()));
+        pay_one_confirm_ref.setText((new PersianEnglishDigit(activity.getString(R.string.pay_one_ref, individualPaymentResponse.getRefCode()))).E2P());
 
         RecentPay recentPay = new RecentPay();
 
@@ -1073,7 +1076,9 @@ public class HamPayDialog {
             }
         });
 
-        pay_one_confirm.setText(activity.getString(R.string.pay_one_confirm, amountValue.toString(),
+        pay_one_confirm.setText(activity.getString(R.string.pay_one_confirm,
+                (new PersianEnglishDigit()).E2P(String.format("%,d", amountValue).replace(".", ",")),
+//                amountValue.toString(),
                 businessPaymentConfirmResponse.getFullName(),
                 businessPaymentConfirmResponse.getBankName()));
 
@@ -1147,7 +1152,7 @@ public class HamPayDialog {
             }
         });
 
-        pay_one_confirm_ref.setText(activity.getString(R.string.pay_one_ref, businessPaymentResponse.getRefCode()));
+        pay_one_confirm_ref.setText((new PersianEnglishDigit(activity.getString(R.string.pay_one_ref, businessPaymentResponse.getRefCode()))).E2P());
 
 
         view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));

@@ -18,6 +18,7 @@ import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
+import com.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class VerifyAccountActivity extends ActionBarActivity {
 
@@ -45,9 +46,9 @@ public class VerifyAccountActivity extends ActionBarActivity {
         activity = VerifyAccountActivity.this;
 
         bundle = getIntent().getExtras();
-        TransferMoneyComment = bundle.getString(Constants.TRANSFER_MONEY_COMMENT, "");
+        TransferMoneyComment = bundle.getString(Constants.TRANSFER_MONEY_COMMENT);
         verification_response_text = (FacedTextView)findViewById(R.id.verification_response_text);
-        verification_response_text.setText(TransferMoneyComment);
+        verification_response_text.setText(new PersianEnglishDigit(TransferMoneyComment).E2P());
 
         verify_account_button = (ButtonRectangle)findViewById(R.id.verify_account_button);
         verify_account_button.setOnClickListener(new View.OnClickListener() {

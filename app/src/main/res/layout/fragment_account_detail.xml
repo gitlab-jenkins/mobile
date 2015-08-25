@@ -48,7 +48,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/normal_text"
                         android:textSize="15dp"
-                        android:gravity="center"
+                        android:gravity="right"
                         android:layout_marginRight="4dp"
                         android:text=""/>
 
@@ -77,18 +77,8 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
+                        android:orientation="vertical"
                         android:layout_marginRight="4dp">
-
-
-                        <com.hampay.mobile.android.component.FacedTextView
-                            android:id="@+id/user_account_type"
-                            geekui:customTypeface="fonts/iran_sans.ttf"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/black"
-                            android:textSize="14dp"
-                            android:gravity="center" />
 
 
                         <com.hampay.mobile.android.component.FacedTextView
@@ -98,8 +88,20 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/normal_text"
                             android:textSize="14dp"
-                            android:gravity="center"
+                            android:gravity="right"
+                            android:layout_gravity="right"
                             android:text="@string/account_type"/>
+
+
+                        <com.hampay.mobile.android.component.FacedTextView
+                            android:id="@+id/user_account_type"
+                            geekui:customTypeface="fonts/iran_sans.ttf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/black"
+                            android:textSize="14dp"
+                            android:gravity="right"
+                            android:layout_gravity="right"/>
 
 
                     </LinearLayout>
@@ -109,8 +111,8 @@
 
                 <ImageView
                     android:id="@+id/user_image"
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
                     android:src="@drawable/user_icon_blak"
                     android:layout_margin="2dp"/>
 
@@ -344,6 +346,15 @@
         </LinearLayout>
 
     </ScrollView>
+
+    <View
+        android:id="@+id/hide_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:visibility="visible">
+
+    </View>
 
 
 </RelativeLayout>

@@ -11,8 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
@@ -35,6 +33,7 @@ import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.JalaliConvert;
+import com.hampay.mobile.android.util.PersianEnglishDigit;
 
 import java.util.List;
 
@@ -42,6 +41,11 @@ import java.util.List;
  * Created by amir on 6/5/15.
  */
 public class AccountDetailFragment extends Fragment implements View.OnClickListener {
+
+
+    View hide_bg;
+
+    PersianEnglishDigit persianEnglishDigit;
 
     LinearLayout verification_status_ll;
 
@@ -89,6 +93,8 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        persianEnglishDigit = new PersianEnglishDigit();
+
         prefs = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE);
         editor = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE).edit();
 
@@ -110,6 +116,8 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_account_detail, container, false);
+
+        hide_bg = (View)rootView.findViewById(R.id.hide_bg);
 
         verification_status_ll = (LinearLayout)rootView.findViewById(R.id.verification_status_ll);
 
@@ -242,6 +250,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
             Log.e("FINISH", "FINISH");
 
             hamPayDialog.dismisWaitingDialog();
+            hide_bg.setVisibility(View.GONE);
 
             if (userProfileResponseMessage != null) {
 
@@ -268,6 +277,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         @Override
         public void onTaskPreRun() {
             hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+            hide_bg.setVisibility(View.VISIBLE);
         }
     }
 
@@ -340,11 +350,11 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         user_name_text.setText(userProfileDTO.getFullName());
         MainActivity.user_account_name.setText(userProfileDTO.getFullName());
         //CLS
-        user_account_no_text.setText(getString(R.string.account_no) + ": " + userProfileDTO.getAccountNumber());
+        user_account_no_text.setText(getString(R.string.account_no) + ": \n" + persianEnglishDigit.E2P(userProfileDTO.getAccountNumber()));
         user_bank_name.setText(userProfileDTO.getBankName());
-        user_mobile_no.setText(getString(R.string.mobile_no) + ": " + userProfileDTO.getCellNumber());
+        user_mobile_no.setText(getString(R.string.mobile_no) + ": " + persianEnglishDigit.E2P(userProfileDTO.getCellNumber()));
 
-        user_account_title.setText(getString(R.string.account_type));
+//        user_account_title.setText(getString(R.string.account_type));
 
 
         editor.putInt(Constants.USER_VERIFICATION_STATUS, userProfileDTO.getVerificationStatus().ordinal());
@@ -372,11 +382,12 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
         if (userProfileDTO.getLastLoginDate() != null) {
             user_last_login.setText(getString(R.string.last_login) + ": "
-                    + jalaliConvert.GregorianToPersian(userProfileDTO.getLastLoginDate()));
+                    + persianEnglishDigit.E2P(jalaliConvert.GregorianToPersian(userProfileDTO.getLastLoginDate())));
         }else {
             user_last_login.setText("");
         }
 
+        hide_bg.setVisibility(View.GONE);
 
         List<ContactDTO> contactDTOs = userProfileDTO.getSelectedContacts();
 

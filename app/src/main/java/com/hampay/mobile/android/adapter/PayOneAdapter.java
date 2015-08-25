@@ -18,6 +18,7 @@ import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.component.sectionlist.SectionedBaseAdapter;
 import com.hampay.mobile.android.model.EnabledHamPay;
 import com.hampay.mobile.android.model.RecentPay;
+import com.hampay.mobile.android.util.PersianEnglishDigit;
 
 import java.util.List;
 
@@ -30,11 +31,15 @@ public class PayOneAdapter extends SectionedBaseAdapter{
     private List<RecentPay> recentPays;
     private List<EnabledHamPay> enabledHamPays;
 
+    private PersianEnglishDigit persianEnglishDigit;
+
     public  PayOneAdapter(Activity context, List<RecentPay> recentPays, List<EnabledHamPay> enabledHamPays){
         mContext = context;
 
         this.recentPays = recentPays;
         this.enabledHamPays = enabledHamPays;
+
+        persianEnglishDigit = new PersianEnglishDigit();
 
     }
 
@@ -110,9 +115,9 @@ public class PayOneAdapter extends SectionedBaseAdapter{
         if(section == 0) {
 
             final RecentPay recentPay = recentPays.get(position);
-            user_name.setText(recentPay.getName());
-            user_phone.setText(recentPay.getPhone());
-            message.setText(recentPay.getMessage());
+            user_name.setText(persianEnglishDigit.E2P(recentPay.getName()));
+            user_phone.setText(persianEnglishDigit.E2P(recentPay.getPhone()));
+            message.setText(persianEnglishDigit.E2P(recentPay.getMessage()));
             call_icon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -134,8 +139,8 @@ public class PayOneAdapter extends SectionedBaseAdapter{
         }else{
 
             final EnabledHamPay enabledHamPay = enabledHamPays.get(position);
-            contact_name.setText(enabledHamPay.getDisplayName());
-            contact_phone_no.setText(enabledHamPay.getCellNumber());
+            contact_name.setText(persianEnglishDigit.E2P(enabledHamPay.getDisplayName()));
+            contact_phone_no.setText(persianEnglishDigit.E2P(enabledHamPay.getCellNumber()));
 
             pay_to_one_button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -163,7 +168,6 @@ public class PayOneAdapter extends SectionedBaseAdapter{
         } else {
             layout = (LinearLayout) convertView;
         }
-        //((TextView) layout.findViewById(R.id.textItem)).setText("Header for section " + section);
 
         FacedTextView pinned_header_text = (FacedTextView) layout.findViewById(R.id.pinned_header_text);
         //textView.setText("Header for section " + section);

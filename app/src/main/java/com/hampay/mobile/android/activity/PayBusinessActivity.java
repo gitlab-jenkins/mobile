@@ -30,6 +30,8 @@ public class PayBusinessActivity extends ActionBarActivity {
 
     Bundle bundle;
 
+    PersianEnglishDigit persianEnglishDigit;
+
     FacedTextView business_name_code;
 
     ButtonRectangle pay_to_business_button;
@@ -68,6 +70,8 @@ public class PayBusinessActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay_business);
+
+        persianEnglishDigit = new PersianEnglishDigit();
 
         context = this;
         activity = PayBusinessActivity.this;
@@ -109,7 +113,7 @@ public class PayBusinessActivity extends ActionBarActivity {
         bundle = getIntent().getExtras();
 
         business_name_code = (FacedTextView)findViewById(R.id.business_name_code);
-        business_name_code.setText(bundle.getString("business_name") + " " + "(" + bundle.getString("business_code") + ")");
+        business_name_code.setText(persianEnglishDigit.E2P(bundle.getString("business_name") + " " + "(" + bundle.getString("business_code") + ")"));
 
         contact_message = (FacedEditText)findViewById(R.id.contact_message);
 

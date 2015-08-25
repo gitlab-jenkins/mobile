@@ -9,6 +9,7 @@ import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.activity.PayBusinessActivity;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
+import com.hampay.mobile.android.util.PersianEnglishDigit;
 
 /**
  * Created by amir on 6/26/15.
@@ -19,9 +20,13 @@ public class HamPayBusinessesAdapter extends HamPayBusinessesGenericAdapter<Busi
     Context context;
     BusinessDTO businessDTO;
 
+    PersianEnglishDigit persianEnglishDigit;
+
     public HamPayBusinessesAdapter(Context context) {
         super(context);
         this.context = context;
+
+        persianEnglishDigit = new PersianEnglishDigit();
     }
 
     private ViewHolder viewHolder;
@@ -50,8 +55,8 @@ public class HamPayBusinessesAdapter extends HamPayBusinessesGenericAdapter<Busi
 
         viewHolder.business_name.setText(businessDTO.getTitle());
         viewHolder.business_description.setText(businessDTO.getCategory());
-        viewHolder.business_phone_no.setText("تلفن: " + businessDTO.getDefaultPhoneNumber());
-        viewHolder.business_hampay_id.setText("شناسه: " + businessDTO.getCode());
+        viewHolder.business_phone_no.setText(persianEnglishDigit.E2P("تلفن: " + businessDTO.getDefaultPhoneNumber()));
+        viewHolder.business_hampay_id.setText(persianEnglishDigit.E2P("شناسه: " + businessDTO.getCode()));
 
         viewHolder.pay_to_business_button.setOnClickListener(new View.OnClickListener() {
             @Override

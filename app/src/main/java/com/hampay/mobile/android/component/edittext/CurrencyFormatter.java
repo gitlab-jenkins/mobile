@@ -47,9 +47,9 @@ public class CurrencyFormatter implements TextWatcher{
             Number n = df.parse(v);
             int cp = editText.getSelectionStart();
             if (hasFractionalPart) {
-                editText.setText(df.format(n));
+                editText.setText(new PersianEnglishDigit().E2P(df.format(n)));
             } else {
-                editText.setText(dfnd.format(n));
+                editText.setText(new PersianEnglishDigit().E2P(dfnd.format(n)));
             }
             endlen = editText.getText().length();
             int sel = (cp + (endlen - inilen));
@@ -65,6 +65,9 @@ public class CurrencyFormatter implements TextWatcher{
             // do nothing?
         }
 
+//        editText.setText(new PersianEnglishDigit().E2P(editText.getText().toString()));
+//        editText.setSelection(s.toString().length());
+//
         editText.addTextChangedListener(this);
     }
 
@@ -77,10 +80,10 @@ public class CurrencyFormatter implements TextWatcher{
     public void onTextChanged(CharSequence s, int start, int before, int count)
     {
 
-        editText.removeTextChangedListener(this);
-        editText.setText(new PersianEnglishDigit(s.toString()).E2P());
-        editText.setSelection(s.toString().length());
-        editText.addTextChangedListener(this);
+//        this.editText.removeTextChangedListener(this);
+//        this.editText.setText(new PersianEnglishDigit().E2P(s.toString()));
+//        this.editText.setSelection(s.toString().length());
+//        this.editText.addTextChangedListener(this);
         
         if (s.toString().contains(String.valueOf(df.getDecimalFormatSymbols().getDecimalSeparator()))) {
             hasFractionalPart = true;
