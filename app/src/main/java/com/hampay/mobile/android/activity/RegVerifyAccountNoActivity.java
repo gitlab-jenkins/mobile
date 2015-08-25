@@ -122,7 +122,10 @@ public class RegVerifyAccountNoActivity extends Activity {
                         finish();
                         startActivity(intent);
                     }
-                }else {
+                }else if (verifyTransferMoneyResponseMessage.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
+                    new HamPayDialog(activity).showInvalidStepDialog();
+                }
+                else {
                     requestRegistrationVerifyTransferMoney = new RequestRegistrationVerifyTransferMoney(context, new RequestRegistrationVerifyTransferMoneyTaskCompleteListener());
                     new HamPayDialog(activity).showFailRequestVerifyTransferMoneyDialog(requestRegistrationVerifyTransferMoney, registrationVerifyTransferMoneyRequest,
                             verifyTransferMoneyResponseMessage.getService().getResultStatus().getCode(),

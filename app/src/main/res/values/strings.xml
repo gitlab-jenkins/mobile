@@ -322,7 +322,13 @@
     <string name="login_retry">تلاش مجدد</string>
 
     <string name="msg_rooted_device">دستگاه شما به دلیل روت شدن مجوز استفاده از این اپ را نخواهد داشت!</string>
-    
+
+    <string name="invalid_step_code">کد خطا: 1001</string>
+    <string name="invalid_step_message">مرحله جاری ثبت نام به علت خطای سیستمی صحیح نمیباشد. لطفا مجددا ثبت نام کنید.</string>
+    <string name="invalid_step_confrim">انجام میدم</string>
+    <string name="invalid_step_disconfrim">منصرف شدم</string>
+
+
     <string name="msg_fail_fetch_bank_list">لیست بانک‌ها دریافت نشد.</string>
     <string name="msg_fail_registration_entry">ثبت اطلاعات شخصی شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="mgs_fail_registration_send_sms_token">درخواست پیامک فعالسازی با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>

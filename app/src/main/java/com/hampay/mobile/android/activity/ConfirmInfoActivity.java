@@ -508,6 +508,8 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
                     intent.putExtra(Constants.TRANSFER_MONEY_COMMENT, verifyAccountResponseMessage.getService().getTransferMoneyComment());
                     finish();
                     startActivity(intent);
+                }else if (verifyAccountResponseMessage.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
+                    new HamPayDialog(activity).showInvalidStepDialog();
                 }
                 else{
                     requestRegisterVerifyAccount = new RequestRegisterVerifyAccount(context, new RequestRegistrationVerifyAccountResponseTaskCompleteListener());
@@ -551,7 +553,10 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
                     userFamilyValue.setText(registrationFetchUserDataResponseMessage.getService().getFulName());
                     accountNumberValue.setText(registrationFetchUserDataResponseMessage.getService().getAccountNumber());
                     nationalCodeValue.setText(registrationFetchUserDataResponseMessage.getService().getNationalCode());
-                }else {
+                }else if (registrationFetchUserDataResponseMessage.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
+                    new HamPayDialog(activity).showInvalidStepDialog();
+                }
+                else {
                     requestFetchUserData = new RequestFetchUserData(context, new RequestFetchUserDataTaskCompleteListener());
                     registrationFetchUserDataRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
                     new HamPayDialog(activity).showFailFetchUserDataDialog(requestFetchUserData, registrationFetchUserDataRequest,
@@ -606,7 +611,10 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
                     accountNumberValue.setFocusable(false);
 //                nationalCodeValue.setFocusable(false);
                     confirm_layout.setVisibility(View.VISIBLE);
-                }else {
+                }else if (registrationConfirmUserDataResponseMessage.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
+                    new HamPayDialog(activity).showInvalidStepDialog();
+                }
+                else {
                     requestConfirmUserData = new RequestConfirmUserData(context, new RequestConfirmUserDataTaskCompleteListener());
                     new HamPayDialog(activity).showFailConfirmUserDataDialog(requestConfirmUserData, registrationConfirmUserDataRequest,
                             registrationConfirmUserDataResponseMessage.getService().getResultStatus().getCode(),

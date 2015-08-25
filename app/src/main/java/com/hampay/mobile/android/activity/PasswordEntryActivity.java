@@ -159,7 +159,10 @@ public class PasswordEntryActivity extends Activity implements View.OnClickListe
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     finish();
                     startActivity(intent);
-                }else {
+                }else if (passCodeEntryResponseMessage.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
+                    new HamPayDialog(activity).showInvalidStepDialog();
+                }
+                else {
                     requestPassCodeEntry = new RequestPassCodeEntry(context, new RequestPassCodeEntryResponseTaskCompleteListener());
                     new HamPayDialog(activity).showFailPasswordEntryDialog(requestPassCodeEntry, registrationPassCodeEntryRequest,
                             passCodeEntryResponseMessage.getService().getResultStatus().getCode(),

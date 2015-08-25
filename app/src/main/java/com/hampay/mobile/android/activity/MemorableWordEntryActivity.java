@@ -116,7 +116,10 @@ public class MemorableWordEntryActivity extends Activity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     finish();
                     startActivity(intent);
-                }else {
+                }else if (registrationMemorableWordEntryResponseMessage.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
+                    new HamPayDialog(activity).showInvalidStepDialog();
+                }
+                else {
                     requestMemorableWordEntry = new RequestMemorableWordEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
                     new HamPayDialog(activity).showFailMemorableEntryDialog(requestMemorableWordEntry, registrationMemorableWordEntryRequest,
                             registrationMemorableWordEntryResponseMessage.getService().getResultStatus().getCode(),

@@ -95,8 +95,10 @@ public class VerificationActivity extends Activity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     finish();
                     startActivity(intent);
-                }else {
-
+                }else if (registrationSendSmsTokenResponse.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
+                    new HamPayDialog(activity).showInvalidStepDialog();
+                }
+                else {
                     requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
                     new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
                             registrationSendSmsTokenResponse.getService().getResultStatus().getCode(),
@@ -106,7 +108,7 @@ public class VerificationActivity extends Activity {
             }else {
                 requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
                 new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
-                        "200",
+                        "2000",
                         getString(R.string.mgs_fail_registration_send_sms_token));
             }
         }

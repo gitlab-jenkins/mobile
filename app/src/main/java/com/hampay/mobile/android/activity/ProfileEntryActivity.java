@@ -451,8 +451,6 @@ public class ProfileEntryActivity extends Activity {
             if (registrationEntryResponse != null) {
 
                 if (registrationEntryResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
-
-//                    editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ProfileEntryActivity.class.getName());
                     editor.putString(Constants.REGISTERED_CELL_NUMBER, cellNumberValue.getText().toString());
                     editor.putString(Constants.REGISTERED_BANK_ID, selectedBankCode);
                     editor.putString(Constants.REGISTERED_BANK_ACCOUNT_NO_FORMAT, accountNumberFormat);
@@ -466,7 +464,10 @@ public class ProfileEntryActivity extends Activity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     finish();
                     startActivity(intent);
-                }else {
+                }else if (registrationEntryResponse.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
+                    new HamPayDialog(activity).showInvalidStepDialog();
+                }
+                else {
                     requestRegistrationEntry = new RequestRegistrationEntry(context,
                             new RequestRegistrationEntryTaskCompleteListener(),
                             latitute + "," + longitude);

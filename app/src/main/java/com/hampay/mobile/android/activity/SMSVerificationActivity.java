@@ -568,10 +568,10 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
                             keyboard.setVisibility(View.VISIBLE);
                         }
                     }.start();
-
-
-                }else {
-
+                }else if (registrationSendSmsTokenResponse.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
+                    new HamPayDialog(activity).showInvalidStepDialog();
+                }
+                else {
                     requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
                     new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
                             registrationSendSmsTokenResponse.getService().getResultStatus().getCode(),
