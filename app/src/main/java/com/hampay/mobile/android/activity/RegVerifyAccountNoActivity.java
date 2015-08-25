@@ -20,6 +20,7 @@ import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.NetworkConnectivity;
+import com.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class RegVerifyAccountNoActivity extends Activity {
 
@@ -58,12 +59,19 @@ public class RegVerifyAccountNoActivity extends Activity {
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, RegVerifyAccountNoActivity.class.getName());
-        editor.commit();
-
 
         bundle = getIntent().getExtras();
-        TransferMoneyComment = bundle.getString(Constants.TRANSFER_MONEY_COMMENT);
+
+        if (bundle != null && bundle.getString(Constants.TRANSFER_MONEY_COMMENT) != null) {
+            TransferMoneyComment = bundle.getString(Constants.TRANSFER_MONEY_COMMENT);
+            editor.putString(Constants.TRANSFER_MONEY_COMMENT, TransferMoneyComment);
+            editor.commit();
+        }else {
+            TransferMoneyComment = prefs.getString(Constants.TRANSFER_MONEY_COMMENT, "");
+        }
+
+        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, RegVerifyAccountNoActivity.class.getName());
+        editor.commit();
 
 //        loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
         hamPayDialog = new HamPayDialog(activity);
@@ -72,7 +80,7 @@ public class RegVerifyAccountNoActivity extends Activity {
         context = this;
 
         verification_response_text = (FacedTextView)findViewById(R.id.verification_response_text);
-        verification_response_text.setText(TransferMoneyComment);
+        verification_response_text.setText(new PersianEnglishDigit(TransferMoneyComment).E2P());
 
         keepOn_button = (ButtonRectangle)findViewById(R.id.keepOn_button);
         keepOn_button.setOnClickListener(new View.OnClickListener() {

@@ -36,11 +36,10 @@ public class PostRegVerifyAccountNoActivity extends Activity {
 
         activity = PostRegVerifyAccountNoActivity.this;
 
-//        loading_rl = (RelativeLayout) findViewById(R.id.loading_rl);
-
         hamPayDialog = new HamPayDialog(activity);
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, PostRegVerifyAccountNoActivity.class.getName());
         editor.putBoolean(Constants.VERIFIED_USER, true);
         editor.commit();
 

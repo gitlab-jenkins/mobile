@@ -85,13 +85,13 @@ public class VerificationActivity extends Activity {
             if (registrationSendSmsTokenResponse != null) {
                 if (registrationSendSmsTokenResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
-                    editor.putString(Constants.REGISTERED_ACTIVITY_DATA, VerificationActivity.class.toString());
-                    editor.commit();
+//                    editor.putString(Constants.REGISTERED_ACTIVITY_DATA, VerificationActivity.class.toString());
+//                    editor.commit();
 
                     Intent intent = new Intent();
                     intent.setClass(VerificationActivity.this, SMSVerificationActivity.class);
-                    editor.putString(Constants.REGISTERED_ACTIVITY_DATA, SMSVerificationActivity.class.toString());
-                    editor.commit();
+//                    editor.putString(Constants.REGISTERED_ACTIVITY_DATA, SMSVerificationActivity.class.toString());
+//                    editor.commit();
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     finish();
                     startActivity(intent);

@@ -32,8 +32,8 @@ public class PostStartActivity extends Activity {
         activity = PostStartActivity.this;
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, PostStartActivity.class.getName());
-        editor.commit();
+//        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, PostStartActivity.class.getName());
+//        editor.commit();
 
         keepOn_button = (ButtonRectangle)findViewById(R.id.keepOn_button);
         keepOn_button.setOnClickListener(new View.OnClickListener() {

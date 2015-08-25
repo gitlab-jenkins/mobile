@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.hampay.mobile.android.R;
@@ -202,20 +203,20 @@ public class AppSliderActivity extends ActionBarActivity {
         registeredActivityData = prefs.getString(Constants.REGISTERED_ACTIVITY_DATA, "");
 
         if (registeredActivityData.length() != 0){
-            if (registeredActivityData.equalsIgnoreCase(StartActivity.class.getName())){
-                destinationActivity = new StartActivity();
-            }else if (registeredActivityData.equalsIgnoreCase(PostStartActivity.class.getName())){
-                destinationActivity = new PostStartActivity();
-            }
-            else if (registeredActivityData.equalsIgnoreCase(ProfileEntryActivity.class.getName())){
+//            if (registeredActivityData.equalsIgnoreCase(StartActivity.class.getName())){
+//                destinationActivity = new StartActivity();
+//            }else if (registeredActivityData.equalsIgnoreCase(PostStartActivity.class.getName())){
+//                destinationActivity = new PostStartActivity();
+//            }
+            if (registeredActivityData.equalsIgnoreCase(ProfileEntryActivity.class.getName())){
                 destinationActivity = new ProfileEntryActivity();
             }
             else if (registeredActivityData.equalsIgnoreCase(VerificationActivity.class.getName())){
                 destinationActivity = new VerificationActivity();
             }
-            else if (registeredActivityData.equalsIgnoreCase(SMSVerificationActivity.class.getName())){
-                destinationActivity = new SMSVerificationActivity();
-            }
+//            else if (registeredActivityData.equalsIgnoreCase(SMSVerificationActivity.class.getName())){
+//                destinationActivity = new SMSVerificationActivity();
+//            }
             else if (registeredActivityData.equalsIgnoreCase(ConfirmAccountNoActivity.class.getName())){
                 destinationActivity = new ConfirmAccountNoActivity();
             }
@@ -225,16 +226,15 @@ public class AppSliderActivity extends ActionBarActivity {
             else if (registeredActivityData.equalsIgnoreCase(RegVerifyAccountNoActivity.class.getName())){
                 destinationActivity = new RegVerifyAccountNoActivity();
             }
+            else if (registeredActivityData.equalsIgnoreCase(PostRegVerifyAccountNoActivity.class.getName())){
+                destinationActivity = new PostRegVerifyAccountNoActivity();
+            }
             else if (registeredActivityData.equalsIgnoreCase(PasswordEntryActivity.class.getName())){
                 destinationActivity = new PasswordEntryActivity();
             }
             else if (registeredActivityData.equalsIgnoreCase(MemorableWordEntryActivity.class.getName())){
                 destinationActivity = new MemorableWordEntryActivity();
             }
-
-
-
-
 
             new HamPayDialog(activity).showResumeRegisterationDialog(destinationActivity);
 
@@ -250,6 +250,9 @@ public class AppSliderActivity extends ActionBarActivity {
 
         else {
             if (prefs.getBoolean(Constants.REGISTERED_USER, false)) {
+
+                RelativeLayout hampay_login_splash = (RelativeLayout)findViewById(R.id.hampay_login_splash);
+                hampay_login_splash.setVisibility(View.VISIBLE);
 
                 Thread thread = new Thread() {
                     public void run() {

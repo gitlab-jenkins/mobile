@@ -471,15 +471,19 @@
                         <LinearLayout
                             android:id="@+id/confirm_check_ll"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
+                            android:layout_height="fill_parent"
+                            android:gravity="center_vertical"
+                            android:layout_gravity="center_vertical">
 
                             <com.hampay.mobile.android.component.FacedTextView
                                 geekui:customTypeface="fonts/iran_sans.ttf"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_height="fill_parent"
                                 android:textColor="@color/normal_text"
-                                android:textSize="16dp"
-                                android:text="@string/correct_data" />
+                                android:textSize="15dp"
+                                android:text="@string/correct_data"
+                                android:gravity="center_vertical"
+                                android:layout_gravity="center_vertical"/>
 
                         </LinearLayout>
 
@@ -505,14 +509,14 @@
                             android:layout_height="fill_parent"
                             android:layout_centerHorizontal="true"
                             android:background="@color/register_btn_color"
-                            android:textSize="16dp" />
+                            android:textSize="15dp" />
 
                         <com.hampay.mobile.android.component.FacedTextView
                             geekui:customTypeface="fonts/iran_sans.ttf"
                             android:layout_width="fill_parent"
                             android:layout_height="fill_parent"
                             android:textColor="@android:color/white"
-                            android:textSize="16dp"
+                            android:textSize="15dp"
                             android:gravity="center"
                             android:layout_gravity="center"
                             android:text="@string/correct_info" />

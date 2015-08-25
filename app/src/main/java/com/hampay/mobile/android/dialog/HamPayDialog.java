@@ -482,6 +482,8 @@ public class HamPayDialog {
         tac_accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dialog.dismiss();
+                showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                 requestTACAccept = new RequestTACAccept(activity, new RequestTACAcceptResponseTaskCompleteListener());
                 requestTACAccept.execute(tacAcceptRequest);
             }
@@ -510,6 +512,9 @@ public class HamPayDialog {
         @Override
         public void onTaskComplete(ResponseMessage<TACAcceptResponse> tacAcceptResponseMessage)
         {
+
+            dismisWaitingDialog();
+
             if (tacAcceptResponseMessage != null) {
 
                 if (tacAcceptResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {

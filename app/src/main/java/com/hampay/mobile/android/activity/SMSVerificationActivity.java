@@ -33,6 +33,7 @@ import com.hampay.mobile.android.component.material.RippleView;
 import com.hampay.mobile.android.component.numericalprogressbar.NumberProgressBar;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
+import com.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class SMSVerificationActivity extends Activity implements View.OnClickListener{
 
@@ -40,6 +41,8 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
     Activity activity;
 
     ButtonRectangle verify_button;
+
+    PersianEnglishDigit persianEnglishDigit;
 
     RippleView digit_1;
     RippleView digit_2;
@@ -93,8 +96,6 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
     protected void onResume() {
         super.onResume();
 
-        android.util.Log.e("recevice", "rec");
-
         IntentFilter intentFilter = new IntentFilter("SmsMessage.intent.MAIN");
         mIntentReceiver = new BroadcastReceiver() {
             @Override
@@ -115,15 +116,15 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
                 numberProgressBar.setVisibility(View.INVISIBLE);
                 countDownTimer.cancel();
 
-                input_digit_1.setText(receivedSmsValue.substring(0, 1));
+                input_digit_1.setText(persianEnglishDigit.E2P(receivedSmsValue.substring(0, 1)));
                 input_digit_1.setBackgroundColor(Color.TRANSPARENT);
-                input_digit_2.setText(receivedSmsValue.substring(1, 2));
+                input_digit_2.setText(persianEnglishDigit.E2P(receivedSmsValue.substring(1, 2)));
                 input_digit_2.setBackgroundColor(Color.TRANSPARENT);
-                input_digit_3.setText(receivedSmsValue.substring(2, 3));
+                input_digit_3.setText(persianEnglishDigit.E2P(receivedSmsValue.substring(2, 3)));
                 input_digit_3.setBackgroundColor(Color.TRANSPARENT);
-                input_digit_4.setText(receivedSmsValue.substring(3, 4));
+                input_digit_4.setText(persianEnglishDigit.E2P(receivedSmsValue.substring(3, 4)));
                 input_digit_4.setBackgroundColor(Color.TRANSPARENT);
-                input_digit_5.setText(receivedSmsValue.substring(4, 5));
+                input_digit_5.setText(persianEnglishDigit.E2P(receivedSmsValue.substring(4, 5)));
                 input_digit_5.setBackgroundColor(Color.TRANSPARENT);
 
             }
@@ -152,9 +153,11 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
 
         context = this;
 
+        persianEnglishDigit = new PersianEnglishDigit();
+
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         editor.putString(Constants.RECEIVED_SMS_ACTIVATION, "");
-        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, SMSVerificationActivity.class.getName());
+//        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, SMSVerificationActivity.class.getName());
         editor.commit();
 
         numberProgressBar = (NumberProgressBar)findViewById(R.id.numberProgressBar);
@@ -380,12 +383,12 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
                 break;
 
             case R.id.resend_active_code:
+
                 if (sendSmsPermision){
                     sendSmsPermision = false;
-
+                    hamPayDialog.showWaitingdDialog("");
                     requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
                     requestRegistrationSendSmsToken.execute(registrationSendSmsTokenRequest);
-
                 }
                 break;
 
@@ -405,7 +408,7 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
                         input_digit_1.setText("");
                         input_digit_1.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     } else {
-                        input_digit_1.setText(digit);
+                        input_digit_1.setText(persianEnglishDigit.E2P(digit));
                         input_digit_1.setBackgroundColor(Color.TRANSPARENT);
                     }
                     input_digit_2.setText("");
@@ -424,7 +427,7 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
                         input_digit_2.setText("");
                         input_digit_2.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     } else {
-                        input_digit_2.setText(digit);
+                        input_digit_2.setText(persianEnglishDigit.E2P(digit));
                         input_digit_2.setBackgroundColor(Color.TRANSPARENT);
                     }
                     input_digit_3.setText("");
@@ -441,7 +444,7 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
                         input_digit_3.setText("");
                         input_digit_3.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     } else {
-                        input_digit_3.setText(digit);
+                        input_digit_3.setText(persianEnglishDigit.E2P(digit));
                         input_digit_3.setBackgroundColor(Color.TRANSPARENT);
                     }
                     input_digit_4.setText("");
@@ -455,7 +458,7 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
                         input_digit_4.setText("");
                         input_digit_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     } else {
-                        input_digit_4.setText(digit);
+                        input_digit_4.setText(persianEnglishDigit.E2P(digit));
                         input_digit_4.setBackgroundColor(Color.TRANSPARENT);
                     }
                     vibrator.vibrate(20);
@@ -465,7 +468,7 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
                         input_digit_5.setText("");
                         input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     } else {
-                        input_digit_5.setText(digit);
+                        input_digit_5.setText(persianEnglishDigit.E2P(digit));
                         input_digit_5.setBackgroundColor(Color.TRANSPARENT);
                     }
                     vibrator.vibrate(20);
@@ -475,7 +478,7 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
                         input_digit_5.setText("");
                         input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     } else {
-                        input_digit_5.setText(digit);
+                        input_digit_5.setText(persianEnglishDigit.E2P(digit));
                         input_digit_5.setBackgroundColor(Color.TRANSPARENT);
                     }
                     vibrator.vibrate(20);
@@ -527,16 +530,13 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
         public void onTaskComplete(ResponseMessage<RegistrationSendSmsTokenResponse> registrationSendSmsTokenResponse)
         {
 
-
-//            loading_rl.setVisibility(View.GONE);
-
             hamPayDialog.dismisWaitingDialog();
 
             if (registrationSendSmsTokenResponse != null) {
                 if (registrationSendSmsTokenResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
-                    editor.putString(Constants.REGISTERED_ACTIVITY_DATA, VerificationActivity.class.toString());
-                    editor.commit();
+//                    editor.putString(Constants.REGISTERED_ACTIVITY_DATA, VerificationActivity.class.toString());
+//                    editor.commit();
 
 
                     numberProgressBar.setProgress(0);
@@ -588,8 +588,7 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
 
         @Override
         public void onTaskPreRun() {
-//            loading_rl.setVisibility(View.VISIBLE);
-            hamPayDialog.showWaitingdDialog("");
+//            hamPayDialog.showWaitingdDialog("");
         }
     }
 

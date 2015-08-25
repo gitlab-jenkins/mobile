@@ -33,7 +33,7 @@
             android:textSize="15dp"
             android:text="@string/user_profile"
             android:layout_centerVertical="true"
-            android:layout_marginRight="20dp"/>
+            android:layout_marginLeft="20dp"/>
 
 
     </RelativeLayout>
@@ -107,7 +107,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/black"
                         android:textSize="15dp"
-                        android:gravity="center"
+                        android:gravity="right"
                         android:layout_gravity="right"
                         android:text="@string/user_info_for_hampy" />
 
@@ -127,9 +127,10 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/normal_text"
                         android:textSize="15dp"
-                        android:gravity="center"
+                        android:gravity="right"
                         android:layout_gravity="right"
-                        android:text="@string/phone_number" />
+                        android:text="@string/phone_number"
+                        android:layout_marginRight="8dp"/>
 
                 </LinearLayout>
 
@@ -145,9 +146,10 @@
                         android:layout_height="wrap_content"
                         android:textColor="@color/normal_text"
                         android:textSize="15dp"
-                        android:gravity="center"
+                        android:gravity="right"
                         android:layout_gravity="right"
-                        android:text="@string/credit_info" />
+                        android:text="@string/credit_info"
+                        android:layout_marginRight="8dp"/>
 
                 </LinearLayout>
 

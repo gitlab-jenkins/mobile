@@ -136,8 +136,6 @@ public class PasswordEntryActivity extends Activity implements View.OnClickListe
         public void onTaskComplete(ResponseMessage<RegistrationPassCodeEntryResponse> passCodeEntryResponseMessage)
         {
 
-//            loading_rl.setVisibility(View.GONE);
-
             hamPayDialog.dismisWaitingDialog();
 
             if (passCodeEntryResponseMessage != null) {
@@ -177,7 +175,6 @@ public class PasswordEntryActivity extends Activity implements View.OnClickListe
 
         @Override
         public void onTaskPreRun() {
-//            loading_rl.setVisibility(View.VISIBLE);
             hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
@@ -399,7 +396,6 @@ public class PasswordEntryActivity extends Activity implements View.OnClickListe
                         vibrator.vibrate(20);
 
                         if (inputPasswordValue.equalsIgnoreCase(inputRePasswordValue)) {
-
 
                             registrationPassCodeEntryRequest = new RegistrationPassCodeEntryRequest();
                             registrationPassCodeEntryRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
