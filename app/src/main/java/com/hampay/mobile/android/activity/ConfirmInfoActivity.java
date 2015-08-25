@@ -636,4 +636,9 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        new HamPayDialog(activity).showExitRegistrationDialog();
+    }
+
 }
