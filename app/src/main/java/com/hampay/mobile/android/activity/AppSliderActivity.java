@@ -258,7 +258,7 @@ public class AppSliderActivity extends ActionBarActivity {
                     public void run() {
 
                         try {
-                            sleep(3 * 1000);
+                            sleep(2 * 1000);
 
                             intent.setClass(AppSliderActivity.this, HamPayLoginActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

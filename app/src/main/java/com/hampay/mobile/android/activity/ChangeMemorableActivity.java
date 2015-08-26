@@ -25,6 +25,8 @@ public class ChangeMemorableActivity extends ActionBarActivity {
     FacedTextView memorable_text;
     FacedTextView keepOn_text;
 
+
+
     public void contactUs(View view){
         (new HamPayDialog(this)).showContactUsDialog();
     }

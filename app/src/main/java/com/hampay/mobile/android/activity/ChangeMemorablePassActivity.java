@@ -33,6 +33,8 @@ import com.hampay.mobile.android.webservice.WebServices;
 public class ChangeMemorablePassActivity extends ActionBarActivity implements View.OnClickListener{
 
 
+    HamPayDialog hamPayDialog;
+
     String currentMemorable = "";
     String newMemorable = "";
 
@@ -87,6 +89,8 @@ public class ChangeMemorablePassActivity extends ActionBarActivity implements Vi
 
         context = this;
         activity = ChangeMemorablePassActivity.this;
+
+        hamPayDialog = new HamPayDialog(activity);
 
         keyboard = (LinearLayout)findViewById(R.id.keyboard);
         password_holder = (LinearLayout)findViewById(R.id.password_holder);
@@ -327,17 +331,20 @@ public class ChangeMemorablePassActivity extends ActionBarActivity implements Vi
         public void onTaskComplete(ResponseMessage<ChangeMemorableWordResponse> changeMemorableWordResponseMessage)
         {
 
+            hamPayDialog.dismisWaitingDialog();
+
             if (changeMemorableWordResponseMessage != null) {
                 if (changeMemorableWordResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     editor.putString(Constants.MEMORABLE_WORD, newMemorable);
                     editor.commit();
                     new HamPayDialog(activity).showSuccessChangeSettingDialog(changeMemorableWordResponseMessage.getService().getResultStatus().getDescription());
                 }
-                requestChangeMemorableWord = new RequestChangeMemorableWord(context, new RequestChangeMemorableWordTaskCompleteListener());
-                new HamPayDialog(activity).showFailChangeMemorableWordDialog(requestChangeMemorableWord, changeMemorableWordRequest,
-                        changeMemorableWordResponseMessage.getService().getResultStatus().getCode(),
-                        changeMemorableWordResponseMessage.getService().getResultStatus().getDescription());
-
+                else {
+                    requestChangeMemorableWord = new RequestChangeMemorableWord(context, new RequestChangeMemorableWordTaskCompleteListener());
+                    new HamPayDialog(activity).showFailChangeMemorableWordDialog(requestChangeMemorableWord, changeMemorableWordRequest,
+                            changeMemorableWordResponseMessage.getService().getResultStatus().getCode(),
+                            changeMemorableWordResponseMessage.getService().getResultStatus().getDescription());
+                }
             }else {
                 requestChangeMemorableWord = new RequestChangeMemorableWord(context, new RequestChangeMemorableWordTaskCompleteListener());
                 new HamPayDialog(activity).showFailChangeMemorableWordDialog(requestChangeMemorableWord, changeMemorableWordRequest,
@@ -348,6 +355,7 @@ public class ChangeMemorablePassActivity extends ActionBarActivity implements Vi
 
         @Override
         public void onTaskPreRun() {
+            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 

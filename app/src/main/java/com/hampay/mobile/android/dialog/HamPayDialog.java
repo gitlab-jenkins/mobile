@@ -57,6 +57,7 @@ import com.hampay.common.core.model.response.dto.UserProfileDTO;
 import com.hampay.mobile.android.Helper.DatabaseHelper;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.activity.AppSliderActivity;
+import com.hampay.mobile.android.activity.ChangeMemorableActivity;
 import com.hampay.mobile.android.activity.GuideDetailActivity;
 import com.hampay.mobile.android.activity.HamPayLoginActivity;
 import com.hampay.mobile.android.activity.MainActivity;
@@ -182,7 +183,8 @@ public class HamPayDialog {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(view);
         dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
         dialog.show();
     }
 
@@ -1959,7 +1961,8 @@ public class HamPayDialog {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(view);
         dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
         dialog.show();
     }
 
@@ -1988,13 +1991,15 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                requestChangePassCode.execute(changePassCodeRequest);
+//                activity.finish();
+//                requestChangePassCode.execute(changePassCodeRequest);
             }
         });
         cancel_request.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                activity.finish();
             }
         });
 
@@ -2004,7 +2009,8 @@ public class HamPayDialog {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(view);
         dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
         dialog.show();
     }
 
@@ -2034,13 +2040,20 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                requestChangeMemorableWord.execute(changeMemorableWordRequest);
+
+                Intent intent = new Intent();
+                intent.setClass(activity, ChangeMemorableActivity.class);
+                activity.startActivity(intent);
+                activity.finish();
+
+//                requestChangeMemorableWord.execute(changeMemorableWordRequest);
             }
         });
         cancel_request.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                activity.finish();
             }
         });
 
@@ -2050,7 +2063,8 @@ public class HamPayDialog {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(view);
         dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
         dialog.show();
     }
 

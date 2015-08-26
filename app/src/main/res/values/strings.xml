@@ -114,7 +114,7 @@
     <string name="communicate_confirm">باشه</string>
     <string name="communicate_disconfirm">منصرف شدم</string>
 
-    <string name="dismatch_password">تغییر رمزعبور با مشکل مواجه شد. لطفا مجدد تلاش کنید</string>
+    <string name="dismatch_password">رمزعبور وارد شده تطابقی با هم ندارند.</string>
     <string name="retry_password">باشه</string>
 
     <string name="tac_title">شرایط استفاده سرویس</string>
@@ -247,6 +247,9 @@
         <item>تغییر رمز عبور</item>
         <item>تغییر کلمه یادآوری</item>
     </string-array>
+
+    <string name="change_password">تغییر رمز عبور</string>
+    <string name="change_memorable">تغییر کلمه یادآوری</string>
 
     <string-array name="guide_list">
         <item>ثبت نام</item>

@@ -27,6 +27,7 @@ import com.hampay.mobile.android.util.Constants;
 
 public class ChangePasswordActivity extends ActionBarActivity implements View.OnClickListener {
 
+    HamPayDialog hamPayDialog;
 
     RippleView digit_1;
     RippleView digit_2;
@@ -76,6 +77,8 @@ public class ChangePasswordActivity extends ActionBarActivity implements View.On
 
         context = this;
         activity = ChangePasswordActivity.this;
+
+        hamPayDialog = new HamPayDialog(activity);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
@@ -435,24 +438,9 @@ public class ChangePasswordActivity extends ActionBarActivity implements View.On
                                 requestChangePassCode.execute(changePassCodeRequest);
                             }
 
-
                         } else {
-
                             (new HamPayDialog(this)).showDisMatchPasswordDialog();
-
-                            password_0_rl.setVisibility(View.VISIBLE);
-                            password_1_rl.setVisibility(View.INVISIBLE);
-                            password_2_rl.setVisibility(View.INVISIBLE);
-
-                            currentPassword = "";
-                            inputPasswordValue = "";
-                            inputRePasswordValue = "";
-
-                            input_digit_1.setImageResource(R.drawable.pass_icon_2);
-                            input_digit_2.setImageResource(R.drawable.pass_icon_2);
-                            input_digit_3.setImageResource(R.drawable.pass_icon_2);
-                            input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                            input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                            resetLayout();
                         }
 
                         break;
@@ -466,6 +454,8 @@ public class ChangePasswordActivity extends ActionBarActivity implements View.On
         @Override
         public void onTaskComplete(ResponseMessage<ChangePassCodeResponse> changePassCodeResponseMessage)
         {
+
+            hamPayDialog.dismisWaitingDialog();
 
             if (changePassCodeResponseMessage != null) {
                 if (changePassCodeResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
@@ -482,14 +472,15 @@ public class ChangePasswordActivity extends ActionBarActivity implements View.On
                     input_digit_4.setImageResource(R.drawable.pass_icon_2);
                     input_digit_5.setImageResource(R.drawable.pass_icon_2);
                     new HamPayDialog(activity).showSuccessChangeSettingDialog(changePassCodeResponseMessage.getService().getResultStatus().getDescription());
+                }else {
+                    resetLayout();
+                    requestChangePassCode = new RequestChangePassCode(context, new RequestChangePassCodeTaskCompleteListener());
+                    new HamPayDialog(activity).showFailChangePassCodeDialog(requestChangePassCode, changePassCodeRequest,
+                            changePassCodeResponseMessage.getService().getResultStatus().getCode(),
+                            changePassCodeResponseMessage.getService().getResultStatus().getDescription());
                 }
-
-                requestChangePassCode = new RequestChangePassCode(context, new RequestChangePassCodeTaskCompleteListener());
-                new HamPayDialog(activity).showFailChangePassCodeDialog(requestChangePassCode, changePassCodeRequest,
-                        changePassCodeResponseMessage.getService().getResultStatus().getCode(),
-                        changePassCodeResponseMessage.getService().getResultStatus().getDescription());
-
             }else {
+                resetLayout();
                 requestChangePassCode = new RequestChangePassCode(context, new RequestChangePassCodeTaskCompleteListener());
                 new HamPayDialog(activity).showFailChangePassCodeDialog(requestChangePassCode, changePassCodeRequest,
                         "2000",
@@ -499,6 +490,24 @@ public class ChangePasswordActivity extends ActionBarActivity implements View.On
 
         @Override
         public void onTaskPreRun() {
+            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
+    }
+
+
+    private void resetLayout(){
+        password_0_rl.setVisibility(View.VISIBLE);
+        password_1_rl.setVisibility(View.INVISIBLE);
+        password_2_rl.setVisibility(View.INVISIBLE);
+
+        currentPassword = "";
+        inputPasswordValue = "";
+        inputRePasswordValue = "";
+
+        input_digit_1.setImageResource(R.drawable.pass_icon_2);
+        input_digit_2.setImageResource(R.drawable.pass_icon_2);
+        input_digit_3.setImageResource(R.drawable.pass_icon_2);
+        input_digit_4.setImageResource(R.drawable.pass_icon_2);
+        input_digit_5.setImageResource(R.drawable.pass_icon_2);
     }
 }
