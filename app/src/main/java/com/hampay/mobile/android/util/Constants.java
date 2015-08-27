@@ -50,5 +50,6 @@ public class Constants {
     public static final String RECEIVED_SMS_ACTIVATION = "received_sms_activation";
     public static final String MAX_XFER_Amount = "MaxXferAmount";
     public static final String MIN_XFER_Amount = "MinXferAmount";
+    public static final String USER_ENTRY_PASSWORD = "userEntryPassword";
 
 }

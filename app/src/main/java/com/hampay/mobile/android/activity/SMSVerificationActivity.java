@@ -13,6 +13,7 @@ import android.os.Vibrator;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.Transformation;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -24,6 +25,8 @@ import com.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
 import com.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
 import com.hampay.common.core.model.response.RegistrationVerifyMobileResponse;
 import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.animation.Collapse;
+import com.hampay.mobile.android.animation.Expand;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestRegistrationSendSmsToken;
 import com.hampay.mobile.android.async.RequestVerifyMobile;
@@ -75,7 +78,7 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
 
     SharedPreferences.Editor editor;
 
-//    RelativeLayout loading_rl;
+    //    RelativeLayout loading_rl;
     HamPayDialog hamPayDialog;
 
     SharedPreferences prefs;
@@ -184,18 +187,21 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
                         Toast.makeText(context, getString(R.string.sms_upper_reach_sms), Toast.LENGTH_LONG).show();
                     }
 
-                    keyboard.setVisibility(LinearLayout.VISIBLE);
-                    Animation animation = AnimationUtils.loadAnimation(context, R.anim.keyboard);
-                    animation.setDuration(400);
-                    keyboard.setAnimation(animation);
-                    keyboard.animate();
-                    animation.start();
-                    keyboard.setVisibility(View.VISIBLE);
+                    if (keyboard.getVisibility() != View.VISIBLE)
+                        new Expand(keyboard).animate();
+
+//                    keyboard.setVisibility(LinearLayout.VISIBLE);
+//                    Animation animation = AnimationUtils.loadAnimation(context, R.anim.keyboard);
+//                    animation.setDuration(400);
+//                    keyboard.setAnimation(animation);
+//                    keyboard.animate();
+//                    animation.start();
+//                    keyboard.setVisibility(View.VISIBLE);
                 }
             }
         }.start();
 
-//        loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
+
 
         activity = SMSVerificationActivity.this;
 
@@ -314,7 +320,7 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
 
         @Override
         public void onTaskPreRun() {
-            keyboard.setVisibility(View.GONE);
+//            keyboard.setVisibility(View.GONE);
 //            loading_rl.setVisibility(View.VISIBLE);
             hamPayDialog.showWaitingdDialog("");
         }
@@ -325,13 +331,15 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
         switch (v.getId()){
 
             case R.id.activation_holder:
-                keyboard.setVisibility(LinearLayout.VISIBLE);
-                Animation animation   =    AnimationUtils.loadAnimation(this, R.anim.keyboard);
-                animation.setDuration(400);
-                keyboard.setAnimation(animation);
-                keyboard.animate();
-                animation.start();
-                keyboard.setVisibility(View.VISIBLE);
+//                keyboard.setVisibility(LinearLayout.VISIBLE);
+//                Animation animation   =    AnimationUtils.loadAnimation(this, R.anim.keyboard);
+//                animation.setDuration(400);
+//                keyboard.setAnimation(animation);
+//                keyboard.animate();
+//                animation.start();
+//                keyboard.setVisibility(View.VISIBLE);
+                if (keyboard.getVisibility() != View.VISIBLE)
+                    new Expand(keyboard).animate();
                 break;
 
             case R.id.digit_1:
@@ -521,7 +529,13 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
 
     @Override
     public void onBackPressed() {
-        new HamPayDialog(activity).showExitRegistrationDialog();
+
+        if (keyboard.getVisibility() == View.VISIBLE){
+            new Collapse(keyboard).animate();
+        }
+        else {
+            new HamPayDialog(activity).showExitRegistrationDialog();
+        }
     }
 
 
@@ -559,13 +573,17 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
                                 Toast.makeText(context, getString(R.string.sms_upper_reach_sms), Toast.LENGTH_LONG).show();
                             }
 
-                            keyboard.setVisibility(LinearLayout.VISIBLE);
-                            Animation animation   =    AnimationUtils.loadAnimation(context, R.anim.keyboard);
-                            animation.setDuration(400);
-                            keyboard.setAnimation(animation);
-                            keyboard.animate();
-                            animation.start();
-                            keyboard.setVisibility(View.VISIBLE);
+//                            keyboard.setVisibility(LinearLayout.VISIBLE);
+//                            Animation animation   =    AnimationUtils.loadAnimation(context, R.anim.keyboard);
+//                            animation.setDuration(400);
+//                            keyboard.setAnimation(animation);
+//                            keyboard.animate();
+//                            animation.start();
+//                            keyboard.setVisibility(View.VISIBLE);
+
+                            if (keyboard.getVisibility() != View.VISIBLE)
+                                new Expand(keyboard).animate();
+
                         }
                     }.start();
                 }else if (registrationSendSmsTokenResponse.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
@@ -587,10 +605,7 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
         }
 
         @Override
-        public void onTaskPreRun() {
-//            hamPayDialog.showWaitingdDialog("");
-        }
+        public void onTaskPreRun() {   }
     }
-
 
 }

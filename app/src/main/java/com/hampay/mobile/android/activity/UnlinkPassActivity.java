@@ -4,41 +4,31 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
-import com.hampay.common.core.model.request.ChangeMemorableWordRequest;
-import com.hampay.common.core.model.request.ChangePassCodeRequest;
-import com.hampay.common.core.model.response.ChangeMemorableWordResponse;
-import com.hampay.common.core.model.response.ChangePassCodeResponse;
+import com.hampay.common.core.model.request.UnlinkUserRequest;
+import com.hampay.common.core.model.response.UnlinkUserResponse;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.animation.Collapse;
 import com.hampay.mobile.android.animation.Expand;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import com.hampay.mobile.android.async.RequestChangeMemorableWord;
-import com.hampay.mobile.android.async.RequestChangePassCode;
+import com.hampay.mobile.android.async.RequestUnlinkUser;
 import com.hampay.mobile.android.component.material.RippleView;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
-import com.hampay.mobile.android.webservice.WebServices;
 
-public class ChangeMemorablePassActivity extends ActionBarActivity implements View.OnClickListener{
+public class UnlinkPassActivity extends ActionBarActivity implements View.OnClickListener{
 
 
     HamPayDialog hamPayDialog;
-
-    String currentMemorable = "";
-    String newMemorable = "";
 
     RippleView digit_1;
     RippleView digit_2;
@@ -64,13 +54,11 @@ public class ChangeMemorablePassActivity extends ActionBarActivity implements Vi
 
     RelativeLayout password_0_rl;
 
-    Bundle bundle;
-
     LinearLayout keyboard;
     LinearLayout password_holder;
 
-    RequestChangeMemorableWord requestChangeMemorableWord;
-    ChangeMemorableWordRequest changeMemorableWordRequest;
+    RequestUnlinkUser requestUnlinkUser;
+    UnlinkUserRequest unlinkUserRequest;
 
     Context context;
     Activity activity;
@@ -78,33 +66,29 @@ public class ChangeMemorablePassActivity extends ActionBarActivity implements Vi
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
+
     public void contactUs(View view){
-        new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/changeMemorableWord.html");
+        new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/user-unlink.html");
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_change_memorable_pass);
+        setContentView(R.layout.activity_unlink_user_pass);
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
 
 
         context = this;
-        activity = ChangeMemorablePassActivity.this;
+        activity = UnlinkPassActivity.this;
 
         hamPayDialog = new HamPayDialog(activity);
 
         keyboard = (LinearLayout)findViewById(R.id.keyboard);
         password_holder = (LinearLayout)findViewById(R.id.password_holder);
         password_holder.setOnClickListener(this);
-
-        bundle = getIntent().getExtras();
-
-        currentMemorable = bundle.getString("currentMemorable");
-        newMemorable = bundle.getString("newMemorable");
-
 
         password_0_rl = (RelativeLayout)findViewById(R.id.password_0_rl);
 
@@ -283,17 +267,11 @@ public class ChangeMemorablePassActivity extends ActionBarActivity implements Vi
                     }else {
                         editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                         editor.commit();
-
-                        if (prefs.getString(Constants.MEMORABLE_WORD, "").compareTo(currentMemorable) == 0){
-                            changeMemorableWordRequest = new ChangeMemorableWordRequest();
-                            changeMemorableWordRequest.setPassCode(inputPasswordValue);
-                            changeMemorableWordRequest.setCurrentMemorableWord(currentMemorable);
-                            changeMemorableWordRequest.setNewMemorableWord(newMemorable);
-                            requestChangeMemorableWord = new RequestChangeMemorableWord(context, new RequestChangeMemorableWordTaskCompleteListener());
-                            requestChangeMemorableWord.execute(changeMemorableWordRequest);
-                        }else {
-                            new HamPayDialog(activity).showDisMatchMemorableDialog();
-                        }
+                        unlinkUserRequest = new UnlinkUserRequest();
+                        unlinkUserRequest.setPassCode(inputPasswordValue);
+                        unlinkUserRequest.setMemorableWord(prefs.getString(Constants.MEMORABLE_WORD, ""));
+                        requestUnlinkUser = new RequestUnlinkUser(context, new RequestUnlinkUserTaskCompleteListener());
+                        requestUnlinkUser.execute(unlinkUserRequest);
                     }
 
 
@@ -303,30 +281,33 @@ public class ChangeMemorablePassActivity extends ActionBarActivity implements Vi
     }
 
 
-    public class RequestChangeMemorableWordTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<ChangeMemorableWordResponse>> {
+    public class RequestUnlinkUserTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<UnlinkUserResponse>> {
         @Override
-        public void onTaskComplete(ResponseMessage<ChangeMemorableWordResponse> changeMemorableWordResponseMessage)
+        public void onTaskComplete(ResponseMessage<UnlinkUserResponse> unlinkUserResponseResponseMessage)
         {
 
             hamPayDialog.dismisWaitingDialog();
 
-            if (changeMemorableWordResponseMessage != null) {
-                if (changeMemorableWordResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    editor.putString(Constants.MEMORABLE_WORD, newMemorable);
-                    editor.commit();
-                    new HamPayDialog(activity).showSuccessChangeSettingDialog(changeMemorableWordResponseMessage.getService().getResultStatus().getDescription());
+            if (unlinkUserResponseResponseMessage != null) {
+                if (unlinkUserResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+//                    editor.clear().commit();
+//                    editor.commit();
+                    Intent intent = new Intent(activity, AppSliderActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    finish();
+                    startActivity(intent);
                 }
                 else {
-                    requestChangeMemorableWord = new RequestChangeMemorableWord(context, new RequestChangeMemorableWordTaskCompleteListener());
-                    new HamPayDialog(activity).showFailChangeMemorableWordDialog(requestChangeMemorableWord, changeMemorableWordRequest,
-                            changeMemorableWordResponseMessage.getService().getResultStatus().getCode(),
-                            changeMemorableWordResponseMessage.getService().getResultStatus().getDescription());
+                    requestUnlinkUser = new RequestUnlinkUser(context, new RequestUnlinkUserTaskCompleteListener());
+                    new HamPayDialog(activity).showFailUnlinkDialog(requestUnlinkUser, unlinkUserRequest,
+                            unlinkUserResponseResponseMessage.getService().getResultStatus().getCode(),
+                            unlinkUserResponseResponseMessage.getService().getResultStatus().getDescription());
                 }
             }else {
-                requestChangeMemorableWord = new RequestChangeMemorableWord(context, new RequestChangeMemorableWordTaskCompleteListener());
-                new HamPayDialog(activity).showFailChangeMemorableWordDialog(requestChangeMemorableWord, changeMemorableWordRequest,
+                requestUnlinkUser = new RequestUnlinkUser(context, new RequestUnlinkUserTaskCompleteListener());
+                new HamPayDialog(activity).showFailUnlinkDialog(requestUnlinkUser, unlinkUserRequest,
                         "2000",
-                        getString(R.string.msg_fail_change_memorable_word));
+                        getString(R.string.msg_fail_unlink_user));
             }
         }
 

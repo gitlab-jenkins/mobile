@@ -28,7 +28,7 @@ public class ChangeMemorableActivity extends ActionBarActivity {
 
 
     public void contactUs(View view){
-        (new HamPayDialog(this)).showContactUsDialog();
+        new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/changeMemorableWord.html");
     }
 
     @Override

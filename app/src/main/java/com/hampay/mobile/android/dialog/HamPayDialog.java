@@ -33,9 +33,9 @@ import com.hampay.common.core.model.request.ContactUsRequest;
 import com.hampay.common.core.model.request.ContactsHampayEnabledRequest;
 import com.hampay.common.core.model.request.IndividualPaymentRequest;
 import com.hampay.common.core.model.request.RegistrationConfirmUserDataRequest;
+import com.hampay.common.core.model.request.RegistrationCredentialsRequest;
 import com.hampay.common.core.model.request.RegistrationEntryRequest;
 import com.hampay.common.core.model.request.RegistrationFetchUserDataRequest;
-import com.hampay.common.core.model.request.RegistrationMemorableWordEntryRequest;
 import com.hampay.common.core.model.request.RegistrationPassCodeEntryRequest;
 import com.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
 import com.hampay.common.core.model.request.RegistrationVerifyAccountRequest;
@@ -44,6 +44,7 @@ import com.hampay.common.core.model.request.RegistrationVerifyTransferMoneyReque
 import com.hampay.common.core.model.request.TACAcceptRequest;
 import com.hampay.common.core.model.request.TACRequest;
 import com.hampay.common.core.model.request.TransactionListRequest;
+import com.hampay.common.core.model.request.UnlinkUserRequest;
 import com.hampay.common.core.model.request.UserProfileRequest;
 import com.hampay.common.core.model.request.VerifyAccountRequest;
 import com.hampay.common.core.model.request.VerifyTransferMoneyRequest;
@@ -62,6 +63,7 @@ import com.hampay.mobile.android.activity.GuideDetailActivity;
 import com.hampay.mobile.android.activity.HamPayLoginActivity;
 import com.hampay.mobile.android.activity.MainActivity;
 import com.hampay.mobile.android.activity.StartActivity;
+import com.hampay.mobile.android.activity.UnlinkPassActivity;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestBankList;
 import com.hampay.mobile.android.async.RequestBusinessPayment;
@@ -69,11 +71,11 @@ import com.hampay.mobile.android.async.RequestChangeMemorableWord;
 import com.hampay.mobile.android.async.RequestChangePassCode;
 import com.hampay.mobile.android.async.RequestConfirmUserData;
 import com.hampay.mobile.android.async.RequestContactHampayEnabled;
+import com.hampay.mobile.android.async.RequestCredentialEntry;
 import com.hampay.mobile.android.async.RequestFetchUserData;
 import com.hampay.mobile.android.async.RequestHamPayBusiness;
 import com.hampay.mobile.android.async.RequestIndividualPayment;
 import com.hampay.mobile.android.async.RequestLogout;
-import com.hampay.mobile.android.async.RequestMemorableWordEntry;
 import com.hampay.mobile.android.async.RequestPassCodeEntry;
 import com.hampay.mobile.android.async.RequestRegisterVerifyAccount;
 import com.hampay.mobile.android.async.RequestRegistrationEntry;
@@ -82,6 +84,7 @@ import com.hampay.mobile.android.async.RequestRegistrationVerifyTransferMoney;
 import com.hampay.mobile.android.async.RequestSearchHamPayBusiness;
 import com.hampay.mobile.android.async.RequestTAC;
 import com.hampay.mobile.android.async.RequestTACAccept;
+import com.hampay.mobile.android.async.RequestUnlinkUser;
 import com.hampay.mobile.android.async.RequestUserProfile;
 import com.hampay.mobile.android.async.RequestUserTransaction;
 import com.hampay.mobile.android.async.RequestVerifyAccount;
@@ -174,6 +177,36 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.show();
+    }
+
+    public void showDisMatchMemorableDialog(){
+
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_dismatch_memorable, null);
+
+        FacedTextView retry_memorable = (FacedTextView) view.findViewById(R.id.retry_memorable);
+
+        retry_memorable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                activity.finish();
             }
         });
 
@@ -1797,8 +1830,8 @@ public class HamPayDialog {
     }
 
 
-    public void showFailMemorableEntryDialog(final RequestMemorableWordEntry requestMemorableWordEntry,
-                                             final RegistrationMemorableWordEntryRequest registrationMemorableWordEntryRequest,
+    public void showFailMemorableEntryDialog(final RequestCredentialEntry requestMemorableWordEntry,
+                                             final RegistrationCredentialsRequest registrationMemorableWordEntryRequest,
                                              final String code,
                                              final String message){
         Rect displayRectangle = new Rect();
@@ -2045,8 +2078,6 @@ public class HamPayDialog {
                 intent.setClass(activity, ChangeMemorableActivity.class);
                 activity.startActivity(intent);
                 activity.finish();
-
-//                requestChangeMemorableWord.execute(changeMemorableWordRequest);
             }
         });
         cancel_request.setOnClickListener(new View.OnClickListener() {
@@ -2363,5 +2394,89 @@ public class HamPayDialog {
         dialog.show();
     }
 
+
+    public void showUnlinkDialog(){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_unlink, null);
+
+        FacedTextView unlink_confirm = (FacedTextView) view.findViewById(R.id.unlink_confirm);
+        FacedTextView unlink_disconfirm = (FacedTextView) view.findViewById(R.id.unlink_disconfirm);
+
+        unlink_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent intent = new Intent();
+                intent.setClass(activity, UnlinkPassActivity.class);
+                activity.startActivity(intent);
+            }
+        });
+
+        unlink_disconfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
+    public void showFailUnlinkDialog(final RequestUnlinkUser requestUnlinkUser,
+                                     final UnlinkUserRequest unlinkUserRequest,
+                                     final String code,
+                                     final String message){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_unlink_user, null);
+
+        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+
+        responseCode.setText(activity.getString(R.string.error_code, code));
+        responseMessage.setText(message);
+
+        FacedTextView retry_unlink_user = (FacedTextView) view.findViewById(R.id.retry_unlink_user);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
+        retry_unlink_user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                requestUnlinkUser.execute(unlinkUserRequest);
+            }
+        });
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                activity.finish();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.show();
+    }
 
 }

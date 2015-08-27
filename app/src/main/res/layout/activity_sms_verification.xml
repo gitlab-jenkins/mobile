@@ -394,9 +394,9 @@
     <LinearLayout
         android:id="@+id/keyboard"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_alignParentBottom="true"
-        android:visibility="invisible">
+        android:visibility="gone">
 
     <include
         android:layout_width="fill_parent"

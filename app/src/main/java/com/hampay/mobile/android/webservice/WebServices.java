@@ -29,6 +29,7 @@ import com.hampay.common.core.model.request.ContactsHampayEnabledRequest;
 import com.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
 import com.hampay.common.core.model.request.IndividualPaymentRequest;
 import com.hampay.common.core.model.request.RegistrationConfirmUserDataRequest;
+import com.hampay.common.core.model.request.RegistrationCredentialsRequest;
 import com.hampay.common.core.model.request.RegistrationEntryRequest;
 import com.hampay.common.core.model.request.RegistrationFetchUserDataRequest;
 import com.hampay.common.core.model.request.RegistrationMemorableWordEntryRequest;
@@ -40,6 +41,7 @@ import com.hampay.common.core.model.request.RegistrationVerifyTransferMoneyReque
 import com.hampay.common.core.model.request.TACAcceptRequest;
 import com.hampay.common.core.model.request.TACRequest;
 import com.hampay.common.core.model.request.TransactionListRequest;
+import com.hampay.common.core.model.request.UnlinkUserRequest;
 import com.hampay.common.core.model.request.UserProfileRequest;
 import com.hampay.common.core.model.request.VerifyAccountRequest;
 import com.hampay.common.core.model.request.VerifyTransferMoneyRequest;
@@ -54,6 +56,7 @@ import com.hampay.common.core.model.response.ContactsHampayEnabledResponse;
 import com.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
 import com.hampay.common.core.model.response.IndividualPaymentResponse;
 import com.hampay.common.core.model.response.RegistrationConfirmUserDataResponse;
+import com.hampay.common.core.model.response.RegistrationCredentialsResponse;
 import com.hampay.common.core.model.response.RegistrationEntryResponse;
 import com.hampay.common.core.model.response.RegistrationFetchUserDataResponse;
 import com.hampay.common.core.model.response.RegistrationMemorableWordEntryResponse;
@@ -65,6 +68,7 @@ import com.hampay.common.core.model.response.RegistrationVerifyTransferMoneyResp
 import com.hampay.common.core.model.response.TACAcceptResponse;
 import com.hampay.common.core.model.response.TACResponse;
 import com.hampay.common.core.model.response.TransactionListResponse;
+import com.hampay.common.core.model.response.UnlinkUserResponse;
 import com.hampay.common.core.model.response.UserProfileResponse;
 import com.hampay.common.core.model.response.VerifyAccountResponse;
 import com.hampay.common.core.model.response.VerifyTransferMoneyResponse;
@@ -602,6 +606,50 @@ public class WebServices  {
 
             Gson gson = new Gson();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegistrationMemorableWordEntryResponse>>() {}.getType());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (connection != null)
+                connection.disconnect();
+        }
+        return responseMessage;
+    }
+
+    public ResponseMessage<RegistrationCredentialsResponse> newRegistrationCredentialsResponse(RegistrationCredentialsRequest registrationCredentialsRequest){
+
+        ResponseMessage<RegistrationCredentialsResponse> responseMessage = null;
+        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/reg-credential-entry");
+        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+
+        try {
+
+            RequestHeader header = new RequestHeader();
+            header.setAuthToken("008ewe");
+            header.setVersion("1.0-PA");
+
+            RequestMessage<RegistrationCredentialsRequest> message = new RequestMessage<RegistrationCredentialsRequest>();
+            message.setRequestHeader(header);
+            RegistrationCredentialsRequest request = registrationCredentialsRequest;
+            request.setRequestUUID("1234");
+            message.setService(request);
+
+            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationCredentialsRequest>>() {}.getType();
+            String jsonRequest = new Gson().toJson(message, requestType);
+
+            connection.setConnectTimeout(30000);
+            connection.setReadTimeout(30000);
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            OutputStream outputStream = connection.getOutputStream();
+            outputStream.write(jsonRequest.getBytes());
+            outputStream.flush();
+
+            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+
+            Gson gson = new Gson();
+            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegistrationCredentialsResponse>>() {}.getType());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -1538,7 +1586,53 @@ public class WebServices  {
 
 
 
+    public ResponseMessage<UnlinkUserResponse> unlinkUserResponse(UnlinkUserRequest unlinkUserRequest) {
 
+        ResponseMessage<UnlinkUserResponse> responseMessage = null;
+
+        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/unlink");
+        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+
+        try {
+
+            RequestHeader header = new RequestHeader();
+            header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+
+            header.setVersion("1.0-PA");
+
+            RequestMessage<UnlinkUserRequest> message = new RequestMessage<UnlinkUserRequest>();
+            message.setRequestHeader(header);
+            UnlinkUserRequest request = unlinkUserRequest;
+            request.setRequestUUID("1234");
+            message.setService(request);
+
+            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<UnlinkUserRequest>>() {}.getType();
+            String jsonRequest = new Gson().toJson(message, requestType);
+
+            connection.setDoOutput(true);
+            connection.setRequestMethod("PUT");
+            connection.setRequestProperty("Content-Type", "application/json");
+            OutputStream outputStream = connection.getOutputStream();
+            outputStream.write(jsonRequest.getBytes());
+            outputStream.flush();
+
+            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            Gson gson = new Gson();
+            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<UnlinkUserResponse>>() {}.getType());
+
+            if( responseMessage != null && responseMessage.getService() != null ) { }
+            else { }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null)
+                connection.disconnect();
+        }
+
+        return responseMessage;
+
+    }
 
 
 

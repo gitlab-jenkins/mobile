@@ -10,10 +10,12 @@ import android.widget.RelativeLayout;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
+import com.hampay.common.core.model.request.RegistrationCredentialsRequest;
 import com.hampay.common.core.model.request.RegistrationMemorableWordEntryRequest;
-import com.hampay.common.core.model.response.RegistrationMemorableWordEntryResponse;
+import com.hampay.common.core.model.response.RegistrationCredentialsResponse;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import com.hampay.mobile.android.async.RequestCredentialEntry;
 import com.hampay.mobile.android.async.RequestMemorableWordEntry;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.edittext.MemorableTextWatcher;
@@ -40,8 +42,14 @@ public class MemorableWordEntryActivity extends Activity {
 
     String Uuid = "";
 
-    RequestMemorableWordEntry requestMemorableWordEntry;
-    RegistrationMemorableWordEntryRequest registrationMemorableWordEntryRequest;
+    Bundle bundle;
+
+    String userEntryPassword;
+
+    RequestCredentialEntry requestCredentialEntry;
+    RegistrationCredentialsRequest registrationCredentialsRequest;
+//    RequestMemorableWordEntry requestMemorableWordEntry;
+//    RegistrationMemorableWordEntryRequest registrationMemorableWordEntryRequest;
 
     public void contactUs(View view){
 //        new HamPayDialog(this).showContactUsDialog();
@@ -52,6 +60,10 @@ public class MemorableWordEntryActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memorable_word_entry);
+
+        bundle = getIntent().getExtras();
+
+        userEntryPassword = bundle.getString(Constants.USER_ENTRY_PASSWORD);
 
         activity = MemorableWordEntryActivity.this;
 
@@ -65,23 +77,24 @@ public class MemorableWordEntryActivity extends Activity {
         memorable_value.addTextChangedListener(new MemorableTextWatcher(memorable_value));
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, MemorableWordEntryActivity.class.getName());
+        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, PasswordEntryActivity.class.getName());
         editor.commit();
 
         keepOn_button = (ButtonRectangle) findViewById(R.id.keepOn_button);
         keepOn_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                registrationMemorableWordEntryRequest = new RegistrationMemorableWordEntryRequest();
-                registrationMemorableWordEntryRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
-                registrationMemorableWordEntryRequest.setDeviceId(new DeviceInfo(getApplicationContext()).getAndroidId());
+                registrationCredentialsRequest = new RegistrationCredentialsRequest();
+                registrationCredentialsRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
+                registrationCredentialsRequest.setDeviceId(new DeviceInfo(getApplicationContext()).getAndroidId());
                 Uuid = UUID.randomUUID().toString();
-                registrationMemorableWordEntryRequest.setInstallationToken(Uuid);
+                registrationCredentialsRequest.setInstallationToken(Uuid);
                 editor.putString("UUID", Uuid);
                 editor.commit();
-                registrationMemorableWordEntryRequest.setMemorableWord(memorable_value.getText().toString());
-                requestMemorableWordEntry = new RequestMemorableWordEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
-                requestMemorableWordEntry.execute(registrationMemorableWordEntryRequest);
+                registrationCredentialsRequest.setMemorableKey(memorable_value.getText().toString());
+                registrationCredentialsRequest.setPassCode(userEntryPassword);
+                requestCredentialEntry = new RequestCredentialEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
+                requestCredentialEntry.execute(registrationCredentialsRequest);
 
             }
         });
@@ -90,13 +103,13 @@ public class MemorableWordEntryActivity extends Activity {
 
 
 
-    public class RequestMemorableWordEntryResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationMemorableWordEntryResponse>>
+    public class RequestMemorableWordEntryResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationCredentialsResponse>>
     {
         public RequestMemorableWordEntryResponseTaskCompleteListener(){
         }
 
         @Override
-        public void onTaskComplete(ResponseMessage<RegistrationMemorableWordEntryResponse> registrationMemorableWordEntryResponseMessage) {
+        public void onTaskComplete(ResponseMessage<RegistrationCredentialsResponse> registrationMemorableWordEntryResponseMessage) {
 
             hamPayDialog.dismisWaitingDialog();
 
@@ -120,14 +133,14 @@ public class MemorableWordEntryActivity extends Activity {
                     new HamPayDialog(activity).showInvalidStepDialog();
                 }
                 else {
-                    requestMemorableWordEntry = new RequestMemorableWordEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
-                    new HamPayDialog(activity).showFailMemorableEntryDialog(requestMemorableWordEntry, registrationMemorableWordEntryRequest,
+                    requestCredentialEntry = new RequestCredentialEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
+                    new HamPayDialog(activity).showFailMemorableEntryDialog(requestCredentialEntry, registrationCredentialsRequest,
                             registrationMemorableWordEntryResponseMessage.getService().getResultStatus().getCode(),
                             registrationMemorableWordEntryResponseMessage.getService().getResultStatus().getDescription());
                 }
             }else {
-                requestMemorableWordEntry = new RequestMemorableWordEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
-                new HamPayDialog(activity).showFailMemorableEntryDialog(requestMemorableWordEntry, registrationMemorableWordEntryRequest,
+                requestCredentialEntry = new RequestCredentialEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
+                new HamPayDialog(activity).showFailMemorableEntryDialog(requestCredentialEntry, registrationCredentialsRequest,
                         "2000",
                         getString(R.string.msg_fail_memorable_entry));
             }

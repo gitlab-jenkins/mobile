@@ -18,6 +18,8 @@ import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.RegistrationPassCodeEntryRequest;
 import com.hampay.common.core.model.response.RegistrationPassCodeEntryResponse;
 import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.animation.Collapse;
+import com.hampay.mobile.android.animation.Expand;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestPassCodeEntry;
 import com.hampay.mobile.android.component.material.RippleView;
@@ -188,13 +190,17 @@ public class PasswordEntryActivity extends Activity implements View.OnClickListe
         switch (v.getId()){
 
             case R.id.password_holder:
-                keyboard.setVisibility(LinearLayout.VISIBLE);
-                Animation animation   =    AnimationUtils.loadAnimation(this, R.anim.keyboard);
-                animation.setDuration(400);
-                keyboard.setAnimation(animation);
-                keyboard.animate();
-                animation.start();
-                keyboard.setVisibility(View.VISIBLE);
+//                keyboard.setVisibility(LinearLayout.VISIBLE);
+//                Animation animation   =    AnimationUtils.loadAnimation(this, R.anim.keyboard);
+//                animation.setDuration(400);
+//                keyboard.setAnimation(animation);
+//                keyboard.animate();
+//                animation.start();
+//                keyboard.setVisibility(View.VISIBLE);
+
+                if (keyboard.getVisibility() != View.VISIBLE)
+                    new Expand(keyboard).animate();
+
                 break;
 
             case R.id.digit_1:
@@ -400,12 +406,21 @@ public class PasswordEntryActivity extends Activity implements View.OnClickListe
 
                         if (inputPasswordValue.equalsIgnoreCase(inputRePasswordValue)) {
 
-                            registrationPassCodeEntryRequest = new RegistrationPassCodeEntryRequest();
-                            registrationPassCodeEntryRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
-                            registrationPassCodeEntryRequest.setPassCode(inputPasswordValue);
+//                            registrationPassCodeEntryRequest = new RegistrationPassCodeEntryRequest();
+//                            registrationPassCodeEntryRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
+//                            registrationPassCodeEntryRequest.setPassCode(inputPasswordValue);
+//
+//                            requestPassCodeEntry = new RequestPassCodeEntry(context, new RequestPassCodeEntryResponseTaskCompleteListener());
+//                            requestPassCodeEntry.execute(registrationPassCodeEntryRequest);
 
-                            requestPassCodeEntry = new RequestPassCodeEntry(context, new RequestPassCodeEntryResponseTaskCompleteListener());
-                            requestPassCodeEntry.execute(registrationPassCodeEntryRequest);
+
+                            Intent intent = new Intent();
+                            intent.setClass(PasswordEntryActivity.this, MemorableWordEntryActivity.class);
+                            intent.putExtra(Constants.USER_ENTRY_PASSWORD, inputPasswordValue);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            finish();
+                            startActivity(intent);
+
 
                         } else {
 
@@ -432,6 +447,11 @@ public class PasswordEntryActivity extends Activity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
-        new HamPayDialog(activity).showExitRegistrationDialog();
+        if (keyboard.getVisibility() == View.VISIBLE){
+            new Collapse(keyboard).animate();
+        }
+        else {
+            new HamPayDialog(activity).showExitRegistrationDialog();
+        }
     }
 }

@@ -22,6 +22,8 @@ import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.TACRequest;
 import com.hampay.common.core.model.response.TACResponse;
 import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.animation.Collapse;
+import com.hampay.mobile.android.animation.Expand;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestLogin;
 import com.hampay.mobile.android.async.RequestTAC;
@@ -293,13 +295,17 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
         switch (v.getId()){
 
             case R.id.password_holder:
-                keyboard.setVisibility(LinearLayout.VISIBLE);
-                Animation animation   =    AnimationUtils.loadAnimation(this, R.anim.keyboard);
-                animation.setDuration(400);
-                keyboard.setAnimation(animation);
-                keyboard.animate();
-                animation.start();
-                keyboard.setVisibility(View.VISIBLE);
+//                keyboard.setVisibility(LinearLayout.VISIBLE);
+//                Animation animation   =    AnimationUtils.loadAnimation(this, R.anim.keyboard);
+//                animation.setDuration(400);
+//                keyboard.setAnimation(animation);
+//                keyboard.animate();
+//                animation.start();
+//                keyboard.setVisibility(View.VISIBLE);
+
+                if (keyboard.getVisibility() != View.VISIBLE)
+                    new Expand(keyboard).animate();
+
                 break;
 
             case R.id.digit_1:
@@ -455,6 +461,16 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
 
     }
 
+
+    @Override
+    public void onBackPressed() {
+        if (keyboard.getVisibility() == View.VISIBLE){
+            new Collapse(keyboard).animate();
+        }
+        else {
+            finish();
+        }
+    }
 
     private void sendLoginRequest() {
 

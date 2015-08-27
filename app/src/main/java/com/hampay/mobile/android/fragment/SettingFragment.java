@@ -14,6 +14,7 @@ import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.activity.ChangeMemorableActivity;
 import com.hampay.mobile.android.activity.ChangePasswordActivity;
 import com.hampay.mobile.android.adapter.SettingAdapter;
+import com.hampay.mobile.android.dialog.HamPayDialog;
 
 /**
  * Created by amir on 6/5/15.
@@ -62,6 +63,10 @@ public class SettingFragment extends Fragment {
                         intent = new Intent();
                         intent.setClass(getActivity(), ChangeMemorableActivity.class);
                         startActivity(intent);
+                        break;
+
+                    case 2:
+                        new HamPayDialog(getActivity()).showUnlinkDialog();
                         break;
                 }
             }

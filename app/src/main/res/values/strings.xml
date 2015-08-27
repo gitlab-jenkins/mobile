@@ -117,6 +117,9 @@
     <string name="dismatch_password">رمزعبور وارد شده تطابقی با هم ندارند.</string>
     <string name="retry_password">باشه</string>
 
+    <string name="dismatch_memorable">کلمه یادآوری وارد شده اشتباه می باشد.</string>
+    <string name="retry_memorable">باشه</string>
+
     <string name="tac_title">شرایط استفاده سرویس</string>
     <string name="tac_accept">قبول دارم</string>
     <string name="tac_reject">قبول ندارم</string>
@@ -246,6 +249,7 @@
     <string-array name="setting_list">
         <item>تغییر رمز عبور</item>
         <item>تغییر کلمه یادآوری</item>
+        <item>لغو عضویت</item>
     </string-array>
 
     <string name="change_password">تغییر رمز عبور</string>
@@ -331,6 +335,11 @@
     <string name="invalid_step_confrim">انجام میدم</string>
     <string name="invalid_step_disconfrim">منصرف شدم</string>
 
+    <string name="unlink_text">اطلاعات شما در موبایل پاک خواهد شد و باید مجددا ثبت نام کنید آیا مطمئن هستید؟</string>
+    <string name="unlink_confirm">لغو عضویت</string>
+    <string name="unlink_disconfirm">منصرف شدم</string>
+    <string name="unlink_current_password">لطفا رمز عبور خود را برای لغو عضویت وارد نمایید.</string>
+
 
     <string name="msg_fail_fetch_bank_list">لیست بانک‌ها دریافت نشد.</string>
     <string name="msg_fail_registration_entry">ثبت اطلاعات شخصی شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
@@ -356,6 +365,7 @@
     <string name="sms_upper_reach_sms">حداکثر درخواست برای ارسال مجدد پیامک فعالسازی به اتمام رسید. لطفا در ساعات دیگر تلاش کنید.</string>
     <string name="msg_fail_change_pass_code">تغییر رمز عبور با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_change_memorable_word">تغییر کلمه یادآوری با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
+    <string name="msg_fail_unlink_user">درخواست لغو اشتراک شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_payment_permission">نوع حساب شما %1$s می باشد و برای پرداخت می بایستی به نوع عادی تبدیل شود.
     \n اما شما کماکان میتونید از اعضای عادی هم‌پی پول دریافت کنید.
     </string>
