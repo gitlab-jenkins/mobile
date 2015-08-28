@@ -8,7 +8,6 @@
     android:gravity="center_vertical|right"
     android:padding="8dp">
 
-
     <com.hampay.mobile.android.component.FacedTextView
         android:id="@+id/title"
         geekui:customTypeface="fonts/iran_sans.ttf"
@@ -22,9 +21,5 @@
     <ImageView
         android:id="@+id/icon"
         android:layout_width="22dp"
-        android:layout_height="22dp"
-        />
-
-
-
+        android:layout_height="22dp" />
 </LinearLayout>

@@ -18,15 +18,23 @@
             android:layout_height="60dp"
             android:background="@color/colorPrimary">
 
-            <ImageView
-                android:id="@+id/nav_icon"
+            <com.hampay.mobile.android.component.material.RippleView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/line"
-                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                geekui:rv_centered="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="12dp"
-                android:padding="13dp"/>
+                android:layout_centerVertical="true">
+
+                <ImageView
+                    android:id="@+id/nav_icon"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/line"
+                    android:padding="13dp"/>
+
+            </com.hampay.mobile.android.component.material.RippleView>
 
             <com.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/fragment_title"
@@ -44,21 +52,39 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="25dp">
+                android:layout_centerVertical="true">
+
+                <com.hampay.mobile.android.component.material.RippleView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    geekui:rv_centered="true"
+                    android:layout_marginLeft="15dp">
 
                 <ImageView
                     android:id="@+id/first_shortcut"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:src="@drawable/pay_ic_wit"/>
+                    android:src="@drawable/pay_ic_wit"
+                    android:layout_centerInParent="true"/>
 
-                <ImageView
-                    android:id="@+id/second_shortcut"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:src="@drawable/businnes_ic_wit"
-                    android:layout_marginLeft="25dp"/>
+                </com.hampay.mobile.android.component.material.RippleView>
+
+                <com.hampay.mobile.android.component.material.RippleView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    geekui:rv_centered="true"
+                    android:layout_marginLeft="5dp">
+
+                    <ImageView
+                        android:id="@+id/second_shortcut"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/businnes_ic_wit"
+                        android:layout_centerInParent="true"/>
+
+                </com.hampay.mobile.android.component.material.RippleView>
 
             </LinearLayout>
 

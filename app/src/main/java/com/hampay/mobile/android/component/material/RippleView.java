@@ -29,7 +29,7 @@ public class RippleView extends RelativeLayout {
     private int WIDTH;
     private int HEIGHT;
     private int frameRate = 10;
-    private int rippleDuration = 400;
+    private int rippleDuration = 200;
     private int rippleAlpha = 90;
     private Handler canvasHandler;
     private float radiusMax = 0;
