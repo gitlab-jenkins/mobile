@@ -1610,7 +1610,7 @@ public class WebServices  {
             String jsonRequest = new Gson().toJson(message, requestType);
 
             connection.setDoOutput(true);
-            connection.setRequestMethod("PUT");
+            connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());

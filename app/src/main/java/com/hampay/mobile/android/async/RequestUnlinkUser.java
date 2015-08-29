@@ -47,4 +47,16 @@ public class RequestUnlinkUser extends AsyncTask<UnlinkUserRequest, Void, Respon
         listener.onTaskComplete(changeMemorableWordResponseMessage);
     }
 
+    @Override
+    protected void onCancelled(ResponseMessage<UnlinkUserResponse> unlinkUserResponseResponseMessage) {
+        super.onCancelled(unlinkUserResponseResponseMessage);
+        cancel(true);
+    }
+
+    @Override
+    protected void onCancelled() {
+        super.onCancelled();
+        cancel(true);
+    }
+
 }

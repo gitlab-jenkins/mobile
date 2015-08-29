@@ -124,6 +124,17 @@ public class UnlinkPassActivity extends ActionBarActivity implements View.OnClic
         input_digit_5 = (ImageView)findViewById(R.id.input_digit_5);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+
+        if (requestUnlinkUser != null){
+            if (!requestUnlinkUser.isCancelled())
+                requestUnlinkUser.cancel(true);
+        }
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -290,11 +301,16 @@ public class UnlinkPassActivity extends ActionBarActivity implements View.OnClic
 
             if (unlinkUserResponseResponseMessage != null) {
                 if (unlinkUserResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-//                    editor.clear().commit();
-//                    editor.commit();
-                    Intent intent = new Intent(activity, AppSliderActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    finish();
+                    editor.clear().commit();
+                    editor.commit();
+//                    Intent intent = new Intent(context, AppSliderActivity.class);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    startActivity(intent);
+//                    finish();
+
+                    Intent intent = new Intent();
+                    intent.setClass(getApplicationContext(), AppSliderActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 }
                 else {

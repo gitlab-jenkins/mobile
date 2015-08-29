@@ -1984,7 +1984,13 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                activity.finish();
+//                activity.finish();
+
+                Intent intent = new Intent();
+                intent.setClass(activity, AppSliderActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                activity.startActivity(intent);
+
             }
         });
 
