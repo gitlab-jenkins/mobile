@@ -101,7 +101,7 @@ public class VerifyAccountActivity extends ActionBarActivity {
             else {
                 requestVerifyTransferMoney = new RequestVerifyTransferMoney(context, new RequestVerifyTransferMoneyTaskCompleteListener());
                 new HamPayDialog(activity).showFailVerifyTransferMoneyDialog(requestVerifyTransferMoney, verifyTransferMoneyRequest,
-                        "2000",
+                        Constants.LOCAL_ERROR_CODE,
                         getString(R.string.mgs_fail_verify_transfer_money));
             }
         }

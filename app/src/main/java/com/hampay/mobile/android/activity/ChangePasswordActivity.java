@@ -489,7 +489,7 @@ public class ChangePasswordActivity extends ActionBarActivity implements View.On
                 resetLayout();
                 requestChangePassCode = new RequestChangePassCode(context, new RequestChangePassCodeTaskCompleteListener());
                 new HamPayDialog(activity).showFailChangePassCodeDialog(requestChangePassCode, changePassCodeRequest,
-                        "2000",
+                        Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_change_pass_code));
             }
         }

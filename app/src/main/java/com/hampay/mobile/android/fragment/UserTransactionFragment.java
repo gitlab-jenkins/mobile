@@ -194,7 +194,7 @@ public class UserTransactionFragment extends Fragment {
                 transactionListRequest.setPageNumber(requestPageNumber);
                 requestUserTransaction = new RequestUserTransaction(getActivity(), new RequestUserTransactionsTaskCompleteListener());
                 new HamPayDialog(getActivity()).showFailUserTransactionDialog(requestUserTransaction, transactionListRequest,
-                        "2000",
+                        Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_user_transation));
             }
         }

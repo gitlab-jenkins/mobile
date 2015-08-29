@@ -322,7 +322,7 @@ public class UnlinkPassActivity extends ActionBarActivity implements View.OnClic
             }else {
                 requestUnlinkUser = new RequestUnlinkUser(context, new RequestUnlinkUserTaskCompleteListener());
                 new HamPayDialog(activity).showFailUnlinkDialog(requestUnlinkUser, unlinkUserRequest,
-                        "2000",
+                        Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_unlink_user));
             }
         }

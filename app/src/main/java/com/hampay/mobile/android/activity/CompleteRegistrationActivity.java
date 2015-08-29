@@ -13,7 +13,7 @@ import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
 
-public class CompleteRegistrationActivity extends ActionBarActivity {
+public class CompleteRegistrationActivity extends Activity {
 
     ButtonRectangle hampay_login_button;
 

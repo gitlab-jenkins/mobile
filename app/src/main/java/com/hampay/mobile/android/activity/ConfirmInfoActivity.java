@@ -521,7 +521,7 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
             else {
                 requestRegisterVerifyAccount = new RequestRegisterVerifyAccount(context, new RequestRegistrationVerifyAccountResponseTaskCompleteListener());
                 new HamPayDialog(activity).showFailRegisterVerifyAccountDialog(requestRegisterVerifyAccount, registrationVerifyAccountRequest,
-                        "2000",
+                        Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_verify_account));
             }
 
@@ -567,7 +567,7 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
                 requestFetchUserData = new RequestFetchUserData(context, new RequestFetchUserDataTaskCompleteListener());
                 registrationFetchUserDataRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
                 new HamPayDialog(activity).showFailFetchUserDataDialog(requestFetchUserData, registrationFetchUserDataRequest,
-                        "2000",
+                        Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_registration_fetch_user_data));
             }
 
@@ -623,7 +623,7 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
             }else {
                 requestConfirmUserData = new RequestConfirmUserData(context, new RequestConfirmUserDataTaskCompleteListener());
                 new HamPayDialog(activity).showFailConfirmUserDataDialog(requestConfirmUserData, registrationConfirmUserDataRequest,
-                        "2000",
+                        Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_registration_confirm_user_data));
             }
 

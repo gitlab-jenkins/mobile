@@ -593,7 +593,7 @@ public class HamPayDialog {
             }
             else {
                 showFailTACAcceeptRequestDialog(requestTACAccept, tacAcceptRequest,
-                        "2000",
+                        Constants.LOCAL_ERROR_CODE,
                         activity.getString(R.string.msg_fail_tac_accept_request));
             }
 
@@ -1062,7 +1062,7 @@ public class HamPayDialog {
                             individualPaymentResponseMessage.getService().getResultStatus().getDescription());
                 }
             }else {
-                new HamPayDialog(activity).showFailPaymentDialog("2000",
+                new HamPayDialog(activity).showFailPaymentDialog(Constants.LOCAL_ERROR_CODE,
                         activity.getString(R.string.msg_fail_payment));
             }
         }
@@ -1154,7 +1154,7 @@ public class HamPayDialog {
                             businessPaymentResponseMessage.getService().getResultStatus().getDescription());
                 }
             }else {
-                new HamPayDialog(activity).showFailPaymentDialog("2000",
+                new HamPayDialog(activity).showFailPaymentDialog(Constants.LOCAL_ERROR_CODE,
                         activity.getString(R.string.msg_fail_payment));
             }
         }
@@ -2025,6 +2025,9 @@ public class HamPayDialog {
         FacedTextView retry_change_pass_code = (FacedTextView) view.findViewById(R.id.retry_change_pass_code);
         FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
 
+        if ((code.compareTo("1005") == 0) || (code.compareTo("۱۰۰۵") == 0) ){
+            retry_change_pass_code.setVisibility(View.INVISIBLE);
+        }
 
         retry_change_pass_code.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2074,6 +2077,10 @@ public class HamPayDialog {
 
         FacedTextView retry_change_memorable_word = (FacedTextView) view.findViewById(R.id.retry_change_memorable_word);
         FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
+        if ((code.compareTo("1005") == 0) || (code.compareTo("۱۰۰۵") == 0) ){
+            retry_change_memorable_word.setVisibility(View.INVISIBLE);
+        }
 
         retry_change_memorable_word.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2459,11 +2466,18 @@ public class HamPayDialog {
         FacedTextView retry_unlink_user = (FacedTextView) view.findViewById(R.id.retry_unlink_user);
         FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
 
+        if ((code.compareTo("1005") == 0) || (code.compareTo("۱۰۰۵") == 0) ){
+            retry_unlink_user.setVisibility(View.INVISIBLE);
+        }
+
         retry_unlink_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                requestUnlinkUser.execute(unlinkUserRequest);
+
+                if (requestUnlinkUser.getStatus() == AsyncTask.Status.FINISHED) {
+                    requestUnlinkUser.execute(unlinkUserRequest);
+                }
             }
         });
         cancel_request.setOnClickListener(new View.OnClickListener() {

@@ -218,7 +218,7 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
             else {
                 requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
                 new HamPayDialog(activity).showFailTCRequestDialog(requestTAC, tacRequest,
-                        "2000",
+                        Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_tac_request));
             }
 
@@ -261,7 +261,7 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
                         new HamPayDialog(activity).showLoginFailDialog(failedLoginResponse);
                     }else {
                         failedLoginResponse = new FailedLoginResponse();
-                        failedLoginResponse.setCode(-1);
+                        failedLoginResponse.setCode(Constants.LOCAL_ERROR_CODE);
                         failedLoginResponse.setMessage(getString(R.string.msg_fail_hampay_server));
                         new HamPayDialog(activity).showLoginFailDialog(failedLoginResponse);
                     }
@@ -275,7 +275,7 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
                 }
             }else {
                 failedLoginResponse = new FailedLoginResponse();
-                failedLoginResponse.setCode(-1);
+                failedLoginResponse.setCode(Constants.LOCAL_ERROR_CODE);
                 failedLoginResponse.setMessage(getString(R.string.msg_fail_hampay_server));
                 new HamPayDialog(activity).showLoginFailDialog(failedLoginResponse);
             }

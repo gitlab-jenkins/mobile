@@ -325,7 +325,7 @@ public class ChangeMemorablePassActivity extends ActionBarActivity implements Vi
             }else {
                 requestChangeMemorableWord = new RequestChangeMemorableWord(context, new RequestChangeMemorableWordTaskCompleteListener());
                 new HamPayDialog(activity).showFailChangeMemorableWordDialog(requestChangeMemorableWord, changeMemorableWordRequest,
-                        "2000",
+                        Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_change_memorable_word));
             }
         }

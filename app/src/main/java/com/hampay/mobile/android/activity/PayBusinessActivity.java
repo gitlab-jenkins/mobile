@@ -208,7 +208,7 @@ public class PayBusinessActivity extends ActionBarActivity {
                             businessPaymentConfirmResponseMessage.getService().getResultStatus().getDescription());
                 }
             }else {
-                new HamPayDialog(activity).showFailPaymentDialog("2000",
+                new HamPayDialog(activity).showFailPaymentDialog(Constants.LOCAL_ERROR_CODE,
                         activity.getString(R.string.msg_fail_payment));
             }
             pay_to_business_button.setEnabled(true);

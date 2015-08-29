@@ -633,6 +633,31 @@ public class WebServices  {
             message.setRequestHeader(header);
             RegistrationCredentialsRequest request = registrationCredentialsRequest;
             request.setRequestUUID("1234");
+
+
+            List<ContactDTO> contactDTOs = new ArrayList<ContactDTO>();
+            Cursor phones = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null,null, null);
+
+            while (phones.moveToNext()) {
+                String contact_name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                String contact_phone_no = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+                if (contact_phone_no.trim().replace(" ", "").startsWith("00989")
+                        || contact_phone_no.trim().replace(" ", "").startsWith("+989")
+                        || contact_phone_no.trim().replace(" ", "").startsWith("09")) {
+
+                    ContactDTO contactDTO = new ContactDTO();
+                    contactDTO.setCellNumber(contact_phone_no);
+                    contactDTO.setDisplayName(contact_name);
+
+                    contactDTOs.add(contactDTO);
+                }
+
+            }
+            phones.close();
+
+//            request.setContacts(contactDTOs);
+
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationCredentialsRequest>>() {}.getType();
@@ -1089,10 +1114,7 @@ public class WebServices  {
 
 
             List<ContactDTO> contactDTOs = new ArrayList<ContactDTO>();
-
             Cursor phones = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null,null, null);
-
-
 
             while (phones.moveToNext()) {
                 String contact_name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));

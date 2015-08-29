@@ -431,7 +431,7 @@ public class ProfileEntryActivity extends Activity {
             }else {
                 requestBankList = new RequestBankList(context, new RequestBanksTaskCompleteListener(true));
                 new HamPayDialog(activity).showFailBankListDialog(requestBankList, bankListRequest,
-                        "2000",
+                        Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_fetch_bank_list));
             }
         }
@@ -479,7 +479,7 @@ public class ProfileEntryActivity extends Activity {
                 requestRegistrationEntry = new RequestRegistrationEntry(context, new RequestRegistrationEntryTaskCompleteListener(),
                         latitute + "," + longitude);
                 new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest,
-                        "2000",
+                        Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_registration_entry));
             }
         }

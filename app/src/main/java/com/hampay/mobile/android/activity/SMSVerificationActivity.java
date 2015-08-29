@@ -599,7 +599,7 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
             }else {
                 requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
                 new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
-                        "200",
+                        Constants.LOCAL_ERROR_CODE,
                         getString(R.string.mgs_fail_registration_send_sms_token));
             }
         }

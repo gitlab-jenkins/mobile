@@ -269,7 +269,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
             else {
                 requestUserProfile = new RequestUserProfile(getActivity(), new RequestUserProfileTaskCompleteListener());
                 new HamPayDialog(getActivity()).showFailUserProfileDialog(requestUserProfile, userProfileRequest,
-                        "2000",
+                        Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_user_profile));
             }
         }
@@ -313,7 +313,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                 hamPayDialog.dismisWaitingDialog();
                 requestVerifyAccount = new RequestVerifyAccount(getActivity(), new RequestVerifyAccountTaskCompleteListener());
                 new HamPayDialog(getActivity()).showFailVerifyAccountDialog(requestVerifyAccount, verifyAccountRequest,
-                        "2000",
+                        Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_verify_account));
             }
         }

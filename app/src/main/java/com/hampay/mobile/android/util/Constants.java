@@ -51,5 +51,6 @@ public class Constants {
     public static final String MAX_XFER_Amount = "MaxXferAmount";
     public static final String MIN_XFER_Amount = "MinXferAmount";
     public static final String USER_ENTRY_PASSWORD = "userEntryPassword";
+    public static final String LOCAL_ERROR_CODE = "۲۰۰۰";
 
 }

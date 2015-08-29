@@ -173,7 +173,7 @@ public class PasswordEntryActivity extends Activity implements View.OnClickListe
             }else {
                 requestPassCodeEntry = new RequestPassCodeEntry(context, new RequestPassCodeEntryResponseTaskCompleteListener());
                 new HamPayDialog(activity).showFailPasswordEntryDialog(requestPassCodeEntry, registrationPassCodeEntryRequest,
-                        "2000",
+                        Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_pass_code_entry));
             }
         }

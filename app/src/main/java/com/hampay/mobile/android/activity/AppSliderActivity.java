@@ -235,6 +235,9 @@ public class AppSliderActivity extends ActionBarActivity {
             else if (registeredActivityData.equalsIgnoreCase(MemorableWordEntryActivity.class.getName())){
                 destinationActivity = new MemorableWordEntryActivity();
             }
+//            else if (registeredActivityData.equalsIgnoreCase(CompleteRegistrationActivity.class.getName())){
+//                destinationActivity = new CompleteRegistrationActivity();
+//            }
 
             new HamPayDialog(activity).showResumeRegisterationDialog(destinationActivity);
 

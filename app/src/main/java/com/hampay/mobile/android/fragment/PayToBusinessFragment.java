@@ -311,14 +311,14 @@ public class PayToBusinessFragment extends Fragment {
                     businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
                     requestHamPayBusiness = new RequestHamPayBusiness(getActivity(), new RequestBusinessListTaskCompleteListener(false));
                     new HamPayDialog(getActivity()).showFailBusinessListDialog(requestHamPayBusiness, businessListRequest,
-                            "2000",
+                            Constants.LOCAL_ERROR_CODE,
                             getString(R.string.msg_fail_business_list));
                 }else {
                     businessSearchRequest.setPageNumber(requestPageNumber);
                     businessSearchRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
                     requestSearchHamPayBusiness = new RequestSearchHamPayBusiness(getActivity(), new RequestBusinessListTaskCompleteListener(true));
                     new HamPayDialog(getActivity()).showFailBusinessSearchListDialog(requestSearchHamPayBusiness, businessSearchRequest,
-                            "2000",
+                            Constants.LOCAL_ERROR_CODE,
                             getString(R.string.msg_fail_business_search_list));
 //                    requestSearchHamPayBusiness.execute(businessSearchRequest);
                 }

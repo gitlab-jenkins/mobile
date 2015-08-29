@@ -275,7 +275,7 @@ public class PayOneActivity extends ActionBarActivity {
                             individualPaymentConfirmResponseMessage.getService().getResultStatus().getDescription());
                 }
             }else {
-                new HamPayDialog(activity).showFailPaymentDialog("2000",
+                new HamPayDialog(activity).showFailPaymentDialog(Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_payment));
             }
 
