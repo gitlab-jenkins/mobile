@@ -36,7 +36,6 @@ import com.hampay.common.core.model.request.RegistrationConfirmUserDataRequest;
 import com.hampay.common.core.model.request.RegistrationCredentialsRequest;
 import com.hampay.common.core.model.request.RegistrationEntryRequest;
 import com.hampay.common.core.model.request.RegistrationFetchUserDataRequest;
-import com.hampay.common.core.model.request.RegistrationPassCodeEntryRequest;
 import com.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
 import com.hampay.common.core.model.request.RegistrationVerifyAccountRequest;
 import com.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
@@ -76,7 +75,6 @@ import com.hampay.mobile.android.async.RequestFetchUserData;
 import com.hampay.mobile.android.async.RequestHamPayBusiness;
 import com.hampay.mobile.android.async.RequestIndividualPayment;
 import com.hampay.mobile.android.async.RequestLogout;
-import com.hampay.mobile.android.async.RequestPassCodeEntry;
 import com.hampay.mobile.android.async.RequestRegisterVerifyAccount;
 import com.hampay.mobile.android.async.RequestRegistrationEntry;
 import com.hampay.mobile.android.async.RequestRegistrationSendSmsToken;
@@ -1785,49 +1783,49 @@ public class HamPayDialog {
     }
 
 
-    public void showFailPasswordEntryDialog(final RequestPassCodeEntry requestPassCodeEntry,
-                                            final RegistrationPassCodeEntryRequest registrationPassCodeEntryRequest,
-                                            final String code,
-                                            final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_password_entry, null);
-
-        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
-        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
-
-        responseCode.setText(activity.getString(R.string.error_code, code));
-        responseMessage.setText(message);
-
-        FacedTextView retry_pass_code_entry = (FacedTextView) view.findViewById(R.id.retry_pass_code_entry);
-        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
-
-        retry_pass_code_entry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                requestPassCodeEntry.execute(registrationPassCodeEntryRequest);
-            }
-        });
-        cancel_request.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.show();
-    }
+//    public void showFailPasswordEntryDialog(final RequestPassCodeEntry requestPassCodeEntry,
+//                                            final RegistrationPassCodeEntryRequest registrationPassCodeEntryRequest,
+//                                            final String code,
+//                                            final String message){
+//        Rect displayRectangle = new Rect();
+//        Activity parent = (Activity) activity;
+//        Window window = parent.getWindow();
+//        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+//
+//        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_password_entry, null);
+//
+//        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
+//        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+//
+//        responseCode.setText(activity.getString(R.string.error_code, code));
+//        responseMessage.setText(message);
+//
+//        FacedTextView retry_pass_code_entry = (FacedTextView) view.findViewById(R.id.retry_pass_code_entry);
+//        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+//
+//        retry_pass_code_entry.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//                requestPassCodeEntry.execute(registrationPassCodeEntryRequest);
+//            }
+//        });
+//        cancel_request.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+//        dialog = new Dialog(activity);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        dialog.setContentView(view);
+//        dialog.setTitle(null);
+//        dialog.setCanceledOnTouchOutside(true);
+//        dialog.show();
+//    }
 
 
     public void showFailMemorableEntryDialog(final RequestCredentialEntry requestMemorableWordEntry,

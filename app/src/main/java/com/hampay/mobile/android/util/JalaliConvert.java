@@ -135,7 +135,7 @@ public class JalaliConvert {
                 + " "
                 + String.format("%04d/%02d/%02d", getYear(), getMonth(), getDayFromMonth())
                 + "\n"
-                + " ساعت " + getTimeDay();
+                + "ساعت " + getTimeDay();
     }
 
     public void GregorianToPersian(int year, int month, int day) {

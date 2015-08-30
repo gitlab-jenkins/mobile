@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -32,8 +33,6 @@ import com.hampay.common.core.model.request.RegistrationConfirmUserDataRequest;
 import com.hampay.common.core.model.request.RegistrationCredentialsRequest;
 import com.hampay.common.core.model.request.RegistrationEntryRequest;
 import com.hampay.common.core.model.request.RegistrationFetchUserDataRequest;
-import com.hampay.common.core.model.request.RegistrationMemorableWordEntryRequest;
-import com.hampay.common.core.model.request.RegistrationPassCodeEntryRequest;
 import com.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
 import com.hampay.common.core.model.request.RegistrationVerifyAccountRequest;
 import com.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
@@ -59,8 +58,6 @@ import com.hampay.common.core.model.response.RegistrationConfirmUserDataResponse
 import com.hampay.common.core.model.response.RegistrationCredentialsResponse;
 import com.hampay.common.core.model.response.RegistrationEntryResponse;
 import com.hampay.common.core.model.response.RegistrationFetchUserDataResponse;
-import com.hampay.common.core.model.response.RegistrationMemorableWordEntryResponse;
-import com.hampay.common.core.model.response.RegistrationPassCodeEntryResponse;
 import com.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
 import com.hampay.common.core.model.response.RegistrationVerifyAccountResponse;
 import com.hampay.common.core.model.response.RegistrationVerifyMobileResponse;
@@ -529,93 +526,6 @@ public class WebServices  {
     }
 
 
-    public ResponseMessage<RegistrationPassCodeEntryResponse> newRegistrationPassCodeEntryResponse(RegistrationPassCodeEntryRequest registrationPassCodeEntryRequest){
-
-        ResponseMessage<RegistrationPassCodeEntryResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/reg-pass-code-entry");
-        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
-
-        try {
-
-            RequestHeader header = new RequestHeader();
-            header.setAuthToken("008ewe");
-            header.setVersion("1.0-PA");
-
-            RequestMessage<RegistrationPassCodeEntryRequest> message = new RequestMessage<RegistrationPassCodeEntryRequest>();
-            message.setRequestHeader(header);
-            RegistrationPassCodeEntryRequest request = registrationPassCodeEntryRequest;
-            request.setRequestUUID("1234");
-            message.setService(request);
-
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationPassCodeEntryRequest>>() {}.getType();
-            String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(jsonRequest.getBytes());
-            outputStream.flush();
-
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
-
-            Gson gson = new Gson();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegistrationPassCodeEntryResponse>>() {}.getType());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            if (connection != null)
-                connection.disconnect();
-        }
-        return responseMessage;
-    }
-
-    public ResponseMessage<RegistrationMemorableWordEntryResponse> newRegistrationMemorableWordEntryResponse(RegistrationMemorableWordEntryRequest registrationMemorableWordEntryRequest){
-
-        ResponseMessage<RegistrationMemorableWordEntryResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/reg-memorable-word-entry");
-        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
-
-        try {
-
-            RequestHeader header = new RequestHeader();
-            header.setAuthToken("008ewe");
-            header.setVersion("1.0-PA");
-
-            RequestMessage<RegistrationMemorableWordEntryRequest> message = new RequestMessage<RegistrationMemorableWordEntryRequest>();
-            message.setRequestHeader(header);
-            RegistrationMemorableWordEntryRequest request = registrationMemorableWordEntryRequest;
-            request.setRequestUUID("1234");
-            message.setService(request);
-
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationMemorableWordEntryRequest>>() {}.getType();
-            String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(jsonRequest.getBytes());
-            outputStream.flush();
-
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
-
-            Gson gson = new Gson();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegistrationMemorableWordEntryResponse>>() {}.getType());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            if (connection != null)
-                connection.disconnect();
-        }
-        return responseMessage;
-    }
 
     public ResponseMessage<RegistrationCredentialsResponse> newRegistrationCredentialsResponse(RegistrationCredentialsRequest registrationCredentialsRequest){
 
@@ -646,11 +556,12 @@ public class WebServices  {
                         || contact_phone_no.trim().replace(" ", "").startsWith("+989")
                         || contact_phone_no.trim().replace(" ", "").startsWith("09")) {
 
-                    ContactDTO contactDTO = new ContactDTO();
-                    contactDTO.setCellNumber(contact_phone_no);
-                    contactDTO.setDisplayName(contact_name);
-
-                    contactDTOs.add(contactDTO);
+                    if (prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").compareTo(contact_phone_no.trim().replace("+98", "0")) != 0) {
+                        ContactDTO contactDTO = new ContactDTO();
+                        contactDTO.setCellNumber(contact_phone_no);
+                        contactDTO.setDisplayName(contact_name);
+                        contactDTOs.add(contactDTO);
+                    }
                 }
 
             }
@@ -1124,11 +1035,15 @@ public class WebServices  {
                         || contact_phone_no.trim().replace(" ", "").startsWith("+989")
                         || contact_phone_no.trim().replace(" ", "").startsWith("09")) {
 
-                    ContactDTO contactDTO = new ContactDTO();
-                    contactDTO.setCellNumber(contact_phone_no);
-                    contactDTO.setDisplayName(contact_name);
-
-                    contactDTOs.add(contactDTO);
+                    if (prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").compareTo(contact_phone_no.trim().replace("+98", "0")) != 0) {
+                        ContactDTO contactDTO = new ContactDTO();
+                        contactDTO.setCellNumber(contact_phone_no);
+                        contactDTO.setDisplayName(contact_name);
+                        contactDTOs.add(contactDTO);
+                    }
+                    else {
+                        Log.e("PHONE", contact_phone_no);
+                    }
                 }
 
             }

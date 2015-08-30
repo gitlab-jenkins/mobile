@@ -15,13 +15,10 @@ import android.widget.RelativeLayout;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
-import com.hampay.common.core.model.request.RegistrationPassCodeEntryRequest;
-import com.hampay.common.core.model.response.RegistrationPassCodeEntryResponse;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.animation.Collapse;
 import com.hampay.mobile.android.animation.Expand;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import com.hampay.mobile.android.async.RequestPassCodeEntry;
 import com.hampay.mobile.android.component.material.RippleView;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
@@ -63,9 +60,6 @@ public class PasswordEntryActivity extends Activity implements View.OnClickListe
     Context context;
 
     HamPayDialog hamPayDialog;
-
-    RequestPassCodeEntry requestPassCodeEntry;
-    RegistrationPassCodeEntryRequest registrationPassCodeEntryRequest;
 
     public void contactUs(View view){
         new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/pass-a.html");
@@ -127,61 +121,6 @@ public class PasswordEntryActivity extends Activity implements View.OnClickListe
         input_digit_4 = (ImageView)findViewById(R.id.input_digit_4);
         input_digit_5 = (ImageView)findViewById(R.id.input_digit_5);
 
-    }
-
-    public class RequestPassCodeEntryResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationPassCodeEntryResponse>>
-    {
-        public RequestPassCodeEntryResponseTaskCompleteListener(){
-        }
-
-        @Override
-        public void onTaskComplete(ResponseMessage<RegistrationPassCodeEntryResponse> passCodeEntryResponseMessage)
-        {
-
-            hamPayDialog.dismisWaitingDialog();
-
-            if (passCodeEntryResponseMessage != null) {
-
-                if (passCodeEntryResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-
-                    password_1_rl.setVisibility(View.VISIBLE);
-                    password_2_rl.setVisibility(View.INVISIBLE);
-
-                    inputPasswordValue = "";
-                    inputRePasswordValue = "";
-
-                    input_digit_1.setImageResource(R.drawable.pass_icon_2);
-                    input_digit_2.setImageResource(R.drawable.pass_icon_2);
-                    input_digit_3.setImageResource(R.drawable.pass_icon_2);
-                    input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                    input_digit_5.setImageResource(R.drawable.pass_icon_2);
-
-                    Intent intent = new Intent();
-                    intent.setClass(PasswordEntryActivity.this, MemorableWordEntryActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    finish();
-                    startActivity(intent);
-                }else if (passCodeEntryResponseMessage.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
-                    new HamPayDialog(activity).showInvalidStepDialog();
-                }
-                else {
-                    requestPassCodeEntry = new RequestPassCodeEntry(context, new RequestPassCodeEntryResponseTaskCompleteListener());
-                    new HamPayDialog(activity).showFailPasswordEntryDialog(requestPassCodeEntry, registrationPassCodeEntryRequest,
-                            passCodeEntryResponseMessage.getService().getResultStatus().getCode(),
-                            passCodeEntryResponseMessage.getService().getResultStatus().getDescription());
-                }
-            }else {
-                requestPassCodeEntry = new RequestPassCodeEntry(context, new RequestPassCodeEntryResponseTaskCompleteListener());
-                new HamPayDialog(activity).showFailPasswordEntryDialog(requestPassCodeEntry, registrationPassCodeEntryRequest,
-                        Constants.LOCAL_ERROR_CODE,
-                        getString(R.string.msg_fail_pass_code_entry));
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
     }
 
 

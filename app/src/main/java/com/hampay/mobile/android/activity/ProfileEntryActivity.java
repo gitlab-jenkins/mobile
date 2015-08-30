@@ -451,7 +451,7 @@ public class ProfileEntryActivity extends Activity {
             if (registrationEntryResponse != null) {
 
                 if (registrationEntryResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    editor.putString(Constants.REGISTERED_CELL_NUMBER, cellNumberValue.getText().toString());
+                    editor.putString(Constants.REGISTERED_CELL_NUMBER, new PersianEnglishDigit(cellNumberValue.getText().toString()).P2E());
                     editor.putString(Constants.REGISTERED_BANK_ID, selectedBankCode);
                     editor.putString(Constants.REGISTERED_BANK_ACCOUNT_NO_FORMAT, accountNumberFormat);
                     editor.putString(Constants.REGISTERED_ACCOUNT_NO, accountNumberValue.getText().toString());

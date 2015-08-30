@@ -33,7 +33,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:gravity="right">
+                android:gravity="right"
+                android:layout_marginTop="6dp">
 
                 <com.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/status_text"

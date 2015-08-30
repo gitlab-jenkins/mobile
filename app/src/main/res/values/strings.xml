@@ -88,9 +88,12 @@
     </string>
 
     <string name="detail_transaction">جزئیات تراکنش</string>
-    <string name="account_no">شماره حساب </string>
-    <string name="mobile_no">شماره همراه </string>
+    <string name="account_no">شماره حساب: </string>
+    <string name="mobile_no">شماره همراه: </string>
+    <string name="account_no_entry">شماره حساب </string>
+    <string name="mobile_no_entry">شماره همراه </string>
     <string name="account_type">نوع حساب: </string>
+    <string name="bank">بانک:</string>
     <string name="unverified_account">محدود</string>
     <string name="pending_review_account">محدود (در انتظار تایید کاربر)</string>
     <string name="verified_account">محدود (در انتظار تایید)</string>
@@ -215,7 +218,7 @@
     <string name="get_password_text_2">منتظر تماس هم‌پی یارتان برای ارتقا به کاربر عادی باشید.</string>
     <string name="get_password_text_3">در مرحله بعد یک رمز عبور برای ورود به سیستم انتخاب خواهید کرد.</string>
     <string name="get_password_text_4">لطفا رمز عبوری پنج رقمی را به انتخاب خود وارد نمایید.دقت کنید که بیش از دو عدد تکراری قابل قبول نمی‌باشد.</string>
-    <string name="get_password_text_5">لطفا کلمه عبور مورد نظر خود را مجدد تکرار نمایید.</string>
+    <string name="get_password_text_5">لطفا رمز عبور مورد نظر خود را مجدد تکرار نمایید.</string>
     <string name="current_password">لطفا رمز عبور جاری خود را وارد نمایید.</string>
 
     <string name="confirm">تایید</string>
@@ -265,6 +268,7 @@
         <item>دریافت کلمه یادآوری</item>
         <item>جزییات حساب</item>
         <item>حساب محدود</item>
+        <item>لغو عضویت</item>
         <item>پرداخت به فرد</item>
         <item>پرداخت به کسب و کار</item>
         <item>تماس با ما</item>
@@ -360,7 +364,7 @@
     <string name="msg_fail_business_search_list">دریافت لیست جستجوی کسب و کار با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_payment">واریز مبلغ مورد نظر شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_hampay_server">اطلاعاتی از سامانه هم‌پی دریافت نشد. لطفا مجدد تلاش کنید.</string>
-    <string name="msg_fail_hampay_login">کلمه عبور صحیح نمی باشد. لطفا با دقت کلمه عبور خود را وارد کنید.</string>
+    <string name="msg_fail_hampay_login">رمز عبور صحیح نمی باشد. لطفا با دقت رمز عبور خود را وارد کنید.</string>
     <string name="msg_fail_receive_sms">دریافت پیامک فعالسازی با مشکل مواجه شد. لطفا دکمه ارسال مجدد را انتخاب کنید.</string>
     <string name="sms_upper_reach_sms">حداکثر درخواست برای ارسال مجدد پیامک فعالسازی به اتمام رسید. لطفا در ساعات دیگر تلاش کنید.</string>
     <string name="msg_fail_change_pass_code">تغییر رمز عبور با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>

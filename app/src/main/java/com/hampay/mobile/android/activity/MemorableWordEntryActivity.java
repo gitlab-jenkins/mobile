@@ -6,17 +6,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.RelativeLayout;
 
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.RegistrationCredentialsRequest;
-import com.hampay.common.core.model.request.RegistrationMemorableWordEntryRequest;
 import com.hampay.common.core.model.response.RegistrationCredentialsResponse;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestCredentialEntry;
-import com.hampay.mobile.android.async.RequestMemorableWordEntry;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.edittext.MemorableTextWatcher;
 import com.hampay.mobile.android.component.material.ButtonRectangle;

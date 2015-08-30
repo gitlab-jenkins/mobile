@@ -352,7 +352,7 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
                     public void onClick(View v) {
 
                         editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ConfirmInfoActivity.class.getName());
-                        editor.putString(Constants.REGISTERED_CELL_NUMBER, cellNumberValue.getText().toString());
+                        editor.putString(Constants.REGISTERED_CELL_NUMBER, new PersianEnglishDigit(cellNumberValue.getText().toString()).P2E());
                         editor.putString(Constants.REGISTERED_USER_FAMILY, userFamilyValue.getText().toString());
                         editor.putString(Constants.REGISTERED_USER_NAME, userFamilyValue.getText().toString().split(" ")[0]);
                         editor.putString(Constants.REGISTERED_ACCOUNT_NO, accountNumberValue.getText().toString());
@@ -384,7 +384,7 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
 
 
                 editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ConfirmInfoActivity.class.getName());
-                editor.putString(Constants.REGISTERED_CELL_NUMBER, cellNumberValue.getText().toString());
+                editor.putString(Constants.REGISTERED_CELL_NUMBER, new PersianEnglishDigit(cellNumberValue.getText().toString()).P2E());
                 editor.putString(Constants.REGISTERED_USER_FAMILY, userFamilyValue.getText().toString());
                 editor.putString(Constants.REGISTERED_USER_NAME, userFamilyValue.getText().toString().split(" ")[0]);
                 editor.putString(Constants.REGISTERED_ACCOUNT_NO, accountNumberValue.getText().toString());

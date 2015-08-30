@@ -250,13 +250,18 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
             Log.e("FINISH", "FINISH");
 
             hamPayDialog.dismisWaitingDialog();
-            hide_bg.setVisibility(View.GONE);
+
 
             if (userProfileResponseMessage != null) {
 
+
                 if (userProfileResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
 
-                    fillUserProfile(userProfileResponseMessage.getService().getUserProfile());
+                    userProfileDTO = userProfileResponseMessage.getService().getUserProfile();
+
+                    fillUserProfile(userProfileDTO);
+
+                    hide_bg.setVisibility(View.GONE);
 
                 }
                 else{
@@ -264,6 +269,8 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                     new HamPayDialog(getActivity()).showFailUserProfileDialog(requestUserProfile, userProfileRequest,
                             userProfileResponseMessage.getService().getResultStatus().getCode(),
                             userProfileResponseMessage.getService().getResultStatus().getDescription());
+
+                    hide_bg.setVisibility(View.VISIBLE);
                 }
             }
             else {
@@ -271,6 +278,8 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                 new HamPayDialog(getActivity()).showFailUserProfileDialog(requestUserProfile, userProfileRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_user_profile));
+
+                hide_bg.setVisibility(View.VISIBLE);
             }
         }
 
@@ -350,12 +359,9 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         user_name_text.setText(userProfileDTO.getFullName());
         MainActivity.user_account_name.setText(userProfileDTO.getFullName());
         //CLS
-        user_account_no_text.setText(getString(R.string.account_no) + ": \n" + persianEnglishDigit.E2P(userProfileDTO.getAccountNumber()));
-        user_bank_name.setText(userProfileDTO.getBankName());
-        user_mobile_no.setText(getString(R.string.mobile_no) + ": " + persianEnglishDigit.E2P(userProfileDTO.getCellNumber()));
-
-//        user_account_title.setText(getString(R.string.account_type));
-
+        user_account_no_text.setText(persianEnglishDigit.E2P(userProfileDTO.getAccountNumber()));
+        user_bank_name.setText(" " + userProfileDTO.getBankName());
+        user_mobile_no.setText(persianEnglishDigit.E2P(userProfileDTO.getCellNumber()));
 
         editor.putInt(Constants.USER_VERIFICATION_STATUS, userProfileDTO.getVerificationStatus().ordinal());
         editor.commit();
@@ -363,19 +369,19 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         switch (userProfileDTO.getVerificationStatus()){
 
             case UNVERIFIED:
-                user_account_type.setText(" " + getString(R.string.unverified_account));
+                user_account_type.setText(getString(R.string.unverified_account));
                 break;
 
             case PENDING_REVIEW:
-                user_account_type.setText(" " + getString(R.string.pending_review_account));
+                user_account_type.setText(getString(R.string.pending_review_account));
                 break;
 
             case VERIFIED:
-                user_account_type.setText(" " + getString(R.string.verified_account));
+                user_account_type.setText(getString(R.string.verified_account));
                 break;
 
             case DELEGATED:
-                user_account_type.setText(" " + getString(R.string.delegate_account));
+                user_account_type.setText(getString(R.string.delegate_account));
                 break;
         }
 
