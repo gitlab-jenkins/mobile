@@ -5,15 +5,15 @@ public class Constants {
 
     public static String SERVER_IP = "176.58.104.158";//England Server
     public static String URL_PREFIX = "/hampay";
-//    public static String URL_PREFIX = "";
+    //    public static String URL_PREFIX = "";
     //    public static final String SERVER_IP = "192.168.1.132";//Sima Server
     public static final int SERVER_PORT = 9090;
     public static String SERVICE_URL = "http://" + SERVER_IP  + ":9090";
     public static final String OPENAM_LOGIN_URL = "http://"+ SERVER_IP + ":8080/openam/json/authenticate";
     public static final String OPENAM_LOGOUT_URL = "http://" + SERVER_IP +":8080/openam/json/sessions/?_action=logout";
 
-        public static String HTTPS_SERVER_IP = "https://176.58.104.158" + URL_PREFIX;//England Server
-//    public static String HTTPS_SERVER_IP = "https://mobile.tejaratbourse.com" + URL_PREFIX;//Tejarat bourse Server
+//    public static String HTTPS_SERVER_IP = "https://176.58.104.158" + URL_PREFIX;//England Server
+        public static String HTTPS_SERVER_IP = "https://mobile.tejaratbourse.com" + URL_PREFIX;//Tejarat bourse Server
     public static final String HTTPS_OPENAM_LOGIN_URL = HTTPS_SERVER_IP + "/auth";
     public static final String HTTPSOPENAM_LOGOUT_URL = HTTPS_SERVER_IP + "/unauth";
 
@@ -38,6 +38,7 @@ public class Constants {
     public static final String REGISTERED_USER_FAMILY = "registeredUserFamily";
     public static final String REGISTERED_USER_NAME = "registeredUserName";
     public static final String LOGIN_TOKEN_ID = "login_token_id";
+    public static final String USER_ACCOUNT_LOCKET = "User Account Locked";
     public static final String RECENT_PAY_TO_ONE_LIMIT = "10";
     public static final int DEFAULT_PAGE_SIZE = 15;
     public static final String WEB_URL_REGEX = "\\(?\\b(http://|https://|www[.]|app[.])[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]";

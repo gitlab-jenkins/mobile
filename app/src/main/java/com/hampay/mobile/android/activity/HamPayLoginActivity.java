@@ -257,7 +257,13 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
                     responseElement = jsonParser.parse(loginResponse.toString());
                     failedLoginResponse = gson.fromJson(responseElement.toString(), listType);
                     if (failedLoginResponse != null) {
-                        failedLoginResponse.setMessage(getString(R.string.msg_fail_hampay_login));
+
+                        if (failedLoginResponse.getMessage().equalsIgnoreCase(Constants.USER_ACCOUNT_LOCKET)){
+                            failedLoginResponse.setMessage(getString(R.string.msg_locked_hampay_login));
+                        }else {
+                            failedLoginResponse.setMessage(getString(R.string.msg_fail_hampay_login));
+                        }
+
                         new HamPayDialog(activity).showLoginFailDialog(failedLoginResponse);
                     }else {
                         failedLoginResponse = new FailedLoginResponse();

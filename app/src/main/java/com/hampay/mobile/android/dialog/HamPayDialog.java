@@ -809,7 +809,7 @@ public class HamPayDialog {
 
         FacedTextView failedLoginText = (FacedTextView)view.findViewById(R.id.failedLoginText);
 
-        failedLoginText.setText("کد خطای: " + failedLoginResponse.getCode()
+        failedLoginText.setText("کد خطای: " + new PersianEnglishDigit(failedLoginResponse.getCode()).E2P()
                         + "\n"
                         + failedLoginResponse.getMessage()
         );

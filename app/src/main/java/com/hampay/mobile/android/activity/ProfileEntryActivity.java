@@ -58,7 +58,7 @@ public class ProfileEntryActivity extends Activity {
 
     FacedEditText nationalCodeValue;
     ImageView nationalCodeIcon;
-    boolean nationalCodeIsValid;
+    boolean nationalCodeIsValid = true;
 
     FacedEditText accountNumberValue;
     boolean accountNumberIsValid = true;
@@ -171,22 +171,22 @@ public class ProfileEntryActivity extends Activity {
             public void afterTextChanged(Editable s) { }
         });
 
-        nationalCodeValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus){
-
-                    if (new NationalCodeVerification(nationalCodeValue.getText().toString()).isValidCode()){
-                        nationalCodeIcon.setImageResource(R.drawable.right_icon);
-                        nationalCodeIsValid = true;
-                    }
-                    else {
-                        nationalCodeIcon.setImageResource(R.drawable.false_icon);
-                        nationalCodeIsValid = false;
-                    }
-                }
-            }
-        });
+//        nationalCodeValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if (!hasFocus){
+//
+//                    if (new NationalCodeVerification(nationalCodeValue.getText().toString()).isValidCode()){
+//                        nationalCodeIcon.setImageResource(R.drawable.right_icon);
+//                        nationalCodeIsValid = true;
+//                    }
+//                    else {
+//                        nationalCodeIcon.setImageResource(R.drawable.false_icon);
+//                        nationalCodeIsValid = false;
+//                    }
+//                }
+//            }
+//        });
 
         accountNumberValue = (FacedEditText)findViewById(R.id.accountNumberValue);
         accountNumberIcon = (ImageView)findViewById(R.id.accountNumberIcon);
