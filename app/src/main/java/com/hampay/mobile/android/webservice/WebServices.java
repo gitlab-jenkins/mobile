@@ -556,12 +556,12 @@ public class WebServices  {
                         || contact_phone_no.trim().replace(" ", "").startsWith("+989")
                         || contact_phone_no.trim().replace(" ", "").startsWith("09")) {
 
-                    if (prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").compareTo(contact_phone_no.trim().replace("+98", "0")) != 0) {
-                        ContactDTO contactDTO = new ContactDTO();
-                        contactDTO.setCellNumber(contact_phone_no);
-                        contactDTO.setDisplayName(contact_name);
-                        contactDTOs.add(contactDTO);
-                    }
+//                    if (prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").compareTo(contact_phone_no.replace("+98", "0").replaceAll("\\s+","")) != 0) {
+                    ContactDTO contactDTO = new ContactDTO();
+                    contactDTO.setCellNumber(contact_phone_no);
+                    contactDTO.setDisplayName(contact_name);
+                    contactDTOs.add(contactDTO);
+//                    }
                 }
 
             }
@@ -1035,15 +1035,15 @@ public class WebServices  {
                         || contact_phone_no.trim().replace(" ", "").startsWith("+989")
                         || contact_phone_no.trim().replace(" ", "").startsWith("09")) {
 
-                    if (prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").compareTo(contact_phone_no.trim().replace("+98", "0")) != 0) {
-                        ContactDTO contactDTO = new ContactDTO();
-                        contactDTO.setCellNumber(contact_phone_no);
-                        contactDTO.setDisplayName(contact_name);
-                        contactDTOs.add(contactDTO);
-                    }
-                    else {
-                        Log.e("PHONE", contact_phone_no);
-                    }
+//                    if (prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").compareTo(contact_phone_no.replace("+98", "0").replaceAll("\\s+","")) != 0) {
+                    ContactDTO contactDTO = new ContactDTO();
+                    contactDTO.setCellNumber(contact_phone_no);
+                    contactDTO.setDisplayName(contact_name);
+                    contactDTOs.add(contactDTO);
+//                    }
+//                    else {
+//                        Log.e("PHONE", contact_phone_no);
+//                    }
                 }
 
             }

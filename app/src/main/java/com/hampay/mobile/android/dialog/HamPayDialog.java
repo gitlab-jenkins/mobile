@@ -154,6 +154,7 @@ public class HamPayDialog {
     }
 
     public void dismisWaitingDialog(){
+
         if (dialog != null){
             if (dialog.isShowing())
                 dialog.dismiss();
