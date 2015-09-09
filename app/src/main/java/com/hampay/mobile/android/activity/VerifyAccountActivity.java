@@ -13,6 +13,7 @@ import com.hampay.common.core.model.request.VerifyTransferMoneyRequest;
 import com.hampay.common.core.model.response.VerifyTransferMoneyResponse;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import com.hampay.mobile.android.async.RequestRegistrationVerifyTransferMoney;
 import com.hampay.mobile.android.async.RequestVerifyTransferMoney;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
@@ -89,6 +90,11 @@ public class VerifyAccountActivity extends ActionBarActivity {
                         intent.setClass(VerifyAccountActivity.this, CongratsAccountActivity.class);
                         startActivityForResult(intent, 1023);
                         finish();
+                    }else {
+                        requestVerifyTransferMoney = new RequestVerifyTransferMoney(context, new RequestVerifyTransferMoneyTaskCompleteListener());
+                        new HamPayDialog(activity).showFailVerifyTransferMoneyDialog(requestVerifyTransferMoney, verifyTransferMoneyRequest,
+                                "",
+                                verifyTransferMoneyResponseMessage.getService().getMessage());
                     }
                 }else {
                     requestVerifyTransferMoney = new RequestVerifyTransferMoney(context, new RequestVerifyTransferMoneyTaskCompleteListener());

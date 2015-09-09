@@ -166,18 +166,19 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
     @Override
     protected void onStop() {
         super.onStop();
+
+        if (requestTAC != null){
+            if (!requestTAC.isCancelled())
+                requestTAC.cancel(true);
+        }
+
         if (requestLogin != null){
             if (!requestLogin.isCancelled()){
                 requestLogin.cancel(true);
             }
         }
-        if (requestTAC != null){
-            if (!requestTAC.isCancelled())
-                requestTAC.cancel(true);
-        }
-    }
 
-    private ResponseMessage<TACResponse> tACResponse;
+    }
 
     public class RequestTACResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<TACResponse>>
     {
@@ -399,6 +400,7 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
 
             requestLogin = new RequestLogin(context, new RequestLoginResponseTaskCompleteListener());
             requestLogin.execute(loginData);
+//            requestLogin.execute(loginData);
 
 
             inputPassValue = "";

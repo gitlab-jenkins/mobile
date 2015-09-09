@@ -77,6 +77,7 @@ import com.hampay.mobile.android.util.PersianEnglishDigit;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -86,6 +87,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -243,10 +245,19 @@ public class WebServices  {
             connection.setConnectTimeout(5000);
             connection.setReadTimeout(5000);
             connection.setRequestMethod("POST");
+//            connection.setRequestProperty("Accept-Encoding", "gzip");
             connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
+//            Log.e("Encoding", connection.getContentEncoding());
             outputStream.flush();
+
+
+
+//            GZIPInputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+//            InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+//            InputStreamReader reader = new InputStreamReader(gzipInputStream);
+
 
             InputStreamReader reader = new InputStreamReader(connection.getInputStream());
             Gson gson = new Gson();
@@ -289,12 +300,17 @@ public class WebServices  {
             connection.setConnectTimeout(30000);
             connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
+
+            connection.setRequestProperty("Accept-Encoding", "gzip");
             connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
 
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+            InputStreamReader reader = new InputStreamReader(gzipInputStream);
+
+//            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
             Gson gson = new Gson();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegistrationEntryResponse>>() {}.getType());
 
@@ -567,22 +583,34 @@ public class WebServices  {
             }
             phones.close();
 
-//            request.setContacts(contactDTOs);
+            request.setContacts(contactDTOs);
 
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationCredentialsRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
 
+
+
             connection.setConnectTimeout(30000);
             connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
+            connection.setRequestProperty("Accept-Encoding", "gzip");
             connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
 
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+//            String encoding = connection.getHeaderField("Content-Encoding");
+//            boolean gzipped = encoding!=null && encoding.toLowerCase().contains("gzip");
+
+            InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+            InputStreamReader reader = new InputStreamReader(gzipInputStream);
+
+//            GZIPInputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+//            InputStreamReader reader = new InputStreamReader(gzipInputStream);
+
+//            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
 
             Gson gson = new Gson();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegistrationCredentialsResponse>>() {}.getType());
@@ -1040,10 +1068,7 @@ public class WebServices  {
                     contactDTO.setCellNumber(contact_phone_no);
                     contactDTO.setDisplayName(contact_name);
                     contactDTOs.add(contactDTO);
-//                    }
-//                    else {
-//                        Log.e("PHONE", contact_phone_no);
-//                    }
+
                 }
 
             }
@@ -1058,15 +1083,28 @@ public class WebServices  {
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<ContactsHampayEnabledRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
 
+
+
+            connection.setDoOutput(false);
+//            connection.setInstanceFollowRedirects(false);
             connection.setConnectTimeout(30000);
             connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
+            connection.setRequestProperty("Accept-Encoding", "gzip");
             connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
 
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+//            int code = connection.getResponseCode();
+
+//            String encoding = connection.getHeaderField("Content-Encoding");
+//            boolean gzipped = encoding!=null && encoding.toLowerCase().contains("gzip");
+
+            InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+            InputStreamReader reader = new InputStreamReader(gzipInputStream);
+//
+//            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
 
             GsonBuilder builder = new GsonBuilder();
             builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {

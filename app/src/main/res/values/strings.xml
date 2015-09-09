@@ -310,6 +310,7 @@
     <string name="debit">پرداخت</string>
     <string name="credit">دریافت</string>
     <string name="fail">ناموفق</string>
+    <string name="pending">درحال بررسی</string>
 
 
     <string name="pay_one_search_hint">نام یا شماره همراه دریافت کننده را وارد کنید</string>

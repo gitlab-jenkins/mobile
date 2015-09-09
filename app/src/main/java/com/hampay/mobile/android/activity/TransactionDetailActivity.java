@@ -25,6 +25,7 @@ public class TransactionDetailActivity extends ActionBarActivity implements View
 
     PersianEnglishDigit persianEnglishDigit;
 
+    FacedTextView from_to_text;
     ImageView status_icon;
     FacedTextView status_text;
     FacedTextView user_name;
@@ -54,6 +55,7 @@ public class TransactionDetailActivity extends ActionBarActivity implements View
         context = this;
         activity = TransactionDetailActivity.this;
 
+        from_to_text = (FacedTextView)findViewById(R.id.from_to_text);
         status_icon = (ImageView)findViewById(R.id.status_icon);
         status_text = (FacedTextView)findViewById(R.id.status_text);
         user_name = (FacedTextView)findViewById(R.id.user_name);
@@ -80,17 +82,26 @@ public class TransactionDetailActivity extends ActionBarActivity implements View
         if (transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.SUCCESS){
 
             if (transactionDTO.getTransactionType() == TransactionDTO.TransactionType.CREDIT){
+                from_to_text.setText(getString(R.string.transaction_from));
                 status_text.setText(getString(R.string.credit));
                 status_text.setTextColor(getResources().getColor(R.color.register_btn_color));
                 status_icon.setImageResource(R.drawable.arrow_r);
             }
             else if (transactionDTO.getTransactionType() == TransactionDTO.TransactionType.DEBIT){
+                from_to_text.setText(getString(R.string.transaction_to));
                 status_text.setText(getString(R.string.debit));
                 status_text.setTextColor(getResources().getColor(R.color.user_change_status));
                 status_icon.setImageResource(R.drawable.arrow_p);
             }
 
-        }else {
+        }else if (transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.PENDING) {
+            from_to_text.setText(getString(R.string.transaction_to));
+            status_text.setText(context.getString(R.string.pending));
+            status_text.setTextColor(getResources().getColor(R.color.pending_transaction));
+            status_icon.setImageResource(R.drawable.arrow_p);
+        }
+        else {
+            from_to_text.setText(getString(R.string.transaction_to));
             status_text.setText(getString(R.string.fail));
             status_text.setTextColor(getResources().getColor(R.color.colorPrimary));
             status_icon.setImageResource(R.drawable.arrow_f);
@@ -99,7 +110,7 @@ public class TransactionDetailActivity extends ActionBarActivity implements View
 
         user_name.setText(transactionDTO.getPersonName());
         message.setText(transactionDTO.getMessage());
-        price_pay.setText(persianEnglishDigit.E2P(String.format("%,d", transactionDTO.getAmount()).replace(",", ".")));
+        price_pay.setText(persianEnglishDigit.E2P(String.format("%,d", transactionDTO.getAmount())));
         user_mobile_no.setText(persianEnglishDigit.E2P(transactionDTO.getPhoneNumber()));
         date_time.setText(persianEnglishDigit.E2P((new JalaliConvert()).GregorianToPersian(transactionDTO.getTransactionDate())));
         tracking_code.setText(persianEnglishDigit.E2P(transactionDTO.getReference()));

@@ -421,7 +421,7 @@ public class HamPayDialog {
         layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
         layoutParams.x = 25;
         layoutParams.y = 20;
-        
+
         dialog.show();
     }
 
@@ -1601,9 +1601,9 @@ public class HamPayDialog {
     }
 
     public void showFailVerifyAccountDialog(final RequestVerifyAccount requestVerifyAccount,
-                                                    final VerifyAccountRequest verifyAccountRequest,
-                                                    final String code,
-                                                    final String message){
+                                            final VerifyAccountRequest verifyAccountRequest,
+                                            final String code,
+                                            final String message){
         Rect displayRectangle = new Rect();
         Activity parent = (Activity) activity;
         Window window = parent.getWindow();
@@ -1647,9 +1647,9 @@ public class HamPayDialog {
     }
 
     public void showFailUserProfileDialog(final RequestUserProfile requestUserProfile,
-                                            final UserProfileRequest userProfileRequest,
-                                            final String code,
-                                            final String message){
+                                          final UserProfileRequest userProfileRequest,
+                                          final String code,
+                                          final String message){
         Rect displayRectangle = new Rect();
         Activity parent = (Activity) activity;
         Window window = parent.getWindow();
@@ -1693,9 +1693,9 @@ public class HamPayDialog {
 
 
     public void showFailRequestVerifyTransferMoneyDialog(final RequestRegistrationVerifyTransferMoney requestRegistrationVerifyTransferMoney,
-                                                  final RegistrationVerifyTransferMoneyRequest registrationVerifyTransferMoneyRequest,
-                                                  final String code,
-                                                  final String message){
+                                                         final RegistrationVerifyTransferMoneyRequest registrationVerifyTransferMoneyRequest,
+                                                         final String code,
+                                                         final String message){
         Rect displayRectangle = new Rect();
         Activity parent = (Activity) activity;
         Window window = parent.getWindow();
@@ -1706,7 +1706,12 @@ public class HamPayDialog {
         FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
         FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
 
-        responseCode.setText(activity.getString(R.string.error_code, code));
+        if (code.length() == 0){
+            responseCode.setText("");
+            responseCode.setVisibility(View.GONE);
+        }else {
+            responseCode.setText(activity.getString(R.string.error_code, code));
+        }
         responseMessage.setText(message);
 
         FacedTextView retry_verify_transfer_money = (FacedTextView) view.findViewById(R.id.retry_verify_transfer_money);
@@ -1739,9 +1744,9 @@ public class HamPayDialog {
 
 
     public void showFailVerifyTransferMoneyDialog(final RequestVerifyTransferMoney requestVerifyTransferMoney,
-                                                         final VerifyTransferMoneyRequest verifyTransferMoneyRequest,
-                                                         final String code,
-                                                         final String message){
+                                                  final VerifyTransferMoneyRequest verifyTransferMoneyRequest,
+                                                  final String code,
+                                                  final String message){
         Rect displayRectangle = new Rect();
         Activity parent = (Activity) activity;
         Window window = parent.getWindow();
@@ -1752,7 +1757,12 @@ public class HamPayDialog {
         FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
         FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
 
-        responseCode.setText(activity.getString(R.string.error_code, code));
+        if (code.length() == 0){
+            responseCode.setText("");
+            responseCode.setVisibility(View.GONE);
+        }else {
+            responseCode.setText(activity.getString(R.string.error_code, code));
+        }
         responseMessage.setText(message);
 
         FacedTextView retry_verify_transfer_money = (FacedTextView) view.findViewById(R.id.retry_verify_transfer_money);
@@ -1763,6 +1773,7 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                 requestVerifyTransferMoney.execute(verifyTransferMoneyRequest);
             }
         });
@@ -1899,7 +1910,8 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                requestTAC.execute(tacRequest);
+                if (requestTAC.getStatus() == AsyncTask.Status.FINISHED)
+                    requestTAC.execute(tacRequest);
             }
         });
         cancel_request.setOnClickListener(new View.OnClickListener() {
