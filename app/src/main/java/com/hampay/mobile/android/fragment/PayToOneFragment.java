@@ -19,12 +19,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.dto.ContactDTO;
 import com.hampay.common.core.model.request.ContactsHampayEnabledRequest;
 import com.hampay.common.core.model.response.ContactsHampayEnabledResponse;
 import com.hampay.common.core.model.response.RegistrationEntryResponse;
+import com.hampay.mobile.android.HamPayApplication;
 import com.hampay.mobile.android.Helper.DatabaseHelper;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.activity.HamPayLoginActivity;
@@ -67,8 +70,6 @@ public class PayToOneFragment extends Fragment {
 
     boolean searchEnabled = false;
 
-//    boolean onResume = false;
-
     static Activity context;
 
     static PayOneAdapter payOneAdapter;
@@ -79,22 +80,19 @@ public class PayToOneFragment extends Fragment {
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
+    Tracker hamPayGaTracker;
+
     public PayToOneFragment() {
     }
 
     @Override
     public void startActivityForResult(Intent intent, int requestCode) {
         super.startActivityForResult(intent, requestCode);
-
-        Log.e("Start", "start");
-
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        Log.e("Start", "start");
     }
 
 
@@ -110,6 +108,9 @@ public class PayToOneFragment extends Fragment {
 
         searchRecentPays = new ArrayList<RecentPay>();
         searchEnabledHamPay = new ArrayList<EnabledHamPay>();
+
+        hamPayGaTracker = ((HamPayApplication) getActivity().getApplication())
+                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
 //        for (RecentPay pay : recentPays){
 //            Log.e("PAY", pay.getId() + ": " + pay.getName());
@@ -462,7 +463,7 @@ public class PayToOneFragment extends Fragment {
                     if (contactDTOs.size() > 0) {
 
                         dbHelper.deleteEnabledHamPays();
-//
+
                         for (ContactDTO contactDTO : contactDTOs) {
 
                             EnabledHamPay enabledHamPay = new EnabledHamPay();
@@ -473,18 +474,36 @@ public class PayToOneFragment extends Fragment {
 
                         }
                     }
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Contacts Hampay Enabled")
+                            .setAction("Fetch")
+                            .setLabel("Success")
+                            .build());
                 }
                 else {
                     requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());
                     new HamPayDialog(context).showFailContactsHamPayEnabledDialog(requestContactHampayEnabled, contactsHampayEnabledRequest,
                             contactsHampayEnabledResponseMessage.getService().getResultStatus().getCode(),
                             contactsHampayEnabledResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Contacts Hampay Enabled")
+                            .setAction("Fetch")
+                            .setLabel("Fail(Server)")
+                            .build());
                 }
             }else {
                 requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());
                 new HamPayDialog(context).showFailContactsHamPayEnabledDialog(requestContactHampayEnabled, contactsHampayEnabledRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_contacts_enabled));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Contacts Hampay Enabled")
+                        .setAction("Fetch")
+                        .setLabel("Fail(Mobile)")
+                        .build());
             }
 
             if (isAdded()) {

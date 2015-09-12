@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.dto.ContactDTO;
@@ -21,6 +23,7 @@ import com.hampay.common.core.model.request.VerifyAccountRequest;
 import com.hampay.common.core.model.response.UserProfileResponse;
 import com.hampay.common.core.model.response.VerifyAccountResponse;
 import com.hampay.common.core.model.response.dto.UserProfileDTO;
+import com.hampay.mobile.android.HamPayApplication;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.activity.MainActivity;
 import com.hampay.mobile.android.activity.PayOneActivity;
@@ -87,7 +90,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     RequestUserProfile requestUserProfile;
     UserProfileRequest userProfileRequest;
 
-
+    Tracker hamPayGaTracker;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,6 +101,8 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         prefs = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE);
         editor = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE).edit();
 
+        hamPayGaTracker = ((HamPayApplication) getActivity().getApplicationContext())
+                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
 
         bundle = getArguments();
@@ -263,6 +268,12 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
                     hide_bg.setVisibility(View.GONE);
 
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("User Profile")
+                            .setAction("Fetch")
+                            .setLabel("Success")
+                            .build());
+
                 }
                 else{
                     requestUserProfile = new RequestUserProfile(getActivity(), new RequestUserProfileTaskCompleteListener());
@@ -271,6 +282,12 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                             userProfileResponseMessage.getService().getResultStatus().getDescription());
 
                     hide_bg.setVisibility(View.VISIBLE);
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("User Profile")
+                            .setAction("Fetch")
+                            .setLabel("Fail(Server)")
+                            .build());
                 }
             }
             else {
@@ -280,6 +297,12 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                         getString(R.string.msg_fail_user_profile));
 
                 hide_bg.setVisibility(View.VISIBLE);
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("User Profile")
+                        .setAction("Fetch")
+                        .setLabel("Fail(Mobile)")
+                        .build());
             }
         }
 
@@ -309,6 +332,14 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                     intent.putExtra(Constants.TRANSFER_MONEY_COMMENT, verifyAccountResponseMessage.getService().getTransferMoneyComment());
                     startActivityForResult(intent, 1023);
                     startActivity(intent);
+
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Verify Account")
+                            .setAction("Verify")
+                            .setLabel("Success")
+                            .build());
+
                 }
                 else{
                     hamPayDialog.dismisWaitingDialog();
@@ -316,6 +347,12 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                     new HamPayDialog(getActivity()).showFailVerifyAccountDialog(requestVerifyAccount, verifyAccountRequest,
                             verifyAccountResponseMessage.getService().getResultStatus().getCode(),
                             verifyAccountResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Verify Account")
+                            .setAction("Verify")
+                            .setLabel("Fail(Server)")
+                            .build());
                 }
             }
             else {
@@ -324,6 +361,12 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                 new HamPayDialog(getActivity()).showFailVerifyAccountDialog(requestVerifyAccount, verifyAccountRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_verify_account));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Verify Account")
+                        .setAction("Verify")
+                        .setLabel("Fail(Mobile)")
+                        .build());
             }
         }
 

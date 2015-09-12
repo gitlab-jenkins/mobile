@@ -580,17 +580,35 @@ public class HamPayDialog {
                         dialog.dismiss();
                     }
 
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("TAC Accept")
+                            .setAction("Accept")
+                            .setLabel("Success")
+                            .build());
+
                 }else {
                     requestTACAccept = new RequestTACAccept(activity, new RequestTACAcceptResponseTaskCompleteListener());
                     showFailTACAcceeptRequestDialog(requestTACAccept, tacAcceptRequest,
                             tacAcceptResponseMessage.getService().getResultStatus().getCode(),
                             tacAcceptResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("TAC Accept")
+                            .setAction("Accept")
+                            .setLabel("Fail(Server)")
+                            .build());
                 }
             }
             else {
                 showFailTACAcceeptRequestDialog(requestTACAccept, tacAcceptRequest,
                         Constants.LOCAL_ERROR_CODE,
                         activity.getString(R.string.msg_fail_tac_accept_request));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("TAC Accept")
+                        .setAction("Accept")
+                        .setLabel("Fail(Mobile)")
+                        .build());
             }
 
         }

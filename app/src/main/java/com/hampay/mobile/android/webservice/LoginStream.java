@@ -2,21 +2,13 @@ package com.hampay.mobile.android.webservice;
 
 import android.content.Context;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 import com.hampay.mobile.android.model.LoginData;
-import com.hampay.mobile.android.model.SuccessLoginResponse;
 import com.hampay.mobile.android.util.Constants;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 

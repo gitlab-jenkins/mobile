@@ -20,12 +20,15 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.BusinessListRequest;
 import com.hampay.common.core.model.request.BusinessSearchRequest;
 import com.hampay.common.core.model.response.BusinessListResponse;
 import com.hampay.common.core.model.response.dto.BusinessDTO;
+import com.hampay.mobile.android.HamPayApplication;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.activity.HamPayLoginActivity;
 import com.hampay.mobile.android.adapter.HamPayBusinessesAdapter;
@@ -84,6 +87,8 @@ public class PayToBusinessFragment extends Fragment {
 
     boolean searchEnabled = false;
 
+    Tracker hamPayGaTracker;
+
     public PayToBusinessFragment() {
 
     }
@@ -96,6 +101,9 @@ public class PayToBusinessFragment extends Fragment {
         editor = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE).edit();
 
         hamPayBusinessesAdapter = new HamPayBusinessesAdapter(getActivity());
+
+        hamPayGaTracker = ((HamPayApplication) getActivity().getApplication())
+                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
     }
 
     @Override
@@ -287,6 +295,13 @@ public class PayToBusinessFragment extends Fragment {
                             }
                         }
                     }
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Business List")
+                            .setAction("Fetch")
+                            .setLabel("Success")
+                            .build());
+
                 }else {
                     if (!searchEnabled) {
                         businessListRequest.setPageNumber(requestPageNumber);
@@ -304,6 +319,12 @@ public class PayToBusinessFragment extends Fragment {
                                 businessListResponseMessage.getService().getResultStatus().getDescription());
 //                        requestSearchHamPayBusiness.execute(businessSearchRequest);
                     }
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Business List")
+                            .setAction("Fetch")
+                            .setLabel("Fail(Server)")
+                            .build());
                 }
             }else {
                 if (!searchEnabled) {
@@ -322,6 +343,12 @@ public class PayToBusinessFragment extends Fragment {
                             getString(R.string.msg_fail_business_search_list));
 //                    requestSearchHamPayBusiness.execute(businessSearchRequest);
                 }
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Business List")
+                        .setAction("Fetch")
+                        .setLabel("Fail(Mobile)")
+                        .build());
             }
         }
 

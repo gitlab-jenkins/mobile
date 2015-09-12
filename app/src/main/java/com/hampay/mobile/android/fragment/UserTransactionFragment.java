@@ -13,11 +13,14 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.TransactionListRequest;
 import com.hampay.common.core.model.response.TransactionListResponse;
 import com.hampay.common.core.model.response.dto.TransactionDTO;
+import com.hampay.mobile.android.HamPayApplication;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.activity.HamPayLoginActivity;
 import com.hampay.mobile.android.activity.TransactionDetailActivity;
@@ -62,8 +65,9 @@ public class UserTransactionFragment extends Fragment {
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
+    Tracker hamPayGaTracker;
+
     public UserTransactionFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -75,6 +79,9 @@ public class UserTransactionFragment extends Fragment {
 
         transactionDTOs = new ArrayList<TransactionDTO>();
         userTransactionAdapter = new UserTransactionAdapter(getActivity());
+
+        hamPayGaTracker = ((HamPayApplication) getActivity().getApplication())
+                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
     }
 
     @Override
@@ -183,12 +190,24 @@ public class UserTransactionFragment extends Fragment {
 
                     }
 
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Transaction List")
+                            .setAction("Fetch")
+                            .setLabel("Success")
+                            .build());
+
                 } else {
                     transactionListRequest.setPageNumber(requestPageNumber);
                     requestUserTransaction = new RequestUserTransaction(getActivity(), new RequestUserTransactionsTaskCompleteListener());
                     new HamPayDialog(getActivity()).showFailUserTransactionDialog(requestUserTransaction, transactionListRequest,
                             transactionListResponseMessage.getService().getResultStatus().getCode(),
                             transactionListResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Transaction List")
+                            .setAction("Fetch")
+                            .setLabel("Fail(Server)")
+                            .build());
                 }
             } else {
                 transactionListRequest.setPageNumber(requestPageNumber);
@@ -196,6 +215,12 @@ public class UserTransactionFragment extends Fragment {
                 new HamPayDialog(getActivity()).showFailUserTransactionDialog(requestUserTransaction, transactionListRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_user_transation));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Transaction List")
+                        .setAction("Fetch")
+                        .setLabel("Fail(Mobile)")
+                        .build());
             }
         }
 
