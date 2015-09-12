@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.Tracker;
+import com.hampay.mobile.android.HamPayApplication;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.component.material.RippleView;
@@ -20,7 +22,6 @@ public class PostStartActivity extends Activity {
 
     SharedPreferences.Editor editor;
 
-
     Activity activity;
 
     public void contactUs(View view){
@@ -33,6 +34,7 @@ public class PostStartActivity extends Activity {
         setContentView(R.layout.activity_post_start);
 
         activity = PostStartActivity.this;
+
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 //        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, PostStartActivity.class.getName());

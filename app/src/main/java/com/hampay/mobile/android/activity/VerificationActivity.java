@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
@@ -37,8 +39,9 @@ public class VerificationActivity extends Activity {
 
     HamPayDialog hamPayDialog;
 
+    Tracker hamPayGaTracker;
+
     public void contactUs(View view){
-//        new HamPayDialog(this).showContactUsDialog();
         new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/ver-num.html");
     }
 
@@ -78,31 +81,43 @@ public class VerificationActivity extends Activity {
         {
 
             keepOn_button.setEnabled(true);
-//            loading_rl.setVisibility(View.GONE);
 
             hamPayDialog.dismisWaitingDialog();
 
             if (registrationSendSmsTokenResponse != null) {
                 if (registrationSendSmsTokenResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
-//                    editor.putString(Constants.REGISTERED_ACTIVITY_DATA, VerificationActivity.class.toString());
-//                    editor.commit();
-
                     Intent intent = new Intent();
                     intent.setClass(VerificationActivity.this, SMSVerificationActivity.class);
-//                    editor.putString(Constants.REGISTERED_ACTIVITY_DATA, SMSVerificationActivity.class.toString());
-//                    editor.commit();
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     finish();
                     startActivity(intent);
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Send Sms Token")
+                            .setAction("Send")
+                            .setLabel("Success")
+                            .build());
                 }else if (registrationSendSmsTokenResponse.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
                     new HamPayDialog(activity).showInvalidStepDialog();
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Send Sms Token")
+                            .setAction("Send")
+                            .setLabel("Success(Invalid)")
+                            .build());
                 }
                 else {
                     requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
                     new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
                             registrationSendSmsTokenResponse.getService().getResultStatus().getCode(),
                             registrationSendSmsTokenResponse.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Send Sms Token")
+                            .setAction("Send")
+                            .setLabel("Fail(Server)")
+                            .build());
                 }
 
             }else {
@@ -110,13 +125,18 @@ public class VerificationActivity extends Activity {
                 new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.mgs_fail_registration_send_sms_token));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Send Sms Token")
+                        .setAction("Send")
+                        .setLabel("Fail(Mobile)")
+                        .build());
             }
         }
 
         @Override
         public void onTaskPreRun() {
             keepOn_button.setEnabled(false);
-//            loading_rl.setVisibility(View.VISIBLE);
             hamPayDialog.showWaitingdDialog("");
         }
     }

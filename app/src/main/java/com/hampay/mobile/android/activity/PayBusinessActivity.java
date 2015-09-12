@@ -9,11 +9,14 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.dto.UserVerificationStatus;
 import com.hampay.common.core.model.request.BusinessPaymentConfirmRequest;
 import com.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
+import com.hampay.mobile.android.HamPayApplication;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestBusinessPaymentConfirm;
@@ -62,6 +65,8 @@ public class PayBusinessActivity extends ActionBarActivity {
 
     HamPayDialog hamPayDialog;
 
+    Tracker hamPayGaTracker;
+
     public void backActionBar(View view){
         finish();
     }
@@ -75,6 +80,9 @@ public class PayBusinessActivity extends ActionBarActivity {
 
         context = this;
         activity = PayBusinessActivity.this;
+
+        hamPayGaTracker = ((HamPayApplication) getApplication())
+                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -203,13 +211,31 @@ public class PayBusinessActivity extends ActionBarActivity {
             if (businessPaymentConfirmResponseMessage != null){
                 if (businessPaymentConfirmResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
                     new HamPayDialog(activity).businessPaymentConfirmDialog(businessPaymentConfirmResponseMessage.getService(), amountValue, businessMssage);
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Business Payment Confirm")
+                            .setAction("Payment Confirm")
+                            .setLabel("Success")
+                            .build());
                 }else {
                     new HamPayDialog(activity).showFailPaymentDialog(businessPaymentConfirmResponseMessage.getService().getResultStatus().getCode(),
                             businessPaymentConfirmResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Business Payment Confirm")
+                            .setAction("Payment Confirm")
+                            .setLabel("Fail(Server)")
+                            .build());
                 }
             }else {
                 new HamPayDialog(activity).showFailPaymentDialog(Constants.LOCAL_ERROR_CODE,
                         activity.getString(R.string.msg_fail_payment));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Business Payment Confirm")
+                        .setAction("Payment Confirm")
+                        .setLabel("Fail(Mobile)")
+                        .build());
             }
             pay_to_business_button.setEnabled(true);
         }

@@ -33,7 +33,7 @@ public class GuideDetailActivity extends ActionBarActivity {
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
 
-        webPageUrl = bundle.getString(Constants.WEB_PAGE_ADDRESS, "");
+        webPageUrl = bundle.getString(Constants.WEB_PAGE_ADDRESS);
 
         guide_webview = (WebView)findViewById(R.id.guide_webview);
 

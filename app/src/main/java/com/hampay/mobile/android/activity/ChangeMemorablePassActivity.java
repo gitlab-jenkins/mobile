@@ -4,33 +4,29 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.ChangeMemorableWordRequest;
-import com.hampay.common.core.model.request.ChangePassCodeRequest;
 import com.hampay.common.core.model.response.ChangeMemorableWordResponse;
-import com.hampay.common.core.model.response.ChangePassCodeResponse;
+import com.hampay.mobile.android.HamPayApplication;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.animation.Collapse;
 import com.hampay.mobile.android.animation.Expand;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestChangeMemorableWord;
-import com.hampay.mobile.android.async.RequestChangePassCode;
 import com.hampay.mobile.android.component.material.RippleView;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
-import com.hampay.mobile.android.webservice.WebServices;
 
 public class ChangeMemorablePassActivity extends ActionBarActivity implements View.OnClickListener{
 
@@ -78,6 +74,8 @@ public class ChangeMemorablePassActivity extends ActionBarActivity implements Vi
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
+    Tracker hamPayGaTracker;
+
     public void contactUs(View view){
         new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/changeMemorableWord.html");
     }
@@ -93,6 +91,9 @@ public class ChangeMemorablePassActivity extends ActionBarActivity implements Vi
 
         context = this;
         activity = ChangeMemorablePassActivity.this;
+
+        hamPayGaTracker = ((HamPayApplication) getApplication())
+                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -315,18 +316,36 @@ public class ChangeMemorablePassActivity extends ActionBarActivity implements Vi
                     editor.putString(Constants.MEMORABLE_WORD, newMemorable);
                     editor.commit();
                     new HamPayDialog(activity).showSuccessChangeSettingDialog(changeMemorableWordResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Memorable Word")
+                            .setAction("Change")
+                            .setLabel("Success")
+                            .build());
                 }
                 else {
                     requestChangeMemorableWord = new RequestChangeMemorableWord(context, new RequestChangeMemorableWordTaskCompleteListener());
                     new HamPayDialog(activity).showFailChangeMemorableWordDialog(requestChangeMemorableWord, changeMemorableWordRequest,
                             changeMemorableWordResponseMessage.getService().getResultStatus().getCode(),
                             changeMemorableWordResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Memorable Word")
+                            .setAction("Change")
+                            .setLabel("Fail(Server)")
+                            .build());
                 }
             }else {
                 requestChangeMemorableWord = new RequestChangeMemorableWord(context, new RequestChangeMemorableWordTaskCompleteListener());
                 new HamPayDialog(activity).showFailChangeMemorableWordDialog(requestChangeMemorableWord, changeMemorableWordRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_change_memorable_word));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Memorable Word")
+                        .setAction("Change")
+                        .setLabel("Fail(Mobile)")
+                        .build());
             }
         }
 

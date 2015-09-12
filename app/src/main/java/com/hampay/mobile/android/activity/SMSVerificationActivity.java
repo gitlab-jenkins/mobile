@@ -18,12 +18,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
 import com.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
 import com.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
 import com.hampay.common.core.model.response.RegistrationVerifyMobileResponse;
+import com.hampay.mobile.android.HamPayApplication;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.animation.Collapse;
 import com.hampay.mobile.android.animation.Expand;
@@ -78,7 +81,6 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
 
     SharedPreferences.Editor editor;
 
-    //    RelativeLayout loading_rl;
     HamPayDialog hamPayDialog;
 
     SharedPreferences prefs;
@@ -94,6 +96,8 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
 
     boolean sendSmsPermision = false;
     int sendSmsCounter = 0;
+
+    Tracker hamPayGaTracker;
 
     @Override
     protected void onResume() {
@@ -156,6 +160,9 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
 
         context = this;
 
+        hamPayGaTracker = ((HamPayApplication) getApplication())
+                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
+
         persianEnglishDigit = new PersianEnglishDigit();
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
@@ -190,13 +197,6 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
                     if (keyboard.getVisibility() != View.VISIBLE)
                         new Expand(keyboard).animate();
 
-//                    keyboard.setVisibility(LinearLayout.VISIBLE);
-//                    Animation animation = AnimationUtils.loadAnimation(context, R.anim.keyboard);
-//                    animation.setDuration(400);
-//                    keyboard.setAnimation(animation);
-//                    keyboard.animate();
-//                    animation.start();
-//                    keyboard.setVisibility(View.VISIBLE);
                 }
             }
         }.start();
@@ -287,7 +287,7 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
 
             numberProgressBar.setProgress(0);
             verify_button.setEnabled(true);
-//            loading_rl.setVisibility(View.GONE);
+
             hamPayDialog.dismisWaitingDialog();
             if (registrationVerifyMobileResponseMessage != null) {
 
@@ -300,14 +300,32 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
                         finish();
                         startActivity(intent);
 
+                        hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                                .setCategory("Verify Mobile")
+                                .setAction("Verify")
+                                .setLabel("Success")
+                                .build());
+
                     } else {
                         new HamPayDialog(activity).showIncorrectSMSVerification();
+
+                        hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                                .setCategory("Verify Mobile")
+                                .setAction("Verify")
+                                .setLabel("Success(Is Not Verified)")
+                                .build());
                     }
                 }else {
                     requestVerifyMobile = new RequestVerifyMobile(context, new RequestRegistrationVerifyMobileTaskCompleteListener());
                     new HamPayDialog(activity).showFailRegistrationVerifyMobileDialog(requestVerifyMobile, registrationVerifyMobileRequest,
                             registrationVerifyMobileResponseMessage.getService().getResultStatus().getCode(),
                             registrationVerifyMobileResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Verify Mobile")
+                            .setAction("Verify")
+                            .setLabel("Fail(Server)")
+                            .build());
                 }
 
             }else {
@@ -315,13 +333,17 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
                 new HamPayDialog(activity).showFailRegistrationVerifyMobileDialog(requestVerifyMobile, registrationVerifyMobileRequest,
                         registrationVerifyMobileResponseMessage.getService().getResultStatus().getCode(),
                         registrationVerifyMobileResponseMessage.getService().getResultStatus().getDescription());
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Verify Mobile")
+                        .setAction("Verify")
+                        .setLabel("Fail(Mobile)")
+                        .build());
             }
         }
 
         @Override
         public void onTaskPreRun() {
-//            keyboard.setVisibility(View.GONE);
-//            loading_rl.setVisibility(View.VISIBLE);
             hamPayDialog.showWaitingdDialog("");
         }
     }
@@ -331,13 +353,6 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
         switch (v.getId()){
 
             case R.id.activation_holder:
-//                keyboard.setVisibility(LinearLayout.VISIBLE);
-//                Animation animation   =    AnimationUtils.loadAnimation(this, R.anim.keyboard);
-//                animation.setDuration(400);
-//                keyboard.setAnimation(animation);
-//                keyboard.animate();
-//                animation.start();
-//                keyboard.setVisibility(View.VISIBLE);
                 if (keyboard.getVisibility() != View.VISIBLE)
                     new Expand(keyboard).animate();
                 break;
@@ -549,8 +564,11 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
             if (registrationSendSmsTokenResponse != null) {
                 if (registrationSendSmsTokenResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
-//                    editor.putString(Constants.REGISTERED_ACTIVITY_DATA, VerificationActivity.class.toString());
-//                    editor.commit();
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Send Sms Token")
+                            .setAction("Send")
+                            .setLabel("Success")
+                            .build());
 
 
                     numberProgressBar.setProgress(0);
@@ -573,14 +591,6 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
                                 Toast.makeText(context, getString(R.string.sms_upper_reach_sms), Toast.LENGTH_LONG).show();
                             }
 
-//                            keyboard.setVisibility(LinearLayout.VISIBLE);
-//                            Animation animation   =    AnimationUtils.loadAnimation(context, R.anim.keyboard);
-//                            animation.setDuration(400);
-//                            keyboard.setAnimation(animation);
-//                            keyboard.animate();
-//                            animation.start();
-//                            keyboard.setVisibility(View.VISIBLE);
-
                             if (keyboard.getVisibility() != View.VISIBLE)
                                 new Expand(keyboard).animate();
 
@@ -588,12 +598,24 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
                     }.start();
                 }else if (registrationSendSmsTokenResponse.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
                     new HamPayDialog(activity).showInvalidStepDialog();
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Send Sms Token")
+                            .setAction("Send")
+                            .setLabel("Success(Invalid)")
+                            .build());
                 }
                 else {
                     requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
                     new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
                             registrationSendSmsTokenResponse.getService().getResultStatus().getCode(),
                             registrationSendSmsTokenResponse.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Send Sms Token")
+                            .setAction("Send")
+                            .setLabel("Fail(Server)")
+                            .build());
                 }
 
             }else {
@@ -601,6 +623,12 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
                 new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.mgs_fail_registration_send_sms_token));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Send Sms Token")
+                        .setAction("Send")
+                        .setLabel("Fail(Mobile)")
+                        .build());
             }
         }
 

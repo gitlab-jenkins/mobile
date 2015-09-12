@@ -18,14 +18,12 @@ public class PostRegVerifyAccountNoActivity extends Activity {
 
     ButtonRectangle keepOn_button;
 
-//    RelativeLayout loading_rl;
 
     HamPayDialog hamPayDialog;
 
     SharedPreferences.Editor editor;
 
     public void contactUs(View view){
-//        new HamPayDialog(this).showContactUsDialog();
         new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/pass.html");
     }
 

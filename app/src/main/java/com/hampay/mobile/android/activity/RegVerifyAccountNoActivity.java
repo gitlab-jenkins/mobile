@@ -8,10 +8,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.RegistrationVerifyTransferMoneyRequest;
 import com.hampay.common.core.model.response.RegistrationVerifyTransferMoneyResponse;
+import com.hampay.mobile.android.HamPayApplication;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestRegistrationVerifyTransferMoney;
@@ -45,6 +48,8 @@ public class RegVerifyAccountNoActivity extends Activity {
     RequestRegistrationVerifyTransferMoney requestRegistrationVerifyTransferMoney;
     RegistrationVerifyTransferMoneyRequest registrationVerifyTransferMoneyRequest;
 
+    Tracker hamPayGaTracker;
+
 
     public void contactUs(View view){
         new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/accountVerification.html");
@@ -56,6 +61,9 @@ public class RegVerifyAccountNoActivity extends Activity {
         setContentView(R.layout.activity_reg_verify_account_no);
 
         activity = RegVerifyAccountNoActivity.this;
+
+        hamPayGaTracker = ((HamPayApplication) getApplication())
+                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
@@ -73,7 +81,6 @@ public class RegVerifyAccountNoActivity extends Activity {
         editor.putString(Constants.REGISTERED_ACTIVITY_DATA, RegVerifyAccountNoActivity.class.getName());
         editor.commit();
 
-//        loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
         hamPayDialog = new HamPayDialog(activity);
         networkConnectivity = new NetworkConnectivity(this);
 
@@ -107,8 +114,6 @@ public class RegVerifyAccountNoActivity extends Activity {
         public void onTaskComplete(ResponseMessage<RegistrationVerifyTransferMoneyResponse> verifyTransferMoneyResponseMessage)
         {
 
-//            loading_rl.setVisibility(View.GONE);
-
             hamPayDialog.dismisWaitingDialog();
 
             if (verifyTransferMoneyResponseMessage != null) {
@@ -121,33 +126,63 @@ public class RegVerifyAccountNoActivity extends Activity {
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         finish();
                         startActivity(intent);
+
+                        hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                                .setCategory("Verify Transfer Money")
+                                .setAction("Transfer")
+                                .setLabel("Success")
+                                .build());
+
                     }else {
                         requestRegistrationVerifyTransferMoney = new RequestRegistrationVerifyTransferMoney(context, new RequestRegistrationVerifyTransferMoneyTaskCompleteListener());
                         new HamPayDialog(activity).showFailRequestVerifyTransferMoneyDialog(requestRegistrationVerifyTransferMoney, registrationVerifyTransferMoneyRequest,
                                 "",
                                 verifyTransferMoneyResponseMessage.getService().getMessage());
+
+                        hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                                .setCategory("Verify Transfer Money")
+                                .setAction("Transfer")
+                                .setLabel("Success(Is Not Verified)")
+                                .build());
                     }
                 }else if (verifyTransferMoneyResponseMessage.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
                     new HamPayDialog(activity).showInvalidStepDialog();
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Verify Transfer Money")
+                            .setAction("Transfer")
+                            .setLabel("Success(Invalid)")
+                            .build());
                 }
                 else {
                     requestRegistrationVerifyTransferMoney = new RequestRegistrationVerifyTransferMoney(context, new RequestRegistrationVerifyTransferMoneyTaskCompleteListener());
                     new HamPayDialog(activity).showFailRequestVerifyTransferMoneyDialog(requestRegistrationVerifyTransferMoney, registrationVerifyTransferMoneyRequest,
                             verifyTransferMoneyResponseMessage.getService().getResultStatus().getCode(),
                             verifyTransferMoneyResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Verify Transfer Money")
+                            .setAction("Transfer")
+                            .setLabel("Fail(Server)")
+                            .build());
                 }
             }else {
                 requestRegistrationVerifyTransferMoney = new RequestRegistrationVerifyTransferMoney(context, new RequestRegistrationVerifyTransferMoneyTaskCompleteListener());
                 new HamPayDialog(activity).showFailRequestVerifyTransferMoneyDialog(requestRegistrationVerifyTransferMoney, registrationVerifyTransferMoneyRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.mgs_fail_verify_transfer_money));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Verify Transfer Money")
+                        .setAction("Transfer")
+                        .setLabel("Fail(Mobile)")
+                        .build());
             }
 
         }
 
         @Override
         public void onTaskPreRun() {
-//            loading_rl.setVisibility(View.VISIBLE);
             hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }

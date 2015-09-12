@@ -7,10 +7,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.RegistrationCredentialsRequest;
 import com.hampay.common.core.model.response.RegistrationCredentialsResponse;
+import com.hampay.mobile.android.HamPayApplication;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestCredentialEntry;
@@ -43,6 +46,8 @@ public class MemorableWordEntryActivity extends Activity {
 
     String userEntryPassword;
 
+    Tracker hamPayGaTracker;
+
     RequestCredentialEntry requestCredentialEntry;
     RegistrationCredentialsRequest registrationCredentialsRequest;
 //    RequestMemorableWordEntry requestMemorableWordEntry;
@@ -63,12 +68,14 @@ public class MemorableWordEntryActivity extends Activity {
         userEntryPassword = bundle.getString(Constants.USER_ENTRY_PASSWORD);
 
         activity = MemorableWordEntryActivity.this;
+        context = this;
 
         hamPayDialog = new HamPayDialog(activity);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
 
-        context = this;
+        hamPayGaTracker = ((HamPayApplication) getApplication())
+                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
         memorable_value = (FacedEditText)findViewById(R.id.memorable_value);
         memorable_value.addTextChangedListener(new MemorableTextWatcher(memorable_value));
@@ -126,20 +133,44 @@ public class MemorableWordEntryActivity extends Activity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     finish();
                     startActivity(intent);
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Registration Memorable Word Entry")
+                            .setAction("Registration")
+                            .setLabel("Success")
+                            .build());
                 }else if (registrationMemorableWordEntryResponseMessage.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
                     new HamPayDialog(activity).showInvalidStepDialog();
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Registration Memorable Word Entry")
+                            .setAction("Registration")
+                            .setLabel("Success(Invalid)")
+                            .build());
                 }
                 else {
                     requestCredentialEntry = new RequestCredentialEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
                     new HamPayDialog(activity).showFailMemorableEntryDialog(requestCredentialEntry, registrationCredentialsRequest,
                             registrationMemorableWordEntryResponseMessage.getService().getResultStatus().getCode(),
                             registrationMemorableWordEntryResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Registration Memorable Word Entry")
+                            .setAction("Registration")
+                            .setLabel("Fail(Server)")
+                            .build());
                 }
             }else {
                 requestCredentialEntry = new RequestCredentialEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
                 new HamPayDialog(activity).showFailMemorableEntryDialog(requestCredentialEntry, registrationCredentialsRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_memorable_entry));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Registration Memorable Word Entry")
+                        .setAction("Registration")
+                        .setLabel("Fail(Mobile)")
+                        .build());
             }
 
         }

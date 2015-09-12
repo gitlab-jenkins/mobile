@@ -98,7 +98,7 @@ public class TransactionDetailActivity extends ActionBarActivity implements View
             from_to_text.setText(getString(R.string.transaction_to));
             status_text.setText(context.getString(R.string.pending));
             status_text.setTextColor(getResources().getColor(R.color.pending_transaction));
-            status_icon.setImageResource(R.drawable.arrow_p);
+            status_icon.setImageResource(R.drawable.pending);
         }
         else {
             from_to_text.setText(getString(R.string.transaction_to));

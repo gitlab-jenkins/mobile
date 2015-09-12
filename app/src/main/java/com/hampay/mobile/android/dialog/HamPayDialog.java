@@ -21,6 +21,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.BankListRequest;
@@ -54,6 +56,7 @@ import com.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
 import com.hampay.common.core.model.response.IndividualPaymentResponse;
 import com.hampay.common.core.model.response.TACAcceptResponse;
 import com.hampay.common.core.model.response.dto.UserProfileDTO;
+import com.hampay.mobile.android.HamPayApplication;
 import com.hampay.mobile.android.Helper.DatabaseHelper;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.activity.AppSliderActivity;
@@ -114,6 +117,8 @@ public class HamPayDialog {
 
     DatabaseHelper dbHelper;
 
+    Tracker hamPayGaTracker;
+
     public HamPayDialog(Activity activity){
 
         this.activity = activity;
@@ -123,6 +128,9 @@ public class HamPayDialog {
 
 
         dbHelper = new DatabaseHelper(activity);
+
+        hamPayGaTracker = ((HamPayApplication) this.activity.getApplicationContext())
+                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
     }
 
@@ -568,20 +576,9 @@ public class HamPayDialog {
                     activity.finish();
                     activity.startActivity(intent);
 
-
                     if (dialog != null && dialog.isShowing()) {
                         dialog.dismiss();
                     }
-
-//                Intent intent = new Intent(activity, MainActivity.class);
-//                intent.putExtra("userProfileDTO", userProfileDTO);
-//                activity.startActivity(intent);
-
-//                if (tacAcceptResponseMessage.getService().getShouldAcceptTAC()){
-//
-//                    (new HamPayDialog(activity)).showTACAcceptDialog(tacAcceptResponseMessage.getService().getTac());
-//
-//                }
 
                 }else {
                     requestTACAccept = new RequestTACAccept(activity, new RequestTACAcceptResponseTaskCompleteListener());
@@ -1056,13 +1053,32 @@ public class HamPayDialog {
                     individualPaymentDialog(individualPaymentResponseMessage.getService(),
                             individualPaymentRequest,
                             contactName);
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Individual Payment")
+                            .setAction("Payment")
+                            .setLabel("Success")
+                            .build());
+
                 }else {
                     showFailPaymentDialog(individualPaymentResponseMessage.getService().getResultStatus().getCode(),
                             individualPaymentResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Individual Payment")
+                            .setAction("Payment")
+                            .setLabel("Fail(Server)")
+                            .build());
                 }
             }else {
                 new HamPayDialog(activity).showFailPaymentDialog(Constants.LOCAL_ERROR_CODE,
                         activity.getString(R.string.msg_fail_payment));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Individual Payment")
+                        .setAction("Payment")
+                        .setLabel("Fail(Mobile)")
+                        .build());
             }
         }
 
@@ -1148,13 +1164,32 @@ public class HamPayDialog {
                     new HamPayDialog(activity).businessPaymentDialog(businessPaymentResponseMessage.getService(),
                             businessPaymentRequest,
                             businessName);
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Business Payment")
+                            .setAction("Payment")
+                            .setLabel("Success")
+                            .build());
+
                 }else {
                     showFailPaymentDialog(businessPaymentResponseMessage.getService().getResultStatus().getCode(),
                             businessPaymentResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Business Payment")
+                            .setAction("Payment")
+                            .setLabel("Fail(Server)")
+                            .build());
                 }
             }else {
                 new HamPayDialog(activity).showFailPaymentDialog(Constants.LOCAL_ERROR_CODE,
                         activity.getString(R.string.msg_fail_payment));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Business Payment")
+                        .setAction("Payment")
+                        .setLabel("Fail(Mobile)")
+                        .build());
             }
         }
 

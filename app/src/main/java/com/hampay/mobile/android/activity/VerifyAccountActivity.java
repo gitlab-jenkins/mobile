@@ -7,10 +7,13 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.VerifyTransferMoneyRequest;
 import com.hampay.common.core.model.response.VerifyTransferMoneyResponse;
+import com.hampay.mobile.android.HamPayApplication;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestRegistrationVerifyTransferMoney;
@@ -34,6 +37,8 @@ public class VerifyAccountActivity extends ActionBarActivity {
     RequestVerifyTransferMoney requestVerifyTransferMoney;
     VerifyTransferMoneyRequest verifyTransferMoneyRequest;
 
+    Tracker hamPayGaTracker;
+
     public void contactUs(View view){
         (new HamPayDialog(this)).showContactUsDialog();
     }
@@ -45,6 +50,9 @@ public class VerifyAccountActivity extends ActionBarActivity {
 
         context = this;
         activity = VerifyAccountActivity.this;
+
+        hamPayGaTracker = ((HamPayApplication) getApplication())
+                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
         bundle = getIntent().getExtras();
         TransferMoneyComment = bundle.getString(Constants.TRANSFER_MONEY_COMMENT);
@@ -90,17 +98,35 @@ public class VerifyAccountActivity extends ActionBarActivity {
                         intent.setClass(VerifyAccountActivity.this, CongratsAccountActivity.class);
                         startActivityForResult(intent, 1023);
                         finish();
+
+                        hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                                .setCategory("Verify Transfer Money")
+                                .setAction("Verify")
+                                .setLabel("Success")
+                                .build());
                     }else {
                         requestVerifyTransferMoney = new RequestVerifyTransferMoney(context, new RequestVerifyTransferMoneyTaskCompleteListener());
                         new HamPayDialog(activity).showFailVerifyTransferMoneyDialog(requestVerifyTransferMoney, verifyTransferMoneyRequest,
                                 "",
                                 verifyTransferMoneyResponseMessage.getService().getMessage());
+
+                        hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                                .setCategory("Verify Transfer Money")
+                                .setAction("Verify")
+                                .setLabel("Fail")
+                                .build());
                     }
                 }else {
                     requestVerifyTransferMoney = new RequestVerifyTransferMoney(context, new RequestVerifyTransferMoneyTaskCompleteListener());
                     new HamPayDialog(activity).showFailVerifyTransferMoneyDialog(requestVerifyTransferMoney, verifyTransferMoneyRequest,
                             verifyTransferMoneyResponseMessage.getService().getResultStatus().getCode(),
                             verifyTransferMoneyResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Verify Transfer Money")
+                            .setAction("Verify")
+                            .setLabel("Fail")
+                            .build());
                 }
             }
 

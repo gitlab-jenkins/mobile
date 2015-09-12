@@ -14,10 +14,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.ChangePassCodeRequest;
 import com.hampay.common.core.model.response.ChangePassCodeResponse;
+import com.hampay.mobile.android.HamPayApplication;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.animation.Collapse;
 import com.hampay.mobile.android.animation.Expand;
@@ -68,6 +71,8 @@ public class ChangePasswordActivity extends ActionBarActivity implements View.On
     Context context;
     Activity activity;
 
+    Tracker hamPayGaTracker;
+
     public void contactUs(View view){
         new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/changePassword.html");
     }
@@ -79,6 +84,9 @@ public class ChangePasswordActivity extends ActionBarActivity implements View.On
 
         context = this;
         activity = ChangePasswordActivity.this;
+
+        hamPayGaTracker = ((HamPayApplication) getApplication())
+                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -478,12 +486,25 @@ public class ChangePasswordActivity extends ActionBarActivity implements View.On
                     input_digit_4.setImageResource(R.drawable.pass_icon_2);
                     input_digit_5.setImageResource(R.drawable.pass_icon_2);
                     new HamPayDialog(activity).showSuccessChangeSettingDialog(changePassCodeResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Change PassCode")
+                            .setAction("Change")
+                            .setLabel("Success")
+                            .build());
+
                 }else {
                     resetLayout();
                     requestChangePassCode = new RequestChangePassCode(context, new RequestChangePassCodeTaskCompleteListener());
                     new HamPayDialog(activity).showFailChangePassCodeDialog(requestChangePassCode, changePassCodeRequest,
                             changePassCodeResponseMessage.getService().getResultStatus().getCode(),
                             changePassCodeResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Change PassCode")
+                            .setAction("Change")
+                            .setLabel("Fail(Server)")
+                            .build());
                 }
             }else {
                 resetLayout();
@@ -491,6 +512,12 @@ public class ChangePasswordActivity extends ActionBarActivity implements View.On
                 new HamPayDialog(activity).showFailChangePassCodeDialog(requestChangePassCode, changePassCodeRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_change_pass_code));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Change PassCode")
+                        .setAction("Change")
+                        .setLabel("Fail(Mobile)")
+                        .build());
             }
         }
 

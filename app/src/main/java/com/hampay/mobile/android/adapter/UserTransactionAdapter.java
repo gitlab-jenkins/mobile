@@ -71,7 +71,7 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
         }else if (transactionDTO.getTransactionStatus() == TransactionStatus.PENDING) {
             viewHolder.status_text.setText(context.getString(R.string.pending));
             viewHolder.status_text.setTextColor(convertView.getResources().getColor(R.color.pending_transaction));
-            viewHolder.status_icon.setImageResource(R.drawable.arrow_p);
+            viewHolder.status_icon.setImageResource(R.drawable.pending);
         }
         else {
             viewHolder.status_text.setText(context.getString(R.string.fail));

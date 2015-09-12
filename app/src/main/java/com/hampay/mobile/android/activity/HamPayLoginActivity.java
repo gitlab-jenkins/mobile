@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -21,6 +23,7 @@ import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.TACRequest;
 import com.hampay.common.core.model.response.TACResponse;
+import com.hampay.mobile.android.HamPayApplication;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.animation.Collapse;
 import com.hampay.mobile.android.animation.Expand;
@@ -90,9 +93,10 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
     TACRequest tacRequest;
     RequestTAC requestTAC;
 
+    Tracker hamPayGaTracker;
+
 
     public void contactUs(View view){
-//        (new HamPayDialog(this)).showContactUsDialog();
         new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/login.html");
     }
 
@@ -110,6 +114,9 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
 
         context = this;
         activity = HamPayLoginActivity.this;
+
+        hamPayGaTracker = ((HamPayApplication) getApplication())
+                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -209,11 +216,24 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
                         finish();
                         startActivity(intent);
                     }
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Request TAC")
+                            .setAction("Request")
+                            .setLabel("Success")
+                            .build());
+
                 }else {
                     requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
                     new HamPayDialog(activity).showFailTCRequestDialog(requestTAC, tacRequest,
                             tacResponseMessage.getService().getResultStatus().getCode(),
                             tacResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Request TAC")
+                            .setAction("Request")
+                            .setLabel("Fail(Server)")
+                            .build());
                 }
             }
             else {
@@ -221,6 +241,12 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
                 new HamPayDialog(activity).showFailTCRequestDialog(requestTAC, tacRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_tac_request));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Request TAC")
+                        .setAction("Request")
+                        .setLabel("Fail(Mobile)")
+                        .build());
             }
 
         }
@@ -266,11 +292,23 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
                         }
 
                         new HamPayDialog(activity).showLoginFailDialog(failedLoginResponse);
+
+                        hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                                .setCategory("User Login")
+                                .setAction("Login")
+                                .setLabel("Fail(Server)")
+                                .build());
                     }else {
                         failedLoginResponse = new FailedLoginResponse();
                         failedLoginResponse.setCode(Constants.LOCAL_ERROR_CODE);
                         failedLoginResponse.setMessage(getString(R.string.msg_fail_hampay_server));
                         new HamPayDialog(activity).showLoginFailDialog(failedLoginResponse);
+
+                        hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                                .setCategory("User Login")
+                                .setAction("Login")
+                                .setLabel("Fail(Mobile)")
+                                .build());
                     }
                 }else {
 
@@ -279,18 +317,29 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
                     tacRequest = new TACRequest();
                     requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
                     requestTAC.execute(tacRequest);
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("User Login")
+                            .setAction("Login")
+                            .setLabel("Success")
+                            .build());
                 }
             }else {
                 failedLoginResponse = new FailedLoginResponse();
                 failedLoginResponse.setCode(Constants.LOCAL_ERROR_CODE);
                 failedLoginResponse.setMessage(getString(R.string.msg_fail_hampay_server));
                 new HamPayDialog(activity).showLoginFailDialog(failedLoginResponse);
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("User Login")
+                        .setAction("Login")
+                        .setLabel("Fail(Mobile)")
+                        .build());
             }
     }
 
     @Override
     public void onTaskPreRun() {
-//        loading_rl.setVisibility(View.VISIBLE);
         hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
     }
 }
@@ -302,13 +351,6 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
         switch (v.getId()){
 
             case R.id.password_holder:
-//                keyboard.setVisibility(LinearLayout.VISIBLE);
-//                Animation animation   =    AnimationUtils.loadAnimation(this, R.anim.keyboard);
-//                animation.setDuration(400);
-//                keyboard.setAnimation(animation);
-//                keyboard.animate();
-//                animation.start();
-//                keyboard.setVisibility(View.VISIBLE);
 
                 if (keyboard.getVisibility() != View.VISIBLE)
                     new Expand(keyboard).animate();

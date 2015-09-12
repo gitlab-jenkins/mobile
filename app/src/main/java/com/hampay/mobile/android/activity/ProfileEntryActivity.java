@@ -23,12 +23,15 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.BankListRequest;
 import com.hampay.common.core.model.request.RegistrationEntryRequest;
 import com.hampay.common.core.model.response.BankListResponse;
 import com.hampay.common.core.model.response.RegistrationEntryResponse;
+import com.hampay.mobile.android.HamPayApplication;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.adapter.BankListAdapter;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
@@ -95,6 +98,8 @@ public class ProfileEntryActivity extends Activity {
 
     HamPayDialog hamPayDialog;
 
+    Tracker hamPayGaTracker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,6 +108,9 @@ public class ProfileEntryActivity extends Activity {
         context = this;
 
         activity = this;
+
+        hamPayGaTracker = ((HamPayApplication) getApplication())
+                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
         initLocation();
 
@@ -421,18 +429,35 @@ public class ProfileEntryActivity extends Activity {
                     if (showBankList) {
                         showListBankDialog();
                     }
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Bank List")
+                            .setAction("Fetch")
+                            .setLabel("Success")
+                            .build());
                 }else {
                     bankListResponseMessage.getService().getResultStatus().getDescription();
                     requestBankList = new RequestBankList(context, new RequestBanksTaskCompleteListener(true));
                     new HamPayDialog(activity).showFailBankListDialog(requestBankList, bankListRequest,
                             bankListResponse.getResultStatus().getCode(),
                             bankListResponse.getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Bank List")
+                            .setAction("Fetch")
+                            .setLabel("Fail(Server)")
+                            .build());
                 }
             }else {
                 requestBankList = new RequestBankList(context, new RequestBanksTaskCompleteListener(true));
                 new HamPayDialog(activity).showFailBankListDialog(requestBankList, bankListRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_fetch_bank_list));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Bank List")
+                        .setAction("Fetch")
+                        .setLabel("Fail(Mobile)")
+                        .build());
             }
         }
 
@@ -464,8 +489,21 @@ public class ProfileEntryActivity extends Activity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     finish();
                     startActivity(intent);
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Registration Entry")
+                            .setAction("Entry")
+                            .setLabel("Success")
+                            .build());
+
                 }else if (registrationEntryResponse.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
                     new HamPayDialog(activity).showInvalidStepDialog();
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Registration Entry")
+                            .setAction("Entry")
+                            .setLabel("Success(Invalid)")
+                            .build());
                 }
                 else {
                     requestRegistrationEntry = new RequestRegistrationEntry(context,
@@ -474,6 +512,12 @@ public class ProfileEntryActivity extends Activity {
                     new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest,
                             registrationEntryResponse.getService().getResultStatus().getCode(),
                             registrationEntryResponse.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Registration Entry")
+                            .setAction("Entry")
+                            .setLabel("Fail(Server)")
+                            .build());
                 }
             }else {
                 requestRegistrationEntry = new RequestRegistrationEntry(context, new RequestRegistrationEntryTaskCompleteListener(),
@@ -481,6 +525,12 @@ public class ProfileEntryActivity extends Activity {
                 new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_registration_entry));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Registration Entry")
+                        .setAction("Entry")
+                        .setLabel("Fail(Mobile)")
+                        .build());
             }
         }
 

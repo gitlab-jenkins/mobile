@@ -261,7 +261,13 @@ public class WebServices  {
 
             InputStreamReader reader = new InputStreamReader(connection.getInputStream());
             Gson gson = new Gson();
+
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding!=null && encoding.toLowerCase().contains("gzip");
+
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<BankListResponse>>() {}.getType());
+
+
 
             if( responseMessage != null && responseMessage.getService() != null );
 

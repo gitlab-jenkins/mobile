@@ -15,11 +15,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.dto.UserVerificationStatus;
 import com.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
 import com.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
+import com.hampay.mobile.android.HamPayApplication;
 import com.hampay.mobile.android.Helper.DatabaseHelper;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
@@ -77,6 +80,8 @@ public class PayOneActivity extends ActionBarActivity {
 
     HamPayDialog hamPayDialog;
 
+    Tracker hamPayGaTracker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,6 +120,9 @@ public class PayOneActivity extends ActionBarActivity {
 
         context = this;
         activity = PayOneActivity.this;
+
+        hamPayGaTracker = ((HamPayApplication) getApplication())
+                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -270,13 +278,32 @@ public class PayOneActivity extends ActionBarActivity {
             if (individualPaymentConfirmResponseMessage != null){
                 if (individualPaymentConfirmResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
                     new HamPayDialog(activity).individualPaymentConfirmDialog(individualPaymentConfirmResponseMessage.getService(), amountValue, contactMssage);
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Individual Payment Confirm")
+                            .setAction("Payment Confirm")
+                            .setLabel("Success")
+                            .build());
+
                 }else {
                     new HamPayDialog(activity).showFailPaymentDialog(individualPaymentConfirmResponseMessage.getService().getResultStatus().getCode(),
                             individualPaymentConfirmResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Individual Payment Confirm")
+                            .setAction("Payment Confirm")
+                            .setLabel("Fail(Server)")
+                            .build());
                 }
             }else {
                 new HamPayDialog(activity).showFailPaymentDialog(Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_payment));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Individual Payment Confirm")
+                        .setAction("Payment Confirm")
+                        .setLabel("Fail(Mobile)")
+                        .build());
             }
 
             pay_to_one_button.setEnabled(true);

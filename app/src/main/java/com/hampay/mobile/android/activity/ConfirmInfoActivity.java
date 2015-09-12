@@ -19,6 +19,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.RegistrationConfirmUserDataRequest;
@@ -27,6 +29,7 @@ import com.hampay.common.core.model.request.RegistrationVerifyAccountRequest;
 import com.hampay.common.core.model.response.RegistrationConfirmUserDataResponse;
 import com.hampay.common.core.model.response.RegistrationFetchUserDataResponse;
 import com.hampay.common.core.model.response.RegistrationVerifyAccountResponse;
+import com.hampay.mobile.android.HamPayApplication;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestConfirmUserData;
@@ -76,14 +79,14 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
 
     Context context;
 
-//    RelativeLayout loading_rl;
-
     HamPayDialog hamPayDialog;
 
 
     LinearLayout correct_info;
 
     private boolean oneConfirmUserData = false;
+
+    Tracker hamPayGaTracker;
 
     public void contactUs(View view){
         new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/continue.html");
@@ -110,8 +113,8 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
 
         correct_info = (LinearLayout)findViewById(R.id.correct_info);
 
-
-//        loading_rl = (RelativeLayout)findViewById(R.id.loading_rl);
+        hamPayGaTracker = ((HamPayApplication) getApplication())
+                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -496,7 +499,6 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
         @Override
         public void onTaskComplete(ResponseMessage<RegistrationVerifyAccountResponse> verifyAccountResponseMessage)
         {
-//            loading_rl.setVisibility(View.GONE);
             hamPayDialog.dismisWaitingDialog();
             if (verifyAccountResponseMessage != null) {
 
@@ -508,14 +510,31 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
                     intent.putExtra(Constants.TRANSFER_MONEY_COMMENT, verifyAccountResponseMessage.getService().getTransferMoneyComment());
                     finish();
                     startActivity(intent);
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Registration Verify Account")
+                            .setAction("Verify")
+                            .setLabel("Success")
+                            .build());
+
                 }else if (verifyAccountResponseMessage.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
                     new HamPayDialog(activity).showInvalidStepDialog();
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Registration Verify Account")
+                            .setAction("Verify")
+                            .setLabel("Success(Invalid)")
+                            .build());
                 }
                 else{
                     requestRegisterVerifyAccount = new RequestRegisterVerifyAccount(context, new RequestRegistrationVerifyAccountResponseTaskCompleteListener());
                     new HamPayDialog(activity).showFailRegisterVerifyAccountDialog(requestRegisterVerifyAccount, registrationVerifyAccountRequest,
                             verifyAccountResponseMessage.getService().getResultStatus().getCode(),
                             verifyAccountResponseMessage.getService().getResultStatus().getDescription());
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Registration Verify Account")
+                            .setAction("Verify")
+                            .setLabel("Fail(Server)")
+                            .build());
                 }
             }
             else {
@@ -523,13 +542,18 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
                 new HamPayDialog(activity).showFailRegisterVerifyAccountDialog(requestRegisterVerifyAccount, registrationVerifyAccountRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_verify_account));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Registration Verify Account")
+                        .setAction("Verify")
+                        .setLabel("Fail(Mobile)")
+                        .build());
             }
 
         }
 
         @Override
         public void onTaskPreRun() {
-//            loading_rl.setVisibility(View.VISIBLE);
             hamPayDialog.showWaitingdDialog("");
         }
     }
@@ -542,8 +566,6 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
         @Override
         public void onTaskComplete(ResponseMessage<RegistrationFetchUserDataResponse> registrationFetchUserDataResponseMessage)
         {
-//            loading_rl.setVisibility(View.GONE);
-
             hamPayDialog.dismisWaitingDialog();
 
             if (registrationFetchUserDataResponseMessage != null) {
@@ -553,8 +575,20 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
                     userFamilyValue.setText(registrationFetchUserDataResponseMessage.getService().getFulName());
                     accountNumberValue.setText(registrationFetchUserDataResponseMessage.getService().getAccountNumber());
                     nationalCodeValue.setText(registrationFetchUserDataResponseMessage.getService().getNationalCode());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Fetch User Data")
+                            .setAction("Fetch")
+                            .setLabel("Success")
+                            .build());
                 }else if (registrationFetchUserDataResponseMessage.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
                     new HamPayDialog(activity).showInvalidStepDialog();
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Fetch User Data")
+                            .setAction("Fetch")
+                            .setLabel("Success(Invalid)")
+                            .build());
                 }
                 else {
                     requestFetchUserData = new RequestFetchUserData(context, new RequestFetchUserDataTaskCompleteListener());
@@ -562,6 +596,12 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
                     new HamPayDialog(activity).showFailFetchUserDataDialog(requestFetchUserData, registrationFetchUserDataRequest,
                             registrationFetchUserDataResponseMessage.getService().getResultStatus().getCode(),
                             registrationFetchUserDataResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Fetch User Data")
+                            .setAction("Fetch")
+                            .setLabel("Fail(Server)")
+                            .build());
                 }
             }else {
                 requestFetchUserData = new RequestFetchUserData(context, new RequestFetchUserDataTaskCompleteListener());
@@ -569,6 +609,12 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
                 new HamPayDialog(activity).showFailFetchUserDataDialog(requestFetchUserData, registrationFetchUserDataRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_registration_fetch_user_data));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Fetch User Data")
+                        .setAction("Fetch")
+                        .setLabel("Fail(Mobile)")
+                        .build());
             }
 
         }
@@ -592,46 +638,61 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
         @Override
         public void onTaskComplete(ResponseMessage<RegistrationConfirmUserDataResponse> registrationConfirmUserDataResponseMessage)
         {
-//            loading_rl.setVisibility(View.GONE);
-
             hamPayDialog.dismisWaitingDialog();
 
             if (registrationConfirmUserDataResponseMessage != null) {
 
                 if (registrationConfirmUserDataResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-
                     oneConfirmUserData = true;
-
-//                confirm_check_img.setImageResource(R.drawable.tick_icon);
                     confirm_check.setChecked(true);
                     correct_button.setVisibility(View.GONE);
                     correct_button_rl.setVisibility(View.GONE);
-//                user_phone.setFocusable(false);
-//                userFamilyValue.setFocusable(false);
                     accountNumberValue.setFocusable(false);
-//                nationalCodeValue.setFocusable(false);
                     confirm_layout.setVisibility(View.VISIBLE);
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Confirm User Data")
+                            .setAction("Confirm")
+                            .setLabel("Success")
+                            .build());
                 }else if (registrationConfirmUserDataResponseMessage.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
                     new HamPayDialog(activity).showInvalidStepDialog();
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Confirm User Data")
+                            .setAction("Confirm")
+                            .setLabel("Success(Invalid)")
+                            .build());
                 }
                 else {
                     requestConfirmUserData = new RequestConfirmUserData(context, new RequestConfirmUserDataTaskCompleteListener());
                     new HamPayDialog(activity).showFailConfirmUserDataDialog(requestConfirmUserData, registrationConfirmUserDataRequest,
                             registrationConfirmUserDataResponseMessage.getService().getResultStatus().getCode(),
                             registrationConfirmUserDataResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Confirm User Data")
+                            .setAction("Confirm")
+                            .setLabel("Fail(Server)")
+                            .build());
                 }
             }else {
                 requestConfirmUserData = new RequestConfirmUserData(context, new RequestConfirmUserDataTaskCompleteListener());
                 new HamPayDialog(activity).showFailConfirmUserDataDialog(requestConfirmUserData, registrationConfirmUserDataRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_registration_confirm_user_data));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Confirm User Data")
+                        .setAction("Confirm")
+                        .setLabel("Fail(Mobile)")
+                        .build());
             }
 
         }
 
         @Override
         public void onTaskPreRun() {
-//            loading_rl.setVisibility(View.VISIBLE);
             hamPayDialog.showWaitingdDialog("");
         }
     }

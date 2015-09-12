@@ -12,10 +12,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.UnlinkUserRequest;
 import com.hampay.common.core.model.response.UnlinkUserResponse;
+import com.hampay.mobile.android.HamPayApplication;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.animation.Collapse;
 import com.hampay.mobile.android.animation.Expand;
@@ -66,6 +69,8 @@ public class UnlinkPassActivity extends ActionBarActivity implements View.OnClic
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
+    Tracker hamPayGaTracker;
+
 
     public void contactUs(View view){
         new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/user-unlink.html");
@@ -83,6 +88,9 @@ public class UnlinkPassActivity extends ActionBarActivity implements View.OnClic
 
         context = this;
         activity = UnlinkPassActivity.this;
+
+        hamPayGaTracker = ((HamPayApplication) getApplication())
+                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -303,27 +311,41 @@ public class UnlinkPassActivity extends ActionBarActivity implements View.OnClic
                 if (unlinkUserResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     editor.clear().commit();
                     editor.commit();
-//                    Intent intent = new Intent(context, AppSliderActivity.class);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                    startActivity(intent);
-//                    finish();
 
                     Intent intent = new Intent();
                     intent.setClass(getApplicationContext(), AppSliderActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Unlink User")
+                            .setAction("Unlink")
+                            .setLabel("Success")
+                            .build());
                 }
                 else {
                     requestUnlinkUser = new RequestUnlinkUser(context, new RequestUnlinkUserTaskCompleteListener());
                     new HamPayDialog(activity).showFailUnlinkDialog(requestUnlinkUser, unlinkUserRequest,
                             unlinkUserResponseResponseMessage.getService().getResultStatus().getCode(),
                             unlinkUserResponseResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Unlink User")
+                            .setAction("Unlink")
+                            .setLabel("Fail(Server)")
+                            .build());
                 }
             }else {
                 requestUnlinkUser = new RequestUnlinkUser(context, new RequestUnlinkUserTaskCompleteListener());
                 new HamPayDialog(activity).showFailUnlinkDialog(requestUnlinkUser, unlinkUserRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_unlink_user));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Unlink User")
+                        .setAction("Unlink")
+                        .setLabel("Fail(Mobile)")
+                        .build());
             }
         }
 
