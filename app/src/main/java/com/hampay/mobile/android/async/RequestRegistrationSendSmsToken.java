@@ -47,4 +47,17 @@ public class RequestRegistrationSendSmsToken extends AsyncTask<RegistrationSendS
         listener.onTaskComplete(registrationSendSmsTokenResponseMessage);
     }
 
+    @Override
+    protected void onCancelled(ResponseMessage<RegistrationSendSmsTokenResponse> registrationSendSmsTokenResponseResponseMessage) {
+        super.onCancelled(registrationSendSmsTokenResponseResponseMessage);
+
+        cancel(true);
+    }
+
+    @Override
+    protected void onCancelled() {
+        super.onCancelled();
+        cancel(true);
+    }
+
 }

@@ -140,17 +140,8 @@ public class ChangePasswordActivity extends ActionBarActivity implements View.On
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.password_holder:
-//                keyboard.setVisibility(LinearLayout.VISIBLE);
-//                Animation animation   =    AnimationUtils.loadAnimation(this, R.anim.keyboard);
-//                animation.setDuration(400);
-//                keyboard.setAnimation(animation);
-//                keyboard.animate();
-//                animation.start();
-//                keyboard.setVisibility(View.VISIBLE);
-
                 if (keyboard.getVisibility() != View.VISIBLE)
                     new Expand(keyboard).animate();
-
                 break;
             case R.id.digit_1:
                 inputDigit("1");

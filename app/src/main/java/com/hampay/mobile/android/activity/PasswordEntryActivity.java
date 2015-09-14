@@ -7,18 +7,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.hampay.common.common.response.ResponseMessage;
-import com.hampay.common.common.response.ResultStatus;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.animation.Collapse;
 import com.hampay.mobile.android.animation.Expand;
-import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.component.material.RippleView;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
@@ -129,17 +124,8 @@ public class PasswordEntryActivity extends Activity implements View.OnClickListe
         switch (v.getId()){
 
             case R.id.password_holder:
-//                keyboard.setVisibility(LinearLayout.VISIBLE);
-//                Animation animation   =    AnimationUtils.loadAnimation(this, R.anim.keyboard);
-//                animation.setDuration(400);
-//                keyboard.setAnimation(animation);
-//                keyboard.animate();
-//                animation.start();
-//                keyboard.setVisibility(View.VISIBLE);
-
                 if (keyboard.getVisibility() != View.VISIBLE)
                     new Expand(keyboard).animate();
-
                 break;
 
             case R.id.digit_1:
@@ -196,7 +182,6 @@ public class PasswordEntryActivity extends Activity implements View.OnClickListe
 
         if (password_1_rl.getVisibility() == View.VISIBLE) {
 
-
             if (inputPasswordValue.length() <= 4) {
 
                 if (digit.contains("d")) {
@@ -208,7 +193,6 @@ public class PasswordEntryActivity extends Activity implements View.OnClickListe
                         inputPasswordValue += digit;
                     }
                 }
-
 
                 switch (inputPasswordValue.length()) {
 

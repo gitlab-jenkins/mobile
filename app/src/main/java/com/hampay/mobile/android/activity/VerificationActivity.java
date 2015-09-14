@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -14,6 +16,7 @@ import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
 import com.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
+import com.hampay.mobile.android.HamPayApplication;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestRegistrationSendSmsToken;
@@ -52,6 +55,9 @@ public class VerificationActivity extends Activity {
 
         activity = VerificationActivity.this;
 
+        hamPayGaTracker = ((HamPayApplication) getApplication())
+                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
+
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         editor.putString(Constants.REGISTERED_ACTIVITY_DATA, VerificationActivity.class.getName());
@@ -75,12 +81,16 @@ public class VerificationActivity extends Activity {
         });
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+
     public class RequestRegistrationSendSmsTokenTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationSendSmsTokenResponse>> {
         @Override
         public void onTaskComplete(ResponseMessage<RegistrationSendSmsTokenResponse> registrationSendSmsTokenResponse)
         {
-
-            keepOn_button.setEnabled(true);
 
             hamPayDialog.dismisWaitingDialog();
 
@@ -136,8 +146,7 @@ public class VerificationActivity extends Activity {
 
         @Override
         public void onTaskPreRun() {
-            keepOn_button.setEnabled(false);
-            hamPayDialog.showWaitingdDialog("");
+            hamPayDialog.showWaitingdSMSDialog(requestRegistrationSendSmsToken, "");
         }
     }
 

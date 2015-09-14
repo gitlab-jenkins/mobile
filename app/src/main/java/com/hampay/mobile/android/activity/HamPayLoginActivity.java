@@ -518,32 +518,7 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
             new Collapse(keyboard).animate();
         }
         else {
-            finish();
+            new HamPayDialog(activity).showExitLoginDialog();
         }
-    }
-
-    private void sendLoginRequest() {
-
-
-//        AlertUtils.getInstance().showProgressDialog(this);
-//
-//
-//        LoginService service = new LoginService(this);
-////        service.sendLoginRequest("87378fbf3a67463dac9829256f26270a", passCode);
-//        String memorableWord = "";
-//
-//        String userId = "";
-//
-//        String installationToken = "";
-//
-//        cls
-//
-//        String password = SecurityUtils.getInstance(this).
-//                generatePassword(inputPassValue,
-//                        memorableWord,
-//                        new DeviceUuidFactory(this).getDeviceUuid().toString(),
-//                        installationToken);
-//
-//        service.sendLoginRequest(userId, password);
     }
 }

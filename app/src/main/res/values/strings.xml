@@ -65,6 +65,7 @@
     <string name="transaction_user_message">پیامک</string>
 
     <string name="hampay_contact">ارتباط با هم‌پی</string>
+    <string name="hampay_contact_failed">اطلاعات تماس با هم‌پی دریافت نشد.</string>
     <string name="pay_to">پرداخت به:   </string>
     <string name="price">مبلغ (ریال)</string>
 
@@ -203,9 +204,6 @@
     <string name="correct_data">اطلاعات بالا صحیح است</string>
     <string name="correct_info">تصحیح اطلاعات</string>
     <string name="verify_account_no">بررسی شماره حساب</string>
-
-
-
 
     <string name="reg_verify_account_no_text_1">انتقال وجه زیر را خارج از برنامه هم‌پی و از طریق یکی از روش‌های اینترنت بانک، همراه بانک و یا عابر بانک انجام دهید.</string>
     <string name="reg_verify_account_no_text_2">برای بررسی صحت شماره حساب شما مبلغ ۲۱۴۱ ریال از حساب هم‌پی ۸۰۰۰۴۵۹ به حساب شما ۱۲۳۴۵۶۷۷ واریز شد.</string>

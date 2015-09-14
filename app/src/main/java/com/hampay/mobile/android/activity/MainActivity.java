@@ -267,7 +267,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     @Override
     public void onDrawerItemSelected(View view, int position) {
-        if (currentFragmet != position || position == 1 || position == 7) {
+        if (currentFragmet != position || position == 1 || position == 5 || position == 7) {
             currentFragmet = position;
             displayView(position);
         }
@@ -301,15 +301,13 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 title = getString(R.string.title_settings);
                 break;
             case 5:
-                new HamPayDialog(activity).showContactUsDialog();
+                new HamPayDialog(activity).fetchContactUsInfo();
                 break;
             case 6:
                 fragment = new GuideFragment();
                 title = getString(R.string.title_guide);
                 break;
             case 7:
-
-
                 LogoutData logoutData = new LogoutData();
                 logoutData.setIplanetDirectoryPro(prefs.getString(Constants.TOKEN_ID, null));
                 new HamPayDialog(activity).showExitDialog(logoutData);

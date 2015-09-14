@@ -3,6 +3,7 @@ package com.hampay.mobile.android.dialog;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -20,6 +21,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -66,6 +68,7 @@ import com.hampay.mobile.android.activity.HamPayLoginActivity;
 import com.hampay.mobile.android.activity.MainActivity;
 import com.hampay.mobile.android.activity.StartActivity;
 import com.hampay.mobile.android.activity.UnlinkPassActivity;
+import com.hampay.mobile.android.analytics.GaAnalyticsEvent;
 import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import com.hampay.mobile.android.async.RequestBankList;
 import com.hampay.mobile.android.async.RequestBusinessPayment;
@@ -119,6 +122,8 @@ public class HamPayDialog {
 
     Tracker hamPayGaTracker;
 
+    GaAnalyticsEvent gaAnalyticsEvent;
+
     public HamPayDialog(Activity activity){
 
         this.activity = activity;
@@ -126,6 +131,8 @@ public class HamPayDialog {
         prefs = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE);
         editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE).edit();
 
+
+        gaAnalyticsEvent = new GaAnalyticsEvent(activity);
 
         dbHelper = new DatabaseHelper(activity);
 
@@ -153,6 +160,39 @@ public class HamPayDialog {
 
         view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
         dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
+    public void showWaitingdSMSDialog(final RequestRegistrationSendSmsToken requestRegistrationSendSmsToken, String hampayUser){
+
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_waiting, null);
+
+        FacedTextView wating_text = (FacedTextView)view.findViewById(R.id.wating_text);
+
+        if (hampayUser.length() != 0){
+            wating_text.setText(activity.getString(R.string.dialog_hampay_user_waiting, hampayUser));
+        }
+
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+//                Toast.makeText(activity, "ksjdks", Toast.LENGTH_LONG).show();
+                requestRegistrationSendSmsToken.cancel(true);
+            }
+        });
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.setContentView(view);
@@ -329,6 +369,11 @@ public class HamPayDialog {
     }
 
 
+    public void fetchContactUsInfo(){
+        ContactUsRequest contactUsRequest = new ContactUsRequest();
+        contactUsRequest.setRequestUUID("");
+        new HttpContactUs().execute(contactUsRequest);
+    }
 
     public void showContactUsDialog(){
 
@@ -341,10 +386,6 @@ public class HamPayDialog {
 
         FacedTextView send_message = (FacedTextView) view.findViewById(R.id.send_message);
         FacedTextView call_message = (FacedTextView) view.findViewById(R.id.call_message);
-
-        ContactUsRequest contactUsRequest = new ContactUsRequest();
-        contactUsRequest.setRequestUUID("");
-        new HttpContactUs().execute(contactUsRequest);
 
         send_message.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -403,7 +444,9 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                showContactUsDialog();
+                ContactUsRequest contactUsRequest = new ContactUsRequest();
+                contactUsRequest.setRequestUUID("");
+                new HttpContactUs().execute(contactUsRequest);
             }
         });
 
@@ -452,15 +495,20 @@ public class HamPayDialog {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
 
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
 
+            dismisWaitingDialog();
             if (contactUsResponseResponseMessage != null){
                 contactUsMail = contactUsResponseResponseMessage.getService().getEmailAddress();
                 contactUsPhone = contactUsResponseResponseMessage.getService().getPhoneNumber();
+                showContactUsDialog();
+            }else {
+                Toast.makeText(activity, activity.getString(R.string.hampay_contact_failed), Toast.LENGTH_LONG).show();
             }
 
 
@@ -642,6 +690,8 @@ public class HamPayDialog {
 
                 new RequestLogout(activity, new RequestLogoutResponseTaskCompleteListener()).execute(logoutData);
 
+
+
             }
         });
 
@@ -789,11 +839,51 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-//                Intent intent = new Intent();
-//                intent.setClass(activity, AppSliderActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 activity.finish();
-//                activity.startActivity(intent);
+
+                gaAnalyticsEvent.GaTrackMobileEvent("User Exit HamPay", "Exit", activity.getLocalClassName());
+            }
+        });
+
+        exit_registration_no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(true);
+
+        dialog.show();
+    }
+
+    public void showExitLoginDialog(){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_exit_registration, null);
+
+        FacedTextView exit_text = (FacedTextView)view.findViewById(R.id.exit_text);
+        FacedTextView exit_registration_yes = (FacedTextView) view.findViewById(R.id.exit_registration_yes);
+        FacedTextView exit_registration_no = (FacedTextView) view.findViewById(R.id.exit_registration_no);
+
+        exit_text.setText(activity.getString(R.string.exit_app_text));
+
+        exit_registration_yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                activity.finish();
+
+                gaAnalyticsEvent.GaTrackMobileEvent("User Exit HamPay", "Exit", activity.getLocalClassName());
             }
         });
 

@@ -137,7 +137,6 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
         confirm_layout = (LinearLayout)findViewById(R.id.confirm_layout);
         confirm_check_ll = (LinearLayout)findViewById(R.id.confirm_check_ll);
         confirm_check = (CheckBox)findViewById(R.id.confirm_check);
-//        confirm_check.setEnabled(false);
         confirm_check.setOncheckListener(new CheckBox.OnCheckListener() {
             @Override
             public void onCheck(CheckBox view, boolean check) {
