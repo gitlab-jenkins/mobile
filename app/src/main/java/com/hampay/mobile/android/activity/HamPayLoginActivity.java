@@ -36,6 +36,7 @@ import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.model.FailedLoginResponse;
 import com.hampay.mobile.android.model.LoginData;
 import com.hampay.mobile.android.model.SuccessLoginResponse;
+import com.hampay.mobile.android.util.AppInfo;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.DeviceInfo;
 import com.hampay.mobile.android.util.PersianEnglishDigit;
@@ -315,6 +316,8 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
                     editor.putString(Constants.LOGIN_TOKEN_ID, successLoginResponse.getTokenId());
                     editor.commit();
                     tacRequest = new TACRequest();
+                    tacRequest.setDeviceId(new DeviceInfo(context).getAndroidId());
+                    tacRequest.setAppVersion(new AppInfo(context).getVersionCode() + "");
                     requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
                     requestTAC.execute(tacRequest);
 

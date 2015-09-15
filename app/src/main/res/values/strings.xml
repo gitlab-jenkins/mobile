@@ -56,6 +56,8 @@
     <string name="login">ورود</string>
     <string name="title_guide">راهنما</string>
     <string name="title_exit">خروج</string>
+    <string name="notification_operation_type">نوع عملیات: </string>
+    <string name="notification_message">پیام: </string>
 
     <string name="payment">پرداخت</string>
     <string name="message">پیام</string>

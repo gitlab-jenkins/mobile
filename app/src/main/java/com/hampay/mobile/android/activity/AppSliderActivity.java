@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -13,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -21,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.adapter.AppSliderAdapter;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
@@ -32,6 +35,8 @@ import com.hampay.mobile.android.fragment.AppSliderFragmentD;
 import com.hampay.mobile.android.fragment.AppSliderFragmentE;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.RootUtil;
+
+import java.io.IOException;
 
 
 public class AppSliderActivity extends ActionBarActivity {
@@ -61,12 +66,19 @@ public class AppSliderActivity extends ActionBarActivity {
 //    Runnable runnable;
 //    int slideIndex = 0;
 
+
+    GoogleCloudMessaging gcm;
+    String regid;
+    String PROJECT_NUMBER = "936219454834";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_slider);
 
         activity = AppSliderActivity.this;
+
+        getRegId();
 
 //        if (new RootUtil().checkRootedDevice()){
 //            new HamPayDialog(this).showPreventRootDeviceDialog();
@@ -388,5 +400,32 @@ public class AppSliderActivity extends ActionBarActivity {
 //        }
 //    }
 
+
+    public void getRegId(){
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String msg = "";
+                try {
+                    if (gcm == null) {
+                        gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
+                    }
+                    regid = gcm.register(PROJECT_NUMBER);
+                    msg = "Device registered, registration ID=" + regid;
+                    Log.e("GCM", msg);
+
+                } catch (IOException ex) {
+                    msg = "Error :" + ex.getMessage();
+
+                }
+                return msg;
+            }
+
+            @Override
+            protected void onPostExecute(String msg) {
+                Log.e("GCM", msg);
+            }
+        }.execute(null, null, null);
+    }
 
 }
