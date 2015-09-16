@@ -76,6 +76,7 @@ import com.hampay.mobile.android.util.PersianEnglishDigit;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -87,7 +88,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -184,43 +187,6 @@ public class WebServices  {
         return (LogoutResponse) gson.fromJson(responseElement.toString(), listType);
     }
 
-
-//    public HttpsURLConnection setUpHttpsURLConnection(String urlString){
-//        try
-//        {
-//
-//            CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-//            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/nginx.crt"));
-//            Certificate certificate = certificateFactory.generateCertificate(caInput);
-//            Log.e("ca=", ((X509Certificate) certificate).getSubjectDN() + "");
-//            String keyStoreType = KeyStore.getDefaultType();
-//            KeyStore keyStore = KeyStore.getInstance(keyStoreType);
-//            keyStore.load(null, null);
-//            keyStore.setCertificateEntry("ca", certificate);
-//
-//            String defaultAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
-//            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(defaultAlgorithm);
-//            trustManagerFactory.init(keyStore);
-//
-//            SSLContext context = SSLContext.getInstance("TLS");
-//            context.init(null, trustManagerFactory.getTrustManagers(), null);
-//
-//            URL url = new URL(urlString);
-//            HttpsURLConnection urlConnection = (HttpsURLConnection)url.openConnection();
-//            urlConnection.setSSLSocketFactory(context.getSocketFactory());
-//
-//            urlConnection.setHostnameVerifier(new NullHostNameVerifier());
-//
-//            return urlConnection;
-//
-//        }catch (Exception ex)
-//        {
-//            Log.e("CERT FAILD", "Failed to establish SSL connection to server: " + ex.toString());
-//            return null;
-//        }
-//    }
-
-
     public ResponseMessage<BankListResponse> getBankList() {
 
         ResponseMessage<BankListResponse> responseMessage = null;
@@ -236,7 +202,7 @@ public class WebServices  {
             RequestMessage<BankListRequest> message = new RequestMessage<BankListRequest>();
             message.setRequestHeader(header);
             BankListRequest request = new BankListRequest();
-            request.setRequestUUID("1234");
+            request.setRequestUUID(UUID.randomUUID().toString());
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<BankListRequest>>() {}.getType();
@@ -245,41 +211,29 @@ public class WebServices  {
             connection.setConnectTimeout(5000);
             connection.setReadTimeout(5000);
             connection.setRequestMethod("POST");
-//            connection.setRequestProperty("Accept-Encoding", "gzip");
             connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
-//            Log.e("Encoding", connection.getContentEncoding());
             outputStream.flush();
 
-
-
-//            GZIPInputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-//            InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-//            InputStreamReader reader = new InputStreamReader(gzipInputStream);
-
-
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
-            Gson gson = new Gson();
-
             String encoding = connection.getHeaderField("Content-Encoding");
-            boolean gzipped = encoding!=null && encoding.toLowerCase().contains("gzip");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
 
+            Gson gson = new Gson();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<BankListResponse>>() {}.getType());
-
-
-
-            if( responseMessage != null && responseMessage.getService() != null );
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
+        } catch (IOException e) { e.printStackTrace(); }
+        finally {
             if (connection != null)
                 connection.disconnect();
         }
-
         return responseMessage;
-
     }
 
     public ResponseMessage<RegistrationEntryResponse> newRegistrationEntry(RegistrationEntryRequest registrationEntryRequest){
@@ -297,7 +251,7 @@ public class WebServices  {
             RequestMessage<RegistrationEntryRequest> message = new RequestMessage<RegistrationEntryRequest>();
             message.setRequestHeader(header);
             RegistrationEntryRequest request = registrationEntryRequest;
-            request.setRequestUUID("1234");
+            request.setRequestUUID(UUID.randomUUID().toString());
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationEntryRequest>>() {}.getType();
@@ -307,19 +261,25 @@ public class WebServices  {
             connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
 
+            connection.setRequestProperty("Content-Encoding", "gzip");
             connection.setRequestProperty("Accept-Encoding", "gzip");
-            connection.setRequestProperty("Content-Type", "application/json");
+
             OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(jsonRequest.getBytes());
+            outputStream.write(gzip(jsonRequest.getBytes()));
             outputStream.flush();
 
-            InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-            InputStreamReader reader = new InputStreamReader(gzipInputStream);
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
 
-//            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
             Gson gson = new Gson();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegistrationEntryResponse>>() {}.getType());
-
 
         } catch (IOException e) {e.printStackTrace();}
         finally {
@@ -327,6 +287,29 @@ public class WebServices  {
                 connection.disconnect();
         }
         return responseMessage;
+    }
+
+    static byte[] gzip(byte[] input) {
+        GZIPOutputStream gzipOS = null;
+        try {
+            ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
+            gzipOS = new GZIPOutputStream(byteArrayOS);
+            gzipOS.write(input);
+            gzipOS.flush();
+            gzipOS.close();
+            gzipOS = null;
+
+            long size = byteArrayOS.size();
+
+            return byteArrayOS.toByteArray();
+        } catch (Exception e) {
+//            throw new WebbException(e); // <-- just a RuntimeException
+        } finally {
+            if (gzipOS != null) {
+                try { gzipOS.close(); } catch (Exception ignored) {}
+            }
+        }
+        return null;
     }
 
 
@@ -345,7 +328,7 @@ public class WebServices  {
             RequestMessage<ContactUsRequest> message = new RequestMessage<ContactUsRequest>();
             message.setRequestHeader(header);
             ContactUsRequest request = contactUsRequest;
-            request.setRequestUUID("1234");
+            request.setRequestUUID(UUID.randomUUID().toString());
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<ContactUsRequest>>() {}.getType();
@@ -359,7 +342,16 @@ public class WebServices  {
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
 
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
+
             Gson gson = new Gson();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<ContactUsResponse>>() {}.getType());
 
@@ -386,7 +378,7 @@ public class WebServices  {
             RequestMessage<RegistrationSendSmsTokenRequest> message = new RequestMessage<RegistrationSendSmsTokenRequest>();
             message.setRequestHeader(header);
             RegistrationSendSmsTokenRequest request = registrationSendSmsTokenRequest;
-            request.setRequestUUID("1234");
+            request.setRequestUUID(UUID.randomUUID().toString());
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationSendSmsTokenRequest>>() {}.getType();
@@ -400,7 +392,16 @@ public class WebServices  {
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
 
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
+
             Gson gson = new Gson();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegistrationSendSmsTokenResponse>>() {}.getType());
 
@@ -428,7 +429,7 @@ public class WebServices  {
             RequestMessage<RegistrationVerifyMobileRequest> message = new RequestMessage<RegistrationVerifyMobileRequest>();
             message.setRequestHeader(header);
             RegistrationVerifyMobileRequest request = registrationVerifyMobileRequest;
-            request.setRequestUUID("1234");
+            request.setRequestUUID(UUID.randomUUID().toString());
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationVerifyMobileRequest>>() {}.getType();
@@ -442,7 +443,16 @@ public class WebServices  {
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
 
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
+
             Gson gson = new Gson();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegistrationVerifyMobileResponse>>() {}.getType());
 
@@ -469,7 +479,7 @@ public class WebServices  {
             RequestMessage<RegistrationFetchUserDataRequest> message = new RequestMessage<RegistrationFetchUserDataRequest>();
             message.setRequestHeader(header);
             RegistrationFetchUserDataRequest request = registrationFetchUserDataRequest;
-            request.setRequestUUID("1234");
+            request.setRequestUUID(UUID.randomUUID().toString());
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationFetchUserDataRequest>>() {}.getType();
@@ -483,7 +493,16 @@ public class WebServices  {
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
 
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
+
             Gson gson = new Gson();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegistrationFetchUserDataResponse>>() {}.getType());
 
@@ -511,7 +530,7 @@ public class WebServices  {
             RequestMessage<RegistrationConfirmUserDataRequest> message = new RequestMessage<RegistrationConfirmUserDataRequest>();
             message.setRequestHeader(header);
             RegistrationConfirmUserDataRequest request = registrationConfirmUserDataRequest;
-            request.setRequestUUID("1234");
+            request.setRequestUUID(UUID.randomUUID().toString());
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationConfirmUserDataRequest>>() {}.getType();
@@ -525,7 +544,15 @@ public class WebServices  {
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
 
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
 
             GsonBuilder builder = new GsonBuilder();
             builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
@@ -564,7 +591,7 @@ public class WebServices  {
             RequestMessage<RegistrationCredentialsRequest> message = new RequestMessage<RegistrationCredentialsRequest>();
             message.setRequestHeader(header);
             RegistrationCredentialsRequest request = registrationCredentialsRequest;
-            request.setRequestUUID("1234");
+            request.setRequestUUID(UUID.randomUUID().toString());
 
 
             List<ContactDTO> contactDTOs = new ArrayList<ContactDTO>();
@@ -596,27 +623,26 @@ public class WebServices  {
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationCredentialsRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
 
-
-
             connection.setConnectTimeout(30000);
             connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
+
+            connection.setRequestProperty("Content-Encoding", "gzip");
             connection.setRequestProperty("Accept-Encoding", "gzip");
-            connection.setRequestProperty("Content-Type", "application/json");
+
             OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(jsonRequest.getBytes());
+            outputStream.write(gzip(jsonRequest.getBytes()));
             outputStream.flush();
 
-//            String encoding = connection.getHeaderField("Content-Encoding");
-//            boolean gzipped = encoding!=null && encoding.toLowerCase().contains("gzip");
-
-            InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-            InputStreamReader reader = new InputStreamReader(gzipInputStream);
-
-//            GZIPInputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-//            InputStreamReader reader = new InputStreamReader(gzipInputStream);
-
-//            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
 
             Gson gson = new Gson();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegistrationCredentialsResponse>>() {}.getType());
@@ -647,7 +673,7 @@ public class WebServices  {
             RequestMessage<RegistrationVerifyAccountRequest> message = new RequestMessage<RegistrationVerifyAccountRequest>();
             message.setRequestHeader(header);
             RegistrationVerifyAccountRequest request = registrationVerifyAccountRequest;
-            request.setRequestUUID("1234");
+            request.setRequestUUID(UUID.randomUUID().toString());
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationVerifyAccountRequest>>() {}.getType();
@@ -661,7 +687,15 @@ public class WebServices  {
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
 
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
 
             Gson gson = new Gson();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegistrationVerifyAccountResponse>>() {}.getType());
@@ -692,7 +726,7 @@ public class WebServices  {
             RequestMessage<RegistrationVerifyTransferMoneyRequest> message = new RequestMessage<RegistrationVerifyTransferMoneyRequest>();
             message.setRequestHeader(header);
             RegistrationVerifyTransferMoneyRequest request = registrationVerifyTransferMoneyRequest;
-            request.setRequestUUID("1234");
+            request.setRequestUUID(UUID.randomUUID().toString());
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationVerifyTransferMoneyRequest>>() {}.getType();
@@ -706,7 +740,15 @@ public class WebServices  {
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
 
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
 
             Gson gson = new Gson();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegistrationVerifyTransferMoneyResponse>>() {}.getType());
@@ -737,7 +779,7 @@ public class WebServices  {
             RequestMessage<TACRequest> message = new RequestMessage<TACRequest>();
             message.setRequestHeader(header);
             TACRequest request = tacRequest;
-            request.setRequestUUID("1234");
+            request.setRequestUUID(UUID.randomUUID().toString());
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<TACRequest>>() {}.getType();
@@ -751,7 +793,15 @@ public class WebServices  {
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
 
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
 
             GsonBuilder builder = new GsonBuilder();
             builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
@@ -791,7 +841,7 @@ public class WebServices  {
             RequestMessage<TACAcceptRequest> message = new RequestMessage<TACAcceptRequest>();
             message.setRequestHeader(header);
             TACAcceptRequest request = tacAcceptRequest;
-            request.setRequestUUID("1234");
+            request.setRequestUUID(UUID.randomUUID().toString());
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<TACAcceptRequest>>() {}.getType();
@@ -805,7 +855,15 @@ public class WebServices  {
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
 
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
 
             GsonBuilder builder = new GsonBuilder();
             builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
@@ -843,7 +901,7 @@ public class WebServices  {
             RequestMessage<UserProfileRequest> message = new RequestMessage<UserProfileRequest>();
             message.setRequestHeader(header);
             UserProfileRequest request = userProfileRequest;
-            request.setRequestUUID("1234");
+            request.setRequestUUID(UUID.randomUUID().toString());
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<UserProfileRequest>>() {}.getType();
@@ -857,7 +915,15 @@ public class WebServices  {
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
 
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
 
             GsonBuilder builder = new GsonBuilder();
             builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
@@ -895,7 +961,7 @@ public class WebServices  {
             RequestMessage<VerifyAccountRequest> message = new RequestMessage<VerifyAccountRequest>();
             message.setRequestHeader(header);
             VerifyAccountRequest request = verifyAccountRequest;
-            request.setRequestUUID("1234");
+            request.setRequestUUID(UUID.randomUUID().toString());
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<VerifyAccountRequest>>() {}.getType();
@@ -909,9 +975,15 @@ public class WebServices  {
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
 
-
-
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
 
             GsonBuilder builder = new GsonBuilder();
             builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
@@ -949,7 +1021,7 @@ public class WebServices  {
             RequestMessage<VerifyTransferMoneyRequest> message = new RequestMessage<VerifyTransferMoneyRequest>();
             message.setRequestHeader(header);
             VerifyTransferMoneyRequest request = verifyTransferMoneyRequest;
-            request.setRequestUUID("1234");
+            request.setRequestUUID(UUID.randomUUID().toString());
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<VerifyTransferMoneyRequest>>() {}.getType();
@@ -963,7 +1035,15 @@ public class WebServices  {
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
 
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
 
             GsonBuilder builder = new GsonBuilder();
             builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
@@ -1004,7 +1084,7 @@ public class WebServices  {
             request.setUserId(new PersianEnglishDigit(prefs.getString(Constants.REGISTERED_NATIONAL_CODE, "")).P2E());
             request.setPageSize(transactionListRequest.getPageSize());
             request.setPageNumber(transactionListRequest.getPageNumber());
-            request.setRequestUUID("1234");
+            request.setRequestUUID(UUID.randomUUID().toString());
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<TransactionListRequest>>() {}.getType();
@@ -1018,7 +1098,15 @@ public class WebServices  {
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
 
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
 
             GsonBuilder builder = new GsonBuilder();
             builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
@@ -1082,7 +1170,7 @@ public class WebServices  {
 
             request.setContacts(contactDTOs);
 
-            request.setRequestUUID("1234");
+            request.setRequestUUID(UUID.randomUUID().toString());
             message.setService(request);
 
 
@@ -1096,21 +1184,22 @@ public class WebServices  {
             connection.setConnectTimeout(30000);
             connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Encoding", "gzip");
             connection.setRequestProperty("Accept-Encoding", "gzip");
-            connection.setRequestProperty("Content-Type", "application/json");
+
             OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(jsonRequest.getBytes());
+            outputStream.write(gzip(jsonRequest.getBytes()));
             outputStream.flush();
 
-//            int code = connection.getResponseCode();
-
-//            String encoding = connection.getHeaderField("Content-Encoding");
-//            boolean gzipped = encoding!=null && encoding.toLowerCase().contains("gzip");
-
-            InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-            InputStreamReader reader = new InputStreamReader(gzipInputStream);
-//
-//            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
 
             GsonBuilder builder = new GsonBuilder();
             builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
@@ -1150,7 +1239,7 @@ public class WebServices  {
             IndividualPaymentConfirmRequest request = new IndividualPaymentConfirmRequest();
 
             request.setCellNumber(individualPaymentConfirmRequest.getCellNumber());
-            request.setRequestUUID("1234");
+            request.setRequestUUID(UUID.randomUUID().toString());
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<IndividualPaymentConfirmRequest>>() {}.getType();
@@ -1164,7 +1253,15 @@ public class WebServices  {
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
 
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
 
             GsonBuilder builder = new GsonBuilder();
             builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
@@ -1206,7 +1303,7 @@ public class WebServices  {
             request.setAmount(individualPaymentRequest.getAmount());
             request.setMessage(individualPaymentRequest.getMessage());
 
-            request.setRequestUUID("1234");
+            request.setRequestUUID(UUID.randomUUID().toString());
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<IndividualPaymentRequest>>() {}.getType();
@@ -1220,7 +1317,15 @@ public class WebServices  {
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
 
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
 
             GsonBuilder builder = new GsonBuilder();
             builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
@@ -1262,7 +1367,7 @@ public class WebServices  {
             request.setPageNumber(businessListRequest.getPageNumber());
             request.setPageSize(businessListRequest.getPageSize());
 
-            request.setRequestUUID("1234");
+            request.setRequestUUID(UUID.randomUUID().toString());
 
             message.setService(request);
 
@@ -1277,7 +1382,15 @@ public class WebServices  {
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
 
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
 
             GsonBuilder builder = new GsonBuilder();
             builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
@@ -1318,7 +1431,7 @@ public class WebServices  {
 
             request.setBusinessCode(businessPaymentConfirmRequest.getBusinessCode());
 
-            request.setRequestUUID("1234");
+            request.setRequestUUID(UUID.randomUUID().toString());
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<BusinessPaymentConfirmRequest>>() {}.getType();
@@ -1332,7 +1445,15 @@ public class WebServices  {
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
 
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
 
             GsonBuilder builder = new GsonBuilder();
             builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
@@ -1374,7 +1495,7 @@ public class WebServices  {
             request.setBusinessCode(businessPaymentRequest.getBusinessCode());
             request.setAmount(businessPaymentRequest.getAmount());
             request.setMessage(businessPaymentRequest.getMessage());
-            request.setRequestUUID("1234");
+            request.setRequestUUID(UUID.randomUUID().toString());
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<BusinessPaymentRequest>>() {}.getType();
@@ -1388,7 +1509,15 @@ public class WebServices  {
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
 
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
 
             GsonBuilder builder = new GsonBuilder();
             builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
@@ -1428,7 +1557,7 @@ public class WebServices  {
             message.setRequestHeader(header);
             BusinessSearchRequest request = businessSearchRequest;
 
-            request.setRequestUUID("1234");
+            request.setRequestUUID(UUID.randomUUID().toString());
 
             message.setService(request);
 
@@ -1443,7 +1572,15 @@ public class WebServices  {
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
 
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
 
             GsonBuilder builder = new GsonBuilder();
             builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
@@ -1485,7 +1622,7 @@ public class WebServices  {
             RequestMessage<ChangePassCodeRequest> message = new RequestMessage<ChangePassCodeRequest>();
             message.setRequestHeader(header);
             ChangePassCodeRequest request = changePassCodeRequest;
-            request.setRequestUUID("1234");
+            request.setRequestUUID(UUID.randomUUID().toString());
 
             message.setService(request);
 
@@ -1500,7 +1637,16 @@ public class WebServices  {
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
 
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
+
             Gson gson = new Gson();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<ChangePassCodeResponse>>() {}.getType());
 
@@ -1530,7 +1676,7 @@ public class WebServices  {
             RequestMessage<ChangeMemorableWordRequest> message = new RequestMessage<ChangeMemorableWordRequest>();
             message.setRequestHeader(header);
             ChangeMemorableWordRequest request = changeMemorableWordRequest;
-            request.setRequestUUID("1234");
+            request.setRequestUUID(UUID.randomUUID().toString());
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<ChangeMemorableWordRequest>>() {}.getType();
@@ -1543,16 +1689,18 @@ public class WebServices  {
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
 
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
+
             Gson gson = new Gson();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<ChangeMemorableWordResponse>>() {}.getType());
-
-            if( responseMessage != null && responseMessage.getService() != null ) {
-                System.out.println("Response requestUUID : " + responseMessage.getService().getRequestUUID());
-                System.out.println("Response bank list size : " + responseMessage.getService());
-            } else {
-                System.out.println("Response is null...");
-            }
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -1584,7 +1732,7 @@ public class WebServices  {
             RequestMessage<UnlinkUserRequest> message = new RequestMessage<UnlinkUserRequest>();
             message.setRequestHeader(header);
             UnlinkUserRequest request = unlinkUserRequest;
-            request.setRequestUUID("1234");
+            request.setRequestUUID(UUID.randomUUID().toString());
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<UnlinkUserRequest>>() {}.getType();
@@ -1597,7 +1745,16 @@ public class WebServices  {
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
 
-            InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
+
             Gson gson = new Gson();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<UnlinkUserResponse>>() {}.getType());
 

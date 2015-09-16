@@ -104,6 +104,7 @@ import com.hampay.mobile.android.util.PersianEnglishDigit;
 import com.hampay.mobile.android.webservice.WebServices;
 
 import java.text.NumberFormat;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -371,7 +372,7 @@ public class HamPayDialog {
 
     public void fetchContactUsInfo(){
         ContactUsRequest contactUsRequest = new ContactUsRequest();
-        contactUsRequest.setRequestUUID("");
+        contactUsRequest.setRequestUUID(UUID.randomUUID().toString());
         new HttpContactUs().execute(contactUsRequest);
     }
 
@@ -445,7 +446,7 @@ public class HamPayDialog {
             public void onClick(View v) {
                 dialog.dismiss();
                 ContactUsRequest contactUsRequest = new ContactUsRequest();
-                contactUsRequest.setRequestUUID("");
+                contactUsRequest.setRequestUUID(UUID.randomUUID().toString());
                 new HttpContactUs().execute(contactUsRequest);
             }
         });
@@ -2540,7 +2541,8 @@ public class HamPayDialog {
 
         NumberFormat nf = NumberFormat.getInstance();
 
-        responseMessage.setText(activity.getString(R.string.msg_incorrect_amount, nf.format(MaxXferAmount) + "",  nf.format(MinXferAmount) + ""));
+        responseMessage.setText(activity.getString(R.string.msg_incorrect_amount, new PersianEnglishDigit(nf.format(MaxXferAmount)).E2P() + ""
+                ,  new PersianEnglishDigit(nf.format(MinXferAmount) + "").E2P()));
 
         FacedTextView payment_permission = (FacedTextView) view.findViewById(R.id.payment_permission);
 
