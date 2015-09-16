@@ -67,12 +67,18 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
+    boolean fromNotification = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        bundle = new Bundle();
+        bundle = getIntent().getExtras();
+
+        if (bundle != null) {
+            fromNotification = bundle.getBoolean(Constants.NOTIFICATION);
+        }
 
         activity = MainActivity.this;
 
@@ -244,7 +250,11 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         };
 
-        displayView(currentFragmet);
+        if (fromNotification){
+            displayView(1);
+        }else {
+            displayView(currentFragmet);
+        }
     }
 
     @Override

@@ -96,6 +96,9 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
 
     Tracker hamPayGaTracker;
 
+    Bundle bundle;
+
+    boolean fromNotification = false;
 
     public void contactUs(View view){
         new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/login.html");
@@ -111,6 +114,14 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
 
         user_name = (FacedTextView)findViewById(R.id.user_name);
         user_name.setText("سلام: " + prefs.getString(Constants.REGISTERED_USER_FAMILY, ""));
+
+
+        bundle = getIntent().getExtras();
+
+        if (bundle != null){
+            fromNotification = bundle.getBoolean(Constants.NOTIFICATION);
+        }
+
 
 
         context = this;
@@ -212,6 +223,7 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
                         intent.setClass(activity, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.putExtra(Constants.USER_PROFILE_DTO, tacResponseMessage.getService().getUserProfile());
+                        intent.putExtra(Constants.NOTIFICATION, fromNotification);
                         editor.putBoolean(Constants.FORCE_USER_PROFILE, true);
                         editor.commit();
                         finish();

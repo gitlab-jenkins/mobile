@@ -4,6 +4,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.activity.HamPayLoginActivity;
 import com.hampay.mobile.android.receiver.GcmBroadcastReceiver;
+import com.hampay.mobile.android.util.Constants;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -46,7 +47,7 @@ public class GcmMessageHandler extends IntentService{
 
         mes = extras.getString("price");
         showToast();
-        Log.i("GCM", "Received : (" +messageType+")  "+extras.getString("title"));
+        Log.i("GCM", "Received : (" + messageType +")  " + extras.getString("title"));
 
         GcmBroadcastReceiver.completeWakefulIntent(intent);
 
@@ -71,9 +72,11 @@ public class GcmMessageHandler extends IntentService{
             String ns = Context.NOTIFICATION_SERVICE;
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
 
-            int icon = R.mipmap.ic_launcher;
+            int icon = R.drawable.ball;
             long when = System.currentTimeMillis();
             Notification notification = new Notification(icon, getString(R.string.app_name), when);
+            notification.flags = Notification.FLAG_AUTO_CANCEL;
+//            notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL | Notification.FLAG_ONLY_ALERT_ONCE;
 
             RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.server_notification);
             contentView.setImageViewResource(R.id.notification_image, R.mipmap.ic_launcher);
@@ -82,8 +85,14 @@ public class GcmMessageHandler extends IntentService{
             notification.contentView = contentView;
 
             Intent notificationIntent = new Intent(getApplicationContext(), HamPayLoginActivity.class);
-            notificationIntent.putExtra("notification", true);
-            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
+
+            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP |
+                    Intent.FLAG_ACTIVITY_NEW_TASK);
+            notificationIntent.putExtra(Constants.NOTIFICATION, true);
+//            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
+            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0,
+                    notificationIntent, 0);
             notification.contentIntent = contentIntent;
 
             //notification.flags |= Notification.FLAG_NO_CLEAR; //Do not clear the notification
