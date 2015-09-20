@@ -294,6 +294,7 @@ public class ProfileEntryActivity extends Activity {
             }
         });
 
+        hamPayDialog.showWaitingdDialog("");
         bankListRequest = new BankListRequest();
         requestBankList = new RequestBankList(this, new RequestBanksTaskCompleteListener(false));
         requestBankList.execute(bankListRequest);

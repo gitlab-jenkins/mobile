@@ -40,6 +40,7 @@ public class Constants {
     public static final String REGISTERED_USER_NAME = "registeredUserName";
     public static final String LOGIN_TOKEN_ID = "login_token_id";
     public static final String USER_ACCOUNT_LOCKET = "User Account Locked";
+    public static final String SEND_MOBILE_REGISTER_ID = "send_mobile_register_id";
     public static final String RECENT_PAY_TO_ONE_LIMIT = "10";
     public static final int DEFAULT_PAGE_SIZE = 15;
     public static final String WEB_URL_REGEX = "\\(?\\b(http://|https://|www[.]|app[.])[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]";

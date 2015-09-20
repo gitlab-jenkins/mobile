@@ -1,14 +1,23 @@
 package com.hampay.mobile.android.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.hampay.common.common.response.ResponseMessage;
+import com.hampay.common.common.response.ResultStatus;
+import com.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
+import com.hampay.common.core.model.response.MobileRegistrationIdEntryResponse;
+import com.hampay.mobile.android.HamPayApplication;
 import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import com.hampay.mobile.android.async.RequestMobileRegistrationIdEntry;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.util.Constants;
@@ -20,9 +29,15 @@ public class CompleteRegistrationActivity extends Activity {
     ImageView step_circle;
 
     Activity activity;
+    Context context;
 
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
+
+    HamPayDialog hamPayDialog;
+
+    Tracker hamPayGaTracker;
+
 
     public void contactUs(View view){
         new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/reg-com.html");
@@ -34,6 +49,8 @@ public class CompleteRegistrationActivity extends Activity {
 
         setContentView(R.layout.activity_complete_registration);
 
+
+        context = this;
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
@@ -50,6 +67,11 @@ public class CompleteRegistrationActivity extends Activity {
         }
 
         activity = CompleteRegistrationActivity.this;
+
+        hamPayGaTracker = ((HamPayApplication) getApplication())
+                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
+
+        hamPayDialog = new HamPayDialog(activity);
 
         hampay_login_button = (ButtonRectangle)findViewById(R.id.hampay_login_button);
         hampay_login_button.setOnClickListener(new View.OnClickListener() {

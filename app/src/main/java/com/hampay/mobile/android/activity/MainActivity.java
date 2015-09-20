@@ -5,8 +5,10 @@ import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,8 +24,18 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.hampay.common.common.response.ResponseMessage;
+import com.hampay.common.common.response.ResultStatus;
+import com.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
+import com.hampay.common.core.model.response.MobileRegistrationIdEntryResponse;
 import com.hampay.common.core.model.response.dto.UserProfileDTO;
+import com.hampay.mobile.android.HamPayApplication;
 import com.hampay.mobile.android.R;
+import com.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import com.hampay.mobile.android.async.RequestMobileRegistrationIdEntry;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.fragment.AccountDetailFragment;
@@ -35,6 +47,10 @@ import com.hampay.mobile.android.fragment.SettingFragment;
 import com.hampay.mobile.android.fragment.UserTransactionFragment;
 import com.hampay.mobile.android.model.LogoutData;
 import com.hampay.mobile.android.util.Constants;
+import com.hampay.mobile.android.util.DeviceInfo;
+
+import java.io.IOException;
+import java.util.UUID;
 
 
 public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener, View.OnClickListener {
@@ -69,6 +85,15 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     boolean fromNotification = false;
 
+    HamPayDialog hamPayDialog;
+
+    Tracker hamPayGaTracker;
+
+    Context context;
+
+    RequestMobileRegistrationIdEntry requestMobileRegistrationIdEntry;
+    MobileRegistrationIdEntryRequest mobileRegistrationIdEntryRequest;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,11 +101,16 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         bundle = getIntent().getExtras();
 
+
+        hamPayGaTracker = ((HamPayApplication) getApplication())
+                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
+
         if (bundle != null) {
             fromNotification = bundle.getBoolean(Constants.NOTIFICATION);
         }
 
         activity = MainActivity.this;
+        context = this;
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE).edit();
@@ -255,6 +285,12 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         }else {
             displayView(currentFragmet);
         }
+
+
+        if (!prefs.getBoolean(Constants.SEND_MOBILE_REGISTER_ID, false)) {
+            getRegId();
+        }
+
     }
 
     @Override
@@ -452,4 +488,78 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         logoutData.setIplanetDirectoryPro(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         new HamPayDialog(activity).showExitDialog(logoutData);
     }
+
+    GoogleCloudMessaging gcm;
+    String regid;
+    String PROJECT_NUMBER = "936219454834";
+
+    public void getRegId(){
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String msg = "";
+                try {
+                    if (gcm == null) {
+                        gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
+                    }
+                    regid = gcm.register(PROJECT_NUMBER);
+                    msg = "Device registered, registration ID=" + regid;
+                    Log.e("GCM", msg);
+
+                } catch (IOException ex) {
+                    msg = "Error :" + ex.getMessage();
+
+                }
+                return regid;
+            }
+
+            @Override
+            protected void onPostExecute(String registerId) {
+                mobileRegistrationIdEntryRequest = new MobileRegistrationIdEntryRequest();
+                mobileRegistrationIdEntryRequest.setRegistrationId(registerId);
+                mobileRegistrationIdEntryRequest.setDeviceId(new DeviceInfo(context).getAndroidId());
+                mobileRegistrationIdEntryRequest.setRequestUUID(UUID.randomUUID().toString());
+                requestMobileRegistrationIdEntry = new RequestMobileRegistrationIdEntry(context, new RequestMobileRegistrationIdEntryTaskCompleteListener());
+                requestMobileRegistrationIdEntry.execute(mobileRegistrationIdEntryRequest);
+            }
+        }.execute(null, null, null);
+    }
+
+    public class RequestMobileRegistrationIdEntryTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<MobileRegistrationIdEntryResponse>> {
+        @Override
+        public void onTaskComplete(ResponseMessage<MobileRegistrationIdEntryResponse> mobileRegistrationIdEntryResponseMessage)
+        {
+            if (mobileRegistrationIdEntryResponseMessage != null) {
+                if (mobileRegistrationIdEntryResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+
+                    editor.putBoolean(Constants.SEND_MOBILE_REGISTER_ID, true);
+                    editor.commit();
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Mobile Registration Id Entry")
+                            .setAction("Registration")
+                            .setLabel("Success")
+                            .build());
+                }
+                else {
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Mobile Registration Id Entry")
+                            .setAction("Registration")
+                            .setLabel("Fail(Server)")
+                            .build());
+                }
+
+            }else {
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Mobile Registration Id Entry")
+                        .setAction("Registration")
+                        .setLabel("Fail(Mobile)")
+                        .build());
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {   }
+    }
+
 }
