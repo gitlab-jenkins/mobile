@@ -90,7 +90,7 @@ public class UserTransactionFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_transaction, container, false);
 
         hamPayDialog = new HamPayDialog(getActivity());
-        hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+
 
         no_transaction = (FacedTextView)rootView.findViewById(R.id.no_transaction);
 
@@ -227,6 +227,7 @@ public class UserTransactionFragment extends Fragment {
 
         @Override
         public void onTaskPreRun() {
+            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 

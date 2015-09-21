@@ -112,6 +112,9 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
+        editor.putBoolean(Constants.FETCHED_HAMPAY_ENABLED, false);
+        editor.commit();
+
         user_name = (FacedTextView)findViewById(R.id.user_name);
         user_name.setText("سلام: " + prefs.getString(Constants.REGISTERED_USER_FAMILY, ""));
 

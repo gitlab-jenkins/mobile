@@ -5,6 +5,8 @@ import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.activity.HamPayLoginActivity;
 import com.hampay.mobile.android.receiver.GcmBroadcastReceiver;
 import com.hampay.mobile.android.util.Constants;
+import com.hampay.mobile.android.util.PersianEnglishDigit;
+import com.hampay.mobile.android.util.TimeConvert;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -24,7 +26,9 @@ import android.widget.Toast;
  */
 public class GcmMessageHandler extends IntentService{
 
-    String mes;
+    String type;
+    String name;
+    String message;
     private Handler handler;
     public GcmMessageHandler() {
         super("GcmMessageHandler");
@@ -45,9 +49,11 @@ public class GcmMessageHandler extends IntentService{
         // in your BroadcastReceiver.
         String messageType = gcm.getMessageType(intent);
 
-        mes = extras.getString("price");
+        type = extras.getString("type");
+        name = extras.getString("name");
+        message = extras.getString("message");
         showToast();
-        Log.i("GCM", "Received : (" + messageType +")  " + extras.getString("title"));
+//        Log.i("GCM", "Received : (" + messageType +")  " + extras.getString("title"));
 
         GcmBroadcastReceiver.completeWakefulIntent(intent);
 
@@ -80,8 +86,15 @@ public class GcmMessageHandler extends IntentService{
 
             RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.server_notification);
             contentView.setImageViewResource(R.id.notification_image, R.mipmap.ic_launcher);
-            contentView.setTextViewText(R.id.service_type_value, " " + "دریافت");
-            contentView.setTextViewText(R.id.service_message_value, " " + "هومن، پولی که طلب داشتی واریز کردم، مخلص.");
+            if (type.equalsIgnoreCase("PAYMENT")) {
+                contentView.setTextViewText(R.id.service_type_value, " " + name);
+            }else if (type.equalsIgnoreCase("APP_UPDATE")){
+                contentView.setTextViewText(R.id.service_type_value, " " + name);
+            }else if (type.equalsIgnoreCase("JOINT")){
+                contentView.setTextViewText(R.id.service_type_value, " " + name);
+            }
+            contentView.setTextViewText(R.id.service_time, new PersianEnglishDigit().E2P(new TimeConvert(when).timeStampToTime()));
+            contentView.setTextViewText(R.id.service_message_value, " " + new PersianEnglishDigit(message).E2P());
             notification.contentView = contentView;
 
             Intent notificationIntent = new Intent(getApplicationContext(), HamPayLoginActivity.class);

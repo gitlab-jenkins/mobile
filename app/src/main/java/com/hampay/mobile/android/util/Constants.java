@@ -45,6 +45,7 @@ public class Constants {
     public static final int DEFAULT_PAGE_SIZE = 15;
     public static final String WEB_URL_REGEX = "\\(?\\b(http://|https://|www[.]|app[.])[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]";
     public static final String REGISTERED_USER = "registeredUser";
+    public static final String FETCHED_HAMPAY_ENABLED = "fetched_hampay_enabled";
     public static final String VERIFIED_USER = "verified_user";
     public static final String TOKEN_ID = "TokenId";
     public static final String  MOBILE_TIME_OUT = "mobile_time_out";

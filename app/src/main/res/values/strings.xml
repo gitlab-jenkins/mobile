@@ -312,6 +312,10 @@
     <string name="fail">ناموفق</string>
     <string name="pending">درحال بررسی</string>
 
+    <string name="new_credit">دریافت پول</string>
+    <string name="new_verison">نسخه جدید</string>
+    <string name="new_hampay_user">دوست هم‌پی جدید!</string>
+
 
     <string name="pay_one_search_hint">نام یا شماره همراه دریافت کننده را وارد کنید</string>
 

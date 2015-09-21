@@ -247,9 +247,12 @@ public class PayToOneFragment extends Fragment {
         }else {
             editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
             editor.commit();
-            contactsHampayEnabledRequest = new ContactsHampayEnabledRequest();
-            requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());
-            requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
+
+            if (!prefs.getBoolean(Constants.FETCHED_HAMPAY_ENABLED, false)) {
+                contactsHampayEnabledRequest = new ContactsHampayEnabledRequest();
+                requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());
+                requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
+            }
         }
 
 
@@ -473,6 +476,9 @@ public class PayToOneFragment extends Fragment {
                             dbHelper.createEnabledHamPay(enabledHamPay);
 
                         }
+
+                        editor.putBoolean(Constants.FETCHED_HAMPAY_ENABLED, true);
+                        editor.commit();
                     }
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()

@@ -287,9 +287,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         }
 
 
-        if (!prefs.getBoolean(Constants.SEND_MOBILE_REGISTER_ID, false)) {
+        //if (!prefs.getBoolean(Constants.SEND_MOBILE_REGISTER_ID, false)) {
             getRegId();
-        }
+        //}
 
     }
 
@@ -515,12 +515,14 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
             @Override
             protected void onPostExecute(String registerId) {
-                mobileRegistrationIdEntryRequest = new MobileRegistrationIdEntryRequest();
-                mobileRegistrationIdEntryRequest.setRegistrationId(registerId);
-                mobileRegistrationIdEntryRequest.setDeviceId(new DeviceInfo(context).getAndroidId());
-                mobileRegistrationIdEntryRequest.setRequestUUID(UUID.randomUUID().toString());
-                requestMobileRegistrationIdEntry = new RequestMobileRegistrationIdEntry(context, new RequestMobileRegistrationIdEntryTaskCompleteListener());
-                requestMobileRegistrationIdEntry.execute(mobileRegistrationIdEntryRequest);
+                if (registerId != null) {
+                    mobileRegistrationIdEntryRequest = new MobileRegistrationIdEntryRequest();
+                    mobileRegistrationIdEntryRequest.setRegistrationId(registerId);
+                    mobileRegistrationIdEntryRequest.setDeviceId(new DeviceInfo(context).getAndroidId());
+                    mobileRegistrationIdEntryRequest.setRequestUUID(UUID.randomUUID().toString());
+                    requestMobileRegistrationIdEntry = new RequestMobileRegistrationIdEntry(context, new RequestMobileRegistrationIdEntryTaskCompleteListener());
+                    requestMobileRegistrationIdEntry.execute(mobileRegistrationIdEntryRequest);
+                }
             }
         }.execute(null, null, null);
     }
