@@ -3,6 +3,8 @@ package com.hampay.mobile.android.service;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.hampay.mobile.android.R;
 import com.hampay.mobile.android.activity.HamPayLoginActivity;
+import com.hampay.mobile.android.component.headsup.HeadsUp;
+import com.hampay.mobile.android.component.headsup.HeadsUpManager;
 import com.hampay.mobile.android.receiver.GcmBroadcastReceiver;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.PersianEnglishDigit;
@@ -27,9 +29,12 @@ import android.widget.Toast;
 public class GcmMessageHandler extends IntentService{
 
     String type;
-    String name;
-    String message;
+    String headsUpTitle;
+    String headsUpContent;
     private Handler handler;
+
+    private int code = 1;
+
     public GcmMessageHandler() {
         super("GcmMessageHandler");
     }
@@ -50,8 +55,8 @@ public class GcmMessageHandler extends IntentService{
         String messageType = gcm.getMessageType(intent);
 
         type = extras.getString("type");
-        name = extras.getString("name");
-        message = extras.getString("message");
+        headsUpTitle = extras.getString("name");
+        headsUpContent = extras.getString("message");
         showToast();
 //        Log.i("GCM", "Received : (" + messageType +")  " + extras.getString("title"));
 
@@ -74,46 +79,80 @@ public class GcmMessageHandler extends IntentService{
         @Override
         public void handleMessage(Message msg)
         {
+
             int NOTIFICATION_ID = 759;
             String ns = Context.NOTIFICATION_SERVICE;
-            NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
-
-            int icon = R.drawable.ball;
-            long when = System.currentTimeMillis();
-            Notification notification = new Notification(icon, getString(R.string.app_name), when);
-            notification.flags = Notification.FLAG_AUTO_CANCEL;
-//            notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL | Notification.FLAG_ONLY_ALERT_ONCE;
-
-            RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.server_notification);
-            contentView.setImageViewResource(R.id.notification_image, R.mipmap.ic_launcher);
-            if (type.equalsIgnoreCase("PAYMENT")) {
-                contentView.setTextViewText(R.id.service_type_value, " " + name);
-            }else if (type.equalsIgnoreCase("APP_UPDATE")){
-                contentView.setTextViewText(R.id.service_type_value, " " + name);
-            }else if (type.equalsIgnoreCase("JOINT")){
-                contentView.setTextViewText(R.id.service_type_value, " " + name);
-            }
-            contentView.setTextViewText(R.id.service_time, new PersianEnglishDigit().E2P(new TimeConvert(when).timeStampToTime()));
-            contentView.setTextViewText(R.id.service_message_value, " " + new PersianEnglishDigit(message).E2P());
-            notification.contentView = contentView;
+            NotificationManager notificationManager = (NotificationManager) getSystemService(ns);
 
             Intent notificationIntent = new Intent(getApplicationContext(), HamPayLoginActivity.class);
-
             notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                     Intent.FLAG_ACTIVITY_SINGLE_TOP |
                     Intent.FLAG_ACTIVITY_NEW_TASK);
+
             notificationIntent.putExtra(Constants.NOTIFICATION, true);
-//            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
-            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0,
+            PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
                     notificationIntent, 0);
-            notification.contentIntent = contentIntent;
 
-            //notification.flags |= Notification.FLAG_NO_CLEAR; //Do not clear the notification
-            notification.defaults |= Notification.DEFAULT_LIGHTS; // LED
-            notification.defaults |= Notification.DEFAULT_VIBRATE; //Vibration
-            notification.defaults |= Notification.DEFAULT_SOUND; // Sound
+            HeadsUpManager manage = HeadsUpManager.getInstant(getApplication());
+            HeadsUp.Builder builder = new HeadsUp.Builder(getApplicationContext());
 
-            mNotificationManager.notify(NOTIFICATION_ID, notification);
+            builder.setContentTitle(headsUpTitle).setDefaults(
+                    Notification.FLAG_AUTO_CANCEL
+                            | Notification.DEFAULT_SOUND
+                            | Notification.DEFAULT_LIGHTS)
+                    .setSmallIcon(R.drawable.ball)
+                    .setAutoCancel(true)
+                    .setContentIntent(pendingIntent)
+                    .setFullScreenIntent(pendingIntent,false)
+                    .setContentText(new PersianEnglishDigit(headsUpContent).E2P());
+
+            HeadsUp headsUp = builder.buildHeadUp();
+            headsUp.setSticky(true);
+            manage.notify(code++, headsUp);
+
+            notificationManager.notify(NOTIFICATION_ID, builder.build());
+
+
+//            int NOTIFICATION_ID = 759;
+//            String ns = Context.NOTIFICATION_SERVICE;
+//            NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
+//
+//            int icon = R.drawable.ball;
+//            long when = System.currentTimeMillis();
+//            Notification notification = new Notification(icon, getString(R.string.app_name), when);
+//            notification.flags = Notification.FLAG_AUTO_CANCEL;
+////            notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL | Notification.FLAG_ONLY_ALERT_ONCE;
+//
+//            RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.server_notification);
+//            contentView.setImageViewResource(R.id.notification_image, R.mipmap.ic_launcher);
+//            if (type.equalsIgnoreCase("PAYMENT")) {
+//                contentView.setTextViewText(R.id.service_type_value, " " + name);
+//            }else if (type.equalsIgnoreCase("APP_UPDATE")){
+//                contentView.setTextViewText(R.id.service_type_value, " " + name);
+//            }else if (type.equalsIgnoreCase("JOINT")){
+//                contentView.setTextViewText(R.id.service_type_value, " " + name);
+//            }
+//            contentView.setTextViewText(R.id.service_time, new PersianEnglishDigit().E2P(new TimeConvert(when).timeStampToTime()));
+//            contentView.setTextViewText(R.id.service_message_value, " " + new PersianEnglishDigit(message).E2P());
+//            notification.contentView = contentView;
+//
+//            Intent notificationIntent = new Intent(getApplicationContext(), HamPayLoginActivity.class);
+//
+//            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+//                    Intent.FLAG_ACTIVITY_SINGLE_TOP |
+//                    Intent.FLAG_ACTIVITY_NEW_TASK);
+//            notificationIntent.putExtra(Constants.NOTIFICATION, true);
+////            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
+//            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0,
+//                    notificationIntent, 0);
+//            notification.contentIntent = contentIntent;
+//
+//            //notification.flags |= Notification.FLAG_NO_CLEAR; //Do not clear the notification
+//            notification.defaults |= Notification.DEFAULT_LIGHTS; // LED
+//            notification.defaults |= Notification.DEFAULT_VIBRATE; //Vibration
+//            notification.defaults |= Notification.DEFAULT_SOUND; // Sound
+//
+//            mNotificationManager.notify(NOTIFICATION_ID, notification);
 
         }
     };

@@ -15,9 +15,6 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 
-/**
- * Created by zzz40500 on 2014/10/9.
- */
 public class HeadsUpManager  {
 
     private  WindowManager wmOne;
@@ -26,9 +23,6 @@ public class HeadsUpManager  {
     private static HeadsUpManager manager;
     private Context context;
 
-    /**
-     *
-     */
     private boolean isPolling = false;
 
     private Map<Integer, HeadsUp> map;
@@ -90,7 +84,6 @@ public class HeadsUpManager  {
                 isPolling = true;
                 show(headsUp);
             }else {
-                //当 系统是 lollipop 以上,并且没有自定义布局以后,调用系统自己的 notification
                 isPolling = false;
                 notificationManager.notify(headsUp.getCode(),headsUp.getBuilder().setIcon(headsUp.getIcon()).build());
 

@@ -17,15 +17,14 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
-    <permission android:name="com.hampay.mobile.android.permission.C2D_MESSAGE"
+    <permission
+        android:name="com.hampay.mobile.android.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="com.hampay.mobile.android.permission.C2D_MESSAGE" />
 
     <application
@@ -35,6 +34,7 @@
         android:theme="@style/MyMaterialTheme" >
         <activity
             android:name=".activity.AppSliderActivity"
+
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -214,8 +214,8 @@
         <activity
             android:name=".activity.HamPayLoginActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" >
         </activity>
 
         <receiver
@@ -233,21 +233,26 @@
             android:screenOrientation="portrait" >
         </activity>
 
-
-
         <receiver
             android:name=".receiver.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
                 <category android:name="com.hmkcode.android.gcm" />
             </intent-filter>
         </receiver>
+
         <service android:name=".service.GcmMessageHandler" />
 
-        <meta-data android:name="com.google.android.gms.version"
+        <meta-data
+            android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
+        <activity
+            android:name=".account.HeadUpActivity"
+            android:label="@string/title_activity_head_up" >
+        </activity>
     </application>
 
 </manifest>

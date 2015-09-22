@@ -23,9 +23,6 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- *
- */
 @SuppressLint("ViewConstructor")
 public class FloatView extends LinearLayout {
 
@@ -184,13 +181,6 @@ private int pointerId;
         return super.onTouchEvent(event);
 
     }
-    /**
-     *
-     * @param event 向VelocityTracker添加MotionEvent
-     *
-     * @see android.view.VelocityTracker#obtain()
-     * @see android.view.VelocityTracker#addMovement(MotionEvent)
-     */
     private void acquireVelocityTracker( MotionEvent event) {
         if(null == velocityTracker) {
             velocityTracker = VelocityTracker.obtain();
@@ -381,9 +371,6 @@ private int pointerId;
             }
         }
     }
-
-
-
 
     enum ScrollOrientationEnum {
         VERTICAL,HORIZONTAL,NONE

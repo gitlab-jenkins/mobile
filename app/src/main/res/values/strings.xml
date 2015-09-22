@@ -400,5 +400,6 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_single_contact">SingleContactActivity</string>
+    <string name="title_activity_head_up">HeadUpActivity</string>
 
 </resources>

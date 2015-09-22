@@ -287,9 +287,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         }
 
 
-        //if (!prefs.getBoolean(Constants.SEND_MOBILE_REGISTER_ID, false)) {
+        if (!prefs.getBoolean(Constants.SEND_MOBILE_REGISTER_ID, false)) {
             getRegId();
-        //}
+        }
 
     }
 
@@ -325,7 +325,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         switch (position) {
             case 0:
                 fragment = new AccountDetailFragment();
-                bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
+                if (userProfileDTO != null)
+                    bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
                 fragment.setArguments(bundle);
                 title = getString(R.string.title_account_detail);
 

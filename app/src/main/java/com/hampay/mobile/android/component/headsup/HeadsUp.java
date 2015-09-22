@@ -11,21 +11,11 @@ import android.view.View;
 import android.widget.RemoteViews;
 import java.util.ArrayList;
 import java.util.List;
-
-
-/**
- * Created by zzz40500 on 2014/10/9.
- */
 public class HeadsUp   {
 
     private Context context;
-    /**
-     * 出现时间  单位是 second
-     */
+
     private long duration= 9;
-    /**
-     *
-     */
     private Notification notification;
 
     private Builder builder;
@@ -35,15 +25,7 @@ public class HeadsUp   {
 
     private boolean activateStatusBar=true;
 
-
-    /**
-     *
-     */
-
     private Notification silencerNotification;
-    /**
-     * 间隔时间
-     */
     private long interval=600 ;
     private int code;
     private List<NotificationCompat.Action> actions;
@@ -69,26 +51,17 @@ public class HeadsUp   {
             super(context);
             headsUp=new HeadsUp(context);
         }
-        /**
-         * 显示全部界面
-         * @param isExpand
-         */
         public Builder setUsesChronometer(boolean isExpand){
             headsUp.setExpand(isExpand);
             return this;
         }
-        /**
-         * Set the first line of text in the platform notification template.
-         */
+
         public Builder setContentTitle(CharSequence title) {
             headsUp.setTitle(title);
             super.setContentTitle(title);
             return this;
         }
 
-        /**
-         * Set the second line of text in the platform notification template.
-         */
         public Builder setContentText(CharSequence text) {
             headsUp.setMessage(text);
             super.setContentText(text);
@@ -370,21 +343,10 @@ public class HeadsUp   {
         icon = dRes;
     }
 
-
-    /**
-     * 设置消息标题
-     *
-     * @param titleStr
-     */
     protected void setTitle(CharSequence titleStr) {
         this.titleStr = titleStr;
     }
 
-    /**
-     * 设置消息内容
-     *
-     * @param msgStr
-     */
     protected void setMessage(CharSequence msgStr) {
         this.msgStr = msgStr;
     }
