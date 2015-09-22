@@ -20,7 +20,7 @@ public class SecurityUtils {
     }
 
     public String generatePassword(String passCode, String memorableKey, String deviceId, String installationToken) {
-        return deviceId + toHexString(memorableKey) + String.valueOf(installationToken.length()*3 + 11) + passCode + installationToken + String.valueOf(memorableKey.length()*17 + 23);
+        return deviceId + toHexString(memorableKey) + String.valueOf(installationToken.length() * 3 + 11) + passCode + installationToken + String.valueOf(memorableKey.length()*17 + 23);
     }
 
 

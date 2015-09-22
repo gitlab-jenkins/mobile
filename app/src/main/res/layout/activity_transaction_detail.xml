@@ -332,6 +332,69 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/responseMessage_ll"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@android:color/darker_gray"/>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="right"
+                    android:layout_marginRight="44dp"
+                    android:layout_marginTop="12dp">
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_gravity="right"
+                        android:gravity="right"
+                        android:layout_marginRight="8dp">
+
+
+
+                        <com.hampay.mobile.android.component.FacedTextView
+                            geekui:customTypeface="fonts/iran_sans.ttf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/normal_text"
+                            android:textSize="15dp"
+                            android:text="@string/more_transaction_detail"
+                            android:gravity="right"
+                            android:layout_gravity="right"
+                            />
+
+                        <com.hampay.mobile.android.component.FacedTextView
+                            android:id="@+id/reject_message"
+                            geekui:customTypeface="fonts/iran_sans.ttf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/black"
+                            android:textSize="15dp"
+                            android:gravity="right"
+                            android:layout_marginRight="4dp"
+                            android:text="ssss"/>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="0.5dp"

@@ -44,6 +44,7 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
             viewHolder.date_time = (FacedTextView)convertView.findViewById(R.id.date_time);
             viewHolder.message = (FacedTextView)convertView.findViewById(R.id.message);
             viewHolder.price_pay = (FacedTextView)convertView.findViewById(R.id.price_pay);
+            viewHolder.reject_message = (FacedTextView)convertView.findViewById(R.id.reject_message);
 
 
             convertView.setTag(viewHolder);
@@ -57,6 +58,8 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
 
         if (transactionDTO.getTransactionStatus() == TransactionStatus.SUCCESS){
 
+            viewHolder.reject_message.setVisibility(View.GONE);
+
             if (transactionDTO.getTransactionType() == TransactionType.CREDIT){
                 viewHolder.status_text.setText(context.getString(R.string.credit));
                 viewHolder.status_text.setTextColor(convertView.getResources().getColor(R.color.register_btn_color));
@@ -69,11 +72,13 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
             }
 
         }else if (transactionDTO.getTransactionStatus() == TransactionStatus.PENDING) {
+            viewHolder.reject_message.setVisibility(View.GONE);
             viewHolder.status_text.setText(context.getString(R.string.pending));
             viewHolder.status_text.setTextColor(convertView.getResources().getColor(R.color.pending_transaction));
             viewHolder.status_icon.setImageResource(R.drawable.pending);
         }
         else {
+            viewHolder.reject_message.setVisibility(View.VISIBLE);
             viewHolder.status_text.setText(context.getString(R.string.fail));
             viewHolder.status_text.setTextColor(convertView.getResources().getColor(R.color.colorPrimary));
             viewHolder.status_icon.setImageResource(R.drawable.arrow_f);
@@ -83,6 +88,7 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
         viewHolder.user_name.setText(transactionDTO.getPersonName());
         viewHolder.date_time.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(transactionDTO.getTransactionDate())));
         viewHolder.message.setText(transactionDTO.getMessage());
+        viewHolder.reject_message.setText(transactionDTO.getRejectReasonMessage());
 
         viewHolder.price_pay.setText(persianEnglishDigit.E2P(String.format("%,d", transactionDTO.getAmount()).replace(".", ","))
                         + "\n"
@@ -103,6 +109,7 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
         FacedTextView date_time;
         FacedTextView message;
         FacedTextView price_pay;
+        FacedTextView reject_message;
     }
 
 }

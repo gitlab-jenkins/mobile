@@ -34,6 +34,7 @@
     <string name="transaction_tacking_code">کد پیگیری: </string>
     <string name="transaction_price">مبلغ: </string>
     <string name="transaction_message">پیام: </string>
+    <string name="more_transaction_detail">جزئیات بیشتر: </string>
 
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">

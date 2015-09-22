@@ -34,6 +34,8 @@ public class TransactionDetailActivity extends ActionBarActivity implements View
     FacedTextView tracking_code;
     FacedTextView price_pay;
     FacedTextView message;
+    LinearLayout responseMessage_ll;
+    FacedTextView reject_message;
     LinearLayout pay_to_one_ll;
     LinearLayout send_message;
     LinearLayout user_call;
@@ -64,6 +66,8 @@ public class TransactionDetailActivity extends ActionBarActivity implements View
         tracking_code = (FacedTextView)findViewById(R.id.tracking_code);
         price_pay = (FacedTextView)findViewById(R.id.price_pay);
         message = (FacedTextView)findViewById(R.id.message);
+        responseMessage_ll = (LinearLayout)findViewById(R.id.responseMessage_ll);
+        reject_message = (FacedTextView)findViewById(R.id.reject_message);
         pay_to_one_ll = (LinearLayout)findViewById(R.id.pay_to_one_ll);
         pay_to_one_ll.setOnClickListener(this);
 
@@ -110,6 +114,10 @@ public class TransactionDetailActivity extends ActionBarActivity implements View
 
         user_name.setText(transactionDTO.getPersonName());
         message.setText(transactionDTO.getMessage());
+        if (transactionDTO.getRejectReasonMessage() != null){
+            responseMessage_ll.setVisibility(View.VISIBLE);
+            reject_message.setText(transactionDTO.getRejectReasonMessage());
+        }
         price_pay.setText(persianEnglishDigit.E2P(String.format("%,d", transactionDTO.getAmount())));
         user_mobile_no.setText(persianEnglishDigit.E2P(transactionDTO.getPhoneNumber()));
         date_time.setText(persianEnglishDigit.E2P((new JalaliConvert()).GregorianToPersian(transactionDTO.getTransactionDate())));

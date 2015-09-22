@@ -80,10 +80,10 @@ public class AppSliderActivity extends ActionBarActivity {
 
 //        getRegId();
 
-//        if (new RootUtil().checkRootedDevice()){
-//            new HamPayDialog(this).showPreventRootDeviceDialog();
-//            return;
-//        }
+        if (new RootUtil().checkRootedDevice()){
+            new HamPayDialog(this).showPreventRootDeviceDialog();
+            return;
+        }
 
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);

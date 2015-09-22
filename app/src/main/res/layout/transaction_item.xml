@@ -103,6 +103,20 @@
                     android:text="متن پیام"
                     android:singleLine="true"/>
 
+                <com.hampay.mobile.android.component.FacedTextView
+                    android:id="@+id/reject_message"
+                    geekui:customTypeface="fonts/iran_sans.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/normal_text"
+                    android:textSize="13dp"
+                    android:gravity="right"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="8dp"
+                    android:text="متن پیام"
+                    android:singleLine="true"
+                    android:visibility="gone"/>
+
             </LinearLayout>
 
 
