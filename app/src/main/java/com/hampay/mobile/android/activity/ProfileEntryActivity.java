@@ -43,9 +43,15 @@ import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
 import com.hampay.mobile.android.location.BestLocationListener;
 import com.hampay.mobile.android.location.BestLocationProvider;
+import com.hampay.mobile.android.util.AESHelper;
 import com.hampay.mobile.android.util.Constants;
+import com.hampay.mobile.android.util.DeviceInfo;
 import com.hampay.mobile.android.util.NationalCodeVerification;
 import com.hampay.mobile.android.util.PersianEnglishDigit;
+import com.hampay.mobile.android.util.SecurityUtils;
+
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 
 public class ProfileEntryActivity extends Activity {
 
@@ -100,6 +106,12 @@ public class ProfileEntryActivity extends Activity {
 
     Tracker hamPayGaTracker;
 
+
+    String key;
+    DeviceInfo deviceInfo;
+    String encryptedData;
+    String decryptedData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,12 +121,38 @@ public class ProfileEntryActivity extends Activity {
 
         activity = this;
 
+        deviceInfo = new DeviceInfo(context);
+
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
+
+        try {
+            key = SecurityUtils.getInstance(this).generateSHA_256(
+                    deviceInfo.getMacAddress(),
+                    deviceInfo.getIMEI(),
+                    deviceInfo.getAndroidId()
+            );
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
         initLocation();
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+
+        try {
+            encryptedData = AESHelper.encrypt(key, ProfileEntryActivity.class.getName());
+            Log.v("EncryptDecrypt", "Encoded String " + encryptedData);
+            decryptedData = AESHelper.decrypt(key, encryptedData);
+            Log.v("EncryptDecrypt", "Decoded String " + decryptedData);
+        }catch (Exception ex){
+
+            Log.e("Error", ex.getStackTrace().toString());
+
+        }
+
         editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ProfileEntryActivity.class.getName());
         editor.commit();
 

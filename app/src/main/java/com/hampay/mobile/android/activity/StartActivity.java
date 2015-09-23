@@ -31,8 +31,6 @@ public class StartActivity extends Activity {
         activity = StartActivity.this;
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-//        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, StartActivity.class.getName());
-//        editor.commit();
 
 //        waitingProgress = (ProgressView)findViewById(R.id.waitingProgress);
 //        waitingProgress.start();

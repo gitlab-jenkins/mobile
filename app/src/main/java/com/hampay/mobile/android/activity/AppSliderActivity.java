@@ -34,9 +34,13 @@ import com.hampay.mobile.android.fragment.AppSliderFragmentC;
 import com.hampay.mobile.android.fragment.AppSliderFragmentD;
 import com.hampay.mobile.android.fragment.AppSliderFragmentE;
 import com.hampay.mobile.android.util.Constants;
+import com.hampay.mobile.android.util.DeviceInfo;
 import com.hampay.mobile.android.util.RootUtil;
+import com.hampay.mobile.android.util.SecurityUtils;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 
 
 public class AppSliderActivity extends ActionBarActivity {
@@ -67,6 +71,8 @@ public class AppSliderActivity extends ActionBarActivity {
 //    int slideIndex = 0;
 
 
+    String key;
+
     GoogleCloudMessaging gcm;
     String regid;
     String PROJECT_NUMBER = "936219454834";
@@ -77,6 +83,20 @@ public class AppSliderActivity extends ActionBarActivity {
         setContentView(R.layout.activity_app_slider);
 
         activity = AppSliderActivity.this;
+
+        DeviceInfo deviceInfo = new DeviceInfo(this);
+
+        try {
+            key = SecurityUtils.getInstance(this).generateSHA_256(
+                    deviceInfo.getMacAddress(),
+                    deviceInfo.getIMEI(),
+                    deviceInfo.getAndroidId()
+            );
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
 //        getRegId();
 
