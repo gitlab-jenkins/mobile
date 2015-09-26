@@ -2,60 +2,11 @@
 <items version="2" >
 
     <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/libs/common-common-0.0.1.jar"
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-fitness/7.3.0/jars/classes.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="1da1f1f1db283fb33d2fa7266730d546c00d2df4">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/common-common-0.0.1-9d258fb2201c655bc4520b21b4836b5789f807f9.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-safetynet/7.3.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="0708ef60917bf94913fe9ef972a655b99462dca7">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-f4bedbe83a1b9d2c796970b16efe62db5ae37e3d.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/7.3.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="fe3e0c6de7cceed888b277487238b6af9a1cc299">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-a3d8080a19740b7b21648ecd14606513f3449287.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-identity/7.3.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="b48d5c51a9a9e329005106b4667f54948de4d4d8">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-9949fdabc66418f6b7e5528e7caa8d8c9e967e32.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-cast/7.3.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="e5b9f5b0aa8dee788beb63d23832cb29ce771343">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-fbca8b605545781ee2861aa77b1c0857ac24d9f9.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/libs/acra-4.6.2.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="b99297996579b72496c9f81b0c12d8404c74e618">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/acra-4.6.2-81213741f00f066c29eaedae11c2f8ba35aec4c9.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/7.3.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="59652857a825fff0de62166fca1bc9553cc01abb">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-02373243b3d2937452a1b3d2a5918e75757ec7ca.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-nearby/7.3.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="5ea948d825957be6c4358c48422bee60eef2d487">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-dea88d9ad0d24f769ba06e9af75196c5547d0006.jar" />
+        sha1="4f4fe3c23776540625f3c2844152a7510fddf9f1">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-5161646dc92a4b0cc828146083344dd69be169d3.jar" />
     </item>
     <item
         jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/22.1.1/jars/classes.jar"
@@ -65,116 +16,11 @@
         <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-fe6e96d443bd7d7a77cf389afa17f0e6f5509f71.jar" />
     </item>
     <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/libs/gson-2.2.4.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="973e832af433b44c3ed11c426f2f390b29f3f3f8">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/gson-2.2.4-138e3dd2093cfb8611c5a2f88e62d50e40bd428d.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-fitness/7.3.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="4f4fe3c23776540625f3c2844152a7510fddf9f1">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-5161646dc92a4b0cc828146083344dd69be169d3.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/7.3.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="7215ac1f2fca947b9415a6ee2a1bf991364aab24">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-9b8ca7e0135af9e81c25ea874693966b96ea8571.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.3.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="3988694bf9d8186ff97ad5cdfa4ed88b5010fe08">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-dced6fb718918b36a93beb74f06b6e8118f901e3.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/7.3.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="6046e5cdaf799120b7c56a5a061d80e8854c4d34">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-792ccb0244889eaa5e7305c633b7e023a5010606.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="c95ba8152923e4872e86a82cfcba9a51c0214328">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-158f60a0b33656583d0cbc13553c14cc22515977.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appindexing/7.3.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="e35fae1b377c23aa5fd2d309a190c2d0f73d54ec">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-068605c4f2fda5fc801178ffdb3ff9bf125160e4.jar" />
-    </item>
-    <item
-        jar="/home/amir/.gradle/caches/modules-2/files-2.1/com.nineoldandroids/library/2.4.0/e9b63380f3a242dbdbf103a2355ad7e43bad17cb/library-2.4.0.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/library-2.4.0-0de2a9a4bd89d5c59a401b848221ad5cee18b315.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/libs/internal_impl-22.1.1.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/internal_impl-22.1.1-e43e87dcdf0c2df6e8dc811a136a90e17a5891ea.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="d84409890828e07d344a3b9b1da545dba9897b51">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-f4c6c0d7e9c55afcb1826f9735b963f1536c0b51.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.3.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="f2f7ec211ce4d244ee97a57523eeb4526dc3cf8a">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-08ddbb68fc77d05cb15afc71018f3cada5f86897.jar" />
-    </item>
-    <item
         jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics/7.3.0/jars/classes.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="9c9dea9e85aceb09d95df5e6f7bc8a43fc286068">
         <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-d372d7f225e952247e5c68ba5942c8794b644c21.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appstate/7.3.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="0180d031a7b54dabb93b4af3869468b55dc938bd">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-6704ea9e5973bded12268a2be56f9e42d3d57377.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-drive/7.3.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="a0ce76dfaccbfbd6c551ed2174280aaabe60fe47">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-29e2e935f46b4634225dcd4ba4767ea5e3191ba0.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-panorama/7.3.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="565a01f90f1529f73362707c4c185d0623a68782">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-5fb3a68496b8a0fbd09210d81e7718229441280a.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appinvite/7.3.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="bb36004beb02b69562cbec9aa7d6a3cf16bf5d1b">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-16cdada3bd0d5bd9c1b1d05c15867fdf6e56607a.jar" />
     </item>
     <item
         jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/7.3.0/jars/classes.jar"
@@ -184,11 +30,18 @@
         <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-7ae55df4b6ec0901d107abdbe6da35c1708d0e76.jar" />
     </item>
     <item
-        jar="/home/amir/AndroidStudioProjects/HamPay/app/libs/common-core-0.0.1.jar"
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-panorama/7.3.0/jars/classes.jar"
         jumboMode="false"
         revision="22.0.1"
-        sha1="28eb6b9abf03cfba1d7ba88d95955a4ef1044df2">
-        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/common-core-0.0.1-0d2eb0d164b1ccc709daabf560c677110de97c71.jar" />
+        sha1="565a01f90f1529f73362707c4c185d0623a68782">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-5fb3a68496b8a0fbd09210d81e7718229441280a.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/libs/gson-2.2.4.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="973e832af433b44c3ed11c426f2f390b29f3f3f8">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/gson-2.2.4-138e3dd2093cfb8611c5a2f88e62d50e40bd428d.jar" />
     </item>
     <item
         jar="/home/amir/android-studio/sdk/extras/android/m2repository/com/android/support/support-annotations/22.1.1/support-annotations-22.1.1.jar"
@@ -198,6 +51,34 @@
         <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/support-annotations-22.1.1-f0b05c12fce91acb407d1c4752cb59d51484c19b.jar" />
     </item>
     <item
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/libs/common-common-0.0.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="1da1f1f1db283fb33d2fa7266730d546c00d2df4">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/common-common-0.0.1-9d258fb2201c655bc4520b21b4836b5789f807f9.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-drive/7.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="a0ce76dfaccbfbd6c551ed2174280aaabe60fe47">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-29e2e935f46b4634225dcd4ba4767ea5e3191ba0.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/libs/common-core-0.0.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="28eb6b9abf03cfba1d7ba88d95955a4ef1044df2">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/common-core-0.0.1-0d2eb0d164b1ccc709daabf560c677110de97c71.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/libs/acra-4.6.2.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="b99297996579b72496c9f81b0c12d8404c74e618">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/acra-4.6.2-81213741f00f066c29eaedae11c2f8ba35aec4c9.jar" />
+    </item>
+    <item
         jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-games/7.3.0/jars/classes.jar"
         jumboMode="false"
         revision="22.0.1"
@@ -205,11 +86,130 @@
         <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-c5fd7f801978dfaa31d740595f941337be81af0b.jar" />
     </item>
     <item
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appstate/7.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="0180d031a7b54dabb93b4af3869468b55dc938bd">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-6704ea9e5973bded12268a2be56f9e42d3d57377.jar" />
+    </item>
+    <item
         jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/7.3.0/jars/classes.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="e5bf453b070c1e39297986144960e45afa0fdfad">
         <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-cffbf172018174ff039d873daeac6ccb16f36f86.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/7.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="7215ac1f2fca947b9415a6ee2a1bf991364aab24">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-9b8ca7e0135af9e81c25ea874693966b96ea8571.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="c95ba8152923e4872e86a82cfcba9a51c0214328">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-158f60a0b33656583d0cbc13553c14cc22515977.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appinvite/7.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="bb36004beb02b69562cbec9aa7d6a3cf16bf5d1b">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-16cdada3bd0d5bd9c1b1d05c15867fdf6e56607a.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="f2f7ec211ce4d244ee97a57523eeb4526dc3cf8a">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-08ddbb68fc77d05cb15afc71018f3cada5f86897.jar" />
+    </item>
+    <item
+        jar="/home/amir/.gradle/caches/modules-2/files-2.1/com.nineoldandroids/library/2.4.0/e9b63380f3a242dbdbf103a2355ad7e43bad17cb/library-2.4.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/library-2.4.0-0de2a9a4bd89d5c59a401b848221ad5cee18b315.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/7.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="6046e5cdaf799120b7c56a5a061d80e8854c4d34">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-792ccb0244889eaa5e7305c633b7e023a5010606.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/7.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="59652857a825fff0de62166fca1bc9553cc01abb">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-02373243b3d2937452a1b3d2a5918e75757ec7ca.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/7.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="fe3e0c6de7cceed888b277487238b6af9a1cc299">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-a3d8080a19740b7b21648ecd14606513f3449287.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-nearby/7.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="5ea948d825957be6c4358c48422bee60eef2d487">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-dea88d9ad0d24f769ba06e9af75196c5547d0006.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-safetynet/7.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="0708ef60917bf94913fe9ef972a655b99462dca7">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-f4bedbe83a1b9d2c796970b16efe62db5ae37e3d.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-identity/7.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="b48d5c51a9a9e329005106b4667f54948de4d4d8">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-9949fdabc66418f6b7e5528e7caa8d8c9e967e32.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="d84409890828e07d344a3b9b1da545dba9897b51">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-f4c6c0d7e9c55afcb1826f9735b963f1536c0b51.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appindexing/7.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="e35fae1b377c23aa5fd2d309a190c2d0f73d54ec">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-068605c4f2fda5fc801178ffdb3ff9bf125160e4.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-cast/7.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="e5b9f5b0aa8dee788beb63d23832cb29ce771343">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-fbca8b605545781ee2861aa77b1c0857ac24d9f9.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/libs/internal_impl-22.1.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/internal_impl-22.1.1-e43e87dcdf0c2df6e8dc811a136a90e17a5891ea.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.3.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="3988694bf9d8186ff97ad5cdfa4ed88b5010fe08">
+        <dex dex="/home/amir/AndroidStudioProjects/HamPay/app/build/intermediates/pre-dexed/release/classes-dced6fb718918b36a93beb74f06b6e8118f901e3.jar" />
     </item>
 
 </items>

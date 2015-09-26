@@ -26,7 +26,7 @@ public class HeadsUp   {
     private boolean activateStatusBar=true;
 
     private Notification silencerNotification;
-    private long interval=600 ;
+    private long interval = 600 ;
     private int code;
     private List<NotificationCompat.Action> actions;
     private CharSequence titleStr;

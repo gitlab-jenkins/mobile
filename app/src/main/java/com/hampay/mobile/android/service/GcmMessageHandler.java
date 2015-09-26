@@ -10,6 +10,7 @@ import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.PersianEnglishDigit;
 import com.hampay.mobile.android.util.TimeConvert;
 
+import android.app.ActivityManager;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -22,6 +23,8 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.Toast;
+
+import java.util.List;
 
 /**
  * Created by amir on 9/15/15.
@@ -80,44 +83,109 @@ public class GcmMessageHandler extends IntentService{
         public void handleMessage(Message msg)
         {
 
+//            int NOTIFICATION_ID = 759;
+//            String ns = Context.NOTIFICATION_SERVICE;
+//            NotificationManager notificationManager = (NotificationManager) getSystemService(ns);
+//
+//            Intent notificationIntent = new Intent(getApplicationContext(), HamPayLoginActivity.class);
+//            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+//                    Intent.FLAG_ACTIVITY_SINGLE_TOP |
+//                    Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+//            notificationIntent.putExtra(Constants.NOTIFICATION, true);
+//            PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
+//                    notificationIntent, 0);
+//
+//            HeadsUpManager manage = HeadsUpManager.getInstant(getApplication());
+//            HeadsUp.Builder builder = new HeadsUp.Builder(getApplicationContext());
+//
+//            builder.setContentTitle(headsUpTitle).setDefaults(
+//                    Notification.FLAG_AUTO_CANCEL
+//                            | Notification.DEFAULT_SOUND
+//                            | Notification.DEFAULT_LIGHTS)
+//                    .setSmallIcon(R.drawable.tiny_notification)
+//                    .setAutoCancel(true)
+//                    .setContentIntent(pendingIntent)
+//                    .setFullScreenIntent(pendingIntent,false)
+//                    .setContentText(/*new PersianEnglishDigit(headsUpContent).E2P()*/"123");
+//
+//            HeadsUp headsUp = builder.buildHeadUp();
+//            headsUp.setSticky(true);
+//            manage.notify(code++, headsUp);
+//
+//            notificationManager.notify(NOTIFICATION_ID, builder.build());
+
+
+            ActivityManager activityManager = (ActivityManager) getSystemService( ACTIVITY_SERVICE );
+
+            List<ActivityManager.RunningTaskInfo> taskList = activityManager.getRunningTasks(10);
+
+
+
             int NOTIFICATION_ID = 759;
             String ns = Context.NOTIFICATION_SERVICE;
             NotificationManager notificationManager = (NotificationManager) getSystemService(ns);
 
-            Intent notificationIntent = new Intent(getApplicationContext(), HamPayLoginActivity.class);
+            Intent notificationIntent = null;
+            PendingIntent pendingIntent = null;
+
+//            if(taskList.size() == 0 || taskList.size() == 1) {
+
+            notificationIntent = new Intent(getApplicationContext(), HamPayLoginActivity.class);
             notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                     Intent.FLAG_ACTIVITY_SINGLE_TOP |
                     Intent.FLAG_ACTIVITY_NEW_TASK);
 
             notificationIntent.putExtra(Constants.NOTIFICATION, true);
-            PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
-                    notificationIntent, 0);
+
+            pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
+                    notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+//            }
 
             HeadsUpManager manage = HeadsUpManager.getInstant(getApplication());
             HeadsUp.Builder builder = new HeadsUp.Builder(getApplicationContext());
 
-            builder.setContentTitle(headsUpTitle).setDefaults(
-                    Notification.FLAG_AUTO_CANCEL
-                            | Notification.DEFAULT_SOUND
-                            | Notification.DEFAULT_LIGHTS)
-                    .setSmallIcon(R.drawable.ball)
-                    .setAutoCancel(true)
-                    .setContentIntent(pendingIntent)
-                    .setFullScreenIntent(pendingIntent,false)
-                    .setContentText(new PersianEnglishDigit(headsUpContent).E2P());
+            if(taskList.size() == 0 || taskList.size() == 1) {
+
+//                builder.setAutoCancel(true);
+                builder.setContentTitle(headsUpTitle).setDefaults(
+                        Notification.DEFAULT_LIGHTS
+//                                |Notification.FLAG_AUTO_CANCEL
+                                |Notification.DEFAULT_SOUND
+                )
+                        .setSmallIcon(R.drawable.tiny_notification)
+                        .setAutoCancel(true)
+                        .setContentIntent(pendingIntent)
+                        .setFullScreenIntent(pendingIntent, false)
+                        .setContentText(/*new PersianEnglishDigit(headsUpContent).E2P()*/"123");
+            }else {
+//                builder.setAutoCancel(true);
+                builder.setContentTitle(headsUpTitle).setDefaults(
+                        Notification.DEFAULT_LIGHTS
+//                                |Notification.FLAG_AUTO_CANCEL
+                                |Notification.DEFAULT_SOUND)
+                        .setSmallIcon(R.drawable.tiny_notification)
+                        .setAutoCancel(true)
+//                        .setContentIntent(pendingIntent)
+//                        .setFullScreenIntent(pendingIntent, false)
+                        .setContentText(/*new PersianEnglishDigit(headsUpContent).E2P()*/"123");
+            }
 
             HeadsUp headsUp = builder.buildHeadUp();
             headsUp.setSticky(true);
             manage.notify(code++, headsUp);
 
-            notificationManager.notify(NOTIFICATION_ID, builder.build());
+//            notificationManager.notify(NOTIFICATION_ID, builder.build());
+
+
 
 
 //            int NOTIFICATION_ID = 759;
 //            String ns = Context.NOTIFICATION_SERVICE;
 //            NotificationManager mNotificationManager = (NotificationManager) getSystemService(ns);
 //
-//            int icon = R.drawable.ball;
+//            int icon = R.drawable.tiny_notification;
 //            long when = System.currentTimeMillis();
 //            Notification notification = new Notification(icon, getString(R.string.app_name), when);
 //            notification.flags = Notification.FLAG_AUTO_CANCEL;
@@ -125,15 +193,15 @@ public class GcmMessageHandler extends IntentService{
 //
 //            RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.server_notification);
 //            contentView.setImageViewResource(R.id.notification_image, R.mipmap.ic_launcher);
-//            if (type.equalsIgnoreCase("PAYMENT")) {
-//                contentView.setTextViewText(R.id.service_type_value, " " + name);
-//            }else if (type.equalsIgnoreCase("APP_UPDATE")){
-//                contentView.setTextViewText(R.id.service_type_value, " " + name);
-//            }else if (type.equalsIgnoreCase("JOINT")){
-//                contentView.setTextViewText(R.id.service_type_value, " " + name);
-//            }
+////            if (type.equalsIgnoreCase("PAYMENT")) {
+////                contentView.setTextViewText(R.id.service_type_value, " " + "1");
+////            }else if (type.equalsIgnoreCase("APP_UPDATE")){
+////                contentView.setTextViewText(R.id.service_type_value, " " + "1");
+////            }else if (type.equalsIgnoreCase("JOINT")){
+////                contentView.setTextViewText(R.id.service_type_value, " " + "1");
+////            }
 //            contentView.setTextViewText(R.id.service_time, new PersianEnglishDigit().E2P(new TimeConvert(when).timeStampToTime()));
-//            contentView.setTextViewText(R.id.service_message_value, " " + new PersianEnglishDigit(message).E2P());
+//            contentView.setTextViewText(R.id.service_message_value, " " + /*new PersianEnglishDigit(message).E2P()*/"123");
 //            notification.contentView = contentView;
 //
 //            Intent notificationIntent = new Intent(getApplicationContext(), HamPayLoginActivity.class);
@@ -141,6 +209,7 @@ public class GcmMessageHandler extends IntentService{
 //            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
 //                    Intent.FLAG_ACTIVITY_SINGLE_TOP |
 //                    Intent.FLAG_ACTIVITY_NEW_TASK);
+//            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 //            notificationIntent.putExtra(Constants.NOTIFICATION, true);
 ////            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
 //            PendingIntent contentIntent = PendingIntent.getActivity(getApplicationContext(), 0,

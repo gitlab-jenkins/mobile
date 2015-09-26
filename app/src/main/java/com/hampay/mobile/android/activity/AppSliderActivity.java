@@ -98,7 +98,7 @@ public class AppSliderActivity extends ActionBarActivity {
             e.printStackTrace();
         }
 
-//        getRegId();
+        getRegId();
 
         if (new RootUtil().checkRootedDevice()){
             new HamPayDialog(this).showPreventRootDeviceDialog();
