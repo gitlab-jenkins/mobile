@@ -9,7 +9,7 @@
     android:padding="8dp">
 
 
-    <com.hampay.mobile.android.component.FacedTextView
+    <xyz.homapay.hampay.mobile.android.component.FacedTextView
         android:id="@+id/tac_title"
         geekui:customTypeface="fonts/iran_sans.ttf"
         android:layout_width="wrap_content"
@@ -27,7 +27,7 @@
         android:layout_below="@id/tac_title"
         android:layout_above="@+id/botton_rl">
 
-        <com.hampay.mobile.android.component.FacedTextView
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
             android:id="@+id/tac_term"
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="wrap_content"
@@ -48,7 +48,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp">
 
-        <com.hampay.mobile.android.component.FacedTextView
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
             android:id="@+id/tac_reject"
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="wrap_content"
@@ -57,7 +57,7 @@
             android:textSize="14dp"
             android:text="@string/tac_reject" />
 
-        <com.hampay.mobile.android.component.FacedTextView
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
             android:id="@+id/tac_accept"
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="wrap_content"

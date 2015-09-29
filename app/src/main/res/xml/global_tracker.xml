@@ -11,5 +11,5 @@
     <bool name="ga_dryRun">false</bool>
 
     <!-- The screen names that will appear in reports -->
-    <string name="com.hampay.mobile.android.activity.MainActivity">HamPay Core</string>
+    <string name="xyz.homapay.hampay.mobile.android.activity.MainActivity">HamPay Core</string>
 </resources>

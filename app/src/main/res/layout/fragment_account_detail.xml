@@ -30,7 +30,7 @@
                     android:orientation="vertical"
                     android:gravity="right">
 
-                    <com.hampay.mobile.android.component.FacedTextView
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/user_name_text"
                         geekui:customTypeface="fonts/iran_sans.ttf"
                         android:layout_width="wrap_content"
@@ -41,7 +41,7 @@
                         android:layout_marginRight="4dp"
                         android:text=""/>
 
-                    <com.hampay.mobile.android.component.FacedTextView
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/user_account_no"
                         geekui:customTypeface="fonts/iran_sans.ttf"
                         android:layout_width="wrap_content"
@@ -52,7 +52,7 @@
                         android:layout_marginRight="4dp"
                         android:text="@string/account_no"/>
 
-                    <com.hampay.mobile.android.component.FacedTextView
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/user_account_no_text"
                         geekui:customTypeface="fonts/iran_sans.ttf"
                         android:layout_width="wrap_content"
@@ -69,7 +69,7 @@
                         android:orientation="horizontal"
                         android:layout_marginRight="4dp">
 
-                        <com.hampay.mobile.android.component.FacedTextView
+                        <xyz.homapay.hampay.mobile.android.component.FacedTextView
                             android:id="@+id/user_bank_name"
                             geekui:customTypeface="fonts/iran_sans.ttf"
                             android:layout_width="wrap_content"
@@ -79,7 +79,7 @@
                             android:gravity="center"
                             android:text=""/>
 
-                        <com.hampay.mobile.android.component.FacedTextView
+                        <xyz.homapay.hampay.mobile.android.component.FacedTextView
                             geekui:customTypeface="fonts/iran_sans.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
                         android:orientation="horizontal"
                         android:layout_marginRight="4dp">
 
-                        <com.hampay.mobile.android.component.FacedTextView
+                        <xyz.homapay.hampay.mobile.android.component.FacedTextView
                             android:id="@+id/user_mobile_no"
                             geekui:customTypeface="fonts/iran_sans.ttf"
                             android:layout_width="wrap_content"
@@ -106,7 +106,7 @@
                             android:gravity="center"
                             android:layout_marginRight="4dp" />
 
-                        <com.hampay.mobile.android.component.FacedTextView
+                        <xyz.homapay.hampay.mobile.android.component.FacedTextView
                             geekui:customTypeface="fonts/iran_sans.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -125,7 +125,7 @@
                         android:layout_marginRight="4dp">
 
 
-                        <com.hampay.mobile.android.component.FacedTextView
+                        <xyz.homapay.hampay.mobile.android.component.FacedTextView
                             android:id="@+id/user_account_title"
                             geekui:customTypeface="fonts/iran_sans.ttf"
                             android:layout_width="wrap_content"
@@ -137,7 +137,7 @@
                             android:text="@string/account_type"/>
 
 
-                        <com.hampay.mobile.android.component.FacedTextView
+                        <xyz.homapay.hampay.mobile.android.component.FacedTextView
                             android:id="@+id/user_account_type"
                             geekui:customTypeface="fonts/iran_sans.ttf"
                             android:layout_width="wrap_content"
@@ -170,7 +170,7 @@
                 android:orientation="vertical"
                 android:visibility="gone">
 
-                <com.hampay.mobile.android.component.FacedTextView
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/user_status_text"
                     geekui:customTypeface="fonts/iran_sans.ttf"
                     android:layout_width="wrap_content"
@@ -190,7 +190,7 @@
                     android:layout_gravity="center_horizontal">
 
 
-                    <com.hampay.mobile.android.component.material.ButtonRectangle
+                    <xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle
                         android:id="@+id/verify_account_button"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
@@ -198,7 +198,7 @@
                         android:background="@color/user_change_status"
                         android:textSize="16dp" />
 
-                    <com.hampay.mobile.android.component.FacedTextView
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         geekui:customTypeface="fonts/iran_sans.ttf"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
@@ -222,7 +222,7 @@
                 android:layout_marginTop="15dp"/>
 
 
-            <com.hampay.mobile.android.component.FacedTextView
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -254,7 +254,7 @@
                         android:layout_height="32dp"
                         android:background="@drawable/user_icon_blak" />
 
-                    <com.hampay.mobile.android.component.FacedTextView
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/hampay_2"
                         geekui:customTypeface="fonts/iran_sans.ttf"
                         android:layout_width="wrap_content"
@@ -277,7 +277,7 @@
                     android:gravity="right"
                     android:visibility="gone">
 
-                    <com.hampay.mobile.android.component.FacedTextView
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/hampay_1"
                         geekui:customTypeface="fonts/iran_sans.ttf"
                         android:layout_width="wrap_content"
@@ -321,7 +321,7 @@
                         android:layout_height="32dp"
                         android:background="@drawable/user_icon_blue" />
 
-                    <com.hampay.mobile.android.component.FacedTextView
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/hampay_4"
                         geekui:customTypeface="fonts/iran_sans.ttf"
                         android:layout_width="wrap_content"
@@ -345,7 +345,7 @@
                     android:visibility="gone">
 
 
-                    <com.hampay.mobile.android.component.FacedTextView
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/hampay_3"
                         geekui:customTypeface="fonts/iran_sans.ttf"
                         android:layout_width="wrap_content"
@@ -375,7 +375,7 @@
                 android:background="@color/normal_text"
                 android:layout_marginTop="5dp"/>
 
-            <com.hampay.mobile.android.component.FacedTextView
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/user_last_login"
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="wrap_content"

@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:background="@android:color/white">
 
-    <com.hampay.mobile.android.component.FacedTextView
+    <xyz.homapay.hampay.mobile.android.component.FacedTextView
         geekui:customTypeface="fonts/iran_sans_bold.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
         android:orientation="vertical"
         android:layout_centerInParent="true">
 
-        <!--<com.hampay.mobile.android.component.material.progressbar.ProgressView-->
+        <!--<xyz.homapay.hampay.mobile.android.component.material.progressbar.ProgressView-->
             <!--android:id="@+id/waitingProgress"-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="4dp"-->
@@ -60,7 +60,7 @@
                     android:src="@drawable/hampay_colored"
                     />
 
-                <com.hampay.mobile.android.component.FacedTextView
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     geekui:customTypeface="fonts/iran_sans.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -93,7 +93,7 @@
                     android:orientation="horizontal"
                     android:gravity="center">
 
-                    <com.hampay.mobile.android.component.FacedTextView
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         geekui:customTypeface="fonts/iran_sans.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -117,7 +117,7 @@
                     android:orientation="horizontal"
                     android:gravity="center">
 
-                    <com.hampay.mobile.android.component.FacedTextView
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         geekui:customTypeface="fonts/iran_sans.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -141,7 +141,7 @@
                     android:orientation="horizontal"
                     android:gravity="center">
 
-                    <com.hampay.mobile.android.component.FacedTextView
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         geekui:customTypeface="fonts/iran_sans.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -186,7 +186,7 @@
         android:layout_marginBottom="25dp">
 
 
-        <com.hampay.mobile.android.component.material.ButtonRectangle
+        <xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle
             android:id="@+id/start_button"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -194,7 +194,7 @@
             android:background="@color/register_btn_color"
             android:textSize="16dp" />
 
-        <com.hampay.mobile.android.component.FacedTextView
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"

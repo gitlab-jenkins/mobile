@@ -8,7 +8,7 @@
     android:layout_height="wrap_content"
     android:background="#aa000000">
 
-    <com.hampay.mobile.android.component.FacedTextView
+    <xyz.homapay.hampay.mobile.android.component.FacedTextView
         android:id="@+id/pinned_header_text"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

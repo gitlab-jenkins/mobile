@@ -9,7 +9,7 @@
     android:padding="15dp">
 
 
-    <com.hampay.mobile.android.component.FacedTextView
+    <xyz.homapay.hampay.mobile.android.component.FacedTextView
         geekui:customTypeface="fonts/iran_sans.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp">
 
-        <com.hampay.mobile.android.component.FacedTextView
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
             android:id="@+id/disconfrim_resume_register"
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="wrap_content"
@@ -33,7 +33,7 @@
             android:textSize="14dp"
             android:text="@string/disconfrim_resume_register" />
 
-        <com.hampay.mobile.android.component.FacedTextView
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
             android:id="@+id/confrim_resume_register"
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="wrap_content"

@@ -8,7 +8,7 @@
     android:padding="8dp"
     android:gravity="right|center_vertical">
 
-    <com.hampay.mobile.android.component.FacedTextView
+    <xyz.homapay.hampay.mobile.android.component.FacedTextView
         android:id="@+id/wating_text"
         geekui:customTypeface="fonts/iran_sans.ttf"
         android:layout_width="wrap_content"

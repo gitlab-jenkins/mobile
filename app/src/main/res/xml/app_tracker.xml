@@ -22,6 +22,6 @@
 
     <integer name="ga_sessionTimeout">-1</integer>
 
-    <string name="com.hampay.mobile.android.activity.MainActivity">HamPay Core</string>
+    <string name="xyz.homapay.hampay.mobile.android.activity.MainActivity">HamPay Core</string>
 
 </resources>

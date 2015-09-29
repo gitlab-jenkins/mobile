@@ -16,7 +16,7 @@
             android:layout_height="60dp"
             android:background="@color/colorPrimary">
 
-            <com.hampay.mobile.android.component.FacedTextView
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"/>
 
-            <com.hampay.mobile.android.component.FacedTextView
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -243,7 +243,7 @@
                     android:layout_centerVertical="true"
                     android:layout_margin="12dp"/>
 
-                <com.hampay.mobile.android.component.FacedTextView
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     geekui:customTypeface="fonts/iran_sans.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -263,7 +263,7 @@
             
             
             
-            <com.hampay.mobile.android.component.numericalprogressbar.NumberProgressBar
+            <xyz.homapay.hampay.mobile.android.component.numericalprogressbar.NumberProgressBar
                 android:id="@+id/numberProgressBar"
                 android:layout_margin="20dp"
                 style="@style/NumberProgressBar_Relax_Blue"
@@ -284,7 +284,7 @@
                 android:layout_marginTop="18dp">
 
 
-                <com.hampay.mobile.android.component.FacedTextView
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/input_digit_1"
                     geekui:customTypeface="fonts/iran_sans_bold.ttf"
                     android:layout_width="25dp"
@@ -297,7 +297,7 @@
                     android:layout_margin="8dp" />
 
 
-                <com.hampay.mobile.android.component.FacedTextView
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/input_digit_2"
                     geekui:customTypeface="fonts/iran_sans_bold.ttf"
                     android:layout_width="25dp"
@@ -309,7 +309,7 @@
                     android:background="@drawable/remember_edittext_bg"
                     android:layout_margin="8dp"/>
 
-                <com.hampay.mobile.android.component.FacedTextView
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/input_digit_3"
                     geekui:customTypeface="fonts/iran_sans_bold.ttf"
                     android:layout_width="25dp"
@@ -321,7 +321,7 @@
                     android:background="@drawable/remember_edittext_bg"
                     android:layout_margin="8dp"/>
 
-                <com.hampay.mobile.android.component.FacedTextView
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/input_digit_4"
                     geekui:customTypeface="fonts/iran_sans_bold.ttf"
                     android:layout_width="25dp"
@@ -333,7 +333,7 @@
                     android:background="@drawable/remember_edittext_bg"
                     android:layout_margin="8dp"/>
 
-                <com.hampay.mobile.android.component.FacedTextView
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/input_digit_5"
                     geekui:customTypeface="fonts/iran_sans_bold.ttf"
                     android:layout_width="25dp"
@@ -356,7 +356,7 @@
                 android:layout_marginTop="18dp">
 
 
-                <com.hampay.mobile.android.component.material.ButtonRectangle
+                <xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle
                     android:id="@+id/verify_button"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
@@ -364,7 +364,7 @@
                     android:background="@color/register_btn_color"
                     android:textSize="15dp" />
 
-                <com.hampay.mobile.android.component.FacedTextView
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     geekui:customTypeface="fonts/iran_sans.ttf"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"

@@ -19,7 +19,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true">
 
-            <com.hampay.mobile.android.component.FacedTextView
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/contact_name"
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="wrap_content"
@@ -30,7 +30,7 @@
                 android:layout_marginRight="8dp"
                 android:text="مجید زمانی"/>
 
-            <com.hampay.mobile.android.component.FacedTextView
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/contact_phone_no"
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="wrap_content"
@@ -51,7 +51,7 @@
             android:layout_centerVertical="true">
 
 
-            <com.hampay.mobile.android.component.material.ButtonRectangle
+            <xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle
                 android:id="@+id/pay_to_one_button"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -59,7 +59,7 @@
                 android:background="@color/register_btn_color"
                 android:textSize="16sp" />
 
-            <com.hampay.mobile.android.component.FacedTextView
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -84,7 +84,7 @@
             <!--card_view:cardElevation="4dp"-->
             <!--android:layout_centerVertical="true">-->
 
-            <!--<com.hampay.mobile.android.component.FacedTextView-->
+            <!--<xyz.homapay.hampay.mobile.android.component.FacedTextView-->
                 <!--geekui:customTypeface="fonts/iran_sans.ttf"-->
                 <!--android:layout_width="wrap_content"-->
                 <!--android:layout_height="wrap_content"-->
@@ -122,7 +122,7 @@
                 android:orientation="vertical"
                 android:gravity="right">
 
-                <com.hampay.mobile.android.component.FacedTextView
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/user_name"
                     geekui:customTypeface="fonts/iran_sans.ttf"
                     android:layout_width="wrap_content"
@@ -133,7 +133,7 @@
                     android:layout_marginRight="8dp"
                     android:text="دریافت"/>
 
-                <com.hampay.mobile.android.component.FacedTextView
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/user_phone"
                     geekui:customTypeface="fonts/iran_sans.ttf"
                     android:layout_width="wrap_content"
@@ -145,7 +145,7 @@
                     android:text="هومن امینی"/>
 
 
-                <com.hampay.mobile.android.component.FacedTextView
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/message"
                     geekui:customTypeface="fonts/iran_sans.ttf"
                     android:layout_width="wrap_content"

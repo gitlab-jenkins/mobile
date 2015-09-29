@@ -12,7 +12,7 @@
         android:layout_height="60dp"
         android:background="@color/colorPrimary">
 
-        <com.hampay.mobile.android.component.FacedTextView
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"/>
 
-        <com.hampay.mobile.android.component.FacedTextView
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -250,7 +250,7 @@
                             android:src="@drawable/hampay_colored"
                             />
 
-                        <com.hampay.mobile.android.component.FacedTextView
+                        <xyz.homapay.hampay.mobile.android.component.FacedTextView
                             geekui:customTypeface="fonts/iran_sans.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -265,7 +265,7 @@
 
 
 
-                <com.hampay.mobile.android.component.FacedTextView
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     geekui:customTypeface="fonts/iran_sans.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -290,7 +290,7 @@
                 android:layout_marginBottom="25dp">
 
 
-                <com.hampay.mobile.android.component.material.ButtonRectangle
+                <xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle
                     android:id="@+id/keepOn_button"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
@@ -298,7 +298,7 @@
                     android:background="@color/register_btn_color"
                     android:textSize="16dp" />
 
-                <com.hampay.mobile.android.component.FacedTextView
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     geekui:customTypeface="fonts/iran_sans.ttf"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"

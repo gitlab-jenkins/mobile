@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.hampay.mobile.android" >
+    package="xyz.homapay.hampay.mobile.android" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -22,10 +22,10 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <permission
-        android:name="com.hampay.mobile.android.permission.C2D_MESSAGE"
+        android:name="xyz.homapay.hampay.mobile.android.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.hampay.mobile.android.permission.C2D_MESSAGE" />
+    <uses-permission android:name="xyz.homapay.hampay.mobile.android.permission.C2D_MESSAGE" />
 
     <application
         android:name=".HamPayApplication"
@@ -127,7 +127,7 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="vnd.android.cursor.item/com.hampay.mobile" />
+                <data android:mimeType="vnd.android.cursor.item/xyz.homapay.hampay.mobile" />
             </intent-filter>
         </activity>
         <activity
@@ -249,10 +249,6 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity
-            android:name=".account.HeadUpActivity"
-            android:label="@string/title_activity_head_up" >
-        </activity>
     </application>
 
 </manifest>

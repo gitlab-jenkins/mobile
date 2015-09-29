@@ -22,7 +22,7 @@
             android:clickable="true"
             android:onClick="backActionBar"/>
 
-        <com.hampay.mobile.android.component.FacedTextView
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
                 android:layout_margin="20dp"
                 android:gravity="right">
 
-                <com.hampay.mobile.android.component.FacedTextView
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     geekui:customTypeface="fonts/iran_sans.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
                     android:layout_gravity="right"
                     />
 
-                <com.hampay.mobile.android.component.FacedTextView
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/business_name_code"
                     geekui:customTypeface="fonts/iran_sans.ttf"
                     android:layout_width="wrap_content"
@@ -81,7 +81,7 @@
             </LinearLayout>
 
 
-            <com.hampay.mobile.android.component.FacedTextView
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -98,7 +98,7 @@
                 android:layout_marginRight="18dp">
 
 
-                <com.hampay.mobile.android.component.edittext.FacedEditText
+                <xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText
                     android:id="@+id/contact_message"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
@@ -125,7 +125,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content">
 
-                    <com.hampay.mobile.android.component.FacedTextView
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         geekui:customTypeface="fonts/iran_sans.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -150,7 +150,7 @@
                     android:background="@drawable/entry_field_bg">
 
 
-                    <com.hampay.mobile.android.component.edittext.FacedEditText
+                    <xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText
                         android:id="@+id/credit_value"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
@@ -176,7 +176,7 @@
                 android:layout_margin="20dp">
 
 
-                <com.hampay.mobile.android.component.material.ButtonRectangle
+                <xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle
                     android:id="@+id/pay_to_business_button"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
@@ -184,7 +184,7 @@
                     android:background="@color/register_btn_color"
                     android:textSize="15dp" />
 
-                <com.hampay.mobile.android.component.FacedTextView
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     geekui:customTypeface="fonts/iran_sans.ttf"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"

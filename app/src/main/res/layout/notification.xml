@@ -4,7 +4,7 @@
     android:layout_height="fill_parent">
 
 
-            <com.hampay.mobile.android.component.headsup.widget.CircleImageView
+            <xyz.homapay.hampay.mobile.android.component.headsup.widget.CircleImageView
                 android:id="@+id/iconIM"
                 android:layout_width="60dp"
                 android:layout_height="60dp"

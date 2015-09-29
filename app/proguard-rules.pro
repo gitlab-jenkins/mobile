@@ -102,8 +102,8 @@
 -keepattributes Signature
 
 # Application classes that will be serialized/deserialized over Gson, keepclassmembers
--keep class com.hampay.mobile.android.model.** { *; }
--keepclassmembers class com.hampay.mobile.android.model.** { *; }
+-keep class xyz.homapay.hampay.mobile.android.model.** { *; }
+-keepclassmembers class xyz.homapay.hampay.mobile.android.model.** { *; }
 
 #-keep class com.google.gson.* { *; }
 

@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:padding="8dp">
 
-    <com.hampay.mobile.android.component.FacedTextView
+    <xyz.homapay.hampay.mobile.android.component.FacedTextView
         geekui:customTypeface="fonts/iran_sans.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
         android:layout_margin="8dp"
         android:padding="8dp">
 
-        <com.hampay.mobile.android.component.FacedTextView
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
             android:id="@+id/unlink_confirm"
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="wrap_content"
@@ -37,7 +37,7 @@
             android:layout_alignParentRight="true"
             android:text="@string/unlink_confirm" />
 
-        <com.hampay.mobile.android.component.FacedTextView
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
             android:id="@+id/unlink_disconfirm"
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="wrap_content"

@@ -5,7 +5,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content">
 
-    <com.hampay.mobile.android.component.FacedTextView
+    <xyz.homapay.hampay.mobile.android.component.FacedTextView
         android:id="@+id/guide_item"
         geekui:customTypeface="fonts/iran_sans.ttf"
         android:layout_width="wrap_content"

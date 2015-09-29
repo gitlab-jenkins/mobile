@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:padding="15dp">
 
-    <com.hampay.mobile.android.component.FacedTextView
+    <xyz.homapay.hampay.mobile.android.component.FacedTextView
         geekui:customTypeface="fonts/iran_sans.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
         android:textSize="15dp"
         android:text="@string/attention"/>
 
-    <com.hampay.mobile.android.component.FacedTextView
+    <xyz.homapay.hampay.mobile.android.component.FacedTextView
         geekui:customTypeface="fonts/iran_sans.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
         android:layout_marginTop="15dp"/>
 
 
-    <com.hampay.mobile.android.component.FacedTextView
+    <xyz.homapay.hampay.mobile.android.component.FacedTextView
         geekui:customTypeface="fonts/iran_sans.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,14 +47,14 @@
             android:layout_alignParentLeft="true">
 
 
-            <com.hampay.mobile.android.component.material.ButtonFlat
+            <xyz.homapay.hampay.mobile.android.component.material.ButtonFlat
                 android:id="@+id/uncheck_account"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:background="#1E88E5"
                 android:text="" />
 
-            <com.hampay.mobile.android.component.FacedTextView
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -74,14 +74,14 @@
             android:layout_alignParentRight="true">
 
 
-            <com.hampay.mobile.android.component.material.ButtonFlat
+            <xyz.homapay.hampay.mobile.android.component.material.ButtonFlat
                 android:id="@+id/check_account"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:background="#1E88E5"
                 android:text="" />
 
-            <com.hampay.mobile.android.component.FacedTextView
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
