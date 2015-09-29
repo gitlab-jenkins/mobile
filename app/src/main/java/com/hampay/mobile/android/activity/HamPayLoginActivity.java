@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -215,6 +216,9 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
 
                 if (tacResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
+                    editor.putString(Constants.USER_ID_TOKEN, tacResponseMessage.getService().getUserIdToken());
+                    editor.commit();
+
                     if (tacResponseMessage.getService().getShouldAcceptTAC()) {
 
                         (new HamPayDialog(activity)).showTACAcceptDialog(tacResponseMessage.getService().getTac());
@@ -273,6 +277,20 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
         }
     }
 
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        Log.e("EXIT", "onUserInteraction");
+    }
+
+//    @Override
+//    protected void onUserLeaveHint() {
+//        super.onUserLeaveHint();
+//        Log.e("EXIT", "onUserLeaveHint");
+//        editor.putString(Constants.USER_ID_TOKEN, "");
+//        editor.commit();
+//    }
+
 
     public class RequestLoginResponseTaskCompleteListener implements AsyncTaskCompleteListener<String>
     {
@@ -327,7 +345,6 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
                                 .build());
                     }
                 }else {
-
                     editor.putString(Constants.LOGIN_TOKEN_ID, successLoginResponse.getTokenId());
                     editor.commit();
                     tacRequest = new TACRequest();

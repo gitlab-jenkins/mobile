@@ -1,6 +1,7 @@
 package com.hampay.mobile.android.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -34,9 +35,12 @@ import com.hampay.mobile.android.async.RequestVerifyAccount;
 import com.hampay.mobile.android.component.FacedTextView;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
+import com.hampay.mobile.android.util.AESHelper;
 import com.hampay.mobile.android.util.Constants;
+import com.hampay.mobile.android.util.DeviceInfo;
 import com.hampay.mobile.android.util.JalaliConvert;
 import com.hampay.mobile.android.util.PersianEnglishDigit;
+import com.hampay.mobile.android.util.SecurityUtils;
 
 import java.util.List;
 
@@ -92,9 +96,20 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
     Tracker hamPayGaTracker;
 
+    byte[] mobileKey;
+    String serverKey;
+
+    String encryptedData;
+
+    DeviceInfo deviceInfo;
+
+    Context context;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        context = getActivity();
 
         persianEnglishDigit = new PersianEnglishDigit();
 
@@ -109,11 +124,37 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
         this.userProfileDTO = (UserProfileDTO)bundle.getSerializable(Constants.USER_PROFILE_DTO);
 
-        if (userProfileDTO != null) {
-            editor.putLong(Constants.MAX_XFER_Amount, this.userProfileDTO.getMaxXferAmount());
-            editor.putLong(Constants.MIN_XFER_Amount, this.userProfileDTO.getMinXferAmount());
-            editor.commit();
+        deviceInfo = new DeviceInfo(context);
+
+        try {
+
+            mobileKey = SecurityUtils.getInstance(context).generateSHA_256(
+                    deviceInfo.getMacAddress(),
+                    deviceInfo.getIMEI(),
+                    deviceInfo.getAndroidId());
+
+            serverKey = prefs.getString(Constants.USER_ID_TOKEN, "");
+
+            if (userProfileDTO != null) {
+                encryptedData = AESHelper.encrypt(mobileKey, serverKey, this.userProfileDTO.getMaxXferAmount().toString());
+                editor.putString(Constants.MAX_XFER_Amount, encryptedData);
+                encryptedData = AESHelper.encrypt(mobileKey, serverKey, this.userProfileDTO.getMinXferAmount().toString());
+                editor.putString(Constants.MIN_XFER_Amount, encryptedData);
+                editor.commit();
+            }
+
         }
+        catch (Exception ex){
+
+            Log.e("Error", ex.getStackTrace().toString());
+
+        }
+
+//        if (userProfileDTO != null) {
+//            editor.putLong(Constants.MAX_XFER_Amount, this.userProfileDTO.getMaxXferAmount());
+//            editor.putLong(Constants.MIN_XFER_Amount, this.userProfileDTO.getMinXferAmount());
+//            editor.commit();
+//        }
 
     }
 
@@ -382,9 +423,17 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     private void fillUserProfile(UserProfileDTO userProfileDTO){
 
 
-        editor.putLong(Constants.MAX_XFER_Amount, userProfileDTO.getMaxXferAmount());
-        editor.putLong(Constants.MIN_XFER_Amount, userProfileDTO.getMinXferAmount());
-        editor.commit();
+//        editor.putLong(Constants.MAX_XFER_Amount, userProfileDTO.getMaxXferAmount());
+//        editor.putLong(Constants.MIN_XFER_Amount, userProfileDTO.getMinXferAmount());
+//        editor.commit();
+
+        if (userProfileDTO != null) {
+            encryptedData = AESHelper.encrypt(mobileKey, serverKey, this.userProfileDTO.getMaxXferAmount().toString());
+            editor.putString(Constants.MAX_XFER_Amount, encryptedData);
+            encryptedData = AESHelper.encrypt(mobileKey, serverKey, this.userProfileDTO.getMinXferAmount().toString());
+            editor.putString(Constants.MIN_XFER_Amount, encryptedData);
+            editor.commit();
+        }
 
         if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.UNVERIFIED) {
             verification_status_ll.setVisibility(View.VISIBLE);

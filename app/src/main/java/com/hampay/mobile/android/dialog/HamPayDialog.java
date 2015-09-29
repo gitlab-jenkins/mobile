@@ -1122,7 +1122,7 @@ public class HamPayDialog {
             recentPay.setName(contactName);
             recentPay.setPhone(individualPaymentRequest.getCellNumber());
             recentPay.setMessage(individualPaymentRequest.getMessage());
-            dbHelper.createRecentPAy(recentPay);
+            dbHelper.createRecentPay(recentPay);
 
         }else {
             recentPay = new RecentPay();

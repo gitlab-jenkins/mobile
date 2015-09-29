@@ -38,6 +38,8 @@ import com.hampay.mobile.android.util.DeviceInfo;
 import com.hampay.mobile.android.util.RootUtil;
 import com.hampay.mobile.android.util.SecurityUtils;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -84,26 +86,27 @@ public class AppSliderActivity extends ActionBarActivity {
 
         activity = AppSliderActivity.this;
 
+
         DeviceInfo deviceInfo = new DeviceInfo(this);
 
-        try {
-            key = SecurityUtils.getInstance(this).generateSHA_256(
-                    deviceInfo.getMacAddress(),
-                    deviceInfo.getIMEI(),
-                    deviceInfo.getAndroidId()
-            );
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            key = SecurityUtils.getInstance(this).generateSHA_256(
+//                    deviceInfo.getMacAddress(),
+//                    deviceInfo.getIMEI(),
+//                    deviceInfo.getAndroidId()
+//            );
+//        } catch (NoSuchAlgorithmException e) {
+//            e.printStackTrace();
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
 
-        getRegId();
+//        getRegId();
 
-        if (new RootUtil().checkRootedDevice()){
-            new HamPayDialog(this).showPreventRootDeviceDialog();
-            return;
-        }
+//        if (new RootUtil(this).checkRootedDevice()){
+//            new HamPayDialog(this).showPreventRootDeviceDialog();
+//            return;
+//        }
 
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);

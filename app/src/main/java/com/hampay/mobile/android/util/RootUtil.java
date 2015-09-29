@@ -1,5 +1,9 @@
 package com.hampay.mobile.android.util;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -9,9 +13,15 @@ import java.io.InputStreamReader;
  */
 public class RootUtil {
 
+    Context context;
+
+    public RootUtil(Context context){
+        this.context = context;
+    }
+
 
     public boolean checkRootedDevice(){
-        if (firstApproach() || secondApproach() || thirdApproach()){
+        if (firstApproach() || secondApproach() || thirdApproach() || forthApproach() || fifthApproach()){
             return true;
         }
         else {
@@ -19,21 +29,32 @@ public class RootUtil {
         }
     }
 
-    private static boolean firstApproach() {
+    private boolean firstApproach() {
         String buildTags = android.os.Build.TAGS;
         return buildTags != null && buildTags.contains("test-keys");
     }
 
-    private static boolean secondApproach() {
-        String[] paths = { "/system/app/Superuser.apk", "/sbin/su", "/system/bin/su", "/system/xbin/su", "/data/local/xbin/su", "/data/local/bin/su", "/system/sd/xbin/su",
-                "/system/bin/failsafe/su", "/data/local/su" };
+    private boolean secondApproach() {
+        String[] paths = {
+                "/system/app/Superuser.apk",
+                "/sbin/su",
+                "/system/su",
+                "/system/bin/su",
+                "/system/xbin/su",
+                "/data/local/xbin/su",
+                "/data/local/bin/su",
+                "/system/sd/xbin/su",
+                "/system/bin/failsafe/su",
+                "/data/local/su",
+                "/system/bin/.ext/.su"
+        };
         for (String path : paths) {
             if (new File(path).exists()) return true;
         }
         return false;
     }
 
-    private static boolean thirdApproach() {
+    private boolean thirdApproach() {
         Process process = null;
         try {
             process = Runtime.getRuntime().exec(new String[] { "/system/xbin/which", "su" });
@@ -45,5 +66,52 @@ public class RootUtil {
         } finally {
             if (process != null) process.destroy();
         }
+    }
+
+    private boolean forthApproach(){
+        String path = "/etc/security";
+        File f = new File(path);
+        File file[] = f.listFiles();
+        for (int i=0; i < file.length; i++)
+        {
+            if (file[i].getName().toLowerCase().contains("otacerts")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean fifthApproach(){
+
+        String[] bundle_ids = {
+            "com.noshufou.android.su",
+            "com.thirdparty.superuser",
+            "eu.chainfire.supersu",
+            "com.koushikdutta.superuser"
+        };
+
+        for (String bundle_id : bundle_ids){
+            if (appInstalledOrNot(bundle_id)){
+
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+
+    private boolean appInstalledOrNot(String uri) {
+        PackageManager pm = context.getPackageManager();
+        boolean app_installed;
+        try {
+            pm.getPackageInfo(uri, PackageManager.GET_ACTIVITIES);
+            app_installed = true;
+        }
+        catch (PackageManager.NameNotFoundException e) {
+            app_installed = false;
+        }
+        return app_installed;
     }
 }

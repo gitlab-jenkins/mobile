@@ -32,8 +32,11 @@ import com.hampay.mobile.android.component.edittext.CurrencyFormatter;
 import com.hampay.mobile.android.component.edittext.FacedEditText;
 import com.hampay.mobile.android.component.material.ButtonRectangle;
 import com.hampay.mobile.android.dialog.HamPayDialog;
+import com.hampay.mobile.android.util.AESHelper;
 import com.hampay.mobile.android.util.Constants;
+import com.hampay.mobile.android.util.DeviceInfo;
 import com.hampay.mobile.android.util.PersianEnglishDigit;
+import com.hampay.mobile.android.util.SecurityUtils;
 
 public class PayOneActivity extends ActionBarActivity {
 
@@ -82,17 +85,41 @@ public class PayOneActivity extends ActionBarActivity {
 
     Tracker hamPayGaTracker;
 
+    byte[] mobileKey;
+    String serverKey;
+    String decryptedData;
+
+    DeviceInfo deviceInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay_one);
 
+        context = this;
+        activity = PayOneActivity.this;
+
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
-        MaxXferAmount = prefs.getLong(Constants.MAX_XFER_Amount, 0);
-        MinXferAmount = prefs.getLong(Constants.MIN_XFER_Amount, 0);
+        deviceInfo = new DeviceInfo(context);
+
+        try {
+
+            mobileKey = SecurityUtils.getInstance(context).generateSHA_256(
+                    deviceInfo.getMacAddress(),
+                    deviceInfo.getIMEI(),
+                    deviceInfo.getAndroidId());
+            serverKey = prefs.getString(Constants.USER_ID_TOKEN, "");
+            decryptedData = AESHelper.decrypt(mobileKey, serverKey, prefs.getString(Constants.MAX_XFER_Amount, "0"));
+            MaxXferAmount = Long.parseLong(decryptedData);
+            decryptedData = AESHelper.decrypt(mobileKey, serverKey, prefs.getString(Constants.MIN_XFER_Amount, "0"));
+            MinXferAmount = Long.parseLong(decryptedData);
+
+        }catch (Exception ex){
+            Log.e("Error", ex.getStackTrace().toString());
+        }
 
         switch (prefs.getInt(Constants.USER_VERIFICATION_STATUS, -1)){
 
@@ -118,8 +145,7 @@ public class PayOneActivity extends ActionBarActivity {
 
         }
 
-        context = this;
-        activity = PayOneActivity.this;
+
 
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
@@ -247,6 +273,20 @@ public class PayOneActivity extends ActionBarActivity {
         });
     }
 
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        Log.e("EXIT", "onUserInteraction");
+    }
+
+    @Override
+    protected void onUserLeaveHint() {
+        super.onUserLeaveHint();
+        Log.e("EXIT", "onUserLeaveHint");
+        editor.putString(Constants.USER_ID_TOKEN, "");
+        editor.commit();
+    }
 
     @Override
     public void onBackPressed() {

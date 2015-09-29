@@ -46,8 +46,10 @@ import com.hampay.mobile.android.fragment.PayToOneFragment;
 import com.hampay.mobile.android.fragment.SettingFragment;
 import com.hampay.mobile.android.fragment.UserTransactionFragment;
 import com.hampay.mobile.android.model.LogoutData;
+import com.hampay.mobile.android.util.AESHelper;
 import com.hampay.mobile.android.util.Constants;
 import com.hampay.mobile.android.util.DeviceInfo;
+import com.hampay.mobile.android.util.SecurityUtils;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -94,6 +96,15 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     RequestMobileRegistrationIdEntry requestMobileRegistrationIdEntry;
     MobileRegistrationIdEntryRequest mobileRegistrationIdEntryRequest;
 
+
+    byte[] mobileKey;
+    String serverKey;
+
+    String encryptedData;
+    String decryptedData;
+
+    DeviceInfo deviceInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,6 +125,27 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE).edit();
+
+
+
+        deviceInfo = new DeviceInfo(context);
+
+        try {
+
+            mobileKey = SecurityUtils.getInstance(this).generateSHA_256(
+                    deviceInfo.getMacAddress(),
+                    deviceInfo.getIMEI(),
+                    deviceInfo.getAndroidId());
+
+            serverKey = prefs.getString(Constants.USER_ID_TOKEN, "");
+
+            encryptedData = AESHelper.encrypt(mobileKey, serverKey, "ThisIsASecretKetThisIsASecretKetThisIsASecretKetThisIsASecretKetThisIsASecretKetThisIsASecretKetThisIsASecretKetThisIsASecretKet");
+            decryptedData = AESHelper.decrypt(mobileKey, serverKey, encryptedData.trim());
+        }
+        catch (Exception ex){
+            Log.e("Error", ex.getStackTrace().toString());
+        }
+
 
         Intent intent = getIntent();
 
@@ -310,6 +342,20 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     }
 
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        Log.e("EXIT", "onUserInteraction");
+    }
+
+    @Override
+    protected void onUserLeaveHint() {
+        super.onUserLeaveHint();
+        Log.e("EXIT", "onUserLeaveHint");
+//        editor.putString(Constants.USER_ID_TOKEN, "");
+//        editor.commit();
+    }
+
 
     @Override
     public void onDrawerItemSelected(View view, int position) {
@@ -489,6 +535,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         logoutData.setIplanetDirectoryPro(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         new HamPayDialog(activity).showExitDialog(logoutData);
     }
+
+
 
     GoogleCloudMessaging gcm;
     String regid;

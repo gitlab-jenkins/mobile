@@ -46,6 +46,12 @@ public class HamPayApplication extends Application {
         ACRA.init(this);
     }
 
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        Log.e("ee", "");
+    }
+
 
     public synchronized Tracker getTracker(TrackerName trackerId) {
         Log.d(TAG, "getTracker()");

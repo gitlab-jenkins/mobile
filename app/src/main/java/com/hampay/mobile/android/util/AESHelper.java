@@ -5,50 +5,89 @@ package com.hampay.mobile.android.util;
  */
 import android.util.Base64;
 
+//import org.apache.commons.codec.binary.Base64;
+
 import java.security.SecureRandom;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 public class AESHelper {
 
-    public static String encrypt(String seed, String cleartext)
-            throws Exception {
-//        byte[] rawKey = getRawKey(seed.getBytes("UTF-8"));
-//        byte[] result = encrypt(rawKey, cleartext.getBytes("UTF-8"));
-//        return toHex(result);
 
-        byte[] encryptedText = null;
+    public static String encrypt(byte[] key1, String key2, String value) {
         try {
-            byte[] keyData = seed.substring(0, 32).getBytes();
-            SecretKey ks = new SecretKeySpec(keyData, "AES");
-            Cipher c = Cipher.getInstance("AES");
-            c.init(Cipher.ENCRYPT_MODE, ks);
-            encryptedText = c.doFinal(cleartext.getBytes("UTF-8"));
-            return Base64.encodeToString(encryptedText, Base64.DEFAULT);
-        } catch (Exception e) {
-            return null;
-        }
+            IvParameterSpec iv = new IvParameterSpec(key2.getBytes("UTF-8"));
 
+            SecretKeySpec skeySpec = new SecretKeySpec(key1,
+                    "AES");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
+            byte[] encrypted = cipher.doFinal(value.getBytes("UTF-8"));
+            System.out.println("encrypted string:"
+                    + Base64.encodeToString(encrypted, Base64.DEFAULT));
+            return Base64.encodeToString(encrypted, Base64.DEFAULT);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
     }
 
-    public static String decrypt(String seed, String encrypted)
-            throws Exception {
 
-        byte[] clearText = null;
+    public static String decrypt(byte[] key1, String key2, String encrypted) {
         try {
-            byte[] keyData = seed.substring(0, 32).getBytes();
-            SecretKey ks = new SecretKeySpec(keyData, "AES");
-            Cipher c = Cipher.getInstance("AES");
-            c.init(Cipher.DECRYPT_MODE, ks);
-            clearText = c.doFinal(Base64.decode(encrypted, Base64.DEFAULT));
-            return new String(clearText, "UTF-8");
-        } catch (Exception e) {
-            return null;
+            IvParameterSpec iv = new IvParameterSpec(key2.getBytes("UTF-8"));
+
+            SecretKeySpec skeySpec = new SecretKeySpec(key1,
+                    "AES");
+            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
+            byte[] original = cipher.doFinal(Base64.decode(encrypted.getBytes("UTF-8"), Base64.DEFAULT));
+
+            return new String(original);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
+        return null;
     }
+
+
+
+
+//    public static String encrypt(String seed, String cleartext)
+//            throws Exception {
+//        byte[] encryptedText = null;
+//        try {
+//            byte[] keyData = seed.substring(0, 32).getBytes();
+//            SecretKey ks = new SecretKeySpec(keyData, "AES");
+//            Cipher c = Cipher.getInstance("AES");
+//            c.init(Cipher.ENCRYPT_MODE, ks);
+//            encryptedText = c.doFinal(cleartext.getBytes("UTF-8"));
+//            return Base64.encodeToString(encryptedText, Base64.DEFAULT);
+//        } catch (Exception e) {
+//            return null;
+//        }
+//
+//    }
+
+//    public static String decrypt(String seed, String encrypted)
+//            throws Exception {
+//
+//        byte[] clearText = null;
+//        try {
+//            byte[] keyData = seed.substring(0, 32).getBytes();
+//            SecretKey ks = new SecretKeySpec(keyData, "AES");
+//            Cipher c = Cipher.getInstance("AES");
+//            c.init(Cipher.DECRYPT_MODE, ks);
+//            clearText = c.doFinal(Base64.decode(encrypted, Base64.DEFAULT));
+//            return new String(clearText, "UTF-8");
+//        } catch (Exception e) {
+//            return null;
+//        }
+//    }
 
     private static byte[] getRawKey(byte[] seed) throws Exception {
         KeyGenerator kgen = KeyGenerator.getInstance("AES");

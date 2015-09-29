@@ -30,14 +30,14 @@ public class SecurityUtils {
 
 
 
-    public String generateSHA_256(String macAddress, String IMEI, String androidId) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+    public byte[] generateSHA_256(String macAddress, String IMEI, String androidId) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
         String rawData = macAddress + IMEI + androidId;
         messageDigest.update(rawData.getBytes("UTF-8")); // Change this to "UTF-16" if needed
         byte[] digest = messageDigest.digest();
 
-        return bin2hex(digest);
+        return digest;
 
     }
 

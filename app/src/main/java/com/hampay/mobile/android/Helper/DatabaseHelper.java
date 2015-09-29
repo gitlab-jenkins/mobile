@@ -2,14 +2,19 @@ package com.hampay.mobile.android.Helper;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import com.hampay.mobile.android.model.EnabledHamPay;
 import com.hampay.mobile.android.model.RecentPay;
+import com.hampay.mobile.android.util.AESHelper;
 import com.hampay.mobile.android.util.Constants;
+import com.hampay.mobile.android.util.DeviceInfo;
+import com.hampay.mobile.android.util.SecurityUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,9 +67,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + ")";
 
 
+    SharedPreferences prefs;
+
+    byte[] mobileKey;
+    String serverKey;
+
+    String encryptedData;
+    String decryptedData;
+
+    DeviceInfo deviceInfo;
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+
+        prefs =  context.getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
+        deviceInfo = new DeviceInfo(context);
+
+        try {
+
+            mobileKey = SecurityUtils.getInstance(context).generateSHA_256(
+                    deviceInfo.getMacAddress(),
+                    deviceInfo.getIMEI(),
+                    deviceInfo.getAndroidId());
+
+            serverKey = prefs.getString(Constants.USER_ID_TOKEN, "");
+
+        }catch (Exception ex){
+            Log.e("Error", ex.getStackTrace().toString());
+        }
     }
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -83,14 +115,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public long createRecentPAy(RecentPay recentPay) {
+    public long createRecentPay(RecentPay recentPay) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(KEY_STATUS, recentPay.getStatus());
-        values.put(KEY_NAME, recentPay.getName());
-        values.put(KEY_MESSAGE, recentPay.getMessage());
-        values.put(KEY_PHONE, recentPay.getPhone());
+        encryptedData = AESHelper.encrypt(mobileKey, serverKey, recentPay.getName());
+        values.put(KEY_NAME, encryptedData.trim());
+        encryptedData = AESHelper.encrypt(mobileKey, serverKey, recentPay.getMessage());
+        values.put(KEY_MESSAGE, encryptedData.trim());
+        encryptedData = AESHelper.encrypt(mobileKey, serverKey, recentPay.getPhone());
+        values.put(KEY_PHONE, encryptedData.trim());
 
         // insert row
         long recent_pay_id = db.insert(TABLE_RECENT_PAY, null, values);
@@ -102,8 +137,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_DISPLAY_NAME, enabledHamPay.getDisplayName());
-        values.put(KEY_CELL_NUMBER, enabledHamPay.getCellNumber());
+
+        encryptedData = AESHelper.encrypt(mobileKey, serverKey, enabledHamPay.getDisplayName());
+        values.put(KEY_DISPLAY_NAME, encryptedData.trim());
+        encryptedData = AESHelper.encrypt(mobileKey, serverKey, enabledHamPay.getCellNumber());
+        values.put(KEY_CELL_NUMBER, encryptedData.trim());
 
         // insert row
         long enabled_hampay_id = db.insert(TABLE_ENABLED_HAMPAY, null, values);
@@ -119,8 +157,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public RecentPay getRecentPay(String phone_no) {
         SQLiteDatabase db = this.getReadableDatabase();
+
+        encryptedData = AESHelper.encrypt(mobileKey, serverKey, phone_no);
+
         String selectQuery = "SELECT  * FROM " + TABLE_RECENT_PAY + " WHERE "
-                + KEY_PHONE + " = '" + phone_no + "'";
+                + KEY_PHONE + " = '" + encryptedData.trim() + "'";
         Log.e(LOG, selectQuery);
         Cursor c = db.rawQuery(selectQuery, null);
         if (c != null)
@@ -153,8 +194,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public boolean getExistRecentPay(String phone_no) {
         SQLiteDatabase db = this.getReadableDatabase();
+
+
+        encryptedData = AESHelper.encrypt(mobileKey, serverKey, phone_no);
+
         String selectQuery = "SELECT  * FROM " + TABLE_RECENT_PAY + " WHERE "
-                + KEY_PHONE + " = '" + phone_no + "'";
+                + KEY_PHONE + " = '" + encryptedData.trim() + "'";
         Log.e(LOG, selectQuery);
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.getCount() > 0)
@@ -180,10 +225,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public int updateRecentPay(RecentPay recentPay) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(KEY_MESSAGE, recentPay.getMessage());
-        return db.update(TABLE_RECENT_PAY, values, KEY_PHONE + " = ?",
-                new String[] { recentPay.getPhone() });
+
+        final SQLiteStatement statement = db.compileStatement("UPDATE " + TABLE_RECENT_PAY
+                + " SET " + KEY_MESSAGE + "=?"
+                + " WHERE " + KEY_PHONE + "=?");
+
+        encryptedData = AESHelper.encrypt(mobileKey, serverKey, recentPay.getMessage());
+        statement.bindString(1, encryptedData);
+
+//        encryptedData = AESHelper.encrypt(mobileKey, serverKey, recentPay.getPhone());
+        statement.bindString(2, recentPay.getPhone());
+
+        return statement.executeUpdateDelete();
+
+
+
+//        ContentValues values = new ContentValues();
+//        encryptedData = AESHelper.encrypt(mobileKey, serverKey, recentPay.getMessage());
+//        values.put(KEY_MESSAGE, encryptedData.trim());
+//        return db.update(TABLE_RECENT_PAY, values, KEY_PHONE + " = ?",
+//                new String[] { recentPay.getPhone() });
     }
 
     public List<RecentPay> getAllRecentPays() {
@@ -201,9 +262,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 RecentPay recentPay = new RecentPay();
                 recentPay.setId(c.getInt(c.getColumnIndex(KEY_ID)));
                 recentPay.setStatus((c.getString(c.getColumnIndex(KEY_STATUS))));
-                recentPay.setName(c.getString(c.getColumnIndex(KEY_NAME)));
-                recentPay.setPhone(c.getString(c.getColumnIndex(KEY_PHONE)));
-                recentPay.setMessage(c.getString(c.getColumnIndex(KEY_MESSAGE)));
+                decryptedData = AESHelper.decrypt(mobileKey, serverKey, c.getString(c.getColumnIndex(KEY_NAME)).trim());
+                recentPay.setName(decryptedData);
+                decryptedData = AESHelper.decrypt(mobileKey, serverKey, c.getString(c.getColumnIndex(KEY_PHONE)).trim());
+                recentPay.setPhone(decryptedData);
+                decryptedData = AESHelper.decrypt(mobileKey, serverKey, c.getString(c.getColumnIndex(KEY_MESSAGE)).trim());
+                recentPay.setMessage(decryptedData);
 
                 // adding to todo list
                 recentPays.add(recentPay);
@@ -226,8 +290,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (c.moveToFirst()) {
             do {
                 EnabledHamPay enabledHamPay = new EnabledHamPay();
-                enabledHamPay.setCellNumber(c.getString(c.getColumnIndex(KEY_CELL_NUMBER)));
-                enabledHamPay.setDisplayName(c.getString(c.getColumnIndex(KEY_DISPLAY_NAME)));
+                decryptedData = AESHelper.decrypt(mobileKey, serverKey, c.getString(c.getColumnIndex(KEY_CELL_NUMBER)));
+                enabledHamPay.setCellNumber(decryptedData);
+                decryptedData = AESHelper.decrypt(mobileKey, serverKey, c.getString(c.getColumnIndex(KEY_DISPLAY_NAME)));
+                enabledHamPay.setDisplayName(decryptedData);
 
                 // adding to todo list
                 enabledHamPays.add(enabledHamPay);
