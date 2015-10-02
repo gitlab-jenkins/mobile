@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
+import android.os.Build;
 import android.util.Log;
 
 import xyz.homapay.hampay.mobile.android.model.EnabledHamPay;
@@ -192,6 +193,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return enabledHamPay;
     }
 
+
+    //parameter
     public boolean getExistRecentPay(String phone_no) {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -232,11 +235,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         encryptedData = AESHelper.encrypt(mobileKey, serverKey, recentPay.getMessage());
         statement.bindString(1, encryptedData);
-
-//        encryptedData = AESHelper.encrypt(mobileKey, serverKey, recentPay.getPhone());
         statement.bindString(2, recentPay.getPhone());
 
-        return statement.executeUpdateDelete();
+        if (Build.VERSION.SDK_INT >= 11) {
+            return statement.executeUpdateDelete();
+        }else {
+            statement.execute();
+            return 1;
+        }
 
 
 

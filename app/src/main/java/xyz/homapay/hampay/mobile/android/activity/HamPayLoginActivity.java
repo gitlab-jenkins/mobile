@@ -22,21 +22,26 @@ import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
+import com.hampay.common.core.model.request.GetUserIdTokenRequest;
 import com.hampay.common.core.model.request.TACRequest;
+import com.hampay.common.core.model.response.RegistrationCredentialsResponse;
 import com.hampay.common.core.model.response.TACResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import xyz.homapay.hampay.mobile.android.async.RequestCredentialEntry;
 import xyz.homapay.hampay.mobile.android.async.RequestLogin;
 import xyz.homapay.hampay.mobile.android.async.RequestTAC;
+import xyz.homapay.hampay.mobile.android.async.RequestUserIdToken;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.material.RippleView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.FailedLoginResponse;
 import xyz.homapay.hampay.mobile.android.model.LoginData;
 import xyz.homapay.hampay.mobile.android.model.SuccessLoginResponse;
+import xyz.homapay.hampay.mobile.android.util.AESHelper;
 import xyz.homapay.hampay.mobile.android.util.AppInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
@@ -100,6 +105,9 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
     Bundle bundle;
 
     boolean fromNotification = false;
+
+    GetUserIdTokenRequest getUserIdTokenRequest;
+    RequestUserIdToken requestUserIdToken;
 
     public void contactUs(View view){
         new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/login.html");
@@ -176,13 +184,17 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
         hampay_memorableword_text = (FacedTextView)findViewById(R.id.hampay_memorableword_text);
 
         nationalCode = prefs.getString(Constants.REGISTERED_NATIONAL_CODE, "");
+
+
+
+
         memorableWord = prefs.getString(Constants.MEMORABLE_WORD, "");
 
         if (memorableWord != null) {
             hampay_memorableword_text.setText(memorableWord);
         }
 
-        installationToken = prefs.getString("UUID", "");
+        installationToken = prefs.getString(Constants.UUID, "");
 
     }
 
@@ -545,6 +557,93 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
         }
 
     }
+
+
+//    public class RequestGetUserIdTokenResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationCredentialsResponse>>
+//    {
+//        public RequestGetUserIdTokenResponseTaskCompleteListener(){
+//        }
+//
+//        @Override
+//        public void onTaskComplete(ResponseMessage<RegistrationCredentialsResponse> registrationGetUserIdTokenResponseMessage) {
+//
+//            hamPayDialog.dismisWaitingDialog();
+//
+//            ResultStatus resultStatus;
+//
+//            if (registrationGetUserIdTokenResponseMessage != null) {
+//
+//                resultStatus = registrationGetUserIdTokenResponseMessage.getService().getResultStatus();
+//
+//                if (resultStatus == ResultStatus.SUCCESS) {
+//                    try {
+//                        mobileKey = SecurityUtils.getInstance(context).generateSHA_256(
+//                                deviceInfo.getMacAddress(),
+//                                deviceInfo.getIMEI(),
+//                                deviceInfo.getAndroidId());
+//                        serverKey = registrationGetUserIdTokenResponseMessage.getService().getUserIdToken();
+//                        encryptedData = AESHelper.encrypt(mobileKey, serverKey, memorable_value.getText().toString());
+//                        editor.putString(Constants.MEMORABLE_WORD, encryptedData);
+//                        encryptedData = AESHelper.encrypt(mobileKey, serverKey, Uuid);
+//                        editor.putString(Constants.UUID, encryptedData);
+//                        editor.commit();
+//                    }
+//                    catch (Exception ex){
+//                        Log.e("Error", ex.getStackTrace().toString());
+//                    }
+//
+//                    Intent intent = new Intent();
+//                    intent.setClass(HamPayLoginActivity.this, CompleteRegistrationActivity.class);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    finish();
+//                    startActivity(intent);
+//
+//                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+//                            .setCategory("Registration Memorable Word Entry")
+//                            .setAction("Registration")
+//                            .setLabel("Success")
+//                            .build());
+//                }else if (registrationGetUserIdTokenResponseMessage.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
+//                    new HamPayDialog(activity).showInvalidStepDialog();
+//
+//                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+//                            .setCategory("Registration Memorable Word Entry")
+//                            .setAction("Registration")
+//                            .setLabel("Success(Invalid)")
+//                            .build());
+//                }
+//                else {
+//                    requestCredentialEntry = new RequestCredentialEntry(context, new RequestGetUserIdTokenResponseTaskCompleteListener());
+//                    new HamPayDialog(activity).showFailMemorableEntryDialog(requestCredentialEntry, registrationCredentialsRequest,
+//                            registrationGetUserIdTokenResponseMessage.getService().getResultStatus().getCode(),
+//                            registrationGetUserIdTokenResponseMessage.getService().getResultStatus().getDescription());
+//
+//                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+//                            .setCategory("Registration Memorable Word Entry")
+//                            .setAction("Registration")
+//                            .setLabel("Fail(Server)")
+//                            .build());
+//                }
+//            }else {
+//                requestCredentialEntry = new RequestCredentialEntry(context, new RequestGetUserIdTokenResponseTaskCompleteListener());
+//                new HamPayDialog(activity).showFailMemorableEntryDialog(requestCredentialEntry, registrationCredentialsRequest,
+//                        Constants.LOCAL_ERROR_CODE,
+//                        getString(R.string.msg_fail_memorable_entry));
+//
+//                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+//                        .setCategory("Registration Memorable Word Entry")
+//                        .setAction("Registration")
+//                        .setLabel("Fail(Mobile)")
+//                        .build());
+//            }
+//
+//        }
+//
+//        @Override
+//        public void onTaskPreRun() {
+//            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+//        }
+//    }
 
 
     @Override

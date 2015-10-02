@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -21,8 +22,10 @@ import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.edittext.MemorableTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.util.AESHelper;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
+import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
 
 import java.util.UUID;
 
@@ -37,7 +40,6 @@ public class MemorableWordEntryActivity extends Activity {
 
     Activity activity;
 
-
     HamPayDialog hamPayDialog;
 
     String Uuid = "";
@@ -50,8 +52,13 @@ public class MemorableWordEntryActivity extends Activity {
 
     RequestCredentialEntry requestCredentialEntry;
     RegistrationCredentialsRequest registrationCredentialsRequest;
-//    RequestMemorableWordEntry requestMemorableWordEntry;
-//    RegistrationMemorableWordEntryRequest registrationMemorableWordEntryRequest;
+
+    byte[] mobileKey;
+    String serverKey;
+
+//    String encryptedData;
+
+    DeviceInfo deviceInfo;
 
     public void contactUs(View view){
 //        new HamPayDialog(this).showContactUsDialog();
@@ -63,12 +70,14 @@ public class MemorableWordEntryActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memorable_word_entry);
 
-        bundle = getIntent().getExtras();
-
-        userEntryPassword = bundle.getString(Constants.USER_ENTRY_PASSWORD);
-
         activity = MemorableWordEntryActivity.this;
         context = this;
+
+        bundle = getIntent().getExtras();
+
+        deviceInfo = new DeviceInfo(context);
+
+        userEntryPassword = bundle.getString(Constants.USER_ENTRY_PASSWORD);
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -93,8 +102,7 @@ public class MemorableWordEntryActivity extends Activity {
                 registrationCredentialsRequest.setDeviceId(new DeviceInfo(getApplicationContext()).getAndroidId());
                 Uuid = UUID.randomUUID().toString();
                 registrationCredentialsRequest.setInstallationToken(Uuid);
-                editor.putString("UUID", Uuid);
-                editor.commit();
+
                 registrationCredentialsRequest.setMemorableKey(memorable_value.getText().toString());
                 registrationCredentialsRequest.setPassCode(userEntryPassword);
                 requestCredentialEntry = new RequestCredentialEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
@@ -124,9 +132,21 @@ public class MemorableWordEntryActivity extends Activity {
                 resultStatus = registrationMemorableWordEntryResponseMessage.getService().getResultStatus();
 
                 if (resultStatus == ResultStatus.SUCCESS) {
-
-                    editor.putString(Constants.MEMORABLE_WORD, memorable_value.getText().toString());
-                    editor.commit();
+                    try {
+                        mobileKey = SecurityUtils.getInstance(context).generateSHA_256(
+                                deviceInfo.getMacAddress(),
+                                deviceInfo.getIMEI(),
+                                deviceInfo.getAndroidId());
+                        serverKey = registrationMemorableWordEntryResponseMessage.getService().getUserIdToken();
+//                        encryptedData = AESHelper.encrypt(mobileKey, serverKey, memorable_value.getText().toString());
+                        editor.putString(Constants.MEMORABLE_WORD, memorable_value.getText().toString());
+//                        encryptedData = AESHelper.encrypt(mobileKey, serverKey, Uuid);
+                        editor.putString(Constants.UUID, Uuid);
+                        editor.commit();
+                    }
+                    catch (Exception ex){
+                        Log.e("Error", ex.getStackTrace().toString());
+                    }
 
                     Intent intent = new Intent();
                     intent.setClass(MemorableWordEntryActivity.this, CompleteRegistrationActivity.class);
