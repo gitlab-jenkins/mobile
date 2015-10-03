@@ -104,15 +104,18 @@ public class PayBusinessActivity extends ActionBarActivity {
 
         try {
 
-            mobileKey = SecurityUtils.getInstance(context).generateSHA_256(
-                    deviceInfo.getMacAddress(),
-                    deviceInfo.getIMEI(),
-                    deviceInfo.getAndroidId());
-            serverKey = prefs.getString(Constants.USER_ID_TOKEN, "");
-            decryptedData = AESHelper.decrypt(mobileKey, serverKey, prefs.getString(Constants.MAX_XFER_Amount, "0"));
-            MaxXferAmount = Long.parseLong(decryptedData);
-            decryptedData = AESHelper.decrypt(mobileKey, serverKey, prefs.getString(Constants.MIN_XFER_Amount, "0"));
-            MinXferAmount = Long.parseLong(decryptedData);
+            //            mobileKey = SecurityUtils.getInstance(context).generateSHA_256(
+//                    deviceInfo.getMacAddress(),
+//                    deviceInfo.getIMEI(),
+//                    deviceInfo.getAndroidId());
+//            serverKey = prefs.getString(Constants.USER_ID_TOKEN, "");
+//            decryptedData = AESHelper.decrypt(mobileKey, serverKey, prefs.getString(Constants.MAX_XFER_Amount, "0"));
+//            MaxXferAmount = Long.parseLong(decryptedData);
+//            decryptedData = AESHelper.decrypt(mobileKey, serverKey, prefs.getString(Constants.MIN_XFER_Amount, "0"));
+//            MinXferAmount = Long.parseLong(decryptedData);
+
+            MaxXferAmount = prefs.getLong(Constants.MAX_XFER_Amount, 0);
+            MinXferAmount = prefs.getLong(Constants.MIN_XFER_Amount, 0);
 
         }catch (Exception ex){
             Log.e("Error", ex.getStackTrace().toString());

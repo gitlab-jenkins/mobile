@@ -48,7 +48,9 @@ import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
+import java.security.NoSuchAlgorithmException;
 
 
 public class HamPayLoginActivity extends Activity implements View.OnClickListener {
@@ -108,6 +110,8 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
 
     GetUserIdTokenRequest getUserIdTokenRequest;
     RequestUserIdToken requestUserIdToken;
+
+    String password = "";
 
     public void contactUs(View view){
         new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/login.html");
@@ -474,11 +478,16 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
 
         if (inputPassValue.length() == 5){
 
-            String password = SecurityUtils.getInstance(this).
-                    generatePassword(inputPassValue,
-                            memorableWord,
-                            new DeviceInfo(context).getAndroidId(),
-                            installationToken);
+            try {
+
+                password = SecurityUtils.getInstance(this).
+                        generatePassword(inputPassValue,
+                                memorableWord,
+                                new DeviceInfo(context).getAndroidId(),
+                                installationToken);
+
+            }catch (NoSuchAlgorithmException ex){}
+            catch (UnsupportedEncodingException ex){}
 
             LoginData loginData = new LoginData();
 

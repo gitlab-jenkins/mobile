@@ -136,10 +136,10 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
             serverKey = prefs.getString(Constants.USER_ID_TOKEN, "");
 
             if (userProfileDTO != null) {
-                encryptedData = AESHelper.encrypt(mobileKey, serverKey, this.userProfileDTO.getMaxXferAmount().toString());
-                editor.putString(Constants.MAX_XFER_Amount, encryptedData);
-                encryptedData = AESHelper.encrypt(mobileKey, serverKey, this.userProfileDTO.getMinXferAmount().toString());
-                editor.putString(Constants.MIN_XFER_Amount, encryptedData);
+//                encryptedData = AESHelper.encrypt(mobileKey, serverKey, this.userProfileDTO.getMaxXferAmount().toString());
+                editor.putLong(Constants.MAX_XFER_Amount, this.userProfileDTO.getMaxXferAmount());
+//                encryptedData = AESHelper.encrypt(mobileKey, serverKey, this.userProfileDTO.getMinXferAmount().toString());
+                editor.putLong(Constants.MIN_XFER_Amount, this.userProfileDTO.getMinXferAmount());
                 editor.commit();
             }
 
@@ -428,10 +428,10 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 //        editor.commit();
 
         if (userProfileDTO != null) {
-            encryptedData = AESHelper.encrypt(mobileKey, serverKey, this.userProfileDTO.getMaxXferAmount().toString());
-            editor.putString(Constants.MAX_XFER_Amount, encryptedData);
-            encryptedData = AESHelper.encrypt(mobileKey, serverKey, this.userProfileDTO.getMinXferAmount().toString());
-            editor.putString(Constants.MIN_XFER_Amount, encryptedData);
+//            encryptedData = AESHelper.encrypt(mobileKey, serverKey, this.userProfileDTO.getMaxXferAmount().toString());
+            editor.putLong(Constants.MAX_XFER_Amount, this.userProfileDTO.getMaxXferAmount());
+//            encryptedData = AESHelper.encrypt(mobileKey, serverKey, this.userProfileDTO.getMinXferAmount().toString());
+            editor.putLong(Constants.MIN_XFER_Amount, this.userProfileDTO.getMinXferAmount());
             editor.commit();
         }
 

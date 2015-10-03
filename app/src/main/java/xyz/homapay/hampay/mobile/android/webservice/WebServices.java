@@ -887,7 +887,7 @@ public class WebServices  {
     public ResponseMessage<GetUserIdTokenResponse> newGetUserIdTokenResponse(GetUserIdTokenRequest getUserIdTokenRequest){
 
         ResponseMessage<GetUserIdTokenResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/get-user-it-token");
+        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/get-user-id-token");
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -899,7 +899,7 @@ public class WebServices  {
             RequestMessage<GetUserIdTokenRequest> message = new RequestMessage<GetUserIdTokenRequest>();
             message.setRequestHeader(header);
             GetUserIdTokenRequest request = getUserIdTokenRequest;
-            request.setRequestUUID(UUID.randomUUID().toString());
+            request.setRequestUUID(prefs.getString(Constants.UUID, ""));
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<GetUserIdTokenRequest>>() {}.getType();

@@ -35,6 +35,7 @@ import com.hampay.common.core.model.request.ChangeMemorableWordRequest;
 import com.hampay.common.core.model.request.ChangePassCodeRequest;
 import com.hampay.common.core.model.request.ContactUsRequest;
 import com.hampay.common.core.model.request.ContactsHampayEnabledRequest;
+import com.hampay.common.core.model.request.GetUserIdTokenRequest;
 import com.hampay.common.core.model.request.IndividualPaymentRequest;
 import com.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
 import com.hampay.common.core.model.request.RegistrationConfirmUserDataRequest;
@@ -91,6 +92,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestSearchHamPayBusiness;
 import xyz.homapay.hampay.mobile.android.async.RequestTAC;
 import xyz.homapay.hampay.mobile.android.async.RequestTACAccept;
 import xyz.homapay.hampay.mobile.android.async.RequestUnlinkUser;
+import xyz.homapay.hampay.mobile.android.async.RequestUserIdToken;
 import xyz.homapay.hampay.mobile.android.async.RequestUserProfile;
 import xyz.homapay.hampay.mobile.android.async.RequestUserTransaction;
 import xyz.homapay.hampay.mobile.android.async.RequestVerifyAccount;
@@ -127,6 +129,8 @@ public class HamPayDialog {
 
     GaAnalyticsEvent gaAnalyticsEvent;
 
+    String serverKey = "";
+
     public HamPayDialog(Activity activity){
 
         this.activity = activity;
@@ -137,7 +141,22 @@ public class HamPayDialog {
 
         gaAnalyticsEvent = new GaAnalyticsEvent(activity);
 
-        dbHelper = new DatabaseHelper(activity);
+        hamPayGaTracker = ((HamPayApplication) this.activity.getApplicationContext())
+                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
+
+    }
+
+    public HamPayDialog(Activity activity, String serverKey){
+
+        this.activity = activity;
+        this.serverKey = serverKey;
+
+        prefs = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE);
+        editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE).edit();
+
+        gaAnalyticsEvent = new GaAnalyticsEvent(activity);
+
+        dbHelper = new DatabaseHelper(activity, serverKey);
 
         hamPayGaTracker = ((HamPayApplication) this.activity.getApplicationContext())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
@@ -2699,6 +2718,52 @@ public class HamPayDialog {
         dialog.setTitle(null);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
+        dialog.show();
+    }
+
+
+    public void showFailGetUserIdTokenDialog(final RequestUserIdToken requestUserIdToken,
+                                             final GetUserIdTokenRequest getUserIdTokenRequest,
+                                             final String code,
+                                             final String message){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_server_key, null);
+
+        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+
+        responseCode.setText(activity.getString(R.string.error_code, code));
+        responseMessage.setText(message);
+
+        FacedTextView retry_server_key = (FacedTextView) view.findViewById(R.id.retry_server_key);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
+        retry_server_key.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                requestUserIdToken.execute(getUserIdTokenRequest);
+            }
+        });
+
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(true);
         dialog.show();
     }
 

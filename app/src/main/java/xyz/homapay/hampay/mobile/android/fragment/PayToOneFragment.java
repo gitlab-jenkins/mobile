@@ -25,7 +25,9 @@ import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.common.response.ResultStatus;
 import com.hampay.common.core.model.dto.ContactDTO;
 import com.hampay.common.core.model.request.ContactsHampayEnabledRequest;
+import com.hampay.common.core.model.request.GetUserIdTokenRequest;
 import com.hampay.common.core.model.response.ContactsHampayEnabledResponse;
+import com.hampay.common.core.model.response.GetUserIdTokenResponse;
 import com.hampay.common.core.model.response.RegistrationEntryResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
@@ -34,6 +36,7 @@ import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.adapter.PayOneAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestContactHampayEnabled;
+import xyz.homapay.hampay.mobile.android.async.RequestUserIdToken;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.sectionlist.PinnedHeaderListView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
@@ -82,6 +85,11 @@ public class PayToOneFragment extends Fragment {
 
     Tracker hamPayGaTracker;
 
+    GetUserIdTokenRequest getUserIdTokenRequest;
+    RequestUserIdToken requestUserIdToken;
+
+    String serverKey = "";
+
     public PayToOneFragment() {
     }
 
@@ -100,7 +108,7 @@ public class PayToOneFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        dbHelper = new DatabaseHelper(getActivity());
+
 
         prefs = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE);
         editor = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE).edit();
@@ -223,37 +231,50 @@ public class PayToOneFragment extends Fragment {
 //            }
 //        });
 
-        recentPays = dbHelper.getAllRecentPays();
-        enabledHamPays = dbHelper.getAllEnabledHamPay();
+        if ((prefs.getString(Constants.USER_ID_TOKEN, "") != null && prefs.getString(Constants.USER_ID_TOKEN, "").length() == 16)){
 
-        if (enabledHamPays.size() > 0) {
+            serverKey = prefs.getString(Constants.USER_ID_TOKEN, "");
+            dbHelper = new DatabaseHelper(getActivity(), serverKey);
+
+            recentPays = dbHelper.getAllRecentPays();
+            enabledHamPays = dbHelper.getAllEnabledHamPay();
 
             if (enabledHamPays.size() > 0) {
-                payOneAdapter = new PayOneAdapter(getActivity(),
-                        recentPays,
-                        enabledHamPays);
-                pinnedHeaderListView.setAdapter(payOneAdapter);
+                if (enabledHamPays.size() > 0) {
+                    payOneAdapter = new PayOneAdapter(getActivity(),
+                            recentPays,
+                            enabledHamPays);
+                    pinnedHeaderListView.setAdapter(payOneAdapter);
+                }
+                hamPayDialog.dismisWaitingDialog();
             }
 
-            hamPayDialog.dismisWaitingDialog();
-        }
+            if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), HamPayLoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                getActivity().finish();
+                startActivity(intent);
+            }else {
+                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                editor.commit();
 
-        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
-            Intent intent = new Intent();
-            intent.setClass(getActivity(), HamPayLoginActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            getActivity().finish();
-            startActivity(intent);
+                if (!prefs.getBoolean(Constants.FETCHED_HAMPAY_ENABLED, false)) {
+                    contactsHampayEnabledRequest = new ContactsHampayEnabledRequest();
+                    requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());
+                    requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
+                }
+            }
+
         }else {
-            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-            editor.commit();
-
-            if (!prefs.getBoolean(Constants.FETCHED_HAMPAY_ENABLED, false)) {
-                contactsHampayEnabledRequest = new ContactsHampayEnabledRequest();
-                requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());
-                requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
-            }
+            recentPays = new ArrayList<RecentPay>();
+            enabledHamPays = new ArrayList<EnabledHamPay>();
+            getUserIdTokenRequest = new GetUserIdTokenRequest();
+            requestUserIdToken = new RequestUserIdToken(context, new RequestGetUserIdTokenResponseTaskCompleteListener());
+            requestUserIdToken.execute(getUserIdTokenRequest);
         }
+
+
 
 
         return rootView;
@@ -465,6 +486,11 @@ public class PayToOneFragment extends Fragment {
 
                     if (contactDTOs.size() > 0) {
 
+                        dbHelper = new DatabaseHelper(context, serverKey);
+
+                        recentPays = dbHelper.getAllRecentPays();
+                        enabledHamPays = dbHelper.getAllEnabledHamPay();
+
                         dbHelper.deleteEnabledHamPays();
 
                         for (ContactDTO contactDTO : contactDTOs) {
@@ -514,19 +540,94 @@ public class PayToOneFragment extends Fragment {
 
             if (isAdded()) {
 
-                if (payOneAdapter == null) {
+//                if (payOneAdapter == null) {
                     enabledHamPays = dbHelper.getAllEnabledHamPay();
                     payOneAdapter = new PayOneAdapter(getActivity(),
                             recentPays,
                             enabledHamPays);
                     pinnedHeaderListView.setAdapter(payOneAdapter);
-                }
+//                }
             }
             hamPayDialog.dismisWaitingDialog();
         }
 
         @Override
         public void onTaskPreRun() { }
+    }
 
+
+
+
+    public class RequestGetUserIdTokenResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<GetUserIdTokenResponse>> {
+        public RequestGetUserIdTokenResponseTaskCompleteListener(){
+        }
+
+        @Override
+        public void onTaskComplete(ResponseMessage<GetUserIdTokenResponse> registrationGetUserIdTokenResponseMessage) {
+
+            ResultStatus resultStatus;
+
+            if (registrationGetUserIdTokenResponseMessage != null) {
+
+                resultStatus = registrationGetUserIdTokenResponseMessage.getService().getResultStatus();
+
+                if (resultStatus == ResultStatus.SUCCESS) {
+
+                    serverKey = registrationGetUserIdTokenResponseMessage.getService().getUserIdToken();
+
+                    editor.putString(Constants.USER_ID_TOKEN, serverKey);
+                    editor.commit();
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Get User Id Token")
+                            .setAction("Get")
+                            .setLabel("Success")
+                            .build());
+
+                    if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+                        Intent intent = new Intent();
+                        intent.setClass(getActivity(), HamPayLoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        getActivity().finish();
+                        startActivity(intent);
+                    }else {
+                        editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                        editor.commit();
+
+//                        if (!prefs.getBoolean(Constants.FETCHED_HAMPAY_ENABLED, false)) {
+                        contactsHampayEnabledRequest = new ContactsHampayEnabledRequest();
+                        requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());
+                        requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
+//                        }
+                    }
+
+                }else {
+                    requestUserIdToken = new RequestUserIdToken(context, new RequestGetUserIdTokenResponseTaskCompleteListener());
+                    new HamPayDialog(getActivity()).showFailGetUserIdTokenDialog(requestUserIdToken, getUserIdTokenRequest,
+                            registrationGetUserIdTokenResponseMessage.getService().getResultStatus().getCode(),
+                            registrationGetUserIdTokenResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Get User Id Token")
+                            .setAction("Get")
+                            .setLabel("Fail(Server)")
+                            .build());
+                }
+            }else {
+                requestUserIdToken = new RequestUserIdToken(context, new RequestGetUserIdTokenResponseTaskCompleteListener());
+                new HamPayDialog(getActivity()).showFailGetUserIdTokenDialog(requestUserIdToken, getUserIdTokenRequest,
+                        Constants.LOCAL_ERROR_CODE,
+                        getString(R.string.msg_fail_server_key));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Get User Id Token")
+                        .setAction("Get")
+                        .setLabel("Fail(Mobile)")
+                        .build());
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {   }
     }
 }

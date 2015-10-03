@@ -78,7 +78,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     DeviceInfo deviceInfo;
 
-    public DatabaseHelper(Context context) {
+    public DatabaseHelper(Context context, String serverKey) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
         prefs =  context.getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
@@ -91,7 +91,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     deviceInfo.getIMEI(),
                     deviceInfo.getAndroidId());
 
-            serverKey = prefs.getString(Constants.USER_ID_TOKEN, "");
+            this.serverKey = serverKey;
+
+//            serverKey = prefs.getString(Constants.USER_ID_TOKEN, "");
 
         }catch (Exception ex){
             Log.e("Error", ex.getStackTrace().toString());

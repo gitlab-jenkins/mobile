@@ -24,17 +24,25 @@ public class SecurityUtils {
         return instance;
     }
 
-    public String generatePassword(String passCode, String memorableKey, String deviceId, String installationToken) {
+    public String generatePassword(String passCode, String memorableKey, String deviceId, String installationToken) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         return deviceId + toHexString(memorableKey) + String.valueOf(installationToken.length() * 3 + 11) + passCode + installationToken + String.valueOf(memorableKey.length()*17 + 23);
+//        return generateSHA_256_Password(deviceId + toHexString(memorableKey) + String.valueOf(installationToken.length() * 3 + 11) + passCode + installationToken + String.valueOf(memorableKey.length()*17 + 23));
     }
 
 
 
-    public byte[] generateSHA_256(String macAddress, String IMEI, String androidId) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+    public String generateSHA_256_Password(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+        messageDigest.update(password.getBytes("UTF-8"));
+        byte[] digest = messageDigest.digest();
+        String convertDigest = new String(digest);
+        return convertDigest;
+    }
 
+    public byte[] generateSHA_256(String macAddress, String IMEI, String androidId) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
         String rawData = macAddress + IMEI + androidId;
-        messageDigest.update(rawData.getBytes("UTF-8")); // Change this to "UTF-16" if needed
+        messageDigest.update(rawData.getBytes("UTF-8"));
         byte[] digest = messageDigest.digest();
 
         return digest;

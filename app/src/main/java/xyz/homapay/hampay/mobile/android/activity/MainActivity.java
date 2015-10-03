@@ -128,23 +128,23 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
 
 
-        deviceInfo = new DeviceInfo(context);
-
-        try {
-
-            mobileKey = SecurityUtils.getInstance(this).generateSHA_256(
-                    deviceInfo.getMacAddress(),
-                    deviceInfo.getIMEI(),
-                    deviceInfo.getAndroidId());
-
-            serverKey = prefs.getString(Constants.USER_ID_TOKEN, "");
-
-            encryptedData = AESHelper.encrypt(mobileKey, serverKey, "ThisIsASecretKetThisIsASecretKetThisIsASecretKetThisIsASecretKetThisIsASecretKetThisIsASecretKetThisIsASecretKetThisIsASecretKet");
-            decryptedData = AESHelper.decrypt(mobileKey, serverKey, encryptedData.trim());
-        }
-        catch (Exception ex){
-            Log.e("Error", ex.getStackTrace().toString());
-        }
+//        deviceInfo = new DeviceInfo(context);
+//
+//        try {
+//
+//            mobileKey = SecurityUtils.getInstance(this).generateSHA_256(
+//                    deviceInfo.getMacAddress(),
+//                    deviceInfo.getIMEI(),
+//                    deviceInfo.getAndroidId());
+//
+//            serverKey = prefs.getString(Constants.USER_ID_TOKEN, "");
+//
+//            encryptedData = AESHelper.encrypt(mobileKey, serverKey, "ThisIsASecretKetThisIsASecretKetThisIsASecretKetThisIsASecretKetThisIsASecretKetThisIsASecretKetThisIsASecretKetThisIsASecretKet");
+//            decryptedData = AESHelper.decrypt(mobileKey, serverKey, encryptedData.trim());
+//        }
+//        catch (Exception ex){
+//            Log.e("Error", ex.getStackTrace().toString());
+//        }
 
 
         Intent intent = getIntent();
@@ -352,8 +352,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     protected void onUserLeaveHint() {
         super.onUserLeaveHint();
         Log.e("EXIT", "onUserLeaveHint");
-//        editor.putString(Constants.USER_ID_TOKEN, "");
-//        editor.commit();
+        editor.putString(Constants.USER_ID_TOKEN, "");
+        editor.commit();
     }
 
 
