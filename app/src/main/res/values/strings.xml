@@ -301,12 +301,7 @@
     <string name="confirm_info_uncheck">ادامه بدون بررسی</string>
     <string name="confirm_account_check">بررسی صورت حساب</string>
 
-
-    <string name="user_status_text">کاربر محدود شبکه هم‌پی می تواند از اعضای عادی پول دریافت کند
-    \n
-        برای امکان واریز وجه به دوستانتان، کلیک کنید.
-    </string>
-
+    <string name="user_status_text">کاربر محدود شبکه هم‌پی می‌تواند از اعضای عادی پول دریافت کند.\nبرای امکان واریز وجه به دوستانتان، کلیک کنید.</string>
 
     <string name="debit">پرداخت</string>
     <string name="credit">دریافت</string>

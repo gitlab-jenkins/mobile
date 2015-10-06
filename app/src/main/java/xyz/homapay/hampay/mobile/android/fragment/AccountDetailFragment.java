@@ -122,7 +122,9 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
         bundle = getArguments();
 
-        this.userProfileDTO = (UserProfileDTO)bundle.getSerializable(Constants.USER_PROFILE_DTO);
+        if (bundle != null){
+            this.userProfileDTO = (UserProfileDTO) bundle.getSerializable(Constants.USER_PROFILE_DTO);
+        }
 
         deviceInfo = new DeviceInfo(context);
 
