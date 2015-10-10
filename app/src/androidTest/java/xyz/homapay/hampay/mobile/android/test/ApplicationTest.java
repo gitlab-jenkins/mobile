@@ -1,4 +1,4 @@
-package xyz.homapay.hampay.mobile.android;
+package xyz.homapay.hampay.mobile.android.test;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
