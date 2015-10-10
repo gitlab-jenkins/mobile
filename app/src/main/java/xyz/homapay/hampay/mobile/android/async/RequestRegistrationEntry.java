@@ -7,6 +7,8 @@ import com.hampay.common.common.response.ResponseMessage;
 import com.hampay.common.core.model.dto.DeviceDTO;
 import com.hampay.common.core.model.request.RegistrationEntryRequest;
 import com.hampay.common.core.model.response.RegistrationEntryResponse;
+
+import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.webservice.WebServices;
 
@@ -53,6 +55,7 @@ public class RequestRegistrationEntry extends AsyncTask<RegistrationEntryRequest
         deviceDTO.setCpu_abi(deviceInfo.getCpu_abi());
         deviceDTO.setDeviceAPI(deviceInfo.getDeviceAPI());
         deviceDTO.setOsVersion(deviceInfo.getOsVersion());
+        deviceDTO.setOsName(DeviceDTO.OSName.ANDROID);
         deviceDTO.setDisplaySize(deviceInfo.getDisplaySize());
         deviceDTO.setDisplayMetrics(deviceInfo.getDisplaymetrics());
         deviceDTO.setSimState(deviceInfo.getSimState());
@@ -61,6 +64,7 @@ public class RequestRegistrationEntry extends AsyncTask<RegistrationEntryRequest
         deviceDTO.setLocale(deviceInfo.getLocale());
         deviceDTO.setMacAddress(deviceInfo.getMacAddress());
         deviceDTO.setUserLocation(location);
+
 
         params[0].setDeviceDTO(deviceDTO);
 

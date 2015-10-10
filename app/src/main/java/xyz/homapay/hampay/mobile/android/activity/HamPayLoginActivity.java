@@ -296,7 +296,7 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
     @Override
     public void onUserInteraction() {
         super.onUserInteraction();
-        Log.e("EXIT", "onUserInteraction");
+//        Log.e("EXIT", "onUserInteraction");
     }
 
 //    @Override

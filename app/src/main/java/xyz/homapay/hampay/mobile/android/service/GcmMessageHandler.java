@@ -17,6 +17,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -129,52 +130,90 @@ public class GcmMessageHandler extends IntentService{
             Intent notificationIntent = null;
             PendingIntent pendingIntent = null;
 
-//            if(taskList.size() == 0 || taskList.size() == 1) {
 
-            notificationIntent = new Intent(getApplicationContext(), HamPayLoginActivity.class);
-            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                    Intent.FLAG_ACTIVITY_SINGLE_TOP |
-                    Intent.FLAG_ACTIVITY_NEW_TASK);
+            if (type.equalsIgnoreCase("APP_UPDATE")){
 
-            notificationIntent.putExtra(Constants.NOTIFICATION, true);
+                try {
+                    notificationIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName()));
+                } catch (android.content.ActivityNotFoundException anfe) {
+                    notificationIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName()));
+                }
 
-            pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
-                    notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
+                        notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-//            }
 
-            HeadsUpManager manage = HeadsUpManager.getInstant(getApplication());
-            HeadsUp.Builder builder = new HeadsUp.Builder(getApplicationContext());
+                HeadsUpManager manage = HeadsUpManager.getInstant(getApplication());
+                HeadsUp.Builder builder = new HeadsUp.Builder(getApplicationContext());
 
-            if(taskList.size() == 0 || taskList.size() == 1) {
 
-//                builder.setAutoCancel(true);
                 builder.setContentTitle(headsUpTitle).setDefaults(
                         Notification.DEFAULT_LIGHTS
 //                                |Notification.FLAG_AUTO_CANCEL
-                                |Notification.DEFAULT_SOUND
+                                | Notification.DEFAULT_SOUND
                 )
                         .setSmallIcon(R.drawable.tiny_notification)
                         .setAutoCancel(true)
                         .setContentIntent(pendingIntent)
                         .setFullScreenIntent(pendingIntent, false)
-                        .setContentText(/*new PersianEnglishDigit(headsUpContent).E2P()*/"123");
-            }else {
+                        .setContentText(new PersianEnglishDigit(headsUpContent).E2P());
+
+
+                HeadsUp headsUp = builder.buildHeadUp();
+                headsUp.setSticky(true);
+                manage.notify(code++, headsUp);
+
+            }else if (type.equalsIgnoreCase("JOINT")){
+
+
+
+            }else if (type.equalsIgnoreCase("PAYMENT")) {
+
+
+                notificationIntent = new Intent(getApplicationContext(), HamPayLoginActivity.class);
+                notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                        Intent.FLAG_ACTIVITY_SINGLE_TOP |
+                        Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                notificationIntent.putExtra(Constants.NOTIFICATION, true);
+
+                pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
+                        notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+
+                HeadsUpManager manage = HeadsUpManager.getInstant(getApplication());
+                HeadsUp.Builder builder = new HeadsUp.Builder(getApplicationContext());
+
+                if (taskList.size() == 0 || taskList.size() == 1) {
+
 //                builder.setAutoCancel(true);
-                builder.setContentTitle(headsUpTitle).setDefaults(
-                        Notification.DEFAULT_LIGHTS
+                    builder.setContentTitle(headsUpTitle).setDefaults(
+                            Notification.DEFAULT_LIGHTS
 //                                |Notification.FLAG_AUTO_CANCEL
-                                |Notification.DEFAULT_SOUND)
-                        .setSmallIcon(R.drawable.tiny_notification)
-                        .setAutoCancel(true)
+                                    | Notification.DEFAULT_SOUND
+                    )
+                            .setSmallIcon(R.drawable.tiny_notification)
+                            .setAutoCancel(true)
+                            .setContentIntent(pendingIntent)
+                            .setFullScreenIntent(pendingIntent, false)
+                            .setContentText(new PersianEnglishDigit(headsUpContent).E2P());
+                } else {
+//                builder.setAutoCancel(true);
+                    builder.setContentTitle(headsUpTitle).setDefaults(
+                            Notification.DEFAULT_LIGHTS
+//                                |Notification.FLAG_AUTO_CANCEL
+                                    | Notification.DEFAULT_SOUND)
+                            .setSmallIcon(R.drawable.tiny_notification)
+                            .setAutoCancel(true)
 //                        .setContentIntent(pendingIntent)
 //                        .setFullScreenIntent(pendingIntent, false)
-                        .setContentText(/*new PersianEnglishDigit(headsUpContent).E2P()*/"123");
-            }
+                            .setContentText(new PersianEnglishDigit(headsUpContent).E2P());
+                }
 
-            HeadsUp headsUp = builder.buildHeadUp();
-            headsUp.setSticky(true);
-            manage.notify(code++, headsUp);
+                HeadsUp headsUp = builder.buildHeadUp();
+                headsUp.setSticky(true);
+                manage.notify(code++, headsUp);
+            }
 
 //            notificationManager.notify(NOTIFICATION_ID, builder.build());
 
