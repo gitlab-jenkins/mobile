@@ -6,7 +6,8 @@
     android:orientation="horizontal"
     android:clickable="true"
     android:gravity="center_vertical|right"
-    android:padding="8dp">
+
+    android:layout_marginTop="16dp">
 
     <xyz.homapay.hampay.mobile.android.component.FacedTextView
         android:id="@+id/title"
@@ -21,5 +22,6 @@
     <ImageView
         android:id="@+id/icon"
         android:layout_width="22dp"
-        android:layout_height="22dp" />
+        android:layout_height="22dp"
+        android:layout_marginRight="8dp"/>
 </LinearLayout>

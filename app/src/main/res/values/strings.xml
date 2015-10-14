@@ -358,6 +358,7 @@
     <string name="msg_fail_pass_code_entry">ثبت رمزعبور شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_memorable_entry">ثبت کلمه یادآوری با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_mobile_reg_id"></string>
+    <string name="msg_fail_upload_image">درخواست ارسال تصویر با مشکل مواجه شد، لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_tac_request">درخواست قوانین استفاده با اشکال مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_tac_accept_request">درخواست تایید قوانین استفاده با اشکال مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_user_transation">بارگیری تراکنش‌ها با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
@@ -394,9 +395,11 @@
     <string name="no_transaction">در حال حاضر هیچ تراکنشی برای شما ثبت نشده است.لطفا بعد از تراکنش پرداخت به این بخش رجوع کنید.</string>
     <string name="title_activity_test_json">TestJson</string>
 
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_single_contact">SingleContactActivity</string>
-    <string name="title_activity_head_up">HeadUpActivity</string>
+    <string name="user_profile_image_title">ویرایش عکس</string>
+    <string name="user_profile_image_camera">دوربین</string>
+    <string name="user_profile_image_gallary">گالری تصاویر</string>
+    <string name="user_profile_image_remove">حذف عکس</string>
+    <string name="user_profile_image_cancel">بیخیال</string>
+    <string name="user_profile_image_select">انتخاب</string>
 
 </resources>

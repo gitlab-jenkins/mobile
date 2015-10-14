@@ -14,65 +14,67 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-import com.hampay.common.common.request.RequestHeader;
-import com.hampay.common.common.request.RequestMessage;
-import com.hampay.common.common.response.ResponseMessage;
-import com.hampay.common.core.model.dto.ContactDTO;
-import com.hampay.common.core.model.request.BankListRequest;
-import com.hampay.common.core.model.request.BusinessListRequest;
-import com.hampay.common.core.model.request.BusinessPaymentConfirmRequest;
-import com.hampay.common.core.model.request.BusinessPaymentRequest;
-import com.hampay.common.core.model.request.BusinessSearchRequest;
-import com.hampay.common.core.model.request.ChangeMemorableWordRequest;
-import com.hampay.common.core.model.request.ChangePassCodeRequest;
-import com.hampay.common.core.model.request.ContactUsRequest;
-import com.hampay.common.core.model.request.ContactsHampayEnabledRequest;
-import com.hampay.common.core.model.request.GetUserIdTokenRequest;
-import com.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
-import com.hampay.common.core.model.request.IndividualPaymentRequest;
-import com.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
-import com.hampay.common.core.model.request.RegistrationConfirmUserDataRequest;
-import com.hampay.common.core.model.request.RegistrationCredentialsRequest;
-import com.hampay.common.core.model.request.RegistrationEntryRequest;
-import com.hampay.common.core.model.request.RegistrationFetchUserDataRequest;
-import com.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
-import com.hampay.common.core.model.request.RegistrationVerifyAccountRequest;
-import com.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
-import com.hampay.common.core.model.request.RegistrationVerifyTransferMoneyRequest;
-import com.hampay.common.core.model.request.TACAcceptRequest;
-import com.hampay.common.core.model.request.TACRequest;
-import com.hampay.common.core.model.request.TransactionListRequest;
-import com.hampay.common.core.model.request.UnlinkUserRequest;
-import com.hampay.common.core.model.request.UserProfileRequest;
-import com.hampay.common.core.model.request.VerifyAccountRequest;
-import com.hampay.common.core.model.request.VerifyTransferMoneyRequest;
-import com.hampay.common.core.model.response.BankListResponse;
-import com.hampay.common.core.model.response.BusinessListResponse;
-import com.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
-import com.hampay.common.core.model.response.BusinessPaymentResponse;
-import com.hampay.common.core.model.response.ChangeMemorableWordResponse;
-import com.hampay.common.core.model.response.ChangePassCodeResponse;
-import com.hampay.common.core.model.response.ContactUsResponse;
-import com.hampay.common.core.model.response.ContactsHampayEnabledResponse;
-import com.hampay.common.core.model.response.GetUserIdTokenResponse;
-import com.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
-import com.hampay.common.core.model.response.IndividualPaymentResponse;
-import com.hampay.common.core.model.response.MobileRegistrationIdEntryResponse;
-import com.hampay.common.core.model.response.RegistrationConfirmUserDataResponse;
-import com.hampay.common.core.model.response.RegistrationCredentialsResponse;
-import com.hampay.common.core.model.response.RegistrationEntryResponse;
-import com.hampay.common.core.model.response.RegistrationFetchUserDataResponse;
-import com.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
-import com.hampay.common.core.model.response.RegistrationVerifyAccountResponse;
-import com.hampay.common.core.model.response.RegistrationVerifyMobileResponse;
-import com.hampay.common.core.model.response.RegistrationVerifyTransferMoneyResponse;
-import com.hampay.common.core.model.response.TACAcceptResponse;
-import com.hampay.common.core.model.response.TACResponse;
-import com.hampay.common.core.model.response.TransactionListResponse;
-import com.hampay.common.core.model.response.UnlinkUserResponse;
-import com.hampay.common.core.model.response.UserProfileResponse;
-import com.hampay.common.core.model.response.VerifyAccountResponse;
-import com.hampay.common.core.model.response.VerifyTransferMoneyResponse;
+import xyz.homapay.hampay.common.common.request.RequestHeader;
+import xyz.homapay.hampay.common.common.request.RequestMessage;
+import xyz.homapay.hampay.common.common.response.ResponseMessage;
+import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
+import xyz.homapay.hampay.common.core.model.request.BankListRequest;
+import xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
+import xyz.homapay.hampay.common.core.model.request.BusinessPaymentConfirmRequest;
+import xyz.homapay.hampay.common.core.model.request.BusinessPaymentRequest;
+import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
+import xyz.homapay.hampay.common.core.model.request.ChangeMemorableWordRequest;
+import xyz.homapay.hampay.common.core.model.request.ChangePassCodeRequest;
+import xyz.homapay.hampay.common.core.model.request.ContactUsRequest;
+import xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
+import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
+import xyz.homapay.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
+import xyz.homapay.hampay.common.core.model.request.IndividualPaymentRequest;
+import xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
+import xyz.homapay.hampay.common.core.model.request.RegistrationConfirmUserDataRequest;
+import xyz.homapay.hampay.common.core.model.request.RegistrationCredentialsRequest;
+import xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
+import xyz.homapay.hampay.common.core.model.request.RegistrationFetchUserDataRequest;
+import xyz.homapay.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
+import xyz.homapay.hampay.common.core.model.request.RegistrationVerifyAccountRequest;
+import xyz.homapay.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
+import xyz.homapay.hampay.common.core.model.request.RegistrationVerifyTransferMoneyRequest;
+import xyz.homapay.hampay.common.core.model.request.TACAcceptRequest;
+import xyz.homapay.hampay.common.core.model.request.TACRequest;
+import xyz.homapay.hampay.common.core.model.request.TransactionListRequest;
+import xyz.homapay.hampay.common.core.model.request.UnlinkUserRequest;
+import xyz.homapay.hampay.common.core.model.request.UploadImageRequest;
+import xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
+import xyz.homapay.hampay.common.core.model.request.VerifyAccountRequest;
+import xyz.homapay.hampay.common.core.model.request.VerifyTransferMoneyRequest;
+import xyz.homapay.hampay.common.core.model.response.BankListResponse;
+import xyz.homapay.hampay.common.core.model.response.BusinessListResponse;
+import xyz.homapay.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
+import xyz.homapay.hampay.common.core.model.response.BusinessPaymentResponse;
+import xyz.homapay.hampay.common.core.model.response.ChangeMemorableWordResponse;
+import xyz.homapay.hampay.common.core.model.response.ChangePassCodeResponse;
+import xyz.homapay.hampay.common.core.model.response.ContactUsResponse;
+import xyz.homapay.hampay.common.core.model.response.ContactsHampayEnabledResponse;
+import xyz.homapay.hampay.common.core.model.response.GetUserIdTokenResponse;
+import xyz.homapay.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
+import xyz.homapay.hampay.common.core.model.response.IndividualPaymentResponse;
+import xyz.homapay.hampay.common.core.model.response.MobileRegistrationIdEntryResponse;
+import xyz.homapay.hampay.common.core.model.response.RegistrationConfirmUserDataResponse;
+import xyz.homapay.hampay.common.core.model.response.RegistrationCredentialsResponse;
+import xyz.homapay.hampay.common.core.model.response.RegistrationEntryResponse;
+import xyz.homapay.hampay.common.core.model.response.RegistrationFetchUserDataResponse;
+import xyz.homapay.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
+import xyz.homapay.hampay.common.core.model.response.RegistrationVerifyAccountResponse;
+import xyz.homapay.hampay.common.core.model.response.RegistrationVerifyMobileResponse;
+import xyz.homapay.hampay.common.core.model.response.RegistrationVerifyTransferMoneyResponse;
+import xyz.homapay.hampay.common.core.model.response.TACAcceptResponse;
+import xyz.homapay.hampay.common.core.model.response.TACResponse;
+import xyz.homapay.hampay.common.core.model.response.TransactionListResponse;
+import xyz.homapay.hampay.common.core.model.response.UnlinkUserResponse;
+import xyz.homapay.hampay.common.core.model.response.UploadImageResponse;
+import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
+import xyz.homapay.hampay.common.core.model.response.VerifyAccountResponse;
+import xyz.homapay.hampay.common.core.model.response.VerifyTransferMoneyResponse;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -870,6 +872,67 @@ public class WebServices  {
 
             Gson gson = builder.create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<TACResponse>>() {}.getType());
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (connection != null)
+                connection.disconnect();
+        }
+        return responseMessage;
+    }
+
+    public ResponseMessage<UploadImageResponse> newUploadImage(UploadImageRequest uploadImageRequest){
+
+        ResponseMessage<UploadImageResponse> responseMessage = null;
+        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/upload-image");
+        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+
+        try {
+
+            RequestHeader header = new RequestHeader();
+            header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+            header.setVersion("1.0-PA");
+
+            RequestMessage<UploadImageRequest> message = new RequestMessage<UploadImageRequest>();
+            message.setRequestHeader(header);
+            UploadImageRequest request = uploadImageRequest;
+            request.setRequestUUID(prefs.getString(Constants.UUID, ""));
+            message.setService(request);
+
+            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<UploadImageRequest>>() {}.getType();
+            String jsonRequest = new Gson().toJson(message, requestType);
+
+            connection.setConnectTimeout(30000);
+            connection.setReadTimeout(30000);
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            OutputStream outputStream = connection.getOutputStream();
+            outputStream.write(jsonRequest.getBytes());
+            outputStream.flush();
+
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
+
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                }
+            });
+
+            Gson gson = builder.create();
+            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<UploadImageResponse>>() {}.getType());
 
 
 

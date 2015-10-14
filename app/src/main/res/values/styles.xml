@@ -298,9 +298,8 @@
         <item name="pv_progressStyle">@style/Material.Drawable.LinearProgress.Buffer</item>
         <item name="pv_progressMode">buffer</item>
     </style>
-
-
-
+    <style name="MyMaterialTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="MyMaterialTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
 

@@ -10,11 +10,11 @@ import android.view.View;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.hampay.common.common.response.ResponseMessage;
-import com.hampay.common.common.response.ResultStatus;
-import com.hampay.common.core.model.request.GetUserIdTokenRequest;
-import com.hampay.common.core.model.request.RegistrationCredentialsRequest;
-import com.hampay.common.core.model.response.RegistrationCredentialsResponse;
+import xyz.homapay.hampay.common.common.response.ResponseMessage;
+import xyz.homapay.hampay.common.common.response.ResultStatus;
+import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
+import xyz.homapay.hampay.common.core.model.request.RegistrationCredentialsRequest;
+import xyz.homapay.hampay.common.core.model.response.RegistrationCredentialsResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;

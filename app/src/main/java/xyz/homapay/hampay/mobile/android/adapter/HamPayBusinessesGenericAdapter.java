@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.hampay.common.core.model.response.dto.BusinessDTO;
+import xyz.homapay.hampay.common.core.model.response.dto.BusinessDTO;
 
 import java.util.ArrayList;
 import java.util.Arrays;

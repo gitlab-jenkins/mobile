@@ -3,9 +3,9 @@ package xyz.homapay.hampay.mobile.android.async;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.hampay.common.common.response.ResponseMessage;
-import com.hampay.common.core.model.request.TACRequest;
-import com.hampay.common.core.model.response.TACResponse;
+import xyz.homapay.hampay.common.common.response.ResponseMessage;
+import xyz.homapay.hampay.common.core.model.request.TACRequest;
+import xyz.homapay.hampay.common.core.model.response.TACResponse;
 import xyz.homapay.hampay.mobile.android.webservice.WebServices;
 
 /**

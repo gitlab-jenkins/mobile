@@ -15,15 +15,15 @@ import android.widget.LinearLayout;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.hampay.common.common.response.ResponseMessage;
-import com.hampay.common.common.response.ResultStatus;
-import com.hampay.common.core.model.dto.ContactDTO;
-import com.hampay.common.core.model.dto.UserVerificationStatus;
-import com.hampay.common.core.model.request.UserProfileRequest;
-import com.hampay.common.core.model.request.VerifyAccountRequest;
-import com.hampay.common.core.model.response.UserProfileResponse;
-import com.hampay.common.core.model.response.VerifyAccountResponse;
-import com.hampay.common.core.model.response.dto.UserProfileDTO;
+import xyz.homapay.hampay.common.common.response.ResponseMessage;
+import xyz.homapay.hampay.common.common.response.ResultStatus;
+import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
+import xyz.homapay.hampay.common.core.model.dto.UserVerificationStatus;
+import xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
+import xyz.homapay.hampay.common.core.model.request.VerifyAccountRequest;
+import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
+import xyz.homapay.hampay.common.core.model.response.VerifyAccountResponse;
+import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.MainActivity;
@@ -193,7 +193,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
 
 
-        user_image = (ImageView)rootView.findViewById(R.id.user_image);
+//        user_image = (ImageView)rootView.findViewById(R.id.user_image);
         user_name_text = (FacedTextView)rootView.findViewById(R.id.user_name_text);
         user_account_no_text = (FacedTextView)rootView.findViewById(R.id.user_account_no_text);
         user_bank_name = (FacedTextView)rootView.findViewById(R.id.user_bank_name);
@@ -213,13 +213,13 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
 
         if (prefs.getBoolean(Constants.FORCE_USER_PROFILE, false)){
-            fillUserProfile(userProfileDTO);
-            editor.putBoolean(Constants.FORCE_USER_PROFILE, false);
-            editor.commit();
-        }else {
             userProfileRequest = new UserProfileRequest();
             requestUserProfile = new RequestUserProfile(getActivity(), new RequestUserProfileTaskCompleteListener());
             requestUserProfile.execute(userProfileRequest);
+        }else {
+            fillUserProfile(userProfileDTO);
+            editor.putBoolean(Constants.FORCE_USER_PROFILE, true);
+            editor.commit();
         }
 
         // Inflate the layout for this fragment
@@ -351,6 +351,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
         @Override
         public void onTaskPreRun() {
+            //cls
             hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
             hide_bg.setVisibility(View.VISIBLE);
         }
@@ -446,9 +447,9 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
 
         if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.UNVERIFIED){
-            user_image.setImageResource(R.drawable.user_icon_blak);
+//            user_image.setImageResource(R.drawable.user_icon_blak);
         }else {
-            user_image.setImageResource(R.drawable.user_icon_blue);
+//            user_image.setImageResource(R.drawable.user_icon_blue);
         }
         user_name_text.setText(userProfileDTO.getFullName());
         MainActivity.user_account_name.setText(userProfileDTO.getFullName());

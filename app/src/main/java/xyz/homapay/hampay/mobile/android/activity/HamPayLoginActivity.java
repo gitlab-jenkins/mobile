@@ -20,12 +20,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-import com.hampay.common.common.response.ResponseMessage;
-import com.hampay.common.common.response.ResultStatus;
-import com.hampay.common.core.model.request.GetUserIdTokenRequest;
-import com.hampay.common.core.model.request.TACRequest;
-import com.hampay.common.core.model.response.RegistrationCredentialsResponse;
-import com.hampay.common.core.model.response.TACResponse;
+import xyz.homapay.hampay.common.common.response.ResponseMessage;
+import xyz.homapay.hampay.common.common.response.ResultStatus;
+import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
+import xyz.homapay.hampay.common.core.model.request.TACRequest;
+import xyz.homapay.hampay.common.core.model.response.RegistrationCredentialsResponse;
+import xyz.homapay.hampay.common.core.model.response.TACResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
@@ -55,7 +55,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class HamPayLoginActivity extends Activity implements View.OnClickListener {
 
-    SharedPreferences.Editor editor;
+
 
     RequestLogin requestLogin;
 
@@ -93,6 +93,7 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
     Context context;
     Activity activity;
 
+    SharedPreferences.Editor editor;
     SharedPreferences prefs;
 
     HamPayDialog hamPayDialog;
@@ -247,7 +248,7 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.putExtra(Constants.USER_PROFILE_DTO, tacResponseMessage.getService().getUserProfile());
                         intent.putExtra(Constants.NOTIFICATION, fromNotification);
-                        editor.putBoolean(Constants.FORCE_USER_PROFILE, true);
+                        editor.putBoolean(Constants.FORCE_USER_PROFILE, false);
                         editor.commit();
                         finish();
                         startActivity(intent);
@@ -296,7 +297,6 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
     @Override
     public void onUserInteraction() {
         super.onUserInteraction();
-//        Log.e("EXIT", "onUserInteraction");
     }
 
 //    @Override

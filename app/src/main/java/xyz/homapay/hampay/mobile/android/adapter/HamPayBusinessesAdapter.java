@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
-import com.hampay.common.core.model.response.dto.BusinessDTO;
+import xyz.homapay.hampay.common.core.model.response.dto.BusinessDTO;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.PayBusinessActivity;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;

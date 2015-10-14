@@ -25,12 +25,12 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.hampay.common.common.response.ResponseMessage;
-import com.hampay.common.common.response.ResultStatus;
-import com.hampay.common.core.model.request.BankListRequest;
-import com.hampay.common.core.model.request.RegistrationEntryRequest;
-import com.hampay.common.core.model.response.BankListResponse;
-import com.hampay.common.core.model.response.RegistrationEntryResponse;
+import xyz.homapay.hampay.common.common.response.ResponseMessage;
+import xyz.homapay.hampay.common.common.response.ResultStatus;
+import xyz.homapay.hampay.common.core.model.request.BankListRequest;
+import xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
+import xyz.homapay.hampay.common.core.model.response.BankListResponse;
+import xyz.homapay.hampay.common.core.model.response.RegistrationEntryResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.BankListAdapter;

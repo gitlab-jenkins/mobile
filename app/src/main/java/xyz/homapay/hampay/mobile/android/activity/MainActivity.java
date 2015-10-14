@@ -27,16 +27,19 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.hampay.common.common.response.ResponseMessage;
-import com.hampay.common.common.response.ResultStatus;
-import com.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
-import com.hampay.common.core.model.response.MobileRegistrationIdEntryResponse;
-import com.hampay.common.core.model.response.dto.UserProfileDTO;
+import com.squareup.picasso.Picasso;
+
+import xyz.homapay.hampay.common.common.response.ResponseMessage;
+import xyz.homapay.hampay.common.common.response.ResultStatus;
+import xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
+import xyz.homapay.hampay.common.core.model.response.MobileRegistrationIdEntryResponse;
+import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestMobileRegistrationIdEntry;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.fragment.AccountDetailFragment;
 import xyz.homapay.hampay.mobile.android.fragment.FragmentDrawer;
@@ -51,6 +54,7 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -70,6 +74,8 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     FacedTextView fragment_title;
 
     public static  FacedTextView user_account_name;
+
+    CircleImageView image_profile;
 
     int currentFragmet = 0;
 
@@ -154,6 +160,15 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         fragment_title = (FacedTextView)findViewById(R.id.fragment_title);
 
         user_account_name = (FacedTextView)findViewById(R.id.user_account_name);
+        image_profile = (CircleImageView)findViewById(R.id.image_profile);
+        image_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new HamPayDialog(activity).showUserProfileImage();
+            }
+        });
+
+
 
         first_shortcut = (ImageView)findViewById(R.id.first_shortcut);
         second_shortcut = (ImageView)findViewById(R.id.second_shortcut);
@@ -328,6 +343,13 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
     @Override
     protected void onResume() {
         super.onResume();
+
+        String filePath = getFilesDir().getPath().toString() + "/" + "userImage.png";
+        File file = new File(filePath);
+        if (file.exists()){
+            Picasso.with(this).invalidate(file);
+            Picasso.with(this).load(file).into(image_profile);
+        }
 
         if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)){
             Intent intent = new Intent();

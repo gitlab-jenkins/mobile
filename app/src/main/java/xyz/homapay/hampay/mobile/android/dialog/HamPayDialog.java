@@ -3,15 +3,20 @@ package xyz.homapay.hampay.mobile.android.dialog;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -25,46 +30,48 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.hampay.common.common.response.ResponseMessage;
-import com.hampay.common.common.response.ResultStatus;
-import com.hampay.common.core.model.request.BankListRequest;
-import com.hampay.common.core.model.request.BusinessListRequest;
-import com.hampay.common.core.model.request.BusinessPaymentRequest;
-import com.hampay.common.core.model.request.BusinessSearchRequest;
-import com.hampay.common.core.model.request.ChangeMemorableWordRequest;
-import com.hampay.common.core.model.request.ChangePassCodeRequest;
-import com.hampay.common.core.model.request.ContactUsRequest;
-import com.hampay.common.core.model.request.ContactsHampayEnabledRequest;
-import com.hampay.common.core.model.request.GetUserIdTokenRequest;
-import com.hampay.common.core.model.request.IndividualPaymentRequest;
-import com.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
-import com.hampay.common.core.model.request.RegistrationConfirmUserDataRequest;
-import com.hampay.common.core.model.request.RegistrationCredentialsRequest;
-import com.hampay.common.core.model.request.RegistrationEntryRequest;
-import com.hampay.common.core.model.request.RegistrationFetchUserDataRequest;
-import com.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
-import com.hampay.common.core.model.request.RegistrationVerifyAccountRequest;
-import com.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
-import com.hampay.common.core.model.request.RegistrationVerifyTransferMoneyRequest;
-import com.hampay.common.core.model.request.TACAcceptRequest;
-import com.hampay.common.core.model.request.TACRequest;
-import com.hampay.common.core.model.request.TransactionListRequest;
-import com.hampay.common.core.model.request.UnlinkUserRequest;
-import com.hampay.common.core.model.request.UserProfileRequest;
-import com.hampay.common.core.model.request.VerifyAccountRequest;
-import com.hampay.common.core.model.request.VerifyTransferMoneyRequest;
-import com.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
-import com.hampay.common.core.model.response.BusinessPaymentResponse;
-import com.hampay.common.core.model.response.ContactUsResponse;
-import com.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
-import com.hampay.common.core.model.response.IndividualPaymentResponse;
-import com.hampay.common.core.model.response.TACAcceptResponse;
-import com.hampay.common.core.model.response.dto.UserProfileDTO;
+import xyz.homapay.hampay.common.common.response.ResponseMessage;
+import xyz.homapay.hampay.common.common.response.ResultStatus;
+import  xyz.homapay.hampay.common.core.model.request.BankListRequest;
+import  xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
+import  xyz.homapay.hampay.common.core.model.request.BusinessPaymentRequest;
+import  xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
+import  xyz.homapay.hampay.common.core.model.request.ChangeMemorableWordRequest;
+import  xyz.homapay.hampay.common.core.model.request.ChangePassCodeRequest;
+import  xyz.homapay.hampay.common.core.model.request.ContactUsRequest;
+import  xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
+import  xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
+import  xyz.homapay.hampay.common.core.model.request.IndividualPaymentRequest;
+import  xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
+import  xyz.homapay.hampay.common.core.model.request.RegistrationConfirmUserDataRequest;
+import  xyz.homapay.hampay.common.core.model.request.RegistrationCredentialsRequest;
+import  xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
+import  xyz.homapay.hampay.common.core.model.request.RegistrationFetchUserDataRequest;
+import  xyz.homapay.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
+import  xyz.homapay.hampay.common.core.model.request.RegistrationVerifyAccountRequest;
+import  xyz.homapay.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
+import  xyz.homapay.hampay.common.core.model.request.RegistrationVerifyTransferMoneyRequest;
+import  xyz.homapay.hampay.common.core.model.request.TACAcceptRequest;
+import  xyz.homapay.hampay.common.core.model.request.TACRequest;
+import  xyz.homapay.hampay.common.core.model.request.TransactionListRequest;
+import  xyz.homapay.hampay.common.core.model.request.UnlinkUserRequest;
+import xyz.homapay.hampay.common.core.model.request.UploadImageRequest;
+import  xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
+import  xyz.homapay.hampay.common.core.model.request.VerifyAccountRequest;
+import  xyz.homapay.hampay.common.core.model.request.VerifyTransferMoneyRequest;
+import  xyz.homapay.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
+import  xyz.homapay.hampay.common.core.model.response.BusinessPaymentResponse;
+import  xyz.homapay.hampay.common.core.model.response.ContactUsResponse;
+import  xyz.homapay.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
+import  xyz.homapay.hampay.common.core.model.response.IndividualPaymentResponse;
+import  xyz.homapay.hampay.common.core.model.response.TACAcceptResponse;
+import  xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.AppSliderActivity;
 import xyz.homapay.hampay.mobile.android.activity.ChangeMemorableActivity;
+import xyz.homapay.hampay.mobile.android.activity.ChangeUserImageActivity;
 import xyz.homapay.hampay.mobile.android.activity.GuideDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.activity.MainActivity;
@@ -92,6 +99,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestSearchHamPayBusiness;
 import xyz.homapay.hampay.mobile.android.async.RequestTAC;
 import xyz.homapay.hampay.mobile.android.async.RequestTACAccept;
 import xyz.homapay.hampay.mobile.android.async.RequestUnlinkUser;
+import xyz.homapay.hampay.mobile.android.async.RequestUploadImage;
 import xyz.homapay.hampay.mobile.android.async.RequestUserIdToken;
 import xyz.homapay.hampay.mobile.android.async.RequestUserProfile;
 import xyz.homapay.hampay.mobile.android.async.RequestUserTransaction;
@@ -108,6 +116,8 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.webservice.WebServices;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -641,7 +651,7 @@ public class HamPayDialog {
                     intent.setClass(activity, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     intent.putExtra(Constants.USER_PROFILE_DTO, userProfileDTO);
-                    editor.putBoolean(Constants.FORCE_USER_PROFILE, true);
+                    editor.putBoolean(Constants.FORCE_USER_PROFILE, false);
                     editor.commit();
                     activity.finish();
                     activity.startActivity(intent);
@@ -1581,9 +1591,9 @@ public class HamPayDialog {
     }
 
     public void showFailRegistrationMobileIdDialog(final RequestMobileRegistrationIdEntry requestMobileRegistrationIdEntry,
-                                                       final MobileRegistrationIdEntryRequest mobileRegistrationIdEntryRequest,
-                                                       final String code,
-                                                       final String message){
+                                                   final MobileRegistrationIdEntryRequest mobileRegistrationIdEntryRequest,
+                                                   final String code,
+                                                   final String message){
         Rect displayRectangle = new Rect();
         Activity parent = (Activity) activity;
         Window window = parent.getWindow();
@@ -2608,7 +2618,7 @@ public class HamPayDialog {
         NumberFormat nf = NumberFormat.getInstance();
 
         responseMessage.setText(activity.getString(R.string.msg_incorrect_amount, new PersianEnglishDigit(nf.format(MaxXferAmount)).E2P() + ""
-                ,  new PersianEnglishDigit(nf.format(MinXferAmount) + "").E2P()));
+                , new PersianEnglishDigit(nf.format(MinXferAmount) + "").E2P()));
 
         FacedTextView payment_permission = (FacedTextView) view.findViewById(R.id.payment_permission);
 
@@ -2751,6 +2761,108 @@ public class HamPayDialog {
         });
 
         cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
+
+    public void showUserProfileImage(){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_user_image_profile, null);
+
+        FacedTextView camera_choose = (FacedTextView)view.findViewById(R.id.camera_choose);
+        camera_choose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(activity, ChangeUserImageActivity.class);
+                intent.putExtra(Constants.IMAGE_PROFILE_SOURCE, Constants.CAMERA_SELECT);
+                activity.startActivity(intent);
+                dialog.dismiss();
+            }
+        });
+
+        FacedTextView gallary_choose = (FacedTextView)view.findViewById(R.id.gallary_choose);
+        gallary_choose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(activity, ChangeUserImageActivity.class);
+                intent.putExtra(Constants.IMAGE_PROFILE_SOURCE, Constants.CONTENT_SELECT);
+                activity.startActivity(intent);
+                dialog.dismiss();
+            }
+        });
+
+
+        FacedTextView remove_choose = (FacedTextView)view.findViewById(R.id.remove_choose);
+        FacedTextView cancel_choose = (FacedTextView)view.findViewById(R.id.cancel_choose);
+
+        cancel_choose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+
+    }
+
+
+    public void showFailUploadImage(final RequestUploadImage requestUploadImage,
+                                        final UploadImageRequest uploadImageRequest,
+                                        final String code,
+                                        final String message){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_upload_image, null);
+
+        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+
+        responseCode.setText(activity.getString(R.string.error_code, code));
+        responseMessage.setText(message);
+
+        FacedTextView retry_upload_image = (FacedTextView) view.findViewById(R.id.retry_upload_image);
+        FacedTextView cancel_upload_image = (FacedTextView) view.findViewById(R.id.cancel_upload_image);
+
+
+        retry_upload_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                if (requestUploadImage.getStatus() == AsyncTask.Status.FINISHED)
+                    requestUploadImage.execute(uploadImageRequest);
+            }
+        });
+        cancel_upload_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();

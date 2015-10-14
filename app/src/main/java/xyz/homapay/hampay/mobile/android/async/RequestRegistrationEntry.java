@@ -3,10 +3,10 @@ package xyz.homapay.hampay.mobile.android.async;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.hampay.common.common.response.ResponseMessage;
-import com.hampay.common.core.model.dto.DeviceDTO;
-import com.hampay.common.core.model.request.RegistrationEntryRequest;
-import com.hampay.common.core.model.response.RegistrationEntryResponse;
+import xyz.homapay.hampay.common.common.response.ResponseMessage;
+import xyz.homapay.hampay.common.core.model.dto.DeviceDTO;
+import xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
+import xyz.homapay.hampay.common.core.model.response.RegistrationEntryResponse;
 
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;

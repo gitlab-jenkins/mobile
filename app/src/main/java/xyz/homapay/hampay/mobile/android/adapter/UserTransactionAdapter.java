@@ -5,12 +5,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.hampay.common.core.model.response.dto.TransactionDTO;
+import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
-import com.hampay.common.core.model.response.dto.TransactionDTO.TransactionStatus;
-import com.hampay.common.core.model.response.dto.TransactionDTO.TransactionType;
+import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO.TransactionStatus;
+import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO.TransactionType;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 /**
