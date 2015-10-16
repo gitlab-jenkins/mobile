@@ -1102,9 +1102,9 @@ public class HamPayDialog {
 
         pay_one_confirm.setText(activity.getString(R.string.pay_one_confirm,
                 (new PersianEnglishDigit()).E2P(String.format("%,d", amountValue).replace(".", ",")),
-//                amountValue.toString(),
                 individualPaymentConfirmResponse.getFullName(),
-                individualPaymentConfirmResponse.getBankName()));
+                (new PersianEnglishDigit().E2P(String.format("%,d", individualPaymentConfirmResponse.getFeeCharge()).replace(".", ","))),
+                        individualPaymentConfirmResponse.getBankName()));
 
         view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
         dialog = new Dialog(activity);

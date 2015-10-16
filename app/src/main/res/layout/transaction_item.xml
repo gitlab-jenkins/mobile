@@ -36,7 +36,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="right"
-                android:layout_marginTop="6dp">
+                android:layout_marginTop="6dp"
+                android:paddingRight="8dp">
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/status_text"
@@ -46,7 +47,6 @@
                     android:textColor="@android:color/black"
                     android:textSize="15dp"
                     android:gravity="center"
-                    android:layout_marginRight="8dp"
                     android:text="دریافت"/>
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
@@ -57,14 +57,11 @@
                     android:textColor="@android:color/black"
                     android:textSize="14dp"
                     android:gravity="center"
-                    android:layout_marginRight="8dp"
                     android:text="هومن امینی"/>
 
                 <RelativeLayout
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginLeft="8dp">
+                    android:layout_height="wrap_content">
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/date_time"
@@ -99,7 +96,6 @@
                     android:textSize="13dp"
                     android:gravity="right"
                     android:layout_gravity="right"
-                    android:layout_marginRight="8dp"
                     android:text="متن پیام"
                     android:singleLine="true"/>
 
@@ -112,10 +108,37 @@
                     android:textSize="13dp"
                     android:gravity="right"
                     android:layout_gravity="right"
-                    android:layout_marginRight="8dp"
                     android:text="متن پیام"
                     android:singleLine="true"
                     android:visibility="gone"/>
+
+                <LinearLayout
+                    android:id="@+id/user_fee_ll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/user_fee_value"
+                        geekui:customTypeface="fonts/iran_sans.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:textSize="13dp"
+                        android:gravity="center"
+                        android:text=""/>
+
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/user_fee_title"
+                        geekui:customTypeface="fonts/iran_sans.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/normal_text"
+                        android:textSize="13dp"
+                        android:gravity="right"
+                        android:text="@string/user_fee_title"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 

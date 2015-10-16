@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO;
 import xyz.homapay.hampay.mobile.android.R;
@@ -45,6 +46,8 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
             viewHolder.message = (FacedTextView)convertView.findViewById(R.id.message);
             viewHolder.price_pay = (FacedTextView)convertView.findViewById(R.id.price_pay);
             viewHolder.reject_message = (FacedTextView)convertView.findViewById(R.id.reject_message);
+            viewHolder.user_fee_value = (FacedTextView)convertView.findViewById(R.id.user_fee_value);
+            viewHolder.user_fee_ll = (LinearLayout)convertView.findViewById(R.id.user_fee_ll);
 
 
             convertView.setTag(viewHolder);
@@ -64,11 +67,13 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
                 viewHolder.status_text.setText(context.getString(R.string.credit));
                 viewHolder.status_text.setTextColor(convertView.getResources().getColor(R.color.register_btn_color));
                 viewHolder.status_icon.setImageResource(R.drawable.arrow_r);
+                viewHolder.user_fee_ll.setVisibility(View.GONE);
             }
             else if (transactionDTO.getTransactionType() == TransactionType.DEBIT){
                 viewHolder.status_text.setText(context.getString(R.string.debit));
                 viewHolder.status_text.setTextColor(convertView.getResources().getColor(R.color.user_change_status));
                 viewHolder.status_icon.setImageResource(R.drawable.arrow_p);
+                viewHolder.user_fee_ll.setVisibility(View.VISIBLE);
             }
 
         }else if (transactionDTO.getTransactionStatus() == TransactionStatus.PENDING) {
@@ -76,12 +81,14 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
             viewHolder.status_text.setText(context.getString(R.string.pending));
             viewHolder.status_text.setTextColor(convertView.getResources().getColor(R.color.pending_transaction));
             viewHolder.status_icon.setImageResource(R.drawable.pending);
+            viewHolder.user_fee_ll.setVisibility(View.VISIBLE);
         }
         else {
             viewHolder.reject_message.setVisibility(View.VISIBLE);
             viewHolder.status_text.setText(context.getString(R.string.fail));
             viewHolder.status_text.setTextColor(convertView.getResources().getColor(R.color.colorPrimary));
             viewHolder.status_icon.setImageResource(R.drawable.arrow_f);
+            viewHolder.user_fee_ll.setVisibility(View.GONE);
         }
 
 
@@ -89,6 +96,7 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
         viewHolder.date_time.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(transactionDTO.getTransactionDate())));
         viewHolder.message.setText(transactionDTO.getMessage());
         viewHolder.reject_message.setText(transactionDTO.getRejectReasonMessage());
+        viewHolder.user_fee_value.setText(" " + persianEnglishDigit.E2P(String.format("%,d", transactionDTO.getFeeCharge()).replace(".", ",") + " " + context.getString(R.string.currency_rials)));
 
         viewHolder.price_pay.setText(persianEnglishDigit.E2P(String.format("%,d", transactionDTO.getAmount()).replace(".", ","))
                         + "\n"
@@ -110,6 +118,8 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
         FacedTextView message;
         FacedTextView price_pay;
         FacedTextView reject_message;
+        FacedTextView user_fee_value;
+        LinearLayout user_fee_ll;
     }
 
 }

@@ -262,6 +262,7 @@ public class PayOneActivity extends ActionBarActivity {
                                         hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                                         individualPaymentConfirmRequest = new IndividualPaymentConfirmRequest();
                                         individualPaymentConfirmRequest.setCellNumber(contactPhoneNo);
+                                        individualPaymentConfirmRequest.setAmount(amountValue);
                                         requestIndividualPaymentConfirm = new RequestIndividualPaymentConfirm(context, new RequestIndividualPaymentConfirmTaskCompleteListener());
                                         requestIndividualPaymentConfirm.execute(individualPaymentConfirmRequest);
                                         break;
@@ -411,6 +412,7 @@ public class PayOneActivity extends ActionBarActivity {
                                 case DELEGATED:
                                     individualPaymentConfirmRequest = new IndividualPaymentConfirmRequest();
                                     individualPaymentConfirmRequest.setCellNumber(contactPhoneNo);
+                                    individualPaymentConfirmRequest.setAmount(amountValue);
                                     requestIndividualPaymentConfirm = new RequestIndividualPaymentConfirm(context, new RequestIndividualPaymentConfirmTaskCompleteListener());
                                     requestIndividualPaymentConfirm.execute(individualPaymentConfirmRequest);
                                     break;

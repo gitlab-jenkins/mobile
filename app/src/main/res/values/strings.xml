@@ -1,6 +1,7 @@
 <resources>
 
-    <string name="app_name">هم‌پی</string>
+    <!--<string name="app_name">هم‌پی</string>-->
+    <string name="app_name">HamPay</string>
 
     <string name="hampay_network">شبکه پرداخت هم‌پی </string>
 
@@ -280,7 +281,7 @@
     </string-array>
 
 
-    <string name="pay_one_confirm">واریز مبلغ %1$s ریال به %2$s در %3$s</string>
+    <string name="pay_one_confirm">واریز مبلغ %1$s ریال به %2$s با کارمزد %3$s ریال در %4$s</string>
     <string name="pay_one_comment">لطفا از صحت نام و مبلغ واریزی مطمئن شوید.</string>
     <string name="pay_one_question">آیا موافق هستید؟</string>
     <string name="confirmation">موافقم</string>
@@ -401,5 +402,7 @@
     <string name="user_profile_image_remove">حذف عکس</string>
     <string name="user_profile_image_cancel">بیخیال</string>
     <string name="user_profile_image_select">انتخاب</string>
+
+    <string name="user_fee_title">کارمزد: </string>
 
 </resources>

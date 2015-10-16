@@ -1419,11 +1419,9 @@ public class WebServices  {
 
             RequestMessage<IndividualPaymentConfirmRequest> message = new RequestMessage<IndividualPaymentConfirmRequest>();
             message.setRequestHeader(header);
-            IndividualPaymentConfirmRequest request = new IndividualPaymentConfirmRequest();
 
-            request.setCellNumber(individualPaymentConfirmRequest.getCellNumber());
-            request.setRequestUUID(UUID.randomUUID().toString());
-            message.setService(request);
+            individualPaymentConfirmRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+            message.setService(individualPaymentConfirmRequest);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<IndividualPaymentConfirmRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
