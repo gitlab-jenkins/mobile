@@ -45,6 +45,7 @@ public class FragmentDrawer extends Fragment {
             R.drawable.settings,
             R.drawable.contact_us,
             R.drawable.help,
+            R.drawable.help,
             R.drawable.exit};
     private FragmentDrawerListener drawerListener;
 
@@ -76,9 +77,6 @@ public class FragmentDrawer extends Fragment {
 
         // drawer labels
         titles = getActivity().getResources().getStringArray(R.array.nav_drawer_labels);
-
-
-
     }
 
     @Override

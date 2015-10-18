@@ -19,6 +19,7 @@
 
     <color name="entry_field_color">#e9eaea</color>
     <color name="normal_text">#6e6f71</color>
+    <color name="help_strok">#CECECE</color>
     <color name="keyword_btn_color">#6c6d71</color>
     <color name="me_action_bar_bg">#354c75</color>
     <color name="me_list_titles_text">#808184</color>

@@ -26,6 +26,7 @@
     <string name="nav_item_settings">تنظیمات</string>
     <string name="nav_item_contacts_us">تماس با ما</string>
     <string name="nav_item_help">راهنما</string>
+    <string name="nav_item_about">درباره ما</string>
     <string name="nav_item_exit">خروج</string>
 
     <string name="transaction_to">به: </string>
@@ -46,6 +47,7 @@
         <item>@string/nav_item_settings</item>
         <item>@string/nav_item_contacts_us</item>
         <item>@string/nav_item_help</item>
+        <item>@string/nav_item_about</item>
         <item>@string/nav_item_exit</item>
     </string-array>
 
@@ -57,6 +59,7 @@
     <string name="title_contacts_us">تماس با ما</string>
     <string name="login">ورود</string>
     <string name="title_guide">راهنما</string>
+    <string name="title_about">درباره ما</string>
     <string name="title_exit">خروج</string>
     <string name="notification_operation_type">نوع عملیات: </string>
     <string name="notification_message">پیام: </string>
@@ -404,5 +407,20 @@
     <string name="user_profile_image_select">انتخاب</string>
 
     <string name="user_fee_title">کارمزد: </string>
+    <string name="total_payment">جمع کل: </string>
+
+    <string name="about_text_1">هم‌پی: کاری از گروه نرم‌افزاری هماپی</string>
+    <string name="about_text_2">Copyright© homapay.xyz, All Right Reserved.</string>
+    <string name="about_text_3">تمامی حقوق این نرم‌افزار متعلق به بنگاه نرم‌افزاری هماپی می‌باشد.</string>
+    <string name="about_text_4">پیاده‌سازی شده با توصیه‌های امنیتی...می‌باشد.</string>
+    <string name="about_text_5">پیاده‌سازی شده با توصیه‌های حریم خصوصی...می‌باشد.</string>
+    <string name="about_text_6">این نرم‌افزار توصیه‌های امنیت و حریم خصوصی کاربران را در نظر گرفته و به آن پایبند می‌باشد.</string>
+    <string name="about_text_7">نرم‌افزار هم‌پی از نرم‌افزارهای متن باز بهره برده و به همین دلیل از لیسانس‌های مبتنی بر متن باز برای برخی از اجزای نرم‌افزاری خود حمایت می‌کند.</string>
+    <string name="about_text_8">بخش‌هایی از هم‌پی براساس نرم‌افزارهای متن باز می‌باشد:</string>
+    <string name="about_text_9">
+        \n-
+        \n-
+        \n-
+    </string>
 
 </resources>

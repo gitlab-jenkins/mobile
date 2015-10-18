@@ -2793,7 +2793,7 @@ public class HamPayDialog {
                 Intent intent = new Intent();
                 intent.setClass(activity, ChangeUserImageActivity.class);
                 intent.putExtra(Constants.IMAGE_PROFILE_SOURCE, Constants.CAMERA_SELECT);
-                activity.startActivity(intent);
+                activity.startActivityForResult(intent, 5000);
                 dialog.dismiss();
             }
         });
@@ -2805,7 +2805,7 @@ public class HamPayDialog {
                 Intent intent = new Intent();
                 intent.setClass(activity, ChangeUserImageActivity.class);
                 intent.putExtra(Constants.IMAGE_PROFILE_SOURCE, Constants.CONTENT_SELECT);
-                activity.startActivity(intent);
+                activity.startActivityForResult(intent, 5000);
                 dialog.dismiss();
             }
         });

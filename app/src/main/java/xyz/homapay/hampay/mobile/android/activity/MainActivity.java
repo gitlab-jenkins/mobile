@@ -4,7 +4,6 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,12 +21,15 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.squareup.picasso.Picasso;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
@@ -37,10 +39,13 @@ import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.RequestMobileRegistrationIdEntry;
+import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.fragment.AboutFragment;
 import xyz.homapay.hampay.mobile.android.fragment.AccountDetailFragment;
 import xyz.homapay.hampay.mobile.android.fragment.FragmentDrawer;
 import xyz.homapay.hampay.mobile.android.fragment.GuideFragment;
@@ -49,14 +54,9 @@ import xyz.homapay.hampay.mobile.android.fragment.PayToOneFragment;
 import xyz.homapay.hampay.mobile.android.fragment.SettingFragment;
 import xyz.homapay.hampay.mobile.android.fragment.UserTransactionFragment;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
-import xyz.homapay.hampay.mobile.android.util.AESHelper;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
-import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.UUID;
+import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 
 public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener, View.OnClickListener {
@@ -101,6 +101,9 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     RequestMobileRegistrationIdEntry requestMobileRegistrationIdEntry;
     MobileRegistrationIdEntryRequest mobileRegistrationIdEntryRequest;
+
+
+    RequestImageDownloader requestImageDownloader;
 
 
     byte[] mobileKey;
@@ -351,6 +354,11 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             Picasso.with(this).load(file).into(image_profile);
         }
 
+//        String URL = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
+
+//        requestImageDownloader = new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile));
+//        requestImageDownloader.execute(URL);
+
         if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)){
             Intent intent = new Intent();
             intent.setClass(MainActivity.this, HamPayLoginActivity.class);
@@ -381,7 +389,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
 
     @Override
     public void onDrawerItemSelected(View view, int position) {
-        if (currentFragmet != position || position == 1 || position == 5 || position == 7) {
+        if (currentFragmet != position || position == 1 || position == 5 || position == 7 || position == 8) {
             currentFragmet = position;
             displayView(position);
         }
@@ -423,6 +431,10 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                 title = getString(R.string.title_guide);
                 break;
             case 7:
+                fragment = new AboutFragment();
+                title = getString(R.string.title_about);
+                break;
+            case 8:
                 LogoutData logoutData = new LogoutData();
                 logoutData.setIplanetDirectoryPro(prefs.getString(Constants.TOKEN_ID, null));
                 new HamPayDialog(activity).showExitDialog(logoutData);
@@ -533,6 +545,22 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
             }
         }else if (requestCode == 1023){
             if(resultCode == 1023){
+                fragment = new AccountDetailFragment();
+                bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
+                fragment.setArguments(bundle);
+                title = getString(R.string.title_account_detail);
+                currentFragmet = 0;
+                setupActionnBar(currentFragmet);
+                if (fragment != null) {
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.container_body, fragment);
+                    fragmentTransaction.commit();
+                    fragment_title.setText(title);
+                }
+            }
+        }else if (requestCode == 5000){
+            if (resultCode == 5000){
                 fragment = new AccountDetailFragment();
                 bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
                 fragment.setArguments(bundle);

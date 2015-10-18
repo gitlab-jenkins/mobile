@@ -33,6 +33,9 @@ public class TransactionDetailActivity extends ActionBarActivity implements View
     FacedTextView date_time;
     FacedTextView tracking_code;
     FacedTextView price_pay;
+    LinearLayout more_payment_info;
+    FacedTextView user_fee_value;
+    FacedTextView total_payment_value;
     FacedTextView message;
     LinearLayout responseMessage_ll;
     FacedTextView reject_message;
@@ -65,6 +68,9 @@ public class TransactionDetailActivity extends ActionBarActivity implements View
         date_time = (FacedTextView)findViewById(R.id.date_time);
         tracking_code = (FacedTextView)findViewById(R.id.tracking_code);
         price_pay = (FacedTextView)findViewById(R.id.price_pay);
+        more_payment_info = (LinearLayout)findViewById(R.id.more_payment_info);
+        user_fee_value = (FacedTextView)findViewById(R.id.user_fee_value);
+        total_payment_value = (FacedTextView)findViewById(R.id.total_payment_value);
         message = (FacedTextView)findViewById(R.id.message);
         responseMessage_ll = (LinearLayout)findViewById(R.id.responseMessage_ll);
         reject_message = (FacedTextView)findViewById(R.id.reject_message);
@@ -119,6 +125,14 @@ public class TransactionDetailActivity extends ActionBarActivity implements View
             reject_message.setText(transactionDTO.getRejectReasonMessage());
         }
         price_pay.setText(persianEnglishDigit.E2P(String.format("%,d", transactionDTO.getAmount())));
+        if (transactionDTO.getAmount() == 0){
+            more_payment_info.setVisibility(View.GONE);
+        }else {
+            more_payment_info.setVisibility(View.VISIBLE);
+            user_fee_value.setText(persianEnglishDigit.E2P(String.format("%,d", transactionDTO.getFeeCharge())) + " ");
+            total_payment_value.setText(persianEnglishDigit.E2P(String.format("%,d", transactionDTO.getFeeCharge() + transactionDTO.getAmount())) + " ");
+        }
+
         user_mobile_no.setText(persianEnglishDigit.E2P(transactionDTO.getPhoneNumber()));
         date_time.setText(persianEnglishDigit.E2P((new JalaliConvert()).GregorianToPersian(transactionDTO.getTransactionDate())));
         tracking_code.setText(persianEnglishDigit.E2P(transactionDTO.getReference()));

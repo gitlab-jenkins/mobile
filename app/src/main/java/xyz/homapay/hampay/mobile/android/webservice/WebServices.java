@@ -3,6 +3,8 @@ package xyz.homapay.hampay.mobile.android.webservice;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.provider.ContactsContract;
 import android.util.Log;
 
@@ -1954,9 +1956,24 @@ public class WebServices  {
     }
 
 
-
-
-
-
-
+    public Bitmap newImageDownloader(String url){
+        Bitmap bitmap = null;
+        SSLConnection sslConnection = new SSLConnection(context, url);
+        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+        try {
+            connection.setConnectTimeout(30000);
+            connection.setReadTimeout(30000);
+            connection.setRequestMethod("GET");
+            InputStream inputStream;
+            inputStream = connection.getInputStream();
+            bitmap = BitmapFactory.decodeStream(inputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (connection != null)
+                connection.disconnect();
+        }
+        return bitmap;
+    }
 }

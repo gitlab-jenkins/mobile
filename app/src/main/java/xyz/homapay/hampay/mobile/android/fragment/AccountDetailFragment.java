@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.squareup.picasso.Picasso;
+
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
@@ -30,9 +32,12 @@ import xyz.homapay.hampay.mobile.android.activity.MainActivity;
 import xyz.homapay.hampay.mobile.android.activity.PayOneActivity;
 import xyz.homapay.hampay.mobile.android.activity.VerifyAccountActivity;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.RequestUserProfile;
 import xyz.homapay.hampay.mobile.android.async.RequestVerifyAccount;
+import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.util.AESHelper;
@@ -42,6 +47,7 @@ import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -51,6 +57,8 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
 
     View hide_bg;
+
+    String user_image_url = "";
 
     PersianEnglishDigit persianEnglishDigit;
 
@@ -69,13 +77,16 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     FacedTextView hampay_3;
     FacedTextView hampay_4;
     ImageView hampay_image_1;
-    ImageView hampay_image_2;
+    CircleImageView hampay_image_2;
     ImageView hampay_image_3;
     ImageView hampay_image_4;
     LinearLayout hampay_1_ll;
     LinearLayout hampay_2_ll;
     LinearLayout hampay_3_ll;
     LinearLayout hampay_4_ll;
+
+    RequestImageDownloader requestImageDownloader;
+    CircleImageView image_profile;
 
     HamPayDialog hamPayDialog;
 
@@ -169,6 +180,20 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
         verification_status_ll = (LinearLayout)rootView.findViewById(R.id.verification_status_ll);
 
+        image_profile = (CircleImageView)rootView.findViewById(R.id.image_profile);
+
+//        String URL = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
+//
+//        requestImageDownloader = new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile));
+//        requestImageDownloader.execute(URL);
+
+        String filePath = context.getFilesDir().getPath().toString() + "/" + "userImage.png";
+        File file = new File(filePath);
+        if (file.exists()){
+            Picasso.with(context).invalidate(file);
+            Picasso.with(context).load(file).into(image_profile);
+        }
+
 
         hamPayDialog = new HamPayDialog(getActivity());
 
@@ -207,7 +232,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         hampay_3 = (FacedTextView)rootView.findViewById(R.id.hampay_3);
         hampay_4 = (FacedTextView)rootView.findViewById(R.id.hampay_4);
         hampay_image_1 = (ImageView)rootView.findViewById(R.id.hampay_image_1);
-        hampay_image_2 = (ImageView)rootView.findViewById(R.id.hampay_image_2);
+        hampay_image_2 = (CircleImageView)rootView.findViewById(R.id.hampay_image_2);
         hampay_image_3 = (ImageView)rootView.findViewById(R.id.hampay_image_3);
         hampay_image_4 = (ImageView)rootView.findViewById(R.id.hampay_image_4);
 
@@ -498,38 +523,48 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                 case 0:
                     hampay_1_ll.setVisibility(View.VISIBLE);
                     hampay_1.setText(contactDTOs.get(0).getDisplayName());
-                    if (contactDTOs.get(0).getUserVerificationStatus() == UserVerificationStatus.DELEGATED){
-                        hampay_image_1.setImageResource(R.drawable.user_icon_blue_s);
-                    }else {
-                        hampay_image_1.setImageResource(R.drawable.user_icon_blak_s);
-                    }
+                    user_image_url = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contactDTOs.get(0).getContactImageId();
+                    new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_1)).execute(user_image_url);
+//                    if (contactDTOs.get(0).getUserVerificationStatus() == UserVerificationStatus.DELEGATED){
+//                        hampay_image_1.setImageResource(R.drawable.user_icon_blue_s);
+//                    }else {
+//                        hampay_image_1.setImageResource(R.drawable.user_icon_blak_s);
+//                    }
                     break;
                 case 1:
                     hampay_2_ll.setVisibility(View.VISIBLE);
                     hampay_2.setText(contactDTOs.get(1).getDisplayName());
-                    if (contactDTOs.get(1).getUserVerificationStatus() == UserVerificationStatus.DELEGATED){
-                        hampay_image_2.setImageResource(R.drawable.user_icon_blue_s);
-                    }else {
-                        hampay_image_2.setImageResource(R.drawable.user_icon_blak_s);
-                    }
+                    user_image_url = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contactDTOs.get(1).getContactImageId();
+                    new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_2)).execute(user_image_url);
+//                    if (contactDTOs.get(1).getUserVerificationStatus() == UserVerificationStatus.DELEGATED){
+//                        hampay_image_2.setImageResource(R.drawable.user_icon_blue_s);
+//                    }else {
+//                        hampay_image_2.setImageResource(R.drawable.user_icon_blak_s);
+//                    }
                     break;
                 case 2:
                     hampay_3_ll.setVisibility(View.VISIBLE);
                     hampay_3.setText(contactDTOs.get(2).getDisplayName());
-                    if (contactDTOs.get(2).getUserVerificationStatus() == UserVerificationStatus.DELEGATED){
-                        hampay_image_3.setImageResource(R.drawable.user_icon_blue_s);
-                    }else {
-                        hampay_image_3.setImageResource(R.drawable.user_icon_blak_s);
-                    }
+                    user_image_url = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contactDTOs.get(2).getContactImageId();
+                    new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_3)).execute(user_image_url);
+
+//                    if (contactDTOs.get(2).getUserVerificationStatus() == UserVerificationStatus.DELEGATED){
+//                        hampay_image_3.setImageResource(R.drawable.user_icon_blue_s);
+//                    }else {
+//                        hampay_image_3.setImageResource(R.drawable.user_icon_blak_s);
+//                    }
                     break;
                 case 3:
                     hampay_4_ll.setVisibility(View.VISIBLE);
                     hampay_4.setText(contactDTOs.get(3).getDisplayName());
-                    if (contactDTOs.get(3).getUserVerificationStatus() == UserVerificationStatus.DELEGATED){
-                        hampay_image_4.setImageResource(R.drawable.user_icon_blue_s);
-                    }else {
-                        hampay_image_4.setImageResource(R.drawable.user_icon_blak_s);
-                    }
+                    user_image_url = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contactDTOs.get(3).getContactImageId();
+                    new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_4)).execute(user_image_url);
+
+//                    if (contactDTOs.get(3).getUserVerificationStatus() == UserVerificationStatus.DELEGATED){
+//                        hampay_image_4.setImageResource(R.drawable.user_icon_blue_s);
+//                    }else {
+//                        hampay_image_4.setImageResource(R.drawable.user_icon_blak_s);
+//                    }
                     break;
 
             }

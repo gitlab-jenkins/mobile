@@ -130,11 +130,10 @@ public class ChangeUserImageActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 croppedImage = cropImageView.getCroppedImage();
-                savebitmap(croppedImage, "userImage.png");
+
                 ImageView croppedImageView = (ImageView) findViewById(R.id.croppedImageView);
                 cropImageView.setVisibility(View.INVISIBLE);
                 croppedImageView.setImageBitmap(croppedImage);
-
                 uploadImageRequest = new UploadImageRequest();
                 requestUploadImage = new RequestUploadImage(context, new RequestUploadImageTaskCompleteListener());
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -163,8 +162,6 @@ public class ChangeUserImageActivity extends ActionBarActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-
 
         if (resultCode == Activity.RESULT_OK) {
 //            cropImageView.setCropShape(CropImageView.CropShape.RECTANGLE);
@@ -335,11 +332,17 @@ public class ChangeUserImageActivity extends ActionBarActivity {
 
                 if (uploadImageResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
+                    savebitmap(croppedImage, "userImage.png");
+
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Request Upload Image")
                             .setAction("Request")
                             .setLabel("Success")
                             .build());
+
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("result", 5000);
+                    setResult(5000);
 
 
                     finish();
