@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:geekui="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content">
 
@@ -11,36 +12,62 @@
         android:visibility="visible"
         android:padding="12dp">
 
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="right"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true">
+            android:orientation="horizontal"
+            android:layout_alignParentRight="true">
 
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                android:id="@+id/contact_name"
-                geekui:customTypeface="fonts/iran_sans.ttf"
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:textSize="14sp"
-                android:gravity="center"
-                android:layout_marginRight="8dp"
-                android:text="مجید زمانی"/>
+                android:orientation="vertical"
+                android:gravity="right|center_vertical"
+                android:layout_gravity="center_vertical"
+                android:layout_centerVertical="true">
 
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                android:id="@+id/contact_phone_no"
-                geekui:customTypeface="fonts/iran_sans.ttf"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:textSize="13sp"
-                android:gravity="center"
-                android:layout_marginRight="8dp"
-                android:text="09126157905"/>
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                    android:id="@+id/contact_name"
+                    geekui:customTypeface="fonts/iran_sans.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp"
+                    android:gravity="center"
+                    android:layout_marginRight="8dp"
+                    android:text="مجید زمانی"/>
 
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                    android:id="@+id/contact_phone_no"
+                    geekui:customTypeface="fonts/iran_sans.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textSize="13sp"
+                    android:gravity="center"
+                    android:layout_marginRight="8dp"
+                    android:text="09126157905"/>
+
+
+            </LinearLayout>
+
+
+            <xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView
+                android:id="@+id/image_profile"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center_horizontal"
+                android:clickable="true"
+                android:src="@drawable/user_icon_blak"
+                app:civ_border="true"
+                app:civ_borderColor="#FFFFFFFF"
+                app:civ_borderWidth="1dp"
+                app:civ_selector="true"
+                app:civ_selectorColor="#4403a9f4"
+                app:civ_selectorStrokeColor="#aa5677fc"
+                app:civ_selectorStrokeWidth="1dp" />
 
         </LinearLayout>
 
@@ -74,27 +101,27 @@
 
 
         <!--<android.support.v7.widget.CardView-->
-            <!--android:id="@+id/pay_to_one"-->
-            <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-            <!--xmlns:card_view="http://schemas.android.com/apk/res-auto"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--card_view:cardBackgroundColor="@color/register_btn_color"-->
-            <!--card_view:cardCornerRadius="2dp"-->
-            <!--card_view:cardElevation="4dp"-->
-            <!--android:layout_centerVertical="true">-->
+        <!--android:id="@+id/pay_to_one"-->
+        <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--xmlns:card_view="http://schemas.android.com/apk/res-auto"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--card_view:cardBackgroundColor="@color/register_btn_color"-->
+        <!--card_view:cardCornerRadius="2dp"-->
+        <!--card_view:cardElevation="4dp"-->
+        <!--android:layout_centerVertical="true">-->
 
-            <!--<xyz.homapay.hampay.mobile.android.component.FacedTextView-->
-                <!--geekui:customTypeface="fonts/iran_sans.ttf"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:textColor="@android:color/white"-->
-                <!--android:textSize="18sp"-->
-                <!--android:gravity="center"-->
-                <!--android:layout_gravity="center"-->
-                <!--android:text="@string/select"-->
-                <!--android:layout_marginLeft="12dp"-->
-                <!--android:layout_marginRight="12dp"/>-->
+        <!--<xyz.homapay.hampay.mobile.android.component.FacedTextView-->
+        <!--geekui:customTypeface="fonts/iran_sans.ttf"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--android:textSize="18sp"-->
+        <!--android:gravity="center"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:text="@string/select"-->
+        <!--android:layout_marginLeft="12dp"-->
+        <!--android:layout_marginRight="12dp"/>-->
 
         <!--</android.support.v7.widget.CardView>-->
 

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +14,15 @@ import android.widget.RelativeLayout;
 
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.PayOneActivity;
+import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
+import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.component.sectionlist.SectionedBaseAdapter;
 import xyz.homapay.hampay.mobile.android.model.EnabledHamPay;
 import xyz.homapay.hampay.mobile.android.model.RecentPay;
+import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 import java.util.List;
@@ -30,15 +35,15 @@ public class PayOneAdapter extends SectionedBaseAdapter{
     Activity mContext;
     private List<RecentPay> recentPays;
     private List<EnabledHamPay> enabledHamPays;
+    private String loginTokenId;
 
     private PersianEnglishDigit persianEnglishDigit;
 
-    public  PayOneAdapter(Activity context, List<RecentPay> recentPays, List<EnabledHamPay> enabledHamPays){
+    public  PayOneAdapter(Activity context, List<RecentPay> recentPays, List<EnabledHamPay> enabledHamPays, String loginTokenId){
         mContext = context;
-
         this.recentPays = recentPays;
         this.enabledHamPays = enabledHamPays;
-
+        this.loginTokenId = loginTokenId;
         persianEnglishDigit = new PersianEnglishDigit();
 
     }
@@ -105,6 +110,7 @@ public class PayOneAdapter extends SectionedBaseAdapter{
         FacedTextView message = (FacedTextView)layout.findViewById(R.id.message);
 
 
+        CircleImageView image_profile = (CircleImageView)layout.findViewById(R.id.image_profile);
         FacedTextView contact_name = (FacedTextView)layout.findViewById(R.id.contact_name);
         FacedTextView contact_phone_no = (FacedTextView)layout.findViewById(R.id.contact_phone_no);
         ButtonRectangle pay_to_one_button = (ButtonRectangle)layout.findViewById(R.id.pay_to_one_button);
@@ -138,7 +144,10 @@ public class PayOneAdapter extends SectionedBaseAdapter{
 
         }else{
 
+            Log.e("COUNT", "COUNT");
+
             final EnabledHamPay enabledHamPay = enabledHamPays.get(position);
+            new RequestImageDownloader(mContext, new RequestImageDownloaderTaskCompleteListener(image_profile)).execute(Constants.HTTPS_SERVER_IP + "/users/" + loginTokenId + "/" + enabledHamPay.getPhotoId());
             contact_name.setText(persianEnglishDigit.E2P(enabledHamPay.getDisplayName()));
             contact_phone_no.setText(persianEnglishDigit.E2P(enabledHamPay.getCellNumber()));
 

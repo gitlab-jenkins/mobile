@@ -243,7 +243,8 @@ public class PayToOneFragment extends Fragment {
                 if (enabledHamPays.size() > 0) {
                     payOneAdapter = new PayOneAdapter(getActivity(),
                             recentPays,
-                            enabledHamPays);
+                            enabledHamPays,
+                            prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
                     pinnedHeaderListView.setAdapter(payOneAdapter);
                 }
                 hamPayDialog.dismisWaitingDialog();
@@ -320,7 +321,8 @@ public class PayToOneFragment extends Fragment {
             }else {
                 payOneAdapter = new PayOneAdapter(getActivity(),
                         searchRecentPays,
-                        searchEnabledHamPay);
+                        searchEnabledHamPay,
+                        prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
                 pinnedHeaderListView.setAdapter(payOneAdapter);
             }
 
@@ -328,7 +330,8 @@ public class PayToOneFragment extends Fragment {
 
             payOneAdapter = new PayOneAdapter(getActivity(),
                     recentPays,
-                    enabledHamPays);
+                    enabledHamPays,
+                    prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
             pinnedHeaderListView.setAdapter(payOneAdapter);
 
         }
@@ -498,7 +501,7 @@ public class PayToOneFragment extends Fragment {
                             EnabledHamPay enabledHamPay = new EnabledHamPay();
                             enabledHamPay.setCellNumber(contactDTO.getCellNumber());
                             enabledHamPay.setDisplayName(contactDTO.getDisplayName());
-
+                            enabledHamPay.setPhotoId(contactDTO.getContactImageId());
                             dbHelper.createEnabledHamPay(enabledHamPay);
 
                         }
@@ -541,11 +544,12 @@ public class PayToOneFragment extends Fragment {
             if (isAdded()) {
 
 //                if (payOneAdapter == null) {
-                    enabledHamPays = dbHelper.getAllEnabledHamPay();
-                    payOneAdapter = new PayOneAdapter(getActivity(),
-                            recentPays,
-                            enabledHamPays);
-                    pinnedHeaderListView.setAdapter(payOneAdapter);
+//                    enabledHamPays = dbHelper.getAllEnabledHamPay();
+//                    payOneAdapter = new PayOneAdapter(getActivity(),
+//                            recentPays,
+//                            enabledHamPays,
+//                            prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+//                    pinnedHeaderListView.setAdapter(payOneAdapter);
 //                }
             }
             hamPayDialog.dismisWaitingDialog();

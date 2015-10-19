@@ -49,6 +49,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //Enabled HamPay Table - column names
     private static final String KEY_DISPLAY_NAME = "display_name";
     private static final String KEY_CELL_NUMBER = "cell_number";
+    private static final String KEY_PHOTO_ID = "photo_id";
 
     // recent pay table create statement
     private static final String CREATE_TABLE_RECENT_PAY = "CREATE TABLE "
@@ -64,7 +65,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_HAMPAY_ENABLED = "CREATE TABLE "
             + TABLE_ENABLED_HAMPAY + "("
             + KEY_DISPLAY_NAME + " TEXT,"
-            + KEY_CELL_NUMBER + " TEXT"
+            + KEY_CELL_NUMBER + " TEXT,"
+            + KEY_PHOTO_ID + " TEXT"
             + ")";
 
 
@@ -145,8 +147,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_DISPLAY_NAME, encryptedData.trim());
         encryptedData = AESHelper.encrypt(mobileKey, serverKey, enabledHamPay.getCellNumber());
         values.put(KEY_CELL_NUMBER, encryptedData.trim());
+        encryptedData = AESHelper.encrypt(mobileKey, serverKey, enabledHamPay.getPhotoId());
+        values.put(KEY_PHOTO_ID, encryptedData.trim());
 
-        // insert row
         long enabled_hampay_id = db.insert(TABLE_ENABLED_HAMPAY, null, values);
 
         return enabled_hampay_id;
@@ -191,6 +194,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         EnabledHamPay enabledHamPay = new EnabledHamPay();
         enabledHamPay.setCellNumber(c.getString(c.getColumnIndex(KEY_CELL_NUMBER)));
         enabledHamPay.setDisplayName(c.getString(c.getColumnIndex(KEY_DISPLAY_NAME)));
+        enabledHamPay.setPhotoId(c.getString(c.getColumnIndex(KEY_PHOTO_ID)));
 
         return enabledHamPay;
     }
@@ -302,6 +306,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 enabledHamPay.setCellNumber(decryptedData);
                 decryptedData = AESHelper.decrypt(mobileKey, serverKey, c.getString(c.getColumnIndex(KEY_DISPLAY_NAME)));
                 enabledHamPay.setDisplayName(decryptedData);
+                decryptedData = AESHelper.decrypt(mobileKey, serverKey, c.getString(c.getColumnIndex(KEY_PHOTO_ID)));
+                enabledHamPay.setPhotoId(decryptedData);
 
                 // adding to todo list
                 enabledHamPays.add(enabledHamPay);

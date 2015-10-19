@@ -7,6 +7,7 @@ public class EnabledHamPay {
 
     private String displayName;
     private String cellNumber;
+    private String photoId;
 
     public String getDisplayName() {
         return displayName;
@@ -23,5 +24,14 @@ public class EnabledHamPay {
     public void setCellNumber(String cellNumber) {
         this.cellNumber = cellNumber;
     }
+
+    public String getPhotoId() {
+        return photoId;
+    }
+
+    public void setPhotoId(String photoId) {
+        this.photoId = photoId;
+    }
+
 
 }

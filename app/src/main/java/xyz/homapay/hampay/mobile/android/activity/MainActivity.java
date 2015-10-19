@@ -41,7 +41,6 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.RequestMobileRegistrationIdEntry;
-import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
@@ -56,7 +55,6 @@ import xyz.homapay.hampay.mobile.android.fragment.UserTransactionFragment;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
-import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 
 public class MainActivity extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener, View.OnClickListener {
