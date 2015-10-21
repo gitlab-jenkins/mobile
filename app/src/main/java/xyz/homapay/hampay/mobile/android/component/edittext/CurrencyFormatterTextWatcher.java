@@ -14,7 +14,7 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 /**
  * Created by amir on 7/7/15.
  */
-public class CurrencyFormatter implements TextWatcher{
+public class CurrencyFormatterTextWatcher implements TextWatcher{
 
     private DecimalFormat df;
     private DecimalFormat dfnd;
@@ -22,7 +22,7 @@ public class CurrencyFormatter implements TextWatcher{
 
     private EditText editText;
 
-    public CurrencyFormatter(EditText editText)
+    public CurrencyFormatterTextWatcher(EditText editText)
     {
         df = new DecimalFormat("#,###.##");
         df.setDecimalSeparatorAlwaysShown(true);

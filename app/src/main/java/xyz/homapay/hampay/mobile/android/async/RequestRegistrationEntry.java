@@ -59,8 +59,6 @@ public class RequestRegistrationEntry extends AsyncTask<RegistrationEntryRequest
         deviceDTO.setDisplaySize(deviceInfo.getDisplaySize());
         deviceDTO.setDisplayMetrics(deviceInfo.getDisplaymetrics());
         deviceDTO.setSimState(deviceInfo.getSimState());
-        deviceDTO.setAppNames(deviceInfo.getAppNames());
-        deviceDTO.setDeviceEmailAccount(deviceInfo.getDeviceEmailAccount());
         deviceDTO.setLocale(deviceInfo.getLocale());
         deviceDTO.setMacAddress(deviceInfo.getMacAddress());
         deviceDTO.setUserLocation(location);

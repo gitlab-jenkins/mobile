@@ -190,9 +190,6 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
 
         nationalCode = prefs.getString(Constants.REGISTERED_NATIONAL_CODE, "");
 
-
-
-
         memorableWord = prefs.getString(Constants.MEMORABLE_WORD, "");
 
         if (memorableWord != null) {

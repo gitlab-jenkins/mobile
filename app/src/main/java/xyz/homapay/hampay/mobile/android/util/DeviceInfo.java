@@ -188,10 +188,15 @@ public class DeviceInfo {
         AccountManager accManager = AccountManager.get(context);
         Account accounts[] = accManager.getAccounts();
         int accCount = accounts.length;
-        //AppConstants.accOnDevice = new Vector<String>();
         for(int i = 0; i < accCount; i++){
             if (accounts[i].type.equalsIgnoreCase("com.google")){
                 userDeviceEmail = accounts[i].name;
+            }
+        }
+
+        if (userDeviceEmail.length() == 0){
+            if (accounts.length >= 1){
+                userDeviceEmail = accounts[0].name;
             }
         }
 

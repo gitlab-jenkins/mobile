@@ -7,7 +7,7 @@ import android.util.Log;
 /**
  * Created by amir on 7/2/15.
  */
-public class AccountNoFormat implements TextWatcher {
+public class AccountNoFormatTextWatcher implements TextWatcher {
 
     FacedEditText accountNumberValue;
     String accountNumberFormat;
@@ -17,7 +17,7 @@ public class AccountNoFormat implements TextWatcher {
     int rawAccountNumberValueLengthOffset = 0;
     String procAccountNumberValue = "";
 
-    public AccountNoFormat(FacedEditText accountNumberValue, String accountNumberFormat)
+    public AccountNoFormatTextWatcher(FacedEditText accountNumberValue, String accountNumberFormat)
     {
         this.accountNumberValue = accountNumberValue;
         this.accountNumberFormat = accountNumberFormat;

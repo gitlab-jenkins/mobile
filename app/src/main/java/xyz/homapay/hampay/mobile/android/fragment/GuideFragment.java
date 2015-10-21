@@ -91,34 +91,42 @@ public class GuideFragment extends Fragment {
                         break;
 
                     case 9:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/user-unlink.html");
+                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/login.html");
                         break;
 
                     case 10:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/payment.html");
+                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/transaction.html");
                         break;
 
                     case 11:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/businessPayment.html");
+                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/user-unlink.html");
                         break;
 
                     case 12:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/contactUs.html");
+                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/payment.html");
                         break;
 
                     case 13:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/logout.html");
+                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/businessPayment.html");
                         break;
 
                     case 14:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/setting.html");
+                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/contactUs.html");
                         break;
 
                     case 15:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/changeMemorableWord.html");
+                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/logout.html");
                         break;
 
                     case 16:
+                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/setting.html");
+                        break;
+
+                    case 17:
+                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/changeMemorableWord.html");
+                        break;
+
+                    case 18:
                         intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/changePassword.html");
                         break;
 

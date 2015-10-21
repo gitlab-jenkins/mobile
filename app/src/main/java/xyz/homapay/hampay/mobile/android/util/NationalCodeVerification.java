@@ -11,7 +11,7 @@ public class NationalCodeVerification {
     long nationalCodeMod;
     String[] exeptionsNationalCode = {
             "0000000000",
-//            "1111111111",
+            "1111111111",
             "2222222222",
             "3333333333",
             "4444444444",

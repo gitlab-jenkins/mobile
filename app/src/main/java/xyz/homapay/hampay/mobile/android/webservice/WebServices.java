@@ -25,11 +25,13 @@ import xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessPaymentConfirmRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
+import xyz.homapay.hampay.common.core.model.request.ChangeEmailRequest;
 import xyz.homapay.hampay.common.core.model.request.ChangeMemorableWordRequest;
 import xyz.homapay.hampay.common.core.model.request.ChangePassCodeRequest;
 import xyz.homapay.hampay.common.core.model.request.ContactUsRequest;
 import xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
 import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
+import xyz.homapay.hampay.common.core.model.request.IllegalAppListRequest;
 import xyz.homapay.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
 import xyz.homapay.hampay.common.core.model.request.IndividualPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
@@ -53,11 +55,13 @@ import xyz.homapay.hampay.common.core.model.response.BankListResponse;
 import xyz.homapay.hampay.common.core.model.response.BusinessListResponse;
 import xyz.homapay.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
 import xyz.homapay.hampay.common.core.model.response.BusinessPaymentResponse;
+import xyz.homapay.hampay.common.core.model.response.ChangeEmailResponse;
 import xyz.homapay.hampay.common.core.model.response.ChangeMemorableWordResponse;
 import xyz.homapay.hampay.common.core.model.response.ChangePassCodeResponse;
 import xyz.homapay.hampay.common.core.model.response.ContactUsResponse;
 import xyz.homapay.hampay.common.core.model.response.ContactsHampayEnabledResponse;
 import xyz.homapay.hampay.common.core.model.response.GetUserIdTokenResponse;
+import xyz.homapay.hampay.common.core.model.response.IllegalAppListResponse;
 import xyz.homapay.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
 import xyz.homapay.hampay.common.core.model.response.IndividualPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.MobileRegistrationIdEntryResponse;
@@ -80,6 +84,7 @@ import xyz.homapay.hampay.common.core.model.response.VerifyTransferMoneyResponse
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 import java.io.BufferedReader;
@@ -193,6 +198,59 @@ public class WebServices  {
         JsonElement responseElement = jsonParser.parse(response.toString());
 
         return (LogoutResponse) gson.fromJson(responseElement.toString(), listType);
+    }
+
+    public ResponseMessage<IllegalAppListResponse> getIllegalAppList() {
+
+        ResponseMessage<IllegalAppListResponse> responseMessage = null;
+        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/illegal-apps");
+        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+
+        try {
+
+            RequestHeader header = new RequestHeader();
+            header.setAuthToken("008ewe");
+            header.setVersion("1.0-PA");
+
+            RequestMessage<IllegalAppListRequest> message = new RequestMessage<IllegalAppListRequest>();
+            message.setRequestHeader(header);
+            IllegalAppListRequest request = new IllegalAppListRequest();
+            request.setRequestUUID(UUID.randomUUID().toString());
+            message.setService(request);
+
+            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<IllegalAppListRequest>>() {}.getType();
+            String jsonRequest = new Gson().toJson(message, requestType);
+
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(5000);
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            OutputStream outputStream = connection.getOutputStream();
+            outputStream.write(jsonRequest.getBytes());
+            outputStream.flush();
+
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
+
+            Gson gson = new Gson();
+            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<IllegalAppListResponse>>() {}.getType());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (connection != null)
+                connection.disconnect();
+        }
+
+        return responseMessage;
     }
 
     public ResponseMessage<BankListResponse> getBankList() {
@@ -614,13 +672,10 @@ public class WebServices  {
                 if (contact_phone_no.trim().replace(" ", "").startsWith("00989")
                         || contact_phone_no.trim().replace(" ", "").startsWith("+989")
                         || contact_phone_no.trim().replace(" ", "").startsWith("09")) {
-
-//                    if (prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").compareTo(contact_phone_no.replace("+98", "0").replaceAll("\\s+","")) != 0) {
                     ContactDTO contactDTO = new ContactDTO();
                     contactDTO.setCellNumber(contact_phone_no);
                     contactDTO.setDisplayName(contact_name);
                     contactDTOs.add(contactDTO);
-//                    }
                 }
 
             }
@@ -1342,7 +1397,6 @@ public class WebServices  {
                         || contact_phone_no.trim().replace(" ", "").startsWith("+989")
                         || contact_phone_no.trim().replace(" ", "").startsWith("09")) {
 
-//                    if (prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").compareTo(contact_phone_no.replace("+98", "0").replaceAll("\\s+","")) != 0) {
                     ContactDTO contactDTO = new ContactDTO();
                     contactDTO.setCellNumber(contact_phone_no);
                     contactDTO.setDisplayName(contact_name);
@@ -1915,7 +1969,7 @@ public class WebServices  {
             RequestMessage<UnlinkUserRequest> message = new RequestMessage<UnlinkUserRequest>();
             message.setRequestHeader(header);
             UnlinkUserRequest request = unlinkUserRequest;
-            request.setRequestUUID(UUID.randomUUID().toString());
+            request.setRequestUUID(prefs.getString(Constants.UUID, ""));
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<UnlinkUserRequest>>() {}.getType();
@@ -1940,6 +1994,63 @@ public class WebServices  {
 
             Gson gson = new Gson();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<UnlinkUserResponse>>() {}.getType());
+
+            if( responseMessage != null && responseMessage.getService() != null ) { }
+            else { }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null)
+                connection.disconnect();
+        }
+
+        return responseMessage;
+
+    }
+
+    public ResponseMessage<ChangeEmailResponse> changeEmailResponse(ChangeEmailRequest changeEmailRequest) {
+
+        ResponseMessage<ChangeEmailResponse> responseMessage = null;
+
+        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/change-email");
+        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+
+        try {
+
+            RequestHeader header = new RequestHeader();
+            header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+
+            header.setVersion("1.0-PA");
+
+            RequestMessage<ChangeEmailRequest> message = new RequestMessage<ChangeEmailRequest>();
+            message.setRequestHeader(header);
+            ChangeEmailRequest request = changeEmailRequest;
+            request.setRequestUUID(prefs.getString(Constants.UUID, ""));
+            message.setService(request);
+
+            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<ChangeEmailRequest>>() {}.getType();
+            String jsonRequest = new Gson().toJson(message, requestType);
+
+            connection.setDoOutput(true);
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            OutputStream outputStream = connection.getOutputStream();
+            outputStream.write(jsonRequest.getBytes());
+            outputStream.flush();
+
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
+
+            Gson gson = new Gson();
+            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<ChangeEmailResponse>>() {}.getType());
 
             if( responseMessage != null && responseMessage.getService() != null ) { }
             else { }

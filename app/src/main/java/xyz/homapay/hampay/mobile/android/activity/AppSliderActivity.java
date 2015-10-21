@@ -7,11 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -21,28 +16,28 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+
+import java.io.IOException;
+
+import xyz.homapay.hampay.common.common.response.ResponseMessage;
+import xyz.homapay.hampay.common.common.response.ResultStatus;
+import xyz.homapay.hampay.common.core.model.request.BankListRequest;
+import xyz.homapay.hampay.common.core.model.request.IllegalAppListRequest;
+import xyz.homapay.hampay.common.core.model.response.IllegalAppListResponse;
+import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.AppSliderAdapter;
+import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import xyz.homapay.hampay.mobile.android.async.RequestBankList;
+import xyz.homapay.hampay.mobile.android.async.RequestIllegalAppList;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
-import xyz.homapay.hampay.mobile.android.fragment.AppSliderFragmentA;
-import xyz.homapay.hampay.mobile.android.fragment.AppSliderFragmentB;
-import xyz.homapay.hampay.mobile.android.fragment.AppSliderFragmentC;
-import xyz.homapay.hampay.mobile.android.fragment.AppSliderFragmentD;
-import xyz.homapay.hampay.mobile.android.fragment.AppSliderFragmentE;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
-import xyz.homapay.hampay.mobile.android.util.RootUtil;
-import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 
 
 public class AppSliderActivity extends ActionBarActivity {
@@ -60,6 +55,9 @@ public class AppSliderActivity extends ActionBarActivity {
     private ImageView indicator_5;
 
     private SharedPreferences prefs;
+    SharedPreferences.Editor editor;
+
+    Tracker hamPayGaTracker;
 
     private Activity activity;
     private Activity destinationActivity;
@@ -67,17 +65,15 @@ public class AppSliderActivity extends ActionBarActivity {
 
     private Intent intent;
 
-
-//    Handler handler;
-//    Runnable runnable;
-//    int slideIndex = 0;
-
-
-    String key;
+    HamPayDialog hamPayDialog;
 
     GoogleCloudMessaging gcm;
     String regid;
     String PROJECT_NUMBER = "936219454834";
+
+    IllegalAppListRequest illegalAppListRequest;
+    RequestIllegalAppList requestIllegalAppList;
+    long launchAppCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,8 +82,17 @@ public class AppSliderActivity extends ActionBarActivity {
 
         activity = AppSliderActivity.this;
 
+        hamPayDialog = new HamPayDialog(activity);
+
+        hamPayGaTracker = ((HamPayApplication) getApplication())
+                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
+
 
         DeviceInfo deviceInfo = new DeviceInfo(this);
+
+
+
+
 
 //        try {
 //            key = SecurityUtils.getInstance(this).generateSHA_256(
@@ -110,13 +115,22 @@ public class AppSliderActivity extends ActionBarActivity {
 
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+        editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+
+//        launchAppCount = prefs.getLong(Constants.LAUNCH_APP_COUNT, 0);
+//        editor.putLong(Constants.LAUNCH_APP_COUNT, launchAppCount + 1).commit();
+//        launchAppCount = 0;
+//        if ((launchAppCount % 10) == 0) {
+//            illegalAppListRequest = new IllegalAppListRequest();
+//            requestIllegalAppList = new RequestIllegalAppList(activity, new RequestIllegalAppListTaskCompleteListener());
+//            requestIllegalAppList.execute(illegalAppListRequest);
+//        }
+
 
         intent = new Intent();
 
 
-
-
-        register_button = (ButtonRectangle)findViewById(R.id.register_button);
+        register_button = (ButtonRectangle) findViewById(R.id.register_button);
         register_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,13 +142,13 @@ public class AppSliderActivity extends ActionBarActivity {
             }
         });
 
-        indicator_1 = (ImageView)findViewById(R.id.indicator_1);
-        indicator_2 = (ImageView)findViewById(R.id.indicator_2);
-        indicator_3 = (ImageView)findViewById(R.id.indicator_3);
-        indicator_4 = (ImageView)findViewById(R.id.indicator_4);
-        indicator_5 = (ImageView)findViewById(R.id.indicator_5);
+        indicator_1 = (ImageView) findViewById(R.id.indicator_1);
+        indicator_2 = (ImageView) findViewById(R.id.indicator_2);
+        indicator_3 = (ImageView) findViewById(R.id.indicator_3);
+        indicator_4 = (ImageView) findViewById(R.id.indicator_4);
+        indicator_5 = (ImageView) findViewById(R.id.indicator_5);
 
-        sliding_into_app = (ViewPager)findViewById(R.id.sliding_into_app);
+        sliding_into_app = (ViewPager) findViewById(R.id.sliding_into_app);
         sliding_into_app.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View arg0, MotionEvent motionEvent) {
                 return true;
@@ -237,37 +251,31 @@ public class AppSliderActivity extends ActionBarActivity {
 
         registeredActivityData = prefs.getString(Constants.REGISTERED_ACTIVITY_DATA, "");
 
-        if (registeredActivityData.length() != 0){
+        if (registeredActivityData.length() != 0) {
 //            if (registeredActivityData.equalsIgnoreCase(StartActivity.class.getName())){
 //                destinationActivity = new StartActivity();
 //            }else if (registeredActivityData.equalsIgnoreCase(PostStartActivity.class.getName())){
 //                destinationActivity = new PostStartActivity();
 //            }
-            if (registeredActivityData.equalsIgnoreCase(ProfileEntryActivity.class.getName())){
+            if (registeredActivityData.equalsIgnoreCase(ProfileEntryActivity.class.getName())) {
                 destinationActivity = new ProfileEntryActivity();
-            }
-            else if (registeredActivityData.equalsIgnoreCase(VerificationActivity.class.getName())){
+            } else if (registeredActivityData.equalsIgnoreCase(VerificationActivity.class.getName())) {
                 destinationActivity = new VerificationActivity();
             }
 //            else if (registeredActivityData.equalsIgnoreCase(SMSVerificationActivity.class.getName())){
 //                destinationActivity = new SMSVerificationActivity();
 //            }
-            else if (registeredActivityData.equalsIgnoreCase(ConfirmAccountNoActivity.class.getName())){
+            else if (registeredActivityData.equalsIgnoreCase(ConfirmAccountNoActivity.class.getName())) {
                 destinationActivity = new ConfirmAccountNoActivity();
-            }
-            else if (registeredActivityData.equalsIgnoreCase(ConfirmInfoActivity.class.getName())){
+            } else if (registeredActivityData.equalsIgnoreCase(ConfirmInfoActivity.class.getName())) {
                 destinationActivity = new ConfirmInfoActivity();
-            }
-            else if (registeredActivityData.equalsIgnoreCase(RegVerifyAccountNoActivity.class.getName())){
+            } else if (registeredActivityData.equalsIgnoreCase(RegVerifyAccountNoActivity.class.getName())) {
                 destinationActivity = new RegVerifyAccountNoActivity();
-            }
-            else if (registeredActivityData.equalsIgnoreCase(PostRegVerifyAccountNoActivity.class.getName())){
+            } else if (registeredActivityData.equalsIgnoreCase(PostRegVerifyAccountNoActivity.class.getName())) {
                 destinationActivity = new PostRegVerifyAccountNoActivity();
-            }
-            else if (registeredActivityData.equalsIgnoreCase(PasswordEntryActivity.class.getName())){
+            } else if (registeredActivityData.equalsIgnoreCase(PasswordEntryActivity.class.getName())) {
                 destinationActivity = new PasswordEntryActivity();
-            }
-            else if (registeredActivityData.equalsIgnoreCase(MemorableWordEntryActivity.class.getName())){
+            } else if (registeredActivityData.equalsIgnoreCase(MemorableWordEntryActivity.class.getName())) {
                 destinationActivity = new MemorableWordEntryActivity();
             }
 //            else if (registeredActivityData.equalsIgnoreCase(CompleteRegistrationActivity.class.getName())){
@@ -279,33 +287,31 @@ public class AppSliderActivity extends ActionBarActivity {
 
         }
 
-//        if (registeredActivityData.equalsIgnoreCase(ProfileEntryActivity.class.getName())){
-//            intent.setClass(AppSliderActivity.this, ProfileEntryActivity.class);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            finish();
-//            startActivity(intent);
-//        }
-
         else {
             if (prefs.getBoolean(Constants.REGISTERED_USER, false)) {
 
-                RelativeLayout hampay_login_splash = (RelativeLayout)findViewById(R.id.hampay_login_splash);
+                RelativeLayout hampay_login_splash = (RelativeLayout) findViewById(R.id.hampay_login_splash);
                 hampay_login_splash.setVisibility(View.VISIBLE);
 
                 Thread thread = new Thread() {
                     public void run() {
 
                         try {
-                            sleep(2 * 1000);
-
-                            intent.setClass(AppSliderActivity.this, HamPayLoginActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            finish();
-                            startActivity(intent);
-
+                            launchAppCount = prefs.getLong(Constants.LAUNCH_APP_COUNT, 0);
+                            editor.putLong(Constants.LAUNCH_APP_COUNT, launchAppCount + 1).commit();
+                            if ((launchAppCount % 2) == 0 || prefs.getBoolean(Constants.FORCE_FETCH_ILLEGAL_APPS, false)) {
+                                illegalAppListRequest = new IllegalAppListRequest();
+                                requestIllegalAppList = new RequestIllegalAppList(activity, new RequestIllegalAppListTaskCompleteListener());
+                                requestIllegalAppList.execute(illegalAppListRequest);
+                            }else {
+                                sleep(2 * 1000);
+                                intent.setClass(AppSliderActivity.this, HamPayLoginActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                finish();
+                                startActivity(intent);
+                            }
 
                         } catch (Exception e) {
-
                         }
                     }
                 };
@@ -361,7 +367,15 @@ public class AppSliderActivity extends ActionBarActivity {
         }
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
 
+        if (requestIllegalAppList != null){
+            if (!requestIllegalAppList.isCancelled())
+                requestIllegalAppList.cancel(true);
+        }
+    }
 
 
 //    class MyAdapter extends FragmentStatePagerAdapter
@@ -424,7 +438,7 @@ public class AppSliderActivity extends ActionBarActivity {
 //    }
 
 
-    public void getRegId(){
+    public void getRegId() {
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
@@ -451,4 +465,74 @@ public class AppSliderActivity extends ActionBarActivity {
         }.execute(null, null, null);
     }
 
+
+    public class RequestIllegalAppListTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<IllegalAppListResponse>> {
+
+
+        @Override
+        public void onTaskComplete(ResponseMessage<IllegalAppListResponse> illegalAppListResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+
+            if (illegalAppListResponseMessage != null) {
+
+                if (illegalAppListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Illegal App List")
+                            .setAction("Fetch")
+                            .setLabel("Success")
+                            .build());
+
+                    String downloadedAppNames = new DeviceInfo(activity).getDownloadedAppNames();
+                    for (String illegalAppName : illegalAppListResponseMessage.getService().getIllegalAppList()){
+                        if (downloadedAppNames.equalsIgnoreCase(illegalAppName)){
+                            requestIllegalAppList = new RequestIllegalAppList(activity, new RequestIllegalAppListTaskCompleteListener());
+                            new HamPayDialog(activity).showFailIllegalAppListDialog(requestIllegalAppList, illegalAppListRequest,
+                                    illegalAppName,
+                                    getString(R.string.msg_found_illegal_app));
+
+                            editor.putBoolean(Constants.FORCE_FETCH_ILLEGAL_APPS, true).commit();
+
+                            return;
+                        }
+                    }
+
+                    editor.putBoolean(Constants.FORCE_FETCH_ILLEGAL_APPS, false).commit();
+
+                    intent.setClass(AppSliderActivity.this, HamPayLoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    finish();
+                    startActivity(intent);
+
+                } else {
+                    illegalAppListResponseMessage.getService().getResultStatus().getDescription();
+                    requestIllegalAppList = new RequestIllegalAppList(activity, new RequestIllegalAppListTaskCompleteListener());
+                    new HamPayDialog(activity).showFailIllegalAppListDialog(requestIllegalAppList, illegalAppListRequest,
+                            illegalAppListResponseMessage.getService().getResultStatus().getCode(),
+                            illegalAppListResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Illegal App List")
+                            .setAction("Fetch")
+                            .setLabel("Fail(Server)")
+                            .build());
+                }
+            } else {
+                requestIllegalAppList = new RequestIllegalAppList(activity, new RequestIllegalAppListTaskCompleteListener());
+                new HamPayDialog(activity).showFailIllegalAppListDialog(requestIllegalAppList, illegalAppListRequest,
+                        Constants.LOCAL_ERROR_CODE,
+                        getString(R.string.msg_fail_illegal_app_list));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Illegal App List")
+                        .setAction("Fetch")
+                        .setLabel("Fail(Mobile)")
+                        .build());
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+        }
+    }
 }

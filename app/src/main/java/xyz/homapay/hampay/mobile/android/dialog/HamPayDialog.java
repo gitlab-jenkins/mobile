@@ -26,6 +26,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -36,11 +39,13 @@ import  xyz.homapay.hampay.common.core.model.request.BankListRequest;
 import  xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
 import  xyz.homapay.hampay.common.core.model.request.BusinessPaymentRequest;
 import  xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
+import xyz.homapay.hampay.common.core.model.request.ChangeEmailRequest;
 import  xyz.homapay.hampay.common.core.model.request.ChangeMemorableWordRequest;
 import  xyz.homapay.hampay.common.core.model.request.ChangePassCodeRequest;
 import  xyz.homapay.hampay.common.core.model.request.ContactUsRequest;
 import  xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
 import  xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
+import xyz.homapay.hampay.common.core.model.request.IllegalAppListRequest;
 import  xyz.homapay.hampay.common.core.model.request.IndividualPaymentRequest;
 import  xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
 import  xyz.homapay.hampay.common.core.model.request.RegistrationConfirmUserDataRequest;
@@ -61,6 +66,7 @@ import  xyz.homapay.hampay.common.core.model.request.VerifyAccountRequest;
 import  xyz.homapay.hampay.common.core.model.request.VerifyTransferMoneyRequest;
 import  xyz.homapay.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
 import  xyz.homapay.hampay.common.core.model.response.BusinessPaymentResponse;
+import xyz.homapay.hampay.common.core.model.response.ChangeEmailResponse;
 import  xyz.homapay.hampay.common.core.model.response.ContactUsResponse;
 import  xyz.homapay.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
 import  xyz.homapay.hampay.common.core.model.response.IndividualPaymentResponse;
@@ -81,6 +87,7 @@ import xyz.homapay.hampay.mobile.android.analytics.GaAnalyticsEvent;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestBankList;
 import xyz.homapay.hampay.mobile.android.async.RequestBusinessPayment;
+import xyz.homapay.hampay.mobile.android.async.RequestChangeEmail;
 import xyz.homapay.hampay.mobile.android.async.RequestChangeMemorableWord;
 import xyz.homapay.hampay.mobile.android.async.RequestChangePassCode;
 import xyz.homapay.hampay.mobile.android.async.RequestConfirmUserData;
@@ -88,6 +95,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestContactHampayEnabled;
 import xyz.homapay.hampay.mobile.android.async.RequestCredentialEntry;
 import xyz.homapay.hampay.mobile.android.async.RequestFetchUserData;
 import xyz.homapay.hampay.mobile.android.async.RequestHamPayBusiness;
+import xyz.homapay.hampay.mobile.android.async.RequestIllegalAppList;
 import xyz.homapay.hampay.mobile.android.async.RequestIndividualPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestLogout;
 import xyz.homapay.hampay.mobile.android.async.RequestMobileRegistrationIdEntry;
@@ -107,11 +115,14 @@ import xyz.homapay.hampay.mobile.android.async.RequestVerifyAccount;
 import xyz.homapay.hampay.mobile.android.async.RequestVerifyMobile;
 import xyz.homapay.hampay.mobile.android.async.RequestVerifyTransferMoney;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.component.edittext.EmailTextWatcher;
+import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.model.FailedLoginResponse;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
 import xyz.homapay.hampay.mobile.android.model.RecentPay;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.EmailVerification;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.webservice.WebServices;
 
@@ -1450,7 +1461,6 @@ public class HamPayDialog {
         dialog.show();
     }
 
-
     public void showFailBankListDialog(final RequestBankList requestBankList,
                                        final BankListRequest bankListRequest,
                                        final String code,
@@ -1484,6 +1494,54 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
+
+    public void showFailIllegalAppListDialog(final RequestIllegalAppList requestIllegalAppList,
+                                       final IllegalAppListRequest illegalAppListRequest,
+                                       final String code,
+                                       final String message){
+
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_illegal_app_list, null);
+
+        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+
+        responseCode.setText(activity.getString(R.string.error_code, code));
+        responseMessage.setText(message);
+
+        FacedTextView retry_fetch_illegal_app_list = (FacedTextView) view.findViewById(R.id.retry_fetch_illegal_app_list);
+        FacedTextView cancel_request = (FacedTextView)view.findViewById(R.id.cancel_request);
+
+        retry_fetch_illegal_app_list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                requestIllegalAppList.execute(illegalAppListRequest);
+            }
+        });
+
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                activity.finish();
             }
         });
 
@@ -2731,6 +2789,59 @@ public class HamPayDialog {
         dialog.show();
     }
 
+    public void showFailChnageEmail(final RequestChangeEmail requestChangeEmail,
+                                     final ChangeEmailRequest changeEmailRequest,
+                                     final String code,
+                                     final String message){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_unlink_user, null);
+
+        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+
+        responseCode.setText(activity.getString(R.string.error_code, code));
+        responseMessage.setText(message);
+
+        FacedTextView retry_unlink_user = (FacedTextView) view.findViewById(R.id.retry_unlink_user);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
+        if ((code.compareTo("1005") == 0) || (code.compareTo("۱۰۰۵") == 0) ){
+            retry_unlink_user.setVisibility(View.INVISIBLE);
+        }
+
+        retry_unlink_user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+                if (requestChangeEmail.getStatus() == AsyncTask.Status.FINISHED) {
+                    requestChangeEmail.execute(changeEmailRequest);
+                }
+            }
+        });
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                activity.finish();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.show();
+    }
+
 
     public void showFailGetUserIdTokenDialog(final RequestUserIdToken requestUserIdToken,
                                              final GetUserIdTokenRequest getUserIdTokenRequest,
@@ -2878,5 +2989,131 @@ public class HamPayDialog {
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
     }
+
+
+    public void showChangeEmail(final String password, final String memorableWord){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_change_email, null);
+
+        ImageView emailIcon = (ImageView)view.findViewById(R.id.emailIcon);
+        final CheckBox email_confirm_check = (CheckBox)view.findViewById(R.id.email_confirm_check);
+        final FacedEditText emailValue = (FacedEditText)view.findViewById(R.id.emailValue);
+        FacedTextView change_email = (FacedTextView)view.findViewById(R.id.change_email);
+        FacedTextView cancel_change_email = (FacedTextView)view.findViewById(R.id.cancel_change_email);
+
+        email_confirm_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    if (!new EmailVerification().isValid(emailValue.getText().toString())) {
+                        email_confirm_check.setChecked(false);
+                    }
+                }
+            }
+        });
+        emailValue.addTextChangedListener(new EmailTextWatcher(emailValue, emailIcon, email_confirm_check));
+        emailValue.setText(prefs.getString(Constants.REGISTERED_USER_EMAIL, ""));
+
+        change_email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (new EmailVerification().isValid(emailValue.getText().toString())) {
+                    dialog.dismiss();
+                    ChangeEmailRequest changeEmailRequest = new ChangeEmailRequest();
+                    changeEmailRequest.setEmail(emailValue.getText().toString());
+                    changeEmailRequest.setPassCode(password);
+                    changeEmailRequest.setMemorableWord(memorableWord);
+                    RequestChangeEmail requestChangeEmail = new RequestChangeEmail(activity, new RequestChangeEmailTaskCompleteListener(changeEmailRequest));
+                    requestChangeEmail.execute(changeEmailRequest);
+                }else {
+                    Toast.makeText(activity, activity.getString(R.string.msg_email_invalid), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        cancel_change_email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                activity.finish();
+            }
+        });
+
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
+    public class RequestChangeEmailTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<ChangeEmailResponse>> {
+
+        private RequestChangeEmail requestChangeEmail = null;
+        private ChangeEmailRequest changeEmailRequest;
+
+        public RequestChangeEmailTaskCompleteListener(ChangeEmailRequest changeEmailRequest){
+            this.changeEmailRequest = changeEmailRequest;
+
+        }
+
+        @Override
+        public void onTaskComplete(ResponseMessage<ChangeEmailResponse> changeEmailResponseResponseMessage)
+        {
+
+            dismisWaitingDialog();
+
+            if (changeEmailResponseResponseMessage != null) {
+                if (changeEmailResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+
+                    dialog.dismiss();
+                    activity.finish();
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Change Email User")
+                            .setAction("Change")
+                            .setLabel("Success")
+                            .build());
+                }
+                else {
+                    requestChangeEmail = new RequestChangeEmail(activity, new RequestChangeEmailTaskCompleteListener(changeEmailRequest));
+                    new HamPayDialog(activity).showFailChnageEmail(requestChangeEmail, changeEmailRequest,
+                            changeEmailResponseResponseMessage.getService().getResultStatus().getCode(),
+                            changeEmailResponseResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Change Email User")
+                            .setAction("Change")
+                            .setLabel("Fail(Server)")
+                            .build());
+                }
+            }else {
+                RequestChangeEmail requestChangeEmail = new RequestChangeEmail(activity, new RequestChangeEmailTaskCompleteListener(changeEmailRequest));
+                new HamPayDialog(activity).showFailChnageEmail(requestChangeEmail, changeEmailRequest,
+                        Constants.LOCAL_ERROR_CODE,
+                        activity.getString(R.string.msg_gail_change_email));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Change Email User")
+                        .setAction("Change")
+                        .setLabel("Fail(Mobile)")
+                        .build());
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
+    }
+
 
 }

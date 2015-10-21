@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -25,6 +27,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.BankListRequest;
@@ -38,6 +41,7 @@ import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestBankList;
 import xyz.homapay.hampay.mobile.android.async.RequestRegistrationEntry;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.component.edittext.EmailTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
@@ -46,12 +50,10 @@ import xyz.homapay.hampay.mobile.android.location.BestLocationProvider;
 import xyz.homapay.hampay.mobile.android.util.AESHelper;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
+import xyz.homapay.hampay.mobile.android.util.EmailVerification;
 import xyz.homapay.hampay.mobile.android.util.NationalCodeVerification;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
-
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 
 public class ProfileEntryActivity extends Activity {
 
@@ -76,6 +78,11 @@ public class ProfileEntryActivity extends Activity {
     ImageView accountNumberIcon;
     FacedTextView selectedBankTitle;
     String selectedBankCode;
+
+    FacedEditText emailValue;
+    ImageView emailIcon;
+    boolean emailIsValid = false;
+    CheckBox email_confirm_check;
 
     Context context;
 
@@ -196,13 +203,12 @@ public class ProfileEntryActivity extends Activity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
 
-                if (!hasFocus){
+                if (!hasFocus) {
                     if (cellNumberValue.getText().toString().length() == 11
-                            && cellNumberValue.getText().toString().startsWith("۰۹")){
+                            && cellNumberValue.getText().toString().startsWith("۰۹")) {
                         cellNumberIcon.setImageResource(R.drawable.right_icon);
                         cellNumberIsValid = true;
-                    }
-                    else {
+                    } else {
                         cellNumberIcon.setImageResource(R.drawable.false_icon);
                         cellNumberIsValid = false;
                     }
@@ -215,7 +221,8 @@ public class ProfileEntryActivity extends Activity {
         nationalCodeIcon = (ImageView)findViewById(R.id.nationalCodeIcon);
         nationalCodeValue.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -227,19 +234,19 @@ public class ProfileEntryActivity extends Activity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) { }
+            public void afterTextChanged(Editable s) {
+            }
         });
 
         nationalCodeValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus){
+                if (!hasFocus) {
 
-                    if (new NationalCodeVerification(nationalCodeValue.getText().toString()).isValidCode()){
+                    if (new NationalCodeVerification(nationalCodeValue.getText().toString()).isValidCode()) {
                         nationalCodeIcon.setImageResource(R.drawable.right_icon);
                         nationalCodeIsValid = true;
-                    }
-                    else {
+                    } else {
                         nationalCodeIcon.setImageResource(R.drawable.false_icon);
                         nationalCodeIsValid = false;
                     }
@@ -253,27 +260,27 @@ public class ProfileEntryActivity extends Activity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
 
-                if (!hasFocus){
+                if (!hasFocus) {
 
                     accountNumberIsValid = true;
 
                     String splitedFormat[] = accountNumberFormat.split("/");
                     String splitedAccountNo[] = accountNumberValue.getText().toString().split("/");
 
-                    if (splitedAccountNo.length != splitedFormat.length){
+                    if (splitedAccountNo.length != splitedFormat.length) {
                         accountNumberIsValid = false;
 
-                    }else{
-                        for (int i = 0; i < splitedAccountNo.length; i++){
-                            if (splitedAccountNo[i].length() != splitedFormat[i].length()){
+                    } else {
+                        for (int i = 0; i < splitedAccountNo.length; i++) {
+                            if (splitedAccountNo[i].length() != splitedFormat[i].length()) {
                                 accountNumberIsValid = false;
                             }
                         }
                     }
 
-                    if (accountNumberIsValid){
+                    if (accountNumberIsValid) {
                         accountNumberIcon.setImageResource(R.drawable.right_icon);
-                    }else {
+                    } else {
                         accountNumberIcon.setImageResource(R.drawable.false_icon);
                     }
                 }
@@ -314,6 +321,7 @@ public class ProfileEntryActivity extends Activity {
                 }
                 accountNumberValue.addTextChangedListener(this);
             }
+
             @Override
             public void afterTextChanged(Editable s) {
                 accountNumberValue.removeTextChangedListener(this);
@@ -345,6 +353,27 @@ public class ProfileEntryActivity extends Activity {
             }
         });
 
+
+        emailValue = (FacedEditText)findViewById(R.id.emailValue);
+        email_confirm_check = (CheckBox)findViewById(R.id.email_confirm_check);
+        emailIcon = (ImageView)findViewById(R.id.emailIcon);
+        email_confirm_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    if (!new EmailVerification().isValid(emailValue.getText().toString())) {
+                        email_confirm_check.setChecked(false);
+                    }else {
+                        emailIsValid = true;
+                    }
+                }
+            }
+        });
+        emailValue.addTextChangedListener(new EmailTextWatcher(emailValue, emailIcon, email_confirm_check));
+        emailValue.setText(new DeviceInfo(context).getDeviceEmailAccount());
+
+
+
         hamPayDialog.showWaitingdDialog("");
         bankListRequest = new BankListRequest();
         requestBankList = new RequestBankList(this, new RequestBanksTaskCompleteListener(false));
@@ -366,6 +395,13 @@ public class ProfileEntryActivity extends Activity {
                 nationalCodeValue.clearFocus();
                 accountNumberValue.clearFocus();
 
+                if (email_confirm_check.isChecked()){
+                    if (!emailIsValid){
+                        Toast.makeText(context, getString(R.string.msg_email_invalid), Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+
                 if (cellNumberIsValid && nationalCodeIsValid && accountNumberIsValid
                         && cellNumberValue.getText().toString().length() > 0
                         && nationalCodeValue.getText().toString().length() > 0
@@ -378,6 +414,7 @@ public class ProfileEntryActivity extends Activity {
                     registrationEntryRequest.setCellNumber(new PersianEnglishDigit(cellNumberValue.getText().toString()).P2E());
                     registrationEntryRequest.setAccountNumber(new PersianEnglishDigit(accountNumberValue.getText().toString()).P2E());
                     registrationEntryRequest.setBankCode(selectedBankCode);
+                    registrationEntryRequest.setEmail(emailValue.getText().toString());
                     registrationEntryRequest.setNationalCode(new PersianEnglishDigit(nationalCodeValue.getText().toString()).P2E());
 
                     requestRegistrationEntry = new RequestRegistrationEntry(context,
@@ -528,12 +565,13 @@ public class ProfileEntryActivity extends Activity {
             if (registrationEntryResponse != null) {
 
                 if (registrationEntryResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    editor.putString(Constants.REGISTERED_CELL_NUMBER, new PersianEnglishDigit(cellNumberValue.getText().toString()).P2E());
+//                    editor.putString(Constants.REGISTERED_CELL_NUMBER, new PersianEnglishDigit(cellNumberValue.getText().toString()).P2E());
                     editor.putString(Constants.REGISTERED_BANK_ID, selectedBankCode);
                     editor.putString(Constants.REGISTERED_BANK_ACCOUNT_NO_FORMAT, accountNumberFormat);
                     editor.putString(Constants.REGISTERED_ACCOUNT_NO, accountNumberValue.getText().toString());
                     editor.putString(Constants.REGISTERED_NATIONAL_CODE, new PersianEnglishDigit(nationalCodeValue.getText().toString()).P2E());
                     editor.putString(Constants.REGISTERED_USER_ID_TOKEN, registrationEntryResponse.getService().getUserIdToken());
+                    editor.putString(Constants.REGISTERED_USER_EMAIL, emailValue.getText().toString());
                     editor.commit();
 
                     Intent intent = new Intent();

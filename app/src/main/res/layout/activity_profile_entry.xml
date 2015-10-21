@@ -9,7 +9,8 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="60dp"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimary"
+        android:visibility="gone">
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
             geekui:customTypeface="fonts/iran_sans.ttf"
@@ -236,7 +237,8 @@
                         android:layout_width="fill_parent"
                         android:layout_height="74dp"
                         android:gravity="right|center_vertical"
-                        android:background="@drawable/stroke_bg">
+                        android:background="@drawable/stroke_bg"
+                        android:visibility="gone">
 
                         <xyz.homapay.hampay.mobile.android.component.FacedTextView
                             geekui:customTypeface="fonts/iran_sans.ttf"
@@ -407,6 +409,44 @@
 
                         <ImageView
                             android:id="@+id/nationalCodeIcon"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="12dp"/>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/entry_field_bg"
+                        android:layout_marginTop="6dp">
+
+                        <CheckBox
+                            android:id="@+id/email_confirm_check"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_margin="4dp"
+                            />
+
+                        <xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText
+                            android:id="@+id/emailValue"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:background="@android:color/transparent"
+                            android:layout_marginLeft="48dp"
+                            android:layout_marginRight="34dp"
+                            android:textSize="15dp"
+                            android:inputType="textEmailAddress"
+                            android:hint="@string/email"
+                            android:textColor="@android:color/black"
+                            android:gravity="center_vertical"
+                            android:padding="8dp"/>
+
+                        <ImageView
+                            android:id="@+id/emailIcon"
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_centerVertical="true"

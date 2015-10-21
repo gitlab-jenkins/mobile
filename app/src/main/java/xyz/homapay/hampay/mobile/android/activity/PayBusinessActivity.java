@@ -22,15 +22,13 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestBusinessPaymentConfirm;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
-import xyz.homapay.hampay.mobile.android.component.edittext.CurrencyFormatter;
+import xyz.homapay.hampay.mobile.android.component.edittext.CurrencyFormatterTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
-import xyz.homapay.hampay.mobile.android.util.AESHelper;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
-import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
 
 public class PayBusinessActivity extends ActionBarActivity {
 
@@ -157,7 +155,7 @@ public class PayBusinessActivity extends ActionBarActivity {
         contact_message = (FacedEditText)findViewById(R.id.contact_message);
 
         credit_value = (FacedEditText)findViewById(R.id.credit_value);
-        credit_value.addTextChangedListener(new CurrencyFormatter(credit_value));
+        credit_value.addTextChangedListener(new CurrencyFormatterTextWatcher(credit_value));
         credit_value_icon = (ImageView)findViewById(R.id.credit_value_icon);
         credit_value.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override

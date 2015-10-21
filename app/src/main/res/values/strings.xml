@@ -1,7 +1,7 @@
 <resources>
 
-    <!--<string name="app_name">هم‌پی</string>-->
-    <string name="app_name">HamPay</string>
+    <string name="app_name">هم‌پی</string>
+    <!--<string name="app_name">HamPay</string>-->
 
     <string name="hampay_network">شبکه پرداخت هم‌پی </string>
 
@@ -83,6 +83,7 @@
     <string name="msg_accountNo_invalid">شماره حساب خود را صحیح وارد کنید</string>
     <string name="msg_nationalCode_invalid">کد ملی خود را صحیح وارد کنید</string>
     <string name="msg_family_invalid">نام و نام خانوادگی خود را صحیح وارد کنید</string>
+    <string name="msg_email_invalid">ایمیل خود را صحیح وارد کنید</string>
 
 
 
@@ -208,6 +209,7 @@
     <string name="name_family">نام و نام خانوادگی</string>
     <string name="account_id">شماره حساب</string>
     <string name="iter_code">کد ملی</string>
+    <string name="email">ایمیل</string>
     <string name="correct_data">اطلاعات بالا صحیح است</string>
     <string name="correct_info">تصحیح اطلاعات</string>
     <string name="verify_account_no">بررسی شماره حساب</string>
@@ -258,6 +260,7 @@
         <item>تغییر رمز عبور</item>
         <item>تغییر کلمه یادآوری</item>
         <item>لغو عضویت</item>
+        <item>تغییر ایمیل</item>
     </string-array>
 
     <string name="change_password">تغییر رمز عبور</string>
@@ -273,6 +276,8 @@
         <item>دریافت کلمه یادآوری</item>
         <item>جزییات حساب</item>
         <item>حساب محدود</item>
+        <item>ورود</item>
+        <item>تراکنش</item>
         <item>لغو عضویت</item>
         <item>پرداخت به فرد</item>
         <item>پرداخت به کسب و کار</item>
@@ -349,7 +354,12 @@
     <string name="unlink_disconfirm">منصرف شدم</string>
     <string name="unlink_current_password">لطفا رمز عبور خود را برای لغو عضویت وارد نمایید.</string>
 
+    <string name="change_email">تغییر ایمیل</string>
+    <string name="change_email_text">لطفا رمز عبور خود را برای تغییر ایمیل وارد نمایید.</string>
 
+
+    <string name="msg_found_illegal_app">کاربر گرامی به دلیل بهبود امنیت شما، قبل از استفاده از هم‌پی نیاز به حذف یا غیرفعالسازی اپلیکیشن فوق هستیم.</string>
+    <string name="msg_fail_illegal_app_list">اطلاعاتی از سامانه هم‌پی دریافت نشد، لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_fetch_bank_list">لیست بانک‌ها دریافت نشد.</string>
     <string name="msg_fail_registration_entry">ثبت اطلاعات شخصی شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="mgs_fail_registration_send_sms_token">درخواست پیامک فعالسازی با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
@@ -378,6 +388,7 @@
     <string name="msg_fail_change_pass_code">تغییر رمز عبور با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_change_memorable_word">تغییر کلمه یادآوری با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_unlink_user">درخواست لغو اشتراک شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
+    <string name="msg_gail_change_email">درخواست تغییر ایمیل شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_server_key">دریافت کلید امنیتی با مشکل مواجه شد، لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_payment_permission">نوع حساب شما %1$s می باشد و برای پرداخت می بایستی به نوع عادی تبدیل شود.
     \n اما شما کماکان میتونید از اعضای عادی هم‌پی پول دریافت کنید.
