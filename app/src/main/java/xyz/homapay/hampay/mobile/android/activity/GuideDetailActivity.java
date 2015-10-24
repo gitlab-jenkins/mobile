@@ -29,6 +29,7 @@ public class GuideDetailActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guide_detail);
 
+
         bundle = getIntent().getExtras();
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
