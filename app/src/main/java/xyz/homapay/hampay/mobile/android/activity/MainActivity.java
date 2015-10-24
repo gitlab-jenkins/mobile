@@ -254,6 +254,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
                         title = getString(R.string.title_pay_to_one);
                         currentFragmet = 2;
                         break;
+
                 }
 
                 setupActionnBar(currentFragmet);
