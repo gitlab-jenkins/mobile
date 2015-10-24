@@ -35,6 +35,7 @@ public class HamPayApplication extends Application {
 
     private static HamPayApplication mInstance;
 
+
     @Override
     public void onCreate()
     {
