@@ -3,7 +3,7 @@ package xyz.homapay.hampay.mobile.android.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import xyz.homapay.hampay.mobile.android.R;
@@ -13,7 +13,7 @@ import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
-public class ChangeMemorableActivity extends ActionBarActivity {
+public class ChangeMemorableActivity extends AppCompatActivity {
 
     ButtonRectangle keepOn_button;
     SharedPreferences prefs;

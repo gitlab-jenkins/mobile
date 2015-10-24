@@ -2,14 +2,14 @@ package xyz.homapay.hampay.mobile.android.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 
-public class CongratsAccountActivity extends ActionBarActivity {
+public class CongratsAccountActivity extends AppCompatActivity {
 
     ButtonRectangle keepOn_button;
 

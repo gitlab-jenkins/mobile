@@ -3,7 +3,7 @@ package xyz.homapay.hampay.mobile.android.activity;
 import android.content.SharedPreferences;
 import android.net.http.SslError;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -13,7 +13,7 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
-public class GuideDetailActivity extends ActionBarActivity {
+public class GuideDetailActivity extends AppCompatActivity {
 
     WebView guide_webview;
     Bundle bundle;

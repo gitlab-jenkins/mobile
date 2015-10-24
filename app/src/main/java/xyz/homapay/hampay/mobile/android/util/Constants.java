@@ -12,11 +12,11 @@ public class Constants {
     public static final String OPENAM_LOGIN_URL = "http://"+ SERVER_IP + ":8080/openam/json/authenticate";
     public static final String OPENAM_LOGOUT_URL = "http://" + SERVER_IP + ":8080/openam/json/sessions/?_action=logout";
 
-//        public static final String HTTPS_SERVER_IP = "https://192.168.1.102" + URL_PREFIX; //Sima Server
-    public static String HTTPS_SERVER_IP = "https://176.58.104.158" + URL_PREFIX;//England Server
+        public static final String HTTPS_SERVER_IP = "https://192.168.1.102" + URL_PREFIX; //Sima Server
+//    public static String HTTPS_SERVER_IP = "https://176.58.104.158" + URL_PREFIX;//England Server
 //        public static String HTTPS_SERVER_IP = "https://mobile.tejaratbourse.com" + URL_PREFIX;//Tejarat bourse Server
-    public static final String HTTPS_OPENAM_LOGIN_URL = HTTPS_SERVER_IP + "/auth";
-    public static final String HTTPSOPENAM_LOGOUT_URL = HTTPS_SERVER_IP + "/unauth";
+    public static final String HTTPS_OPENAM_LOGIN_URL = /*HTTPS_SERVER_IP*/ "https://176.58.104.158" + URL_PREFIX + "/auth";
+    public static final String HTTPSOPENAM_LOGOUT_URL = /*HTTPS_SERVER_IP*/ "https://176.58.104.158" + URL_PREFIX + "/unauth";
 
     public static final String WEB_PAGE_ADDRESS = "web_page_address";
 
