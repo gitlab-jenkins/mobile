@@ -56,6 +56,10 @@ public class RequestLogin extends AsyncTask<LoginData, Void, String> {
                     resultLogin = loginStream.failLogin();
                     break;
 
+                case 502:
+                    resultLogin = loginStream.failLogin();
+                    break;
+
             }
         } catch (Exception e) {
             e.printStackTrace();

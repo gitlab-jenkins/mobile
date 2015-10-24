@@ -299,7 +299,7 @@ public class AppSliderActivity extends ActionBarActivity {
                         try {
                             launchAppCount = prefs.getLong(Constants.LAUNCH_APP_COUNT, 0);
                             editor.putLong(Constants.LAUNCH_APP_COUNT, launchAppCount + 1).commit();
-                            if ((launchAppCount % 2) == 0 || prefs.getBoolean(Constants.FORCE_FETCH_ILLEGAL_APPS, false)) {
+                            if ((launchAppCount % 10) == 0 || prefs.getBoolean(Constants.FORCE_FETCH_ILLEGAL_APPS, false)) {
                                 illegalAppListRequest = new IllegalAppListRequest();
                                 requestIllegalAppList = new RequestIllegalAppList(activity, new RequestIllegalAppListTaskCompleteListener());
                                 requestIllegalAppList.execute(illegalAppListRequest);

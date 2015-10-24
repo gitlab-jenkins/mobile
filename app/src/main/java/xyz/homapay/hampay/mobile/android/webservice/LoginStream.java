@@ -1,6 +1,7 @@
 package xyz.homapay.hampay.mobile.android.webservice;
 
 import android.content.Context;
+import android.util.Log;
 
 import xyz.homapay.hampay.mobile.android.model.LoginData;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -55,6 +56,7 @@ public class LoginStream {
             output.flush();
             output.close();
         } catch (Exception e) {
+            Log.e("Fail", "Login Failed.");
         }
 
         return connection.getResponseCode();
