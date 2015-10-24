@@ -5,6 +5,9 @@
         <!-- Customize your theme here. -->
     </style>
 
+
+
+
     <style name="MyMaterialTheme" parent="MyMaterialTheme.Base">
 
     </style>
@@ -22,6 +25,8 @@
         <item name="android:layout_margin">0dp</item>
         <item name="android:padding">0dp</item>
         <item name="android:windowNoTitle">true</item>
+
+
     </style>
 
 
@@ -159,6 +164,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
         <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
 
