@@ -350,6 +350,7 @@ public class MainActivity extends ActionBarActivity implements FragmentDrawer.Fr
         if (file.exists()){
             Picasso.with(this).invalidate(file);
             Picasso.with(this).load(file).into(image_profile);
+
         }
 
 //        String URL = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
