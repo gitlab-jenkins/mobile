@@ -8,7 +8,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -40,7 +40,7 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 
 
-public class AppSliderActivity extends ActionBarActivity {
+public class AppSliderActivity extends AppCompatActivity {
 
     private ViewPager sliding_into_app;
     private ButtonRectangle register_button;

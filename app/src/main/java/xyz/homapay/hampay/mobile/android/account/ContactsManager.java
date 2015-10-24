@@ -13,7 +13,7 @@ import android.content.Context;
 import android.content.Entity;
 import android.database.Cursor;
 import android.net.Uri;
-import android.provider.Contacts;
+//import android.provider.Contacts;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Im;
