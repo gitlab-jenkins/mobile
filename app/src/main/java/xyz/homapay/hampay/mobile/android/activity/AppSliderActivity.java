@@ -454,6 +454,8 @@ public class AppSliderActivity extends AppCompatActivity {
                 } catch (IOException ex) {
                     msg = "Error :" + ex.getMessage();
 
+                }catch (NullPointerException ex){
+                    msg = "Error :" + ex.getMessage();
                 }
                 return msg;
             }

@@ -19,6 +19,7 @@ import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.UnlinkUserRequest;
 import xyz.homapay.hampay.common.core.model.response.UnlinkUserResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
+import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
@@ -71,6 +72,7 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
 
     Tracker hamPayGaTracker;
 
+    DatabaseHelper databaseHelper;
 
     public void contactUs(View view){
         new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/user-unlink.html");
@@ -81,6 +83,8 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_unlink_user_pass);
+
+        databaseHelper = new DatabaseHelper(this);
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
@@ -311,6 +315,8 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
                 if (unlinkUserResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     editor.clear().commit();
                     editor.commit();
+
+                    databaseHelper.deleteAllDataBase();
 
                     Intent intent = new Intent();
                     intent.setClass(getApplicationContext(), AppSliderActivity.class);

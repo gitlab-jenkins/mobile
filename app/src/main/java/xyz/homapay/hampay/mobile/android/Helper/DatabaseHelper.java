@@ -80,8 +80,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     DeviceInfo deviceInfo;
 
+    Context context;
+
+    public DatabaseHelper(Context context){
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+
+        this.context = context;
+    }
+
     public DatabaseHelper(Context context, String serverKey) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+
+        this.context = context;
 
         prefs =  context.getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
         deviceInfo = new DeviceInfo(context);
@@ -158,6 +168,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void deleteEnabledHamPays() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_ENABLED_HAMPAY, null, null);
+    }
+
+    public void deleteAllDataBase(){
+        context.deleteDatabase(DATABASE_NAME);
     }
 
 

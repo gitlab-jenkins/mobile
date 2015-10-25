@@ -27,6 +27,7 @@
     <string name="nav_item_contacts_us">تماس با ما</string>
     <string name="nav_item_help">راهنما</string>
     <string name="nav_item_about">درباره ما</string>
+    <string name="nav_item_rate">امتیاز دهی</string>
     <string name="nav_item_exit">خروج</string>
 
     <string name="transaction_to">به: </string>
@@ -48,6 +49,7 @@
         <item>@string/nav_item_contacts_us</item>
         <item>@string/nav_item_help</item>
         <item>@string/nav_item_about</item>
+        <item>@string/nav_item_rate</item>
         <item>@string/nav_item_exit</item>
     </string-array>
 
@@ -433,5 +435,6 @@
         \n-
         \n-
     </string>
+    <string name="title_activity_tc">TCActivity</string>
 
 </resources>

@@ -4,9 +4,11 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -389,7 +391,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     @Override
     public void onDrawerItemSelected(View view, int position) {
-        if (currentFragmet != position || position == 1 || position == 5 || position == 7 || position == 8) {
+        if (currentFragmet != position || position == 1 || position == 5 || position == 7 || position == 8 || position == 9 || position == 10) {
             currentFragmet = position;
             displayView(position);
         }
@@ -435,6 +437,20 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 title = getString(R.string.title_about);
                 break;
             case 8:
+                Uri uri = Uri.parse("http://play.google.com/store/apps/details?id=" + context.getPackageName());
+                Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+                goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                try {
+                    startActivity(goToMarket);
+                } catch (ActivityNotFoundException e) {
+                    startActivity(new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("market://details?id=بب" + context.getPackageName())));
+                }
+                break;
+            case 9:
+                break;
+            case 10:
                 LogoutData logoutData = new LogoutData();
                 logoutData.setIplanetDirectoryPro(prefs.getString(Constants.TOKEN_ID, null));
                 new HamPayDialog(activity).showExitDialog(logoutData);
@@ -608,6 +624,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 } catch (IOException ex) {
                     msg = "Error :" + ex.getMessage();
 
+                }catch (NullPointerException ex){
+                    msg = "Error :" + ex.getMessage();
                 }
                 return regid;
             }
