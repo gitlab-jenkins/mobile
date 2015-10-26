@@ -53,6 +53,7 @@ import xyz.homapay.hampay.mobile.android.fragment.GuideFragment;
 import xyz.homapay.hampay.mobile.android.fragment.PayToBusinessFragment;
 import xyz.homapay.hampay.mobile.android.fragment.PayToOneFragment;
 import xyz.homapay.hampay.mobile.android.fragment.SettingFragment;
+import xyz.homapay.hampay.mobile.android.fragment.TCFragment;
 import xyz.homapay.hampay.mobile.android.fragment.UserTransactionFragment;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -449,6 +450,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 }
                 break;
             case 9:
+                fragment = new TCFragment();
+                title = getString(R.string.title_alredy_tc);
                 break;
             case 10:
                 LogoutData logoutData = new LogoutData();

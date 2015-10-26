@@ -574,10 +574,10 @@ public class HamPayDialog {
         FacedTextView tac_accept = (FacedTextView) view.findViewById(R.id.tac_accept);
         FacedTextView tac_reject = (FacedTextView) view.findViewById(R.id.tac_reject);
 
-        Pattern p = Pattern.compile(Constants.WEB_URL_REGEX);
-        Matcher m = p.matcher(accept_term);
-        while (m.find()) {
-            final String urlStr = m.group();
+        Pattern pattern = Pattern.compile(Constants.WEB_URL_REGEX);
+        Matcher matcher = pattern.matcher(accept_term);
+        while (matcher.find()) {
+            final String urlStr = matcher.group();
 
             Spannable WordtoSpan = new SpannableString(accept_term);
 
