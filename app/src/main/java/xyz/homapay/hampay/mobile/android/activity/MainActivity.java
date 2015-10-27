@@ -52,6 +52,7 @@ import xyz.homapay.hampay.mobile.android.fragment.FragmentDrawer;
 import xyz.homapay.hampay.mobile.android.fragment.GuideFragment;
 import xyz.homapay.hampay.mobile.android.fragment.PayToBusinessFragment;
 import xyz.homapay.hampay.mobile.android.fragment.PayToOneFragment;
+import xyz.homapay.hampay.mobile.android.fragment.PrivacyFragment;
 import xyz.homapay.hampay.mobile.android.fragment.SettingFragment;
 import xyz.homapay.hampay.mobile.android.fragment.TCFragment;
 import xyz.homapay.hampay.mobile.android.fragment.UserTransactionFragment;
@@ -392,7 +393,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     @Override
     public void onDrawerItemSelected(View view, int position) {
-        if (currentFragmet != position || position == 1 || position == 5 || position == 7 || position == 8 || position == 9 || position == 10) {
+        if (currentFragmet != position || position == 1 || position == 5 || position == 7 || position == 8 || position == 9 || position == 10 || position == 11) {
             currentFragmet = position;
             displayView(position);
         }
@@ -446,14 +447,18 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     startActivity(goToMarket);
                 } catch (ActivityNotFoundException e) {
                     startActivity(new Intent(Intent.ACTION_VIEW,
-                            Uri.parse("market://details?id=بب" + context.getPackageName())));
+                            Uri.parse("market://details?id=" + context.getPackageName())));
                 }
                 break;
             case 9:
                 fragment = new TCFragment();
-                title = getString(R.string.title_alredy_tc);
+                title = getString(R.string.title_already_tc);
                 break;
             case 10:
+                fragment = new PrivacyFragment();
+                title = getString(R.string.title_already_privacy);
+                break;
+            case 11:
                 LogoutData logoutData = new LogoutData();
                 logoutData.setIplanetDirectoryPro(prefs.getString(Constants.TOKEN_ID, null));
                 new HamPayDialog(activity).showExitDialog(logoutData);

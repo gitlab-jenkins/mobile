@@ -48,6 +48,7 @@ public class FragmentDrawer extends Fragment {
             R.drawable.ic_about_us,
             R.drawable.ic_about_us,
             R.drawable.ic_about_us,
+            R.drawable.ic_about_us,
             R.drawable.exit
     };
     private FragmentDrawerListener drawerListener;

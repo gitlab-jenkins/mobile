@@ -81,6 +81,7 @@ import xyz.homapay.hampay.mobile.android.activity.ChangeUserImageActivity;
 import xyz.homapay.hampay.mobile.android.activity.GuideDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.activity.MainActivity;
+import xyz.homapay.hampay.mobile.android.activity.PostStartActivity;
 import xyz.homapay.hampay.mobile.android.activity.StartActivity;
 import xyz.homapay.hampay.mobile.android.activity.UnlinkPassActivity;
 import xyz.homapay.hampay.mobile.android.analytics.GaAnalyticsEvent;
@@ -208,6 +209,79 @@ public class HamPayDialog {
         dialog.setContentView(view);
         dialog.setTitle(null);
         dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
+    public void showTcPrivacyDialog(){
+
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_tc_privacy, null);
+
+        FacedTextView tc_privacy_text = (FacedTextView) view.findViewById(R.id.tc_privacy_text);
+
+        Spannable tcPrivacySpannable = new SpannableString(activity.getString(R.string.tc_privacy_text));
+        ClickableSpan tcClickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                Intent intent = new Intent();
+                intent.setClass(activity, GuideDetailActivity.class);
+                intent.putExtra(Constants.WEB_PAGE_ADDRESS, "https://192.168.1.102/hampay/users/tac-file");
+                activity.startActivity(intent);
+            }
+        };
+        tcPrivacySpannable.setSpan(tcClickableSpan, 3, 35, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tc_privacy_text.setText(tcPrivacySpannable);
+        tc_privacy_text.setMovementMethod(LinkMovementMethod.getInstance());
+        ClickableSpan privacySpan = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                Intent intent = new Intent();
+                intent.setClass(activity, GuideDetailActivity.class);
+                intent.putExtra(Constants.WEB_PAGE_ADDRESS, "https://192.168.1.102/hampay/users/tac-file");
+                activity.startActivity(intent);
+            }
+        };
+
+        tcPrivacySpannable.setSpan(privacySpan, 38, 59, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tc_privacy_text.setText(tcPrivacySpannable);
+        tc_privacy_text.setMovementMethod(LinkMovementMethod.getInstance());
+
+
+        FacedTextView tc_privacy_confirm = (FacedTextView) view.findViewById(R.id.tc_privacy_confirm);
+        tc_privacy_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(activity, PostStartActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                activity.finish();
+                activity.startActivity(intent);
+            }
+        });
+
+
+        FacedTextView tc_privacy_disconfirm = (FacedTextView) view.findViewById(R.id.tc_privacy_disconfirm);
+
+        tc_privacy_disconfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                activity.finish();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(true);
+
         dialog.show();
     }
 

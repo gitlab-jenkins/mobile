@@ -171,44 +171,6 @@
             </LinearLayout>
         </LinearLayout>
 
-
-        <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            android:id="@+id/tc_privacy_text"
-            geekui:customTypeface="fonts/iran_sans.ttf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/normal_text"
-            android:textSize="13dp"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:text="@string/tc_privacy_text"
-            android:layout_marginTop="8dp"/>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical|right"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="8dp">
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/iran_sans.ttf"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/normal_text"
-                android:textSize="15dp"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:text="@string/tc_privacy_confirm_text" />
-
-            <CheckBox
-                android:id="@+id/tc_privacy_confirm"
-                android:layout_width="32dp"
-                android:layout_height="32dp" />
-
-        </LinearLayout>
-
     </LinearLayout>
 
 
@@ -229,8 +191,7 @@
             android:layout_height="fill_parent"
             android:layout_centerHorizontal="true"
             android:background="@color/register_btn_color"
-            android:textSize="16dp"
-            android:enabled="false"/>
+            android:textSize="16dp" />
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
             geekui:customTypeface="fonts/iran_sans.ttf"

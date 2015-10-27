@@ -28,9 +28,6 @@ public class StartActivity extends Activity {
     Activity activity;
     SharedPreferences.Editor editor;
 
-    FacedTextView tc_privacy_text;
-    CheckBox tc_privacy_confirm;
-
 //    ProgressView waitingProgress;
 
     @Override
@@ -42,41 +39,6 @@ public class StartActivity extends Activity {
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
-        tc_privacy_text = (FacedTextView)findViewById(R.id.tc_privacy_text);
-        tc_privacy_confirm = (CheckBox)findViewById(R.id.tc_privacy_confirm);
-
-        Spannable tcPrivacySpannable = new SpannableString(getString(R.string.tc_privacy_text));
-
-        ClickableSpan tcClickableSpan = new ClickableSpan() {
-            @Override
-            public void onClick(View textView) {
-                Intent intent = new Intent();
-                intent.setClass(StartActivity.this, GuideDetailActivity.class);
-                intent.putExtra(Constants.WEB_PAGE_ADDRESS, "https://192.168.1.102/hampay/users/tac-file");
-                startActivity(intent);
-            }
-        };
-
-        tcPrivacySpannable.setSpan(tcClickableSpan, 3, 35, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        tc_privacy_text.setText(tcPrivacySpannable);
-        tc_privacy_text.setMovementMethod(LinkMovementMethod.getInstance());
-
-
-
-        ClickableSpan privacySpan = new ClickableSpan() {
-            @Override
-            public void onClick(View textView) {
-                Intent intent = new Intent();
-                intent.setClass(StartActivity.this, GuideDetailActivity.class);
-                intent.putExtra(Constants.WEB_PAGE_ADDRESS, "https://192.168.1.102/hampay/users/tac-file");
-                startActivity(intent);
-            }
-        };
-
-        tcPrivacySpannable.setSpan(privacySpan, 38, 59, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        tc_privacy_text.setText(tcPrivacySpannable);
-        tc_privacy_text.setMovementMethod(LinkMovementMethod.getInstance());
-
 
 //        waitingProgress = (ProgressView)findViewById(R.id.waitingProgress);
 //        waitingProgress.start();
@@ -85,23 +47,7 @@ public class StartActivity extends Activity {
         start_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(StartActivity.this, PostStartActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                finish();
-                startActivity(intent);
-            }
-        });
-
-        start_button.setEnabled(false);
-        tc_privacy_confirm.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    start_button.setEnabled(true);
-                }else {
-                    start_button.setEnabled(false);
-                }
+                new HamPayDialog(StartActivity.this).showTcPrivacyDialog();
             }
         });
     }
