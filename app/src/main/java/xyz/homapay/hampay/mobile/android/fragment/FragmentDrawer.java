@@ -46,9 +46,9 @@ public class FragmentDrawer extends Fragment {
             R.drawable.contact_us,
             R.drawable.help,
             R.drawable.ic_about_us,
-            R.drawable.ic_about_us,
-            R.drawable.ic_about_us,
-            R.drawable.ic_about_us,
+            R.drawable.ic_rate,
+            R.drawable.tac_ic,
+            R.drawable.privacy_icon,
             R.drawable.exit
     };
     private FragmentDrawerListener drawerListener;
