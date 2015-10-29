@@ -295,7 +295,8 @@
                             android:maxLength="11"
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
-                            android:padding="8dp"/>
+                            android:padding="8dp"
+                            android:contentDescription="phone"/>
 
                         <ImageView
                             android:id="@+id/cellNumberIcon"
@@ -333,7 +334,8 @@
                         android:layout_width="fill_parent"
                         android:layout_height="48dp"
                         android:background="@drawable/entry_field_bg"
-                        android:layout_marginTop="6dp">
+                        android:layout_marginTop="6dp"
+                        android:contentDescription="bank_selection">
 
                         <xyz.homapay.hampay.mobile.android.component.FacedTextView
                             android:id="@+id/selectedBankText"
@@ -375,7 +377,8 @@
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
                             android:padding="8dp"
-                            android:focusable="false"/>
+                            android:focusable="false"
+                            android:contentDescription="account"/>
 
                         <ImageView
                             android:id="@+id/accountNumberIcon"
@@ -405,7 +408,8 @@
                             android:maxLength="10"
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
-                            android:padding="8dp"/>
+                            android:padding="8dp"
+                            android:contentDescription="national"/>
 
                         <ImageView
                             android:id="@+id/nationalCodeIcon"
@@ -443,7 +447,8 @@
                             android:hint="@string/email"
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
-                            android:padding="8dp"/>
+                            android:padding="8dp"
+                            android:contentDescription="email"/>
 
                         <ImageView
                             android:id="@+id/emailIcon"
@@ -469,7 +474,8 @@
                             android:layout_height="fill_parent"
                             android:layout_centerHorizontal="true"
                             android:background="@color/register_btn_color"
-                            android:textSize="16dp" />
+                            android:textSize="16dp"
+                            android:contentDescription="keep_on"/>
 
                         <xyz.homapay.hampay.mobile.android.component.FacedTextView
                             geekui:customTypeface="fonts/iran_sans.ttf"

@@ -1,7 +1,7 @@
 <resources>
 
-    <string name="app_name">هم‌پی</string>
-    <!--<string name="app_name">HamPay</string>-->
+    <!--<string name="app_name">هم‌پی</string>-->
+    <string name="app_name">hampay</string>
 
     <string name="hampay_network">شبکه پرداخت هم‌پی </string>
 

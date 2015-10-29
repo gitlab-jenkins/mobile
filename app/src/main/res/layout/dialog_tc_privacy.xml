@@ -44,7 +44,8 @@
             android:textColor="@color/register_btn_color"
             android:textSize="14dp"
             android:text="@string/tc_privacy_confirm"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentRight="true"
+            android:contentDescription="confirm"/>
 
     </RelativeLayout>
 

@@ -281,7 +281,8 @@
                 android:layout_height="50dp"
                 android:orientation="horizontal"
                 android:gravity="center"
-                android:layout_marginTop="18dp">
+                android:layout_marginTop="18dp"
+                android:contentDescription="activation_holder">
 
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
@@ -362,7 +363,8 @@
                     android:layout_height="fill_parent"
                     android:layout_centerHorizontal="true"
                     android:background="@color/register_btn_color"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"
+                    android:contentDescription="verify"/>
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     geekui:customTypeface="fonts/iran_sans.ttf"

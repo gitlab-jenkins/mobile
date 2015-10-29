@@ -117,6 +117,8 @@ public class AppSliderActivity extends AppCompatActivity {
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
+        editor.clear().commit();
+
 //        launchAppCount = prefs.getLong(Constants.LAUNCH_APP_COUNT, 0);
 //        editor.putLong(Constants.LAUNCH_APP_COUNT, launchAppCount + 1).commit();
 //        launchAppCount = 0;

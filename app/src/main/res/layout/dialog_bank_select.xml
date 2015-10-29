@@ -12,7 +12,8 @@
     <ListView
         android:id="@+id/bankListView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:contentDescription="bank_list"/>
 
 
 </LinearLayout>
