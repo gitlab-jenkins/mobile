@@ -296,14 +296,6 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
         super.onUserInteraction();
     }
 
-//    @Override
-//    protected void onUserLeaveHint() {
-//        super.onUserLeaveHint();
-//        Log.e("EXIT", "onUserLeaveHint");
-//        editor.putString(Constants.USER_ID_TOKEN, "");
-//        editor.commit();
-//    }
-
 
     public class RequestLoginResponseTaskCompleteListener implements AsyncTaskCompleteListener<String>
     {
@@ -475,6 +467,8 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
 
         if (inputPassValue.length() == 5){
 
+            nationalCode = "testUser";
+
             try {
 
                 password = SecurityUtils.getInstance(this).
@@ -482,6 +476,8 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
                                 memorableWord,
                                 new DeviceInfo(context).getAndroidId(),
                                 installationToken);
+
+                password = "12345678";
 
             }catch (NoSuchAlgorithmException ex){}
             catch (UnsupportedEncodingException ex){}
@@ -495,7 +491,6 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
 
             requestLogin = new RequestLogin(context, new RequestLoginResponseTaskCompleteListener());
             requestLogin.execute(loginData);
-//            requestLogin.execute(loginData);
 
 
             inputPassValue = "";
@@ -563,93 +558,6 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
         }
 
     }
-
-
-//    public class RequestGetUserIdTokenResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationCredentialsResponse>>
-//    {
-//        public RequestGetUserIdTokenResponseTaskCompleteListener(){
-//        }
-//
-//        @Override
-//        public void onTaskComplete(ResponseMessage<RegistrationCredentialsResponse> registrationGetUserIdTokenResponseMessage) {
-//
-//            hamPayDialog.dismisWaitingDialog();
-//
-//            ResultStatus resultStatus;
-//
-//            if (registrationGetUserIdTokenResponseMessage != null) {
-//
-//                resultStatus = registrationGetUserIdTokenResponseMessage.getService().getResultStatus();
-//
-//                if (resultStatus == ResultStatus.SUCCESS) {
-//                    try {
-//                        mobileKey = SecurityUtils.getInstance(context).generateSHA_256(
-//                                deviceInfo.getMacAddress(),
-//                                deviceInfo.getIMEI(),
-//                                deviceInfo.getAndroidId());
-//                        serverKey = registrationGetUserIdTokenResponseMessage.getService().getUserIdToken();
-//                        encryptedData = AESHelper.encrypt(mobileKey, serverKey, memorable_value.getText().toString());
-//                        editor.putString(Constants.MEMORABLE_WORD, encryptedData);
-//                        encryptedData = AESHelper.encrypt(mobileKey, serverKey, Uuid);
-//                        editor.putString(Constants.UUID, encryptedData);
-//                        editor.commit();
-//                    }
-//                    catch (Exception ex){
-//                        Log.e("Error", ex.getStackTrace().toString());
-//                    }
-//
-//                    Intent intent = new Intent();
-//                    intent.setClass(HamPayLoginActivity.this, CompleteRegistrationActivity.class);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                    finish();
-//                    startActivity(intent);
-//
-//                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-//                            .setCategory("Registration Memorable Word Entry")
-//                            .setAction("Registration")
-//                            .setLabel("Success")
-//                            .build());
-//                }else if (registrationGetUserIdTokenResponseMessage.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
-//                    new HamPayDialog(activity).showInvalidStepDialog();
-//
-//                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-//                            .setCategory("Registration Memorable Word Entry")
-//                            .setAction("Registration")
-//                            .setLabel("Success(Invalid)")
-//                            .build());
-//                }
-//                else {
-//                    requestCredentialEntry = new RequestCredentialEntry(context, new RequestGetUserIdTokenResponseTaskCompleteListener());
-//                    new HamPayDialog(activity).showFailMemorableEntryDialog(requestCredentialEntry, registrationCredentialsRequest,
-//                            registrationGetUserIdTokenResponseMessage.getService().getResultStatus().getCode(),
-//                            registrationGetUserIdTokenResponseMessage.getService().getResultStatus().getDescription());
-//
-//                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-//                            .setCategory("Registration Memorable Word Entry")
-//                            .setAction("Registration")
-//                            .setLabel("Fail(Server)")
-//                            .build());
-//                }
-//            }else {
-//                requestCredentialEntry = new RequestCredentialEntry(context, new RequestGetUserIdTokenResponseTaskCompleteListener());
-//                new HamPayDialog(activity).showFailMemorableEntryDialog(requestCredentialEntry, registrationCredentialsRequest,
-//                        Constants.LOCAL_ERROR_CODE,
-//                        getString(R.string.msg_fail_memorable_entry));
-//
-//                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-//                        .setCategory("Registration Memorable Word Entry")
-//                        .setAction("Registration")
-//                        .setLabel("Fail(Mobile)")
-//                        .build());
-//            }
-//
-//        }
-//
-//        @Override
-//        public void onTaskPreRun() {
-//            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-//        }
-//    }
 
 
     @Override

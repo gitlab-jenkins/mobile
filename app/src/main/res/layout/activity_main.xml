@@ -32,7 +32,8 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:src="@drawable/line"
-                    android:padding="13dp"/>
+                    android:padding="13dp"
+                    android:contentDescription="menu"/>
 
             </xyz.homapay.hampay.mobile.android.component.material.RippleView>
 
@@ -66,7 +67,8 @@
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:src="@drawable/pay_ic_wit"
-                    android:layout_centerInParent="true"/>
+                    android:layout_centerInParent="true"
+                    android:contentDescription="submenu1"/>
 
                 </xyz.homapay.hampay.mobile.android.component.material.RippleView>
 
@@ -82,7 +84,8 @@
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:src="@drawable/businnes_ic_wit"
-                        android:layout_centerInParent="true"/>
+                        android:layout_centerInParent="true"
+                        android:contentDescription="submenu2"/>
 
                 </xyz.homapay.hampay.mobile.android.component.material.RippleView>
 

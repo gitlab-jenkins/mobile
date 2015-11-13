@@ -36,7 +36,8 @@
                 android:hint="@string/pay_one_search_hint"
                 android:singleLine="true"
                 android:layout_marginLeft="48dp"
-                android:imeOptions="actionSearch"/>
+                android:imeOptions="actionSearch"
+                android:contentDescription="search"/>
 
 
         </RelativeLayout>

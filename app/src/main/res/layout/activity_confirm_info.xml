@@ -301,7 +301,8 @@
                                 android:inputType="number"
                                 android:focusable="false"
                                 android:textColor="@android:color/black"
-                                android:gravity="center_vertical" />
+                                android:gravity="center_vertical"
+                                android:contentDescription="phone"/>
 
                         </LinearLayout>
 
@@ -473,7 +474,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="fill_parent"
                             android:gravity="center_vertical"
-                            android:layout_gravity="center_vertical">
+                            android:layout_gravity="center_vertical"
+                            android:contentDescription="confirm_check_ll">
 
                             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                                 geekui:customTypeface="fonts/iran_sans.ttf"
@@ -575,7 +577,8 @@
                                 android:layout_height="fill_parent"
                                 android:layout_centerHorizontal="true"
                                 android:background="@color/user_change_status"
-                                android:textSize="16dp" />
+                                android:textSize="16dp"
+                                android:contentDescription="keeOn_with_button"/>
 
                             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                                 geekui:customTypeface="fonts/iran_sans.ttf"

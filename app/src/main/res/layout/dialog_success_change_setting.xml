@@ -19,7 +19,8 @@
         android:text="@string/msg_success_change_setting"
         android:gravity="center"
         android:layout_gravity="center"
-        android:layout_margin="8dp"/>
+        android:layout_margin="8dp"
+        />
 
 
 
@@ -37,7 +38,8 @@
             android:textSize="14dp"
             android:gravity="center"
             android:layout_centerInParent="true"
-            android:text="@string/success_setting" />
+            android:text="@string/success_setting"
+            android:contentDescription="done"/>
 
     </RelativeLayout>
 

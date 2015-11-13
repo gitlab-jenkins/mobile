@@ -59,7 +59,8 @@
             android:textColor="@color/pay_confirm"
             android:textSize="14dp"
             android:text="@string/pay_confirm"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentRight="true"
+            android:contentDescription="done"/>
 
     </RelativeLayout>
 

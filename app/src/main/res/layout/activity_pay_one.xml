@@ -108,7 +108,8 @@
                     android:padding="6dp"
                     android:textColor="@color/normal_text"
                     android:hint="@string/insert_message"
-                    android:gravity="top"/>
+                    android:gravity="top"
+                    android:contentDescription="message"/>
 
 
             </RelativeLayout>
@@ -164,7 +165,8 @@
                         android:singleLine="true"
                         android:hint="@string/insert_price"
                         android:inputType="number"
-                        android:lines="1"/>
+                        android:lines="1"
+                        android:contentDescription="price"/>
 
 
                 </RelativeLayout>
@@ -185,7 +187,8 @@
                     android:layout_height="fill_parent"
                     android:layout_centerHorizontal="true"
                     android:background="@color/register_btn_color"
-                    android:textSize="15dp" />
+                    android:textSize="15dp"
+                    android:contentDescription="pay"/>
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     geekui:customTypeface="fonts/iran_sans.ttf"
@@ -197,7 +200,7 @@
                     android:layout_gravity="center"
                     android:text="@string/payment"
                     android:layout_marginTop="2dp"
-                    android:layout_marginBottom="2dp"/>
+                    android:layout_marginBottom="2dp" />
 
             </RelativeLayout>
 

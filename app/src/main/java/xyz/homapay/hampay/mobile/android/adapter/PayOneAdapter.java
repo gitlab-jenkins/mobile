@@ -85,7 +85,6 @@ public class PayOneAdapter extends SectionedBaseAdapter{
         } else {
             layout = (RelativeLayout) convertView;
         }
-        //((TextView) layout.findViewById(R.id.textItem)).setText("Section " + section + " Item " + position);
 
         RelativeLayout contact_rl = (RelativeLayout)layout.findViewById(R.id.contact_rl);
 
@@ -141,10 +140,18 @@ public class PayOneAdapter extends SectionedBaseAdapter{
                     mContext.startActivityForResult(intent, 1024);
                 }
             });
+            message.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent();
+                    intent.setClass(mContext, PayOneActivity.class);
+                    intent.putExtra("contact_name", recentPay.getName());
+                    intent.putExtra("contact_phone_no", recentPay.getPhone());
+                    mContext.startActivityForResult(intent, 1024);
+                }
+            });
 
         }else{
-
-            Log.e("COUNT", "COUNT");
 
             final EnabledHamPay enabledHamPay = enabledHamPays.get(position);
             new RequestImageDownloader(mContext, new RequestImageDownloaderTaskCompleteListener(image_profile)).execute(Constants.HTTPS_SERVER_IP + "/users/" + loginTokenId + "/" + enabledHamPay.getPhotoId());
@@ -179,7 +186,6 @@ public class PayOneAdapter extends SectionedBaseAdapter{
         }
 
         FacedTextView pinned_header_text = (FacedTextView) layout.findViewById(R.id.pinned_header_text);
-        //textView.setText("Header for section " + section);
         if(section == 0) {
             pinned_header_text.setBackgroundColor(mContext.getResources().getColor(R.color.confirmation));
             pinned_header_text.setText(mContext.getResources().getString(R.string.recent_pay_one));

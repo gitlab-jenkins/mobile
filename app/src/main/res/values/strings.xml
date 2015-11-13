@@ -1,7 +1,7 @@
 <resources>
 
-    <!--<string name="app_name">هم‌پی</string>-->
-    <string name="app_name">hampay</string>
+    <string name="app_name">هم‌پی</string>
+    <!--<string name="app_name">ahampay</string>-->
 
     <string name="hampay_network">شبکه پرداخت هم‌پی </string>
 
@@ -13,14 +13,14 @@
     <string name="intro_5">نمایش پرداخت‌ها و دریافت‌های گذشته</string>
 
 
-    <string name="msg_fail_sms_verification">کد ۵ رقمی را کامل وارد کنید.</string>
+    <string name="msg_fail_sms_correct_entry">کد ۵ رقمی را کامل وارد کنید.</string>
 
     <string name="action_search">Search</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
 
     <string name="nav_item_account_detail">جزئیات حساب</string>
-    <string name="nav_item_transactions">تراکنش‌ها</string>
+    <string name="nav_item_transactions">تراکنشها</string>
     <string name="nav_item_pay_to_one">پرداخت به فرد</string>
     <string name="nav_item_pay_to_business">پرداخت به کسب و کار</string>
     <string name="nav_item_settings">تنظیمات</string>
@@ -396,6 +396,7 @@
     <string name="msg_fail_hampay_server">اطلاعاتی از سامانه هم‌پی دریافت نشد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_hampay_login">رمز عبور صحیح نمی باشد. لطفا با دقت رمز عبور خود را وارد کنید.</string>
     <string name="msg_locked_hampay_login">کاربر گرامی، حساب کاربری شما به علت تلاش در استفاده از رمز عبور اشتباه غیر فعال شده است. برای فعال کردن حساب کاربری با پشتیبانی تماس حاصل نمایید.</string>
+    <string name="msg_fail_send_sms">درخواست فعالسازی شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_receive_sms">دریافت پیامک فعالسازی با مشکل مواجه شد. لطفا دکمه ارسال مجدد را انتخاب کنید.</string>
     <string name="sms_upper_reach_sms">حداکثر درخواست برای ارسال مجدد پیامک فعالسازی به اتمام رسید. لطفا در ساعات دیگر تلاش کنید.</string>
     <string name="msg_fail_change_pass_code">تغییر رمز عبور با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>

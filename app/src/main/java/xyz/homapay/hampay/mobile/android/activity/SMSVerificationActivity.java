@@ -267,7 +267,7 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
                     requestVerifyMobile.execute(registrationVerifyMobileRequest);
 
                 }else {
-                    Toast.makeText(context, getString(R.string.msg_fail_sms_verification), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, getString(R.string.msg_fail_sms_correct_entry), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -331,8 +331,8 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
             }else {
                 requestVerifyMobile = new RequestVerifyMobile(context, new RequestRegistrationVerifyMobileTaskCompleteListener());
                 new HamPayDialog(activity).showFailRegistrationVerifyMobileDialog(requestVerifyMobile, registrationVerifyMobileRequest,
-                        registrationVerifyMobileResponseMessage.getService().getResultStatus().getCode(),
-                        registrationVerifyMobileResponseMessage.getService().getResultStatus().getDescription());
+                        Constants.LOCAL_ERROR_CODE,
+                        getString(R.string.msg_fail_send_sms));
 
                 hamPayGaTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Verify Mobile")

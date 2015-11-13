@@ -277,7 +277,8 @@
                         android:layout_gravity="center_horizontal"
                         android:background="@drawable/remember_edittext_bg"
                         android:layout_marginTop="12dp"
-                        android:singleLine="true"/>
+                        android:singleLine="true"
+                        android:contentDescription="memorable"/>
 
 
 
@@ -294,7 +295,8 @@
                             android:layout_height="fill_parent"
                             android:layout_centerHorizontal="true"
                             android:background="@color/register_btn_color"
-                            android:textSize="15dp" />
+                            android:textSize="15dp"
+                            android:contentDescription="confirm"/>
 
                         <xyz.homapay.hampay.mobile.android.component.FacedTextView
                             geekui:customTypeface="fonts/iran_sans.ttf"

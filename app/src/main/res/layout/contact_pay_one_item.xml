@@ -9,7 +9,7 @@
         android:id="@+id/contact_rl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:visibility="gone"
         android:padding="12dp">
 
 
@@ -133,7 +133,7 @@
         xmlns:geekui="http://schemas.android.com/apk/res-auto"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
+        android:visibility="visible"
         android:padding="12dp">
 
         <LinearLayout
@@ -181,7 +181,8 @@
                     android:textSize="13dp"
                     android:gravity="center"
                     android:layout_marginRight="8dp"
-                    android:text="متن پیام"/>
+                    android:text="متن پیام"
+                    android:contentDescription="pay_plus"/>
 
 
 
@@ -214,7 +215,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:src="@drawable/p_icon_blak"
-                android:layout_margin="8dp"/>
+                android:layout_margin="8dp" />
 
         </LinearLayout>
 

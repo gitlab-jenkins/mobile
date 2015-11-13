@@ -71,7 +71,6 @@ public class BankListAdapter extends BaseAdapter  {
             viewHolder = (ViewHolder)convertView.getTag();
         }
 
-
         viewHolder.bank_name.setText(bankDTOs.get(position).getTitle());
 
 

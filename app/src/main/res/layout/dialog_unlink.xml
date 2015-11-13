@@ -35,7 +35,8 @@
             android:textSize="14dp"
             android:gravity="center"
             android:layout_alignParentRight="true"
-            android:text="@string/unlink_confirm" />
+            android:text="@string/unlink_confirm"
+            android:contentDescription="confirm"/>
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
             android:id="@+id/unlink_disconfirm"

@@ -89,6 +89,7 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -104,6 +105,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+import java.util.zip.Inflater;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -126,42 +128,10 @@ public class WebServices  {
 
     }
 
-
-//    public SuccessLoginResponse sendLoginRequest(LoginData loginData)throws Exception {
-//
-//
-//
-//
-//        BufferedReader in = new BufferedReader(
-//                new InputStreamReader(httpURLConnection.getInputStream()));
-//
-//        String inputLine;
-//        StringBuffer response = new StringBuffer();
-//
-//        while ((inputLine = in.readLine()) != null) {
-//            response.append(inputLine);
-//        }
-//        in.close();
-//
-//        Gson gson = new Gson();
-//
-//        Type listType = new TypeToken<SuccessLoginResponse>(){}.getType();
-//
-//        JsonParser jsonParser = new JsonParser();
-//        JsonElement responseElement = jsonParser.parse(response.toString());
-//
-//        return (SuccessLoginResponse) gson.fromJson(responseElement.toString(), listType);
-//    }
-
-
     public LogoutResponse sendLogoutRequest(LogoutData logoutData)throws Exception {
 
         SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPSOPENAM_LOGOUT_URL);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
-
-
-//        URL urlConnection = new URL(Constants.OPENAM_LOGOUT_URL);
-//        HttpURLConnection httpURLConnection = (HttpURLConnection) urlConnection.openConnection();
 
         connection.setRequestMethod("POST");
         connection.setConnectTimeout(20 * 1000);
@@ -333,6 +303,9 @@ public class WebServices  {
             connection.setRequestProperty("Accept-Encoding", "gzip");
 
             OutputStream outputStream = connection.getOutputStream();
+
+//            String raw = new String(decompress(gzip(jsonRequest.getBytes())));
+
             outputStream.write(gzip(jsonRequest.getBytes()));
             outputStream.flush();
 
@@ -349,7 +322,9 @@ public class WebServices  {
             Gson gson = new Gson();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegistrationEntryResponse>>() {}.getType());
 
-        } catch (IOException e) {e.printStackTrace();}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         finally {
             if (connection != null)
                 connection.disconnect();
@@ -380,6 +355,21 @@ public class WebServices  {
         return null;
     }
 
+
+    public static String decompress(byte[] compressed) throws IOException {
+        final int BUFFER_SIZE = 32;
+        ByteArrayInputStream is = new ByteArrayInputStream(compressed);
+        GZIPInputStream gis = new GZIPInputStream(is, BUFFER_SIZE);
+        StringBuilder string = new StringBuilder();
+        byte[] data = new byte[BUFFER_SIZE];
+        int bytesRead;
+        while ((bytesRead = gis.read(data)) != -1) {
+            string.append(new String(data, 0, bytesRead));
+        }
+        gis.close();
+        is.close();
+        return string.toString();
+    }
 
     public ResponseMessage<ContactUsResponse> newContactUsResponse(ContactUsRequest contactUsRequest){
 
@@ -677,6 +667,8 @@ public class WebServices  {
                     contactDTO.setDisplayName(contact_name);
                     contactDTOs.add(contactDTO);
                 }
+
+
 
             }
             phones.close();
@@ -1389,6 +1381,7 @@ public class WebServices  {
             List<ContactDTO> contactDTOs = new ArrayList<ContactDTO>();
             Cursor phones = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null,null, null);
 
+
             while (phones.moveToNext()) {
                 String contact_name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                 String contact_phone_no = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
@@ -1419,7 +1412,6 @@ public class WebServices  {
 
 
             connection.setDoOutput(false);
-//            connection.setInstanceFollowRedirects(false);
             connection.setConnectTimeout(30000);
             connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");

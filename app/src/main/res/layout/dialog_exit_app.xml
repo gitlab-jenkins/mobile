@@ -40,7 +40,8 @@
             android:textColor="@color/exit_dis_confirmation"
             android:textSize="14dp"
             android:text="@string/exit_app_no"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentRight="true"
+            android:contentDescription="keep_on"/>
 
     </RelativeLayout>
 

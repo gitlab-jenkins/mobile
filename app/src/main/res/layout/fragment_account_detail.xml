@@ -184,7 +184,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/user_status_text"
@@ -212,7 +212,8 @@
                         android:layout_height="fill_parent"
                         android:layout_centerHorizontal="true"
                         android:background="@color/user_change_status"
-                        android:textSize="16dp" />
+                        android:textSize="16dp"
+                        android:contentDescription="verify"/>
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         geekui:customTypeface="fonts/iran_sans.ttf"
@@ -262,7 +263,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:orientation="horizontal"
-                    android:visibility="gone">
+                    android:visibility="visible"
+                    android:contentDescription="hampay_2_ll">
 
                     <xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView
                         android:id="@+id/hampay_image_2"
@@ -300,7 +302,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:gravity="right"
-                    android:visibility="gone">
+                    android:visibility="visible"
+                    android:contentDescription="hampay_1_ll">
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/hampay_1"
@@ -338,7 +341,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:orientation="horizontal"
-                    android:visibility="gone">
+                    android:visibility="visible"
+                    android:contentDescription="hampay_4_ll">
 
                     <ImageView
                         android:id="@+id/hampay_image_4"
@@ -367,7 +371,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:gravity="right"
-                    android:visibility="gone">
+                    android:visibility="visible"
+                    android:contentDescription="hampay_3_ll">
 
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView

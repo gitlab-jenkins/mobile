@@ -148,26 +148,16 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
             serverKey = prefs.getString(Constants.USER_ID_TOKEN, "");
 
-            if (userProfileDTO != null) {
-//                encryptedData = AESHelper.encrypt(mobileKey, serverKey, this.userProfileDTO.getMaxXferAmount().toString());
+            if (userProfileDTO.getMaxXferAmount() != null && userProfileDTO.getMinXferAmount() != null) {
                 editor.putLong(Constants.MAX_XFER_Amount, this.userProfileDTO.getMaxXferAmount());
-//                encryptedData = AESHelper.encrypt(mobileKey, serverKey, this.userProfileDTO.getMinXferAmount().toString());
                 editor.putLong(Constants.MIN_XFER_Amount, this.userProfileDTO.getMinXferAmount());
                 editor.commit();
             }
 
         }
         catch (Exception ex){
-
             Log.e("Error", ex.getStackTrace().toString());
-
         }
-
-//        if (userProfileDTO != null) {
-//            editor.putLong(Constants.MAX_XFER_Amount, this.userProfileDTO.getMaxXferAmount());
-//            editor.putLong(Constants.MIN_XFER_Amount, this.userProfileDTO.getMinXferAmount());
-//            editor.commit();
-//        }
 
     }
 
@@ -182,10 +172,10 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
         image_profile = (CircleImageView)rootView.findViewById(R.id.image_profile);
 
-//        String URL = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
-//
-//        requestImageDownloader = new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile));
-//        requestImageDownloader.execute(URL);
+        String URL = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
+
+        requestImageDownloader = new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile));
+        requestImageDownloader.execute(URL);
 
         String filePath = context.getFilesDir().getPath().toString() + "/" + "userImage.png";
         File file = new File(filePath);
@@ -376,7 +366,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
         @Override
         public void onTaskPreRun() {
-            //cls
             hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
             hide_bg.setVisibility(View.VISIBLE);
         }
@@ -450,15 +439,8 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
     private void fillUserProfile(UserProfileDTO userProfileDTO){
 
-
-//        editor.putLong(Constants.MAX_XFER_Amount, userProfileDTO.getMaxXferAmount());
-//        editor.putLong(Constants.MIN_XFER_Amount, userProfileDTO.getMinXferAmount());
-//        editor.commit();
-
-        if (userProfileDTO != null) {
-//            encryptedData = AESHelper.encrypt(mobileKey, serverKey, this.userProfileDTO.getMaxXferAmount().toString());
+        if (userProfileDTO.getMaxXferAmount() != null && userProfileDTO.getMinXferAmount() != null) {
             editor.putLong(Constants.MAX_XFER_Amount, this.userProfileDTO.getMaxXferAmount());
-//            encryptedData = AESHelper.encrypt(mobileKey, serverKey, this.userProfileDTO.getMinXferAmount().toString());
             editor.putLong(Constants.MIN_XFER_Amount, this.userProfileDTO.getMinXferAmount());
             editor.commit();
         }
@@ -478,7 +460,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         }
         user_name_text.setText(userProfileDTO.getFullName());
         MainActivity.user_account_name.setText(userProfileDTO.getFullName());
-        //CLS
+
         user_account_no_text.setText(persianEnglishDigit.E2P(userProfileDTO.getAccountNumber()));
         user_bank_name.setText(" " + userProfileDTO.getBankName());
         user_mobile_no.setText(persianEnglishDigit.E2P(userProfileDTO.getCellNumber()));

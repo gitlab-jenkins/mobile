@@ -246,7 +246,7 @@ public class HamPayDialog {
             }
         };
 
-        tcPrivacySpannable.setSpan(privacySpan, 38, 59, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tcPrivacySpannable.setSpan(privacySpan, 38, 65, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         tc_privacy_text.setText(tcPrivacySpannable);
         tc_privacy_text.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -1353,8 +1353,8 @@ public class HamPayDialog {
 
         pay_one_confirm.setText(activity.getString(R.string.pay_one_confirm,
                 (new PersianEnglishDigit()).E2P(String.format("%,d", amountValue).replace(".", ",")),
-//                amountValue.toString(),
                 businessPaymentConfirmResponse.getFullName(),
+                "۰",
                 businessPaymentConfirmResponse.getBankName()));
 
         view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
@@ -2147,51 +2147,6 @@ public class HamPayDialog {
     }
 
 
-//    public void showFailPasswordEntryDialog(final RequestPassCodeEntry requestPassCodeEntry,
-//                                            final RegistrationPassCodeEntryRequest registrationPassCodeEntryRequest,
-//                                            final String code,
-//                                            final String message){
-//        Rect displayRectangle = new Rect();
-//        Activity parent = (Activity) activity;
-//        Window window = parent.getWindow();
-//        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-//
-//        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_password_entry, null);
-//
-//        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
-//        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
-//
-//        responseCode.setText(activity.getString(R.string.error_code, code));
-//        responseMessage.setText(message);
-//
-//        FacedTextView retry_pass_code_entry = (FacedTextView) view.findViewById(R.id.retry_pass_code_entry);
-//        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
-//
-//        retry_pass_code_entry.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dialog.dismiss();
-//                requestPassCodeEntry.execute(registrationPassCodeEntryRequest);
-//            }
-//        });
-//        cancel_request.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dialog.dismiss();
-//            }
-//        });
-//
-//        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-//        dialog = new Dialog(activity);
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//        dialog.setContentView(view);
-//        dialog.setTitle(null);
-//        dialog.setCanceledOnTouchOutside(true);
-//        dialog.show();
-//    }
-
-
     public void showFailMemorableEntryDialog(final RequestCredentialEntry requestMemorableWordEntry,
                                              final RegistrationCredentialsRequest registrationMemorableWordEntryRequest,
                                              final String code,
@@ -2347,8 +2302,6 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-//                activity.finish();
-
                 Intent intent = new Intent();
                 intent.setClass(activity, AppSliderActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -2396,8 +2349,6 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-//                activity.finish();
-//                requestChangePassCode.execute(changePassCodeRequest);
             }
         });
         cancel_request.setOnClickListener(new View.OnClickListener() {
