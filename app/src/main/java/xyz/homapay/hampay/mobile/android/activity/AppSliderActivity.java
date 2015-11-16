@@ -25,14 +25,12 @@ import java.io.IOException;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
-import xyz.homapay.hampay.common.core.model.request.BankListRequest;
 import xyz.homapay.hampay.common.core.model.request.IllegalAppListRequest;
 import xyz.homapay.hampay.common.core.model.response.IllegalAppListResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.AppSliderAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import xyz.homapay.hampay.mobile.android.async.RequestBankList;
 import xyz.homapay.hampay.mobile.android.async.RequestIllegalAppList;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
@@ -90,10 +88,6 @@ public class AppSliderActivity extends AppCompatActivity {
 
         DeviceInfo deviceInfo = new DeviceInfo(this);
 
-
-
-
-
 //        try {
 //            key = SecurityUtils.getInstance(this).generateSHA_256(
 //                    deviceInfo.getMacAddress(),
@@ -106,7 +100,7 @@ public class AppSliderActivity extends AppCompatActivity {
 //            e.printStackTrace();
 //        }
 
-        getRegId();
+//        getRegId();
 
 //        if (new RootUtil(this).checkRootedDevice()){
 //            new HamPayDialog(this).showPreventRootDeviceDialog();
@@ -378,67 +372,6 @@ public class AppSliderActivity extends AppCompatActivity {
                 requestIllegalAppList.cancel(true);
         }
     }
-
-
-//    class MyAdapter extends FragmentStatePagerAdapter
-//    {
-//
-//        public MyAdapter(FragmentManager fm) {
-//            super(fm);
-//        }
-//
-//        @Override
-//        public Fragment getItem(int i) {
-//            Fragment fragment=null;
-//            if(i == 0)
-//            {
-//                fragment=new AppSliderFragmentA();
-//            }
-//            if(i==1)
-//            {
-//                fragment=new AppSliderFragmentB();
-//            }
-//            if(i==2)
-//            {
-//                fragment=new AppSliderFragmentC();
-//            }
-//            if(i==3)
-//            {
-//                fragment=new AppSliderFragmentD();
-//            }
-//            if(i==4)
-//            {
-//                fragment=new AppSliderFragmentE();
-//            }
-//            return fragment;
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            return 5;
-//        }
-//
-//        @Override
-//        public boolean isViewFromObject(View view, Object object) {
-//            if(object instanceof AppSliderFragmentE){
-//                view.setTag(4);
-//            }
-//            if(object instanceof AppSliderFragmentD){
-//                view.setTag(3);
-//            }
-//            if(object instanceof AppSliderFragmentC){
-//                view.setTag(2);
-//            }
-//            if(object instanceof AppSliderFragmentB){
-//                view.setTag(1);
-//            }
-//            if(object instanceof AppSliderFragmentA){
-//                view.setTag(0);
-//            }
-//            return super.isViewFromObject(view, object);
-//        }
-//    }
-
 
     public void getRegId() {
         new AsyncTask<Void, Void, String>() {

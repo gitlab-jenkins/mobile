@@ -467,7 +467,7 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
 
         if (inputPassValue.length() == 5){
 
-            nationalCode = "testUser";
+//            nationalCode = "testUser";
 
             try {
 
@@ -477,7 +477,7 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
                                 new DeviceInfo(context).getAndroidId(),
                                 installationToken);
 
-                password = "12345678";
+//                password = "12345678";
 
             }catch (NoSuchAlgorithmException ex){}
             catch (UnsupportedEncodingException ex){}

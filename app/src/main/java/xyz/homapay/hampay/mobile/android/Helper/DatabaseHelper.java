@@ -157,8 +157,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_DISPLAY_NAME, encryptedData.trim());
         encryptedData = AESHelper.encrypt(mobileKey, serverKey, enabledHamPay.getCellNumber());
         values.put(KEY_CELL_NUMBER, encryptedData.trim());
-        encryptedData = AESHelper.encrypt(mobileKey, serverKey, enabledHamPay.getPhotoId());
-        values.put(KEY_PHOTO_ID, encryptedData.trim());
+        if ( enabledHamPay.getPhotoId() != null) {
+            encryptedData = AESHelper.encrypt(mobileKey, serverKey, enabledHamPay.getPhotoId());
+            values.put(KEY_PHOTO_ID, encryptedData.trim());
+        }else {
+            values.put(KEY_PHOTO_ID, "");
+        }
 
         long enabled_hampay_id = db.insert(TABLE_ENABLED_HAMPAY, null, values);
 

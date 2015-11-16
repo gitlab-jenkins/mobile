@@ -113,11 +113,7 @@ public class ProfileEntryActivity extends Activity {
 
     Tracker hamPayGaTracker;
 
-
-    //    String key;
     DeviceInfo deviceInfo;
-    String encryptedData;
-    String decryptedData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,45 +129,9 @@ public class ProfileEntryActivity extends Activity {
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
-//        try {
-//            key = SecurityUtils.getInstance(this).generateSHA_256(
-//                    deviceInfo.getMacAddress(),
-//                    deviceInfo.getIMEI(),
-//                    deviceInfo.getAndroidId()
-//            );
-//        } catch (NoSuchAlgorithmException e) {
-//            e.printStackTrace();
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
-
         initLocation();
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-
-        try {
-
-
-            byte[] key = SecurityUtils.getInstance(this).generateSHA_256(
-                    deviceInfo.getMacAddress(),
-                    deviceInfo.getIMEI(),
-                    deviceInfo.getAndroidId());
-
-
-            encryptedData = AESHelper.encrypt(key/*"Bar12345Bar12345"*/, "ThisIsASecretKet", /*ProfileEntryActivity.class.getName()*/  "ThisIsASecretKetThisIsASecretKet");
-            decryptedData = AESHelper.decrypt(key/*"Bar12345Bar12345"*/, "ThisIsASecretKet", encryptedData.trim());
-
-
-
-//            encryptedData = AESHelper.encrypt(key, ProfileEntryActivity.class.getName());
-//            Log.v("EncryptDecrypt", "Encoded String " + encryptedData);
-//            decryptedData = AESHelper.decrypt(key, encryptedData);
-//            Log.v("EncryptDecrypt", "Decoded String " + decryptedData);
-        }catch (Exception ex){
-
-            Log.e("Error", ex.getStackTrace().toString());
-
-        }
 
         editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ProfileEntryActivity.class.getName());
         editor.commit();
@@ -627,7 +587,6 @@ public class ProfileEntryActivity extends Activity {
         @Override
         public void onTaskPreRun() {
             keepOn_button.setEnabled(false);
-//            loading_rl.setVisibility(View.VISIBLE);
             hamPayDialog.showWaitingdDialog("");
         }
     }

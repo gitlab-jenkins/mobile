@@ -263,7 +263,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:orientation="horizontal"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:contentDescription="hampay_2_ll">
 
                     <xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView
@@ -302,7 +302,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:gravity="right"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:contentDescription="hampay_1_ll">
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
@@ -341,7 +341,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:orientation="horizontal"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:contentDescription="hampay_4_ll">
 
                     <ImageView
@@ -371,7 +371,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
                     android:gravity="right"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:contentDescription="hampay_3_ll">
 
 

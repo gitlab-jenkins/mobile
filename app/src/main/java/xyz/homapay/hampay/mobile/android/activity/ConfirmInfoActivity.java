@@ -170,23 +170,6 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
 
         userFamilyValue = (FacedEditText)findViewById(R.id.userFamilyValue);
         userFamilyIcon = (ImageView)findViewById(R.id.userFamilyIcon);
-//        userFamilyValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//
-//                if (!hasFocus){
-//                    if (userFamilyValue.getText().toString().length() > 0){
-//                        userFamilyIcon.setImageResource(R.drawable.right_icon);
-//                        userFamilyIsValid = true;
-//                    }
-//                    else {
-//                        userFamilyIcon.setImageResource(R.drawable.false_icon);
-//                        userFamilyIsValid = false;
-//                    }
-//                }
-//            }
-//        });
-
 
         accountNumberValue = (FacedEditText)findViewById(R.id.accountNumberValue);
         accountNumberValue.setFilters(new InputFilter[]{new InputFilter.LengthFilter(accountNumberFormat.length())});
@@ -279,23 +262,6 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
             @Override
             public void afterTextChanged(Editable s) { }
         });
-//        nationalCodeValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                if (!hasFocus){
-//
-//                    if (new NationalCodeVerification(nationalCodeValue.getText().toString()).isValidCode()){
-//                        nationalCodeIcon.setImageResource(R.drawable.right_icon);
-//                        nationalCodeIsValid = true;
-//                    }
-//                    else {
-//                        nationalCodeIcon.setImageResource(R.drawable.false_icon);
-//                        nationalCodeIsValid = false;
-//                    }
-//
-//                }
-//            }
-//        });
 
 
         registrationFetchUserDataRequest = new RegistrationFetchUserDataRequest();
@@ -327,12 +293,9 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
                 check_account.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-//                        editor.putString(Constants.REGISTERED_CELL_NUMBER, new PersianEnglishDigit(cellNumberValue.getText().toString()).P2E());
                         editor.putString(Constants.REGISTERED_USER_FAMILY, new PersianEnglishDigit(userFamilyValue.getText().toString()).P2E());
                         editor.putString(Constants.REGISTERED_USER_NAME, userFamilyValue.getText().toString().split(" ")[0]);
                         editor.putString(Constants.REGISTERED_ACCOUNT_NO, new PersianEnglishDigit(accountNumberValue.getText().toString()).P2E());
-//                        editor.putString(Constants.REGISTERED_NATIONAL_CODE, nationalCodeValue.getText().toString());
                         editor.commit();
 
                         confirm_info_dialog.dismiss();
@@ -352,11 +315,9 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
                     public void onClick(View v) {
 
                         editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ConfirmInfoActivity.class.getName());
-//                        editor.putString(Constants.REGISTERED_CELL_NUMBER, new PersianEnglishDigit(cellNumberValue.getText().toString()).P2E());
                         editor.putString(Constants.REGISTERED_USER_FAMILY, userFamilyValue.getText().toString());
                         editor.putString(Constants.REGISTERED_USER_NAME, userFamilyValue.getText().toString().split(" ")[0]);
                         editor.putString(Constants.REGISTERED_ACCOUNT_NO, accountNumberValue.getText().toString());
-//                        editor.putString(Constants.REGISTERED_NATIONAL_CODE, nationalCodeValue.getText().toString());
                         editor.commit();
 
                         confirm_info_dialog.dismiss();
@@ -384,11 +345,9 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
 
 
                 editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ConfirmInfoActivity.class.getName());
-//                editor.putString(Constants.REGISTERED_CELL_NUMBER, new PersianEnglishDigit(cellNumberValue.getText().toString()).P2E());
                 editor.putString(Constants.REGISTERED_USER_FAMILY, userFamilyValue.getText().toString());
                 editor.putString(Constants.REGISTERED_USER_NAME, userFamilyValue.getText().toString().split(" ")[0]);
                 editor.putString(Constants.REGISTERED_ACCOUNT_NO, accountNumberValue.getText().toString());
-//                editor.putString(Constants.REGISTERED_NATIONAL_CODE, nationalCodeValue.getText().toString());
                 editor.commit();
 
                 registrationVerifyAccountRequest = new RegistrationVerifyAccountRequest();
@@ -399,14 +358,7 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
                 break;
 
             case R.id.correct_button:
-//                correct_button.setBackgroundColor(getResources().getColor(R.color.normal_text));
-//                user_phone.setFocusableInTouchMode(true);
-//                userFamilyValue.setFocusableInTouchMode(true);
-//                accountNumberValue.setFocusableInTouchMode(true);
-//                nationalCodeValue.setFocusableInTouchMode(true);
-
                 new HamPayDialog(activity).showBackStartRegisterDialog();
-
 
                 break;
 
@@ -427,18 +379,12 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
     RequestConfirmUserData requestConfirmUserData;
 
     private void confirmUserData(){
-
-//                userFamilyValue.clearFocus();
-//                nationalCodeValue.clearFocus();
         accountNumberValue.clearFocus();
 
 
         if (confirm_check_value) {
 
-            if (/*userFamilyIsValid &&*/ /*nationalCodeIsValid &&*/ accountNumberIsValid
-                               /* && userFamilyValue.getText().toString().length() > 0*/
-                                /*&& nationalCodeValue.getText().toString().length() > 0*/
-                    && accountNumberValue.getText().toString().length() > 0) {
+            if (accountNumberIsValid && accountNumberValue.getText().toString().length() > 0) {
 
                 registrationConfirmUserDataRequest = new RegistrationConfirmUserDataRequest();
                 registrationConfirmUserDataRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
@@ -618,7 +564,6 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
 
         @Override
         public void onTaskPreRun() {
-//            loading_rl.setVisibility(View.VISIBLE);
             hamPayDialog.showWaitingdDialog("");
         }
     }

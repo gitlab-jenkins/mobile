@@ -542,14 +542,13 @@ public class PayToOneFragment extends Fragment {
             }
 
             if (isAdded()) {
-
-//                if (payOneAdapter == null) {
-//                    enabledHamPays = dbHelper.getAllEnabledHamPay();
-//                    payOneAdapter = new PayOneAdapter(getActivity(),
-//                            recentPays,
-//                            enabledHamPays,
-//                            prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-//                    pinnedHeaderListView.setAdapter(payOneAdapter);
+//                if (payOneAdapter.getCount() == 0) {
+                    enabledHamPays = dbHelper.getAllEnabledHamPay();
+                    payOneAdapter = new PayOneAdapter(getActivity(),
+                            recentPays,
+                            enabledHamPays,
+                            prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+                    pinnedHeaderListView.setAdapter(payOneAdapter);
 //                }
             }
             hamPayDialog.dismisWaitingDialog();

@@ -167,7 +167,6 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         editor.putString(Constants.RECEIVED_SMS_ACTIVATION, "");
-//        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, SMSVerificationActivity.class.getName());
         editor.commit();
 
         numberProgressBar = (NumberProgressBar)findViewById(R.id.numberProgressBar);
