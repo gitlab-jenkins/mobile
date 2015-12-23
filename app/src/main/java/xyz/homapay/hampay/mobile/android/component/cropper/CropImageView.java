@@ -195,7 +195,7 @@ public class CropImageView extends FrameLayout {
         if (uri != null) {
 
             DisplayMetrics metrics = getResources().getDisplayMetrics();
-            double densityAdj = metrics.density > 1 ? 1 / metrics.density : 1;
+            double densityAdj = metrics.density > 1 ? 1 /*/ metrics.density*/ : 1;
 
             int width = (int) (metrics.widthPixels * densityAdj);
             int height = (int) (metrics.heightPixels * densityAdj);

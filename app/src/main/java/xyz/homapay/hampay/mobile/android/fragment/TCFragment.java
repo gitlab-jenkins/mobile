@@ -52,7 +52,7 @@ public class TCFragment extends Fragment {
         webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 
 
-        webView.loadUrl("https://www.google.com");
+        webView.loadUrl(Constants.HTTPS_SERVER_IP + "/help/tc.html");
         webView.setWebViewClient(new WebViewClient() {
 
             public void onPageFinished(WebView view, String url) {

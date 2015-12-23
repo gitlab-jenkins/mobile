@@ -6,13 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -20,37 +16,33 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
+import java.security.NoSuchAlgorithmException;
+
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
-import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
 import xyz.homapay.hampay.common.core.model.request.TACRequest;
-import xyz.homapay.hampay.common.core.model.response.RegistrationCredentialsResponse;
 import xyz.homapay.hampay.common.core.model.response.TACResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import xyz.homapay.hampay.mobile.android.async.RequestCredentialEntry;
 import xyz.homapay.hampay.mobile.android.async.RequestLogin;
 import xyz.homapay.hampay.mobile.android.async.RequestTAC;
-import xyz.homapay.hampay.mobile.android.async.RequestUserIdToken;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.material.RippleView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.FailedLoginResponse;
 import xyz.homapay.hampay.mobile.android.model.LoginData;
 import xyz.homapay.hampay.mobile.android.model.SuccessLoginResponse;
-import xyz.homapay.hampay.mobile.android.util.AESHelper;
 import xyz.homapay.hampay.mobile.android.util.AppInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
-
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Type;
-import java.security.NoSuchAlgorithmException;
 
 
 public class HamPayLoginActivity extends Activity implements View.OnClickListener {
@@ -108,9 +100,6 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
     Bundle bundle;
 
     boolean fromNotification = false;
-
-    GetUserIdTokenRequest getUserIdTokenRequest;
-    RequestUserIdToken requestUserIdToken;
 
     String password = "";
 

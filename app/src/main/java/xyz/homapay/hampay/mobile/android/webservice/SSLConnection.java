@@ -40,7 +40,8 @@ public class SSLConnection  {
         try
         {
             CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/tejarat_nginx.crt"));
+//            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/tejarat_nginx.crt"));
+            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/nginx.crt"));
             Certificate certificate = certificateFactory.generateCertificate(caInput);
 //            Log.e("ca=", ((X509Certificate) certificate).getSubjectDN() + "");
             String keyStoreType = KeyStore.getDefaultType();

@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -121,18 +122,29 @@ public class ChangeUserImageActivity extends AppCompatActivity {
         user_profile_image_select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                croppedImage = cropImageView.getCroppedImage();
 
-                ImageView croppedImageView = (ImageView) findViewById(R.id.croppedImageView);
-                cropImageView.setVisibility(View.INVISIBLE);
-                croppedImageView.setImageBitmap(croppedImage);
-                uploadImageRequest = new UploadImageRequest();
-                requestUploadImage = new RequestUploadImage(context, new RequestUploadImageTaskCompleteListener());
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                croppedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byte[] croppedImageByteArray = stream.toByteArray();
-                uploadImageRequest.setImage(croppedImageByteArray);
-                requestUploadImage.execute(uploadImageRequest);
+                try {
+
+                    croppedImage = cropImageView.getCroppedImage();
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    croppedImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    byte[] croppedImageByteArray = stream.toByteArray();
+
+                    if (croppedImageByteArray.length <= 1024 * 512) {
+                        ImageView croppedImageView = (ImageView) findViewById(R.id.croppedImageView);
+                        cropImageView.setVisibility(View.INVISIBLE);
+                        croppedImageView.setImageBitmap(croppedImage);
+
+                        uploadImageRequest = new UploadImageRequest();
+                        requestUploadImage = new RequestUploadImage(context, new RequestUploadImageTaskCompleteListener());
+                        uploadImageRequest.setImage(croppedImageByteArray);
+                        requestUploadImage.execute(uploadImageRequest);
+                    } else {
+                        Toast.makeText(context, getString(R.string.msg_violation_image_size), Toast.LENGTH_LONG).show();
+                    }
+                }catch (Exception ex){
+                    Log.e("Error", "Error");
+                }
 
             }
         });
@@ -299,7 +311,7 @@ public class ChangeUserImageActivity extends AppCompatActivity {
         }
         try {
             outStream = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
             outStream.flush();
             outStream.close();
         } catch (Exception e) {
@@ -324,7 +336,8 @@ public class ChangeUserImageActivity extends AppCompatActivity {
 
                 if (uploadImageResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
-                    savebitmap(croppedImage, "userImage.png");
+                    savebitmap(croppedImage, "userImage.jpeg");
+                    croppedImage.recycle();
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Request Upload Image")
@@ -332,10 +345,11 @@ public class ChangeUserImageActivity extends AppCompatActivity {
                             .setLabel("Success")
                             .build());
 
+                    cropImageView.setImageBitmap(null);
+
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra("result", 5000);
                     setResult(5000);
-
 
                     finish();
 
@@ -350,6 +364,9 @@ public class ChangeUserImageActivity extends AppCompatActivity {
                             .setAction("Request")
                             .setLabel("Fail(Server)")
                             .build());
+
+                    croppedImage.recycle();
+                    finish();
                 }
             }
             else {
@@ -363,6 +380,9 @@ public class ChangeUserImageActivity extends AppCompatActivity {
                         .setAction("Request")
                         .setLabel("Fail(Mobile)")
                         .build());
+                croppedImage.recycle();
+
+                finish();
             }
 
         }

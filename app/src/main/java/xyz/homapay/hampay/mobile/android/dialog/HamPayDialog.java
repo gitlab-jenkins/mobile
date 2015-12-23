@@ -3,20 +3,15 @@ package xyz.homapay.hampay.mobile.android.dialog;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Parcelable;
-import android.provider.MediaStore;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -33,45 +28,51 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+
+import java.text.NumberFormat;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
-import  xyz.homapay.hampay.common.core.model.request.BankListRequest;
-import  xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
-import  xyz.homapay.hampay.common.core.model.request.BusinessPaymentRequest;
-import  xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
+import xyz.homapay.hampay.common.core.model.request.BankListRequest;
+import xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
+import xyz.homapay.hampay.common.core.model.request.BusinessPaymentRequest;
+import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
 import xyz.homapay.hampay.common.core.model.request.ChangeEmailRequest;
-import  xyz.homapay.hampay.common.core.model.request.ChangeMemorableWordRequest;
-import  xyz.homapay.hampay.common.core.model.request.ChangePassCodeRequest;
-import  xyz.homapay.hampay.common.core.model.request.ContactUsRequest;
-import  xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
-import  xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
+import xyz.homapay.hampay.common.core.model.request.ChangeMemorableWordRequest;
+import xyz.homapay.hampay.common.core.model.request.ChangePassCodeRequest;
+import xyz.homapay.hampay.common.core.model.request.ContactUsRequest;
+import xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
+import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
 import xyz.homapay.hampay.common.core.model.request.IllegalAppListRequest;
-import  xyz.homapay.hampay.common.core.model.request.IndividualPaymentRequest;
-import  xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
-import  xyz.homapay.hampay.common.core.model.request.RegistrationConfirmUserDataRequest;
-import  xyz.homapay.hampay.common.core.model.request.RegistrationCredentialsRequest;
-import  xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
-import  xyz.homapay.hampay.common.core.model.request.RegistrationFetchUserDataRequest;
-import  xyz.homapay.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
-import  xyz.homapay.hampay.common.core.model.request.RegistrationVerifyAccountRequest;
-import  xyz.homapay.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
-import  xyz.homapay.hampay.common.core.model.request.RegistrationVerifyTransferMoneyRequest;
-import  xyz.homapay.hampay.common.core.model.request.TACAcceptRequest;
-import  xyz.homapay.hampay.common.core.model.request.TACRequest;
-import  xyz.homapay.hampay.common.core.model.request.TransactionListRequest;
-import  xyz.homapay.hampay.common.core.model.request.UnlinkUserRequest;
+import xyz.homapay.hampay.common.core.model.request.IndividualPaymentRequest;
+import xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
+import xyz.homapay.hampay.common.core.model.request.RegistrationConfirmUserDataRequest;
+import xyz.homapay.hampay.common.core.model.request.RegistrationCredentialsRequest;
+import xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
+import xyz.homapay.hampay.common.core.model.request.RegistrationFetchUserDataRequest;
+import xyz.homapay.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
+import xyz.homapay.hampay.common.core.model.request.RegistrationVerifyAccountRequest;
+import xyz.homapay.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
+import xyz.homapay.hampay.common.core.model.request.RegistrationVerifyTransferMoneyRequest;
+import xyz.homapay.hampay.common.core.model.request.TACAcceptRequest;
+import xyz.homapay.hampay.common.core.model.request.TACRequest;
+import xyz.homapay.hampay.common.core.model.request.TransactionListRequest;
+import xyz.homapay.hampay.common.core.model.request.UnlinkUserRequest;
 import xyz.homapay.hampay.common.core.model.request.UploadImageRequest;
-import  xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
-import  xyz.homapay.hampay.common.core.model.request.VerifyAccountRequest;
-import  xyz.homapay.hampay.common.core.model.request.VerifyTransferMoneyRequest;
-import  xyz.homapay.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
-import  xyz.homapay.hampay.common.core.model.response.BusinessPaymentResponse;
+import xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
+import xyz.homapay.hampay.common.core.model.request.VerifyAccountRequest;
+import xyz.homapay.hampay.common.core.model.request.VerifyTransferMoneyRequest;
+import xyz.homapay.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
+import xyz.homapay.hampay.common.core.model.response.BusinessPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.ChangeEmailResponse;
-import  xyz.homapay.hampay.common.core.model.response.ContactUsResponse;
-import  xyz.homapay.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
-import  xyz.homapay.hampay.common.core.model.response.IndividualPaymentResponse;
-import  xyz.homapay.hampay.common.core.model.response.TACAcceptResponse;
-import  xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
+import xyz.homapay.hampay.common.core.model.response.ContactUsResponse;
+import xyz.homapay.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
+import xyz.homapay.hampay.common.core.model.response.IndividualPaymentResponse;
+import xyz.homapay.hampay.common.core.model.response.TACAcceptResponse;
+import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
@@ -126,13 +127,6 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.EmailVerification;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.webservice.WebServices;
-
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by amir on 7/8/15.
@@ -229,7 +223,7 @@ public class HamPayDialog {
             public void onClick(View textView) {
                 Intent intent = new Intent();
                 intent.setClass(activity, GuideDetailActivity.class);
-                intent.putExtra(Constants.WEB_PAGE_ADDRESS, "https://192.168.1.102/hampay/users/tac-file");
+                intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/privacy.html");
                 activity.startActivity(intent);
             }
         };
@@ -241,7 +235,7 @@ public class HamPayDialog {
             public void onClick(View textView) {
                 Intent intent = new Intent();
                 intent.setClass(activity, GuideDetailActivity.class);
-                intent.putExtra(Constants.WEB_PAGE_ADDRESS, "https://192.168.1.102/hampay/users/tac-file");
+                intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/tc.html");
                 activity.startActivity(intent);
             }
         };

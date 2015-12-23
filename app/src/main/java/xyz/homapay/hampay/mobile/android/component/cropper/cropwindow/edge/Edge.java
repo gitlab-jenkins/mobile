@@ -214,23 +214,23 @@ public enum Edge {
     }
 
 
-    public void snapToView(View view) {
-
-        switch (this) {
-            case LEFT:
-                mCoordinate = 0;
-                break;
-            case TOP:
-                mCoordinate = 0;
-                break;
-            case RIGHT:
-                mCoordinate = view.getWidth();
-                break;
-            case BOTTOM:
-                mCoordinate = view.getHeight();
-                break;
-        }
-    }
+//    public void snapToView(View view) {
+//
+//        switch (this) {
+//            case LEFT:
+//                mCoordinate = 0;
+//                break;
+//            case TOP:
+//                mCoordinate = 0;
+//                break;
+//            case RIGHT:
+//                mCoordinate = view.getWidth();
+//                break;
+//            case BOTTOM:
+//                mCoordinate = view.getHeight();
+//                break;
+//        }
+//    }
 
 
     public static float getWidth() {
@@ -264,27 +264,27 @@ public enum Edge {
     }
 
 
-    public boolean isOutsideFrame(Rect rect) {
-
-        double margin = 0;
-        boolean result = false;
-
-        switch (this) {
-            case LEFT:
-                result = mCoordinate - rect.left < margin;
-                break;
-            case TOP:
-                result = mCoordinate - rect.top < margin;
-                break;
-            case RIGHT:
-                result = rect.right - mCoordinate < margin;
-                break;
-            case BOTTOM:
-                result = rect.bottom - mCoordinate < margin;
-                break;
-        }
-        return result;
-    }
+//    public boolean isOutsideFrame(Rect rect) {
+//
+//        double margin = 0;
+//        boolean result = false;
+//
+//        switch (this) {
+//            case LEFT:
+//                result = mCoordinate - rect.left < margin;
+//                break;
+//            case TOP:
+//                result = mCoordinate - rect.top < margin;
+//                break;
+//            case RIGHT:
+//                result = rect.right - mCoordinate < margin;
+//                break;
+//            case BOTTOM:
+//                result = rect.bottom - mCoordinate < margin;
+//                break;
+//        }
+//        return result;
+//    }
 
 
     private static float adjustLeft(float x, Rect imageRect, float imageSnapRadius, float aspectRatio) {

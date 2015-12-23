@@ -350,7 +350,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     protected void onResume() {
         super.onResume();
 
-        String filePath = getFilesDir().getPath().toString() + "/" + "userImage.png";
+        String filePath = getFilesDir().getPath().toString() + "/" + "userImage.jpeg";
         File file = new File(filePath);
         if (file.exists()){
             Picasso.with(this).invalidate(file);
