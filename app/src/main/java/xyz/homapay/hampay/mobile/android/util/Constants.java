@@ -13,8 +13,8 @@ public class Constants {
 //    public static final String OPENAM_LOGOUT_URL = "http://" + SERVER_IP + ":8080/openam/json/sessions/?_action=logout";
 
 //        public static final String HTTPS_SERVER_IP = "https://192.168.1.102" + URL_PREFIX; //Sima Server
-    public static String HTTPS_SERVER_IP = "https://176.58.104.158" + URL_PREFIX;//England Server
-//    public static String HTTPS_SERVER_IP = "https://176.58.114.27" + URL_PREFIX;//England Server
+//    public static String HTTPS_SERVER_IP = "https://176.58.104.158" + URL_PREFIX;//England Server
+    public static String HTTPS_SERVER_IP = "https://176.58.114.27" + URL_PREFIX;//England Server
 //        public static String HTTPS_SERVER_IP = "https://mobile.tejaratbourse.com" + URL_PREFIX;//Tejarat bourse Server
     public static final String HTTPS_OPENAM_LOGIN_URL = HTTPS_SERVER_IP + "/auth";
     public static final String HTTPSOPENAM_LOGOUT_URL = HTTPS_SERVER_IP + "/unauth";
@@ -71,6 +71,10 @@ public class Constants {
     public static final String ASPECT_RATIO_X = "ASPECT_RATIO_X";
     public static final String ASPECT_RATIO_Y = "ASPECT_RATIO_Y";
     public static final int ON_TOUCH = 1;
+
+
+
+    public static final String DISMIS_TAC = "DISMIS_TAC";
 
 
 }

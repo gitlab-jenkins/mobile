@@ -332,7 +332,7 @@ public class ChangeUserImageActivity extends AppCompatActivity {
         public void onTaskComplete(ResponseMessage<UploadImageResponse> uploadImageResponseMessage)
         {
             hamPayDialog.dismisWaitingDialog();
-            if (uploadImageResponseMessage != null) {
+            if (uploadImageResponseMessage != null && uploadImageResponseMessage.getService().getResultStatus() != null) {
 
                 if (uploadImageResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
@@ -354,6 +354,10 @@ public class ChangeUserImageActivity extends AppCompatActivity {
                     finish();
 
                 }else {
+
+                    //Remove below line
+                    Toast.makeText(context, "این سرویس هنوز فعال نمی باشد", Toast.LENGTH_LONG).show();
+
                     requestUploadImage = new RequestUploadImage(getApplicationContext(), new RequestUploadImageTaskCompleteListener());
                     new HamPayDialog(activity).showFailUploadImage(requestUploadImage, uploadImageRequest,
                             uploadImageResponseMessage.getService().getResultStatus().getCode(),
@@ -370,6 +374,7 @@ public class ChangeUserImageActivity extends AppCompatActivity {
                 }
             }
             else {
+                Toast.makeText(context, "این سرویس هنوز فعال نمی باشد", Toast.LENGTH_LONG).show();
                 requestUploadImage = new RequestUploadImage(getApplicationContext(), new RequestUploadImageTaskCompleteListener());
                 new HamPayDialog(activity).showFailUploadImage(requestUploadImage, uploadImageRequest,
                         Constants.LOCAL_ERROR_CODE,

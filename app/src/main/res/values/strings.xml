@@ -435,10 +435,10 @@
     <string name="total_payment">جمع کل: </string>
 
     <string name="about_text_1">هم‌پی: کاری از گروه نرم‌افزاری هماپی</string>
-    <string name="about_text_2">Copyright© homapay.xyz, All Right Reserved.</string>
-    <string name="about_text_3">تمامی حقوق این نرم‌افزار متعلق به بنگاه نرم‌افزاری هماپی می‌باشد.</string>
-    <string name="about_text_4">پیاده‌سازی شده با توصیه‌های امنیتی...می‌باشد.</string>
-    <string name="about_text_5">پیاده‌سازی شده با توصیه‌های حریم خصوصی...می‌باشد.</string>
+    <string name="about_text_2">Copyright© homapay.com, All Rights Reserved.</string>
+    <string name="about_text_3">تمام حقوق این نرم افزار متعلق به شرکت پیشرو فن آوری هماپی به شماره ثبت ۴۸۳۷۹۳ می باشد. </string>
+    <string name="about_text_4">سازگاری با توصیه‌های امنیتی OWASP و راهکارهای ده‌گانه آن.</string>
+    <string name="about_text_5">GSMA سازگار با توصیه‌های حفظ حریم خصوصی مطابق سند</string>
     <string name="about_text_6">این نرم‌افزار توصیه‌های امنیت و حریم خصوصی کاربران را در نظر گرفته و به آن پایبند می‌باشد.</string>
     <string name="about_text_7">نرم‌افزار هم‌پی از نرم‌افزارهای متن باز بهره برده و به همین دلیل از لیسانس‌های مبتنی بر متن باز برای برخی از اجزای نرم‌افزاری خود حمایت می‌کند.</string>
     <string name="about_text_8">بخش‌هایی از هم‌پی براساس نرم‌افزارهای متن باز می‌باشد:</string>

@@ -13,6 +13,7 @@ import xyz.homapay.hampay.mobile.android.R;
  */
 public class AppSliderFragmentA extends Fragment {
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_app_slider_a,container,false);

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -77,6 +78,10 @@ public class AppSliderActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_slider);
+
+
+        MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.coin);
+//        mediaPlayer.start();
 
         activity = AppSliderActivity.this;
 

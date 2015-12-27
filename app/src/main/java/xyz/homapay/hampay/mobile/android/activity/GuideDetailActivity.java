@@ -35,6 +35,8 @@ public class GuideDetailActivity extends AppCompatActivity {
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
 
         webPageUrl = bundle.getString(Constants.WEB_PAGE_ADDRESS);
+        //Remove below line
+        webPageUrl = webPageUrl.replace("176.58.114.27", "176.58.104.158");
 
         guide_webview = (WebView)findViewById(R.id.guide_webview);
 

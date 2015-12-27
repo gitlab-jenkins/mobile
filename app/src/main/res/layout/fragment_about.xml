@@ -138,7 +138,8 @@
                 android:gravity="right"
                 android:layout_gravity="right"
                 android:text="@string/about_text_8"
-                android:lineSpacingExtra="8dp"/>
+                android:lineSpacingExtra="8dp"
+                android:visibility="gone"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
@@ -152,7 +153,8 @@
                 android:gravity="left"
                 android:layout_gravity="left"
                 android:text="@string/about_text_9"
-                android:lineSpacingExtra="8dp"/>
+                android:lineSpacingExtra="8dp"
+                android:visibility="gone"/>
 
         </LinearLayout>
 

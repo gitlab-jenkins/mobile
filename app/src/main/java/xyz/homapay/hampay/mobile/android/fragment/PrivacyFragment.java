@@ -40,8 +40,9 @@ public class PrivacyFragment extends Fragment {
         settings.setJavaScriptEnabled(true);
         webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 
-
-        webView.loadUrl(Constants.HTTPS_SERVER_IP + "/help/privacy.html");
+//        webView.loadUrl(Constants.HTTPS_SERVER_IP + "/help/privacy.html");
+        //Remove below line
+        webView.loadUrl("http://176.58.104.158:9090/hampay/users/privacy-file");
         webView.setWebViewClient(new WebViewClient() {
 
             public void onPageFinished(WebView view, String url) {

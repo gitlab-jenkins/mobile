@@ -130,13 +130,13 @@ public class TransactionDetailActivity extends AppCompatActivity implements View
         }else {
             more_payment_info.setVisibility(View.VISIBLE);
             user_fee_value.setText(persianEnglishDigit.E2P(String.format("%,d", transactionDTO.getFeeCharge())) + " ");
-            total_payment_value.setText(persianEnglishDigit.E2P(String.format("%,d", transactionDTO.getFeeCharge() + transactionDTO.getAmount())) + " ");
+            if (transactionDTO.getFeeCharge() != null && transactionDTO.getAmount() != null)
+                total_payment_value.setText(persianEnglishDigit.E2P(String.format("%,d", transactionDTO.getFeeCharge() + transactionDTO.getAmount())) + " ");
         }
 
         user_mobile_no.setText(persianEnglishDigit.E2P(transactionDTO.getPhoneNumber()));
         date_time.setText(persianEnglishDigit.E2P((new JalaliConvert()).GregorianToPersian(transactionDTO.getTransactionDate())));
         tracking_code.setText(persianEnglishDigit.E2P(transactionDTO.getReference()));
-
 
     }
 

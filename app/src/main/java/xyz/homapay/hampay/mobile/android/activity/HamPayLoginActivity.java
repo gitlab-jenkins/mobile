@@ -224,6 +224,9 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
 
                     if (tacResponseMessage.getService().getShouldAcceptTAC()) {
 
+                        //Remove below line
+                        editor.putBoolean(Constants.DISMIS_TAC, false).commit();
+
                         (new HamPayDialog(activity)).showTACAcceptDialog(tacResponseMessage.getService().getTac());
 
                     } else {
@@ -478,8 +481,20 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
 
             keyboard.setEnabled(false);
 
-            requestLogin = new RequestLogin(context, new RequestLoginResponseTaskCompleteListener());
-            requestLogin.execute(loginData);
+            //Remove below lines
+            editor.putString(Constants.LOGIN_TOKEN_ID, /*successLoginResponse.getTokenId()*/"aaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            editor.commit();
+//            if (prefs.getBoolean(Constants.DISMIS_TAC, true)) {
+                tacRequest = new TACRequest();
+                tacRequest.setDeviceId(new DeviceInfo(context).getAndroidId());
+                tacRequest.setAppVersion(new AppInfo(context).getVersionCode() + "");
+                requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
+                requestTAC.execute(tacRequest);
+//            }
+            //Until here
+
+//            requestLogin = new RequestLogin(context, new RequestLoginResponseTaskCompleteListener());
+//            requestLogin.execute(loginData);
 
 
             inputPassValue = "";
