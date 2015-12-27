@@ -449,4 +449,10 @@
     </string>
     <string name="title_activity_tc">TCActivity</string>
 
+
+    <string name="business_request">پرداخت کسب و کار</string>
+    <string name="one_request">پرداخت به فرد</string>
+    <string name="business_pay_code">براساس کد</string>
+    <string name="business_pay_name">براساس نام</string>
+
 </resources>

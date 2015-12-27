@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +33,7 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.MainActivity;
 import xyz.homapay.hampay.mobile.android.activity.PayOneActivity;
 import xyz.homapay.hampay.mobile.android.activity.VerifyAccountActivity;
+import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.RequestUserProfile;
@@ -39,6 +42,7 @@ import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTa
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
+import xyz.homapay.hampay.mobile.android.component.material.RippleView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.util.AESHelper;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -85,6 +89,27 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     LinearLayout hampay_3_ll;
     LinearLayout hampay_4_ll;
 
+    RippleView digit_1;
+    RippleView digit_2;
+    RippleView digit_3;
+    RippleView digit_4;
+    RippleView digit_5;
+    RippleView digit_6;
+    RippleView digit_7;
+    RippleView digit_8;
+    RippleView digit_9;
+    RippleView digit_0;
+    RippleView keyboard_help;
+    RippleView backspace;
+
+    FacedTextView input_digit_1;
+    FacedTextView input_digit_2;
+    FacedTextView input_digit_3;
+    FacedTextView input_digit_4;
+    FacedTextView input_digit_5;
+
+    ButtonRectangle business_request_pay_button;
+
     RequestImageDownloader requestImageDownloader;
     CircleImageView image_profile;
 
@@ -115,6 +140,11 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     DeviceInfo deviceInfo;
 
     Context context;
+
+    LinearLayout keyboard;
+    LinearLayout activation_holder;
+
+    String inputPasswordValue = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -167,6 +197,44 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         View rootView = inflater.inflate(R.layout.fragment_account_detail, container, false);
 
         hide_bg = (View)rootView.findViewById(R.id.hide_bg);
+
+        keyboard = (LinearLayout)rootView.findViewById(R.id.keyboard);
+        activation_holder = (LinearLayout)rootView.findViewById(R.id.activation_holder);
+        activation_holder.setOnClickListener(this);
+
+        business_request_pay_button = (ButtonRectangle)rootView.findViewById(R.id.business_request_pay_button);
+        business_request_pay_button.setOnClickListener(this);
+
+        input_digit_1 = (FacedTextView)rootView.findViewById(R.id.input_digit_1);
+        input_digit_2 = (FacedTextView)rootView.findViewById(R.id.input_digit_2);
+        input_digit_3 = (FacedTextView)rootView.findViewById(R.id.input_digit_3);
+        input_digit_4 = (FacedTextView)rootView.findViewById(R.id.input_digit_4);
+        input_digit_5 = (FacedTextView)rootView.findViewById(R.id.input_digit_5);
+
+        digit_1 = (RippleView)rootView.findViewById(R.id.digit_1);
+        digit_1.setOnClickListener(this);
+        digit_2 = (RippleView)rootView.findViewById(R.id.digit_2);
+        digit_2.setOnClickListener(this);
+        digit_3 = (RippleView)rootView.findViewById(R.id.digit_3);
+        digit_3.setOnClickListener(this);
+        digit_4 = (RippleView)rootView.findViewById(R.id.digit_4);
+        digit_4.setOnClickListener(this);
+        digit_5 = (RippleView)rootView.findViewById(R.id.digit_5);
+        digit_5.setOnClickListener(this);
+        digit_6 = (RippleView)rootView.findViewById(R.id.digit_6);
+        digit_6.setOnClickListener(this);
+        digit_7 = (RippleView)rootView.findViewById(R.id.digit_7);
+        digit_7.setOnClickListener(this);
+        digit_8 = (RippleView)rootView.findViewById(R.id.digit_8);
+        digit_8.setOnClickListener(this);
+        digit_9 = (RippleView)rootView.findViewById(R.id.digit_9);
+        digit_9.setOnClickListener(this);
+        digit_0 = (RippleView)rootView.findViewById(R.id.digit_0);
+        digit_0.setOnClickListener(this);
+        keyboard_help = (RippleView)rootView.findViewById(R.id.keyboard_help);
+        keyboard_help.setOnClickListener(this);
+        backspace = (RippleView)rootView.findViewById(R.id.backspace);
+        backspace.setOnClickListener(this);
 
         verification_status_ll = (LinearLayout)rootView.findViewById(R.id.verification_status_ll);
 
@@ -297,6 +365,185 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                 intent.putExtra(Constants.CONTACT_NAME, userProfileDTO.getSelectedContacts().get(3).getDisplayName());
                 startActivity(intent);
                 break;
+
+            case R.id.activation_holder:
+                if (keyboard.getVisibility() != View.VISIBLE)
+                    new Expand(keyboard).animate();
+                break;
+
+            case R.id.digit_1:
+                inputDigit("1");
+                break;
+
+            case R.id.rect:
+                inputDigit("1");
+                break;
+
+            case R.id.digit_2:
+                inputDigit("2");
+                break;
+
+            case R.id.digit_3:
+                inputDigit("3");
+                break;
+
+            case R.id.digit_4:
+                inputDigit("4");
+                break;
+
+            case R.id.digit_5:
+                inputDigit("5");
+                break;
+
+            case R.id.digit_6:
+                inputDigit("6");
+                break;
+
+            case R.id.digit_7:
+                inputDigit("7");
+                break;
+
+            case R.id.digit_8:
+                inputDigit("8");
+                break;
+
+            case R.id.digit_9:
+                inputDigit("9");
+                break;
+
+            case R.id.digit_0:
+                inputDigit("0");
+                break;
+
+            case R.id.backspace:
+                inputDigit("d");
+                break;
+
+            case  R.id.business_request_pay_button:
+
+                break;
+        }
+    }
+
+    private void inputDigit(String digit){
+        Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+
+        if (inputPasswordValue.length() <= 4) {
+
+            switch (inputPasswordValue.length()) {
+                case 0:
+                    if (digit.equalsIgnoreCase("d")) {
+                        input_digit_1.setText("");
+                        input_digit_1.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    } else {
+                        input_digit_1.setText(persianEnglishDigit.E2P(digit));
+                        input_digit_1.setBackgroundColor(Color.TRANSPARENT);
+                    }
+                    input_digit_2.setText("");
+                    input_digit_2.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_3.setText("");
+                    input_digit_3.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_4.setText("");
+                    input_digit_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_5.setText("");
+                    input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    vibrator.vibrate(20);
+                    break;
+
+                case 1:
+                    if (digit.equalsIgnoreCase("d")) {
+                        input_digit_2.setText("");
+                        input_digit_2.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    } else {
+                        input_digit_2.setText(persianEnglishDigit.E2P(digit));
+                        input_digit_2.setBackgroundColor(Color.TRANSPARENT);
+                    }
+                    input_digit_3.setText("");
+                    input_digit_3.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_4.setText("");
+                    input_digit_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_5.setText("");
+                    input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    vibrator.vibrate(20);
+
+                    break;
+                case 2:
+                    if (digit.equalsIgnoreCase("d")) {
+                        input_digit_3.setText("");
+                        input_digit_3.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    } else {
+                        input_digit_3.setText(persianEnglishDigit.E2P(digit));
+                        input_digit_3.setBackgroundColor(Color.TRANSPARENT);
+                    }
+                    input_digit_4.setText("");
+                    input_digit_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_5.setText("");
+                    input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    vibrator.vibrate(20);
+                    break;
+                case 3:
+                    if (digit.equalsIgnoreCase("d")) {
+                        input_digit_4.setText("");
+                        input_digit_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    } else {
+                        input_digit_4.setText(persianEnglishDigit.E2P(digit));
+                        input_digit_4.setBackgroundColor(Color.TRANSPARENT);
+                    }
+                    vibrator.vibrate(20);
+                    break;
+                case 4:
+                    if (digit.equalsIgnoreCase("d")) {
+                        input_digit_5.setText("");
+                        input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    } else {
+                        input_digit_5.setText(persianEnglishDigit.E2P(digit));
+                        input_digit_5.setBackgroundColor(Color.TRANSPARENT);
+                    }
+                    vibrator.vibrate(20);
+                    break;
+                case 5:
+                    if (digit.equalsIgnoreCase("d")) {
+                        input_digit_5.setText("");
+                        input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    } else {
+                        input_digit_5.setText(persianEnglishDigit.E2P(digit));
+                        input_digit_5.setBackgroundColor(Color.TRANSPARENT);
+                    }
+                    vibrator.vibrate(20);
+                    break;
+            }
+
+        }
+
+        if (digit.contains("d")){
+            if (inputPasswordValue.length() > 0) {
+                inputPasswordValue = inputPasswordValue.substring(0, inputPasswordValue.length() - 1);
+                if (inputPasswordValue.length() == 4){
+                    input_digit_5.setText("");
+                    input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                }
+                else if (inputPasswordValue.length() == 3){
+                    input_digit_4.setText("");
+                    input_digit_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                }
+                else if (inputPasswordValue.length() == 2){
+                    input_digit_3.setText("");
+                    input_digit_3.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                }
+                else if (inputPasswordValue.length() == 1){
+                    input_digit_2.setText("");
+                    input_digit_2.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                }
+                else if (inputPasswordValue.length() == 0){
+                    input_digit_1.setText("");
+                    input_digit_1.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                }
+            }
+        }
+        else {
+            if (inputPasswordValue.length() <= 4) {
+                inputPasswordValue += digit;
+            }
         }
     }
 

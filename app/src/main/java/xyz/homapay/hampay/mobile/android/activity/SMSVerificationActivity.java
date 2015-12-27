@@ -213,8 +213,6 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
 
         digit_1 = (RippleView)findViewById(R.id.digit_1);
         digit_1.setOnClickListener(this);
-
-
         digit_2 = (RippleView)findViewById(R.id.digit_2);
         digit_2.setOnClickListener(this);
         digit_3 = (RippleView)findViewById(R.id.digit_3);
