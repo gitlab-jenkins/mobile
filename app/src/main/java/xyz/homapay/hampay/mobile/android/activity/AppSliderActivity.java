@@ -53,6 +53,7 @@ public class AppSliderActivity extends AppCompatActivity {
     private ImageView indicator_4;
     private ImageView indicator_5;
 
+
     private SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
