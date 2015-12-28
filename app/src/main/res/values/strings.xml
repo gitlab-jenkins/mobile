@@ -454,5 +454,8 @@
     <string name="one_request">پرداخت به فرد</string>
     <string name="business_pay_code">براساس کد</string>
     <string name="business_pay_name">براساس نام</string>
+    <string name="request_pay_detail">جزییات پرداخت</string>
+    <string name="card_nubmer">شماره کارت</string>
+    <string name="pay_with_hampay">پرداخت با هم‌پی</string>
 
 </resources>
