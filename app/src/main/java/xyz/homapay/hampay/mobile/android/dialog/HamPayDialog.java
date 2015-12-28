@@ -701,6 +701,16 @@ public class HamPayDialog {
         dialog.setCanceledOnTouchOutside(true);
 
         dialog.show();
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                if (requestTACAccept != null){
+                    if (!requestTACAccept.isCancelled())
+                        requestTACAccept.cancel(true);
+                }
+            }
+        });
     }
 
     private ResponseMessage<TACAcceptResponse> tACAcceptResponse;
@@ -1183,7 +1193,7 @@ public class HamPayDialog {
                 (new PersianEnglishDigit()).E2P(String.format("%,d", amountValue).replace(".", ",")),
                 individualPaymentConfirmResponse.getFullName(),
                 (new PersianEnglishDigit().E2P(String.format("%,d", individualPaymentConfirmResponse.getFeeCharge()).replace(".", ","))),
-                        individualPaymentConfirmResponse.getBankName()));
+                individualPaymentConfirmResponse.getBankName()));
 
         view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
         dialog = new Dialog(activity);
@@ -1194,6 +1204,15 @@ public class HamPayDialog {
         dialog.setCanceledOnTouchOutside(true);
 
         dialog.show();
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                if (requestIndividualPayment != null){
+                    if (!requestIndividualPayment.isCancelled())
+                        requestIndividualPayment.cancel(true);
+                }
+            }
+        });
     }
 
     public void individualPaymentDialog(final IndividualPaymentResponse individualPaymentResponse,
@@ -2276,6 +2295,15 @@ public class HamPayDialog {
         dialog.setTitle(null);
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                if (requestTACAccept != null){
+                    if (!requestTACAccept.isCancelled())
+                        requestTACAccept.cancel(true);
+                }
+            }
+        });
     }
 
     public void showSuccessChangeSettingDialog(final String message){

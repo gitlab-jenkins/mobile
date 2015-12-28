@@ -307,7 +307,10 @@
     <string name="pay_one_question">آیا موافق هستید؟</string>
     <string name="confirmation">موافقم</string>
     <string name="disConfirmation">منصرف شدم</string>
-    <string name="pay_one_ref">واریز وجه شما با کد پیگیری %1$s ثبت شد.</string>
+    <string name="pay_one_ref">واریز وجه شما با کد پیگیری %1$s ثبت شد.
+    \n
+برای جزییات بیشتر به قسمت تراکنش‌ها مراجعه کنید.
+</string>
 
     <string name="pay_confirm">انجام</string>
     <string name="pay_disconfirm">منصرف شدم</string>

@@ -483,6 +483,8 @@ public class PayToOneFragment extends Fragment {
         @Override
         public void onTaskComplete(ResponseMessage<ContactsHampayEnabledResponse> contactsHampayEnabledResponseMessage) {
 
+            if (!isAdded()) return;
+
             if (contactsHampayEnabledResponseMessage != null){
                 if (contactsHampayEnabledResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
                     contactDTOs = contactsHampayEnabledResponseMessage.getService().getContacts();
@@ -541,16 +543,15 @@ public class PayToOneFragment extends Fragment {
                         .build());
             }
 
-            if (isAdded()) {
 //                if (payOneAdapter.getCount() == 0) {
-                    enabledHamPays = dbHelper.getAllEnabledHamPay();
-                    payOneAdapter = new PayOneAdapter(getActivity(),
-                            recentPays,
-                            enabledHamPays,
-                            prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-                    pinnedHeaderListView.setAdapter(payOneAdapter);
+            enabledHamPays = dbHelper.getAllEnabledHamPay();
+            payOneAdapter = new PayOneAdapter(getActivity(),
+                    recentPays,
+                    enabledHamPays,
+                    prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+            pinnedHeaderListView.setAdapter(payOneAdapter);
 //                }
-            }
+
             hamPayDialog.dismisWaitingDialog();
         }
 

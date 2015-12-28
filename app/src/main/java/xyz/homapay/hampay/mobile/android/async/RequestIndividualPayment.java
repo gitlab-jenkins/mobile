@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.request.IndividualPaymentRequest;
 import xyz.homapay.hampay.common.core.model.response.IndividualPaymentResponse;
+import xyz.homapay.hampay.common.core.model.response.TACAcceptResponse;
 import xyz.homapay.hampay.mobile.android.webservice.WebServices;
 
 /**
@@ -25,6 +26,17 @@ public class RequestIndividualPayment extends AsyncTask<IndividualPaymentRequest
         this.listener = listener;
     }
 
+    @Override
+    protected void onCancelled(ResponseMessage<IndividualPaymentResponse> individualPaymentResponseResponseMessage) {
+        super.onCancelled(individualPaymentResponseResponseMessage);
+        cancel(true);
+    }
+
+    @Override
+    protected void onCancelled() {
+        super.onCancelled();
+        cancel(true);
+    }
 
     protected void onPreExecute()
     {

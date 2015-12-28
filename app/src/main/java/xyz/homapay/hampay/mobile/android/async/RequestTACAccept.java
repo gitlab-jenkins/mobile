@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.request.TACAcceptRequest;
+import xyz.homapay.hampay.common.core.model.response.ContactsHampayEnabledResponse;
 import xyz.homapay.hampay.common.core.model.response.TACAcceptResponse;
 import xyz.homapay.hampay.mobile.android.webservice.WebServices;
 
@@ -30,6 +31,18 @@ public class RequestTACAccept extends AsyncTask<TACAcceptRequest, Void, Response
     {
         super.onPreExecute();
         listener.onTaskPreRun();
+    }
+
+    @Override
+    protected void onCancelled(ResponseMessage<TACAcceptResponse> tacAcceptResponseResponseMessage) {
+        super.onCancelled(tacAcceptResponseResponseMessage);
+        cancel(true);
+    }
+
+    @Override
+    protected void onCancelled() {
+        super.onCancelled();
+        cancel(true);
     }
 
     @Override

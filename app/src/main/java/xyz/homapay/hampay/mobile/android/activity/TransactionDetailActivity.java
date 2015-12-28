@@ -104,7 +104,8 @@ public class TransactionDetailActivity extends AppCompatActivity implements View
                 status_icon.setImageResource(R.drawable.arrow_p);
             }
 
-        }else if (transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.PENDING) {
+        }else if (transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.PENDING
+                /*|| transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.INITIATING*/) {
             from_to_text.setText(getString(R.string.transaction_to));
             status_text.setText(context.getString(R.string.pending));
             status_text.setTextColor(getResources().getColor(R.color.pending_transaction));
