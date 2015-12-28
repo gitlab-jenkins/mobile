@@ -74,7 +74,4 @@ public class Constants {
 
 
 
-    public static final String DISMIS_TAC = "DISMIS_TAC";
-
-
 }

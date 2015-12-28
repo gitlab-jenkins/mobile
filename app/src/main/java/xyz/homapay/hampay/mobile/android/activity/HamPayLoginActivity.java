@@ -224,9 +224,6 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
 
                     if (tacResponseMessage.getService().getShouldAcceptTAC()) {
 
-                        //Remove below line
-                        editor.putBoolean(Constants.DISMIS_TAC, false).commit();
-
                         (new HamPayDialog(activity)).showTACAcceptDialog(tacResponseMessage.getService().getTac());
 
                     } else {

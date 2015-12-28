@@ -377,11 +377,16 @@ public class PayOneActivity extends AppCompatActivity {
 
             ResultStatus resultStatus;
 
+
+            hamPayDialog.dismisWaitingDialog();
+
             if (registrationGetUserIdTokenResponseMessage != null) {
 
                 resultStatus = registrationGetUserIdTokenResponseMessage.getService().getResultStatus();
 
                 if (resultStatus == ResultStatus.SUCCESS) {
+
+
 
                     serverKey = registrationGetUserIdTokenResponseMessage.getService().getUserIdToken();
 

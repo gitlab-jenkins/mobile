@@ -636,44 +636,54 @@ public class HamPayDialog {
         Window window = parent.getWindow();
         window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_tac_accept, null);
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_tc_privacy, null);
 
-        FacedTextView tac_term = (FacedTextView) view.findViewById(R.id.tac_term);
-        FacedTextView tac_accept = (FacedTextView) view.findViewById(R.id.tac_accept);
-        FacedTextView tac_reject = (FacedTextView) view.findViewById(R.id.tac_reject);
+        FacedTextView tc_privacy_text = (FacedTextView) view.findViewById(R.id.tc_privacy_text);
 
-        Pattern pattern = Pattern.compile(Constants.WEB_URL_REGEX);
-        Matcher matcher = pattern.matcher(accept_term);
-        while (matcher.find()) {
-            final String urlStr = matcher.group();
+        Spannable tcPrivacySpannable = new SpannableString(activity.getString(R.string.tc_privacy_text));
+        ClickableSpan tcClickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                Intent intent = new Intent();
+                intent.setClass(activity, GuideDetailActivity.class);
+                intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/privacy.html");
+                activity.startActivity(intent);
+            }
+        };
+        tcPrivacySpannable.setSpan(tcClickableSpan, 3, 35, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tc_privacy_text.setText(tcPrivacySpannable);
+        tc_privacy_text.setMovementMethod(LinkMovementMethod.getInstance());
+        ClickableSpan privacySpan = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                Intent intent = new Intent();
+                intent.setClass(activity, GuideDetailActivity.class);
+                intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/tc.html");
+                activity.startActivity(intent);
+            }
+        };
 
-            Spannable WordtoSpan = new SpannableString(accept_term);
-
-            ClickableSpan privacySpan = new ClickableSpan() {
-                @Override
-                public void onClick(View textView) {
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    if(urlStr.toLowerCase().contains("http://")) {
-                        i.setData(Uri.parse(urlStr));
-                    }else {
-                        i.setData(Uri.parse("http://" + urlStr));
-                    }
-                    activity.startActivity(i);
-                }
-            };
-
-            WordtoSpan.setSpan(privacySpan, accept_term.indexOf(urlStr), accept_term.indexOf(urlStr) + urlStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-            tac_term.setText(WordtoSpan);
-
-            tac_term.setMovementMethod(LinkMovementMethod.getInstance());
-
-        }
+        tcPrivacySpannable.setSpan(privacySpan, 38, 65, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tc_privacy_text.setText(tcPrivacySpannable);
+        tc_privacy_text.setMovementMethod(LinkMovementMethod.getInstance());
 
 
-        tacAcceptRequest = new TACAcceptRequest();
+        FacedTextView tc_privacy_confirm = (FacedTextView) view.findViewById(R.id.tc_privacy_confirm);
+        tc_privacy_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                tacAcceptRequest = new TACAcceptRequest();
+                showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+                requestTACAccept = new RequestTACAccept(activity, new RequestTACAcceptResponseTaskCompleteListener());
+                requestTACAccept.execute(tacAcceptRequest);
+            }
+        });
 
-        tac_reject.setOnClickListener(new View.OnClickListener() {
+
+        FacedTextView tc_privacy_disconfirm = (FacedTextView) view.findViewById(R.id.tc_privacy_disconfirm);
+
+        tc_privacy_disconfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -681,18 +691,7 @@ public class HamPayDialog {
             }
         });
 
-        tac_accept.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-                requestTACAccept = new RequestTACAccept(activity, new RequestTACAcceptResponseTaskCompleteListener());
-                requestTACAccept.execute(tacAcceptRequest);
-            }
-        });
-
         view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        view.setMinimumHeight((int) (displayRectangle.height() * 0.5f));
         dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -702,15 +701,87 @@ public class HamPayDialog {
 
         dialog.show();
 
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                if (requestTACAccept != null){
-                    if (!requestTACAccept.isCancelled())
-                        requestTACAccept.cancel(true);
-                }
-            }
-        });
+
+//        Rect displayRectangle = new Rect();
+//        Activity parent = (Activity) activity;
+//        Window window = parent.getWindow();
+//        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+//
+//        View view = activity.getLayoutInflater().inflate(R.layout.dialog_tac_accept, null);
+//
+//        FacedTextView tac_term = (FacedTextView) view.findViewById(R.id.tac_term);
+//        FacedTextView tac_accept = (FacedTextView) view.findViewById(R.id.tac_accept);
+//        FacedTextView tac_reject = (FacedTextView) view.findViewById(R.id.tac_reject);
+//
+//        Pattern pattern = Pattern.compile(Constants.WEB_URL_REGEX);
+//        Matcher matcher = pattern.matcher(accept_term);
+//        while (matcher.find()) {
+//            final String urlStr = matcher.group();
+//
+//            Spannable WordtoSpan = new SpannableString(accept_term);
+//
+//            ClickableSpan privacySpan = new ClickableSpan() {
+//                @Override
+//                public void onClick(View textView) {
+//                    Intent i = new Intent(Intent.ACTION_VIEW);
+//                    if(urlStr.toLowerCase().contains("http://")) {
+//                        i.setData(Uri.parse(urlStr));
+//                    }else {
+//                        i.setData(Uri.parse("http://" + urlStr));
+//                    }
+//                    activity.startActivity(i);
+//                }
+//            };
+//
+//            WordtoSpan.setSpan(privacySpan, accept_term.indexOf(urlStr), accept_term.indexOf(urlStr) + urlStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//
+//            tac_term.setText(WordtoSpan);
+//
+//            tac_term.setMovementMethod(LinkMovementMethod.getInstance());
+//
+//        }
+//
+//
+//        tacAcceptRequest = new TACAcceptRequest();
+//
+//        tac_reject.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//                activity.finish();
+//            }
+//        });
+//
+//        tac_accept.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//                showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+//                requestTACAccept = new RequestTACAccept(activity, new RequestTACAcceptResponseTaskCompleteListener());
+//                requestTACAccept.execute(tacAcceptRequest);
+//            }
+//        });
+//
+//        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+//        view.setMinimumHeight((int) (displayRectangle.height() * 0.5f));
+//        dialog = new Dialog(activity);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        dialog.setContentView(view);
+//        dialog.setTitle(null);
+//        dialog.setCanceledOnTouchOutside(true);
+//
+//        dialog.show();
+
+//        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//            @Override
+//            public void onDismiss(DialogInterface dialog) {
+//                if (requestTACAccept != null){
+//                    if (!requestTACAccept.isCancelled())
+//                        requestTACAccept.cancel(true);
+//                }
+//            }
+//        });
     }
 
     private ResponseMessage<TACAcceptResponse> tACAcceptResponse;
@@ -1204,15 +1275,15 @@ public class HamPayDialog {
         dialog.setCanceledOnTouchOutside(true);
 
         dialog.show();
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                if (requestIndividualPayment != null){
-                    if (!requestIndividualPayment.isCancelled())
-                        requestIndividualPayment.cancel(true);
-                }
-            }
-        });
+//        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//            @Override
+//            public void onDismiss(DialogInterface dialog) {
+//                if (requestIndividualPayment != null){
+//                    if (!requestIndividualPayment.isCancelled())
+//                        requestIndividualPayment.cancel(true);
+//                }
+//            }
+//        });
     }
 
     public void individualPaymentDialog(final IndividualPaymentResponse individualPaymentResponse,
@@ -2295,15 +2366,15 @@ public class HamPayDialog {
         dialog.setTitle(null);
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                if (requestTACAccept != null){
-                    if (!requestTACAccept.isCancelled())
-                        requestTACAccept.cancel(true);
-                }
-            }
-        });
+//        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+//            @Override
+//            public void onDismiss(DialogInterface dialog) {
+//                if (requestTACAccept != null){
+//                    if (!requestTACAccept.isCancelled())
+//                        requestTACAccept.cancel(true);
+//                }
+//            }
+//        });
     }
 
     public void showSuccessChangeSettingDialog(final String message){
