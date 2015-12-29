@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.hardware.camera2.params.Face;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.Fragment;
@@ -19,6 +18,9 @@ import android.widget.LinearLayout;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.squareup.picasso.Picasso;
+
+import java.io.File;
+import java.util.List;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
@@ -36,7 +38,6 @@ import xyz.homapay.hampay.mobile.android.activity.PayOneActivity;
 import xyz.homapay.hampay.mobile.android.activity.RequestPayBusinessActivity;
 import xyz.homapay.hampay.mobile.android.activity.RequestPayOneActivity;
 import xyz.homapay.hampay.mobile.android.activity.VerifyAccountActivity;
-import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
@@ -48,20 +49,16 @@ import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageVi
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.component.material.RippleView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
-import xyz.homapay.hampay.mobile.android.util.AESHelper;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
 
-import java.io.File;
-import java.util.List;
-
 /**
  * Created by amir on 6/5/15.
  */
-public class AccountDetailFragment extends Fragment implements View.OnClickListener {
+public class PaymentRequestFragment extends Fragment implements View.OnClickListener {
 
 
     View hide_bg;
@@ -124,8 +121,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
     UserProfileDTO userProfileDTO;
 
-    Bundle bundle;
-
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
@@ -168,13 +163,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         hamPayGaTracker = ((HamPayApplication) getActivity().getApplicationContext())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
-
-        bundle = getArguments();
-
-        if (bundle != null){
-            this.userProfileDTO = (UserProfileDTO) bundle.getSerializable(Constants.USER_PROFILE_DTO);
-        }
-
         deviceInfo = new DeviceInfo(context);
 
         try {
@@ -202,7 +190,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_account_detail, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_payment_request, container, false);
 
         hide_bg = (View)rootView.findViewById(R.id.hide_bg);
 
@@ -254,10 +242,10 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
         image_profile = (CircleImageView)rootView.findViewById(R.id.image_profile);
 
-        String URL = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
+//        String URL = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
 
-        requestImageDownloader = new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile));
-        requestImageDownloader.execute(URL);
+//        requestImageDownloader = new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile));
+//        requestImageDownloader.execute(URL);
 
         String filePath = context.getFilesDir().getPath().toString() + "/" + "userImage.png";
         File file = new File(filePath);
@@ -273,20 +261,20 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         hampay_2_ll = (LinearLayout)rootView.findViewById(R.id.hampay_2_ll);
         hampay_3_ll = (LinearLayout)rootView.findViewById(R.id.hampay_3_ll);
         hampay_4_ll = (LinearLayout)rootView.findViewById(R.id.hampay_4_ll);
-        hampay_1_ll.setOnClickListener(this);
-        hampay_2_ll.setOnClickListener(this);
-        hampay_3_ll.setOnClickListener(this);
-        hampay_4_ll.setOnClickListener(this);
+//        hampay_1_ll.setOnClickListener(this);
+//        hampay_2_ll.setOnClickListener(this);
+//        hampay_3_ll.setOnClickListener(this);
+//        hampay_4_ll.setOnClickListener(this);
 
         verify_account_button = (ButtonRectangle)rootView.findViewById(R.id.verify_account_button);
-        verify_account_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                verifyAccountRequest = new VerifyAccountRequest();
-                requestVerifyAccount = new RequestVerifyAccount(getActivity(), new RequestVerifyAccountTaskCompleteListener());
-                requestVerifyAccount.execute(verifyAccountRequest);
-            }
-        });
+//        verify_account_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                verifyAccountRequest = new VerifyAccountRequest();
+//                requestVerifyAccount = new RequestVerifyAccount(getActivity(), new RequestVerifyAccountTaskCompleteListener());
+//                requestVerifyAccount.execute(verifyAccountRequest);
+//            }
+//        });
 
 
 
@@ -309,15 +297,15 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         hampay_image_4 = (ImageView)rootView.findViewById(R.id.hampay_image_4);
 
 
-        if (prefs.getBoolean(Constants.FORCE_USER_PROFILE, false)){
-            userProfileRequest = new UserProfileRequest();
-            requestUserProfile = new RequestUserProfile(getActivity(), new RequestUserProfileTaskCompleteListener());
-            requestUserProfile.execute(userProfileRequest);
-        }else {
-            fillUserProfile(userProfileDTO);
-            editor.putBoolean(Constants.FORCE_USER_PROFILE, true);
-            editor.commit();
-        }
+//        if (prefs.getBoolean(Constants.FORCE_USER_PROFILE, false)){
+//            userProfileRequest = new UserProfileRequest();
+//            requestUserProfile = new RequestUserProfile(getActivity(), new RequestUserProfileTaskCompleteListener());
+//            requestUserProfile.execute(userProfileRequest);
+//        }else {
+//            fillUserProfile(userProfileDTO);
+//            editor.putBoolean(Constants.FORCE_USER_PROFILE, true);
+//            editor.commit();
+//        }
 
         // Inflate the layout for this fragment
         return rootView;
@@ -459,8 +447,8 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                 break;
 
             case R.id.request_business_code:
-                request_business_name.setTextColor(Color.BLACK);
-                request_business_code.setTextColor(Color.WHITE);
+//                request_business_name.setTextColor(Color.BLACK);
+//                request_business_code.setTextColor(Color.WHITE);
                 break;
         }
     }

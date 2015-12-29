@@ -9,7 +9,8 @@
 
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -19,21 +20,23 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="10dp">
 
 
                 <RelativeLayout
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5">
+                    android:layout_weight="0.5"
+                    android:layout_marginRight="5dp">
 
 
                     <xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle
                         android:id="@+id/business_request_button"
                         android:layout_width="fill_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="55dp"
                         android:layout_centerHorizontal="true"
-                        android:background="@color/user_change_status"
+                        android:background="@color/normal_text"
                         android:textSize="16dp"
                         android:contentDescription="verify"/>
 
@@ -54,13 +57,13 @@
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:background="@color/normal_text">
+                    android:layout_marginLeft="5dp">
 
 
                     <xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle
                         android:id="@+id/one_request_button"
                         android:layout_width="fill_parent"
-                        android:layout_height="50dp"
+                        android:layout_height="55dp"
                         android:layout_centerHorizontal="true"
                         android:background="@color/user_change_status"
                         android:textSize="16dp"
@@ -86,12 +89,13 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
 
 
                 <RelativeLayout
                     android:layout_width="0dip"
-                    android:layout_height="36dp"
+                    android:layout_height="50dp"
                     android:layout_weight="0.5">
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
@@ -105,13 +109,13 @@
                         android:layout_gravity="center"
                         android:layout_centerInParent="true"
                         android:text="@string/business_pay_name"
-                        android:background="@color/normal_text"/>
+                        android:background="@android:color/white"/>
 
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="0dip"
-                    android:layout_height="36dp"
+                    android:layout_height="50dp"
                     android:layout_weight="0.5">
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
@@ -119,17 +123,22 @@
                         geekui:customTypeface="fonts/iran_sans.ttf"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:textColor="@android:color/white"
+                        android:textColor="@android:color/black"
                         android:textSize="12dp"
                         android:gravity="center"
                         android:layout_gravity="center"
                         android:layout_centerInParent="true"
                         android:text="@string/business_pay_code"
-                        android:background="@color/normal_text"/>
+                        android:background="#e6e7e8"/>
 
                 </RelativeLayout>
 
             </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="#e6e7e8"/>
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -184,6 +193,10 @@
                         android:background="@drawable/remember_edittext_bg"
                         android:layout_margin="8dp"/>
 
+                    <View
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"/>
+
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/input_digit_4"
                         geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -198,6 +211,18 @@
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/input_digit_5"
+                        geekui:customTypeface="fonts/iran_sans_bold.ttf"
+                        android:layout_width="25dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/register_btn_color"
+                        android:textSize="20dp"
+                        android:gravity="bottom|center_horizontal"
+                        android:layout_gravity="center"
+                        android:background="@drawable/remember_edittext_bg"
+                        android:layout_margin="8dp"/>
+
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/input_digit_6"
                         geekui:customTypeface="fonts/iran_sans_bold.ttf"
                         android:layout_width="25dp"
                         android:layout_height="wrap_content"
@@ -266,7 +291,7 @@
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_width="fill_parent"

@@ -49,7 +49,7 @@ public class RequestPayOneActivity extends AppCompatActivity {
     FacedTextView contact_name;
     FacedEditText contact_message;
     String contactMssage = "";
-    FacedEditText credit_value;
+    FacedTextView credit_value;
     Long amountValue;
     boolean creditValueValidation = false;
     ImageView credit_value_icon;
@@ -139,8 +139,8 @@ public class RequestPayOneActivity extends AppCompatActivity {
 
         hamPayDialog = new HamPayDialog(activity);
 
-        credit_value = (FacedEditText)findViewById(R.id.credit_value);
-        credit_value.addTextChangedListener(new CurrencyFormatterTextWatcher(credit_value));
+        credit_value = (FacedTextView)findViewById(R.id.credit_value);
+//        credit_value.addTextChangedListener(new CurrencyFormatterTextWatcher(credit_value));
         credit_value_icon = (ImageView)findViewById(R.id.credit_value_icon);
 //        credit_value.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 //            @Override

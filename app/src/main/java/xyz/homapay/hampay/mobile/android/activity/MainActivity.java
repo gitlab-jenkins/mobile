@@ -52,6 +52,7 @@ import xyz.homapay.hampay.mobile.android.fragment.FragmentDrawer;
 import xyz.homapay.hampay.mobile.android.fragment.GuideFragment;
 import xyz.homapay.hampay.mobile.android.fragment.PayToBusinessFragment;
 import xyz.homapay.hampay.mobile.android.fragment.PayToOneFragment;
+import xyz.homapay.hampay.mobile.android.fragment.PaymentRequestFragment;
 import xyz.homapay.hampay.mobile.android.fragment.PrivacyFragment;
 import xyz.homapay.hampay.mobile.android.fragment.SettingFragment;
 import xyz.homapay.hampay.mobile.android.fragment.TCFragment;
@@ -162,9 +163,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         userProfileDTO = (UserProfileDTO) intent.getSerializableExtra(Constants.USER_PROFILE_DTO);
 
+
+
         fragment_title = (FacedTextView)findViewById(R.id.fragment_title);
 
         user_account_name = (FacedTextView)findViewById(R.id.user_account_name);
+        user_account_name.setText(userProfileDTO.getFullName());
         image_profile = (CircleImageView)findViewById(R.id.image_profile);
         image_profile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -403,42 +407,46 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         Fragment fragment = null;
         String title = getString(R.string.app_name);
         switch (position) {
+
             case 0:
+                fragment = new PaymentRequestFragment();
+                title = getString(R.string.title_payment_request);
+                break;
+            case 1:
                 fragment = new AccountDetailFragment();
                 if (userProfileDTO != null)
                     bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
                 fragment.setArguments(bundle);
                 title = getString(R.string.title_account_detail);
-
                 break;
-            case 1:
+            case 2:
                 fragment = new UserTransactionFragment();
                 title = getString(R.string.title_transactions);
                 break;
-            case 2:
+            case 3:
                 fragment = new PayToOneFragment();
                 title = getString(R.string.title_pay_to_one);
                 break;
-            case 3:
+            case 4:
                 fragment = new PayToBusinessFragment();
                 title = getString(R.string.title_pay_to_business);
                 break;
-            case 4:
+            case 5:
                 fragment = new SettingFragment();
                 title = getString(R.string.title_settings);
                 break;
-            case 5:
+            case 6:
                 new HamPayDialog(activity).fetchContactUsInfo();
                 break;
-            case 6:
+            case 7:
                 fragment = new GuideFragment();
                 title = getString(R.string.title_guide);
                 break;
-            case 7:
+            case 8:
                 fragment = new AboutFragment();
                 title = getString(R.string.title_about);
                 break;
-            case 8:
+            case 9:
                 Uri uri = Uri.parse("http://play.google.com/store/apps/details?id=" + context.getPackageName());
                 Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
                 goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
@@ -450,15 +458,15 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                             Uri.parse("market://details?id=" + context.getPackageName())));
                 }
                 break;
-            case 9:
+            case 10:
                 fragment = new TCFragment();
                 title = getString(R.string.title_already_tc);
                 break;
-            case 10:
+            case 11:
                 fragment = new PrivacyFragment();
                 title = getString(R.string.title_already_privacy);
                 break;
-            case 11:
+            case 12:
                 LogoutData logoutData = new LogoutData();
                 logoutData.setIplanetDirectoryPro(prefs.getString(Constants.TOKEN_ID, null));
                 new HamPayDialog(activity).showExitDialog(logoutData);

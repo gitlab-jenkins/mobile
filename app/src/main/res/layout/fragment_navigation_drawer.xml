@@ -52,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                 android:textSize="18dp"
-                android:text="df;lksdlsmjfknskcnfksnc"
+                android:text=""
                 android:layout_marginRight="4dp"
                 android:layout_marginLeft="4dp"/>
 

@@ -19,6 +19,7 @@
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
 
+    <string name="nav_item_payment_request">پرداخت‌ها</string>
     <string name="nav_item_account_detail">جزئیات حساب</string>
     <string name="nav_item_transactions">تراکنشها</string>
     <string name="nav_item_pay_to_one">پرداخت به فرد</string>
@@ -43,6 +44,7 @@
 
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">
+        <item>@string/nav_item_payment_request</item>
         <item>@string/nav_item_account_detail</item>
         <item>@string/nav_item_transactions</item>
         <item>@string/nav_item_pay_to_one</item>
@@ -57,6 +59,7 @@
         <item>@string/nav_item_exit</item>
     </string-array>
 
+    <string name="title_payment_request">پرداخت‌ها</string>
     <string name="title_account_detail">جزئیات حساب</string>
     <string name="title_transactions">تراکنش‌ها</string>
     <string name="title_pay_to_one">پرداخت به فرد</string>
@@ -456,6 +459,7 @@
     <string name="business_pay_name">براساس نام</string>
     <string name="request_pay_detail">جزییات پرداخت</string>
     <string name="card_nubmer">شماره کارت</string>
-    <string name="pay_with_hampay">پرداخت با هم‌پی</string>
+    <string name="pay_with_hampay">تایید پرداخت</string>
+    <string name="request_payment_rial">مبلغ</string>
 
 </resources>

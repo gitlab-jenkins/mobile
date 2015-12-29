@@ -38,6 +38,7 @@ public class FragmentDrawer extends Fragment {
     private View containerView;
     private static String[] titles;
     private static int icons[] = {
+            R.drawable.pay_settings,
             R.drawable.account_settings,
             R.drawable.transactions_settings,
             R.drawable.pay_settings,
