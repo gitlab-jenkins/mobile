@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
             android:textSize="15dp"
-            android:text="@string/business_pay_name"
+            android:text="@string/business_name"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="64dp"/>

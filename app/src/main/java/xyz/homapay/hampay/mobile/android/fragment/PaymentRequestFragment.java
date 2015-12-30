@@ -35,8 +35,9 @@ import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.MainActivity;
 import xyz.homapay.hampay.mobile.android.activity.PayOneActivity;
-import xyz.homapay.hampay.mobile.android.activity.RequestPayBusinessActivity;
-import xyz.homapay.hampay.mobile.android.activity.RequestPayOneActivity;
+import xyz.homapay.hampay.mobile.android.activity.PayToOneActivity;
+import xyz.homapay.hampay.mobile.android.activity.RequestPayBusinessListActivity;
+import xyz.homapay.hampay.mobile.android.activity.RequestBusinessPayDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.VerifyAccountActivity;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
@@ -149,6 +150,8 @@ public class PaymentRequestFragment extends Fragment implements View.OnClickList
     FacedTextView request_business_name;
     FacedTextView request_business_code;
 
+    ButtonRectangle pay_to_one_button;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -193,6 +196,9 @@ public class PaymentRequestFragment extends Fragment implements View.OnClickList
         View rootView = inflater.inflate(R.layout.fragment_payment_request, container, false);
 
         hide_bg = (View)rootView.findViewById(R.id.hide_bg);
+
+        pay_to_one_button = (ButtonRectangle)rootView.findViewById(R.id.pay_to_one_button);
+        pay_to_one_button.setOnClickListener(this);
 
         request_business_name = (FacedTextView)rootView.findViewById(R.id.request_business_name);
         request_business_name.setOnClickListener(this);
@@ -422,7 +428,8 @@ public class PaymentRequestFragment extends Fragment implements View.OnClickList
                 break;
 
             case  R.id.business_request_pay_button:
-                intent.setClass(context, RequestPayOneActivity.class);
+                inputPasswordValue = "";
+                intent.setClass(context, RequestBusinessPayDetailActivity.class);
                 startActivity(intent);
                 input_digit_1.setText("");
                 input_digit_1.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
@@ -439,16 +446,16 @@ public class PaymentRequestFragment extends Fragment implements View.OnClickList
                 break;
 
             case R.id.request_business_name:
-//                request_business_name.setTextColor(Color.WHITE);
-//                request_business_code.setTextColor(Color.BLACK);
-
-                intent.setClass(context, RequestPayBusinessActivity.class);
+                intent.setClass(context, RequestPayBusinessListActivity.class);
                 startActivity(intent);
                 break;
 
             case R.id.request_business_code:
-//                request_business_name.setTextColor(Color.BLACK);
-//                request_business_code.setTextColor(Color.WHITE);
+                break;
+
+            case R.id.pay_to_one_button:
+                intent.setClass(context, PayToOneActivity.class);
+                startActivity(intent);
                 break;
         }
     }

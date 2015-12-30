@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.hardware.camera2.params.Face;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.Fragment;
@@ -33,10 +32,9 @@ import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.MainActivity;
 import xyz.homapay.hampay.mobile.android.activity.PayOneActivity;
-import xyz.homapay.hampay.mobile.android.activity.RequestPayBusinessActivity;
-import xyz.homapay.hampay.mobile.android.activity.RequestPayOneActivity;
+import xyz.homapay.hampay.mobile.android.activity.RequestPayBusinessListActivity;
+import xyz.homapay.hampay.mobile.android.activity.RequestBusinessPayDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.VerifyAccountActivity;
-import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
@@ -48,7 +46,6 @@ import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageVi
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.component.material.RippleView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
-import xyz.homapay.hampay.mobile.android.util.AESHelper;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
@@ -434,7 +431,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                 break;
 
             case  R.id.business_request_pay_button:
-                intent.setClass(context, RequestPayOneActivity.class);
+                intent.setClass(context, RequestBusinessPayDetailActivity.class);
                 startActivity(intent);
                 input_digit_1.setText("");
                 input_digit_1.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
@@ -454,7 +451,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 //                request_business_name.setTextColor(Color.WHITE);
 //                request_business_code.setTextColor(Color.BLACK);
 
-                intent.setClass(context, RequestPayBusinessActivity.class);
+                intent.setClass(context, RequestPayBusinessListActivity.class);
                 startActivity(intent);
                 break;
 

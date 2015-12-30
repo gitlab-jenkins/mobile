@@ -423,30 +423,30 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 fragment = new UserTransactionFragment();
                 title = getString(R.string.title_transactions);
                 break;
+//            case 3:
+//                fragment = new PayToOneFragment();
+//                title = getString(R.string.title_pay_to_one);
+//                break;
+//            case 4:
+//                fragment = new PayToBusinessFragment();
+//                title = getString(R.string.title_pay_to_business);
+//                break;
             case 3:
-                fragment = new PayToOneFragment();
-                title = getString(R.string.title_pay_to_one);
-                break;
-            case 4:
-                fragment = new PayToBusinessFragment();
-                title = getString(R.string.title_pay_to_business);
-                break;
-            case 5:
                 fragment = new SettingFragment();
                 title = getString(R.string.title_settings);
                 break;
-            case 6:
+            case 4:
                 new HamPayDialog(activity).fetchContactUsInfo();
                 break;
-            case 7:
+            case 5:
                 fragment = new GuideFragment();
                 title = getString(R.string.title_guide);
                 break;
-            case 8:
+            case 6:
                 fragment = new AboutFragment();
                 title = getString(R.string.title_about);
                 break;
-            case 9:
+            case 7:
                 Uri uri = Uri.parse("http://play.google.com/store/apps/details?id=" + context.getPackageName());
                 Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
                 goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
@@ -458,15 +458,15 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                             Uri.parse("market://details?id=" + context.getPackageName())));
                 }
                 break;
-            case 10:
+            case 8:
                 fragment = new TCFragment();
                 title = getString(R.string.title_already_tc);
                 break;
-            case 11:
+            case 9:
                 fragment = new PrivacyFragment();
                 title = getString(R.string.title_already_privacy);
                 break;
-            case 12:
+            case 10:
                 LogoutData logoutData = new LogoutData();
                 logoutData.setIplanetDirectoryPro(prefs.getString(Constants.TOKEN_ID, null));
                 new HamPayDialog(activity).showExitDialog(logoutData);

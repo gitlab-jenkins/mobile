@@ -47,8 +47,8 @@
         <item>@string/nav_item_payment_request</item>
         <item>@string/nav_item_account_detail</item>
         <item>@string/nav_item_transactions</item>
-        <item>@string/nav_item_pay_to_one</item>
-        <item>@string/nav_item_pay_to_business</item>
+        <!--<item>@string/nav_item_pay_to_one</item>-->
+        <!--<item>@string/nav_item_pay_to_business</item>-->
         <item>@string/nav_item_settings</item>
         <item>@string/nav_item_contacts_us</item>
         <item>@string/nav_item_help</item>
@@ -457,6 +457,7 @@
     <string name="one_request">پرداخت به فرد</string>
     <string name="business_pay_code">براساس کد</string>
     <string name="business_pay_name">براساس نام</string>
+    <string name="business_name">نام کسب و کار</string>
     <string name="request_pay_detail">جزییات پرداخت</string>
     <string name="card_nubmer">شماره کارت</string>
     <string name="pay_with_hampay">تایید پرداخت</string>

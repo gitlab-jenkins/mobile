@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -25,36 +24,25 @@ import java.util.List;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
-import xyz.homapay.hampay.common.core.model.dto.UserVerificationStatus;
 import xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
-import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
-import xyz.homapay.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
 import xyz.homapay.hampay.common.core.model.response.BusinessListResponse;
-import xyz.homapay.hampay.common.core.model.response.GetUserIdTokenResponse;
-import xyz.homapay.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.BusinessDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.HamPayBusinessesAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestHamPayBusiness;
-import xyz.homapay.hampay.mobile.android.async.RequestIndividualPaymentConfirm;
 import xyz.homapay.hampay.mobile.android.async.RequestSearchHamPayBusiness;
-import xyz.homapay.hampay.mobile.android.async.RequestUserIdToken;
-import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.doblist.DobList;
 import xyz.homapay.hampay.mobile.android.component.doblist.events.OnLoadMoreListener;
 import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoEmptyViewException;
 import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoListviewException;
-import xyz.homapay.hampay.mobile.android.component.edittext.CurrencyFormatterTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
-import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.util.Constants;
-import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
-public class RequestPayBusinessActivity extends AppCompatActivity {
+public class RequestPayBusinessListActivity extends AppCompatActivity {
 
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
@@ -105,7 +93,7 @@ public class RequestPayBusinessActivity extends AppCompatActivity {
         setContentView(R.layout.activity_requets_pay_business);
 
         context = this;
-        activity = RequestPayBusinessActivity.this;
+        activity = RequestPayBusinessListActivity.this;
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();

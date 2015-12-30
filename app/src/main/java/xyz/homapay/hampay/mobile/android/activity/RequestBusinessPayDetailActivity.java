@@ -4,12 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -30,14 +26,13 @@ import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestIndividualPaymentConfirm;
 import xyz.homapay.hampay.mobile.android.async.RequestUserIdToken;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
-import xyz.homapay.hampay.mobile.android.component.edittext.CurrencyFormatterTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
-public class RequestPayOneActivity extends AppCompatActivity {
+public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
     ButtonRectangle pay_to_one_button;
 
@@ -90,10 +85,10 @@ public class RequestPayOneActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_requets_pay_one);
+        setContentView(R.layout.activity_requets_business_pay_detail);
 
         context = this;
-        activity = RequestPayOneActivity.this;
+        activity = RequestBusinessPayDetailActivity.this;
 
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
@@ -210,7 +205,10 @@ public class RequestPayOneActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                finish();
+
+                new HamPayDialog(RequestBusinessPayDetailActivity.this).businessMockPaymentConfirmDialog(389000L, "");
+
+//                finish();
 
 //                credit_value.clearFocus();
 //                pay_to_one_button.setEnabled(false);

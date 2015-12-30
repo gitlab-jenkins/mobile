@@ -31,7 +31,7 @@
 
 
                     <xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle
-                        android:id="@+id/business_request_button"
+                        android:id="@+id/pay_to_one_button"
                         android:layout_width="fill_parent"
                         android:layout_height="55dp"
                         android:layout_centerHorizontal="true"
@@ -60,7 +60,7 @@
 
 
                     <xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle
-                        android:id="@+id/one_request_button"
+                        android:id="@+id/request_business_button"
                         android:layout_width="fill_parent"
                         android:layout_height="55dp"
                         android:layout_centerHorizontal="true"

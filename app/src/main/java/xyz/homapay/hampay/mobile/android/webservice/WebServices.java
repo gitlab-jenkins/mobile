@@ -655,6 +655,8 @@ public class WebServices  {
             List<ContactDTO> contactDTOs = new ArrayList<ContactDTO>();
             Cursor phones = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null,null, null);
 
+            int i = 0;
+
             while (phones.moveToNext()) {
                 String contact_name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                 String contact_phone_no = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
@@ -668,6 +670,11 @@ public class WebServices  {
                     contactDTOs.add(contactDTO);
                 }
 
+                i++;
+
+                if (i > 25){
+                    break;
+                }
 
 
             }
@@ -1382,6 +1389,8 @@ public class WebServices  {
             Cursor phones = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null,null, null);
 
 
+            int i = 0;
+
             while (phones.moveToNext()) {
                 String contact_name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                 String contact_phone_no = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
@@ -1395,6 +1404,12 @@ public class WebServices  {
                     contactDTO.setDisplayName(contact_name);
                     contactDTOs.add(contactDTO);
 
+                }
+
+                i++;
+
+                if (i > 25){
+                    break;
                 }
 
             }
