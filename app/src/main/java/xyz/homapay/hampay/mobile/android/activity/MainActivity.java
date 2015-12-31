@@ -163,6 +163,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         userProfileDTO = (UserProfileDTO) intent.getSerializableExtra(Constants.USER_PROFILE_DTO);
 
+        editor.putLong(Constants.MAX_XFER_Amount, this.userProfileDTO.getMaxXferAmount());
+        editor.putLong(Constants.MIN_XFER_Amount, this.userProfileDTO.getMinXferAmount());
+        editor.putInt(Constants.USER_VERIFICATION_STATUS, userProfileDTO.getVerificationStatus().ordinal());
+        editor.commit();
+
 
 
         fragment_title = (FacedTextView)findViewById(R.id.fragment_title);
