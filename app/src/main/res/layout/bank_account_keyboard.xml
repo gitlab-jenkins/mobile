@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ripple="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_alignParentBottom="true"
+    android:background="@android:color/white"
+    xmlns:geekui="http://schemas.android.com/apk/res-auto">
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp">
+
+        <xyz.homapay.hampay.mobile.android.component.material.RippleView
+            android:id="@+id/digit_1"
+            android:layout_width="0dip"
+            android:layout_height="42dp"
+            android:layout_weight="0.3"
+            android:layout_gravity="center_horizontal"
+            ripple:rv_type="rectangle"
+            android:background="@drawable/selector_row"
+            ripple:rv_zoom="true"
+            android:layout_margin="1dp">
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                geekui:customTypeface="fonts/iran_sans.ttf"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textColor="@android:color/white"
+                android:textSize="18dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="۱"
+                android:background="@color/keyword_btn_color"
+                android:contentDescription="one"/>
+
+        </xyz.homapay.hampay.mobile.android.component.material.RippleView>
+
+        <xyz.homapay.hampay.mobile.android.component.material.RippleView
+            android:id="@+id/digit_2"
+            android:layout_width="0dip"
+            android:layout_height="42dp"
+            android:layout_weight="0.3"
+            android:layout_gravity="center_horizontal"
+            ripple:rv_type="rectangle"
+            android:background="@drawable/selector_row"
+            ripple:rv_zoom="true"
+            android:layout_margin="1dp">
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                geekui:customTypeface="fonts/iran_sans.ttf"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textColor="@android:color/white"
+                android:textSize="18dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="۲"
+                android:background="@color/keyword_btn_color"
+                android:contentDescription="two"/>
+
+        </xyz.homapay.hampay.mobile.android.component.material.RippleView>
+
+        <xyz.homapay.hampay.mobile.android.component.material.RippleView
+            android:id="@+id/digit_3"
+            android:layout_width="0dip"
+            android:layout_height="42dp"
+            android:layout_weight="0.3"
+            android:layout_gravity="center_horizontal"
+            ripple:rv_type="rectangle"
+            android:background="@drawable/selector_row"
+            ripple:rv_zoom="true"
+            android:layout_margin="1dp">
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                geekui:customTypeface="fonts/iran_sans.ttf"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textColor="@android:color/white"
+                android:textSize="18dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="۳"
+                android:background="@color/keyword_btn_color"
+                android:contentDescription="three"/>
+
+        </xyz.homapay.hampay.mobile.android.component.material.RippleView>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp">
+
+        <xyz.homapay.hampay.mobile.android.component.material.RippleView
+            android:id="@+id/digit_4"
+            android:layout_width="0dip"
+            android:layout_height="42dp"
+            android:layout_weight="0.3"
+            android:layout_gravity="center_horizontal"
+            ripple:rv_type="rectangle"
+            android:background="@drawable/selector_row"
+            ripple:rv_zoom="true"
+            android:layout_margin="1dp">
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                geekui:customTypeface="fonts/iran_sans.ttf"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textColor="@android:color/white"
+                android:textSize="18dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="۴"
+                android:background="@color/keyword_btn_color"
+                android:contentDescription="four"/>
+
+        </xyz.homapay.hampay.mobile.android.component.material.RippleView>
+
+        <xyz.homapay.hampay.mobile.android.component.material.RippleView
+            android:id="@+id/digit_5"
+            android:layout_width="0dip"
+            android:layout_height="42dp"
+            android:layout_weight="0.3"
+            android:layout_gravity="center_horizontal"
+            ripple:rv_type="rectangle"
+            android:background="@drawable/selector_row"
+            ripple:rv_zoom="true"
+            android:layout_margin="1dp">
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                geekui:customTypeface="fonts/iran_sans.ttf"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textColor="@android:color/white"
+                android:textSize="18dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="۵"
+                android:background="@color/keyword_btn_color"
+                android:contentDescription="five"/>
+
+        </xyz.homapay.hampay.mobile.android.component.material.RippleView>
+
+        <xyz.homapay.hampay.mobile.android.component.material.RippleView
+            android:id="@+id/digit_6"
+            android:layout_width="0dip"
+            android:layout_height="42dp"
+            android:layout_weight="0.3"
+            android:layout_gravity="center_horizontal"
+            ripple:rv_type="rectangle"
+            android:background="@drawable/selector_row"
+            ripple:rv_zoom="true"
+            android:layout_margin="1dp">
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                geekui:customTypeface="fonts/iran_sans.ttf"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textColor="@android:color/white"
+                android:textSize="18dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="۶"
+                android:background="@color/keyword_btn_color"/>
+
+        </xyz.homapay.hampay.mobile.android.component.material.RippleView>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp">
+
+        <xyz.homapay.hampay.mobile.android.component.material.RippleView
+            android:id="@+id/digit_7"
+            android:layout_width="0dip"
+            android:layout_height="42dp"
+            android:layout_weight="0.3"
+            android:layout_gravity="center_horizontal"
+            ripple:rv_type="rectangle"
+            android:background="@drawable/selector_row"
+            ripple:rv_zoom="true"
+            android:layout_margin="1dp">
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                geekui:customTypeface="fonts/iran_sans.ttf"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textColor="@android:color/white"
+                android:textSize="18dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="۷"
+                android:background="@color/keyword_btn_color"/>
+
+        </xyz.homapay.hampay.mobile.android.component.material.RippleView>
+
+        <xyz.homapay.hampay.mobile.android.component.material.RippleView
+            android:id="@+id/digit_8"
+            android:layout_width="0dip"
+            android:layout_height="42dp"
+            android:layout_weight="0.3"
+            android:layout_gravity="center_horizontal"
+            ripple:rv_type="rectangle"
+            android:background="@drawable/selector_row"
+            ripple:rv_zoom="true"
+            android:layout_margin="1dp">
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                geekui:customTypeface="fonts/iran_sans.ttf"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textColor="@android:color/white"
+                android:textSize="18dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="۸"
+                android:background="@color/keyword_btn_color"/>
+
+        </xyz.homapay.hampay.mobile.android.component.material.RippleView>
+
+        <xyz.homapay.hampay.mobile.android.component.material.RippleView
+            android:id="@+id/digit_9"
+            android:layout_width="0dip"
+            android:layout_height="42dp"
+            android:layout_weight="0.3"
+            android:layout_gravity="center_horizontal"
+            ripple:rv_type="rectangle"
+            android:background="@drawable/selector_row"
+            ripple:rv_zoom="true"
+            android:layout_margin="1dp">
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                geekui:customTypeface="fonts/iran_sans.ttf"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textColor="@android:color/white"
+                android:textSize="18dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="۹"
+                android:background="@color/keyword_btn_color"/>
+
+        </xyz.homapay.hampay.mobile.android.component.material.RippleView>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp">
+
+        <xyz.homapay.hampay.mobile.android.component.material.RippleView
+            android:id="@+id/delimiter"
+            android:layout_width="0dip"
+            android:layout_height="42dp"
+            android:layout_weight="0.3"
+            android:layout_gravity="center_horizontal"
+            ripple:rv_type="rectangle"
+            android:background="@drawable/selector_row"
+            ripple:rv_zoom="true"
+            android:layout_margin="1dp">
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                geekui:customTypeface="fonts/iran_sans.ttf"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textColor="@android:color/white"
+                android:textSize="14dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="/"
+                android:background="@color/keyword_btn_color"/>
+
+        </xyz.homapay.hampay.mobile.android.component.material.RippleView>
+
+        <xyz.homapay.hampay.mobile.android.component.material.RippleView
+            android:id="@+id/digit_0"
+            android:layout_width="0dip"
+            android:layout_height="42dp"
+            android:layout_weight="0.3"
+            android:layout_gravity="center_horizontal"
+            ripple:rv_type="rectangle"
+            android:background="@drawable/selector_row"
+            ripple:rv_zoom="true"
+            android:layout_margin="1dp">
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                geekui:customTypeface="fonts/iran_sans.ttf"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:textColor="@android:color/white"
+                android:textSize="18dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="۰"
+                android:background="@color/keyword_btn_color"/>
+
+        </xyz.homapay.hampay.mobile.android.component.material.RippleView>
+
+        <xyz.homapay.hampay.mobile.android.component.material.RippleView
+            android:id="@+id/backspace"
+            android:layout_width="0dip"
+            android:layout_height="42dp"
+            android:layout_weight="0.3"
+            android:layout_gravity="center_horizontal"
+            ripple:rv_type="rectangle"
+            android:background="@color/keyword_btn_color"
+            ripple:rv_zoom="true"
+            android:layout_margin="1dp">
+
+            <ImageView
+                android:layout_width="42dp"
+                android:layout_height="15dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/backsplace" />
+
+        </xyz.homapay.hampay.mobile.android.component.material.RippleView>
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

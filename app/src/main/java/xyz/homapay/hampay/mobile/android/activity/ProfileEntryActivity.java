@@ -14,6 +14,7 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
@@ -21,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -37,6 +39,7 @@ import xyz.homapay.hampay.common.core.model.response.RegistrationEntryResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.BankListAdapter;
+import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestBankList;
 import xyz.homapay.hampay.mobile.android.async.RequestRegistrationEntry;
@@ -115,6 +118,8 @@ public class ProfileEntryActivity extends Activity {
 
     DeviceInfo deviceInfo;
 
+    LinearLayout bank_account_keyboard;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,6 +140,7 @@ public class ProfileEntryActivity extends Activity {
 
         editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ProfileEntryActivity.class.getName());
         editor.commit();
+
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -214,8 +220,19 @@ public class ProfileEntryActivity extends Activity {
             }
         });
 
+        bank_account_keyboard = (LinearLayout)findViewById(R.id.bank_account_keyboard);
+
         accountNumberValue = (FacedEditText)findViewById(R.id.accountNumberValue);
         accountNumberIcon = (ImageView)findViewById(R.id.accountNumberIcon);
+        accountNumberValue.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                new Expand(bank_account_keyboard).animate();
+
+                return true;
+            }
+        });
         accountNumberValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -243,6 +260,9 @@ public class ProfileEntryActivity extends Activity {
                     } else {
                         accountNumberIcon.setImageResource(R.drawable.false_icon);
                     }
+                }
+                else{
+//                    new Expand(bank_account_keyboard).animate();
                 }
             }
         });

@@ -76,7 +76,8 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
                 viewHolder.user_fee_ll.setVisibility(View.VISIBLE);
             }
 
-        }else if (transactionDTO.getTransactionStatus() == TransactionStatus.PENDING) {
+        }else if (transactionDTO.getTransactionStatus() == TransactionStatus.PENDING
+                || transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.INITIATING) {
             viewHolder.reject_message.setVisibility(View.GONE);
             viewHolder.status_text.setText(context.getString(R.string.pending));
             viewHolder.status_text.setTextColor(convertView.getResources().getColor(R.color.pending_transaction));

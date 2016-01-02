@@ -105,7 +105,7 @@ public class TransactionDetailActivity extends AppCompatActivity implements View
             }
 
         }else if (transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.PENDING
-                /*|| transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.INITIATING*/) {
+                || transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.INITIATING) {
             from_to_text.setText(getString(R.string.transaction_to));
             status_text.setText(context.getString(R.string.pending));
             status_text.setTextColor(getResources().getColor(R.color.pending_transaction));
