@@ -10,8 +10,10 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -39,6 +41,7 @@ import xyz.homapay.hampay.common.core.model.response.RegistrationEntryResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.BankListAdapter;
+import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestBankList;
@@ -47,6 +50,7 @@ import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.EmailTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
+import xyz.homapay.hampay.mobile.android.component.material.RippleView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.location.BestLocationListener;
 import xyz.homapay.hampay.mobile.android.location.BestLocationProvider;
@@ -58,7 +62,20 @@ import xyz.homapay.hampay.mobile.android.util.NationalCodeVerification;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
 
-public class ProfileEntryActivity extends Activity {
+public class ProfileEntryActivity extends Activity implements View.OnClickListener {
+
+    RippleView digit_1;
+    RippleView digit_2;
+    RippleView digit_3;
+    RippleView digit_4;
+    RippleView digit_5;
+    RippleView digit_6;
+    RippleView digit_7;
+    RippleView digit_8;
+    RippleView digit_9;
+    RippleView digit_0;
+    RippleView delimiter;
+    RippleView backspace;
 
     Activity activity;
 
@@ -220,24 +237,53 @@ public class ProfileEntryActivity extends Activity {
             }
         });
 
+
+        digit_1 = (RippleView)findViewById(R.id.digit_1);
+        digit_1.setOnClickListener(this);
+        digit_2 = (RippleView)findViewById(R.id.digit_2);
+        digit_2.setOnClickListener(this);
+        digit_3 = (RippleView)findViewById(R.id.digit_3);
+        digit_3.setOnClickListener(this);
+        digit_4 = (RippleView)findViewById(R.id.digit_4);
+        digit_4.setOnClickListener(this);
+        digit_5 = (RippleView)findViewById(R.id.digit_5);
+        digit_5.setOnClickListener(this);
+        digit_6 = (RippleView)findViewById(R.id.digit_6);
+        digit_6.setOnClickListener(this);
+        digit_7 = (RippleView)findViewById(R.id.digit_7);
+        digit_7.setOnClickListener(this);
+        digit_8 = (RippleView)findViewById(R.id.digit_8);
+        digit_8.setOnClickListener(this);
+        digit_9 = (RippleView)findViewById(R.id.digit_9);
+        digit_9.setOnClickListener(this);
+        digit_0 = (RippleView)findViewById(R.id.digit_0);
+        digit_0.setOnClickListener(this);
+        delimiter = (RippleView)findViewById(R.id.delimiter);
+        delimiter.setOnClickListener(this);
+        backspace = (RippleView)findViewById(R.id.backspace);
+        backspace.setOnClickListener(this);
+
         bank_account_keyboard = (LinearLayout)findViewById(R.id.bank_account_keyboard);
 
         accountNumberValue = (FacedEditText)findViewById(R.id.accountNumberValue);
+        accountNumberValue.setInputType(InputType.TYPE_NULL);
         accountNumberIcon = (ImageView)findViewById(R.id.accountNumberIcon);
-        accountNumberValue.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                new Expand(bank_account_keyboard).animate();
-
-                return true;
-            }
-        });
+//        accountNumberValue.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//
+//                new Expand(bank_account_keyboard).animate();
+//
+//                return true;
+//            }
+//        });
         accountNumberValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
 
                 if (!hasFocus) {
+
+                    new Collapse(bank_account_keyboard).animate();
 
                     accountNumberIsValid = true;
 
@@ -262,52 +308,59 @@ public class ProfileEntryActivity extends Activity {
                     }
                 }
                 else{
-//                    new Expand(bank_account_keyboard).animate();
-                }
-            }
-        });
 
-
-        accountNumberValue.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                accountNumberValue.removeTextChangedListener(this);
-                accountNumberValue.addTextChangedListener(this);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                accountNumberValue.removeTextChangedListener(this);
-
-
-                rawAccountNumberValue = s.toString().replace("/", "");
-                rawAccountNumberValueLength = rawAccountNumberValue.length();
-                rawAccountNumberValueLengthOffset = 0;
-                procAccountNumberValue = "";
-                if (rawAccountNumberValue.length() > 0) {
-                    for (int i = 0; i < rawAccountNumberValueLength; i++) {
-                        if (accountNumberFormat.charAt(i + rawAccountNumberValueLengthOffset) == '/') {
-                            procAccountNumberValue += "/" + rawAccountNumberValue.charAt(i);
-                            rawAccountNumberValueLengthOffset++;
-                        } else {
-                            procAccountNumberValue += rawAccountNumberValue.charAt(i);
-                        }
+                    View view = getCurrentFocus();
+                    if (view != null) {
+                        InputMethodManager imm = (InputMethodManager) getSystemService(
+                                Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     }
-
-                    procAccountNumberValue = new PersianEnglishDigit(procAccountNumberValue).E2P();
-
-                    accountNumberValue.setText(procAccountNumberValue);
-                    accountNumberValue.setSelection(accountNumberValue.getText().toString().length());
+                    new Expand(bank_account_keyboard).animate();
                 }
-                accountNumberValue.addTextChangedListener(this);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                accountNumberValue.removeTextChangedListener(this);
-                accountNumberValue.addTextChangedListener(this);
             }
         });
+
+
+//        accountNumberValue.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//                accountNumberValue.removeTextChangedListener(this);
+//                accountNumberValue.addTextChangedListener(this);
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                accountNumberValue.removeTextChangedListener(this);
+//
+//
+//                rawAccountNumberValue = s.toString().replace("/", "");
+//                rawAccountNumberValueLength = rawAccountNumberValue.length();
+//                rawAccountNumberValueLengthOffset = 0;
+//                procAccountNumberValue = "";
+//                if (rawAccountNumberValue.length() > 0) {
+//                    for (int i = 0; i < rawAccountNumberValueLength; i++) {
+//                        if (accountNumberFormat.charAt(i + rawAccountNumberValueLengthOffset) == '/') {
+//                            procAccountNumberValue += "/" + rawAccountNumberValue.charAt(i);
+//                            rawAccountNumberValueLengthOffset++;
+//                        } else {
+//                            procAccountNumberValue += rawAccountNumberValue.charAt(i);
+//                        }
+//                    }
+//
+//                    procAccountNumberValue = new PersianEnglishDigit(procAccountNumberValue).E2P();
+//
+//                    accountNumberValue.setText(procAccountNumberValue);
+//                    accountNumberValue.setSelection(accountNumberValue.getText().toString().length());
+//                }
+//                accountNumberValue.addTextChangedListener(this);
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                accountNumberValue.removeTextChangedListener(this);
+//                accountNumberValue.addTextChangedListener(this);
+//            }
+//        });
 
         selectedBankTitle = (FacedTextView)findViewById(R.id.selectedBankText);
 
@@ -434,6 +487,72 @@ public class ProfileEntryActivity extends Activity {
         new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/reg-userInfo.html");
     }
 
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+
+            case R.id.digit_1:
+                inputDigit("۱");
+                break;
+
+            case R.id.digit_2:
+                inputDigit("۲");
+                break;
+
+            case R.id.digit_3:
+                inputDigit("۳");
+                break;
+
+            case R.id.digit_4:
+                inputDigit("۴");
+                break;
+
+            case R.id.digit_5:
+                inputDigit("۵");
+                break;
+
+            case R.id.digit_6:
+                inputDigit("۶");
+                break;
+
+            case R.id.digit_7:
+                inputDigit("۷");
+                break;
+
+            case R.id.digit_8:
+                inputDigit("۸");
+                break;
+
+            case R.id.digit_9:
+                inputDigit("۹");
+                break;
+
+            case R.id.digit_0:
+                inputDigit("۰");
+                break;
+
+            case R.id.backspace:
+                inputDigit("d");
+                break;
+
+            case R.id.delimiter:
+                inputDigit("/");
+                break;
+        }
+    }
+
+    private void inputDigit(String digit) {
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(20);
+        if (digit.contains("d")) {
+            if (accountNumberValue.getText().toString().length() > 0) {
+                accountNumberValue.setText(accountNumberValue.getText().toString().substring(0, accountNumberValue.getText().toString().length() - 1));
+            }
+        }else {
+            accountNumberValue.setText(accountNumberValue.getText().toString() + digit);
+        }
+    }
 
     private void showListBankDialog(){
         Rect displayRectangle = new Rect();

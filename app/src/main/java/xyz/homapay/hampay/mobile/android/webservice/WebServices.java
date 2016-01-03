@@ -43,6 +43,7 @@ import xyz.homapay.hampay.common.core.model.request.RegistrationSendSmsTokenRequ
 import xyz.homapay.hampay.common.core.model.request.RegistrationVerifyAccountRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationVerifyTransferMoneyRequest;
+import xyz.homapay.hampay.common.core.model.request.RemoveUserImageRequest;
 import xyz.homapay.hampay.common.core.model.request.TACAcceptRequest;
 import xyz.homapay.hampay.common.core.model.request.TACRequest;
 import xyz.homapay.hampay.common.core.model.request.TransactionListRequest;
@@ -73,6 +74,7 @@ import xyz.homapay.hampay.common.core.model.response.RegistrationSendSmsTokenRes
 import xyz.homapay.hampay.common.core.model.response.RegistrationVerifyAccountResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationVerifyMobileResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationVerifyTransferMoneyResponse;
+import xyz.homapay.hampay.common.core.model.response.RemoveUserImageResponse;
 import xyz.homapay.hampay.common.core.model.response.TACAcceptResponse;
 import xyz.homapay.hampay.common.core.model.response.TACResponse;
 import xyz.homapay.hampay.common.core.model.response.TransactionListResponse;
@@ -2078,5 +2080,69 @@ public class WebServices  {
                 connection.disconnect();
         }
         return bitmap;
+    }
+
+
+    public ResponseMessage<RemoveUserImageResponse> newRemoveUserImageResponse(RemoveUserImageRequest removeUserImageRequest){
+
+        ResponseMessage<RemoveUserImageResponse> responseMessage = null;
+        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/remove-image");
+        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+
+        try {
+
+            RequestHeader header = new RequestHeader();
+            header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+            header.setVersion("1.0-PA");
+
+            RequestMessage<RemoveUserImageRequest> message = new RequestMessage<RemoveUserImageRequest>();
+            message.setRequestHeader(header);
+            RemoveUserImageRequest request = removeUserImageRequest;
+            request.setRequestUUID(UUID.randomUUID().toString());
+            message.setService(request);
+
+
+
+            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RemoveUserImageRequest>>() {}.getType();
+            String jsonRequest = new Gson().toJson(message, requestType);
+
+            connection.setConnectTimeout(30000);
+            connection.setReadTimeout(30000);
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            OutputStream outputStream = connection.getOutputStream();
+            outputStream.write(jsonRequest.getBytes());
+            outputStream.flush();
+
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
+
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                }
+            });
+
+            Gson gson = builder.create();
+            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RemoveUserImageResponse>>() {}.getType());
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (connection != null)
+                connection.disconnect();
+        }
+        return responseMessage;
     }
 }

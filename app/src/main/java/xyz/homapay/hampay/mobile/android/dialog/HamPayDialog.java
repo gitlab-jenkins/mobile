@@ -57,6 +57,7 @@ import xyz.homapay.hampay.common.core.model.request.RegistrationSendSmsTokenRequ
 import xyz.homapay.hampay.common.core.model.request.RegistrationVerifyAccountRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationVerifyTransferMoneyRequest;
+import xyz.homapay.hampay.common.core.model.request.RemoveUserImageRequest;
 import xyz.homapay.hampay.common.core.model.request.TACAcceptRequest;
 import xyz.homapay.hampay.common.core.model.request.TACRequest;
 import xyz.homapay.hampay.common.core.model.request.TransactionListRequest;
@@ -71,6 +72,7 @@ import xyz.homapay.hampay.common.core.model.response.ChangeEmailResponse;
 import xyz.homapay.hampay.common.core.model.response.ContactUsResponse;
 import xyz.homapay.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
 import xyz.homapay.hampay.common.core.model.response.IndividualPaymentResponse;
+import xyz.homapay.hampay.common.core.model.response.RemoveUserImageResponse;
 import xyz.homapay.hampay.common.core.model.response.TACAcceptResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
@@ -105,6 +107,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestRegisterVerifyAccount;
 import xyz.homapay.hampay.mobile.android.async.RequestRegistrationEntry;
 import xyz.homapay.hampay.mobile.android.async.RequestRegistrationSendSmsToken;
 import xyz.homapay.hampay.mobile.android.async.RequestRegistrationVerifyTransferMoney;
+import xyz.homapay.hampay.mobile.android.async.RequestRemoveUserImage;
 import xyz.homapay.hampay.mobile.android.async.RequestSearchHamPayBusiness;
 import xyz.homapay.hampay.mobile.android.async.RequestTAC;
 import xyz.homapay.hampay.mobile.android.async.RequestTACAccept;
@@ -521,6 +524,7 @@ public class HamPayDialog {
                 if (contactUsPhone.length() != 0) {
 
                     Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + contactUsPhone));
+                    activity.startActivity(intent);
                     activity.startActivity(intent);
                 }
             }
@@ -3041,6 +3045,16 @@ public class HamPayDialog {
 
 
         FacedTextView remove_choose = (FacedTextView)view.findViewById(R.id.remove_choose);
+        remove_choose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                cls
+                RemoveUserImageRequest removeUserImageRequest = new RemoveUserImageRequest();
+                RequestRemoveUserImage requestRemoveUserImage = new RequestRemoveUserImage(activity, new RequestRemovePhotoTaskCompleteListener(removeUserImageRequest));
+                requestRemoveUserImage.execute(removeUserImageRequest);
+            }
+        });
+
         FacedTextView cancel_choose = (FacedTextView)view.findViewById(R.id.cancel_choose);
 
         cancel_choose.setOnClickListener(new View.OnClickListener() {
@@ -3231,6 +3245,120 @@ public class HamPayDialog {
         public void onTaskPreRun() {
             showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
+    }
+
+
+    public class RequestRemovePhotoTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RemoveUserImageResponse>> {
+
+        private RequestRemoveUserImage requestRemoveUserImage = null;
+        private RemoveUserImageRequest removeUserImageRequest;
+
+        public RequestRemovePhotoTaskCompleteListener(RemoveUserImageRequest removeUserImageRequest){
+            this.removeUserImageRequest = removeUserImageRequest;
+
+        }
+
+        @Override
+        public void onTaskComplete(ResponseMessage<RemoveUserImageResponse> removeUserImageResponseMessage)
+        {
+
+            dismisWaitingDialog();
+
+            if (removeUserImageResponseMessage != null) {
+                if (removeUserImageResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+
+                    dialog.dismiss();
+                    activity.finish();
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Change Email User")
+                            .setAction("Change")
+                            .setLabel("Success")
+                            .build());
+                }
+                else {
+                    requestRemoveUserImage = new RequestRemoveUserImage(activity, new RequestRemovePhotoTaskCompleteListener(removeUserImageRequest));
+                    new HamPayDialog(activity).showFailRemovePhoto(requestRemoveUserImage, removeUserImageRequest,
+                            removeUserImageResponseMessage.getService().getResultStatus().getCode(),
+                            removeUserImageResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Change Email User")
+                            .setAction("Change")
+                            .setLabel("Fail(Server)")
+                            .build());
+                }
+            }else {
+                RequestRemoveUserImage requestChangeEmail = new RequestRemoveUserImage(activity, new RequestRemovePhotoTaskCompleteListener(removeUserImageRequest));
+                new HamPayDialog(activity).showFailRemovePhoto(requestChangeEmail, removeUserImageRequest,
+                        Constants.LOCAL_ERROR_CODE,
+                        activity.getString(R.string.msg_gail_change_email));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Change Email User")
+                        .setAction("Change")
+                        .setLabel("Fail(Mobile)")
+                        .build());
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
+    }
+
+    public void showFailRemovePhoto(final RequestRemoveUserImage requestRemoveUserImage,
+                                    final RemoveUserImageRequest removeUserImageRequest,
+                                    final String code,
+                                    final String message){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_unlink_user, null);
+
+        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+
+        responseCode.setText(activity.getString(R.string.error_code, code));
+        responseMessage.setText(message);
+
+        FacedTextView retry_unlink_user = (FacedTextView) view.findViewById(R.id.retry_unlink_user);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
+        if ((code.compareTo("1005") == 0) || (code.compareTo("۱۰۰۵") == 0) ){
+            retry_unlink_user.setVisibility(View.INVISIBLE);
+        }
+
+        retry_unlink_user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+                if (requestRemoveUserImage.getStatus() == AsyncTask.Status.FINISHED) {
+                    requestRemoveUserImage.execute(removeUserImageRequest);
+                }
+            }
+        });
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                activity.finish();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.show();
     }
 
 

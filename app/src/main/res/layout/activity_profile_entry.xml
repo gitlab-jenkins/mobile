@@ -378,13 +378,13 @@
                                 android:background="@android:color/transparent"
                                 android:layout_marginLeft="48dp"
                                 android:textSize="15dp"
-                                android:inputType="number"
                                 android:hint="@string/account_no_entry"
                                 android:textColor="@android:color/black"
                                 android:gravity="center_vertical"
                                 android:padding="8dp"
                                 android:focusable="false"
-                                android:contentDescription="account"/>
+                                android:contentDescription="account"
+                                android:inputType="number"/>
 
                             <ImageView
                                 android:id="@+id/accountNumberIcon"
@@ -496,6 +496,10 @@
                                 android:layout_marginBottom="2dp"/>
 
                         </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="180dp"/>
 
 
                     </LinearLayout>
