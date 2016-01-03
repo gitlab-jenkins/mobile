@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import java.io.File;
 import java.text.NumberFormat;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -3271,10 +3272,15 @@ public class HamPayDialog {
                     activity.finish();
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Change Email User")
-                            .setAction("Change")
+                            .setCategory("Remove User Image")
+                            .setAction("Remove")
                             .setLabel("Success")
                             .build());
+                    String filePath = activity.getFilesDir().getPath().toString() + "/" + "userImage.png";
+                    File file = new File(filePath);
+                    if (file.exists()) {
+                        file.delete();
+                    }
                 }
                 else {
                     requestRemoveUserImage = new RequestRemoveUserImage(activity, new RequestRemovePhotoTaskCompleteListener(removeUserImageRequest));
@@ -3283,8 +3289,8 @@ public class HamPayDialog {
                             removeUserImageResponseMessage.getService().getResultStatus().getDescription());
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Change Email User")
-                            .setAction("Change")
+                            .setCategory("Remove User Image")
+                            .setAction("Remove")
                             .setLabel("Fail(Server)")
                             .build());
                 }
@@ -3295,8 +3301,8 @@ public class HamPayDialog {
                         activity.getString(R.string.msg_gail_change_email));
 
                 hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Change Email User")
-                        .setAction("Change")
+                        .setCategory("Remove User Image")
+                        .setAction("Remove")
                         .setLabel("Fail(Mobile)")
                         .build());
             }
