@@ -365,13 +365,13 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
                         .setLabel("Fail(Mobile)")
                         .build());
             }
-    }
+        }
 
-    @Override
-    public void onTaskPreRun() {
-        hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
     }
-}
 
 
 
@@ -479,19 +479,19 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
             keyboard.setEnabled(false);
 
             //Remove below lines
-            editor.putString(Constants.LOGIN_TOKEN_ID, /*successLoginResponse.getTokenId()*/"aaaaaaaaaaaaaaaaaaaaaaaaaaa");
-            editor.commit();
+//            editor.putString(Constants.LOGIN_TOKEN_ID, /*successLoginResponse.getTokenId()*/"aaaaaaaaaaaaaaaaaaaaaaaaaaa");
+//            editor.commit();
 //            if (prefs.getBoolean(Constants.DISMIS_TAC, true)) {
-                tacRequest = new TACRequest();
-                tacRequest.setDeviceId(new DeviceInfo(context).getAndroidId());
-                tacRequest.setAppVersion(new AppInfo(context).getVersionCode() + "");
-                requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
-                requestTAC.execute(tacRequest);
+//            tacRequest = new TACRequest();
+//            tacRequest.setDeviceId(new DeviceInfo(context).getAndroidId());
+//            tacRequest.setAppVersion(new AppInfo(context).getVersionCode() + "");
+//            requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
+//            requestTAC.execute(tacRequest);
 //            }
             //Until here
 
-//            requestLogin = new RequestLogin(context, new RequestLoginResponseTaskCompleteListener());
-//            requestLogin.execute(loginData);
+            requestLogin = new RequestLogin(context, new RequestLoginResponseTaskCompleteListener());
+            requestLogin.execute(loginData);
 
 
             inputPassValue = "";

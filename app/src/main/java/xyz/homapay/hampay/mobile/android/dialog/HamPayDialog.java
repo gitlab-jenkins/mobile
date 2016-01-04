@@ -137,6 +137,10 @@ import xyz.homapay.hampay.mobile.android.webservice.WebServices;
  */
 public class HamPayDialog {
 
+    public interface MyDialogFragmentListener {
+        public void onReturnValue(String foo);
+    }
+
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
@@ -3024,6 +3028,7 @@ public class HamPayDialog {
         camera_choose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dialog.dismiss();
                 Intent intent = new Intent();
                 intent.setClass(activity, ChangeUserImageActivity.class);
                 intent.putExtra(Constants.IMAGE_PROFILE_SOURCE, Constants.CAMERA_SELECT);
@@ -3036,11 +3041,11 @@ public class HamPayDialog {
         gallary_choose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dialog.dismiss();
                 Intent intent = new Intent();
                 intent.setClass(activity, ChangeUserImageActivity.class);
                 intent.putExtra(Constants.IMAGE_PROFILE_SOURCE, Constants.CONTENT_SELECT);
                 activity.startActivityForResult(intent, 5000);
-                dialog.dismiss();
             }
         });
 
@@ -3049,7 +3054,7 @@ public class HamPayDialog {
         remove_choose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                cls
+                dialog.dismiss();
                 RemoveUserImageRequest removeUserImageRequest = new RemoveUserImageRequest();
                 RequestRemoveUserImage requestRemoveUserImage = new RequestRemoveUserImage(activity, new RequestRemovePhotoTaskCompleteListener(removeUserImageRequest));
                 requestRemoveUserImage.execute(removeUserImageRequest);
@@ -3269,18 +3274,21 @@ public class HamPayDialog {
                 if (removeUserImageResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
                     dialog.dismiss();
-                    activity.finish();
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Remove User Image")
                             .setAction("Remove")
                             .setLabel("Success")
                             .build());
-                    String filePath = activity.getFilesDir().getPath().toString() + "/" + "userImage.png";
+                    String filePath = activity.getFilesDir().getPath().toString() + "/" + "userImage.jpeg";
                     File file = new File(filePath);
                     if (file.exists()) {
                         file.delete();
                     }
+
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("result", 5000);
+                    activity.setResult(5000);
                 }
                 else {
                     requestRemoveUserImage = new RequestRemoveUserImage(activity, new RequestRemovePhotoTaskCompleteListener(removeUserImageRequest));

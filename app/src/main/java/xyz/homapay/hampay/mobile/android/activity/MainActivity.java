@@ -23,6 +23,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -35,6 +36,7 @@ import java.util.UUID;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
+import xyz.homapay.hampay.common.core.model.dto.UserVerificationStatus;
 import xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
 import xyz.homapay.hampay.common.core.model.response.MobileRegistrationIdEntryResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
@@ -46,6 +48,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestMobileRegistrationIdEntry;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.dialog.UserEditPhotoDialog;
 import xyz.homapay.hampay.mobile.android.fragment.AboutFragment;
 import xyz.homapay.hampay.mobile.android.fragment.AccountDetailFragment;
 import xyz.homapay.hampay.mobile.android.fragment.FragmentDrawer;
@@ -61,7 +64,10 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 
 
-public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener, View.OnClickListener, UserEditPhotoDialog.UserEditPhotoDialogListener {
+
+
+
 
     private static String TAG = MainActivity.class.getSimpleName();
 
@@ -123,7 +129,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         bundle = getIntent().getExtras();
 
-
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
@@ -169,7 +174,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         image_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new HamPayDialog(activity).showUserProfileImage();
+//                new HamPayDialog(activity).showUserProfileImage();
+                FragmentManager fm = getSupportFragmentManager();
+                UserEditPhotoDialog userEditPhotoDialog = new UserEditPhotoDialog();
+                userEditPhotoDialog.show(fm, "fragment_edit_name");
+
             }
         });
 
@@ -355,7 +364,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         if (file.exists()){
             Picasso.with(this).invalidate(file);
             Picasso.with(this).load(file).into(image_profile);
-
+        }else {
+            if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.VERIFIED){
+                image_profile.setBackgroundResource(R.drawable.user_icon_blue);
+            }else {
+                image_profile.setBackgroundResource(R.drawable.user_icon_blak);
+            }
         }
 
 //        String URL = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
@@ -650,6 +664,35 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 }
             }
         }.execute(null, null, null);
+    }
+
+    @Override
+    public void onFinishEditDialog(String inputText) {
+
+
+        String filePath = getFilesDir().getPath().toString() + "/" + "userImage.jpeg";
+        File file = new File(filePath);
+        if (file.exists()) {
+            file.delete();
+        }
+
+        Fragment fragment;
+        String title;
+
+        fragment = new AccountDetailFragment();
+        bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
+        fragment.setArguments(bundle);
+        title = getString(R.string.title_account_detail);
+        currentFragmet = 0;
+        setupActionnBar(currentFragmet);
+        if (fragment != null) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.container_body, fragment);
+            fragmentTransaction.commit();
+            fragment_title.setText(title);
+        }
+
     }
 
     public class RequestMobileRegistrationIdEntryTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<MobileRegistrationIdEntryResponse>> {

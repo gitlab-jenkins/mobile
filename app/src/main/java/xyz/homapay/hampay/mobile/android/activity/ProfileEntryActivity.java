@@ -287,25 +287,25 @@ public class ProfileEntryActivity extends Activity implements View.OnClickListen
 
                     accountNumberIsValid = true;
 
-                    String splitedFormat[] = accountNumberFormat.split("/");
-                    String splitedAccountNo[] = accountNumberValue.getText().toString().split("/");
-
-                    if (splitedAccountNo.length != splitedFormat.length) {
-                        accountNumberIsValid = false;
-
-                    } else {
-                        for (int i = 0; i < splitedAccountNo.length; i++) {
-                            if (splitedAccountNo[i].length() != splitedFormat[i].length()) {
-                                accountNumberIsValid = false;
-                            }
-                        }
-                    }
-
-                    if (accountNumberIsValid) {
-                        accountNumberIcon.setImageResource(R.drawable.right_icon);
-                    } else {
-                        accountNumberIcon.setImageResource(R.drawable.false_icon);
-                    }
+//                    String splitedFormat[] = accountNumberFormat.split("/");
+//                    String splitedAccountNo[] = accountNumberValue.getText().toString().split("/");
+//
+//                    if (splitedAccountNo.length != splitedFormat.length) {
+//                        accountNumberIsValid = false;
+//
+//                    } else {
+//                        for (int i = 0; i < splitedAccountNo.length; i++) {
+//                            if (splitedAccountNo[i].length() != splitedFormat[i].length()) {
+//                                accountNumberIsValid = false;
+//                            }
+//                        }
+//                    }
+//
+//                    if (accountNumberIsValid) {
+//                        accountNumberIcon.setImageResource(R.drawable.right_icon);
+//                    } else {
+//                        accountNumberIcon.setImageResource(R.drawable.false_icon);
+//                    }
                 }
                 else{
 

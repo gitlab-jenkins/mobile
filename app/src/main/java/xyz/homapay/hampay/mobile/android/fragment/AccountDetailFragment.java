@@ -177,11 +177,17 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         requestImageDownloader = new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile));
         requestImageDownloader.execute(URL);
 
-        String filePath = context.getFilesDir().getPath().toString() + "/" + "userImage.png";
+        String filePath = context.getFilesDir().getPath().toString() + "/" + "userImage.jpeg";
         File file = new File(filePath);
         if (file.exists()){
             Picasso.with(context).invalidate(file);
             Picasso.with(context).load(file).into(image_profile);
+        }else {
+            if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.VERIFIED){
+                image_profile.setBackgroundResource(R.drawable.user_icon_blue);
+            }else {
+                image_profile.setBackgroundResource(R.drawable.user_icon_blak);
+            }
         }
 
 
