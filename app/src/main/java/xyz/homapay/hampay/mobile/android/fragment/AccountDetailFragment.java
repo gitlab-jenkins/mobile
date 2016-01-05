@@ -183,10 +183,11 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
             Picasso.with(context).invalidate(file);
             Picasso.with(context).load(file).into(image_profile);
         }else {
+            Picasso.with(context).invalidate(file);
             if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.VERIFIED){
-                image_profile.setBackgroundResource(R.drawable.user_icon_blue);
+                Picasso.with(context).load(R.drawable.user_icon_blue).into(image_profile);
             }else {
-                image_profile.setBackgroundResource(R.drawable.user_icon_blak);
+                Picasso.with(context).load(R.drawable.user_icon_blak).into(image_profile);
             }
         }
 

@@ -178,71 +178,71 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
 
-                if (!hasFocus){
-
-                    accountNumberIsValid = true;
-
-                    String splitedFormat[] = accountNumberFormat.split("/");
-                    String splitedAccountNo[] = accountNumberValue.getText().toString().split("/");
-
-                    if (splitedAccountNo.length != splitedFormat.length){
-                        accountNumberIsValid = false;
-
-                    }else{
-                        for (int i = 0; i < splitedAccountNo.length; i++){
-                            if (splitedAccountNo[i].length() != splitedFormat[i].length()){
-                                accountNumberIsValid = false;
-                            }
-                        }
-                    }
-
-                    if (accountNumberIsValid){
-                        accountNumberIcon.setImageResource(R.drawable.right_icon);
-                    }else {
-                        accountNumberIcon.setImageResource(R.drawable.false_icon);
-                    }
-                }
+//                if (!hasFocus){
+//
+//                    accountNumberIsValid = true;
+//
+//                    String splitedFormat[] = accountNumberFormat.split("/");
+//                    String splitedAccountNo[] = accountNumberValue.getText().toString().split("/");
+//
+//                    if (splitedAccountNo.length != splitedFormat.length){
+//                        accountNumberIsValid = false;
+//
+//                    }else{
+//                        for (int i = 0; i < splitedAccountNo.length; i++){
+//                            if (splitedAccountNo[i].length() != splitedFormat[i].length()){
+//                                accountNumberIsValid = false;
+//                            }
+//                        }
+//                    }
+//
+//                    if (accountNumberIsValid){
+//                        accountNumberIcon.setImageResource(R.drawable.right_icon);
+//                    }else {
+//                        accountNumberIcon.setImageResource(R.drawable.false_icon);
+//                    }
+//                }
             }
         });
 
-        accountNumberValue.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                accountNumberValue.removeTextChangedListener(this);
-                accountNumberValue.addTextChangedListener(this);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                accountNumberValue.removeTextChangedListener(this);
-                rawAccountNumberValue = s.toString().replace("/", "");
-                rawAccountNumberValueLength = rawAccountNumberValue.length();
-                rawAccountNumberValueLengthOffset = 0;
-                procAccountNumberValue = "";
-                if (rawAccountNumberValue.length() > 0) {
-                    for (int i = 0; i < rawAccountNumberValueLength; i++) {
-                        if (accountNumberFormat.charAt(i + rawAccountNumberValueLengthOffset) == '/') {
-                            procAccountNumberValue += "/" + rawAccountNumberValue.charAt(i);
-                            rawAccountNumberValueLengthOffset++;
-                        } else {
-                            procAccountNumberValue += rawAccountNumberValue.charAt(i);
-                        }
-                    }
-
-                    procAccountNumberValue = new PersianEnglishDigit(procAccountNumberValue).E2P();
-
-                    accountNumberValue.setText(procAccountNumberValue);
-                    accountNumberValue.setSelection(accountNumberValue.getText().toString().length());
-                }
-                accountNumberValue.addTextChangedListener(this);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                accountNumberValue.removeTextChangedListener(this);
-                accountNumberValue.addTextChangedListener(this);
-            }
-        });
+//        accountNumberValue.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//                accountNumberValue.removeTextChangedListener(this);
+//                accountNumberValue.addTextChangedListener(this);
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                accountNumberValue.removeTextChangedListener(this);
+//                rawAccountNumberValue = s.toString().replace("/", "");
+//                rawAccountNumberValueLength = rawAccountNumberValue.length();
+//                rawAccountNumberValueLengthOffset = 0;
+//                procAccountNumberValue = "";
+//                if (rawAccountNumberValue.length() > 0) {
+//                    for (int i = 0; i < rawAccountNumberValueLength; i++) {
+//                        if (accountNumberFormat.charAt(i + rawAccountNumberValueLengthOffset) == '/') {
+//                            procAccountNumberValue += "/" + rawAccountNumberValue.charAt(i);
+//                            rawAccountNumberValueLengthOffset++;
+//                        } else {
+//                            procAccountNumberValue += rawAccountNumberValue.charAt(i);
+//                        }
+//                    }
+//
+//                    procAccountNumberValue = new PersianEnglishDigit(procAccountNumberValue).E2P();
+//
+//                    accountNumberValue.setText(procAccountNumberValue);
+//                    accountNumberValue.setSelection(accountNumberValue.getText().toString().length());
+//                }
+//                accountNumberValue.addTextChangedListener(this);
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                accountNumberValue.removeTextChangedListener(this);
+//                accountNumberValue.addTextChangedListener(this);
+//            }
+//        });
 
 
         nationalCodeValue = (FacedEditText)findViewById(R.id.nationalCodeValue);
@@ -516,7 +516,7 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
                     correct_info.setVisibility(View.VISIBLE);
                     cellNumberValue.setText(registrationFetchUserDataResponseMessage.getService().getCellNumber());
                     userFamilyValue.setText(registrationFetchUserDataResponseMessage.getService().getFulName());
-                    accountNumberValue.setText(registrationFetchUserDataResponseMessage.getService().getAccountNumber());
+                    accountNumberValue.setText(new PersianEnglishDigit().E2P(registrationFetchUserDataResponseMessage.getService().getAccountNumber()));
                     nationalCodeValue.setText(registrationFetchUserDataResponseMessage.getService().getNationalCode());
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()

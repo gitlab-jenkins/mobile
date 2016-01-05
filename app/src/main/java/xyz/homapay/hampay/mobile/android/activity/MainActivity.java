@@ -597,8 +597,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     fragment_title.setText(title);
                 }
             }
-        }else if (requestCode == 5000){
-            if (resultCode == 5000){
+        }else if (resultCode == 5000){
+//            if (resultCode == 5000){
                 fragment = new AccountDetailFragment();
                 bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
                 fragment.setArguments(bundle);
@@ -612,7 +612,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     fragmentTransaction.commit();
                     fragment_title.setText(title);
                 }
-            }
+//            }
         }
 
     }
@@ -675,6 +675,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         if (file.exists()) {
             file.delete();
         }
+
+        Picasso.with(this).invalidate(file);
+        Picasso.with(this).load(R.drawable.ic_camera).into(image_profile);
 
         Fragment fragment;
         String title;
