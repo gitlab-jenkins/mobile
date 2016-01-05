@@ -34,7 +34,7 @@ public class Constants {
     public static final String CONTACT_PHONE_NO = "contact_phone_no";
     public static final String CONTACT_NAME = "contact_name";
     public static final String REGISTERED_ACTIVITY_DATA = "registeredActivityData";
-//    public static final String REGISTERED_CELL_NUMBER = "registeredCellNumber";
+    public static final String REGISTERED_CELL_NUMBER = "registeredCellNumber";
     public static final String REGISTERED_BANK_ID = "registeredBankID";
     public static final String REGISTERED_BANK_ACCOUNT_NO_FORMAT = "registeredBankAccountNoFormat";
     public static final String REGISTERED_ACCOUNT_NO = "registeredAccountNo";

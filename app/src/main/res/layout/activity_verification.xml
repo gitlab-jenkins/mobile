@@ -266,6 +266,7 @@
 
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                    android:id="@+id/sms_user_notify"
                     geekui:customTypeface="fonts/iran_sans.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -275,7 +276,8 @@
                     android:layout_margin="12dp"
                     android:layout_gravity="center_horizontal"
                     android:text="@string/sms_verification_text"
-                    android:layout_alignParentBottom="true"/>
+                    android:layout_alignParentBottom="true"
+                    android:lineSpacingExtra="8dp"/>
 
             </LinearLayout>
 

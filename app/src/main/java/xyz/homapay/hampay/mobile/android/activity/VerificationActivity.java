@@ -20,10 +20,12 @@ import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestRegistrationSendSmsToken;
+import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.NetworkConnectivity;
+import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class VerificationActivity extends Activity {
 
@@ -43,6 +45,8 @@ public class VerificationActivity extends Activity {
     HamPayDialog hamPayDialog;
 
     Tracker hamPayGaTracker;
+
+    FacedTextView sms_user_notify;
 
     public void contactUs(View view){
         new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/ver-num.html");
@@ -79,6 +83,9 @@ public class VerificationActivity extends Activity {
                 requestRegistrationSendSmsToken.execute(registrationSendSmsTokenRequest);
             }
         });
+
+        sms_user_notify = (FacedTextView)findViewById(R.id.sms_user_notify);
+        sms_user_notify.setText(getString(R.string.sms_verification_text, new PersianEnglishDigit().E2P(prefs.getString(Constants.REGISTERED_CELL_NUMBER, ""))));
     }
 
     @Override
