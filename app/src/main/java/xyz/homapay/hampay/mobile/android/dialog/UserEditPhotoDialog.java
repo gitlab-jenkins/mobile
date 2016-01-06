@@ -1,5 +1,6 @@
 package xyz.homapay.hampay.mobile.android.dialog;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 
@@ -162,17 +164,17 @@ public class UserEditPhotoDialog extends DialogFragment implements TextView.OnEd
                 }
                 else {
                     requestRemoveUserImage = new RequestRemoveUserImage(getActivity(), new RequestRemovePhotoTaskCompleteListener(removeUserImageRequest));
-                    new HamPayDialog(getActivity()).showFailRemovePhoto(requestRemoveUserImage, removeUserImageRequest,
-                            removeUserImageResponseMessage.getService().getResultStatus().getCode(),
-                            removeUserImageResponseMessage.getService().getResultStatus().getDescription());
+//                    new HamPayDialog(getActivity()).showFailRemovePhoto(requestRemoveUserImage, removeUserImageRequest,
+//                            removeUserImageResponseMessage.getService().getResultStatus().getCode(),
+//                            removeUserImageResponseMessage.getService().getResultStatus().getDescription());
 
 
                 }
             }else {
                 RequestRemoveUserImage requestChangeEmail = new RequestRemoveUserImage(getActivity(), new RequestRemovePhotoTaskCompleteListener(removeUserImageRequest));
-                new HamPayDialog(getActivity()).showFailRemovePhoto(requestChangeEmail, removeUserImageRequest,
-                        Constants.LOCAL_ERROR_CODE,
-                        getActivity().getString(R.string.msg_gail_change_email));
+//                new HamPayDialog(getActivity()).showFailRemovePhoto(requestChangeEmail, removeUserImageRequest,
+//                        Constants.LOCAL_ERROR_CODE,
+//                        getActivity().getString(R.string.msg_gail_change_email));
 
             }
         }

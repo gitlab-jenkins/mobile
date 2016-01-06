@@ -2,214 +2,249 @@
 <items version="2" >
 
     <item
-        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.3.0/jars/classes.jar"
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-safetynet/8.1.0/jars/classes.jar"
         jumboMode="false"
-        revision="22.0.1"
-        sha1="f2f7ec211ce4d244ee97a57523eeb4526dc3cf8a">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/classes-742bddffa0bc936bedf5d2357f2f5a638aefa30c.jar" />
+        revision="23.0.1"
+        sha1="3b05c18f60969ecc2ba49c0409c4b96be2d9cb0c">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/classes-fdbcb75f6fb333ffd6b9116b15121f4d9d76507d.jar" />
     </item>
     <item
-        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appindexing/7.3.0/jars/classes.jar"
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-fitness/8.1.0/jars/classes.jar"
         jumboMode="false"
-        revision="22.0.1"
-        sha1="e35fae1b377c23aa5fd2d309a190c2d0f73d54ec">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/classes-400e2944d74e6afc12de8f7e60843e60d091cdfe.jar" />
+        revision="23.0.1"
+        sha1="9cf8c0ef60847621c7ad00b4f78dbfc9daba4af2">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/classes-1f0d531d6ae4901cbe9400999d2c3e784f1e84fc.jar" />
     </item>
     <item
-        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-identity/7.3.0/jars/classes.jar"
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/jars/classes.jar"
         jumboMode="false"
-        revision="22.0.1"
-        sha1="b48d5c51a9a9e329005106b4667f54948de4d4d8">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/classes-d80e7a82ee09662ebee6b981c5e056bd58129bc1.jar" />
+        revision="23.0.1"
+        sha1="d86429b0f0b3f3cafbeb78dda1b9d89119ccb05d">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/classes-d0c0d0db98df2b6066556e2dd61963d5ca71a643.jar" />
     </item>
     <item
-        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/22.1.1/jars/classes.jar"
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/8.1.0/jars/classes.jar"
         jumboMode="false"
-        revision="22.0.1"
-        sha1="e0b0c35d02308b270015a74cada4887e2e49b889">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/classes-3716de9832167c65e6b383d60bca36ca198fbfb2.jar" />
+        revision="23.0.1"
+        sha1="3aed37c38c56679602255dd72ef356da5d327cda">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/classes-e1cc0a78c6ab5e2122ca3a860520c209baecf07a.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appindexing/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="4477ea44f5ec5ad064022a22691732d7638ff197">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/classes-c0e23c674d2f414272f655ee79e79df2350db067.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-measurement/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="482de223655d06253cc6a4955d653f8994169500">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/classes-c52334cb300293d42668e839f02d8213932d2154.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/22.2.0/jars/libs/internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="0632f06970823b7e3436f649bfa65b47035c91d0">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/internal_impl-22.2.0-d3b3361ea14343c1880b8f8d292d8abb63070b31.jar" />
     </item>
     <item
         jar="/home/amir/AndroidStudioProjects/mobile/app/libs/gson-2.2.4.jar"
         jumboMode="false"
-        revision="22.0.1"
+        revision="23.0.1"
         sha1="973e832af433b44c3ed11c426f2f390b29f3f3f8">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/gson-2.2.4-ce9e43553b5663f35bcd34a952f4a6f2415da11f.jar" />
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/gson-2.2.4-ce9e43553b5663f35bcd34a952f4a6f2415da11f.jar" />
     </item>
     <item
-        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/jars/classes.jar"
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/8.1.0/jars/classes.jar"
         jumboMode="false"
-        revision="22.0.1"
-        sha1="d84409890828e07d344a3b9b1da545dba9897b51">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/classes-28a3a6b185d85e25225b506dabac1ee1807f65cd.jar" />
+        revision="23.0.1"
+        sha1="97f3b099801a9ad9d70e835b9125273e986eb68d">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/classes-664cecca993db2356aa4b1b3f992d3fd6be3bbad.jar" />
     </item>
     <item
-        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/classes.jar"
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/22.2.0/jars/classes.jar"
         jumboMode="false"
-        revision="22.0.1"
-        sha1="c95ba8152923e4872e86a82cfcba9a51c0214328">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/classes-81f5e776c1c79a8c4043fa41b1536505411f8231.jar" />
+        revision="23.0.1"
+        sha1="dcf8c83c3dead00a6c4fe313e95f7aaca20dc641">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/classes-a7f2988a89f36a967a320f93d1fd8754305a2915.jar" />
     </item>
     <item
-        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/7.3.0/jars/classes.jar"
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-vision/8.1.0/jars/classes.jar"
         jumboMode="false"
-        revision="22.0.1"
-        sha1="59652857a825fff0de62166fca1bc9553cc01abb">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/classes-fae4d2e48c9cc0efa38693f0bb4de5cc6082c035.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-safetynet/7.3.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="0708ef60917bf94913fe9ef972a655b99462dca7">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/classes-32fe4fd7efd4b764dd08f5206a983f2e26db95ce.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-fitness/7.3.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="4f4fe3c23776540625f3c2844152a7510fddf9f1">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/classes-9086bb97b91968591b80ec4172b3a40f1ca6adc1.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/7.3.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="b2c07cdb814fe988ad05f7b4d767a841514a5991">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/classes-423563481fd50787a84aff8b40f84372e3765bda.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-panorama/7.3.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="565a01f90f1529f73362707c4c185d0623a68782">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/classes-635c7937a7b2b0d413ce3d619dd441365d5de2f1.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-cast/7.3.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="e5b9f5b0aa8dee788beb63d23832cb29ce771343">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/classes-a06584ebe2470b30f123002373183ac8eba43a63.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.1.1/jars/libs/internal_impl-22.1.1.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="9e070ad32b2700b0343e8e0cccc437733d91ba3a">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/internal_impl-22.1.1-6d54260f12a70d55066a0bf9147396fed0bb17c8.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/7.3.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="e5bf453b070c1e39297986144960e45afa0fdfad">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/classes-ad4880574b90ac2600f49f8759b6a512baffc9b7.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/mobile/app/libs/acra-4.6.2.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="b99297996579b72496c9f81b0c12d8404c74e618">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/acra-4.6.2-e95e8c922e7d0e615d1d51269c7a1980b759c541.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/7.3.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="6046e5cdaf799120b7c56a5a061d80e8854c4d34">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/classes-407ab485e3ce271059d2c65685167f1b9864c6b3.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/mobile/app/libs/common-common-2.0.0-SNAPSHOT.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="31c877bacb4fe09db06358d61904d8ba606c677d">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/common-common-2.0.0-SNAPSHOT-afb974decf0ac0bbb56180884caa02642103f6e0.jar" />
+        revision="23.0.1"
+        sha1="17449c47df35c754b257532052f1270c444f7993">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/classes-61e78f9fe9384e4f812206205e8cc690d266cbbd.jar" />
     </item>
     <item
         jar="/home/amir/AndroidStudioProjects/mobile/app/libs/picasso-2.5.2.jar"
         jumboMode="false"
-        revision="22.0.1"
+        revision="23.0.1"
         sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/picasso-2.5.2-e4989021cd70ffe7ff28c1517d392dfb8dccb5dd.jar" />
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/picasso-2.5.2-e4989021cd70ffe7ff28c1517d392dfb8dccb5dd.jar" />
     </item>
     <item
-        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-drive/7.3.0/jars/classes.jar"
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics/8.1.0/jars/classes.jar"
         jumboMode="false"
-        revision="22.0.1"
-        sha1="a0ce76dfaccbfbd6c551ed2174280aaabe60fe47">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/classes-9b1f750d1132489523a00e6a175ac56f33414858.jar" />
+        revision="23.0.1"
+        sha1="95758a2905669affbffc5ddd262921d375674fad">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/classes-1c53939d357bd43d7218886a659c143508513342.jar" />
     </item>
     <item
-        jar="/home/amir/AndroidStudioProjects/mobile/app/libs/common-core-2.0.0-SNAPSHOT.jar"
+        jar="/home/amir/AndroidStudioProjects/mobile/app/libs/common-common-2.0.0-SNAPSHOT.jar"
         jumboMode="false"
-        revision="22.0.1"
-        sha1="056c72719aa35797d8de1694357fdc8dcbd00f55">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/common-core-2.0.0-SNAPSHOT-e0abbe21004d05e345aa7f55fc2ada51fb55af9b.jar" />
-    </item>
-    <item
-        jar="/home/amir/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/22.1.1/support-annotations-22.1.1.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="01d051a6bfb1218b1db2d3a5af0480ac2c25c42a">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/support-annotations-22.1.1-762e30c13f15339cdbbd8f11ab2cf7d14d093dc5.jar" />
-    </item>
-    <item
-        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/7.3.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="fe3e0c6de7cceed888b277487238b6af9a1cc299">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/classes-d5a81f6aa4cdc12ed3167bccd4a02114c66246f1.jar" />
+        revision="23.0.1"
+        sha1="88d986ff5409dd8cc150259b962204f96f9f266b">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/common-common-2.0.0-SNAPSHOT-afb974decf0ac0bbb56180884caa02642103f6e0.jar" />
     </item>
     <item
         jar="/home/amir/.gradle/caches/modules-2/files-2.1/com.nineoldandroids/library/2.4.0/e9b63380f3a242dbdbf103a2355ad7e43bad17cb/library-2.4.0.jar"
         jumboMode="false"
-        revision="22.0.1"
+        revision="23.0.1"
         sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/library-2.4.0-0de2a9a4bd89d5c59a401b848221ad5cee18b315.jar" />
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/library-2.4.0-0de2a9a4bd89d5c59a401b848221ad5cee18b315.jar" />
     </item>
     <item
-        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-games/7.3.0/jars/classes.jar"
+        jar="/home/amir/AndroidStudioProjects/mobile/app/libs/common-core-2.0.0-SNAPSHOT.jar"
         jumboMode="false"
-        revision="22.0.1"
-        sha1="3b4ff5c39dace8f3b4ab4cab8191785547a0815f">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/classes-9c3053ec8386e9ade2d4621e1f54a0f08feb570e.jar" />
+        revision="23.0.1"
+        sha1="6d8f46e2484b9d1fec5f5efd269604a9a6e51a4a">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/common-core-2.0.0-SNAPSHOT-e0abbe21004d05e345aa7f55fc2ada51fb55af9b.jar" />
     </item>
     <item
-        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics/7.3.0/jars/classes.jar"
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-identity/8.1.0/jars/classes.jar"
         jumboMode="false"
-        revision="22.0.1"
-        sha1="9c9dea9e85aceb09d95df5e6f7bc8a43fc286068">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/classes-1c1a24635a6c314434352df4892e2c09fa43674b.jar" />
+        revision="23.0.1"
+        sha1="d294caf562c4c678b2ef351662a0ca6f1a4d06c0">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/classes-1aed074136ad43bf15fb10f0ad92da9ed495172f.jar" />
     </item>
     <item
-        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/7.3.0/jars/classes.jar"
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/jars/classes.jar"
         jumboMode="false"
-        revision="22.0.1"
-        sha1="7215ac1f2fca947b9415a6ee2a1bf991364aab24">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/classes-c94db1e6faf7e0da6658492fc969aba944161940.jar" />
+        revision="23.0.1"
+        sha1="c31e21b53ff2f74664e498248d01453a32e32d48">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/classes-b5fc7cf446b0bf50220f7426e8a9bf86ed7f3e3c.jar" />
     </item>
     <item
-        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.3.0/jars/classes.jar"
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/8.1.0/jars/classes.jar"
         jumboMode="false"
-        revision="22.0.1"
-        sha1="3988694bf9d8186ff97ad5cdfa4ed88b5010fe08">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/classes-c97318902b4c1f55fc718d2e6586254144c20a1e.jar" />
+        revision="23.0.1"
+        sha1="325788a04b436a0bccbc5b4c54cf0f12ebdcbd2d">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/classes-2d2595db53c389732a7f76ccff928d7ea6bfe6fc.jar" />
     </item>
     <item
-        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appstate/7.3.0/jars/classes.jar"
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-drive/8.1.0/jars/classes.jar"
         jumboMode="false"
-        revision="22.0.1"
-        sha1="0180d031a7b54dabb93b4af3869468b55dc938bd">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/classes-653c303b8aa5192b9bb71d61a8da2948ccd806ff.jar" />
+        revision="23.0.1"
+        sha1="3c729e6d76a36c5dc27e6a4c4009296f49eaa88a">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/classes-e372e075d635de5720ae6eed32ab778a8b17b0e2.jar" />
     </item>
     <item
-        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-nearby/7.3.0/jars/classes.jar"
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.1.0/jars/classes.jar"
         jumboMode="false"
-        revision="22.0.1"
-        sha1="5ea948d825957be6c4358c48422bee60eef2d487">
-        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/debug/classes-0774f3dd078ad4c6e5b9059d55824e7869488cf4.jar" />
+        revision="23.0.1"
+        sha1="82825756edeeb3b56b15e73b2edd56e93da5a444">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/classes-23dfa68dfdf8bc1680cac048755b02d875b8db75.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/jars/libs/internal_impl-23.0.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="aa92916125166649d8ad4ba3940c3dd7515596d3">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/internal_impl-23.0.1-bc03797a8e75de47f38124fc06dd95d0ba8f3537.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d61920aba361832a9545a43fa8c9453eb02f18f7">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/classes-d16fd31625ef79caec57767a051f631106ffb792.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-games/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="993834cb17d07d51b92db89d2c330243592ebf77">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/classes-aafa8a16066e95b0e081d4d5bc303718659bbe40.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="2a7e47da654546f9457deb6132364f1bf33a1857">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/classes-cc54718e257f3168137962d4b10103592093791f.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-cast/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="3178362320bcf51228835b60ff978efadfd1f783">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/classes-788724ef7432bac820acf1cd6275776d8c311714.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/mobile/app/libs/acra-4.6.2.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="b99297996579b72496c9f81b0c12d8404c74e618">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/acra-4.6.2-e95e8c922e7d0e615d1d51269c7a1980b759c541.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-appinvite/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="b92002cb2f0e11a226ac5bac6dff1dc2a9d0b774">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/classes-035874f5ebbcd99b9373fc045ecf480d74e0d171.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.0.1/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="4356e230a981d1bbf047d848b91bc0d9b7c5bacc">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/classes-9c9959b14fdca646679a80faaa1285f25f956532.jar" />
+    </item>
+    <item
+        jar="/home/amir/Android/Sdk/extras/android/m2repository/com/android/support/support-annotations/23.0.1/support-annotations-23.0.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="1fce89a6428c51467090d7f424e4c9c3dbd55f7e">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/support-annotations-23.0.1-bd3709d7b545c5c896f91b0ac93a578c6a41e75e.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-panorama/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d93480da1d303122ee67dc3bc23e6297bdef9951">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/classes-08376f63b7d168f8b18a8d81cef93c7d2335766c.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d0dda274b703dd9c5bb056867649d22b4171ae7d">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/classes-bb512fb2c6ddf7346028bfb4f04a011848b610ab.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-nearby/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="041d93cf0533591c29d1d7263b2fa114dbfb20bd">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/classes-b2ddc2003618c0545e7f48f587ac07c642781348.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="dcb5b75baf05d92e61d5706737200ee55949f97b">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/classes-e79470b91ae1ee3b091d2aea5328936478f5c070.jar" />
+    </item>
+    <item
+        jar="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/8.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="997773777cf3904c11d6764fe3b7668538220e49">
+        <dex dex="/home/amir/AndroidStudioProjects/mobile/app/build/intermediates/pre-dexed/release/classes-22b9205377da8f710c3f81ec57ecf0bf40e1ccb2.jar" />
     </item>
 
 </items>
