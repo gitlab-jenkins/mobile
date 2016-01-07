@@ -8,6 +8,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -35,11 +36,12 @@ import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestIllegalAppList;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.dialog.UserEditPhotoDialog;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 
 
-public class AppSliderActivity extends AppCompatActivity {
+public class AppSliderActivity extends AppCompatActivity implements UserEditPhotoDialog.UserEditPhotoDialogListener{
 
     private ViewPager sliding_into_app;
     private ButtonRectangle register_button;
@@ -78,7 +80,6 @@ public class AppSliderActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_slider);
-
 
         MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.coin);
 //        mediaPlayer.start();
@@ -366,6 +367,7 @@ public class AppSliderActivity extends AppCompatActivity {
                 intro_icon.startAnimation(splashLogoAnimation);
             }
         }
+
     }
 
     @Override
@@ -405,6 +407,11 @@ public class AppSliderActivity extends AppCompatActivity {
                 Log.e("GCM", msg);
             }
         }.execute(null, null, null);
+    }
+
+    @Override
+    public void onFinishEditDialog(String inputText) {
+
     }
 
 

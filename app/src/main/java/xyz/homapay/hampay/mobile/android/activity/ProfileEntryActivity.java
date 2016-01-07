@@ -612,8 +612,10 @@ public class ProfileEntryActivity extends Activity implements View.OnClickListen
 
             if (bankListResponseMessage != null) {
 
+                bankListResponse = bankListResponseMessage.getService();
+
                 if (bankListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-                    bankListResponse = bankListResponseMessage.getService();
+
                     if (showBankList) {
                         showListBankDialog();
                     }

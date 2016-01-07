@@ -5,12 +5,16 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +65,13 @@ public class UserEditPhotoDialog extends DialogFragment implements TextView.OnEd
 
         activity = (UserEditPhotoDialogListener) getActivity();
 
+        String filePath = getContext().getFilesDir().getPath().toString() + "/" + "userImage.jpeg";
+
+
+
+
+        getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         FacedTextView camera_choose = (FacedTextView)view.findViewById(R.id.camera_choose);
         camera_choose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +98,12 @@ public class UserEditPhotoDialog extends DialogFragment implements TextView.OnEd
 
 
         FacedTextView remove_choose = (FacedTextView)view.findViewById(R.id.remove_choose);
+        View third_divider = (View)view.findViewById(R.id.third_divider);
+        File file = new File(filePath);
+        if (file.exists()) {
+            third_divider.setVisibility(View.VISIBLE);
+            remove_choose.setVisibility(View.VISIBLE);
+        }
         remove_choose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -174,11 +174,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         image_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                new HamPayDialog(activity).showUserProfileImage();
                 FragmentManager fm = getSupportFragmentManager();
                 UserEditPhotoDialog userEditPhotoDialog = new UserEditPhotoDialog();
                 userEditPhotoDialog.show(fm, "fragment_edit_name");
-
             }
         });
 

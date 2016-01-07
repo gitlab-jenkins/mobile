@@ -49,9 +49,11 @@
         android:layout_margin="8dp"/>
 
     <View
+        android:id="@+id/third_divider"
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="@color/normal_text"/>
+        android:background="@color/normal_text"
+        android:visibility="gone"/>
 
     <xyz.homapay.hampay.mobile.android.component.FacedTextView
         android:id="@+id/remove_choose"
@@ -62,7 +64,8 @@
         android:textSize="15dp"
         android:text="@string/user_profile_image_remove"
         android:gravity="right"
-        android:layout_margin="8dp"/>
+        android:layout_margin="8dp"
+        android:visibility="gone"/>
 
     <View
         android:layout_width="fill_parent"
