@@ -329,31 +329,59 @@
                         android:layout_gravity="right" />
 
 
+                    <!--<RelativeLayout-->
+                        <!--android:id="@+id/bankSelection"-->
+                        <!--android:layout_width="fill_parent"-->
+                        <!--android:layout_height="48dp"-->
+                        <!--android:background="@drawable/entry_field_bg"-->
+                        <!--android:layout_marginTop="6dp"-->
+                        <!--android:contentDescription="bank_selection">-->
+
+                        <!--<xyz.homapay.hampay.mobile.android.component.FacedTextView-->
+                            <!--android:id="@+id/selectedBankText"-->
+                            <!--geekui:customTypeface="fonts/iran_sans.ttf"-->
+                            <!--android:layout_width="fill_parent"-->
+                            <!--android:layout_height="fill_parent"-->
+                            <!--android:background="@android:color/transparent"-->
+                            <!--android:layout_marginLeft="48dp"-->
+                            <!--android:textSize="15dp"-->
+                            <!--android:hint="@string/bank_name"-->
+                            <!--android:textColor="@android:color/black"-->
+                            <!--android:gravity="center_vertical"-->
+                            <!--android:padding="8dp"/>-->
+
+                        <!--<ImageView-->
+                            <!--android:layout_width="18dp"-->
+                            <!--android:layout_height="18dp"-->
+                            <!--android:src="@drawable/bank_arrow"-->
+                            <!--android:layout_centerVertical="true"-->
+                            <!--android:layout_marginLeft="12dp"/>-->
+
+                    <!--</RelativeLayout>-->
+
                     <RelativeLayout
-                        android:id="@+id/bankSelection"
                         android:layout_width="fill_parent"
                         android:layout_height="48dp"
                         android:background="@drawable/entry_field_bg"
-                        android:layout_marginTop="6dp"
-                        android:contentDescription="bank_selection">
+                        android:layout_marginTop="6dp">
 
-                        <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                            android:id="@+id/selectedBankText"
-                            geekui:customTypeface="fonts/iran_sans.ttf"
+                        <xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText
+                            android:id="@+id/userNameFamily"
                             android:layout_width="fill_parent"
                             android:layout_height="fill_parent"
                             android:background="@android:color/transparent"
                             android:layout_marginLeft="48dp"
                             android:textSize="15dp"
-                            android:hint="@string/bank_name"
+                            android:hint="@string/name_family"
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
-                            android:padding="8dp"/>
+                            android:padding="8dp"
+                            android:contentDescription="account"/>
 
                         <ImageView
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:src="@drawable/bank_arrow"
+                            android:id="@+id/userNameFamilyIcon"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="12dp"/>
 
@@ -377,8 +405,8 @@
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
                             android:padding="8dp"
-                            android:focusable="false"
-                            android:contentDescription="account"/>
+                            android:contentDescription="account"
+                            android:maxLength="19"/>
 
                         <ImageView
                             android:id="@+id/accountNumberIcon"

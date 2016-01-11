@@ -756,9 +756,9 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         }
 
         if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.UNVERIFIED) {
-            verification_status_ll.setVisibility(View.VISIBLE);
+//            verification_status_ll.setVisibility(View.VISIBLE);
         }else {
-            verification_status_ll.setVisibility(View.GONE);
+//            verification_status_ll.setVisibility(View.GONE);
         }
         jalaliConvert = new JalaliConvert();
 

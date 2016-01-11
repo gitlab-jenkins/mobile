@@ -37,6 +37,8 @@ import xyz.homapay.hampay.common.core.model.response.RegistrationEntryResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.BankListAdapter;
+import xyz.homapay.hampay.mobile.android.animation.Collapse;
+import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestBankList;
 import xyz.homapay.hampay.mobile.android.async.RequestRegistrationEntry;
@@ -60,7 +62,7 @@ public class ProfileEntryActivity extends Activity {
     Activity activity;
 
     ButtonRectangle keepOn_button;
-    RelativeLayout bankSelection;
+    //    RelativeLayout bankSelection;
     Dialog bankSelectionDialog;
 
     FacedEditText cellNumberValue;
@@ -73,10 +75,13 @@ public class ProfileEntryActivity extends Activity {
 
     FacedEditText accountNumberValue;
     boolean accountNumberIsValid = true;
-    String accountNumberFormat;
-
+    String accountNumberFormat = "####-####-####-####";
     ImageView accountNumberIcon;
-    FacedTextView selectedBankTitle;
+
+    ImageView userNameFamilyIcon;
+    FacedEditText userNameFamily;
+    boolean userNameFamilyIsValid = true;
+
     String selectedBankCode;
 
     FacedEditText emailValue;
@@ -214,6 +219,28 @@ public class ProfileEntryActivity extends Activity {
             }
         });
 
+        userNameFamily = (FacedEditText)findViewById(R.id.userNameFamily);
+        userNameFamilyIcon = (ImageView)findViewById(R.id.userNameFamilyIcon);
+        userNameFamily.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+                if (!hasFocus) {
+
+                    userNameFamilyIsValid = true;
+
+                    if (userNameFamily.getText().toString().length() == 0){
+                        userNameFamilyIsValid = false;
+                        userNameFamilyIcon.setImageResource(R.drawable.false_icon);
+
+                    }else {
+                        userNameFamilyIsValid = true;
+                        userNameFamilyIcon.setImageResource(R.drawable.right_icon);
+                    }
+                }
+            }
+        });
+
         accountNumberValue = (FacedEditText)findViewById(R.id.accountNumberValue);
         accountNumberIcon = (ImageView)findViewById(R.id.accountNumberIcon);
         accountNumberValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -224,8 +251,8 @@ public class ProfileEntryActivity extends Activity {
 
                     accountNumberIsValid = true;
 
-                    String splitedFormat[] = accountNumberFormat.split("/");
-                    String splitedAccountNo[] = accountNumberValue.getText().toString().split("/");
+                    String splitedFormat[] = accountNumberFormat.split("-");
+                    String splitedAccountNo[] = accountNumberValue.getText().toString().split("-");
 
                     if (splitedAccountNo.length != splitedFormat.length) {
                         accountNumberIsValid = false;
@@ -244,6 +271,15 @@ public class ProfileEntryActivity extends Activity {
                         accountNumberIcon.setImageResource(R.drawable.false_icon);
                     }
                 }
+                else{
+
+                    View view = getCurrentFocus();
+                    if (view != null) {
+                        InputMethodManager imm = (InputMethodManager) getSystemService(
+                                Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
+                }
             }
         });
 
@@ -259,15 +295,14 @@ public class ProfileEntryActivity extends Activity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 accountNumberValue.removeTextChangedListener(this);
 
-
-                rawAccountNumberValue = s.toString().replace("/", "");
+                rawAccountNumberValue = s.toString().replace("-", "");
                 rawAccountNumberValueLength = rawAccountNumberValue.length();
                 rawAccountNumberValueLengthOffset = 0;
                 procAccountNumberValue = "";
                 if (rawAccountNumberValue.length() > 0) {
                     for (int i = 0; i < rawAccountNumberValueLength; i++) {
-                        if (accountNumberFormat.charAt(i + rawAccountNumberValueLengthOffset) == '/') {
-                            procAccountNumberValue += "/" + rawAccountNumberValue.charAt(i);
+                        if (accountNumberFormat.charAt(i + rawAccountNumberValueLengthOffset) == '-') {
+                            procAccountNumberValue += "-" + rawAccountNumberValue.charAt(i);
                             rawAccountNumberValueLengthOffset++;
                         } else {
                             procAccountNumberValue += rawAccountNumberValue.charAt(i);
@@ -289,29 +324,29 @@ public class ProfileEntryActivity extends Activity {
             }
         });
 
-        selectedBankTitle = (FacedTextView)findViewById(R.id.selectedBankText);
 
-        bankSelection = (RelativeLayout)findViewById(R.id.bankSelection);
-        bankSelection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                cellNumberValue.clearFocus();
-                accountNumberValue.clearFocus();
-                nationalCodeValue.clearFocus();
-                bankSelection.requestFocus();
-
-                if (bankListResponse != null) {
-                    if (bankListResponse.getBanks().size() > 0)
-                        showListBankDialog();
-                }else {
-                    hamPayDialog.showWaitingdDialog("");
-                    bankListRequest = new BankListRequest();
-                    requestBankList = new RequestBankList(context, new RequestBanksTaskCompleteListener(true));
-                    requestBankList.execute(bankListRequest);
-                }
-            }
-        });
+//        bankSelection = (RelativeLayout)findViewById(R.id.bankSelection);
+//        bankSelection.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                cellNumberValue.clearFocus();
+//                accountNumberValue.clearFocus();
+//                nationalCodeValue.clearFocus();
+//                bankSelection.requestFocus();
+//
+//                if (bankListResponse != null) {
+//                    if (bankListResponse.getBanks().size() > 0)
+//                        showListBankDialog();
+//                }else {
+//                    hamPayDialog.showWaitingdDialog("");
+//                    bankListRequest = new BankListRequest();
+//                    requestBankList = new RequestBankList(context, new RequestBanksTaskCompleteListener(true));
+//                    requestBankList.execute(bankListRequest);
+//                }
+//            }
+//        });
 
 
         emailValue = (FacedEditText)findViewById(R.id.emailValue);
@@ -323,7 +358,7 @@ public class ProfileEntryActivity extends Activity {
                 if (isChecked) {
                     if (!new EmailVerification().isValid(emailValue.getText().toString())) {
                         email_confirm_check.setChecked(false);
-                    }else {
+                    } else {
                         emailIsValid = true;
                     }
                 }
@@ -334,15 +369,22 @@ public class ProfileEntryActivity extends Activity {
 
 
 
-        hamPayDialog.showWaitingdDialog("");
-        bankListRequest = new BankListRequest();
-        requestBankList = new RequestBankList(this, new RequestBanksTaskCompleteListener(false));
-        requestBankList.execute(bankListRequest);
+//        hamPayDialog.showWaitingdDialog("");
+//        bankListRequest = new BankListRequest();
+//        requestBankList = new RequestBankList(this, new RequestBanksTaskCompleteListener(false));
+//        requestBankList.execute(bankListRequest);
 
         keepOn_button = (ButtonRectangle) findViewById(R.id.keepOn_button);
         keepOn_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+//                Intent intent = new Intent();
+//                intent.setClass(ProfileEntryActivity.this, SMSVerificationActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                finish();
+//                startActivity(intent);
 
                 View view = getCurrentFocus();
                 if (view != null) {
@@ -352,6 +394,7 @@ public class ProfileEntryActivity extends Activity {
                 }
 
                 cellNumberValue.clearFocus();
+                userNameFamily.clearFocus();
                 nationalCodeValue.clearFocus();
                 accountNumberValue.clearFocus();
 
@@ -369,19 +412,19 @@ public class ProfileEntryActivity extends Activity {
 
                     keepOn_button.setEnabled(false);
 
-                    registrationEntryRequest = new RegistrationEntryRequest();
-
-                    registrationEntryRequest.setCellNumber(new PersianEnglishDigit(cellNumberValue.getText().toString()).P2E());
-                    registrationEntryRequest.setAccountNumber(new PersianEnglishDigit(accountNumberValue.getText().toString()).P2E());
-                    registrationEntryRequest.setBankCode(selectedBankCode);
-                    registrationEntryRequest.setEmail(emailValue.getText().toString());
-                    registrationEntryRequest.setNationalCode(new PersianEnglishDigit(nationalCodeValue.getText().toString()).P2E());
-
-                    requestRegistrationEntry = new RequestRegistrationEntry(context,
-                            new RequestRegistrationEntryTaskCompleteListener(),
-                            latitute + "," + longitude);
-
-                    requestRegistrationEntry.execute(registrationEntryRequest);
+//                    registrationEntryRequest = new RegistrationEntryRequest();
+//
+//                    registrationEntryRequest.setCellNumber(new PersianEnglishDigit(cellNumberValue.getText().toString()).P2E());
+//                    registrationEntryRequest.setAccountNumber(new PersianEnglishDigit(accountNumberValue.getText().toString()).P2E());
+//                    registrationEntryRequest.setBankCode(selectedBankCode);
+//                    registrationEntryRequest.setEmail(emailValue.getText().toString());
+//                    registrationEntryRequest.setNationalCode(new PersianEnglishDigit(nationalCodeValue.getText().toString()).P2E());
+//
+//                    requestRegistrationEntry = new RequestRegistrationEntry(context,
+//                            new RequestRegistrationEntryTaskCompleteListener(),
+//                            latitute + "," + longitude);
+//
+//                    requestRegistrationEntry.execute(registrationEntryRequest);
                 } else {
 
                     if (cellNumberValue.getText().toString().length() == 0 || !cellNumberIsValid){
@@ -393,7 +436,7 @@ public class ProfileEntryActivity extends Activity {
 
                     else if (accountNumberValue.getText().toString().length() == 0 || !accountNumberIsValid){
                         Toast.makeText(context, getString(R.string.msg_accountNo_invalid), Toast.LENGTH_SHORT).show();
-                        accountNumberIcon.setImageResource(R.drawable.false_icon);
+//                        accountNumberIcon.setImageResource(R.drawable.false_icon);
                         accountNumberValue.requestFocus();
                     }
 
@@ -431,13 +474,13 @@ public class ProfileEntryActivity extends Activity {
         bankListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectedBankTitle.setText(bankListResponse.getBanks().get(position).getTitle());
+//                selectedBankTitle.setText(bankListResponse.getBanks().get(position).getTitle());
                 selectedBankCode = bankListResponse.getBanks().get(position).getCode();
                 if (accountNumberValue.getText().toString().length() > 0)
                     accountNumberValue.setText("");
                 accountNumberFormat = bankListResponse.getBanks().get(position).getAccountFormat();
                 accountNumberIsValid = false;
-                accountNumberIcon.setImageDrawable(null);
+//                accountNumberIcon.setImageDrawable(null);
                 accountNumberValue.setFilters(new InputFilter[]{new InputFilter.LengthFilter(accountNumberFormat.length())});
                 bankSelectionDialog.dismiss();
                 accountNumberValue.setFocusableInTouchMode(true);

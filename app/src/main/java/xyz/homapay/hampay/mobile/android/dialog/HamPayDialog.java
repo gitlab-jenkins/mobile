@@ -83,6 +83,7 @@ import xyz.homapay.hampay.mobile.android.activity.GuideDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.activity.MainActivity;
 import xyz.homapay.hampay.mobile.android.activity.PostStartActivity;
+import xyz.homapay.hampay.mobile.android.activity.ProfileEntryActivity;
 import xyz.homapay.hampay.mobile.android.activity.StartActivity;
 import xyz.homapay.hampay.mobile.android.activity.UnlinkPassActivity;
 import xyz.homapay.hampay.mobile.android.analytics.GaAnalyticsEvent;
@@ -250,7 +251,8 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(activity, PostStartActivity.class);
+//                intent.setClass(activity, PostStartActivity.class);
+                intent.setClass(activity, ProfileEntryActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 activity.finish();
                 activity.startActivity(intent);
@@ -3137,93 +3139,93 @@ public class HamPayDialog {
     }
 
 
-    public void businessMockPaymentConfirmDialog(final Long amountValue,
-                                             final String userMessage){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_pay_one, null);
-        FacedTextView pay_one_confirm = (FacedTextView) view.findViewById(R.id.pay_one_confirm);
-        FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
-        FacedTextView dis_confirmation = (FacedTextView) view.findViewById(R.id.dis_confirmation);
-
-        confirmation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-
-                businessMockPaymentDialog();
-
-//                showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-//                businessPaymentRequest = new BusinessPaymentRequest();
-//                businessPaymentRequest.setAmount(amountValue);
-//                businessPaymentRequest.setBusinessCode(businessPaymentConfirmResponse.getBusinessCode());
-//                businessPaymentRequest.setMessage(userMessage);
-//                requestBusinessPayment = new RequestBusinessPayment(activity,
-//                        new RequestBusinessPaymentTaskCompleteListener(businessPaymentRequest, businessPaymentConfirmResponse.getFullName()));
-//                requestBusinessPayment.execute(businessPaymentRequest);
-            }
-        });
-
-
-        dis_confirmation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        pay_one_confirm.setText(activity.getString(R.string.pay_one_confirm,
-                (new PersianEnglishDigit()).E2P(String.format("%,d", amountValue).replace(".", ",")),
-                /*businessPaymentConfirmResponse.getFullName()*/"دیجی کالا",
-                "۰",
-                /*businessPaymentConfirmResponse.getBankName()*/"سامان"));
-
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
-
-        dialog.show();
-    }
-
-    public void businessMockPaymentDialog(){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_pay_one_ref, null);
-
-        FacedTextView pay_one_confirm_ref = (FacedTextView) view.findViewById(R.id.pay_one_confirm_ref);
-        FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
-
-
-        confirmation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                activity.finish();
-                activity.onBackPressed();
-            }
-        });
-
-        pay_one_confirm_ref.setText((new PersianEnglishDigit(activity.getString(R.string.pay_one_ref, "123456"))).E2P());
-
-
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
-
-        dialog.show();
-    }
+//    public void businessMockPaymentConfirmDialog(final Long amountValue,
+//                                             final String userMessage){
+//        Rect displayRectangle = new Rect();
+//        Activity parent = (Activity) activity;
+//        Window window = parent.getWindow();
+//        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+//        View view = activity.getLayoutInflater().inflate(R.layout.dialog_pay_one, null);
+//        FacedTextView pay_one_confirm = (FacedTextView) view.findViewById(R.id.pay_one_confirm);
+//        FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
+//        FacedTextView dis_confirmation = (FacedTextView) view.findViewById(R.id.dis_confirmation);
+//
+//        confirmation.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//
+//                businessMockPaymentDialog();
+//
+////                showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+////                businessPaymentRequest = new BusinessPaymentRequest();
+////                businessPaymentRequest.setAmount(amountValue);
+////                businessPaymentRequest.setBusinessCode(businessPaymentConfirmResponse.getBusinessCode());
+////                businessPaymentRequest.setMessage(userMessage);
+////                requestBusinessPayment = new RequestBusinessPayment(activity,
+////                        new RequestBusinessPaymentTaskCompleteListener(businessPaymentRequest, businessPaymentConfirmResponse.getFullName()));
+////                requestBusinessPayment.execute(businessPaymentRequest);
+//            }
+//        });
+//
+//
+//        dis_confirmation.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        pay_one_confirm.setText(activity.getString(R.string.pay_one_confirm,
+//                (new PersianEnglishDigit()).E2P(String.format("%,d", amountValue).replace(".", ",")),
+//                /*businessPaymentConfirmResponse.getFullName()*/"دیجی کالا",
+//                "۰",
+//                /*businessPaymentConfirmResponse.getBankName()*/"سامان"));
+//
+//        view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
+//        dialog = new Dialog(activity);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        dialog.setContentView(view);
+//        dialog.setTitle(null);
+//        dialog.setCanceledOnTouchOutside(true);
+//
+//        dialog.show();
+//    }
+//
+//    public void businessMockPaymentDialog(){
+//        Rect displayRectangle = new Rect();
+//        Activity parent = (Activity) activity;
+//        Window window = parent.getWindow();
+//        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+//
+//        View view = activity.getLayoutInflater().inflate(R.layout.dialog_pay_one_ref, null);
+//
+//        FacedTextView pay_one_confirm_ref = (FacedTextView) view.findViewById(R.id.pay_one_confirm_ref);
+//        FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
+//
+//
+//        confirmation.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//                activity.finish();
+//                activity.onBackPressed();
+//            }
+//        });
+//
+//        pay_one_confirm_ref.setText((new PersianEnglishDigit(activity.getString(R.string.pay_one_ref, "123456"))).E2P());
+//
+//
+//        view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
+//        dialog = new Dialog(activity);
+//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        dialog.setContentView(view);
+//        dialog.setTitle(null);
+//        dialog.setCanceledOnTouchOutside(true);
+//
+//        dialog.show();
+//    }
 
 }

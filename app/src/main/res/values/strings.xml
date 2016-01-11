@@ -108,9 +108,9 @@
     </string>
 
     <string name="detail_transaction">جزئیات تراکنش</string>
-    <string name="account_no">شماره حساب: </string>
+    <string name="account_no">شماره کارت: </string>
     <string name="mobile_no">شماره همراه: </string>
-    <string name="account_no_entry">شماره حساب </string>
+    <string name="account_no_entry">شماره کارت</string>
     <string name="mobile_no_entry">شماره همراه </string>
     <string name="account_type">نوع حساب: </string>
     <string name="bank">بانک:</string>
@@ -170,7 +170,7 @@
 
     <string name="start_activity_title">شبکه پرداخت هم‌پی</string>
     <string name="start_activity_text_1"> پرداخت به دوستان یا کسب و کار</string>
-    <string name="start_activity_text_2"> بدون نیاز به کارت بانکی</string>
+    <string name="start_activity_text_2">تنها با یک کارت بانکی</string>
     <string name="start_activity_text_3"> با نرم افزار ایمن و ساده هم‌پی</string>
     <string name="tc_privacy_text">با شرایط استفاده از نرم‌افزار هم‌پی و قوانین حفظ حریم خصوصی کاربر موافقم.</string>
     <string name="tc_privacy_confirm_text">تایید می‌کنم.</string>
@@ -186,8 +186,8 @@
     <string name="profile_entry">ورود مشخصات</string>
     <string name="please_entry_info">لطفا اطلاعات خود را وارد نمایید.</string>
     <string name="phone_entry">لطفا شماره همراه خود را وارد نمایید</string>
-    <string name="bank_account_info">اطلاعات حساب بانکی</string>
-    <string name="bank_account_info_detail">لطفا شماره حسابی را که مایل به اتصال شبکه هم‌پی هستید را همراه با نام بانک و کد ملی را وارد نمایید.</string>
+    <string name="bank_account_info">اطلاعات بانکی</string>
+    <string name="bank_account_info_detail">لطفا شماره کارتی را که مایل به اتصال شبکه هم‌پی هستید را همراه با نام و نام خانوادگی و کد ملی وارد نمایید.</string>
     <string name="progress_dialog_message">در حال دريافت اطلاعات...</string>
 
     <string name="user_status_verification">بررسی صحت حساب</string>
@@ -462,5 +462,6 @@
     <string name="card_nubmer">شماره کارت</string>
     <string name="pay_with_hampay">تایید پرداخت</string>
     <string name="request_payment_rial">مبلغ</string>
+    <string name="user_pin2">رمز دوم کارت</string>
 
 </resources>

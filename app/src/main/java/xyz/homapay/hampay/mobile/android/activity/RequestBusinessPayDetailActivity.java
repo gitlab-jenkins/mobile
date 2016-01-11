@@ -206,7 +206,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                new HamPayDialog(RequestBusinessPayDetailActivity.this).businessMockPaymentConfirmDialog(389000L, "");
+//                new HamPayDialog(RequestBusinessPayDetailActivity.this).businessMockPaymentConfirmDialog(389000L, "");
 
 //                finish();
 

@@ -105,17 +105,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     RequestMobileRegistrationIdEntry requestMobileRegistrationIdEntry;
     MobileRegistrationIdEntryRequest mobileRegistrationIdEntryRequest;
 
+    Intent intent;
 
-    RequestImageDownloader requestImageDownloader;
-
-
-    byte[] mobileKey;
-    String serverKey;
-
-    String encryptedData;
-    String decryptedData;
-
-    DeviceInfo deviceInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         bundle = getIntent().getExtras();
 
+        intent = new Intent();
 
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
@@ -135,28 +127,13 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         activity = MainActivity.this;
         context = this;
 
+        if (true) {
+            intent.setClass(context, RequestBusinessPayDetailActivity.class);
+            startActivity(intent);
+        }
+
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE).edit();
-
-
-
-//        deviceInfo = new DeviceInfo(context);
-//
-//        try {
-//
-//            mobileKey = SecurityUtils.getInstance(this).generateSHA_256(
-//                    deviceInfo.getMacAddress(),
-//                    deviceInfo.getIMEI(),
-//                    deviceInfo.getAndroidId());
-//
-//            serverKey = prefs.getString(Constants.USER_ID_TOKEN, "");
-//
-//            encryptedData = AESHelper.encrypt(mobileKey, serverKey, "ThisIsASecretKetThisIsASecretKetThisIsASecretKetThisIsASecretKetThisIsASecretKetThisIsASecretKetThisIsASecretKetThisIsASecretKet");
-//            decryptedData = AESHelper.decrypt(mobileKey, serverKey, encryptedData.trim());
-//        }
-//        catch (Exception ex){
-//            Log.e("Error", ex.getStackTrace().toString());
-//        }
 
 
         Intent intent = getIntent();
