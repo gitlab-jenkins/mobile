@@ -3164,7 +3164,6 @@ public class HamPayDialog {
                 registrationSendSmsTokenRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
                 requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(activity, new RequestRegistrationSendSmsTokenTaskCompleteListener());
                 requestRegistrationSendSmsToken.execute(registrationSendSmsTokenRequest);
-
             }
         });
 
