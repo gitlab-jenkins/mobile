@@ -236,6 +236,7 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
                         intent.setClass(activity, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.putExtra(Constants.USER_PROFILE_DTO, tacResponseMessage.getService().getUserProfile());
+                        intent.putExtra(Constants.PENDING_PAYMENT, tacResponseMessage.getService().hasPendingPayment());
                         intent.putExtra(Constants.NOTIFICATION, fromNotification);
                         editor.putBoolean(Constants.FORCE_USER_PROFILE, false);
                         editor.commit();
@@ -482,19 +483,19 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
             keyboard.setEnabled(false);
 
             //Remove below lines
-            editor.putString(Constants.LOGIN_TOKEN_ID, /*successLoginResponse.getTokenId()*/"aaaaaaaaaaaaaaaaaaaaaaaaaaa");
-            editor.commit();
+//            editor.putString(Constants.LOGIN_TOKEN_ID, /*successLoginResponse.getTokenId()*/"aaaaaaaaaaaaaaaaaaaaaaaaaaa");
+//            editor.commit();
 //            if (prefs.getBoolean(Constants.DISMIS_TAC, true)) {
-                tacRequest = new TACRequest();
-                tacRequest.setDeviceId(new DeviceInfo(context).getAndroidId());
-                tacRequest.setAppVersion(new AppInfo(context).getVersionCode() + "");
-                requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
-                requestTAC.execute(tacRequest);
+//                tacRequest = new TACRequest();
+//                tacRequest.setDeviceId(new DeviceInfo(context).getAndroidId());
+//                tacRequest.setAppVersion(new AppInfo(context).getVersionCode() + "");
+//                requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
+//                requestTAC.execute(tacRequest);
 //            }
             //Until here
 
-//            requestLogin = new RequestLogin(context, new RequestLoginResponseTaskCompleteListener());
-//            requestLogin.execute(loginData);
+            requestLogin = new RequestLogin(context, new RequestLoginResponseTaskCompleteListener());
+            requestLogin.execute(loginData);
 
 
             inputPassValue = "";

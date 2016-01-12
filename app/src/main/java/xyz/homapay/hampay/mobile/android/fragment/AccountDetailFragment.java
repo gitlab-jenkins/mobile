@@ -771,7 +771,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         user_name_text.setText(userProfileDTO.getFullName());
         MainActivity.user_account_name.setText(userProfileDTO.getFullName());
 
-        user_account_no_text.setText(persianEnglishDigit.E2P(userProfileDTO.getAccountNumber()));
+        user_account_no_text.setText(persianEnglishDigit.E2P(userProfileDTO.getCardNumber()));
         user_bank_name.setText(" " + userProfileDTO.getBankName());
         user_mobile_no.setText(persianEnglishDigit.E2P(userProfileDTO.getCellNumber()));
 

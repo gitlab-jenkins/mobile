@@ -71,6 +71,7 @@ import xyz.homapay.hampay.common.core.model.response.ChangeEmailResponse;
 import xyz.homapay.hampay.common.core.model.response.ContactUsResponse;
 import xyz.homapay.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
 import xyz.homapay.hampay.common.core.model.response.IndividualPaymentResponse;
+import xyz.homapay.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
 import xyz.homapay.hampay.common.core.model.response.TACAcceptResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
@@ -84,6 +85,7 @@ import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.activity.MainActivity;
 import xyz.homapay.hampay.mobile.android.activity.PostStartActivity;
 import xyz.homapay.hampay.mobile.android.activity.ProfileEntryActivity;
+import xyz.homapay.hampay.mobile.android.activity.SMSVerificationActivity;
 import xyz.homapay.hampay.mobile.android.activity.StartActivity;
 import xyz.homapay.hampay.mobile.android.activity.UnlinkPassActivity;
 import xyz.homapay.hampay.mobile.android.analytics.GaAnalyticsEvent;
@@ -731,6 +733,7 @@ public class HamPayDialog {
                     Intent intent = new Intent();
                     intent.setClass(activity, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.putExtra(Constants.PENDING_PAYMENT, tacAcceptResponseMessage.getService().hasPendingPayment());
                     intent.putExtra(Constants.USER_PROFILE_DTO, userProfileDTO);
                     editor.putBoolean(Constants.FORCE_USER_PROFILE, false);
                     editor.commit();
@@ -3139,59 +3142,114 @@ public class HamPayDialog {
     }
 
 
-//    public void businessMockPaymentConfirmDialog(final Long amountValue,
-//                                             final String userMessage){
-//        Rect displayRectangle = new Rect();
-//        Activity parent = (Activity) activity;
-//        Window window = parent.getWindow();
-//        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-//        View view = activity.getLayoutInflater().inflate(R.layout.dialog_pay_one, null);
-//        FacedTextView pay_one_confirm = (FacedTextView) view.findViewById(R.id.pay_one_confirm);
-//        FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
-//        FacedTextView dis_confirmation = (FacedTextView) view.findViewById(R.id.dis_confirmation);
-//
-//        confirmation.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dialog.dismiss();
-//
-//                businessMockPaymentDialog();
-//
-////                showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-////                businessPaymentRequest = new BusinessPaymentRequest();
-////                businessPaymentRequest.setAmount(amountValue);
-////                businessPaymentRequest.setBusinessCode(businessPaymentConfirmResponse.getBusinessCode());
-////                businessPaymentRequest.setMessage(userMessage);
-////                requestBusinessPayment = new RequestBusinessPayment(activity,
-////                        new RequestBusinessPaymentTaskCompleteListener(businessPaymentRequest, businessPaymentConfirmResponse.getFullName()));
-////                requestBusinessPayment.execute(businessPaymentRequest);
-//            }
-//        });
-//
-//
-//        dis_confirmation.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dialog.dismiss();
-//            }
-//        });
-//
-//        pay_one_confirm.setText(activity.getString(R.string.pay_one_confirm,
-//                (new PersianEnglishDigit()).E2P(String.format("%,d", amountValue).replace(".", ",")),
-//                /*businessPaymentConfirmResponse.getFullName()*/"دیجی کالا",
-//                "۰",
-//                /*businessPaymentConfirmResponse.getBankName()*/"سامان"));
-//
-//        view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
-//        dialog = new Dialog(activity);
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//        dialog.setContentView(view);
-//        dialog.setTitle(null);
-//        dialog.setCanceledOnTouchOutside(true);
-//
-//        dialog.show();
-//    }
+    RequestRegistrationSendSmsToken requestRegistrationSendSmsToken;
+    RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest;
+
+    public void smsConfirmDialog(){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_sms_confirm, null);
+        FacedTextView sms_user_notify = (FacedTextView) view.findViewById(R.id.sms_user_notify);
+        sms_user_notify.setText(activity.getString(R.string.sms_verification_text, new PersianEnglishDigit().E2P(prefs.getString(Constants.REGISTERED_CELL_NUMBER, ""))));
+        FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
+        FacedTextView dis_confirmation = (FacedTextView) view.findViewById(R.id.dis_confirmation);
+
+        confirmation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                registrationSendSmsTokenRequest = new RegistrationSendSmsTokenRequest();
+                registrationSendSmsTokenRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
+                requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(activity, new RequestRegistrationSendSmsTokenTaskCompleteListener());
+                requestRegistrationSendSmsToken.execute(registrationSendSmsTokenRequest);
+
+            }
+        });
+
+
+        dis_confirmation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(true);
+
+        dialog.show();
+    }
+
+    public class RequestRegistrationSendSmsTokenTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationSendSmsTokenResponse>> {
+        @Override
+        public void onTaskComplete(ResponseMessage<RegistrationSendSmsTokenResponse> registrationSendSmsTokenResponse)
+        {
+
+            dismisWaitingDialog();
+
+            if (registrationSendSmsTokenResponse != null) {
+                if (registrationSendSmsTokenResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
+
+                    Intent intent = new Intent();
+                    intent.setClass(activity, SMSVerificationActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    activity.startActivity(intent);
+
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Send Sms Token")
+                            .setAction("Send")
+                            .setLabel("Success")
+                            .build());
+                }else if (registrationSendSmsTokenResponse.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
+                    new HamPayDialog(activity).showInvalidStepDialog();
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Send Sms Token")
+                            .setAction("Send")
+                            .setLabel("Success(Invalid)")
+                            .build());
+                }
+                else {
+                    requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(activity, new RequestRegistrationSendSmsTokenTaskCompleteListener());
+                    new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
+                            registrationSendSmsTokenResponse.getService().getResultStatus().getCode(),
+                            registrationSendSmsTokenResponse.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Send Sms Token")
+                            .setAction("Send")
+                            .setLabel("Fail(Server)")
+                            .build());
+                }
+
+            }else {
+                requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(activity, new RequestRegistrationSendSmsTokenTaskCompleteListener());
+                new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
+                        Constants.LOCAL_ERROR_CODE,
+                        activity.getString(R.string.mgs_fail_registration_send_sms_token));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Send Sms Token")
+                        .setAction("Send")
+                        .setLabel("Fail(Mobile)")
+                        .build());
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            showWaitingdSMSDialog(requestRegistrationSendSmsToken, "");
+        }
+    }
+
 //
 //    public void businessMockPaymentDialog(){
 //        Rect displayRectangle = new Rect();

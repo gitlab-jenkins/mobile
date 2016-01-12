@@ -12,9 +12,9 @@ public class Constants {
 //    public static final String OPENAM_LOGIN_URL = "http://"+ SERVER_IP + ":8080/openam/json/authenticate";
 //    public static final String OPENAM_LOGOUT_URL = "http://" + SERVER_IP + ":8080/openam/json/sessions/?_action=logout";
 
-    //        public static final String HTTPS_SERVER_IP = "https://192.168.1.102" + URL_PREFIX; //Sima Server
-//    public static String HTTPS_SERVER_IP = "https://176.58.104.158" + URL_PREFIX;//England Server
-    public static String HTTPS_SERVER_IP = "https://176.58.114.27" + URL_PREFIX;//England Server
+    public static final String HTTPS_SERVER_IP = "https://192.168.1.101" + URL_PREFIX; //Sima Server
+    //    public static String HTTPS_SERVER_IP = "https://176.58.104.158" + URL_PREFIX;//England Server
+//    public static String HTTPS_SERVER_IP = "https://176.58.114.27" + URL_PREFIX;//England Server
 //    public static String HTTPS_SERVER_IP = "https://192.168.1.109" + URL_PREFIX;//Masoud Server
     //        public static String HTTPS_SERVER_IP = "https://mobile.tejaratbourse.com" + URL_PREFIX;//Tejarat bourse Server
     public static final String HTTPS_OPENAM_LOGIN_URL = HTTPS_SERVER_IP + "/auth";
@@ -30,11 +30,12 @@ public class Constants {
     public static final String APP_PREFERENCE_NAME = "HamPay_Preferences";
     public static final String TRANSFER_MONEY_COMMENT = "TransferMoneyComment";
     public static final String USER_PROFILE_DTO = "UserProfile";
+    public static final String PENDING_PAYMENT = "pendingPayment";
     public static final String USER_TRANSACTION_DTO = "UserTransaction";
     public static final String CONTACT_PHONE_NO = "contact_phone_no";
     public static final String CONTACT_NAME = "contact_name";
     public static final String REGISTERED_ACTIVITY_DATA = "registeredActivityData";
-    //    public static final String REGISTERED_CELL_NUMBER = "registeredCellNumber";
+    public static final String REGISTERED_CELL_NUMBER = "registeredCellNumber";
     public static final String REGISTERED_BANK_ID = "registeredBankID";
     public static final String REGISTERED_BANK_ACCOUNT_NO_FORMAT = "registeredBankAccountNoFormat";
     public static final String REGISTERED_ACCOUNT_NO = "registeredAccountNo";

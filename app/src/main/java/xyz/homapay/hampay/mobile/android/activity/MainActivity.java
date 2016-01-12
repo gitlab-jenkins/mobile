@@ -87,6 +87,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     UserProfileDTO userProfileDTO;
 
+    boolean pendingPayment = false;
+
     Activity activity;
 
     Bundle bundle;
@@ -115,6 +117,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         bundle = getIntent().getExtras();
 
+        Intent intent = getIntent();
+
+        pendingPayment = bundle.getBoolean(Constants.PENDING_PAYMENT, false);
+        userProfileDTO = (UserProfileDTO) intent.getSerializableExtra(Constants.USER_PROFILE_DTO);
+
         intent = new Intent();
 
         hamPayGaTracker = ((HamPayApplication) getApplication())
@@ -127,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         activity = MainActivity.this;
         context = this;
 
-        if (true) {
+        if (pendingPayment) {
             intent.setClass(context, RequestBusinessPayDetailActivity.class);
             startActivity(intent);
         }
@@ -136,9 +143,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE).edit();
 
 
-        Intent intent = getIntent();
 
-        userProfileDTO = (UserProfileDTO) intent.getSerializableExtra(Constants.USER_PROFILE_DTO);
 
         editor.putLong(Constants.MAX_XFER_Amount, this.userProfileDTO.getMaxXferAmount());
         editor.putLong(Constants.MIN_XFER_Amount, this.userProfileDTO.getMinXferAmount());

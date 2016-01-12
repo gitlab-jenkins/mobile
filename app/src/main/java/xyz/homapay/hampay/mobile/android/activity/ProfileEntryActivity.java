@@ -412,19 +412,19 @@ public class ProfileEntryActivity extends Activity {
 
                     keepOn_button.setEnabled(false);
 
-//                    registrationEntryRequest = new RegistrationEntryRequest();
-//
-//                    registrationEntryRequest.setCellNumber(new PersianEnglishDigit(cellNumberValue.getText().toString()).P2E());
-//                    registrationEntryRequest.setAccountNumber(new PersianEnglishDigit(accountNumberValue.getText().toString()).P2E());
-//                    registrationEntryRequest.setBankCode(selectedBankCode);
-//                    registrationEntryRequest.setEmail(emailValue.getText().toString());
-//                    registrationEntryRequest.setNationalCode(new PersianEnglishDigit(nationalCodeValue.getText().toString()).P2E());
-//
-//                    requestRegistrationEntry = new RequestRegistrationEntry(context,
-//                            new RequestRegistrationEntryTaskCompleteListener(),
-//                            latitute + "," + longitude);
-//
-//                    requestRegistrationEntry.execute(registrationEntryRequest);
+                    registrationEntryRequest = new RegistrationEntryRequest();
+
+                    registrationEntryRequest.setCellNumber(new PersianEnglishDigit(cellNumberValue.getText().toString()).P2E());
+                    registrationEntryRequest.setCardNumber(new PersianEnglishDigit(accountNumberValue.getText().toString()).P2E());
+                    registrationEntryRequest.setFullName(userNameFamily.getText().toString());
+                    registrationEntryRequest.setEmail(emailValue.getText().toString());
+                    registrationEntryRequest.setNationalCode(new PersianEnglishDigit(nationalCodeValue.getText().toString()).P2E());
+
+                    requestRegistrationEntry = new RequestRegistrationEntry(context,
+                            new RequestRegistrationEntryTaskCompleteListener(),
+                            latitute + "," + longitude);
+
+                    requestRegistrationEntry.execute(registrationEntryRequest);
                 } else {
 
                     if (cellNumberValue.getText().toString().length() == 0 || !cellNumberIsValid){
@@ -433,10 +433,15 @@ public class ProfileEntryActivity extends Activity {
                         cellNumberValue.requestFocus();
                     }
 
+                    else if (userNameFamily.getText().toString().length() == 0 || !userNameFamilyIsValid){
+                        Toast.makeText(context, getString(R.string.msg_username_invalid), Toast.LENGTH_SHORT).show();
+                        userNameFamilyIcon.setImageResource(R.drawable.false_icon);
+                        userNameFamily.requestFocus();
+                    }
 
                     else if (accountNumberValue.getText().toString().length() == 0 || !accountNumberIsValid){
                         Toast.makeText(context, getString(R.string.msg_accountNo_invalid), Toast.LENGTH_SHORT).show();
-//                        accountNumberIcon.setImageResource(R.drawable.false_icon);
+                        accountNumberIcon.setImageResource(R.drawable.false_icon);
                         accountNumberValue.requestFocus();
                     }
 
@@ -568,7 +573,7 @@ public class ProfileEntryActivity extends Activity {
             if (registrationEntryResponse != null) {
 
                 if (registrationEntryResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
-//                    editor.putString(Constants.REGISTERED_CELL_NUMBER, new PersianEnglishDigit(cellNumberValue.getText().toString()).P2E());
+                    editor.putString(Constants.REGISTERED_CELL_NUMBER, new PersianEnglishDigit(cellNumberValue.getText().toString()).P2E());
                     editor.putString(Constants.REGISTERED_BANK_ID, selectedBankCode);
                     editor.putString(Constants.REGISTERED_BANK_ACCOUNT_NO_FORMAT, accountNumberFormat);
                     editor.putString(Constants.REGISTERED_ACCOUNT_NO, accountNumberValue.getText().toString());
@@ -577,11 +582,14 @@ public class ProfileEntryActivity extends Activity {
                     editor.putString(Constants.REGISTERED_USER_EMAIL, emailValue.getText().toString());
                     editor.commit();
 
-                    Intent intent = new Intent();
-                    intent.setClass(ProfileEntryActivity.this, VerificationActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    finish();
-                    startActivity(intent);
+
+                    hamPayDialog.smsConfirmDialog();
+
+//                    Intent intent = new Intent();
+//                    intent.setClass(ProfileEntryActivity.this, VerificationActivity.class);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    finish();
+//                    startActivity(intent);
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Registration Entry")
