@@ -20,6 +20,7 @@ import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
 import xyz.homapay.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
 import xyz.homapay.hampay.common.core.model.response.GetUserIdTokenResponse;
 import xyz.homapay.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
+import xyz.homapay.hampay.common.psp.model.response.PurchaseResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
@@ -206,65 +207,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-//                new HamPayDialog(RequestBusinessPayDetailActivity.this).businessMockPaymentConfirmDialog(389000L, "");
 
-//                finish();
-
-//                credit_value.clearFocus();
-//                pay_to_one_button.setEnabled(false);
-//
-//
-//
-//                if (creditValueValidation) {
-//
-//
-//                    if ((prefs.getString(Constants.USER_ID_TOKEN, "") != null && prefs.getString(Constants.USER_ID_TOKEN, "").length() == 16)) {
-//
-//                        serverKey = prefs.getString(Constants.USER_ID_TOKEN, "");
-//
-//                        contactMssage = contact_message.getText().toString();
-//                        amountValue = Long.parseLong(new PersianEnglishDigit(credit_value.getText().toString()).P2E().replace(",", ""));
-//
-//                        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
-//                            Intent intent = new Intent();
-//                            intent.setClass(context, HamPayLoginActivity.class);
-//                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                            finish();
-//                            startActivity(intent);
-//                        } else {
-//                            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-//                            editor.commit();
-//                            if (amountValue >= MinXferAmount && amountValue <= MaxXferAmount) {
-//                                switch (userVerificationStatus) {
-//                                    case DELEGATED:
-//                                        hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-//                                        individualPaymentConfirmRequest = new IndividualPaymentConfirmRequest();
-//                                        individualPaymentConfirmRequest.setCellNumber(contactPhoneNo);
-//                                        individualPaymentConfirmRequest.setAmount(amountValue);
-//                                        requestIndividualPaymentConfirm = new RequestIndividualPaymentConfirm(context, new RequestIndividualPaymentConfirmTaskCompleteListener());
-//                                        requestIndividualPaymentConfirm.execute(individualPaymentConfirmRequest);
-//                                        break;
-//
-//                                    default:
-//                                        new HamPayDialog(activity).showFailPaymentPermissionDialog(userVerificationMessage);
-//                                        pay_to_one_button.setEnabled(true);
-//                                        break;
-//                                }
-//                            } else {
-//                                new HamPayDialog(activity).showIncorrectAmountDialog(MinXferAmount, MaxXferAmount);
-//                                pay_to_one_button.setEnabled(true);
-//                            }
-//                        }
-//                    }else {
-//                        hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-//                        getUserIdTokenRequest = new GetUserIdTokenRequest();
-//                        requestUserIdToken = new RequestUserIdToken(context, new RequestGetUserIdTokenResponseTaskCompleteListener());
-//                        requestUserIdToken.execute(getUserIdTokenRequest);
-//                    }
-//                }else {
-//                    (new HamPayDialog(activity)).showIncorrectPrice();
-//                    pay_to_one_button.setEnabled(true);
-//                }
             }
         });
     }
@@ -304,17 +247,16 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
     }
 
 
-    public class RequestIndividualPaymentConfirmTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<IndividualPaymentConfirmResponse>> {
+    public class RequestPurchaseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PurchaseResponse>> {
 
         @Override
-        public void onTaskComplete(ResponseMessage<IndividualPaymentConfirmResponse> individualPaymentConfirmResponseMessage) {
+        public void onTaskComplete(ResponseMessage<PurchaseResponse> purchaseResponseResponseMessage) {
 
             hamPayDialog.dismisWaitingDialog();
 
-            if (individualPaymentConfirmResponseMessage != null){
-                if (individualPaymentConfirmResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-                    new HamPayDialog(activity, serverKey).individualPaymentConfirmDialog(individualPaymentConfirmResponseMessage.getService(),
-                            amountValue, contactMssage);
+            if (purchaseResponseResponseMessage != null){
+                if (purchaseResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
+                    new HamPayDialog(activity).purchaseDialog();
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Individual Payment Confirm")
@@ -323,8 +265,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                             .build());
 
                 }else {
-                    new HamPayDialog(activity).showFailPaymentDialog(individualPaymentConfirmResponseMessage.getService().getResultStatus().getCode(),
-                            individualPaymentConfirmResponseMessage.getService().getResultStatus().getDescription());
+                    new HamPayDialog(activity).showFailPaymentDialog(purchaseResponseResponseMessage.getService().getResultStatus().getCode(),
+                            purchaseResponseResponseMessage.getService().getResultStatus().getDescription());
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Individual Payment Confirm")
@@ -349,96 +291,5 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         @Override
         public void onTaskPreRun() {}
     }
-
-
-    public class RequestGetUserIdTokenResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<GetUserIdTokenResponse>> {
-        public RequestGetUserIdTokenResponseTaskCompleteListener(){
-        }
-
-        @Override
-        public void onTaskComplete(ResponseMessage<GetUserIdTokenResponse> registrationGetUserIdTokenResponseMessage) {
-
-            ResultStatus resultStatus;
-
-            if (registrationGetUserIdTokenResponseMessage != null) {
-
-                resultStatus = registrationGetUserIdTokenResponseMessage.getService().getResultStatus();
-
-                if (resultStatus == ResultStatus.SUCCESS) {
-
-                    serverKey = registrationGetUserIdTokenResponseMessage.getService().getUserIdToken();
-
-                    editor.putString(Constants.USER_ID_TOKEN, serverKey);
-                    editor.commit();
-
-                    contactMssage = contact_message.getText().toString();
-                    amountValue = Long.parseLong(new PersianEnglishDigit(credit_value.getText().toString()).P2E().replace(",", ""));
-
-                    if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
-                        Intent intent = new Intent();
-                        intent.setClass(context, HamPayLoginActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        finish();
-                        startActivity(intent);
-                    } else {
-                        editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-                        editor.commit();
-                        if (amountValue >= MinXferAmount && amountValue <= MaxXferAmount) {
-                            switch (userVerificationStatus) {
-                                case DELEGATED:
-                                    individualPaymentConfirmRequest = new IndividualPaymentConfirmRequest();
-                                    individualPaymentConfirmRequest.setCellNumber(contactPhoneNo);
-                                    individualPaymentConfirmRequest.setAmount(amountValue);
-                                    requestIndividualPaymentConfirm = new RequestIndividualPaymentConfirm(context, new RequestIndividualPaymentConfirmTaskCompleteListener());
-                                    requestIndividualPaymentConfirm.execute(individualPaymentConfirmRequest);
-                                    break;
-
-                                default:
-                                    new HamPayDialog(activity).showFailPaymentPermissionDialog(userVerificationMessage);
-                                    pay_to_one_button.setEnabled(true);
-                                    break;
-                            }
-                        } else {
-                            new HamPayDialog(activity).showIncorrectAmountDialog(MinXferAmount, MaxXferAmount);
-                            pay_to_one_button.setEnabled(true);
-                        }
-                    }
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Get User Id Token")
-                            .setAction("Get")
-                            .setLabel("Success")
-                            .build());
-
-                }else {
-                    requestUserIdToken = new RequestUserIdToken(context, new RequestGetUserIdTokenResponseTaskCompleteListener());
-                    new HamPayDialog(activity).showFailGetUserIdTokenDialog(requestUserIdToken, getUserIdTokenRequest,
-                            registrationGetUserIdTokenResponseMessage.getService().getResultStatus().getCode(),
-                            registrationGetUserIdTokenResponseMessage.getService().getResultStatus().getDescription());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Get User Id Token")
-                            .setAction("Get")
-                            .setLabel("Fail(Server)")
-                            .build());
-                }
-            }else {
-                requestUserIdToken = new RequestUserIdToken(context, new RequestGetUserIdTokenResponseTaskCompleteListener());
-                new HamPayDialog(activity).showFailGetUserIdTokenDialog(requestUserIdToken, getUserIdTokenRequest,
-                        Constants.LOCAL_ERROR_CODE,
-                        getString(R.string.msg_fail_server_key));
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Get User Id Token")
-                        .setAction("Get")
-                        .setLabel("Fail(Mobile)")
-                        .build());
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {   }
-    }
-
 
 }

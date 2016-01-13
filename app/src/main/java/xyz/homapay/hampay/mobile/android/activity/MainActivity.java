@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         Intent intent = getIntent();
 
-        pendingPayment = bundle.getBoolean(Constants.PENDING_PAYMENT, false);
+        pendingPayment = !bundle.getBoolean(Constants.PENDING_PAYMENT, false);
         userProfileDTO = (UserProfileDTO) intent.getSerializableExtra(Constants.USER_PROFILE_DTO);
 
         intent = new Intent();

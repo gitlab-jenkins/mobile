@@ -74,6 +74,7 @@ import xyz.homapay.hampay.common.core.model.response.IndividualPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
 import xyz.homapay.hampay.common.core.model.response.TACAcceptResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
+import xyz.homapay.hampay.common.psp.model.response.PurchaseResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
@@ -3247,6 +3248,39 @@ public class HamPayDialog {
         public void onTaskPreRun() {
             showWaitingdSMSDialog(requestRegistrationSendSmsToken, "");
         }
+    }
+
+
+    public void purchaseDialog(){
+
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_request_pay, null);
+
+        FacedTextView request_payment_message = (FacedTextView) view.findViewById(R.id.request_payment_message);
+        FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
+
+
+        confirmation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                activity.finish();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(true);
+
+        dialog.show();
     }
 
 //

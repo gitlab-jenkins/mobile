@@ -467,4 +467,6 @@
     <string name="request_payment_rial">مبلغ</string>
     <string name="user_pin2">رمز دوم کارت</string>
 
+    <string name="request_payment_message">پرداخت شما با وفقیت انجام شد</string>
+
 </resources>
