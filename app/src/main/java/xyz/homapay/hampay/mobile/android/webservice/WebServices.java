@@ -34,6 +34,7 @@ import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
 import xyz.homapay.hampay.common.core.model.request.IllegalAppListRequest;
 import xyz.homapay.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
 import xyz.homapay.hampay.common.core.model.request.IndividualPaymentRequest;
+import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
 import xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationConfirmUserDataRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationCredentialsRequest;
@@ -64,6 +65,7 @@ import xyz.homapay.hampay.common.core.model.response.GetUserIdTokenResponse;
 import xyz.homapay.hampay.common.core.model.response.IllegalAppListResponse;
 import xyz.homapay.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
 import xyz.homapay.hampay.common.core.model.response.IndividualPaymentResponse;
+import xyz.homapay.hampay.common.core.model.response.LatestPurchaseResponse;
 import xyz.homapay.hampay.common.core.model.response.MobileRegistrationIdEntryResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationConfirmUserDataResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationCredentialsResponse;
@@ -2146,6 +2148,68 @@ public class WebServices  {
 
             Gson gson = builder.create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<PurchaseResponse>>() {}.getType());
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (connection != null)
+                connection.disconnect();
+        }
+        return responseMessage;
+    }
+
+
+    public ResponseMessage<LatestPurchaseResponse> newLatestPurchaseResponse(LatestPurchaseRequest latestPurchaseRequest){
+
+        ResponseMessage<LatestPurchaseResponse> responseMessage = null;
+        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/user/latest-purchase");
+        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+
+        try {
+
+            RequestHeader header = new RequestHeader();
+            header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+            header.setVersion("1.0-PA");
+
+            RequestMessage<LatestPurchaseRequest> message = new RequestMessage<LatestPurchaseRequest>();
+            message.setRequestHeader(header);
+            LatestPurchaseRequest request = latestPurchaseRequest;
+            request.setRequestUUID(UUID.randomUUID().toString());
+            message.setService(request);
+
+            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<LatestPurchaseRequest>>() {}.getType();
+            String jsonRequest = new Gson().toJson(message, requestType);
+
+            connection.setConnectTimeout(30000);
+            connection.setReadTimeout(30000);
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            OutputStream outputStream = connection.getOutputStream();
+            outputStream.write(jsonRequest.getBytes());
+            outputStream.flush();
+
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
+
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                }
+            });
+
+            Gson gson = builder.create();
+            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<LatestPurchaseResponse>>() {}.getType());
 
 
 

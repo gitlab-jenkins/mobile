@@ -18,14 +18,18 @@ import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.UserVerificationStatus;
 import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
 import xyz.homapay.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
+import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
 import xyz.homapay.hampay.common.core.model.response.GetUserIdTokenResponse;
 import xyz.homapay.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
+import xyz.homapay.hampay.common.core.model.response.LatestPurchaseResponse;
+import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
 import xyz.homapay.hampay.common.psp.model.request.PurchaseRequest;
 import xyz.homapay.hampay.common.psp.model.response.PurchaseResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestIndividualPaymentConfirm;
+import xyz.homapay.hampay.mobile.android.async.RequestLatestPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestUserIdToken;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
@@ -41,30 +45,15 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
     Bundle bundle;
 
-    private String contactPhoneNo;
-    private String contactName;
-
     FacedTextView contact_name;
     FacedEditText contact_message;
-    String contactMssage = "";
     FacedTextView credit_value;
-    Long amountValue;
-    boolean creditValueValidation = false;
     ImageView credit_value_icon;
-
-    String number = "";
-
     boolean intentContact = false;
-
     Context context;
     Activity activity;
-
-
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
-
-    String serverKey = "";
-
     RequestIndividualPaymentConfirm requestIndividualPaymentConfirm;
     IndividualPaymentConfirmRequest individualPaymentConfirmRequest;
 
@@ -82,9 +71,15 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
     Tracker hamPayGaTracker;
 
-    GetUserIdTokenRequest getUserIdTokenRequest;
-    RequestUserIdToken requestUserIdToken;
+    FacedTextView input_digit_1;
+    FacedTextView input_digit_2;
+    FacedTextView input_digit_3;
+    FacedTextView input_digit_4;
+    FacedTextView input_digit_5;
+    FacedTextView input_digit_6;
 
+    FacedTextView paymentPriceValue;
+    FacedTextView cardNumberValue;
     FacedEditText pin2Value;
 
     @Override
@@ -164,47 +159,28 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         contact_message = (FacedEditText)findViewById(R.id.contact_message);
         contact_name = (FacedTextView)findViewById(R.id.contact_name);
 
+
+        input_digit_1 = (FacedTextView)findViewById(R.id.input_digit_1);
+        input_digit_2 = (FacedTextView)findViewById(R.id.input_digit_2);
+        input_digit_3 = (FacedTextView)findViewById(R.id.input_digit_3);
+        input_digit_4 = (FacedTextView)findViewById(R.id.input_digit_4);
+        input_digit_5 = (FacedTextView)findViewById(R.id.input_digit_5);
+        input_digit_6 = (FacedTextView)findViewById(R.id.input_digit_6);
+        paymentPriceValue = (FacedTextView)findViewById(R.id.paymentPriceValue);
+        cardNumberValue = (FacedTextView)findViewById(R.id.cardNumberValue);
         pin2Value = (FacedEditText)findViewById(R.id.pin2Value);
+
 
 
         bundle = getIntent().getExtras();
 
         if (bundle != null) {
-            contactPhoneNo = bundle.getString(Constants.CONTACT_PHONE_NO);
-            contactName = bundle.getString(Constants.CONTACT_NAME);
 
         }else {
-
-//            intentContact = true;
-//
-//            Uri uri = getIntent().getData();
-//
-//            Cursor phonesCursor = getContentResolver().query(uri, null, null, null,
-//                    ContactsContract.CommonDataKinds.Phone.IS_PRIMARY + " DESC");
-//            if (phonesCursor != null) {
-//                if (phonesCursor.moveToNext()) {
-//                    String id = phonesCursor.getString(phonesCursor
-//                            .getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
-//                    Cursor pCur = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-//                            null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", new String[]{id}, null);
-//                    while (pCur.moveToNext()) {
-//                        contactPhoneNo = pCur.getString(pCur
-//                                .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-//                        contactName = pCur.getString(pCur
-//                                .getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-//                        if (TextUtils.isEmpty(contactPhoneNo)) continue;
-//                        if (!number.equals("")) number = number + "&";
-//                    }
-//                    pCur.close();
-//                }
-//                phonesCursor.close();
-//
-//                Log.e("URL", contactPhoneNo);
-//
-//            }
+            RequestLatestPurchase requestLatestPurchase = new RequestLatestPurchase(activity, new RequestLatestPurchaseTaskCompleteListener());
+            LatestPurchaseRequest latestPurchaseRequest = new LatestPurchaseRequest();
+            requestLatestPurchase.execute(latestPurchaseRequest);
         }
-
-//        contact_name.setText(contactName);
 
 
         pay_to_business_button = (ButtonRectangle)findViewById(R.id.pay_to_business_button);
@@ -266,7 +242,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
             if (purchaseResponseResponseMessage != null){
                 if (purchaseResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-                    new HamPayDialog(activity).purchaseDialog();
+//                    new HamPayDialog(activity).purchaseDialog();
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Pending Payment Request")
@@ -277,6 +253,66 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 }else {
                     new HamPayDialog(activity).showFailPaymentDialog(purchaseResponseResponseMessage.getService().getServiceDefinition().getCode(),
                             purchaseResponseResponseMessage.getService().getMessage());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Pending Payment Request")
+                            .setAction("Payment")
+                            .setLabel("Fail(Server)")
+                            .build());
+                }
+            }else {
+                new HamPayDialog(activity).showFailPaymentDialog(Constants.LOCAL_ERROR_CODE,
+                        getString(R.string.msg_fail_payment));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Pending Payment Request")
+                        .setAction("Payment")
+                        .setLabel("Fail(Mobile)")
+                        .build());
+            }
+
+            pay_to_business_button.setEnabled(true);
+        }
+
+        @Override
+        public void onTaskPreRun() {}
+    }
+
+
+    public class RequestLatestPurchaseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<LatestPurchaseResponse>> {
+
+        @Override
+        public void onTaskComplete(ResponseMessage<LatestPurchaseResponse> latestPurchaseResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+
+            if (latestPurchaseResponseMessage != null){
+                if (latestPurchaseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
+//                    new HamPayDialog(activity).purchaseDialog();
+
+                    PurchaseInfoDTO purchaseInfoDTO = latestPurchaseResponseMessage.getService().getPurchaseInfo();
+
+//                    latestPurchaseResponseMessage.getService().getPurchaseInfo().get
+
+                    input_digit_1.setText(purchaseInfoDTO.getPurchaseCode().indexOf(0));
+                    input_digit_2.setText(purchaseInfoDTO.getPurchaseCode().indexOf(1));
+                    input_digit_3.setText(purchaseInfoDTO.getPurchaseCode().indexOf(2));
+                    input_digit_4.setText(purchaseInfoDTO.getPurchaseCode().indexOf(3));
+                    input_digit_5.setText(purchaseInfoDTO.getPurchaseCode().indexOf(4));
+                    input_digit_6.setText(purchaseInfoDTO.getPurchaseCode().indexOf(5));
+
+                    paymentPriceValue.setText(latestPurchaseResponseMessage.getService().getPurchaseInfo().getAmount().toString());
+                    cardNumberValue.setText(/*latestPurchaseResponseMessage.getService().getPurchaseInfo().getAmount().toString()*/"۱۱۱۱-۱۱۱۱-۱۱۱۱-۱۱۱۱");
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Pending Payment Request")
+                            .setAction("Payment")
+                            .setLabel("Success")
+                            .build());
+
+                }else {
+                    new HamPayDialog(activity).showFailPaymentDialog(latestPurchaseResponseMessage.getService().getServiceDefinition().getCode(),
+                            /*latestPurchaseResponseMessage.getService().getMessage()*/"");
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Pending Payment Request")
