@@ -20,11 +20,13 @@ import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
 import xyz.homapay.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
 import xyz.homapay.hampay.common.core.model.response.GetUserIdTokenResponse;
 import xyz.homapay.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
+import xyz.homapay.hampay.common.psp.model.request.PurchaseRequest;
 import xyz.homapay.hampay.common.psp.model.response.PurchaseResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestIndividualPaymentConfirm;
+import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestUserIdToken;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
@@ -35,7 +37,7 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
-    ButtonRectangle pay_to_one_button;
+    ButtonRectangle pay_to_business_button;
 
     Bundle bundle;
 
@@ -82,6 +84,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
     GetUserIdTokenRequest getUserIdTokenRequest;
     RequestUserIdToken requestUserIdToken;
+
+    FacedEditText pin2Value;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,6 +164,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         contact_message = (FacedEditText)findViewById(R.id.contact_message);
         contact_name = (FacedTextView)findViewById(R.id.contact_name);
 
+        pin2Value = (FacedEditText)findViewById(R.id.pin2Value);
+
 
         bundle = getIntent().getExtras();
 
@@ -201,13 +207,17 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 //        contact_name.setText(contactName);
 
 
-        pay_to_one_button = (ButtonRectangle)findViewById(R.id.pay_to_one_button);
-        pay_to_one_button.setOnClickListener(new View.OnClickListener() {
+        pay_to_business_button = (ButtonRectangle)findViewById(R.id.pay_to_business_button);
+        pay_to_business_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-
+                RequestPurchase requestPurchase = new RequestPurchase(activity, new RequestPurchaseTaskCompleteListener());
+                PurchaseRequest purchaseRequest = new PurchaseRequest();
+                purchaseRequest.setAmount(0);
+                purchaseRequest.setMerchantId("");
+                purchaseRequest.setMobileNumber(Constants.REGISTERED_CELL_NUMBER);
+                purchaseRequest.setPin2(pin2Value.getText().toString());
+                requestPurchase.execute(purchaseRequest);
             }
         });
     }
@@ -259,18 +269,18 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                     new HamPayDialog(activity).purchaseDialog();
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Individual Payment Confirm")
-                            .setAction("Payment Confirm")
+                            .setCategory("Pending Payment Request")
+                            .setAction("Payment")
                             .setLabel("Success")
                             .build());
 
                 }else {
-                    new HamPayDialog(activity).showFailPaymentDialog(purchaseResponseResponseMessage.getService().getResultStatus().getCode(),
-                            purchaseResponseResponseMessage.getService().getResultStatus().getDescription());
+                    new HamPayDialog(activity).showFailPaymentDialog(purchaseResponseResponseMessage.getService().getServiceDefinition().getCode(),
+                            purchaseResponseResponseMessage.getService().getMessage());
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Individual Payment Confirm")
-                            .setAction("Payment Confirm")
+                            .setCategory("Pending Payment Request")
+                            .setAction("Payment")
                             .setLabel("Fail(Server)")
                             .build());
                 }
@@ -279,13 +289,13 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                         getString(R.string.msg_fail_payment));
 
                 hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Individual Payment Confirm")
-                        .setAction("Payment Confirm")
+                        .setCategory("Pending Payment Request")
+                        .setAction("Payment")
                         .setLabel("Fail(Mobile)")
                         .build());
             }
 
-            pay_to_one_button.setEnabled(true);
+            pay_to_business_button.setEnabled(true);
         }
 
         @Override

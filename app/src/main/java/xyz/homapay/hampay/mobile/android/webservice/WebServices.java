@@ -2101,7 +2101,7 @@ public class WebServices  {
     public ResponseMessage<PurchaseResponse> newPurchaseResponse(PurchaseRequest purchaseRequest){
 
         ResponseMessage<PurchaseResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/hampay/psp/purchase");
+        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/psp/purchase");
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
