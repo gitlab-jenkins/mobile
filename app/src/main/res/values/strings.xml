@@ -413,6 +413,7 @@
     <string name="msg_fail_payment_permission">نوع حساب شما %1$s می باشد و برای پرداخت می بایستی به نوع عادی تبدیل شود.
     \n اما شما کماکان میتونید از اعضای عادی هم‌پی پول دریافت کنید.
     </string>
+    <string name="msg_fail_fetch_latest_payment">دریافت اطلاعات آخرین پرداخت شما با مشکل مواجه شد. مجدد تلاش کنید.</string>
     <string name="msg_violation_image_size">اندازه عکس می‌بایستی از ۵۱۲ کیلو بایت کمتر باشد.</string>
     <string name="msg_incorrect_amount">مبلغ واریزی شما می بایستی بین %1$s ریال و %2$s ریال باشد.</string>
 

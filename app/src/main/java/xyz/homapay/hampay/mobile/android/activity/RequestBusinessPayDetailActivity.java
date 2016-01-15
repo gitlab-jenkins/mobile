@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -54,8 +55,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
     Activity activity;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
-    RequestIndividualPaymentConfirm requestIndividualPaymentConfirm;
-    IndividualPaymentConfirmRequest individualPaymentConfirmRequest;
 
     public void backActionBar(View view){
         finish();
@@ -81,6 +80,9 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
     FacedTextView paymentPriceValue;
     FacedTextView cardNumberValue;
     FacedEditText pin2Value;
+
+    RequestLatestPurchase requestLatestPurchase;
+    LatestPurchaseRequest latestPurchaseRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,34 +129,13 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
         }
 
-
-
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
         hamPayDialog = new HamPayDialog(activity);
 
         credit_value = (FacedTextView)findViewById(R.id.credit_value);
-//        credit_value.addTextChangedListener(new CurrencyFormatterTextWatcher(credit_value));
         credit_value_icon = (ImageView)findViewById(R.id.credit_value_icon);
-//        credit_value.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                if (!hasFocus){
-//                    if (credit_value.getText().toString().length() == 0){
-//                        credit_value_icon.setImageResource(R.drawable.false_icon);
-//                        creditValueValidation = false;
-//                    }
-//                    else {
-//                        credit_value_icon.setImageResource(R.drawable.right_icon);
-//                        creditValueValidation = true;
-//                    }
-//                }else {
-//                    credit_value_icon.setImageDrawable(null);
-//                }
-//
-//            }
-//        });
 
         contact_message = (FacedEditText)findViewById(R.id.contact_message);
         contact_name = (FacedTextView)findViewById(R.id.contact_name);
@@ -177,8 +158,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         if (bundle != null) {
 
         }else {
-            RequestLatestPurchase requestLatestPurchase = new RequestLatestPurchase(activity, new RequestLatestPurchaseTaskCompleteListener());
-            LatestPurchaseRequest latestPurchaseRequest = new LatestPurchaseRequest();
+            requestLatestPurchase = new RequestLatestPurchase(activity, new RequestLatestPurchaseTaskCompleteListener());
+            latestPurchaseRequest = new LatestPurchaseRequest();
             requestLatestPurchase.execute(latestPurchaseRequest);
         }
 
@@ -227,9 +208,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         setResult(1024);
 
         finish();
-
-
-
     }
 
 
@@ -251,6 +229,9 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                             .build());
 
                 }else {
+
+
+
                     new HamPayDialog(activity).showFailPaymentDialog(purchaseResponseResponseMessage.getService().getServiceDefinition().getCode(),
                             purchaseResponseResponseMessage.getService().getMessage());
 
@@ -288,11 +269,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
             if (latestPurchaseResponseMessage != null){
                 if (latestPurchaseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-//                    new HamPayDialog(activity).purchaseDialog();
 
                     PurchaseInfoDTO purchaseInfoDTO = latestPurchaseResponseMessage.getService().getPurchaseInfo();
-
-//                    latestPurchaseResponseMessage.getService().getPurchaseInfo().get
 
                     input_digit_1.setText(purchaseInfoDTO.getPurchaseCode().indexOf(0));
                     input_digit_2.setText(purchaseInfoDTO.getPurchaseCode().indexOf(1));
@@ -305,37 +283,48 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                     cardNumberValue.setText(/*latestPurchaseResponseMessage.getService().getPurchaseInfo().getAmount().toString()*/"۱۱۱۱-۱۱۱۱-۱۱۱۱-۱۱۱۱");
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Pending Payment Request")
-                            .setAction("Payment")
+                            .setCategory("Latest Pending Payment")
+                            .setAction("Fetch")
                             .setLabel("Success")
                             .build());
 
                 }else {
-                    new HamPayDialog(activity).showFailPaymentDialog(latestPurchaseResponseMessage.getService().getServiceDefinition().getCode(),
+                    requestLatestPurchase = new RequestLatestPurchase(context, new RequestLatestPurchaseTaskCompleteListener());
+
+                    new HamPayDialog(activity).showFailPendingPaymentDialog(requestLatestPurchase, latestPurchaseRequest,
+                            latestPurchaseResponseMessage.getService().getServiceDefinition().getCode(),
                             /*latestPurchaseResponseMessage.getService().getMessage()*/"");
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Pending Payment Request")
-                            .setAction("Payment")
+                            .setCategory("Latest Pending Payment")
+                            .setAction("Fetch")
                             .setLabel("Fail(Server)")
                             .build());
                 }
             }else {
-                new HamPayDialog(activity).showFailPaymentDialog(Constants.LOCAL_ERROR_CODE,
-                        getString(R.string.msg_fail_payment));
+
+                requestLatestPurchase = new RequestLatestPurchase(context, new RequestLatestPurchaseTaskCompleteListener());
+
+                new HamPayDialog(activity).showFailPendingPaymentDialog(requestLatestPurchase, latestPurchaseRequest,
+                        Constants.LOCAL_ERROR_CODE,
+                        getString(R.string.msg_fail_fetch_latest_payment));
 
                 hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Pending Payment Request")
-                        .setAction("Payment")
+                        .setCategory("Latest Pending Payment")
+                        .setAction("Fetch")
                         .setLabel("Fail(Mobile)")
                         .build());
             }
 
             pay_to_business_button.setEnabled(true);
+
+//            if (requestLatestPurchase.getStatus() == AsyncTask.Status.)
         }
 
         @Override
-        public void onTaskPreRun() {}
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
     }
 
 }

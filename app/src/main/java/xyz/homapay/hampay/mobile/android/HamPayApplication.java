@@ -43,7 +43,7 @@ public class HamPayApplication extends Application {
 
         mInstance = this;
 
-        ACRA.init(this);
+//        ACRA.init(this);
     }
 
     @Override
