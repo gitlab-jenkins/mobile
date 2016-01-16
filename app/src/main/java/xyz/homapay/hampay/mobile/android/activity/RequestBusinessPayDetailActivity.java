@@ -27,12 +27,15 @@ import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
 import xyz.homapay.hampay.common.psp.model.request.PurchaseRequest;
 import xyz.homapay.hampay.common.psp.model.response.PurchaseResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
+import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.RequestIndividualPaymentConfirm;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestUserIdToken;
+import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
@@ -43,6 +46,7 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
     ButtonRectangle pay_to_business_button;
+    ButtonRectangle cancel_pay_to_business_button;
 
     Bundle bundle;
 
@@ -70,6 +74,9 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
     Tracker hamPayGaTracker;
 
+    FacedTextView business_name;
+    ImageView business_logo;
+
     FacedTextView input_digit_1;
     FacedTextView input_digit_2;
     FacedTextView input_digit_3;
@@ -84,6 +91,11 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
     RequestLatestPurchase requestLatestPurchase;
     LatestPurchaseRequest latestPurchaseRequest;
 
+    DatabaseHelper databaseHelper;
+
+    PurchaseInfoDTO purchaseInfoDTO = null;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +104,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         context = this;
         activity = RequestBusinessPayDetailActivity.this;
 
+
+        databaseHelper = new DatabaseHelper(context);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
@@ -147,6 +161,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         input_digit_4 = (FacedTextView)findViewById(R.id.input_digit_4);
         input_digit_5 = (FacedTextView)findViewById(R.id.input_digit_5);
         input_digit_6 = (FacedTextView)findViewById(R.id.input_digit_6);
+        business_name = (FacedTextView)findViewById(R.id.business_name);
+        business_logo = (ImageView)findViewById(R.id.business_logo);
         paymentPriceValue = (FacedTextView)findViewById(R.id.paymentPriceValue);
         cardNumberValue = (FacedTextView)findViewById(R.id.cardNumberValue);
         pin2Value = (FacedEditText)findViewById(R.id.pin2Value);
@@ -175,6 +191,24 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 purchaseRequest.setMobileNumber(Constants.REGISTERED_CELL_NUMBER);
                 purchaseRequest.setPin2(pin2Value.getText().toString());
                 requestPurchase.execute(purchaseRequest);
+            }
+        });
+
+        cancel_pay_to_business_button = (ButtonRectangle)findViewById(R.id.cancel_pay_to_business_button);
+        cancel_pay_to_business_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (purchaseInfoDTO != null){
+                    if (databaseHelper.getIsExistPurchaseRequest(purchaseInfoDTO.getPurchaseRequestId())){
+                        databaseHelper.updatePurchaseRequest(purchaseInfoDTO.getPurchaseRequestId(), "1");
+                    }else {
+                        databaseHelper.createPurchaseRequest(purchaseInfoDTO.getPurchaseRequestId());
+                        databaseHelper.updatePurchaseRequest(purchaseInfoDTO.getPurchaseRequestId(), "1");
+                    }
+                }
+
+                finish();
+
             }
         });
     }
@@ -233,7 +267,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
 
                     new HamPayDialog(activity).showFailPaymentDialog(purchaseResponseResponseMessage.getService().getServiceDefinition().getCode(),
-                            purchaseResponseResponseMessage.getService().getMessage());
+                            purchaseResponseResponseMessage.getService().getResponseCode());
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Pending Payment Request")
@@ -270,17 +304,28 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             if (latestPurchaseResponseMessage != null){
                 if (latestPurchaseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
 
-                    PurchaseInfoDTO purchaseInfoDTO = latestPurchaseResponseMessage.getService().getPurchaseInfo();
 
-                    input_digit_1.setText(purchaseInfoDTO.getPurchaseCode().indexOf(0));
-                    input_digit_2.setText(purchaseInfoDTO.getPurchaseCode().indexOf(1));
-                    input_digit_3.setText(purchaseInfoDTO.getPurchaseCode().indexOf(2));
-                    input_digit_4.setText(purchaseInfoDTO.getPurchaseCode().indexOf(3));
-                    input_digit_5.setText(purchaseInfoDTO.getPurchaseCode().indexOf(4));
-                    input_digit_6.setText(purchaseInfoDTO.getPurchaseCode().indexOf(5));
+                    PersianEnglishDigit persianEnglishDigit = new PersianEnglishDigit();
 
-                    paymentPriceValue.setText(latestPurchaseResponseMessage.getService().getPurchaseInfo().getAmount().toString());
-                    cardNumberValue.setText(/*latestPurchaseResponseMessage.getService().getPurchaseInfo().getAmount().toString()*/"۱۱۱۱-۱۱۱۱-۱۱۱۱-۱۱۱۱");
+                    purchaseInfoDTO = latestPurchaseResponseMessage.getService().getPurchaseInfo();
+
+
+                    String persianPurchaseCode = persianEnglishDigit.E2P(purchaseInfoDTO.getPurchaseCode());
+
+                    input_digit_1.setText(persianPurchaseCode.charAt(0) + "");
+                    input_digit_2.setText(persianPurchaseCode.charAt(1) + "");
+                    input_digit_3.setText(persianPurchaseCode.charAt(2) + "");
+                    input_digit_4.setText(persianPurchaseCode.charAt(3) + "");
+                    input_digit_5.setText(persianPurchaseCode.charAt(4) + "");
+                    input_digit_6.setText(persianPurchaseCode.charAt(5) + "");
+
+                    paymentPriceValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getAmount().toString()) + " ریال");
+
+                    business_name.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getMerchantName()));
+//                    new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_logo)).execute(purchaseInfoDTO.getMerchantLogoUrl);
+
+
+                    cardNumberValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getCardNo()));
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Latest Pending Payment")

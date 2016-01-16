@@ -39,6 +39,7 @@ import xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryReq
 import xyz.homapay.hampay.common.core.model.response.MobileRegistrationIdEntryResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
+import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
@@ -57,6 +58,7 @@ import xyz.homapay.hampay.mobile.android.fragment.PrivacyFragment;
 import xyz.homapay.hampay.mobile.android.fragment.SettingFragment;
 import xyz.homapay.hampay.mobile.android.fragment.TCFragment;
 import xyz.homapay.hampay.mobile.android.fragment.UserTransactionFragment;
+import xyz.homapay.hampay.mobile.android.model.LatestPurchase;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     UserProfileDTO userProfileDTO;
 
-    boolean pendingPayment = false;
+    String pendingPurchasePaymentId = "";
 
     Activity activity;
 
@@ -109,6 +111,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     Intent intent;
 
+    DatabaseHelper databaseHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         Intent intent = getIntent();
 
-        pendingPayment = !bundle.getBoolean(Constants.PENDING_PAYMENT, false);
+        pendingPurchasePaymentId = bundle.getString(Constants.PENDING_PURCHASE_PAYMENT, "");
         userProfileDTO = (UserProfileDTO) intent.getSerializableExtra(Constants.USER_PROFILE_DTO);
 
         intent = new Intent();
@@ -134,9 +138,18 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         activity = MainActivity.this;
         context = this;
 
-        if (pendingPayment) {
-            intent.setClass(context, RequestBusinessPayDetailActivity.class);
-            startActivity(intent);
+        databaseHelper = new DatabaseHelper(context);
+
+        if (pendingPurchasePaymentId.length() != 0) {
+            if (databaseHelper.getIsExistPurchaseRequest(pendingPurchasePaymentId)) {
+                LatestPurchase latestPurchase = databaseHelper.getPurchaseRequest(pendingPurchasePaymentId);
+                if (latestPurchase.getIsCanceled().equalsIgnoreCase("0")) {
+                    intent.setClass(context, RequestBusinessPayDetailActivity.class);
+                    startActivity(intent);
+                }
+            }else {
+                databaseHelper.createPurchaseRequest(pendingPurchasePaymentId);
+            }
         }
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);

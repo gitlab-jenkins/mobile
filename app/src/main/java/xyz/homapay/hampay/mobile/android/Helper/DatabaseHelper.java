@@ -11,6 +11,7 @@ import android.os.Build;
 import android.util.Log;
 
 import xyz.homapay.hampay.mobile.android.model.EnabledHamPay;
+import xyz.homapay.hampay.mobile.android.model.LatestPurchase;
 import xyz.homapay.hampay.mobile.android.model.RecentPay;
 import xyz.homapay.hampay.mobile.android.util.AESHelper;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -38,6 +39,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Table Names
     private static final String TABLE_RECENT_PAY = "recent_pay";
     private static final String TABLE_ENABLED_HAMPAY = "enabled_hampay";
+    private static final String TABLE_CANCELED_PENDING_PAYMENT = "canceled_pending_payment";
+
 
     // Recent Pay Table - column names
     private static final String KEY_ID = "id";
@@ -50,6 +53,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_DISPLAY_NAME = "display_name";
     private static final String KEY_CELL_NUMBER = "cell_number";
     private static final String KEY_PHOTO_ID = "photo_id";
+
+    // Canceled Pending Payment PurchaseRequestId
+    private static final String KEY_PURCHASE_REQUEST_ID = "purchase_request_id";
+    private static final String KEY_PURCHASE_REQUEST_IS_CANCELED = "is_canceled";
 
     // recent pay table create statement
     private static final String CREATE_TABLE_RECENT_PAY = "CREATE TABLE "
@@ -67,6 +74,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_DISPLAY_NAME + " TEXT,"
             + KEY_CELL_NUMBER + " TEXT,"
             + KEY_PHOTO_ID + " TEXT"
+            + ")";
+
+    // canceled purchase request table create statement
+    private static final String CREATE_TABLE_CANCELED_PENDING_PAYMENT = "CREATE TABLE "
+            + TABLE_CANCELED_PENDING_PAYMENT + "("
+            + KEY_PURCHASE_REQUEST_ID + " TEXT,"
+            + KEY_PURCHASE_REQUEST_IS_CANCELED + " TEXT"
             + ")";
 
 
@@ -118,6 +132,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL(CREATE_TABLE_RECENT_PAY);
         db.execSQL(CREATE_TABLE_HAMPAY_ENABLED);
+        db.execSQL(CREATE_TABLE_CANCELED_PENDING_PAYMENT);
     }
 
     @Override
@@ -125,7 +140,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECENT_PAY);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ENABLED_HAMPAY);
-
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CANCELED_PENDING_PAYMENT);
         // create new tables
         onCreate(db);
     }
@@ -222,7 +237,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean getExistRecentPay(String phone_no) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-
         encryptedData = AESHelper.encrypt(mobileKey, serverKey, phone_no);
 
         String selectQuery = "SELECT  * FROM " + TABLE_RECENT_PAY + " WHERE "
@@ -234,6 +248,67 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         else
             return false;
 
+    }
+
+    public boolean getIsExistPurchaseRequest(String purchaseRequestId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT  * FROM " + TABLE_CANCELED_PENDING_PAYMENT + " WHERE "
+                + KEY_PURCHASE_REQUEST_ID + " = '" + purchaseRequestId.trim() + "'";
+        Log.e(LOG, selectQuery);
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.getCount() > 0)
+            return true;
+        else
+            return false;
+
+    }
+
+    public long createPurchaseRequest(String purchaseRequestId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_PURCHASE_REQUEST_ID, purchaseRequestId);
+        values.put(KEY_PURCHASE_REQUEST_IS_CANCELED, "0");
+
+        // insert row
+        long recent_purchase_request_id = db.insert(TABLE_CANCELED_PENDING_PAYMENT, null, values);
+
+        return recent_purchase_request_id;
+    }
+
+
+    public int updatePurchaseRequest(String purchaseRequestId, String isCanceled) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        final SQLiteStatement statement = db.compileStatement("UPDATE " + TABLE_CANCELED_PENDING_PAYMENT
+                + " SET " + KEY_PURCHASE_REQUEST_IS_CANCELED + "=?"
+                + " WHERE " + KEY_PURCHASE_REQUEST_ID + "=?");
+
+        statement.bindString(1, isCanceled);
+        statement.bindString(2, purchaseRequestId);
+
+        if (Build.VERSION.SDK_INT >= 11) {
+            return statement.executeUpdateDelete();
+        }else {
+            statement.execute();
+            return 1;
+        }
+    }
+
+    public LatestPurchase getPurchaseRequest(String purchaseRequestId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT  * FROM " + TABLE_CANCELED_PENDING_PAYMENT + " WHERE "
+                + KEY_PURCHASE_REQUEST_ID + " = '" + purchaseRequestId + "'";
+        Log.e(LOG, selectQuery);
+        Cursor c = db.rawQuery(selectQuery, null);
+        if (c != null)
+            c.moveToFirst();
+        LatestPurchase latestPurchase = new LatestPurchase();
+        latestPurchase.setPurchaseRequestId(c.getString(c.getColumnIndex(KEY_PURCHASE_REQUEST_ID)));
+        latestPurchase.setIsCanceled(c.getString(c.getColumnIndex(KEY_PURCHASE_REQUEST_IS_CANCELED)));
+
+        return latestPurchase;
     }
 
     public boolean getExistEnabledHamPay(String cellNember) {
@@ -267,14 +342,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             statement.execute();
             return 1;
         }
-
-
-
-//        ContentValues values = new ContentValues();
-//        encryptedData = AESHelper.encrypt(mobileKey, serverKey, recentPay.getMessage());
-//        values.put(KEY_MESSAGE, encryptedData.trim());
-//        return db.update(TABLE_RECENT_PAY, values, KEY_PHONE + " = ?",
-//                new String[] { recentPay.getPhone() });
     }
 
     public List<RecentPay> getAllRecentPays() {

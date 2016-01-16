@@ -2165,7 +2165,7 @@ public class WebServices  {
     public ResponseMessage<LatestPurchaseResponse> newLatestPurchaseResponse(LatestPurchaseRequest latestPurchaseRequest){
 
         ResponseMessage<LatestPurchaseResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/user/latest-purchase");
+        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/purchase/latest");
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {

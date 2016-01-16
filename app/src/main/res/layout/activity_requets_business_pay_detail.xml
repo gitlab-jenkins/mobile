@@ -164,11 +164,31 @@
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"/>
 
-                        <ImageView
-                            android:id="@+id/credit_value_icon"
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
-                            android:src="@drawable/dk"/>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <ImageView
+                                android:id="@+id/business_logo"
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:src="@drawable/dk"/>
+
+                            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                                android:id="@+id/business_name"
+                                geekui:customTypeface="fonts/iran_sans.ttf"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@android:color/black"
+                                android:textSize="15dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"/>
+
+                        </LinearLayout>
+
+
 
                     </RelativeLayout>
 
@@ -322,7 +342,8 @@
                 <RelativeLayout
                     android:layout_width="160dp"
                     android:layout_height="50dp"
-                    android:layout_margin="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
                     android:layout_gravity="center_horizontal">
 
 
@@ -348,6 +369,38 @@
                         android:layout_marginBottom="2dp" />
 
                 </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="160dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_gravity="center_horizontal">
+
+
+                    <xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle
+                        android:id="@+id/cancel_pay_to_business_button"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_centerHorizontal="true"
+                        android:background="@color/colorPrimary"
+                        android:textSize="15dp"
+                        android:contentDescription="pay"/>
+
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        geekui:customTypeface="fonts/iran_sans.ttf"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:textColor="@android:color/white"
+                        android:textSize="15dp"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:text="@string/cancel_pay_with_hampay"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp" />
+
+                </RelativeLayout>
+
 
 
             </LinearLayout>

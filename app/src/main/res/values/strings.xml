@@ -465,6 +465,7 @@
     <string name="request_pay_detail">جزییات پرداخت</string>
     <string name="card_nubmer">شماره کارت</string>
     <string name="pay_with_hampay">تایید پرداخت</string>
+    <string name="cancel_pay_with_hampay">فعلا بیخیال</string>
     <string name="request_payment_rial">مبلغ</string>
     <string name="user_pin2">رمز دوم کارت</string>
 

@@ -236,7 +236,7 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
                         intent.setClass(activity, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.putExtra(Constants.USER_PROFILE_DTO, tacResponseMessage.getService().getUserProfile());
-                        intent.putExtra(Constants.PENDING_PAYMENT, tacResponseMessage.getService().hasPendingPayment());
+                        intent.putExtra(Constants.PENDING_PURCHASE_PAYMENT, tacResponseMessage.getService().hasPendingPayment());
                         intent.putExtra(Constants.NOTIFICATION, fromNotification);
                         editor.putBoolean(Constants.FORCE_USER_PROFILE, false);
                         editor.commit();
