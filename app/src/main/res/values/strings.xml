@@ -418,6 +418,7 @@
     <string name="msg_violation_image_size">اندازه عکس می‌بایستی از ۵۱۲ کیلو بایت کمتر باشد.</string>
     <string name="msg_incorrect_amount">مبلغ واریزی شما می بایستی بین %1$s ریال و %2$s ریال باشد.</string>
 
+
     <string name="action_fail_payment_permission">باشه</string>
 
     <string name="msg_success_change_setting">خواسته شما با موفقیت انجام شد.</string>
@@ -468,8 +469,9 @@
     <string name="pay_with_hampay">تایید پرداخت</string>
     <string name="cancel_pay_with_hampay">فعلا بیخیال</string>
     <string name="request_payment_rial">مبلغ</string>
+    <string name="request_payment_fee">کارمزد</string>
     <string name="user_pin2">رمز دوم کارت</string>
 
-    <string name="request_payment_message">پرداخت شما با وفقیت انجام شد</string>
+    <string name="msg_success_pending_payment">پرداخت شما با کد خرید  s$1% با موفقیت انجام شد.</string>
 
 </resources>

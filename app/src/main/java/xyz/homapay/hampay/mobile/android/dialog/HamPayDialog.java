@@ -3314,7 +3314,7 @@ public class HamPayDialog {
     }
 
 
-    public void purchaseDialog(){
+    public void purchaseDialog(String purchaseCode){
 
         Rect displayRectangle = new Rect();
         Activity parent = (Activity) activity;
@@ -3324,8 +3324,8 @@ public class HamPayDialog {
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_request_pay, null);
 
         FacedTextView request_payment_message = (FacedTextView) view.findViewById(R.id.request_payment_message);
+        request_payment_message.setText(activity.getString(R.string.msg_success_pending_payment, new PersianEnglishDigit().E2P(purchaseCode) + ""));
         FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
-
 
         confirmation.setOnClickListener(new View.OnClickListener() {
             @Override

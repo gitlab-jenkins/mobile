@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/normal_text"
         android:textSize="15dp"
-        android:text="@string/request_payment_message"/>
+        android:text="@string/msg_success_pending_payment"/>
 
 
     <xyz.homapay.hampay.mobile.android.component.FacedTextView
