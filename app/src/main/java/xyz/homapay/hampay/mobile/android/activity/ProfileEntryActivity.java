@@ -583,13 +583,8 @@ public class ProfileEntryActivity extends Activity {
                     editor.commit();
 
 
-                    hamPayDialog.smsConfirmDialog();
-
-//                    Intent intent = new Intent();
-//                    intent.setClass(ProfileEntryActivity.this, VerificationActivity.class);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                    finish();
-//                    startActivity(intent);
+                    hamPayDialog.smsConfirmDialog(cellNumberValue.getText().toString(),
+                            accountNumberValue.getText().toString());
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Registration Entry")

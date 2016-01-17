@@ -75,6 +75,8 @@ import xyz.homapay.hampay.common.core.model.response.IndividualPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
 import xyz.homapay.hampay.common.core.model.response.TACAcceptResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
+import xyz.homapay.hampay.common.psp.model.request.RegisterCardRequest;
+import xyz.homapay.hampay.common.psp.model.request.UnregisterCardRequest;
 import xyz.homapay.hampay.common.psp.model.response.PurchaseResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
@@ -107,6 +109,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestIndividualPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestLogout;
 import xyz.homapay.hampay.mobile.android.async.RequestMobileRegistrationIdEntry;
+import xyz.homapay.hampay.mobile.android.async.RequestRegisterCard;
 import xyz.homapay.hampay.mobile.android.async.RequestRegisterVerifyAccount;
 import xyz.homapay.hampay.mobile.android.async.RequestRegistrationEntry;
 import xyz.homapay.hampay.mobile.android.async.RequestRegistrationSendSmsToken;
@@ -1818,6 +1821,52 @@ public class HamPayDialog {
         dialog.show();
     }
 
+    public void showFailRegisterCardDialog(final RequestRegisterCard requestRegisterCard,
+                                                       final RegisterCardRequest registerCardRequest,
+                                                       final String code,
+                                                       final String message){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_registration_verify_mobile_request, null);
+
+        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+
+        responseCode.setText(activity.getString(R.string.error_code, code));
+        responseMessage.setText(message);
+
+        FacedTextView retry_registration_verify_mobile = (FacedTextView) view.findViewById(R.id.retry_registration_verify_mobile);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
+
+        retry_registration_verify_mobile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                requestRegisterCard.execute(registerCardRequest);
+            }
+        });
+
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
     public void showFailConfirmUserDataDialog(final RequestConfirmUserData requestConfirmUserData,
                                               final RegistrationConfirmUserDataRequest registrationConfirmUserDataRequest,
                                               final String code,
@@ -2766,7 +2815,7 @@ public class HamPayDialog {
     }
 
     public void showFailUnlinkDialog(final RequestUnlinkUser requestUnlinkUser,
-                                     final UnlinkUserRequest unlinkUserRequest,
+                                     final UnregisterCardRequest unregisterCardRequest,
                                      final String code,
                                      final String message){
         Rect displayRectangle = new Rect();
@@ -2795,7 +2844,7 @@ public class HamPayDialog {
                 dialog.dismiss();
 
                 if (requestUnlinkUser.getStatus() == AsyncTask.Status.FINISHED) {
-                    requestUnlinkUser.execute(unlinkUserRequest);
+                    requestUnlinkUser.execute(unregisterCardRequest);
                 }
             }
         });
@@ -3148,7 +3197,7 @@ public class HamPayDialog {
     RequestRegistrationSendSmsToken requestRegistrationSendSmsToken;
     RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest;
 
-    public void smsConfirmDialog(){
+    public void smsConfirmDialog(final String cellNumber, final String cardNumber){
         Rect displayRectangle = new Rect();
         Activity parent = (Activity) activity;
         Window window = parent.getWindow();
@@ -3165,7 +3214,7 @@ public class HamPayDialog {
                 dialog.dismiss();
                 registrationSendSmsTokenRequest = new RegistrationSendSmsTokenRequest();
                 registrationSendSmsTokenRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
-                requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(activity, new RequestRegistrationSendSmsTokenTaskCompleteListener());
+                requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(activity, new RequestRegistrationSendSmsTokenTaskCompleteListener(cellNumber, cardNumber));
                 requestRegistrationSendSmsToken.execute(registrationSendSmsTokenRequest);
             }
         });
@@ -3190,6 +3239,16 @@ public class HamPayDialog {
     }
 
     public class RequestRegistrationSendSmsTokenTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationSendSmsTokenResponse>> {
+
+
+        private String cellNumber;
+        private String cardNumber;
+
+        public RequestRegistrationSendSmsTokenTaskCompleteListener(String cellNumber, String cardNumber){
+            this.cellNumber = cellNumber;
+            this.cardNumber = cardNumber;
+        }
+
         @Override
         public void onTaskComplete(ResponseMessage<RegistrationSendSmsTokenResponse> registrationSendSmsTokenResponse)
         {
@@ -3201,6 +3260,8 @@ public class HamPayDialog {
 
                     Intent intent = new Intent();
                     intent.setClass(activity, SMSVerificationActivity.class);
+                    intent.putExtra(Constants.REGISTERED_CELL_NUMBER, cellNumber);
+                    intent.putExtra(Constants.REGISTERED_ACCOUNT_NO, cardNumber);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     activity.startActivity(intent);
 
@@ -3220,7 +3281,7 @@ public class HamPayDialog {
                             .build());
                 }
                 else {
-                    requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(activity, new RequestRegistrationSendSmsTokenTaskCompleteListener());
+                    requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(activity, new RequestRegistrationSendSmsTokenTaskCompleteListener(cellNumber, cardNumber));
                     new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
                             registrationSendSmsTokenResponse.getService().getResultStatus().getCode(),
                             registrationSendSmsTokenResponse.getService().getResultStatus().getDescription());
@@ -3233,7 +3294,7 @@ public class HamPayDialog {
                 }
 
             }else {
-                requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(activity, new RequestRegistrationSendSmsTokenTaskCompleteListener());
+                requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(activity, new RequestRegistrationSendSmsTokenTaskCompleteListener(cellNumber, cardNumber));
                 new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
                         Constants.LOCAL_ERROR_CODE,
                         activity.getString(R.string.mgs_fail_registration_send_sms_token));

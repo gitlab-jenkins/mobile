@@ -26,11 +26,14 @@ import xyz.homapay.hampay.common.core.model.request.RegistrationSendSmsTokenRequ
 import xyz.homapay.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
 import xyz.homapay.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationVerifyMobileResponse;
+import xyz.homapay.hampay.common.psp.model.request.RegisterCardRequest;
+import xyz.homapay.hampay.common.psp.model.response.RegisterCardResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import xyz.homapay.hampay.mobile.android.async.RequestRegisterCard;
 import xyz.homapay.hampay.mobile.android.async.RequestRegistrationSendSmsToken;
 import xyz.homapay.hampay.mobile.android.async.RequestVerifyMobile;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
@@ -75,6 +78,10 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
 
     RequestRegistrationSendSmsToken requestRegistrationSendSmsToken;
     RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest;
+
+    RequestRegisterCard requestRegisterCard;
+    RegisterCardRequest registerCardRequest;
+
 
     LinearLayout keyboard;
     LinearLayout activation_holder;
@@ -153,6 +160,11 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
 
     }
 
+    Bundle bundle;
+
+    private String cellNumber;
+    private String cardNumber;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -200,6 +212,10 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
             }
         }.start();
 
+        bundle = getIntent().getExtras();
+
+        cellNumber = bundle.getString(Constants.REGISTERED_CELL_NUMBER);
+        cardNumber = bundle.getString(Constants.REGISTERED_ACCOUNT_NO);
 
 
         activity = SMSVerificationActivity.this;
@@ -291,11 +307,18 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
                 if (registrationVerifyMobileResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
                     if (registrationVerifyMobileResponseMessage.getService().getIsVerified()) {
-                        Intent intent = new Intent();
-                        intent.setClass(SMSVerificationActivity.this, PasswordEntryActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        finish();
-                        startActivity(intent);
+
+                        registerCardRequest = new RegisterCardRequest();
+                        registerCardRequest.setMobileNumber(new PersianEnglishDigit().P2E(cellNumber));
+                        registerCardRequest.setCardNumber(new PersianEnglishDigit().P2E(cardNumber));
+                        requestRegisterCard = new RequestRegisterCard(context, new RequestRegisterCardTaskCompleteListener());
+                        requestRegisterCard.execute(registerCardRequest);
+
+//                        Intent intent = new Intent();
+//                        intent.setClass(SMSVerificationActivity.this, PasswordEntryActivity.class);
+//                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                        finish();
+//                        startActivity(intent);
 
                         hamPayGaTracker.send(new HitBuilders.EventBuilder()
                                 .setCategory("Verify Mobile")
@@ -330,6 +353,65 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
                 new HamPayDialog(activity).showFailRegistrationVerifyMobileDialog(requestVerifyMobile, registrationVerifyMobileRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_send_sms));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Verify Mobile")
+                        .setAction("Verify")
+                        .setLabel("Fail(Mobile)")
+                        .build());
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingdDialog("");
+        }
+    }
+
+    public class RequestRegisterCardTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegisterCardResponse>>
+    {
+        @Override
+        public void onTaskComplete(ResponseMessage<RegisterCardResponse> registerCardResponseMessage)
+        {
+
+            numberProgressBar.setProgress(0);
+            verify_button.setEnabled(true);
+
+            hamPayDialog.dismisWaitingDialog();
+            if (registerCardResponseMessage != null) {
+
+                if (registerCardResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+
+                    Intent intent = new Intent();
+                    intent.setClass(SMSVerificationActivity.this, PasswordEntryActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    finish();
+                    startActivity(intent);
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Verify Mobile")
+                            .setAction("Verify")
+                            .setLabel("Success")
+                            .build());
+
+                }else {
+                    requestRegisterCard = new RequestRegisterCard(context, new RequestRegisterCardTaskCompleteListener());
+                    new HamPayDialog(activity).showFailRegisterCardDialog(requestRegisterCard, registerCardRequest,
+                            registerCardResponseMessage.getService().getResultStatus().getCode(),
+                            registerCardResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Verify Mobile")
+                            .setAction("Verify")
+                            .setLabel("Fail(Server)")
+                            .build());
+                }
+
+            }else {
+                requestRegisterCard = new RequestRegisterCard(context, new RequestRegisterCardTaskCompleteListener());
+                new HamPayDialog(activity).showFailRegisterCardDialog(requestRegisterCard, registerCardRequest,
+                        Constants.LOCAL_ERROR_CODE,
+                        getString(R.string.msg_fail_send_card_info));
 
                 hamPayGaTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Verify Mobile")

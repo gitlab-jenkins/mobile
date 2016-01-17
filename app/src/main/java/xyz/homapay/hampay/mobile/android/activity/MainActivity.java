@@ -31,6 +31,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
@@ -140,6 +141,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         databaseHelper = new DatabaseHelper(context);
 
+        List<LatestPurchase> latestPurchaseList = databaseHelper.getAllLatestPurchases();
+
         if (pendingPurchasePaymentId.length() != 0) {
             if (databaseHelper.getIsExistPurchaseRequest(pendingPurchasePaymentId)) {
                 LatestPurchase latestPurchase = databaseHelper.getPurchaseRequest(pendingPurchasePaymentId);
@@ -149,6 +152,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 }
             }else {
                 databaseHelper.createPurchaseRequest(pendingPurchasePaymentId);
+                intent.setClass(context, RequestBusinessPayDetailActivity.class);
+                startActivity(intent);
             }
         }
 

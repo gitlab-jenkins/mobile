@@ -322,7 +322,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                     paymentPriceValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getAmount().toString()) + " ریال");
 
                     business_name.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getMerchantName()));
-//                    new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_logo)).execute(purchaseInfoDTO.getMerchantLogoUrl);
+                    new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_logo)).execute(Constants.HTTPS_SERVER_IP + "/merchant/" + purchaseInfoDTO.getMerchantLogoName());
 
 
                     cardNumberValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getCardNo()));

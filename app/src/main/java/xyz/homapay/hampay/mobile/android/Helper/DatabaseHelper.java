@@ -311,6 +311,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return latestPurchase;
     }
 
+    public List<LatestPurchase> getAllLatestPurchases() {
+        List<LatestPurchase> latestPurchases = new ArrayList<LatestPurchase>();
+        String selectQuery = "SELECT  * FROM " + TABLE_CANCELED_PENDING_PAYMENT;
+        Log.e(LOG, selectQuery);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+        if (c.moveToFirst()) {
+            do {
+                LatestPurchase latestPurchase = new LatestPurchase();
+                latestPurchase.setPurchaseRequestId(c.getString(c.getColumnIndex(KEY_PURCHASE_REQUEST_ID)));
+                latestPurchase.setIsCanceled(c.getString(c.getColumnIndex(KEY_PURCHASE_REQUEST_IS_CANCELED)));
+
+                // adding to todo list
+                latestPurchases.add(latestPurchase);
+            } while (c.moveToNext());
+        }
+
+        return latestPurchases;
+    }
+
     public boolean getExistEnabledHamPay(String cellNember) {
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "SELECT  * FROM " + TABLE_ENABLED_HAMPAY + " WHERE "

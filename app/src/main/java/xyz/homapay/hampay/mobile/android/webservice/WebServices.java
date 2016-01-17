@@ -84,7 +84,11 @@ import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
 import xyz.homapay.hampay.common.core.model.response.VerifyAccountResponse;
 import xyz.homapay.hampay.common.core.model.response.VerifyTransferMoneyResponse;
 import xyz.homapay.hampay.common.psp.model.request.PurchaseRequest;
+import xyz.homapay.hampay.common.psp.model.request.RegisterCardRequest;
+import xyz.homapay.hampay.common.psp.model.request.UnregisterCardRequest;
 import xyz.homapay.hampay.common.psp.model.response.PurchaseResponse;
+import xyz.homapay.hampay.common.psp.model.response.RegisterCardResponse;
+import xyz.homapay.hampay.common.psp.model.response.UnregisterCardResponse;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -518,7 +522,71 @@ public class WebServices  {
             Gson gson = new Gson();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegistrationVerifyMobileResponse>>() {}.getType());
 
-        } catch (IOException e) {e.printStackTrace();}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (connection != null)
+                connection.disconnect();
+        }
+        return responseMessage;
+    }
+
+
+    public ResponseMessage<RegisterCardResponse> newRegisterCardResponse(RegisterCardRequest registerCardRequest){
+
+        ResponseMessage<RegisterCardResponse> responseMessage = null;
+        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/psp/registerCard");
+        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+
+        try {
+
+            RequestHeader header = new RequestHeader();
+            header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+            header.setVersion("1.0-PA");
+
+            RequestMessage<RegisterCardRequest> message = new RequestMessage<RegisterCardRequest>();
+            message.setRequestHeader(header);
+            RegisterCardRequest request = registerCardRequest;
+            request.setRequestUUID(UUID.randomUUID().toString());
+            message.setService(request);
+
+            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegisterCardRequest>>() {}.getType();
+            String jsonRequest = new Gson().toJson(message, requestType);
+
+            connection.setConnectTimeout(30000);
+            connection.setReadTimeout(30000);
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            OutputStream outputStream = connection.getOutputStream();
+            outputStream.write(jsonRequest.getBytes());
+            outputStream.flush();
+
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
+
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                }
+            });
+
+            Gson gson = builder.create();
+            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegisterCardResponse>>() {}.getType());
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         finally {
             if (connection != null)
                 connection.disconnect();
@@ -1963,11 +2031,11 @@ public class WebServices  {
 
 
 
-    public ResponseMessage<UnlinkUserResponse> unlinkUserResponse(UnlinkUserRequest unlinkUserRequest) {
+    public ResponseMessage<UnregisterCardResponse> unregisterCardResponse(UnregisterCardRequest unregisterCardRequest) {
 
-        ResponseMessage<UnlinkUserResponse> responseMessage = null;
+        ResponseMessage<UnregisterCardResponse> responseMessage = null;
 
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/unlink");
+        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/psp/unregisterCard");
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -1977,13 +2045,13 @@ public class WebServices  {
 
             header.setVersion("1.0-PA");
 
-            RequestMessage<UnlinkUserRequest> message = new RequestMessage<UnlinkUserRequest>();
+            RequestMessage<UnregisterCardRequest> message = new RequestMessage<UnregisterCardRequest>();
             message.setRequestHeader(header);
-            UnlinkUserRequest request = unlinkUserRequest;
+            UnregisterCardRequest request = unregisterCardRequest;
             request.setRequestUUID(prefs.getString(Constants.UUID, ""));
             message.setService(request);
 
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<UnlinkUserRequest>>() {}.getType();
+            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<UnregisterCardRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
 
             connection.setDoOutput(true);
@@ -2004,7 +2072,7 @@ public class WebServices  {
             }
 
             Gson gson = new Gson();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<UnlinkUserResponse>>() {}.getType());
+            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<UnregisterCardResponse>>() {}.getType());
 
             if( responseMessage != null && responseMessage.getService() != null ) { }
             else { }
