@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -91,6 +92,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
     FacedTextView paymentFeeValue;
     FacedTextView cardNumberValue;
     FacedEditText pin2Value;
+    ImageView pin2ValueIcon;
 
     RequestLatestPurchase requestLatestPurchase;
     LatestPurchaseRequest latestPurchaseRequest;
@@ -177,6 +179,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         paymentFeeValue = (FacedTextView)findViewById(R.id.paymentFeeValue);
         cardNumberValue = (FacedTextView)findViewById(R.id.cardNumberValue);
         pin2Value = (FacedEditText)findViewById(R.id.pin2Value);
+        pin2ValueIcon = (ImageView)findViewById(R.id.pin2ValueIcon);
 
 
 
@@ -197,10 +200,21 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         pay_to_business_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (pin2Value.getText().toString().length() <= 4 ){
+                    pin2ValueIcon.setImageResource(R.drawable.false_icon);
+                    Toast.makeText(context, getString(R.string.msg_pin2_incurrect), Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 requestPurchase = new RequestPurchase(activity, new RequestPurchaseTaskCompleteListener());
                 purchaseRequest = new PurchaseRequest();
                 purchaseRequest.setPin2(pin2Value.getText().toString());
-                purchaseRequest.setAmount(purchaseInfoDTO.getAmount() + purchaseInfoDTO.getPurchaseFee());
+                if (purchaseInfoDTO.getPurchaseFee() != null) {
+                    purchaseRequest.setAmount(purchaseInfoDTO.getAmount() + purchaseInfoDTO.getPurchaseFee());
+                }else {
+                    purchaseRequest.setAmount(purchaseInfoDTO.getAmount() + 0);
+                }
                 purchaseRequest.setMerchantId(purchaseInfoDTO.getMerchantLogoName());
                 purchaseRequest.setMobileNumber(prefs.getString(Constants.REGISTERED_CELL_NUMBER, ""));
                 purchaseRequest.setPurchaseRequestId(purchaseInfoDTO.getPurchaseRequestId());
@@ -309,7 +323,9 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onTaskPreRun() {}
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
     }
 
     public class RequestPSPResultTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> {
@@ -357,7 +373,9 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onTaskPreRun() {}
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
     }
 
 
@@ -387,7 +405,11 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                     input_digit_6.setText(persianPurchaseCode.charAt(5) + "");
 
                     paymentPriceValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getAmount().toString()) + " ریال");
-                    paymentFeeValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getPurchaseFee().toString()) + " ریال");
+                    if (purchaseInfoDTO.getPurchaseFee() != null) {
+                        paymentFeeValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getPurchaseFee().toString()) + " ریال");
+                    }else {
+                        paymentFeeValue.setText("۰" + " ریال");
+                    }
 
                     business_name.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getMerchantName()));
 

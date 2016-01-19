@@ -457,8 +457,6 @@
         \n-
     </string>
     <string name="title_activity_tc">TCActivity</string>
-
-
     <string name="business_request">پرداخت کسب و کار</string>
     <string name="one_request">پرداخت به فرد</string>
     <string name="business_pay_code">براساس کد</string>
@@ -472,6 +470,8 @@
     <string name="request_payment_fee">کارمزد</string>
     <string name="user_pin2">رمز دوم کارت</string>
 
-    <string name="msg_success_pending_payment">پرداخت شما با کد خرید  s$1% با موفقیت انجام شد.</string>
+    <!--<string name="msg_success_pending_payment">پرداخت شما با کد خرید  s$1% با موفقیت انجام شد.</string>-->
+    <string name="msg_success_pending_payment">پرداخت شما با کد خرید %1$s با موفقیت انجام شد.</string>
+    <string name="msg_pin2_incurrect">رمز دوم خود را به درستی وارد کنید.</string>
 
 </resources>

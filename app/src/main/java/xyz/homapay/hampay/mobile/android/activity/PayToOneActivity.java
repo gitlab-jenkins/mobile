@@ -290,9 +290,9 @@ public class PayToOneActivity extends AppCompatActivity {
                 if (contactsHampayEnabledResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
                     contactDTOs = contactsHampayEnabledResponseMessage.getService().getContacts();
 
-                    if (contactDTOs.size() > 0) {
+                    dbHelper = new DatabaseHelper(context, serverKey);
 
-                        dbHelper = new DatabaseHelper(context, serverKey);
+                    if (contactDTOs.size() > 0) {
 
                         recentPays = dbHelper.getAllRecentPays();
                         enabledHamPays = dbHelper.getAllEnabledHamPay();
@@ -345,12 +345,12 @@ public class PayToOneActivity extends AppCompatActivity {
             }
 
 //                if (payOneAdapter.getCount() == 0) {
-                    enabledHamPays = dbHelper.getAllEnabledHamPay();
-                    payOneAdapter = new PayOneAdapter(context,
-                            recentPays,
-                            enabledHamPays,
-                            prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-                    pinnedHeaderListView.setAdapter(payOneAdapter);
+            enabledHamPays = dbHelper.getAllEnabledHamPay();
+            payOneAdapter = new PayOneAdapter(context,
+                    recentPays,
+                    enabledHamPays,
+                    prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+            pinnedHeaderListView.setAdapter(payOneAdapter);
 //                }
 
             hamPayDialog.dismisWaitingDialog();

@@ -205,7 +205,6 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/normal_text"
                             android:textSize="25dp"
-                            android:text=" ۳۸۹,۰۰۰ ریال"
                             android:gravity="center_horizontal" />
 
 
@@ -239,8 +238,7 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@color/normal_text"
-                            android:textSize="25dp"
-                            android:text=" ۳۸۹,۰۰۰ ریال"
+                            android:textSize="20dp"
                             android:gravity="center_horizontal" />
 
 
@@ -292,7 +290,6 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/normal_text"
                             android:textSize="20dp"
-                            android:text="۶۳۶۲-۲۳۲۸-۲۸۲۹-۲۸۲۲"
                             android:gravity="center"
                             android:layout_centerInParent="true"/>
 
@@ -351,6 +348,13 @@
                         android:layout_height="48dp"
                         android:background="@drawable/entry_field_bg">
 
+                        <ImageView
+                            android:id="@+id/pin2ValueIcon"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="12dp"/>
+
 
                         <xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText
                             android:id="@+id/pin2Value"
@@ -365,7 +369,9 @@
                             android:inputType="numberPassword"
                             android:lines="1"
                             android:contentDescription="price"
-                            android:maxLength="12"/>
+                            android:maxLength="12"
+                            android:layout_marginLeft="48dp"
+                            android:gravity="center_vertical"/>
 
 
                     </RelativeLayout>
@@ -377,8 +383,7 @@
                 <RelativeLayout
                     android:layout_width="160dp"
                     android:layout_height="50dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="20dp"
                     android:layout_gravity="center_horizontal">
 
 
@@ -408,8 +413,7 @@
                 <RelativeLayout
                     android:layout_width="160dp"
                     android:layout_height="50dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="10dp"
                     android:layout_gravity="center_horizontal">
 
 
