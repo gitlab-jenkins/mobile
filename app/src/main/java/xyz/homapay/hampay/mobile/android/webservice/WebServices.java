@@ -2033,11 +2033,11 @@ public class WebServices  {
 
 
 
-    public ResponseMessage<UnregisterCardResponse> unregisterCardResponse(UnregisterCardRequest unregisterCardRequest) {
+    public ResponseMessage<UnlinkUserResponse> unlinkUserResponse(UnlinkUserRequest unlinkUserRequest) {
 
-        ResponseMessage<UnregisterCardResponse> responseMessage = null;
+        ResponseMessage<UnlinkUserResponse> responseMessage = null;
 
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/psp/unregisterCard");
+        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/unlink");
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -2047,13 +2047,13 @@ public class WebServices  {
 
             header.setVersion("1.0-PA");
 
-            RequestMessage<UnregisterCardRequest> message = new RequestMessage<UnregisterCardRequest>();
+            RequestMessage<UnlinkUserRequest> message = new RequestMessage<UnlinkUserRequest>();
             message.setRequestHeader(header);
-            UnregisterCardRequest request = unregisterCardRequest;
+            UnlinkUserRequest request = unlinkUserRequest;
             request.setRequestUUID(prefs.getString(Constants.UUID, ""));
             message.setService(request);
 
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<UnregisterCardRequest>>() {}.getType();
+            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<UnlinkUserRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
 
             connection.setDoOutput(true);
@@ -2074,7 +2074,7 @@ public class WebServices  {
             }
 
             Gson gson = new Gson();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<UnregisterCardResponse>>() {}.getType());
+            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<UnlinkUserResponse>>() {}.getType());
 
             if( responseMessage != null && responseMessage.getService() != null ) { }
             else { }
@@ -2089,6 +2089,7 @@ public class WebServices  {
         return responseMessage;
 
     }
+
 
     public ResponseMessage<ChangeEmailResponse> changeEmailResponse(ChangeEmailRequest changeEmailRequest) {
 

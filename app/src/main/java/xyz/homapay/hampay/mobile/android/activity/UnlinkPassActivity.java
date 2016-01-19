@@ -18,8 +18,6 @@ import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.UnlinkUserRequest;
 import xyz.homapay.hampay.common.core.model.response.UnlinkUserResponse;
-import xyz.homapay.hampay.common.psp.model.request.UnregisterCardRequest;
-import xyz.homapay.hampay.common.psp.model.response.UnregisterCardResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
@@ -64,7 +62,7 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
     LinearLayout password_holder;
 
     RequestUnlinkUser requestUnlinkUser;
-    UnregisterCardRequest unregisterCardRequest;
+    UnlinkUserRequest unlinkUserRequest;
 
     Context context;
     Activity activity;
@@ -292,12 +290,11 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
                     }else {
                         editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                         editor.commit();
-                        unregisterCardRequest = new UnregisterCardRequest();
-                        unregisterCardRequest.setMobileNumber(Constants.REGISTERED_CELL_NUMBER);
-//                        unregisterCardRequest.setPassCode(inputPasswordValue);
-//                        unregisterCardRequest.setMemorableWord(prefs.getString(Constants.MEMORABLE_WORD, ""));
-                        requestUnlinkUser = new RequestUnlinkUser(context, new RequestUnregisterCardTaskCompleteListener());
-                        requestUnlinkUser.execute(unregisterCardRequest);
+                        unlinkUserRequest = new UnlinkUserRequest();
+                        unlinkUserRequest.setPassCode(inputPasswordValue);
+                        unlinkUserRequest.setMemorableWord(prefs.getString(Constants.MEMORABLE_WORD, ""));
+                        requestUnlinkUser = new RequestUnlinkUser(context, new RequestUnlinkUserTaskCompleteListener());
+                        requestUnlinkUser.execute(unlinkUserRequest);
                     }
 
 
@@ -307,15 +304,15 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
     }
 
 
-    public class RequestUnregisterCardTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<UnregisterCardResponse>> {
+    public class RequestUnlinkUserTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<UnlinkUserResponse>> {
         @Override
-        public void onTaskComplete(ResponseMessage<UnregisterCardResponse> unregisterCardResponseMessage)
+        public void onTaskComplete(ResponseMessage<UnlinkUserResponse> unlinkUserResponseResponseMessage)
         {
 
             hamPayDialog.dismisWaitingDialog();
 
-            if (unregisterCardResponseMessage != null) {
-                if (unregisterCardResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+            if (unlinkUserResponseResponseMessage != null) {
+                if (unlinkUserResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     editor.clear().commit();
                     editor.commit();
 
@@ -333,10 +330,10 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
                             .build());
                 }
                 else {
-                    requestUnlinkUser = new RequestUnlinkUser(context, new RequestUnregisterCardTaskCompleteListener());
-                    new HamPayDialog(activity).showFailUnlinkDialog(requestUnlinkUser, unregisterCardRequest,
-                            unregisterCardResponseMessage.getService().getResultStatus().getCode(),
-                            unregisterCardResponseMessage.getService().getResultStatus().getDescription());
+                    requestUnlinkUser = new RequestUnlinkUser(context, new RequestUnlinkUserTaskCompleteListener());
+                    new HamPayDialog(activity).showFailUnlinkDialog(requestUnlinkUser, unlinkUserRequest,
+                            unlinkUserResponseResponseMessage.getService().getResultStatus().getCode(),
+                            unlinkUserResponseResponseMessage.getService().getResultStatus().getDescription());
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Unlink User")
@@ -345,8 +342,8 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
                             .build());
                 }
             }else {
-                requestUnlinkUser = new RequestUnlinkUser(context, new RequestUnregisterCardTaskCompleteListener());
-                new HamPayDialog(activity).showFailUnlinkDialog(requestUnlinkUser, unregisterCardRequest,
+                requestUnlinkUser = new RequestUnlinkUser(context, new RequestUnlinkUserTaskCompleteListener());
+                new HamPayDialog(activity).showFailUnlinkDialog(requestUnlinkUser, unlinkUserRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_unlink_user));
 

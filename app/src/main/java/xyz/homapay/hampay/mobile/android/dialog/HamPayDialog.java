@@ -2815,7 +2815,7 @@ public class HamPayDialog {
     }
 
     public void showFailUnlinkDialog(final RequestUnlinkUser requestUnlinkUser,
-                                     final UnregisterCardRequest unregisterCardRequest,
+                                     final UnlinkUserRequest unlinkUserRequest,
                                      final String code,
                                      final String message){
         Rect displayRectangle = new Rect();
@@ -2844,7 +2844,7 @@ public class HamPayDialog {
                 dialog.dismiss();
 
                 if (requestUnlinkUser.getStatus() == AsyncTask.Status.FINISHED) {
-                    requestUnlinkUser.execute(unregisterCardRequest);
+                    requestUnlinkUser.execute(unlinkUserRequest);
                 }
             }
         });
