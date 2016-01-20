@@ -753,19 +753,20 @@ public class PaymentRequestFragment extends Fragment implements View.OnClickList
             editor.commit();
         }
 
-        if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.UNVERIFIED) {
-            verification_status_ll.setVisibility(View.VISIBLE);
-        }else {
-            verification_status_ll.setVisibility(View.GONE);
-        }
+//        if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.UNVERIFIED) {
+//            verification_status_ll.setVisibility(View.VISIBLE);
+//        }else {
+//            verification_status_ll.setVisibility(View.GONE);
+//        }
+
         jalaliConvert = new JalaliConvert();
 
 
-        if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.UNVERIFIED){
+//        if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.UNVERIFIED){
 //            user_image.setImageResource(R.drawable.user_icon_blak);
-        }else {
+//        }else {
 //            user_image.setImageResource(R.drawable.user_icon_blue);
-        }
+//        }
         user_name_text.setText(userProfileDTO.getFullName());
         MainActivity.user_account_name.setText(userProfileDTO.getFullName());
 

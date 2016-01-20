@@ -755,24 +755,24 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
             editor.commit();
         }
 
-        if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.UNVERIFIED) {
+//        if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.UNVERIFIED) {
 //            verification_status_ll.setVisibility(View.VISIBLE);
-        }else {
+//        }else {
 //            verification_status_ll.setVisibility(View.GONE);
-        }
+//        }
         jalaliConvert = new JalaliConvert();
 
 
-        if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.UNVERIFIED){
+//        if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.UNVERIFIED){
 //            user_image.setImageResource(R.drawable.user_icon_blak);
-        }else {
+//        }else {
 //            user_image.setImageResource(R.drawable.user_icon_blue);
-        }
+//        }
         user_name_text.setText(userProfileDTO.getFullName());
         MainActivity.user_account_name.setText(userProfileDTO.getFullName());
 
         user_account_no_text.setText(persianEnglishDigit.E2P(userProfileDTO.getCardNumber()));
-        user_bank_name.setText(" " + userProfileDTO.getBankName());
+//        user_bank_name.setText(" " + userProfileDTO.getBankName());
         user_mobile_no.setText(persianEnglishDigit.E2P(userProfileDTO.getCellNumber()));
 
         editor.putInt(Constants.USER_VERIFICATION_STATUS, userProfileDTO.getVerificationStatus().ordinal());

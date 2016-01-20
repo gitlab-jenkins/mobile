@@ -122,29 +122,29 @@ public class PayBusinessActivity extends AppCompatActivity {
 //        MaxXferAmount = prefs.getLong(Constants.MAX_XFER_Amount, 0);
 //        MinXferAmount = prefs.getLong(Constants.MIN_XFER_Amount, 0);
 
-        switch (prefs.getInt(Constants.USER_VERIFICATION_STATUS, -1)){
-
-            case 0:
-                userVerificationStatus = UserVerificationStatus.UNVERIFIED;
-                userVerificationMessage = getString(R.string.unverified_account);
-                break;
-
-            case 1:
-                userVerificationStatus = UserVerificationStatus.PENDING_REVIEW;
-                userVerificationMessage = getString(R.string.pending_review_account);
-                break;
-
-            case 2:
-                userVerificationStatus = UserVerificationStatus.VERIFIED;
-                userVerificationMessage = getString(R.string.verified_account);
-                break;
-
-            case 3:
-                userVerificationStatus = UserVerificationStatus.DELEGATED;
-                userVerificationMessage = getString(R.string.delegate_account);
-                break;
-
-        }
+//        switch (prefs.getInt(Constants.USER_VERIFICATION_STATUS, -1)){
+//
+//            case 0:
+//                userVerificationStatus = UserVerificationStatus.UNVERIFIED;
+//                userVerificationMessage = getString(R.string.unverified_account);
+//                break;
+//
+//            case 1:
+//                userVerificationStatus = UserVerificationStatus.PENDING_REVIEW;
+//                userVerificationMessage = getString(R.string.pending_review_account);
+//                break;
+//
+//            case 2:
+//                userVerificationStatus = UserVerificationStatus.VERIFIED;
+//                userVerificationMessage = getString(R.string.verified_account);
+//                break;
+//
+//            case 3:
+//                userVerificationStatus = UserVerificationStatus.DELEGATED;
+//                userVerificationMessage = getString(R.string.delegate_account);
+//                break;
+//
+//        }
 
 
         bundle = getIntent().getExtras();
@@ -200,20 +200,20 @@ public class PayBusinessActivity extends AppCompatActivity {
                         editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                         editor.commit();
                         if (amountValue >= MinXferAmount && amountValue <= MaxXferAmount) {
-                            switch (userVerificationStatus) {
-                                case DELEGATED:
+//                            switch (userVerificationStatus) {
+//                                case DELEGATED:
                                     hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                                     businessPaymentConfirmRequest = new BusinessPaymentConfirmRequest();
                                     businessPaymentConfirmRequest.setBusinessCode(bundle.getString("business_code"));
                                     requestBusinessPaymentConfirm = new RequestBusinessPaymentConfirm(context, new RequestBusinessPaymentConfirmTaskCompleteListener());
                                     requestBusinessPaymentConfirm.execute(businessPaymentConfirmRequest);
-                                    break;
+//                                    break;
 
-                                default:
-                                    new HamPayDialog(activity).showFailPaymentPermissionDialog(userVerificationMessage);
-                                    pay_to_business_button.setEnabled(true);
-                                    break;
-                            }
+//                                default:
+//                                    new HamPayDialog(activity).showFailPaymentPermissionDialog(userVerificationMessage);
+//                                    pay_to_business_button.setEnabled(true);
+//                                    break;
+//                            }
                         }else {
                             new HamPayDialog(activity).showIncorrectAmountDialog(MinXferAmount, MaxXferAmount);
                             pay_to_business_button.setEnabled(true);
@@ -232,7 +232,7 @@ public class PayBusinessActivity extends AppCompatActivity {
     @Override
     public void onUserInteraction() {
         super.onUserInteraction();
-        Log.e("EXIT", "onUserInteraction");
+//        Log.e("EXIT", "onUserInteraction");
     }
 
     @Override

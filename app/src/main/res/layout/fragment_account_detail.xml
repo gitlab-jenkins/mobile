@@ -360,7 +360,7 @@
                             android:textColor="@android:color/black"
                             android:textSize="14dp"
                             android:gravity="center"
-                            android:text=""/>
+                            android:text=" خاورمیانه "/>
 
                         <xyz.homapay.hampay.mobile.android.component.FacedTextView
                             geekui:customTypeface="fonts/iran_sans.ttf"

@@ -131,29 +131,29 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             Log.e("Error", ex.getStackTrace().toString());
         }
 
-        switch (prefs.getInt(Constants.USER_VERIFICATION_STATUS, -1)){
-
-            case 0:
-                userVerificationStatus = UserVerificationStatus.UNVERIFIED;
-                userVerificationMessage = getString(R.string.unverified_account);
-                break;
-
-            case 1:
-                userVerificationStatus = UserVerificationStatus.PENDING_REVIEW;
-                userVerificationMessage = getString(R.string.pending_review_account);
-                break;
-
-            case 2:
-                userVerificationStatus = UserVerificationStatus.VERIFIED;
-                userVerificationMessage = getString(R.string.verified_account);
-                break;
-
-            case 3:
-                userVerificationStatus = UserVerificationStatus.DELEGATED;
-                userVerificationMessage = getString(R.string.delegate_account);
-                break;
-
-        }
+//        switch (prefs.getInt(Constants.USER_VERIFICATION_STATUS, -1)){
+//
+//            case 0:
+//                userVerificationStatus = UserVerificationStatus.UNVERIFIED;
+//                userVerificationMessage = getString(R.string.unverified_account);
+//                break;
+//
+//            case 1:
+//                userVerificationStatus = UserVerificationStatus.PENDING_REVIEW;
+//                userVerificationMessage = getString(R.string.pending_review_account);
+//                break;
+//
+//            case 2:
+//                userVerificationStatus = UserVerificationStatus.VERIFIED;
+//                userVerificationMessage = getString(R.string.verified_account);
+//                break;
+//
+//            case 3:
+//                userVerificationStatus = UserVerificationStatus.DELEGATED;
+//                userVerificationMessage = getString(R.string.delegate_account);
+//                break;
+//
+//        }
 
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
@@ -245,7 +245,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
     @Override
     public void onUserInteraction() {
         super.onUserInteraction();
-        Log.e("EXIT", "onUserInteraction");
+//        Log.e("EXIT", "onUserInteraction");
     }
 
     @Override

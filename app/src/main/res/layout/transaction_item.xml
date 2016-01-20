@@ -97,7 +97,8 @@
                     android:gravity="right"
                     android:layout_gravity="right"
                     android:text="متن پیام"
-                    android:singleLine="true"/>
+                    android:singleLine="true"
+                    android:visibility="gone"/>
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/reject_message"

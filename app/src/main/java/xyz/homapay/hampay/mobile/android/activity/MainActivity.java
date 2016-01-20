@@ -388,7 +388,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     @Override
     public void onUserInteraction() {
         super.onUserInteraction();
-        Log.e("EXIT", "onUserInteraction");
+//        Log.e("EXIT", "onUserInteraction");
     }
 
     @Override
