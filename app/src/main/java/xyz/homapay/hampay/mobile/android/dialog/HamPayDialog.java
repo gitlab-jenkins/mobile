@@ -1194,7 +1194,7 @@ public class HamPayDialog {
                 (new PersianEnglishDigit()).E2P(String.format("%,d", amountValue).replace(".", ",")),
                 individualPaymentConfirmResponse.getFullName(),
                 (new PersianEnglishDigit().E2P(String.format("%,d", individualPaymentConfirmResponse.getFeeCharge()).replace(".", ","))),
-                        individualPaymentConfirmResponse.getBankName()));
+                individualPaymentConfirmResponse.getBankName()));
 
         view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
         dialog = new Dialog(activity);
@@ -1590,9 +1590,9 @@ public class HamPayDialog {
 
 
     public void showFailIllegalAppListDialog(final RequestIllegalAppList requestIllegalAppList,
-                                       final IllegalAppListRequest illegalAppListRequest,
-                                       final String code,
-                                       final String message){
+                                             final IllegalAppListRequest illegalAppListRequest,
+                                             final String code,
+                                             final String message){
 
         Rect displayRectangle = new Rect();
         Activity parent = (Activity) activity;
@@ -1822,9 +1822,9 @@ public class HamPayDialog {
     }
 
     public void showFailRegisterCardDialog(final RequestRegisterCard requestRegisterCard,
-                                                       final RegisterCardRequest registerCardRequest,
-                                                       final String code,
-                                                       final String message){
+                                           final RegisterCardRequest registerCardRequest,
+                                           final String code,
+                                           final String message){
         Rect displayRectangle = new Rect();
         Activity parent = (Activity) activity;
         Window window = parent.getWindow();
@@ -2504,7 +2504,8 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                requestUserTransaction.execute(transactionListRequest);
+                if (requestUserTransaction.getStatus() == AsyncTask.Status.FINISHED)
+                    requestUserTransaction.execute(transactionListRequest);
             }
         });
         cancel_request.setOnClickListener(new View.OnClickListener() {
@@ -2868,9 +2869,9 @@ public class HamPayDialog {
     }
 
     public void showFailChnageEmail(final RequestChangeEmail requestChangeEmail,
-                                     final ChangeEmailRequest changeEmailRequest,
-                                     final String code,
-                                     final String message){
+                                    final ChangeEmailRequest changeEmailRequest,
+                                    final String code,
+                                    final String message){
         Rect displayRectangle = new Rect();
         Activity parent = (Activity) activity;
         Window window = parent.getWindow();
@@ -3023,9 +3024,9 @@ public class HamPayDialog {
 
 
     public void showFailUploadImage(final RequestUploadImage requestUploadImage,
-                                        final UploadImageRequest uploadImageRequest,
-                                        final String code,
-                                        final String message){
+                                    final UploadImageRequest uploadImageRequest,
+                                    final String code,
+                                    final String message){
         Rect displayRectangle = new Rect();
         Activity parent = (Activity) activity;
         Window window = parent.getWindow();
@@ -3348,9 +3349,9 @@ public class HamPayDialog {
 
 
     public void showFailPendingPaymentDialog(final RequestLatestPurchase requestLatestPurchase,
-                                                    final LatestPurchaseRequest latestPurchaseRequest,
-                                                    final String code,
-                                                    final String message){
+                                             final LatestPurchaseRequest latestPurchaseRequest,
+                                             final String code,
+                                             final String message){
         Rect displayRectangle = new Rect();
         Activity parent = (Activity) activity;
         Window window = parent.getWindow();

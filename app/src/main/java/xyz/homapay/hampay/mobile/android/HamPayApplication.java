@@ -15,7 +15,7 @@ import java.util.HashMap;
  * Created by amir on 7/10/15.
  */
 
-@ReportsCrashes(mailTo = "ahooman@gmail.com,amirh.sharafkar@gmail.com")
+@ReportsCrashes(mailTo = "amirh.sharafkar@gmail.com,defects@homapay.com")
 
 public class HamPayApplication extends Application {
 
