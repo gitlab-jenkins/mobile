@@ -5,12 +5,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 
 import java.util.List;
 
 import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
+import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
+import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 
 /**
@@ -59,10 +65,14 @@ public class PendingPaymentAdapter extends BaseAdapter  {
 
         if (convertView == null) {
             viewHolder = new ViewHolder();
-            convertView = inflater.inflate(R.layout.bank_item_row, null);
+            convertView = inflater.inflate(R.layout.pending_payment_row, null);
 
 
-            viewHolder.bank_name = (FacedTextView)convertView.findViewById(R.id.bank_name);
+            viewHolder.business_name = (FacedTextView)convertView.findViewById(R.id.business_name);
+            viewHolder.business_logo = (ImageView)convertView.findViewById(R.id.business_logo);
+            viewHolder.date_time = (FacedTextView)convertView.findViewById(R.id.date_time);
+            viewHolder.price_pay = (FacedTextView)convertView.findViewById(R.id.price_pay);
+            viewHolder.expire_pay = (FacedTextView)convertView.findViewById(R.id.expire_pay);
 
 
             convertView.setTag(viewHolder);
@@ -71,7 +81,14 @@ public class PendingPaymentAdapter extends BaseAdapter  {
             viewHolder = (ViewHolder)convertView.getTag();
         }
 
-//        viewHolder.bank_name.setText(purchaseInfoDTOs.get(position).getTitle());
+        viewHolder.business_name.setText(purchaseInfoDTOs.get(position).getMerchantName());
+        String LogoUrl = Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTOs.get(position).getMerchantLogoName();
+        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.business_logo)).execute(Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTOs.get(position).getMerchantLogoName());
+        viewHolder.date_time.setText(new PersianEnglishDigit().E2P(new JalaliConvert().GregorianToPersian(purchaseInfoDTOs.get(position).getCreatedBy())));
+        viewHolder.price_pay.setText(new PersianEnglishDigit().E2P(purchaseInfoDTOs.get(position).getAmount().toString()) + " ریال");
+        viewHolder.expire_pay.setVisibility(View.GONE);
+//        viewHolder.expire_pay.setText(purchaseInfoDTOs.get(position).get);
+
 
 
         return convertView;
@@ -83,7 +100,11 @@ public class PendingPaymentAdapter extends BaseAdapter  {
 
         ViewHolder(){ }
 
-        FacedTextView bank_name;
+        FacedTextView business_name;
+        ImageView business_logo;
+        FacedTextView date_time;
+        FacedTextView price_pay;
+        FacedTextView expire_pay;
     }
 
 }

@@ -431,7 +431,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 break;
             case 3:
                 fragment = new PendingPaymentFragment();
-                title = getString(R.string.title_pay_to_one);
+                title = getString(R.string.title_pending_payment);
                 break;
 //            case 4:
 //                fragment = new PayToBusinessFragment();

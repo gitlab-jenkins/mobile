@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -18,15 +17,12 @@ import com.google.android.gms.analytics.Tracker;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.UserVerificationStatus;
-import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
-import xyz.homapay.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
 import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
-import xyz.homapay.hampay.common.core.model.response.GetUserIdTokenResponse;
-import xyz.homapay.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
 import xyz.homapay.hampay.common.core.model.response.LatestPurchaseResponse;
 import xyz.homapay.hampay.common.core.model.response.PSPResultResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
+import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO;
 import xyz.homapay.hampay.common.psp.model.request.PurchaseRequest;
 import xyz.homapay.hampay.common.psp.model.response.PurchaseResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
@@ -34,11 +30,9 @@ import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
-import xyz.homapay.hampay.mobile.android.async.RequestIndividualPaymentConfirm;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestPSPResult;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
-import xyz.homapay.hampay.mobile.android.async.RequestUserIdToken;
 import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
@@ -106,6 +100,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
     RequestPurchase requestPurchase;
     PurchaseRequest purchaseRequest;
+
+    PurchaseInfoDTO getPurchaseInfoDTO = null;
 
 
     @Override
@@ -186,9 +182,38 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         bundle = getIntent().getExtras();
 
 
+        Intent intent = getIntent();
 
-        if (bundle != null) {
+        purchaseInfoDTO = (PurchaseInfoDTO)intent.getSerializableExtra(Constants.PENDING_PAYMENT_REQUEST);
 
+
+        if (purchaseInfoDTO != null) {
+            PersianEnglishDigit persianEnglishDigit = new PersianEnglishDigit();
+
+            String persianPurchaseCode = persianEnglishDigit.E2P(purchaseInfoDTO.getPurchaseCode());
+
+            input_digit_1.setText(persianPurchaseCode.charAt(0) + "");
+            input_digit_2.setText(persianPurchaseCode.charAt(1) + "");
+            input_digit_3.setText(persianPurchaseCode.charAt(2) + "");
+            input_digit_4.setText(persianPurchaseCode.charAt(3) + "");
+            input_digit_5.setText(persianPurchaseCode.charAt(4) + "");
+            input_digit_6.setText(persianPurchaseCode.charAt(5) + "");
+
+            paymentPriceValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getAmount().toString()) + " ریال");
+            if (purchaseInfoDTO.getPurchaseFee() != null) {
+                paymentFeeValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getPurchaseFee().toString()) + " ریال");
+            }else {
+                paymentFeeValue.setText("۰" + " ریال");
+            }
+
+            business_name.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getMerchantName()));
+
+            String LogoUrl = Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantLogoName();
+
+            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_logo)).execute(Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantLogoName());
+
+
+            cardNumberValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getCardNo()));
         }else {
             requestLatestPurchase = new RequestLatestPurchase(activity, new RequestLatestPurchaseTaskCompleteListener());
             latestPurchaseRequest = new LatestPurchaseRequest();

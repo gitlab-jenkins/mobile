@@ -64,6 +64,7 @@
     <string name="title_payment_request">پرداخت‌ها</string>
     <string name="title_account_detail">جزئیات حساب</string>
     <string name="title_transactions">تراکنش‌ها</string>
+    <string name="title_pending_payment">صف پرداخت‌ها</string>
     <string name="title_pay_to_one">پرداخت به فرد</string>
     <string name="title_pay_to_business">پرداخت به کسب و کار</string>
     <string name="title_settings">تنظیمات</string>
