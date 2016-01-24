@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -98,16 +99,20 @@ public class MemorableWordEntryActivity extends Activity {
         keepOn_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                registrationCredentialsRequest = new RegistrationCredentialsRequest();
-                registrationCredentialsRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
-                registrationCredentialsRequest.setDeviceId(new DeviceInfo(getApplicationContext()).getAndroidId());
-                Uuid = UUID.randomUUID().toString();
-                registrationCredentialsRequest.setInstallationToken(Uuid);
 
-                registrationCredentialsRequest.setMemorableKey(memorable_value.getText().toString());
-                registrationCredentialsRequest.setPassCode(userEntryPassword);
-                requestCredentialEntry = new RequestCredentialEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
-                requestCredentialEntry.execute(registrationCredentialsRequest);
+                if (memorable_value.getText().toString().trim().length() != 0) {
+                    registrationCredentialsRequest = new RegistrationCredentialsRequest();
+                    registrationCredentialsRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
+                    registrationCredentialsRequest.setDeviceId(new DeviceInfo(getApplicationContext()).getAndroidId());
+                    Uuid = UUID.randomUUID().toString();
+                    registrationCredentialsRequest.setInstallationToken(Uuid);
+                    registrationCredentialsRequest.setMemorableKey(memorable_value.getText().toString());
+                    registrationCredentialsRequest.setPassCode(userEntryPassword);
+                    requestCredentialEntry = new RequestCredentialEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
+                    requestCredentialEntry.execute(registrationCredentialsRequest);
+                }else {
+                    Toast.makeText(context, getString(R.string.msg_memorable_incorrect), Toast.LENGTH_SHORT).show();
+                }
 
             }
         });

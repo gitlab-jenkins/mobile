@@ -421,6 +421,7 @@
     <string name="msg_violation_image_size">اندازه عکس می‌بایستی از ۵۱۲ کیلو بایت کمتر باشد.</string>
     <string name="msg_incorrect_amount">مبلغ واریزی شما می بایستی بین %1$s ریال و %2$s ریال باشد.</string>
 
+    <string name="msg_memorable_incorrect">کلمه یادآوری می‌بایستی وارد شود</string>
 
     <string name="action_fail_payment_permission">باشه</string>
 

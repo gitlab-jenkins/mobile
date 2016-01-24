@@ -148,8 +148,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             if (databaseHelper.getIsExistPurchaseRequest(pendingPurchasePaymentId)) {
                 LatestPurchase latestPurchase = databaseHelper.getPurchaseRequest(pendingPurchasePaymentId);
                 if (latestPurchase.getIsCanceled().equalsIgnoreCase("0")) {
-                    intent.setClass(context, RequestBusinessPayDetailActivity.class);
-                    startActivity(intent);
+//                    intent.setClass(context, RequestBusinessPayDetailActivity.class);
+//                    startActivity(intent);
                 }
             }else {
                 databaseHelper.createPurchaseRequest(pendingPurchasePaymentId);

@@ -131,7 +131,7 @@ public class PendingPaymentFragment extends Fragment {
 
                 snackbar.show();
 
-                return false;
+                return true;
             }
         });
 

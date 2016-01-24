@@ -143,12 +143,38 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp">
+
+                    <ImageView
+                        android:id="@+id/business_logo"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp" />
+
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/business_name"
+                        geekui:customTypeface="fonts/iran_sans.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:textSize="15dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true" />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_gravity="right"
                     android:gravity="right"
-                    android:layout_margin="20dp">
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp">
 
                     <RelativeLayout
                         android:layout_width="fill_parent"
@@ -163,30 +189,6 @@
                             android:text="@string/request_payment_rial"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"/>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:gravity="center_vertical">
-
-                            <ImageView
-                                android:id="@+id/business_logo"
-                                android:layout_width="60dp"
-                                android:layout_height="60dp" />
-
-                            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                                android:id="@+id/business_name"
-                                geekui:customTypeface="fonts/iran_sans.ttf"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@android:color/black"
-                                android:textSize="15dp"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerVertical="true"/>
-
-                        </LinearLayout>
-
 
 
                     </RelativeLayout>
