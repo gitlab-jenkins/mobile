@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -25,7 +26,6 @@ import java.util.List;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
-import xyz.homapay.hampay.common.core.model.dto.UserVerificationStatus;
 import xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
 import xyz.homapay.hampay.common.core.model.request.VerifyAccountRequest;
 import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
@@ -39,6 +39,7 @@ import xyz.homapay.hampay.mobile.android.activity.PayToOneActivity;
 import xyz.homapay.hampay.mobile.android.activity.RequestPayBusinessListActivity;
 import xyz.homapay.hampay.mobile.android.activity.RequestBusinessPayDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.VerifyAccountActivity;
+import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
@@ -145,7 +146,7 @@ public class PaymentRequestFragment extends Fragment implements View.OnClickList
     LinearLayout keyboard;
     LinearLayout activation_holder;
 
-    String inputPasswordValue = "";
+    String inputPurchaseCode = "";
 
     FacedTextView request_business_name;
     FacedTextView request_business_code;
@@ -428,21 +429,28 @@ public class PaymentRequestFragment extends Fragment implements View.OnClickList
                 break;
 
             case  R.id.business_request_pay_button:
-                inputPasswordValue = "";
-                intent.setClass(context, RequestBusinessPayDetailActivity.class);
-                startActivity(intent);
-                input_digit_1.setText("");
-                input_digit_1.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
-                input_digit_2.setText("");
-                input_digit_2.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
-                input_digit_3.setText("");
-                input_digit_3.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
-                input_digit_4.setText("");
-                input_digit_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
-                input_digit_5.setText("");
-                input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
-                input_digit_6.setText("");
-                input_digit_6.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+
+                new Collapse(keyboard).animate();
+
+                if (inputPurchaseCode.length() == 6) {
+                    inputPurchaseCode = "";
+                    intent.setClass(context, RequestBusinessPayDetailActivity.class);
+                    startActivity(intent);
+                    input_digit_1.setText("");
+                    input_digit_1.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_2.setText("");
+                    input_digit_2.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_3.setText("");
+                    input_digit_3.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_4.setText("");
+                    input_digit_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_5.setText("");
+                    input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_6.setText("");
+                    input_digit_6.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                }else {
+                    Toast.makeText(context, getString(R.string.msg_incorrect_pending_payment_code), Toast.LENGTH_LONG).show();
+                }
                 break;
 
             case R.id.request_business_name:
@@ -463,9 +471,9 @@ public class PaymentRequestFragment extends Fragment implements View.OnClickList
     private void inputDigit(String digit){
         Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 
-        if (inputPasswordValue.length() <= 5) {
+        if (inputPurchaseCode.length() <= 5) {
 
-            switch (inputPasswordValue.length()) {
+            switch (inputPurchaseCode.length()) {
                 case 0:
                     if (digit.equalsIgnoreCase("d")) {
                         input_digit_1.setText("");
@@ -573,37 +581,37 @@ public class PaymentRequestFragment extends Fragment implements View.OnClickList
         }
 
         if (digit.contains("d")){
-            if (inputPasswordValue.length() > 0) {
-                inputPasswordValue = inputPasswordValue.substring(0, inputPasswordValue.length() - 1);
-                if (inputPasswordValue.length() == 5){
+            if (inputPurchaseCode.length() > 0) {
+                inputPurchaseCode = inputPurchaseCode.substring(0, inputPurchaseCode.length() - 1);
+                if (inputPurchaseCode.length() == 5){
                     input_digit_6.setText("");
                     input_digit_6.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                 }
-                if (inputPasswordValue.length() == 4){
+                if (inputPurchaseCode.length() == 4){
                     input_digit_5.setText("");
                     input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                 }
-                else if (inputPasswordValue.length() == 3){
+                else if (inputPurchaseCode.length() == 3){
                     input_digit_4.setText("");
                     input_digit_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                 }
-                else if (inputPasswordValue.length() == 2){
+                else if (inputPurchaseCode.length() == 2){
                     input_digit_3.setText("");
                     input_digit_3.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                 }
-                else if (inputPasswordValue.length() == 1){
+                else if (inputPurchaseCode.length() == 1){
                     input_digit_2.setText("");
                     input_digit_2.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                 }
-                else if (inputPasswordValue.length() == 0){
+                else if (inputPurchaseCode.length() == 0){
                     input_digit_1.setText("");
                     input_digit_1.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                 }
             }
         }
         else {
-            if (inputPasswordValue.length() <= 5) {
-                inputPasswordValue += digit;
+            if (inputPurchaseCode.length() <= 5) {
+                inputPurchaseCode += digit;
             }
         }
     }

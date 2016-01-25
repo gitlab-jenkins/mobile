@@ -41,7 +41,7 @@ public class FragmentDrawer extends Fragment {
             R.drawable.pay_settings,
             R.drawable.account_settings,
             R.drawable.transactions_settings,
-            R.drawable.pay_settings,
+            R.drawable.pending_payment,
 //            R.drawable.bussines_settings,
             R.drawable.settings,
             R.drawable.contact_us,

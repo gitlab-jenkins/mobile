@@ -85,6 +85,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
     FacedTextView paymentPriceValue;
     FacedTextView paymentFeeValue;
     FacedTextView cardNumberValue;
+    FacedTextView user_bank_name;
     FacedEditText pin2Value;
     ImageView pin2ValueIcon;
 
@@ -173,6 +174,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         business_logo = (ImageView)findViewById(R.id.business_logo);
         paymentPriceValue = (FacedTextView)findViewById(R.id.paymentPriceValue);
         paymentFeeValue = (FacedTextView)findViewById(R.id.paymentFeeValue);
+        user_bank_name = (FacedTextView)findViewById(R.id.user_bank_name);
         cardNumberValue = (FacedTextView)findViewById(R.id.cardNumberValue);
         pin2Value = (FacedEditText)findViewById(R.id.pin2Value);
         pin2ValueIcon = (ImageView)findViewById(R.id.pin2ValueIcon);
@@ -214,6 +216,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
 
             cardNumberValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getCardNo()));
+//            user_bank_name.setText(purchaseInfoDTO.getBankName);
         }else {
             requestLatestPurchase = new RequestLatestPurchase(activity, new RequestLatestPurchaseTaskCompleteListener());
             latestPurchaseRequest = new LatestPurchaseRequest();
@@ -414,36 +417,42 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             if (latestPurchaseResponseMessage != null){
                 if (latestPurchaseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
 
-
-                    PersianEnglishDigit persianEnglishDigit = new PersianEnglishDigit();
-
                     purchaseInfoDTO = latestPurchaseResponseMessage.getService().getPurchaseInfo();
 
+                    if (purchaseInfoDTO != null) {
 
-                    String persianPurchaseCode = persianEnglishDigit.E2P(purchaseInfoDTO.getPurchaseCode());
+                        PersianEnglishDigit persianEnglishDigit = new PersianEnglishDigit();
 
-                    input_digit_1.setText(persianPurchaseCode.charAt(0) + "");
-                    input_digit_2.setText(persianPurchaseCode.charAt(1) + "");
-                    input_digit_3.setText(persianPurchaseCode.charAt(2) + "");
-                    input_digit_4.setText(persianPurchaseCode.charAt(3) + "");
-                    input_digit_5.setText(persianPurchaseCode.charAt(4) + "");
-                    input_digit_6.setText(persianPurchaseCode.charAt(5) + "");
+                        String persianPurchaseCode = persianEnglishDigit.E2P(purchaseInfoDTO.getPurchaseCode());
 
-                    paymentPriceValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getAmount().toString()) + " ریال");
-                    if (purchaseInfoDTO.getPurchaseFee() != null) {
-                        paymentFeeValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getPurchaseFee().toString()) + " ریال");
-                    }else {
-                        paymentFeeValue.setText("۰" + " ریال");
+                        input_digit_1.setText(persianPurchaseCode.charAt(0) + "");
+                        input_digit_2.setText(persianPurchaseCode.charAt(1) + "");
+                        input_digit_3.setText(persianPurchaseCode.charAt(2) + "");
+                        input_digit_4.setText(persianPurchaseCode.charAt(3) + "");
+                        input_digit_5.setText(persianPurchaseCode.charAt(4) + "");
+                        input_digit_6.setText(persianPurchaseCode.charAt(5) + "");
+
+                        paymentPriceValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getAmount().toString()) + " ریال");
+                        if (purchaseInfoDTO.getPurchaseFee() != null) {
+                            paymentFeeValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getPurchaseFee().toString()) + " ریال");
+                        } else {
+                            paymentFeeValue.setText("۰" + " ریال");
+                        }
+
+                        business_name.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getMerchantName()));
+
+                        String LogoUrl = Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantLogoName();
+
+                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_logo)).execute(Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantLogoName());
+
+
+                        cardNumberValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getCardNo()));
+//                        user_bank_name.setText(purchaseInfoDTO.getBankName);
                     }
-
-                    business_name.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getMerchantName()));
-
-                    String LogoUrl = Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantLogoName();
-
-                    new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_logo)).execute(Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantLogoName());
-
-
-                    cardNumberValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getCardNo()));
+                    else {
+                        Toast.makeText(context, getString(R.string.msg_not_found_pending_payment_code), Toast.LENGTH_LONG).show();
+                        finish();
+                    }
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Latest Pending Payment")

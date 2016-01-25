@@ -477,5 +477,7 @@
     <!--<string name="msg_success_pending_payment">پرداخت شما با کد خرید  s$1% با موفقیت انجام شد.</string>-->
     <string name="msg_success_pending_payment">پرداخت شما با کد خرید %1$s با موفقیت انجام شد.</string>
     <string name="msg_pin2_incurrect">رمز دوم خود را به درستی وارد کنید.</string>
+    <string name="msg_not_found_pending_payment_code">اطلاعات خرید شما با این کد یافت نشد </string>
+    <string name="msg_incorrect_pending_payment_code">کد را کامل و صحیح وارد کنید</string>
 
 </resources>

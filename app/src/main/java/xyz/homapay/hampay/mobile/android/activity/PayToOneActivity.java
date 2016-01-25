@@ -234,7 +234,7 @@ public class PayToOneActivity extends AppCompatActivity {
 
     private void performPayToOneSearch(String searchPhrase, boolean searchEnabled){
 
-        inputMethodManager.hideSoftInputFromWindow(searchPhraseText.getWindowToken(), 0);
+//        inputMethodManager.hideSoftInputFromWindow(searchPhraseText.getWindowToken(), 0);
 
 
         if (searchEnabled) {

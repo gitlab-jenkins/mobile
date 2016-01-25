@@ -128,7 +128,7 @@ public class RequestPayBusinessListActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if (count == 0) {
+                if (s.toString().length() == 0) {
                     requestPageNumber = 0;
                     searchEnabled = false;
                     FINISHED_SCROLLING = false;
