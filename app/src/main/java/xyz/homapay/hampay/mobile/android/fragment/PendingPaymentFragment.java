@@ -8,30 +8,33 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.CancelPurchasePaymentRequest;
+import xyz.homapay.hampay.common.core.model.request.PendingPaymentListRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingPurchaseListRequest;
 import xyz.homapay.hampay.common.core.model.response.CancelPurchasePaymentResponse;
+import xyz.homapay.hampay.common.core.model.response.PendingPaymentListResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingPurchaseListResponse;
+import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.RequestBusinessPayDetailActivity;
-import xyz.homapay.hampay.mobile.android.activity.TransactionDetailActivity;
 import xyz.homapay.hampay.mobile.android.adapter.PendingPaymentAdapter;
+import xyz.homapay.hampay.mobile.android.adapter.PendingPurchaseAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestCancelPurchase;
+import xyz.homapay.hampay.mobile.android.async.RequestPendingPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestPendingPurchase;
+import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
@@ -46,17 +49,25 @@ public class PendingPaymentFragment extends Fragment {
     RequestPendingPurchase requestPendingPurchase;
     PendingPurchaseListRequest pendingPurchaseListRequest;
 
-    PendingPaymentAdapter pendingPaymentAdapter;
+    RequestPendingPayment requestPendingPayment;
+    PendingPaymentListRequest pendingPaymentListRequest;
+
+    PendingPurchaseAdapter pendingPurchaseAdapter;
+    PendingPaymentAdapter pendingCreditRequestAdapter;
 
     ListView pendigPaymentListView;
 
     HamPayDialog hamPayDialog;
 
     List<PurchaseInfoDTO> purchaseInfoDTOs;
+    List<PaymentInfoDTO> paymentInfoDTOs;
 
 
     RequestCancelPurchase requestCancelPurchase;
     CancelPurchasePaymentRequest cancelPurchasePaymentRequest;
+
+    ButtonRectangle request_business_button;
+    ButtonRectangle request_individual_button;
 
     public PendingPaymentFragment() {
     }
@@ -80,6 +91,9 @@ public class PendingPaymentFragment extends Fragment {
         requestPendingPurchase = new RequestPendingPurchase(getActivity(), new RequestPendingPurchaseTaskCompleteListener());
         pendingPurchaseListRequest = new PendingPurchaseListRequest();
 
+        requestPendingPayment = new RequestPendingPayment(getActivity(), new RequestPendingPaymentTaskCompleteListener());
+        pendingPaymentListRequest = new PendingPaymentListRequest();
+
 
     }
 
@@ -91,6 +105,24 @@ public class PendingPaymentFragment extends Fragment {
 
         hamPayDialog = new HamPayDialog(getActivity());
         pendigPaymentListView = (ListView)rootView.findViewById(R.id.pendigPaymentListView);
+
+        request_business_button = (ButtonRectangle)rootView.findViewById(R.id.request_business_button);
+        request_individual_button = (ButtonRectangle)rootView.findViewById(R.id.request_individual_button);
+
+        request_business_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestPendingPurchase.execute(pendingPurchaseListRequest);
+            }
+        });
+
+        request_individual_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestPendingPayment.execute(pendingPaymentListRequest);
+            }
+        });
+
 
         coordinatorLayout = (CoordinatorLayout) rootView.findViewById(R.id
                 .coordinatorLayout);
@@ -146,8 +178,6 @@ public class PendingPaymentFragment extends Fragment {
 
     }
 
-
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -172,8 +202,8 @@ public class PendingPaymentFragment extends Fragment {
 
                     purchaseInfoDTOs =  pendingPurchaseListResponseMessage.getService().getPendingList();
 
-                    pendingPaymentAdapter = new PendingPaymentAdapter(getActivity(),purchaseInfoDTOs);
-                    pendigPaymentListView.setAdapter(pendingPaymentAdapter);
+                    pendingPurchaseAdapter = new PendingPurchaseAdapter(getActivity(),purchaseInfoDTOs);
+                    pendigPaymentListView.setAdapter(pendingPurchaseAdapter);
 
                 }
             }
@@ -185,6 +215,31 @@ public class PendingPaymentFragment extends Fragment {
         }
     }
 
+
+    public class RequestPendingPaymentTaskCompleteListener implements
+            AsyncTaskCompleteListener<ResponseMessage<PendingPaymentListResponse>> {
+        @Override
+        public void onTaskComplete(ResponseMessage<PendingPaymentListResponse> pendingPaymentListResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+
+            if (pendingPaymentListResponseMessage != null) {
+                if (pendingPaymentListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+
+                    paymentInfoDTOs =  pendingPaymentListResponseMessage.getService().getPendingList();
+
+                    pendingCreditRequestAdapter = new PendingPaymentAdapter(getActivity(),paymentInfoDTOs);
+                    pendigPaymentListView.setAdapter(pendingCreditRequestAdapter);
+
+                }
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingdDialog("");
+        }
+    }
 
     public class RequestCancelPurchasePaymentTaskCompleteListener implements
             AsyncTaskCompleteListener<ResponseMessage<CancelPurchasePaymentResponse>> {
@@ -205,7 +260,7 @@ public class PendingPaymentFragment extends Fragment {
                 if (cancelPurchasePaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     cancelPurchasePaymentResponseMessage.getService().getRequestUUID();
                     purchaseInfoDTOs.remove(position);
-                    pendingPaymentAdapter.notifyDataSetChanged();
+                    pendingPurchaseAdapter.notifyDataSetChanged();
                 }
             }
         }

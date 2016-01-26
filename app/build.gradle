@@ -50,4 +50,6 @@ dependencies {
     androidTestCompile 'com.android.support.test:runner:0.4'
     androidTestCompile 'com.android.support.test:rules:0.4'
     compile files('libs/common-common-3.0.0-PA.jar')
+    compile files('libs/common-core-3.0.0-PA.jar')
+    compile files('libs/common-psp-1.0.0-SNAPSHOT.jar')
 }

@@ -43,7 +43,6 @@ import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.RequestMobileRegistrationIdEntry;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
@@ -53,7 +52,7 @@ import xyz.homapay.hampay.mobile.android.fragment.AccountDetailFragment;
 import xyz.homapay.hampay.mobile.android.fragment.FragmentDrawer;
 import xyz.homapay.hampay.mobile.android.fragment.GuideFragment;
 import xyz.homapay.hampay.mobile.android.fragment.PayToBusinessFragment;
-import xyz.homapay.hampay.mobile.android.fragment.PayToOneFragment;
+import xyz.homapay.hampay.mobile.android.fragment.CreditRequestFragment;
 import xyz.homapay.hampay.mobile.android.fragment.PaymentRequestFragment;
 import xyz.homapay.hampay.mobile.android.fragment.PendingPaymentFragment;
 import xyz.homapay.hampay.mobile.android.fragment.PrivacyFragment;
@@ -197,13 +196,13 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
                 switch (currentFragmet){
                     case 0:
-                        fragment = new PayToOneFragment();
+                        fragment = new CreditRequestFragment();
                         title = getString(R.string.title_pay_to_one);
                         currentFragmet = 2;
 
                         break;
                     case 1:
-                        fragment = new PayToOneFragment();
+                        fragment = new CreditRequestFragment();
                         title = getString(R.string.title_pay_to_one);
                         currentFragmet = 2;
                         break;
@@ -264,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                         currentFragmet = 3;
                         break;
                     case 3:
-                        fragment = new PayToOneFragment();
+                        fragment = new CreditRequestFragment();
                         title = getString(R.string.title_pay_to_one);
                         currentFragmet = 2;
                         break;
@@ -433,26 +432,26 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 fragment = new PendingPaymentFragment();
                 title = getString(R.string.title_pending_payment);
                 break;
-//            case 4:
-//                fragment = new PayToBusinessFragment();
-//                title = getString(R.string.title_pay_to_business);
-//                break;
             case 4:
+                fragment = new CreditRequestFragment();
+                title = getString(R.string.title_credit_request);
+                break;
+            case 5:
                 fragment = new SettingFragment();
                 title = getString(R.string.title_settings);
                 break;
-            case 5:
+            case 6:
                 new HamPayDialog(activity).fetchContactUsInfo();
                 break;
-            case 6:
+            case 7:
                 fragment = new GuideFragment();
                 title = getString(R.string.title_guide);
                 break;
-            case 7:
+            case 8:
                 fragment = new AboutFragment();
                 title = getString(R.string.title_about);
                 break;
-            case 8:
+            case 9:
                 Uri uri = Uri.parse("http://play.google.com/store/apps/details?id=" + context.getPackageName());
                 Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
                 goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
@@ -464,15 +463,15 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                             Uri.parse("market://details?id=" + context.getPackageName())));
                 }
                 break;
-            case 9:
+            case 10:
                 fragment = new TCFragment();
                 title = getString(R.string.title_already_tc);
                 break;
-            case 10:
+            case 11:
                 fragment = new PrivacyFragment();
                 title = getString(R.string.title_already_privacy);
                 break;
-            case 11:
+            case 12:
                 LogoutData logoutData = new LogoutData();
                 logoutData.setIplanetDirectoryPro(prefs.getString(Constants.TOKEN_ID, null));
                 new HamPayDialog(activity).showExitDialog(logoutData);
@@ -568,8 +567,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         if (requestCode == 1024) {
             if(resultCode == 1024){
 //                String result = data.getStringExtra("result");
-                fragment = new PayToOneFragment();
-                title = getString(R.string.title_pay_to_one);
+                fragment = new CreditRequestFragment();
+                title = getString(R.string.title_credit_request);
                 currentFragmet = 2;
                 setupActionnBar(currentFragmet);
                 if (fragment != null) {

@@ -1,7 +1,6 @@
 <resources>
 
     <string name="app_name">هم‌پی</string>
-    <!--<string name="app_name">ahampay</string>-->
 
     <string name="hampay_network">شبکه پرداخت هم‌پی </string>
 
@@ -24,6 +23,7 @@
     <string name="nav_item_transactions">تراکنشها</string>
     <string name="nav_item_pay_to_one">پرداخت به فرد</string>
     <string name="nav_item_pending_payment">صف پرداخت‌ها</string>
+    <string name="nav_item_request_credit">درخواست وجه</string>
     <string name="nav_item_pay_to_business">پرداخت به کسب و کار</string>
     <string name="nav_item_settings">تنظیمات</string>
     <string name="nav_item_contacts_us">تماس با ما</string>
@@ -49,6 +49,7 @@
         <item>@string/nav_item_account_detail</item>
         <item>@string/nav_item_transactions</item>
         <item>@string/nav_item_pending_payment</item>
+        <item>@string/nav_item_request_credit</item>
         <!--<item>@string/nav_item_pay_to_one</item>-->
         <!--<item>@string/nav_item_pay_to_business</item>-->
         <item>@string/nav_item_settings</item>
@@ -66,6 +67,7 @@
     <string name="title_transactions">تراکنش‌ها</string>
     <string name="title_pending_payment">صف پرداخت‌ها</string>
     <string name="title_pay_to_one">پرداخت به فرد</string>
+    <string name="title_credit_request">درخواست وجه‌</string>
     <string name="title_pay_to_business">پرداخت به کسب و کار</string>
     <string name="title_settings">تنظیمات</string>
     <string name="title_contacts_us">تماس با ما</string>
@@ -273,6 +275,7 @@
     <string name="select">انتخاب</string>
     <string name="recent_pay_one">تازه ترین پرداخت ها</string>
     <string name="hampay_contacts">لیست مخاطبین هم‌پی </string>
+    <string name="recent_credit_request">تازه‌ترین درخواست‌ها</string>
 
     <string name="signup_title">Create new account</string>
     <string name="login_label">Log in</string>
@@ -479,5 +482,9 @@
     <string name="msg_pin2_incurrect">رمز دوم خود را به درستی وارد کنید.</string>
     <string name="msg_not_found_pending_payment_code">اطلاعات خرید شما با این کد یافت نشد </string>
     <string name="msg_incorrect_pending_payment_code">کد را کامل و صحیح وارد کنید</string>
+    <string name="delete_pending_request">پرداخت نمیکنم</string>
+    <string name="msg_delete_payment_pending">آیا مایل به حذف این پرداخت درحال انتظار هستید؟</string>
+    <string name="business_pending">کسب و کارها</string>
+    <string name="individual_pending">دوستان</string>
 
 </resources>
