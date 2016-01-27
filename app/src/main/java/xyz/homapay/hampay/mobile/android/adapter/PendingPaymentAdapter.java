@@ -102,7 +102,7 @@ public class PendingPaymentAdapter extends BaseAdapter  {
             viewHolder = (ViewHolder)convertView.getTag();
         }
 
-        viewHolder.callerPhoneNo.setText(paymentInfoDTOs.get(position).getCallerPhoneNumber());
+        viewHolder.callerPhoneNo.setText(new PersianEnglishDigit().E2P(paymentInfoDTOs.get(position).getCallerPhoneNumber()));
 //        String LogoUrl = Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTOs.get(position).getMerchantLogoName();
 //        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.business_logo)).execute(Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTOs.get(position).getMerchantLogoName());
         viewHolder.date_time.setText(new PersianEnglishDigit().E2P(new JalaliConvert().GregorianToPersian(paymentInfoDTOs.get(position).getExpirationDate())));

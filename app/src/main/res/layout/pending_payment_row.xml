@@ -47,7 +47,8 @@
             android:textSize="13dp"
             android:gravity="right"
             android:text="@string/delete_pending_request"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:visibility="gone"/>
 
 
     </RelativeLayout>

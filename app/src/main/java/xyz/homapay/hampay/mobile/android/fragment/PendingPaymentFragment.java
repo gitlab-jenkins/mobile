@@ -27,6 +27,8 @@ import xyz.homapay.hampay.common.core.model.response.PendingPurchaseListResponse
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.activity.IndividualPaymentPendingActivity;
+import xyz.homapay.hampay.mobile.android.activity.PayOneActivity;
 import xyz.homapay.hampay.mobile.android.activity.RequestBusinessPayDetailActivity;
 import xyz.homapay.hampay.mobile.android.adapter.PendingPaymentAdapter;
 import xyz.homapay.hampay.mobile.android.adapter.PendingPurchaseAdapter;
@@ -112,6 +114,8 @@ public class PendingPaymentFragment extends Fragment {
         request_business_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                requestPendingPurchase = new RequestPendingPurchase(getActivity(), new RequestPendingPurchaseTaskCompleteListener());
+                pendingPurchaseListRequest = new PendingPurchaseListRequest();
                 requestPendingPurchase.execute(pendingPurchaseListRequest);
             }
         });
@@ -119,6 +123,8 @@ public class PendingPaymentFragment extends Fragment {
         request_individual_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                requestPendingPayment = new RequestPendingPayment(getActivity(), new RequestPendingPaymentTaskCompleteListener());
+                pendingPaymentListRequest = new PendingPaymentListRequest();
                 requestPendingPayment.execute(pendingPaymentListRequest);
             }
         });
@@ -132,10 +138,19 @@ public class PendingPaymentFragment extends Fragment {
         pendigPaymentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 Intent intent = new Intent();
-                intent.setClass(getActivity(), RequestBusinessPayDetailActivity.class);
-                intent.putExtra(Constants.PENDING_PAYMENT_REQUEST, purchaseInfoDTOs.get(position));
-                startActivity(intent);
+
+                if (purchaseInfoDTOs != null) {
+                    intent.setClass(getActivity(), RequestBusinessPayDetailActivity.class);
+                    intent.putExtra(Constants.PENDING_PAYMENT_REQUEST, purchaseInfoDTOs.get(position));
+                    startActivity(intent);
+                }else if (paymentInfoDTOs != null){
+                    intent.setClass(getActivity(), IndividualPaymentPendingActivity.class);
+                    intent.putExtra(Constants.CONTACT_PHONE_NO, paymentInfoDTOs.get(position).getCallerPhoneNumber());
+                    intent.putExtra(Constants.CONTACT_NAME, /*paymentInfoDTOs.get(position).getCallerName()*/ "");
+                    startActivity(intent);
+                }
             }
         });
 
@@ -199,12 +214,10 @@ public class PendingPaymentFragment extends Fragment {
 
             if (pendingPurchaseListResponseMessage != null) {
                 if (pendingPurchaseListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-
                     purchaseInfoDTOs =  pendingPurchaseListResponseMessage.getService().getPendingList();
-
                     pendingPurchaseAdapter = new PendingPurchaseAdapter(getActivity(),purchaseInfoDTOs);
                     pendigPaymentListView.setAdapter(pendingPurchaseAdapter);
-
+                    paymentInfoDTOs = null;
                 }
             }
         }
@@ -225,12 +238,10 @@ public class PendingPaymentFragment extends Fragment {
 
             if (pendingPaymentListResponseMessage != null) {
                 if (pendingPaymentListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-
-                    paymentInfoDTOs =  pendingPaymentListResponseMessage.getService().getPendingList();
-
+                    paymentInfoDTOs = pendingPaymentListResponseMessage.getService().getPendingList();
                     pendingCreditRequestAdapter = new PendingPaymentAdapter(getActivity(),paymentInfoDTOs);
                     pendigPaymentListView.setAdapter(pendingCreditRequestAdapter);
-
+                    purchaseInfoDTOs = null;
                 }
             }
         }

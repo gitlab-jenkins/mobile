@@ -178,50 +178,7 @@ public class CreditRequestFragment extends Fragment {
         });
 
         pinnedHeaderListView = (PinnedHeaderListView)rootView.findViewById(R.id.pinnedListView);
-//        pinnedHeaderListView.setOnItemClickListener(new PinnedHeaderListView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int section, int position, long id) {
-//
-//                if (searchEnabled){
-//
-//                    if (section == 0) {
-//                        Intent intent = new Intent();
-//                        intent.setClass(getActivity(), PayOneActivity.class);
-//                        intent.putExtra("contact_name", searchRecentPays.get(position).getName());
-//                        intent.putExtra("contact_phone_no", searchRecentPays.get(position).getPhone());
-//                        startActivity(intent);
-//                    } else if (section == 1) {
-//                        Intent intent = new Intent();
-//                        intent.setClass(getActivity(), PayOneActivity.class);
-//                        intent.putExtra("contact_name", searchContactDTOs.get(position).getDisplayName());
-//                        intent.putExtra("contact_phone_no", searchContactDTOs.get(position).getCellNumber());
-//                        startActivity(intent);
-//                    }
-//
-//                }else {
-//
-//                    if (section == 0) {
-//                        Intent intent = new Intent();
-//                        intent.setClass(getActivity(), PayOneActivity.class);
-//                        intent.putExtra("contact_name", recentPays.get(position).getName());
-//                        intent.putExtra("contact_phone_no", recentPays.get(position).getPhone());
-//                        startActivity(intent);
-//                    } else if (section == 1) {
-//                        Intent intent = new Intent();
-//                        intent.setClass(getActivity(), PayOneActivity.class);
-//                        intent.putExtra("contact_name", contactsHampayEnabledResponse.getService().getContacts().get(position).getDisplayName());
-//                        intent.putExtra("contact_phone_no", contactsHampayEnabledResponse.getService().getContacts().get(position).getCellNumber());
-//                        startActivity(intent);
-//                    }
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onSectionClick(AdapterView<?> adapterView, View view, int section, long id) {
-//
-//            }
-//        });
+
 
         if ((prefs.getString(Constants.USER_ID_TOKEN, "") != null && prefs.getString(Constants.USER_ID_TOKEN, "").length() == 16)){
 
@@ -283,9 +240,6 @@ public class CreditRequestFragment extends Fragment {
     }
 
     private void performPayToOneSearch(String searchPhrase, boolean searchEnabled){
-
-//        inputMethodManager.hideSoftInputFromWindow(searchPhraseText.getWindowToken(), 0);
-
 
         if (searchEnabled) {
 
