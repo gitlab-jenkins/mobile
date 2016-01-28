@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         Intent intentTest = new Intent();
         intentTest.setClass(context, CreditRequestActivity.class);
         intentTest.putExtra("contact_name", "امیر شرف کار");
-        intentTest.putExtra("contact_phone_no", "09126158905");
+        intentTest.putExtra("contact_phone_no", "09219562059");
         startActivity(intentTest);
 //        startActivityForResult(intentTest, 1024);
 

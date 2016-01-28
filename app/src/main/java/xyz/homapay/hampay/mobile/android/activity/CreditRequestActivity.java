@@ -219,7 +219,7 @@ public class CreditRequestActivity extends AppCompatActivity {
 //                                    case DELEGATED:
                                 hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                                 userPaymentRequest = new UserPaymentRequest();
-                                userPaymentRequest.setCalleeMobileNo(contactPhoneNo);
+                                userPaymentRequest.setCalleeCellNumber(contactPhoneNo);
                                 userPaymentRequest.setAmount(amountValue);
                                 userPaymentRequest.setMessage(contact_message.getText().toString());
                                 requestUserPayment = new RequestUserPayment(context, new RequestUserPaymentTaskCompleteListener());
@@ -369,7 +369,7 @@ public class CreditRequestActivity extends AppCompatActivity {
 //                            switch (userVerificationStatus) {
 //                                case DELEGATED:
                             userPaymentRequest = new UserPaymentRequest();
-                            userPaymentRequest.setCalleeMobileNo(contactPhoneNo);
+                            userPaymentRequest.setCalleeCellNumber(contactPhoneNo);
                             userPaymentRequest.setAmount(amountValue);
                             userPaymentRequest.setMessage(contact_message.getText().toString());
                             requestUserPayment = new RequestUserPayment(context, new RequestUserPaymentTaskCompleteListener());

@@ -175,8 +175,7 @@ public class GcmMessageHandler extends IntentService{
 
 
 
-            }else if (type.equalsIgnoreCase("PAYMENT")) {
-
+            }else if (type.equalsIgnoreCase("PAYMENT") || type.equalsIgnoreCase("CREDIT_REQUEST")) {
 
                 notificationIntent = new Intent(getApplicationContext(), HamPayLoginActivity.class);
                 notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
@@ -222,6 +221,9 @@ public class GcmMessageHandler extends IntentService{
                 headsUp.setSticky(true);
                 manage.notify(code++, headsUp);
             }
+//            else if (type.equalsIgnoreCase("CREDIT_REQUEST")){
+//
+//            }
 
 //            notificationManager.notify(NOTIFICATION_ID, builder.build());
 
