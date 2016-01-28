@@ -3397,40 +3397,36 @@ public class HamPayDialog {
         dialog.show();
     }
 
-//
-//    public void businessMockPaymentDialog(){
-//        Rect displayRectangle = new Rect();
-//        Activity parent = (Activity) activity;
-//        Window window = parent.getWindow();
-//        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-//
-//        View view = activity.getLayoutInflater().inflate(R.layout.dialog_pay_one_ref, null);
-//
-//        FacedTextView pay_one_confirm_ref = (FacedTextView) view.findViewById(R.id.pay_one_confirm_ref);
-//        FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
-//
-//
-//        confirmation.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dialog.dismiss();
-//                activity.finish();
-//                activity.onBackPressed();
-//            }
-//        });
-//
-//        pay_one_confirm_ref.setText((new PersianEnglishDigit(activity.getString(R.string.pay_one_ref, "123456"))).E2P());
-//
-//
-//        view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
-//        dialog = new Dialog(activity);
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//        dialog.setContentView(view);
-//        dialog.setTitle(null);
-//        dialog.setCanceledOnTouchOutside(true);
-//
-//        dialog.show();
-//    }
+
+    public void creditRequestDialog(){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_credit_request, null);
+
+        FacedTextView pay_one_confirm_ref = (FacedTextView) view.findViewById(R.id.pay_one_confirm_ref);
+        FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
+
+
+        confirmation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                activity.finish();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(true);
+
+        dialog.show();
+    }
 
 }

@@ -136,7 +136,12 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" >
         </activity>
-        
+        <activity
+            android:name=".activity.CreditRequestActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
         <activity
             android:name=".activity.RequestBusinessPayDetailActivity"
             android:label="@string/app_name"

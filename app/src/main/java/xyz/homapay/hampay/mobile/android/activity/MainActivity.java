@@ -4,10 +4,12 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.app.Activity;
+import android.app.Notification;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,6 +36,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import br.com.goncalves.pugnotification.notification.PugNotification;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
@@ -59,6 +62,7 @@ import xyz.homapay.hampay.mobile.android.fragment.PrivacyFragment;
 import xyz.homapay.hampay.mobile.android.fragment.SettingFragment;
 import xyz.homapay.hampay.mobile.android.fragment.TCFragment;
 import xyz.homapay.hampay.mobile.android.fragment.UserTransactionFragment;
+import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.LatestPurchase;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -114,20 +118,99 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     DatabaseHelper databaseHelper;
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        HamPayApplication.setAppSate(AppState.Paused);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        HamPayApplication.setAppSate(AppState.Stoped);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        HamPayApplication.setAppSate(AppState.Resumed);
+
+        String filePath = getFilesDir().getPath().toString() + "/" + "userImage.jpeg";
+        File file = new File(filePath);
+        if (file.exists()){
+            Picasso.with(this).invalidate(file);
+            Picasso.with(this).load(file).into(image_profile);
+
+        }
+
+//        String URL = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
+
+//        requestImageDownloader = new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile));
+//        requestImageDownloader.execute(URL);
+
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)){
+            Intent intent = new Intent();
+            intent.setClass(MainActivity.this, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }else {
+            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            editor.commit();
+        }
+
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        activity = MainActivity.this;
+        context = this;
+
         bundle = getIntent().getExtras();
 
         Intent intent = getIntent();
+
+        Intent intentTest = new Intent();
+        intentTest.setClass(context, CreditRequestActivity.class);
+        intentTest.putExtra("contact_name", "امیر شرف کار");
+        intentTest.putExtra("contact_phone_no", "09126158905");
+        startActivity(intentTest);
+//        startActivityForResult(intentTest, 1024);
 
         pendingPurchasePaymentId = bundle.getString(Constants.PENDING_PURCHASE_PAYMENT, "");
         userProfileDTO = (UserProfileDTO) intent.getSerializableExtra(Constants.USER_PROFILE_DTO);
 
         intent = new Intent();
+
+
+//        PugNotification.with(context)
+//                .load()
+//                .identifier(1020)
+//                .title("TEST")
+//                .message("WelCome")
+//                .bigTextStyle(":))))))))))))))")
+//                .smallIcon(R.mipmap.ic_launcher)
+////                .largeIcon(largeIcon)
+//                .flags(Notification.DEFAULT_ALL)
+////                .button(icon, title, pendingIntent)
+//                .click(UnlinkPassActivity.class, bundle)
+//                .dismiss(MainActivity.class, bundle)
+//                .color(R.color.colorPrimary)
+//                .ticker("ticker")
+////                .when(when)
+////                .vibrate(100)
+////                .lights(color, ledOnMs, ledOfMs)
+////                .sound(sound)
+//                .autoCancel(true)
+//                .simple()
+//                .build();
+
 
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
@@ -136,8 +219,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             fromNotification = bundle.getBoolean(Constants.NOTIFICATION);
         }
 
-        activity = MainActivity.this;
-        context = this;
+
 
         databaseHelper = new DatabaseHelper(context);
 
@@ -355,35 +437,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
 
-        String filePath = getFilesDir().getPath().toString() + "/" + "userImage.jpeg";
-        File file = new File(filePath);
-        if (file.exists()){
-            Picasso.with(this).invalidate(file);
-            Picasso.with(this).load(file).into(image_profile);
 
-        }
 
-//        String URL = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
 
-//        requestImageDownloader = new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile));
-//        requestImageDownloader.execute(URL);
-
-        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)){
-            Intent intent = new Intent();
-            intent.setClass(MainActivity.this, HamPayLoginActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            finish();
-            startActivity(intent);
-        }else {
-            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-            editor.commit();
-        }
-
-    }
 
     @Override
     public void onUserInteraction() {

@@ -1,10 +1,13 @@
 package xyz.homapay.hampay.mobile.android.service;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+
+import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.component.headsup.HeadsUp;
 import xyz.homapay.hampay.mobile.android.component.headsup.HeadsUpManager;
+import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.receiver.GcmBroadcastReceiver;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
@@ -83,6 +86,11 @@ public class GcmMessageHandler extends IntentService{
         @Override
         public void handleMessage(Message msg)
         {
+
+
+            if (HamPayApplication.getAppState() == AppState.Stoped){
+
+            }
 
 //            int NOTIFICATION_ID = 759;
 //            String ns = Context.NOTIFICATION_SERVICE;

@@ -11,6 +11,8 @@ import org.acra.annotation.ReportsCrashes;
 
 import java.util.HashMap;
 
+import xyz.homapay.hampay.mobile.android.model.AppState;
+
 /**
  * Created by amir on 7/10/15.
  */
@@ -73,6 +75,16 @@ public class HamPayApplication extends Application {
             mTrackers.put(trackerId, t);
         }
         return mTrackers.get(trackerId);
+    }
+
+    static AppState applicationState;
+
+    public static AppState getAppState(){
+        return applicationState;
+    }
+
+    public static void setAppSate(AppState appState){
+        applicationState = appState;
     }
 
 }

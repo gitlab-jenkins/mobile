@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
             android:textSize="15dp"
-            android:text="@string/payment"
+            android:text="@string/title_credit_request"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="64dp"/>
@@ -74,7 +74,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/normal_text"
                     android:textSize="15dp"
-                    android:text="@string/pay_to"
+                    android:text="@string/credit_request_from"
                     android:gravity="right"
                     android:layout_gravity="right"
                     />
@@ -198,7 +198,7 @@
                     android:textSize="15dp"
                     android:gravity="center"
                     android:layout_gravity="center"
-                    android:text="@string/payment"
+                    android:text="@string/credit_request_action"
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="2dp" />
 

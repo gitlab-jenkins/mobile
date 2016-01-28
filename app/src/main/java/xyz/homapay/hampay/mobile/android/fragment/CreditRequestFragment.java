@@ -306,9 +306,11 @@ public class CreditRequestFragment extends Fragment {
                 if (contactsHampayEnabledResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
                     contactDTOs = contactsHampayEnabledResponseMessage.getService().getContacts();
 
+                    dbHelper = new DatabaseHelper(context, serverKey);
+
                     if (contactDTOs.size() > 0) {
 
-                        dbHelper = new DatabaseHelper(context, serverKey);
+
 
                         recentPays = dbHelper.getAllRecentPays();
                         enabledHamPays = dbHelper.getAllEnabledHamPay();

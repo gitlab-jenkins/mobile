@@ -53,6 +53,7 @@ import xyz.homapay.hampay.common.core.model.request.TACRequest;
 import xyz.homapay.hampay.common.core.model.request.TransactionListRequest;
 import xyz.homapay.hampay.common.core.model.request.UnlinkUserRequest;
 import xyz.homapay.hampay.common.core.model.request.UploadImageRequest;
+import xyz.homapay.hampay.common.core.model.request.UserPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
 import xyz.homapay.hampay.common.core.model.request.VerifyAccountRequest;
 import xyz.homapay.hampay.common.core.model.request.VerifyTransferMoneyRequest;
@@ -88,6 +89,7 @@ import xyz.homapay.hampay.common.core.model.response.TACResponse;
 import xyz.homapay.hampay.common.core.model.response.TransactionListResponse;
 import xyz.homapay.hampay.common.core.model.response.UnlinkUserResponse;
 import xyz.homapay.hampay.common.core.model.response.UploadImageResponse;
+import xyz.homapay.hampay.common.core.model.response.UserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
 import xyz.homapay.hampay.common.core.model.response.VerifyAccountResponse;
 import xyz.homapay.hampay.common.core.model.response.VerifyTransferMoneyResponse;
@@ -2532,6 +2534,67 @@ public class WebServices  {
 
             Gson gson = builder.create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<CancelPurchasePaymentResponse>>() {}.getType());
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (connection != null)
+                connection.disconnect();
+        }
+        return responseMessage;
+    }
+
+    public ResponseMessage<UserPaymentResponse> newUserPaymentResponse(UserPaymentRequest userPaymentRequest){
+
+        ResponseMessage<UserPaymentResponse> responseMessage = null;
+        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/credit-request");
+        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+
+        try {
+
+            RequestHeader header = new RequestHeader();
+            header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+            header.setVersion("1.0-PA");
+
+            RequestMessage<UserPaymentRequest> message = new RequestMessage<UserPaymentRequest>();
+            message.setRequestHeader(header);
+            UserPaymentRequest request = userPaymentRequest;
+            request.setRequestUUID(UUID.randomUUID().toString());
+            message.setService(request);
+
+            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<UserPaymentRequest>>() {}.getType();
+            String jsonRequest = new Gson().toJson(message, requestType);
+
+            connection.setConnectTimeout(30000);
+            connection.setReadTimeout(30000);
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type", "application/json");
+            OutputStream outputStream = connection.getOutputStream();
+            outputStream.write(jsonRequest.getBytes());
+            outputStream.flush();
+
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
+
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                }
+            });
+
+            Gson gson = builder.create();
+            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<UserPaymentResponse>>() {}.getType());
 
 
 

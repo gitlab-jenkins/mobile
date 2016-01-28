@@ -486,5 +486,8 @@
     <string name="msg_delete_payment_pending">آیا مایل به حذف این پرداخت درحال انتظار هستید؟</string>
     <string name="business_pending">کسب و کارها</string>
     <string name="individual_pending">دوستان</string>
+    <string name="credit_request_from">درخواست وجه از: </string>
+    <string name="credit_request_action">درخواست</string>
+    <string name="msg_success_credit_request">درخواست وجه شما با موفقیت ارسال شد</string>
 
 </resources>

@@ -22,13 +22,16 @@ import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.UserVerificationStatus;
 import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
 import xyz.homapay.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
+import xyz.homapay.hampay.common.core.model.request.UserPaymentRequest;
 import xyz.homapay.hampay.common.core.model.response.GetUserIdTokenResponse;
 import xyz.homapay.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
+import xyz.homapay.hampay.common.core.model.response.UserPaymentResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestIndividualPaymentConfirm;
 import xyz.homapay.hampay.mobile.android.async.RequestUserIdToken;
+import xyz.homapay.hampay.mobile.android.async.RequestUserPayment;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.CurrencyFormatterTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
@@ -68,8 +71,8 @@ public class CreditRequestActivity extends AppCompatActivity {
     String serverKey = "";
 
 
-    RequestIndividualPaymentConfirm requestIndividualPaymentConfirm;
-    IndividualPaymentConfirmRequest individualPaymentConfirmRequest;
+    RequestUserPayment requestUserPayment;
+    UserPaymentRequest userPaymentRequest;
 
     public void backActionBar(View view){
         finish();
@@ -214,12 +217,13 @@ public class CreditRequestActivity extends AppCompatActivity {
                             if (amountValue >= MinXferAmount && amountValue <= MaxXferAmount) {
 //                                switch (userVerificationStatus) {
 //                                    case DELEGATED:
-                                        hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-                                        individualPaymentConfirmRequest = new IndividualPaymentConfirmRequest();
-                                        individualPaymentConfirmRequest.setCellNumber(contactPhoneNo);
-                                        individualPaymentConfirmRequest.setAmount(amountValue);
-                                        requestIndividualPaymentConfirm = new RequestIndividualPaymentConfirm(context, new RequestIndividualPaymentConfirmTaskCompleteListener());
-                                        requestIndividualPaymentConfirm.execute(individualPaymentConfirmRequest);
+                                hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+                                userPaymentRequest = new UserPaymentRequest();
+                                userPaymentRequest.setCalleeMobileNo(contactPhoneNo);
+                                userPaymentRequest.setAmount(amountValue);
+                                userPaymentRequest.setMessage(contact_message.getText().toString());
+                                requestUserPayment = new RequestUserPayment(context, new RequestUserPaymentTaskCompleteListener());
+                                requestUserPayment.execute(userPaymentRequest);
 //                                        break;
 //
 //                                    default:
@@ -283,17 +287,16 @@ public class CreditRequestActivity extends AppCompatActivity {
     }
 
 
-    public class RequestIndividualPaymentConfirmTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<IndividualPaymentConfirmResponse>> {
+    public class RequestUserPaymentTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<UserPaymentResponse>> {
 
         @Override
-        public void onTaskComplete(ResponseMessage<IndividualPaymentConfirmResponse> individualPaymentConfirmResponseMessage) {
+        public void onTaskComplete(ResponseMessage<UserPaymentResponse> userPaymentResponseMessage) {
 
             hamPayDialog.dismisWaitingDialog();
 
-            if (individualPaymentConfirmResponseMessage != null){
-                if (individualPaymentConfirmResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-                    new HamPayDialog(activity, serverKey).individualPaymentConfirmDialog(individualPaymentConfirmResponseMessage.getService(),
-                            amountValue, contactMssage);
+            if (userPaymentResponseMessage != null){
+                if (userPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
+                    new HamPayDialog(activity).creditRequestDialog();
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Individual Payment Confirm")
@@ -302,8 +305,8 @@ public class CreditRequestActivity extends AppCompatActivity {
                             .build());
 
                 }else {
-                    new HamPayDialog(activity).showFailPaymentDialog(individualPaymentConfirmResponseMessage.getService().getResultStatus().getCode(),
-                            individualPaymentConfirmResponseMessage.getService().getResultStatus().getDescription());
+                    new HamPayDialog(activity).showFailPaymentDialog(userPaymentResponseMessage.getService().getResultStatus().getCode(),
+                            userPaymentResponseMessage.getService().getResultStatus().getDescription());
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Individual Payment Confirm")
@@ -365,11 +368,12 @@ public class CreditRequestActivity extends AppCompatActivity {
                         if (amountValue >= MinXferAmount && amountValue <= MaxXferAmount) {
 //                            switch (userVerificationStatus) {
 //                                case DELEGATED:
-                                    individualPaymentConfirmRequest = new IndividualPaymentConfirmRequest();
-                                    individualPaymentConfirmRequest.setCellNumber(contactPhoneNo);
-                                    individualPaymentConfirmRequest.setAmount(amountValue);
-                                    requestIndividualPaymentConfirm = new RequestIndividualPaymentConfirm(context, new RequestIndividualPaymentConfirmTaskCompleteListener());
-                                    requestIndividualPaymentConfirm.execute(individualPaymentConfirmRequest);
+                            userPaymentRequest = new UserPaymentRequest();
+                            userPaymentRequest.setCalleeMobileNo(contactPhoneNo);
+                            userPaymentRequest.setAmount(amountValue);
+                            userPaymentRequest.setMessage(contact_message.getText().toString());
+                            requestUserPayment = new RequestUserPayment(context, new RequestUserPaymentTaskCompleteListener());
+                            requestUserPayment.execute(userPaymentRequest);
 //                                    break;
 
 //                                default:
