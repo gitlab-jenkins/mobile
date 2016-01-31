@@ -9,8 +9,10 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class GuideDetailActivity extends AppCompatActivity {
@@ -23,6 +25,25 @@ public class GuideDetailActivity extends AppCompatActivity {
     HamPayDialog hamPayDialog;
 
     SharedPreferences prefs;
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        HamPayApplication.setAppSate(AppState.Paused);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        HamPayApplication.setAppSate(AppState.Stoped);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        HamPayApplication.setAppSate(AppState.Resumed);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

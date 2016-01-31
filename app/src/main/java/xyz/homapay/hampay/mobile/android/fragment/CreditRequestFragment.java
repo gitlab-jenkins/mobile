@@ -302,11 +302,12 @@ public class CreditRequestFragment extends Fragment {
         @Override
         public void onTaskComplete(ResponseMessage<ContactsHampayEnabledResponse> contactsHampayEnabledResponseMessage) {
 
+            dbHelper = new DatabaseHelper(context, serverKey);
+
             if (contactsHampayEnabledResponseMessage != null){
                 if (contactsHampayEnabledResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
                     contactDTOs = contactsHampayEnabledResponseMessage.getService().getContacts();
 
-                    dbHelper = new DatabaseHelper(context, serverKey);
 
                     if (contactDTOs.size() > 0) {
 

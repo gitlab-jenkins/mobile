@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -40,12 +41,13 @@ import xyz.homapay.hampay.mobile.android.component.material.ButtonFlat;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.component.material.CheckBox;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.NetworkConnectivity;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
-public class ConfirmInfoActivity extends Activity implements View.OnClickListener {
+public class ConfirmInfoActivity extends AppCompatActivity implements View.OnClickListener {
 
     Activity activity;
 
@@ -103,6 +105,24 @@ public class ConfirmInfoActivity extends Activity implements View.OnClickListene
 
     RequestRegisterVerifyAccount requestRegisterVerifyAccount;
     RegistrationVerifyAccountRequest registrationVerifyAccountRequest;
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        HamPayApplication.setAppSate(AppState.Paused);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        HamPayApplication.setAppSate(AppState.Stoped);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        HamPayApplication.setAppSate(AppState.Resumed);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

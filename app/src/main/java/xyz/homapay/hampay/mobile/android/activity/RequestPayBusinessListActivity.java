@@ -40,6 +40,7 @@ import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoEmptyVie
 import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoListviewException;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class RequestPayBusinessListActivity extends AppCompatActivity {
@@ -85,6 +86,34 @@ public class RequestPayBusinessListActivity extends AppCompatActivity {
 
     public void backActionBar(View view){
         finish();
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        HamPayApplication.setAppSate(AppState.Paused);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        HamPayApplication.setAppSate(AppState.Stoped);
+        if (requestHamPayBusiness != null){
+            if (!requestHamPayBusiness.isCancelled())
+                requestHamPayBusiness.cancel(true);
+        }
+
+        if (requestSearchHamPayBusiness != null){
+            if (!requestSearchHamPayBusiness.isCancelled())
+                requestSearchHamPayBusiness.cancel(true);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        HamPayApplication.setAppSate(AppState.Resumed);
     }
 
     @Override
@@ -194,20 +223,6 @@ public class RequestPayBusinessListActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (requestHamPayBusiness != null){
-            if (!requestHamPayBusiness.isCancelled())
-                requestHamPayBusiness.cancel(true);
-        }
-
-        if (requestSearchHamPayBusiness != null){
-            if (!requestSearchHamPayBusiness.isCancelled())
-                requestSearchHamPayBusiness.cancel(true);
-        }
-
-    }
 
     private void performBusinessSearch(String searchTerm) {
         requestPageNumber = 0;

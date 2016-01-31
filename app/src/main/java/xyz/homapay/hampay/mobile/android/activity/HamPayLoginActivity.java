@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,6 +36,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestTAC;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.material.RippleView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.FailedLoginResponse;
 import xyz.homapay.hampay.mobile.android.model.LoginData;
 import xyz.homapay.hampay.mobile.android.model.SuccessLoginResponse;
@@ -45,7 +47,7 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
 
 
-public class HamPayLoginActivity extends Activity implements View.OnClickListener {
+public class HamPayLoginActivity extends AppCompatActivity implements View.OnClickListener {
 
 
 
@@ -105,6 +107,35 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
 
     public void contactUs(View view){
         new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/login.html");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        HamPayApplication.setAppSate(AppState.Paused);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        HamPayApplication.setAppSate(AppState.Stoped);
+
+        if (requestTAC != null){
+            if (!requestTAC.isCancelled())
+                requestTAC.cancel(true);
+        }
+
+        if (requestLogin != null){
+            if (!requestLogin.isCancelled()){
+                requestLogin.cancel(true);
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        HamPayApplication.setAppSate(AppState.Resumed);
     }
 
     @Override
@@ -189,22 +220,6 @@ public class HamPayLoginActivity extends Activity implements View.OnClickListene
 
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        if (requestTAC != null){
-            if (!requestTAC.isCancelled())
-                requestTAC.cancel(true);
-        }
-
-        if (requestLogin != null){
-            if (!requestLogin.isCancelled()){
-                requestLogin.cancel(true);
-            }
-        }
-
-    }
 
     public class RequestTACResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<TACResponse>>
     {

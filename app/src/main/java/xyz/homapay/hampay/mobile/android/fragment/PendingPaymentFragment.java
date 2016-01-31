@@ -239,7 +239,7 @@ public class PendingPaymentFragment extends Fragment {
             if (pendingPaymentListResponseMessage != null) {
                 if (pendingPaymentListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     paymentInfoDTOs = pendingPaymentListResponseMessage.getService().getPendingList();
-                    pendingCreditRequestAdapter = new PendingPaymentAdapter(getActivity(),paymentInfoDTOs);
+                    pendingCreditRequestAdapter = new PendingPaymentAdapter(getActivity(), paymentInfoDTOs);
                     pendigPaymentListView.setAdapter(pendingCreditRequestAdapter);
                     purchaseInfoDTOs = null;
                 }

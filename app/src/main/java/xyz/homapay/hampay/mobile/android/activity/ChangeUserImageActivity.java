@@ -39,6 +39,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestUploadImage;
 import xyz.homapay.hampay.mobile.android.component.cropper.CropImageView;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
 
@@ -66,15 +67,29 @@ public class ChangeUserImageActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
     SharedPreferences prefs;
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        HamPayApplication.setAppSate(AppState.Paused);
+    }
 
     @Override
     protected void onStop() {
         super.onStop();
+        HamPayApplication.setAppSate(AppState.Stoped);
+
         if (requestUploadImage != null){
             if (!requestUploadImage.isCancelled())
                 requestUploadImage.cancel(true);
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        HamPayApplication.setAppSate(AppState.Resumed);
+    }
+
 
     @Override
     protected void onSaveInstanceState(@SuppressWarnings("NullableProblems") Bundle bundle) {

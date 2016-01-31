@@ -27,6 +27,7 @@ import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestChangeEmail;
 import xyz.homapay.hampay.mobile.android.component.material.RippleView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class ChangeEmailPassActivity extends AppCompatActivity implements View.OnClickListener{
@@ -75,6 +76,30 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
 
     public void contactUs(View view){
         new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/user-unlink.html");
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        HamPayApplication.setAppSate(AppState.Paused);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        HamPayApplication.setAppSate(AppState.Stoped);
+
+        if (requestChangeEmail != null){
+            if (!requestChangeEmail.isCancelled())
+                requestChangeEmail.cancel(true);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        HamPayApplication.setAppSate(AppState.Resumed);
     }
 
 
@@ -131,17 +156,6 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
         input_digit_3 = (ImageView)findViewById(R.id.input_digit_3);
         input_digit_4 = (ImageView)findViewById(R.id.input_digit_4);
         input_digit_5 = (ImageView)findViewById(R.id.input_digit_5);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-
-        if (requestChangeEmail != null){
-            if (!requestChangeEmail.isCancelled())
-                requestChangeEmail.cancel(true);
-        }
     }
 
 

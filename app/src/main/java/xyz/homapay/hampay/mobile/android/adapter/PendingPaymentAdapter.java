@@ -105,10 +105,10 @@ public class PendingPaymentAdapter extends BaseAdapter  {
         viewHolder.callerPhoneNo.setText(new PersianEnglishDigit().E2P(paymentInfoDTOs.get(position).getCallerPhoneNumber()));
 //        String LogoUrl = Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTOs.get(position).getMerchantLogoName();
 //        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.business_logo)).execute(Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTOs.get(position).getMerchantLogoName());
-        viewHolder.date_time.setText(new PersianEnglishDigit().E2P(new JalaliConvert().GregorianToPersian(paymentInfoDTOs.get(position).getExpirationDate())));
+//        viewHolder.date_time.setText(new PersianEnglishDigit().E2P(new JalaliConvert().GregorianToPersian(paymentInfoDTOs.get(position).getRequestDate())));
         viewHolder.price_pay.setText(new PersianEnglishDigit().E2P(paymentInfoDTOs.get(position).getAmount().toString()) + " ریال");
         viewHolder.message.setText(paymentInfoDTOs.get(position).getMessage());
-        viewHolder.expire_pay.setVisibility(View.GONE);
+        viewHolder.expire_pay.setText(new PersianEnglishDigit().E2P(new JalaliConvert().GregorianToPersian(paymentInfoDTOs.get(position).getExpirationDate())));
 
 
 

@@ -9,13 +9,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
+import android.support.v7.app.AppCompatActivity;
 import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
 import android.util.Log;
 
+import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.model.AppState;
 
-public class ViewingActivity extends Activity {
+public class ViewingActivity extends AppCompatActivity {
 
 
 	static long noexclude;
@@ -24,6 +27,25 @@ public class ViewingActivity extends Activity {
 	String number = "";
 
 	String n;
+
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		HamPayApplication.setAppSate(AppState.Paused);
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		HamPayApplication.setAppSate(AppState.Stoped);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		HamPayApplication.setAppSate(AppState.Resumed);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

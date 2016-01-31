@@ -35,6 +35,7 @@ import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestIllegalAppList;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 
@@ -74,6 +75,28 @@ public class AppSliderActivity extends AppCompatActivity {
     IllegalAppListRequest illegalAppListRequest;
     RequestIllegalAppList requestIllegalAppList;
     long launchAppCount = 0;
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+//        HamPayApplication.setAppSate(AppState.Paused);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+//        HamPayApplication.setAppSate(AppState.Stoped);
+        if (requestIllegalAppList != null){
+            if (!requestIllegalAppList.isCancelled())
+                requestIllegalAppList.cancel(true);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        HamPayApplication.setAppSate(AppState.Resumed);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -358,15 +381,6 @@ public class AppSliderActivity extends AppCompatActivity {
 //        }
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        if (requestIllegalAppList != null){
-            if (!requestIllegalAppList.isCancelled())
-                requestIllegalAppList.cancel(true);
-        }
-    }
 
     public void getRegId() {
         new AsyncTask<Void, Void, String>() {

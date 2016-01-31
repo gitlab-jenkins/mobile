@@ -88,8 +88,26 @@ public class GcmMessageHandler extends IntentService{
         {
 
 
-            if (HamPayApplication.getAppState() == AppState.Stoped){
+            AppState appState = HamPayApplication.getAppState();
 
+            switch (appState){
+                case Stoped:
+                    Toast.makeText(getApplicationContext(), "Stoped", Toast.LENGTH_SHORT).show();
+                    break;
+
+
+                case Paused:
+                    Toast.makeText(getApplicationContext(), "Paused", Toast.LENGTH_SHORT).show();
+                    break;
+
+                case Resumed:
+                    Toast.makeText(getApplicationContext(), "Resumed", Toast.LENGTH_SHORT).show();
+                    break;
+
+            }
+
+
+            if (HamPayApplication.getAppState() == AppState.Stoped){
             }
 
 //            int NOTIFICATION_ID = 759;

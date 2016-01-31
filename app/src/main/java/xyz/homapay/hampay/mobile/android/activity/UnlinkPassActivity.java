@@ -27,6 +27,7 @@ import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestUnlinkUser;
 import xyz.homapay.hampay.mobile.android.component.material.RippleView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class UnlinkPassActivity extends AppCompatActivity implements View.OnClickListener{
@@ -78,6 +79,29 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
         new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/user-unlink.html");
     }
 
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        HamPayApplication.setAppSate(AppState.Paused);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        HamPayApplication.setAppSate(AppState.Stoped);
+
+        if (requestUnlinkUser != null){
+            if (!requestUnlinkUser.isCancelled())
+                requestUnlinkUser.cancel(true);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        HamPayApplication.setAppSate(AppState.Resumed);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,18 +159,6 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
         input_digit_4 = (ImageView)findViewById(R.id.input_digit_4);
         input_digit_5 = (ImageView)findViewById(R.id.input_digit_5);
     }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-
-        if (requestUnlinkUser != null){
-            if (!requestUnlinkUser.isCancelled())
-                requestUnlinkUser.cancel(true);
-        }
-    }
-
 
     @Override
     public void onClick(View v) {

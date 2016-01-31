@@ -21,6 +21,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestVerifyTransferMoney;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
@@ -41,6 +42,30 @@ public class VerifyAccountActivity extends AppCompatActivity {
 
     public void contactUs(View view){
         (new HamPayDialog(this)).showContactUsDialog();
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        HamPayApplication.setAppSate(AppState.Paused);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        HamPayApplication.setAppSate(AppState.Stoped);
+        if (requestVerifyTransferMoney != null){
+            if (!requestVerifyTransferMoney.isCancelled()){
+                requestVerifyTransferMoney.cancel(true);
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        HamPayApplication.setAppSate(AppState.Resumed);
     }
 
     @Override
@@ -70,17 +95,6 @@ public class VerifyAccountActivity extends AppCompatActivity {
             }
         });
     }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (requestVerifyTransferMoney != null){
-            if (!requestVerifyTransferMoney.isCancelled()){
-                requestVerifyTransferMoney.cancel(true);
-            }
-        }
-    }
-
 
     public class RequestVerifyTransferMoneyTaskCompleteListener implements
             AsyncTaskCompleteListener<ResponseMessage<VerifyTransferMoneyResponse>>

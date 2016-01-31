@@ -133,7 +133,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     @Override
     protected void onResume() {
         super.onResume();
-
         HamPayApplication.setAppSate(AppState.Resumed);
 
         String filePath = getFilesDir().getPath().toString() + "/" + "userImage.jpeg";
@@ -181,7 +180,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         intentTest.putExtra("contact_name", "امیر شرف کار");
         intentTest.putExtra("contact_phone_no", "09219562059");
         startActivity(intentTest);
-//        startActivityForResult(intentTest, 1024);
 
         pendingPurchasePaymentId = bundle.getString(Constants.PENDING_PURCHASE_PAYMENT, "");
         userProfileDTO = (UserProfileDTO) intent.getSerializableExtra(Constants.USER_PROFILE_DTO);

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.edittext.MemorableTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.AESHelper;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
@@ -31,7 +33,7 @@ import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
 
 import java.util.UUID;
 
-public class MemorableWordEntryActivity extends Activity {
+public class MemorableWordEntryActivity extends AppCompatActivity {
 
     ButtonRectangle keepOn_button;
     SharedPreferences prefs;
@@ -65,6 +67,25 @@ public class MemorableWordEntryActivity extends Activity {
     public void contactUs(View view){
 //        new HamPayDialog(this).showContactUsDialog();
         new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/memorableKey.html");
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        HamPayApplication.setAppSate(AppState.Paused);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        HamPayApplication.setAppSate(AppState.Stoped);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        HamPayApplication.setAppSate(AppState.Resumed);
     }
 
     @Override

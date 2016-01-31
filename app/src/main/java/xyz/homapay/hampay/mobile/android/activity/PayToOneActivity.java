@@ -41,6 +41,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestUserIdToken;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.sectionlist.PinnedHeaderListView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.EnabledHamPay;
 import xyz.homapay.hampay.mobile.android.model.RecentPay;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -85,6 +86,29 @@ public class PayToOneActivity extends AppCompatActivity {
     RequestUserIdToken requestUserIdToken;
 
     String serverKey = "";
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        HamPayApplication.setAppSate(AppState.Paused);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        HamPayApplication.setAppSate(AppState.Stoped);
+
+        if (requestContactHampayEnabled != null){
+            if (!requestContactHampayEnabled.isCancelled())
+                requestContactHampayEnabled.cancel(true);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        HamPayApplication.setAppSate(AppState.Resumed);
+    }
 
     public PayToOneActivity() {
     }
@@ -222,16 +246,6 @@ public class PayToOneActivity extends AppCompatActivity {
     }
 
 
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (requestContactHampayEnabled != null){
-            if (!requestContactHampayEnabled.isCancelled())
-                requestContactHampayEnabled.cancel(true);
-        }
-    }
-
     private void performPayToOneSearch(String searchPhrase, boolean searchEnabled){
 
 //        inputMethodManager.hideSoftInputFromWindow(searchPhraseText.getWindowToken(), 0);
@@ -286,11 +300,11 @@ public class PayToOneActivity extends AppCompatActivity {
         @Override
         public void onTaskComplete(ResponseMessage<ContactsHampayEnabledResponse> contactsHampayEnabledResponseMessage) {
 
+            dbHelper = new DatabaseHelper(context, serverKey);
+
             if (contactsHampayEnabledResponseMessage != null){
                 if (contactsHampayEnabledResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
                     contactDTOs = contactsHampayEnabledResponseMessage.getService().getContacts();
-
-                    dbHelper = new DatabaseHelper(context, serverKey);
 
                     if (contactDTOs.size() > 0) {
 

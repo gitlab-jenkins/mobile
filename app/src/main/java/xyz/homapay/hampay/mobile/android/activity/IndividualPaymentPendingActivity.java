@@ -34,6 +34,7 @@ import xyz.homapay.hampay.mobile.android.component.edittext.CurrencyFormatterTex
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
@@ -87,6 +88,24 @@ public class IndividualPaymentPendingActivity extends AppCompatActivity {
 
     GetUserIdTokenRequest getUserIdTokenRequest;
     RequestUserIdToken requestUserIdToken;
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        HamPayApplication.setAppSate(AppState.Paused);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        HamPayApplication.setAppSate(AppState.Stoped);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        HamPayApplication.setAppSate(AppState.Resumed);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

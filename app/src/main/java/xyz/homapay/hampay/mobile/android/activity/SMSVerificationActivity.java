@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -41,10 +42,11 @@ import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.component.material.RippleView;
 import xyz.homapay.hampay.mobile.android.component.numericalprogressbar.NumberProgressBar;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
-public class SMSVerificationActivity extends Activity implements View.OnClickListener{
+public class SMSVerificationActivity extends AppCompatActivity implements View.OnClickListener{
 
 
     Activity activity;
@@ -107,8 +109,28 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
     Tracker hamPayGaTracker;
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        HamPayApplication.setAppSate(AppState.Paused);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        HamPayApplication.setAppSate(AppState.Stoped);
+        if (countDownTimer != null)
+            countDownTimer.cancel();
+
+        if (requestVerifyMobile != null){
+            if (!requestVerifyMobile.isCancelled())
+                requestVerifyMobile.cancel(true);
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
+        HamPayApplication.setAppSate(AppState.Resumed);
 
         IntentFilter intentFilter = new IntentFilter("SmsMessage.intent.MAIN");
         mIntentReceiver = new BroadcastReceiver() {
@@ -144,20 +166,6 @@ public class SMSVerificationActivity extends Activity implements View.OnClickLis
             }
         };
         this.registerReceiver(mIntentReceiver, intentFilter);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        if (countDownTimer != null)
-            countDownTimer.cancel();
-
-        if (requestVerifyMobile != null){
-            if (!requestVerifyMobile.isCancelled())
-                requestVerifyMobile.cancel(true);
-        }
-
     }
 
     Bundle bundle;
