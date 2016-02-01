@@ -133,6 +133,12 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        HamPayApplication.setAppSate(AppState.Resumed);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         HamPayApplication.setAppSate(AppState.Resumed);

@@ -2,16 +2,18 @@ package xyz.homapay.hampay.mobile.android.service;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import br.com.goncalves.pugnotification.notification.PugNotification;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.activity.AppSliderActivity;
 import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.component.headsup.HeadsUp;
 import xyz.homapay.hampay.mobile.android.component.headsup.HeadsUpManager;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
 import xyz.homapay.hampay.mobile.android.receiver.GcmBroadcastReceiver;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
-import xyz.homapay.hampay.mobile.android.util.TimeConvert;
 
 import android.app.ActivityManager;
 import android.app.IntentService;
@@ -24,8 +26,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
-import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import java.util.List;
@@ -35,12 +35,23 @@ import java.util.List;
  */
 public class GcmMessageHandler extends IntentService{
 
-    String type;
+
     String headsUpTitle;
     String headsUpContent;
     private Handler handler;
 
     private int code = 1;
+
+    String googleMessageType;
+//    String notificationMessageType;
+
+    NotificationMessageType notificationMessageType;
+    String notificationMessage;
+    String notificationName;
+    Long notificationValue;
+    String notificationCallerCellNumber;
+
+
 
     public GcmMessageHandler() {
         super("GcmMessageHandler");
@@ -56,26 +67,41 @@ public class GcmMessageHandler extends IntentService{
     protected void onHandleIntent(Intent intent) {
         Bundle extras = intent.getExtras();
 
-        GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
-        // The getMessageType() intent parameter must be the intent you received
-        // in your BroadcastReceiver.
-        String messageType = gcm.getMessageType(intent);
+        GoogleCloudMessaging googleCloudMessaging = GoogleCloudMessaging.getInstance(this);
 
-        type = extras.getString("type");
-        headsUpTitle = extras.getString("name");
-        headsUpContent = extras.getString("message");
-        showToast();
-//        Log.i("GCM", "Received : (" + messageType +")  " + extras.getString("title"));
+        googleMessageType = googleCloudMessaging.getMessageType(intent);
+
+        if (extras.getString("type").equalsIgnoreCase(NotificationMessageType.APP_UPDATE.getNotificationMessageType())){
+            notificationMessageType = NotificationMessageType.APP_UPDATE;
+        }else if (extras.getString("type").equalsIgnoreCase(NotificationMessageType.JOINT.getNotificationMessageType())){
+            notificationMessageType = NotificationMessageType.JOINT;
+        }else if (extras.getString("type").equalsIgnoreCase(NotificationMessageType.PAYMENT.getNotificationMessageType())){
+            notificationMessageType = NotificationMessageType.PAYMENT;
+        }else if (extras.getString("type").equalsIgnoreCase(NotificationMessageType.CREDIT_REQUEST.getNotificationMessageType())){
+            notificationMessageType = NotificationMessageType.CREDIT_REQUEST;
+            notificationMessage = extras.getString("message");
+            notificationName = extras.getString("name");
+            notificationValue = extras.getLong("amount");
+            notificationCallerCellNumber = extras.getString("callerCellNumber");
+        }
+
+//        notificationMessageType = extras.getString("type");
+
+
+//        headsUpTitle = extras.getString("name");
+//        headsUpContent = extras.getString("message");
+
+
+
+        sendMessage();
 
         GcmBroadcastReceiver.completeWakefulIntent(intent);
 
     }
 
-    public void showToast(){
+    public void sendMessage(){
         handler.post(new Runnable() {
             public void run() {
-//                Toast.makeText(getApplicationContext(), mes , Toast.LENGTH_LONG).show();
-
                 notificationHandler.sendEmptyMessage(0);
             }
         });
@@ -84,27 +110,105 @@ public class GcmMessageHandler extends IntentService{
 
     private final Handler notificationHandler = new Handler(){
         @Override
-        public void handleMessage(Message msg)
+        public void handleMessage(Message message)
         {
 
+            AppState appState = AppState.Stoped;
 
-            AppState appState = HamPayApplication.getAppState();
+            ActivityManager activityManager = (ActivityManager) getSystemService( ACTIVITY_SERVICE );
 
-            switch (appState){
-                case Stoped:
-                    Toast.makeText(getApplicationContext(), "Stoped", Toast.LENGTH_SHORT).show();
+            List<ActivityManager.RunningTaskInfo> runningTaskInfos = activityManager.getRunningTasks(1024);
+
+//            ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(ACTIVITY_SERVICE);
+//            List<ActivityManager.RunningAppProcessInfo> procInfos = activityManager.getRunningAppProcesses();
+            for(int i = 0; i < runningTaskInfos.size(); i++)
+            {
+                if(runningTaskInfos.get(i).baseActivity.getPackageName().equalsIgnoreCase(getApplicationContext().getPackageName()))
+                {
+//                    runningTaskInfos.get(i).baseActivity.getShortClassName();
+//                    Toast.makeText(getApplicationContext(), "Browser is running", Toast.LENGTH_LONG).show();
+                    appState = AppState.Resumed;
                     break;
-
-
-                case Paused:
-                    Toast.makeText(getApplicationContext(), "Paused", Toast.LENGTH_SHORT).show();
-                    break;
-
-                case Resumed:
-                    Toast.makeText(getApplicationContext(), "Resumed", Toast.LENGTH_SHORT).show();
-                    break;
-
+                }
             }
+
+
+            switch (notificationMessageType){
+
+                case JOINT:
+                    break;
+
+                case APP_UPDATE:
+                    break;
+
+                case PAYMENT:
+                    break;
+
+                case CREDIT_REQUEST:
+
+                    switch (appState){
+                        case Stoped:
+                            Toast.makeText(getApplicationContext(), "Stoped", Toast.LENGTH_SHORT).show();
+
+                            Bundle bundle = new Bundle();
+                            bundle.putString("message", "message");
+
+                            PugNotification.with(getApplicationContext())
+                                    .load()
+                                    .identifier(1020)
+                                    .title(notificationName)
+                                    .message(notificationMessage)
+//                                    .bigTextStyle(":))))))))))))))")
+                                    .smallIcon(R.mipmap.ic_launcher)
+//                .largeIcon(largeIcon)
+                                    .flags(Notification.DEFAULT_ALL)
+//                .button(icon, title, pendingIntent)
+                                    .click(AppSliderActivity.class, bundle)
+//                .dismiss(MainActivity.class, bundle)
+                                    .color(R.color.colorPrimary)
+                                    .ticker(getString(R.string.app_name))
+//                .when(when)
+//                .vibrate(100)
+//                .lights(color, ledOnMs, ledOfMs)
+//                .sound(sound)
+                                    .autoCancel(true)
+                                    .simple()
+                                    .build();
+
+                            break;
+
+
+                        case Paused:
+                            Toast.makeText(getApplicationContext(), "Paused", Toast.LENGTH_SHORT).show();
+                            break;
+
+                        case Resumed:
+                            Toast.makeText(getApplicationContext(), "Resumed", Toast.LENGTH_SHORT).show();
+                            break;
+
+                    }
+
+                    break;
+            }
+
+
+
+
+//            switch (appState){
+//                case Stoped:
+//                    Toast.makeText(getApplicationContext(), "Stoped", Toast.LENGTH_SHORT).show();
+//                    break;
+//
+//
+//                case Paused:
+//                    Toast.makeText(getApplicationContext(), "Paused", Toast.LENGTH_SHORT).show();
+//                    break;
+//
+//                case Resumed:
+//                    Toast.makeText(getApplicationContext(), "Resumed", Toast.LENGTH_SHORT).show();
+//                    break;
+//
+//            }
 
 
             if (HamPayApplication.getAppState() == AppState.Stoped){
@@ -143,102 +247,102 @@ public class GcmMessageHandler extends IntentService{
 //            notificationManager.notify(NOTIFICATION_ID, builder.build());
 
 
-            ActivityManager activityManager = (ActivityManager) getSystemService( ACTIVITY_SERVICE );
+//            ActivityManager activityManager = (ActivityManager) getSystemService( ACTIVITY_SERVICE );
+//
+//            List<ActivityManager.RunningTaskInfo> taskList = activityManager.getRunningTasks(10);
+//
+//
+//
+//            int NOTIFICATION_ID = 759;
+//            String ns = Context.NOTIFICATION_SERVICE;
+//            NotificationManager notificationManager = (NotificationManager) getSystemService(ns);
+//
+//            Intent notificationIntent = null;
+//            PendingIntent pendingIntent = null;
+//
 
-            List<ActivityManager.RunningTaskInfo> taskList = activityManager.getRunningTasks(10);
-
-
-
-            int NOTIFICATION_ID = 759;
-            String ns = Context.NOTIFICATION_SERVICE;
-            NotificationManager notificationManager = (NotificationManager) getSystemService(ns);
-
-            Intent notificationIntent = null;
-            PendingIntent pendingIntent = null;
-
-
-            if (type.equalsIgnoreCase("APP_UPDATE")){
-
-                try {
-                    notificationIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName()));
-                } catch (android.content.ActivityNotFoundException anfe) {
-                    notificationIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName()));
-                }
-
-                pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
-                        notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-
-
-                HeadsUpManager manage = HeadsUpManager.getInstant(getApplication());
-                HeadsUp.Builder builder = new HeadsUp.Builder(getApplicationContext());
-
-
-                builder.setContentTitle(headsUpTitle).setDefaults(
-                        Notification.DEFAULT_LIGHTS
-//                                |Notification.FLAG_AUTO_CANCEL
-                                | Notification.DEFAULT_SOUND
-                )
-                        .setSmallIcon(R.drawable.tiny_notification)
-                        .setAutoCancel(true)
-                        .setContentIntent(pendingIntent)
-                        .setFullScreenIntent(pendingIntent, false)
-                        .setContentText(new PersianEnglishDigit(headsUpContent).E2P());
-
-
-                HeadsUp headsUp = builder.buildHeadUp();
-                headsUp.setSticky(true);
-                manage.notify(code++, headsUp);
-
-            }else if (type.equalsIgnoreCase("JOINT")){
-
-
-
-            }else if (type.equalsIgnoreCase("PAYMENT") || type.equalsIgnoreCase("CREDIT_REQUEST")) {
-
-                notificationIntent = new Intent(getApplicationContext(), HamPayLoginActivity.class);
-                notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                        Intent.FLAG_ACTIVITY_SINGLE_TOP |
-                        Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                notificationIntent.putExtra(Constants.NOTIFICATION, true);
-
-                pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
-                        notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-
-
-                HeadsUpManager manage = HeadsUpManager.getInstant(getApplication());
-                HeadsUp.Builder builder = new HeadsUp.Builder(getApplicationContext());
-
-                if (taskList.size() == 0 || taskList.size() == 1) {
-
-//                builder.setAutoCancel(true);
-                    builder.setContentTitle(headsUpTitle).setDefaults(
-                            Notification.DEFAULT_LIGHTS
-//                                |Notification.FLAG_AUTO_CANCEL
-                                    | Notification.DEFAULT_SOUND
-                    )
-                            .setSmallIcon(R.drawable.tiny_notification)
-                            .setAutoCancel(true)
-                            .setContentIntent(pendingIntent)
-                            .setFullScreenIntent(pendingIntent, false)
-                            .setContentText(new PersianEnglishDigit(headsUpContent).E2P());
-                } else {
-//                builder.setAutoCancel(true);
-                    builder.setContentTitle(headsUpTitle).setDefaults(
-                            Notification.DEFAULT_LIGHTS
-//                                |Notification.FLAG_AUTO_CANCEL
-                                    | Notification.DEFAULT_SOUND)
-                            .setSmallIcon(R.drawable.tiny_notification)
-                            .setAutoCancel(true)
+//            if (notificationMessageType.equalsIgnoreCase("APP_UPDATE")){
+//
+//                try {
+//                    notificationIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName()));
+//                } catch (android.content.ActivityNotFoundException anfe) {
+//                    notificationIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName()));
+//                }
+//
+//                pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
+//                        notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+//
+//
+//                HeadsUpManager manage = HeadsUpManager.getInstant(getApplication());
+//                HeadsUp.Builder builder = new HeadsUp.Builder(getApplicationContext());
+//
+//
+//                builder.setContentTitle(headsUpTitle).setDefaults(
+//                        Notification.DEFAULT_LIGHTS
+////                                |Notification.FLAG_AUTO_CANCEL
+//                                | Notification.DEFAULT_SOUND
+//                )
+//                        .setSmallIcon(R.drawable.tiny_notification)
+//                        .setAutoCancel(true)
 //                        .setContentIntent(pendingIntent)
 //                        .setFullScreenIntent(pendingIntent, false)
-                            .setContentText(new PersianEnglishDigit(headsUpContent).E2P());
-                }
-
-                HeadsUp headsUp = builder.buildHeadUp();
-                headsUp.setSticky(true);
-                manage.notify(code++, headsUp);
-            }
+//                        .setContentText(new PersianEnglishDigit(headsUpContent).E2P());
+//
+//
+//                HeadsUp headsUp = builder.buildHeadUp();
+//                headsUp.setSticky(true);
+//                manage.notify(code++, headsUp);
+//
+//            }else if (notificationMessageType.equalsIgnoreCase("JOINT")){
+//
+//
+//
+//            }else if (notificationMessageType.equalsIgnoreCase("PAYMENT") || notificationMessageType.equalsIgnoreCase("CREDIT_REQUEST")) {
+//
+//                notificationIntent = new Intent(getApplicationContext(), HamPayLoginActivity.class);
+//                notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+//                        Intent.FLAG_ACTIVITY_SINGLE_TOP |
+//                        Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+//                notificationIntent.putExtra(Constants.NOTIFICATION, true);
+//
+//                pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
+//                        notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+//
+//
+//                HeadsUpManager manage = HeadsUpManager.getInstant(getApplication());
+//                HeadsUp.Builder builder = new HeadsUp.Builder(getApplicationContext());
+//
+//                if (taskList.size() == 0 || taskList.size() == 1) {
+//
+////                builder.setAutoCancel(true);
+//                    builder.setContentTitle(headsUpTitle).setDefaults(
+//                            Notification.DEFAULT_LIGHTS
+////                                |Notification.FLAG_AUTO_CANCEL
+//                                    | Notification.DEFAULT_SOUND
+//                    )
+//                            .setSmallIcon(R.drawable.tiny_notification)
+//                            .setAutoCancel(true)
+//                            .setContentIntent(pendingIntent)
+//                            .setFullScreenIntent(pendingIntent, false)
+//                            .setContentText(new PersianEnglishDigit(headsUpContent).E2P());
+//                } else {
+////                builder.setAutoCancel(true);
+//                    builder.setContentTitle(headsUpTitle).setDefaults(
+//                            Notification.DEFAULT_LIGHTS
+////                                |Notification.FLAG_AUTO_CANCEL
+//                                    | Notification.DEFAULT_SOUND)
+//                            .setSmallIcon(R.drawable.tiny_notification)
+//                            .setAutoCancel(true)
+////                        .setContentIntent(pendingIntent)
+////                        .setFullScreenIntent(pendingIntent, false)
+//                            .setContentText(new PersianEnglishDigit(headsUpContent).E2P());
+//                }
+//
+//                HeadsUp headsUp = builder.buildHeadUp();
+//                headsUp.setSticky(true);
+//                manage.notify(code++, headsUp);
+//            }
 //            else if (type.equalsIgnoreCase("CREDIT_REQUEST")){
 //
 //            }

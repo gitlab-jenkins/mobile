@@ -175,11 +175,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         Intent intent = getIntent();
 
-        Intent intentTest = new Intent();
-        intentTest.setClass(context, CreditRequestActivity.class);
-        intentTest.putExtra("contact_name", "امیر شرف کار");
-        intentTest.putExtra("contact_phone_no", "09219562059");
-        startActivity(intentTest);
+//        Intent intentTest = new Intent();
+//        intentTest.setClass(context, CreditRequestActivity.class);
+//        intentTest.putExtra("contact_name", "هم‌پی تست");
+//        intentTest.putExtra("contact_phone_no", "09219562059");
+//        startActivity(intentTest);
 
         pendingPurchasePaymentId = bundle.getString(Constants.PENDING_PURCHASE_PAYMENT, "");
         userProfileDTO = (UserProfileDTO) intent.getSerializableExtra(Constants.USER_PROFILE_DTO);

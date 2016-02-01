@@ -737,29 +737,30 @@ public class WebServices  {
             List<ContactDTO> contactDTOs = new ArrayList<ContactDTO>();
             Cursor phones = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null,null, null);
 
+            //Remove here
             int i = 0;
 
-//            while (phones.moveToNext()) {
-//                String contact_name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-//                String contact_phone_no = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-//
-//                if (contact_phone_no.trim().replace(" ", "").startsWith("00989")
-//                        || contact_phone_no.trim().replace(" ", "").startsWith("+989")
-//                        || contact_phone_no.trim().replace(" ", "").startsWith("09")) {
-//                    ContactDTO contactDTO = new ContactDTO();
-//                    contactDTO.setCellNumber(contact_phone_no);
-//                    contactDTO.setDisplayName(contact_name);
-//                    contactDTOs.add(contactDTO);
-//                }
-//
-//                i++;
-//
-//                if (i > 25){
-//                    break;
-//                }
-//
-//
-//            }
+            while (phones.moveToNext()) {
+                String contact_name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                String contact_phone_no = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+                if (contact_phone_no.trim().replace(" ", "").startsWith("00989")
+                        || contact_phone_no.trim().replace(" ", "").startsWith("+989")
+                        || contact_phone_no.trim().replace(" ", "").startsWith("09")) {
+                    ContactDTO contactDTO = new ContactDTO();
+                    contactDTO.setCellNumber(contact_phone_no);
+                    contactDTO.setDisplayName(contact_name);
+                    contactDTOs.add(contactDTO);
+                }
+
+                i++;
+
+                if (i > 25){
+                    break;
+                }
+
+
+            }
             phones.close();
 
             request.setContacts(contactDTOs);
@@ -1471,8 +1472,6 @@ public class WebServices  {
             Cursor phones = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null,null, null);
 
 
-            int i = 0;
-
             while (phones.moveToNext()) {
                 String contact_name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                 String contact_phone_no = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
@@ -1488,11 +1487,6 @@ public class WebServices  {
 
                 }
 
-                i++;
-
-                if (i > 25){
-                    break;
-                }
 
             }
             phones.close();
