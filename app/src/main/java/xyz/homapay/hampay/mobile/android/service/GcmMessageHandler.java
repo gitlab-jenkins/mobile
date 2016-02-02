@@ -7,6 +7,7 @@ import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.AppSliderActivity;
 import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
+import xyz.homapay.hampay.mobile.android.activity.IndividualPaymentPendingActivity;
 import xyz.homapay.hampay.mobile.android.component.headsup.HeadsUp;
 import xyz.homapay.hampay.mobile.android.component.headsup.HeadsUpManager;
 import xyz.homapay.hampay.mobile.android.model.AppState;
@@ -119,19 +120,22 @@ public class GcmMessageHandler extends IntentService{
 
             List<ActivityManager.RunningTaskInfo> runningTaskInfos = activityManager.getRunningTasks(1024);
 
-//            ActivityManager activityManager = (ActivityManager) getApplicationContext().getSystemService(ACTIVITY_SERVICE);
-//            List<ActivityManager.RunningAppProcessInfo> procInfos = activityManager.getRunningAppProcesses();
             for(int i = 0; i < runningTaskInfos.size(); i++)
             {
                 if(runningTaskInfos.get(i).baseActivity.getPackageName().equalsIgnoreCase(getApplicationContext().getPackageName()))
                 {
-//                    runningTaskInfos.get(i).baseActivity.getShortClassName();
-//                    Toast.makeText(getApplicationContext(), "Browser is running", Toast.LENGTH_LONG).show();
-                    appState = AppState.Resumed;
+                    if (runningTaskInfos.get(i).baseActivity.getShortClassName().contains("HamPayLoginActivity")){
+                        appState = AppState.Stoped;
+
+                    }else {
+                        appState = AppState.Resumed;
+                    }
+
                     break;
                 }
             }
 
+            Bundle bundle = new Bundle();
 
             switch (notificationMessageType){
 
@@ -139,38 +143,53 @@ public class GcmMessageHandler extends IntentService{
                     break;
 
                 case APP_UPDATE:
+
+                    Intent appStoreIntent;
+
+
+                    try {
+                        appStoreIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName()));
+                    } catch (android.content.ActivityNotFoundException anfe) {
+                        appStoreIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName()));
+                    }
+
+                    PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
+                            appStoreIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+                    PugNotification.with(getApplicationContext())
+                            .load()
+                            .identifier(1020)
+                            .title(notificationName)
+                            .message(notificationMessage)
+                            .smallIcon(R.mipmap.ic_launcher)
+                            .flags(Notification.DEFAULT_ALL)
+                            .click(pendingIntent)
+                            .color(R.color.colorPrimary)
+                            .ticker(Constants.NOTIFICATION_APP_UPDATE)
+                            .autoCancel(true)
+                            .simple()
+                            .build();
+
+
                     break;
 
                 case PAYMENT:
-                    break;
-
-                case CREDIT_REQUEST:
 
                     switch (appState){
                         case Stoped:
-                            Toast.makeText(getApplicationContext(), "Stoped", Toast.LENGTH_SHORT).show();
-
-                            Bundle bundle = new Bundle();
-                            bundle.putString("message", "message");
+                            bundle.putBoolean(Constants.HAS_NOTIFICATION, true);
+                            bundle.putString(Constants.NOTIFICATION_TYPE, notificationMessageType.getNotificationMessageType());
 
                             PugNotification.with(getApplicationContext())
                                     .load()
                                     .identifier(1020)
                                     .title(notificationName)
                                     .message(notificationMessage)
-//                                    .bigTextStyle(":))))))))))))))")
                                     .smallIcon(R.mipmap.ic_launcher)
-//                .largeIcon(largeIcon)
                                     .flags(Notification.DEFAULT_ALL)
-//                .button(icon, title, pendingIntent)
                                     .click(AppSliderActivity.class, bundle)
-//                .dismiss(MainActivity.class, bundle)
                                     .color(R.color.colorPrimary)
-                                    .ticker(getString(R.string.app_name))
-//                .when(when)
-//                .vibrate(100)
-//                .lights(color, ledOnMs, ledOfMs)
-//                .sound(sound)
+                                    .ticker(Constants.NOTIFICATION_PAYMENT)
                                     .autoCancel(true)
                                     .simple()
                                     .build();
@@ -178,37 +197,80 @@ public class GcmMessageHandler extends IntentService{
                             break;
 
 
-                        case Paused:
-                            Toast.makeText(getApplicationContext(), "Paused", Toast.LENGTH_SHORT).show();
+                        case Resumed:
+
+                            bundle.putString(Constants.CONTACT_PHONE_NO, notificationCallerCellNumber);
+                            bundle.putString(Constants.CONTACT_NAME, notificationName);
+
+                            PugNotification.with(getApplicationContext())
+                                    .load()
+                                    .identifier(1020)
+                                    .title(notificationName)
+                                    .message(notificationMessage)
+                                    .smallIcon(R.mipmap.ic_launcher)
+                                    .flags(Notification.DEFAULT_ALL)
+                                    .click(IndividualPaymentPendingActivity.class, bundle)
+                                    .color(R.color.colorPrimary)
+                                    .ticker(Constants.NOTIFICATION_PAYMENT)
+                                    .autoCancel(true)
+                                    .simple()
+                                    .build();
                             break;
 
+                    }
+
+                    break;
+
+                case CREDIT_REQUEST:
+
+                    switch (appState){
+                        case Stoped:
+                            bundle.putBoolean(Constants.HAS_NOTIFICATION, true);
+                            bundle.putString(Constants.NOTIFICATION_TYPE, notificationMessageType.getNotificationMessageType());
+                            bundle.putString(Constants.CONTACT_PHONE_NO, notificationCallerCellNumber);
+                            bundle.putString(Constants.CONTACT_NAME, notificationName);
+
+                            PugNotification.with(getApplicationContext())
+                                    .load()
+                                    .identifier(1020)
+                                    .title(notificationName)
+                                    .message(notificationMessage)
+                                    .smallIcon(R.mipmap.ic_launcher)
+                                    .flags(Notification.DEFAULT_ALL)
+                                    .click(AppSliderActivity.class, bundle)
+                                    .color(R.color.colorPrimary)
+                                    .ticker(Constants.NOTIFICATION_CREDIT_REQUEST)
+                                    .autoCancel(true)
+                                    .simple()
+                                    .build();
+
+                            break;
+
+
                         case Resumed:
-                            Toast.makeText(getApplicationContext(), "Resumed", Toast.LENGTH_SHORT).show();
+
+                            bundle.putString(Constants.CONTACT_PHONE_NO, notificationCallerCellNumber);
+                            bundle.putString(Constants.CONTACT_NAME, notificationName);
+
+                            PugNotification.with(getApplicationContext())
+                                    .load()
+                                    .identifier(1020)
+                                    .title(notificationName)
+                                    .message(notificationMessage)
+                                    .smallIcon(R.mipmap.ic_launcher)
+                                    .flags(Notification.DEFAULT_ALL)
+                                    .click(IndividualPaymentPendingActivity.class, bundle)
+                                    .color(R.color.colorPrimary)
+                                    .ticker(Constants.NOTIFICATION_CREDIT_REQUEST)
+                                    .autoCancel(true)
+                                    .simple()
+                                    .build();
                             break;
 
                     }
 
                     break;
             }
-
-
-
-
-//            switch (appState){
-//                case Stoped:
-//                    Toast.makeText(getApplicationContext(), "Stoped", Toast.LENGTH_SHORT).show();
-//                    break;
-//
-//
-//                case Paused:
-//                    Toast.makeText(getApplicationContext(), "Paused", Toast.LENGTH_SHORT).show();
-//                    break;
-//
-//                case Resumed:
-//                    Toast.makeText(getApplicationContext(), "Resumed", Toast.LENGTH_SHORT).show();
-//                    break;
-//
-//            }
 
 
             if (HamPayApplication.getAppState() == AppState.Stoped){

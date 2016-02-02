@@ -75,10 +75,12 @@ public class Constants {
     public static final int ON_TOUCH = 1;
 
     public static final String PENDING_PAYMENT_REQUEST = "pending_payment_request";
-
-
-
-    public static final String DISMIS_TAC = "DISMIS_TAC";
+    public static final String HAS_NOTIFICATION = "has_notification";
+    public static final String NOTIFICATION_TYPE = "notification_type";
+    public static final String NOTIFICATION_APP_UPDATE = "نسخه جدید هم‌پی";
+    public static final String NOTIFICATION_JOINT = "دوست هم‌پی جدید";
+    public static final String NOTIFICATION_PAYMENT = "انتقال وجه";
+    public static final String NOTIFICATION_CREDIT_REQUEST = "درخواست وجه";
 
 
 }

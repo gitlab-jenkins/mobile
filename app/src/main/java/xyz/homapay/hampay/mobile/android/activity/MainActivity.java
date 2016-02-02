@@ -65,6 +65,7 @@ import xyz.homapay.hampay.mobile.android.fragment.UserTransactionFragment;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.LatestPurchase;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
+import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 
@@ -175,6 +176,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         Intent intent = getIntent();
 
+
+
+
 //        Intent intentTest = new Intent();
 //        intentTest.setClass(context, CreditRequestActivity.class);
 //        intentTest.putExtra("contact_name", "هم‌پی تست");
@@ -183,8 +187,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         pendingPurchasePaymentId = bundle.getString(Constants.PENDING_PURCHASE_PAYMENT, "");
         userProfileDTO = (UserProfileDTO) intent.getSerializableExtra(Constants.USER_PROFILE_DTO);
-
-        intent = new Intent();
 
 
 //        PugNotification.with(context)
@@ -422,15 +424,42 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         };
 
-        if (fromNotification){
-            displayView(1);
-        }else {
-            displayView(currentFragmet);
-        }
+        displayView(currentFragmet);
+
+//        if (fromNotification){
+//            displayView(1);
+//        }else {
+//
+//        }
 
 
         if (!prefs.getBoolean(Constants.SEND_MOBILE_REGISTER_ID, false)) {
             getRegId();
+        }
+
+
+        if (bundle != null) {
+            if (bundle.getBoolean(Constants.HAS_NOTIFICATION)) {
+                NotificationMessageType notificationMessageType;
+                notificationMessageType = NotificationMessageType.valueOf(bundle.getString(Constants.NOTIFICATION_TYPE));
+
+                Intent notificationIntent;
+
+                switch (notificationMessageType){
+                    case PAYMENT:
+
+                        displayView(2);
+
+                        break;
+
+                    case CREDIT_REQUEST:
+                        notificationIntent = getIntent();
+                        notificationIntent.setClass(activity, IndividualPaymentPendingActivity.class);
+                        startActivity(notificationIntent);
+                        break;
+                }
+
+            }
         }
 
     }

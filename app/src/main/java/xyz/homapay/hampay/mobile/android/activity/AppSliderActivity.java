@@ -36,6 +36,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestIllegalAppList;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 
@@ -76,6 +77,9 @@ public class AppSliderActivity extends AppCompatActivity {
     RequestIllegalAppList requestIllegalAppList;
     long launchAppCount = 0;
 
+
+    Bundle bundle;
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -103,11 +107,44 @@ public class AppSliderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_app_slider);
 
-
-        MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.coin);
-//        mediaPlayer.start();
-
         activity = AppSliderActivity.this;
+
+        bundle = getIntent().getExtras();
+
+        if (bundle != null) {
+            if (bundle.getBoolean(Constants.HAS_NOTIFICATION)) {
+
+                if(HamPayLoginActivity.instance != null) {
+                    try {
+                        HamPayLoginActivity.instance.finish();
+                    } catch (Exception e) {}
+                }
+
+                NotificationMessageType notificationMessageType;
+                notificationMessageType = NotificationMessageType.valueOf(bundle.getString(Constants.NOTIFICATION_TYPE));
+
+                switch (notificationMessageType){
+                    case PAYMENT:
+                        intent = getIntent();
+                        intent.setClass(activity, HamPayLoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        finish();
+                        startActivity(intent);
+                        break;
+
+                    case CREDIT_REQUEST:
+                        intent = getIntent();
+                        intent.setClass(activity, HamPayLoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        finish();
+                        startActivity(intent);
+                        break;
+                }
+
+            }
+        }
+
+
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -116,6 +153,9 @@ public class AppSliderActivity extends AppCompatActivity {
 
 
         DeviceInfo deviceInfo = new DeviceInfo(this);
+
+
+
 
 //        try {
 //            key = SecurityUtils.getInstance(this).generateSHA_256(

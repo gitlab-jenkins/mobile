@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,6 +40,7 @@ import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.FailedLoginResponse;
 import xyz.homapay.hampay.mobile.android.model.LoginData;
+import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
 import xyz.homapay.hampay.mobile.android.model.SuccessLoginResponse;
 import xyz.homapay.hampay.mobile.android.util.AppInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -50,6 +52,8 @@ import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
 public class HamPayLoginActivity extends AppCompatActivity implements View.OnClickListener {
 
 
+
+    public static HamPayLoginActivity instance = null;
 
     RequestLogin requestLogin;
 
@@ -99,7 +103,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
     Tracker hamPayGaTracker;
 
-    Bundle bundle;
 
     boolean fromNotification = false;
 
@@ -145,9 +148,22 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
+    public void finish() {
+        super.finish();
+        instance = null;
+    }
+
+    Bundle bundle;
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ham_pay_login);
+
+        instance = this;
+
+        context = this;
+        activity = HamPayLoginActivity.this;
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
@@ -158,17 +174,18 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         user_name = (FacedTextView)findViewById(R.id.user_name);
         user_name.setText("سلام: " + prefs.getString(Constants.REGISTERED_USER_FAMILY, ""));
 
-
         bundle = getIntent().getExtras();
 
-        if (bundle != null){
-            fromNotification = bundle.getBoolean(Constants.NOTIFICATION);
-        }
 
 
 
-        context = this;
-        activity = HamPayLoginActivity.this;
+//        if (bundle != null){
+//            fromNotification = bundle.getBoolean(Constants.NOTIFICATION);
+//        }
+
+
+
+
 
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
@@ -245,15 +262,38 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
                     if (tacResponseMessage.getService().getShouldAcceptTAC()) {
 
-                        //Remove below line
-                        editor.putBoolean(Constants.DISMIS_TAC, false).commit();
-
                         (new HamPayDialog(activity)).showTACAcceptDialog(tacResponseMessage.getService().getTac());
 
                     } else {
+
+                        Intent intent = new Intent();
+
+                        if (bundle != null) {
+                            if (bundle.getBoolean(Constants.HAS_NOTIFICATION)) {
+                                NotificationMessageType notificationMessageType;
+                                notificationMessageType = NotificationMessageType.valueOf(bundle.getString(Constants.NOTIFICATION_TYPE));
+
+                                intent = getIntent();
+
+//                                Intent intent;
+//
+//                                switch (notificationMessageType){
+//                                    case PAYMENT:
+//                                        break;
+//
+//                                    case CREDIT_REQUEST:
+//                                        intent = getIntent();
+//                                        intent.setClass(activity, IndividualPaymentPendingActivity.class);
+//                                        startActivity(intent);
+//                                        break;
+//                                }
+
+                            }
+                        }
+
                         editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                         editor.commit();
-                        Intent intent = new Intent();
+
                         intent.setClass(activity, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.putExtra(Constants.USER_PROFILE_DTO, tacResponseMessage.getService().getUserProfile());
