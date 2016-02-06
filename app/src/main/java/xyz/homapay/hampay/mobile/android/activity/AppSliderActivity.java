@@ -111,6 +111,12 @@ public class AppSliderActivity extends AppCompatActivity {
 
         bundle = getIntent().getExtras();
 
+//        try {
+//            soapTest();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
         if (bundle != null) {
             if (bundle.getBoolean(Constants.HAS_NOTIFICATION)) {
 
@@ -353,7 +359,7 @@ public class AppSliderActivity extends AppCompatActivity {
                         try {
                             launchAppCount = prefs.getLong(Constants.LAUNCH_APP_COUNT, 0);
                             editor.putLong(Constants.LAUNCH_APP_COUNT, launchAppCount + 1).commit();
-                            if ((launchAppCount % 10) == 0 || prefs.getBoolean(Constants.FORCE_FETCH_ILLEGAL_APPS, false)) {
+                            if ((launchAppCount % 1) == 0 || prefs.getBoolean(Constants.FORCE_FETCH_ILLEGAL_APPS, false)) {
                                 illegalAppListRequest = new IllegalAppListRequest();
                                 requestIllegalAppList = new RequestIllegalAppList(activity, new RequestIllegalAppListTaskCompleteListener());
                                 requestIllegalAppList.execute(illegalAppListRequest);
@@ -520,5 +526,7 @@ public class AppSliderActivity extends AppCompatActivity {
         @Override
         public void onTaskPreRun() {
         }
+
+
     }
 }

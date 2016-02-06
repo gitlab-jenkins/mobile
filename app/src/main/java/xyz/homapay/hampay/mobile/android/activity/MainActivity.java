@@ -172,6 +172,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         activity = MainActivity.this;
         context = this;
 
+//        try {
+//            soapTest();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
         bundle = getIntent().getExtras();
 
         Intent intent = getIntent();
@@ -785,5 +791,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         @Override
         public void onTaskPreRun() {   }
     }
+
+
 
 }
