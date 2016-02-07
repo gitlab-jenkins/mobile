@@ -62,7 +62,7 @@ public class AppSliderActivity extends AppCompatActivity {
     Tracker hamPayGaTracker;
 
     private Activity activity;
-    private Activity destinationActivity;
+//    private Activity destinationActivity;
     private String registeredActivityData = "";
 
     private Intent intent;
@@ -348,7 +348,7 @@ public class AppSliderActivity extends AppCompatActivity {
 //        }
 
 //        else {
-            if (prefs.getBoolean(Constants.REGISTERED_USER, false)) {
+            if (!prefs.getBoolean(Constants.REGISTERED_USER, false)) {
 
                 RelativeLayout hampay_login_splash = (RelativeLayout) findViewById(R.id.hampay_login_splash);
                 hampay_login_splash.setVisibility(View.VISIBLE);

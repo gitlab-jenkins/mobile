@@ -739,7 +739,8 @@ public class HamPayDialog {
                     Intent intent = new Intent();
                     intent.setClass(activity, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.putExtra(Constants.PENDING_PURCHASE_PAYMENT, tacAcceptResponseMessage.getService().getPurchaseRequestId());
+                    intent.putExtra(Constants.PENDING_PURCHASE_PAYMENT_ID, tacAcceptResponseMessage.getService().getProductCode());
+                    intent.putExtra(Constants.PENDING_PURCHASE_PAYMENT_COUNT, tacAcceptResponseMessage.getService().getPendingPurchasesCount());
                     intent.putExtra(Constants.USER_PROFILE_DTO, userProfileDTO);
                     editor.putBoolean(Constants.FORCE_USER_PROFILE, false);
                     editor.commit();

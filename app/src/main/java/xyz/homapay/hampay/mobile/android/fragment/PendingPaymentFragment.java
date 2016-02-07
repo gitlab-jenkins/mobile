@@ -61,7 +61,8 @@ public class PendingPaymentFragment extends Fragment {
 
     HamPayDialog hamPayDialog;
 
-    List<PurchaseInfoDTO> purchaseInfoDTOs;
+    PendingPurchaseListResponse pendingPurchaseListResponse;
+
     List<PaymentInfoDTO> paymentInfoDTOs;
 
 
@@ -141,9 +142,10 @@ public class PendingPaymentFragment extends Fragment {
 
                 Intent intent = new Intent();
 
-                if (purchaseInfoDTOs != null) {
+                if (pendingPurchaseListResponse != null) {
                     intent.setClass(getActivity(), RequestBusinessPayDetailActivity.class);
-                    intent.putExtra(Constants.PENDING_PAYMENT_REQUEST, purchaseInfoDTOs.get(position));
+                    intent.putExtra(Constants.PENDING_PAYMENT_REQUEST_LIST, pendingPurchaseListResponse.getPendingList().get(position));
+                    intent.putExtra(Constants.CARD_INFO, pendingPurchaseListResponse.getCardDTO());
                     startActivity(intent);
                 }else if (paymentInfoDTOs != null){
                     intent.setClass(getActivity(), IndividualPaymentPendingActivity.class);
@@ -165,7 +167,7 @@ public class PendingPaymentFragment extends Fragment {
                             public void onClick(View view) {
                                 requestCancelPurchase = new RequestCancelPurchase(getActivity(), new RequestCancelPurchasePaymentTaskCompleteListener(position));
                                 cancelPurchasePaymentRequest = new CancelPurchasePaymentRequest();
-                                cancelPurchasePaymentRequest.setPurchaseCode(purchaseInfoDTOs.get(position).getPurchaseCode());
+                                cancelPurchasePaymentRequest.setProductCode(pendingPurchaseListResponse.getPendingList().get(position).getProductCode());
                                 requestCancelPurchase.execute(cancelPurchasePaymentRequest);
                             }
                         });
@@ -214,8 +216,8 @@ public class PendingPaymentFragment extends Fragment {
 
             if (pendingPurchaseListResponseMessage != null) {
                 if (pendingPurchaseListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    purchaseInfoDTOs =  pendingPurchaseListResponseMessage.getService().getPendingList();
-                    pendingPurchaseAdapter = new PendingPurchaseAdapter(getActivity(),purchaseInfoDTOs);
+                    pendingPurchaseListResponse = pendingPurchaseListResponseMessage.getService();
+                    pendingPurchaseAdapter = new PendingPurchaseAdapter(getActivity(), pendingPurchaseListResponseMessage.getService().getPendingList());
                     pendigPaymentListView.setAdapter(pendingPurchaseAdapter);
                     paymentInfoDTOs = null;
                 }
@@ -241,7 +243,7 @@ public class PendingPaymentFragment extends Fragment {
                     paymentInfoDTOs = pendingPaymentListResponseMessage.getService().getPendingList();
                     pendingCreditRequestAdapter = new PendingPaymentAdapter(getActivity(), paymentInfoDTOs);
                     pendigPaymentListView.setAdapter(pendingCreditRequestAdapter);
-                    purchaseInfoDTOs = null;
+                    pendingPurchaseListResponse = null;
                 }
             }
         }
@@ -270,7 +272,7 @@ public class PendingPaymentFragment extends Fragment {
             if (cancelPurchasePaymentResponseMessage != null) {
                 if (cancelPurchasePaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     cancelPurchasePaymentResponseMessage.getService().getRequestUUID();
-                    purchaseInfoDTOs.remove(position);
+                    pendingPurchaseListResponse.getPendingList().remove(position);
                     pendingPurchaseAdapter.notifyDataSetChanged();
                 }
             }

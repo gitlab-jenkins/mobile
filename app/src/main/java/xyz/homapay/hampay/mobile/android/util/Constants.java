@@ -30,7 +30,8 @@ public class Constants {
     public static final String APP_PREFERENCE_NAME = "HamPay_Preferences";
     public static final String TRANSFER_MONEY_COMMENT = "TransferMoneyComment";
     public static final String USER_PROFILE_DTO = "UserProfile";
-    public static final String PENDING_PURCHASE_PAYMENT = "pendingPurchasePayment";
+    public static final String PENDING_PURCHASE_PAYMENT_ID = "pendingPurchasePaymentId";
+    public static final String PENDING_PURCHASE_PAYMENT_COUNT = "pendingPurchasePaymentCount";
     public static final String USER_TRANSACTION_DTO = "UserTransaction";
     public static final String CONTACT_PHONE_NO = "contact_phone_no";
     public static final String CONTACT_NAME = "contact_name";
@@ -58,8 +59,11 @@ public class Constants {
     public static final long MOBILE_TIME_OUT_INTERVAL = 300000;
     public static final String FORCE_USER_PROFILE = "force_user_profile";
     public static final String RECEIVED_SMS_ACTIVATION = "received_sms_activation";
-    public static final String MAX_XFER_Amount = "MaxXferAmount";
-    public static final String MIN_XFER_Amount = "MinXferAmount";
+    public static final String MAX_BUSINESS_XFER_AMOUNT = "MaxBusinessXferAmount";
+    public static final String MIN_BUSINESS_XFER_AMOUNT = "MinBusinessXferAmount";
+    public static final String MAX_INDIVIDUAL_XFER_AMOUNT = "MaxIndividualXferAmount";
+    public static final String MIN_INDIVIDUAL_XFER_AMOUNT = "MinIndividualXferAmount";
+
     public static final String USER_ENTRY_PASSWORD = "userEntryPassword";
     public static final String LOCAL_ERROR_CODE = "۲۰۰۰";
     public static final String NOTIFICATION = "notification";
@@ -74,7 +78,9 @@ public class Constants {
     public static final String ASPECT_RATIO_Y = "ASPECT_RATIO_Y";
     public static final int ON_TOUCH = 1;
 
-    public static final String PENDING_PAYMENT_REQUEST = "pending_payment_request";
+    public static final String PENDING_PAYMENT_REQUEST_LIST = "pending_payment_request_list";
+    public static final String CARD_INFO = "card_info";
+    public static final String PSP_NAME = "psp_name";
     public static final String HAS_NOTIFICATION = "has_notification";
     public static final String NOTIFICATION_TYPE = "notification_type";
     public static final String NOTIFICATION_APP_UPDATE = "نسخه جدید هم‌پی";

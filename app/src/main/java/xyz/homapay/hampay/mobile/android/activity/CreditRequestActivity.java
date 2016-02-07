@@ -124,8 +124,8 @@ public class CreditRequestActivity extends AppCompatActivity {
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
         try {
-            MaxXferAmount = prefs.getLong(Constants.MAX_XFER_Amount, 0);
-            MinXferAmount = prefs.getLong(Constants.MIN_XFER_Amount, 0);
+            MaxXferAmount = prefs.getLong(Constants.MAX_INDIVIDUAL_XFER_AMOUNT, 0);
+            MinXferAmount = prefs.getLong(Constants.MIN_INDIVIDUAL_XFER_AMOUNT, 0);
 
         }catch (Exception ex){
             Log.e("Error", ex.getStackTrace().toString());

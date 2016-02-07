@@ -133,8 +133,8 @@ public class IndividualPaymentPendingActivity extends AppCompatActivity {
 //            decryptedData = AESHelper.decrypt(mobileKey, serverKey, prefs.getString(Constants.MIN_XFER_Amount, "0"));
 //            MinXferAmount = Long.parseLong(decryptedData);
 
-            MaxXferAmount = prefs.getLong(Constants.MAX_XFER_Amount, 0);
-            MinXferAmount = prefs.getLong(Constants.MIN_XFER_Amount, 0);
+            MaxXferAmount = prefs.getLong(Constants.MAX_INDIVIDUAL_XFER_AMOUNT, 0);
+            MinXferAmount = prefs.getLong(Constants.MIN_INDIVIDUAL_XFER_AMOUNT, 0);
 
         }catch (Exception ex){
             Log.e("Error", ex.getStackTrace().toString());

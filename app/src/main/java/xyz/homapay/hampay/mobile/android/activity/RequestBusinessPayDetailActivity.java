@@ -21,6 +21,7 @@ import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
 import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
 import xyz.homapay.hampay.common.core.model.response.LatestPurchaseResponse;
 import xyz.homapay.hampay.common.core.model.response.PSPResultResponse;
+import xyz.homapay.hampay.common.core.model.response.dto.CardDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO;
 import xyz.homapay.hampay.common.psp.model.request.PurchaseRequest;
@@ -96,6 +97,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
     DatabaseHelper databaseHelper;
 
     PurchaseInfoDTO purchaseInfoDTO = null;
+    CardDTO cardDTO = null;
 
     RequestPSPResult requestPSPResult;
     PSPResultRequest pspResultRequest;
@@ -140,8 +142,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
         try {
 
-            MaxXferAmount = prefs.getLong(Constants.MAX_XFER_Amount, 0);
-            MinXferAmount = prefs.getLong(Constants.MIN_XFER_Amount, 0);
+            MaxXferAmount = prefs.getLong(Constants.MAX_BUSINESS_XFER_AMOUNT, 0);
+            MinXferAmount = prefs.getLong(Constants.MIN_BUSINESS_XFER_AMOUNT, 0);
 
         }catch (Exception ex){
             Log.e("Error", ex.getStackTrace().toString());
@@ -205,7 +207,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        purchaseInfoDTO = (PurchaseInfoDTO)intent.getSerializableExtra(Constants.PENDING_PAYMENT_REQUEST);
+        purchaseInfoDTO = (PurchaseInfoDTO)intent.getSerializableExtra(Constants.PENDING_PAYMENT_REQUEST_LIST);
+        cardDTO = (CardDTO)intent.getSerializableExtra(Constants.CARD_INFO);
 
 
         if (purchaseInfoDTO != null) {
@@ -229,12 +232,12 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
             business_name.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getMerchantName()));
 
-            String LogoUrl = Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantLogoName();
+            String LogoUrl = Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantImageId();
 
-            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_logo)).execute(Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantLogoName());
+            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_logo)).execute(Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantImageId());
 
 
-            cardNumberValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getCardNo()));
+            cardNumberValue.setText(persianEnglishDigit.E2P(cardDTO.getMaskedCardNumber()));
 //            user_bank_name.setText(purchaseInfoDTO.getBankName);
         }else {
             requestLatestPurchase = new RequestLatestPurchase(activity, new RequestLatestPurchaseTaskCompleteListener());
@@ -262,9 +265,9 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 }else {
                     purchaseRequest.setAmount(purchaseInfoDTO.getAmount() + 0);
                 }
-                purchaseRequest.setMerchantId(purchaseInfoDTO.getMerchantLogoName());
+                purchaseRequest.setMerchantId(purchaseInfoDTO.getMerchantImageId());
                 purchaseRequest.setMobileNumber(prefs.getString(Constants.REGISTERED_CELL_NUMBER, ""));
-                purchaseRequest.setPurchaseRequestId(purchaseInfoDTO.getPurchaseRequestId());
+                purchaseRequest.setPurchaseRequestId(purchaseInfoDTO.getProductCode());
                 requestPurchase.execute(purchaseRequest);
             }
         });
@@ -274,11 +277,11 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (purchaseInfoDTO != null){
-                    if (databaseHelper.getIsExistPurchaseRequest(purchaseInfoDTO.getPurchaseRequestId())){
-                        databaseHelper.updatePurchaseRequest(purchaseInfoDTO.getPurchaseRequestId(), "1");
+                    if (databaseHelper.getIsExistPurchaseRequest(purchaseInfoDTO.getProductCode())){
+                        databaseHelper.updatePurchaseRequest(purchaseInfoDTO.getProductCode(), "1");
                     }else {
-                        databaseHelper.createPurchaseRequest(purchaseInfoDTO.getPurchaseRequestId());
-                        databaseHelper.updatePurchaseRequest(purchaseInfoDTO.getPurchaseRequestId(), "1");
+                        databaseHelper.createPurchaseRequest(purchaseInfoDTO.getProductCode());
+                        databaseHelper.updatePurchaseRequest(purchaseInfoDTO.getProductCode(), "1");
                     }
                 }
 
@@ -332,9 +335,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
                     PurchaseResponse purchaseResponse = purchaseResponseResponseMessage.getService();
                     pspResultRequest = new PSPResultRequest();
-                    pspResultRequest.setPurchaseRequestId(purchaseInfoDTO.getPurchaseRequestId());
+                    pspResultRequest.setProductCode(purchaseInfoDTO.getProductCode());
                     pspResultRequest.setPspResponseCode(purchaseResponse.getResponseCode());
-                    pspResultRequest.setPurchaseCode(purchaseInfoDTO.getPurchaseCode());
                     requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener());
                     requestPSPResult.execute(pspResultRequest);
 
@@ -460,13 +462,11 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
                         business_name.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getMerchantName()));
 
-                        String LogoUrl = Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantLogoName();
+                        String LogoUrl = Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantImageId();
 
-                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_logo)).execute(Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantLogoName());
+                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_logo)).execute(Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantImageId());
 
-
-                        cardNumberValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getCardNo()));
-//                        user_bank_name.setText(purchaseInfoDTO.getBankName);
+                        cardNumberValue.setText(persianEnglishDigit.E2P(cardDTO.getMaskedCardNumber()));
                     }
                     else {
                         Toast.makeText(context, getString(R.string.msg_not_found_pending_payment_code), Toast.LENGTH_LONG).show();

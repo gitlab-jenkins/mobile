@@ -109,8 +109,8 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
         }
 
         viewHolder.business_name.setText(purchaseInfoDTOs.get(position).getMerchantName());
-        String LogoUrl = Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTOs.get(position).getMerchantLogoName();
-        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.business_logo)).execute(Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTOs.get(position).getMerchantLogoName());
+        String LogoUrl = Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTOs.get(position).getMerchantImageId();
+        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.business_logo)).execute(Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTOs.get(position).getMerchantImageId());
         viewHolder.date_time.setText(new PersianEnglishDigit().E2P(new JalaliConvert().GregorianToPersian(purchaseInfoDTOs.get(position).getCreatedBy())));
         viewHolder.price_pay.setText(new PersianEnglishDigit().E2P(purchaseInfoDTOs.get(position).getAmount().toString()) + " ریال");
         viewHolder.expire_pay.setVisibility(View.GONE);
@@ -136,7 +136,7 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
                         dialog.dismiss();
                         requestCancelPurchase = new RequestCancelPurchase(activity, new RequestCancelPurchasePaymentTaskCompleteListener(position));
                         cancelPurchasePaymentRequest = new CancelPurchasePaymentRequest();
-                        cancelPurchasePaymentRequest.setPurchaseCode(purchaseInfoDTOs.get(position).getPurchaseCode());
+                        cancelPurchasePaymentRequest.setProductCode(purchaseInfoDTOs.get(position).getPurchaseCode());
                         requestCancelPurchase.execute(cancelPurchasePaymentRequest);
                     }
                 });

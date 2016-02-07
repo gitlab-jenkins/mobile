@@ -1,4 +1,4 @@
-package xyz.homapay.hampay.mobile.android.webservice.xyz.homapay.hampay.mobile.android.webservice.soap.xyz.homapay.hampay.mobile.android.webservice.xyz.homapay.hampay.mobile.android.webservice.soap.test;
+package xyz.homapay.hampay.mobile.android.webservice.psp;
 
 //------------------------------------------------------------------------------
 // <wsdl2code-generated>

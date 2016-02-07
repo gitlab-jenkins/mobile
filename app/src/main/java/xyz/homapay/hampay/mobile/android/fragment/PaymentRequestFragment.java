@@ -178,11 +178,11 @@ public class PaymentRequestFragment extends Fragment implements View.OnClickList
 
             serverKey = prefs.getString(Constants.USER_ID_TOKEN, "");
 
-            if (userProfileDTO.getMaxXferAmount() != null && userProfileDTO.getMinXferAmount() != null) {
-                editor.putLong(Constants.MAX_XFER_Amount, this.userProfileDTO.getMaxXferAmount());
-                editor.putLong(Constants.MIN_XFER_Amount, this.userProfileDTO.getMinXferAmount());
-                editor.commit();
-            }
+            editor.putLong(Constants.MAX_BUSINESS_XFER_AMOUNT, this.userProfileDTO.getMaxBusinessXferAmount());
+            editor.putLong(Constants.MIN_BUSINESS_XFER_AMOUNT, this.userProfileDTO.getMinBusinessXferAmount());
+            editor.putLong(Constants.MAX_INDIVIDUAL_XFER_AMOUNT, this.userProfileDTO.getMaxIndividualXferAmount());
+            editor.putLong(Constants.MIN_INDIVIDUAL_XFER_AMOUNT, this.userProfileDTO.getMinIndividualXferAmount());
+            editor.commit();
 
         }
         catch (Exception ex){
@@ -755,11 +755,11 @@ public class PaymentRequestFragment extends Fragment implements View.OnClickList
 
     private void fillUserProfile(UserProfileDTO userProfileDTO){
 
-        if (userProfileDTO.getMaxXferAmount() != null && userProfileDTO.getMinXferAmount() != null) {
-            editor.putLong(Constants.MAX_XFER_Amount, this.userProfileDTO.getMaxXferAmount());
-            editor.putLong(Constants.MIN_XFER_Amount, this.userProfileDTO.getMinXferAmount());
-            editor.commit();
-        }
+        editor.putLong(Constants.MAX_BUSINESS_XFER_AMOUNT, this.userProfileDTO.getMaxBusinessXferAmount());
+        editor.putLong(Constants.MIN_BUSINESS_XFER_AMOUNT, this.userProfileDTO.getMinBusinessXferAmount());
+        editor.putLong(Constants.MAX_INDIVIDUAL_XFER_AMOUNT, this.userProfileDTO.getMaxIndividualXferAmount());
+        editor.putLong(Constants.MIN_INDIVIDUAL_XFER_AMOUNT, this.userProfileDTO.getMinIndividualXferAmount());
+        editor.commit();
 
 //        if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.UNVERIFIED) {
 //            verification_status_ll.setVisibility(View.VISIBLE);

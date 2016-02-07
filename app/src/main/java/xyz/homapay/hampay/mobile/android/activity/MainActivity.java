@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     UserProfileDTO userProfileDTO;
 
     String pendingPurchasePaymentId = "";
+    int pendingPurchasePaymentCount = 0;
 
     Activity activity;
 
@@ -191,7 +192,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 //        intentTest.putExtra("contact_phone_no", "09219562059");
 //        startActivity(intentTest);
 
-        pendingPurchasePaymentId = bundle.getString(Constants.PENDING_PURCHASE_PAYMENT, "");
+        pendingPurchasePaymentId = bundle.getString(Constants.PENDING_PURCHASE_PAYMENT_ID, "");
+        pendingPurchasePaymentCount = bundle.getInt(Constants.PENDING_PURCHASE_PAYMENT_COUNT, 0);
         userProfileDTO = (UserProfileDTO) intent.getSerializableExtra(Constants.USER_PROFILE_DTO);
 
 
@@ -251,8 +253,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
 
 
-        editor.putLong(Constants.MAX_XFER_Amount, this.userProfileDTO.getMaxXferAmount());
-        editor.putLong(Constants.MIN_XFER_Amount, this.userProfileDTO.getMinXferAmount());
+        editor.putLong(Constants.MAX_BUSINESS_XFER_AMOUNT, this.userProfileDTO.getMaxBusinessXferAmount());
+        editor.putLong(Constants.MIN_BUSINESS_XFER_AMOUNT, this.userProfileDTO.getMinBusinessXferAmount());
+        editor.putLong(Constants.MAX_INDIVIDUAL_XFER_AMOUNT, this.userProfileDTO.getMaxIndividualXferAmount());
+        editor.putLong(Constants.MIN_INDIVIDUAL_XFER_AMOUNT, this.userProfileDTO.getMinIndividualXferAmount());
         editor.putInt(Constants.USER_VERIFICATION_STATUS, userProfileDTO.getVerificationStatus().ordinal());
         editor.commit();
 
