@@ -1,75 +1,51 @@
 package xyz.homapay.hampay.mobile.android.webservice.psp;
 
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateException;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
-import java.util.List;
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.SoapFault;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.HttpTransportSE;
-import org.ksoap2.HeaderProperty;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.transport.HttpsTransportSE;
-import org.ksoap2.transport.KeepAliveHttpsTransportSE;
-
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManager;
+import org.ksoap2.HeaderProperty;
+import org.ksoap2.SoapEnvelope;
+import org.ksoap2.SoapFault;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.ksoap2.transport.KeepAliveHttpsTransportSE;
 
-import xyz.homapay.hampay.mobile.android.util.HamPayX509TrustManager;
+import java.util.List;
+
+import xyz.homapay.hampay.mobile.android.ssl.AllowHamPaySSL;
+import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class PayThPartyApp {
     
     public String NAMESPACE ="http://soapService.psp.core.hampay.homapay.xyz/";
-    public String url="176.58.104.158";
+
     public int timeOut = 180;
     public IWsdl2CodeEvents eventHandler;
     public WS_Enums.SoapProtocolVersion soapVersion;
 
-    private static Context _context;
+    private AllowHamPaySSL allowHamPaySSL;
+    private static Context context;
 
     public PayThPartyApp(Context context){
-        this._context = context;
+        this.context = context;
+        allowHamPaySSL = new AllowHamPaySSL(this.context);
     }
 
-
-    
     public PayThPartyApp(IWsdl2CodeEvents eventHandler)
     {
         this.eventHandler = eventHandler;
     }
-    public PayThPartyApp(IWsdl2CodeEvents eventHandler,String url)
-    {
-        this.eventHandler = eventHandler;
-        this.url = url;
-    }
+
     public PayThPartyApp(IWsdl2CodeEvents eventHandler,String url,int timeOutInSeconds)
     {
         this.eventHandler = eventHandler;
-        this.url = url;
         this.setTimeOut(timeOutInSeconds);
     }
     public void setTimeOut(int seconds){
         this.timeOut = seconds * 1000;
     }
-    public void setUrl(String url){
-        this.url = url;
-    }
+
     public void getBookIDAsync(String arg0) throws Exception{
         if (this.eventHandler == null)
             throw new Exception("Async Methods Requires IWsdl2CodeEvents");
@@ -104,16 +80,13 @@ public class PayThPartyApp {
     }
     
     public void getBookID(String arg0,List<HeaderProperty> headers){
-
-
-
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
         soapEnvelope.dotNet = true;
         SoapObject soapReq = new SoapObject("http://soapService.psp.core.hampay.homapay.xyz/","getBookID");
         soapReq.addProperty("arg0",arg0);
         soapEnvelope.setOutputSoapObject(soapReq);
-        KeepAliveHttpsTransportSE httpTransport = new KeepAliveHttpsTransportSE(url,443,"/ptpa",timeOut);
+        KeepAliveHttpsTransportSE httpTransport = new KeepAliveHttpsTransportSE(Constants.PSP_SOAO_SERVICE_URL, 443, "/ptpa", timeOut);
 
         try{
             if (headers!=null){
@@ -161,96 +134,9 @@ public class PayThPartyApp {
     }
 
 
-    public static class _FakeX509TrustManager implements
-            javax.net.ssl.X509TrustManager {
-        private static final X509Certificate[] _AcceptedIssuers =
-                new X509Certificate[]{};
-
-        public void checkClientTrusted(X509Certificate[] arg0, String arg1)
-                throws CertificateException {
-        }
-
-        public void checkServerTrusted(X509Certificate[] arg0, String arg1)
-                throws CertificateException {
-        }
-
-        public boolean isClientTrusted(X509Certificate[] chain) {
-            return (true);
-        }
-
-        public boolean isServerTrusted(X509Certificate[] chain) {
-            return (true);
-        }
-
-        public X509Certificate[] getAcceptedIssuers() {
-            return (_AcceptedIssuers);
-        }
-    }
-
-
-    private static TrustManager[] trustManagers;
-
-    public static void allowAllSSL() {
-
-        javax.net.ssl.HttpsURLConnection.setDefaultHostnameVerifier(new
-                                                                            HostnameVerifier() {
-                                                                                public boolean verify(String hostname, SSLSession
-                                                                                        session) {
-                                                                                    return true;
-                                                                                }
-                                                                            });
-
-        javax.net.ssl.SSLContext context = null;
-
-
-
-        if (trustManagers == null) {
-            try {
-
-                CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-//            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/tejarat_nginx.crt"));
-                InputStream caInput = new BufferedInputStream(_context.getAssets().open("cert/nginx.crt"));
-                Certificate certificate = certificateFactory.generateCertificate(caInput);
-//            Log.e("ca=", ((X509Certificate) certificate).getSubjectDN() + "");
-                String keyStoreType = KeyStore.getDefaultType();
-                KeyStore keyStore = KeyStore.getInstance(keyStoreType);
-                keyStore.load(null, null);
-                keyStore.setCertificateEntry("ca", certificate);
-
-                trustManagers = new TrustManager[]{new
-                        HamPayX509TrustManager(keyStore)};
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            } catch (KeyStoreException e) {
-                e.printStackTrace();
-            }catch (CertificateException ex)
-            {
-                Log.e("CERT FAILD", "Failed to establish SSL connection to server: " + ex.toString());
-
-            }
-            catch (IOException ex)
-            {
-                Log.e("CERT FAILD", "Failed to establish SSL connection to server: " + ex.toString());
-
-            }
-
-        }
-
-        try {
-            context = javax.net.ssl.SSLContext.getInstance("TLS");
-            context.init(null, trustManagers, new SecureRandom());
-        } catch (NoSuchAlgorithmException e) {
-
-        } catch (KeyManagementException e) {
-
-        }
-
-        javax.net.ssl.HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
-    }
-
     public Vectorstring2stringMapEntry DoWork(String arg0,String arg1,String arg2,int arg3,boolean arg3Specified,Vectorstring2stringMapEntry arg4,List<HeaderProperty> headers){
 
-        allowAllSSL();
+        allowHamPaySSL.enableHamPaySSL();
 
         SoapSerializationEnvelope soapEnvelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         soapEnvelope.implicitTypes = true;
@@ -263,7 +149,7 @@ public class PayThPartyApp {
         soapReq.addProperty("arg3Specified",arg3Specified);
         soapReq.addProperty("arg4", arg4);
         soapEnvelope.setOutputSoapObject(soapReq);
-        KeepAliveHttpsTransportSE httpTransport = new KeepAliveHttpsTransportSE(url,443,"/ptpa",timeOut);
+        KeepAliveHttpsTransportSE httpTransport = new KeepAliveHttpsTransportSE(Constants.PSP_SOAO_SERVICE_URL, 443, "/ptpa", timeOut);
 
         try{
             if (headers!=null){

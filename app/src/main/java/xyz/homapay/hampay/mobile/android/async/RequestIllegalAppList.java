@@ -41,21 +41,21 @@ public class RequestIllegalAppList extends AsyncTask<IllegalAppListRequest, Void
 
         WebServices webServices = new WebServices(context);
 
-        try {
-
-            Vectorstring2stringMapEntry vectorstring2stringMapEntry = new Vectorstring2stringMapEntry();
-            string2stringMapEntry string2stringMapEntry1 = new string2stringMapEntry();
-            string2stringMapEntry1.key = "iraj";
-            string2stringMapEntry1.value = "2423423";
-            vectorstring2stringMapEntry.add(string2stringMapEntry1);
-
-            PayThPartyApp payThPartyApp = new PayThPartyApp(context);
-            Vectorstring2stringMapEntry string2stringMapEntries = payThPartyApp.DoWork("test", "1234", "09126157905", 0, false, vectorstring2stringMapEntry);
-
-            Log.e("SOAP", "Baghali");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//
+//            Vectorstring2stringMapEntry vectorstring2stringMapEntry = new Vectorstring2stringMapEntry();
+//            string2stringMapEntry string2stringMapEntry1 = new string2stringMapEntry();
+//            string2stringMapEntry1.key = "iraj";
+//            string2stringMapEntry1.value = "2423423";
+//            vectorstring2stringMapEntry.add(string2stringMapEntry1);
+//
+//            PayThPartyApp payThPartyApp = new PayThPartyApp(context);
+//            Vectorstring2stringMapEntry string2stringMapEntries = payThPartyApp.DoWork("test", "1234", "09126157905", 0, false, vectorstring2stringMapEntry);
+//
+//            Log.e("SOAP", "Baghali");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         return webServices.getIllegalAppList();
     }

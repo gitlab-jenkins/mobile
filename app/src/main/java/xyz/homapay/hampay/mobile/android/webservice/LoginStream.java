@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import xyz.homapay.hampay.mobile.android.model.LoginData;
+import xyz.homapay.hampay.mobile.android.ssl.SSLConnection;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
 import java.io.BufferedReader;

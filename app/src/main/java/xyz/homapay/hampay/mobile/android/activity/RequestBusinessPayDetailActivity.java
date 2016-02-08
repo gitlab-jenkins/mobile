@@ -40,8 +40,11 @@ import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
+import xyz.homapay.hampay.mobile.android.webservice.psp.Vectorstring2stringMapEntry;
+import xyz.homapay.hampay.mobile.android.webservice.psp.string2stringMapEntry;
 
 public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
@@ -103,9 +106,9 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
     PSPResultRequest pspResultRequest;
 
     RequestPurchase requestPurchase;
-    PurchaseRequest purchaseRequest;
+//    PurchaseRequest purchaseRequest;
+    private DoWorkInfo doWorkInfo;
 
-    PurchaseInfoDTO getPurchaseInfoDTO = null;
 
     @Override
     protected void onPause() {
@@ -258,17 +261,57 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 }
 
                 requestPurchase = new RequestPurchase(activity, new RequestPurchaseTaskCompleteListener());
-                purchaseRequest = new PurchaseRequest();
-                purchaseRequest.setPin2(pin2Value.getText().toString());
-                if (purchaseInfoDTO.getPurchaseFee() != null) {
-                    purchaseRequest.setAmount(purchaseInfoDTO.getAmount() + purchaseInfoDTO.getPurchaseFee());
-                }else {
-                    purchaseRequest.setAmount(purchaseInfoDTO.getAmount() + 0);
-                }
-                purchaseRequest.setMerchantId(purchaseInfoDTO.getMerchantImageId());
-                purchaseRequest.setMobileNumber(prefs.getString(Constants.REGISTERED_CELL_NUMBER, ""));
-                purchaseRequest.setPurchaseRequestId(purchaseInfoDTO.getProductCode());
-                requestPurchase.execute(purchaseRequest);
+
+                doWorkInfo = new DoWorkInfo();
+                doWorkInfo.setUserName("test");
+                doWorkInfo.setPassword("1234");
+                doWorkInfo.setCellNumber(prefs.getString(Constants.REGISTERED_CELL_NUMBER, ""));
+                doWorkInfo.setLangAByte((byte) 0);
+                doWorkInfo.setLangABoolean(false);
+                Vectorstring2stringMapEntry vectorstring2stringMapEntry = new Vectorstring2stringMapEntry();
+                string2stringMapEntry s2sMapEntry = new string2stringMapEntry();
+
+                s2sMapEntry.key = "Amount";
+                s2sMapEntry.value = (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getPurchaseFee()) + "";
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry.key = "Pin2";
+                s2sMapEntry.value = pin2Value.getText().toString();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry.key = "ThirdParty";
+                s2sMapEntry.value = purchaseInfoDTO.getProductCode();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry.key = "TerminalId";
+                s2sMapEntry.value = "283129";
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry.key = "CardId";
+                s2sMapEntry.value = cardDTO.getCardId();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry.key = "Merchant";
+                s2sMapEntry.value = purchaseInfoDTO.getMerchantImageId();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry.key = "IPAddress";
+                s2sMapEntry.value = "192.168.0.1";
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                doWorkInfo.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
+
+//                purchaseRequest = new PurchaseRequest();
+//                purchaseRequest.setPin2(pin2Value.getText().toString());
+//                if (purchaseInfoDTO.getPurchaseFee() != null) {
+//                    purchaseRequest.setAmount(purchaseInfoDTO.getAmount() + purchaseInfoDTO.getPurchaseFee());
+//                }else {
+//                    purchaseRequest.setAmount(purchaseInfoDTO.getAmount() + 0);
+//                }
+//                purchaseRequest.setMerchantId(purchaseInfoDTO.getMerchantImageId());
+//                purchaseRequest.setMobileNumber(prefs.getString(Constants.REGISTERED_CELL_NUMBER, ""));
+//                purchaseRequest.setPurchaseRequestId(purchaseInfoDTO.getProductCode());
+                requestPurchase.execute(doWorkInfo);
             }
         });
 
@@ -323,20 +366,20 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
     }
 
 
-    public class RequestPurchaseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PurchaseResponse>> {
+    public class RequestPurchaseTaskCompleteListener implements AsyncTaskCompleteListener<Vectorstring2stringMapEntry> {
 
         @Override
-        public void onTaskComplete(ResponseMessage<PurchaseResponse> purchaseResponseResponseMessage) {
+        public void onTaskComplete(Vectorstring2stringMapEntry purchaseResponseResponseMessage) {
 
             hamPayDialog.dismisWaitingDialog();
 
             if (purchaseResponseResponseMessage != null){
-                if (purchaseResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-
-                    PurchaseResponse purchaseResponse = purchaseResponseResponseMessage.getService();
+//                if (purchaseResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
+//                    PurchaseResponse purchaseResponse = purchaseResponseResponseMessage.getService();
                     pspResultRequest = new PSPResultRequest();
                     pspResultRequest.setProductCode(purchaseInfoDTO.getProductCode());
-                    pspResultRequest.setPspResponseCode(purchaseResponse.getResponseCode());
+//                    pspResultRequest.setPspResponseCode(purchaseResponse.getResponseCode());
+                pspResultRequest.setPspResponseCode(purchaseResponseResponseMessage.getProperty(2).toString());
                     requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener());
                     requestPSPResult.execute(pspResultRequest);
 
@@ -346,10 +389,11 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                             .setLabel("Success")
                             .build());
 
-                }else {
+                }
+            else {
 
-                    new HamPayDialog(activity).showFailPaymentDialog(purchaseResponseResponseMessage.getService().getServiceDefinition().getCode(),
-                            purchaseResponseResponseMessage.getService().getResponseCode());
+//                    new HamPayDialog(activity).showFailPaymentDialog(purchaseResponseResponseMessage.getService().getServiceDefinition().getCode(),
+//                            purchaseResponseResponseMessage.getService().getResponseCode());
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Pending Payment Request")
@@ -357,16 +401,16 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                             .setLabel("Fail(Server)")
                             .build());
                 }
-            }else {
-                new HamPayDialog(activity).showFailPaymentDialog(Constants.LOCAL_ERROR_CODE,
-                        getString(R.string.msg_fail_payment));
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Pending Payment Request")
-                        .setAction("Payment")
-                        .setLabel("Fail(Mobile)")
-                        .build());
-            }
+//            }else {
+//                new HamPayDialog(activity).showFailPaymentDialog(Constants.LOCAL_ERROR_CODE,
+//                        getString(R.string.msg_fail_payment));
+//
+//                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+//                        .setCategory("Pending Payment Request")
+//                        .setAction("Payment")
+//                        .setLabel("Fail(Mobile)")
+//                        .build());
+//            }
 
             pay_to_business_button.setEnabled(true);
         }

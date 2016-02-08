@@ -1,4 +1,4 @@
-package xyz.homapay.hampay.mobile.android.webservice;
+package xyz.homapay.hampay.mobile.android.ssl;
 
 import android.util.Log;
 

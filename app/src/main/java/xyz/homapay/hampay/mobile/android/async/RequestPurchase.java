@@ -4,22 +4,22 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
-import xyz.homapay.hampay.common.psp.model.request.PurchaseRequest;
-import xyz.homapay.hampay.common.psp.model.response.PurchaseResponse;
+import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.webservice.WebServices;
+import xyz.homapay.hampay.mobile.android.webservice.psp.Vectorstring2stringMapEntry;
 
 /**
  * Created by amir on 7/3/15.
  */
-public class RequestPurchase extends AsyncTask<PurchaseRequest, Void, ResponseMessage<PurchaseResponse>> {
+public class RequestPurchase extends AsyncTask<DoWorkInfo, Void, Vectorstring2stringMapEntry> {
 
     private static final String TAG = "RequestPurchase";
 
     private Context context;
-    private AsyncTaskCompleteListener<ResponseMessage<PurchaseResponse>> listener;
+    private AsyncTaskCompleteListener<Vectorstring2stringMapEntry> listener;
 
 
-    public RequestPurchase(Context context, AsyncTaskCompleteListener<ResponseMessage<PurchaseResponse>> listener)
+    public RequestPurchase(Context context, AsyncTaskCompleteListener<Vectorstring2stringMapEntry> listener)
     {
         this.context = context;
         this.listener = listener;
@@ -33,7 +33,7 @@ public class RequestPurchase extends AsyncTask<PurchaseRequest, Void, ResponseMe
     }
 
     @Override
-    protected ResponseMessage<PurchaseResponse> doInBackground(PurchaseRequest... params) {
+    protected Vectorstring2stringMapEntry doInBackground(DoWorkInfo... params) {
 
         WebServices webServices = new WebServices(context);
 
@@ -42,15 +42,15 @@ public class RequestPurchase extends AsyncTask<PurchaseRequest, Void, ResponseMe
 
 
     @Override
-    protected void onPostExecute(ResponseMessage<PurchaseResponse> tacResponseMessage)
+    protected void onPostExecute(Vectorstring2stringMapEntry purchaseResponseMessage)
     {
-        super.onPostExecute(tacResponseMessage);
-        listener.onTaskComplete(tacResponseMessage);
+        super.onPostExecute(purchaseResponseMessage);
+        listener.onTaskComplete(purchaseResponseMessage);
     }
 
     @Override
-    protected void onCancelled(ResponseMessage<PurchaseResponse> tacResponseResponseMessage) {
-        super.onCancelled(tacResponseResponseMessage);
+    protected void onCancelled(Vectorstring2stringMapEntry purchaseResponseMessage) {
+        super.onCancelled(purchaseResponseMessage);
         cancel(true);
     }
 

@@ -1,4 +1,4 @@
-package xyz.homapay.hampay.mobile.android.util;
+package xyz.homapay.hampay.mobile.android.ssl;
 
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -23,7 +23,6 @@ public class HamPayX509TrustManager implements X509TrustManager {
 
         TrustManagerFactory factory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
         factory.init(keystore);
-
 
         TrustManager[] trustmanagers = factory.getTrustManagers();
         if (trustmanagers.length == 0) {

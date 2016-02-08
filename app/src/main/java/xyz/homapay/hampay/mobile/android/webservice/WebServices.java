@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.provider.ContactsContract;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -95,15 +94,16 @@ import xyz.homapay.hampay.common.core.model.response.VerifyAccountResponse;
 import xyz.homapay.hampay.common.core.model.response.VerifyTransferMoneyResponse;
 import xyz.homapay.hampay.common.psp.model.request.PurchaseRequest;
 import xyz.homapay.hampay.common.psp.model.request.RegisterCardRequest;
-import xyz.homapay.hampay.common.psp.model.request.UnregisterCardRequest;
 import xyz.homapay.hampay.common.psp.model.response.PurchaseResponse;
 import xyz.homapay.hampay.common.psp.model.response.RegisterCardResponse;
-import xyz.homapay.hampay.common.psp.model.response.UnregisterCardResponse;
+import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
+import xyz.homapay.hampay.mobile.android.ssl.SSLConnection;
 import xyz.homapay.hampay.mobile.android.util.Constants;
-import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
+import xyz.homapay.hampay.mobile.android.webservice.psp.PayThPartyApp;
+import xyz.homapay.hampay.mobile.android.webservice.psp.Vectorstring2stringMapEntry;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -115,15 +115,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-import java.util.zip.Inflater;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -2173,64 +2170,17 @@ public class WebServices  {
     }
 
 
-    public ResponseMessage<PurchaseResponse> newPurchaseResponse(PurchaseRequest purchaseRequest){
+    public Vectorstring2stringMapEntry newPurchaseResponse(DoWorkInfo doWorkInfo){
 
-        ResponseMessage<PurchaseResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/psp/purchase");
-        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+        PayThPartyApp payThPartyApp = new PayThPartyApp(context);
+        Vectorstring2stringMapEntry responseMessage = payThPartyApp.DoWork(
+                doWorkInfo.getUserName(),
+                doWorkInfo.getPassword(),
+                doWorkInfo.getCellNumber(),
+                doWorkInfo.getLangAByte(),
+                doWorkInfo.isLangABoolean(),
+                doWorkInfo.getVectorstring2stringMapEntry());
 
-        try {
-
-            RequestHeader header = new RequestHeader();
-            header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion("1.0-PA");
-
-            RequestMessage<PurchaseRequest> message = new RequestMessage<PurchaseRequest>();
-            message.setRequestHeader(header);
-            PurchaseRequest request = purchaseRequest;
-            request.setRequestUUID(UUID.randomUUID().toString());
-            message.setService(request);
-
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<PurchaseRequest>>() {}.getType();
-            String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(jsonRequest.getBytes());
-            outputStream.flush();
-
-            String encoding = connection.getHeaderField("Content-Encoding");
-            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
-            InputStreamReader reader;
-            if (gzipped){
-                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-                reader = new InputStreamReader(gzipInputStream);
-            }else {
-                reader = new InputStreamReader(connection.getInputStream());
-            }
-
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
-
-            Gson gson = builder.create();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<PurchaseResponse>>() {}.getType());
-
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            if (connection != null)
-                connection.disconnect();
-        }
         return responseMessage;
     }
 

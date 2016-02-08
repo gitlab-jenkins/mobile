@@ -5,12 +5,6 @@ public class Constants {
 
     //    public static String SERVER_IP = "176.58.104.158";//England Server
     public static String URL_PREFIX = "/hampay";
-    //    public static String URL_PREFIX = "";
-    //    public static final String SERVER_IP = "192.168.1.132";//Sima Server
-//    public static final int SERVER_PORT = 9090;
-//    public static String SERVICE_URL = "http://" + SERVER_IP  + ":9090";
-//    public static final String OPENAM_LOGIN_URL = "http://"+ SERVER_IP + ":8080/openam/json/authenticate";
-//    public static final String OPENAM_LOGOUT_URL = "http://" + SERVER_IP + ":8080/openam/json/sessions/?_action=logout";
 
 //    public static final String HTTPS_SERVER_IP = "https://192.168.1.101" + URL_PREFIX; //Sima Server
         public static String HTTPS_SERVER_IP = "https://176.58.104.158" + URL_PREFIX;//England Server
@@ -19,6 +13,8 @@ public class Constants {
     //        public static String HTTPS_SERVER_IP = "https://mobile.tejaratbourse.com" + URL_PREFIX;//Tejarat bourse Server
     public static final String HTTPS_OPENAM_LOGIN_URL = HTTPS_SERVER_IP + "/auth";
     public static final String HTTPSOPENAM_LOGOUT_URL = HTTPS_SERVER_IP + "/unauth";
+
+    public static final String PSP_SOAO_SERVICE_URL = "176.58.104.158";
 
     public static final String WEB_PAGE_ADDRESS = "web_page_address";
 
