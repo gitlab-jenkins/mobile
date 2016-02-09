@@ -272,29 +272,39 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 string2stringMapEntry s2sMapEntry = new string2stringMapEntry();
 
                 s2sMapEntry.key = "Amount";
-                s2sMapEntry.value = (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getPurchaseFee()) + "";
+                if (purchaseInfoDTO.getPurchaseFee() != null) {
+                    s2sMapEntry.value = (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getPurchaseFee()) + "";
+                }else {
+                    s2sMapEntry.value = (purchaseInfoDTO.getAmount() + 0) + "";
+                }
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
+                s2sMapEntry = new string2stringMapEntry();
                 s2sMapEntry.key = "Pin2";
                 s2sMapEntry.value = pin2Value.getText().toString();
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
+                s2sMapEntry = new string2stringMapEntry();
                 s2sMapEntry.key = "ThirdParty";
                 s2sMapEntry.value = purchaseInfoDTO.getProductCode();
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
+                s2sMapEntry = new string2stringMapEntry();
                 s2sMapEntry.key = "TerminalId";
                 s2sMapEntry.value = "283129";
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
+                s2sMapEntry = new string2stringMapEntry();
                 s2sMapEntry.key = "CardId";
-                s2sMapEntry.value = cardDTO.getCardId();
+                s2sMapEntry.value = /*cardDTO.getCardId()*/ "100";
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
+                s2sMapEntry = new string2stringMapEntry();
                 s2sMapEntry.key = "Merchant";
                 s2sMapEntry.value = purchaseInfoDTO.getMerchantImageId();
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
+                s2sMapEntry = new string2stringMapEntry();
                 s2sMapEntry.key = "IPAddress";
                 s2sMapEntry.value = "192.168.0.1";
                 vectorstring2stringMapEntry.add(s2sMapEntry);
@@ -319,10 +329,10 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         cancel_pay_to_business_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (purchaseInfoDTO != null){
-                    if (databaseHelper.getIsExistPurchaseRequest(purchaseInfoDTO.getProductCode())){
+                if (purchaseInfoDTO != null) {
+                    if (databaseHelper.getIsExistPurchaseRequest(purchaseInfoDTO.getProductCode())) {
                         databaseHelper.updatePurchaseRequest(purchaseInfoDTO.getProductCode(), "1");
-                    }else {
+                    } else {
                         databaseHelper.createPurchaseRequest(purchaseInfoDTO.getProductCode());
                         databaseHelper.updatePurchaseRequest(purchaseInfoDTO.getProductCode(), "1");
                     }
@@ -379,7 +389,14 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                     pspResultRequest = new PSPResultRequest();
                     pspResultRequest.setProductCode(purchaseInfoDTO.getProductCode());
 //                    pspResultRequest.setPspResponseCode(purchaseResponse.getResponseCode());
-                pspResultRequest.setPspResponseCode(purchaseResponseResponseMessage.getProperty(2).toString());
+                for(string2stringMapEntry s2sMapEntry : purchaseResponseResponseMessage){
+                    if (s2sMapEntry.key.equalsIgnoreCase("ResponseCode")){
+                        pspResultRequest.setPspResponseCode(s2sMapEntry.value);
+                    }else if (s2sMapEntry.key.equalsIgnoreCase("SWTraceNum")){
+                        pspResultRequest.setTrackingCode(s2sMapEntry.value);
+                    }
+                }
+
                     requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener());
                     requestPSPResult.execute(pspResultRequest);
 
@@ -483,6 +500,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 if (latestPurchaseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
 
                     purchaseInfoDTO = latestPurchaseResponseMessage.getService().getPurchaseInfo();
+
+                    cardDTO = latestPurchaseResponseMessage.getService().getCardDTO();
 
                     if (purchaseInfoDTO != null) {
 

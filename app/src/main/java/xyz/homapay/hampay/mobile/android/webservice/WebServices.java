@@ -2172,7 +2172,8 @@ public class WebServices  {
 
     public Vectorstring2stringMapEntry newPurchaseResponse(DoWorkInfo doWorkInfo){
 
-        PayThPartyApp payThPartyApp = new PayThPartyApp(context);
+//        PayThPartyApp payThPartyApp = new PayThPartyApp(context);
+        PayThPartyApp payThPartyApp = new PayThPartyApp();
         Vectorstring2stringMapEntry responseMessage = payThPartyApp.DoWork(
                 doWorkInfo.getUserName(),
                 doWorkInfo.getPassword(),
