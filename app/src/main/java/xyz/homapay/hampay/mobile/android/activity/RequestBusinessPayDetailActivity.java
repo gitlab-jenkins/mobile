@@ -449,7 +449,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
 
 
-                    new HamPayDialog(activity).purchaseDialog(purchaseInfoDTO.getPurchaseCode() + "");
+                    new HamPayDialog(activity).purchaseDialog(pspResultResponseMessage.getService().getResultStatus().getCode() + "");
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Pending Payment Request")
