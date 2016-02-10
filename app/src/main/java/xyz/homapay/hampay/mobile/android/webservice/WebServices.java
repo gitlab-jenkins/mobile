@@ -154,7 +154,7 @@ public class WebServices  {
 
         connection.setDoOutput(true);
 
-        connection.setRequestProperty("iplanetDirectoryPro", logoutData.getIplanetDirectoryPro());
+        connection.setRequestProperty("x_token", logoutData.getIplanetDirectoryPro());
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Accept-Encoding", "UTF-8");
 
@@ -2172,8 +2172,8 @@ public class WebServices  {
 
     public Vectorstring2stringMapEntry newPurchaseResponse(DoWorkInfo doWorkInfo){
 
-//        PayThPartyApp payThPartyApp = new PayThPartyApp(context);
-        PayThPartyApp payThPartyApp = new PayThPartyApp();
+        PayThPartyApp payThPartyApp = new PayThPartyApp(context);
+//        PayThPartyApp payThPartyApp = new PayThPartyApp();
         Vectorstring2stringMapEntry responseMessage = payThPartyApp.DoWork(
                 doWorkInfo.getUserName(),
                 doWorkInfo.getPassword(),

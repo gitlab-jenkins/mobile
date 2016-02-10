@@ -489,6 +489,7 @@
     <string name="credit_request_from">درخواست وجه از: </string>
     <string name="credit_request_action">درخواست</string>
     <string name="msg_success_credit_request">درخواست وجه شما با موفقیت ارسال شد</string>
+    <string name="msg_success_psp_result">درخواست شما با موفقیت دریافت شد. برای جزییات بیشتر به تراکنش‌ها مراجعه کنید.</string>
 
 
 </resources>

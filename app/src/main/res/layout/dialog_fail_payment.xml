@@ -19,7 +19,7 @@
         android:text="@string/msg_fail_fetch_bank_list"
         android:gravity="right"
         android:layout_gravity="right"
-        android:layout_margin="8dp"/>
+        android:layout_margin="8dp" />
 
     <xyz.homapay.hampay.mobile.android.component.FacedTextView
         android:id="@+id/responseMessage"
@@ -30,7 +30,7 @@
         android:textSize="15dp"
         android:text="@string/msg_fail_payment"
         android:gravity="right"
-        android:layout_gravity="center"
+        android:layout_gravity="right"
         android:layout_margin="8dp"/>
 
 

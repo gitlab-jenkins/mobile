@@ -152,30 +152,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             Log.e("Error", ex.getStackTrace().toString());
         }
 
-//        switch (prefs.getInt(Constants.USER_VERIFICATION_STATUS, -1)){
-//
-//            case 0:
-//                userVerificationStatus = UserVerificationStatus.UNVERIFIED;
-//                userVerificationMessage = getString(R.string.unverified_account);
-//                break;
-//
-//            case 1:
-//                userVerificationStatus = UserVerificationStatus.PENDING_REVIEW;
-//                userVerificationMessage = getString(R.string.pending_review_account);
-//                break;
-//
-//            case 2:
-//                userVerificationStatus = UserVerificationStatus.VERIFIED;
-//                userVerificationMessage = getString(R.string.verified_account);
-//                break;
-//
-//            case 3:
-//                userVerificationStatus = UserVerificationStatus.DELEGATED;
-//                userVerificationMessage = getString(R.string.delegate_account);
-//                break;
-//
-//        }
-
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
@@ -275,7 +251,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 if (purchaseInfoDTO.getPurchaseFee() != null) {
                     s2sMapEntry.value = (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getPurchaseFee()) + "";
                 }else {
-                    s2sMapEntry.value = (purchaseInfoDTO.getAmount() + 0) + "";
+                    s2sMapEntry.value = (purchaseInfoDTO.getAmount()) + "";
                 }
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
@@ -310,17 +286,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
                 doWorkInfo.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
-
-//                purchaseRequest = new PurchaseRequest();
-//                purchaseRequest.setPin2(pin2Value.getText().toString());
-//                if (purchaseInfoDTO.getPurchaseFee() != null) {
-//                    purchaseRequest.setAmount(purchaseInfoDTO.getAmount() + purchaseInfoDTO.getPurchaseFee());
-//                }else {
-//                    purchaseRequest.setAmount(purchaseInfoDTO.getAmount() + 0);
-//                }
-//                purchaseRequest.setMerchantId(purchaseInfoDTO.getMerchantImageId());
-//                purchaseRequest.setMobileNumber(prefs.getString(Constants.REGISTERED_CELL_NUMBER, ""));
-//                purchaseRequest.setPurchaseRequestId(purchaseInfoDTO.getProductCode());
                 requestPurchase.execute(doWorkInfo);
             }
         });
@@ -384,11 +349,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             hamPayDialog.dismisWaitingDialog();
 
             if (purchaseResponseResponseMessage != null){
-//                if (purchaseResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-//                    PurchaseResponse purchaseResponse = purchaseResponseResponseMessage.getService();
                     pspResultRequest = new PSPResultRequest();
                     pspResultRequest.setProductCode(purchaseInfoDTO.getProductCode());
-//                    pspResultRequest.setPspResponseCode(purchaseResponse.getResponseCode());
                 for(string2stringMapEntry s2sMapEntry : purchaseResponseResponseMessage){
                     if (s2sMapEntry.key.equalsIgnoreCase("ResponseCode")){
                         pspResultRequest.setPspResponseCode(s2sMapEntry.value);
@@ -408,27 +370,12 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
                 }
             else {
-
-//                    new HamPayDialog(activity).showFailPaymentDialog(purchaseResponseResponseMessage.getService().getServiceDefinition().getCode(),
-//                            purchaseResponseResponseMessage.getService().getResponseCode());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Pending Payment Request")
                             .setAction("Payment")
                             .setLabel("Fail(Server)")
                             .build());
                 }
-//            }else {
-//                new HamPayDialog(activity).showFailPaymentDialog(Constants.LOCAL_ERROR_CODE,
-//                        getString(R.string.msg_fail_payment));
-//
-//                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-//                        .setCategory("Pending Payment Request")
-//                        .setAction("Payment")
-//                        .setLabel("Fail(Mobile)")
-//                        .build());
-//            }
-
             pay_to_business_button.setEnabled(true);
         }
 
@@ -449,7 +396,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
 
 
-                    new HamPayDialog(activity).purchaseDialog(pspResultResponseMessage.getService().getResultStatus().getCode() + "");
+                    new HamPayDialog(activity).pspResultDialog(pspResultResponseMessage.getService().getResultStatus().getCode() + "");
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Pending Payment Request")
@@ -459,8 +406,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
                 }else {
 
-                    new HamPayDialog(activity).showFailPaymentDialog(pspResultResponseMessage.getService().getServiceDefinition().getCode(),
-                            pspResultResponseMessage.getService().getServiceDefinition().getCode());
+                    new HamPayDialog(activity).showFailPaymentDialog(pspResultResponseMessage.getService().getResultStatus().getCode(),
+                            pspResultResponseMessage.getService().getResultStatus().getDescription());
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Pending Payment Request")
@@ -572,7 +519,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
             pay_to_business_button.setEnabled(true);
 
-//            if (requestLatestPurchase.getStatus() == AsyncTask.Status.)
         }
 
         @Override

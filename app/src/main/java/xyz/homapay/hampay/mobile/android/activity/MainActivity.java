@@ -496,7 +496,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     @Override
     public void onDrawerItemSelected(View view, int position) {
-        if (currentFragmet != position || position == 1 || position == 5 || position == 7 || position == 8 || position == 9 || position == 10 || position == 11) {
+        if (currentFragmet != position || position == 1 || position == 5 || position == 7 || position == 8 || position == 9 || position == 10 || position == 12) {
             currentFragmet = position;
             displayView(position);
         }
@@ -567,7 +567,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 break;
             case 12:
                 LogoutData logoutData = new LogoutData();
-                logoutData.setIplanetDirectoryPro(prefs.getString(Constants.TOKEN_ID, null));
+                logoutData.setIplanetDirectoryPro(prefs.getString(Constants.LOGIN_TOKEN_ID, null));
                 new HamPayDialog(activity).showExitDialog(logoutData);
                 break;
 

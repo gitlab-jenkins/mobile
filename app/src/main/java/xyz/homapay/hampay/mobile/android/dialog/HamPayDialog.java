@@ -2677,8 +2677,8 @@ public class HamPayDialog {
         FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
         FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
 
-        responseCode.setText(activity.getString(R.string.error_code, code));
-        responseMessage.setText(message);
+        responseCode.setText(activity.getString(R.string.error_code, (new PersianEnglishDigit()).E2P(code)));
+        responseMessage.setText((new PersianEnglishDigit()).E2P(message));
 
         FacedTextView retry_payment = (FacedTextView) view.findViewById(R.id.retry_payment);
         FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
@@ -3317,7 +3317,7 @@ public class HamPayDialog {
     }
 
 
-    public void purchaseDialog(String purchaseCode){
+    public void pspResultDialog(String purchaseCode){
 
         Rect displayRectangle = new Rect();
         Activity parent = (Activity) activity;
@@ -3327,7 +3327,8 @@ public class HamPayDialog {
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_request_pay, null);
 
         FacedTextView request_payment_message = (FacedTextView) view.findViewById(R.id.request_payment_message);
-        request_payment_message.setText(activity.getString(R.string.msg_success_pending_payment, new PersianEnglishDigit().E2P(purchaseCode) + ""));
+//        request_payment_message.setText(activity.getString(R.string.msg_success_pending_payment, new PersianEnglishDigit().E2P(purchaseCode) + ""));
+        request_payment_message.setText(activity.getString(R.string.msg_success_psp_result));
         FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
 
         confirmation.setOnClickListener(new View.OnClickListener() {
