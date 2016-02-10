@@ -154,7 +154,7 @@ public class WebServices  {
 
         connection.setDoOutput(true);
 
-        connection.setRequestProperty("x_token", logoutData.getIplanetDirectoryPro());
+        connection.setRequestProperty("iplanetDirectoryPro", logoutData.getIplanetDirectoryPro());
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Accept-Encoding", "UTF-8");
 
