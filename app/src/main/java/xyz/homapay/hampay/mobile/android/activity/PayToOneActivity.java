@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -198,6 +199,25 @@ public class PayToOneActivity extends AppCompatActivity {
         });
 
         pinnedHeaderListView = (PinnedHeaderListView)findViewById(R.id.pinnedListView);
+        pinnedHeaderListView.setOnItemClickListener(new PinnedHeaderListView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int section, int position, long id) {
+                if (section == 0){
+
+                }else {
+                    Intent intent = new Intent();
+                    intent.setClass(context, PayOneActivity.class);
+                    intent.putExtra("contact_name", enabledHamPays.get(position).getDisplayName());
+                    intent.putExtra("contact_phone_no", enabledHamPays.get(position).getCellNumber());
+                    startActivityForResult(intent, 1024);
+                }
+            }
+
+            @Override
+            public void onSectionClick(AdapterView<?> adapterView, View view, int section, long id) {
+
+            }
+        });
 
 
         if ((prefs.getString(Constants.USER_ID_TOKEN, "") != null && prefs.getString(Constants.USER_ID_TOKEN, "").length() == 16)){

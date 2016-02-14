@@ -13,7 +13,7 @@ import xyz.homapay.hampay.mobile.android.webservice.WebServices;
  */
 public class RequestContactHampayEnabled extends AsyncTask<ContactsHampayEnabledRequest, Void, ResponseMessage<ContactsHampayEnabledResponse>>  {
 
-    private static final String TAG = "RequestHttpRegistrationEntry";
+    private static final String TAG = "RequestContactHampayEnabled";
 
     private Context context;
     private AsyncTaskCompleteListener<ResponseMessage<ContactsHampayEnabledResponse>> listener;

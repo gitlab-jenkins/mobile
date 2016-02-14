@@ -112,7 +112,7 @@ public class PayOneAdapter extends SectionedBaseAdapter{
         CircleImageView image_profile = (CircleImageView)layout.findViewById(R.id.image_profile);
         FacedTextView contact_name = (FacedTextView)layout.findViewById(R.id.contact_name);
         FacedTextView contact_phone_no = (FacedTextView)layout.findViewById(R.id.contact_phone_no);
-        ButtonRectangle pay_to_one_button = (ButtonRectangle)layout.findViewById(R.id.pay_to_one_button);
+//        ButtonRectangle pay_to_one_button = (ButtonRectangle)layout.findViewById(R.id.pay_to_one_button);
 
 
 
@@ -158,16 +158,16 @@ public class PayOneAdapter extends SectionedBaseAdapter{
             contact_name.setText(persianEnglishDigit.E2P(enabledHamPay.getDisplayName()));
             contact_phone_no.setText(persianEnglishDigit.E2P(enabledHamPay.getCellNumber()));
 
-            pay_to_one_button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent();
-                    intent.setClass(mContext, PayOneActivity.class);
-                    intent.putExtra("contact_name", enabledHamPay.getDisplayName());
-                    intent.putExtra("contact_phone_no", enabledHamPay.getCellNumber());
-                    mContext.startActivityForResult(intent, 1024);
-                }
-            });
+//            pay_to_one_button.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent();
+//                    intent.setClass(mContext, PayOneActivity.class);
+//                    intent.putExtra("contact_name", enabledHamPay.getDisplayName());
+//                    intent.putExtra("contact_phone_no", enabledHamPay.getCellNumber());
+//                    mContext.startActivityForResult(intent, 1024);
+//                }
+//            });
 
 
         }
