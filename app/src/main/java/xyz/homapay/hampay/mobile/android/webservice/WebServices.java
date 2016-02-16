@@ -2,10 +2,8 @@ package xyz.homapay.hampay.mobile.android.webservice;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.provider.ContactsContract;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -15,10 +13,27 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
+import java.util.Date;
+import java.util.UUID;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
+
+import javax.net.ssl.HttpsURLConnection;
+
 import xyz.homapay.hampay.common.common.request.RequestHeader;
 import xyz.homapay.hampay.common.common.request.RequestMessage;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
-import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
 import xyz.homapay.hampay.common.core.model.request.BankListRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessPaymentConfirmRequest;
@@ -92,9 +107,7 @@ import xyz.homapay.hampay.common.core.model.response.UserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
 import xyz.homapay.hampay.common.core.model.response.VerifyAccountResponse;
 import xyz.homapay.hampay.common.core.model.response.VerifyTransferMoneyResponse;
-import xyz.homapay.hampay.common.psp.model.request.PurchaseRequest;
 import xyz.homapay.hampay.common.psp.model.request.RegisterCardRequest;
-import xyz.homapay.hampay.common.psp.model.response.PurchaseResponse;
 import xyz.homapay.hampay.common.psp.model.response.RegisterCardResponse;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
@@ -102,27 +115,9 @@ import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
 import xyz.homapay.hampay.mobile.android.ssl.SSLConnection;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
+import xyz.homapay.hampay.mobile.android.util.UserContacts;
 import xyz.homapay.hampay.mobile.android.webservice.psp.PayThPartyApp;
 import xyz.homapay.hampay.mobile.android.webservice.psp.Vectorstring2stringMapEntry;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
-
-import javax.net.ssl.HttpsURLConnection;
 
 /**
  * Created by amir on 6/6/15.
@@ -149,13 +144,10 @@ public class WebServices  {
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         connection.setRequestMethod("POST");
-        connection.setConnectTimeout(20 * 1000);
-        connection.setReadTimeout(20 * 1000);
 
         connection.setDoOutput(true);
 
         connection.setRequestProperty("iplanetDirectoryPro", logoutData.getIplanetDirectoryPro());
-        connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Accept-Encoding", "UTF-8");
 
         BufferedWriter output = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
@@ -194,22 +186,16 @@ public class WebServices  {
         try {
 
             RequestHeader header = new RequestHeader();
-            header.setAuthToken("008ewe");
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<IllegalAppListRequest> message = new RequestMessage<IllegalAppListRequest>();
             message.setRequestHeader(header);
             IllegalAppListRequest request = new IllegalAppListRequest();
             request.setRequestUUID(UUID.randomUUID().toString());
             message.setService(request);
-
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<IllegalAppListRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(5000);
-            connection.setReadTimeout(5000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -247,8 +233,7 @@ public class WebServices  {
         try {
 
             RequestHeader header = new RequestHeader();
-            header.setAuthToken("008ewe");
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<BankListRequest> message = new RequestMessage<BankListRequest>();
             message.setRequestHeader(header);
@@ -258,11 +243,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<BankListRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(5000);
-            connection.setReadTimeout(5000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -298,8 +279,7 @@ public class WebServices  {
         try {
 
             RequestHeader header = new RequestHeader();
-            header.setAuthToken("008ewe");
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<RegistrationEntryRequest> message = new RequestMessage<RegistrationEntryRequest>();
             message.setRequestHeader(header);
@@ -309,9 +289,6 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationEntryRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
 
             connection.setRequestProperty("Content-Encoding", "gzip");
@@ -395,8 +372,7 @@ public class WebServices  {
         try {
 
             RequestHeader header = new RequestHeader();
-            header.setAuthToken("008ewe");
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<ContactUsRequest> message = new RequestMessage<ContactUsRequest>();
             message.setRequestHeader(header);
@@ -406,11 +382,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<ContactUsRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -445,8 +417,7 @@ public class WebServices  {
         try {
 
             RequestHeader header = new RequestHeader();
-            header.setAuthToken("008ewe");
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<RegistrationSendSmsTokenRequest> message = new RequestMessage<RegistrationSendSmsTokenRequest>();
             message.setRequestHeader(header);
@@ -456,11 +427,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationSendSmsTokenRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -496,8 +463,7 @@ public class WebServices  {
         try {
 
             RequestHeader header = new RequestHeader();
-            header.setAuthToken("008ewe");
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<RegistrationVerifyMobileRequest> message = new RequestMessage<RegistrationVerifyMobileRequest>();
             message.setRequestHeader(header);
@@ -507,11 +473,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationVerifyMobileRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -550,7 +512,7 @@ public class WebServices  {
 
             RequestHeader header = new RequestHeader();
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<RegisterCardRequest> message = new RequestMessage<RegisterCardRequest>();
             message.setRequestHeader(header);
@@ -560,11 +522,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegisterCardRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -610,8 +568,7 @@ public class WebServices  {
         try {
 
             RequestHeader header = new RequestHeader();
-            header.setAuthToken("008ewe");
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<RegistrationFetchUserDataRequest> message = new RequestMessage<RegistrationFetchUserDataRequest>();
             message.setRequestHeader(header);
@@ -621,11 +578,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationFetchUserDataRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -661,8 +614,7 @@ public class WebServices  {
         try {
 
             RequestHeader header = new RequestHeader();
-            header.setAuthToken("008ewe");
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<RegistrationConfirmUserDataRequest> message = new RequestMessage<RegistrationConfirmUserDataRequest>();
             message.setRequestHeader(header);
@@ -672,11 +624,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationConfirmUserDataRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -722,53 +670,20 @@ public class WebServices  {
         try {
 
             RequestHeader header = new RequestHeader();
-            header.setAuthToken("008ewe");
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<RegistrationCredentialsRequest> message = new RequestMessage<RegistrationCredentialsRequest>();
             message.setRequestHeader(header);
             RegistrationCredentialsRequest request = registrationCredentialsRequest;
             request.setRequestUUID(UUID.randomUUID().toString());
 
-
-            List<ContactDTO> contactDTOs = new ArrayList<ContactDTO>();
-            Cursor phones = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null,null, null);
-
-            //Remove here
-            int i = 0;
-
-            while (phones.moveToNext()) {
-                String contact_name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                String contact_phone_no = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
-                if (contact_phone_no.trim().replace(" ", "").startsWith("00989")
-                        || contact_phone_no.trim().replace(" ", "").startsWith("+989")
-                        || contact_phone_no.trim().replace(" ", "").startsWith("09")) {
-                    ContactDTO contactDTO = new ContactDTO();
-                    contactDTO.setCellNumber(contact_phone_no);
-                    contactDTO.setDisplayName(contact_name);
-                    contactDTOs.add(contactDTO);
-                }
-
-                i++;
-
-                if (i > 25){
-                    break;
-                }
-
-
-            }
-            phones.close();
-
-            request.setContacts(contactDTOs);
+            UserContacts userContacts = new UserContacts(context);
+            request.setContacts(userContacts.read());
 
             message.setService(request);
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationCredentialsRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
 
             connection.setRequestProperty("Content-Encoding", "gzip");
@@ -811,8 +726,7 @@ public class WebServices  {
         try {
 
             RequestHeader header = new RequestHeader();
-            header.setAuthToken("008ewe");
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<RegistrationVerifyAccountRequest> message = new RequestMessage<RegistrationVerifyAccountRequest>();
             message.setRequestHeader(header);
@@ -822,11 +736,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationVerifyAccountRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -864,8 +774,7 @@ public class WebServices  {
         try {
 
             RequestHeader header = new RequestHeader();
-            header.setAuthToken("008ewe");
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<RegistrationVerifyTransferMoneyRequest> message = new RequestMessage<RegistrationVerifyTransferMoneyRequest>();
             message.setRequestHeader(header);
@@ -875,11 +784,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationVerifyTransferMoneyRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -919,7 +824,7 @@ public class WebServices  {
 
             RequestHeader header = new RequestHeader();
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<MobileRegistrationIdEntryRequest> message = new RequestMessage<MobileRegistrationIdEntryRequest>();
             message.setRequestHeader(header);
@@ -929,11 +834,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<MobileRegistrationIdEntryRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -970,7 +871,7 @@ public class WebServices  {
 
             RequestHeader header = new RequestHeader();
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<TACRequest> message = new RequestMessage<TACRequest>();
             message.setRequestHeader(header);
@@ -980,11 +881,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<TACRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -1031,7 +928,7 @@ public class WebServices  {
 
             RequestHeader header = new RequestHeader();
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<UploadImageRequest> message = new RequestMessage<UploadImageRequest>();
             message.setRequestHeader(header);
@@ -1041,11 +938,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<UploadImageRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -1093,7 +986,7 @@ public class WebServices  {
 
             RequestHeader header = new RequestHeader();
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<GetUserIdTokenRequest> message = new RequestMessage<GetUserIdTokenRequest>();
             message.setRequestHeader(header);
@@ -1103,11 +996,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<GetUserIdTokenRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -1155,7 +1044,7 @@ public class WebServices  {
 
             RequestHeader header = new RequestHeader();
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<TACAcceptRequest> message = new RequestMessage<TACAcceptRequest>();
             message.setRequestHeader(header);
@@ -1165,11 +1054,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<TACAcceptRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -1215,7 +1100,7 @@ public class WebServices  {
 
             RequestHeader header = new RequestHeader();
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<UserProfileRequest> message = new RequestMessage<UserProfileRequest>();
             message.setRequestHeader(header);
@@ -1225,11 +1110,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<UserProfileRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -1275,7 +1156,7 @@ public class WebServices  {
 
             RequestHeader header = new RequestHeader();
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<VerifyAccountRequest> message = new RequestMessage<VerifyAccountRequest>();
             message.setRequestHeader(header);
@@ -1285,11 +1166,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<VerifyAccountRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -1335,7 +1212,7 @@ public class WebServices  {
 
             RequestHeader header = new RequestHeader();
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<VerifyTransferMoneyRequest> message = new RequestMessage<VerifyTransferMoneyRequest>();
             message.setRequestHeader(header);
@@ -1345,11 +1222,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<VerifyTransferMoneyRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -1395,7 +1268,7 @@ public class WebServices  {
 
             RequestHeader header = new RequestHeader();
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<TransactionListRequest> message = new RequestMessage<TransactionListRequest>();
             message.setRequestHeader(header);
@@ -1408,11 +1281,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<TransactionListRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -1458,38 +1327,13 @@ public class WebServices  {
 
             RequestHeader header = new RequestHeader();
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<ContactsHampayEnabledRequest> message = new RequestMessage<ContactsHampayEnabledRequest>();
             message.setRequestHeader(header);
             ContactsHampayEnabledRequest request = new ContactsHampayEnabledRequest();
-
-
-            List<ContactDTO> contactDTOs = new ArrayList<ContactDTO>();
-            Cursor phones = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null,null, null);
-
-
-            while (phones.moveToNext()) {
-                String contact_name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                String contact_phone_no = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
-                if (contact_phone_no.trim().replace(" ", "").startsWith("00989")
-                        || contact_phone_no.trim().replace(" ", "").startsWith("+989")
-                        || contact_phone_no.trim().replace(" ", "").startsWith("09")) {
-
-                    ContactDTO contactDTO = new ContactDTO();
-                    contactDTO.setCellNumber(contact_phone_no);
-                    contactDTO.setDisplayName(contact_name);
-                    contactDTOs.add(contactDTO);
-
-                }
-
-
-            }
-            phones.close();
-
-            request.setContacts(contactDTOs);
-
+            UserContacts userContacts = new UserContacts(context);
+            request.setContacts(userContacts.read());
             request.setRequestUUID(UUID.randomUUID().toString());
             message.setService(request);
 
@@ -1497,11 +1341,7 @@ public class WebServices  {
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<ContactsHampayEnabledRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
 
-
-
             connection.setDoOutput(false);
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
             connection.setRequestProperty("Content-Encoding", "gzip");
             connection.setRequestProperty("Accept-Encoding", "gzip");
@@ -1551,7 +1391,7 @@ public class WebServices  {
 
             RequestHeader header = new RequestHeader();
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<IndividualPaymentConfirmRequest> message = new RequestMessage<IndividualPaymentConfirmRequest>();
             message.setRequestHeader(header);
@@ -1561,11 +1401,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<IndividualPaymentConfirmRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -1610,7 +1446,7 @@ public class WebServices  {
 
             RequestHeader header = new RequestHeader();
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<IndividualPaymentRequest> message = new RequestMessage<IndividualPaymentRequest>();
             message.setRequestHeader(header);
@@ -1625,11 +1461,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<IndividualPaymentRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -1675,7 +1507,7 @@ public class WebServices  {
 
             RequestHeader header = new RequestHeader();
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<BusinessListRequest> message = new RequestMessage<BusinessListRequest>();
             message.setRequestHeader(header);
@@ -1690,11 +1522,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<BusinessListRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -1740,7 +1568,7 @@ public class WebServices  {
 
             RequestHeader header = new RequestHeader();
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<BusinessPaymentConfirmRequest> message = new RequestMessage<BusinessPaymentConfirmRequest>();
             message.setRequestHeader(header);
@@ -1753,11 +1581,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<BusinessPaymentConfirmRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -1803,7 +1627,7 @@ public class WebServices  {
 
             RequestHeader header = new RequestHeader();
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<BusinessPaymentRequest> message = new RequestMessage<BusinessPaymentRequest>();
             message.setRequestHeader(header);
@@ -1817,11 +1641,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<BusinessPaymentRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -1868,7 +1688,7 @@ public class WebServices  {
 
             RequestHeader header = new RequestHeader();
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<BusinessSearchRequest> message = new RequestMessage<BusinessSearchRequest>();
             message.setRequestHeader(header);
@@ -1880,11 +1700,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<BusinessListRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -1933,7 +1749,7 @@ public class WebServices  {
         try {
 
             RequestHeader header = new RequestHeader();
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
 
             RequestMessage<ChangePassCodeRequest> message = new RequestMessage<ChangePassCodeRequest>();
@@ -1949,7 +1765,6 @@ public class WebServices  {
 
             connection.setDoOutput(true);
             connection.setRequestMethod("PUT");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -1988,7 +1803,7 @@ public class WebServices  {
             RequestHeader header = new RequestHeader();
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
 
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<ChangeMemorableWordRequest> message = new RequestMessage<ChangeMemorableWordRequest>();
             message.setRequestHeader(header);
@@ -2001,7 +1816,6 @@ public class WebServices  {
 
             connection.setDoOutput(true);
             connection.setRequestMethod("PUT");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -2044,7 +1858,7 @@ public class WebServices  {
             RequestHeader header = new RequestHeader();
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
 
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<UnlinkUserRequest> message = new RequestMessage<UnlinkUserRequest>();
             message.setRequestHeader(header);
@@ -2057,7 +1871,6 @@ public class WebServices  {
 
             connection.setDoOutput(true);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -2102,7 +1915,7 @@ public class WebServices  {
             RequestHeader header = new RequestHeader();
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
 
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<ChangeEmailRequest> message = new RequestMessage<ChangeEmailRequest>();
             message.setRequestHeader(header);
@@ -2115,7 +1928,7 @@ public class WebServices  {
 
             connection.setDoOutput(true);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
+
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -2153,8 +1966,6 @@ public class WebServices  {
         SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
         try {
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("GET");
             InputStream inputStream;
             inputStream = connection.getInputStream();
@@ -2196,7 +2007,7 @@ public class WebServices  {
 
             RequestHeader header = new RequestHeader();
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<LatestPurchaseRequest> message = new RequestMessage<LatestPurchaseRequest>();
             message.setRequestHeader(header);
@@ -2206,11 +2017,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<LatestPurchaseRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -2257,7 +2064,7 @@ public class WebServices  {
 
             RequestHeader header = new RequestHeader();
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<PSPResultRequest> message = new RequestMessage<PSPResultRequest>();
             message.setRequestHeader(header);
@@ -2267,11 +2074,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<PSPResultRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -2318,7 +2121,7 @@ public class WebServices  {
 
             RequestHeader header = new RequestHeader();
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<PendingPurchaseListRequest> message = new RequestMessage<PendingPurchaseListRequest>();
             message.setRequestHeader(header);
@@ -2328,11 +2131,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<PendingPurchaseListRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -2380,7 +2179,7 @@ public class WebServices  {
 
             RequestHeader header = new RequestHeader();
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<PendingPaymentListRequest> message = new RequestMessage<PendingPaymentListRequest>();
             message.setRequestHeader(header);
@@ -2390,11 +2189,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<PendingPaymentListRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -2441,7 +2236,7 @@ public class WebServices  {
 
             RequestHeader header = new RequestHeader();
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<CancelPurchasePaymentRequest> message = new RequestMessage<CancelPurchasePaymentRequest>();
             message.setRequestHeader(header);
@@ -2451,11 +2246,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<CancelPurchasePaymentRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();
@@ -2503,7 +2294,7 @@ public class WebServices  {
 
             RequestHeader header = new RequestHeader();
             header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion("1.0-PA");
+            header.setVersion(Constants.REQUEST_VERSION);
 
             RequestMessage<UserPaymentRequest> message = new RequestMessage<UserPaymentRequest>();
             message.setRequestHeader(header);
@@ -2513,11 +2304,7 @@ public class WebServices  {
 
             Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<UserPaymentRequest>>() {}.getType();
             String jsonRequest = new Gson().toJson(message, requestType);
-
-            connection.setConnectTimeout(30000);
-            connection.setReadTimeout(30000);
             connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "application/json");
             OutputStream outputStream = connection.getOutputStream();
             outputStream.write(jsonRequest.getBytes());
             outputStream.flush();

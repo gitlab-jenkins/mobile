@@ -13,6 +13,8 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 
+import xyz.homapay.hampay.mobile.android.util.Constants;
+
 /**
  * Created by amir on 8/12/15.
  */
@@ -36,6 +38,9 @@ public class SSLConnection  {
             URL url = new URL(urlString);
             HttpsURLConnection urlConnection = (HttpsURLConnection)url.openConnection();
             urlConnection.setSSLSocketFactory(context.getSocketFactory());
+            urlConnection.setConnectTimeout(Constants.SERVICE_CONNECTION_TIMEOUT);
+            urlConnection.setReadTimeout(Constants.SERVICE_READ_TIMEOUT);
+            urlConnection.setRequestProperty("Content-Type", Constants.SERVICE_CONTENT_TYPE);
             urlConnection.setHostnameVerifier(new NullHostNameVerifier());
             return urlConnection;
         }

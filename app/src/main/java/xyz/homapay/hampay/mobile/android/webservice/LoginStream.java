@@ -34,20 +34,13 @@ public class LoginStream {
 
         sslConnection = new SSLConnection(context, Constants.HTTPS_OPENAM_LOGIN_URL);
         connection = sslConnection.setUpHttpsURLConnection();
-
-        connection.setRequestMethod("POST");
-        connection.setConnectTimeout(20 * 1000);
-        connection.setReadTimeout(20 * 1000);
-
         connection.setDoOutput(true);
-
         connection.setRequestMethod("POST");
-
-        connection.setConnectTimeout(30000);
-        connection.setReadTimeout(30000);
+        connection.setConnectTimeout(Constants.SERVICE_CONNECTION_TIMEOUT);
+        connection.setReadTimeout(Constants.SERVICE_READ_TIMEOUT);
         connection.setRequestProperty("username", loginData.getUserName());
         connection.setRequestProperty("password", loginData.getUserPassword());
-        connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty("Content-Type", Constants.SERVICE_CONTENT_TYPE);
         connection.setRequestProperty("Accept-Encoding", "UTF-8");
 
         try {
