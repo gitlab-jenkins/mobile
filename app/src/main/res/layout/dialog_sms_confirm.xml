@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/pay_disconfirm"
             android:textSize="14dp"
-            android:text="@string/pay_disconfirm" />
+            android:text="@string/sms_cancel" />
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
             android:id="@+id/confirmation"

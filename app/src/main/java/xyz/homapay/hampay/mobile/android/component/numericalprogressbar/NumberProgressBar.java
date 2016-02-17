@@ -82,8 +82,6 @@ public class NumberProgressBar extends View {
 
     private Paint mTextPaint;
 
-    private Typeface typeface;
-
     private RectF mUnreachedRectF = new RectF(0, 0, 0, 0);
 
     private RectF mReachedRectF = new RectF(0, 0, 0, 0);
@@ -120,8 +118,8 @@ public class NumberProgressBar extends View {
 
         default_reached_bar_height = dp2px(1.5f);
         default_unreached_bar_height = dp2px(1.0f);
-        default_text_size = sp2px(40);
-        default_progress_text_offset = dp2px(3.0f);
+        default_text_size = sp2px(0);
+        default_progress_text_offset = dp2px(0);
 
         //load styled attributes.
         final TypedArray attributes = context.getTheme().obtainStyledAttributes(attrs, R.styleable.NumberProgressBar,
@@ -130,7 +128,7 @@ public class NumberProgressBar extends View {
         mReachedBarColor = attributes.getColor(R.styleable.NumberProgressBar_progress_reached_color, default_reached_color);
         mUnreachedBarColor = attributes.getColor(R.styleable.NumberProgressBar_progress_unreached_color, default_unreached_color);
         mTextColor = attributes.getColor(R.styleable.NumberProgressBar_progress_text_color, default_text_color);
-        mTextSize = attributes.getDimension(R.styleable.NumberProgressBar_progress_text_size, default_text_size);
+        mTextSize  = /*attributes.getDimension(R.styleable.NumberProgressBar_progress_text_size, default_text_size)*/ 0.0F;
 
         mReachedBarHeight = attributes.getDimension(R.styleable.NumberProgressBar_progress_reached_bar_height, default_reached_bar_height);
         mUnreachedBarHeight = attributes.getDimension(R.styleable.NumberProgressBar_progress_unreached_bar_height, default_unreached_bar_height);
@@ -214,8 +212,6 @@ public class NumberProgressBar extends View {
         mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mTextPaint.setColor(mTextColor);
         mTextPaint.setTextSize(mTextSize);
-        typeface = Typeface.createFromAsset(context.getAssets(), "fonts/iran_sans.ttf");
-        mTextPaint.setTypeface(typeface);
     }
 
 
@@ -253,7 +249,7 @@ public class NumberProgressBar extends View {
 
         if ((mDrawTextStart + mDrawTextWidth) >= getWidth() - getPaddingRight()) {
             mDrawTextStart = getWidth() - getPaddingRight() - mDrawTextWidth;
-            mReachedRectF.right = mDrawTextStart - mOffset;
+            mReachedRectF.right = mDrawTextStart - 0;
         }
 
         float unreachedBarStart = mDrawTextStart + mDrawTextWidth + mOffset;

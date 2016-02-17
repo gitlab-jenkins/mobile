@@ -32,7 +32,7 @@
             android:layout_marginRight="34dp"
             android:textSize="15dp"
             android:inputType="textEmailAddress"
-            android:hint="@string/email"
+            android:hint="@string/email_change_hint"
             android:textColor="@android:color/black"
             android:gravity="center_vertical"
             android:padding="8dp"/>

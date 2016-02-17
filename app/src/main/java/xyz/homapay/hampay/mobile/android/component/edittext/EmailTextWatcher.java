@@ -2,6 +2,7 @@ package xyz.homapay.hampay.mobile.android.component.edittext;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 
@@ -15,14 +16,13 @@ public class EmailTextWatcher implements TextWatcher {
 
     FacedEditText emailValue;
     ImageView emailIcon;
-    CheckBox email_confirm_check;
+    private boolean isValidEmail = true;
 
 
-    public EmailTextWatcher(FacedEditText emailValue, ImageView emailIcon, CheckBox email_confirm_check)
+    public EmailTextWatcher(FacedEditText emailValue, ImageView emailIcon)
     {
         this.emailValue = emailValue;
         this.emailIcon = emailIcon;
-        this.email_confirm_check = email_confirm_check;
     }
 
     @SuppressWarnings("unused")
@@ -43,19 +43,30 @@ public class EmailTextWatcher implements TextWatcher {
     }
 
     @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count)
+    public void onTextChanged(CharSequence charSequence, int start, int before, int count)
     {
         emailValue.removeTextChangedListener(this);
+        emailIcon.setVisibility(View.VISIBLE);
 
         if (new EmailVerification().isValid(emailValue.getText().toString())){
             emailIcon.setImageResource(R.drawable.right_icon);
-            email_confirm_check.setChecked(true);
+            isValidEmail = true;
         }else {
             emailIcon.setImageResource(R.drawable.false_icon);
-            email_confirm_check.setChecked(false);
+            isValidEmail = false;
+        }
+
+        if (charSequence.toString().length() == 0){
+            emailIcon.setVisibility(View.INVISIBLE);
+            isValidEmail = true;
         }
 
         emailValue.addTextChangedListener(this);
 
     }
+
+    public boolean isValid(){
+        return isValidEmail;
+    }
+
 }

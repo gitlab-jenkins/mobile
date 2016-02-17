@@ -86,10 +86,9 @@ public class ProfileEntryActivity extends AppCompatActivity {
 
     String selectedBankCode;
 
+    EmailTextWatcher emailTextWatcher;
     FacedEditText emailValue;
     ImageView emailIcon;
-    boolean emailIsValid = false;
-    CheckBox email_confirm_check;
 
     Context context;
 
@@ -375,41 +374,17 @@ public class ProfileEntryActivity extends AppCompatActivity {
 
 
         emailValue = (FacedEditText)findViewById(R.id.emailValue);
-        email_confirm_check = (CheckBox)findViewById(R.id.email_confirm_check);
         emailIcon = (ImageView)findViewById(R.id.emailIcon);
-        email_confirm_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    if (!new EmailVerification().isValid(emailValue.getText().toString())) {
-                        email_confirm_check.setChecked(false);
-                    } else {
-                        emailIsValid = true;
-                    }
-                }
-            }
-        });
-        emailValue.addTextChangedListener(new EmailTextWatcher(emailValue, emailIcon, email_confirm_check));
+        emailTextWatcher = new EmailTextWatcher(emailValue, emailIcon);
+
+        emailValue.addTextChangedListener(emailTextWatcher);
         emailValue.setText(new DeviceInfo(context).getDeviceEmailAccount());
-
-
-
-//        hamPayDialog.showWaitingdDialog("");
-//        bankListRequest = new BankListRequest();
-//        requestBankList = new RequestBankList(this, new RequestBanksTaskCompleteListener(false));
-//        requestBankList.execute(bankListRequest);
 
         keepOn_button = (ButtonRectangle) findViewById(R.id.keepOn_button);
         keepOn_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-
-//                Intent intent = new Intent();
-//                intent.setClass(ProfileEntryActivity.this, SMSVerificationActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                finish();
-//                startActivity(intent);
 
                 View view = getCurrentFocus();
                 if (view != null) {
@@ -423,17 +398,12 @@ public class ProfileEntryActivity extends AppCompatActivity {
                 nationalCodeValue.clearFocus();
                 accountNumberValue.clearFocus();
 
-                if (email_confirm_check.isChecked()){
-                    if (!emailIsValid){
-                        Toast.makeText(context, getString(R.string.msg_email_invalid), Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                }
 
                 if (cellNumberIsValid && nationalCodeIsValid && accountNumberIsValid
                         && cellNumberValue.getText().toString().length() > 0
                         && nationalCodeValue.getText().toString().length() > 0
-                        && accountNumberValue.getText().toString().length() > 0) {
+                        && accountNumberValue.getText().toString().length() > 0
+                        && emailTextWatcher.isValid()) {
 
                     keepOn_button.setEnabled(false);
 
@@ -474,6 +444,10 @@ public class ProfileEntryActivity extends AppCompatActivity {
                         Toast.makeText(context, getString(R.string.msg_nationalCode_invalid), Toast.LENGTH_SHORT).show();
                         nationalCodeIcon.setImageResource(R.drawable.false_icon);
                         nationalCodeValue.requestFocus();
+                    }
+                    else if (!emailTextWatcher.isValid()){
+                        Toast.makeText(context, getString(R.string.msg_invalid_email), Toast.LENGTH_SHORT).show();
+                        emailValue.requestFocus();
                     }
                 }
 

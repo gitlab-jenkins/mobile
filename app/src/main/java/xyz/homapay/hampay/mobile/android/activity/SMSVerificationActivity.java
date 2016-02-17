@@ -53,8 +53,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
 
     ButtonRectangle verify_button;
 
-    PersianEnglishDigit persianEnglishDigit;
-
     RippleView digit_1;
     RippleView digit_2;
     RippleView digit_3;
@@ -100,6 +98,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
     private BroadcastReceiver mIntentReceiver;
 
     private NumberProgressBar numberProgressBar;
+    private FacedTextView remain_timer;
 
     CountDownTimer countDownTimer;
 
@@ -173,6 +172,10 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
     private String cellNumber;
     private String cardNumber;
 
+    private int minutes = 0;
+    private int seconds = 0;
+    private PersianEnglishDigit persianEnglishDigit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -190,16 +193,21 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         editor.commit();
 
         numberProgressBar = (NumberProgressBar)findViewById(R.id.numberProgressBar);
+        remain_timer = (FacedTextView)findViewById(R.id.remain_timer);
 
         countDownTimer = new CountDownTimer(181000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 numberProgressBar.incrementProgressBy(1);
+                minutes =  (int)(millisUntilFinished / (60 * 1000));
+                seconds = (int)(millisUntilFinished / 1000) % 60;
+                remain_timer.setText(persianEnglishDigit.E2P(String.format("%02d:%02d", minutes, seconds)));
             }
 
             public void onFinish() {
 
                 numberProgressBar.setProgress(0);
+                remain_timer.setText("۰۰:۰۰");
 
                 if (prefs.getString(Constants.RECEIVED_SMS_ACTIVATION, "").length() == 0) {
 

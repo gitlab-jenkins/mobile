@@ -3095,7 +3095,7 @@ public class HamPayDialog {
                 }
             }
         });
-        emailValue.addTextChangedListener(new EmailTextWatcher(emailValue, emailIcon, email_confirm_check));
+        emailValue.addTextChangedListener(new EmailTextWatcher(emailValue, emailIcon));
         emailValue.setText(prefs.getString(Constants.REGISTERED_USER_EMAIL, ""));
 
         change_email.setOnClickListener(new View.OnClickListener() {

@@ -6,9 +6,9 @@
 
 
     <string name="intro_1">هم‌پی \n پرداخت مدرن، ساده و مطمئن</string>
-    <string name="intro_2">پرداخت به دوستان با یک شماره موبایل</string>
-    <string name="intro_3">پرداخت به هر عضو شبکه هم‌پی با یک شماره موبایل</string>
-    <string name="intro_4">مشاهده حساب‌های مرتبط</string>
+    <string name="intro_2">تولید فاکتور</string>
+    <string name="intro_3">پرداخت‌های روزانه به کسب و کارهای گوناگون</string>
+    <string name="intro_4">مشاهده حساب و کارت مرتبط</string>
     <string name="intro_5">نمایش پرداخت‌ها و دریافت‌های گذشته</string>
 
 
@@ -98,6 +98,7 @@
     <string name="msg_cellNumber_invalid">شماره همراه خود را صحیح وارد کنید</string>
     <string name="msg_accountNo_invalid">شماره حساب خود را صحیح وارد کنید</string>
     <string name="msg_nationalCode_invalid">کد ملی خود را صحیح وارد کنید</string>
+    <string name="msg_invalid_email">ایمیل خود را صحیح وارد کنید</string>
     <string name="msg_family_invalid">نام و نام خانوادگی خود را صحیح وارد کنید</string>
     <string name="msg_email_invalid">ایمیل خود را صحیح وارد کنید</string>
     <string name="msg_username_invalid">نام و نام خانوادگی خود را وارد کنید</string>
@@ -115,7 +116,7 @@
 
     <string name="detail_transaction">جزئیات تراکنش</string>
     <string name="account_no">شماره کارت: </string>
-    <string name="mobile_no">شماره همراه: </string>
+    <string name="mobile_no">شماره همراه</string>
     <string name="account_no_entry">شماره کارت</string>
     <string name="mobile_no_entry">شماره همراه </string>
     <string name="account_type">نوع حساب: </string>
@@ -174,10 +175,9 @@
 
 
 
-    <string name="start_activity_title">شبکه پرداخت هم‌پی</string>
-    <string name="start_activity_text_1"> پرداخت به دوستان یا کسب و کار</string>
-    <string name="start_activity_text_2">تنها با یک کارت بانکی</string>
-    <string name="start_activity_text_3"> با نرم افزار ایمن و ساده هم‌پی</string>
+    <string name="start_activity_title">همراه پرداخت هم‌پی</string>
+    <string name="start_activity_text_1">پرداخت به افراد و کسب و کارها</string>
+    <string name="start_activity_text_2">با نرم‌افزار ساده و امن هم‌پی</string>
     <string name="tc_privacy_text">با شرایط استفاده از نرم‌افزار هم‌پی و قوانین حفظ حریم خصوصی کاربر موافقم.</string>
     <string name="tc_privacy_confirm_text">تایید می‌کنم.</string>
 
@@ -193,7 +193,7 @@
     <string name="please_entry_info">لطفا اطلاعات خود را وارد نمایید.</string>
     <string name="phone_entry">لطفا شماره همراه خود را وارد نمایید</string>
     <string name="bank_account_info">اطلاعات بانکی</string>
-    <string name="bank_account_info_detail">لطفا شماره کارتی را که مایل به اتصال شبکه هم‌پی هستید را همراه با نام و نام خانوادگی و کد ملی وارد نمایید.</string>
+    <string name="bank_account_info_detail">لطفا اطلاعات زیر را وارد کنید</string>
     <string name="progress_dialog_message">در حال دريافت اطلاعات...</string>
 
     <string name="user_status_verification">بررسی صحت حساب</string>
@@ -209,7 +209,8 @@
 
 
     <string name="sms_verification_text">یک کد فعالسازی ۵ رقمی به شماره %1$s  پیامک خواهد شد.</string>
-    <string name="sms_request">بفرست</string>
+    <string name="sms_request">تایید</string>
+    <string name="sms_cancel">انصراف</string>
     <string name="mobile_no_verification">تایید شماره همراه</string>
     <string name="deliver_verification">کد ۵ رقمی برای شما پیامک شد. در صورت عدم دریافت پیامک تا ۳ دقیقه، دکمه ارسال مجدد را فشار دهید.</string>
     <string name="verification">بررسی</string>
@@ -232,7 +233,8 @@
     <string name="name_family">نام و نام خانوادگی</string>
     <string name="account_id">شماره حساب</string>
     <string name="iter_code">کد ملی</string>
-    <string name="email">ایمیل</string>
+    <string name="email">ایمیل(اختیاری)</string>
+    <string name="email_change_hint">ایمیل</string>
     <string name="correct_data">اطلاعات بالا صحیح است</string>
     <string name="correct_info">تصحیح اطلاعات</string>
     <string name="verify_account_no">بررسی شماره حساب</string>
