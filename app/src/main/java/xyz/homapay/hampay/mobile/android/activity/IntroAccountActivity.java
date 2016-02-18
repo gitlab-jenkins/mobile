@@ -74,6 +74,7 @@ public class IntroAccountActivity extends AppCompatActivity {
         public RequestIBANConfirmationTaskCompleteListener() {
         }
 
+
         @Override
         public void onTaskComplete(ResponseMessage<IBANConfirmationResponse> ibanConfirmationResponseMessage) {
             hamPayDialog.dismisWaitingDialog();
