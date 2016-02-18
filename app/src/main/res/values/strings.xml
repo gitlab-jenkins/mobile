@@ -104,7 +104,6 @@
     <string name="msg_username_invalid">نام و نام خانوادگی خود را وارد کنید</string>
 
 
-
     <string name="some_people_at_hampay">بعضی از دوستان شما در هم‌پی</string>
     <string name="register">ثبت نام</string>
     <string name="start">شروع</string>
@@ -121,6 +120,7 @@
     <string name="mobile_no_entry">شماره همراه </string>
     <string name="account_type">نوع حساب: </string>
     <string name="bank">بانک:</string>
+    <string name="national_code">کد ملی: </string>
     <string name="unverified_account">محدود</string>
     <string name="pending_review_account">محدود (در انتظار تایید کاربر)</string>
     <string name="verified_account">محدود (در انتظار تایید)</string>
@@ -174,7 +174,6 @@
     <string name="fail_sms_verification">شماره اعتبار سنجی وارد شده صحیح نمی‌باشد. لطفا از صحت شماره اطمینان حاصل کرده و شماره را مجدد وارد کنید.</string>
 
 
-
     <string name="start_activity_title">همراه پرداخت هم‌پی</string>
     <string name="start_activity_text_1">پرداخت به افراد و کسب و کارها</string>
     <string name="start_activity_text_2">با نرم‌افزار ساده و امن هم‌پی</string>
@@ -197,6 +196,18 @@
     <string name="progress_dialog_message">در حال دريافت اطلاعات...</string>
 
     <string name="user_status_verification">بررسی صحت حساب</string>
+    <string name="intro_account">معرفی حساب بانکی</string>
+    <string name="intro_account_text">لطفا شماره شبای خود را وارد کنید و سپس دکمه بررسی را انتخاب کنید</string>
+    <string name="sheba_text">IR</string>
+    <string name="sheba_number_hint">شماره شبا</string>
+    <string name="sheba_number_text">شماره شبا: </string>
+    <string name="sheba_verify">بررسی</string>
+    <string name="sheba_question_part1_text">آیا شماره: </string>
+    <string name="sheba_question_part2_text">متعلق به %1$s در بانک %2$s می‌باشد؟</string>
+    <string name="sheba_question_part3_text">دقت کنید که این حساب برای دریافت مبالغ واریزی به شما استفاده می‌شود</string>
+    <string name="sheba_confirm">بله</string>
+    <string name="sheba_cancel">خیر</string>
+
     <string name="currency_rials">ريال</string>
     <string name="return_button">بازگشت</string>
     <string name="ok_button">تاييد</string>
@@ -259,11 +270,10 @@
     <string name="get_new_memorable">دریافت کلمه یادآوری جدید</string>
 
 
-
     <string name="remember_phrase">یادآوری</string>
     <string name="remember_phrase_text">لطفا یک کلمه کوتاه به عنوان یادآوری رمز عبور وارد نمایید.</string>
     <string name="complete_registarion">تکمیل ثبت نام</string>
-    <string name="complete_registarion_text_1">تبریک، شما عضو تازه شبکه هم‌پی هستید.</string>
+    <string name="complete_registarion_text_1">به همراه پرداخت هم‌پی خوش آمدید</string>
     <string name="complete_registarion_text_2">حالا دوستانتان در شبکه هم‌پی تنها با شماره موبایلتان به شما پول می‌دهند.</string>
 
 
@@ -325,7 +335,6 @@
     <string name="pay_confirm">انجام</string>
     <string name="pay_disconfirm">منصرف شدم</string>
     <string name="pay_ok">باشه</string>
-
 
 
     <string name="error_code">کد خطا:  %1$s</string>
@@ -422,6 +431,8 @@
     <string name="msg_fail_payment_permission">نوع حساب شما %1$s می باشد و برای پرداخت می بایستی به نوع عادی تبدیل شود.
     \n اما شما کماکان میتونید از اعضای عادی هم‌پی پول دریافت کنید.
     </string>
+    <string name="msg_fail_iban_confirm">بررسی شماره شبا با مشکل مواجه شد، مجدد تلاش کنید</string>
+    <string name="msg_fail_iban_change">تایید شماره شبا با مشکل مواجه شد، مجدد تلاش کنید</string>
     <string name="msg_fail_fetch_latest_payment">دریافت اطلاعات آخرین پرداخت شما با مشکل مواجه شد. مجدد تلاش کنید.</string>
     <string name="msg_violation_image_size">اندازه عکس می‌بایستی از ۵۱۲ کیلو بایت کمتر باشد.</string>
     <string name="msg_incorrect_amount">مبلغ واریزی شما می بایستی بین %1$s ریال و %2$s ریال باشد.</string>
@@ -436,7 +447,6 @@
     <string name="retry_registration_entry">مجدد تلاش می‌کنم</string>
     <string name="cancel_registration_entry">منصرف شدم</string>
     <string name="prevent_rooted_device">باشه</string>
-
 
 
     <string name="no_transaction">در حال حاضر هیچ تراکنشی برای شما ثبت نشده است.لطفا بعد از تراکنش پرداخت به این بخش رجوع کنید.</string>
@@ -476,6 +486,7 @@
     <string name="pay_with_hampay">تایید پرداخت</string>
     <string name="cancel_pay_with_hampay">فعلا بیخیال</string>
     <string name="request_payment_rial">مبلغ</string>
+    <string name="request_payment_vat">مالیات بر ارزش </string>
     <string name="request_payment_fee">کارمزد</string>
     <string name="user_pin2">رمز دوم کارت</string>
 

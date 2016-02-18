@@ -778,11 +778,9 @@ public class PaymentRequestFragment extends Fragment implements View.OnClickList
         user_name_text.setText(userProfileDTO.getFullName());
         MainActivity.user_account_name.setText(userProfileDTO.getFullName());
 
-        user_account_no_text.setText(persianEnglishDigit.E2P(userProfileDTO.getCardNumber()));
-        user_bank_name.setText(" " + userProfileDTO.getBankName());
+        user_account_no_text.setText(persianEnglishDigit.E2P(userProfileDTO.getCardDTO().getMaskedCardNumber()));
+        user_bank_name.setText(" " + userProfileDTO.getCardDTO().getBankName());
         user_mobile_no.setText(persianEnglishDigit.E2P(userProfileDTO.getCellNumber()));
-
-        editor.putInt(Constants.USER_VERIFICATION_STATUS, userProfileDTO.getVerificationStatus().ordinal());
         editor.commit();
 
         switch (userProfileDTO.getVerificationStatus()){

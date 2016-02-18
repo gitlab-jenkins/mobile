@@ -46,6 +46,8 @@ import xyz.homapay.hampay.common.core.model.request.ChangePassCodeRequest;
 import xyz.homapay.hampay.common.core.model.request.ContactUsRequest;
 import xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
 import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
+import xyz.homapay.hampay.common.core.model.request.IBANChangeRequest;
+import xyz.homapay.hampay.common.core.model.request.IBANConfirmationRequest;
 import xyz.homapay.hampay.common.core.model.request.IllegalAppListRequest;
 import xyz.homapay.hampay.common.core.model.request.IndividualPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
@@ -70,6 +72,8 @@ import xyz.homapay.hampay.common.core.model.response.BusinessPaymentConfirmRespo
 import xyz.homapay.hampay.common.core.model.response.BusinessPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.ChangeEmailResponse;
 import xyz.homapay.hampay.common.core.model.response.ContactUsResponse;
+import xyz.homapay.hampay.common.core.model.response.IBANChangeResponse;
+import xyz.homapay.hampay.common.core.model.response.IBANConfirmationResponse;
 import xyz.homapay.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
 import xyz.homapay.hampay.common.core.model.response.IndividualPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
@@ -104,6 +108,8 @@ import xyz.homapay.hampay.mobile.android.async.RequestContactHampayEnabled;
 import xyz.homapay.hampay.mobile.android.async.RequestCredentialEntry;
 import xyz.homapay.hampay.mobile.android.async.RequestFetchUserData;
 import xyz.homapay.hampay.mobile.android.async.RequestHamPayBusiness;
+import xyz.homapay.hampay.mobile.android.async.RequestIBANChange;
+import xyz.homapay.hampay.mobile.android.async.RequestIBANConfirmation;
 import xyz.homapay.hampay.mobile.android.async.RequestIllegalAppList;
 import xyz.homapay.hampay.mobile.android.async.RequestIndividualPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPurchase;
@@ -3428,6 +3434,180 @@ public class HamPayDialog {
         dialog.setTitle(null);
         dialog.setCanceledOnTouchOutside(true);
 
+        dialog.show();
+    }
+
+    public void showIBANConfirmationDialog(final String iban, final IBANConfirmationResponse ibanConfirmationResponse){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_request_iban_confirm, null);
+
+        FacedTextView ibanNumber = (FacedTextView)view.findViewById(R.id.ibanNumber);
+        FacedTextView ibanOwnInfo = (FacedTextView)view.findViewById(R.id.ibanOwnInfo);
+
+        ibanNumber.setText("IR" + new PersianEnglishDigit().E2P(iban));
+        ibanOwnInfo.setText(activity.getString(R.string.sheba_question_part2_text, ibanConfirmationResponse.getName(), ibanConfirmationResponse.getBankName()));
+
+        FacedTextView iban_request_confirm = (FacedTextView) view.findViewById(R.id.iban_request_confirm);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
+        iban_request_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IBANChangeRequest ibanChangeRequest = new IBANChangeRequest();
+                ibanChangeRequest.setIban(iban);
+                RequestIBANChange requestIBANChange = new RequestIBANChange(activity, new RequestIBANChangeTaskCompleteListener(ibanChangeRequest));
+                requestIBANChange.execute(ibanChangeRequest);
+            }
+        });
+
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                activity.finish();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
+
+    public class RequestIBANChangeTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<IBANChangeResponse>> {
+
+        IBANChangeRequest ibanChangeRequest;
+        RequestIBANChange requestIBANChange;
+
+        public RequestIBANChangeTaskCompleteListener(IBANChangeRequest ibanChangeRequest) {
+            this.ibanChangeRequest = ibanChangeRequest;
+        }
+
+        @Override
+        public void onTaskComplete(ResponseMessage<IBANChangeResponse> ibanChangeResponseMessage) {
+            dismisWaitingDialog();
+            if (ibanChangeResponseMessage != null) {
+                if (ibanChangeResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("result", 1023);
+                    activity.setResult(1023);
+                    activity.finish();
+                } else {
+                    requestIBANChange = new RequestIBANChange(activity, new RequestIBANChangeTaskCompleteListener(ibanChangeRequest));
+                    showFailIBANChangeDialog(requestIBANChange, ibanChangeRequest,
+                            ibanChangeResponseMessage.getService().getResultStatus().getCode(),
+                            ibanChangeResponseMessage.getService().getResultStatus().getDescription());
+                }
+            } else {
+                requestIBANChange = new RequestIBANChange(activity, new RequestIBANChangeTaskCompleteListener(ibanChangeRequest));
+                showFailIBANChangeDialog(requestIBANChange, ibanChangeRequest,
+                        Constants.LOCAL_ERROR_CODE,
+                        activity.getString(R.string.msg_fail_iban_change));
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
+    }
+
+    public void showFailIBANChangeDialog(final RequestIBANChange requestIBANChange,
+                                         final IBANChangeRequest ibanChangeRequest,
+                                         final String code,
+                                         final String message){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_request_iban_confirm, null);
+
+        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+
+        responseCode.setText(activity.getString(R.string.error_code, code));
+        responseMessage.setText(message);
+
+        FacedTextView retry_iban_request = (FacedTextView) view.findViewById(R.id.retry_iban_request);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
+        retry_iban_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                requestIBANChange.execute(ibanChangeRequest);
+            }
+        });
+
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
+    public void showFailIBANConfirmationDialog(final RequestIBANConfirmation requestIBANConfirmation,
+                                               final IBANConfirmationRequest ibanConfirmationRequest,
+                                               final String code,
+                                               final String message){
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_request_iban_confirm, null);
+
+        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+
+        responseCode.setText(activity.getString(R.string.error_code, code));
+        responseMessage.setText(message);
+
+        FacedTextView retry_iban_request = (FacedTextView) view.findViewById(R.id.retry_iban_request);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
+        retry_iban_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                requestIBANConfirmation.execute(ibanConfirmationRequest);
+            }
+        });
+
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(true);
         dialog.show();
     }
 

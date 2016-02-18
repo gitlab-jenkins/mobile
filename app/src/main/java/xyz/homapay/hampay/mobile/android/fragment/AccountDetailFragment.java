@@ -30,6 +30,7 @@ import xyz.homapay.hampay.common.core.model.response.VerifyAccountResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.activity.IntroAccountActivity;
 import xyz.homapay.hampay.mobile.android.activity.MainActivity;
 import xyz.homapay.hampay.mobile.android.activity.PayOneActivity;
 import xyz.homapay.hampay.mobile.android.activity.RequestPayBusinessListActivity;
@@ -75,6 +76,9 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     FacedTextView user_account_no_text;
     FacedTextView user_bank_name;
     FacedTextView user_mobile_no;
+    FacedTextView user_iban_value;
+    FacedTextView user_iban_bank;
+    FacedTextView user_national_code;
     FacedTextView user_account_type;
     FacedTextView user_account_title;
     FacedTextView user_last_login;
@@ -119,6 +123,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     HamPayDialog hamPayDialog;
 
     ButtonRectangle verify_account_button;
+    ButtonRectangle intro_account_button;
 
     UserProfileDTO userProfileDTO;
 
@@ -275,6 +280,17 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         hampay_3_ll.setOnClickListener(this);
         hampay_4_ll.setOnClickListener(this);
 
+
+        intro_account_button = (ButtonRectangle)rootView.findViewById(R.id.intro_account_button);
+        intro_account_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(context, IntroAccountActivity.class);
+                startActivityForResult(intent, 1023);
+            }
+        });
+
         verify_account_button = (ButtonRectangle)rootView.findViewById(R.id.verify_account_button);
         verify_account_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -292,6 +308,9 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         user_account_no_text = (FacedTextView)rootView.findViewById(R.id.user_account_no_text);
         user_bank_name = (FacedTextView)rootView.findViewById(R.id.user_bank_name);
         user_mobile_no = (FacedTextView)rootView.findViewById(R.id.user_mobile_no);
+        user_iban_value = (FacedTextView)rootView.findViewById(R.id.user_iban_value);
+        user_iban_bank = (FacedTextView)rootView.findViewById(R.id.user_iban_bank);
+        user_national_code = (FacedTextView)rootView.findViewById(R.id.user_national_code);
         user_account_type = (FacedTextView)rootView.findViewById(R.id.user_account_type);
         user_account_title = (FacedTextView)rootView.findViewById(R.id.user_account_title);
         user_last_login = (FacedTextView)rootView.findViewById(R.id.user_last_login);
@@ -699,8 +718,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                     intent.setClass(getActivity(), VerifyAccountActivity.class);
                     intent.putExtra(Constants.TRANSFER_MONEY_COMMENT, verifyAccountResponseMessage.getService().getTransferMoneyComment());
                     startActivityForResult(intent, 1023);
-                    startActivity(intent);
-
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Verify Account")
@@ -771,32 +788,13 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         user_name_text.setText(userProfileDTO.getFullName());
         MainActivity.user_account_name.setText(userProfileDTO.getFullName());
 
-        user_account_no_text.setText(persianEnglishDigit.E2P(userProfileDTO.getCardNumber()));
-        user_bank_name.setText(" " + userProfileDTO.getBankName());
+        user_account_no_text.setText(persianEnglishDigit.E2P(userProfileDTO.getCardDTO().getMaskedCardNumber()));
+        user_bank_name.setText(" " + userProfileDTO.getCardDTO().getBankName());
         user_mobile_no.setText(persianEnglishDigit.E2P(userProfileDTO.getCellNumber()));
-
-        editor.putInt(Constants.USER_VERIFICATION_STATUS, userProfileDTO.getVerificationStatus().ordinal());
+        user_iban_value.setText("IR" + persianEnglishDigit.E2P(userProfileDTO.getIbanDTO().getIban()));
+        user_iban_bank.setText(userProfileDTO.getIbanDTO().getBankName());
+        user_national_code.setText(persianEnglishDigit.E2P(userProfileDTO.getCellNumber()));
         editor.commit();
-
-        switch (userProfileDTO.getVerificationStatus()){
-
-            case UNVERIFIED:
-                user_account_type.setText(getString(R.string.unverified_account));
-                break;
-
-            case PENDING_REVIEW:
-                user_account_type.setText(getString(R.string.pending_review_account));
-                break;
-
-            case VERIFIED:
-                user_account_type.setText(getString(R.string.verified_account));
-                break;
-
-            case DELEGATED:
-                user_account_type.setText(getString(R.string.delegate_account));
-                break;
-        }
-
 
         if (userProfileDTO.getLastLoginDate() != null) {
             user_last_login.setText(getString(R.string.last_login) + ": "
@@ -819,11 +817,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                         user_image_url = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contactDTOs.get(0).getContactImageId();
                         new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_1)).execute(user_image_url);
                     }
-//                    if (contactDTOs.get(0).getUserVerificationStatus() == UserVerificationStatus.DELEGATED){
-//                        hampay_image_1.setImageResource(R.drawable.user_icon_blue_s);
-//                    }else {
-//                        hampay_image_1.setImageResource(R.drawable.user_icon_blak_s);
-//                    }
                     break;
                 case 1:
                     hampay_2_ll.setVisibility(View.VISIBLE);
@@ -832,11 +825,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                         user_image_url = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contactDTOs.get(1).getContactImageId();
                         new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_2)).execute(user_image_url);
                     }
-//                    if (contactDTOs.get(1).getUserVerificationStatus() == UserVerificationStatus.DELEGATED){
-//                        hampay_image_2.setImageResource(R.drawable.user_icon_blue_s);
-//                    }else {
-//                        hampay_image_2.setImageResource(R.drawable.user_icon_blak_s);
-//                    }
                     break;
                 case 2:
                     hampay_3_ll.setVisibility(View.VISIBLE);

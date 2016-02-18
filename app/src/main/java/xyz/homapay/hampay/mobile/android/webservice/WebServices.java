@@ -46,6 +46,8 @@ import xyz.homapay.hampay.common.core.model.request.ChangePassCodeRequest;
 import xyz.homapay.hampay.common.core.model.request.ContactUsRequest;
 import xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
 import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
+import xyz.homapay.hampay.common.core.model.request.IBANChangeRequest;
+import xyz.homapay.hampay.common.core.model.request.IBANConfirmationRequest;
 import xyz.homapay.hampay.common.core.model.request.IllegalAppListRequest;
 import xyz.homapay.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
 import xyz.homapay.hampay.common.core.model.request.IndividualPaymentRequest;
@@ -82,6 +84,8 @@ import xyz.homapay.hampay.common.core.model.response.ChangePassCodeResponse;
 import xyz.homapay.hampay.common.core.model.response.ContactUsResponse;
 import xyz.homapay.hampay.common.core.model.response.ContactsHampayEnabledResponse;
 import xyz.homapay.hampay.common.core.model.response.GetUserIdTokenResponse;
+import xyz.homapay.hampay.common.core.model.response.IBANChangeResponse;
+import xyz.homapay.hampay.common.core.model.response.IBANConfirmationResponse;
 import xyz.homapay.hampay.common.core.model.response.IllegalAppListResponse;
 import xyz.homapay.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
 import xyz.homapay.hampay.common.core.model.response.IndividualPaymentResponse;
@@ -2328,6 +2332,123 @@ public class WebServices  {
 
             Gson gson = builder.create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<UserPaymentResponse>>() {}.getType());
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (connection != null)
+                connection.disconnect();
+        }
+        return responseMessage;
+    }
+
+
+    public ResponseMessage<IBANConfirmationResponse> newIBANConfirmation(IBANConfirmationRequest ibanConfirmationRequest){
+
+        ResponseMessage<IBANConfirmationResponse> responseMessage = null;
+        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/iban/confirmation");
+        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+
+        try {
+
+            RequestHeader header = new RequestHeader();
+            header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+            header.setVersion(Constants.REQUEST_VERSION);
+
+            RequestMessage<IBANConfirmationRequest> message = new RequestMessage<IBANConfirmationRequest>();
+            message.setRequestHeader(header);
+            IBANConfirmationRequest request = ibanConfirmationRequest;
+            request.setRequestUUID(UUID.randomUUID().toString());
+            message.setService(request);
+
+            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<IBANConfirmationRequest>>() {}.getType();
+            String jsonRequest = new Gson().toJson(message, requestType);
+            connection.setRequestMethod("POST");
+            OutputStream outputStream = connection.getOutputStream();
+            outputStream.write(jsonRequest.getBytes());
+            outputStream.flush();
+
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
+
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                }
+            });
+
+            Gson gson = builder.create();
+            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<IBANConfirmationResponse>>() {}.getType());
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (connection != null)
+                connection.disconnect();
+        }
+        return responseMessage;
+    }
+
+
+
+    public ResponseMessage<IBANChangeResponse> newIBANChange(IBANChangeRequest ibanChangeRequest){
+
+        ResponseMessage<IBANChangeResponse> responseMessage = null;
+        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/iban/change");
+        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+
+        try {
+
+            RequestHeader header = new RequestHeader();
+            header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+            header.setVersion(Constants.REQUEST_VERSION);
+
+            RequestMessage<IBANChangeRequest> message = new RequestMessage<IBANChangeRequest>();
+            message.setRequestHeader(header);
+            IBANChangeRequest request = ibanChangeRequest;
+            request.setRequestUUID(UUID.randomUUID().toString());
+            message.setService(request);
+
+            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<IBANChangeRequest>>() {}.getType();
+            String jsonRequest = new Gson().toJson(message, requestType);
+            connection.setRequestMethod("POST");
+            OutputStream outputStream = connection.getOutputStream();
+            outputStream.write(jsonRequest.getBytes());
+            outputStream.flush();
+
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
+
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                }
+            });
+
+            Gson gson = builder.create();
+            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<IBANChangeResponse>>() {}.getType());
 
 
 

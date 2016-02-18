@@ -203,8 +203,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             input_digit_6.setText(persianPurchaseCode.charAt(5) + "");
 
             paymentPriceValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getAmount().toString()) + " ریال");
-            if (purchaseInfoDTO.getPurchaseFee() != null) {
-                paymentFeeValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getPurchaseFee().toString()) + " ریال");
+            if (purchaseInfoDTO.getFeeCharge() != null) {
+                paymentFeeValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getFeeCharge().toString()) + " ریال");
             }else {
                 paymentFeeValue.setText("۰" + " ریال");
             }
@@ -248,10 +248,10 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 string2stringMapEntry s2sMapEntry = new string2stringMapEntry();
 
                 s2sMapEntry.key = "Amount";
-                if (purchaseInfoDTO.getPurchaseFee() != null) {
-                    s2sMapEntry.value = (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getPurchaseFee()) + "";
+                if (purchaseInfoDTO.getFeeCharge() != null) {
+                    s2sMapEntry.value = (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge())  + purchaseInfoDTO.getVat() + "";
                 }else {
-                    s2sMapEntry.value = (purchaseInfoDTO.getAmount()) + "";
+                    s2sMapEntry.value = (purchaseInfoDTO.getAmount()) + purchaseInfoDTO.getVat() + "";
                 }
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
@@ -464,8 +464,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                         input_digit_6.setText(persianPurchaseCode.charAt(5) + "");
 
                         paymentPriceValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getAmount().toString()) + " ریال");
-                        if (purchaseInfoDTO.getPurchaseFee() != null) {
-                            paymentFeeValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getPurchaseFee().toString()) + " ریال");
+                        if (purchaseInfoDTO.getFeeCharge() != null) {
+                            paymentFeeValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getFeeCharge().toString()) + " ریال");
                         } else {
                             paymentFeeValue.setText("۰" + " ریال");
                         }

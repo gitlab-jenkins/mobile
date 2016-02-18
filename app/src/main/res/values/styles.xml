@@ -6,12 +6,9 @@
     </style>
 
 
-
-
     <style name="MyMaterialTheme" parent="MyMaterialTheme.Base">
 
     </style>
-
 
 
     <style name="AppTheme.Translucent" parent="android:style/Theme.Translucent">
@@ -91,11 +88,8 @@
         <item name="unselected_height">6dp</item>
     </style>
 
-    <declare-styleable
-        name="TypefaceTextView">
-        <attr
-            name="customTypeface"
-            format="string"/>
+    <declare-styleable name="TypefaceTextView">
+        <attr name="customTypeface" format="string" />
     </declare-styleable>
 
     <style name="Material"></style>
@@ -148,14 +142,6 @@
     </style>
 
 
-
-
-
-
-
-
-
-
     <style name="MyMaterialTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
@@ -166,9 +152,6 @@
         <item name="android:windowBackground">@color/windowBackground</item>
         <item name="windowNoTitle">true</item>
     </style>
-
-
-
 
 
     <style name="AppThemeNoActionBar" parent="AppTheme">
@@ -182,20 +165,6 @@
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
         <item name="android:windowBackground">@color/windowBackground</item>
     </style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     <style name="LinearProgressDrawableStyle" parent="Material.Drawable.LinearProgress">
@@ -304,9 +273,10 @@
         <item name="pv_progressStyle">@style/Material.Drawable.LinearProgress.Buffer</item>
         <item name="pv_progressMode">buffer</item>
     </style>
-    <style name="MyMaterialTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-    <style name="MyMaterialTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="MyMaterialTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="MyMaterialTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
 </resources>

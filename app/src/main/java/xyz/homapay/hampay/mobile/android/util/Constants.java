@@ -6,7 +6,7 @@ public class Constants {
     //    public static String SERVER_IP = "176.58.104.158";//England Server
     public static String URL_PREFIX = "/hampay";
 
-//    public static final String HTTPS_SERVER_IP = "https://192.168.1.116" + URL_PREFIX; //Sima Server
+//    public static final String HTTPS_SERVER_IP = "https://192.168.1.101" + URL_PREFIX; //Sima Server
         public static String HTTPS_SERVER_IP = "https://176.58.104.158" + URL_PREFIX;//England Server
 //    public static String HTTPS_SERVER_IP = "https://176.58.114.27" + URL_PREFIX;//England Server
 //    public static String HTTPS_SERVER_IP = "https://192.168.1.109" + URL_PREFIX;//Masoud Server
@@ -24,7 +24,6 @@ public class Constants {
     public static final String WEB_PAGE_ADDRESS = "web_page_address";
 
     public static final String MEMORABLE_WORD = "MemorableWord";
-    public static final String USER_VERIFICATION_STATUS = "UserVerificationStatus";
 
     public static final String LAUNCH_APP_COUNT = "launch_app_count";
     public static final String FORCE_FETCH_ILLEGAL_APPS = "forceFetchIllegalApps";

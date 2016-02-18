@@ -233,19 +233,19 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         List<LatestPurchase> latestPurchaseList = databaseHelper.getAllLatestPurchases();
 
-        if (pendingPurchasePaymentId.length() != 0) {
-            if (databaseHelper.getIsExistPurchaseRequest(pendingPurchasePaymentId)) {
-                LatestPurchase latestPurchase = databaseHelper.getPurchaseRequest(pendingPurchasePaymentId);
-                if (latestPurchase.getIsCanceled().equalsIgnoreCase("0")) {
-                    intent.setClass(context, RequestBusinessPayDetailActivity.class);
-                    startActivity(intent);
-                }
-            }else {
-                databaseHelper.createPurchaseRequest(pendingPurchasePaymentId);
-                intent.setClass(context, RequestBusinessPayDetailActivity.class);
-                startActivity(intent);
-            }
-        }
+//        if (pendingPurchasePaymentId.length() != 0) {
+//            if (databaseHelper.getIsExistPurchaseRequest(pendingPurchasePaymentId)) {
+//                LatestPurchase latestPurchase = databaseHelper.getPurchaseRequest(pendingPurchasePaymentId);
+//                if (latestPurchase.getIsCanceled().equalsIgnoreCase("0")) {
+//                    intent.setClass(context, RequestBusinessPayDetailActivity.class);
+//                    startActivity(intent);
+//                }
+//            }else {
+//                databaseHelper.createPurchaseRequest(pendingPurchasePaymentId);
+//                intent.setClass(context, RequestBusinessPayDetailActivity.class);
+//                startActivity(intent);
+//            }
+//        }
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE).edit();
@@ -257,7 +257,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         editor.putLong(Constants.MIN_BUSINESS_XFER_AMOUNT, this.userProfileDTO.getMinBusinessXferAmount());
         editor.putLong(Constants.MAX_INDIVIDUAL_XFER_AMOUNT, this.userProfileDTO.getMaxIndividualXferAmount());
         editor.putLong(Constants.MIN_INDIVIDUAL_XFER_AMOUNT, this.userProfileDTO.getMinIndividualXferAmount());
-        editor.putInt(Constants.USER_VERIFICATION_STATUS, userProfileDTO.getVerificationStatus().ordinal());
         editor.commit();
 
 
@@ -674,7 +673,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 }
 
             }
-        }else if (requestCode == 1023){
+        }else if (resultCode == 1023){
             if(resultCode == 1023){
                 fragment = new AccountDetailFragment();
                 bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);

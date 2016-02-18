@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:geekui="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="right"
+    android:background="@drawable/dialog_pay_theme"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+        geekui:customTypeface="fonts/iran_sans.ttf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/normal_text"
+        android:textSize="15dp"
+        android:text="@string/sheba_question_part1_text"
+        android:gravity="right"
+        android:layout_gravity="right"
+        android:layout_margin="8dp"/>
+
+
+    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+        android:id="@+id/ibanNumber"
+        geekui:customTypeface="fonts/iran_sans.ttf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/register_btn_color"
+        android:textSize="15dp"
+        android:gravity="left"
+        android:layout_gravity="left"
+        android:layout_marginLeft="8dp"/>
+
+    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+        android:id="@+id/ibanOwnInfo"
+        geekui:customTypeface="fonts/iran_sans.ttf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/normal_text"
+        android:textSize="15dp"
+        android:text="@string/sheba_question_part2_text"
+        android:gravity="right"
+        android:layout_gravity="right"
+        android:layout_marginRight="8dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/entry_field_color"
+        android:layout_marginTop="18dp"/>
+
+
+    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+        geekui:customTypeface="fonts/iran_sans.ttf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#e1aa9e"
+        android:textSize="15dp"
+        android:text="@string/sheba_question_part3_text"
+        android:gravity="right"
+        android:layout_gravity="right"
+        android:layout_margin="8dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/entry_field_color" />
+
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:padding="8dp">
+
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+            android:id="@+id/iban_request_confirm"
+            geekui:customTypeface="fonts/iran_sans.ttf"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/pay_confirm"
+            android:textSize="14dp"
+            android:gravity="right"
+            android:layout_alignParentRight="true"
+            android:text="@string/sheba_confirm" />
+
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+            android:id="@+id/cancel_request"
+            geekui:customTypeface="fonts/iran_sans.ttf"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14dp"
+            android:gravity="left"
+            android:text="@string/sheba_cancel" />
+
+    </RelativeLayout>
+
+</LinearLayout>

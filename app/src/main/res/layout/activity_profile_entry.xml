@@ -296,6 +296,7 @@
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
                             android:padding="8dp"
+                            android:text="09126157905"
                             android:contentDescription="phone"/>
 
                         <ImageView
@@ -348,7 +349,8 @@
                             android:gravity="center_vertical"
                             android:padding="8dp"
                             android:contentDescription="account"
-                            android:maxLength="19"/>
+                            android:maxLength="19"
+                            android:text="1111-1111-1111-1111"/>
 
                         <ImageView
                             android:id="@+id/accountNumberIcon"
@@ -378,7 +380,8 @@
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
                             android:padding="8dp"
-                            android:contentDescription="national"/>
+                            android:contentDescription="national"
+                            android:text="4899915667"/>
 
                         <ImageView
                             android:id="@+id/nationalCodeIcon"
@@ -406,7 +409,8 @@
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
                             android:padding="8dp"
-                            android:contentDescription="account"/>
+                            android:contentDescription="account"
+                            android:text="amir"/>
 
                         <ImageView
                             android:id="@+id/userNameFamilyIcon"
@@ -436,7 +440,8 @@
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
                             android:padding="8dp"
-                            android:contentDescription="email"/>
+                            android:contentDescription="email"
+                            android:text="amirh.sharafkar@gmail.com"/>
 
                         <ImageView
                             android:id="@+id/emailIcon"
