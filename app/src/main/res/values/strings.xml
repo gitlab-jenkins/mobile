@@ -18,20 +18,21 @@
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
 
-    <string name="nav_item_payment_request">پرداخت‌ها</string>
+    <string name="nav_item_main_fragmrnt">صفحه اصلی</string>
     <string name="nav_item_account_detail">جزئیات حساب</string>
-    <string name="nav_item_transactions">تراکنشها</string>
-    <string name="nav_item_pay_to_one">پرداخت به فرد</string>
-    <string name="nav_item_pending_payment">صف پرداخت‌ها</string>
-    <string name="nav_item_request_credit">درخواست وجه</string>
-    <string name="nav_item_pay_to_business">پرداخت به کسب و کار</string>
+
+    <!--<string name="nav_item_transactions">تراکنشها</string>-->
+    <!--<string name="nav_item_pay_to_one">پرداخت به فرد</string>-->
+    <!--<string name="nav_item_pending_payment">صف پرداخت‌ها</string>-->
+    <!--<string name="nav_item_request_credit">درخواست وجه</string>-->
+    <!--<string name="nav_item_pay_to_business">پرداخت به کسب و کار</string>-->
     <string name="nav_item_settings">تنظیمات</string>
     <string name="nav_item_contacts_us">تماس با ما</string>
     <string name="nav_item_help">راهنما</string>
-    <string name="nav_item_about">درباره ما</string>
-    <string name="nav_item_rate">امتیاز دهی</string>
-    <string name="nav_item_tc">شرایط استفاده</string>
-    <string name="nav_item_privacy">حفظ حریم خصوصی</string>
+    <!--<string name="nav_item_about">درباره ما</string>-->
+    <!--<string name="nav_item_rate">امتیاز دهی</string>-->
+    <!--<string name="nav_item_tc">شرایط استفاده</string>-->
+    <!--<string name="nav_item_privacy">حفظ حریم خصوصی</string>-->
     <string name="nav_item_exit">خروج</string>
 
     <string name="transaction_to">به: </string>
@@ -45,24 +46,23 @@
 
     <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">
-        <item>@string/nav_item_payment_request</item>
+        <item>@string/nav_item_main_fragmrnt</item>
         <item>@string/nav_item_account_detail</item>
-        <item>@string/nav_item_transactions</item>
-        <item>@string/nav_item_pending_payment</item>
-        <item>@string/nav_item_request_credit</item>
-        <!--<item>@string/nav_item_pay_to_one</item>-->
-        <!--<item>@string/nav_item_pay_to_business</item>-->
+        <!--<item>@string/nav_item_transactions</item>-->
+        <!--<item>@string/nav_item_pending_payment</item>-->
+        <!--<item>@string/nav_item_request_credit</item>-->
         <item>@string/nav_item_settings</item>
         <item>@string/nav_item_contacts_us</item>
         <item>@string/nav_item_help</item>
-        <item>@string/nav_item_about</item>
-        <item>@string/nav_item_rate</item>
-        <item>@string/nav_item_tc</item>
-        <item>@string/nav_item_privacy</item>
+        <!--<item>@string/nav_item_about</item>-->
+        <!--<item>@string/nav_item_rate</item>-->
+        <!--<item>@string/nav_item_tc</item>-->
+        <!--<item>@string/nav_item_privacy</item>-->
         <item>@string/nav_item_exit</item>
     </string-array>
 
-    <string name="title_payment_request">پرداخت‌ها</string>
+    <string name="title_main_fragment">صفحه اصلی</string>
+    <string name="title_payment_request">صفحه اصلی</string>
     <string name="title_account_detail">جزئیات حساب</string>
     <string name="title_transactions">تراکنش‌ها</string>
     <string name="title_pending_payment">صف پرداخت‌ها</string>
@@ -112,6 +112,11 @@
     \n
         مجدد تلاش کنید
     </string>
+
+    <string name="main_fragment_generate_factor">تولید فاکتور</string>
+    <string name="main_fragment_business_payment">پرداخت به کسب و کار</string>
+    <string name="main_fragment_pending_factor">فاکتورهای در انتظار</string>
+    <string name="main_fragment_transactions">تراکنش‌ها</string>
 
     <string name="detail_transaction">جزئیات تراکنش</string>
     <string name="account_no">شماره کارت: </string>
@@ -485,9 +490,10 @@
     <string name="card_nubmer">شماره کارت</string>
     <string name="pay_with_hampay">تایید پرداخت</string>
     <string name="cancel_pay_with_hampay">فعلا بیخیال</string>
-    <string name="request_payment_rial">مبلغ</string>
-    <string name="request_payment_vat">مالیات بر ارزش </string>
-    <string name="request_payment_fee">کارمزد</string>
+    <string name="request_payment_rial">مبلغ: </string>
+    <string name="request_payment_vat">مالیات بر ارزش افزوده: </string>
+    <string name="request_payment_fee">کارمزد: </string>
+    <string name="request_payment_total">مبلغ نهایی: </string>
     <string name="user_pin2">رمز دوم کارت</string>
 
     <!--<string name="msg_success_pending_payment">پرداخت شما با کد خرید  s$1% با موفقیت انجام شد.</string>-->

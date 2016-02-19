@@ -241,7 +241,7 @@
                             android:id="@+id/step_icon"
                             android:layout_width="36dp"
                             android:layout_height="36dp"
-                            android:src="@drawable/step_icon_pass"
+                            android:src="@drawable/step_icon_mobile"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:layout_margin="12dp"/>

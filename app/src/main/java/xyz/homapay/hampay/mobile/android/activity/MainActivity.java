@@ -54,6 +54,7 @@ import xyz.homapay.hampay.mobile.android.fragment.AboutFragment;
 import xyz.homapay.hampay.mobile.android.fragment.AccountDetailFragment;
 import xyz.homapay.hampay.mobile.android.fragment.FragmentDrawer;
 import xyz.homapay.hampay.mobile.android.fragment.GuideFragment;
+import xyz.homapay.hampay.mobile.android.fragment.MainFragment;
 import xyz.homapay.hampay.mobile.android.fragment.PayToBusinessFragment;
 import xyz.homapay.hampay.mobile.android.fragment.CreditRequestFragment;
 import xyz.homapay.hampay.mobile.android.fragment.PaymentRequestFragment;
@@ -89,9 +90,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     CircleImageView image_profile;
 
     int currentFragmet = 0;
-
-    ImageView first_shortcut;
-    ImageView second_shortcut;
 
     UserProfileDTO userProfileDTO;
 
@@ -233,33 +231,28 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         List<LatestPurchase> latestPurchaseList = databaseHelper.getAllLatestPurchases();
 
-//        if (pendingPurchasePaymentId.length() != 0) {
-//            if (databaseHelper.getIsExistPurchaseRequest(pendingPurchasePaymentId)) {
-//                LatestPurchase latestPurchase = databaseHelper.getPurchaseRequest(pendingPurchasePaymentId);
-//                if (latestPurchase.getIsCanceled().equalsIgnoreCase("0")) {
-//                    intent.setClass(context, RequestBusinessPayDetailActivity.class);
-//                    startActivity(intent);
-//                }
-//            }else {
-//                databaseHelper.createPurchaseRequest(pendingPurchasePaymentId);
-//                intent.setClass(context, RequestBusinessPayDetailActivity.class);
-//                startActivity(intent);
-//            }
-//        }
+        if (pendingPurchasePaymentId.length() != 0) {
+            if (databaseHelper.getIsExistPurchaseRequest(pendingPurchasePaymentId)) {
+                LatestPurchase latestPurchase = databaseHelper.getPurchaseRequest(pendingPurchasePaymentId);
+                if (latestPurchase.getIsCanceled().equalsIgnoreCase("0")) {
+                    intent.setClass(context, RequestBusinessPayDetailActivity.class);
+                    startActivity(intent);
+                }
+            }else {
+                databaseHelper.createPurchaseRequest(pendingPurchasePaymentId);
+                intent.setClass(context, RequestBusinessPayDetailActivity.class);
+                startActivity(intent);
+            }
+        }
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE).edit();
-
-
-
 
         editor.putLong(Constants.MAX_BUSINESS_XFER_AMOUNT, this.userProfileDTO.getMaxBusinessXferAmount());
         editor.putLong(Constants.MIN_BUSINESS_XFER_AMOUNT, this.userProfileDTO.getMinBusinessXferAmount());
         editor.putLong(Constants.MAX_INDIVIDUAL_XFER_AMOUNT, this.userProfileDTO.getMaxIndividualXferAmount());
         editor.putLong(Constants.MIN_INDIVIDUAL_XFER_AMOUNT, this.userProfileDTO.getMinIndividualXferAmount());
         editor.commit();
-
-
 
         fragment_title = (FacedTextView)findViewById(R.id.fragment_title);
 
@@ -273,107 +266,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             }
         });
 
-
-
-        first_shortcut = (ImageView)findViewById(R.id.first_shortcut);
-        second_shortcut = (ImageView)findViewById(R.id.second_shortcut);
-
-        first_shortcut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Fragment fragment = null;
-                String title = getString(R.string.app_name);
-
-                switch (currentFragmet){
-                    case 0:
-                        fragment = new CreditRequestFragment();
-                        title = getString(R.string.title_pay_to_one);
-                        currentFragmet = 2;
-
-                        break;
-                    case 1:
-                        fragment = new CreditRequestFragment();
-                        title = getString(R.string.title_pay_to_one);
-                        currentFragmet = 2;
-                        break;
-                    case 2:
-                        fragment = new AccountDetailFragment();
-                        bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
-                        fragment.setArguments(bundle);
-                        title = getString(R.string.title_account_detail);
-                        currentFragmet = 0;
-                        break;
-                    case 3:
-                        fragment = new AccountDetailFragment();
-                        bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
-                        fragment.setArguments(bundle);
-                        title = getString(R.string.title_account_detail);
-                        currentFragmet = 0;
-                        break;
-                }
-
-                setupActionnBar(currentFragmet);
-
-                if (fragment != null) {
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.container_body, fragment);
-                    fragmentTransaction.commit();
-
-                    fragment_title.setText(title);
-
-                }
-            }
-        });
-
-        second_shortcut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Fragment fragment = null;
-                String title = getString(R.string.app_name);
-
-                switch (currentFragmet){
-                    case 0:
-                        fragment = new UserTransactionFragment();
-                        title = getString(R.string.title_transactions);
-                        currentFragmet = 1;
-
-                        break;
-                    case 1:
-                        fragment = new AccountDetailFragment();
-                        bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
-                        fragment.setArguments(bundle);
-                        title = getString(R.string.title_account_detail);
-                        currentFragmet = 0;
-                        break;
-                    case 2:
-                        fragment = new PayToBusinessFragment();
-                        title = getString(R.string.title_pay_to_business);
-                        currentFragmet = 3;
-                        break;
-                    case 3:
-                        fragment = new CreditRequestFragment();
-                        title = getString(R.string.title_pay_to_one);
-                        currentFragmet = 2;
-                        break;
-
-                }
-
-                setupActionnBar(currentFragmet);
-
-                if (fragment != null) {
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.container_body, fragment);
-                    fragmentTransaction.commit();
-
-                    fragment_title.setText(title);
-
-                }
-            }
-        });
 
 //        addNewAccount(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
 //        ContactsManager.addContact(MainActivity.this, new HamPayContact("", "Sharafkar", "", "09122020200"));
@@ -507,8 +399,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         switch (position) {
 
             case 0:
-                fragment = new PaymentRequestFragment();
-                title = getString(R.string.title_payment_request);
+
+                fragment = new MainFragment();
+                title = getString(R.string.title_main_fragment);
                 break;
             case 1:
                 fragment = new AccountDetailFragment();
@@ -518,21 +411,33 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 title = getString(R.string.title_account_detail);
                 break;
             case 2:
-                fragment = new UserTransactionFragment();
-                title = getString(R.string.title_transactions);
-                break;
-            case 3:
-                fragment = new PendingPaymentFragment();
-                title = getString(R.string.title_pending_payment);
-                break;
-            case 4:
-                fragment = new CreditRequestFragment();
-                title = getString(R.string.title_credit_request);
-                break;
-            case 5:
                 fragment = new SettingFragment();
                 title = getString(R.string.title_settings);
                 break;
+//                fragment = new UserTransactionFragment();
+//                title = getString(R.string.title_transactions);
+//                break;
+            case 3:
+                new HamPayDialog(activity).fetchContactUsInfo();
+                break;
+//                fragment = new PendingPaymentFragment();
+//                title = getString(R.string.title_pending_payment);
+//                break;
+            case 4:
+                fragment = new GuideFragment();
+                title = getString(R.string.title_guide);
+                break;
+//                fragment = new CreditRequestFragment();
+//                title = getString(R.string.title_credit_request);
+//                break;
+            case 5:
+                LogoutData logoutData = new LogoutData();
+                logoutData.setIplanetDirectoryPro(prefs.getString(Constants.LOGIN_TOKEN_ID, null));
+                new HamPayDialog(activity).showExitDialog(logoutData);
+                break;
+//                fragment = new SettingFragment();
+//                title = getString(R.string.title_settings);
+//                break;
             case 6:
                 new HamPayDialog(activity).fetchContactUsInfo();
                 break;
@@ -565,16 +470,15 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 title = getString(R.string.title_already_privacy);
                 break;
             case 12:
-                LogoutData logoutData = new LogoutData();
-                logoutData.setIplanetDirectoryPro(prefs.getString(Constants.LOGIN_TOKEN_ID, null));
-                new HamPayDialog(activity).showExitDialog(logoutData);
+//                LogoutData logoutData = new LogoutData();
+//                logoutData.setIplanetDirectoryPro(prefs.getString(Constants.LOGIN_TOKEN_ID, null));
+//                new HamPayDialog(activity).showExitDialog(logoutData);
                 break;
 
             default:
                 break;
         }
 
-        setupActionnBar(currentFragmet);
 
         if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -586,40 +490,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         }
     }
-
-    private void setupActionnBar(int currentFragment){
-
-        first_shortcut.setVisibility(View.VISIBLE);
-        second_shortcut.setVisibility(View.VISIBLE);
-
-        switch (currentFragment){
-            case 0:
-                first_shortcut.setImageResource(R.drawable.pay_ic_wit);
-                second_shortcut.setImageResource(R.drawable.businnes_ic_wit);
-                break;
-
-            case 1:
-                first_shortcut.setImageResource(R.drawable.pay_ic_wit);
-                second_shortcut.setImageResource(R.drawable.account_ic_wit);
-                break;
-
-            case 2:
-                first_shortcut.setImageResource(R.drawable.account_ic_wit);
-                second_shortcut.setImageResource(R.drawable.transactions_ic_wit);
-                break;
-
-            case 3:
-                first_shortcut.setImageResource(R.drawable.account_ic_wit);
-                second_shortcut.setImageResource(R.drawable.pay_ic_wit);
-                break;
-
-            default:
-                first_shortcut.setVisibility(View.GONE);
-                second_shortcut.setVisibility(View.GONE);
-                break;
-        }
-    }
-
 
     @Override
     public void onClick(View view) {
@@ -663,7 +533,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 fragment = new CreditRequestFragment();
                 title = getString(R.string.title_credit_request);
                 currentFragmet = 2;
-                setupActionnBar(currentFragmet);
                 if (fragment != null) {
                     FragmentManager fragmentManager = getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -680,7 +549,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 fragment.setArguments(bundle);
                 title = getString(R.string.title_account_detail);
                 currentFragmet = 0;
-                setupActionnBar(currentFragmet);
                 if (fragment != null) {
                     FragmentManager fragmentManager = getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -696,7 +564,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 fragment.setArguments(bundle);
                 title = getString(R.string.title_account_detail);
                 currentFragmet = 0;
-                setupActionnBar(currentFragmet);
                 if (fragment != null) {
                     FragmentManager fragmentManager = getSupportFragmentManager();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

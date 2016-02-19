@@ -245,7 +245,7 @@
                         <ImageView
                             android:layout_width="36dp"
                             android:layout_height="36dp"
-                            android:src="@drawable/step_icon_pass"
+                            android:src="@drawable/step_icon_memorable"
                             android:layout_margin="8dp"
                             android:layout_alignParentRight="true"/>
 

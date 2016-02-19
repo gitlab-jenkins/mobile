@@ -4,7 +4,6 @@ package xyz.homapay.hampay.mobile.android.fragment;
  * Created by amir on 6/5/15.
  */
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -17,8 +16,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.NavigationDrawerAdapter;
@@ -38,19 +35,12 @@ public class FragmentDrawer extends Fragment {
     private View containerView;
     private static String[] titles;
     private static int icons[] = {
-            R.drawable.pay_settings,
-            R.drawable.account_settings,
-            R.drawable.transactions_settings,
-            R.drawable.pending_payment,
-            R.drawable.bussines_settings,
-            R.drawable.settings,
-            R.drawable.contact_us,
-            R.drawable.help,
-            R.drawable.ic_about_us,
-            R.drawable.ic_rate,
-            R.drawable.tac_ic,
-            R.drawable.privacy_icon,
-            R.drawable.exit
+            R.drawable.ic_main_menu,
+            R.drawable.ic_account_settings,
+            R.drawable.ic_settings,
+            R.drawable.ic_contact_us,
+            R.drawable.ic_help,
+            R.drawable.ic_exit,
     };
     private FragmentDrawerListener drawerListener;
 
