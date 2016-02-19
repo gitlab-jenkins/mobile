@@ -101,6 +101,10 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"></activity>
         <activity
+            android:name=".activity.TransactionsHistoryActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"></activity>
+        <activity
             android:name=".activity.TransactionDetailActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"></activity>
@@ -123,6 +127,13 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"></activity>
+
+        <activity
+            android:name=".activity.PaymentRequestActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"></activity>
+
         <activity
             android:name=".activity.CreditRequestActivity"
             android:label="@string/app_name"

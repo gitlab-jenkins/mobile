@@ -115,8 +115,11 @@
 
     <string name="main_fragment_generate_factor">تولید فاکتور</string>
     <string name="main_fragment_business_payment">پرداخت به کسب و کار</string>
-    <string name="main_fragment_pending_factor">فاکتورهای در انتظار</string>
+    <string name="main_fragment_pending_payment">پرداخت‌های در انتظار</string>
     <string name="main_fragment_transactions">تراکنش‌ها</string>
+
+    <string name="transaction_history_title">تاریخچه تراکنش‌ها</string>
+    <string name="payment_request_title">تولید فاکتور</string>
 
     <string name="detail_transaction">جزئیات تراکنش</string>
     <string name="account_no">شماره کارت: </string>
@@ -487,14 +490,14 @@
     <string name="business_pay_name">براساس نام</string>
     <string name="business_name">نام کسب و کار</string>
     <string name="request_pay_detail">جزییات پرداخت</string>
-    <string name="card_nubmer">شماره کارت</string>
+    <string name="card_nubmer">شماره کارت: </string>
     <string name="pay_with_hampay">تایید پرداخت</string>
     <string name="cancel_pay_with_hampay">فعلا بیخیال</string>
     <string name="request_payment_rial">مبلغ: </string>
     <string name="request_payment_vat">مالیات بر ارزش افزوده: </string>
     <string name="request_payment_fee">کارمزد: </string>
     <string name="request_payment_total">مبلغ نهایی: </string>
-    <string name="user_pin2">رمز دوم کارت</string>
+    <string name="user_pin2">رمز دوم کارت: </string>
 
     <!--<string name="msg_success_pending_payment">پرداخت شما با کد خرید  s$1% با موفقیت انجام شد.</string>-->
     <string name="msg_success_pending_payment">پرداخت شما با کد خرید %1$s با موفقیت انجام شد.</string>

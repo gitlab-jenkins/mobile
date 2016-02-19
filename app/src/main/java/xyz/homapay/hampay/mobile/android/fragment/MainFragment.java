@@ -1,6 +1,7 @@
 package xyz.homapay.hampay.mobile.android.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.activity.PaymentRequestActivity;
+import xyz.homapay.hampay.mobile.android.activity.TransactionsHistoryActivity;
 import xyz.homapay.hampay.mobile.android.adapter.GuideAdapter;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
@@ -27,6 +30,8 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     private LinearLayout show_hampay_friend;
     private LinearLayout hampay_friend;
     private ImageView indicator_icon;
+    LinearLayout user_transaction_history;
+    LinearLayout user_payment_request;
 
     public MainFragment() {
         // Required empty public constructor
@@ -55,6 +60,12 @@ public class MainFragment extends Fragment implements View.OnClickListener{
 
         indicator_icon = (ImageView)rootView.findViewById(R.id.indicator_icon);
 
+        user_transaction_history = (LinearLayout)rootView.findViewById(R.id.user_transaction_history);
+        user_transaction_history.setOnClickListener(this);
+
+        user_payment_request = (LinearLayout)rootView.findViewById(R.id.user_payment_request);
+        user_payment_request.setOnClickListener(this);
+
         return rootView;
     }
 
@@ -71,6 +82,8 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
 
+        Intent intent = new Intent();
+
         switch (v.getId()){
 
             case R.id.show_hampay_friend:
@@ -81,6 +94,16 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                     new Collapse(hampay_friend).animate();
                     indicator_icon.setImageResource(R.drawable.ic_friend_expand);
                 }
+                break;
+
+            case R.id.user_transaction_history:
+                intent.setClass(getActivity(), TransactionsHistoryActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.user_payment_request:
+                intent.setClass(getActivity(), PaymentRequestActivity.class);
+                startActivity(intent);
                 break;
         }
 

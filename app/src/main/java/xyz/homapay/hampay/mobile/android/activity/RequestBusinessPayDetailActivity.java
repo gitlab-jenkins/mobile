@@ -49,7 +49,7 @@ import xyz.homapay.hampay.mobile.android.webservice.psp.string2stringMapEntry;
 public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
     ButtonRectangle pay_to_business_button;
-    ButtonRectangle cancel_pay_to_business_button;
+    FacedTextView cancel_pay_to_business_button;
 
     Bundle bundle;
 
@@ -89,9 +89,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
     FacedTextView paymentFeeValue;
     FacedTextView paymentTotalValue;
     FacedTextView cardNumberValue;
-    FacedTextView user_bank_name;
+//    FacedTextView user_bank_name;
     FacedEditText pin2Value;
-    ImageView pin2ValueIcon;
 
     RequestLatestPurchase requestLatestPurchase;
     LatestPurchaseRequest latestPurchaseRequest;
@@ -174,12 +173,9 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         paymentPriceValue = (FacedTextView)findViewById(R.id.paymentPriceValue);
         paymentVAT = (FacedTextView)findViewById(R.id.paymentVAT);
         paymentFeeValue = (FacedTextView)findViewById(R.id.paymentFeeValue);
-        user_bank_name = (FacedTextView)findViewById(R.id.user_bank_name);
+//        user_bank_name = (FacedTextView)findViewById(R.id.user_bank_name);
         cardNumberValue = (FacedTextView)findViewById(R.id.cardNumberValue);
         pin2Value = (FacedEditText)findViewById(R.id.pin2Value);
-        pin2ValueIcon = (ImageView)findViewById(R.id.pin2ValueIcon);
-
-
 
         bundle = getIntent().getExtras();
 
@@ -230,7 +226,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (pin2Value.getText().toString().length() <= 4 ){
-                    pin2ValueIcon.setImageResource(R.drawable.false_icon);
                     Toast.makeText(context, getString(R.string.msg_pin2_incurrect), Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -289,7 +284,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             }
         });
 
-        cancel_pay_to_business_button = (ButtonRectangle)findViewById(R.id.cancel_pay_to_business_button);
+        cancel_pay_to_business_button = (FacedTextView)findViewById(R.id.cancel_pay_to_business_button);
         cancel_pay_to_business_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -23,6 +23,7 @@
                 android:src="@drawable/main_fragment_banner"/>
 
             <LinearLayout
+                android:id="@+id/user_payment_request"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
@@ -101,7 +102,7 @@
                     android:textSize="15dp"
                     android:gravity="center"
                     android:layout_gravity="center"
-                    android:text="@string/main_fragment_pending_factor" />
+                    android:text="@string/main_fragment_pending_payment" />
 
                 <ImageView
                     android:layout_width="48dp"
@@ -120,6 +121,7 @@
                 android:background="@color/entry_field_color"/>
 
             <LinearLayout
+                android:id="@+id/user_transaction_history"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
