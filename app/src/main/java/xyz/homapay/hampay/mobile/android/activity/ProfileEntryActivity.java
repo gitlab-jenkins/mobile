@@ -3,8 +3,9 @@ package xyz.homapay.hampay.mobile.android.activity;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -19,11 +20,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -32,18 +30,17 @@ import com.google.android.gms.analytics.Tracker;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.BankListRequest;
+import xyz.homapay.hampay.common.core.model.request.CardProfileRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
-import xyz.homapay.hampay.common.core.model.response.BankListResponse;
+import xyz.homapay.hampay.common.core.model.response.CardProfileResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationEntryResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.BankListAdapter;
-import xyz.homapay.hampay.mobile.android.animation.Collapse;
-import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestBankList;
+import xyz.homapay.hampay.mobile.android.async.RequestCardProfile;
 import xyz.homapay.hampay.mobile.android.async.RequestRegistrationEntry;
-import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.EmailTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
@@ -51,13 +48,10 @@ import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.location.BestLocationListener;
 import xyz.homapay.hampay.mobile.android.location.BestLocationProvider;
 import xyz.homapay.hampay.mobile.android.model.AppState;
-import xyz.homapay.hampay.mobile.android.util.AESHelper;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
-import xyz.homapay.hampay.mobile.android.util.EmailVerification;
 import xyz.homapay.hampay.mobile.android.util.NationalCodeVerification;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
-import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
 
 public class ProfileEntryActivity extends AppCompatActivity {
 
@@ -77,6 +71,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
 
     FacedEditText accountNumberValue;
     boolean accountNumberIsValid = true;
+    boolean verifiedCardNumber = false;
     String accountNumberFormat = "####-####-####-####";
     ImageView accountNumberIcon;
 
@@ -97,7 +92,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
     int rawAccountNumberValueLengthOffset = 0;
     String procAccountNumberValue = "";
 
-    private BankListResponse bankListResponse;
+    private CardProfileResponse cardProfileResponse;
 
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
@@ -112,8 +107,8 @@ public class ProfileEntryActivity extends AppCompatActivity {
     private BestLocationProvider mBestLocationProvider;
     private BestLocationListener mBestLocationListener;
 
-    BankListRequest bankListRequest;
-    RequestBankList requestBankList;
+    CardProfileRequest cardProfileRequest;
+    RequestCardProfile requestCardProfile;
 
     HamPayDialog hamPayDialog;
 
@@ -290,7 +285,10 @@ public class ProfileEntryActivity extends AppCompatActivity {
                     }
 
                     if (accountNumberIsValid) {
-                        accountNumberIcon.setImageResource(R.drawable.right_icon);
+                        cardProfileRequest = new CardProfileRequest();
+                        cardProfileRequest.setCardNumber(new PersianEnglishDigit().P2E(accountNumberValue.getText().toString()));
+                        requestCardProfile = new RequestCardProfile(activity, new RequestCardProfileTaskCompleteListener());
+                        requestCardProfile.execute(cardProfileRequest);
                     } else {
                         accountNumberIcon.setImageResource(R.drawable.false_icon);
                     }
@@ -399,7 +397,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
                 accountNumberValue.clearFocus();
 
 
-                if (cellNumberIsValid && nationalCodeIsValid && accountNumberIsValid
+                if (cellNumberIsValid && nationalCodeIsValid && verifiedCardNumber
                         && cellNumberValue.getText().toString().length() > 0
                         && nationalCodeValue.getText().toString().length() > 0
                         && accountNumberValue.getText().toString().length() > 0
@@ -434,7 +432,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
                         userNameFamily.requestFocus();
                     }
 
-                    else if (accountNumberValue.getText().toString().length() == 0 || !accountNumberIsValid){
+                    else if (accountNumberValue.getText().toString().length() == 0 || !verifiedCardNumber){
                         Toast.makeText(context, getString(R.string.msg_accountNo_invalid), Toast.LENGTH_SHORT).show();
                         accountNumberIcon.setImageResource(R.drawable.false_icon);
                         accountNumberValue.requestFocus();
@@ -462,80 +460,41 @@ public class ProfileEntryActivity extends AppCompatActivity {
     }
 
 
-    private void showListBankDialog(){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) ProfileEntryActivity.this;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
-        View view = getLayoutInflater().inflate(R.layout.dialog_bank_select, null);
-
-        ListView bankListView = (ListView) view.findViewById(R.id.bankListView);
-
-        BankListAdapter bankListAdapter = new BankListAdapter(getApplicationContext(), bankListResponse.getBanks());
-
-        bankListView.setAdapter(bankListAdapter);
-        bankListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                selectedBankTitle.setText(bankListResponse.getBanks().get(position).getTitle());
-                selectedBankCode = bankListResponse.getBanks().get(position).getCode();
-                if (accountNumberValue.getText().toString().length() > 0)
-                    accountNumberValue.setText("");
-                accountNumberFormat = bankListResponse.getBanks().get(position).getAccountFormat();
-                accountNumberIsValid = false;
-//                accountNumberIcon.setImageDrawable(null);
-                accountNumberValue.setFilters(new InputFilter[]{new InputFilter.LengthFilter(accountNumberFormat.length())});
-                bankSelectionDialog.dismiss();
-                accountNumberValue.setFocusableInTouchMode(true);
-            }
-        });
-
-
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
-        bankSelectionDialog = new Dialog(ProfileEntryActivity.this);
-        bankSelectionDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        bankSelectionDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        bankSelectionDialog.setContentView(view);
-        bankSelectionDialog.setTitle(null);
-        bankSelectionDialog.setCanceledOnTouchOutside(true);
-
-        bankSelectionDialog.show();
-    }
-
-    public class RequestBanksTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<BankListResponse>>
+    public class RequestCardProfileTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<CardProfileResponse>>
     {
-        boolean showBankList = false;
 
-        public RequestBanksTaskCompleteListener(boolean showBankList){
-            this.showBankList = showBankList;
+        public RequestCardProfileTaskCompleteListener(){
+
         }
 
 
         @Override
-        public void onTaskComplete(ResponseMessage<BankListResponse> bankListResponseMessage)
+        public void onTaskComplete(ResponseMessage<CardProfileResponse> cardProfileResponseMessage)
         {
+            if (cardProfileResponseMessage != null) {
 
-            hamPayDialog.dismisWaitingDialog();
+                cardProfileResponse = cardProfileResponseMessage.getService();
 
-            if (bankListResponseMessage != null) {
+                if (cardProfileResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
 
-                if (bankListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-                    bankListResponse = bankListResponseMessage.getService();
-                    if (showBankList) {
-                        showListBankDialog();
-                    }
+                    verifiedCardNumber = true;
+
+                    accountNumberValue.setText(accountNumberValue.getText() + "(" + cardProfileResponse.getBankName() + " - " + cardProfileResponse.getFullName() + ")");
+
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(cardProfileResponse.getBankLogo(), 0, cardProfileResponse.getBankLogo().length);
+                    accountNumberIcon.setImageBitmap(bitmap);
+
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Bank List")
                             .setAction("Fetch")
                             .setLabel("Success")
                             .build());
                 }else {
-                    bankListResponseMessage.getService().getResultStatus().getDescription();
-                    requestBankList = new RequestBankList(context, new RequestBanksTaskCompleteListener(true));
-                    new HamPayDialog(activity).showFailBankListDialog(requestBankList, bankListRequest,
-                            bankListResponse.getResultStatus().getCode(),
-                            bankListResponse.getResultStatus().getDescription());
+                    requestCardProfile = new RequestCardProfile(context, new RequestCardProfileTaskCompleteListener());
+                    new HamPayDialog(activity).showFailCardProfileDialog(requestCardProfile, cardProfileRequest,
+                            cardProfileResponse.getResultStatus().getCode(),
+                            cardProfileResponse.getResultStatus().getDescription());
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Bank List")
@@ -544,10 +503,10 @@ public class ProfileEntryActivity extends AppCompatActivity {
                             .build());
                 }
             }else {
-                requestBankList = new RequestBankList(context, new RequestBanksTaskCompleteListener(true));
-                new HamPayDialog(activity).showFailBankListDialog(requestBankList, bankListRequest,
+                requestCardProfile = new RequestCardProfile(context, new RequestCardProfileTaskCompleteListener());
+                new HamPayDialog(activity).showFailCardProfileDialog(requestCardProfile, cardProfileRequest,
                         Constants.LOCAL_ERROR_CODE,
-                        getString(R.string.msg_fail_fetch_bank_list));
+                        getString(R.string.msg_fail_fetch_card_profile));
 
                 hamPayGaTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Bank List")

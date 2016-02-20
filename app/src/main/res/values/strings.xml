@@ -96,7 +96,7 @@
 
     <string name="fill_data">اطلاعات را کامل و دقیق وارد کنید.</string>
     <string name="msg_cellNumber_invalid">شماره همراه خود را صحیح وارد کنید</string>
-    <string name="msg_accountNo_invalid">شماره حساب خود را صحیح وارد کنید</string>
+    <string name="msg_accountNo_invalid">شماره کارت خود را صحیح وارد نمایید</string>
     <string name="msg_nationalCode_invalid">کد ملی خود را صحیح وارد کنید</string>
     <string name="msg_invalid_email">ایمیل خود را صحیح وارد کنید</string>
     <string name="msg_family_invalid">نام و نام خانوادگی خود را صحیح وارد کنید</string>
@@ -404,7 +404,8 @@
 
     <string name="msg_found_illegal_app">کاربر گرامی به دلیل بهبود امنیت شما، قبل از استفاده از هم‌پی نیاز به حذف یا غیرفعالسازی اپلیکیشن فوق هستیم.</string>
     <string name="msg_fail_illegal_app_list">اطلاعاتی از سامانه هم‌پی دریافت نشد، لطفا مجدد تلاش کنید.</string>
-    <string name="msg_fail_fetch_bank_list">لیست بانک‌ها دریافت نشد.</string>
+    <string name="msg_fail_fetch_card_profile">اطلاعات کارت شما یافت نشد. مجدد تلاش کنید</string>
+    <string name="msg_fail_fetch_bank_list"></string>
     <string name="msg_fail_registration_entry">ثبت اطلاعات شخصی شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="mgs_fail_registration_send_sms_token">درخواست پیامک فعالسازی با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
     <string name="msg_fail_registration_verify_mobile">ارسال کد فعالسازی با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>

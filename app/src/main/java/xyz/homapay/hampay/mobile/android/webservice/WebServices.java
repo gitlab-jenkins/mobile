@@ -40,6 +40,7 @@ import xyz.homapay.hampay.common.core.model.request.BusinessPaymentConfirmReques
 import xyz.homapay.hampay.common.core.model.request.BusinessPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
 import xyz.homapay.hampay.common.core.model.request.CancelPurchasePaymentRequest;
+import xyz.homapay.hampay.common.core.model.request.CardProfileRequest;
 import xyz.homapay.hampay.common.core.model.request.ChangeEmailRequest;
 import xyz.homapay.hampay.common.core.model.request.ChangeMemorableWordRequest;
 import xyz.homapay.hampay.common.core.model.request.ChangePassCodeRequest;
@@ -78,6 +79,7 @@ import xyz.homapay.hampay.common.core.model.response.BusinessListResponse;
 import xyz.homapay.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
 import xyz.homapay.hampay.common.core.model.response.BusinessPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.CancelPurchasePaymentResponse;
+import xyz.homapay.hampay.common.core.model.response.CardProfileResponse;
 import xyz.homapay.hampay.common.core.model.response.ChangeEmailResponse;
 import xyz.homapay.hampay.common.core.model.response.ChangeMemorableWordResponse;
 import xyz.homapay.hampay.common.core.model.response.ChangePassCodeResponse;
@@ -2451,6 +2453,61 @@ public class WebServices  {
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<IBANChangeResponse>>() {}.getType());
 
 
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (connection != null)
+                connection.disconnect();
+        }
+        return responseMessage;
+    }
+
+    public ResponseMessage<CardProfileResponse> newCardProfile(CardProfileRequest cardProfileRequest){
+
+        ResponseMessage<CardProfileResponse> responseMessage = null;
+        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/card/info");
+        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+
+        try {
+
+            RequestHeader header = new RequestHeader();
+            header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+            header.setVersion(Constants.REQUEST_VERSION);
+
+            RequestMessage<CardProfileRequest> message = new RequestMessage<CardProfileRequest>();
+            message.setRequestHeader(header);
+            CardProfileRequest request = cardProfileRequest;
+            request.setRequestUUID(UUID.randomUUID().toString());
+            message.setService(request);
+
+            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<CardProfileRequest>>() {}.getType();
+            String jsonRequest = new Gson().toJson(message, requestType);
+            connection.setRequestMethod("POST");
+            OutputStream outputStream = connection.getOutputStream();
+            outputStream.write(jsonRequest.getBytes());
+            outputStream.flush();
+
+            String encoding = connection.getHeaderField("Content-Encoding");
+            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+            InputStreamReader reader;
+            if (gzipped){
+                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
+                reader = new InputStreamReader(gzipInputStream);
+            }else {
+                reader = new InputStreamReader(connection.getInputStream());
+            }
+
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                }
+            });
+
+            Gson gson = builder.create();
+            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<CardProfileResponse>>() {}.getType());
 
         } catch (Exception e) {
             e.printStackTrace();

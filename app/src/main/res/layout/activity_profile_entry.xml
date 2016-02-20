@@ -350,7 +350,7 @@
                             android:padding="8dp"
                             android:contentDescription="account"
                             android:maxLength="19"
-                            android:text="1111-1111-1111-1111"/>
+                            android:text="5022-2910-4789-2581"/>
 
                         <ImageView
                             android:id="@+id/accountNumberIcon"

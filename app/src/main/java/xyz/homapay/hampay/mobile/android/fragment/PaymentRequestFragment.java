@@ -783,25 +783,6 @@ public class PaymentRequestFragment extends Fragment implements View.OnClickList
         user_mobile_no.setText(persianEnglishDigit.E2P(userProfileDTO.getCellNumber()));
         editor.commit();
 
-        switch (userProfileDTO.getVerificationStatus()){
-
-            case UNVERIFIED:
-                user_account_type.setText(getString(R.string.unverified_account));
-                break;
-
-            case PENDING_REVIEW:
-                user_account_type.setText(getString(R.string.pending_review_account));
-                break;
-
-            case VERIFIED:
-                user_account_type.setText(getString(R.string.verified_account));
-                break;
-
-            case DELEGATED:
-                user_account_type.setText(getString(R.string.delegate_account));
-                break;
-        }
-
 
         if (userProfileDTO.getLastLoginDate() != null) {
             user_last_login.setText(getString(R.string.last_login) + ": "

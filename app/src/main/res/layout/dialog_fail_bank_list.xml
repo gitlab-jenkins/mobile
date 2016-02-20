@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/normal_text"
         android:textSize="15dp"
-        android:text="@string/msg_fail_fetch_bank_list"
+        android:text="@string/msg_fail_fetch_card_profile"
         android:gravity="right"
         android:layout_gravity="right"
         android:layout_margin="8dp"/>
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/normal_text"
         android:textSize="15dp"
-        android:text="@string/msg_fail_fetch_bank_list"
+        android:text="@string/msg_fail_fetch_card_profile"
         android:gravity="right"
         android:layout_gravity="right"
         android:layout_margin="8dp"/>

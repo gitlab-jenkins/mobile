@@ -40,6 +40,7 @@ import xyz.homapay.hampay.common.core.model.request.BankListRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
+import xyz.homapay.hampay.common.core.model.request.CardProfileRequest;
 import xyz.homapay.hampay.common.core.model.request.ChangeEmailRequest;
 import xyz.homapay.hampay.common.core.model.request.ChangeMemorableWordRequest;
 import xyz.homapay.hampay.common.core.model.request.ChangePassCodeRequest;
@@ -100,6 +101,7 @@ import xyz.homapay.hampay.mobile.android.analytics.GaAnalyticsEvent;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestBankList;
 import xyz.homapay.hampay.mobile.android.async.RequestBusinessPayment;
+import xyz.homapay.hampay.mobile.android.async.RequestCardProfile;
 import xyz.homapay.hampay.mobile.android.async.RequestChangeEmail;
 import xyz.homapay.hampay.mobile.android.async.RequestChangeMemorableWord;
 import xyz.homapay.hampay.mobile.android.async.RequestChangePassCode;
@@ -1549,8 +1551,8 @@ public class HamPayDialog {
         dialog.show();
     }
 
-    public void showFailBankListDialog(final RequestBankList requestBankList,
-                                       final BankListRequest bankListRequest,
+    public void showFailCardProfileDialog(final RequestCardProfile requestCardProfile,
+                                       final CardProfileRequest cardProfileRequest,
                                        final String code,
                                        final String message){
 
@@ -1574,7 +1576,7 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                requestBankList.execute(bankListRequest);
+                requestCardProfile.execute(cardProfileRequest);
             }
         });
 
