@@ -135,7 +135,7 @@
             android:windowSoftInputMode="stateHidden"></activity>
 
         <activity
-            android:name=".activity.CreditRequestActivity"
+            android:name=".activity.PaymentRequestDetailActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"></activity>

@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
 
 //        Intent intentTest = new Intent();
-//        intentTest.setClass(context, CreditRequestActivity.class);
+//        intentTest.setClass(context, PaymentRequestDetailActivity.class);
 //        intentTest.putExtra("contact_name", "هم‌پی تست");
 //        intentTest.putExtra("contact_phone_no", "09219562059");
 //        startActivity(intentTest);
@@ -231,19 +231,19 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         List<LatestPurchase> latestPurchaseList = databaseHelper.getAllLatestPurchases();
 
-        if (pendingPurchasePaymentId.length() != 0) {
-            if (databaseHelper.getIsExistPurchaseRequest(pendingPurchasePaymentId)) {
-                LatestPurchase latestPurchase = databaseHelper.getPurchaseRequest(pendingPurchasePaymentId);
-                if (latestPurchase.getIsCanceled().equalsIgnoreCase("0")) {
-                    intent.setClass(context, RequestBusinessPayDetailActivity.class);
-                    startActivity(intent);
-                }
-            }else {
-                databaseHelper.createPurchaseRequest(pendingPurchasePaymentId);
-                intent.setClass(context, RequestBusinessPayDetailActivity.class);
-                startActivity(intent);
-            }
-        }
+//        if (pendingPurchasePaymentId.length() != 0) {
+//            if (databaseHelper.getIsExistPurchaseRequest(pendingPurchasePaymentId)) {
+//                LatestPurchase latestPurchase = databaseHelper.getPurchaseRequest(pendingPurchasePaymentId);
+//                if (latestPurchase.getIsCanceled().equalsIgnoreCase("0")) {
+//                    intent.setClass(context, RequestBusinessPayDetailActivity.class);
+//                    startActivity(intent);
+//                }
+//            }else {
+//                databaseHelper.createPurchaseRequest(pendingPurchasePaymentId);
+//                intent.setClass(context, RequestBusinessPayDetailActivity.class);
+//                startActivity(intent);
+//            }
+//        }
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE).edit();

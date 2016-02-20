@@ -3422,6 +3422,9 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("result", 1024);
+                activity.setResult(1024);
                 activity.finish();
             }
         });

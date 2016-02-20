@@ -14,8 +14,7 @@ import android.widget.RelativeLayout;
 import java.util.List;
 
 import xyz.homapay.hampay.mobile.android.R;
-import xyz.homapay.hampay.mobile.android.activity.CreditRequestActivity;
-import xyz.homapay.hampay.mobile.android.activity.PayOneActivity;
+import xyz.homapay.hampay.mobile.android.activity.PaymentRequestDetailActivity;
 import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
@@ -134,7 +133,7 @@ public class CreditRequestAdapter extends SectionedBaseAdapter{
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent();
-                    intent.setClass(mContext, CreditRequestActivity.class);
+                    intent.setClass(mContext, PaymentRequestDetailActivity.class);
                     intent.putExtra("contact_name", recentPay.getName());
                     intent.putExtra("contact_phone_no", recentPay.getPhone());
                     mContext.startActivityForResult(intent, 1024);
@@ -144,7 +143,7 @@ public class CreditRequestAdapter extends SectionedBaseAdapter{
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent();
-                    intent.setClass(mContext, CreditRequestActivity.class);
+                    intent.setClass(mContext, PaymentRequestDetailActivity.class);
                     intent.putExtra("contact_name", recentPay.getName());
                     intent.putExtra("contact_phone_no", recentPay.getPhone());
                     mContext.startActivityForResult(intent, 1024);
@@ -162,7 +161,7 @@ public class CreditRequestAdapter extends SectionedBaseAdapter{
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent();
-                    intent.setClass(mContext, CreditRequestActivity.class);
+                    intent.setClass(mContext, PaymentRequestDetailActivity.class);
                     intent.putExtra("contact_name", enabledHamPay.getDisplayName());
                     intent.putExtra("contact_phone_no", enabledHamPay.getCellNumber());
                     mContext.startActivityForResult(intent, 1024);

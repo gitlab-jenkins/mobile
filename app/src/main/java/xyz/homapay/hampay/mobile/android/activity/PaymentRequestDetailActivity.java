@@ -19,38 +19,45 @@ import com.google.android.gms.analytics.Tracker;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
-import xyz.homapay.hampay.common.core.model.dto.UserVerificationStatus;
 import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
-import xyz.homapay.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
 import xyz.homapay.hampay.common.core.model.request.UserPaymentRequest;
 import xyz.homapay.hampay.common.core.model.response.GetUserIdTokenResponse;
-import xyz.homapay.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
 import xyz.homapay.hampay.common.core.model.response.UserPaymentResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
+import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import xyz.homapay.hampay.mobile.android.async.RequestIndividualPaymentConfirm;
+import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.RequestUserIdToken;
 import xyz.homapay.hampay.mobile.android.async.RequestUserPayment;
+import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
 import xyz.homapay.hampay.mobile.android.component.edittext.CurrencyFormatterTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.model.RecentPay;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
-public class CreditRequestActivity extends AppCompatActivity {
+public class PaymentRequestDetailActivity extends AppCompatActivity {
 
     ButtonRectangle pay_to_one_button;
 
     Bundle bundle;
 
+    PersianEnglishDigit persianEnglishDigit;
+
     private String contactPhoneNo;
     private String contactName;
+    private String userImageProfileId;
+    private String loginTokenId;
 
+    private CircleImageView image_profile;
     FacedTextView contact_name;
+    FacedTextView contact_phone_no;
     FacedEditText contact_message;
     String contactMssage = "";
     FacedEditText credit_value;
@@ -78,9 +85,6 @@ public class CreditRequestActivity extends AppCompatActivity {
     public void backActionBar(View view){
         finish();
     }
-
-    UserVerificationStatus userVerificationStatus;
-    String userVerificationMessage = "";
 
     Long MaxXferAmount = 0L;
     Long MinXferAmount = 0L;
@@ -114,11 +118,12 @@ public class CreditRequestActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_credit_request);
+        setContentView(R.layout.activity_payment_request_detail);
 
         context = this;
-        activity = CreditRequestActivity.this;
+        activity = PaymentRequestDetailActivity.this;
 
+        persianEnglishDigit = new PersianEnglishDigit();
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
@@ -142,16 +147,15 @@ public class CreditRequestActivity extends AppCompatActivity {
         credit_value.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus){
-                    if (credit_value.getText().toString().length() == 0){
+                if (!hasFocus) {
+                    if (credit_value.getText().toString().length() == 0) {
                         credit_value_icon.setImageResource(R.drawable.false_icon);
                         creditValueValidation = false;
-                    }
-                    else {
+                    } else {
                         credit_value_icon.setImageResource(R.drawable.right_icon);
                         creditValueValidation = true;
                     }
-                }else {
+                } else {
                     credit_value_icon.setImageDrawable(null);
                 }
 
@@ -160,6 +164,8 @@ public class CreditRequestActivity extends AppCompatActivity {
 
         contact_message = (FacedEditText)findViewById(R.id.contact_message);
         contact_name = (FacedTextView)findViewById(R.id.contact_name);
+        contact_phone_no = (FacedTextView)findViewById(R.id.contact_phone_no);
+        image_profile = (CircleImageView)findViewById(R.id.image_profile);
 
 
         bundle = getIntent().getExtras();
@@ -167,6 +173,8 @@ public class CreditRequestActivity extends AppCompatActivity {
         if (bundle != null) {
             contactPhoneNo = bundle.getString(Constants.CONTACT_PHONE_NO);
             contactName = bundle.getString(Constants.CONTACT_NAME);
+            userImageProfileId = bundle.getString(Constants.USER_IMAGE_PROFILE_ID);
+            loginTokenId = bundle.getString(Constants.LOGIN_TOKEN_ID);
 
         }else {
 
@@ -202,7 +210,10 @@ public class CreditRequestActivity extends AppCompatActivity {
             }
         }
 
-        contact_name.setText(contactName);
+        contact_name.setText(persianEnglishDigit.E2P(contactName));
+        contact_phone_no.setText(persianEnglishDigit.E2P(contactPhoneNo));
+        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile)).execute(Constants.HTTPS_SERVER_IP + "/users/" + loginTokenId + "/" + userImageProfileId);
+
 
 
         pay_to_one_button = (ButtonRectangle)findViewById(R.id.pay_to_one_button);
@@ -235,8 +246,6 @@ public class CreditRequestActivity extends AppCompatActivity {
                             editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                             editor.commit();
                             if (amountValue >= MinXferAmount && amountValue <= MaxXferAmount) {
-//                                switch (userVerificationStatus) {
-//                                    case DELEGATED:
                                 hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                                 userPaymentRequest = new UserPaymentRequest();
                                 userPaymentRequest.setCalleeCellNumber(contactPhoneNo);
@@ -244,21 +253,12 @@ public class CreditRequestActivity extends AppCompatActivity {
                                 userPaymentRequest.setMessage(contact_message.getText().toString());
                                 requestUserPayment = new RequestUserPayment(context, new RequestUserPaymentTaskCompleteListener());
                                 requestUserPayment.execute(userPaymentRequest);
-//                                        break;
-//
-//                                    default:
-//                                        new HamPayDialog(activity).showFailPaymentPermissionDialog(userVerificationMessage);
-//                                        pay_to_one_button.setEnabled(true);
-//                                        break;
-//                                }
                             } else {
                                 new HamPayDialog(activity).showIncorrectAmountDialog(MinXferAmount, MaxXferAmount);
                                 pay_to_one_button.setEnabled(true);
                             }
                         }
                     }else {
-//                        cls
-
                         hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                         getUserIdTokenRequest = new GetUserIdTokenRequest();
                         requestUserIdToken = new RequestUserIdToken(context, new RequestGetUserIdTokenResponseTaskCompleteListener());
@@ -282,9 +282,9 @@ public class CreditRequestActivity extends AppCompatActivity {
     @Override
     protected void onUserLeaveHint() {
         super.onUserLeaveHint();
-        Log.e("EXIT", "onUserLeaveHint");
-        editor.putString(Constants.USER_ID_TOKEN, "");
-        editor.commit();
+//        Log.e("EXIT", "onUserLeaveHint");
+//        editor.putString(Constants.USER_ID_TOKEN, "");
+//        editor.commit();
     }
 
     @Override
@@ -295,15 +295,10 @@ public class CreditRequestActivity extends AppCompatActivity {
             i.setClass(this, MainActivity.class);
             startActivity(i);
         }
-
         Intent returnIntent = new Intent();
         returnIntent.putExtra("result", 1024);
         setResult(1024);
-
         finish();
-
-
-
     }
 
 
@@ -316,7 +311,19 @@ public class CreditRequestActivity extends AppCompatActivity {
 
             if (userPaymentResponseMessage != null){
                 if (userPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
+
+                    DatabaseHelper databaseHelper = new DatabaseHelper(context, serverKey);
+                    RecentPay recentPay = new RecentPay();
+                    recentPay.setName(contactName);
+                    recentPay.setMessage(contact_message.getText().toString());
+                    recentPay.setStatus("1");
+                    recentPay.setId(2);
+                    recentPay.setPhone(contactPhoneNo);
+                    databaseHelper.createRecentPay(recentPay);
+
                     new HamPayDialog(activity).creditRequestDialog();
+
+
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Individual Payment Confirm")
@@ -386,21 +393,12 @@ public class CreditRequestActivity extends AppCompatActivity {
                         editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                         editor.commit();
                         if (amountValue >= MinXferAmount && amountValue <= MaxXferAmount) {
-//                            switch (userVerificationStatus) {
-//                                case DELEGATED:
                             userPaymentRequest = new UserPaymentRequest();
                             userPaymentRequest.setCalleeCellNumber(contactPhoneNo);
                             userPaymentRequest.setAmount(amountValue);
                             userPaymentRequest.setMessage(contact_message.getText().toString());
                             requestUserPayment = new RequestUserPayment(context, new RequestUserPaymentTaskCompleteListener());
                             requestUserPayment.execute(userPaymentRequest);
-//                                    break;
-
-//                                default:
-//                                    new HamPayDialog(activity).showFailPaymentPermissionDialog(userVerificationMessage);
-//                                    pay_to_one_button.setEnabled(true);
-//                                    break;
-//                            }
                         } else {
                             new HamPayDialog(activity).showIncorrectAmountDialog(MinXferAmount, MaxXferAmount);
                             pay_to_one_button.setEnabled(true);
