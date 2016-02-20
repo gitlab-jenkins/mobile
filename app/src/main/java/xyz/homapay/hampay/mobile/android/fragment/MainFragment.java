@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.activity.BusinessPurchaseActivity;
 import xyz.homapay.hampay.mobile.android.activity.PaymentRequestActivity;
 import xyz.homapay.hampay.mobile.android.activity.TransactionsHistoryActivity;
 import xyz.homapay.hampay.mobile.android.adapter.GuideAdapter;
@@ -103,6 +104,11 @@ public class MainFragment extends Fragment implements View.OnClickListener{
 
             case R.id.user_payment_request:
                 intent.setClass(getActivity(), PaymentRequestActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.businessPurchase:
+                intent.setClass(getActivity(), BusinessPurchaseActivity.class);
                 startActivity(intent);
                 break;
         }
