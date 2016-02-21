@@ -1,0 +1,104 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:geekui="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:background="@color/colorPrimary">
+
+        <ImageView
+            android:id="@+id/nav_icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/back_actionbar"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="12dp"
+            android:padding="12dp"
+            android:clickable="true"
+            android:onClick="backActionBar"/>
+
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+            geekui:customTypeface="fonts/iran_sans.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="15dp"
+            android:text="@string/pending_purchase_payment_title"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="64dp"/>
+
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="52dp"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/payment_rl"
+            android:layout_width="0dip"
+            android:layout_height="52dp"
+            android:layout_weight="0.5">
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/payment_title"
+                geekui:customTypeface="fonts/iran_sans.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/normal_text"
+                android:textSize="15dp"
+                android:text="@string/pending_payment"
+                android:layout_centerInParent="true"/>
+
+            <View
+                android:id="@+id/payment_sep"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/normal_text"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/purchase_rl"
+            android:layout_width="0dip"
+            android:layout_height="52dp"
+            android:layout_weight="0.5">
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/purchase_title"
+                geekui:customTypeface="fonts/iran_sans.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/user_change_status"
+                android:textSize="15dp"
+                android:text="@string/pending_purchase"
+                android:layout_centerInParent="true"/>
+
+            <View
+                android:id="@+id/purchase_sep"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/user_change_status"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+    <ListView
+        android:id="@+id/pendingListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+</LinearLayout>

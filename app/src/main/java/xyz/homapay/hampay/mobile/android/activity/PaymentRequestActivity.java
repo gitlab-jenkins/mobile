@@ -142,9 +142,6 @@ public class PaymentRequestActivity extends AppCompatActivity implements View.On
                 recent_sep.setBackgroundColor(getResources().getColor(R.color.user_change_status));
                 hampay_title.setTextColor(getResources().getColor(R.color.normal_text));
                 hampay_sep.setBackgroundColor(getResources().getColor(R.color.normal_text));
-
-
-
                 break;
 
             case R.id.hampay_rl:
@@ -153,11 +150,9 @@ public class PaymentRequestActivity extends AppCompatActivity implements View.On
                 hampay_sep.setBackgroundColor(getResources().getColor(R.color.user_change_status));
                 recent_title.setTextColor(getResources().getColor(R.color.normal_text));
                 recent_sep.setBackgroundColor(getResources().getColor(R.color.normal_text));
-
                 contactsHampayEnabledRequest = new ContactsHampayEnabledRequest();
                 requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());
                 requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
-
                 break;
         }
 

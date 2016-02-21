@@ -90,6 +90,7 @@
                 android:background="@color/entry_field_color"/>
 
             <LinearLayout
+                android:id="@+id/pendingPurchasePayment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"

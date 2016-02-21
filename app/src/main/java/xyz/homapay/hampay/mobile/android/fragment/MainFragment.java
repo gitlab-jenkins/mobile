@@ -16,6 +16,7 @@ import android.widget.ListView;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.BusinessPurchaseActivity;
 import xyz.homapay.hampay.mobile.android.activity.PaymentRequestActivity;
+import xyz.homapay.hampay.mobile.android.activity.PendingPurchasePaymentActivity;
 import xyz.homapay.hampay.mobile.android.activity.TransactionsHistoryActivity;
 import xyz.homapay.hampay.mobile.android.adapter.GuideAdapter;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
@@ -34,6 +35,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     LinearLayout user_transaction_history;
     LinearLayout user_payment_request;
     LinearLayout businessPurchase;
+    LinearLayout pendingPurchasePayment;
 
     public MainFragment() {
         // Required empty public constructor
@@ -70,6 +72,9 @@ public class MainFragment extends Fragment implements View.OnClickListener{
 
         businessPurchase = (LinearLayout)rootView.findViewById(R.id.businessPurchase);
         businessPurchase.setOnClickListener(this);
+
+        pendingPurchasePayment = (LinearLayout)rootView.findViewById(R.id.pendingPurchasePayment);
+        pendingPurchasePayment.setOnClickListener(this);
 
         return rootView;
     }
@@ -113,6 +118,11 @@ public class MainFragment extends Fragment implements View.OnClickListener{
 
             case R.id.businessPurchase:
                 intent.setClass(getActivity(), BusinessPurchaseActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.pendingPurchasePayment:
+                intent.setClass(getActivity(), PendingPurchasePaymentActivity.class);
                 startActivity(intent);
                 break;
         }
