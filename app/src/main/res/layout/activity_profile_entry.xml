@@ -308,7 +308,6 @@
 
                     </RelativeLayout>
 
-
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         geekui:customTypeface="fonts/iran_sans.ttf"
                         android:layout_width="wrap_content"
@@ -350,7 +349,7 @@
                             android:padding="8dp"
                             android:contentDescription="account"
                             android:maxLength="19"
-                            android:text="5022-2910-4789-2581"/>
+                            android:text="5859-4710-1018-8708"/>
 
                         <ImageView
                             android:id="@+id/accountNumberIcon"
@@ -360,6 +359,17 @@
                             android:layout_marginLeft="12dp"/>
 
                     </RelativeLayout>
+
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/cardProfile"
+                        geekui:customTypeface="fonts/iran_sans.ttf"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/normal_text"
+                        android:textSize="13dp"
+                        android:gravity="left"
+                        android:layout_gravity="left"
+                        android:layout_margin="3dp"/>
 
                     <RelativeLayout
                         android:layout_width="fill_parent"

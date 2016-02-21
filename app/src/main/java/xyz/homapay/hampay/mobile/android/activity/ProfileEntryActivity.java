@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -26,6 +27,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+
+import java.io.UnsupportedEncodingException;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
@@ -41,6 +44,7 @@ import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestBankList;
 import xyz.homapay.hampay.mobile.android.async.RequestCardProfile;
 import xyz.homapay.hampay.mobile.android.async.RequestRegistrationEntry;
+import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.EmailTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
@@ -70,6 +74,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
     boolean nationalCodeIsValid = false;
 
     FacedEditText accountNumberValue;
+    FacedTextView cardProfile;
     boolean accountNumberIsValid = true;
     boolean verifiedCardNumber = false;
     String accountNumberFormat = "####-####-####-####";
@@ -261,6 +266,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
         });
 
         accountNumberValue = (FacedEditText)findViewById(R.id.accountNumberValue);
+        cardProfile = (FacedTextView)findViewById(R.id.cardProfile);
         accountNumberIcon = (ImageView)findViewById(R.id.accountNumberIcon);
         accountNumberValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -317,24 +323,27 @@ public class ProfileEntryActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 accountNumberValue.removeTextChangedListener(this);
 
-                rawAccountNumberValue = s.toString().replace("-", "");
-                rawAccountNumberValueLength = rawAccountNumberValue.length();
-                rawAccountNumberValueLengthOffset = 0;
-                procAccountNumberValue = "";
-                if (rawAccountNumberValue.length() > 0) {
-                    for (int i = 0; i < rawAccountNumberValueLength; i++) {
-                        if (accountNumberFormat.charAt(i + rawAccountNumberValueLengthOffset) == '-') {
-                            procAccountNumberValue += "-" + rawAccountNumberValue.charAt(i);
-                            rawAccountNumberValueLengthOffset++;
-                        } else {
-                            procAccountNumberValue += rawAccountNumberValue.charAt(i);
+                if (accountNumberValue.getText().toString().length() <= 19) {
+
+                    rawAccountNumberValue = s.toString().replace("-", "");
+                    rawAccountNumberValueLength = rawAccountNumberValue.length();
+                    rawAccountNumberValueLengthOffset = 0;
+                    procAccountNumberValue = "";
+                    if (rawAccountNumberValue.length() > 0) {
+                        for (int i = 0; i < rawAccountNumberValueLength; i++) {
+                            if (accountNumberFormat.charAt(i + rawAccountNumberValueLengthOffset) == '-') {
+                                procAccountNumberValue += "-" + rawAccountNumberValue.charAt(i);
+                                rawAccountNumberValueLengthOffset++;
+                            } else {
+                                procAccountNumberValue += rawAccountNumberValue.charAt(i);
+                            }
                         }
+
+                        procAccountNumberValue = new PersianEnglishDigit(procAccountNumberValue).E2P();
+
+                        accountNumberValue.setText(procAccountNumberValue);
+                        accountNumberValue.setSelection(accountNumberValue.getText().toString().length());
                     }
-
-                    procAccountNumberValue = new PersianEnglishDigit(procAccountNumberValue).E2P();
-
-                    accountNumberValue.setText(procAccountNumberValue);
-                    accountNumberValue.setSelection(accountNumberValue.getText().toString().length());
                 }
                 accountNumberValue.addTextChangedListener(this);
             }
@@ -480,9 +489,13 @@ public class ProfileEntryActivity extends AppCompatActivity {
 
                     verifiedCardNumber = true;
 
-                    accountNumberValue.setText(accountNumberValue.getText() + "(" + cardProfileResponse.getBankName() + " - " + cardProfileResponse.getFullName() + ")");
+                    cardProfile.setText(cardProfileResponse.getFullName() + " - " + cardProfileResponse.getBankName());
 
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(cardProfileResponse.getBankLogo(), 0, cardProfileResponse.getBankLogo().length);
+                    byte[] bytes = new byte[0];
+
+                    bytes = Base64.decode(cardProfileResponse.getBankLogo(), Base64.DEFAULT);
+
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                     accountNumberIcon.setImageBitmap(bitmap);
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()

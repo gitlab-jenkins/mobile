@@ -33,6 +33,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     private ImageView indicator_icon;
     LinearLayout user_transaction_history;
     LinearLayout user_payment_request;
+    LinearLayout businessPurchase;
 
     public MainFragment() {
         // Required empty public constructor
@@ -66,6 +67,9 @@ public class MainFragment extends Fragment implements View.OnClickListener{
 
         user_payment_request = (LinearLayout)rootView.findViewById(R.id.user_payment_request);
         user_payment_request.setOnClickListener(this);
+
+        businessPurchase = (LinearLayout)rootView.findViewById(R.id.businessPurchase);
+        businessPurchase.setOnClickListener(this);
 
         return rootView;
     }

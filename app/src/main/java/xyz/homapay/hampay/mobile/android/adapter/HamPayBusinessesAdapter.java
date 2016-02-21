@@ -41,7 +41,7 @@ public class HamPayBusinessesAdapter extends HamPayBusinessesGenericAdapter<Busi
             viewHolder.business_description = (FacedTextView)convertView.findViewById(R.id.business_description);
             viewHolder.business_phone_no = (FacedTextView)convertView.findViewById(R.id.business_phone_no);
             viewHolder.business_hampay_id = (FacedTextView)convertView.findViewById(R.id.business_hampay_id);
-            viewHolder.pay_to_business_button = (ButtonRectangle)convertView.findViewById(R.id.pay_to_business_button);
+//            viewHolder.pay_to_business_button = (ButtonRectangle)convertView.findViewById(R.id.pay_to_business_button);
 
 
             convertView.setTag(viewHolder);
@@ -58,16 +58,16 @@ public class HamPayBusinessesAdapter extends HamPayBusinessesGenericAdapter<Busi
         viewHolder.business_phone_no.setText(persianEnglishDigit.E2P("تلفن: " + businessDTO.getDefaultPhoneNumber()));
         viewHolder.business_hampay_id.setText(persianEnglishDigit.E2P("شناسه: " + businessDTO.getCode()));
 
-        viewHolder.pay_to_business_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(context, PayBusinessActivity.class);
-                intent.putExtra("business_name", getItem(position).getTitle());
-                intent.putExtra("business_code", getItem(position).getCode());
-                context.startActivity(intent);
-            }
-        });
+//        viewHolder.pay_to_business_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent();
+//                intent.setClass(context, PayBusinessActivity.class);
+//                intent.putExtra("business_name", getItem(position).getTitle());
+//                intent.putExtra("business_code", getItem(position).getCode());
+//                context.startActivity(intent);
+//            }
+//        });
 
         return convertView;
     }
@@ -82,7 +82,7 @@ public class HamPayBusinessesAdapter extends HamPayBusinessesGenericAdapter<Busi
         FacedTextView business_description;
         FacedTextView business_phone_no;
         FacedTextView business_hampay_id;
-        ButtonRectangle pay_to_business_button;
+//        ButtonRectangle pay_to_business_button;
     }
 
 }

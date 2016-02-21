@@ -61,31 +61,31 @@
 
     </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="80dp"
-        android:layout_height="40dp"
-        android:layout_centerVertical="true">
+    <!--<RelativeLayout-->
+        <!--android:layout_width="80dp"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_centerVertical="true">-->
 
 
-        <xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle
-            android:id="@+id/pay_to_business_button"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_centerHorizontal="true"
-            android:background="@color/register_btn_color"
-            android:textSize="20sp" />
+        <!--<xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle-->
+            <!--android:id="@+id/pay_to_business_button"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="fill_parent"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:background="@color/register_btn_color"-->
+            <!--android:textSize="20sp" />-->
 
-        <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            geekui:customTypeface="fonts/iran_sans.ttf"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:textColor="@android:color/white"
-            android:textSize="15dp"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:text="@string/select" />
+        <!--<xyz.homapay.hampay.mobile.android.component.FacedTextView-->
+            <!--geekui:customTypeface="fonts/iran_sans.ttf"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="fill_parent"-->
+            <!--android:textColor="@android:color/white"-->
+            <!--android:textSize="15dp"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:text="@string/select" />-->
 
-    </RelativeLayout>
+    <!--</RelativeLayout>-->
 
 
 </RelativeLayout>

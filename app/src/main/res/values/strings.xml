@@ -518,5 +518,7 @@
 
     <string name="hampay_contact_list"> مخاطبین هم‌پی</string>
     <string name="recent_payment_request">تازه‌ترین‌ها</string>
+    <string name="business_payment_per_name">بر اساس نام</string>
+    <string name="business_payment_per_code">براساس کد</string>
 
 </resources>
