@@ -178,6 +178,11 @@
             android:orientation="vertical"
             android:background="@android:color/white">
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/entry_field_color"/>
+
             <ImageView
                 android:id="@+id/indicator_icon"
                 android:layout_width="32dp"
@@ -190,7 +195,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/normal_text"
-                android:textSize="15dp"
+                android:textSize="14dp"
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:text="@string/some_people_at_hampay" />

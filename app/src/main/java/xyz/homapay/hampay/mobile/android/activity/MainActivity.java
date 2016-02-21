@@ -171,12 +171,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         activity = MainActivity.this;
         context = this;
 
-//        try {
-//            soapTest();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
         bundle = getIntent().getExtras();
 
         Intent intent = getIntent();
@@ -399,15 +393,19 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         switch (position) {
 
             case 0:
-
                 fragment = new MainFragment();
+                if (userProfileDTO != null) {
+                    bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
+                    fragment.setArguments(bundle);
+                }
                 title = getString(R.string.title_main_fragment);
                 break;
             case 1:
                 fragment = new AccountDetailFragment();
-                if (userProfileDTO != null)
+                if (userProfileDTO != null) {
                     bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
-                fragment.setArguments(bundle);
+                    fragment.setArguments(bundle);
+                }
                 title = getString(R.string.title_account_detail);
                 break;
             case 2:

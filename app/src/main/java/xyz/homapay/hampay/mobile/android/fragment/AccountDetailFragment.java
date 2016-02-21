@@ -86,10 +86,10 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     FacedTextView hampay_2;
     FacedTextView hampay_3;
     FacedTextView hampay_4;
-    ImageView hampay_image_1;
+    CircleImageView hampay_image_1;
     CircleImageView hampay_image_2;
-    ImageView hampay_image_3;
-    ImageView hampay_image_4;
+    CircleImageView hampay_image_3;
+    CircleImageView hampay_image_4;
     LinearLayout hampay_1_ll;
     LinearLayout hampay_2_ll;
     LinearLayout hampay_3_ll;
@@ -302,8 +302,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         });
 
 
-
-//        user_image = (ImageView)rootView.findViewById(R.id.user_image);
         user_name_text = (FacedTextView)rootView.findViewById(R.id.user_name_text);
         user_account_no_text = (FacedTextView)rootView.findViewById(R.id.user_account_no_text);
         user_bank_name = (FacedTextView)rootView.findViewById(R.id.user_bank_name);
@@ -319,10 +317,10 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         hampay_2 = (FacedTextView)rootView.findViewById(R.id.hampay_2);
         hampay_3 = (FacedTextView)rootView.findViewById(R.id.hampay_3);
         hampay_4 = (FacedTextView)rootView.findViewById(R.id.hampay_4);
-        hampay_image_1 = (ImageView)rootView.findViewById(R.id.hampay_image_1);
+        hampay_image_1 = (CircleImageView)rootView.findViewById(R.id.hampay_image_1);
         hampay_image_2 = (CircleImageView)rootView.findViewById(R.id.hampay_image_2);
-        hampay_image_3 = (ImageView)rootView.findViewById(R.id.hampay_image_3);
-        hampay_image_4 = (ImageView)rootView.findViewById(R.id.hampay_image_4);
+        hampay_image_3 = (CircleImageView)rootView.findViewById(R.id.hampay_image_3);
+        hampay_image_4 = (CircleImageView)rootView.findViewById(R.id.hampay_image_4);
 
 
         if (prefs.getBoolean(Constants.FORCE_USER_PROFILE, false)){
@@ -335,7 +333,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
             editor.commit();
         }
 
-        // Inflate the layout for this fragment
         return rootView;
     }
 
@@ -772,27 +769,18 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         editor.putLong(Constants.MIN_INDIVIDUAL_XFER_AMOUNT, this.userProfileDTO.getMinIndividualXferAmount());
         editor.commit();
 
-//        if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.UNVERIFIED) {
-//            verification_status_ll.setVisibility(View.VISIBLE);
-//        }else {
-//            verification_status_ll.setVisibility(View.GONE);
-//        }
         jalaliConvert = new JalaliConvert();
 
-
-//        if (userProfileDTO.getVerificationStatus() == UserVerificationStatus.UNVERIFIED){
-//            user_image.setImageResource(R.drawable.user_icon_blak);
-//        }else {
-//            user_image.setImageResource(R.drawable.user_icon_blue);
-//        }
         user_name_text.setText(userProfileDTO.getFullName());
         MainActivity.user_account_name.setText(userProfileDTO.getFullName());
 
         user_account_no_text.setText(persianEnglishDigit.E2P(userProfileDTO.getCardDTO().getMaskedCardNumber()));
         user_bank_name.setText(" " + userProfileDTO.getCardDTO().getBankName());
         user_mobile_no.setText(persianEnglishDigit.E2P(userProfileDTO.getCellNumber()));
-        user_iban_value.setText("IR" + persianEnglishDigit.E2P(userProfileDTO.getIbanDTO().getIban()));
-        user_iban_bank.setText(userProfileDTO.getIbanDTO().getBankName());
+        if (userProfileDTO.getIbanDTO() != null) {
+            user_iban_value.setText("IR" + persianEnglishDigit.E2P(userProfileDTO.getIbanDTO().getIban()));
+            user_iban_bank.setText(userProfileDTO.getIbanDTO().getBankName());
+        }
         user_national_code.setText(persianEnglishDigit.E2P(userProfileDTO.getCellNumber()));
         editor.commit();
 
@@ -833,12 +821,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                         user_image_url = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contactDTOs.get(2).getContactImageId();
                         new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_3)).execute(user_image_url);
                     }
-
-//                    if (contactDTOs.get(2).getUserVerificationStatus() == UserVerificationStatus.DELEGATED){
-//                        hampay_image_3.setImageResource(R.drawable.user_icon_blue_s);
-//                    }else {
-//                        hampay_image_3.setImageResource(R.drawable.user_icon_blak_s);
-//                    }
                     break;
                 case 3:
                     hampay_4_ll.setVisibility(View.VISIBLE);
@@ -847,12 +829,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                         user_image_url = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contactDTOs.get(3).getContactImageId();
                         new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_4)).execute(user_image_url);
                     }
-
-//                    if (contactDTOs.get(3).getUserVerificationStatus() == UserVerificationStatus.DELEGATED){
-//                        hampay_image_4.setImageResource(R.drawable.user_icon_blue_s);
-//                    }else {
-//                        hampay_image_4.setImageResource(R.drawable.user_icon_blak_s);
-//                    }
                     break;
 
             }
