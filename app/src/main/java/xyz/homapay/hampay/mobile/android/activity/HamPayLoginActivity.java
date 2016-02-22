@@ -172,7 +172,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         editor.commit();
 
         user_name = (FacedTextView)findViewById(R.id.user_name);
-        user_name.setText("سلام: " + prefs.getString(Constants.REGISTERED_USER_FAMILY, ""));
+        user_name.setText(prefs.getString(Constants.REGISTERED_USER_NAME, "") + " عزیز");
 
         bundle = getIntent().getExtras();
 

@@ -293,8 +293,9 @@
     <string name="new_memorable">کلمه یادآوری جدید خود را وارد کنید.</string>
 
     <string name="login_hampay">ورود به شبکه هم‌پی </string>
+    <string name="login_hello">سلام: </string>
 
-    <string name="hampay_login_text">لطفا کد پنج رقمی خود را برای ورود به شبکه هم‌پی را وارد کنید. </string>
+    <string name="hampay_login_text">لطفا کد پنج رقمی خود را برای ورود به شبکه هم‌پی وارد کنید. </string>
 
     <string name="select">انتخاب</string>
     <string name="recent_pay_one">تازه ترین پرداخت ها</string>
