@@ -17,12 +17,10 @@ import android.widget.LinearLayout;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.squareup.picasso.Picasso;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
-import xyz.homapay.hampay.common.core.model.dto.UserVerificationStatus;
 import xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
 import xyz.homapay.hampay.common.core.model.request.VerifyAccountRequest;
 import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
@@ -30,7 +28,7 @@ import xyz.homapay.hampay.common.core.model.response.VerifyAccountResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
-import xyz.homapay.hampay.mobile.android.activity.IntroAccountActivity;
+import xyz.homapay.hampay.mobile.android.activity.IntroIBANActivity;
 import xyz.homapay.hampay.mobile.android.activity.MainActivity;
 import xyz.homapay.hampay.mobile.android.activity.PayOneActivity;
 import xyz.homapay.hampay.mobile.android.activity.RequestPayBusinessListActivity;
@@ -46,7 +44,6 @@ import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.component.material.RippleView;
-import xyz.homapay.hampay.mobile.android.component.progressbar.ColorsShape;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
@@ -54,7 +51,6 @@ import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -75,6 +71,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     FacedTextView user_name_text;
     FacedTextView user_account_no_text;
     FacedTextView user_bank_name;
+    LinearLayout iban_ll;
     FacedTextView user_mobile_no;
     FacedTextView user_iban_value;
     FacedTextView user_iban_bank;
@@ -118,7 +115,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     ButtonRectangle business_request_pay_button;
 
     RequestImageDownloader requestImageDownloader;
-    CircleImageView image_profile;
+//    CircleImageView image_profile;
 
     HamPayDialog hamPayDialog;
 
@@ -254,19 +251,19 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
         verification_status_ll = (LinearLayout)rootView.findViewById(R.id.verification_status_ll);
 
-        image_profile = (CircleImageView)rootView.findViewById(R.id.image_profile);
+//        image_profile = (CircleImageView)rootView.findViewById(R.id.image_profile);
 
         String URL = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
 
-        requestImageDownloader = new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile));
-        requestImageDownloader.execute(URL);
+//        requestImageDownloader = new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile));
+//        requestImageDownloader.execute(URL);
 
-        String filePath = context.getFilesDir().getPath().toString() + "/" + "userImage.png";
-        File file = new File(filePath);
-        if (file.exists()){
-            Picasso.with(context).invalidate(file);
-            Picasso.with(context).load(file).into(image_profile);
-        }
+//        String filePath = context.getFilesDir().getPath().toString() + "/" + "userImage.png";
+//        File file = new File(filePath);
+//        if (file.exists()){
+//            Picasso.with(context).invalidate(file);
+//            Picasso.with(context).load(file).into(image_profile);
+//        }
 
 
         hamPayDialog = new HamPayDialog(getActivity());
@@ -286,7 +283,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(context, IntroAccountActivity.class);
+                intent.setClass(context, IntroIBANActivity.class);
                 startActivityForResult(intent, 1023);
             }
         });
@@ -305,6 +302,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         user_name_text = (FacedTextView)rootView.findViewById(R.id.user_name_text);
         user_account_no_text = (FacedTextView)rootView.findViewById(R.id.user_account_no_text);
         user_bank_name = (FacedTextView)rootView.findViewById(R.id.user_bank_name);
+        iban_ll = (LinearLayout)rootView.findViewById(R.id.iban_ll);
         user_mobile_no = (FacedTextView)rootView.findViewById(R.id.user_mobile_no);
         user_iban_value = (FacedTextView)rootView.findViewById(R.id.user_iban_value);
         user_iban_bank = (FacedTextView)rootView.findViewById(R.id.user_iban_bank);
@@ -780,6 +778,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         if (userProfileDTO.getIbanDTO() != null) {
             user_iban_value.setText("IR" + persianEnglishDigit.E2P(userProfileDTO.getIbanDTO().getIban()));
             user_iban_bank.setText(userProfileDTO.getIbanDTO().getBankName());
+            iban_ll.setVisibility(View.VISIBLE);
         }
         user_national_code.setText(persianEnglishDigit.E2P(userProfileDTO.getCellNumber()));
         editor.commit();

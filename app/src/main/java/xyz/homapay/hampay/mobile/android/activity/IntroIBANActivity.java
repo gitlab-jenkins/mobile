@@ -8,6 +8,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -25,12 +27,14 @@ import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
-public class IntroAccountActivity extends AppCompatActivity {
+public class IntroIBANActivity extends AppCompatActivity {
 
     HamPayDialog hamPayDialog;
     ButtonRectangle sheba_verify_button;
     FacedEditText shebaNumberValue;
+    PersianEnglishDigit persianEnglishDigit;
     Activity activity;
 
     RequestIBANConfirmation requestIBANConfirmation;
@@ -51,7 +55,28 @@ public class IntroAccountActivity extends AppCompatActivity {
 
         hamPayDialog = new HamPayDialog(activity);
 
+        persianEnglishDigit = new PersianEnglishDigit();
+
         shebaNumberValue = (FacedEditText)findViewById(R.id.shebaNumberValue);
+        shebaNumberValue.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                shebaNumberValue.removeTextChangedListener(this);
+                shebaNumberValue.setText(persianEnglishDigit.E2P(shebaNumberValue.getText().toString()));
+                shebaNumberValue.setSelection(shebaNumberValue.getText().toString().length());
+                shebaNumberValue.addTextChangedListener(this);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         sheba_verify_button = (ButtonRectangle)findViewById(R.id.sheba_verify_button);
         sheba_verify_button.setOnClickListener(new View.OnClickListener() {
@@ -60,7 +85,6 @@ public class IntroAccountActivity extends AppCompatActivity {
 
                 ibanConfirmationRequest = new IBANConfirmationRequest();
                 ibanConfirmationRequest.setIban(shebaNumberValue.getText().toString());
-
                 requestIBANConfirmation = new RequestIBANConfirmation(activity, new RequestIBANConfirmationTaskCompleteListener());
                 requestIBANConfirmation.execute(ibanConfirmationRequest);
 

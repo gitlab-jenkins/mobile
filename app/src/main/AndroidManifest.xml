@@ -284,7 +284,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".activity.IntroAccountActivity"
+            android:name=".activity.IntroIBANActivity"
             android:label="@string/app_name"
             android:theme="@style/MyMaterialTheme">
         </activity>
