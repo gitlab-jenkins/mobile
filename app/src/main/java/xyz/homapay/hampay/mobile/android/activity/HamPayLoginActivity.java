@@ -176,17 +176,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
         bundle = getIntent().getExtras();
 
-
-
-
-//        if (bundle != null){
-//            fromNotification = bundle.getBoolean(Constants.NOTIFICATION);
-//        }
-
-
-
-
-
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 

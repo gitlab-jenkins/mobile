@@ -359,9 +359,9 @@
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/black"
                         android:textSize="15dp"
-                        android:gravity="right"
-                        android:layout_marginRight="4dp"
-                        android:text=""/>
+                        android:gravity="left"
+                        android:layout_gravity="left"
+                        android:layout_marginLeft="4dp" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -453,13 +453,24 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:gravity="right"
-                        >
+                        android:visibility="gone">
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_marginRight="4dp">
+                            android:orientation="vertical"
+                            android:layout_marginRight="4dp"
+                            android:layout_marginLeft="4dp">
+
+                            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                                geekui:customTypeface="fonts/iran_sans.ttf"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/normal_text"
+                                android:textSize="15dp"
+                                android:gravity="right"
+                                android:layout_gravity="right"
+                                android:text="@string/sheba_number_text"/>
 
                             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                                 android:id="@+id/user_iban_value"
@@ -470,15 +481,6 @@
                                 android:textSize="14dp"
                                 android:gravity="center"
                                 android:layout_marginRight="2dp" />
-
-                            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                                geekui:customTypeface="fonts/iran_sans.ttf"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/normal_text"
-                                android:textSize="15dp"
-                                android:gravity="right"
-                                android:text="@string/sheba_number_text"/>
 
 
                         </LinearLayout>
@@ -632,7 +634,7 @@
             <RelativeLayout
                 android:layout_width="180dp"
                 android:layout_height="48dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="8dp"
                 android:layout_gravity="center_horizontal">
 
 
@@ -658,13 +660,18 @@
             </RelativeLayout>
 
 
+            <LinearLayout
+                android:id="@+id/selectedHampay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
 
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
                 android:background="@color/entry_field_color"
                 android:layout_margin="10dp"/>
-
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
@@ -675,7 +682,6 @@
                 android:gravity="center"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/some_people_at_hampay"/>
-
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -852,11 +858,14 @@
 
             </LinearLayout>
 
+            </LinearLayout>
+
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
                 android:background="@color/entry_field_color"
-                android:layout_margin="10dp"/>
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/user_last_login"
@@ -865,7 +874,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/normal_text"
                 android:textSize="12dp"
-                android:layout_marginRight="10dp"
+                android:layout_margin="10dp"
                 android:gravity="right"
                 android:layout_gravity="right"
                 android:text="آخرین ورودبه سیستم، "

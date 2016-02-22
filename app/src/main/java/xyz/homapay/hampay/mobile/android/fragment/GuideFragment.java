@@ -130,6 +130,10 @@ public class GuideFragment extends Fragment {
                         intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/changePassword.html");
                         break;
 
+                    case 19:
+                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/changePassword.html");
+                        break;
+
                 }
 
                 startActivity(intent);

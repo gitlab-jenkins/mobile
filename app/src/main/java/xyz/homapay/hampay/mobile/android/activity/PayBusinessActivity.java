@@ -220,20 +220,11 @@ public class PayBusinessActivity extends AppCompatActivity {
                         editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                         editor.commit();
                         if (amountValue >= MinXferAmount && amountValue <= MaxXferAmount) {
-//                            switch (userVerificationStatus) {
-//                                case DELEGATED:
                                     hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                                     businessPaymentConfirmRequest = new BusinessPaymentConfirmRequest();
                                     businessPaymentConfirmRequest.setBusinessCode(bundle.getString("business_code"));
                                     requestBusinessPaymentConfirm = new RequestBusinessPaymentConfirm(context, new RequestBusinessPaymentConfirmTaskCompleteListener());
                                     requestBusinessPaymentConfirm.execute(businessPaymentConfirmRequest);
-//                                    break;
-
-//                                default:
-//                                    new HamPayDialog(activity).showFailPaymentPermissionDialog(userVerificationMessage);
-//                                    pay_to_business_button.setEnabled(true);
-//                                    break;
-//                            }
                         }else {
                             new HamPayDialog(activity).showIncorrectAmountDialog(MinXferAmount, MaxXferAmount);
                             pay_to_business_button.setEnabled(true);
@@ -252,13 +243,11 @@ public class PayBusinessActivity extends AppCompatActivity {
     @Override
     public void onUserInteraction() {
         super.onUserInteraction();
-//        Log.e("EXIT", "onUserInteraction");
     }
 
     @Override
     protected void onUserLeaveHint() {
         super.onUserLeaveHint();
-        Log.e("EXIT", "onUserLeaveHint");
         editor.putString(Constants.USER_ID_TOKEN, "");
         editor.commit();
     }

@@ -79,6 +79,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     FacedTextView user_account_type;
     FacedTextView user_account_title;
     FacedTextView user_last_login;
+    LinearLayout selectedHampay;
     FacedTextView hampay_1;
     FacedTextView hampay_2;
     FacedTextView hampay_3;
@@ -139,8 +140,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
     byte[] mobileKey;
     String serverKey;
-
-    String encryptedData;
 
     DeviceInfo deviceInfo;
 
@@ -268,6 +267,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
         hamPayDialog = new HamPayDialog(getActivity());
 
+        selectedHampay = (LinearLayout)rootView.findViewById(R.id.selectedHampay);
         hampay_1_ll = (LinearLayout)rootView.findViewById(R.id.hampay_1_ll);
         hampay_2_ll = (LinearLayout)rootView.findViewById(R.id.hampay_2_ll);
         hampay_3_ll = (LinearLayout)rootView.findViewById(R.id.hampay_3_ll);
@@ -794,6 +794,9 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
         List<ContactDTO> contactDTOs = userProfileDTO.getSelectedContacts();
 
+        if (contactDTOs.size() > 0){
+            selectedHampay.setVisibility(View.VISIBLE);
+        }
 
         for (int contact = 0; contact < contactDTOs.size(); contact++){
             switch (contact){

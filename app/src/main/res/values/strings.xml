@@ -335,6 +335,7 @@
         <item>تنظیمات</item>
         <item>تغییر کلمه یادآوری</item>
         <item>تغییر رمز عبور</item>
+        <item>تغییر کد ملی</item>
     </string-array>
 
 
@@ -516,7 +517,7 @@
     <string name="individual_pending">دوستان</string>
     <string name="payment_request_from">تولید فاکتور برای: </string>
     <string name="credit_request_action">ارسال</string>
-    <string name="msg_success_credit_request">درخواست وجه شما با موفقیت ارسال شد</string>
+    <string name="msg_success_credit_request">فاکتور شما با موفقیت ارسال شد.</string>
     <string name="msg_success_psp_result">درخواست شما با موفقیت دریافت شد. برای جزییات بیشتر به تراکنش‌ها مراجعه کنید.</string>
 
 

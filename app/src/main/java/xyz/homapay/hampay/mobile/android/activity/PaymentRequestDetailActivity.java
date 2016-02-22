@@ -323,8 +323,6 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
 
                     new HamPayDialog(activity).creditRequestDialog();
 
-
-
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Individual Payment Confirm")
                             .setAction("Payment Confirm")
