@@ -65,24 +65,25 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:background="@android:color/transparent"
-                android:layout_marginLeft="48dp"
+                android:layout_marginLeft="24dp"
                 android:textSize="15dp"
                 android:inputType="number"
                 android:hint="@string/sheba_number_hint"
                 android:textColor="@android:color/black"
                 android:gravity="center_vertical"
-                android:padding="8dp"
                 android:contentDescription="account"
-                android:maxLength="24" />
+                android:maxLength="24"
+                android:padding="8dp"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
-                android:layout_width="48dp"
+                android:layout_width="32dp"
                 android:layout_height="48dp"
                 android:textColor="@color/register_btn_color"
                 android:textSize="18dp"
                 android:text="@string/sheba_text"
                 android:layout_gravity="center"
+
                 android:gravity="center" />
 
         </RelativeLayout>

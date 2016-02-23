@@ -10,6 +10,31 @@
         android:layout_height="60dp"
         android:background="@color/colorPrimary">
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="8dp">
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                geekui:customTypeface="fonts/iran_sans.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="15dp"
+                android:text="@string/business_payment_per_name" />
+
+            <ImageView
+                android:id="@+id/indicator_icon"
+                android:layout_width="32dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_friend_collaps" />
+
+
+        </LinearLayout>
+
         <ImageView
             android:id="@+id/nav_icon"
             android:layout_width="48dp"

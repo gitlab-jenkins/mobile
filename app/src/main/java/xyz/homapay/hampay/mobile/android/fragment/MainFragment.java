@@ -159,7 +159,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
 
         show_hampay_friend = (LinearLayout)rootView.findViewById(R.id.show_hampay_friend);
         hampay_friend = (LinearLayout)rootView.findViewById(R.id.hampay_friend);
-        show_hampay_friend.setOnClickListener(this);
+//        show_hampay_friend.setOnClickListener(this);
 
         indicator_icon = (ImageView)rootView.findViewById(R.id.indicator_icon);
 
