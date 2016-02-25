@@ -1,22 +1,33 @@
 package xyz.homapay.hampay.mobile.android.activity;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
+import xyz.homapay.hampay.common.core.model.request.ContactUsRequest;
 import xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
 import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
 import xyz.homapay.hampay.common.core.model.response.ContactsHampayEnabledResponse;
@@ -59,8 +70,11 @@ public class PaymentRequestActivity extends AppCompatActivity implements View.On
     private RelativeLayout hampay_rl;
     private FacedTextView hampay_title;
     private View hampay_sep;
+    private FacedTextView selectedMenu;
 
     private int selectedType = 1;
+
+    private Dialog dialog;
 
     ContactsHampayEnabledRequest contactsHampayEnabledRequest;
     RequestContactHampayEnabled requestContactHampayEnabled;
@@ -69,6 +83,63 @@ public class PaymentRequestActivity extends AppCompatActivity implements View.On
         finish();
     }
 
+    public void menu(View v){
+
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_payment_request, null);
+
+        final FacedTextView recent_payment_request = (FacedTextView) view.findViewById(R.id.recent_payment_request);
+        FacedTextView hampay_contact_list = (FacedTextView) view.findViewById(R.id.hampay_contact_list);
+
+        recent_payment_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                selectedMenu.setText(getString(R.string.recent_payment_request));
+                if ((prefs.getString(Constants.USER_ID_TOKEN, "") != null && prefs.getString(Constants.USER_ID_TOKEN, "").length() == 16)){
+                    serverKey = prefs.getString(Constants.USER_ID_TOKEN, "");
+                    dbHelper = new DatabaseHelper(activity, serverKey);
+                    recentPays = dbHelper.getAllRecentPays();
+                    recentPaymentRequestAdapter = new RecentPaymentRequestAdapter(activity, recentPays, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+                    paymentRequestList.setAdapter(recentPaymentRequestAdapter);
+                }else {
+                    recentPays = new ArrayList<RecentPay>();
+                    getUserIdTokenRequest = new GetUserIdTokenRequest();
+                    requestUserIdToken = new RequestUserIdToken(context, new RequestGetUserIdTokenResponseTaskCompleteListener());
+                    requestUserIdToken.execute(getUserIdTokenRequest);
+                }
+            }
+        });
+
+        hampay_contact_list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                selectedMenu.setText(getString(R.string.hampay_contact_list));
+                contactsHampayEnabledRequest = new ContactsHampayEnabledRequest();
+                requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());
+                requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
+            }
+        });
+
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setDimAmount(0);
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(true);
+        WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
+        layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
+        layoutParams.x = 25;
+        layoutParams.y = 20;
+
+        dialog.show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +163,8 @@ public class PaymentRequestActivity extends AppCompatActivity implements View.On
         hampay_rl.setOnClickListener(this);
         hampay_title = (FacedTextView)findViewById(R.id.hampay_title);
         hampay_sep = (View)findViewById(R.id.hampay_sep);
+
+        selectedMenu = (FacedTextView)findViewById(R.id.selectedMenu);
 
         recentPaymentRequestAdapter = new RecentPaymentRequestAdapter(activity, recentPays, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
         paymentRequestList.setAdapter(recentPaymentRequestAdapter);
@@ -142,6 +215,19 @@ public class PaymentRequestActivity extends AppCompatActivity implements View.On
                 recent_sep.setBackgroundColor(getResources().getColor(R.color.user_change_status));
                 hampay_title.setTextColor(getResources().getColor(R.color.normal_text));
                 hampay_sep.setBackgroundColor(getResources().getColor(R.color.normal_text));
+
+                if ((prefs.getString(Constants.USER_ID_TOKEN, "") != null && prefs.getString(Constants.USER_ID_TOKEN, "").length() == 16)){
+                    serverKey = prefs.getString(Constants.USER_ID_TOKEN, "");
+                    dbHelper = new DatabaseHelper(activity, serverKey);
+                    recentPays = dbHelper.getAllRecentPays();
+                    recentPaymentRequestAdapter = new RecentPaymentRequestAdapter(activity, recentPays, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+                    paymentRequestList.setAdapter(recentPaymentRequestAdapter);
+                }else {
+                    recentPays = new ArrayList<RecentPay>();
+                    getUserIdTokenRequest = new GetUserIdTokenRequest();
+                    requestUserIdToken = new RequestUserIdToken(context, new RequestGetUserIdTokenResponseTaskCompleteListener());
+                    requestUserIdToken.execute(getUserIdTokenRequest);
+                }
                 break;
 
             case R.id.hampay_rl:

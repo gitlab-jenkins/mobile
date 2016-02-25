@@ -1,17 +1,23 @@
 package xyz.homapay.hampay.mobile.android.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -33,14 +39,17 @@ import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
 import xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
+import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
 import xyz.homapay.hampay.common.core.model.request.TransactionListRequest;
 import xyz.homapay.hampay.common.core.model.response.BusinessListResponse;
 import xyz.homapay.hampay.common.core.model.response.TransactionListResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.BusinessDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
+import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.HamPayBusinessesAdapter;
+import xyz.homapay.hampay.mobile.android.adapter.RecentPaymentRequestAdapter;
 import xyz.homapay.hampay.mobile.android.adapter.UserTransactionAdapter;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
@@ -48,6 +57,7 @@ import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestContactHampayEnabled;
 import xyz.homapay.hampay.mobile.android.async.RequestHamPayBusiness;
 import xyz.homapay.hampay.mobile.android.async.RequestSearchHamPayBusiness;
+import xyz.homapay.hampay.mobile.android.async.RequestUserIdToken;
 import xyz.homapay.hampay.mobile.android.async.RequestUserTransaction;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.doblist.DobList;
@@ -59,6 +69,7 @@ import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.component.material.RippleView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.model.RecentPay;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
@@ -141,7 +152,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
 
     Tracker hamPayGaTracker;
 
-
+    private Dialog dialog;
 
     public void backActionBar(View view){
         finish();
@@ -173,6 +184,66 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                 requestSearchHamPayBusiness.cancel(true);
         }
     }
+
+    public void menu(View v){
+
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_business_purchase, null);
+
+        final FacedTextView business_payment_per_name = (FacedTextView) view.findViewById(R.id.business_payment_per_name);
+        FacedTextView business_payment_per_code = (FacedTextView) view.findViewById(R.id.business_payment_per_code);
+
+        business_payment_per_name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                if (keyboard.getVisibility() == View.VISIBLE){
+                    new Collapse(keyboard).animate();
+                }
+                businessListView.setVisibility(View.VISIBLE);
+                find_business_purchase.setVisibility(View.GONE);
+                selectedType = 1;
+                name_title.setTextColor(getResources().getColor(R.color.user_change_status));
+                name_sep.setBackgroundColor(getResources().getColor(R.color.user_change_status));
+                code_title.setTextColor(getResources().getColor(R.color.normal_text));
+                code_sep.setBackgroundColor(getResources().getColor(R.color.normal_text));
+
+            }
+        });
+
+        business_payment_per_code.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                businessListView.setVisibility(View.GONE);
+                find_business_purchase.setVisibility(View.VISIBLE);
+                selectedType = 2;
+                code_title.setTextColor(getResources().getColor(R.color.user_change_status));
+                code_sep.setBackgroundColor(getResources().getColor(R.color.user_change_status));
+                name_title.setTextColor(getResources().getColor(R.color.normal_text));
+                name_sep.setBackgroundColor(getResources().getColor(R.color.normal_text));
+            }
+        });
+
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setDimAmount(0);
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(true);
+        WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
+        layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
+        layoutParams.x = 25;
+        layoutParams.y = 20;
+
+        dialog.show();
+    }
+
 
 
     @Override

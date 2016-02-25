@@ -524,8 +524,8 @@
 
     <string name="hampay_contact_list"> مخاطبین هم‌پی</string>
     <string name="recent_payment_request">تازه‌ترین‌ها</string>
-    <string name="business_payment_per_name">نام</string>
-    <string name="business_payment_per_code">کد</string>
+    <string name="business_payment_per_name">براساس نام</string>
+    <string name="business_payment_per_code">براساس کد</string>
     <string name="pending_purchase">خریدهای آنلاین</string>
     <string name="pending_payment">خریدهای آفلاین</string>
 

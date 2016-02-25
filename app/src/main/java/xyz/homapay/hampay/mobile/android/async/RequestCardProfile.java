@@ -3,6 +3,8 @@ package xyz.homapay.hampay.mobile.android.async;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import java.io.IOException;
+
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.response.CardProfileResponse;
 import xyz.homapay.hampay.common.core.model.request.CardProfileRequest;
@@ -37,7 +39,8 @@ public class RequestCardProfile extends AsyncTask<CardProfileRequest, Void, Resp
 
         WebServices webServices = new WebServices(context);
 
-        return webServices.newCardProfile(params[0]);
+            return webServices.newCardProfile(params[0]);
+
     }
 
 

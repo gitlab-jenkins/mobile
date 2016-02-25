@@ -24,6 +24,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Date;
 import java.util.UUID;
 import java.util.zip.GZIPInputStream;
@@ -118,6 +121,7 @@ import xyz.homapay.hampay.common.psp.model.response.RegisterCardResponse;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
+import xyz.homapay.hampay.mobile.android.ssl.NullHostNameVerifier;
 import xyz.homapay.hampay.mobile.android.ssl.SSLConnection;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
@@ -2516,6 +2520,43 @@ public class WebServices  {
             if (connection != null)
                 connection.disconnect();
         }
+        return responseMessage;
+    }
+
+    public ResponseMessage<CardProfileResponse> newHttpCardProfile(CardProfileRequest cardProfileRequest) throws IOException {
+
+
+        ProxyService proxyService = new ProxyService(ConnectionType.HTTP, ConnectionMethod.POST);
+        URL url = new URL(Constants.HTTP_SERVER_IP + "/card/info");
+
+        ResponseMessage<CardProfileResponse> responseMessage = null;
+
+        RequestHeader header = new RequestHeader();
+        header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+        header.setVersion(Constants.REQUEST_VERSION);
+
+        RequestMessage<CardProfileRequest> message = new RequestMessage<CardProfileRequest>();
+        message.setRequestHeader(header);
+        CardProfileRequest request = cardProfileRequest;
+        request.setRequestUUID(UUID.randomUUID().toString());
+        message.setService(request);
+
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<CardProfileRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
+
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+            public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                return new Date(json.getAsJsonPrimitive().getAsLong());
+            }
+        });
+
+        Gson gson = builder.create();
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(url), new TypeToken<ResponseMessage<CardProfileResponse>>() {}.getType());
+
+        proxyService.closeConnection();
+
         return responseMessage;
     }
 

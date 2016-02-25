@@ -1,15 +1,21 @@
 package xyz.homapay.hampay.mobile.android.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -39,6 +45,7 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.PendingPaymentAdapter;
 import xyz.homapay.hampay.mobile.android.adapter.PendingPurchaseAdapter;
 import xyz.homapay.hampay.mobile.android.adapter.UserTransactionAdapter;
+import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestCancelPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestContactHampayEnabled;
@@ -95,9 +102,58 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
     ButtonRectangle request_business_button;
     ButtonRectangle request_individual_button;
 
+    private Dialog dialog;
+
 
     public void backActionBar(View view){
         finish();
+    }
+
+    public void menu(View v){
+
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_pending, null);
+
+        final FacedTextView pending_purchase = (FacedTextView) view.findViewById(R.id.pending_purchase);
+        FacedTextView pending_payment = (FacedTextView) view.findViewById(R.id.pending_payment);
+
+        pending_purchase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                requestPendingPurchase = new RequestPendingPurchase(activity, new RequestPendingPurchaseTaskCompleteListener());
+                pendingPurchaseListRequest = new PendingPurchaseListRequest();
+                requestPendingPurchase.execute(pendingPurchaseListRequest);
+            }
+        });
+
+        pending_payment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                requestPendingPayment = new RequestPendingPayment(activity, new RequestPendingPaymentTaskCompleteListener());
+                pendingPaymentListRequest = new PendingPaymentListRequest();
+                requestPendingPayment.execute(pendingPaymentListRequest);
+            }
+        });
+
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setDimAmount(0);
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(true);
+        WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
+        layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
+        layoutParams.x = 25;
+        layoutParams.y = 20;
+
+        dialog.show();
     }
 
     @Override

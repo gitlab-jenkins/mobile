@@ -12,9 +12,9 @@ import javax.net.ssl.SSLSession;
 public class NullHostNameVerifier implements HostnameVerifier {
     @Override
     public boolean verify(String hostname, SSLSession session) {
-//        Log.e("RestUtilImpl", "Approving certificate for " + hostname);
-        HostnameVerifier hv =
-                HttpsURLConnection.getDefaultHostnameVerifier();
-        return hv.verify("www.homapay.com", session);
+       Log.e("RestUtilImpl", "Approving certificate for " + hostname);
+//        HostnameVerifier hv = HttpsURLConnection.getDefaultHostnameVerifier();
+//        return hv.verify("www.homapay.com", session);
+        return true;
     }
 }

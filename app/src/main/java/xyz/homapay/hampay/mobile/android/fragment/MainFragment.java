@@ -43,7 +43,6 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     private ImageView main_banner;
     private LinearLayout show_hampay_friend;
     private LinearLayout hampay_friend;
-    private ImageView indicator_icon;
     LinearLayout user_transaction_history;
     LinearLayout user_payment_request;
     LinearLayout businessPurchase;
@@ -159,9 +158,6 @@ public class MainFragment extends Fragment implements View.OnClickListener{
 
         show_hampay_friend = (LinearLayout)rootView.findViewById(R.id.show_hampay_friend);
         hampay_friend = (LinearLayout)rootView.findViewById(R.id.hampay_friend);
-//        show_hampay_friend.setOnClickListener(this);
-
-        indicator_icon = (ImageView)rootView.findViewById(R.id.indicator_icon);
 
         user_transaction_history = (LinearLayout)rootView.findViewById(R.id.user_transaction_history);
         user_transaction_history.setOnClickListener(this);
@@ -197,10 +193,10 @@ public class MainFragment extends Fragment implements View.OnClickListener{
             case R.id.show_hampay_friend:
                 if (hampay_friend.getVisibility() == View.GONE){
                     new Expand(hampay_friend).animate();
-                    indicator_icon.setImageResource(R.drawable.ic_friend_collaps);
+//                    indicator_icon.setImageResource(R.drawable.ic_friend_collaps);
                 }else {
                     new Collapse(hampay_friend).animate();
-                    indicator_icon.setImageResource(R.drawable.ic_friend_expand);
+//                    indicator_icon.setImageResource(R.drawable.ic_friend_expand);
                 }
                 break;
 
