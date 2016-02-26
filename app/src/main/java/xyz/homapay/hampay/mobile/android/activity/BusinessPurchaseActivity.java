@@ -37,6 +37,7 @@ import java.util.List;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
+import xyz.homapay.hampay.common.core.model.request.BusinessPaymentConfirmRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
 import xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
 import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
@@ -54,6 +55,7 @@ import xyz.homapay.hampay.mobile.android.adapter.UserTransactionAdapter;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import xyz.homapay.hampay.mobile.android.async.RequestBusinessPaymentConfirm;
 import xyz.homapay.hampay.mobile.android.async.RequestContactHampayEnabled;
 import xyz.homapay.hampay.mobile.android.async.RequestHamPayBusiness;
 import xyz.homapay.hampay.mobile.android.async.RequestSearchHamPayBusiness;
@@ -153,6 +155,11 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
     Tracker hamPayGaTracker;
 
     private Dialog dialog;
+
+    Long MaxXferAmount = 0L;
+    Long MinXferAmount = 0L;
+    RequestBusinessPaymentConfirm requestBusinessPaymentConfirm;
+    BusinessPaymentConfirmRequest businessPaymentConfirmRequest;
 
     public void backActionBar(View view){
         finish();
@@ -320,6 +327,9 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+
+        MaxXferAmount = prefs.getLong(Constants.MAX_BUSINESS_XFER_AMOUNT, 0);
+        MinXferAmount = prefs.getLong(Constants.MIN_BUSINESS_XFER_AMOUNT, 0);
 
         hamPayBusinessesAdapter = new HamPayBusinessesAdapter(activity);
 
@@ -721,105 +731,68 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                 case 0:
                     if (digit.equalsIgnoreCase("d")) {
                         input_digit_1.setText("");
-//                        input_digit_1.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     } else {
                         input_digit_1.setText(persianEnglishDigit.E2P(digit));
-//                        input_digit_1.setBackgroundColor(Color.TRANSPARENT);
                     }
                     input_digit_2.setText("");
-//                    input_digit_2.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     input_digit_3.setText("");
-//                    input_digit_3.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     input_digit_4.setText("");
-//                    input_digit_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     input_digit_5.setText("");
-//                    input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     input_digit_6.setText("");
-//                    input_digit_6.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     vibrator.vibrate(20);
                     break;
 
                 case 1:
                     if (digit.equalsIgnoreCase("d")) {
                         input_digit_2.setText("");
-//                        input_digit_2.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     } else {
                         input_digit_2.setText(persianEnglishDigit.E2P(digit));
-//                        input_digit_2.setBackgroundColor(Color.TRANSPARENT);
                     }
                     input_digit_3.setText("");
-//                    input_digit_3.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     input_digit_4.setText("");
-//                    input_digit_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     input_digit_5.setText("");
-//                    input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     input_digit_6.setText("");
-//                    input_digit_6.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     vibrator.vibrate(20);
 
                     break;
                 case 2:
                     if (digit.equalsIgnoreCase("d")) {
                         input_digit_3.setText("");
-//                        input_digit_3.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     } else {
                         input_digit_3.setText(persianEnglishDigit.E2P(digit));
-//                        input_digit_3.setBackgroundColor(Color.TRANSPARENT);
                     }
                     input_digit_4.setText("");
-//                    input_digit_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     input_digit_5.setText("");
-//                    input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     input_digit_6.setText("");
-//                    input_digit_6.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     vibrator.vibrate(20);
                     break;
                 case 3:
                     if (digit.equalsIgnoreCase("d")) {
                         input_digit_4.setText("");
-//                        input_digit_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     } else {
                         input_digit_4.setText(persianEnglishDigit.E2P(digit));
-//                        input_digit_4.setBackgroundColor(Color.TRANSPARENT);
                     }
                     input_digit_5.setText("");
-//                    input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     input_digit_6.setText("");
-//                    input_digit_6.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     vibrator.vibrate(20);
                     break;
                 case 4:
                     if (digit.equalsIgnoreCase("d")) {
                         input_digit_5.setText("");
-//                        input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     } else {
                         input_digit_5.setText(persianEnglishDigit.E2P(digit));
-//                        input_digit_5.setBackgroundColor(Color.TRANSPARENT);
                     }
                     input_digit_6.setText("");
-//                    input_digit_6.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     vibrator.vibrate(20);
                     break;
                 case 5:
                     if (digit.equalsIgnoreCase("d")) {
                         input_digit_6.setText("");
-//                        input_digit_6.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                     } else {
                         input_digit_6.setText(persianEnglishDigit.E2P(digit));
-//                        input_digit_6.setBackgroundColor(Color.TRANSPARENT);
                     }
                     vibrator.vibrate(20);
                     break;
-//                case 6:
-//                    if (digit.equalsIgnoreCase("d")) {
-//                        input_digit_6.setText("");
-//                        input_digit_6.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
-//                    } else {
-//                        input_digit_6.setText(persianEnglishDigit.E2P(digit));
-//                        input_digit_6.setBackgroundColor(Color.TRANSPARENT);
-//                    }
-//                    vibrator.vibrate(20);
-//                    break;
             }
 
         }
@@ -829,27 +802,21 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                 inputPurchaseCode = inputPurchaseCode.substring(0, inputPurchaseCode.length() - 1);
                 if (inputPurchaseCode.length() == 5){
                     input_digit_6.setText("");
-//                    input_digit_6.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                 }
                 if (inputPurchaseCode.length() == 4){
                     input_digit_5.setText("");
-//                    input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                 }
                 else if (inputPurchaseCode.length() == 3){
                     input_digit_4.setText("");
-//                    input_digit_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                 }
                 else if (inputPurchaseCode.length() == 2){
                     input_digit_3.setText("");
-//                    input_digit_3.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                 }
                 else if (inputPurchaseCode.length() == 1){
                     input_digit_2.setText("");
-//                    input_digit_2.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                 }
                 else if (inputPurchaseCode.length() == 0){
                     input_digit_1.setText("");
-//                    input_digit_1.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
                 }
             }
         }

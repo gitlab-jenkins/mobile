@@ -1571,7 +1571,7 @@ public class WebServices  {
     public ResponseMessage<BusinessPaymentConfirmResponse> newBusinessPaymentConfirm(BusinessPaymentConfirmRequest businessPaymentConfirmRequest){
 
         ResponseMessage<BusinessPaymentConfirmResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/businesses/business-payment-confirm");
+        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/payment/info");
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -1994,7 +1994,6 @@ public class WebServices  {
     public Vectorstring2stringMapEntry newPurchaseResponse(DoWorkInfo doWorkInfo){
 
         PayThPartyApp payThPartyApp = new PayThPartyApp(context);
-//        PayThPartyApp payThPartyApp = new PayThPartyApp();
         Vectorstring2stringMapEntry responseMessage = payThPartyApp.DoWork(
                 doWorkInfo.getUserName(),
                 doWorkInfo.getPassword(),

@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -16,20 +17,28 @@ import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.UserVerificationStatus;
 import xyz.homapay.hampay.common.core.model.request.BusinessPaymentConfirmRequest;
+import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
 import xyz.homapay.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
+import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
+import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestBusinessPaymentConfirm;
+import xyz.homapay.hampay.mobile.android.async.RequestPSPResult;
+import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.CurrencyFormatterTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
+import xyz.homapay.hampay.mobile.android.webservice.psp.Vectorstring2stringMapEntry;
+import xyz.homapay.hampay.mobile.android.webservice.psp.string2stringMapEntry;
 
 public class PayBusinessActivity extends AppCompatActivity {
 
@@ -57,11 +66,13 @@ public class PayBusinessActivity extends AppCompatActivity {
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
-    RequestBusinessPaymentConfirm requestBusinessPaymentConfirm;
-    BusinessPaymentConfirmRequest businessPaymentConfirmRequest;
+    private RequestBusinessPaymentConfirm requestBusinessPaymentConfirm;
+    private BusinessPaymentConfirmRequest businessPaymentConfirmRequest;
 
-    UserVerificationStatus userVerificationStatus;
-    String userVerificationMessage = "";
+    private RequestPurchase requestPurchase;
+    private DoWorkInfo doWorkInfo;
+
+    FacedEditText pin2Value;
 
     Long MaxXferAmount = 0L;
     Long MinXferAmount = 0L;
@@ -69,10 +80,6 @@ public class PayBusinessActivity extends AppCompatActivity {
     HamPayDialog hamPayDialog;
 
     Tracker hamPayGaTracker;
-
-    byte[] mobileKey;
-    String serverKey;
-    String decryptedData;
 
     DeviceInfo deviceInfo;
 
@@ -121,17 +128,6 @@ public class PayBusinessActivity extends AppCompatActivity {
         deviceInfo = new DeviceInfo(context);
 
         try {
-
-            //            mobileKey = SecurityUtils.getInstance(context).generateSHA_256(
-//                    deviceInfo.getMacAddress(),
-//                    deviceInfo.getIMEI(),
-//                    deviceInfo.getAndroidId());
-//            serverKey = prefs.getString(Constants.USER_ID_TOKEN, "");
-//            decryptedData = AESHelper.decrypt(mobileKey, serverKey, prefs.getString(Constants.MAX_XFER_Amount, "0"));
-//            MaxXferAmount = Long.parseLong(decryptedData);
-//            decryptedData = AESHelper.decrypt(mobileKey, serverKey, prefs.getString(Constants.MIN_XFER_Amount, "0"));
-//            MinXferAmount = Long.parseLong(decryptedData);
-
             MaxXferAmount = prefs.getLong(Constants.MAX_BUSINESS_XFER_AMOUNT, 0);
             MinXferAmount = prefs.getLong(Constants.MIN_BUSINESS_XFER_AMOUNT, 0);
 
@@ -139,35 +135,9 @@ public class PayBusinessActivity extends AppCompatActivity {
             Log.e("Error", ex.getStackTrace().toString());
         }
 
-//        MaxXferAmount = prefs.getLong(Constants.MAX_XFER_Amount, 0);
-//        MinXferAmount = prefs.getLong(Constants.MIN_XFER_Amount, 0);
-
-//        switch (prefs.getInt(Constants.USER_VERIFICATION_STATUS, -1)){
-//
-//            case 0:
-//                userVerificationStatus = UserVerificationStatus.UNVERIFIED;
-//                userVerificationMessage = getString(R.string.unverified_account);
-//                break;
-//
-//            case 1:
-//                userVerificationStatus = UserVerificationStatus.PENDING_REVIEW;
-//                userVerificationMessage = getString(R.string.pending_review_account);
-//                break;
-//
-//            case 2:
-//                userVerificationStatus = UserVerificationStatus.VERIFIED;
-//                userVerificationMessage = getString(R.string.verified_account);
-//                break;
-//
-//            case 3:
-//                userVerificationStatus = UserVerificationStatus.DELEGATED;
-//                userVerificationMessage = getString(R.string.delegate_account);
-//                break;
-//
-//        }
-
-
         bundle = getIntent().getExtras();
+
+        pin2Value = (FacedEditText)findViewById(R.id.pin2Value);
 
         business_name_code = (FacedTextView)findViewById(R.id.business_name_code);
         business_name_code.setText(persianEnglishDigit.E2P(bundle.getString("business_name") + " " + "(" + bundle.getString("business_code") + ")"));
@@ -203,8 +173,6 @@ public class PayBusinessActivity extends AppCompatActivity {
             public void onClick(View v) {
                 credit_value.clearFocus();
 
-                pay_to_business_button.setEnabled(false);
-
                 if (creditValueValidation) {
 
                     amountValue = Long.parseLong(new PersianEnglishDigit(credit_value.getText().toString()).P2E().replace(",", ""));
@@ -220,20 +188,21 @@ public class PayBusinessActivity extends AppCompatActivity {
                         editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                         editor.commit();
                         if (amountValue >= MinXferAmount && amountValue <= MaxXferAmount) {
-                                    hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-                                    businessPaymentConfirmRequest = new BusinessPaymentConfirmRequest();
-                                    businessPaymentConfirmRequest.setBusinessCode(bundle.getString("business_code"));
-                                    requestBusinessPaymentConfirm = new RequestBusinessPaymentConfirm(context, new RequestBusinessPaymentConfirmTaskCompleteListener());
-                                    requestBusinessPaymentConfirm.execute(businessPaymentConfirmRequest);
+                            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+                            businessPaymentConfirmRequest = new BusinessPaymentConfirmRequest();
+                            businessPaymentConfirmRequest.setAmount(amountValue);
+                            businessPaymentConfirmRequest.setBusinessCode(bundle.getString("business_code"));
+                            requestBusinessPaymentConfirm = new RequestBusinessPaymentConfirm(context, new RequestBusinessPaymentConfirmTaskCompleteListener());
+                            requestBusinessPaymentConfirm.execute(businessPaymentConfirmRequest);
                         }else {
                             new HamPayDialog(activity).showIncorrectAmountDialog(MinXferAmount, MaxXferAmount);
-                            pay_to_business_button.setEnabled(true);
+
                         }
                     }
 
                 }else {
                     (new HamPayDialog(activity)).showIncorrectPrice();
-                    pay_to_business_button.setEnabled(true);
+
                 }
             }
         });
@@ -262,7 +231,68 @@ public class PayBusinessActivity extends AppCompatActivity {
 
             if (businessPaymentConfirmResponseMessage != null){
                 if (businessPaymentConfirmResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-                    new HamPayDialog(activity).businessPaymentConfirmDialog(businessPaymentConfirmResponseMessage.getService(), amountValue, businessMssage);
+//                    new HamPayDialog(activity).businessPaymentConfirmDialog(businessPaymentConfirmResponseMessage.getService(), amountValue, businessMssage);
+
+                    PaymentInfoDTO paymentInfo = businessPaymentConfirmResponseMessage.getService().getPaymentInfo();
+                    PspInfoDTO pspInfo = businessPaymentConfirmResponseMessage.getService().getPspInfo();
+
+                    if (pin2Value.getText().toString().length() <= 4 ){
+                        Toast.makeText(context, getString(R.string.msg_pin2_incurrect), Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    requestPurchase = new RequestPurchase(activity, new RequestPurchaseTaskCompleteListener());
+
+                    doWorkInfo = new DoWorkInfo();
+                    doWorkInfo.setUserName("test");
+                    doWorkInfo.setPassword("1234");
+                    doWorkInfo.setCellNumber(prefs.getString(Constants.REGISTERED_CELL_NUMBER, ""));
+                    doWorkInfo.setLangAByte((byte) 0);
+                    doWorkInfo.setLangABoolean(false);
+                    Vectorstring2stringMapEntry vectorstring2stringMapEntry = new Vectorstring2stringMapEntry();
+                    string2stringMapEntry s2sMapEntry = new string2stringMapEntry();
+
+                    s2sMapEntry.key = "Amount";
+                    if (paymentInfo.getFeeCharge() != null) {
+                        s2sMapEntry.value = (paymentInfo.getAmount() + paymentInfo.getFeeCharge()) + "";
+                    }else {
+                        s2sMapEntry.value = (paymentInfo.getAmount()) + "";
+                    }
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                    s2sMapEntry = new string2stringMapEntry();
+                    s2sMapEntry.key = "Pin2";
+                    s2sMapEntry.value = pin2Value.getText().toString();
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                    s2sMapEntry = new string2stringMapEntry();
+                    s2sMapEntry.key = "ThirdParty";
+                    s2sMapEntry.value = pspInfo.getProductCode();
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                    s2sMapEntry = new string2stringMapEntry();
+                    s2sMapEntry.key = "TerminalId";
+                    s2sMapEntry.value = "283129";
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                    s2sMapEntry = new string2stringMapEntry();
+                    s2sMapEntry.key = "CardId";
+                    s2sMapEntry.value = /*cardDTO.getCardId()*/ "100";
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                    s2sMapEntry = new string2stringMapEntry();
+                    s2sMapEntry.key = "Merchant";
+                    s2sMapEntry.value = "123";
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                    s2sMapEntry = new string2stringMapEntry();
+                    s2sMapEntry.key = "IPAddress";
+                    s2sMapEntry.value = "192.168.0.1";
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                    doWorkInfo.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
+                    requestPurchase.execute(doWorkInfo);
+
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Business Payment Confirm")
@@ -289,11 +319,46 @@ public class PayBusinessActivity extends AppCompatActivity {
                         .setLabel("Fail(Mobile)")
                         .build());
             }
-            pay_to_business_button.setEnabled(true);
+
         }
 
         @Override
         public void onTaskPreRun() { }
     }
+
+    public class RequestPurchaseTaskCompleteListener implements AsyncTaskCompleteListener<Vectorstring2stringMapEntry> {
+
+        @Override
+        public void onTaskComplete(Vectorstring2stringMapEntry purchaseResponseResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+
+            if (purchaseResponseResponseMessage != null){
+
+                new HamPayDialog(activity).pspResultDialog("10000" + "");
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Pending Payment Request")
+                        .setAction("Payment")
+                        .setLabel("Success")
+                        .build());
+
+            }
+            else {
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Pending Payment Request")
+                        .setAction("Payment")
+                        .setLabel("Fail(Server)")
+                        .build());
+            }
+
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
+    }
+
 
 }

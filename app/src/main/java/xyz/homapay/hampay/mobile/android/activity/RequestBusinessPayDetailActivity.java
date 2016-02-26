@@ -103,7 +103,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
     RequestPSPResult requestPSPResult;
     PSPResultRequest pspResultRequest;
 
-    RequestPurchase requestPurchase;
+    private RequestPurchase requestPurchase;
     private DoWorkInfo doWorkInfo;
 
 
