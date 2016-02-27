@@ -4,6 +4,7 @@ package xyz.homapay.hampay.mobile.android.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 
@@ -15,24 +16,37 @@ public class SmsActivation extends BroadcastReceiver {
 
     public void onReceive(Context context, Intent intent) {
 
-        Bundle extras = intent.getExtras();
-        if (extras == null)
-            return;
 
-        Object[] pdus = (Object[]) extras.get("pdus");
-        for (int i = 0; i < pdus.length; i++) {
-            SmsMessage SMessage = SmsMessage.createFromPdu((byte[]) pdus[i]);
-            String sender = SMessage.getOriginatingAddress();
-            String body = SMessage.getMessageBody().toString();
+        Bundle myBundle = intent.getExtras();
+        SmsMessage [] messages = null;
+        String sender = "";
+        String body = "";
 
-            Intent in = new Intent("SmsMessage.intent.MAIN").putExtra(
+        if (myBundle != null)
+        {
+            Object[] pdus = (Object[]) myBundle.get("pdus");
+
+            messages = new SmsMessage[pdus.length];
+
+            for (int i = 0; i < messages.length; i++)
+            {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    String format = myBundle.getString("format");
+                    messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i], format);
+                }
+                else {
+                    messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
+                }
+                sender = messages[i].getOriginatingAddress();
+                body = messages[i].getMessageBody();
+            }
+        }
+
+        Intent in = new Intent("SmsMessage.intent.MAIN").putExtra(
                     "get_msg", sender + ":" + body);
-
-            if (sender.contains("300042178") || sender.contains("10008096")) {
+        if (sender.contains("300042178") || sender.contains("10008096")) {
                 abortBroadcast();
                 context.sendBroadcast(in);
-            }
-
         }
     }
 }

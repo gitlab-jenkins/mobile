@@ -1582,9 +1582,7 @@ public class WebServices  {
 
             RequestMessage<BusinessPaymentConfirmRequest> message = new RequestMessage<BusinessPaymentConfirmRequest>();
             message.setRequestHeader(header);
-            BusinessPaymentConfirmRequest request = new BusinessPaymentConfirmRequest();
-
-            request.setBusinessCode(businessPaymentConfirmRequest.getBusinessCode());
+            BusinessPaymentConfirmRequest request = businessPaymentConfirmRequest;
 
             request.setRequestUUID(UUID.randomUUID().toString());
             message.setService(request);

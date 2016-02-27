@@ -190,7 +190,6 @@
                     android:textSize="16dp"
                     android:gravity="center_vertical"
                     android:layout_gravity="center_vertical"
-                    android:text="XXXX-XXXX-XXXX-۵۵۵۵"
                     android:background="@drawable/purchase_input_text"
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"/>

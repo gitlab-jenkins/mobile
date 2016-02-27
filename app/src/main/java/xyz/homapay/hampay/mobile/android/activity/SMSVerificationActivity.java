@@ -135,15 +135,8 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         mIntentReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                String msg = intent.getStringExtra("get_msg");
-
-                msg = msg.replace("\n", "");
-                String body = msg.substring(msg.lastIndexOf(":") + 1,
-                        msg.length()).trim();
-                String pNumber = msg.substring(0, msg.lastIndexOf(":"));
-
-                receivedSmsValue = body;
-
+                String message = intent.getStringExtra("get_msg");
+                receivedSmsValue = message.substring(message.lastIndexOf(":") + 1, message.length()).trim();
                 editor.putString(Constants.RECEIVED_SMS_ACTIVATION, receivedSmsValue);
                 editor.commit();
 
@@ -161,6 +154,21 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                 input_digit_4.setBackgroundColor(Color.TRANSPARENT);
                 input_digit_5.setText(persianEnglishDigit.E2P(receivedSmsValue.substring(4, 5)));
                 input_digit_5.setBackgroundColor(Color.TRANSPARENT);
+
+                if (receivedSmsValue.length() == 5) {
+
+                    registrationVerifyMobileRequest = new RegistrationVerifyMobileRequest();
+
+                    registrationVerifyMobileRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
+                    registrationVerifyMobileRequest.setSmsToken(receivedSmsValue);
+
+                    verify_button.setEnabled(false);
+                    requestVerifyMobile = new RequestVerifyMobile(context, new RequestRegistrationVerifyMobileTaskCompleteListener());
+                    requestVerifyMobile.execute(registrationVerifyMobileRequest);
+
+                }else {
+                    Toast.makeText(context, getString(R.string.msg_fail_sms_correct_entry), Toast.LENGTH_SHORT).show();
+                }
 
             }
         };
@@ -329,12 +337,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                         registerCardRequest.setCardNumber(new PersianEnglishDigit().P2E(cardNumber));
                         requestRegisterCard = new RequestRegisterCard(context, new RequestRegisterCardTaskCompleteListener());
                         requestRegisterCard.execute(registerCardRequest);
-
-//                        Intent intent = new Intent();
-//                        intent.setClass(SMSVerificationActivity.this, PasswordEntryActivity.class);
-//                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                        finish();
-//                        startActivity(intent);
 
                         hamPayGaTracker.send(new HitBuilders.EventBuilder()
                                 .setCategory("Verify Mobile")
@@ -634,6 +636,21 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
             if (receivedSmsValue.length() <= 4) {
                 receivedSmsValue += digit;
             }
+        }
+
+        if (receivedSmsValue.length() == 5) {
+
+            registrationVerifyMobileRequest = new RegistrationVerifyMobileRequest();
+
+            registrationVerifyMobileRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
+            registrationVerifyMobileRequest.setSmsToken(receivedSmsValue);
+
+            verify_button.setEnabled(false);
+            requestVerifyMobile = new RequestVerifyMobile(context, new RequestRegistrationVerifyMobileTaskCompleteListener());
+            requestVerifyMobile.execute(registrationVerifyMobileRequest);
+
+        }else {
+            Toast.makeText(context, getString(R.string.msg_fail_sms_correct_entry), Toast.LENGTH_SHORT).show();
         }
     }
 

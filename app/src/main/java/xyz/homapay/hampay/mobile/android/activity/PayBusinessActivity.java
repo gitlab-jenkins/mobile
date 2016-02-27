@@ -83,6 +83,9 @@ public class PayBusinessActivity extends AppCompatActivity {
 
     DeviceInfo deviceInfo;
 
+
+    FacedTextView cardNumberValue;
+
     public void backActionBar(View view){
         finish();
     }
@@ -141,6 +144,7 @@ public class PayBusinessActivity extends AppCompatActivity {
 
         business_name_code = (FacedTextView)findViewById(R.id.business_name_code);
         business_name_code.setText(persianEnglishDigit.E2P(bundle.getString("business_name") + " " + "(" + bundle.getString("business_code") + ")"));
+        cardNumberValue = (FacedTextView)findViewById(R.id.cardNumberValue);
 
         contact_message = (FacedEditText)findViewById(R.id.contact_message);
 
@@ -173,6 +177,11 @@ public class PayBusinessActivity extends AppCompatActivity {
             public void onClick(View v) {
                 credit_value.clearFocus();
 
+                if (pin2Value.getText().toString().length() == 0){
+                    Toast.makeText(context, getString(R.string.msg_pin2_incurrect), Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 if (creditValueValidation) {
 
                     amountValue = Long.parseLong(new PersianEnglishDigit(credit_value.getText().toString()).P2E().replace(",", ""));
@@ -192,6 +201,7 @@ public class PayBusinessActivity extends AppCompatActivity {
                             businessPaymentConfirmRequest = new BusinessPaymentConfirmRequest();
                             businessPaymentConfirmRequest.setAmount(amountValue);
                             businessPaymentConfirmRequest.setBusinessCode(bundle.getString("business_code"));
+                            businessPaymentConfirmRequest.setMessage(contact_message.getText().toString());
                             requestBusinessPaymentConfirm = new RequestBusinessPaymentConfirm(context, new RequestBusinessPaymentConfirmTaskCompleteListener());
                             requestBusinessPaymentConfirm.execute(businessPaymentConfirmRequest);
                         }else {
@@ -236,10 +246,7 @@ public class PayBusinessActivity extends AppCompatActivity {
                     PaymentInfoDTO paymentInfo = businessPaymentConfirmResponseMessage.getService().getPaymentInfo();
                     PspInfoDTO pspInfo = businessPaymentConfirmResponseMessage.getService().getPspInfo();
 
-                    if (pin2Value.getText().toString().length() <= 4 ){
-                        Toast.makeText(context, getString(R.string.msg_pin2_incurrect), Toast.LENGTH_LONG).show();
-                        return;
-                    }
+                    cardNumberValue.setText(pspInfo.getCardNo());
 
                     requestPurchase = new RequestPurchase(activity, new RequestPurchaseTaskCompleteListener());
 
@@ -272,22 +279,22 @@ public class PayBusinessActivity extends AppCompatActivity {
 
                     s2sMapEntry = new string2stringMapEntry();
                     s2sMapEntry.key = "TerminalId";
-                    s2sMapEntry.value = "283129";
+                    s2sMapEntry.value = pspInfo.getTerminalID();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     s2sMapEntry = new string2stringMapEntry();
                     s2sMapEntry.key = "CardId";
-                    s2sMapEntry.value = /*cardDTO.getCardId()*/ "100";
+                    s2sMapEntry.value = pspInfo.getCardNo();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     s2sMapEntry = new string2stringMapEntry();
                     s2sMapEntry.key = "Merchant";
-                    s2sMapEntry.value = "123";
+                    s2sMapEntry.value = pspInfo.getMerchant();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     s2sMapEntry = new string2stringMapEntry();
                     s2sMapEntry.key = "IPAddress";
-                    s2sMapEntry.value = "192.168.0.1";
+                    s2sMapEntry.value = pspInfo.getIpAddress();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     doWorkInfo.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
