@@ -2,10 +2,14 @@ package xyz.homapay.hampay.mobile.android.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.util.SparseLongArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
@@ -45,6 +49,11 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
         NavDrawerItem current = data.get(position);
         holder.title.setText(current.getTitle());
         holder.icon.setImageResource(current.getIcon());
+        if (data.get(position).getSelected() == 1){
+            holder.nav_draw_bg.setSelected(true);
+        }else {
+            holder.nav_draw_bg.setSelected(false);
+        }
     }
 
     @Override
@@ -55,11 +64,28 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
     class MyViewHolder extends RecyclerView.ViewHolder {
         FacedTextView title;
         ImageView icon;
+        LinearLayout nav_draw_bg;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             title = (FacedTextView) itemView.findViewById(R.id.title);
             icon = (ImageView)itemView.findViewById(R.id.icon);
+            nav_draw_bg = (LinearLayout)itemView.findViewById(R.id.nav_draw_bg);
+//            nav_draw_bg.setOnClickListener(this);
         }
+
+//        @Override
+//        public void onClick(View v) {
+//
+//            Log.e("POS", getAdapterPosition() + "");
+//            if (selectedItems.get(getAdapterPosition(), false)) {
+//                selectedItems.delete(getAdapterPosition());
+//                nav_draw_bg.setSelected(false);
+//            }
+//            else {
+//                selectedItems.put(getAdapterPosition(), true);
+//                nav_draw_bg.setSelected(true);
+//            }
+//        }
     }
 }

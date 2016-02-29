@@ -78,7 +78,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     FacedTextView user_national_code;
     FacedTextView user_account_type;
     FacedTextView user_account_title;
-    FacedTextView user_last_login;
     LinearLayout selectedHampay;
     FacedTextView hampay_1;
     FacedTextView hampay_2;
@@ -309,7 +308,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         user_national_code = (FacedTextView)rootView.findViewById(R.id.user_national_code);
         user_account_type = (FacedTextView)rootView.findViewById(R.id.user_account_type);
         user_account_title = (FacedTextView)rootView.findViewById(R.id.user_account_title);
-        user_last_login = (FacedTextView)rootView.findViewById(R.id.user_last_login);
 
         hampay_1 = (FacedTextView)rootView.findViewById(R.id.hampay_1);
         hampay_2 = (FacedTextView)rootView.findViewById(R.id.hampay_2);
@@ -782,13 +780,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         }
         user_national_code.setText(persianEnglishDigit.E2P(userProfileDTO.getCellNumber()));
         editor.commit();
-
-        if (userProfileDTO.getLastLoginDate() != null) {
-            user_last_login.setText(getString(R.string.last_login) + ": "
-                    + persianEnglishDigit.E2P(jalaliConvert.GregorianToPersian(userProfileDTO.getLastLoginDate())));
-        }else {
-            user_last_login.setText("");
-        }
 
         hide_bg.setVisibility(View.GONE);
 

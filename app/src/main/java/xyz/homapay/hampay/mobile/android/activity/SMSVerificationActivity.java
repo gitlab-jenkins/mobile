@@ -166,8 +166,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                     requestVerifyMobile = new RequestVerifyMobile(context, new RequestRegistrationVerifyMobileTaskCompleteListener());
                     requestVerifyMobile.execute(registrationVerifyMobileRequest);
 
-                }else {
-                    Toast.makeText(context, getString(R.string.msg_fail_sms_correct_entry), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -649,8 +647,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
             requestVerifyMobile = new RequestVerifyMobile(context, new RequestRegistrationVerifyMobileTaskCompleteListener());
             requestVerifyMobile.execute(registrationVerifyMobileRequest);
 
-        }else {
-            Toast.makeText(context, getString(R.string.msg_fail_sms_correct_entry), Toast.LENGTH_SHORT).show();
         }
     }
 

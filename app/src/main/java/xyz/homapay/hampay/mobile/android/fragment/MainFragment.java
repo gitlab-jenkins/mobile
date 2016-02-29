@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import java.util.List;
 
@@ -23,9 +22,9 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.BusinessPurchaseActivity;
 import xyz.homapay.hampay.mobile.android.activity.PayOneActivity;
 import xyz.homapay.hampay.mobile.android.activity.PaymentRequestActivity;
+import xyz.homapay.hampay.mobile.android.activity.PaymentRequestDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.PendingPurchasePaymentActivity;
 import xyz.homapay.hampay.mobile.android.activity.TransactionsHistoryActivity;
-import xyz.homapay.hampay.mobile.android.adapter.GuideAdapter;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
@@ -33,6 +32,8 @@ import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTa
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
+import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 /**
  * Created by amir on 6/5/15.
@@ -41,7 +42,6 @@ public class MainFragment extends Fragment implements View.OnClickListener{
 
 
     private ImageView main_banner;
-    private LinearLayout show_hampay_friend;
     private LinearLayout hampay_friend;
     LinearLayout user_transaction_history;
     LinearLayout user_payment_request;
@@ -63,10 +63,14 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     FacedTextView hampay_3;
     FacedTextView hampay_4;
 
+    FacedTextView user_last_login;
+
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
     private Context context;
+
+    private PersianEnglishDigit persianEnglishDigit;
 
     public MainFragment() {
     }
@@ -87,6 +91,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         prefs = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
         editor = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE).edit();
 
+        persianEnglishDigit = new PersianEnglishDigit();
 
         bundle = getArguments();
 
@@ -110,6 +115,13 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         hampay_image_2 = (CircleImageView)rootView.findViewById(R.id.hampay_image_2);
         hampay_image_3 = (CircleImageView)rootView.findViewById(R.id.hampay_image_3);
         hampay_image_4 = (CircleImageView)rootView.findViewById(R.id.hampay_image_4);
+        user_last_login = (FacedTextView)rootView.findViewById(R.id.user_last_login);
+        if (userProfileDTO.getLastLoginDate() != null) {
+            user_last_login.setText(getString(R.string.last_login) + ": "
+                    + persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(userProfileDTO.getLastLoginDate())));
+        }else {
+            user_last_login.setText("");
+        }
 
         List<ContactDTO> contacts = userProfileDTO.getSelectedContacts();
         for (int contact = 0; contact < contacts.size(); contact++){
@@ -155,8 +167,6 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         display.getSize(size);
         main_banner = (ImageView)rootView.findViewById(R.id.main_banner);
         main_banner.getLayoutParams().height = size.x / 3;
-
-        show_hampay_friend = (LinearLayout)rootView.findViewById(R.id.show_hampay_friend);
         hampay_friend = (LinearLayout)rootView.findViewById(R.id.hampay_friend);
 
         user_transaction_history = (LinearLayout)rootView.findViewById(R.id.user_transaction_history);
@@ -221,25 +231,25 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                 break;
 
             case R.id.hampay_1_ll:
-                intent = new Intent(getActivity(), PayOneActivity.class);
+                intent = new Intent(getActivity(), PaymentRequestDetailActivity.class);
                 intent.putExtra(Constants.CONTACT_PHONE_NO, userProfileDTO.getSelectedContacts().get(0).getCellNumber());
                 intent.putExtra(Constants.CONTACT_NAME, userProfileDTO.getSelectedContacts().get(0).getDisplayName());
                 startActivity(intent);
                 break;
             case R.id.hampay_2_ll:
-                intent = new Intent(getActivity(), PayOneActivity.class);
+                intent = new Intent(getActivity(), PaymentRequestDetailActivity.class);
                 intent.putExtra(Constants.CONTACT_PHONE_NO, userProfileDTO.getSelectedContacts().get(1).getCellNumber());
                 intent.putExtra(Constants.CONTACT_NAME, userProfileDTO.getSelectedContacts().get(1).getDisplayName());
                 startActivity(intent);
                 break;
             case R.id.hampay_3_ll:
-                intent = new Intent(getActivity(), PayOneActivity.class);
+                intent = new Intent(getActivity(), PaymentRequestDetailActivity.class);
                 intent.putExtra(Constants.CONTACT_PHONE_NO, userProfileDTO.getSelectedContacts().get(2).getCellNumber());
                 intent.putExtra(Constants.CONTACT_NAME, userProfileDTO.getSelectedContacts().get(2).getDisplayName());
                 startActivity(intent);
                 break;
             case R.id.hampay_4_ll:
-                intent = new Intent(getActivity(), PayOneActivity.class);
+                intent = new Intent(getActivity(), PaymentRequestDetailActivity.class);
                 intent.putExtra(Constants.CONTACT_PHONE_NO, userProfileDTO.getSelectedContacts().get(3).getCellNumber());
                 intent.putExtra(Constants.CONTACT_NAME, userProfileDTO.getSelectedContacts().get(3).getDisplayName());
                 startActivity(intent);

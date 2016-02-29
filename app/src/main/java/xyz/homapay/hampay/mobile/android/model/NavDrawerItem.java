@@ -7,6 +7,15 @@ public class NavDrawerItem {
 
     private boolean showNotify;
     private String title;
+    private int selected;
+
+    public int getSelected() {
+        return selected;
+    }
+
+    public void setSelected(int selected) {
+        this.selected = selected;
+    }
 
     public int getIcon() {
         return icon;

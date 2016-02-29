@@ -186,7 +186,7 @@
     <string name="fail_sms_verification">شماره اعتبار سنجی وارد شده صحیح نمی‌باشد. لطفا از صحت شماره اطمینان حاصل کرده و شماره را مجدد وارد کنید.</string>
 
 
-    <string name="start_activity_title">همراه پرداخت هم‌پی</string>
+    <string name="start_activity_title">به شبکه هم‌پی خوش آمدید</string>
     <string name="start_activity_text_1">پرداخت به افراد و کسب و کارها</string>
     <string name="start_activity_text_2">با نرم‌افزار ساده و امن هم‌پی</string>
     <string name="tc_privacy_text">با شرایط استفاده از نرم‌افزار هم‌پی و قوانین حفظ حریم خصوصی کاربر موافقم.</string>
@@ -336,7 +336,7 @@
         <item>تنظیمات</item>
         <item>تغییر کلمه یادآوری</item>
         <item>تغییر رمز عبور</item>
-        <item>تغییر کد ملی</item>
+        <item>تصحیح کد ملی</item>
     </string-array>
 
 
@@ -472,7 +472,7 @@
     <string name="user_profile_image_camera">دوربین</string>
     <string name="user_profile_image_gallary">گالری تصاویر</string>
     <string name="user_profile_image_remove">حذف عکس</string>
-    <string name="user_profile_image_cancel">بیخیال</string>
+    <string name="user_profile_image_cancel">انصراف</string>
     <string name="user_profile_image_select">انتخاب</string>
 
     <string name="user_fee_title">کارمزد: </string>

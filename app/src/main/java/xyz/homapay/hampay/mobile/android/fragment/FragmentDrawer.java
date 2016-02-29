@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.NavigationDrawerAdapter;
@@ -54,9 +55,6 @@ public class FragmentDrawer extends Fragment {
 
     public static List<NavDrawerItem> getData() {
         List<NavDrawerItem> data = new ArrayList<>();
-
-
-        // preparing navigation drawer items
         for (int i = 0; i < titles.length; i++) {
             NavDrawerItem navItem = new NavDrawerItem();
             navItem.setTitle(titles[i]);
@@ -81,7 +79,11 @@ public class FragmentDrawer extends Fragment {
         View layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         recyclerView = (RecyclerView) layout.findViewById(R.id.drawerList);
 
-        adapter = new NavigationDrawerAdapter(getActivity(), getData());
+
+        List<NavDrawerItem> navDrawerItems = getData();
+        navDrawerItems.get(0).setSelected(1);
+        adapter = new NavigationDrawerAdapter(getActivity(), navDrawerItems);
+
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
@@ -89,6 +91,13 @@ public class FragmentDrawer extends Fragment {
             public void onClick(View view, int position) {
                 drawerListener.onDrawerItemSelected(view, position);
                 mDrawerLayout.closeDrawer(containerView);
+                List<NavDrawerItem> navDrawerItems = getData();
+                NavDrawerItem navDrawerItem = navDrawerItems.get(position);
+                navDrawerItem.setSelected(1);
+                navDrawerItems.set(position, navDrawerItem);
+                adapter = new NavigationDrawerAdapter(getActivity(), navDrawerItems);
+                adapter.notifyDataSetChanged();
+                recyclerView.setAdapter(adapter);
             }
 
             @Override

@@ -312,13 +312,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         displayView(currentFragmet);
 
-//        if (fromNotification){
-//            displayView(1);
-//        }else {
-//
-//        }
-
-
         if (!prefs.getBoolean(Constants.SEND_MOBILE_REGISTER_ID, false)) {
             getRegId();
         }
@@ -358,13 +351,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     @Override
     public void onUserInteraction() {
         super.onUserInteraction();
-//        Log.e("EXIT", "onUserInteraction");
     }
 
     @Override
     protected void onUserLeaveHint() {
         super.onUserLeaveHint();
-        Log.e("EXIT", "onUserLeaveHint");
         editor.putString(Constants.USER_ID_TOKEN, "");
         editor.commit();
     }
@@ -567,9 +558,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     @Override
     public void onBackPressed() {
-        LogoutData logoutData = new LogoutData();
-        logoutData.setIplanetDirectoryPro(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-        new HamPayDialog(activity).showExitDialog(logoutData);
+
+        if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+            drawerLayout.closeDrawer(Gravity.RIGHT);
+        } else {
+            LogoutData logoutData = new LogoutData();
+            logoutData.setIplanetDirectoryPro(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+            new HamPayDialog(activity).showExitDialog(logoutData);
+        }
     }
 
 

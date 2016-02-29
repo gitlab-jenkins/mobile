@@ -99,6 +99,7 @@ public class PaymentRequestActivity extends AppCompatActivity implements View.On
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                selectedType = 1;
                 selectedMenu.setText(getString(R.string.recent_payment_request));
                 if ((prefs.getString(Constants.USER_ID_TOKEN, "") != null && prefs.getString(Constants.USER_ID_TOKEN, "").length() == 16)){
                     serverKey = prefs.getString(Constants.USER_ID_TOKEN, "");
@@ -119,6 +120,7 @@ public class PaymentRequestActivity extends AppCompatActivity implements View.On
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                selectedType = 2;
                 selectedMenu.setText(getString(R.string.hampay_contact_list));
                 contactsHampayEnabledRequest = new ContactsHampayEnabledRequest();
                 requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());
@@ -177,12 +179,12 @@ public class PaymentRequestActivity extends AppCompatActivity implements View.On
                 intent.putExtra(Constants.LOGIN_TOKEN_ID, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
 
                 if (selectedType == 1) {
-                    intent.putExtra("contact_name", recentPays.get(position).getName());
-                    intent.putExtra("contact_phone_no", recentPays.get(position).getPhone());
+                    intent.putExtra(Constants.CONTACT_NAME, recentPays.get(position).getName());
+                    intent.putExtra(Constants.CONTACT_PHONE_NO, recentPays.get(position).getPhone());
                     intent.putExtra(Constants.USER_IMAGE_PROFILE_ID, recentPays.get(position).getId());
                 }else {
-                    intent.putExtra("contact_name", /*hamPayContact.get(position).getDisplayName()*/"علی امیری آخوندیان");
-                    intent.putExtra("contact_phone_no", hamPayContact.get(position).getCellNumber());
+                    intent.putExtra(Constants.CONTACT_NAME, /*hamPayContact.get(position).getDisplayName()*/"علی امیری آخوندیان");
+                    intent.putExtra(Constants.CONTACT_PHONE_NO, hamPayContact.get(position).getCellNumber());
                     intent.putExtra(Constants.USER_IMAGE_PROFILE_ID, hamPayContact.get(position).getContactImageId());
                 }
                 startActivityForResult(intent, 1024);

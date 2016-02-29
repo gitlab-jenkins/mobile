@@ -169,6 +169,20 @@
                     android:layout_height="1dp"
                     android:background="@color/entry_field_color"/>
 
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                    android:id="@+id/user_last_login"
+                    geekui:customTypeface="fonts/iran_sans.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/normal_text"
+                    android:textSize="12dp"
+                    android:layout_margin="10dp"
+                    android:gravity="right"
+                    android:layout_gravity="right"
+                    android:text="آخرین ورودبه سیستم، "
+                    android:lineSpacingExtra="8dp"/>
+
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="160dp"/>
