@@ -528,5 +528,8 @@
     <string name="business_payment_per_code">براساس کد</string>
     <string name="pending_purchase">خریدهای آنلاین</string>
     <string name="pending_payment">خریدهای آفلاین</string>
+    <string name="business_payment_info">اطلاعات پرداخت</string>
+    <string name="business_payment_preview">پرداخت</string>
+    <string name="business_payment_create">درخواست پرداخت</string>
 
 </resources>

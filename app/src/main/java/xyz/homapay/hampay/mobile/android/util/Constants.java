@@ -90,6 +90,7 @@ public class Constants {
     public static final String NOTIFICATION_PAYMENT = "انتقال وجه";
     public static final String NOTIFICATION_CREDIT_REQUEST = "درخواست وجه";
     public static final String USER_IMAGE_PROFILE_ID = "userImageProfileId";
-
+    public static final String PAYMENT_INFO = "paymantInfo";
+    public static final String PSP_INFO = "pspInfo";
 
 }

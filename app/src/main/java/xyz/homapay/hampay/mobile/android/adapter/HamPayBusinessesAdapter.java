@@ -1,14 +1,11 @@
 package xyz.homapay.hampay.mobile.android.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import xyz.homapay.hampay.common.core.model.response.dto.BusinessDTO;
 import xyz.homapay.hampay.mobile.android.R;
-import xyz.homapay.hampay.mobile.android.activity.PayBusinessActivity;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
-import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 /**
@@ -62,7 +59,7 @@ public class HamPayBusinessesAdapter extends HamPayBusinessesGenericAdapter<Busi
 //            @Override
 //            public void onClick(View v) {
 //                Intent intent = new Intent();
-//                intent.setClass(context, PayBusinessActivity.class);
+//                intent.setClass(context, BusinessPaymentInfoActivity.class);
 //                intent.putExtra("business_name", getItem(position).getTitle());
 //                intent.putExtra("business_code", getItem(position).getCode());
 //                context.startActivity(intent);

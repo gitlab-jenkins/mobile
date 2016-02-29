@@ -145,6 +145,11 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"></activity>
         <activity
+            android:name=".activity.BusinessPaymentConfirmActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"></activity>
+        <activity
             android:name=".activity.PendingPurchasePaymentActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
@@ -165,7 +170,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"></activity>
         <activity
-            android:name=".activity.PayBusinessActivity"
+            android:name=".activity.BusinessPaymentInfoActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"></activity>

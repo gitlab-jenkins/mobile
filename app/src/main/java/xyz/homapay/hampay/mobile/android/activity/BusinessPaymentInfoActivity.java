@@ -15,9 +15,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
-import xyz.homapay.hampay.common.core.model.dto.UserVerificationStatus;
 import xyz.homapay.hampay.common.core.model.request.BusinessPaymentConfirmRequest;
-import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
 import xyz.homapay.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
@@ -25,7 +23,6 @@ import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestBusinessPaymentConfirm;
-import xyz.homapay.hampay.mobile.android.async.RequestPSPResult;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.CurrencyFormatterTextWatcher;
@@ -40,7 +37,7 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.webservice.psp.Vectorstring2stringMapEntry;
 import xyz.homapay.hampay.mobile.android.webservice.psp.string2stringMapEntry;
 
-public class PayBusinessActivity extends AppCompatActivity {
+public class BusinessPaymentInfoActivity extends AppCompatActivity {
 
 
     Bundle bundle;
@@ -112,12 +109,12 @@ public class PayBusinessActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pay_business);
+        setContentView(R.layout.activity_business_payment_info);
 
         persianEnglishDigit = new PersianEnglishDigit();
 
         context = this;
-        activity = PayBusinessActivity.this;
+        activity = BusinessPaymentInfoActivity.this;
 
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
@@ -176,11 +173,6 @@ public class PayBusinessActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 credit_value.clearFocus();
-
-                if (pin2Value.getText().toString().length() == 0){
-                    Toast.makeText(context, getString(R.string.msg_pin2_incurrect), Toast.LENGTH_LONG).show();
-                    return;
-                }
 
                 if (creditValueValidation) {
 
@@ -243,63 +235,21 @@ public class PayBusinessActivity extends AppCompatActivity {
                 if (businessPaymentConfirmResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
 //                    new HamPayDialog(activity).businessPaymentConfirmDialog(businessPaymentConfirmResponseMessage.getService(), amountValue, businessMssage);
 
+
                     PaymentInfoDTO paymentInfo = businessPaymentConfirmResponseMessage.getService().getPaymentInfo();
                     PspInfoDTO pspInfo = businessPaymentConfirmResponseMessage.getService().getPspInfo();
 
-                    cardNumberValue.setText(pspInfo.getCardNo());
+                    Intent intent = new Intent();
+                    intent.putExtra(Constants.PAYMENT_INFO, paymentInfo);
+                    intent.putExtra(Constants.PSP_INFO, pspInfo);
+                    intent.setClass(activity, BusinessPaymentConfirmActivity.class);
+                    startActivity(intent);
 
-                    requestPurchase = new RequestPurchase(activity, new RequestPurchaseTaskCompleteListener());
+                    /*cardNumberValue.setText(pspInfo.getCardNo());
 
-                    doWorkInfo = new DoWorkInfo();
-                    doWorkInfo.setUserName("test");
-                    doWorkInfo.setPassword("1234");
-                    doWorkInfo.setCellNumber(prefs.getString(Constants.REGISTERED_CELL_NUMBER, ""));
-                    doWorkInfo.setLangAByte((byte) 0);
-                    doWorkInfo.setLangABoolean(false);
-                    Vectorstring2stringMapEntry vectorstring2stringMapEntry = new Vectorstring2stringMapEntry();
-                    string2stringMapEntry s2sMapEntry = new string2stringMapEntry();
 
-                    s2sMapEntry.key = "Amount";
-                    if (paymentInfo.getFeeCharge() != null) {
-                        s2sMapEntry.value = (paymentInfo.getAmount() + paymentInfo.getFeeCharge()) + "";
-                    }else {
-                        s2sMapEntry.value = (paymentInfo.getAmount()) + "";
-                    }
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                    s2sMapEntry = new string2stringMapEntry();
-                    s2sMapEntry.key = "Pin2";
-                    s2sMapEntry.value = pin2Value.getText().toString();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new string2stringMapEntry();
-                    s2sMapEntry.key = "ThirdParty";
-                    s2sMapEntry.value = pspInfo.getProductCode();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new string2stringMapEntry();
-                    s2sMapEntry.key = "TerminalId";
-                    s2sMapEntry.value = pspInfo.getTerminalID();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new string2stringMapEntry();
-                    s2sMapEntry.key = "CardId";
-                    s2sMapEntry.value = pspInfo.getCardNo();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new string2stringMapEntry();
-                    s2sMapEntry.key = "Merchant";
-                    s2sMapEntry.value = pspInfo.getMerchant();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new string2stringMapEntry();
-                    s2sMapEntry.key = "IPAddress";
-                    s2sMapEntry.value = pspInfo.getIpAddress();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    doWorkInfo.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
-                    requestPurchase.execute(doWorkInfo);
-
+*/
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Business Payment Confirm")
@@ -332,40 +282,4 @@ public class PayBusinessActivity extends AppCompatActivity {
         @Override
         public void onTaskPreRun() { }
     }
-
-    public class RequestPurchaseTaskCompleteListener implements AsyncTaskCompleteListener<Vectorstring2stringMapEntry> {
-
-        @Override
-        public void onTaskComplete(Vectorstring2stringMapEntry purchaseResponseResponseMessage) {
-
-            hamPayDialog.dismisWaitingDialog();
-
-            if (purchaseResponseResponseMessage != null){
-
-                new HamPayDialog(activity).pspResultDialog("10000" + "");
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Pending Payment Request")
-                        .setAction("Payment")
-                        .setLabel("Success")
-                        .build());
-
-            }
-            else {
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Pending Payment Request")
-                        .setAction("Payment")
-                        .setLabel("Fail(Server)")
-                        .build());
-            }
-
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
-    }
-
-
 }

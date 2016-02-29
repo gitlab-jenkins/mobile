@@ -200,7 +200,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             paymentPriceValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getAmount().toString()) + " ریال");
             paymentVAT.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getVat().toString()) + " ریال");
             paymentFeeValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getFeeCharge().toString()) + " ریال");
-            paymentTotalValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() + "") + " ریال");
+            paymentTotalValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() + "") + " ریال");
 
 
             business_name.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getMerchantName()));
@@ -459,7 +459,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                         paymentPriceValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getAmount().toString()) + " ریال");
                         paymentVAT.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getVat().toString()) + " ریال");
                         paymentFeeValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getFeeCharge().toString()) + " ریال");
-                        paymentTotalValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() + "") + " ریال");
+                        paymentTotalValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() + "") + " ریال");
                         business_name.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getMerchantName()));
 
                         String LogoUrl = Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantImageId();

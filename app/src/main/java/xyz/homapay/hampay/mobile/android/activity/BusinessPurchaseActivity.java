@@ -39,28 +39,17 @@ import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessPaymentConfirmRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
-import xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
-import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
-import xyz.homapay.hampay.common.core.model.request.TransactionListRequest;
 import xyz.homapay.hampay.common.core.model.response.BusinessListResponse;
-import xyz.homapay.hampay.common.core.model.response.TransactionListResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.BusinessDTO;
-import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
-import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.HamPayBusinessesAdapter;
-import xyz.homapay.hampay.mobile.android.adapter.RecentPaymentRequestAdapter;
-import xyz.homapay.hampay.mobile.android.adapter.UserTransactionAdapter;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestBusinessPaymentConfirm;
-import xyz.homapay.hampay.mobile.android.async.RequestContactHampayEnabled;
 import xyz.homapay.hampay.mobile.android.async.RequestHamPayBusiness;
 import xyz.homapay.hampay.mobile.android.async.RequestSearchHamPayBusiness;
-import xyz.homapay.hampay.mobile.android.async.RequestUserIdToken;
-import xyz.homapay.hampay.mobile.android.async.RequestUserTransaction;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.doblist.DobList;
 import xyz.homapay.hampay.mobile.android.component.doblist.events.OnLoadMoreListener;
@@ -71,7 +60,6 @@ import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.component.material.RippleView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
-import xyz.homapay.hampay.mobile.android.model.RecentPay;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
@@ -277,7 +265,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent();
-                intent.setClass(context, PayBusinessActivity.class);
+                intent.setClass(context, BusinessPaymentInfoActivity.class);
                 intent.putExtra("business_name", businessDTOs.get(position).getTitle());
                 intent.putExtra("business_code", businessDTOs.get(position).getCode());
                 context.startActivity(intent);
