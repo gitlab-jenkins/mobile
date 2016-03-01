@@ -233,11 +233,10 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
 
             if (businessPaymentConfirmResponseMessage != null){
                 if (businessPaymentConfirmResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-//                    new HamPayDialog(activity).businessPaymentConfirmDialog(businessPaymentConfirmResponseMessage.getService(), amountValue, businessMssage);
-
-
                     PaymentInfoDTO paymentInfo = businessPaymentConfirmResponseMessage.getService().getPaymentInfo();
                     PspInfoDTO pspInfo = businessPaymentConfirmResponseMessage.getService().getPspInfo();
+
+
 
                     Intent intent = new Intent();
                     intent.putExtra(Constants.PAYMENT_INFO, paymentInfo);
@@ -245,11 +244,7 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
                     intent.setClass(activity, BusinessPaymentConfirmActivity.class);
                     startActivity(intent);
 
-                    /*cardNumberValue.setText(pspInfo.getCardNo());
-
-
-
-*/
+                    finish();
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Business Payment Confirm")

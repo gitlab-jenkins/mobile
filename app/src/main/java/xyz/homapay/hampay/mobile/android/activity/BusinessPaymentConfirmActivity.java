@@ -156,6 +156,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
         paymentPriceValue = (FacedTextView)findViewById(R.id.paymentPriceValue);
         paymentVAT = (FacedTextView)findViewById(R.id.paymentVAT);
         paymentFeeValue = (FacedTextView)findViewById(R.id.paymentFeeValue);
+        paymentTotalValue = (FacedTextView)findViewById(R.id.paymentTotalValue);
 //        user_bank_name = (FacedTextView)findViewById(R.id.user_bank_name);
         cardNumberValue = (FacedTextView)findViewById(R.id.cardNumberValue);
         pin2Value = (FacedEditText)findViewById(R.id.pin2Value);
