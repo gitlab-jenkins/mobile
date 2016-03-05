@@ -7,6 +7,7 @@ public class Constants {
     public static String URL_PREFIX = "/hampay";
 
     public static String HTTP_SERVER_IP = "http://176.58.104.158:90" + URL_PREFIX;//England Server
+    public static String IPG_URL = "http://176.58.104.158:9090" + URL_PREFIX;//England Server
 
 //    public static final String HTTPS_SERVER_IP = "https://192.168.1.101" + URL_PREFIX; //Sima Server
         public static String HTTPS_SERVER_IP = "https://176.58.104.158" + URL_PREFIX;//England Server

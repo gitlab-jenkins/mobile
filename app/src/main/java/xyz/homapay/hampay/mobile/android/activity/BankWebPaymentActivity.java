@@ -1,5 +1,6 @@
 package xyz.homapay.hampay.mobile.android.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.http.SslError;
@@ -16,6 +17,7 @@ import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.account.Log;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -28,6 +30,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
     PaymentInfoDTO paymentInfoDTO = null;
     PspInfoDTO pspInfoDTO = null;
 
+    Activity activity;
 
     @Override
     protected void onPause() {
@@ -56,6 +59,8 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
+        activity = BankWebPaymentActivity.this;
+
         paymentInfoDTO = (PaymentInfoDTO)intent.getSerializableExtra(Constants.PAYMENT_INFO);
         pspInfoDTO = (PspInfoDTO)intent.getSerializableExtra(Constants.PSP_INFO);
 
@@ -70,12 +75,14 @@ public class BankWebPaymentActivity extends AppCompatActivity {
         settings.setJavaScriptEnabled(true);
         bankWebView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 
+        final String redirectedURL = prefs.getString(Constants.IPG_URL, "") + "/redirect/saman/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") ;
+
         String postData =
                 "Amount=" + paymentInfoDTO.getAmount() +
                 "&TerminalId=" + pspInfoDTO.getTerminalID() +
                 "&ResNum=" + pspInfoDTO.getProductCode() +
                 "&ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
-                "&RedirectURL=" + "/hampay/redirect/saman/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") ;
+                "&RedirectURL=" + redirectedURL;
 
         try {
             bankWebView.postUrl("http://176.58.104.158/assets/psp/index.php", postData.getBytes( "UTF-8"));
@@ -86,6 +93,13 @@ public class BankWebPaymentActivity extends AppCompatActivity {
         bankWebView.setWebViewClient(new WebViewClient() {
 
             public void onPageFinished(WebView view, String url) {
+
+                android.util.Log.e("URL", url);
+
+                if (url.equalsIgnoreCase(redirectedURL)){
+                    new HamPayDialog(activity).pspResultDialog(pspInfoDTO.getProductCode());
+                }
+
                 hamPayDialog.dismisWaitingDialog();
             }
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error){
