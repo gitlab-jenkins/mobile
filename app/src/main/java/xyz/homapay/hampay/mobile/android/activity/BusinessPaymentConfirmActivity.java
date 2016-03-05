@@ -9,30 +9,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
-import xyz.homapay.hampay.common.common.response.ResponseMessage;
-import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
 import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
-import xyz.homapay.hampay.common.core.model.response.LatestPurchaseResponse;
-import xyz.homapay.hampay.common.core.model.response.PSPResultResponse;
-import xyz.homapay.hampay.common.core.model.response.dto.CardDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
-import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestPSPResult;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
-import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
@@ -49,7 +42,6 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
     ButtonRectangle pay_to_business_button;
     FacedTextView cancel_pay_to_business_button;
 
-    Bundle bundle;
 
     FacedTextView contact_name;
     FacedEditText contact_message;
@@ -161,13 +153,15 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
         cardNumberValue = (FacedTextView)findViewById(R.id.cardNumberValue);
         pin2Value = (FacedEditText)findViewById(R.id.pin2Value);
 
-        bundle = getIntent().getExtras();
-
-
         Intent intent = getIntent();
 
         paymentInfoDTO = (PaymentInfoDTO)intent.getSerializableExtra(Constants.PAYMENT_INFO);
         pspInfoDTO = (PspInfoDTO)intent.getSerializableExtra(Constants.PSP_INFO);
+
+        if (pspInfoDTO.getCardId().length() == 0) {
+            LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
+            creditInfo.setVisibility(View.GONE);
+        }
 
 
         if (paymentInfoDTO != null) {
@@ -193,64 +187,73 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (pin2Value.getText().toString().length() <= 4 ){
-                    Toast.makeText(context, getString(R.string.msg_pin2_incurrect), Toast.LENGTH_LONG).show();
-                    return;
+
+                if (pspInfoDTO.getCardId().length() == 0) {
+                    Intent intent = new Intent();
+                    intent.setClass(activity, BankWebPaymentActivity.class);
+                    intent.putExtra(Constants.PAYMENT_INFO, paymentInfoDTO);
+                    intent.putExtra(Constants.PSP_INFO, pspInfoDTO);
+                    startActivity(intent);
+                } else {
+
+                    if (pin2Value.getText().toString().length() <= 4) {
+                        Toast.makeText(context, getString(R.string.msg_pin2_incurrect), Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    requestPurchase = new RequestPurchase(activity, new RequestPurchaseTaskCompleteListener());
+
+                    doWorkInfo = new DoWorkInfo();
+                    doWorkInfo.setUserName("test");
+                    doWorkInfo.setPassword("1234");
+                    doWorkInfo.setCellNumber(prefs.getString(Constants.REGISTERED_CELL_NUMBER, ""));
+                    doWorkInfo.setLangAByte((byte) 0);
+                    doWorkInfo.setLangABoolean(false);
+                    Vectorstring2stringMapEntry vectorstring2stringMapEntry = new Vectorstring2stringMapEntry();
+                    string2stringMapEntry s2sMapEntry = new string2stringMapEntry();
+
+                    s2sMapEntry.key = "Amount";
+                    if (paymentInfoDTO.getFeeCharge() != null) {
+                        s2sMapEntry.value = (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge()) + "";
+                    } else {
+                        s2sMapEntry.value = (paymentInfoDTO.getAmount()) + "";
+                    }
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                    s2sMapEntry = new string2stringMapEntry();
+                    s2sMapEntry.key = "Pin2";
+                    s2sMapEntry.value = pin2Value.getText().toString();
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                    s2sMapEntry = new string2stringMapEntry();
+                    s2sMapEntry.key = "ThirdParty";
+                    s2sMapEntry.value = pspInfoDTO.getProductCode();
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                    s2sMapEntry = new string2stringMapEntry();
+                    s2sMapEntry.key = "TerminalId";
+                    s2sMapEntry.value = pspInfoDTO.getTerminalID();
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                    s2sMapEntry = new string2stringMapEntry();
+                    s2sMapEntry.key = "CardId";
+                    s2sMapEntry.value = pspInfoDTO.getCardNo();
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                    s2sMapEntry = new string2stringMapEntry();
+                    s2sMapEntry.key = "Merchant";
+                    s2sMapEntry.value = pspInfoDTO.getMerchant();
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                    s2sMapEntry = new string2stringMapEntry();
+                    s2sMapEntry.key = "IPAddress";
+                    s2sMapEntry.value = pspInfoDTO.getIpAddress();
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                    doWorkInfo.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
+                    requestPurchase.execute(doWorkInfo);
+
                 }
-
-                requestPurchase = new RequestPurchase(activity, new RequestPurchaseTaskCompleteListener());
-
-                doWorkInfo = new DoWorkInfo();
-                doWorkInfo.setUserName("test");
-                doWorkInfo.setPassword("1234");
-                doWorkInfo.setCellNumber(prefs.getString(Constants.REGISTERED_CELL_NUMBER, ""));
-                doWorkInfo.setLangAByte((byte) 0);
-                doWorkInfo.setLangABoolean(false);
-                Vectorstring2stringMapEntry vectorstring2stringMapEntry = new Vectorstring2stringMapEntry();
-                string2stringMapEntry s2sMapEntry = new string2stringMapEntry();
-
-                s2sMapEntry.key = "Amount";
-                if (paymentInfoDTO.getFeeCharge() != null) {
-                    s2sMapEntry.value = (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge()) + "";
-                }else {
-                    s2sMapEntry.value = (paymentInfoDTO.getAmount()) + "";
-                }
-                vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                s2sMapEntry = new string2stringMapEntry();
-                s2sMapEntry.key = "Pin2";
-                s2sMapEntry.value = pin2Value.getText().toString();
-                vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                s2sMapEntry = new string2stringMapEntry();
-                s2sMapEntry.key = "ThirdParty";
-                s2sMapEntry.value = pspInfoDTO.getProductCode();
-                vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                s2sMapEntry = new string2stringMapEntry();
-                s2sMapEntry.key = "TerminalId";
-                s2sMapEntry.value = pspInfoDTO.getTerminalID();
-                vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                s2sMapEntry = new string2stringMapEntry();
-                s2sMapEntry.key = "CardId";
-                s2sMapEntry.value = pspInfoDTO.getCardNo();
-                vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                s2sMapEntry = new string2stringMapEntry();
-                s2sMapEntry.key = "Merchant";
-                s2sMapEntry.value = pspInfoDTO.getMerchant();
-                vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                s2sMapEntry = new string2stringMapEntry();
-                s2sMapEntry.key = "IPAddress";
-                s2sMapEntry.value = pspInfoDTO.getIpAddress();
-                vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                doWorkInfo.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
-                requestPurchase.execute(doWorkInfo);
-
-
             }
         });
 
@@ -304,7 +307,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
             if (purchaseResponseResponseMessage != null){
 
-                new HamPayDialog(activity).pspResultDialog("10000" + "");
+                new HamPayDialog(activity).pspResultDialog(purchaseResponseResponseMessage.get(0).value);
 
                 hamPayGaTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Pending Payment Request")
