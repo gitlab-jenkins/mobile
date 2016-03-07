@@ -30,6 +30,8 @@ public class BankWebPaymentActivity extends AppCompatActivity {
     PaymentInfoDTO paymentInfoDTO = null;
     PspInfoDTO pspInfoDTO = null;
 
+    String redirectedURL;
+
     Activity activity;
 
     @Override
@@ -75,17 +77,19 @@ public class BankWebPaymentActivity extends AppCompatActivity {
         settings.setJavaScriptEnabled(true);
         bankWebView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 
-        final String redirectedURL = prefs.getString(Constants.IPG_URL, "") + "/redirect/saman/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") ;
+        redirectedURL = Constants.IPG_URL + "/redirect/saman/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") ;
 
         String postData =
                 "Amount=" + paymentInfoDTO.getAmount() +
                 "&TerminalId=" + pspInfoDTO.getTerminalID() +
                 "&ResNum=" + pspInfoDTO.getProductCode() +
-                "&ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
+                "&ResNum4=" +Constants.REGISTERED_CELL_NUMBER +
                 "&RedirectURL=" + redirectedURL;
 
+        android.util.Log.e("POST", postData);
+
         try {
-            bankWebView.postUrl("http://176.58.104.158/assets/psp/index.php", postData.getBytes( "UTF-8"));
+            bankWebView.postUrl("http://176.58.104.158/assets/psp/index.php", postData.getBytes("UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -94,7 +98,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
             public void onPageFinished(WebView view, String url) {
 
-                android.util.Log.e("URL", url);
+                android.util.Log.e("Page-Title", view.getTitle());
 
                 if (url.equalsIgnoreCase(redirectedURL)){
                     new HamPayDialog(activity).pspResultDialog(pspInfoDTO.getProductCode());

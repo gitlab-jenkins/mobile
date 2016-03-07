@@ -194,6 +194,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
                     intent.putExtra(Constants.PAYMENT_INFO, paymentInfoDTO);
                     intent.putExtra(Constants.PSP_INFO, pspInfoDTO);
                     startActivity(intent);
+                    finish();
                 } else {
 
                     if (pin2Value.getText().toString().length() <= 4) {

@@ -154,7 +154,8 @@ public class HamPayDialog {
     SharedPreferences.Editor editor;
 
     Activity activity;
-    Dialog dialog;
+
+    HamPayCustomDialog dialog;
 
     DatabaseHelper dbHelper;
 
@@ -164,9 +165,14 @@ public class HamPayDialog {
 
     String serverKey = "";
 
+    Rect rect = new Rect();
+
     public HamPayDialog(Activity activity){
 
         this.activity = activity;
+
+
+        this.windowDisplayFrame();
 
         prefs = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE);
         editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE).edit();
@@ -178,6 +184,13 @@ public class HamPayDialog {
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
     }
+
+    private void windowDisplayFrame(){
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(rect);
+    }
+
 
     public HamPayDialog(Activity activity, String serverKey){
 
@@ -199,41 +212,20 @@ public class HamPayDialog {
 
     public void showWaitingdDialog(String hampayUser){
 
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_waiting, null);
-
         FacedTextView wating_text = (FacedTextView)view.findViewById(R.id.wating_text);
-
         if (hampayUser.length() != 0){
             wating_text.setText(activity.getString(R.string.dialog_hampay_user_waiting, hampayUser));
         }
-
-
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(false);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
     public void showTcPrivacyDialog(){
 
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_tc_privacy, null);
-
         FacedTextView tc_privacy_text = (FacedTextView) view.findViewById(R.id.tc_privacy_text);
-
         Spannable tcPrivacySpannable = new SpannableString(activity.getString(R.string.tc_privacy_text));
         ClickableSpan tcClickableSpan = new ClickableSpan() {
             @Override
@@ -267,7 +259,6 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-//                intent.setClass(activity, PostStartActivity.class);
                 intent.setClass(activity, ProfileEntryActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 activity.finish();
@@ -285,24 +276,12 @@ public class HamPayDialog {
                 activity.finish();
             }
         });
-
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
-
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
     public void showWaitingdSMSDialog(final RequestRegistrationSendSmsToken requestRegistrationSendSmsToken, String hampayUser){
-
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_waiting, null);
 
@@ -312,21 +291,8 @@ public class HamPayDialog {
             wating_text.setText(activity.getString(R.string.dialog_hampay_user_waiting, hampayUser));
         }
 
-
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-//                Toast.makeText(activity, "ksjdks", Toast.LENGTH_LONG).show();
-                requestRegistrationSendSmsToken.cancel(true);
-            }
-        });
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(false);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -340,39 +306,20 @@ public class HamPayDialog {
 
     public void showDisMatchPasswordDialog(){
 
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_dismatch_password, null);
-
         FacedTextView retry_password = (FacedTextView) view.findViewById(R.id.retry_password);
-
         retry_password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
             }
         });
-
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
     public void showDisMatchMemorableDialog(){
-
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_dismatch_memorable, null);
 
@@ -386,23 +333,12 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
     public void showCommunicateDialog(final int type, final String cellNumber){
-
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_communicate_confirm, null);
 
@@ -414,9 +350,9 @@ public class HamPayDialog {
             public void onClick(View v) {
                 dialog.dismiss();
 
-                if (type == 0){
+                if (type == 0) {
                     activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", cellNumber, null)));
-                }else if (type == 1){
+                } else if (type == 1) {
                     activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("tel", cellNumber, null)));
                 }
             }
@@ -429,23 +365,12 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
-
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
     public void showNoResultSearchDialog(){
-
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_no_result, null);
 
@@ -458,23 +383,13 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
 
     public void showIncorrectPrice(){
-
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_incorrect, null);
 
@@ -487,13 +402,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -505,11 +415,6 @@ public class HamPayDialog {
     }
 
     public void showContactUsDialog(){
-
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_contact_us, null);
 
@@ -544,25 +449,14 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
-
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     public void showHelpDialog(final String help_url){
-
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_help, null);
 
@@ -590,13 +484,8 @@ public class HamPayDialog {
             }
         });
 
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().setDimAmount(0);
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
         layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
         layoutParams.x = 25;
@@ -648,11 +537,6 @@ public class HamPayDialog {
     RequestTACAccept requestTACAccept;
 
     public void showTACAcceptDialog(String accept_term) {
-
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_tac_accept, null);
 
@@ -709,15 +593,9 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        view.setMinimumHeight((int) (displayRectangle.height() * 0.5f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
-
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        view.setMinimumHeight((int) (rect.height() * 0.5f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -798,10 +676,6 @@ public class HamPayDialog {
 
 
     public void showExitDialog(final LogoutData logoutData){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_exit_app, null);
 
@@ -822,7 +696,6 @@ public class HamPayDialog {
                 new RequestLogout(activity, new RequestLogoutResponseTaskCompleteListener()).execute(logoutData);
 
 
-
             }
         });
 
@@ -833,14 +706,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
-
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -867,10 +734,6 @@ public class HamPayDialog {
     }
 
     public void showRemovePasswordDialog(){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_remove_password, null);
 
@@ -899,22 +762,12 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
-
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
     public void showBackStartRegisterDialog(){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_back_start, null);
 
@@ -943,23 +796,13 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
-
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
 
     public void showExitRegistrationDialog(){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_exit_registration, null);
 
@@ -983,22 +826,12 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
-
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
     public void showExitLoginDialog(){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_exit_registration, null);
 
@@ -1025,22 +858,12 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
-
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
     public void showLoginFailDialog(FailedLoginResponse failedLoginResponse){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_login_fail, null);
 
@@ -1070,23 +893,13 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
-
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
 
     public void showResumeRegisterationDialog(final Activity destinationActivity){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_resume_registeration, null);
 
@@ -1118,25 +931,13 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
-
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
 
     public void showIncorrectSMSVerification(){
-
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_incorrect_sms_verication, null);
 
@@ -1149,13 +950,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -1167,10 +963,7 @@ public class HamPayDialog {
     public void individualPaymentConfirmDialog(final IndividualPaymentConfirmResponse individualPaymentConfirmResponse,
                                                final Long amountValue,
                                                final String userMessage){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_pay_one, null);
         FacedTextView pay_one_confirm = (FacedTextView) view.findViewById(R.id.pay_one_confirm);
         FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
@@ -1205,24 +998,14 @@ public class HamPayDialog {
                 (new PersianEnglishDigit().E2P(String.format("%,d", individualPaymentConfirmResponse.getFeeCharge()).replace(".", ","))),
                 individualPaymentConfirmResponse.getBankName()));
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
-
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
     public void individualPaymentDialog(final IndividualPaymentResponse individualPaymentResponse,
                                         final IndividualPaymentRequest individualPaymentRequest,
                                         final String contactName){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_pay_one_ref, null);
 
@@ -1260,14 +1043,8 @@ public class HamPayDialog {
             dbHelper.updateRecentPay(recentPay);
         }
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
-
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -1331,59 +1108,6 @@ public class HamPayDialog {
     BusinessPaymentRequest businessPaymentRequest;
 
 
-//    public void businessPaymentConfirmDialog(final BusinessPaymentConfirmResponse businessPaymentConfirmResponse,
-//                                             final Long amountValue,
-//                                             final String userMessage){
-//        Rect displayRectangle = new Rect();
-//        Activity parent = (Activity) activity;
-//        Window window = parent.getWindow();
-//        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-//        View view = activity.getLayoutInflater().inflate(R.layout.dialog_pay_one, null);
-//        FacedTextView pay_one_confirm = (FacedTextView) view.findViewById(R.id.pay_one_confirm);
-//        FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
-//        FacedTextView dis_confirmation = (FacedTextView) view.findViewById(R.id.dis_confirmation);
-//
-//        confirmation.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dialog.dismiss();
-//                showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-//                businessPaymentRequest = new BusinessPaymentRequest();
-//                businessPaymentRequest.setAmount(amountValue);
-//                businessPaymentRequest.setBusinessCode(businessPaymentConfirmResponse.getBusinessCode());
-//                businessPaymentRequest.setMessage(userMessage);
-//                requestBusinessPayment = new RequestBusinessPayment(activity,
-//                        new RequestBusinessPaymentTaskCompleteListener(businessPaymentRequest, businessPaymentConfirmResponse.getFullName()));
-//                requestBusinessPayment.execute(businessPaymentRequest);
-//            }
-//        });
-//
-//
-//        dis_confirmation.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                dialog.dismiss();
-//            }
-//        });
-//
-//        pay_one_confirm.setText(activity.getString(R.string.pay_one_confirm,
-//                (new PersianEnglishDigit()).E2P(String.format("%,d", amountValue).replace(".", ",")),
-//                businessPaymentConfirmResponse.getFullName(),
-//                "۰",
-//                businessPaymentConfirmResponse.getBankName()));
-//
-//        view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
-//        dialog = new Dialog(activity);
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//        dialog.setContentView(view);
-//        dialog.setTitle(null);
-//        dialog.setCanceledOnTouchOutside(true);
-//
-//        dialog.show();
-//    }
-
-
     public class RequestBusinessPaymentTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<BusinessPaymentResponse>> {
 
         String businessName;
@@ -1441,10 +1165,6 @@ public class HamPayDialog {
     public void businessPaymentDialog(final BusinessPaymentResponse businessPaymentResponse,
                                       final BusinessPaymentRequest businessPaymentRequest,
                                       final String contactName){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_pay_one_ref, null);
 
@@ -1464,24 +1184,13 @@ public class HamPayDialog {
         pay_one_confirm_ref.setText((new PersianEnglishDigit(activity.getString(R.string.pay_one_ref, businessPaymentResponse.getRefCode()))).E2P());
 
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
-
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
 
     public void showPreventRootDeviceDialog(){
-
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_prevent_root_device, null);
 
@@ -1495,23 +1204,13 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
 
     public void showInvalidStepDialog(){
-
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_invalid_step, null);
 
@@ -1540,13 +1239,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -1554,11 +1248,6 @@ public class HamPayDialog {
                                        final CardProfileRequest cardProfileRequest,
                                        final String code,
                                        final String message){
-
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_bank_list, null);
 
@@ -1586,13 +1275,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -1601,11 +1285,6 @@ public class HamPayDialog {
                                              final IllegalAppListRequest illegalAppListRequest,
                                              final String code,
                                              final String message){
-
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_illegal_app_list, null);
 
@@ -1634,13 +1313,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -1648,11 +1322,6 @@ public class HamPayDialog {
                                                 final RegistrationEntryRequest registrationEntryRequest,
                                                 final String code,
                                                 final String message){
-
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_registration_entry, null);
 
@@ -1681,13 +1350,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -1695,11 +1359,6 @@ public class HamPayDialog {
                                                        final RegistrationSendSmsTokenRequest registrationEntryRequest,
                                                        final String code,
                                                        final String message){
-
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_registration_send_sms_token, null);
 
@@ -1727,13 +1386,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -1741,10 +1395,6 @@ public class HamPayDialog {
                                                    final MobileRegistrationIdEntryRequest mobileRegistrationIdEntryRequest,
                                                    final String code,
                                                    final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_registration_send_sms_token, null);
 
@@ -1772,13 +1422,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -1787,10 +1432,6 @@ public class HamPayDialog {
                                                        final RegistrationVerifyMobileRequest registrationVerifyMobileRequest,
                                                        final String code,
                                                        final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_registration_verify_mobile_request, null);
 
@@ -1819,13 +1460,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -1833,10 +1469,6 @@ public class HamPayDialog {
                                            final RegisterCardRequest registerCardRequest,
                                            final String code,
                                            final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_registration_verify_mobile_request, null);
 
@@ -1865,13 +1497,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -1879,10 +1506,6 @@ public class HamPayDialog {
                                               final RegistrationConfirmUserDataRequest registrationConfirmUserDataRequest,
                                               final String code,
                                               final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_confirm_user_data, null);
 
@@ -1910,13 +1533,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -1925,10 +1543,6 @@ public class HamPayDialog {
                                             final RegistrationFetchUserDataRequest registrationFetchUserDataRequest,
                                             final String code,
                                             final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_fetch_user_data, null);
 
@@ -1956,13 +1570,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -1972,10 +1581,6 @@ public class HamPayDialog {
                                                     final RegistrationVerifyAccountRequest registrationVerifyAccountRequest,
                                                     final String code,
                                                     final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_request_register_verify_account, null);
 
@@ -2003,13 +1608,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -2017,10 +1617,6 @@ public class HamPayDialog {
                                             final VerifyAccountRequest verifyAccountRequest,
                                             final String code,
                                             final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_request_register_verify_account, null);
 
@@ -2049,13 +1645,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -2063,10 +1654,6 @@ public class HamPayDialog {
                                           final UserProfileRequest userProfileRequest,
                                           final String code,
                                           final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_user_profile, null);
 
@@ -2094,13 +1681,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -2109,10 +1691,6 @@ public class HamPayDialog {
                                                          final RegistrationVerifyTransferMoneyRequest registrationVerifyTransferMoneyRequest,
                                                          final String code,
                                                          final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_request_verify_transfer_money, null);
 
@@ -2145,13 +1723,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -2160,10 +1733,6 @@ public class HamPayDialog {
                                                   final VerifyTransferMoneyRequest verifyTransferMoneyRequest,
                                                   final String code,
                                                   final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_request_verify_transfer_money, null);
 
@@ -2197,13 +1766,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -2212,10 +1776,6 @@ public class HamPayDialog {
                                              final RegistrationCredentialsRequest registrationMemorableWordEntryRequest,
                                              final String code,
                                              final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_memorable_entry, null);
 
@@ -2243,13 +1803,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -2257,10 +1812,6 @@ public class HamPayDialog {
                                         final TACRequest tacRequest,
                                         final String code,
                                         final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_tac_request, null);
 
@@ -2289,13 +1840,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -2304,10 +1850,6 @@ public class HamPayDialog {
                                                 final TACAcceptRequest tacAcceptRequest,
                                                 final String code,
                                                 final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_tac_accept_request, null);
 
@@ -2335,21 +1877,12 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
     public void showSuccessChangeSettingDialog(final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_success_change_setting, null);
 
@@ -2371,14 +1904,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -2386,10 +1913,6 @@ public class HamPayDialog {
                                              final ChangePassCodeRequest changePassCodeRequest,
                                              final String code,
                                              final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_change_pass_code, null);
 
@@ -2420,14 +1943,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -2437,10 +1954,6 @@ public class HamPayDialog {
                                                   final ChangeMemorableWordRequest changeMemorableWordRequest,
                                                   final String code,
                                                   final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_change_memorable_word, null);
 
@@ -2476,14 +1989,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -2492,10 +1999,6 @@ public class HamPayDialog {
                                               final TransactionListRequest transactionListRequest,
                                               final String code,
                                               final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_user_transaction, null);
 
@@ -2523,13 +2026,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -2537,10 +2035,6 @@ public class HamPayDialog {
                                            final BusinessListRequest businessListRequest,
                                            final String code,
                                            final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_business_list, null);
 
@@ -2568,13 +2062,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -2582,10 +2071,6 @@ public class HamPayDialog {
                                                  final BusinessSearchRequest businessSearchRequest,
                                                  final String code,
                                                  final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_business_search_list, null);
 
@@ -2613,13 +2098,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -2628,10 +2108,6 @@ public class HamPayDialog {
                                                     final ContactsHampayEnabledRequest contactsHampayEnabledRequest,
                                                     final String code,
                                                     final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_contacts_enabled, null);
 
@@ -2661,23 +2137,13 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
     public void showFailPaymentDialog(final String code,
                                       final String message){
-
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_payment, null);
 
@@ -2705,22 +2171,12 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
     public void showFailPaymentPermissionDialog(String message){
-
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_payment_permission, null);
 
@@ -2739,22 +2195,12 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
     public void showIncorrectAmountDialog(Long MaxXferAmount, Long MinXferAmount){
-
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_payment_permission, null);
 
@@ -2774,22 +2220,13 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
 
     public void showUnlinkDialog(){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_unlink, null);
 
@@ -2813,13 +2250,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -2827,10 +2259,6 @@ public class HamPayDialog {
                                      final UnlinkUserRequest unlinkUserRequest,
                                      final String code,
                                      final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_unlink_user, null);
 
@@ -2865,14 +2293,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -2880,10 +2302,6 @@ public class HamPayDialog {
                                     final ChangeEmailRequest changeEmailRequest,
                                     final String code,
                                     final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_unlink_user, null);
 
@@ -2918,14 +2336,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setCancelable(false);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -2934,10 +2346,6 @@ public class HamPayDialog {
                                              final GetUserIdTokenRequest getUserIdTokenRequest,
                                              final String code,
                                              final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_server_key, null);
 
@@ -2965,22 +2373,13 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
 
     public void showUserProfileImage(){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_user_image_profile, null);
 
@@ -3019,13 +2418,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
 
     }
@@ -3035,10 +2429,6 @@ public class HamPayDialog {
                                     final UploadImageRequest uploadImageRequest,
                                     final String code,
                                     final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_upload_image, null);
 
@@ -3067,22 +2457,13 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
 
     public void showChangeEmail(final String password, final String memorableWord){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_change_email, null);
 
@@ -3117,7 +2498,7 @@ public class HamPayDialog {
                     changeEmailRequest.setMemorableWord(memorableWord);
                     RequestChangeEmail requestChangeEmail = new RequestChangeEmail(activity, new RequestChangeEmailTaskCompleteListener(changeEmailRequest));
                     requestChangeEmail.execute(changeEmailRequest);
-                }else {
+                } else {
                     Toast.makeText(activity, activity.getString(R.string.msg_email_invalid), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -3132,13 +2513,8 @@ public class HamPayDialog {
         });
 
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -3207,10 +2583,7 @@ public class HamPayDialog {
     RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest;
 
     public void smsConfirmDialog(final String cellNumber, final String cardNumber){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_sms_confirm, null);
         FacedTextView sms_user_notify = (FacedTextView) view.findViewById(R.id.sms_user_notify);
         sms_user_notify.setText(activity.getString(R.string.sms_verification_text, new PersianEnglishDigit().E2P(prefs.getString(Constants.REGISTERED_CELL_NUMBER, ""))));
@@ -3236,14 +2609,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
-
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -3326,11 +2693,6 @@ public class HamPayDialog {
 
     public void pspResultDialog(String purchaseCode){
 
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_request_pay, null);
 
         FacedTextView request_payment_message = (FacedTextView) view.findViewById(R.id.request_payment_message);
@@ -3345,14 +2707,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
-
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -3361,10 +2717,6 @@ public class HamPayDialog {
                                              final LatestPurchaseRequest latestPurchaseRequest,
                                              final String code,
                                              final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_contacts_enabled, null);
 
@@ -3395,22 +2747,13 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
 
     public void creditRequestDialog(){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_credit_request, null);
 
@@ -3429,22 +2772,12 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
-
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
     public void showIBANConfirmationDialog(final String iban, final IBANConfirmationResponse ibanConfirmationResponse){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_request_iban_confirm, null);
 
@@ -3475,13 +2808,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -3528,10 +2856,6 @@ public class HamPayDialog {
                                          final IBANChangeRequest ibanChangeRequest,
                                          final String code,
                                          final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_request_iban_confirm, null);
 
@@ -3559,13 +2883,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
@@ -3573,10 +2892,6 @@ public class HamPayDialog {
                                                final IBANConfirmationRequest ibanConfirmationRequest,
                                                final String code,
                                                final String message){
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_request_iban_confirm, null);
 
@@ -3604,13 +2919,8 @@ public class HamPayDialog {
             }
         });
 
-        view.setMinimumWidth((int) (displayRectangle.width() * 0.85f));
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
 
