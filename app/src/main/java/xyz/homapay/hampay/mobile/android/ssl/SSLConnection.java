@@ -21,12 +21,12 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 public class SSLConnection  {
 
     private Context context;
-    private String urlString;
+    private URL url;
     private SSLKeyStore sslKeyStore;
 
-    public SSLConnection(Context context, String urlString){
+    public SSLConnection(Context context, URL url){
         this.context = context;
-        this.urlString = urlString;
+        this.url = url;
         this.sslKeyStore = new SSLKeyStore(this.context);
     }
 
@@ -35,7 +35,7 @@ public class SSLConnection  {
         {
             SSLContext context = SSLContext.getInstance("TLS");
             context.init(null, new TrustManager[] { new HamPayX509TrustManager(sslKeyStore.getAppKeyStore()) }, null);
-            URL url = new URL(urlString);
+
             HttpsURLConnection urlConnection = (HttpsURLConnection)url.openConnection();
             urlConnection.setSSLSocketFactory(context.getSocketFactory());
             urlConnection.setConnectTimeout(Constants.SERVICE_CONNECTION_TIMEOUT);

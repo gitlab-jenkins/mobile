@@ -11,6 +11,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -32,7 +33,9 @@ public class LoginStream {
 
     public int resultCode() throws Exception {
 
-        sslConnection = new SSLConnection(context, Constants.HTTPS_OPENAM_LOGIN_URL);
+        URL url = new URL(Constants.HTTPS_OPENAM_LOGIN_URL);
+
+        sslConnection = new SSLConnection(context, url);
         connection = sslConnection.setUpHttpsURLConnection();
         connection.setDoOutput(true);
         connection.setRequestMethod("POST");

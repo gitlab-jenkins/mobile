@@ -140,17 +140,37 @@ public class WebServices  {
 
     SharedPreferences prefs;
 
-    public WebServices(Context context){
+    DateGsonBuilder builder;
 
+    private ConnectionType connectionType;
+
+    private URL url;
+    private String ServiceURL = "";
+
+    public WebServices(Context context, ConnectionType connectionType){
         this.context = context;
-
         prefs =  context.getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
+        builder = new DateGsonBuilder();
+        this.connectionType = connectionType;
+        if (connectionType == ConnectionType.HTTPS){
+            ServiceURL = Constants.HTTPS_SERVER_IP;
+        }else {
+            ServiceURL = Constants.HTTP_SERVER_IP;
+        }
 
     }
 
-    public LogoutResponse sendLogoutRequest(LogoutData logoutData)throws Exception {
+    public WebServices(Context context){
+        this.context = context;
+        prefs =  context.getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
+        builder = new DateGsonBuilder();
+    }
 
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPSOPENAM_LOGOUT_URL);
+    public LogoutResponse sendLogoutRequest(LogoutData logoutData) throws Exception {
+
+        URL url = new URL(Constants.HTTPSOPENAM_LOGOUT_URL);
+
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         connection.setRequestMethod("POST");
@@ -189,8 +209,15 @@ public class WebServices  {
 
     public ResponseMessage<IllegalAppListResponse> getIllegalAppList() {
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/illegal-apps");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<IllegalAppListResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/illegal-apps");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -236,8 +263,15 @@ public class WebServices  {
 
     public ResponseMessage<BankListResponse> getBankList() {
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/banks");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<BankListResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/banks");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -280,10 +314,17 @@ public class WebServices  {
         return responseMessage;
     }
 
-    public ResponseMessage<RegistrationEntryResponse> newRegistrationEntry(RegistrationEntryRequest registrationEntryRequest){
+    public ResponseMessage<RegistrationEntryResponse> newRegistrationEntry(RegistrationEntryRequest registrationEntryRequest) {
+
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/users/reg-entry");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
 
         ResponseMessage<RegistrationEntryResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/reg-entry");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -375,8 +416,15 @@ public class WebServices  {
 
     public ResponseMessage<ContactUsResponse> newContactUsResponse(ContactUsRequest contactUsRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/contactus");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<ContactUsResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/contactus");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -418,10 +466,17 @@ public class WebServices  {
         return responseMessage;
     }
 
-    public ResponseMessage<RegistrationSendSmsTokenResponse> newRegistrationSendSmsToken(RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest){
+    public ResponseMessage<RegistrationSendSmsTokenResponse> newRegistrationSendSmsToken(RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest) {
+
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/users/reg-sms-token");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
 
         ResponseMessage<RegistrationSendSmsTokenResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/reg-sms-token");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -464,10 +519,17 @@ public class WebServices  {
     }
 
 
-    public ResponseMessage<RegistrationVerifyMobileResponse> newRegistrationVerifyMobileResponse(RegistrationVerifyMobileRequest registrationVerifyMobileRequest){
+    public ResponseMessage<RegistrationVerifyMobileResponse> newRegistrationVerifyMobileResponse(RegistrationVerifyMobileRequest registrationVerifyMobileRequest) {
+
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/users/reg-verify-mobile");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
 
         ResponseMessage<RegistrationVerifyMobileResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/reg-verify-mobile");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -514,8 +576,15 @@ public class WebServices  {
 
     public ResponseMessage<RegisterCardResponse> newRegisterCardResponse(RegisterCardRequest registerCardRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/psp/registerCard");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<RegisterCardResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/psp/registerCard");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -547,14 +616,7 @@ public class WebServices  {
                 reader = new InputStreamReader(connection.getInputStream());
             }
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
-
-            Gson gson = builder.create();
+            Gson gson = builder.getDatebuilder().create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegisterCardResponse>>() {}.getType());
 
 
@@ -569,10 +631,17 @@ public class WebServices  {
         return responseMessage;
     }
 
-    public ResponseMessage<RegistrationFetchUserDataResponse> newRegistrationFetchUserDataResponse(RegistrationFetchUserDataRequest registrationFetchUserDataRequest){
+    public ResponseMessage<RegistrationFetchUserDataResponse> newRegistrationFetchUserDataResponse(RegistrationFetchUserDataRequest registrationFetchUserDataRequest) {
+
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/users/reg-fetch-user-data");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
 
         ResponseMessage<RegistrationFetchUserDataResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/reg-fetch-user-data");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -615,10 +684,17 @@ public class WebServices  {
     }
 
 
-    public ResponseMessage<RegistrationConfirmUserDataResponse> newRegistrationConfirmUserDataResponse(RegistrationConfirmUserDataRequest registrationConfirmUserDataRequest){
+    public ResponseMessage<RegistrationConfirmUserDataResponse> newRegistrationConfirmUserDataResponse(RegistrationConfirmUserDataRequest registrationConfirmUserDataRequest) {
+
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/users/reg-confirm-user-data");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
 
         ResponseMessage<RegistrationConfirmUserDataResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/reg-confirm-user-data");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -649,14 +725,7 @@ public class WebServices  {
                 reader = new InputStreamReader(connection.getInputStream());
             }
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
-
-            Gson gson = builder.create();
+            Gson gson = builder.getDatebuilder().create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegistrationConfirmUserDataResponse>>() {}.getType());
 
         } catch (Exception e) {
@@ -673,8 +742,15 @@ public class WebServices  {
 
     public ResponseMessage<RegistrationCredentialsResponse> newRegistrationCredentialsResponse(RegistrationCredentialsRequest registrationCredentialsRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/users/reg-credential-entry");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<RegistrationCredentialsResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/reg-credential-entry");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -729,8 +805,15 @@ public class WebServices  {
 
     public ResponseMessage<RegistrationVerifyAccountResponse> newRegistrationVerifyAccountResponse(RegistrationVerifyAccountRequest registrationVerifyAccountRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/customers/reg-verify-account");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<RegistrationVerifyAccountResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/customers/reg-verify-account");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -777,8 +860,15 @@ public class WebServices  {
 
     public ResponseMessage<RegistrationVerifyTransferMoneyResponse> newRegistrationVerifyTransferMoneyResponse(RegistrationVerifyTransferMoneyRequest registrationVerifyTransferMoneyRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/customers/reg-verify-xfer");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<RegistrationVerifyTransferMoneyResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/customers/reg-verify-xfer");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -826,8 +916,15 @@ public class WebServices  {
 
     public ResponseMessage<MobileRegistrationIdEntryResponse> newRegistrationDeviceRegId(MobileRegistrationIdEntryRequest mobileRegistrationIdEntryRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/users/mobile-reg-id-entry");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<MobileRegistrationIdEntryResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/mobile-reg-id-entry");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -873,8 +970,15 @@ public class WebServices  {
 
     public ResponseMessage<TACResponse> newTACResponse(TACRequest tacRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/users/tac");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<TACResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/tac");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -906,14 +1010,7 @@ public class WebServices  {
                 reader = new InputStreamReader(connection.getInputStream());
             }
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
-
-            Gson gson = builder.create();
+            Gson gson = builder.getDatebuilder().create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<TACResponse>>() {}.getType());
 
 
@@ -930,8 +1027,15 @@ public class WebServices  {
 
     public ResponseMessage<UploadImageResponse> newUploadImage(UploadImageRequest uploadImageRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/users/upload-image");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<UploadImageResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/upload-image");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -963,14 +1067,7 @@ public class WebServices  {
                 reader = new InputStreamReader(connection.getInputStream());
             }
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
-
-            Gson gson = builder.create();
+            Gson gson = builder.getDatebuilder().create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<UploadImageResponse>>() {}.getType());
 
 
@@ -988,8 +1085,15 @@ public class WebServices  {
 
     public ResponseMessage<GetUserIdTokenResponse> newGetUserIdTokenResponse(GetUserIdTokenRequest getUserIdTokenRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/users/get-user-id-token");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<GetUserIdTokenResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/get-user-id-token");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -1021,14 +1125,7 @@ public class WebServices  {
                 reader = new InputStreamReader(connection.getInputStream());
             }
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
-
-            Gson gson = builder.create();
+            Gson gson = builder.getDatebuilder().create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<GetUserIdTokenResponse>>() {}.getType());
 
 
@@ -1046,8 +1143,15 @@ public class WebServices  {
 
     public ResponseMessage<TACAcceptResponse> newTACAcceptResponse(TACAcceptRequest tacAcceptRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/users/tacaccept");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<TACAcceptResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/tacaccept");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -1079,14 +1183,7 @@ public class WebServices  {
                 reader = new InputStreamReader(connection.getInputStream());
             }
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
-
-            Gson gson = builder.create();
+            Gson gson = builder.getDatebuilder().create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<TACAcceptResponse>>() {}.getType());
 
         } catch (Exception e) {
@@ -1102,8 +1199,15 @@ public class WebServices  {
 
     public ResponseMessage<UserProfileResponse> newGetUserProfile(UserProfileRequest userProfileRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/users/profile");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<UserProfileResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/profile");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -1135,14 +1239,7 @@ public class WebServices  {
                 reader = new InputStreamReader(connection.getInputStream());
             }
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
-
-            Gson gson = builder.create();
+            Gson gson = builder.getDatebuilder().create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<UserProfileResponse>>() {}.getType());
 
         } catch (Exception e) {
@@ -1158,8 +1255,15 @@ public class WebServices  {
 
     public ResponseMessage<VerifyAccountResponse> newVerifyAccountResponse(VerifyAccountRequest verifyAccountRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/customers/verify-account");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<VerifyAccountResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/customers/verify-account");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -1191,14 +1295,7 @@ public class WebServices  {
                 reader = new InputStreamReader(connection.getInputStream());
             }
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
-
-            Gson gson = builder.create();
+            Gson gson = builder.getDatebuilder().create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<VerifyAccountResponse>>() {}.getType());
 
         } catch (Exception e) {
@@ -1214,8 +1311,15 @@ public class WebServices  {
 
     public ResponseMessage<VerifyTransferMoneyResponse> newVerifyTransferMoneyResponse(VerifyTransferMoneyRequest verifyTransferMoneyRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/customers/verify-xfer");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<VerifyTransferMoneyResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/customers/verify-xfer");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -1247,14 +1351,7 @@ public class WebServices  {
                 reader = new InputStreamReader(connection.getInputStream());
             }
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
-
-            Gson gson = builder.create();
+            Gson gson = builder.getDatebuilder().create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<VerifyTransferMoneyResponse>>() {}.getType());
 
         } catch (Exception e) {
@@ -1270,8 +1367,15 @@ public class WebServices  {
 
     public ResponseMessage<TransactionListResponse> newGetUserTransaction(TransactionListRequest transactionListRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/transactions");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<TransactionListResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/transactions");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -1306,14 +1410,7 @@ public class WebServices  {
                 reader = new InputStreamReader(connection.getInputStream());
             }
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
-
-            Gson gson = builder.create();
+            Gson gson = builder.getDatebuilder().create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<TransactionListResponse>>() {}.getType());
 
         } catch (Exception e) {
@@ -1329,8 +1426,15 @@ public class WebServices  {
 
     public ResponseMessage<ContactsHampayEnabledResponse> newGetEnabledHamPayContacts(ContactsHampayEnabledRequest contactsHampayEnabledRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/customer/contacts/hp-enabled");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<ContactsHampayEnabledResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/customer/contacts/hp-enabled");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -1370,14 +1474,7 @@ public class WebServices  {
                 reader = new InputStreamReader(connection.getInputStream());
             }
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
-
-            Gson gson = builder.create();
+            Gson gson = builder.getDatebuilder().create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<ContactsHampayEnabledResponse>>() {}.getType());
 
         } catch (Exception e) {
@@ -1393,8 +1490,15 @@ public class WebServices  {
 
     public ResponseMessage<IndividualPaymentConfirmResponse> newIndividualPaymentConfirm(IndividualPaymentConfirmRequest individualPaymentConfirmRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/customers/individual-payment-confirm");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<IndividualPaymentConfirmResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/customers/individual-payment-confirm");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -1426,14 +1530,7 @@ public class WebServices  {
                 reader = new InputStreamReader(connection.getInputStream());
             }
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
-
-            Gson gson = builder.create();
+            Gson gson = builder.getDatebuilder().create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<IndividualPaymentConfirmResponse>>() {}.getType());
 
         } catch (Exception e) {
@@ -1448,8 +1545,15 @@ public class WebServices  {
 
     public ResponseMessage<IndividualPaymentResponse> newIndividualPayment(IndividualPaymentRequest individualPaymentRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/customers/individual-payment");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<IndividualPaymentResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/customers/individual-payment");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -1486,14 +1590,7 @@ public class WebServices  {
                 reader = new InputStreamReader(connection.getInputStream());
             }
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
-
-            Gson gson = builder.create();
+            Gson gson = builder.getDatebuilder().create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<IndividualPaymentResponse>>() {}.getType());
 
         } catch (Exception e) {
@@ -1509,8 +1606,15 @@ public class WebServices  {
 
     public ResponseMessage<BusinessListResponse> newGetHamPayBusiness(BusinessListRequest businessListRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/businesses");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<BusinessListResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/businesses");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -1547,14 +1651,7 @@ public class WebServices  {
                 reader = new InputStreamReader(connection.getInputStream());
             }
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
-
-            Gson gson = builder.create();
+            Gson gson = builder.getDatebuilder().create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<BusinessListResponse>>() {}.getType());
 
         } catch (Exception e) {
@@ -1570,8 +1667,15 @@ public class WebServices  {
 
     public ResponseMessage<BusinessPaymentConfirmResponse> newBusinessPaymentConfirm(BusinessPaymentConfirmRequest businessPaymentConfirmRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/payment/info");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<BusinessPaymentConfirmResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/payment/info");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -1604,14 +1708,7 @@ public class WebServices  {
                 reader = new InputStreamReader(connection.getInputStream());
             }
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
-
-            Gson gson = builder.create();
+            Gson gson = builder.getDatebuilder().create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<BusinessPaymentConfirmResponse>>() {}.getType());
 
         } catch (Exception e) {
@@ -1627,8 +1724,15 @@ public class WebServices  {
 
     public ResponseMessage<BusinessPaymentResponse> newBusinessPayment(BusinessPaymentRequest businessPaymentRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/customers/business-payment");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<BusinessPaymentResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/customers/business-payment");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -1664,14 +1768,7 @@ public class WebServices  {
                 reader = new InputStreamReader(connection.getInputStream());
             }
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
-
-            Gson gson = builder.create();
+            Gson gson = builder.getDatebuilder().create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<BusinessPaymentResponse>>() {}.getType());
 
         } catch (Exception e) {
@@ -1688,8 +1785,15 @@ public class WebServices  {
 
     public ResponseMessage<BusinessListResponse> newSearchBusinessList(BusinessSearchRequest businessSearchRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/search");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<BusinessListResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/search");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -1723,14 +1827,7 @@ public class WebServices  {
                 reader = new InputStreamReader(connection.getInputStream());
             }
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
-
-            Gson gson = builder.create();
+            Gson gson = builder.getDatebuilder().create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<BusinessListResponse>>() {}.getType());
 
         } catch (Exception e) {
@@ -1749,9 +1846,16 @@ public class WebServices  {
 
     public ResponseMessage<ChangePassCodeResponse> changePassCodeResponse(ChangePassCodeRequest changePassCodeRequest) {
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/users/passcode");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<ChangePassCodeResponse> responseMessage = null;
 
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/passcode");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -1801,9 +1905,16 @@ public class WebServices  {
 
     public ResponseMessage<ChangeMemorableWordResponse> changeMemorableWordResponse(ChangeMemorableWordRequest changeMemorableWordRequest) {
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/users/memorable-word");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<ChangeMemorableWordResponse> responseMessage = null;
 
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/memorable-word");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -1856,9 +1967,16 @@ public class WebServices  {
 
     public ResponseMessage<UnlinkUserResponse> unlinkUserResponse(UnlinkUserRequest unlinkUserRequest) {
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/users/unlink");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<UnlinkUserResponse> responseMessage = null;
 
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/unlink");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -1913,9 +2031,16 @@ public class WebServices  {
 
     public ResponseMessage<ChangeEmailResponse> changeEmailResponse(ChangeEmailRequest changeEmailRequest) {
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/users/change-email");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<ChangeEmailResponse> responseMessage = null;
 
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/change-email");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -1969,7 +2094,15 @@ public class WebServices  {
     }
 
 
-    public Bitmap newImageDownloader(String url){
+    public Bitmap newImageDownloader(String stringUrl) {
+
+        URL url = null;
+        try {
+            url = new URL(stringUrl);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         Bitmap bitmap = null;
         SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
@@ -2006,8 +2139,15 @@ public class WebServices  {
 
     public ResponseMessage<LatestPurchaseResponse> newLatestPurchaseResponse(LatestPurchaseRequest latestPurchaseRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/purchase/latest");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<LatestPurchaseResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/purchase/latest");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -2039,14 +2179,7 @@ public class WebServices  {
                 reader = new InputStreamReader(connection.getInputStream());
             }
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
-
-            Gson gson = builder.create();
+            Gson gson = builder.getDatebuilder().create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<LatestPurchaseResponse>>() {}.getType());
 
 
@@ -2063,8 +2196,15 @@ public class WebServices  {
 
     public ResponseMessage<PSPResultResponse> newPSPResultResponse(PSPResultRequest pspResultRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/purchase/psp-result");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<PSPResultResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/purchase/psp-result");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -2096,14 +2236,7 @@ public class WebServices  {
                 reader = new InputStreamReader(connection.getInputStream());
             }
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
-
-            Gson gson = builder.create();
+            Gson gson = builder.getDatebuilder().create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<PSPResultResponse>>() {}.getType());
 
 
@@ -2120,8 +2253,15 @@ public class WebServices  {
 
     public ResponseMessage<PendingPurchaseListResponse> newPendingPurchase(PendingPurchaseListRequest pendingPurchaseListRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/purchase/pendingList");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<PendingPurchaseListResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/purchase/pendingList");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -2153,14 +2293,7 @@ public class WebServices  {
                 reader = new InputStreamReader(connection.getInputStream());
             }
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
-
-            Gson gson = builder.create();
+            Gson gson = builder.getDatebuilder().create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<PendingPurchaseListResponse>>() {}.getType());
 
 
@@ -2178,8 +2311,15 @@ public class WebServices  {
 
     public ResponseMessage<PendingPaymentListResponse> newPendingPayment(PendingPaymentListRequest pendingPaymentListRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/payment/pendingList");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<PendingPaymentListResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/payment/pendingList");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -2211,14 +2351,7 @@ public class WebServices  {
                 reader = new InputStreamReader(connection.getInputStream());
             }
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
-
-            Gson gson = builder.create();
+            Gson gson = builder.getDatebuilder().create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<PendingPaymentListResponse>>() {}.getType());
 
 
@@ -2235,8 +2368,15 @@ public class WebServices  {
 
     public ResponseMessage<CancelPurchasePaymentResponse> newCancelPurchasePaymentResponse(CancelPurchasePaymentRequest cancelPurchasePaymentRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/purchase/cancel");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<CancelPurchasePaymentResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/purchase/cancel");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -2268,14 +2408,7 @@ public class WebServices  {
                 reader = new InputStreamReader(connection.getInputStream());
             }
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
-
-            Gson gson = builder.create();
+            Gson gson = builder.getDatebuilder().create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<CancelPurchasePaymentResponse>>() {}.getType());
 
 
@@ -2293,8 +2426,15 @@ public class WebServices  {
 
     public ResponseMessage<UserPaymentResponse> newUserPaymentResponse(UserPaymentRequest userPaymentRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/users/credit-request");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<UserPaymentResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/users/credit-request");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -2326,14 +2466,7 @@ public class WebServices  {
                 reader = new InputStreamReader(connection.getInputStream());
             }
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
-
-            Gson gson = builder.create();
+            Gson gson = builder.getDatebuilder().create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<UserPaymentResponse>>() {}.getType());
 
 
@@ -2351,8 +2484,15 @@ public class WebServices  {
 
     public ResponseMessage<IBANConfirmationResponse> newIBANConfirmation(IBANConfirmationRequest ibanConfirmationRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/iban/confirmation");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<IBANConfirmationResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/iban/confirmation");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -2384,14 +2524,8 @@ public class WebServices  {
                 reader = new InputStreamReader(connection.getInputStream());
             }
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
+            Gson gson = builder.getDatebuilder().create();
 
-            Gson gson = builder.create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<IBANConfirmationResponse>>() {}.getType());
 
 
@@ -2410,8 +2544,15 @@ public class WebServices  {
 
     public ResponseMessage<IBANChangeResponse> newIBANChange(IBANChangeRequest ibanChangeRequest){
 
+        URL url = null;
+        try {
+            url = new URL(Constants.HTTPS_SERVER_IP + "/iban/change");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
         ResponseMessage<IBANChangeResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/iban/change");
+        SSLConnection sslConnection = new SSLConnection(context, url);
         HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
 
         try {
@@ -2443,14 +2584,8 @@ public class WebServices  {
                 reader = new InputStreamReader(connection.getInputStream());
             }
 
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
+            Gson gson = builder.getDatebuilder().create();
 
-            Gson gson = builder.create();
             responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<IBANChangeResponse>>() {}.getType());
 
 
@@ -2465,68 +2600,10 @@ public class WebServices  {
         return responseMessage;
     }
 
-    public ResponseMessage<CardProfileResponse> newCardProfile(CardProfileRequest cardProfileRequest){
+    public ResponseMessage<CardProfileResponse> getCardProfile(CardProfileRequest cardProfileRequest) throws IOException {
 
-        ResponseMessage<CardProfileResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, Constants.HTTPS_SERVER_IP + "/card/info");
-        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
-
-        try {
-
-            RequestHeader header = new RequestHeader();
-            header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion(Constants.REQUEST_VERSION);
-
-            RequestMessage<CardProfileRequest> message = new RequestMessage<CardProfileRequest>();
-            message.setRequestHeader(header);
-            CardProfileRequest request = cardProfileRequest;
-            request.setRequestUUID(UUID.randomUUID().toString());
-            message.setService(request);
-
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<CardProfileRequest>>() {}.getType();
-            String jsonRequest = new Gson().toJson(message, requestType);
-            connection.setRequestMethod("POST");
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(jsonRequest.getBytes());
-            outputStream.flush();
-
-            String encoding = connection.getHeaderField("Content-Encoding");
-            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
-            InputStreamReader reader;
-            if (gzipped){
-                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-                reader = new InputStreamReader(gzipInputStream);
-            }else {
-                reader = new InputStreamReader(connection.getInputStream());
-            }
-
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-                public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
-                }
-            });
-
-            Gson gson = builder.create();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<CardProfileResponse>>() {}.getType());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            if (connection != null)
-                connection.disconnect();
-        }
-        return responseMessage;
-    }
-
-    public ResponseMessage<CardProfileResponse> newHttpCardProfile(CardProfileRequest cardProfileRequest) throws IOException {
-
-
-        ProxyService proxyService = new ProxyService(ConnectionType.HTTP, ConnectionMethod.POST);
-        URL url = new URL(Constants.HTTP_SERVER_IP + "/card/info");
-
-        ResponseMessage<CardProfileResponse> responseMessage = null;
+        url = new URL(ServiceURL + "/card/info");
+        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         RequestHeader header = new RequestHeader();
         header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
@@ -2534,27 +2611,17 @@ public class WebServices  {
 
         RequestMessage<CardProfileRequest> message = new RequestMessage<CardProfileRequest>();
         message.setRequestHeader(header);
-        CardProfileRequest request = cardProfileRequest;
-        request.setRequestUUID(UUID.randomUUID().toString());
-        message.setService(request);
+        cardProfileRequest.setRequestUUID(UUID.randomUUID().toString());
+        message.setService(cardProfileRequest);
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<CardProfileRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-            public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                return new Date(json.getAsJsonPrimitive().getAsLong());
-            }
-        });
+        Gson gson = builder.getDatebuilder().create();
 
-        Gson gson = builder.create();
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(url), new TypeToken<ResponseMessage<CardProfileResponse>>() {}.getType());
+        return  gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<CardProfileResponse>>() {}.getType());
 
-        proxyService.closeConnection();
-
-        return responseMessage;
     }
 
 }

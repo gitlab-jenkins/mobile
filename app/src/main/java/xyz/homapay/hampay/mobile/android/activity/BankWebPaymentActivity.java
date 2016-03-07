@@ -98,10 +98,8 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
             public void onPageFinished(WebView view, String url) {
 
-                android.util.Log.e("Page-Title", view.getTitle());
-
                 if (url.equalsIgnoreCase(redirectedURL)){
-                    new HamPayDialog(activity).pspResultDialog(pspInfoDTO.getProductCode());
+                    new HamPayDialog(activity).pspResultDialog(view.getTitle());
                 }
 
                 hamPayDialog.dismisWaitingDialog();

@@ -1,5 +1,7 @@
 package xyz.homapay.hampay.mobile.android.webservice;
 
+import android.content.Context;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -7,6 +9,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.zip.GZIPInputStream;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import xyz.homapay.hampay.mobile.android.ssl.SSLConnection;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -16,24 +20,27 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
  */
 public class ProxyService {
 
+    private Context context;
     private HttpURLConnection httpURLConnection;
-    private SSLConnection httpsURLConnection;
+    private HttpsURLConnection httpsURLConnection;
     private ConnectionType type;
     private ConnectionMethod method;
-    private InputStream inputStream;
     private String jsonBody;
+    private URL url;
 
     public void setJsonBody(String jsonBody){
         this.jsonBody = jsonBody;
     }
 
-    public ProxyService(ConnectionType type, ConnectionMethod method){
+    public ProxyService(Context context, ConnectionType type, ConnectionMethod method, URL url){
+        this.context = context;
         this.type = type;
         this.method = method;
+        this.url = url;
     }
 
 
-    public InputStreamReader getInputStreamReader(URL url) throws IOException {
+    public InputStreamReader getInputStreamReader() throws IOException {
 
         OutputStream outputStream;
         String encoding;
@@ -61,7 +68,19 @@ public class ProxyService {
                 break;
 
             case HTTPS:
-
+                httpsURLConnection = new SSLConnection(context, url).setUpHttpsURLConnection();
+                httpsURLConnection.setRequestMethod(method.name());
+                outputStream = httpsURLConnection.getOutputStream();
+                outputStream.write(jsonBody.getBytes());
+                outputStream.flush();
+                encoding = httpsURLConnection.getHeaderField("Content-Encoding");
+                gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
+                if (gzipped){
+                    InputStream gzipInputStream = new GZIPInputStream(httpsURLConnection.getInputStream());
+                    inputStreamReader = new InputStreamReader(gzipInputStream);
+                }else {
+                    inputStreamReader = new InputStreamReader(httpsURLConnection.getInputStream());
+                }
                 break;
         }
 
