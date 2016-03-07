@@ -2605,9 +2605,7 @@ public class WebServices  {
         url = new URL(ServiceURL + "/card/info");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new RequestHeader();
-        header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-        header.setVersion(Constants.REQUEST_VERSION);
+        RequestHeader header = new CreateHeader("", Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<CardProfileRequest> message = new RequestMessage<CardProfileRequest>();
         message.setRequestHeader(header);
