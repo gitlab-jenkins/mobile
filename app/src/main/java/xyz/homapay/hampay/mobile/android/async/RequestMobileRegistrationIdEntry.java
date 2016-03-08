@@ -3,9 +3,12 @@ package xyz.homapay.hampay.mobile.android.async;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import java.io.IOException;
+
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
 import xyz.homapay.hampay.common.core.model.response.MobileRegistrationIdEntryResponse;
+import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.webservice.WebServices;
 
 /**
@@ -34,8 +37,13 @@ public class RequestMobileRegistrationIdEntry extends AsyncTask<MobileRegistrati
     @Override
     protected ResponseMessage<MobileRegistrationIdEntryResponse> doInBackground(MobileRegistrationIdEntryRequest... params) {
 
-        WebServices webServices = new WebServices(context);
-        return webServices.newRegistrationDeviceRegId(params[0]);
+        WebServices webServices = new WebServices(context, Constants.CONNECTION_TYPE);
+        try {
+            return webServices.registrationDeviceRegId(params[0]);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

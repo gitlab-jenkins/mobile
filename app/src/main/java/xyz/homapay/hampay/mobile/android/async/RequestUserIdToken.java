@@ -3,10 +3,13 @@ package xyz.homapay.hampay.mobile.android.async;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import java.io.IOException;
+
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
 import xyz.homapay.hampay.common.core.model.response.GetUserIdTokenResponse;
 
+import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.webservice.WebServices;
 
 /**
@@ -36,9 +39,14 @@ public class RequestUserIdToken extends AsyncTask<GetUserIdTokenRequest, Void, R
     @Override
     protected ResponseMessage<GetUserIdTokenResponse> doInBackground(GetUserIdTokenRequest... params) {
 
-        WebServices webServices = new WebServices(context);
+        WebServices webServices = new WebServices(context, Constants.CONNECTION_TYPE);
 
-        return webServices.newGetUserIdTokenResponse(params[0]);
+        try {
+            return webServices.getUserIdTokenResponse(params[0]);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

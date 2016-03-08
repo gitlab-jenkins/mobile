@@ -3,9 +3,12 @@ package xyz.homapay.hampay.mobile.android.async;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import java.io.IOException;
+
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.psp.model.request.RegisterCardRequest;
 import xyz.homapay.hampay.common.psp.model.response.RegisterCardResponse;
+import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.webservice.WebServices;
 
 /**
@@ -35,9 +38,14 @@ public class RequestRegisterCard extends AsyncTask<RegisterCardRequest, Void, Re
     @Override
     protected ResponseMessage<RegisterCardResponse> doInBackground(RegisterCardRequest... params) {
 
-        WebServices webServices = new WebServices(context);
+        WebServices webServices = new WebServices(context, Constants.CONNECTION_TYPE);
 
-        return webServices.newRegisterCardResponse(params[0]);
+        try {
+            return webServices.newRegisterCardResponse(params[0]);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

@@ -3,12 +3,15 @@ package xyz.homapay.hampay.mobile.android.async;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import java.io.IOException;
+
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.dto.DeviceDTO;
 import xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
 import xyz.homapay.hampay.common.core.model.response.RegistrationEntryResponse;
 
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.webservice.WebServices;
 
@@ -67,8 +70,13 @@ public class RequestRegistrationEntry extends AsyncTask<RegistrationEntryRequest
         params[0].setDeviceDTO(deviceDTO);
 
 
-        WebServices webServices = new WebServices(context);
-        return webServices.newRegistrationEntry(params[0]);
+        WebServices webServices = new WebServices(context, Constants.CONNECTION_TYPE);
+        try {
+            return webServices.registrationEntry(params[0]);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

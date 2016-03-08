@@ -74,6 +74,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
         WebSettings settings = bankWebView.getSettings();
 
+
         settings.setJavaScriptEnabled(true);
         bankWebView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 
@@ -94,15 +95,22 @@ public class BankWebPaymentActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+
+
         bankWebView.setWebViewClient(new WebViewClient() {
 
             public void onPageFinished(WebView view, String url) {
 
                 if (url.equalsIgnoreCase(redirectedURL)){
-                    new HamPayDialog(activity).pspResultDialog(view.getTitle());
+                    if (view.getTitle().equalsIgnoreCase("failure")){
+                        hamPayDialog.businessPaymentFailDialog();
+                    }else {
+                        hamPayDialog.businessPaymentSuccessDialog(view.getTitle());
+                    }
                 }
-
-                hamPayDialog.dismisWaitingDialog();
+                else {
+                    hamPayDialog.dismisWaitingDialog();
+                }
             }
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error){
                 handler.proceed();

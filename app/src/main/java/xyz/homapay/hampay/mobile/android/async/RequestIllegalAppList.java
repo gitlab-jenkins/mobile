@@ -4,9 +4,12 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import java.io.IOException;
+
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.request.IllegalAppListRequest;
 import xyz.homapay.hampay.common.core.model.response.IllegalAppListResponse;
+import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.webservice.WebServices;
 import xyz.homapay.hampay.mobile.android.webservice.psp.PayThPartyApp;
 import xyz.homapay.hampay.mobile.android.webservice.psp.Vectorstring2stringMapEntry;
@@ -39,25 +42,14 @@ public class RequestIllegalAppList extends AsyncTask<IllegalAppListRequest, Void
     @Override
     protected ResponseMessage<IllegalAppListResponse> doInBackground(IllegalAppListRequest... params) {
 
-        WebServices webServices = new WebServices(context);
+        WebServices webServices = new WebServices(context, Constants.CONNECTION_TYPE);
 
-//        try {
-//
-//            Vectorstring2stringMapEntry vectorstring2stringMapEntry = new Vectorstring2stringMapEntry();
-//            string2stringMapEntry string2stringMapEntry1 = new string2stringMapEntry();
-//            string2stringMapEntry1.key = "iraj";
-//            string2stringMapEntry1.value = "2423423";
-//            vectorstring2stringMapEntry.add(string2stringMapEntry1);
-//
-//            PayThPartyApp payThPartyApp = new PayThPartyApp(context);
-//            Vectorstring2stringMapEntry string2stringMapEntries = payThPartyApp.DoWork("test", "1234", "09126157905", 0, false, vectorstring2stringMapEntry);
-//
-//            Log.e("SOAP", "Baghali");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
-        return webServices.getIllegalAppList();
+        try {
+            return webServices.getIllegalAppList();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

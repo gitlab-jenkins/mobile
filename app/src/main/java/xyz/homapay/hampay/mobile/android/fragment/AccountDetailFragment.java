@@ -33,12 +33,10 @@ import xyz.homapay.hampay.mobile.android.activity.MainActivity;
 import xyz.homapay.hampay.mobile.android.activity.PayOneActivity;
 import xyz.homapay.hampay.mobile.android.activity.RequestPayBusinessListActivity;
 import xyz.homapay.hampay.mobile.android.activity.RequestBusinessPayDetailActivity;
-import xyz.homapay.hampay.mobile.android.activity.VerifyAccountActivity;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.RequestUserProfile;
-import xyz.homapay.hampay.mobile.android.async.RequestVerifyAccount;
 import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
@@ -64,8 +62,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     String user_image_url = "";
 
     PersianEnglishDigit persianEnglishDigit;
-
-    LinearLayout verification_status_ll;
 
     ImageView user_image;
     FacedTextView user_name_text;
@@ -119,7 +115,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
     HamPayDialog hamPayDialog;
 
-    ButtonRectangle verify_account_button;
     ButtonRectangle intro_account_button;
 
     UserProfileDTO userProfileDTO;
@@ -128,9 +123,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
-
-    RequestVerifyAccount requestVerifyAccount;
-    VerifyAccountRequest verifyAccountRequest;
 
     RequestUserProfile requestUserProfile;
     UserProfileRequest userProfileRequest;
@@ -247,8 +239,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         backspace = (RippleView)rootView.findViewById(R.id.backspace);
         backspace.setOnClickListener(this);
 
-        verification_status_ll = (LinearLayout)rootView.findViewById(R.id.verification_status_ll);
-
 //        image_profile = (CircleImageView)rootView.findViewById(R.id.image_profile);
 
         String URL = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
@@ -284,16 +274,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                 Intent intent = new Intent();
                 intent.setClass(context, IntroIBANActivity.class);
                 startActivityForResult(intent, 1023);
-            }
-        });
-
-        verify_account_button = (ButtonRectangle)rootView.findViewById(R.id.verify_account_button);
-        verify_account_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                verifyAccountRequest = new VerifyAccountRequest();
-                requestVerifyAccount = new RequestVerifyAccount(getActivity(), new RequestVerifyAccountTaskCompleteListener());
-                requestVerifyAccount.execute(verifyAccountRequest);
             }
         });
 
@@ -340,12 +320,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
             if (!requestUserProfile.isCancelled())
                 requestUserProfile.cancel(true);
         }
-        if (requestVerifyAccount != null){
-            if (!requestVerifyAccount.isCancelled()){
-                requestVerifyAccount.cancel(true);
-            }
-        }
-
     }
 
     @Override
@@ -690,67 +664,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         public void onTaskPreRun() {
             hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
             hide_bg.setVisibility(View.VISIBLE);
-        }
-    }
-
-
-    public class RequestVerifyAccountTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<VerifyAccountResponse>>
-    {
-        public RequestVerifyAccountTaskCompleteListener(){
-        }
-
-        @Override
-        public void onTaskComplete(ResponseMessage<VerifyAccountResponse> verifyAccountResponseMessage)
-        {
-            hamPayDialog.dismisWaitingDialog();
-            if (verifyAccountResponseMessage != null) {
-
-                if (verifyAccountResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-
-                    Intent intent = new Intent();
-                    intent.setClass(getActivity(), VerifyAccountActivity.class);
-                    intent.putExtra(Constants.TRANSFER_MONEY_COMMENT, verifyAccountResponseMessage.getService().getTransferMoneyComment());
-                    startActivityForResult(intent, 1023);
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Verify Account")
-                            .setAction("Verify")
-                            .setLabel("Success")
-                            .build());
-
-                }
-                else{
-                    hamPayDialog.dismisWaitingDialog();
-                    requestVerifyAccount = new RequestVerifyAccount(getActivity(), new RequestVerifyAccountTaskCompleteListener());
-                    new HamPayDialog(getActivity()).showFailVerifyAccountDialog(requestVerifyAccount, verifyAccountRequest,
-                            verifyAccountResponseMessage.getService().getResultStatus().getCode(),
-                            verifyAccountResponseMessage.getService().getResultStatus().getDescription());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Verify Account")
-                            .setAction("Verify")
-                            .setLabel("Fail(Server)")
-                            .build());
-                }
-            }
-            else {
-                hamPayDialog.dismisWaitingDialog();
-                requestVerifyAccount = new RequestVerifyAccount(getActivity(), new RequestVerifyAccountTaskCompleteListener());
-                new HamPayDialog(getActivity()).showFailVerifyAccountDialog(requestVerifyAccount, verifyAccountRequest,
-                        Constants.LOCAL_ERROR_CODE,
-                        getString(R.string.msg_fail_verify_account));
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Verify Account")
-                        .setAction("Verify")
-                        .setLabel("Fail(Mobile)")
-                        .build());
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 

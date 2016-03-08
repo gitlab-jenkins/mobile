@@ -3,9 +3,12 @@ package xyz.homapay.hampay.mobile.android.async;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import java.io.IOException;
+
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
 import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
+import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.webservice.WebServices;
 
 /**
@@ -35,8 +38,13 @@ public class RequestUserProfile extends AsyncTask<UserProfileRequest, Void, Resp
     protected ResponseMessage<UserProfileResponse> doInBackground(UserProfileRequest... params) {
 
 
-        WebServices webServices = new WebServices(context);
-        return webServices.newGetUserProfile(params[0]);
+        WebServices webServices = new WebServices(context, Constants.CONNECTION_TYPE);
+        try {
+            return webServices.getUserProfile(params[0]);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

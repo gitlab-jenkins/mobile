@@ -3,9 +3,12 @@ package xyz.homapay.hampay.mobile.android.async;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import java.io.IOException;
+
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.request.TACRequest;
 import xyz.homapay.hampay.common.core.model.response.TACResponse;
+import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.webservice.WebServices;
 
 /**
@@ -35,9 +38,14 @@ public class RequestTAC extends AsyncTask<TACRequest, Void, ResponseMessage<TACR
     @Override
     protected ResponseMessage<TACResponse> doInBackground(TACRequest... params) {
 
-        WebServices webServices = new WebServices(context);
+        WebServices webServices = new WebServices(context, Constants.CONNECTION_TYPE);
 
-        return webServices.newTACResponse(params[0]);
+        try {
+            return webServices.tacResponse(params[0]);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

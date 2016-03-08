@@ -6,31 +6,22 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Date;
 import java.util.UUID;
 import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -121,9 +112,9 @@ import xyz.homapay.hampay.common.psp.model.response.RegisterCardResponse;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
-import xyz.homapay.hampay.mobile.android.ssl.NullHostNameVerifier;
 import xyz.homapay.hampay.mobile.android.ssl.SSLConnection;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.GZip;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.UserContacts;
 import xyz.homapay.hampay.mobile.android.webservice.psp.PayThPartyApp;
@@ -168,6 +159,7 @@ public class WebServices  {
 
     public LogoutResponse sendLogoutRequest(LogoutData logoutData) throws Exception {
 
+
         URL url = new URL(Constants.HTTPSOPENAM_LOGOUT_URL);
 
         SSLConnection sslConnection = new SSLConnection(context, url);
@@ -207,1219 +199,382 @@ public class WebServices  {
         return (LogoutResponse) gson.fromJson(responseElement.toString(), listType);
     }
 
-    public ResponseMessage<IllegalAppListResponse> getIllegalAppList() {
-
-        URL url = null;
-        try {
-            url = new URL(Constants.HTTPS_SERVER_IP + "/illegal-apps");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+    public ResponseMessage<IllegalAppListResponse> getIllegalAppList() throws IOException{
 
         ResponseMessage<IllegalAppListResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, url);
-        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+        url = new URL(ServiceURL + "/illegal-apps");
+        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        try {
+        RequestHeader header = new CreateHeader("", Constants.REQUEST_VERSION).createHeader();
 
-            RequestHeader header = new RequestHeader();
-            header.setVersion(Constants.REQUEST_VERSION);
+        RequestMessage<IllegalAppListRequest> message = new RequestMessage<>();
+        message.setRequestHeader(header);
+        IllegalAppListRequest illegalAppListRequest = new IllegalAppListRequest();
+        illegalAppListRequest.setRequestUUID(UUID.randomUUID().toString());
+        message.setService(illegalAppListRequest);
 
-            RequestMessage<IllegalAppListRequest> message = new RequestMessage<IllegalAppListRequest>();
-            message.setRequestHeader(header);
-            IllegalAppListRequest request = new IllegalAppListRequest();
-            request.setRequestUUID(UUID.randomUUID().toString());
-            message.setService(request);
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<IllegalAppListRequest>>() {}.getType();
-            String jsonRequest = new Gson().toJson(message, requestType);
-            connection.setRequestMethod("POST");
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(jsonRequest.getBytes());
-            outputStream.flush();
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<IllegalAppListRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
 
-            String encoding = connection.getHeaderField("Content-Encoding");
-            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
-            InputStreamReader reader;
-            if (gzipped){
-                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-                reader = new InputStreamReader(gzipInputStream);
-            }else {
-                reader = new InputStreamReader(connection.getInputStream());
-            }
+        Gson gson = new Gson();
 
-            Gson gson = new Gson();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<IllegalAppListResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<IllegalAppListResponse>>() {}.getType());
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        finally {
-            if (connection != null)
-                connection.disconnect();
-        }
+        proxyService.closeConnection();
 
-        return responseMessage;
+        return  responseMessage;
     }
 
-    public ResponseMessage<BankListResponse> getBankList() {
-
-        URL url = null;
-        try {
-            url = new URL(Constants.HTTPS_SERVER_IP + "/banks");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        ResponseMessage<BankListResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, url);
-        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
-
-        try {
-
-            RequestHeader header = new RequestHeader();
-            header.setVersion(Constants.REQUEST_VERSION);
-
-            RequestMessage<BankListRequest> message = new RequestMessage<BankListRequest>();
-            message.setRequestHeader(header);
-            BankListRequest request = new BankListRequest();
-            request.setRequestUUID(UUID.randomUUID().toString());
-            message.setService(request);
-
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<BankListRequest>>() {}.getType();
-            String jsonRequest = new Gson().toJson(message, requestType);
-            connection.setRequestMethod("POST");
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(jsonRequest.getBytes());
-            outputStream.flush();
-
-            String encoding = connection.getHeaderField("Content-Encoding");
-            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
-            InputStreamReader reader;
-            if (gzipped){
-                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-                reader = new InputStreamReader(gzipInputStream);
-            }else {
-                reader = new InputStreamReader(connection.getInputStream());
-            }
-
-            Gson gson = new Gson();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<BankListResponse>>() {}.getType());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        finally {
-            if (connection != null)
-                connection.disconnect();
-        }
-        return responseMessage;
-    }
-
-    public ResponseMessage<RegistrationEntryResponse> newRegistrationEntry(RegistrationEntryRequest registrationEntryRequest) {
-
-        URL url = null;
-        try {
-            url = new URL(Constants.HTTPS_SERVER_IP + "/users/reg-entry");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+    public ResponseMessage<RegistrationEntryResponse> registrationEntry(RegistrationEntryRequest registrationEntryRequest) throws IOException {
 
         ResponseMessage<RegistrationEntryResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, url);
-        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+        url = new URL(ServiceURL + "/users/reg-entry");
+        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url, true);
 
-        try {
+        RequestHeader header = new CreateHeader("", Constants.REQUEST_VERSION).createHeader();
 
-            RequestHeader header = new RequestHeader();
-            header.setVersion(Constants.REQUEST_VERSION);
+        RequestMessage<RegistrationEntryRequest> message = new RequestMessage<>();
+        message.setRequestHeader(header);
+        registrationEntryRequest.setRequestUUID(UUID.randomUUID().toString());
+        message.setService(registrationEntryRequest);
 
-            RequestMessage<RegistrationEntryRequest> message = new RequestMessage<RegistrationEntryRequest>();
-            message.setRequestHeader(header);
-            RegistrationEntryRequest request = registrationEntryRequest;
-            request.setRequestUUID(UUID.randomUUID().toString());
-            message.setService(request);
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationEntryRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
 
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationEntryRequest>>() {}.getType();
-            String jsonRequest = new Gson().toJson(message, requestType);
-            connection.setRequestMethod("POST");
+        Gson gson = new Gson();
 
-            connection.setRequestProperty("Content-Encoding", "gzip");
-            connection.setRequestProperty("Accept-Encoding", "gzip");
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<RegistrationEntryResponse>>() {}.getType());
 
-            OutputStream outputStream = connection.getOutputStream();
+        proxyService.closeConnection();
 
-//            String raw = new String(decompress(gzip(jsonRequest.getBytes())));
-
-            outputStream.write(gzip(jsonRequest.getBytes()));
-            outputStream.flush();
-
-            String encoding = connection.getHeaderField("Content-Encoding");
-            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
-            InputStreamReader reader;
-            if (gzipped){
-                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-                reader = new InputStreamReader(gzipInputStream);
-            }else {
-                reader = new InputStreamReader(connection.getInputStream());
-            }
-
-            Gson gson = new Gson();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegistrationEntryResponse>>() {}.getType());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        finally {
-            if (connection != null)
-                connection.disconnect();
-        }
-        return responseMessage;
+        return  responseMessage;
     }
 
-    static byte[] gzip(byte[] input) {
-        GZIPOutputStream gzipOS = null;
-        try {
-            ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();
-            gzipOS = new GZIPOutputStream(byteArrayOS);
-            gzipOS.write(input);
-            gzipOS.flush();
-            gzipOS.close();
-            gzipOS = null;
+    public ResponseMessage<ContactUsResponse> contactUsResponse(ContactUsRequest contactUsRequest) throws IOException{
 
-            long size = byteArrayOS.size();
-
-            return byteArrayOS.toByteArray();
-        } catch (Exception e) {
-//            throw new WebbException(e); // <-- just a RuntimeException
-        } finally {
-            if (gzipOS != null) {
-                try { gzipOS.close(); } catch (Exception ignored) {}
-            }
-        }
-        return null;
-    }
-
-
-    public static String decompress(byte[] compressed) throws IOException {
-        final int BUFFER_SIZE = 32;
-        ByteArrayInputStream is = new ByteArrayInputStream(compressed);
-        GZIPInputStream gis = new GZIPInputStream(is, BUFFER_SIZE);
-        StringBuilder string = new StringBuilder();
-        byte[] data = new byte[BUFFER_SIZE];
-        int bytesRead;
-        while ((bytesRead = gis.read(data)) != -1) {
-            string.append(new String(data, 0, bytesRead));
-        }
-        gis.close();
-        is.close();
-        return string.toString();
-    }
-
-    public ResponseMessage<ContactUsResponse> newContactUsResponse(ContactUsRequest contactUsRequest){
-
-        URL url = null;
-        try {
-            url = new URL(Constants.HTTPS_SERVER_IP + "/contactus");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
 
         ResponseMessage<ContactUsResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, url);
-        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+        url = new URL(ServiceURL + "/contactus");
+        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        try {
+        RequestHeader header = new CreateHeader("", Constants.REQUEST_VERSION).createHeader();
 
-            RequestHeader header = new RequestHeader();
-            header.setVersion(Constants.REQUEST_VERSION);
+        RequestMessage<ContactUsRequest> message = new RequestMessage<>();
+        message.setRequestHeader(header);
+        contactUsRequest.setRequestUUID(UUID.randomUUID().toString());
+        message.setService(contactUsRequest);
 
-            RequestMessage<ContactUsRequest> message = new RequestMessage<ContactUsRequest>();
-            message.setRequestHeader(header);
-            ContactUsRequest request = contactUsRequest;
-            request.setRequestUUID(UUID.randomUUID().toString());
-            message.setService(request);
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<ContactUsRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
 
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<ContactUsRequest>>() {}.getType();
-            String jsonRequest = new Gson().toJson(message, requestType);
-            connection.setRequestMethod("POST");
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(jsonRequest.getBytes());
-            outputStream.flush();
+        Gson gson = new Gson();
 
-            String encoding = connection.getHeaderField("Content-Encoding");
-            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
-            InputStreamReader reader;
-            if (gzipped){
-                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-                reader = new InputStreamReader(gzipInputStream);
-            }else {
-                reader = new InputStreamReader(connection.getInputStream());
-            }
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<ContactUsResponse>>() {}.getType());
 
-            Gson gson = new Gson();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<ContactUsResponse>>() {}.getType());
+        proxyService.closeConnection();
 
-        } catch (IOException e) {e.printStackTrace();}
-        finally {
-            if (connection != null)
-                connection.disconnect();
-        }
-        return responseMessage;
+        return  responseMessage;
     }
 
-    public ResponseMessage<RegistrationSendSmsTokenResponse> newRegistrationSendSmsToken(RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest) {
-
-        URL url = null;
-        try {
-            url = new URL(Constants.HTTPS_SERVER_IP + "/users/reg-sms-token");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+    public ResponseMessage<RegistrationSendSmsTokenResponse> registrationSendSmsToken(RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest) throws IOException{
 
         ResponseMessage<RegistrationSendSmsTokenResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, url);
-        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+        url = new URL(ServiceURL + "/users/reg-sms-token");
+        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        try {
+        RequestHeader header = new CreateHeader("", Constants.REQUEST_VERSION).createHeader();
 
-            RequestHeader header = new RequestHeader();
-            header.setVersion(Constants.REQUEST_VERSION);
+        RequestMessage<RegistrationSendSmsTokenRequest> message = new RequestMessage<>();
+        message.setRequestHeader(header);
+        registrationSendSmsTokenRequest.setRequestUUID(UUID.randomUUID().toString());
+        message.setService(registrationSendSmsTokenRequest);
 
-            RequestMessage<RegistrationSendSmsTokenRequest> message = new RequestMessage<RegistrationSendSmsTokenRequest>();
-            message.setRequestHeader(header);
-            RegistrationSendSmsTokenRequest request = registrationSendSmsTokenRequest;
-            request.setRequestUUID(UUID.randomUUID().toString());
-            message.setService(request);
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationSendSmsTokenRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
 
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationSendSmsTokenRequest>>() {}.getType();
-            String jsonRequest = new Gson().toJson(message, requestType);
-            connection.setRequestMethod("POST");
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(jsonRequest.getBytes());
-            outputStream.flush();
+        Gson gson = new Gson();
 
-            String encoding = connection.getHeaderField("Content-Encoding");
-            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
-            InputStreamReader reader;
-            if (gzipped){
-                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-                reader = new InputStreamReader(gzipInputStream);
-            }else {
-                reader = new InputStreamReader(connection.getInputStream());
-            }
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<RegistrationSendSmsTokenResponse>>() {}.getType());
 
-            Gson gson = new Gson();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegistrationSendSmsTokenResponse>>() {}.getType());
+        proxyService.closeConnection();
 
-        } catch (IOException e) {e.printStackTrace();}
-        finally {
-            if (connection != null)
-                connection.disconnect();
-        }
         return responseMessage;
     }
 
 
-    public ResponseMessage<RegistrationVerifyMobileResponse> newRegistrationVerifyMobileResponse(RegistrationVerifyMobileRequest registrationVerifyMobileRequest) {
-
-        URL url = null;
-        try {
-            url = new URL(Constants.HTTPS_SERVER_IP + "/users/reg-verify-mobile");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+    public ResponseMessage<RegistrationVerifyMobileResponse> registrationVerifyMobileResponse(RegistrationVerifyMobileRequest registrationVerifyMobileRequest) throws IOException{
 
         ResponseMessage<RegistrationVerifyMobileResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, url);
-        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+        url = new URL(ServiceURL + "/users/reg-verify-mobile");
+        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        try {
+        RequestHeader header = new CreateHeader("", Constants.REQUEST_VERSION).createHeader();
 
-            RequestHeader header = new RequestHeader();
-            header.setVersion(Constants.REQUEST_VERSION);
+        RequestMessage<RegistrationVerifyMobileRequest> message = new RequestMessage<>();
+        message.setRequestHeader(header);
+        registrationVerifyMobileRequest.setRequestUUID(UUID.randomUUID().toString());
+        message.setService(registrationVerifyMobileRequest);
 
-            RequestMessage<RegistrationVerifyMobileRequest> message = new RequestMessage<RegistrationVerifyMobileRequest>();
-            message.setRequestHeader(header);
-            RegistrationVerifyMobileRequest request = registrationVerifyMobileRequest;
-            request.setRequestUUID(UUID.randomUUID().toString());
-            message.setService(request);
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationVerifyMobileRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
 
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationVerifyMobileRequest>>() {}.getType();
-            String jsonRequest = new Gson().toJson(message, requestType);
-            connection.setRequestMethod("POST");
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(jsonRequest.getBytes());
-            outputStream.flush();
+        Gson gson = new Gson();
 
-            String encoding = connection.getHeaderField("Content-Encoding");
-            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
-            InputStreamReader reader;
-            if (gzipped){
-                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-                reader = new InputStreamReader(gzipInputStream);
-            }else {
-                reader = new InputStreamReader(connection.getInputStream());
-            }
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<RegistrationVerifyMobileResponse>>() {}.getType());
 
-            Gson gson = new Gson();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegistrationVerifyMobileResponse>>() {}.getType());
+        proxyService.closeConnection();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        finally {
-            if (connection != null)
-                connection.disconnect();
-        }
         return responseMessage;
     }
 
 
-    public ResponseMessage<RegisterCardResponse> newRegisterCardResponse(RegisterCardRequest registerCardRequest){
-
-        URL url = null;
-        try {
-            url = new URL(Constants.HTTPS_SERVER_IP + "/psp/registerCard");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+    public ResponseMessage<RegisterCardResponse> newRegisterCardResponse(RegisterCardRequest registerCardRequest) throws IOException{
 
         ResponseMessage<RegisterCardResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, url);
-        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+        url = new URL(ServiceURL + "/psp/registerCard");
+        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        try {
+        RequestHeader header = new CreateHeader("", Constants.REQUEST_VERSION).createHeader();
 
-            RequestHeader header = new RequestHeader();
-            header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion(Constants.REQUEST_VERSION);
+        RequestMessage<RegisterCardRequest> message = new RequestMessage<>();
+        message.setRequestHeader(header);
+        registerCardRequest.setRequestUUID(UUID.randomUUID().toString());
+        message.setService(registerCardRequest);
 
-            RequestMessage<RegisterCardRequest> message = new RequestMessage<RegisterCardRequest>();
-            message.setRequestHeader(header);
-            RegisterCardRequest request = registerCardRequest;
-            request.setRequestUUID(UUID.randomUUID().toString());
-            message.setService(request);
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegisterCardRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
 
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegisterCardRequest>>() {}.getType();
-            String jsonRequest = new Gson().toJson(message, requestType);
-            connection.setRequestMethod("POST");
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(jsonRequest.getBytes());
-            outputStream.flush();
+        Gson gson = new Gson();
 
-            String encoding = connection.getHeaderField("Content-Encoding");
-            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
-            InputStreamReader reader;
-            if (gzipped){
-                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-                reader = new InputStreamReader(gzipInputStream);
-            }else {
-                reader = new InputStreamReader(connection.getInputStream());
-            }
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<RegisterCardResponse>>() {}.getType());
 
-            Gson gson = builder.getDatebuilder().create();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegisterCardResponse>>() {}.getType());
+        proxyService.closeConnection();
 
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            if (connection != null)
-                connection.disconnect();
-        }
-        return responseMessage;
-    }
-
-    public ResponseMessage<RegistrationFetchUserDataResponse> newRegistrationFetchUserDataResponse(RegistrationFetchUserDataRequest registrationFetchUserDataRequest) {
-
-        URL url = null;
-        try {
-            url = new URL(Constants.HTTPS_SERVER_IP + "/users/reg-fetch-user-data");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        ResponseMessage<RegistrationFetchUserDataResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, url);
-        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
-
-        try {
-
-            RequestHeader header = new RequestHeader();
-            header.setVersion(Constants.REQUEST_VERSION);
-
-            RequestMessage<RegistrationFetchUserDataRequest> message = new RequestMessage<RegistrationFetchUserDataRequest>();
-            message.setRequestHeader(header);
-            RegistrationFetchUserDataRequest request = registrationFetchUserDataRequest;
-            request.setRequestUUID(UUID.randomUUID().toString());
-            message.setService(request);
-
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationFetchUserDataRequest>>() {}.getType();
-            String jsonRequest = new Gson().toJson(message, requestType);
-            connection.setRequestMethod("POST");
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(jsonRequest.getBytes());
-            outputStream.flush();
-
-            String encoding = connection.getHeaderField("Content-Encoding");
-            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
-            InputStreamReader reader;
-            if (gzipped){
-                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-                reader = new InputStreamReader(gzipInputStream);
-            }else {
-                reader = new InputStreamReader(connection.getInputStream());
-            }
-
-            Gson gson = new Gson();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegistrationFetchUserDataResponse>>() {}.getType());
-
-        } catch (IOException e) {e.printStackTrace();}
-        finally {
-            if (connection != null)
-                connection.disconnect();
-        }
         return responseMessage;
     }
 
 
-    public ResponseMessage<RegistrationConfirmUserDataResponse> newRegistrationConfirmUserDataResponse(RegistrationConfirmUserDataRequest registrationConfirmUserDataRequest) {
+    public ResponseMessage<RegistrationCredentialsResponse> registrationCredentialsResponse(RegistrationCredentialsRequest registrationCredentialsRequest) throws IOException{
 
-        URL url = null;
-        try {
-            url = new URL(Constants.HTTPS_SERVER_IP + "/users/reg-confirm-user-data");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        ResponseMessage<RegistrationConfirmUserDataResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, url);
-        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
-
-        try {
-
-            RequestHeader header = new RequestHeader();
-            header.setVersion(Constants.REQUEST_VERSION);
-
-            RequestMessage<RegistrationConfirmUserDataRequest> message = new RequestMessage<RegistrationConfirmUserDataRequest>();
-            message.setRequestHeader(header);
-            RegistrationConfirmUserDataRequest request = registrationConfirmUserDataRequest;
-            request.setRequestUUID(UUID.randomUUID().toString());
-            message.setService(request);
-
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationConfirmUserDataRequest>>() {}.getType();
-            String jsonRequest = new Gson().toJson(message, requestType);
-            connection.setRequestMethod("POST");
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(jsonRequest.getBytes());
-            outputStream.flush();
-
-            String encoding = connection.getHeaderField("Content-Encoding");
-            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
-            InputStreamReader reader;
-            if (gzipped){
-                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-                reader = new InputStreamReader(gzipInputStream);
-            }else {
-                reader = new InputStreamReader(connection.getInputStream());
-            }
-
-            Gson gson = builder.getDatebuilder().create();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegistrationConfirmUserDataResponse>>() {}.getType());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            if (connection != null)
-                connection.disconnect();
-        }
-        return responseMessage;
-    }
-
-
-
-    public ResponseMessage<RegistrationCredentialsResponse> newRegistrationCredentialsResponse(RegistrationCredentialsRequest registrationCredentialsRequest){
-
-        URL url = null;
-        try {
-            url = new URL(Constants.HTTPS_SERVER_IP + "/users/reg-credential-entry");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
 
         ResponseMessage<RegistrationCredentialsResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, url);
-        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+        url = new URL(ServiceURL + "/users/reg-credential-entry");
+        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url, true);
 
-        try {
+        RequestHeader header = new CreateHeader("", Constants.REQUEST_VERSION).createHeader();
 
-            RequestHeader header = new RequestHeader();
-            header.setVersion(Constants.REQUEST_VERSION);
+        RequestMessage<RegistrationCredentialsRequest> message = new RequestMessage<>();
+        message.setRequestHeader(header);
+        UserContacts userContacts = new UserContacts(context);
+        registrationCredentialsRequest.setContacts(userContacts.read());
+        registrationCredentialsRequest.setRequestUUID(UUID.randomUUID().toString());
+        message.setService(registrationCredentialsRequest);
 
-            RequestMessage<RegistrationCredentialsRequest> message = new RequestMessage<RegistrationCredentialsRequest>();
-            message.setRequestHeader(header);
-            RegistrationCredentialsRequest request = registrationCredentialsRequest;
-            request.setRequestUUID(UUID.randomUUID().toString());
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationCredentialsRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
 
-            UserContacts userContacts = new UserContacts(context);
-            request.setContacts(userContacts.read());
+        Gson gson = new Gson();
 
-            message.setService(request);
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<RegistrationCredentialsResponse>>() {}.getType());
 
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationCredentialsRequest>>() {}.getType();
-            String jsonRequest = new Gson().toJson(message, requestType);
-            connection.setRequestMethod("POST");
+        proxyService.closeConnection();
 
-            connection.setRequestProperty("Content-Encoding", "gzip");
-            connection.setRequestProperty("Accept-Encoding", "gzip");
-
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(gzip(jsonRequest.getBytes()));
-            outputStream.flush();
-
-            String encoding = connection.getHeaderField("Content-Encoding");
-            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
-            InputStreamReader reader;
-            if (gzipped){
-                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-                reader = new InputStreamReader(gzipInputStream);
-            }else {
-                reader = new InputStreamReader(connection.getInputStream());
-            }
-
-            Gson gson = new Gson();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegistrationCredentialsResponse>>() {}.getType());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            if (connection != null)
-                connection.disconnect();
-        }
         return responseMessage;
     }
 
 
-    public ResponseMessage<RegistrationVerifyAccountResponse> newRegistrationVerifyAccountResponse(RegistrationVerifyAccountRequest registrationVerifyAccountRequest){
-
-        URL url = null;
-        try {
-            url = new URL(Constants.HTTPS_SERVER_IP + "/customers/reg-verify-account");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        ResponseMessage<RegistrationVerifyAccountResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, url);
-        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
-
-        try {
-
-            RequestHeader header = new RequestHeader();
-            header.setVersion(Constants.REQUEST_VERSION);
-
-            RequestMessage<RegistrationVerifyAccountRequest> message = new RequestMessage<RegistrationVerifyAccountRequest>();
-            message.setRequestHeader(header);
-            RegistrationVerifyAccountRequest request = registrationVerifyAccountRequest;
-            request.setRequestUUID(UUID.randomUUID().toString());
-            message.setService(request);
-
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationVerifyAccountRequest>>() {}.getType();
-            String jsonRequest = new Gson().toJson(message, requestType);
-            connection.setRequestMethod("POST");
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(jsonRequest.getBytes());
-            outputStream.flush();
-
-            String encoding = connection.getHeaderField("Content-Encoding");
-            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
-            InputStreamReader reader;
-            if (gzipped){
-                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-                reader = new InputStreamReader(gzipInputStream);
-            }else {
-                reader = new InputStreamReader(connection.getInputStream());
-            }
-
-            Gson gson = new Gson();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegistrationVerifyAccountResponse>>() {}.getType());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            if (connection != null)
-                connection.disconnect();
-        }
-        return responseMessage;
-    }
-
-
-    public ResponseMessage<RegistrationVerifyTransferMoneyResponse> newRegistrationVerifyTransferMoneyResponse(RegistrationVerifyTransferMoneyRequest registrationVerifyTransferMoneyRequest){
-
-        URL url = null;
-        try {
-            url = new URL(Constants.HTTPS_SERVER_IP + "/customers/reg-verify-xfer");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        ResponseMessage<RegistrationVerifyTransferMoneyResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, url);
-        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
-
-        try {
-
-            RequestHeader header = new RequestHeader();
-            header.setVersion(Constants.REQUEST_VERSION);
-
-            RequestMessage<RegistrationVerifyTransferMoneyRequest> message = new RequestMessage<RegistrationVerifyTransferMoneyRequest>();
-            message.setRequestHeader(header);
-            RegistrationVerifyTransferMoneyRequest request = registrationVerifyTransferMoneyRequest;
-            request.setRequestUUID(UUID.randomUUID().toString());
-            message.setService(request);
-
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationVerifyTransferMoneyRequest>>() {}.getType();
-            String jsonRequest = new Gson().toJson(message, requestType);
-            connection.setRequestMethod("POST");
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(jsonRequest.getBytes());
-            outputStream.flush();
-
-            String encoding = connection.getHeaderField("Content-Encoding");
-            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
-            InputStreamReader reader;
-            if (gzipped){
-                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-                reader = new InputStreamReader(gzipInputStream);
-            }else {
-                reader = new InputStreamReader(connection.getInputStream());
-            }
-
-            Gson gson = new Gson();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<RegistrationVerifyTransferMoneyResponse>>() {}.getType());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            if (connection != null)
-                connection.disconnect();
-        }
-        return responseMessage;
-    }
-
-
-
-    public ResponseMessage<MobileRegistrationIdEntryResponse> newRegistrationDeviceRegId(MobileRegistrationIdEntryRequest mobileRegistrationIdEntryRequest){
-
-        URL url = null;
-        try {
-            url = new URL(Constants.HTTPS_SERVER_IP + "/users/mobile-reg-id-entry");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+    public ResponseMessage<MobileRegistrationIdEntryResponse> registrationDeviceRegId(MobileRegistrationIdEntryRequest mobileRegistrationIdEntryRequest) throws IOException{
 
         ResponseMessage<MobileRegistrationIdEntryResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, url);
-        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+        url = new URL(ServiceURL + "/users/mobile-reg-id-entry");
+        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        try {
+        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
 
-            RequestHeader header = new RequestHeader();
-            header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion(Constants.REQUEST_VERSION);
+        RequestMessage<MobileRegistrationIdEntryRequest> message = new RequestMessage<>();
+        message.setRequestHeader(header);
+        mobileRegistrationIdEntryRequest.setRequestUUID(UUID.randomUUID().toString());
+        message.setService(mobileRegistrationIdEntryRequest);
 
-            RequestMessage<MobileRegistrationIdEntryRequest> message = new RequestMessage<MobileRegistrationIdEntryRequest>();
-            message.setRequestHeader(header);
-            MobileRegistrationIdEntryRequest request = mobileRegistrationIdEntryRequest;
-            request.setRequestUUID(UUID.randomUUID().toString());
-            message.setService(request);
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<MobileRegistrationIdEntryRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
 
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<MobileRegistrationIdEntryRequest>>() {}.getType();
-            String jsonRequest = new Gson().toJson(message, requestType);
-            connection.setRequestMethod("POST");
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(jsonRequest.getBytes());
-            outputStream.flush();
+        Gson gson = new Gson();
 
-            String encoding = connection.getHeaderField("Content-Encoding");
-            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
-            InputStreamReader reader;
-            if (gzipped){
-                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-                reader = new InputStreamReader(gzipInputStream);
-            }else {
-                reader = new InputStreamReader(connection.getInputStream());
-            }
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<MobileRegistrationIdEntryResponse>>() {}.getType());
 
-            Gson gson = new Gson();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<MobileRegistrationIdEntryResponse>>() {}.getType());
+        proxyService.closeConnection();
 
-        } catch (IOException e) {e.printStackTrace();}
-        finally {
-            if (connection != null)
-                connection.disconnect();
-        }
         return responseMessage;
     }
 
 
-    public ResponseMessage<TACResponse> newTACResponse(TACRequest tacRequest){
-
-        URL url = null;
-        try {
-            url = new URL(Constants.HTTPS_SERVER_IP + "/users/tac");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+    public ResponseMessage<TACResponse> tacResponse(TACRequest tacRequest) throws IOException{
 
         ResponseMessage<TACResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, url);
-        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+        url = new URL(ServiceURL + "/users/tac");
+        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        try {
+        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
 
-            RequestHeader header = new RequestHeader();
-            header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion(Constants.REQUEST_VERSION);
+        RequestMessage<TACRequest> message = new RequestMessage<>();
+        message.setRequestHeader(header);
+        tacRequest.setRequestUUID(UUID.randomUUID().toString());
+        message.setService(tacRequest);
 
-            RequestMessage<TACRequest> message = new RequestMessage<TACRequest>();
-            message.setRequestHeader(header);
-            TACRequest request = tacRequest;
-            request.setRequestUUID(UUID.randomUUID().toString());
-            message.setService(request);
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<TACRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
 
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<TACRequest>>() {}.getType();
-            String jsonRequest = new Gson().toJson(message, requestType);
-            connection.setRequestMethod("POST");
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(jsonRequest.getBytes());
-            outputStream.flush();
+        Gson gson = builder.getDatebuilder().create();
 
-            String encoding = connection.getHeaderField("Content-Encoding");
-            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
-            InputStreamReader reader;
-            if (gzipped){
-                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-                reader = new InputStreamReader(gzipInputStream);
-            }else {
-                reader = new InputStreamReader(connection.getInputStream());
-            }
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<TACResponse>>() {}.getType());
 
-            Gson gson = builder.getDatebuilder().create();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<TACResponse>>() {}.getType());
+        proxyService.closeConnection();
 
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            if (connection != null)
-                connection.disconnect();
-        }
         return responseMessage;
     }
 
-    public ResponseMessage<UploadImageResponse> newUploadImage(UploadImageRequest uploadImageRequest){
-
-        URL url = null;
-        try {
-            url = new URL(Constants.HTTPS_SERVER_IP + "/users/upload-image");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+    public ResponseMessage<UploadImageResponse> newUploadImage(UploadImageRequest uploadImageRequest) throws IOException{
 
         ResponseMessage<UploadImageResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, url);
-        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+        url = new URL(ServiceURL + "/users/upload-image");
+        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        try {
+        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
 
-            RequestHeader header = new RequestHeader();
-            header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion(Constants.REQUEST_VERSION);
+        RequestMessage<UploadImageRequest> message = new RequestMessage<>();
+        message.setRequestHeader(header);
+        uploadImageRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        message.setService(uploadImageRequest);
 
-            RequestMessage<UploadImageRequest> message = new RequestMessage<UploadImageRequest>();
-            message.setRequestHeader(header);
-            UploadImageRequest request = uploadImageRequest;
-            request.setRequestUUID(prefs.getString(Constants.UUID, ""));
-            message.setService(request);
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<UploadImageRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
 
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<UploadImageRequest>>() {}.getType();
-            String jsonRequest = new Gson().toJson(message, requestType);
-            connection.setRequestMethod("POST");
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(jsonRequest.getBytes());
-            outputStream.flush();
+        Gson gson = builder.getDatebuilder().create();
 
-            String encoding = connection.getHeaderField("Content-Encoding");
-            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
-            InputStreamReader reader;
-            if (gzipped){
-                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-                reader = new InputStreamReader(gzipInputStream);
-            }else {
-                reader = new InputStreamReader(connection.getInputStream());
-            }
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<UploadImageResponse>>() {}.getType());
 
-            Gson gson = builder.getDatebuilder().create();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<UploadImageResponse>>() {}.getType());
+        proxyService.closeConnection();
 
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            if (connection != null)
-                connection.disconnect();
-        }
         return responseMessage;
     }
 
 
-    public ResponseMessage<GetUserIdTokenResponse> newGetUserIdTokenResponse(GetUserIdTokenRequest getUserIdTokenRequest){
-
-        URL url = null;
-        try {
-            url = new URL(Constants.HTTPS_SERVER_IP + "/users/get-user-id-token");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+    public ResponseMessage<GetUserIdTokenResponse> getUserIdTokenResponse(GetUserIdTokenRequest getUserIdTokenRequest) throws IOException{
 
         ResponseMessage<GetUserIdTokenResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, url);
-        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+        url = new URL(ServiceURL + "/users/get-user-id-token");
+        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        try {
+        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
 
-            RequestHeader header = new RequestHeader();
-            header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion(Constants.REQUEST_VERSION);
+        RequestMessage<GetUserIdTokenRequest> message = new RequestMessage<>();
+        message.setRequestHeader(header);
+        getUserIdTokenRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        message.setService(getUserIdTokenRequest);
 
-            RequestMessage<GetUserIdTokenRequest> message = new RequestMessage<GetUserIdTokenRequest>();
-            message.setRequestHeader(header);
-            GetUserIdTokenRequest request = getUserIdTokenRequest;
-            request.setRequestUUID(prefs.getString(Constants.UUID, ""));
-            message.setService(request);
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<GetUserIdTokenRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
 
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<GetUserIdTokenRequest>>() {}.getType();
-            String jsonRequest = new Gson().toJson(message, requestType);
-            connection.setRequestMethod("POST");
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(jsonRequest.getBytes());
-            outputStream.flush();
+        Gson gson = builder.getDatebuilder().create();
 
-            String encoding = connection.getHeaderField("Content-Encoding");
-            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
-            InputStreamReader reader;
-            if (gzipped){
-                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-                reader = new InputStreamReader(gzipInputStream);
-            }else {
-                reader = new InputStreamReader(connection.getInputStream());
-            }
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<GetUserIdTokenResponse>>() {}.getType());
 
-            Gson gson = builder.getDatebuilder().create();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<GetUserIdTokenResponse>>() {}.getType());
+        proxyService.closeConnection();
 
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            if (connection != null)
-                connection.disconnect();
-        }
         return responseMessage;
     }
 
 
-    public ResponseMessage<TACAcceptResponse> newTACAcceptResponse(TACAcceptRequest tacAcceptRequest){
-
-        URL url = null;
-        try {
-            url = new URL(Constants.HTTPS_SERVER_IP + "/users/tacaccept");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+    public ResponseMessage<TACAcceptResponse> tacAcceptResponse(TACAcceptRequest tacAcceptRequest) throws IOException{
 
         ResponseMessage<TACAcceptResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, url);
-        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+        url = new URL(ServiceURL + "/users/tacaccept");
+        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        try {
+        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
 
-            RequestHeader header = new RequestHeader();
-            header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion(Constants.REQUEST_VERSION);
+        RequestMessage<TACAcceptRequest> message = new RequestMessage<>();
+        message.setRequestHeader(header);
+        tacAcceptRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        message.setService(tacAcceptRequest);
 
-            RequestMessage<TACAcceptRequest> message = new RequestMessage<TACAcceptRequest>();
-            message.setRequestHeader(header);
-            TACAcceptRequest request = tacAcceptRequest;
-            request.setRequestUUID(UUID.randomUUID().toString());
-            message.setService(request);
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<TACAcceptRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
 
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<TACAcceptRequest>>() {}.getType();
-            String jsonRequest = new Gson().toJson(message, requestType);
-            connection.setRequestMethod("POST");
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(jsonRequest.getBytes());
-            outputStream.flush();
+        Gson gson = builder.getDatebuilder().create();
 
-            String encoding = connection.getHeaderField("Content-Encoding");
-            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
-            InputStreamReader reader;
-            if (gzipped){
-                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-                reader = new InputStreamReader(gzipInputStream);
-            }else {
-                reader = new InputStreamReader(connection.getInputStream());
-            }
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<TACAcceptResponse>>() {}.getType());
 
-            Gson gson = builder.getDatebuilder().create();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<TACAcceptResponse>>() {}.getType());
+        proxyService.closeConnection();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            if (connection != null)
-                connection.disconnect();
-        }
         return responseMessage;
     }
 
 
-    public ResponseMessage<UserProfileResponse> newGetUserProfile(UserProfileRequest userProfileRequest){
-
-        URL url = null;
-        try {
-            url = new URL(Constants.HTTPS_SERVER_IP + "/users/profile");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+    public ResponseMessage<UserProfileResponse> getUserProfile(UserProfileRequest userProfileRequest) throws IOException{
 
         ResponseMessage<UserProfileResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, url);
-        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+        url = new URL(ServiceURL + "/users/profile");
+        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        try {
+        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
 
-            RequestHeader header = new RequestHeader();
-            header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion(Constants.REQUEST_VERSION);
+        RequestMessage<UserProfileRequest> message = new RequestMessage<>();
+        message.setRequestHeader(header);
+        userProfileRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        message.setService(userProfileRequest);
 
-            RequestMessage<UserProfileRequest> message = new RequestMessage<UserProfileRequest>();
-            message.setRequestHeader(header);
-            UserProfileRequest request = userProfileRequest;
-            request.setRequestUUID(UUID.randomUUID().toString());
-            message.setService(request);
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<UserProfileRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
 
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<UserProfileRequest>>() {}.getType();
-            String jsonRequest = new Gson().toJson(message, requestType);
-            connection.setRequestMethod("POST");
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(jsonRequest.getBytes());
-            outputStream.flush();
+        Gson gson = builder.getDatebuilder().create();
 
-            String encoding = connection.getHeaderField("Content-Encoding");
-            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
-            InputStreamReader reader;
-            if (gzipped){
-                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-                reader = new InputStreamReader(gzipInputStream);
-            }else {
-                reader = new InputStreamReader(connection.getInputStream());
-            }
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<UserProfileResponse>>() {}.getType());
 
-            Gson gson = builder.getDatebuilder().create();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<UserProfileResponse>>() {}.getType());
+        proxyService.closeConnection();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            if (connection != null)
-                connection.disconnect();
-        }
         return responseMessage;
     }
 
 
-    public ResponseMessage<VerifyAccountResponse> newVerifyAccountResponse(VerifyAccountRequest verifyAccountRequest){
-
-        URL url = null;
-        try {
-            url = new URL(Constants.HTTPS_SERVER_IP + "/customers/verify-account");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        ResponseMessage<VerifyAccountResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, url);
-        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
-
-        try {
-
-            RequestHeader header = new RequestHeader();
-            header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion(Constants.REQUEST_VERSION);
-
-            RequestMessage<VerifyAccountRequest> message = new RequestMessage<VerifyAccountRequest>();
-            message.setRequestHeader(header);
-            VerifyAccountRequest request = verifyAccountRequest;
-            request.setRequestUUID(UUID.randomUUID().toString());
-            message.setService(request);
-
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<VerifyAccountRequest>>() {}.getType();
-            String jsonRequest = new Gson().toJson(message, requestType);
-            connection.setRequestMethod("POST");
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(jsonRequest.getBytes());
-            outputStream.flush();
-
-            String encoding = connection.getHeaderField("Content-Encoding");
-            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
-            InputStreamReader reader;
-            if (gzipped){
-                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-                reader = new InputStreamReader(gzipInputStream);
-            }else {
-                reader = new InputStreamReader(connection.getInputStream());
-            }
-
-            Gson gson = builder.getDatebuilder().create();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<VerifyAccountResponse>>() {}.getType());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            if (connection != null)
-                connection.disconnect();
-        }
-        return responseMessage;
-    }
-
-
-    public ResponseMessage<VerifyTransferMoneyResponse> newVerifyTransferMoneyResponse(VerifyTransferMoneyRequest verifyTransferMoneyRequest){
-
-        URL url = null;
-        try {
-            url = new URL(Constants.HTTPS_SERVER_IP + "/customers/verify-xfer");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        ResponseMessage<VerifyTransferMoneyResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, url);
-        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
-
-        try {
-
-            RequestHeader header = new RequestHeader();
-            header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion(Constants.REQUEST_VERSION);
-
-            RequestMessage<VerifyTransferMoneyRequest> message = new RequestMessage<VerifyTransferMoneyRequest>();
-            message.setRequestHeader(header);
-            VerifyTransferMoneyRequest request = verifyTransferMoneyRequest;
-            request.setRequestUUID(UUID.randomUUID().toString());
-            message.setService(request);
-
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<VerifyTransferMoneyRequest>>() {}.getType();
-            String jsonRequest = new Gson().toJson(message, requestType);
-            connection.setRequestMethod("POST");
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(jsonRequest.getBytes());
-            outputStream.flush();
-
-            String encoding = connection.getHeaderField("Content-Encoding");
-            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
-            InputStreamReader reader;
-            if (gzipped){
-                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-                reader = new InputStreamReader(gzipInputStream);
-            }else {
-                reader = new InputStreamReader(connection.getInputStream());
-            }
-
-            Gson gson = builder.getDatebuilder().create();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<VerifyTransferMoneyResponse>>() {}.getType());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            if (connection != null)
-                connection.disconnect();
-        }
-        return responseMessage;
-    }
-
-
-    public ResponseMessage<TransactionListResponse> newGetUserTransaction(TransactionListRequest transactionListRequest){
-
-        URL url = null;
-        try {
-            url = new URL(Constants.HTTPS_SERVER_IP + "/transactions");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+    public ResponseMessage<TransactionListResponse> userTransaction(TransactionListRequest transactionListRequest) throws IOException{
 
         ResponseMessage<TransactionListResponse> responseMessage = null;
-        SSLConnection sslConnection = new SSLConnection(context, url);
-        HttpsURLConnection connection = sslConnection.setUpHttpsURLConnection();
+        url = new URL(ServiceURL + "/transactions");
+        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        try {
+        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
 
-            RequestHeader header = new RequestHeader();
-            header.setAuthToken(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            header.setVersion(Constants.REQUEST_VERSION);
+        RequestMessage<TransactionListRequest> message = new RequestMessage<>();
+        message.setRequestHeader(header);
+        transactionListRequest.setUserId(new PersianEnglishDigit(prefs.getString(Constants.REGISTERED_NATIONAL_CODE, "")).P2E());
+        transactionListRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        message.setService(transactionListRequest);
 
-            RequestMessage<TransactionListRequest> message = new RequestMessage<TransactionListRequest>();
-            message.setRequestHeader(header);
-            TransactionListRequest request = new TransactionListRequest();
-            request.setUserId(new PersianEnglishDigit(prefs.getString(Constants.REGISTERED_NATIONAL_CODE, "")).P2E());
-            request.setPageSize(transactionListRequest.getPageSize());
-            request.setPageNumber(transactionListRequest.getPageNumber());
-            request.setRequestUUID(UUID.randomUUID().toString());
-            message.setService(request);
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<TransactionListRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
 
-            Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<TransactionListRequest>>() {}.getType();
-            String jsonRequest = new Gson().toJson(message, requestType);
-            connection.setRequestMethod("POST");
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(jsonRequest.getBytes());
-            outputStream.flush();
+        Gson gson = builder.getDatebuilder().create();
 
-            String encoding = connection.getHeaderField("Content-Encoding");
-            boolean gzipped = encoding != null && encoding.toLowerCase().contains("gzip");
-            InputStreamReader reader;
-            if (gzipped){
-                InputStream gzipInputStream = new GZIPInputStream(connection.getInputStream());
-                reader = new InputStreamReader(gzipInputStream);
-            }else {
-                reader = new InputStreamReader(connection.getInputStream());
-            }
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<TransactionListResponse>>() {}.getType());
 
-            Gson gson = builder.getDatebuilder().create();
-            responseMessage = gson.fromJson(reader, new TypeToken<ResponseMessage<TransactionListResponse>>() {}.getType());
+        proxyService.closeConnection();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            if (connection != null)
-                connection.disconnect();
-        }
         return responseMessage;
     }
 
@@ -1461,7 +616,7 @@ public class WebServices  {
             connection.setRequestProperty("Accept-Encoding", "gzip");
 
             OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(gzip(jsonRequest.getBytes()));
+            outputStream.write((new GZip(jsonRequest.getBytes())).compress());
             outputStream.flush();
 
             String encoding = connection.getHeaderField("Content-Encoding");
@@ -2602,6 +1757,7 @@ public class WebServices  {
 
     public ResponseMessage<CardProfileResponse> getCardProfile(CardProfileRequest cardProfileRequest) throws IOException {
 
+        ResponseMessage<CardProfileResponse> responseMessage = null;
         url = new URL(ServiceURL + "/card/info");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
@@ -2618,7 +1774,10 @@ public class WebServices  {
 
         Gson gson = builder.getDatebuilder().create();
 
-        return  gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<CardProfileResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<CardProfileResponse>>() {}.getType());
+        proxyService.closeConnection();
+
+        return  responseMessage;
 
     }
 
