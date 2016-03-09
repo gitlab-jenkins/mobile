@@ -119,7 +119,7 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_pending, null);
 
         final FacedTextView pending_purchase = (FacedTextView) view.findViewById(R.id.pending_purchase);
-        FacedTextView pending_payment = (FacedTextView) view.findViewById(R.id.pending_payment);
+        final FacedTextView pending_payment = (FacedTextView) view.findViewById(R.id.pending_payment);
 
         pending_purchase.setOnClickListener(new View.OnClickListener() {
             @Override

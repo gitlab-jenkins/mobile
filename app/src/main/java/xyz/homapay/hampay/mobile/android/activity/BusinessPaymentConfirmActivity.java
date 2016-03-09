@@ -72,19 +72,12 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
     FacedTextView paymentFeeValue;
     FacedTextView paymentTotalValue;
     FacedTextView cardNumberValue;
-//    FacedTextView user_bank_name;
     FacedEditText pin2Value;
-
-    RequestLatestPurchase requestLatestPurchase;
-    LatestPurchaseRequest latestPurchaseRequest;
 
     DatabaseHelper databaseHelper;
 
     PaymentInfoDTO paymentInfoDTO = null;
     PspInfoDTO pspInfoDTO = null;
-
-    RequestPSPResult requestPSPResult;
-    PSPResultRequest pspResultRequest;
 
     private RequestPurchase requestPurchase;
     private DoWorkInfo doWorkInfo;
@@ -149,7 +142,6 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
         paymentVAT = (FacedTextView)findViewById(R.id.paymentVAT);
         paymentFeeValue = (FacedTextView)findViewById(R.id.paymentFeeValue);
         paymentTotalValue = (FacedTextView)findViewById(R.id.paymentTotalValue);
-//        user_bank_name = (FacedTextView)findViewById(R.id.user_bank_name);
         cardNumberValue = (FacedTextView)findViewById(R.id.cardNumberValue);
         pin2Value = (FacedEditText)findViewById(R.id.pin2Value);
 

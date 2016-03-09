@@ -136,7 +136,7 @@ public class WebServices  {
         Gson gson = new Gson();
         Type listType = new TypeToken<LogoutResponse>(){}.getType();
         JsonParser jsonParser = new JsonParser();
-        JsonElement responseElement = jsonParser.parse(proxyService.hamPaylogout(logoutData).toString());
+        JsonElement responseElement = jsonParser.parse(proxyService.hamPayLogout(logoutData).toString());
         proxyService.closeConnection();
         return (LogoutResponse) gson.fromJson(responseElement.toString(), listType);
     }

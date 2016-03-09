@@ -39,7 +39,7 @@ public class LoginStream {
     }
 
     public int resultCode() throws Exception {
-        int responseCode = proxyHamPayLogin.hamPaylogin(loginData);
+        int responseCode = proxyHamPayLogin.hamPayLogin(loginData);
         proxyHamPayLogin.closeConnection();
         return responseCode;
 

@@ -236,8 +236,6 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
                     PaymentInfoDTO paymentInfo = businessPaymentConfirmResponseMessage.getService().getPaymentInfo();
                     PspInfoDTO pspInfo = businessPaymentConfirmResponseMessage.getService().getPspInfo();
 
-
-
                     Intent intent = new Intent();
                     intent.putExtra(Constants.PAYMENT_INFO, paymentInfo);
                     intent.putExtra(Constants.PSP_INFO, pspInfo);

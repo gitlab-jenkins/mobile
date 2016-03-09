@@ -37,7 +37,7 @@ public class ProxyHamPayLogin {
     }
 
 
-    public int hamPaylogin(LoginData loginData) throws IOException {
+    public int hamPayLogin(LoginData loginData) throws IOException {
 
         BufferedWriter output;
         int responseCode = 0;

@@ -128,7 +128,7 @@ public class ProxyService {
 
     }
 
-    public StringBuffer hamPaylogout(LogoutData logoutData) throws IOException {
+    public StringBuffer hamPayLogout(LogoutData logoutData) throws IOException {
 
         BufferedWriter output;
         StringBuffer response = null;
