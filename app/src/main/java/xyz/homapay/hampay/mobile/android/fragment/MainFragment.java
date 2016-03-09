@@ -20,7 +20,6 @@ import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.BusinessPurchaseActivity;
-import xyz.homapay.hampay.mobile.android.activity.PayOneActivity;
 import xyz.homapay.hampay.mobile.android.activity.PaymentRequestActivity;
 import xyz.homapay.hampay.mobile.android.activity.PaymentRequestDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.PendingPurchasePaymentActivity;
@@ -49,7 +48,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     LinearLayout pendingPurchasePayment;
     UserProfileDTO userProfileDTO;
     Bundle bundle;
-    private String user_image_url = "";
+    private String userImageId = "";
     LinearLayout hampay_1_ll;
     LinearLayout hampay_2_ll;
     LinearLayout hampay_3_ll;
@@ -130,32 +129,32 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                     hampay_1_ll.setVisibility(View.VISIBLE);
                     hampay_1.setText(contacts.get(0).getDisplayName());
                     if (contacts.get(0).getContactImageId() != null) {
-                        user_image_url = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contacts.get(0).getContactImageId();
-                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_1)).execute(user_image_url);
+                        userImageId = "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contacts.get(0).getContactImageId();
+                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_1)).execute(userImageId);
                     }
                     break;
                 case 1:
                     hampay_2_ll.setVisibility(View.VISIBLE);
                     hampay_2.setText(contacts.get(1).getDisplayName());
                     if (contacts.get(1).getContactImageId() != null) {
-                        user_image_url = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contacts.get(1).getContactImageId();
-                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_2)).execute(user_image_url);
+                        userImageId = "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contacts.get(1).getContactImageId();
+                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_2)).execute(userImageId);
                     }
                     break;
                 case 2:
                     hampay_3_ll.setVisibility(View.VISIBLE);
                     hampay_3.setText(contacts.get(2).getDisplayName());
                     if (contacts.get(2).getContactImageId() != null) {
-                        user_image_url = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contacts.get(2).getContactImageId();
-                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_3)).execute(user_image_url);
+                        userImageId = "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contacts.get(2).getContactImageId();
+                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_3)).execute(userImageId);
                     }
                     break;
                 case 3:
                     hampay_4_ll.setVisibility(View.VISIBLE);
                     hampay_4.setText(contacts.get(3).getDisplayName());
                     if (contacts.get(3).getContactImageId() != null) {
-                        user_image_url = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contacts.get(3).getContactImageId();
-                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_4)).execute(user_image_url);
+                        userImageId = "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contacts.get(3).getContactImageId();
+                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_4)).execute(userImageId);
                     }
                     break;
 

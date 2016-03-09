@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
+import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.webservice.WebServices;
 
 /**
@@ -35,10 +36,10 @@ public class RequestLogout extends AsyncTask<LogoutData, Void, LogoutResponse> {
     @Override
     protected LogoutResponse doInBackground(LogoutData... params) {
 
-        WebServices webServices = new WebServices(context);
+        WebServices webServices = new WebServices(context, Constants.CONNECTION_TYPE);
 
         try {
-            logoutResponse = webServices.sendLogoutRequest(params[0]);
+            logoutResponse = webServices.logoutRequest(params[0]);
         } catch (Exception e) {
             e.printStackTrace();
         }

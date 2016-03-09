@@ -9,6 +9,7 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
@@ -22,79 +23,37 @@ public class LoginStream {
 
     Context context;
     LoginData loginData;
-    SSLConnection sslConnection;
-    HttpsURLConnection connection;
+    ProxyHamPayLogin proxyHamPayLogin;
+    URL url;
 
 
-    public LoginStream(Context context, LoginData loginData) {
+    public LoginStream(Context context, LoginData loginData) throws IOException{
         this.context = context;
         this.loginData = loginData;
+        if (Constants.CONNECTION_TYPE == ConnectionType.HTTPS) {
+            url = new URL(Constants.HTTPS_OPENAM_LOGIN_URL);
+        }else {
+            url = new URL(Constants.HTTP_OPENAM_LOGIN_URL);
+        }
+        proxyHamPayLogin = new ProxyHamPayLogin(context, Constants.CONNECTION_TYPE, ConnectionMethod.POST, url);
     }
 
     public int resultCode() throws Exception {
-
-        URL url = new URL(Constants.HTTPS_OPENAM_LOGIN_URL);
-
-        sslConnection = new SSLConnection(context, url);
-        connection = sslConnection.setUpHttpsURLConnection();
-        connection.setDoOutput(true);
-        connection.setRequestMethod("POST");
-        connection.setConnectTimeout(Constants.SERVICE_CONNECTION_TIMEOUT);
-        connection.setReadTimeout(Constants.SERVICE_READ_TIMEOUT);
-        connection.setRequestProperty("username", loginData.getUserName());
-        connection.setRequestProperty("password", loginData.getUserPassword());
-        connection.setRequestProperty("Content-Type", Constants.SERVICE_CONTENT_TYPE);
-        connection.setRequestProperty("Accept-Encoding", "UTF-8");
-
-        try {
-
-            BufferedWriter output = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
-            output.write("{}");
-            output.flush();
-            output.close();
-        } catch (Exception e) {
-            Log.e("Fail", "Login Failed.");
-        }
-
-        return connection.getResponseCode();
+        int responseCode = proxyHamPayLogin.hamPaylogin(loginData);
+        proxyHamPayLogin.closeConnection();
+        return responseCode;
 
     }
 
     public String successLogin() throws Exception {
 
-        String inputLine;
-        StringBuffer response;
-
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(connection.getInputStream()));
-
-        response = new StringBuffer();
-
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
-
-        return response.toString();
+      return proxyHamPayLogin.hamPaySuccessLogin();
 
     }
 
     public String failLogin() throws Exception {
 
-        String inputLine;
-        StringBuffer response;
-
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(connection.getErrorStream()));
-
-        response = new StringBuffer();
-
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
-
-        return response.toString();
+       return proxyHamPayLogin.hamPayFailLogin();
     }
 
 }

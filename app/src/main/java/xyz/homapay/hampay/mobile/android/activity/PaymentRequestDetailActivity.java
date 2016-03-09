@@ -197,9 +197,6 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                                 .getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                         if (TextUtils.isEmpty(contactPhoneNo)) continue;
                         if (!number.equals("")) number = number + "&";
-//                        contactPhoneNo = PhoneNumberUtils.stripSeparators(contactPhoneNo);
-
-                        //number = number + searchReplaceNumber(getApplicationContext(), n);
                     }
                     pCur.close();
                 }
@@ -212,7 +209,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
 
         contact_name.setText(persianEnglishDigit.E2P(contactName));
         contact_phone_no.setText(persianEnglishDigit.E2P(contactPhoneNo));
-        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile)).execute(Constants.HTTPS_SERVER_IP + "/users/" + loginTokenId + "/" + userImageProfileId);
+        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile)).execute(userImageProfileId);
 
 
 

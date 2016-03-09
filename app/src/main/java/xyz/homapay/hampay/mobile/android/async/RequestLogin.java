@@ -3,6 +3,8 @@ package xyz.homapay.hampay.mobile.android.async;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import java.io.IOException;
+
 import xyz.homapay.hampay.mobile.android.model.LoginData;
 import xyz.homapay.hampay.mobile.android.model.SuccessLoginResponse;
 import xyz.homapay.hampay.mobile.android.webservice.LoginStream;
@@ -37,7 +39,12 @@ public class RequestLogin extends AsyncTask<LoginData, Void, String> {
     protected String doInBackground(LoginData... params) {
 
 
-        LoginStream loginStream = new LoginStream(context, params[0]);
+        LoginStream loginStream = null;
+        try {
+            loginStream = new LoginStream(context, params[0]);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         String resultLogin = "";
 
@@ -64,21 +71,7 @@ public class RequestLogin extends AsyncTask<LoginData, Void, String> {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
         return resultLogin;
-
-//        WebServices webServices = new WebServices(context);
-//
-//        try {
-//            loginResponse = webServices.sendLoginRequest(params[0]);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        return loginResponse;
-
     }
 
 

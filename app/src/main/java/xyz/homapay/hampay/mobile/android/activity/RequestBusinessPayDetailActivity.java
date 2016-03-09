@@ -205,13 +205,12 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
             business_name.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getMerchantName()));
 
-            String LogoUrl = Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantImageId();
+            String imageUrl = "/merchant-logo/" + purchaseInfoDTO.getMerchantImageId();
 
-            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_logo)).execute(Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantImageId());
+            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_logo)).execute(imageUrl);
 
 
             cardNumberValue.setText(persianEnglishDigit.E2P(cardDTO.getMaskedCardNumber()));
-//            user_bank_name.setText(purchaseInfoDTO.getBankName);
         }else {
             requestLatestPurchase = new RequestLatestPurchase(activity, new RequestLatestPurchaseTaskCompleteListener());
             latestPurchaseRequest = new LatestPurchaseRequest();

@@ -3,9 +3,12 @@ package xyz.homapay.hampay.mobile.android.async;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import java.io.IOException;
+
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.request.ChangePassCodeRequest;
 import xyz.homapay.hampay.common.core.model.response.ChangePassCodeResponse;
+import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.webservice.WebServices;
 
 /**
@@ -34,9 +37,13 @@ public class RequestChangePassCode extends AsyncTask<ChangePassCodeRequest, Void
     @Override
     protected ResponseMessage<ChangePassCodeResponse> doInBackground(ChangePassCodeRequest... params) {
 
-
-        WebServices webServices = new WebServices(context);
-        return webServices.changePassCodeResponse(params[0]);
+        WebServices webServices = new WebServices(context, Constants.CONNECTION_TYPE);
+        try {
+            return webServices.changePassCodeResponse(params[0]);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

@@ -4,6 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
+import java.io.IOException;
+
+import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.webservice.WebServices;
 
 /**
@@ -33,9 +36,13 @@ public class RequestImageDownloader extends AsyncTask<String, Integer, Bitmap> {
     @Override
     protected Bitmap doInBackground(String... params) {
 
-        WebServices webServices = new WebServices(context);
-
-        return webServices.newImageDownloader(params[0]);
+        WebServices webServices = new WebServices(context, Constants.CONNECTION_TYPE);
+        try {
+            return webServices.imageDownloader(params[0]);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 
