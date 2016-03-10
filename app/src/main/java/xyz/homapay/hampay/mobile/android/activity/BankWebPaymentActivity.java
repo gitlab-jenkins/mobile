@@ -83,7 +83,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
         String postData =
                 "Amount=" + paymentInfoDTO.getAmount() +
                 "&TerminalId=" + pspInfoDTO.getTerminalID() +
-                "&ResNum=" + pspInfoDTO.getProductCode() +
+                "&ResNum=" + paymentInfoDTO.getProductCode() +
                 "&ResNum4=" +Constants.REGISTERED_CELL_NUMBER +
                 "&RedirectURL=" + redirectedURL;
 

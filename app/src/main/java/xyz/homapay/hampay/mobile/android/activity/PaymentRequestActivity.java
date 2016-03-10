@@ -183,7 +183,7 @@ public class PaymentRequestActivity extends AppCompatActivity implements View.On
                     intent.putExtra(Constants.CONTACT_PHONE_NO, recentPays.get(position).getPhone());
                     intent.putExtra(Constants.USER_IMAGE_PROFILE_ID, recentPays.get(position).getId());
                 }else {
-                    intent.putExtra(Constants.CONTACT_NAME, /*hamPayContact.get(position).getDisplayName()*/"علی امیری آخوندیان");
+                    intent.putExtra(Constants.CONTACT_NAME, hamPayContact.get(position).getDisplayName());
                     intent.putExtra(Constants.CONTACT_PHONE_NO, hamPayContact.get(position).getCellNumber());
                     intent.putExtra(Constants.USER_IMAGE_PROFILE_ID, hamPayContact.get(position).getContactImageId());
                 }

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -21,42 +20,26 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.CancelPurchasePaymentRequest;
-import xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingPaymentListRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingPurchaseListRequest;
-import xyz.homapay.hampay.common.core.model.request.TransactionListRequest;
 import xyz.homapay.hampay.common.core.model.response.CancelPurchasePaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingPaymentListResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingPurchaseListResponse;
-import xyz.homapay.hampay.common.core.model.response.TransactionListResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
-import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO;
-import xyz.homapay.hampay.mobile.android.HamPayApplication;
+import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.PendingPaymentAdapter;
 import xyz.homapay.hampay.mobile.android.adapter.PendingPurchaseAdapter;
-import xyz.homapay.hampay.mobile.android.adapter.UserTransactionAdapter;
-import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestCancelPurchase;
-import xyz.homapay.hampay.mobile.android.async.RequestContactHampayEnabled;
 import xyz.homapay.hampay.mobile.android.async.RequestPendingPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestPendingPurchase;
-import xyz.homapay.hampay.mobile.android.async.RequestUserTransaction;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
-import xyz.homapay.hampay.mobile.android.component.doblist.DobList;
-import xyz.homapay.hampay.mobile.android.component.doblist.events.OnLoadMoreListener;
-import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoEmptyViewException;
-import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoListviewException;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -94,6 +77,7 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
     PendingPurchaseListResponse pendingPurchaseListResponse;
 
     List<PaymentInfoDTO> paymentInfoDTOs;
+    PspInfoDTO pspInfoDTOs;
 
 
     RequestCancelPurchase requestCancelPurchase;
@@ -197,9 +181,9 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
                     intent.putExtra(Constants.CARD_INFO, pendingPurchaseListResponse.getCardDTO());
                     startActivity(intent);
                 } else if (paymentInfoDTOs != null) {
-                    intent.setClass(activity, IndividualPaymentPendingActivity.class);
-                    intent.putExtra(Constants.CONTACT_PHONE_NO, paymentInfoDTOs.get(position).getCallerPhoneNumber());
-                    intent.putExtra(Constants.CONTACT_NAME, /*paymentInfoDTOs.get(position).getCallerName()*/ "");
+                    intent.setClass(activity, InvoicePaymentPendingActivity.class);
+                    intent.putExtra(Constants.PAYMENT_INFO, paymentInfoDTOs.get(position));
+                    intent.putExtra(Constants.PSP_INFO, pspInfoDTOs);
                     startActivity(intent);
                 }
             }
@@ -268,6 +252,7 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
             if (pendingPaymentListResponseMessage != null) {
                 if (pendingPaymentListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     paymentInfoDTOs = pendingPaymentListResponseMessage.getService().getPendingList();
+                    pspInfoDTOs = pendingPaymentListResponseMessage.getService().getPspInfo();
                     pendingCreditRequestAdapter = new PendingPaymentAdapter(activity, paymentInfoDTOs);
                     pendingListView.setAdapter(pendingCreditRequestAdapter);
                     pendingPurchaseListResponse = null;

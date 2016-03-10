@@ -79,7 +79,7 @@ public class HamPayEnabledContactAdapter extends BaseAdapter {
 
         ContactDTO contact = contacts.get(position);
         new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.image_profile)).execute(Constants.HTTPS_SERVER_IP + "/users/" + loginTokenId + "/" + contact.getContactImageId());
-        viewHolder.contact_name.setText(persianEnglishDigit.E2P(/*contact.getDisplayName()*/"علی امیری آخوندیان"));
+        viewHolder.contact_name.setText(persianEnglishDigit.E2P(contact.getDisplayName()));
         viewHolder.contact_phone_no.setText(persianEnglishDigit.E2P(contact.getCellNumber()));
 
         return convertView;

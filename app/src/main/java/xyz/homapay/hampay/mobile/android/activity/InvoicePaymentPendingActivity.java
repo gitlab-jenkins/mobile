@@ -4,8 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,18 +19,23 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
-import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
-import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
+import xyz.homapay.hampay.common.common.response.ResponseMessage;
+import xyz.homapay.hampay.common.common.response.ResultStatus;
+import xyz.homapay.hampay.common.core.model.dto.UserVerificationStatus;
+import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
+import xyz.homapay.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
+import xyz.homapay.hampay.common.core.model.response.GetUserIdTokenResponse;
+import xyz.homapay.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
-import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import xyz.homapay.hampay.mobile.android.async.RequestLatestPurchase;
-import xyz.homapay.hampay.mobile.android.async.RequestPSPResult;
+import xyz.homapay.hampay.mobile.android.async.RequestIndividualPaymentConfirm;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
+import xyz.homapay.hampay.mobile.android.async.RequestUserIdToken;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.component.edittext.CurrencyFormatterTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
@@ -37,19 +46,35 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.webservice.psp.Vectorstring2stringMapEntry;
 import xyz.homapay.hampay.mobile.android.webservice.psp.string2stringMapEntry;
 
-public class BusinessPaymentConfirmActivity extends AppCompatActivity {
+public class InvoicePaymentPendingActivity extends AppCompatActivity {
 
-    ButtonRectangle pay_to_business_button;
-    FacedTextView cancel_pay_to_business_button;
+    ButtonRectangle pay_to_one_button;
 
+    Bundle bundle;
 
-    FacedTextView contact_name;
+    private String contactPhoneNo;
+    private String contactName;
+
+    FacedTextView contact_name_1;
+    FacedTextView contact_name_2;
+    FacedTextView received_message;
+
     FacedEditText contact_message;
-    FacedTextView credit_value;
-    ImageView credit_value_icon;
+    String contactMssage = "";
+    FacedTextView payment_value;
+    FacedTextView cardNumberValue;
+    FacedEditText pin2Value;
+    Long amountValue;
+    boolean creditValueValidation = false;
+
+    String number = "";
+
     boolean intentContact = false;
+
     Context context;
     Activity activity;
+
+
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
@@ -64,18 +89,6 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
     Tracker hamPayGaTracker;
 
-    FacedTextView business_name;
-    ImageView business_logo;
-
-    FacedTextView paymentPriceValue;
-    FacedTextView paymentVAT;
-    FacedTextView paymentFeeValue;
-    FacedTextView paymentTotalValue;
-    FacedTextView cardNumberValue;
-    FacedEditText pin2Value;
-
-    DatabaseHelper databaseHelper;
-
     PaymentInfoDTO paymentInfoDTO = null;
     PspInfoDTO pspInfoDTO = null;
 
@@ -83,7 +96,6 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
     private DoWorkInfo doWorkInfo;
 
     PersianEnglishDigit persianEnglishDigit;
-
 
     @Override
     protected void onPause() {
@@ -103,27 +115,22 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
         HamPayApplication.setAppSate(AppState.Resumed);
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_business_payment_confirm);
+        setContentView(R.layout.activity_invoice_payment_pending);
 
         context = this;
-        activity = BusinessPaymentConfirmActivity.this;
+        activity = InvoicePaymentPendingActivity.this;
 
-
-        databaseHelper = new DatabaseHelper(context);
-
-        persianEnglishDigit = new PersianEnglishDigit();
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
         try {
 
-            MaxXferAmount = prefs.getLong(Constants.MAX_BUSINESS_XFER_AMOUNT, 0);
-            MinXferAmount = prefs.getLong(Constants.MIN_BUSINESS_XFER_AMOUNT, 0);
+            MaxXferAmount = prefs.getLong(Constants.MAX_INDIVIDUAL_XFER_AMOUNT, 0);
+            MinXferAmount = prefs.getLong(Constants.MIN_INDIVIDUAL_XFER_AMOUNT, 0);
 
         }catch (Exception ex){
             Log.e("Error", ex.getStackTrace().toString());
@@ -134,54 +141,76 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
         hamPayDialog = new HamPayDialog(activity);
 
-        credit_value = (FacedTextView)findViewById(R.id.credit_value);
-        credit_value_icon = (ImageView)findViewById(R.id.credit_value_icon);
+        persianEnglishDigit = new PersianEnglishDigit();
+
 
         contact_message = (FacedEditText)findViewById(R.id.contact_message);
-        contact_name = (FacedTextView)findViewById(R.id.contact_name);
-
-        business_name = (FacedTextView)findViewById(R.id.business_name);
-        business_logo = (ImageView)findViewById(R.id.business_logo);
-        paymentPriceValue = (FacedTextView)findViewById(R.id.paymentPriceValue);
-        paymentVAT = (FacedTextView)findViewById(R.id.paymentVAT);
-        paymentFeeValue = (FacedTextView)findViewById(R.id.paymentFeeValue);
-        paymentTotalValue = (FacedTextView)findViewById(R.id.paymentTotalValue);
-        cardNumberValue = (FacedTextView)findViewById(R.id.cardNumberValue);
+        contact_name_1 = (FacedTextView)findViewById(R.id.contact_name_1);
+        contact_name_2 = (FacedTextView)findViewById(R.id.contact_name_2);
+        received_message = (FacedTextView)findViewById(R.id.received_message);
+        payment_value = (FacedTextView)findViewById(R.id.payment_value);
         pin2Value = (FacedEditText)findViewById(R.id.pin2Value);
+        cardNumberValue = (FacedTextView)findViewById(R.id.cardNumberValue);
+
+        bundle = getIntent().getExtras();
 
         Intent intent = getIntent();
 
-        paymentInfoDTO = (PaymentInfoDTO)intent.getSerializableExtra(Constants.PAYMENT_INFO);
-        pspInfoDTO = (PspInfoDTO)intent.getSerializableExtra(Constants.PSP_INFO);
+        if (intent != null) {
+            paymentInfoDTO = (PaymentInfoDTO)intent.getSerializableExtra(Constants.PAYMENT_INFO);
+            pspInfoDTO = (PspInfoDTO)intent.getSerializableExtra(Constants.PSP_INFO);
+            contact_name_1.setText(paymentInfoDTO.getCallerName());
+            contact_name_2.setText(paymentInfoDTO.getCallerName());
+            received_message.setText(paymentInfoDTO.getMessage());
+            payment_value.setText(paymentInfoDTO.getAmount() + "");
 
-        if (pspInfoDTO.getCardDTO().getCardId() == null) {
-            LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
-            creditInfo.setVisibility(View.GONE);
+            if (pspInfoDTO.getCardDTO().getCardId() == null) {
+                LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
+                creditInfo.setVisibility(View.GONE);
+            }else {
+                cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
+            }
+        }else {
+
+            intentContact = true;
+
+            Uri uri = getIntent().getData();
+
+            Cursor phonesCursor = getContentResolver().query(uri, null, null, null,
+                    ContactsContract.CommonDataKinds.Phone.IS_PRIMARY + " DESC");
+            if (phonesCursor != null) {
+                if (phonesCursor.moveToNext()) {
+                    String id = phonesCursor.getString(phonesCursor
+                            .getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
+                    Cursor pCur = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", new String[]{id}, null);
+                    while (pCur.moveToNext()) {
+                        contactPhoneNo = pCur.getString(pCur
+                                .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        contactName = pCur.getString(pCur
+                                .getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                        if (TextUtils.isEmpty(contactPhoneNo)) continue;
+                        if (!number.equals("")) number = number + "&";
+//                        contactPhoneNo = PhoneNumberUtils.stripSeparators(contactPhoneNo);
+
+                        //number = number + searchReplaceNumber(getApplicationContext(), n);
+                    }
+                    pCur.close();
+                }
+                phonesCursor.close();
+
+                Log.e("URL", contactPhoneNo);
+
+            }
         }
-        else {
-            cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
-        }
 
 
-        if (paymentInfoDTO != null) {
-            PersianEnglishDigit persianEnglishDigit = new PersianEnglishDigit();
 
-            paymentPriceValue.setText(persianEnglishDigit.E2P(paymentInfoDTO.getAmount().toString()) + " ریال");
-            paymentFeeValue.setText(persianEnglishDigit.E2P(paymentInfoDTO.getFeeCharge().toString()) + " ریال");
-            paymentTotalValue.setText(persianEnglishDigit.E2P(paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + "") + " ریال");
-//            String LogoUrl = Constants.HTTPS_SERVER_IP + "/merchant-logo/" + paymentInfoDTO.getMerchantImageId();
 
-//            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_logo)).execute(Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantImageId());
-
-//            user_bank_name.setText(purchaseInfoDTO.getBankName);
-        }
-
-        pay_to_business_button = (ButtonRectangle)findViewById(R.id.pay_to_business_button);
-        pay_to_business_button.setOnClickListener(new View.OnClickListener() {
+        pay_to_one_button = (ButtonRectangle)findViewById(R.id.pay_to_one_button);
+        pay_to_one_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 if (pspInfoDTO.getCardDTO().getCardId() == null) {
                     Intent intent = new Intent();
                     intent.setClass(activity, BankWebPaymentActivity.class);
@@ -251,31 +280,8 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
                 }
             }
         });
-
-        cancel_pay_to_business_button = (FacedTextView)findViewById(R.id.cancel_pay_to_business_button);
-        cancel_pay_to_business_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-
-            }
-        });
     }
 
-
-    @Override
-    public void onUserInteraction() {
-        super.onUserInteraction();
-//        Log.e("EXIT", "onUserInteraction");
-    }
-
-    @Override
-    protected void onUserLeaveHint() {
-        super.onUserLeaveHint();
-        Log.e("EXIT", "onUserLeaveHint");
-        editor.putString(Constants.USER_ID_TOKEN, "");
-        editor.commit();
-    }
 
     @Override
     public void onBackPressed() {
@@ -292,6 +298,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
         finish();
     }
+
 
     public class RequestPurchaseTaskCompleteListener implements AsyncTaskCompleteListener<Vectorstring2stringMapEntry> {
 
@@ -326,5 +333,6 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
             hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
+
 
 }

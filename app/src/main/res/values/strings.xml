@@ -517,6 +517,7 @@
     <string name="business_pending">کسب و کارها</string>
     <string name="individual_pending">دوستان</string>
     <string name="payment_request_from">تولید فاکتور برای: </string>
+    <string name="payment_request_to">پرداخت به: </string>
     <string name="credit_request_action">ارسال</string>
     <string name="msg_success_credit_request">فاکتور شما با موفقیت ارسال شد.</string>
     <string name="msg_success_psp_result">درخواست شما با موفقیت دریافت شد. برای جزییات بیشتر به تراکنش‌ها مراجعه کنید.</string>
@@ -531,5 +532,6 @@
     <string name="business_payment_info">اطلاعات پرداخت</string>
     <string name="business_payment_preview">پرداخت</string>
     <string name="business_payment_create">درخواست پرداخت</string>
+    <string name="invoce_payment_confirm">تایید پرداخت</string>
 
 </resources>

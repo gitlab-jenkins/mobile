@@ -440,7 +440,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
                     purchaseInfoDTO = latestPurchaseResponseMessage.getService().getPurchaseInfo();
 
-                    cardDTO = latestPurchaseResponseMessage.getService().getCardDTO();
+                    cardDTO = latestPurchaseResponseMessage.getService().getPspInfoDTO().getCardDTO();
 
                     if (purchaseInfoDTO != null) {
 

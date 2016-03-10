@@ -71,19 +71,6 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".activity.ConfirmAccountNoActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"></activity>
-        <activity
-            android:name=".activity.ConfirmInfoActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"></activity>
-        <activity
-            android:name=".activity.RegVerifyAccountNoActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"></activity>
-        <activity
             android:name=".activity.PostRegVerifyAccountNoActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"></activity>
@@ -176,6 +163,11 @@
             android:windowSoftInputMode="stateHidden"></activity>
         <activity
             android:name=".activity.BankWebPaymentActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"></activity>
+        <activity
+            android:name=".activity.InvoicePaymentPendingActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"></activity>

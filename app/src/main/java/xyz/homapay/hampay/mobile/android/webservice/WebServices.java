@@ -573,6 +573,7 @@ public class WebServices  {
 
         proxyService.closeConnection();
 
+
         return responseMessage;
     }
 
