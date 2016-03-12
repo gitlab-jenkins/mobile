@@ -39,6 +39,7 @@ import xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryReq
 import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingPaymentListRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingPurchaseListRequest;
+import xyz.homapay.hampay.common.core.model.request.PurchaseInfoRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationCredentialsRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
@@ -71,6 +72,7 @@ import xyz.homapay.hampay.common.core.model.response.MobileRegistrationIdEntryRe
 import xyz.homapay.hampay.common.core.model.response.PSPResultResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingPaymentListResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingPurchaseListResponse;
+import xyz.homapay.hampay.common.core.model.response.PurchaseInfoResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationCredentialsResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationEntryResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
@@ -1064,7 +1066,32 @@ public class WebServices  {
         proxyService.closeConnection();
 
         return  responseMessage;
+    }
 
+    public ResponseMessage<PurchaseInfoResponse> purchaseInfo(PurchaseInfoRequest purchaseInfoRequest) throws IOException{
+
+        ResponseMessage<PurchaseInfoResponse> responseMessage = null;
+        url = new URL(ServiceURL + "/purchase/info");
+        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+
+        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+
+        RequestMessage<PurchaseInfoRequest> message = new RequestMessage<>();
+        message.setRequestHeader(header);
+        purchaseInfoRequest.setRequestUUID(UUID.randomUUID().toString());
+        message.setService(purchaseInfoRequest);
+
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<PurchaseInfoRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
+
+        Gson gson = builder.getDatebuilder().create();
+
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<PurchaseInfoResponse>>() {}.getType());
+
+        proxyService.closeConnection();
+
+        return responseMessage;
     }
 
 }

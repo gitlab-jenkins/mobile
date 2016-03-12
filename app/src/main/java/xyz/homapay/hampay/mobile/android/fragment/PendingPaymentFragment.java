@@ -145,7 +145,7 @@ public class PendingPaymentFragment extends Fragment {
                 if (pendingPurchaseListResponse != null) {
                     intent.setClass(getActivity(), RequestBusinessPayDetailActivity.class);
                     intent.putExtra(Constants.PENDING_PAYMENT_REQUEST_LIST, pendingPurchaseListResponse.getPendingList().get(position));
-                    intent.putExtra(Constants.CARD_INFO, pendingPurchaseListResponse.getCardDTO());
+                    intent.putExtra(Constants.PSP_INFO, pendingPurchaseListResponse.getPspInfo());
                     startActivity(intent);
                 }else if (paymentInfoDTOs != null){
                     intent.setClass(getActivity(), IndividualPaymentPendingActivity.class);

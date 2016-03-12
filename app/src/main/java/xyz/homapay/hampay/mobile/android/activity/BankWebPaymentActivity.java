@@ -15,6 +15,7 @@ import java.io.UnsupportedEncodingException;
 
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
+import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.account.Log;
@@ -28,11 +29,14 @@ public class BankWebPaymentActivity extends AppCompatActivity {
     HamPayDialog hamPayDialog;
     SharedPreferences prefs;
     PaymentInfoDTO paymentInfoDTO = null;
+    PurchaseInfoDTO purchaseInfoDTO = null;
     PspInfoDTO pspInfoDTO = null;
 
     String redirectedURL;
 
     Activity activity;
+
+    String postData;
 
     @Override
     protected void onPause() {
@@ -64,6 +68,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
         activity = BankWebPaymentActivity.this;
 
         paymentInfoDTO = (PaymentInfoDTO)intent.getSerializableExtra(Constants.PAYMENT_INFO);
+        purchaseInfoDTO = (PurchaseInfoDTO)intent.getSerializableExtra(Constants.PURCHASE_INFO);
         pspInfoDTO = (PspInfoDTO)intent.getSerializableExtra(Constants.PSP_INFO);
 
         bankWebView = (WebView)findViewById(R.id.bankWebView);
@@ -80,13 +85,23 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
         redirectedURL = Constants.IPG_URL + "/redirect/saman/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") ;
 
-        String postData =
-                "Amount=" + paymentInfoDTO.getAmount() +
-                "&TerminalId=" + pspInfoDTO.getTerminalID() +
-                "&ResNum=" + paymentInfoDTO.getProductCode() +
-                "&ResNum4=" +Constants.REGISTERED_CELL_NUMBER +
-                "&RedirectURL=" + redirectedURL;
 
+        if (paymentInfoDTO != null) {
+            postData =
+                    "Amount=" + paymentInfoDTO.getAmount() +
+                            "&TerminalId=" + pspInfoDTO.getTerminalID() +
+                            "&ResNum=" + paymentInfoDTO.getProductCode() +
+                            "&ResNum4=" + Constants.REGISTERED_CELL_NUMBER +
+                            "&RedirectURL=" + redirectedURL;
+
+        }else if (purchaseInfoDTO != null){
+            postData =
+                    "Amount=" + purchaseInfoDTO.getAmount() +
+                            "&TerminalId=" + pspInfoDTO.getTerminalID() +
+                            "&ResNum=" + purchaseInfoDTO.getProductCode() +
+                            "&ResNum4=" + Constants.REGISTERED_CELL_NUMBER +
+                            "&RedirectURL=" + redirectedURL;
+        }
         android.util.Log.e("POST", postData);
 
         try {

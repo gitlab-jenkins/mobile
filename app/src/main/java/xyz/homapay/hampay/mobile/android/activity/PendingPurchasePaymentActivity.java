@@ -178,7 +178,7 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
                 if (pendingPurchaseListResponse != null) {
                     intent.setClass(activity, RequestBusinessPayDetailActivity.class);
                     intent.putExtra(Constants.PENDING_PAYMENT_REQUEST_LIST, pendingPurchaseListResponse.getPendingList().get(position));
-                    intent.putExtra(Constants.CARD_INFO, pendingPurchaseListResponse.getCardDTO());
+                    intent.putExtra(Constants.PSP_INFO, pendingPurchaseListResponse.getPspInfo());
                     startActivity(intent);
                 } else if (paymentInfoDTOs != null) {
                     intent.setClass(activity, InvoicePaymentPendingActivity.class);

@@ -443,11 +443,11 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
 
             case R.id.find_business_purchase_button:
 
-                    new Collapse(keyboard).animate();
+                new Collapse(keyboard).animate();
 
                 if (inputPurchaseCode.length() == 6) {
-                    inputPurchaseCode = "";
                     Intent intent = new Intent();
+                    intent.putExtra(Constants.BUSINESS_PURCHASE_CODE, inputPurchaseCode);
                     intent.setClass(context, RequestBusinessPayDetailActivity.class);
                     startActivity(intent);
                     input_digit_1.setText("");
@@ -456,7 +456,8 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                     input_digit_4.setText("");
                     input_digit_5.setText("");
                     input_digit_6.setText("");
-                    }else {
+                    inputPurchaseCode = "";
+                }else {
                     Toast.makeText(context, getString(R.string.msg_incorrect_pending_payment_code), Toast.LENGTH_LONG).show();
                 }
                 break;

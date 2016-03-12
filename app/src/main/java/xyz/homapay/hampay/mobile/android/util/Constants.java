@@ -83,4 +83,6 @@ public class Constants {
     public static final String USER_IMAGE_PROFILE_ID = "userImageProfileId";
     public static final String PAYMENT_INFO = "paymantInfo";
     public static final String PSP_INFO = "pspInfo";
+    public static final String PURCHASE_INFO = "purchaseInfo";
+    public static final String BUSINESS_PURCHASE_CODE = "businessPurchaseCode";
 }

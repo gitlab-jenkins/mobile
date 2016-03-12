@@ -208,11 +208,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
                     string2stringMapEntry s2sMapEntry = new string2stringMapEntry();
 
                     s2sMapEntry.key = "Amount";
-                    if (paymentInfoDTO.getFeeCharge() != null) {
-                        s2sMapEntry.value = (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge()) + "";
-                    } else {
-                        s2sMapEntry.value = (paymentInfoDTO.getAmount()) + "";
-                    }
+                    s2sMapEntry.value = (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge()) + "";
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     s2sMapEntry = new string2stringMapEntry();
