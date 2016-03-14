@@ -333,7 +333,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
                     case CREDIT_REQUEST:
                         notificationIntent = getIntent();
-                        notificationIntent.setClass(activity, IndividualPaymentPendingActivity.class);
+                        notificationIntent.setClass(activity, PendingPurchasePaymentActivity.class);
                         startActivity(notificationIntent);
                         break;
                 }

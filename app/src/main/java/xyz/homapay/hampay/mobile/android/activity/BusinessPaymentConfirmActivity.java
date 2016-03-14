@@ -15,16 +15,12 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
-import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
-import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import xyz.homapay.hampay.mobile.android.async.RequestLatestPurchase;
-import xyz.homapay.hampay.mobile.android.async.RequestPSPResult;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
@@ -166,6 +162,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
         if (paymentInfoDTO != null) {
             PersianEnglishDigit persianEnglishDigit = new PersianEnglishDigit();
 
+            business_name.setText(paymentInfoDTO.getCallerName());
             paymentPriceValue.setText(persianEnglishDigit.E2P(paymentInfoDTO.getAmount().toString()) + " ریال");
             paymentFeeValue.setText(persianEnglishDigit.E2P(paymentInfoDTO.getFeeCharge().toString()) + " ریال");
             paymentTotalValue.setText(persianEnglishDigit.E2P(paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + "") + " ریال");

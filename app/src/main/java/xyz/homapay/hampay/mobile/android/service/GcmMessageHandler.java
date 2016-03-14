@@ -8,6 +8,7 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.AppSliderActivity;
 import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.activity.IndividualPaymentPendingActivity;
+import xyz.homapay.hampay.mobile.android.activity.PendingPurchasePaymentActivity;
 import xyz.homapay.hampay.mobile.android.component.headsup.HeadsUp;
 import xyz.homapay.hampay.mobile.android.component.headsup.HeadsUpManager;
 import xyz.homapay.hampay.mobile.android.model.AppState;
@@ -209,7 +210,7 @@ public class GcmMessageHandler extends IntentService{
                                     .message(notificationMessage)
                                     .smallIcon(R.mipmap.ic_launcher)
                                     .flags(Notification.DEFAULT_ALL)
-                                    .click(IndividualPaymentPendingActivity.class, bundle)
+                                    .click(PendingPurchasePaymentActivity.class, bundle)
                                     .color(R.color.colorPrimary)
                                     .ticker(Constants.NOTIFICATION_PAYMENT)
                                     .autoCancel(true)
@@ -259,7 +260,7 @@ public class GcmMessageHandler extends IntentService{
                                     .message(notificationMessage)
                                     .smallIcon(R.mipmap.ic_launcher)
                                     .flags(Notification.DEFAULT_ALL)
-                                    .click(IndividualPaymentPendingActivity.class, bundle)
+                                    .click(PendingPurchasePaymentActivity.class, bundle)
                                     .color(R.color.colorPrimary)
                                     .ticker(Constants.NOTIFICATION_CREDIT_REQUEST)
                                     .autoCancel(true)

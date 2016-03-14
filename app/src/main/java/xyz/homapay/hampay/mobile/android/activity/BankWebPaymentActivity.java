@@ -83,10 +83,8 @@ public class BankWebPaymentActivity extends AppCompatActivity {
         settings.setJavaScriptEnabled(true);
         bankWebView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 
-        redirectedURL = Constants.IPG_URL + "/redirect/saman/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") ;
-
-
         if (paymentInfoDTO != null) {
+            redirectedURL = Constants.IPG_URL + "/payment/saman-redirect/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
             postData =
                     "Amount=" + paymentInfoDTO.getAmount() +
                             "&TerminalId=" + pspInfoDTO.getTerminalID() +
@@ -95,6 +93,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                             "&RedirectURL=" + redirectedURL;
 
         }else if (purchaseInfoDTO != null){
+            redirectedURL = Constants.IPG_URL + "/purchase/saman-redirect/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
             postData =
                     "Amount=" + purchaseInfoDTO.getAmount() +
                             "&TerminalId=" + pspInfoDTO.getTerminalID() +
@@ -105,7 +104,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
         android.util.Log.e("POST", postData);
 
         try {
-            bankWebView.postUrl("http://176.58.104.158/assets/psp/index.php", postData.getBytes("UTF-8"));
+            bankWebView.postUrl(Constants.BANK_GATEWAY_URL, postData.getBytes("UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -116,18 +115,18 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
             public void onPageFinished(WebView view, String url) {
 
-                if (url.equalsIgnoreCase(redirectedURL)){
-                    if (view.getTitle().equalsIgnoreCase("failure")){
+                if (url.equalsIgnoreCase(redirectedURL)) {
+                    if (view.getTitle().equalsIgnoreCase("failure")) {
                         hamPayDialog.businessPaymentFailDialog();
-                    }else {
+                    } else {
                         hamPayDialog.businessPaymentSuccessDialog(view.getTitle());
                     }
-                }
-                else {
+                } else {
                     hamPayDialog.dismisWaitingDialog();
                 }
             }
-            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error){
+
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
                 handler.proceed();
             }
         });
