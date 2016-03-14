@@ -71,6 +71,9 @@ public class RequestLogin extends AsyncTask<LoginData, Void, String> {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        loginStream.closeConnection();
+
         return resultLogin;
     }
 

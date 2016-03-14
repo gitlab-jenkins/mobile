@@ -40,7 +40,6 @@ public class LoginStream {
 
     public int resultCode() throws Exception {
         int responseCode = proxyHamPayLogin.hamPayLogin(loginData);
-        proxyHamPayLogin.closeConnection();
         return responseCode;
 
     }
@@ -54,6 +53,10 @@ public class LoginStream {
     public String failLogin() throws Exception {
 
        return proxyHamPayLogin.hamPayFailLogin();
+    }
+
+    public void closeConnection(){
+        proxyHamPayLogin.closeConnection();
     }
 
 }
