@@ -106,6 +106,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
     PspInfoDTO pspInfoDTO = null;
     String purchaseCode = null;
 
+    LinearLayout creditInfo;
+
     RequestPSPResult requestPSPResult;
     PSPResultRequest pspResultRequest;
 
@@ -169,6 +171,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         contact_message = (FacedEditText)findViewById(R.id.contact_message);
         contact_name = (FacedTextView)findViewById(R.id.contact_name);
 
+        creditInfo = (LinearLayout)findViewById(R.id.creditInfo);
 
         input_digit_1 = (FacedTextView)findViewById(R.id.input_digit_1);
         input_digit_2 = (FacedTextView)findViewById(R.id.input_digit_2);
@@ -465,6 +468,13 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
                     if (purchaseInfoDTO != null) {
 
+                        if (pspInfoDTO.getCardDTO().getCardId() == null) {
+                            creditInfo.setVisibility(View.GONE);
+                        }
+                        else {
+                            creditInfo.setVisibility(View.VISIBLE);
+                        }
+
                         PersianEnglishDigit persianEnglishDigit = new PersianEnglishDigit();
 
                         String persianPurchaseCode = persianEnglishDigit.E2P(purchaseInfoDTO.getPurchaseCode());
@@ -554,8 +564,10 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                     if (purchaseInfoDTO != null) {
 
                         if (pspInfoDTO.getCardDTO().getCardId() == null) {
-                            LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
                             creditInfo.setVisibility(View.GONE);
+                        }
+                        else {
+                            creditInfo.setVisibility(View.VISIBLE);
                         }
 
                         PersianEnglishDigit persianEnglishDigit = new PersianEnglishDigit();

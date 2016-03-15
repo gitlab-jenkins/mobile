@@ -121,7 +121,6 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
             @Override
             public void onClick(View v) {
 
-
                 Rect displayRectangle = new Rect();
 
                 Window window = activity.getWindow();

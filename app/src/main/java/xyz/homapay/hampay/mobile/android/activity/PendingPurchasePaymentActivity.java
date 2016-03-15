@@ -68,7 +68,7 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
     PendingPaymentListRequest pendingPaymentListRequest;
 
     PendingPurchaseAdapter pendingPurchaseAdapter;
-    PendingPaymentAdapter pendingCreditRequestAdapter;
+    PendingPaymentAdapter pendingPaymentAdapter;
 
     ListView pendingListView;
 
@@ -253,8 +253,8 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
                 if (pendingPaymentListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     paymentInfoDTOs = pendingPaymentListResponseMessage.getService().getPendingList();
                     pspInfoDTOs = pendingPaymentListResponseMessage.getService().getPspInfo();
-                    pendingCreditRequestAdapter = new PendingPaymentAdapter(activity, paymentInfoDTOs);
-                    pendingListView.setAdapter(pendingCreditRequestAdapter);
+                    pendingPaymentAdapter = new PendingPaymentAdapter(activity, paymentInfoDTOs);
+                    pendingListView.setAdapter(pendingPaymentAdapter);
                     pendingPurchaseListResponse = null;
                 }
             }

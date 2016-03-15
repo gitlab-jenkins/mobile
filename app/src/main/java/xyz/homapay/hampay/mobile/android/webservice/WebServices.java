@@ -277,7 +277,7 @@ public class WebServices  {
     }
 
 
-    public ResponseMessage<RegisterCardResponse> newRegisterCardResponse(RegisterCardRequest registerCardRequest) throws IOException{
+    public ResponseMessage<RegisterCardResponse> registerCardResponse(RegisterCardRequest registerCardRequest) throws IOException{
 
         ResponseMessage<RegisterCardResponse> responseMessage = null;
         url = new URL(ServiceURL + "/psp/registerCard");
@@ -387,7 +387,7 @@ public class WebServices  {
         return responseMessage;
     }
 
-    public ResponseMessage<UploadImageResponse> newUploadImage(UploadImageRequest uploadImageRequest) throws IOException{
+    public ResponseMessage<UploadImageResponse> uploadImage(UploadImageRequest uploadImageRequest) throws IOException{
 
         ResponseMessage<UploadImageResponse> responseMessage = null;
         url = new URL(ServiceURL + "/users/upload-image");

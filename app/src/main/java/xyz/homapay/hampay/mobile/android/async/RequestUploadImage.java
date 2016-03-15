@@ -41,7 +41,7 @@ public class RequestUploadImage extends AsyncTask<UploadImageRequest, Void, Resp
         WebServices webServices = new WebServices(context, Constants.CONNECTION_TYPE);
 
         try {
-            return webServices.newUploadImage(params[0]);
+            return webServices.uploadImage(params[0]);
         } catch (IOException e) {
             e.printStackTrace();
         }
