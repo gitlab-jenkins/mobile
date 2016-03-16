@@ -152,6 +152,10 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
 
+        Intent intent = getIntent();
+
+
+
         purchase_rl = (RelativeLayout)findViewById(R.id.purchase_rl);
         purchase_rl.setOnClickListener(this);
         purchase_title = (FacedTextView)findViewById(R.id.purchase_title);
@@ -171,10 +175,15 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
         requestPendingPayment = new RequestPendingPayment(activity, new RequestPendingPaymentTaskCompleteListener());
         pendingPaymentListRequest = new PendingPaymentListRequest();
 
+        if (intent.getStringExtra(Constants.CONTACT_NAME) != null){
+            requestPendingPayment.execute(pendingPaymentListRequest);
+        }else {
+            requestPendingPurchase.execute(pendingPurchaseListRequest);
+        }
+
+
         coordinatorLayout = (CoordinatorLayout)findViewById(R.id
                 .coordinatorLayout);
-
-        requestPendingPurchase.execute(pendingPurchaseListRequest);
 
         pendingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
