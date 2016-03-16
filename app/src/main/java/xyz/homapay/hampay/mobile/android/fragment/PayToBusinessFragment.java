@@ -100,7 +100,7 @@ public class PayToBusinessFragment extends Fragment {
         prefs = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE);
         editor = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE).edit();
 
-        hamPayBusinessesAdapter = new HamPayBusinessesAdapter(getActivity());
+        hamPayBusinessesAdapter = new HamPayBusinessesAdapter(getActivity(), prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
 
         hamPayGaTracker = ((HamPayApplication) getActivity().getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);

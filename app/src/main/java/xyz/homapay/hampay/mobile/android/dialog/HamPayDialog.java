@@ -2466,7 +2466,7 @@ public class HamPayDialog {
 
     public void businessPaymentSuccessDialog(String purchaseCode){
 
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_request_pay, null);
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_business_success, null);
 
         FacedTextView request_payment_message = (FacedTextView) view.findViewById(R.id.request_payment_message);
         request_payment_message.setText(activity.getString(R.string.msg_business_payment_success, new PersianEnglishDigit().E2P(purchaseCode)));
@@ -2487,7 +2487,7 @@ public class HamPayDialog {
 
     public void businessPaymentFailDialog(){
 
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_request_pay, null);
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_business_fail, null);
 
         FacedTextView request_payment_message = (FacedTextView) view.findViewById(R.id.request_payment_message);
         request_payment_message.setText(activity.getString(R.string.msg_business_payment_fail));

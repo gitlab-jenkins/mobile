@@ -21,7 +21,9 @@ import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
+import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
@@ -61,7 +63,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
     Tracker hamPayGaTracker;
 
     FacedTextView business_name;
-    ImageView business_logo;
+    ImageView business_image;
 
     FacedTextView paymentPriceValue;
     FacedTextView paymentVAT;
@@ -137,7 +139,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
         contact_name = (FacedTextView)findViewById(R.id.contact_name);
 
         business_name = (FacedTextView)findViewById(R.id.business_name);
-        business_logo = (ImageView)findViewById(R.id.business_logo);
+        business_image = (ImageView)findViewById(R.id.business_image);
         paymentPriceValue = (FacedTextView)findViewById(R.id.paymentPriceValue);
         paymentVAT = (FacedTextView)findViewById(R.id.paymentVAT);
         paymentFeeValue = (FacedTextView)findViewById(R.id.paymentFeeValue);
@@ -166,11 +168,14 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
             paymentPriceValue.setText(persianEnglishDigit.E2P(paymentInfoDTO.getAmount().toString()) + " ریال");
             paymentFeeValue.setText(persianEnglishDigit.E2P(paymentInfoDTO.getFeeCharge().toString()) + " ریال");
             paymentTotalValue.setText(persianEnglishDigit.E2P(paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + "") + " ریال");
-//            String LogoUrl = Constants.HTTPS_SERVER_IP + "/merchant-logo/" + paymentInfoDTO.getMerchantImageId();
 
-//            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_logo)).execute(Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantImageId());
-
-//            user_bank_name.setText(purchaseInfoDTO.getBankName);
+            if (paymentInfoDTO.getImageId() != null) {
+                new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute("/logo/"
+                        + prefs.getString(Constants.LOGIN_TOKEN_ID, "")
+                        + "/" + paymentInfoDTO.getImageId());
+            }else {
+                business_image.setBackgroundColor(context.getResources().getColor(R.color.user_change_status));
+            }
         }
 
         pay_to_business_button = (ButtonRectangle)findViewById(R.id.pay_to_business_button);

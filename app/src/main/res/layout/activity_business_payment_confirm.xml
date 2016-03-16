@@ -67,7 +67,7 @@
                     android:orientation="horizontal"
                     android:gravity="right|center_vertical"
                     android:layout_gravity="right"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/business_name"
@@ -79,10 +79,9 @@
                         android:text="دیجی کالا"/>
 
                     <ImageView
-                        android:id="@+id/business_logo"
+                        android:id="@+id/business_image"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:src="@drawable/dk"
                         android:layout_marginRight="24dp"
                         android:layout_marginTop="12dp"
                         android:layout_marginBottom="12dp"

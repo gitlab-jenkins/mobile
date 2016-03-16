@@ -30,10 +30,9 @@
                 android:text="test"/>
 
             <ImageView
-                android:id="@+id/business_logo"
+                android:id="@+id/business_image"
                 android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/dk"/>
+                android:layout_height="60dp" />
 
         </LinearLayout>
 

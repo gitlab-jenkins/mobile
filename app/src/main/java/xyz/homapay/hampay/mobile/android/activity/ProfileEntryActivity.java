@@ -393,7 +393,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
                 accountNumberValue.clearFocus();
 
 
-                if (cellNumberIsValid && nationalCodeIsValid /*&& verifiedCardNumber*/
+                if (cellNumberIsValid && nationalCodeIsValid && verifiedCardNumber
                         && cellNumberValue.getText().toString().length() > 0
                         && nationalCodeValue.getText().toString().length() > 0
                         && accountNumberValue.getText().toString().length() > 0

@@ -184,11 +184,6 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-    }
-
-    @Override
     public void onDetach() {
         super.onDetach();
     }
@@ -202,10 +197,8 @@ public class MainFragment extends Fragment implements View.OnClickListener{
             case R.id.show_hampay_friend:
                 if (hampay_friend.getVisibility() == View.GONE){
                     new Expand(hampay_friend).animate();
-//                    indicator_icon.setImageResource(R.drawable.ic_friend_collaps);
                 }else {
                     new Collapse(hampay_friend).animate();
-//                    indicator_icon.setImageResource(R.drawable.ic_friend_expand);
                 }
                 break;
 

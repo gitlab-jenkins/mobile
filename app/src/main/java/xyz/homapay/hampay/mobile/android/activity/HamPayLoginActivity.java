@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -155,10 +154,16 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
     Bundle bundle;
 
+    ImageView image;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ham_pay_login);
+
+        image = (ImageView)findViewById(R.id.image);
+
+
 
         instance = this;
 

@@ -17,13 +17,16 @@ import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.BusinessPaymentConfirmRequest;
 import xyz.homapay.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
+import xyz.homapay.hampay.common.core.model.response.dto.BusinessDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestBusinessPaymentConfirm;
+import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
+import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.CurrencyFormatterTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
@@ -40,11 +43,10 @@ import xyz.homapay.hampay.mobile.android.webservice.psp.string2stringMapEntry;
 public class BusinessPaymentInfoActivity extends AppCompatActivity {
 
 
-    Bundle bundle;
-
     PersianEnglishDigit persianEnglishDigit;
 
-    FacedTextView business_name_code;
+    FacedTextView business_name;
+    ImageView business_image;
 
     ButtonRectangle pay_to_business_button;
 
@@ -66,9 +68,6 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
     private RequestBusinessPaymentConfirm requestBusinessPaymentConfirm;
     private BusinessPaymentConfirmRequest businessPaymentConfirmRequest;
 
-    private RequestPurchase requestPurchase;
-    private DoWorkInfo doWorkInfo;
-
     FacedEditText pin2Value;
 
     Long MaxXferAmount = 0L;
@@ -79,6 +78,8 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
     Tracker hamPayGaTracker;
 
     DeviceInfo deviceInfo;
+
+    private BusinessDTO businessDTO;
 
 
     FacedTextView cardNumberValue;
@@ -135,12 +136,23 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
             Log.e("Error", ex.getStackTrace().toString());
         }
 
-        bundle = getIntent().getExtras();
+        Intent intent = getIntent();
+        businessDTO = (BusinessDTO)intent.getSerializableExtra(Constants.BUSINESS_INFO);
 
         pin2Value = (FacedEditText)findViewById(R.id.pin2Value);
 
-        business_name_code = (FacedTextView)findViewById(R.id.business_name_code);
-        business_name_code.setText(persianEnglishDigit.E2P(bundle.getString("business_name") + " " + "(" + bundle.getString("business_code") + ")"));
+        business_name = (FacedTextView)findViewById(R.id.business_name);
+        business_name.setText(persianEnglishDigit.E2P(businessDTO.getTitle() + " " + "(" +businessDTO.getCode() + ")"));
+        business_image = (ImageView)findViewById(R.id.business_image);
+
+        if (businessDTO.getBusinessImageId() != null) {
+            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute("/logo/"
+                    + prefs.getString(Constants.LOGIN_TOKEN_ID, "")
+                    + "/" + businessDTO.getBusinessImageId());
+        }else {
+            business_image.setBackgroundColor(context.getResources().getColor(R.color.user_change_status));
+        }
+
         cardNumberValue = (FacedTextView)findViewById(R.id.cardNumberValue);
 
         contact_message = (FacedEditText)findViewById(R.id.contact_message);
@@ -192,7 +204,7 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
                             hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                             businessPaymentConfirmRequest = new BusinessPaymentConfirmRequest();
                             businessPaymentConfirmRequest.setAmount(amountValue);
-                            businessPaymentConfirmRequest.setBusinessCode(bundle.getString("business_code"));
+                            businessPaymentConfirmRequest.setBusinessCode(businessDTO.getCode());
                             businessPaymentConfirmRequest.setMessage(contact_message.getText().toString());
                             requestBusinessPaymentConfirm = new RequestBusinessPaymentConfirm(context, new RequestBusinessPaymentConfirmTaskCompleteListener());
                             requestBusinessPaymentConfirm.execute(businessPaymentConfirmRequest);

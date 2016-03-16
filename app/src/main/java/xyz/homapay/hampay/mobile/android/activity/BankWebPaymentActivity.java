@@ -115,7 +115,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
             public void onPageFinished(WebView view, String url) {
 
-                if (url.equalsIgnoreCase(redirectedURL)) {
+                if (url.toLowerCase().contains("c.php")) {
                     if (view.getTitle().equalsIgnoreCase("failure")) {
                         hamPayDialog.businessPaymentFailDialog();
                     } else {

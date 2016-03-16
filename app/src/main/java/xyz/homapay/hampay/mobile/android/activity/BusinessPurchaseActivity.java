@@ -146,8 +146,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
 
     Long MaxXferAmount = 0L;
     Long MinXferAmount = 0L;
-    RequestBusinessPaymentConfirm requestBusinessPaymentConfirm;
-    BusinessPaymentConfirmRequest businessPaymentConfirmRequest;
 
     public void backActionBar(View view){
         finish();
@@ -266,8 +264,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent();
                 intent.setClass(context, BusinessPaymentInfoActivity.class);
-                intent.putExtra("business_name", businessDTOs.get(position).getTitle());
-                intent.putExtra("business_code", businessDTOs.get(position).getCode());
+                intent.putExtra(Constants.BUSINESS_INFO, businessDTOs.get(position));
                 context.startActivity(intent);
             }
         });
@@ -319,7 +316,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
         MaxXferAmount = prefs.getLong(Constants.MAX_BUSINESS_XFER_AMOUNT, 0);
         MinXferAmount = prefs.getLong(Constants.MIN_BUSINESS_XFER_AMOUNT, 0);
 
-        hamPayBusinessesAdapter = new HamPayBusinessesAdapter(activity);
+        hamPayBusinessesAdapter = new HamPayBusinessesAdapter(activity, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
 
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);

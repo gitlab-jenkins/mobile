@@ -2,6 +2,7 @@ package xyz.homapay.hampay.mobile.android.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -72,6 +73,8 @@ public class PendingPaymentFragment extends Fragment {
     ButtonRectangle request_business_button;
     ButtonRectangle request_individual_button;
 
+    SharedPreferences prefs;
+
     public PendingPaymentFragment() {
     }
 
@@ -105,6 +108,8 @@ public class PendingPaymentFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_pending_payment, container, false);
+
+        prefs = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE);
 
         hamPayDialog = new HamPayDialog(getActivity());
         pendigPaymentListView = (ListView)rootView.findViewById(R.id.pendigPaymentListView);
@@ -145,7 +150,7 @@ public class PendingPaymentFragment extends Fragment {
                 if (pendingPurchaseListResponse != null) {
                     intent.setClass(getActivity(), RequestBusinessPayDetailActivity.class);
                     intent.putExtra(Constants.PENDING_PAYMENT_REQUEST_LIST, pendingPurchaseListResponse.getPendingList().get(position));
-                    intent.putExtra(Constants.PSP_INFO, pendingPurchaseListResponse.getPspInfo());
+                    intent.putExtra(Constants.PSP_INFO, pendingPurchaseListResponse.getPendingList().get(position).getPspInfo());
                     startActivity(intent);
                 }else if (paymentInfoDTOs != null){
                     intent.setClass(getActivity(), IndividualPaymentPendingActivity.class);
@@ -217,7 +222,7 @@ public class PendingPaymentFragment extends Fragment {
             if (pendingPurchaseListResponseMessage != null) {
                 if (pendingPurchaseListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     pendingPurchaseListResponse = pendingPurchaseListResponseMessage.getService();
-                    pendingPurchaseAdapter = new PendingPurchaseAdapter(getActivity(), pendingPurchaseListResponseMessage.getService().getPendingList());
+                    pendingPurchaseAdapter = new PendingPurchaseAdapter(getActivity(), pendingPurchaseListResponseMessage.getService().getPendingList(), prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
                     pendigPaymentListView.setAdapter(pendingPurchaseAdapter);
                     paymentInfoDTOs = null;
                 }

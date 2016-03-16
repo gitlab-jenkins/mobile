@@ -74,14 +74,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/black"
-                        android:textSize="15dp"
-                        android:text="wwwwww"/>
+                        android:textSize="15dp" />
 
                     <ImageView
-                        android:id="@+id/business_logo"
+                        android:id="@+id/business_image"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:src="@drawable/dk"
                         android:layout_marginRight="24dp"
                         android:layout_marginTop="12dp"
                         android:layout_marginBottom="12dp"

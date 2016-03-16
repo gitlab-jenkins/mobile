@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -88,6 +89,8 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
 
     private Dialog dialog;
 
+    SharedPreferences prefs;
+
 
     public void backActionBar(View view){
         finish();
@@ -147,6 +150,8 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
         context = this;
         activity = PendingPurchasePaymentActivity.this;
 
+        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+
         purchase_rl = (RelativeLayout)findViewById(R.id.purchase_rl);
         purchase_rl.setOnClickListener(this);
         purchase_title = (FacedTextView)findViewById(R.id.purchase_title);
@@ -178,7 +183,7 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
                 if (pendingPurchaseListResponse != null) {
                     intent.setClass(activity, RequestBusinessPayDetailActivity.class);
                     intent.putExtra(Constants.PENDING_PAYMENT_REQUEST_LIST, pendingPurchaseListResponse.getPendingList().get(position));
-                    intent.putExtra(Constants.PSP_INFO, pendingPurchaseListResponse.getPspInfo());
+                    intent.putExtra(Constants.PSP_INFO, pendingPurchaseListResponse.getPendingList().get(position).getPspInfo());
                     startActivity(intent);
                 } else if (paymentInfoDTOs != null) {
                     intent.setClass(activity, InvoicePaymentPendingActivity.class);
@@ -186,34 +191,6 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
                     intent.putExtra(Constants.PSP_INFO, pspInfoDTOs);
                     startActivity(intent);
                 }
-            }
-        });
-
-        pendingListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-
-                Snackbar snackbar = Snackbar
-                        .make(coordinatorLayout, "", Snackbar.LENGTH_LONG)
-                        .setAction("از پرداخت منصرف شدم", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                requestCancelPurchase = new RequestCancelPurchase(activity, new RequestCancelPurchasePaymentTaskCompleteListener(position));
-                                cancelPurchasePaymentRequest = new CancelPurchasePaymentRequest();
-                                cancelPurchasePaymentRequest.setProductCode(pendingPurchaseListResponse.getPendingList().get(position).getProductCode());
-                                requestCancelPurchase.execute(cancelPurchasePaymentRequest);
-                            }
-                        });
-
-                snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimary));
-
-                View sbView = snackbar.getView();
-                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
-                textView.setTextColor(Color.YELLOW);
-
-                snackbar.show();
-
-                return true;
             }
         });
 
@@ -229,7 +206,7 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
             if (pendingPurchaseListResponseMessage != null) {
                 if (pendingPurchaseListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     pendingPurchaseListResponse = pendingPurchaseListResponseMessage.getService();
-                    pendingPurchaseAdapter = new PendingPurchaseAdapter(activity, pendingPurchaseListResponseMessage.getService().getPendingList());
+                    pendingPurchaseAdapter = new PendingPurchaseAdapter(activity, pendingPurchaseListResponseMessage.getService().getPendingList(), prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
                     pendingListView.setAdapter(pendingPurchaseAdapter);
                     paymentInfoDTOs = null;
                 }

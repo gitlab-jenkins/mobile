@@ -80,7 +80,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
     Tracker hamPayGaTracker;
 
     FacedTextView business_name;
-    ImageView business_logo;
+    ImageView business_image;
 
     FacedTextView input_digit_1;
     FacedTextView input_digit_2;
@@ -180,7 +180,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         input_digit_5 = (FacedTextView)findViewById(R.id.input_digit_5);
         input_digit_6 = (FacedTextView)findViewById(R.id.input_digit_6);
         business_name = (FacedTextView)findViewById(R.id.business_name);
-        business_logo = (ImageView)findViewById(R.id.business_logo);
+        business_image = (ImageView)findViewById(R.id.business_image);
         paymentPriceValue = (FacedTextView)findViewById(R.id.paymentPriceValue);
         paymentVAT = (FacedTextView)findViewById(R.id.paymentVAT);
         paymentFeeValue = (FacedTextView)findViewById(R.id.paymentFeeValue);
@@ -219,9 +219,13 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
             business_name.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getMerchantName()));
 
-            String imageUrl = "/merchant-logo/" + purchaseInfoDTO.getMerchantImageId();
-
-            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_logo)).execute(imageUrl);
+            if (purchaseInfoDTO.getMerchantImageId() != null) {
+                new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute("/logo/"
+                        + prefs.getString(Constants.LOGIN_TOKEN_ID, "")
+                        + "/" + purchaseInfoDTO.getMerchantImageId());
+            }else {
+                business_image.setBackgroundColor(context.getResources().getColor(R.color.user_change_status));
+            }
 
             cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
         }else if (purchaseCode != null){
@@ -464,7 +468,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
                     purchaseInfoDTO = latestPurchaseResponseMessage.getService().getPurchaseInfo();
 
-                    pspInfoDTO = latestPurchaseResponseMessage.getService().getPspInfoDTO();
+                    pspInfoDTO = latestPurchaseResponseMessage.getService().getPurchaseInfo().getPspInfo();
 
                     if (purchaseInfoDTO != null) {
 
@@ -492,9 +496,17 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                         paymentTotalValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() + "") + " ریال");
                         business_name.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getMerchantName()));
 
-                        String LogoUrl = Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantImageId();
+//                        String businessImageUrl = Constants.HTTPS_SERVER_IP + "/merchant-logo/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + purchaseInfoDTO.getMerchantImageId();
 
-                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_logo)).execute(Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantImageId());
+//                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute(businessImageUrl);
+
+                        String businessImageUrl = "/logo/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + purchaseInfoDTO.getMerchantImageId();
+
+                        if (purchaseInfoDTO.getMerchantImageId() != null) {
+                            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute(businessImageUrl);
+                        }else {
+                            business_image.setBackgroundColor(context.getResources().getColor(R.color.user_change_status));
+                        }
 
                         cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
                     }
@@ -589,7 +601,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
                         String LogoUrl = Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantImageId();
 
-                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_logo)).execute(Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantImageId());
+                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute(Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantImageId());
 
                         cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
                     }

@@ -40,26 +40,21 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
     private Context context;
 
     List<PurchaseInfoDTO> purchaseInfoDTOs;
-
     Dialog dialog;
-
     HamPayDialog hamPayDialog;
-
     RequestCancelPurchase requestCancelPurchase;
     CancelPurchasePaymentRequest cancelPurchasePaymentRequest;
-
     Activity activity;
+    private String authToken;
 
-    public PendingPurchaseAdapter(Context c, List<PurchaseInfoDTO> purchaseInfoDTOs)
+    public PendingPurchaseAdapter(Context c, List<PurchaseInfoDTO> purchaseInfoDTOs, String authToken)
     {
         // TODO Auto-generated method stub
         context = c;
-
         this.purchaseInfoDTOs = purchaseInfoDTOs;
-
         activity = (Activity) context;
-
         hamPayDialog = new HamPayDialog(activity);
+        this.authToken = authToken;
     }
 
     public int getCount() {
@@ -95,7 +90,7 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
 
 
             viewHolder.business_name = (FacedTextView)convertView.findViewById(R.id.business_name);
-            viewHolder.business_logo = (ImageView)convertView.findViewById(R.id.business_logo);
+            viewHolder.business_image = (ImageView)convertView.findViewById(R.id.business_image);
             viewHolder.date_time = (FacedTextView)convertView.findViewById(R.id.date_time);
             viewHolder.price_pay = (FacedTextView)convertView.findViewById(R.id.price_pay);
             viewHolder.expire_pay = (FacedTextView)convertView.findViewById(R.id.expire_pay);
@@ -108,11 +103,18 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
             viewHolder = (ViewHolder)convertView.getTag();
         }
 
-        viewHolder.business_name.setText(purchaseInfoDTOs.get(position).getMerchantName());
-        String LogoUrl = Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTOs.get(position).getMerchantImageId();
-        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.business_logo)).execute(Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTOs.get(position).getMerchantImageId());
-        viewHolder.date_time.setText(new PersianEnglishDigit().E2P(new JalaliConvert().GregorianToPersian(purchaseInfoDTOs.get(position).getCreatedBy())));
-        viewHolder.price_pay.setText(new PersianEnglishDigit().E2P(purchaseInfoDTOs.get(position).getAmount().toString()) + " ریال");
+        final PurchaseInfoDTO purchaseInfoDTO = purchaseInfoDTOs.get(position);
+
+        viewHolder.business_name.setText(purchaseInfoDTO.getMerchantName());
+
+        if (purchaseInfoDTO.getMerchantImageId() != null) {
+            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.business_image)).execute("/logo/" + authToken + "/" + purchaseInfoDTO.getMerchantImageId());
+        }else {
+            viewHolder.business_image.setBackgroundColor(context.getResources().getColor(R.color.user_change_status));
+        }
+
+        viewHolder.date_time.setText(new PersianEnglishDigit().E2P(new JalaliConvert().GregorianToPersian(purchaseInfoDTO.getCreatedBy())));
+        viewHolder.price_pay.setText(new PersianEnglishDigit().E2P(purchaseInfoDTO.getAmount().toString()) + " ریال");
         viewHolder.expire_pay.setVisibility(View.GONE);
 
 
@@ -135,7 +137,7 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
                         dialog.dismiss();
                         requestCancelPurchase = new RequestCancelPurchase(activity, new RequestCancelPurchasePaymentTaskCompleteListener(position));
                         cancelPurchasePaymentRequest = new CancelPurchasePaymentRequest();
-                        cancelPurchasePaymentRequest.setProductCode(purchaseInfoDTOs.get(position).getPurchaseCode());
+                        cancelPurchasePaymentRequest.setProductCode(purchaseInfoDTO.getProductCode());
                         requestCancelPurchase.execute(cancelPurchasePaymentRequest);
                     }
                 });
@@ -159,9 +161,6 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
                 dialog.show();
             }
         });
-//        viewHolder.expire_pay.setText(purchaseInfoDTOs.get(position).get);
-
-
 
         return convertView;
 
@@ -173,11 +172,12 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
         ViewHolder(){ }
 
         FacedTextView business_name;
-        ImageView business_logo;
+        ImageView business_image;
         FacedTextView date_time;
         FacedTextView price_pay;
         FacedTextView expire_pay;
         FacedTextView delete;
+
     }
 
     public class RequestCancelPurchasePaymentTaskCompleteListener implements
