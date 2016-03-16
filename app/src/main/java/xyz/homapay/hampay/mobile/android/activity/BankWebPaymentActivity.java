@@ -89,7 +89,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                     "Amount=" + paymentInfoDTO.getAmount() +
                             "&TerminalId=" + pspInfoDTO.getTerminalID() +
                             "&ResNum=" + paymentInfoDTO.getProductCode() +
-                            "&ResNum4=" + Constants.REGISTERED_CELL_NUMBER +
+                            "&ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
                             "&RedirectURL=" + redirectedURL;
 
         }else if (purchaseInfoDTO != null){
@@ -98,7 +98,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                     "Amount=" + purchaseInfoDTO.getAmount() +
                             "&TerminalId=" + pspInfoDTO.getTerminalID() +
                             "&ResNum=" + purchaseInfoDTO.getProductCode() +
-                            "&ResNum4=" + Constants.REGISTERED_CELL_NUMBER +
+                            "&ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
                             "&RedirectURL=" + redirectedURL;
         }
         android.util.Log.e("POST", postData);
