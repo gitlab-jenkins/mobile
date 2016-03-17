@@ -15,6 +15,10 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import xyz.homapay.hampay.common.common.response.ResponseMessage;
+import xyz.homapay.hampay.common.common.response.ResultStatus;
+import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
+import xyz.homapay.hampay.common.core.model.response.PSPResultResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
@@ -22,6 +26,7 @@ import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
+import xyz.homapay.hampay.mobile.android.async.RequestPSPResult;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
 import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
@@ -81,6 +86,9 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
     private DoWorkInfo doWorkInfo;
 
     PersianEnglishDigit persianEnglishDigit;
+
+    RequestPSPResult requestPSPResult;
+    PSPResultRequest pspResultRequest;
 
 
     @Override
@@ -300,7 +308,19 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
             if (purchaseResponseResponseMessage != null){
 
-                new HamPayDialog(activity).pspResultDialog(purchaseResponseResponseMessage.get(0).value);
+                pspResultRequest = new PSPResultRequest();
+                pspResultRequest.setProductCode(paymentInfoDTO.getProductCode());
+                for(string2stringMapEntry s2sMapEntry : purchaseResponseResponseMessage){
+                    if (s2sMapEntry.key.equalsIgnoreCase("ResponseCode")){
+                        pspResultRequest.setPspResponseCode(s2sMapEntry.value);
+                    }else if (s2sMapEntry.key.equalsIgnoreCase("SWTraceNum")){
+                        new HamPayDialog(activity).pspResultDialog(s2sMapEntry.value);
+                        pspResultRequest.setTrackingCode(s2sMapEntry.value);
+                    }
+                }
+
+                requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener());
+                requestPSPResult.execute(pspResultRequest);
 
                 hamPayGaTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Pending Payment Request")
@@ -316,7 +336,53 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
                         .setLabel("Fail(Server)")
                         .build());
             }
+        }
 
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
+    }
+
+    public class RequestPSPResultTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> {
+
+        @Override
+        public void onTaskComplete(ResponseMessage<PSPResultResponse> pspResultResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+
+            if (pspResultResponseMessage != null){
+                if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Pending Payment Request")
+                            .setAction("Payment")
+                            .setLabel("Success")
+                            .build());
+
+                }else {
+
+//                    new HamPayDialog(activity).showFailPaymentDialog(pspResultResponseMessage.getService().getResultStatus().getCode(),
+//                            pspResultResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Pending Payment Request")
+                            .setAction("Payment")
+                            .setLabel("Fail(Server)")
+                            .build());
+                }
+            }else {
+//                new HamPayDialog(activity).showFailPaymentDialog(Constants.LOCAL_ERROR_CODE,
+//                        getString(R.string.msg_fail_payment));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Pending Payment Request")
+                        .setAction("Payment")
+                        .setLabel("Fail(Mobile)")
+                        .build());
+            }
+
+            pay_to_business_button.setEnabled(true);
         }
 
         @Override

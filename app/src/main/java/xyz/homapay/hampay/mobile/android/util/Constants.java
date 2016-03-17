@@ -32,8 +32,10 @@ public class Constants {
     public static final String FORCE_FETCH_ILLEGAL_APPS = "forceFetchIllegalApps";
     public static final String APP_PREFERENCE_NAME = "HamPay_Preferences";
     public static final String USER_PROFILE_DTO = "UserProfile";
-    public static final String PENDING_PURCHASE_PAYMENT_ID = "pendingPurchasePaymentId";
-    public static final String PENDING_PURCHASE_PAYMENT_COUNT = "pendingPurchasePaymentCount";
+    public static final String PENDING_PURCHASE_CODE = "pendingPurchaseCode";
+    public static final String PENDING_PAYMENT_CODE = "pendingPaymentCode";
+    public static final String PENDING_PURCHASE_COUNT = "pendingPurchaseCount";
+    public static final String PENDING_PAYMENT_COUNT = "pendingPaymentCount";
     public static final String USER_TRANSACTION_DTO = "UserTransaction";
     public static final String CONTACT_PHONE_NO = "contact_phone_no";
     public static final String CONTACT_NAME = "contact_name";
@@ -56,7 +58,7 @@ public class Constants {
     public static final String FETCHED_HAMPAY_ENABLED = "fetched_hampay_enabled";
     public static final String VERIFIED_USER = "verified_user";
     public static final String  MOBILE_TIME_OUT = "mobile_time_out";
-    public static final long MOBILE_TIME_OUT_INTERVAL = 300000;
+    public static final long MOBILE_TIME_OUT_INTERVAL = 600000;
     public static final String FORCE_USER_PROFILE = "force_user_profile";
     public static final String RECEIVED_SMS_ACTIVATION = "received_sms_activation";
     public static final String MAX_BUSINESS_XFER_AMOUNT = "MaxBusinessXferAmount";

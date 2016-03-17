@@ -47,6 +47,7 @@ import xyz.homapay.hampay.common.core.model.request.IBANChangeRequest;
 import xyz.homapay.hampay.common.core.model.request.IBANConfirmationRequest;
 import xyz.homapay.hampay.common.core.model.request.IllegalAppListRequest;
 import xyz.homapay.hampay.common.core.model.request.IndividualPaymentRequest;
+import xyz.homapay.hampay.common.core.model.request.LatestPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
 import xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationCredentialsRequest;
@@ -98,6 +99,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestIBANChange;
 import xyz.homapay.hampay.mobile.android.async.RequestIBANConfirmation;
 import xyz.homapay.hampay.mobile.android.async.RequestIllegalAppList;
 import xyz.homapay.hampay.mobile.android.async.RequestIndividualPayment;
+import xyz.homapay.hampay.mobile.android.async.RequestLatestPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestLogout;
 import xyz.homapay.hampay.mobile.android.async.RequestMobileRegistrationIdEntry;
@@ -609,8 +611,10 @@ public class HamPayDialog {
                     Intent intent = new Intent();
                     intent.setClass(activity, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.putExtra(Constants.PENDING_PURCHASE_PAYMENT_ID, tacAcceptResponseMessage.getService().getProductCode());
-                    intent.putExtra(Constants.PENDING_PURCHASE_PAYMENT_COUNT, tacAcceptResponseMessage.getService().getPendingPurchasesCount());
+                    intent.putExtra(Constants.PENDING_PURCHASE_CODE, tacAcceptResponseMessage.getService().getProductCode());
+                    intent.putExtra(Constants.PENDING_PAYMENT_CODE, tacAcceptResponseMessage.getService().getPaymentProductCode());
+                    intent.putExtra(Constants.PENDING_PURCHASE_COUNT, tacAcceptResponseMessage.getService().getPendingPurchasesCount());
+                    intent.putExtra(Constants.PENDING_PAYMENT_COUNT, tacAcceptResponseMessage.getService().getPendingPaymentCount());
                     intent.putExtra(Constants.USER_PROFILE_DTO, userProfileDTO);
                     editor.putBoolean(Constants.FORCE_USER_PROFILE, false);
                     editor.commit();
@@ -1589,6 +1593,7 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                activity.finish();
             }
         });
 
@@ -1626,6 +1631,7 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                activity.finish();
             }
         });
 
@@ -2507,10 +2513,10 @@ public class HamPayDialog {
     }
 
 
-    public void showFailPendingPaymentDialog(final RequestLatestPurchase requestLatestPurchase,
-                                             final LatestPurchaseRequest latestPurchaseRequest,
-                                             final String code,
-                                             final String message){
+    public void showFailPendingPurchaseDialog(final RequestLatestPurchase requestLatestPurchase,
+                                              final LatestPurchaseRequest latestPurchaseRequest,
+                                              final String code,
+                                              final String message){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_contacts_enabled, null);
 
@@ -2531,6 +2537,45 @@ public class HamPayDialog {
             public void onClick(View v) {
                 dialog.dismiss();
                 requestLatestPurchase.execute(latestPurchaseRequest);
+            }
+        });
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                activity.finish();
+            }
+        });
+
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
+        dialog.show();
+    }
+
+    public void showFailPendingPaymentDialog(final RequestLatestPayment requestLatestPayment,
+                                              final LatestPaymentRequest latestPaymentRequest,
+                                              final String code,
+                                              final String message){
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_contacts_enabled, null);
+
+
+
+        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+
+        responseCode.setText(activity.getString(R.string.error_code, code));
+        responseMessage.setText(message);
+
+        FacedTextView retry_contacts_enabled = (FacedTextView) view.findViewById(R.id.retry_contacts_enabled);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
+
+        retry_contacts_enabled.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                requestLatestPayment.execute(latestPaymentRequest);
             }
         });
         cancel_request.setOnClickListener(new View.OnClickListener() {

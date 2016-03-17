@@ -4,15 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -21,21 +16,19 @@ import com.google.android.gms.analytics.Tracker;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
-import xyz.homapay.hampay.common.core.model.dto.UserVerificationStatus;
-import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
-import xyz.homapay.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
-import xyz.homapay.hampay.common.core.model.response.GetUserIdTokenResponse;
-import xyz.homapay.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
+import xyz.homapay.hampay.common.core.model.request.LatestPaymentRequest;
+import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
+import xyz.homapay.hampay.common.core.model.response.LatestPaymentResponse;
+import xyz.homapay.hampay.common.core.model.response.PSPResultResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import xyz.homapay.hampay.mobile.android.async.RequestIndividualPaymentConfirm;
+import xyz.homapay.hampay.mobile.android.async.RequestLatestPayment;
+import xyz.homapay.hampay.mobile.android.async.RequestPSPResult;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
-import xyz.homapay.hampay.mobile.android.async.RequestUserIdToken;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
-import xyz.homapay.hampay.mobile.android.component.edittext.CurrencyFormatterTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
@@ -78,7 +71,7 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
-    public void backActionBar(View view){
+    public void backActionBar(View view) {
         finish();
     }
 
@@ -96,6 +89,12 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
     private DoWorkInfo doWorkInfo;
 
     PersianEnglishDigit persianEnglishDigit;
+
+    RequestPSPResult requestPSPResult;
+    PSPResultRequest pspResultRequest;
+
+    RequestLatestPayment requestLatestPayment;
+    LatestPaymentRequest latestPaymentRequest;
 
     @Override
     protected void onPause() {
@@ -132,7 +131,7 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
             MaxXferAmount = prefs.getLong(Constants.MAX_INDIVIDUAL_XFER_AMOUNT, 0);
             MinXferAmount = prefs.getLong(Constants.MIN_INDIVIDUAL_XFER_AMOUNT, 0);
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             Log.e("Error", ex.getStackTrace().toString());
         }
 
@@ -144,21 +143,22 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
         persianEnglishDigit = new PersianEnglishDigit();
 
 
-        contact_message = (FacedEditText)findViewById(R.id.contact_message);
-        contact_name_1 = (FacedTextView)findViewById(R.id.contact_name_1);
-        contact_name_2 = (FacedTextView)findViewById(R.id.contact_name_2);
-        received_message = (FacedTextView)findViewById(R.id.received_message);
-        payment_value = (FacedTextView)findViewById(R.id.payment_value);
-        pin2Value = (FacedEditText)findViewById(R.id.pin2Value);
-        cardNumberValue = (FacedTextView)findViewById(R.id.cardNumberValue);
+        contact_message = (FacedEditText) findViewById(R.id.contact_message);
+        contact_name_1 = (FacedTextView) findViewById(R.id.contact_name_1);
+        contact_name_2 = (FacedTextView) findViewById(R.id.contact_name_2);
+        received_message = (FacedTextView) findViewById(R.id.received_message);
+        payment_value = (FacedTextView) findViewById(R.id.payment_value);
+        pin2Value = (FacedEditText) findViewById(R.id.pin2Value);
+        cardNumberValue = (FacedTextView) findViewById(R.id.cardNumberValue);
 
         bundle = getIntent().getExtras();
 
         Intent intent = getIntent();
 
-        if (intent != null) {
-            paymentInfoDTO = (PaymentInfoDTO)intent.getSerializableExtra(Constants.PAYMENT_INFO);
-            pspInfoDTO = (PspInfoDTO)intent.getSerializableExtra(Constants.PSP_INFO);
+        paymentInfoDTO = (PaymentInfoDTO) intent.getSerializableExtra(Constants.PAYMENT_INFO);
+        pspInfoDTO = (PspInfoDTO) intent.getSerializableExtra(Constants.PSP_INFO);
+
+        if (paymentInfoDTO != null) {
             contact_name_1.setText(paymentInfoDTO.getCallerName());
             contact_name_2.setText(paymentInfoDTO.getCallerName());
             received_message.setText(paymentInfoDTO.getMessage());
@@ -167,47 +167,52 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
             if (pspInfoDTO.getCardDTO().getCardId() == null) {
                 LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
                 creditInfo.setVisibility(View.GONE);
-            }else {
+            } else {
                 cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
             }
-        }else {
-
-            intentContact = true;
-
-            Uri uri = getIntent().getData();
-
-            Cursor phonesCursor = getContentResolver().query(uri, null, null, null,
-                    ContactsContract.CommonDataKinds.Phone.IS_PRIMARY + " DESC");
-            if (phonesCursor != null) {
-                if (phonesCursor.moveToNext()) {
-                    String id = phonesCursor.getString(phonesCursor
-                            .getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
-                    Cursor pCur = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                            null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", new String[]{id}, null);
-                    while (pCur.moveToNext()) {
-                        contactPhoneNo = pCur.getString(pCur
-                                .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                        contactName = pCur.getString(pCur
-                                .getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                        if (TextUtils.isEmpty(contactPhoneNo)) continue;
-                        if (!number.equals("")) number = number + "&";
-//                        contactPhoneNo = PhoneNumberUtils.stripSeparators(contactPhoneNo);
-
-                        //number = number + searchReplaceNumber(getApplicationContext(), n);
-                    }
-                    pCur.close();
-                }
-                phonesCursor.close();
-
-                Log.e("URL", contactPhoneNo);
-
-            }
+        } else {
+            requestLatestPayment = new RequestLatestPayment(activity, new RequestLatestPaymentTaskCompleteListener());
+            latestPaymentRequest = new LatestPaymentRequest();
+            requestLatestPayment.execute(latestPaymentRequest);
         }
 
 
+//        else {
+//
+//            intentContact = true;
+//
+//            Uri uri = getIntent().getData();
+//
+//            Cursor phonesCursor = getContentResolver().query(uri, null, null, null,
+//                    ContactsContract.CommonDataKinds.Phone.IS_PRIMARY + " DESC");
+//            if (phonesCursor != null) {
+//                if (phonesCursor.moveToNext()) {
+//                    String id = phonesCursor.getString(phonesCursor
+//                            .getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
+//                    Cursor pCur = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+//                            null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", new String[]{id}, null);
+//                    while (pCur.moveToNext()) {
+//                        contactPhoneNo = pCur.getString(pCur
+//                                .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+//                        contactName = pCur.getString(pCur
+//                                .getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+//                        if (TextUtils.isEmpty(contactPhoneNo)) continue;
+//                        if (!number.equals("")) number = number + "&";
+////                        contactPhoneNo = PhoneNumberUtils.stripSeparators(contactPhoneNo);
+//
+//                        //number = number + searchReplaceNumber(getApplicationContext(), n);
+//                    }
+//                    pCur.close();
+//                }
+//                phonesCursor.close();
+//
+//                Log.e("URL", contactPhoneNo);
+//
+//            }
+//        }
 
 
-        pay_to_one_button = (ButtonRectangle)findViewById(R.id.pay_to_one_button);
+        pay_to_one_button = (ButtonRectangle) findViewById(R.id.pay_to_one_button);
         pay_to_one_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -286,7 +291,7 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        if (intentContact){
+        if (intentContact) {
             Intent i = new Intent();
             i.setClass(this, MainActivity.class);
             startActivity(i);
@@ -307,9 +312,20 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
 
             hamPayDialog.dismisWaitingDialog();
 
-            if (purchaseResponseResponseMessage != null){
+            if (purchaseResponseResponseMessage != null) {
+                pspResultRequest = new PSPResultRequest();
+                pspResultRequest.setProductCode(paymentInfoDTO.getProductCode());
+                for (string2stringMapEntry s2sMapEntry : purchaseResponseResponseMessage) {
+                    if (s2sMapEntry.key.equalsIgnoreCase("ResponseCode")) {
+                        pspResultRequest.setPspResponseCode(s2sMapEntry.value);
+                    } else if (s2sMapEntry.key.equalsIgnoreCase("SWTraceNum")) {
+                        new HamPayDialog(activity).pspResultDialog(s2sMapEntry.value);
+                        pspResultRequest.setTrackingCode(s2sMapEntry.value);
+                    }
+                }
 
-                new HamPayDialog(activity).pspResultDialog(purchaseResponseResponseMessage.get(0).value);
+                requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener());
+                requestPSPResult.execute(pspResultRequest);
 
                 hamPayGaTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Pending Payment Request")
@@ -317,8 +333,7 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
                         .setLabel("Success")
                         .build());
 
-            }
-            else {
+            } else {
                 hamPayGaTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Pending Payment Request")
                         .setAction("Payment")
@@ -334,5 +349,118 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
         }
     }
 
+    public class RequestPSPResultTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> {
 
+        @Override
+        public void onTaskComplete(ResponseMessage<PSPResultResponse> pspResultResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+
+            if (pspResultResponseMessage != null) {
+                if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+
+
+//                    new HamPayDialog(activity).pspResultDialog(pspResultResponseMessage.getService().getResultStatus().getCode() + "");
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Pending Payment Request")
+                            .setAction("Payment")
+                            .setLabel("Success")
+                            .build());
+
+                } else {
+
+//                    new HamPayDialog(activity).showFailPaymentDialog(pspResultResponseMessage.getService().getResultStatus().getCode(),
+//                            pspResultResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Pending Payment Request")
+                            .setAction("Payment")
+                            .setLabel("Fail(Server)")
+                            .build());
+                }
+            } else {
+//                new HamPayDialog(activity).showFailPaymentDialog(Constants.LOCAL_ERROR_CODE,
+//                        getString(R.string.msg_fail_payment));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Pending Payment Request")
+                        .setAction("Payment")
+                        .setLabel("Fail(Mobile)")
+                        .build());
+            }
+
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
+    }
+
+    public class RequestLatestPaymentTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<LatestPaymentResponse>> {
+
+        @Override
+        public void onTaskComplete(ResponseMessage<LatestPaymentResponse> latestPaymentResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+
+            if (latestPaymentResponseMessage != null) {
+                if (latestPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+
+                    paymentInfoDTO = latestPaymentResponseMessage.getService().getPaymentInfoDTO();
+                    pspInfoDTO = latestPaymentResponseMessage.getService().getPspInfo();
+                    contact_name_1.setText(paymentInfoDTO.getCallerName());
+                    contact_name_2.setText(paymentInfoDTO.getCallerName());
+                    received_message.setText(paymentInfoDTO.getMessage());
+                    payment_value.setText(paymentInfoDTO.getAmount() + "");
+
+                    if (pspInfoDTO.getCardDTO().getCardId() == null) {
+                        LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
+                        creditInfo.setVisibility(View.GONE);
+                    } else {
+                        cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
+                    }
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Latest Pending Payment")
+                            .setAction("Fetch")
+                            .setLabel("Success")
+                            .build());
+
+                } else {
+                    requestLatestPayment = new RequestLatestPayment(context, new RequestLatestPaymentTaskCompleteListener());
+
+                    new HamPayDialog(activity).showFailPendingPaymentDialog(requestLatestPayment, latestPaymentRequest,
+                            latestPaymentResponseMessage.getService().getServiceDefinition().getCode(),
+                            latestPaymentResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Latest Pending Payment")
+                            .setAction("Fetch")
+                            .setLabel("Fail(Server)")
+                            .build());
+                }
+            }
+                else
+
+                {
+                    requestLatestPayment = new RequestLatestPayment(context, new RequestLatestPaymentTaskCompleteListener());
+
+                    new HamPayDialog(activity).showFailPendingPaymentDialog(requestLatestPayment, latestPaymentRequest,
+                            Constants.LOCAL_ERROR_CODE,
+                            getString(R.string.msg_fail_fetch_latest_payment));
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Latest Pending Payment")
+                            .setAction("Fetch")
+                            .setLabel("Fail(Mobile)")
+                            .build());
+                }
+        }
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
+
+    }
 }

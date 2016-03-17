@@ -4,12 +4,10 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.app.Activity;
-import android.app.Notification;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -29,14 +27,11 @@ import android.widget.ImageView;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.squareup.picasso.Picasso;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
-import br.com.goncalves.pugnotification.notification.PugNotification;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
@@ -46,23 +41,21 @@ import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.RequestMobileRegistrationIdEntry;
+import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.fragment.AboutFragment;
 import xyz.homapay.hampay.mobile.android.fragment.AccountDetailFragment;
+import xyz.homapay.hampay.mobile.android.fragment.CreditRequestFragment;
 import xyz.homapay.hampay.mobile.android.fragment.FragmentDrawer;
 import xyz.homapay.hampay.mobile.android.fragment.GuideFragment;
 import xyz.homapay.hampay.mobile.android.fragment.MainFragment;
-import xyz.homapay.hampay.mobile.android.fragment.PayToBusinessFragment;
-import xyz.homapay.hampay.mobile.android.fragment.CreditRequestFragment;
-import xyz.homapay.hampay.mobile.android.fragment.PaymentRequestFragment;
-import xyz.homapay.hampay.mobile.android.fragment.PendingPaymentFragment;
 import xyz.homapay.hampay.mobile.android.fragment.PrivacyFragment;
 import xyz.homapay.hampay.mobile.android.fragment.SettingFragment;
 import xyz.homapay.hampay.mobile.android.fragment.TCFragment;
-import xyz.homapay.hampay.mobile.android.fragment.UserTransactionFragment;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.LatestPurchase;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
@@ -93,8 +86,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     UserProfileDTO userProfileDTO;
 
-    String pendingPurchasePaymentId = "";
-    int pendingPurchasePaymentCount = 0;
+    String pendingPurchaseCode = "";
+    String pendingPaymentCode = "";
+    int pendingPurchaseCount = 0;
+    int pendingPaymentCount = 0;
 
     Activity activity;
 
@@ -135,18 +130,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         super.onResume();
         HamPayApplication.setAppSate(AppState.Resumed);
 
-        String filePath = getFilesDir().getPath().toString() + "/" + "userImage.jpeg";
-        File file = new File(filePath);
-        if (file.exists()){
-            Picasso.with(this).invalidate(file);
-            Picasso.with(this).load(file).into(image_profile);
-
+        if (userProfileDTO.getUserImageId() != null) {
+            String userImageUrl = "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
+            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile)).execute(userImageUrl);
         }
 
-//        String URL = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
-
-//        requestImageDownloader = new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile));
-//        requestImageDownloader.execute(URL);
 
         if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)){
             Intent intent = new Intent();
@@ -175,8 +163,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         Intent intent = getIntent();
 
-        pendingPurchasePaymentId = bundle.getString(Constants.PENDING_PURCHASE_PAYMENT_ID, "");
-        pendingPurchasePaymentCount = bundle.getInt(Constants.PENDING_PURCHASE_PAYMENT_COUNT, 0);
+        pendingPurchaseCode = bundle.getString(Constants.PENDING_PURCHASE_CODE, "");
+        pendingPaymentCode = bundle.getString(Constants.PENDING_PAYMENT_CODE, "");
+        pendingPurchaseCount = bundle.getInt(Constants.PENDING_PURCHASE_COUNT, 0);
+        pendingPaymentCount = bundle.getInt(Constants.PENDING_PAYMENT_COUNT, 0);
+
         userProfileDTO = (UserProfileDTO) intent.getSerializableExtra(Constants.USER_PROFILE_DTO);
 
 
@@ -216,16 +207,26 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         List<LatestPurchase> latestPurchaseList = databaseHelper.getAllLatestPurchases();
 
-        if (pendingPurchasePaymentId.length() != 0) {
-            if (databaseHelper.getIsExistPurchaseRequest(pendingPurchasePaymentId)) {
-                LatestPurchase latestPurchase = databaseHelper.getPurchaseRequest(pendingPurchasePaymentId);
+        if (pendingPurchaseCode.length() != 0) {
+            if (databaseHelper.getIsExistPurchaseRequest(pendingPurchaseCode)) {
+                LatestPurchase latestPurchase = databaseHelper.getPurchaseRequest(pendingPurchaseCode);
                 if (latestPurchase.getIsCanceled().equalsIgnoreCase("0")) {
-                    intent.setClass(context, RequestBusinessPayDetailActivity.class);
-                    startActivity(intent);
+                    if (pendingPurchaseCount > 0) {
+                        intent.setClass(context, RequestBusinessPayDetailActivity.class);
+                        startActivity(intent);
+                    }else if (pendingPaymentCount > 0){
+                        intent.setClass(context, InvoicePaymentPendingActivity.class);
+                        startActivity(intent);
+                    }
                 }
             }else {
-                databaseHelper.createPurchaseRequest(pendingPurchasePaymentId);
+                databaseHelper.createPurchaseRequest(pendingPurchaseCode);
                 intent.setClass(context, RequestBusinessPayDetailActivity.class);
+                startActivity(intent);
+            }
+        }else if (true){
+            if (pendingPaymentCount > 0) {
+                intent.setClass(context, InvoicePaymentPendingActivity.class);
                 startActivity(intent);
             }
         }

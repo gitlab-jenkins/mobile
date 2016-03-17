@@ -22,6 +22,7 @@ import xyz.homapay.hampay.common.core.model.request.BusinessPaymentConfirmReques
 import xyz.homapay.hampay.common.core.model.request.BusinessPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
 import xyz.homapay.hampay.common.core.model.request.CancelPurchasePaymentRequest;
+import xyz.homapay.hampay.common.core.model.request.CancelUserPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.CardProfileRequest;
 import xyz.homapay.hampay.common.core.model.request.ChangeEmailRequest;
 import xyz.homapay.hampay.common.core.model.request.ChangeMemorableWordRequest;
@@ -34,6 +35,7 @@ import xyz.homapay.hampay.common.core.model.request.IBANConfirmationRequest;
 import xyz.homapay.hampay.common.core.model.request.IllegalAppListRequest;
 import xyz.homapay.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
 import xyz.homapay.hampay.common.core.model.request.IndividualPaymentRequest;
+import xyz.homapay.hampay.common.core.model.request.LatestPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
 import xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
 import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
@@ -55,6 +57,7 @@ import xyz.homapay.hampay.common.core.model.response.BusinessListResponse;
 import xyz.homapay.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
 import xyz.homapay.hampay.common.core.model.response.BusinessPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.CancelPurchasePaymentResponse;
+import xyz.homapay.hampay.common.core.model.response.CancelUserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.CardProfileResponse;
 import xyz.homapay.hampay.common.core.model.response.ChangeEmailResponse;
 import xyz.homapay.hampay.common.core.model.response.ChangeMemorableWordResponse;
@@ -67,6 +70,7 @@ import xyz.homapay.hampay.common.core.model.response.IBANConfirmationResponse;
 import xyz.homapay.hampay.common.core.model.response.IllegalAppListResponse;
 import xyz.homapay.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
 import xyz.homapay.hampay.common.core.model.response.IndividualPaymentResponse;
+import xyz.homapay.hampay.common.core.model.response.LatestPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.LatestPurchaseResponse;
 import xyz.homapay.hampay.common.core.model.response.MobileRegistrationIdEntryResponse;
 import xyz.homapay.hampay.common.core.model.response.PSPResultResponse;
@@ -101,12 +105,13 @@ import xyz.homapay.hampay.mobile.android.webservice.psp.Vectorstring2stringMapEn
 public class WebServices  {
 
     public WebServices(){}
-    Context context;
-    SharedPreferences prefs;
-    DateGsonBuilder builder;
+    private Context context;
+    private SharedPreferences prefs;
+    private DateGsonBuilder builder;
     private ConnectionType connectionType;
     private URL url;
-    private String ServiceURL = "";
+    private String serviceURL = "";
+    private String authToken = "";
 
     public WebServices(Context context, ConnectionType connectionType){
         this.context = context;
@@ -114,11 +119,12 @@ public class WebServices  {
         builder = new DateGsonBuilder();
         this.connectionType = connectionType;
         if (connectionType == ConnectionType.HTTPS){
-            ServiceURL = Constants.HTTPS_SERVER_IP;
+            serviceURL = Constants.HTTPS_SERVER_IP;
         }else {
-            ServiceURL = Constants.HTTP_SERVER_IP;
+            serviceURL = Constants.HTTP_SERVER_IP;
         }
 
+        this.authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
     }
 
     public WebServices(Context context){
@@ -146,10 +152,10 @@ public class WebServices  {
     public ResponseMessage<IllegalAppListResponse> getIllegalAppList() throws IOException{
 
         ResponseMessage<IllegalAppListResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/illegal-apps");
+        url = new URL(serviceURL + "/illegal-apps");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader("", Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<IllegalAppListRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -173,10 +179,10 @@ public class WebServices  {
     public ResponseMessage<RegistrationEntryResponse> registrationEntry(RegistrationEntryRequest registrationEntryRequest) throws IOException {
 
         ResponseMessage<RegistrationEntryResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/users/reg-entry");
+        url = new URL(serviceURL + "/users/reg-entry");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url, true);
 
-        RequestHeader header = new CreateHeader("", Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<RegistrationEntryRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -200,10 +206,10 @@ public class WebServices  {
 
 
         ResponseMessage<ContactUsResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/contactus");
+        url = new URL(serviceURL + "/contactus");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader("", Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<ContactUsRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -226,10 +232,10 @@ public class WebServices  {
     public ResponseMessage<RegistrationSendSmsTokenResponse> registrationSendSmsToken(RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest) throws IOException{
 
         ResponseMessage<RegistrationSendSmsTokenResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/users/reg-sms-token");
+        url = new URL(serviceURL + "/users/reg-sms-token");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader("", Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<RegistrationSendSmsTokenRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -253,10 +259,10 @@ public class WebServices  {
     public ResponseMessage<RegistrationVerifyMobileResponse> registrationVerifyMobileResponse(RegistrationVerifyMobileRequest registrationVerifyMobileRequest) throws IOException{
 
         ResponseMessage<RegistrationVerifyMobileResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/users/reg-verify-mobile");
+        url = new URL(serviceURL + "/users/reg-verify-mobile");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader("", Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<RegistrationVerifyMobileRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -280,10 +286,10 @@ public class WebServices  {
     public ResponseMessage<RegisterCardResponse> registerCardResponse(RegisterCardRequest registerCardRequest) throws IOException{
 
         ResponseMessage<RegisterCardResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/psp/registerCard");
+        url = new URL(serviceURL + "/psp/registerCard");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader("", Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<RegisterCardRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -308,10 +314,10 @@ public class WebServices  {
 
 
         ResponseMessage<RegistrationCredentialsResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/users/reg-credential-entry");
+        url = new URL(serviceURL + "/users/reg-credential-entry");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url, true);
 
-        RequestHeader header = new CreateHeader("", Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<RegistrationCredentialsRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -337,10 +343,10 @@ public class WebServices  {
     public ResponseMessage<MobileRegistrationIdEntryResponse> registrationDeviceRegId(MobileRegistrationIdEntryRequest mobileRegistrationIdEntryRequest) throws IOException{
 
         ResponseMessage<MobileRegistrationIdEntryResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/users/mobile-reg-id-entry");
+        url = new URL(serviceURL + "/users/mobile-reg-id-entry");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<MobileRegistrationIdEntryRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -364,10 +370,10 @@ public class WebServices  {
     public ResponseMessage<TACResponse> tacResponse(TACRequest tacRequest) throws IOException{
 
         ResponseMessage<TACResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/users/tac");
+        url = new URL(serviceURL + "/users/tac");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<TACRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -390,10 +396,10 @@ public class WebServices  {
     public ResponseMessage<UploadImageResponse> uploadImage(UploadImageRequest uploadImageRequest) throws IOException{
 
         ResponseMessage<UploadImageResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/users/upload-image");
+        url = new URL(serviceURL + "/users/upload-image");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<UploadImageRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -417,10 +423,10 @@ public class WebServices  {
     public ResponseMessage<GetUserIdTokenResponse> getUserIdTokenResponse(GetUserIdTokenRequest getUserIdTokenRequest) throws IOException{
 
         ResponseMessage<GetUserIdTokenResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/users/get-user-id-token");
+        url = new URL(serviceURL + "/users/get-user-id-token");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<GetUserIdTokenRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -444,10 +450,10 @@ public class WebServices  {
     public ResponseMessage<TACAcceptResponse> tacAcceptResponse(TACAcceptRequest tacAcceptRequest) throws IOException{
 
         ResponseMessage<TACAcceptResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/users/tacaccept");
+        url = new URL(serviceURL + "/users/tacaccept");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<TACAcceptRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -471,10 +477,10 @@ public class WebServices  {
     public ResponseMessage<UserProfileResponse> getUserProfile(UserProfileRequest userProfileRequest) throws IOException{
 
         ResponseMessage<UserProfileResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/users/profile");
+        url = new URL(serviceURL + "/users/profile");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<UserProfileRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -498,10 +504,10 @@ public class WebServices  {
     public ResponseMessage<TransactionListResponse> userTransaction(TransactionListRequest transactionListRequest) throws IOException{
 
         ResponseMessage<TransactionListResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/transactions");
+        url = new URL(serviceURL + "/transactions");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<TransactionListRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -526,10 +532,10 @@ public class WebServices  {
     public ResponseMessage<ContactsHampayEnabledResponse> getEnabledHamPayContacts(ContactsHampayEnabledRequest contactsHampayEnabledRequest) throws IOException{
 
         ResponseMessage<ContactsHampayEnabledResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/customer/contacts/hp-enabled");
+        url = new URL(serviceURL + "/customer/contacts/hp-enabled");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url, true);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<ContactsHampayEnabledRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -555,10 +561,10 @@ public class WebServices  {
     public ResponseMessage<IndividualPaymentConfirmResponse> individualPaymentConfirm(IndividualPaymentConfirmRequest individualPaymentConfirmRequest) throws IOException{
 
         ResponseMessage<IndividualPaymentConfirmResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/customers/individual-payment-confirm");
+        url = new URL(serviceURL + "/customers/individual-payment-confirm");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<IndividualPaymentConfirmRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -582,10 +588,10 @@ public class WebServices  {
     public ResponseMessage<IndividualPaymentResponse> individualPayment(IndividualPaymentRequest individualPaymentRequest) throws IOException{
 
         ResponseMessage<IndividualPaymentResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/customers/individual-payment");
+        url = new URL(serviceURL + "/customers/individual-payment");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<IndividualPaymentRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -608,10 +614,10 @@ public class WebServices  {
     public ResponseMessage<BusinessListResponse> getHamPayBusinesses(BusinessListRequest businessListRequest) throws IOException{
 
         ResponseMessage<BusinessListResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/businesses");
+        url = new URL(serviceURL + "/businesses");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<BusinessListRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -634,10 +640,10 @@ public class WebServices  {
     public ResponseMessage<BusinessPaymentConfirmResponse> businessPaymentConfirm(BusinessPaymentConfirmRequest businessPaymentConfirmRequest) throws IOException{
 
         ResponseMessage<BusinessPaymentConfirmResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/payment/info");
+        url = new URL(serviceURL + "/payment/info");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<BusinessPaymentConfirmRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -660,10 +666,10 @@ public class WebServices  {
     public ResponseMessage<BusinessPaymentResponse> businessPayment(BusinessPaymentRequest businessPaymentRequest) throws IOException{
 
         ResponseMessage<BusinessPaymentResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/customers/business-payment");
+        url = new URL(serviceURL + "/customers/business-payment");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<BusinessPaymentRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -687,10 +693,10 @@ public class WebServices  {
     public ResponseMessage<BusinessListResponse> searchBusinessList(BusinessSearchRequest businessSearchRequest) throws IOException{
 
         ResponseMessage<BusinessListResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/search");
+        url = new URL(serviceURL + "/search");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<BusinessSearchRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -713,10 +719,10 @@ public class WebServices  {
     public ResponseMessage<ChangePassCodeResponse> changePassCodeResponse(ChangePassCodeRequest changePassCodeRequest) throws IOException{
 
         ResponseMessage<ChangePassCodeResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/users/passcode");
+        url = new URL(serviceURL + "/users/passcode");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.PUT, url);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<ChangePassCodeRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -738,10 +744,10 @@ public class WebServices  {
     public ResponseMessage<ChangeMemorableWordResponse> changeMemorableWordResponse(ChangeMemorableWordRequest changeMemorableWordRequest) throws IOException{
 
         ResponseMessage<ChangeMemorableWordResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/users/memorable-word");
+        url = new URL(serviceURL + "/users/memorable-word");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.PUT, url);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<ChangeMemorableWordRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -765,10 +771,10 @@ public class WebServices  {
     public ResponseMessage<UnlinkUserResponse> unlinkUserResponse(UnlinkUserRequest unlinkUserRequest) throws IOException{
 
         ResponseMessage<UnlinkUserResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/users/unlink");
+        url = new URL(serviceURL + "/users/unlink");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<UnlinkUserRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -791,10 +797,10 @@ public class WebServices  {
     public ResponseMessage<ChangeEmailResponse> changeEmailResponse(ChangeEmailRequest changeEmailRequest) throws IOException{
 
         ResponseMessage<ChangeEmailResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/users/change-email");
+        url = new URL(serviceURL + "/users/change-email");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<ChangeEmailRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -816,7 +822,7 @@ public class WebServices  {
 
     public Bitmap imageDownloader(String imageId) throws IOException{
 
-        url = new URL(ServiceURL + imageId);
+        url = new URL(serviceURL + imageId);
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.GET, url);
         Bitmap bitmap = proxyService.imageInputStream();
         proxyService.closeConnection();
@@ -842,10 +848,10 @@ public class WebServices  {
     public ResponseMessage<LatestPurchaseResponse> latestUserPurchase(LatestPurchaseRequest latestPurchaseRequest) throws IOException{
 
         ResponseMessage<LatestPurchaseResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/purchase/latest");
+        url = new URL(serviceURL + "/purchase/latest");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<LatestPurchaseRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -864,13 +870,38 @@ public class WebServices  {
         return responseMessage;
     }
 
+    public ResponseMessage<LatestPaymentResponse> latestUserPayment(LatestPaymentRequest latestPaymentRequest) throws IOException{
+
+        ResponseMessage<LatestPaymentResponse> responseMessage = null;
+        url = new URL(serviceURL + "/payment/latest");
+        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
+
+        RequestMessage<LatestPaymentRequest> message = new RequestMessage<>();
+        message.setRequestHeader(header);
+        latestPaymentRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        message.setService(latestPaymentRequest);
+
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<LatestPaymentRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
+
+        Gson gson = builder.getDatebuilder().create();
+
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<LatestPaymentResponse>>() {}.getType());
+        proxyService.closeConnection();
+
+        return responseMessage;
+    }
+
     public ResponseMessage<PSPResultResponse> pspResult(PSPResultRequest pspResultRequest) throws IOException{
 
         ResponseMessage<PSPResultResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/purchase/psp-result");
+        url = new URL(serviceURL + "/purchase/psp-result");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<PSPResultRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -892,10 +923,10 @@ public class WebServices  {
     public ResponseMessage<PendingPurchaseListResponse> pendingPurchase(PendingPurchaseListRequest pendingPurchaseListRequest) throws IOException{
 
         ResponseMessage<PendingPurchaseListResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/purchase/pendingList");
+        url = new URL(serviceURL + "/purchase/pendingList");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<PendingPurchaseListRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -918,10 +949,10 @@ public class WebServices  {
     public ResponseMessage<PendingPaymentListResponse> pendingPayment(PendingPaymentListRequest pendingPaymentListRequest) throws IOException{
 
         ResponseMessage<PendingPaymentListResponse> responseMessage = null;
-        url = new URL(ServiceURL +  "/payment/pendingList");
+        url = new URL(serviceURL +  "/payment/pendingList");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<PendingPaymentListRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -943,10 +974,10 @@ public class WebServices  {
     public ResponseMessage<CancelPurchasePaymentResponse> cancelPurchasePaymentResponse(CancelPurchasePaymentRequest cancelPurchasePaymentRequest) throws IOException{
 
         ResponseMessage<CancelPurchasePaymentResponse> responseMessage = null;
-        url = new URL(ServiceURL +  "/purchase/cancel");
+        url = new URL(serviceURL +  "/purchase/cancel");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<CancelPurchasePaymentRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -965,13 +996,38 @@ public class WebServices  {
         return responseMessage;
     }
 
+    public ResponseMessage<CancelUserPaymentResponse> cancelUserPaymentResponse(CancelUserPaymentRequest cancelUserPaymentRequest) throws IOException{
+
+        ResponseMessage<CancelUserPaymentResponse> responseMessage = null;
+        url = new URL(serviceURL +  "/payment/cancel");
+        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
+
+        RequestMessage<CancelUserPaymentRequest> message = new RequestMessage<>();
+        message.setRequestHeader(header);
+        cancelUserPaymentRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        message.setService(cancelUserPaymentRequest);
+
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<CancelUserPaymentRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
+
+        Gson gson = builder.getDatebuilder().create();
+
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<CancelUserPaymentResponse>>() {}.getType());
+        proxyService.closeConnection();
+
+        return responseMessage;
+    }
+
     public ResponseMessage<UserPaymentResponse> userPaymentResponse(UserPaymentRequest userPaymentRequest) throws IOException{
 
         ResponseMessage<UserPaymentResponse> responseMessage = null;
-        url = new URL(ServiceURL +  "/users/credit-request");
+        url = new URL(serviceURL +  "/users/credit-request");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<UserPaymentRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -994,10 +1050,10 @@ public class WebServices  {
     public ResponseMessage<IBANConfirmationResponse> ibanConfirmation(IBANConfirmationRequest ibanConfirmationRequest) throws IOException{
 
         ResponseMessage<IBANConfirmationResponse> responseMessage = null;
-        url = new URL(ServiceURL +  "/iban/confirmation");
+        url = new URL(serviceURL +  "/iban/confirmation");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<IBANConfirmationRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -1021,10 +1077,10 @@ public class WebServices  {
     public ResponseMessage<IBANChangeResponse> ibanChange(IBANChangeRequest ibanChangeRequest) throws IOException{
 
         ResponseMessage<IBANChangeResponse> responseMessage = null;
-        url = new URL(ServiceURL +  "/iban/change");
+        url = new URL(serviceURL +  "/iban/change");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<IBANChangeRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
@@ -1046,10 +1102,10 @@ public class WebServices  {
     public ResponseMessage<CardProfileResponse> getCardProfile(CardProfileRequest cardProfileRequest) throws IOException {
 
         ResponseMessage<CardProfileResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/card/info");
+        url = new URL(serviceURL + "/card/info");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader("", Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<CardProfileRequest> message = new RequestMessage<CardProfileRequest>();
         message.setRequestHeader(header);
@@ -1071,10 +1127,10 @@ public class WebServices  {
     public ResponseMessage<PurchaseInfoResponse> purchaseInfo(PurchaseInfoRequest purchaseInfoRequest) throws IOException{
 
         ResponseMessage<PurchaseInfoResponse> responseMessage = null;
-        url = new URL(ServiceURL + "/purchase/info");
+        url = new URL(serviceURL + "/purchase/info");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
-        RequestHeader header = new CreateHeader(prefs.getString(Constants.LOGIN_TOKEN_ID, ""), Constants.REQUEST_VERSION).createHeader();
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
         RequestMessage<PurchaseInfoRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);

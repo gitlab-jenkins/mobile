@@ -291,8 +291,10 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                         intent.setClass(activity, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.putExtra(Constants.USER_PROFILE_DTO, tacResponseMessage.getService().getUserProfile());
-                        intent.putExtra(Constants.PENDING_PURCHASE_PAYMENT_ID, tacResponseMessage.getService().getProductCode());
-                        intent.putExtra(Constants.PENDING_PURCHASE_PAYMENT_COUNT, tacResponseMessage.getService().getPendingPurchasesCount());
+                        intent.putExtra(Constants.PENDING_PURCHASE_CODE, tacResponseMessage.getService().getProductCode());
+                        intent.putExtra(Constants.PENDING_PAYMENT_CODE, tacResponseMessage.getService().getPaymentProductCode());
+                        intent.putExtra(Constants.PENDING_PURCHASE_COUNT, tacResponseMessage.getService().getPendingPurchasesCount());
+                        intent.putExtra(Constants.PENDING_PAYMENT_COUNT, tacResponseMessage.getService().getPendingPaymentCount());
                         intent.putExtra(Constants.NOTIFICATION, fromNotification);
                         editor.putBoolean(Constants.FORCE_USER_PROFILE, false);
                         editor.commit();

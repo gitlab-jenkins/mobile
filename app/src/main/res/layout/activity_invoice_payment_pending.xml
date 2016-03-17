@@ -81,8 +81,7 @@
                             android:textColor="@android:color/black"
                             android:textSize="14sp"
                             android:gravity="center"
-                            android:layout_marginRight="8dp"
-                            android:text="مجید زمانی"/>
+                            android:layout_marginRight="8dp" />
 
                     </LinearLayout>
 
@@ -140,8 +139,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="14sp"
                     android:gravity="center"
-                    android:layout_marginRight="8dp"
-                    android:text="مجید زمانی"/>
+                    android:layout_marginRight="8dp" />
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     geekui:customTypeface="fonts/iran_sans.ttf"
@@ -223,8 +221,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/black"
                         android:textSize="15sp"
-                        android:gravity="center"
-                        android:text="1000"/>
+                        android:gravity="center" />
 
 
                 </RelativeLayout>
@@ -257,7 +254,6 @@
                         android:textSize="16dp"
                         android:gravity="center_vertical"
                         android:layout_gravity="center_vertical"
-                        android:text="XXXX-XXXX-XXXX-۵۵۵۵"
                         android:background="@drawable/purchase_input_text"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"/>

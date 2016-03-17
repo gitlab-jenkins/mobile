@@ -81,12 +81,6 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
     PspInfoDTO pspInfoDTOs;
 
 
-    RequestCancelPurchase requestCancelPurchase;
-    CancelPurchasePaymentRequest cancelPurchasePaymentRequest;
-
-    ButtonRectangle request_business_button;
-    ButtonRectangle request_individual_button;
-
     private Dialog dialog;
 
     SharedPreferences prefs;
@@ -239,7 +233,7 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
                 if (pendingPaymentListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     paymentInfoDTOs = pendingPaymentListResponseMessage.getService().getPendingList();
                     pspInfoDTOs = pendingPaymentListResponseMessage.getService().getPspInfo();
-                    pendingPaymentAdapter = new PendingPaymentAdapter(activity, paymentInfoDTOs);
+                    pendingPaymentAdapter = new PendingPaymentAdapter(activity, paymentInfoDTOs, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
                     pendingListView.setAdapter(pendingPaymentAdapter);
                     pendingPurchaseListResponse = null;
                 }
@@ -252,35 +246,34 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
         }
     }
 
-    public class RequestCancelPurchasePaymentTaskCompleteListener implements
-            AsyncTaskCompleteListener<ResponseMessage<CancelPurchasePaymentResponse>> {
-
-        int position;
-
-        RequestCancelPurchasePaymentTaskCompleteListener(int position){
-            this.position = position;
-        }
-
-
-        @Override
-        public void onTaskComplete(ResponseMessage<CancelPurchasePaymentResponse> cancelPurchasePaymentResponseMessage) {
-
-            hamPayDialog.dismisWaitingDialog();
-
-            if (cancelPurchasePaymentResponseMessage != null) {
-                if (cancelPurchasePaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    cancelPurchasePaymentResponseMessage.getService().getRequestUUID();
-                    pendingPurchaseListResponse.getPendingList().remove(position);
-                    pendingPurchaseAdapter.notifyDataSetChanged();
-                }
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingdDialog("");
-        }
-    }
+//    public class RequestCancelPurchasePaymentTaskCompleteListener implements
+//            AsyncTaskCompleteListener<ResponseMessage<CancelPurchasePaymentResponse>> {
+//
+//        int position;
+//
+//        RequestCancelPurchasePaymentTaskCompleteListener(int position){
+//            this.position = position;
+//        }
+//
+//
+//        @Override
+//        public void onTaskComplete(ResponseMessage<CancelPurchasePaymentResponse> cancelPurchasePaymentResponseMessage) {
+//
+//            hamPayDialog.dismisWaitingDialog();
+//
+//            if (cancelPurchasePaymentResponseMessage != null) {
+//                if (cancelPurchasePaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+//                    pendingPurchaseListResponse.getPendingList().remove(position);
+//                    pendingPurchaseAdapter.notifyDataSetChanged();
+//                }
+//            }
+//        }
+//
+//        @Override
+//        public void onTaskPreRun() {
+//            hamPayDialog.showWaitingdDialog("");
+//        }
+//    }
 
     @Override
     public void onClick(View v) {

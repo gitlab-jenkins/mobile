@@ -25,16 +25,16 @@ public class HamPayEnabledContactAdapter extends BaseAdapter {
     private Context context;
     List<ContactDTO> contacts;
     private PersianEnglishDigit persianEnglishDigit;
-    private String loginTokenId;
+    private String authToken;
 
 
-    public HamPayEnabledContactAdapter(Context c, List<ContactDTO> contacts, String loginTokenId)
+    public HamPayEnabledContactAdapter(Context c, List<ContactDTO> contacts, String authToken)
     {
         // TODO Auto-generated method stub
         context = c;
         this.contacts = contacts;
         persianEnglishDigit = new PersianEnglishDigit();
-        this.loginTokenId = loginTokenId;
+        this.authToken = authToken;
     }
 
     public int getCount() {
@@ -67,7 +67,7 @@ public class HamPayEnabledContactAdapter extends BaseAdapter {
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = inflater.inflate(R.layout.contact_pay_one_item, null);
-            viewHolder.image_profile = (CircleImageView)convertView.findViewById(R.id.image_profile);
+            viewHolder.user_image = (CircleImageView)convertView.findViewById(R.id.user_image);
             viewHolder.contact_name = (FacedTextView)convertView.findViewById(R.id.contact_name);
             viewHolder.contact_phone_no = (FacedTextView)convertView.findViewById(R.id.contact_phone_no);
             convertView.setTag(viewHolder);
@@ -78,7 +78,11 @@ public class HamPayEnabledContactAdapter extends BaseAdapter {
 
 
         ContactDTO contact = contacts.get(position);
-        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.image_profile)).execute(Constants.HTTPS_SERVER_IP + "/users/" + loginTokenId + "/" + contact.getContactImageId());
+        if (contact.getContactImageId() != null) {
+            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.user_image)).execute("/users/" + authToken + "/" + contact.getContactImageId());
+        }else {
+            viewHolder.user_image.setImageResource(R.drawable.user_icon_blue);
+        }
         viewHolder.contact_name.setText(persianEnglishDigit.E2P(contact.getDisplayName()));
         viewHolder.contact_phone_no.setText(persianEnglishDigit.E2P(contact.getCellNumber()));
 
@@ -91,7 +95,7 @@ public class HamPayEnabledContactAdapter extends BaseAdapter {
         ViewHolder(){ }
         FacedTextView contact_name;
         FacedTextView contact_phone_no;
-        CircleImageView image_profile;
+        CircleImageView user_image;
     }
 
 
