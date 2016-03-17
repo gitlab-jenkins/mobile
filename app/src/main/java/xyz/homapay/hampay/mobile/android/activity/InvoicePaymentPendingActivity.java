@@ -43,24 +43,14 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
 
     ButtonRectangle pay_to_one_button;
 
-    Bundle bundle;
-
-    private String contactPhoneNo;
-    private String contactName;
-
     FacedTextView contact_name_1;
     FacedTextView contact_name_2;
     FacedTextView received_message;
 
     FacedEditText contact_message;
-    String contactMssage = "";
     FacedTextView payment_value;
     FacedTextView cardNumberValue;
     FacedEditText pin2Value;
-    Long amountValue;
-    boolean creditValueValidation = false;
-
-    String number = "";
 
     boolean intentContact = false;
 
@@ -151,8 +141,6 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
         pin2Value = (FacedEditText) findViewById(R.id.pin2Value);
         cardNumberValue = (FacedTextView) findViewById(R.id.cardNumberValue);
 
-        bundle = getIntent().getExtras();
-
         Intent intent = getIntent();
 
         paymentInfoDTO = (PaymentInfoDTO) intent.getSerializableExtra(Constants.PAYMENT_INFO);
@@ -162,7 +150,7 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
             contact_name_1.setText(paymentInfoDTO.getCallerName());
             contact_name_2.setText(paymentInfoDTO.getCallerName());
             received_message.setText(paymentInfoDTO.getMessage());
-            payment_value.setText(paymentInfoDTO.getAmount() + "");
+            payment_value.setText(persianEnglishDigit.E2P(paymentInfoDTO.getAmount() + ""));
 
             if (pspInfoDTO.getCardDTO().getCardId() == null) {
                 LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
