@@ -91,8 +91,8 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
 
             viewHolder.business_name = (FacedTextView)convertView.findViewById(R.id.business_name);
             viewHolder.business_image = (ImageView)convertView.findViewById(R.id.business_image);
-            viewHolder.date_time = (FacedTextView)convertView.findViewById(R.id.date_time);
             viewHolder.price_pay = (FacedTextView)convertView.findViewById(R.id.price_pay);
+            viewHolder.createDateTime = (FacedTextView)convertView.findViewById(R.id.createDateTime);
             viewHolder.expire_pay = (FacedTextView)convertView.findViewById(R.id.expire_pay);
             viewHolder.delete = (FacedTextView)convertView.findViewById(R.id.delete);
 
@@ -113,11 +113,9 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
             viewHolder.business_image.setBackgroundColor(context.getResources().getColor(R.color.user_change_status));
         }
 
-        viewHolder.date_time.setText(new PersianEnglishDigit().E2P(new JalaliConvert().GregorianToPersian(purchaseInfoDTO.getCreatedBy())));
+        viewHolder.createDateTime.setText(new PersianEnglishDigit().E2P(new JalaliConvert().GregorianToPersian(purchaseInfoDTO.getCreatedBy())));
+        viewHolder.expire_pay.setText(new PersianEnglishDigit().E2P(new JalaliConvert().GregorianToPersian(purchaseInfoDTO.getExpirationDate())));
         viewHolder.price_pay.setText(new PersianEnglishDigit().E2P(purchaseInfoDTO.getAmount().toString()) + " ریال");
-        viewHolder.expire_pay.setVisibility(View.GONE);
-
-
 
         viewHolder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,6 +173,7 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
         ImageView business_image;
         FacedTextView date_time;
         FacedTextView price_pay;
+        FacedTextView createDateTime;
         FacedTextView expire_pay;
         FacedTextView delete;
 

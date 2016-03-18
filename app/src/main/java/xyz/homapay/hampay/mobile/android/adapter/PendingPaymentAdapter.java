@@ -30,6 +30,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestCancelPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
@@ -97,9 +98,9 @@ public class PendingPaymentAdapter extends BaseAdapter  {
             viewHolder = new ViewHolder();
             convertView = inflater.inflate(R.layout.pending_payment_row, null);
 
-
+            viewHolder.callerName = (FacedTextView)convertView.findViewById(R.id.callerName);
             viewHolder.callerPhoneNo = (FacedTextView)convertView.findViewById(R.id.callerPhoneNo);
-            viewHolder.user_image = (ImageView)convertView.findViewById(R.id.user_image);
+            viewHolder.user_image = (CircleImageView)convertView.findViewById(R.id.user_image);
             viewHolder.date_time = (FacedTextView)convertView.findViewById(R.id.date_time);
             viewHolder.price_pay = (FacedTextView)convertView.findViewById(R.id.price_pay);
             viewHolder.expire_pay = (FacedTextView)convertView.findViewById(R.id.expire_pay);
@@ -115,6 +116,7 @@ public class PendingPaymentAdapter extends BaseAdapter  {
 
         final PaymentInfoDTO paymentInfoDTO = paymentInfoDTOs.get(position);
 
+        viewHolder.callerName.setText(paymentInfoDTO.getCallerName());
         viewHolder.callerPhoneNo.setText(new PersianEnglishDigit().E2P(paymentInfoDTO.getCallerPhoneNumber()));
 //        viewHolder.date_time.setText(new PersianEnglishDigit().E2P(new JalaliConvert().GregorianToPersian(paymentInfoDTO.getRequestDate())));
         viewHolder.price_pay.setText(new PersianEnglishDigit().E2P(paymentInfoDTO.getAmount().toString()) + " ریال");
@@ -183,8 +185,9 @@ public class PendingPaymentAdapter extends BaseAdapter  {
 
         ViewHolder(){ }
 
+        FacedTextView callerName;
         FacedTextView callerPhoneNo;
-        ImageView user_image;
+        CircleImageView user_image;
         FacedTextView date_time;
         FacedTextView price_pay;
         FacedTextView expire_pay;
