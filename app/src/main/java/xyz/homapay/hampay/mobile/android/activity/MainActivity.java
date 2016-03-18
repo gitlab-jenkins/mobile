@@ -337,6 +337,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                         notificationIntent.setClass(activity, PendingPurchasePaymentActivity.class);
                         startActivity(notificationIntent);
                         break;
+
+                    case PURCHASE:
+                        notificationIntent = getIntent();
+                        notificationIntent.setClass(activity, PendingPurchasePaymentActivity.class);
+                        startActivity(notificationIntent);
+                        break;
                 }
 
             }
@@ -510,6 +516,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         if (requestCode == 1024) {
             if(resultCode == 1024){
+//                String result = data.getStringExtra("result");
                 fragment = new CreditRequestFragment();
                 title = getString(R.string.title_credit_request);
                 currentFragmet = 2;
