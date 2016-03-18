@@ -197,8 +197,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
                     intent.setClass(activity, BankWebPaymentActivity.class);
                     intent.putExtra(Constants.PAYMENT_INFO, paymentInfoDTO);
                     intent.putExtra(Constants.PSP_INFO, pspInfoDTO);
-                    startActivity(intent);
-                    finish();
+                    startActivityForResult(intent, 46);
                 } else {
 
                     if (pin2Value.getText().toString().length() <= 4) {
@@ -266,6 +265,26 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 46) {
+            if(resultCode == Activity.RESULT_OK){
+                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, 0);
+                if (result == 1){
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra(Constants.ACTIVITY_RESULT, ResultStatus.SUCCESS.ordinal());
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    finish();
+                }
+
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+            }
+        }
     }
 
 
