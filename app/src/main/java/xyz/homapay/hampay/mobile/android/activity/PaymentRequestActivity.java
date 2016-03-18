@@ -1,6 +1,5 @@
 package xyz.homapay.hampay.mobile.android.activity;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -9,7 +8,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -20,28 +18,22 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
-import xyz.homapay.hampay.common.core.model.request.ContactUsRequest;
 import xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
-import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
+import xyz.homapay.hampay.common.core.model.request.LatestInvoiceContactsRequest;
 import xyz.homapay.hampay.common.core.model.response.ContactsHampayEnabledResponse;
-import xyz.homapay.hampay.common.core.model.response.GetUserIdTokenResponse;
-import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
+import xyz.homapay.hampay.common.core.model.response.LatestInvoiceContactsResponse;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.HamPayEnabledContactAdapter;
-import xyz.homapay.hampay.mobile.android.adapter.RecentPaymentRequestAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestContactHampayEnabled;
-import xyz.homapay.hampay.mobile.android.async.RequestUserIdToken;
+import xyz.homapay.hampay.mobile.android.async.RequestLatestInvoiceContacts;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
-import xyz.homapay.hampay.mobile.android.model.RecentPay;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class PaymentRequestActivity extends AppCompatActivity implements View.OnClickListener{
@@ -50,19 +42,14 @@ public class PaymentRequestActivity extends AppCompatActivity implements View.On
     private Context context;
     private Activity activity;
     private ListView paymentRequestList;
-    DatabaseHelper dbHelper;
-    List<RecentPay> recentPays;
-    List<ContactDTO> hamPayContact;
+    List<ContactDTO> contacts;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
-    GetUserIdTokenRequest getUserIdTokenRequest;
-    RequestUserIdToken requestUserIdToken;
+    private HamPayEnabledContactAdapter hamPayContactAdapter;
 
-    private RecentPaymentRequestAdapter recentPaymentRequestAdapter;
-    private HamPayEnabledContactAdapter hamPayEnabledContactAdapter;
-
-    String serverKey = "";
+    private RequestLatestInvoiceContacts requestLatestInvoiceContacts;
+    private LatestInvoiceContactsRequest latestInvoiceContactsRequest;
 
     private RelativeLayout recent_rl;
     private FacedTextView recent_title;
@@ -72,12 +59,12 @@ public class PaymentRequestActivity extends AppCompatActivity implements View.On
     private View hampay_sep;
     private FacedTextView selectedMenu;
 
-    private int selectedType = 1;
-
     private Dialog dialog;
 
     ContactsHampayEnabledRequest contactsHampayEnabledRequest;
     RequestContactHampayEnabled requestContactHampayEnabled;
+
+    private HamPayDialog hamPayDialog;
 
     public void backActionBar(View view){
         finish();
@@ -99,20 +86,10 @@ public class PaymentRequestActivity extends AppCompatActivity implements View.On
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                selectedType = 1;
                 selectedMenu.setText(getString(R.string.recent_payment_request));
-                if ((prefs.getString(Constants.USER_ID_TOKEN, "") != null && prefs.getString(Constants.USER_ID_TOKEN, "").length() == 16)){
-                    serverKey = prefs.getString(Constants.USER_ID_TOKEN, "");
-                    dbHelper = new DatabaseHelper(activity, serverKey);
-                    recentPays = dbHelper.getAllRecentPays();
-                    recentPaymentRequestAdapter = new RecentPaymentRequestAdapter(activity, recentPays, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-                    paymentRequestList.setAdapter(recentPaymentRequestAdapter);
-                }else {
-                    recentPays = new ArrayList<RecentPay>();
-                    getUserIdTokenRequest = new GetUserIdTokenRequest();
-                    requestUserIdToken = new RequestUserIdToken(context, new RequestGetUserIdTokenResponseTaskCompleteListener());
-                    requestUserIdToken.execute(getUserIdTokenRequest);
-                }
+                latestInvoiceContactsRequest = new LatestInvoiceContactsRequest();
+                requestLatestInvoiceContacts = new RequestLatestInvoiceContacts(activity, new RequestLatestInvoiceContactsTaskCompleteListener());
+                requestLatestInvoiceContacts.execute(latestInvoiceContactsRequest);
             }
         });
 
@@ -120,7 +97,6 @@ public class PaymentRequestActivity extends AppCompatActivity implements View.On
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                selectedType = 2;
                 selectedMenu.setText(getString(R.string.hampay_contact_list));
                 contactsHampayEnabledRequest = new ContactsHampayEnabledRequest();
                 requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());
@@ -150,11 +126,11 @@ public class PaymentRequestActivity extends AppCompatActivity implements View.On
 
         context = this;
         activity = PaymentRequestActivity.this;
+        hamPayDialog = new HamPayDialog(activity);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
-        recentPays = new ArrayList<>();
         paymentRequestList = (ListView)findViewById(R.id.paymentRequestList);
 
         recent_rl = (RelativeLayout)findViewById(R.id.recent_rl);
@@ -168,43 +144,24 @@ public class PaymentRequestActivity extends AppCompatActivity implements View.On
 
         selectedMenu = (FacedTextView)findViewById(R.id.selectedMenu);
 
-        recentPaymentRequestAdapter = new RecentPaymentRequestAdapter(activity, recentPays, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-        paymentRequestList.setAdapter(recentPaymentRequestAdapter);
+        latestInvoiceContactsRequest = new LatestInvoiceContactsRequest();
+        requestLatestInvoiceContacts = new RequestLatestInvoiceContacts(activity, new RequestLatestInvoiceContactsTaskCompleteListener());
+        requestLatestInvoiceContacts.execute(latestInvoiceContactsRequest);
 
         paymentRequestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent();
                 intent.setClass(activity, PaymentRequestDetailActivity.class);
-                intent.putExtra(Constants.LOGIN_TOKEN_ID, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+                intent.putExtra(Constants.HAMPAY_CONTACT, contacts.get(position));
 
-                if (selectedType == 1) {
-                    intent.putExtra(Constants.CONTACT_NAME, recentPays.get(position).getName());
-                    intent.putExtra(Constants.CONTACT_PHONE_NO, recentPays.get(position).getPhone());
-                    intent.putExtra(Constants.USER_IMAGE_PROFILE_ID, recentPays.get(position).getId());
-                }else {
-                    intent.putExtra(Constants.CONTACT_NAME, hamPayContact.get(position).getDisplayName());
-                    intent.putExtra(Constants.CONTACT_PHONE_NO, hamPayContact.get(position).getCellNumber());
-                    intent.putExtra(Constants.USER_IMAGE_PROFILE_ID, hamPayContact.get(position).getContactImageId());
-                }
+//                intent.putExtra(Constants.LOGIN_TOKEN_ID, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+//                intent.putExtra(Constants.CONTACT_NAME, contacts.get(position).getDisplayName());
+//                intent.putExtra(Constants.CONTACT_PHONE_NO, contacts.get(position).getCellNumber());
+//                intent.putExtra(Constants.USER_IMAGE_PROFILE_ID, contacts.get(position).getContactImageId());
                 startActivityForResult(intent, 1024);
             }
         });
-
-        if ((prefs.getString(Constants.USER_ID_TOKEN, "") != null && prefs.getString(Constants.USER_ID_TOKEN, "").length() == 16)){
-            serverKey = prefs.getString(Constants.USER_ID_TOKEN, "");
-            dbHelper = new DatabaseHelper(activity, serverKey);
-            recentPays = dbHelper.getAllRecentPays();
-            recentPaymentRequestAdapter = new RecentPaymentRequestAdapter(activity, recentPays, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            paymentRequestList.setAdapter(recentPaymentRequestAdapter);
-        }else {
-            recentPays = new ArrayList<RecentPay>();
-            getUserIdTokenRequest = new GetUserIdTokenRequest();
-            requestUserIdToken = new RequestUserIdToken(context, new RequestGetUserIdTokenResponseTaskCompleteListener());
-            requestUserIdToken.execute(getUserIdTokenRequest);
-        }
-
-
     }
 
     @Override
@@ -212,28 +169,16 @@ public class PaymentRequestActivity extends AppCompatActivity implements View.On
 
         switch (v.getId()){
             case R.id.recent_rl:
-                selectedType = 1;
                 recent_title.setTextColor(getResources().getColor(R.color.user_change_status));
                 recent_sep.setBackgroundColor(getResources().getColor(R.color.user_change_status));
                 hampay_title.setTextColor(getResources().getColor(R.color.normal_text));
                 hampay_sep.setBackgroundColor(getResources().getColor(R.color.normal_text));
-
-                if ((prefs.getString(Constants.USER_ID_TOKEN, "") != null && prefs.getString(Constants.USER_ID_TOKEN, "").length() == 16)){
-                    serverKey = prefs.getString(Constants.USER_ID_TOKEN, "");
-                    dbHelper = new DatabaseHelper(activity, serverKey);
-                    recentPays = dbHelper.getAllRecentPays();
-                    recentPaymentRequestAdapter = new RecentPaymentRequestAdapter(activity, recentPays, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-                    paymentRequestList.setAdapter(recentPaymentRequestAdapter);
-                }else {
-                    recentPays = new ArrayList<RecentPay>();
-                    getUserIdTokenRequest = new GetUserIdTokenRequest();
-                    requestUserIdToken = new RequestUserIdToken(context, new RequestGetUserIdTokenResponseTaskCompleteListener());
-                    requestUserIdToken.execute(getUserIdTokenRequest);
-                }
+                latestInvoiceContactsRequest = new LatestInvoiceContactsRequest();
+                requestLatestInvoiceContacts = new RequestLatestInvoiceContacts(activity, new RequestLatestInvoiceContactsTaskCompleteListener());
+                requestLatestInvoiceContacts.execute(latestInvoiceContactsRequest);
                 break;
 
             case R.id.hampay_rl:
-                selectedType = 2;
                 hampay_title.setTextColor(getResources().getColor(R.color.user_change_status));
                 hampay_sep.setBackgroundColor(getResources().getColor(R.color.user_change_status));
                 recent_title.setTextColor(getResources().getColor(R.color.normal_text));
@@ -251,14 +196,16 @@ public class PaymentRequestActivity extends AppCompatActivity implements View.On
         @Override
         public void onTaskComplete(ResponseMessage<ContactsHampayEnabledResponse> contactsHampayEnabledResponseMessage) {
 
+            hamPayDialog.dismisWaitingDialog();
+
             if (contactsHampayEnabledResponseMessage != null){
                 if (contactsHampayEnabledResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
 
-                    hamPayContact = contactsHampayEnabledResponseMessage.getService().getContacts();
+                    contacts = contactsHampayEnabledResponseMessage.getService().getContacts();
 
-                    hamPayEnabledContactAdapter = new HamPayEnabledContactAdapter(context, hamPayContact,
+                    hamPayContactAdapter = new HamPayEnabledContactAdapter(context, contacts,
                             prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-                    paymentRequestList.setAdapter(hamPayEnabledContactAdapter);
+                    paymentRequestList.setAdapter(hamPayContactAdapter);
                 }
                 else {
                     requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());
@@ -277,48 +224,46 @@ public class PaymentRequestActivity extends AppCompatActivity implements View.On
         }
 
         @Override
-        public void onTaskPreRun() { }
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
     }
 
-
-
-
-    public class RequestGetUserIdTokenResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<GetUserIdTokenResponse>> {
-        public RequestGetUserIdTokenResponseTaskCompleteListener(){
-        }
-
+    public class RequestLatestInvoiceContactsTaskCompleteListener implements
+            AsyncTaskCompleteListener<ResponseMessage<LatestInvoiceContactsResponse>> {
         @Override
-        public void onTaskComplete(ResponseMessage<GetUserIdTokenResponse> registrationGetUserIdTokenResponseMessage) {
+        public void onTaskComplete(ResponseMessage<LatestInvoiceContactsResponse> latestInvoiceContactsResponseMessage) {
 
-            ResultStatus resultStatus;
-            if (registrationGetUserIdTokenResponseMessage != null) {
-                resultStatus = registrationGetUserIdTokenResponseMessage.getService().getResultStatus();
-                if (resultStatus == ResultStatus.SUCCESS) {
-                    serverKey = registrationGetUserIdTokenResponseMessage.getService().getUserIdToken();
-                    editor.putString(Constants.USER_ID_TOKEN, serverKey);
-                    editor.commit();
+            hamPayDialog.dismisWaitingDialog();
 
-                    dbHelper = new DatabaseHelper(activity, serverKey);
-                    recentPays = dbHelper.getAllRecentPays();
-                    recentPaymentRequestAdapter = new RecentPaymentRequestAdapter(activity, recentPays, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-                    paymentRequestList.setAdapter(recentPaymentRequestAdapter);
+            if (latestInvoiceContactsResponseMessage != null){
+                if (latestInvoiceContactsResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
 
-                }else {
-                    requestUserIdToken = new RequestUserIdToken(context, new RequestGetUserIdTokenResponseTaskCompleteListener());
-                    new HamPayDialog(activity).showFailGetUserIdTokenDialog(requestUserIdToken, getUserIdTokenRequest,
-                            registrationGetUserIdTokenResponseMessage.getService().getResultStatus().getCode(),
-                            registrationGetUserIdTokenResponseMessage.getService().getResultStatus().getDescription());
+                    contacts = latestInvoiceContactsResponseMessage.getService().getContacts();
+
+                    hamPayContactAdapter = new HamPayEnabledContactAdapter(context, contacts,
+                            prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+                    paymentRequestList.setAdapter(hamPayContactAdapter);
+                }
+                else {
+                    requestLatestInvoiceContacts = new RequestLatestInvoiceContacts(context, new RequestLatestInvoiceContactsTaskCompleteListener());
+                    new HamPayDialog(activity).showFailLatestInvoiceDialog(requestLatestInvoiceContacts, latestInvoiceContactsRequest,
+                            latestInvoiceContactsResponseMessage.getService().getResultStatus().getCode(),
+                            latestInvoiceContactsResponseMessage.getService().getResultStatus().getDescription());
+
                 }
             }else {
-                requestUserIdToken = new RequestUserIdToken(context, new RequestGetUserIdTokenResponseTaskCompleteListener());
-                new HamPayDialog(activity).showFailGetUserIdTokenDialog(requestUserIdToken, getUserIdTokenRequest,
+                requestLatestInvoiceContacts = new RequestLatestInvoiceContacts(context, new RequestLatestInvoiceContactsTaskCompleteListener());
+                new HamPayDialog(activity).showFailLatestInvoiceDialog(requestLatestInvoiceContacts, latestInvoiceContactsRequest,
                         Constants.LOCAL_ERROR_CODE,
-                        getString(R.string.msg_fail_server_key));
+                        getString(R.string.msg_fail_contacts_enabled));
             }
         }
 
         @Override
-        public void onTaskPreRun() {   }
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
     }
 }
 

@@ -19,6 +19,7 @@ import com.google.android.gms.analytics.Tracker;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
+import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
 import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
 import xyz.homapay.hampay.common.core.model.request.UserPaymentRequest;
 import xyz.homapay.hampay.common.core.model.response.GetUserIdTokenResponse;
@@ -44,18 +45,17 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class PaymentRequestDetailActivity extends AppCompatActivity {
 
-    ButtonRectangle pay_to_one_button;
 
-    Bundle bundle;
+    private ContactDTO hamPayContact;
+
+    ButtonRectangle pay_to_one_button;
 
     PersianEnglishDigit persianEnglishDigit;
 
     private String contactPhoneNo;
     private String contactName;
-    private String userImageProfileId;
-    private String loginTokenId;
 
-    private CircleImageView image_profile;
+    private CircleImageView user_image;
     FacedTextView contact_name;
     FacedTextView contact_phone_no;
     FacedEditText contact_message;
@@ -95,6 +95,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
 
     GetUserIdTokenRequest getUserIdTokenRequest;
     RequestUserIdToken requestUserIdToken;
+    private String authToken;
 
 
     @Override
@@ -127,6 +128,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
         try {
             MaxXferAmount = prefs.getLong(Constants.MAX_INDIVIDUAL_XFER_AMOUNT, 0);
@@ -165,17 +167,22 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
         contact_message = (FacedEditText)findViewById(R.id.contact_message);
         contact_name = (FacedTextView)findViewById(R.id.contact_name);
         contact_phone_no = (FacedTextView)findViewById(R.id.contact_phone_no);
-        image_profile = (CircleImageView)findViewById(R.id.image_profile);
+        user_image = (CircleImageView)findViewById(R.id.user_image);
 
 
-        bundle = getIntent().getExtras();
+        Intent intent = getIntent();
 
-        if (bundle != null) {
-            contactPhoneNo = bundle.getString(Constants.CONTACT_PHONE_NO);
-            contactName = bundle.getString(Constants.CONTACT_NAME);
-            userImageProfileId = bundle.getString(Constants.USER_IMAGE_PROFILE_ID);
-            loginTokenId = bundle.getString(Constants.LOGIN_TOKEN_ID);
+        hamPayContact = (ContactDTO)intent.getSerializableExtra(Constants.HAMPAY_CONTACT);
 
+        if (hamPayContact != null) {
+            contact_name.setText(hamPayContact.getDisplayName());
+            contact_phone_no.setText(persianEnglishDigit.E2P(hamPayContact.getCellNumber()));
+
+            if (hamPayContact.getContactImageId() != null) {
+                new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(user_image)).execute("/users/" + authToken + "/" + hamPayContact.getContactImageId());
+            }else {
+                user_image.setImageResource(R.drawable.user_icon_blue);
+            }
         }else {
 
             intentContact = true;
@@ -206,11 +213,6 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
 
             }
         }
-
-        contact_name.setText(persianEnglishDigit.E2P(contactName));
-        contact_phone_no.setText(persianEnglishDigit.E2P(contactPhoneNo));
-        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile)).execute(userImageProfileId);
-
 
 
         pay_to_one_button = (ButtonRectangle)findViewById(R.id.pay_to_one_button);

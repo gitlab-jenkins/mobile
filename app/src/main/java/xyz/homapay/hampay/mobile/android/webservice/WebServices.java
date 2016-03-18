@@ -35,6 +35,7 @@ import xyz.homapay.hampay.common.core.model.request.IBANConfirmationRequest;
 import xyz.homapay.hampay.common.core.model.request.IllegalAppListRequest;
 import xyz.homapay.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
 import xyz.homapay.hampay.common.core.model.request.IndividualPaymentRequest;
+import xyz.homapay.hampay.common.core.model.request.LatestInvoiceContactsRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
 import xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
@@ -70,6 +71,7 @@ import xyz.homapay.hampay.common.core.model.response.IBANConfirmationResponse;
 import xyz.homapay.hampay.common.core.model.response.IllegalAppListResponse;
 import xyz.homapay.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
 import xyz.homapay.hampay.common.core.model.response.IndividualPaymentResponse;
+import xyz.homapay.hampay.common.core.model.response.LatestInvoiceContactsResponse;
 import xyz.homapay.hampay.common.core.model.response.LatestPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.LatestPurchaseResponse;
 import xyz.homapay.hampay.common.core.model.response.MobileRegistrationIdEntryResponse;
@@ -1144,6 +1146,32 @@ public class WebServices  {
         Gson gson = builder.getDatebuilder().create();
 
         responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<PurchaseInfoResponse>>() {}.getType());
+
+        proxyService.closeConnection();
+
+        return responseMessage;
+    }
+
+    public ResponseMessage<LatestInvoiceContactsResponse> latestInvoiceContacts(LatestInvoiceContactsRequest latestInvoiceContactsRequest) throws IOException{
+
+        ResponseMessage<LatestInvoiceContactsResponse> responseMessage = null;
+        url = new URL(serviceURL + "/payment/recent-contacts");
+        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
+
+        RequestMessage<LatestInvoiceContactsRequest> message = new RequestMessage<>();
+        message.setRequestHeader(header);
+        latestInvoiceContactsRequest.setRequestUUID(UUID.randomUUID().toString());
+        message.setService(latestInvoiceContactsRequest);
+
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<LatestInvoiceContactsRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
+
+        Gson gson = builder.getDatebuilder().create();
+
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<LatestInvoiceContactsResponse>>() {}.getType());
 
         proxyService.closeConnection();
 

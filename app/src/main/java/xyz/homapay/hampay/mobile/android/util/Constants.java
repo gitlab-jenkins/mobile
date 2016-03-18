@@ -91,4 +91,5 @@ public class Constants {
     public static final String PURCHASE_INFO = "purchaseInfo";
     public static final String BUSINESS_PURCHASE_CODE = "businessPurchaseCode";
     public static final String BUSINESS_INFO = "businessInfo";
+    public static final String HAMPAY_CONTACT = "hamPayContact";
 }

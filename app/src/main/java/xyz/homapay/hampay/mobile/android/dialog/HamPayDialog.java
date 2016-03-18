@@ -47,6 +47,7 @@ import xyz.homapay.hampay.common.core.model.request.IBANChangeRequest;
 import xyz.homapay.hampay.common.core.model.request.IBANConfirmationRequest;
 import xyz.homapay.hampay.common.core.model.request.IllegalAppListRequest;
 import xyz.homapay.hampay.common.core.model.request.IndividualPaymentRequest;
+import xyz.homapay.hampay.common.core.model.request.LatestInvoiceContactsRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
 import xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
@@ -99,6 +100,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestIBANChange;
 import xyz.homapay.hampay.mobile.android.async.RequestIBANConfirmation;
 import xyz.homapay.hampay.mobile.android.async.RequestIllegalAppList;
 import xyz.homapay.hampay.mobile.android.async.RequestIndividualPayment;
+import xyz.homapay.hampay.mobile.android.async.RequestLatestInvoiceContacts;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestLogout;
@@ -1886,6 +1888,44 @@ public class HamPayDialog {
             public void onClick(View v) {
                 dialog.dismiss();
                 requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
+            }
+        });
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
+        dialog.show();
+    }
+
+    public void showFailLatestInvoiceDialog(final RequestLatestInvoiceContacts requestLatestInvoiceContacts,
+                                                    final LatestInvoiceContactsRequest latestInvoiceContactsRequest,
+                                                    final String code,
+                                                    final String message){
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_contacts_enabled, null);
+
+
+
+        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+
+        responseCode.setText(activity.getString(R.string.error_code, code));
+        responseMessage.setText(message);
+
+        FacedTextView retry_contacts_enabled = (FacedTextView) view.findViewById(R.id.retry_contacts_enabled);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
+
+        retry_contacts_enabled.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                requestLatestInvoiceContacts.execute(latestInvoiceContactsRequest);
             }
         });
         cancel_request.setOnClickListener(new View.OnClickListener() {
