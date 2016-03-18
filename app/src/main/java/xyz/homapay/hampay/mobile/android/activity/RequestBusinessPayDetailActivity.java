@@ -193,6 +193,13 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         pspInfoDTO = (PspInfoDTO)intent.getSerializableExtra(Constants.PSP_INFO);
         purchaseCode = intent.getStringExtra(Constants.BUSINESS_PURCHASE_CODE);
 
+        if (pspInfoDTO != null) {
+            if (pspInfoDTO.getCardDTO().getCardId() == null) {
+                creditInfo.setVisibility(View.GONE);
+            } else {
+                creditInfo.setVisibility(View.VISIBLE);
+            }
+        }
 
         if (purchaseInfoDTO != null) {
             PersianEnglishDigit persianEnglishDigit = new PersianEnglishDigit();
@@ -210,7 +217,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             paymentVAT.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getVat().toString()) + " ریال");
             paymentFeeValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getFeeCharge().toString()) + " ریال");
             paymentTotalValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() + "") + " ریال");
-
 
             business_name.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getMerchantName()));
 
@@ -245,8 +251,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                     intent.setClass(activity, BankWebPaymentActivity.class);
                     intent.putExtra(Constants.PURCHASE_INFO, purchaseInfoDTO);
                     intent.putExtra(Constants.PSP_INFO, pspInfoDTO);
-                    startActivity(intent);
-                    finish();
+                    startActivityForResult(intent, 45);
+//                    finish();
                 } else {
                     if (pin2Value.getText().toString().length() <= 4) {
                         Toast.makeText(context, getString(R.string.msg_pin2_incurrect), Toast.LENGTH_LONG).show();
@@ -374,6 +380,10 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                         pspResultRequest.setTrackingCode(s2sMapEntry.value);
                     }
                 }
+
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra(Constants.ACTIVITY_RESULT, ResultStatus.SUCCESS.ordinal());
+                setResult(Activity.RESULT_OK, returnIntent);
 
                 requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener());
                 requestPSPResult.execute(pspResultRequest);
@@ -552,6 +562,25 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         @Override
         public void onTaskPreRun() {
             hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 45) {
+            if(resultCode == Activity.RESULT_OK){
+                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, 0);
+                if (result == 1){
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra(Constants.ACTIVITY_RESULT, ResultStatus.SUCCESS.ordinal());
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    finish();
+                }
+
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+            }
         }
     }
 

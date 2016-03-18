@@ -35,11 +35,6 @@ public class CongratsAccountActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 finish();
                 startActivity(intent);
-
-//                Intent returnIntent = new Intent();
-//                returnIntent.putExtra("result", 1023);
-//                setResult(1023);
-//                finish();
             }
         });
 
@@ -73,12 +68,6 @@ public class CongratsAccountActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         finish();
         startActivity(intent);
-
-//        Intent returnIntent = new Intent();
-//        returnIntent.putExtra("result", 1023);
-//        setResult(1023);
-//
-//        finish();
     }
 
 }

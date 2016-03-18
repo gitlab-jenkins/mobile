@@ -25,10 +25,13 @@ import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestPSPResult;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
+import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
@@ -43,6 +46,7 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
 
     ButtonRectangle pay_to_one_button;
 
+    CircleImageView user_image;
     FacedTextView contact_name_1;
     FacedTextView contact_name_2;
     FacedTextView received_message;
@@ -86,6 +90,8 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
     RequestLatestPayment requestLatestPayment;
     LatestPaymentRequest latestPaymentRequest;
 
+    private String authToken;
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -116,6 +122,8 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
+        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
+
         try {
 
             MaxXferAmount = prefs.getLong(Constants.MAX_INDIVIDUAL_XFER_AMOUNT, 0);
@@ -133,6 +141,7 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
         persianEnglishDigit = new PersianEnglishDigit();
 
 
+        user_image = (CircleImageView)findViewById(R.id.user_image);
         contact_message = (FacedEditText) findViewById(R.id.contact_message);
         contact_name_1 = (FacedTextView) findViewById(R.id.contact_name_1);
         contact_name_2 = (FacedTextView) findViewById(R.id.contact_name_2);
@@ -151,6 +160,12 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
             contact_name_2.setText(paymentInfoDTO.getCallerName());
             received_message.setText(paymentInfoDTO.getMessage());
             payment_value.setText(persianEnglishDigit.E2P(paymentInfoDTO.getAmount() + ""));
+
+            if (paymentInfoDTO.getImageId() != null) {
+                new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(user_image)).execute("/users/" + authToken + "/" + paymentInfoDTO.getImageId());
+            }else {
+                user_image.setImageResource(R.drawable.user_icon_blue);
+            }
 
             if (pspInfoDTO.getCardDTO().getCardId() == null) {
                 LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
@@ -312,6 +327,11 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
                     }
                 }
 
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra(Constants.ACTIVITY_RESULT, ResultStatus.SUCCESS.ordinal());
+                setResult(Activity.RESULT_OK, returnIntent);
+
+
                 requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener());
                 requestPSPResult.execute(pspResultRequest);
 
@@ -402,6 +422,12 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
                     contact_name_2.setText(paymentInfoDTO.getCallerName());
                     received_message.setText(paymentInfoDTO.getMessage());
                     payment_value.setText(paymentInfoDTO.getAmount() + "");
+
+                    if (paymentInfoDTO.getImageId() != null) {
+                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(user_image)).execute("/users/" + authToken + "/" + paymentInfoDTO.getImageId());
+                    }else {
+                        user_image.setImageResource(R.drawable.user_icon_blue);
+                    }
 
                     if (pspInfoDTO.getCardDTO().getCardId() == null) {
                         LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);

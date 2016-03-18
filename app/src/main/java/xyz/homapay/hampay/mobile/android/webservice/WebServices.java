@@ -285,31 +285,31 @@ public class WebServices  {
     }
 
 
-    public ResponseMessage<RegisterCardResponse> registerCardResponse(RegisterCardRequest registerCardRequest) throws IOException{
-
-        ResponseMessage<RegisterCardResponse> responseMessage = null;
-        url = new URL(serviceURL + "/psp/registerCard");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
-
-        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
-
-        RequestMessage<RegisterCardRequest> message = new RequestMessage<>();
-        message.setRequestHeader(header);
-        registerCardRequest.setRequestUUID(UUID.randomUUID().toString());
-        message.setService(registerCardRequest);
-
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegisterCardRequest>>() {}.getType();
-        String jsonRequest = new Gson().toJson(message, requestType);
-        proxyService.setJsonBody(jsonRequest);
-
-        Gson gson = new Gson();
-
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<RegisterCardResponse>>() {}.getType());
-
-        proxyService.closeConnection();
-
-        return responseMessage;
-    }
+//    public ResponseMessage<RegisterCardResponse> registerCardResponse(RegisterCardRequest registerCardRequest) throws IOException{
+//
+//        ResponseMessage<RegisterCardResponse> responseMessage = null;
+//        url = new URL(serviceURL + "/psp/registerCard");
+//        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+//
+//        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
+//
+//        RequestMessage<RegisterCardRequest> message = new RequestMessage<>();
+//        message.setRequestHeader(header);
+//        registerCardRequest.setRequestUUID(UUID.randomUUID().toString());
+//        message.setService(registerCardRequest);
+//
+//        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegisterCardRequest>>() {}.getType();
+//        String jsonRequest = new Gson().toJson(message, requestType);
+//        proxyService.setJsonBody(jsonRequest);
+//
+//        Gson gson = new Gson();
+//
+//        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<RegisterCardResponse>>() {}.getType());
+//
+//        proxyService.closeConnection();
+//
+//        return responseMessage;
+//    }
 
 
     public ResponseMessage<RegistrationCredentialsResponse> registrationCredentialsResponse(RegistrationCredentialsRequest registrationCredentialsRequest) throws IOException{

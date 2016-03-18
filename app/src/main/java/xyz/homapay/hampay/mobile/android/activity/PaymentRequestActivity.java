@@ -154,11 +154,6 @@ public class PaymentRequestActivity extends AppCompatActivity implements View.On
                 Intent intent = new Intent();
                 intent.setClass(activity, PaymentRequestDetailActivity.class);
                 intent.putExtra(Constants.HAMPAY_CONTACT, contacts.get(position));
-
-//                intent.putExtra(Constants.LOGIN_TOKEN_ID, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-//                intent.putExtra(Constants.CONTACT_NAME, contacts.get(position).getDisplayName());
-//                intent.putExtra(Constants.CONTACT_PHONE_NO, contacts.get(position).getCellNumber());
-//                intent.putExtra(Constants.USER_IMAGE_PROFILE_ID, contacts.get(position).getContactImageId());
                 startActivityForResult(intent, 1024);
             }
         });

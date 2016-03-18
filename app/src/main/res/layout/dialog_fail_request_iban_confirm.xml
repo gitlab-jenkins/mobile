@@ -30,7 +30,7 @@
         android:textSize="15dp"
         android:text="@string/msg_fail_verify_account"
         android:gravity="right"
-        android:layout_gravity="center"
+        android:layout_gravity="right"
         android:layout_margin="8dp"/>
 
 

@@ -13,6 +13,7 @@ import android.webkit.WebViewClient;
 
 import java.io.UnsupportedEncodingException;
 
+import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
@@ -120,6 +121,9 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                         hamPayDialog.businessPaymentFailDialog();
                     } else {
                         hamPayDialog.businessPaymentSuccessDialog(view.getTitle());
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra(Constants.ACTIVITY_RESULT, ResultStatus.SUCCESS.ordinal());
+                        setResult(Activity.RESULT_OK, returnIntent);
                     }
                 } else {
                     hamPayDialog.dismisWaitingDialog();

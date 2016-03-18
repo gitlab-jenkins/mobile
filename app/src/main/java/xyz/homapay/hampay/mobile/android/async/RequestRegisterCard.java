@@ -40,11 +40,11 @@ public class RequestRegisterCard extends AsyncTask<RegisterCardRequest, Void, Re
 
         WebServices webServices = new WebServices(context, Constants.CONNECTION_TYPE);
 
-        try {
-            return webServices.registerCardResponse(params[0]);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            return webServices.registerCardResponse(params[0]);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         return null;
     }
 

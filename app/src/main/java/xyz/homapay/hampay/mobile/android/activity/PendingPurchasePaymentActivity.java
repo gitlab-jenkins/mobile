@@ -33,7 +33,9 @@ import xyz.homapay.hampay.common.core.model.response.PendingPaymentListResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingPurchaseListResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
+import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.account.Log;
 import xyz.homapay.hampay.mobile.android.adapter.PendingPaymentAdapter;
 import xyz.homapay.hampay.mobile.android.adapter.PendingPurchaseAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
@@ -75,7 +77,7 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
 
     HamPayDialog hamPayDialog;
 
-    PendingPurchaseListResponse pendingPurchaseListResponse;
+    private List<PurchaseInfoDTO> purchaseInfoDTOs;
 
     List<PaymentInfoDTO> paymentInfoDTOs;
     PspInfoDTO pspInfoDTOs;
@@ -84,6 +86,8 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
     private Dialog dialog;
 
     SharedPreferences prefs;
+
+    private int itemPosition;
 
 
     public void backActionBar(View view){
@@ -183,20 +187,52 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent();
-                if (pendingPurchaseListResponse != null) {
+                if (purchaseInfoDTOs != null) {
                     intent.setClass(activity, RequestBusinessPayDetailActivity.class);
-                    intent.putExtra(Constants.PENDING_PAYMENT_REQUEST_LIST, pendingPurchaseListResponse.getPendingList().get(position));
-                    intent.putExtra(Constants.PSP_INFO, pendingPurchaseListResponse.getPendingList().get(position).getPspInfo());
-                    startActivity(intent);
+                    intent.putExtra(Constants.PENDING_PAYMENT_REQUEST_LIST, purchaseInfoDTOs.get(position));
+                    intent.putExtra(Constants.PSP_INFO, purchaseInfoDTOs.get(position).getPspInfo());
+                    itemPosition = position;
+                    startActivityForResult(intent, 45);
                 } else if (paymentInfoDTOs != null) {
                     intent.setClass(activity, InvoicePaymentPendingActivity.class);
                     intent.putExtra(Constants.PAYMENT_INFO, paymentInfoDTOs.get(position));
                     intent.putExtra(Constants.PSP_INFO, pspInfoDTOs);
-                    startActivity(intent);
+                    itemPosition = position;
+                    startActivityForResult(intent, 46);
                 }
             }
         });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 46) {
+            if(resultCode == Activity.RESULT_OK){
+                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, 0);
+                if (result == 1){
+                    paymentInfoDTOs.remove(itemPosition);
+                    pendingPaymentAdapter.notifyDataSetChanged();
+                }
+
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+            }
+        }
+
+        if (requestCode == 45) {
+            if(resultCode == Activity.RESULT_OK){
+                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, 0);
+                if (result == 1){
+                    purchaseInfoDTOs.remove(itemPosition);
+                    pendingPurchaseAdapter.notifyDataSetChanged();
+                }
+
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+            }
+        }
     }
 
     public class RequestPendingPurchaseTaskCompleteListener implements
@@ -208,8 +244,8 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
 
             if (pendingPurchaseListResponseMessage != null) {
                 if (pendingPurchaseListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    pendingPurchaseListResponse = pendingPurchaseListResponseMessage.getService();
-                    pendingPurchaseAdapter = new PendingPurchaseAdapter(activity, pendingPurchaseListResponseMessage.getService().getPendingList(), prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+                    purchaseInfoDTOs = pendingPurchaseListResponseMessage.getService().getPendingList();
+                    pendingPurchaseAdapter = new PendingPurchaseAdapter(activity, purchaseInfoDTOs, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
                     pendingListView.setAdapter(pendingPurchaseAdapter);
                     paymentInfoDTOs = null;
                 }
@@ -235,7 +271,7 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
                     pspInfoDTOs = pendingPaymentListResponseMessage.getService().getPspInfo();
                     pendingPaymentAdapter = new PendingPaymentAdapter(activity, paymentInfoDTOs, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
                     pendingListView.setAdapter(pendingPaymentAdapter);
-                    pendingPurchaseListResponse = null;
+                    purchaseInfoDTOs = null;
                 }
             }
         }

@@ -228,41 +228,33 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                 if (creditValueValidation) {
 
 
-                    if ((prefs.getString(Constants.USER_ID_TOKEN, "") != null && prefs.getString(Constants.USER_ID_TOKEN, "").length() == 16)) {
+                    contactMssage = contact_message.getText().toString();
+                    amountValue = Long.parseLong(new PersianEnglishDigit(credit_value.getText().toString()).P2E().replace(",", ""));
 
-                        serverKey = prefs.getString(Constants.USER_ID_TOKEN, "");
-
-                        contactMssage = contact_message.getText().toString();
-                        amountValue = Long.parseLong(new PersianEnglishDigit(credit_value.getText().toString()).P2E().replace(",", ""));
-
-                        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
-                            Intent intent = new Intent();
-                            intent.setClass(context, HamPayLoginActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            finish();
-                            startActivity(intent);
+                    if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+                        Intent intent = new Intent();
+                        intent.setClass(context, HamPayLoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        finish();
+                        startActivity(intent);
+                    } else {
+                        editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                        editor.commit();
+                        if (amountValue >= MinXferAmount && amountValue <= MaxXferAmount) {
+                            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+                            userPaymentRequest = new UserPaymentRequest();
+                            userPaymentRequest.setCalleeCellNumber(hamPayContact.getCellNumber());
+                            userPaymentRequest.setAmount(amountValue);
+                            userPaymentRequest.setMessage(contact_message.getText().toString());
+                            requestUserPayment = new RequestUserPayment(context, new RequestUserPaymentTaskCompleteListener());
+                            requestUserPayment.execute(userPaymentRequest);
                         } else {
-                            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-                            editor.commit();
-                            if (amountValue >= MinXferAmount && amountValue <= MaxXferAmount) {
-                                hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-                                userPaymentRequest = new UserPaymentRequest();
-                                userPaymentRequest.setCalleeCellNumber(contactPhoneNo);
-                                userPaymentRequest.setAmount(amountValue);
-                                userPaymentRequest.setMessage(contact_message.getText().toString());
-                                requestUserPayment = new RequestUserPayment(context, new RequestUserPaymentTaskCompleteListener());
-                                requestUserPayment.execute(userPaymentRequest);
-                            } else {
-                                new HamPayDialog(activity).showIncorrectAmountDialog(MinXferAmount, MaxXferAmount);
-                                pay_to_one_button.setEnabled(true);
-                            }
+                            new HamPayDialog(activity).showIncorrectAmountDialog(MinXferAmount, MaxXferAmount);
+                            pay_to_one_button.setEnabled(true);
                         }
-                    }else {
-                        hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-                        getUserIdTokenRequest = new GetUserIdTokenRequest();
-                        requestUserIdToken = new RequestUserIdToken(context, new RequestGetUserIdTokenResponseTaskCompleteListener());
-                        requestUserIdToken.execute(getUserIdTokenRequest);
                     }
+
+
                 }else {
                     (new HamPayDialog(activity)).showIncorrectPrice();
                     pay_to_one_button.setEnabled(true);
@@ -311,14 +303,14 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
             if (userPaymentResponseMessage != null){
                 if (userPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
 
-                    DatabaseHelper databaseHelper = new DatabaseHelper(context, serverKey);
-                    RecentPay recentPay = new RecentPay();
-                    recentPay.setName(contactName);
-                    recentPay.setMessage(contact_message.getText().toString());
-                    recentPay.setStatus("1");
-                    recentPay.setId(2);
-                    recentPay.setPhone(contactPhoneNo);
-                    databaseHelper.createRecentPay(recentPay);
+//                    DatabaseHelper databaseHelper = new DatabaseHelper(context, serverKey);
+//                    RecentPay recentPay = new RecentPay();
+//                    recentPay.setName(contactName);
+//                    recentPay.setMessage(contact_message.getText().toString());
+//                    recentPay.setStatus("1");
+//                    recentPay.setId(2);
+//                    recentPay.setPhone(contactPhoneNo);
+//                    databaseHelper.createRecentPay(recentPay);
 
                     new HamPayDialog(activity).creditRequestDialog();
 
@@ -391,7 +383,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                         editor.commit();
                         if (amountValue >= MinXferAmount && amountValue <= MaxXferAmount) {
                             userPaymentRequest = new UserPaymentRequest();
-                            userPaymentRequest.setCalleeCellNumber(contactPhoneNo);
+                            userPaymentRequest.setCalleeCellNumber(hamPayContact.getCellNumber());
                             userPaymentRequest.setAmount(amountValue);
                             userPaymentRequest.setMessage(contact_message.getText().toString());
                             requestUserPayment = new RequestUserPayment(context, new RequestUserPaymentTaskCompleteListener());
