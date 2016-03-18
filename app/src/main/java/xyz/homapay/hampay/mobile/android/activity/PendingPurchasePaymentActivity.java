@@ -152,8 +152,6 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
 
         Intent intent = getIntent();
 
-
-
         purchase_rl = (RelativeLayout)findViewById(R.id.purchase_rl);
         purchase_rl.setOnClickListener(this);
         purchase_title = (FacedTextView)findViewById(R.id.purchase_title);

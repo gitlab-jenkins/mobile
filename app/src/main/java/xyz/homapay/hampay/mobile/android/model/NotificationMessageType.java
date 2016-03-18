@@ -8,7 +8,8 @@ public enum NotificationMessageType {
     JOINT("JOINT"),
     PAYMENT("PAYMENT"),
     CREDIT_REQUEST("CREDIT_REQUEST"),
-    APP_UPDATE("APP_UPDATE");
+    APP_UPDATE("APP_UPDATE"),
+    PURCHASE("PURCHASE");
 
     private String messageType;
 

@@ -85,6 +85,12 @@ public class GcmMessageHandler extends IntentService{
             notificationName = extras.getString("name");
             notificationValue = extras.getLong("amount");
             notificationCallerCellNumber = extras.getString("callerCellNumber");
+        }else if (extras.getString("type").equalsIgnoreCase(NotificationMessageType.PURCHASE.getNotificationMessageType())){
+            notificationMessageType = NotificationMessageType.PURCHASE;
+            notificationMessage = extras.getString("message");
+            notificationName = extras.getString("name");
+            notificationValue = extras.getLong("amount");
+            notificationCallerCellNumber = extras.getString("callerCellNumber");
         }
 
 //        notificationMessageType = extras.getString("type");
@@ -252,6 +258,56 @@ public class GcmMessageHandler extends IntentService{
 
                             bundle.putString(Constants.CONTACT_PHONE_NO, notificationCallerCellNumber);
                             bundle.putString(Constants.CONTACT_NAME, notificationName);
+
+                            PugNotification.with(getApplicationContext())
+                                    .load()
+                                    .identifier(1020)
+                                    .title(notificationName)
+                                    .message(notificationMessage)
+                                    .smallIcon(R.mipmap.ic_launcher)
+                                    .flags(Notification.DEFAULT_ALL)
+                                    .click(PendingPurchasePaymentActivity.class, bundle)
+                                    .color(R.color.colorPrimary)
+                                    .ticker(Constants.NOTIFICATION_CREDIT_REQUEST)
+                                    .autoCancel(true)
+                                    .simple()
+                                    .build();
+                            break;
+
+                    }
+
+                    break;
+
+                case PURCHASE:
+
+                    switch (appState){
+                        case Stoped:
+                            bundle.putBoolean(Constants.HAS_NOTIFICATION, true);
+                            bundle.putString(Constants.NOTIFICATION_TYPE, notificationMessageType.getNotificationMessageType());
+//                            bundle.putString(Constants.CONTACT_PHONE_NO, notificationCallerCellNumber);
+//                            bundle.putString(Constants.CONTACT_NAME, notificationName);
+
+                            PugNotification.with(getApplicationContext())
+                                    .load()
+                                    .identifier(1020)
+                                    .title(notificationName)
+                                    .message(notificationMessage)
+                                    .smallIcon(R.mipmap.ic_launcher)
+                                    .flags(Notification.DEFAULT_ALL)
+                                    .click(AppSliderActivity.class, bundle)
+                                    .color(R.color.colorPrimary)
+                                    .ticker(Constants.NOTIFICATION_CREDIT_REQUEST)
+                                    .autoCancel(true)
+                                    .simple()
+                                    .build();
+
+                            break;
+
+
+                        case Resumed:
+
+//                            bundle.putString(Constants.CONTACT_PHONE_NO, notificationCallerCellNumber);
+//                            bundle.putString(Constants.CONTACT_NAME, notificationName);
 
                             PugNotification.with(getApplicationContext())
                                     .load()
