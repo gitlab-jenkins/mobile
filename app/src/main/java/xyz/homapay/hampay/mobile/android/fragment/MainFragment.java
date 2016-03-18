@@ -224,26 +224,22 @@ public class MainFragment extends Fragment implements View.OnClickListener{
 
             case R.id.hampay_1_ll:
                 intent = new Intent(getActivity(), PaymentRequestDetailActivity.class);
-                intent.putExtra(Constants.CONTACT_PHONE_NO, userProfileDTO.getSelectedContacts().get(0).getCellNumber());
-                intent.putExtra(Constants.CONTACT_NAME, userProfileDTO.getSelectedContacts().get(0).getDisplayName());
+                intent.putExtra(Constants.HAMPAY_CONTACT, userProfileDTO.getSelectedContacts().get(0));
                 startActivity(intent);
                 break;
             case R.id.hampay_2_ll:
                 intent = new Intent(getActivity(), PaymentRequestDetailActivity.class);
-                intent.putExtra(Constants.CONTACT_PHONE_NO, userProfileDTO.getSelectedContacts().get(1).getCellNumber());
-                intent.putExtra(Constants.CONTACT_NAME, userProfileDTO.getSelectedContacts().get(1).getDisplayName());
+                intent.putExtra(Constants.HAMPAY_CONTACT, userProfileDTO.getSelectedContacts().get(1));
                 startActivity(intent);
                 break;
             case R.id.hampay_3_ll:
                 intent = new Intent(getActivity(), PaymentRequestDetailActivity.class);
-                intent.putExtra(Constants.CONTACT_PHONE_NO, userProfileDTO.getSelectedContacts().get(2).getCellNumber());
-                intent.putExtra(Constants.CONTACT_NAME, userProfileDTO.getSelectedContacts().get(2).getDisplayName());
+                intent.putExtra(Constants.HAMPAY_CONTACT, userProfileDTO.getSelectedContacts().get(2));
                 startActivity(intent);
                 break;
             case R.id.hampay_4_ll:
                 intent = new Intent(getActivity(), PaymentRequestDetailActivity.class);
-                intent.putExtra(Constants.CONTACT_PHONE_NO, userProfileDTO.getSelectedContacts().get(3).getCellNumber());
-                intent.putExtra(Constants.CONTACT_NAME, userProfileDTO.getSelectedContacts().get(3).getDisplayName());
+                intent.putExtra(Constants.HAMPAY_CONTACT, userProfileDTO.getSelectedContacts().get(3));
                 startActivity(intent);
                 break;
         }
