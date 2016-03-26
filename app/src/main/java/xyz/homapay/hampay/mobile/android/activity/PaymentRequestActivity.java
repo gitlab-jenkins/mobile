@@ -23,6 +23,7 @@ import java.util.List;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
+import xyz.homapay.hampay.common.core.model.dto.UserVerificationStatus;
 import xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestInvoiceContactsRequest;
 import xyz.homapay.hampay.common.core.model.response.ContactsHampayEnabledResponse;

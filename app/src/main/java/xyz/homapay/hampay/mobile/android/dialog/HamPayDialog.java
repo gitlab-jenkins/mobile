@@ -51,6 +51,7 @@ import xyz.homapay.hampay.common.core.model.request.LatestInvoiceContactsRequest
 import xyz.homapay.hampay.common.core.model.request.LatestPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
 import xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
+import xyz.homapay.hampay.common.core.model.request.PurchaseInfoRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationCredentialsRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
@@ -105,6 +106,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestLatestPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestLogout;
 import xyz.homapay.hampay.mobile.android.async.RequestMobileRegistrationIdEntry;
+import xyz.homapay.hampay.mobile.android.async.RequestPurchaseInfo;
 import xyz.homapay.hampay.mobile.android.async.RequestRegisterCard;
 import xyz.homapay.hampay.mobile.android.async.RequestRegistrationEntry;
 import xyz.homapay.hampay.mobile.android.async.RequestRegistrationSendSmsToken;
@@ -266,6 +268,8 @@ public class HamPayDialog {
         dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
+
+
 
     public void dismisWaitingDialog(){
 
@@ -2564,6 +2568,45 @@ public class HamPayDialog {
             public void onClick(View v) {
                 dialog.dismiss();
                 requestLatestPurchase.execute(latestPurchaseRequest);
+            }
+        });
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                activity.finish();
+            }
+        });
+
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
+        dialog.show();
+    }
+
+    public void showFailPurchaseInfoDialog(final RequestPurchaseInfo requestPurchaseInfo,
+                                              final PurchaseInfoRequest purchaseInfoRequest,
+                                              final String code,
+                                              final String message){
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_contacts_enabled, null);
+
+
+
+        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+
+        responseCode.setText(activity.getString(R.string.error_code, code));
+        responseMessage.setText(message);
+
+        FacedTextView retry_contacts_enabled = (FacedTextView) view.findViewById(R.id.retry_contacts_enabled);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
+
+        retry_contacts_enabled.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                requestPurchaseInfo.execute(purchaseInfoRequest);
             }
         });
         cancel_request.setOnClickListener(new View.OnClickListener() {

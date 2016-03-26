@@ -596,7 +596,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 if (purchaseInfoResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
 
                     purchaseInfoDTO = purchaseInfoResponseMessage.getService().getPurchaseInfo();
-                    pspInfoDTO = purchaseInfoResponseMessage.getService().getPspInfo();
+                    pspInfoDTO = purchaseInfoResponseMessage.getService().getPurchaseInfo().getPspInfo();
 
                     if (purchaseInfoDTO != null) {
 
@@ -642,9 +642,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                             .build());
 
                 }else {
-                    requestLatestPurchase = new RequestLatestPurchase(context, new RequestLatestPurchaseTaskCompleteListener());
-
-                    new HamPayDialog(activity).showFailPendingPurchaseDialog(requestLatestPurchase, latestPurchaseRequest,
+                    requestPurchaseInfo = new RequestPurchaseInfo(context, new RequestPurchaseInfoTaskCompleteListener());
+                    new HamPayDialog(activity).showFailPurchaseInfoDialog(requestPurchaseInfo, purchaseInfoRequest,
                             purchaseInfoResponseMessage.getService().getResultStatus().getCode(),
                             purchaseInfoResponseMessage.getService().getResultStatus().getDescription());
 
@@ -655,10 +654,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                             .build());
                 }
             }else {
-
-                requestLatestPurchase = new RequestLatestPurchase(context, new RequestLatestPurchaseTaskCompleteListener());
-
-                new HamPayDialog(activity).showFailPendingPurchaseDialog(requestLatestPurchase, latestPurchaseRequest,
+                requestPurchaseInfo = new RequestPurchaseInfo(context, new RequestPurchaseInfoTaskCompleteListener());
+                new HamPayDialog(activity).showFailPurchaseInfoDialog(requestPurchaseInfo, purchaseInfoRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_fetch_latest_payment));
 
