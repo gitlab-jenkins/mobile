@@ -536,6 +536,8 @@
     <string name="business_payment_info">اطلاعات پرداخت</string>
     <string name="business_payment_preview">پرداخت</string>
     <string name="business_payment_create">درخواست پرداخت</string>
-    <string name="invoce_payment_confirm">تایید پرداخت</string>
+    <string name="invoice_payment_confirm">تایید پرداخت</string>
+    <string name="null_pending_business">پرداخت درحال انتظاری وجود ندارد.</string>
+    <string name="null_pending_invoice">پرداخت درحال انتظاری وجود ندارد.</string>
 
 </resources>

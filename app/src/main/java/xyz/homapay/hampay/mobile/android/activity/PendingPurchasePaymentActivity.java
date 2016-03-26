@@ -60,6 +60,7 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
     private FacedTextView payment_title;
     private View payment_sep;
     private int selectedType = 1;
+    private FacedTextView nullPendingText;
 
 
     CoordinatorLayout coordinatorLayout;
@@ -152,6 +153,7 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
 
         Intent intent = getIntent();
 
+        nullPendingText = (FacedTextView)findViewById(R.id.nullPendingText);
         purchase_rl = (RelativeLayout)findViewById(R.id.purchase_rl);
         purchase_rl.setOnClickListener(this);
         purchase_title = (FacedTextView)findViewById(R.id.purchase_title);
@@ -180,6 +182,7 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
 
         coordinatorLayout = (CoordinatorLayout)findViewById(R.id
                 .coordinatorLayout);
+
 
         pendingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -212,6 +215,9 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
                 if (result == 1){
                     paymentInfoDTOs.remove(itemPosition);
                     pendingPaymentAdapter.notifyDataSetChanged();
+                    if (paymentInfoDTOs.size() == 0) {
+                        nullPendingText.setVisibility(View.VISIBLE);
+                    }
                 }
 
             }
@@ -225,6 +231,9 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
                 if (result == 1){
                     purchaseInfoDTOs.remove(itemPosition);
                     pendingPurchaseAdapter.notifyDataSetChanged();
+                    if (purchaseInfoDTOs.size() == 0){
+                        nullPendingText.setVisibility(View.VISIBLE);
+                    }
                 }
 
             }
@@ -243,9 +252,14 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
             if (pendingPurchaseListResponseMessage != null) {
                 if (pendingPurchaseListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     purchaseInfoDTOs = pendingPurchaseListResponseMessage.getService().getPendingList();
-                    pendingPurchaseAdapter = new PendingPurchaseAdapter(activity, purchaseInfoDTOs, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-                    pendingListView.setAdapter(pendingPurchaseAdapter);
-                    paymentInfoDTOs = null;
+                    if (purchaseInfoDTOs.size() == 0){
+                        nullPendingText.setVisibility(View.VISIBLE);
+                    }else {
+                        pendingPurchaseAdapter = new PendingPurchaseAdapter(activity, purchaseInfoDTOs, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+                        pendingListView.setAdapter(pendingPurchaseAdapter);
+                        paymentInfoDTOs = null;
+                        nullPendingText.setVisibility(View.GONE);
+                    }
                 }
             }
         }
@@ -266,10 +280,16 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
             if (pendingPaymentListResponseMessage != null) {
                 if (pendingPaymentListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     paymentInfoDTOs = pendingPaymentListResponseMessage.getService().getPendingList();
-                    pspInfoDTOs = pendingPaymentListResponseMessage.getService().getPspInfo();
-                    pendingPaymentAdapter = new PendingPaymentAdapter(activity, paymentInfoDTOs, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-                    pendingListView.setAdapter(pendingPaymentAdapter);
-                    purchaseInfoDTOs = null;
+                    if (paymentInfoDTOs.size() == 0){
+                        nullPendingText.setVisibility(View.VISIBLE);
+                    }else {
+                        pspInfoDTOs = pendingPaymentListResponseMessage.getService().getPspInfo();
+                        pendingPaymentAdapter = new PendingPaymentAdapter(activity, paymentInfoDTOs, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+                        pendingListView.setAdapter(pendingPaymentAdapter);
+                        purchaseInfoDTOs = null;
+                        nullPendingText.setVisibility(View.GONE);
+                    }
+
                 }
             }
         }

@@ -691,8 +691,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
             user_iban_bank.setText(userProfileDTO.getIbanDTO().getBankName());
             iban_ll.setVisibility(View.VISIBLE);
         }
-        user_national_code.setText(persianEnglishDigit.E2P(userProfileDTO.getCellNumber()));
-        editor.commit();
+        user_national_code.setText(persianEnglishDigit.E2P(prefs.getString(Constants.REGISTERED_NATIONAL_CODE, "")));
 
         hide_bg.setVisibility(View.GONE);
 
