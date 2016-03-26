@@ -2,7 +2,7 @@
 
     <string name="app_name">هم‌پی</string>
 
-    <string name="hampay_network">شبکه پرداخت هم‌پی </string>
+    <string name="hampay_network">شبکه هم‌پی</string>
 
 
     <string name="intro_1">هم‌پی \n پرداخت مدرن، ساده و مطمئن</string>
@@ -289,7 +289,7 @@
     <string name="remember_phrase">یادآوری</string>
     <string name="remember_phrase_text">لطفا یک کلمه کوتاه به عنوان یادآوری رمز عبور وارد نمایید.</string>
     <string name="complete_registarion">تکمیل ثبت نام</string>
-    <string name="complete_registarion_text_1">به شبکه پراخت هم‌پی خوش آمدید.</string>
+    <string name="complete_registarion_text_1">به شبکه هم‌پی خوش آمدید.</string>
     <string name="complete_registarion_text_2">حالا دوستانتان در شبکه هم‌پی تنها با شماره موبایلتان به شما پول می‌دهند.</string>
 
 
