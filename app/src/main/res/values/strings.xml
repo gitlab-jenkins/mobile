@@ -21,6 +21,8 @@
     <string name="nav_item_main_fragmrnt">صفحه اصلی</string>
     <string name="nav_item_account_detail">جزئیات حساب</string>
 
+    <string name="dear_user">عزیز</string>
+
     <!--<string name="nav_item_transactions">تراکنشها</string>-->
     <!--<string name="nav_item_pay_to_one">پرداخت به فرد</string>-->
     <!--<string name="nav_item_pending_payment">صف پرداخت‌ها</string>-->
@@ -139,7 +141,9 @@
     <string name="delegate_account">عادی</string>
 
     <string name="dialog_user_waiting">کاربر گرامی لطفا منتظر بمانید.</string>
-    <string name="dialog_hampay_user_waiting">%1$s عزیز، لطفا منتظر باش</string>
+    <!--<string name="dialog_hampay_user_waiting">%1$s عزیز، لطفا منتظر باش</string>-->
+    <string name="dialog_hampay_user_waiting">عزیز، لطفا منتظر باش</string>
+
 
     <string name="last_login">آخرین زمان ورود به سامانه </string>
 

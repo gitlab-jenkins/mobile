@@ -198,8 +198,10 @@ public class HamPayDialog {
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_waiting, null);
         FacedTextView wating_text = (FacedTextView)view.findViewById(R.id.wating_text);
+        FacedTextView userName = (FacedTextView)view.findViewById(R.id.userName);
         if (hampayUser.length() != 0){
-            wating_text.setText(activity.getString(R.string.dialog_hampay_user_waiting, hampayUser));
+            userName.setText(hampayUser);
+            wating_text.setText(activity.getString(R.string.dialog_hampay_user_waiting));
         }
         view.setMinimumWidth((int) (rect.width() * 0.85f));
         dialog = new HamPayCustomDialog(view, activity, 0);
@@ -260,21 +262,6 @@ public class HamPayDialog {
                 activity.finish();
             }
         });
-        view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
-    }
-
-    public void showWaitingdSMSDialog(final RequestRegistrationSendSmsToken requestRegistrationSendSmsToken, String hampayUser){
-
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_waiting, null);
-
-        FacedTextView wating_text = (FacedTextView)view.findViewById(R.id.wating_text);
-
-        if (hampayUser.length() != 0){
-            wating_text.setText(activity.getString(R.string.dialog_hampay_user_waiting, hampayUser));
-        }
-
         view.setMinimumWidth((int) (rect.width() * 0.85f));
         dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
@@ -2484,7 +2471,7 @@ public class HamPayDialog {
 
         @Override
         public void onTaskPreRun() {
-            showWaitingdSMSDialog(requestRegistrationSendSmsToken, "");
+            showWaitingdDialog("");
         }
     }
 

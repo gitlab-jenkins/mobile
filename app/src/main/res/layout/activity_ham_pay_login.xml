@@ -70,6 +70,17 @@
                     android:gravity="right">
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        geekui:customTypeface="fonts/iran_sans_bold.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:textSize="15dp"
+                        android:layout_gravity="right"
+                        android:gravity="right"
+                        android:text="@string/dear_user"
+                        android:layout_marginRight="2dp"/>
+
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/user_name"
                         geekui:customTypeface="fonts/iran_sans_bold.ttf"
                         android:layout_width="wrap_content"
@@ -77,6 +88,7 @@
                         android:textColor="@android:color/black"
                         android:textSize="15dp"
                         android:layout_gravity="right"
+                        android:gravity="right"
                         android:layout_marginRight="4dp"/>
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView

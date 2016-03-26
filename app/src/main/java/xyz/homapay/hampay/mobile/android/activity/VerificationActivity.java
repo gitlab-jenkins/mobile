@@ -161,7 +161,7 @@ public class VerificationActivity extends AppCompatActivity {
 
         @Override
         public void onTaskPreRun() {
-            hamPayDialog.showWaitingdSMSDialog(requestRegistrationSendSmsToken, "");
+            hamPayDialog.showWaitingdDialog("");
         }
     }
 
