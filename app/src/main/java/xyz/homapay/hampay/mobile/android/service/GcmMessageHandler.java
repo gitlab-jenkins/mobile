@@ -8,7 +8,9 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.AppSliderActivity;
 import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.activity.IndividualPaymentPendingActivity;
+import xyz.homapay.hampay.mobile.android.activity.InvoicePaymentPendingActivity;
 import xyz.homapay.hampay.mobile.android.activity.PendingPurchasePaymentActivity;
+import xyz.homapay.hampay.mobile.android.activity.RequestBusinessPayDetailActivity;
 import xyz.homapay.hampay.mobile.android.component.headsup.HeadsUp;
 import xyz.homapay.hampay.mobile.android.component.headsup.HeadsUpManager;
 import xyz.homapay.hampay.mobile.android.model.AppState;
@@ -266,7 +268,7 @@ public class GcmMessageHandler extends IntentService{
                                     .message(notificationMessage)
                                     .smallIcon(R.mipmap.ic_launcher)
                                     .flags(Notification.DEFAULT_ALL)
-                                    .click(PendingPurchasePaymentActivity.class, bundle)
+                                    .click(InvoicePaymentPendingActivity.class, bundle)
                                     .color(R.color.colorPrimary)
                                     .ticker(Constants.NOTIFICATION_CREDIT_REQUEST)
                                     .autoCancel(true)
@@ -284,9 +286,6 @@ public class GcmMessageHandler extends IntentService{
                         case Stoped:
                             bundle.putBoolean(Constants.HAS_NOTIFICATION, true);
                             bundle.putString(Constants.NOTIFICATION_TYPE, notificationMessageType.getNotificationMessageType());
-//                            bundle.putString(Constants.CONTACT_PHONE_NO, notificationCallerCellNumber);
-//                            bundle.putString(Constants.CONTACT_NAME, notificationName);
-
                             PugNotification.with(getApplicationContext())
                                     .load()
                                     .identifier(1020)
@@ -316,7 +315,7 @@ public class GcmMessageHandler extends IntentService{
                                     .message(notificationMessage)
                                     .smallIcon(R.mipmap.ic_launcher)
                                     .flags(Notification.DEFAULT_ALL)
-                                    .click(PendingPurchasePaymentActivity.class, bundle)
+                                    .click(RequestBusinessPayDetailActivity.class, bundle)
                                     .color(R.color.colorPrimary)
                                     .ticker(Constants.NOTIFICATION_CREDIT_REQUEST)
                                     .autoCancel(true)

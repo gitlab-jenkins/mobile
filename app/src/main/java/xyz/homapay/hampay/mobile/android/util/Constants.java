@@ -5,22 +5,17 @@ import xyz.homapay.hampay.mobile.android.webservice.ConnectionType;
 
 public class Constants {
     public static String SERVER_IP = "176.58.104.158";//England Server IP
-//   public static String SERVER_IP = "139.162.147.189";//UAT Server IP
+    //   public static String SERVER_IP = "139.162.147.189";//UAT Server IP
     public static String URL_PREFIX = "/hampay";
     public static String HTTP_SERVER_IP = "http://" + SERVER_IP + ":90" + URL_PREFIX;//England Server
     public static String IPG_URL = "http://" + SERVER_IP + ":9090" + URL_PREFIX;//England Server
     public static String BANK_GATEWAY_URL = "http://" + SERVER_IP + "/assets/psp/index.php";
     public static ConnectionType CONNECTION_TYPE = ConnectionType.HTTPS;
-//    public static final String HTTPS_SERVER_IP = "https://192.168.1.101" + URL_PREFIX; //Sima Server
-        public static String HTTPS_SERVER_IP = "https://" + SERVER_IP + URL_PREFIX;//England Server
-//        public static String HTTPS_SERVER_IP = "https://139.162.147.189" + URL_PREFIX;//UAT Server
-//    public static String HTTPS_SERVER_IP = "https://176.58.114.27" + URL_PREFIX;//England Server
-//    public static String HTTPS_SERVER_IP = "https://192.168.1.109" + URL_PREFIX;//Masoud Server
-    //        public static String HTTPS_SERVER_IP = "https://mobile.tejaratbourse.com" + URL_PREFIX;//Tejarat bourse Server
+    public static String HTTPS_SERVER_IP = "https://" + SERVER_IP + URL_PREFIX;//England Server
     public static final String HTTPS_OPENAM_LOGIN_URL = HTTPS_SERVER_IP + "/auth";
     public static final String HTTPS_OPENAM_LOGOUT_URL = HTTPS_SERVER_IP + "/unauth";
-    public static final String HTTP_OPENAM_LOGIN_URL = /*HTTPS_SERVER_IP*/ "http://" + SERVER_IP + URL_PREFIX + "/auth";
-    public static final String HTTP_OPENAM_LOGOUT_URL = /*HTTPS_SERVER_IP*/ "http://" + SERVER_IP + URL_PREFIX + "/unauth";
+    public static final String HTTP_OPENAM_LOGIN_URL = "http://" + SERVER_IP + URL_PREFIX + "/auth";
+    public static final String HTTP_OPENAM_LOGOUT_URL = "http://" + SERVER_IP + URL_PREFIX + "/unauth";
     public static final String PSP_SOAO_SERVICE_URL = SERVER_IP;
     public static final String REQUEST_VERSION = "2.0-PA";
     public static final int SERVICE_CONNECTION_TIMEOUT = 30000;
@@ -77,15 +72,12 @@ public class Constants {
     public static final String ASPECT_RATIO_X = "ASPECT_RATIO_X";
     public static final String ASPECT_RATIO_Y = "ASPECT_RATIO_Y";
     public static final String PENDING_PAYMENT_REQUEST_LIST = "pending_payment_request_list";
-    public static final String CARD_INFO = "card_info";
-    public static final String PSP_NAME = "psp_name";
     public static final String HAS_NOTIFICATION = "has_notification";
     public static final String NOTIFICATION_TYPE = "notification_type";
     public static final String NOTIFICATION_APP_UPDATE = "نسخه جدید هم‌پی";
     public static final String NOTIFICATION_JOINT = "دوست هم‌پی جدید";
     public static final String NOTIFICATION_PAYMENT = "انتقال وجه";
     public static final String NOTIFICATION_CREDIT_REQUEST = "درخواست وجه";
-    public static final String USER_IMAGE_PROFILE_ID = "userImageProfileId";
     public static final String PAYMENT_INFO = "paymantInfo";
     public static final String PSP_INFO = "pspInfo";
     public static final String PURCHASE_INFO = "purchaseInfo";

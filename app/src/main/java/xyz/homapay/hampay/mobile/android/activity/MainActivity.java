@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
-    boolean fromNotification = false;
+    boolean hasNotification = false;
 
     HamPayDialog hamPayDialog;
 
@@ -198,36 +198,63 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
         if (bundle != null) {
-            fromNotification = bundle.getBoolean(Constants.NOTIFICATION);
+            hasNotification = bundle.getBoolean(Constants.HAS_NOTIFICATION);
         }
 
 
 
         databaseHelper = new DatabaseHelper(context);
 
-        List<LatestPurchase> latestPurchaseList = databaseHelper.getAllLatestPurchases();
+//        List<LatestPurchase> latestPurchaseList = databaseHelper.getAllLatestPurchases();
 
-        if (pendingPurchaseCode.length() != 0) {
-            if (databaseHelper.getIsExistPurchaseRequest(pendingPurchaseCode)) {
-                LatestPurchase latestPurchase = databaseHelper.getPurchaseRequest(pendingPurchaseCode);
-                if (latestPurchase.getIsCanceled().equalsIgnoreCase("0")) {
-                    if (pendingPurchaseCount > 0) {
-                        intent.setClass(context, RequestBusinessPayDetailActivity.class);
-                        startActivity(intent);
-                    }else if (pendingPaymentCount > 0){
-                        intent.setClass(context, InvoicePaymentPendingActivity.class);
-                        startActivity(intent);
-                    }
-                }
-            }else {
-                databaseHelper.createPurchaseRequest(pendingPurchaseCode);
-                intent.setClass(context, RequestBusinessPayDetailActivity.class);
-                startActivity(intent);
+        if (hasNotification) {
+            NotificationMessageType notificationMessageType;
+            notificationMessageType = NotificationMessageType.valueOf(bundle.getString(Constants.NOTIFICATION_TYPE));
+
+            Intent notificationIntent;
+
+            switch (notificationMessageType){
+                case PAYMENT:
+
+                    displayView(2);
+
+                    break;
+
+                case CREDIT_REQUEST:
+                    notificationIntent = getIntent();
+                    notificationIntent.setClass(activity, InvoicePaymentPendingActivity.class);
+                    startActivity(notificationIntent);
+                    break;
+
+                case PURCHASE:
+                    notificationIntent = getIntent();
+                    notificationIntent.setClass(activity, RequestBusinessPayDetailActivity.class);
+                    startActivity(notificationIntent);
+                    break;
             }
-        }else if (true){
-            if (pendingPaymentCount > 0) {
-                intent.setClass(context, InvoicePaymentPendingActivity.class);
-                startActivity(intent);
+        }else {
+            if (pendingPurchaseCode.length() != 0) {
+                if (databaseHelper.getIsExistPurchaseRequest(pendingPurchaseCode)) {
+                    LatestPurchase latestPurchase = databaseHelper.getPurchaseRequest(pendingPurchaseCode);
+                    if (latestPurchase.getIsCanceled().equalsIgnoreCase("0")) {
+                        if (pendingPurchaseCount > 0) {
+                            intent.setClass(context, RequestBusinessPayDetailActivity.class);
+                            startActivity(intent);
+                        } else if (pendingPaymentCount > 0) {
+                            intent.setClass(context, InvoicePaymentPendingActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                } else {
+                    databaseHelper.createPurchaseRequest(pendingPurchaseCode);
+                    intent.setClass(context, RequestBusinessPayDetailActivity.class);
+                    startActivity(intent);
+                }
+            } else if (true) {
+                if (pendingPaymentCount > 0) {
+                    intent.setClass(context, InvoicePaymentPendingActivity.class);
+                    startActivity(intent);
+                }
             }
         }
 
@@ -316,38 +343,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         if (!prefs.getBoolean(Constants.SEND_MOBILE_REGISTER_ID, false)) {
             getRegId();
         }
-
-
-        if (bundle != null) {
-            if (bundle.getBoolean(Constants.HAS_NOTIFICATION)) {
-                NotificationMessageType notificationMessageType;
-                notificationMessageType = NotificationMessageType.valueOf(bundle.getString(Constants.NOTIFICATION_TYPE));
-
-                Intent notificationIntent;
-
-                switch (notificationMessageType){
-                    case PAYMENT:
-
-                        displayView(2);
-
-                        break;
-
-                    case CREDIT_REQUEST:
-                        notificationIntent = getIntent();
-                        notificationIntent.setClass(activity, PendingPurchasePaymentActivity.class);
-                        startActivity(notificationIntent);
-                        break;
-
-                    case PURCHASE:
-                        notificationIntent = getIntent();
-                        notificationIntent.setClass(activity, PendingPurchasePaymentActivity.class);
-                        startActivity(notificationIntent);
-                        break;
-                }
-
-            }
-        }
-
     }
 
 
