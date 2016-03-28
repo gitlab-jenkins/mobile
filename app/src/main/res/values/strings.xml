@@ -543,6 +543,9 @@
     <string name="sort_create">تاریخ ایجاد</string>
     <string name="sort_expire">مهلت زمانی</string>
     <string name="sort_amount">مبلغ</string>
+    <string name="pending_payment_remaining">زمان باقی مانده</string>
+    <string name="day">روز</string>
+    <string name="time">ساعت</string>
 
 
 </resources>

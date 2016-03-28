@@ -11,28 +11,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Date;
 import java.util.List;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
-import xyz.homapay.hampay.common.core.model.request.CancelPurchasePaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.CancelUserPaymentRequest;
-import xyz.homapay.hampay.common.core.model.response.CancelPurchasePaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.CancelUserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.mobile.android.R;
-import xyz.homapay.hampay.mobile.android.account.Log;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestCancelPayment;
-import xyz.homapay.hampay.mobile.android.async.RequestCancelPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
-import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
@@ -43,28 +40,27 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 public class PendingPaymentAdapter extends BaseAdapter  {
 
     private Context context;
-
     List<PaymentInfoDTO> paymentInfoDTOs;
-
     Dialog dialog;
-
     HamPayDialog hamPayDialog;
-
     RequestCancelPayment requestCancelPayment;
     CancelUserPaymentRequest cancelUserPaymentRequest;
-
     Activity activity;
-
     private String authToken;
+    private Date currentDate;
+    private PersianEnglishDigit persianEnglishDigit;
+    NumberFormat timeFormat;
 
-    public PendingPaymentAdapter(Context c, List<PaymentInfoDTO> paymentInfoDTOs, String authToken)
+    public PendingPaymentAdapter(Context context, List<PaymentInfoDTO> paymentInfoDTOs, String authToken)
     {
-        // TODO Auto-generated method stub
-        context = c;
+        currentDate = new Date();
+        this.context = context;
         this.paymentInfoDTOs = paymentInfoDTOs;
         activity = (Activity) context;
         hamPayDialog = new HamPayDialog(activity);
         this.authToken = authToken;
+        persianEnglishDigit = new PersianEnglishDigit();
+        timeFormat = new DecimalFormat("00");
     }
 
     public int getCount() {
@@ -117,11 +113,36 @@ public class PendingPaymentAdapter extends BaseAdapter  {
         final PaymentInfoDTO paymentInfoDTO = paymentInfoDTOs.get(position);
 
         viewHolder.callerName.setText(paymentInfoDTO.getCallerName());
-        viewHolder.callerPhoneNo.setText(new PersianEnglishDigit().E2P(paymentInfoDTO.getCallerPhoneNumber()));
-//        viewHolder.date_time.setText(new PersianEnglishDigit().E2P(new JalaliConvert().GregorianToPersian(paymentInfoDTO.getRequestDate())));
-        viewHolder.price_pay.setText(new PersianEnglishDigit().E2P(paymentInfoDTO.getAmount().toString()) + " ریال");
+        viewHolder.callerPhoneNo.setText(persianEnglishDigit.E2P(paymentInfoDTO.getCallerPhoneNumber()));
+        viewHolder.date_time.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(paymentInfoDTO.getCreatedBy())));
+        viewHolder.price_pay.setText(persianEnglishDigit.E2P(paymentInfoDTO.getAmount().toString()) + " ریال");
         viewHolder.message.setText(paymentInfoDTO.getMessage());
-        viewHolder.expire_pay.setText(new PersianEnglishDigit().E2P(new JalaliConvert().GregorianToPersian(paymentInfoDTO.getExpirationDate())));
+        Date expireDate = paymentInfoDTO.getExpirationDate();
+        long diff = expireDate.getTime() - currentDate.getTime();
+
+        String diffSeconds = timeFormat.format(diff / 1000 % 60);
+        String diffMinutes = timeFormat.format(diff / (60 * 1000) % 60);
+        String diffHours = timeFormat.format(diff / (60 * 60 * 1000) % 24);
+        long diffDays = diff / (24 * 60 * 60 * 1000);
+
+        String expireTime = "";
+
+        if (diffDays == 0) {
+            expireTime = context.getString(R.string.pending_payment_remaining)
+                    + "\n"
+                    + persianEnglishDigit.E2P(diffHours + ":" + diffMinutes + ":" + diffSeconds)
+                    + " " + context.getString(R.string.time);
+        }else {
+            expireTime = context.getString(R.string.pending_payment_remaining)
+                    + "\n"
+                    + persianEnglishDigit.E2P(diffHours + ":" + diffMinutes + ":" + diffSeconds)
+                    + " " + context.getString(R.string.time)
+                    + "\n"
+                    + persianEnglishDigit.E2P(diffDays + "")
+                    + " " + context.getString(R.string.day);
+        }
+
+        viewHolder.expire_pay.setText(expireTime);
 
         if (paymentInfoDTO.getImageId() != null) {
             String userImageUrl = "/users/" + authToken + "/" + paymentInfoDTO.getImageId();
@@ -172,12 +193,15 @@ public class PendingPaymentAdapter extends BaseAdapter  {
                 dialog.show();
             }
         });
-//        viewHolder.expire_pay.setText(purchaseInfoDTOs.get(position).get);
-
-
 
         return convertView;
 
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        currentDate = new Date();
+        super.notifyDataSetChanged();
     }
 
 

@@ -68,9 +68,8 @@
             android:text="۱۲/۳/۹۴  ۲۲:۴۳"
             android:layout_alignParentRight="true"/>
 
-
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -80,10 +79,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
-                android:textSize="13dp"
-                android:gravity="center"
-                android:layout_marginRight="8dp"
-                android:text="۱۵۰.۰۰۰.۰۰۰"/>
+                android:textSize="14dp"
+                android:gravity="right"
+                android:layout_gravity="right"
+                android:layout_marginRight="8dp" />
 
 
 
@@ -93,16 +92,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/black"
-                android:textSize="13dp"
-                android:gravity="center"
+                android:textSize="10dp"
+                android:gravity="right"
                 android:layout_marginRight="8dp"
-                android:text="۱۵۰.۰۰۰.۰۰۰"/>
+                android:layout_gravity="right" />
 
 
 
         </LinearLayout>
-
-
 
     </RelativeLayout>
 

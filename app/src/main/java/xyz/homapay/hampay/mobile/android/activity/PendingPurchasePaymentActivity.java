@@ -2,13 +2,13 @@ package xyz.homapay.hampay.mobile.android.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -20,7 +20,10 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
@@ -87,6 +90,45 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
     private int itemPosition;
 
     private String authToken;
+
+    Timer timer;
+    TimerTask timerTask;
+    final Handler handler = new Handler();
+
+
+    public void startTimer() {
+        timer = new Timer();
+        initializeTimerTask();
+        timer.schedule(timerTask, 1000, 1000);
+    }
+
+    public void initializeTimerTask() {
+
+        timerTask = new TimerTask() {
+
+            public void run() {
+                handler.post(new Runnable() {
+                    public void run() {
+
+                        if (paymentInfoDTOs != null) {
+                            pendingPaymentAdapter.notifyDataSetChanged();
+                        }else if (purchaseInfoDTOs != null){
+                            pendingPurchaseAdapter.notifyDataSetChanged();
+                        }
+                    }
+                });
+            }
+        };
+    }
+
+    public void stoptimertask() {
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+    }
+
+
 
     public void backActionBar(View view){
         finish();
@@ -280,6 +322,18 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
     }
 
     @Override
+    protected void onStop() {
+        stoptimertask();
+        super.onStop();
+    }
+
+    @Override
+    protected void onStart() {
+        startTimer();
+        super.onStart();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == 46) {
@@ -321,6 +375,8 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
         public void onTaskComplete(ResponseMessage<PendingPurchaseListResponse> pendingPurchaseListResponseMessage) {
 
             hamPayDialog.dismisWaitingDialog();
+
+            Date d = new Date();
 
             if (pendingPurchaseListResponseMessage != null) {
                 if (pendingPurchaseListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {

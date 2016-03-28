@@ -13,6 +13,9 @@ import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Date;
 import java.util.List;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
@@ -27,7 +30,6 @@ import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
-import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
@@ -46,15 +48,20 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
     CancelPurchasePaymentRequest cancelPurchasePaymentRequest;
     Activity activity;
     private String authToken;
+    private Date currentDate;
+    private PersianEnglishDigit persianEnglishDigit;
+    NumberFormat timeFormat;
 
-    public PendingPurchaseAdapter(Context c, List<PurchaseInfoDTO> purchaseInfoDTOs, String authToken)
+    public PendingPurchaseAdapter(Context context, List<PurchaseInfoDTO> purchaseInfoDTOs, String authToken)
     {
-        // TODO Auto-generated method stub
-        context = c;
+        currentDate = new Date();
+        this.context = context;
         this.purchaseInfoDTOs = purchaseInfoDTOs;
         activity = (Activity) context;
         hamPayDialog = new HamPayDialog(activity);
         this.authToken = authToken;
+        persianEnglishDigit = new PersianEnglishDigit();
+        timeFormat = new DecimalFormat("00");
     }
 
     public int getCount() {
@@ -113,9 +120,35 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
             viewHolder.business_image.setBackgroundColor(context.getResources().getColor(R.color.user_change_status));
         }
 
-        viewHolder.createDateTime.setText(new PersianEnglishDigit().E2P(new JalaliConvert().GregorianToPersian(purchaseInfoDTO.getCreatedBy())));
-        viewHolder.expire_pay.setText(new PersianEnglishDigit().E2P(new JalaliConvert().GregorianToPersian(purchaseInfoDTO.getExpirationDate())));
-        viewHolder.price_pay.setText(new PersianEnglishDigit().E2P(purchaseInfoDTO.getAmount().toString()) + " ریال");
+        viewHolder.createDateTime.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(purchaseInfoDTO.getCreatedBy())));
+        Date expireDate = purchaseInfoDTO.getExpirationDate();
+        long diff = expireDate.getTime() - currentDate.getTime();
+
+        String diffSeconds = timeFormat.format(diff / 1000 % 60);
+        String diffMinutes = timeFormat.format(diff / (60 * 1000) % 60);
+        String diffHours = timeFormat.format(diff / (60 * 60 * 1000) % 24);
+        long diffDays = diff / (24 * 60 * 60 * 1000);
+
+        String expireTime = "";
+
+        if (diffDays == 0) {
+            expireTime = context.getString(R.string.pending_payment_remaining)
+                    + "\n"
+                    + persianEnglishDigit.E2P(diffHours + ":" + diffMinutes + ":" + diffSeconds)
+                    + " " + context.getString(R.string.time);
+        }else {
+            expireTime = context.getString(R.string.pending_payment_remaining)
+                    + "\n"
+                    + persianEnglishDigit.E2P(diffHours + ":" + diffMinutes + ":" + diffSeconds)
+                    + " " + context.getString(R.string.time)
+                    + "\n"
+                    + persianEnglishDigit.E2P(diffDays + "")
+                    + " " + context.getString(R.string.day);
+        }
+
+        viewHolder.expire_pay.setText(expireTime);
+
+        viewHolder.price_pay.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getAmount().toString()) + " ریال");
 
         viewHolder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,6 +197,12 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
 
     }
 
+
+    @Override
+    public void notifyDataSetChanged() {
+        currentDate = new Date();
+        super.notifyDataSetChanged();
+    }
 
     private class ViewHolder{
 
