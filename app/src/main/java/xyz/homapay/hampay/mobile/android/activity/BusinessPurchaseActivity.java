@@ -68,13 +68,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
     private Context context;
     private Activity activity;
 
-    private RelativeLayout name_rl;
-    private FacedTextView name_title;
-    private View name_sep;
-    private RelativeLayout code_rl;
-    private FacedTextView code_title;
-    private View code_sep;
-
     private int selectedType = 1;
 
     private ListView businessListView;
@@ -201,11 +194,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                 find_business_purchase.setVisibility(View.GONE);
                 search_layout.setVisibility(View.VISIBLE);
                 selectedType = 1;
-                name_title.setTextColor(getResources().getColor(R.color.user_change_status));
-                name_sep.setBackgroundColor(getResources().getColor(R.color.user_change_status));
-                code_title.setTextColor(getResources().getColor(R.color.normal_text));
-                code_sep.setBackgroundColor(getResources().getColor(R.color.normal_text));
-
             }
         });
 
@@ -217,10 +205,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                 find_business_purchase.setVisibility(View.VISIBLE);
                 search_layout.setVisibility(View.GONE);
                 selectedType = 2;
-                code_title.setTextColor(getResources().getColor(R.color.user_change_status));
-                code_sep.setBackgroundColor(getResources().getColor(R.color.user_change_status));
-                name_title.setTextColor(getResources().getColor(R.color.normal_text));
-                name_sep.setBackgroundColor(getResources().getColor(R.color.normal_text));
             }
         });
 
@@ -250,15 +234,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
         activity = BusinessPurchaseActivity.this;
 
         persianEnglishDigit = new PersianEnglishDigit();
-
-        name_rl = (RelativeLayout)findViewById(R.id.name_rl);
-        name_rl.setOnClickListener(this);
-        name_title = (FacedTextView)findViewById(R.id.name_title);
-        name_sep = (View)findViewById(R.id.name_sep);
-        code_rl = (RelativeLayout)findViewById(R.id.code_rl);
-        code_rl.setOnClickListener(this);
-        code_title = (FacedTextView)findViewById(R.id.code_title);
-        code_sep = (View)findViewById(R.id.code_sep);
 
         search_layout = (RelativeLayout)findViewById(R.id.search_layout);
 
@@ -415,34 +390,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.name_rl:
-                if (keyboard.getVisibility() == View.VISIBLE){
-                    new Collapse(keyboard).animate();
-                }
-                businessListView.setVisibility(View.VISIBLE);
-                find_business_purchase.setVisibility(View.GONE);
-                search_layout.setVisibility(View.VISIBLE);
-                selectedType = 1;
-                name_title.setTextColor(getResources().getColor(R.color.user_change_status));
-                name_sep.setBackgroundColor(getResources().getColor(R.color.user_change_status));
-                code_title.setTextColor(getResources().getColor(R.color.normal_text));
-                code_sep.setBackgroundColor(getResources().getColor(R.color.normal_text));
-
-
-
-                break;
-
-            case R.id.code_rl:
-                businessListView.setVisibility(View.GONE);
-                find_business_purchase.setVisibility(View.VISIBLE);
-                search_layout.setVisibility(View.GONE);
-                selectedType = 2;
-                code_title.setTextColor(getResources().getColor(R.color.user_change_status));
-                code_sep.setBackgroundColor(getResources().getColor(R.color.user_change_status));
-                name_title.setTextColor(getResources().getColor(R.color.normal_text));
-                name_sep.setBackgroundColor(getResources().getColor(R.color.normal_text));
-                break;
-
 
             case R.id.find_business_purchase_button:
 

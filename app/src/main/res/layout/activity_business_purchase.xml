@@ -56,63 +56,6 @@
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="52dp"
-        android:orientation="horizontal"
-        android:visibility="gone">
-
-        <RelativeLayout
-            android:id="@+id/code_rl"
-            android:layout_width="0dip"
-            android:layout_height="52dp"
-            android:layout_weight="0.5">
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                android:id="@+id/code_title"
-                geekui:customTypeface="fonts/iran_sans.ttf"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/normal_text"
-                android:textSize="15dp"
-                android:text="@string/business_payment_per_code"
-                android:layout_centerInParent="true"/>
-
-            <View
-                android:id="@+id/code_sep"
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:layout_alignParentBottom="true"
-                android:background="@color/normal_text"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/name_rl"
-            android:layout_width="0dip"
-            android:layout_height="52dp"
-            android:layout_weight="0.5">
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                android:id="@+id/name_title"
-                geekui:customTypeface="fonts/iran_sans.ttf"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/user_change_status"
-                android:textSize="15dp"
-                android:text="@string/business_payment_per_name"
-                android:layout_centerInParent="true"/>
-
-            <View
-                android:id="@+id/name_sep"
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:layout_alignParentBottom="true"
-                android:background="@color/user_change_status"/>
-
-        </RelativeLayout>
-
-    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/search_layout"
