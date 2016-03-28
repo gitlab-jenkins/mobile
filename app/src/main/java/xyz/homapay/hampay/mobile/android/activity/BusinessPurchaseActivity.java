@@ -145,6 +145,8 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
     Long MaxXferAmount = 0L;
     Long MinXferAmount = 0L;
 
+    private RelativeLayout search_layout;
+
     public void backActionBar(View view){
         finish();
     }
@@ -197,6 +199,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                 }
                 businessListView.setVisibility(View.VISIBLE);
                 find_business_purchase.setVisibility(View.GONE);
+                search_layout.setVisibility(View.VISIBLE);
                 selectedType = 1;
                 name_title.setTextColor(getResources().getColor(R.color.user_change_status));
                 name_sep.setBackgroundColor(getResources().getColor(R.color.user_change_status));
@@ -212,6 +215,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                 dialog.dismiss();
                 businessListView.setVisibility(View.GONE);
                 find_business_purchase.setVisibility(View.VISIBLE);
+                search_layout.setVisibility(View.GONE);
                 selectedType = 2;
                 code_title.setTextColor(getResources().getColor(R.color.user_change_status));
                 code_sep.setBackgroundColor(getResources().getColor(R.color.user_change_status));
@@ -255,6 +259,8 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
         code_rl.setOnClickListener(this);
         code_title = (FacedTextView)findViewById(R.id.code_title);
         code_sep = (View)findViewById(R.id.code_sep);
+
+        search_layout = (RelativeLayout)findViewById(R.id.search_layout);
 
         businessListView = (ListView)findViewById(R.id.businessListView);
         businessListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -415,6 +421,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                 }
                 businessListView.setVisibility(View.VISIBLE);
                 find_business_purchase.setVisibility(View.GONE);
+                search_layout.setVisibility(View.VISIBLE);
                 selectedType = 1;
                 name_title.setTextColor(getResources().getColor(R.color.user_change_status));
                 name_sep.setBackgroundColor(getResources().getColor(R.color.user_change_status));
@@ -428,6 +435,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
             case R.id.code_rl:
                 businessListView.setVisibility(View.GONE);
                 find_business_purchase.setVisibility(View.VISIBLE);
+                search_layout.setVisibility(View.GONE);
                 selectedType = 2;
                 code_title.setTextColor(getResources().getColor(R.color.user_change_status));
                 code_sep.setBackgroundColor(getResources().getColor(R.color.user_change_status));
