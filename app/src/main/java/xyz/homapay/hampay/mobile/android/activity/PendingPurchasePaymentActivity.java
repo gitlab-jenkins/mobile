@@ -10,7 +10,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
@@ -19,38 +18,37 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.List;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
-import xyz.homapay.hampay.common.core.model.request.CancelPurchasePaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingPaymentListRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingPurchaseListRequest;
-import xyz.homapay.hampay.common.core.model.response.CancelPurchasePaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingPaymentListResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingPurchaseListResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
 import xyz.homapay.hampay.mobile.android.R;
-import xyz.homapay.hampay.mobile.android.account.Log;
 import xyz.homapay.hampay.mobile.android.adapter.PendingPaymentAdapter;
 import xyz.homapay.hampay.mobile.android.adapter.PendingPurchaseAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import xyz.homapay.hampay.mobile.android.async.RequestCancelPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestPendingPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestPendingPurchase;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
-import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.impl.comparator.PaymentAmountComparator;
+import xyz.homapay.hampay.mobile.android.impl.comparator.PaymentDateComparator;
+import xyz.homapay.hampay.mobile.android.impl.comparator.PaymentExpireComparator;
+import xyz.homapay.hampay.mobile.android.impl.comparator.PurchaseAmountComparator;
+import xyz.homapay.hampay.mobile.android.impl.comparator.PurchaseDateComparator;
+import xyz.homapay.hampay.mobile.android.impl.comparator.PurchaseExpireComparator;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class PendingPurchasePaymentActivity extends AppCompatActivity implements View.OnClickListener {
 
-
-    private Context context;
     private Activity activity;
 
     private RelativeLayout purchase_rl;
@@ -59,7 +57,6 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
     private RelativeLayout payment_rl;
     private FacedTextView payment_title;
     private View payment_sep;
-    private int selectedType = 1;
     private FacedTextView nullPendingText;
 
 
@@ -79,7 +76,6 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
     HamPayDialog hamPayDialog;
 
     private List<PurchaseInfoDTO> purchaseInfoDTOs;
-
     List<PaymentInfoDTO> paymentInfoDTOs;
     PspInfoDTO pspInfoDTOs;
 
@@ -90,19 +86,20 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
 
     private int itemPosition;
 
+    private String authToken;
 
     public void backActionBar(View view){
         finish();
     }
 
-    public void menu(View v){
+    public void typeView(View v){
 
         Rect displayRectangle = new Rect();
         Activity parent = (Activity) activity;
         Window window = parent.getWindow();
         window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_pending, null);
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_pending_type, null);
 
         final FacedTextView pending_purchase = (FacedTextView) view.findViewById(R.id.pending_purchase);
         final FacedTextView pending_payment = (FacedTextView) view.findViewById(R.id.pending_payment);
@@ -142,14 +139,90 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
         dialog.show();
     }
 
+    public void sortView(View v){
+
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_pending_sort, null);
+
+        final FacedTextView sort_date = (FacedTextView) view.findViewById(R.id.sort_date);
+        final FacedTextView sort_expire = (FacedTextView) view.findViewById(R.id.sort_expire);
+        final FacedTextView sort_amount = (FacedTextView) view.findViewById(R.id.sort_amount);
+
+        sort_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (purchaseInfoDTOs != null){
+                    Collections.sort(purchaseInfoDTOs, new PurchaseDateComparator());
+                    pendingPurchaseAdapter.notifyDataSetChanged();
+                    dialog.dismiss();
+                }else if (paymentInfoDTOs != null){
+                    Collections.sort(paymentInfoDTOs, new PaymentDateComparator());
+                    pendingPaymentAdapter.notifyDataSetChanged();
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        sort_expire.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (purchaseInfoDTOs != null){
+                    Collections.sort(purchaseInfoDTOs, new PurchaseExpireComparator());
+                    pendingPurchaseAdapter.notifyDataSetChanged();
+                    dialog.dismiss();
+                }else if (paymentInfoDTOs != null){
+                    Collections.sort(paymentInfoDTOs, new PaymentExpireComparator());
+                    pendingPaymentAdapter.notifyDataSetChanged();
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        sort_amount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (purchaseInfoDTOs != null){
+                    Collections.sort(purchaseInfoDTOs, new PurchaseAmountComparator());
+                    pendingPurchaseAdapter.notifyDataSetChanged();
+                    dialog.dismiss();
+                }else if (paymentInfoDTOs != null){
+                    Collections.sort(paymentInfoDTOs, new PaymentAmountComparator());
+                    pendingPaymentAdapter.notifyDataSetChanged();
+                    dialog.dismiss();
+                }
+            }
+        });
+
+
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setDimAmount(0);
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(true);
+        WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
+        layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
+        layoutParams.x = 25;
+        layoutParams.y = 20;
+
+        dialog.show();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pending_purchase_payment);
-        context = this;
+
         activity = PendingPurchasePaymentActivity.this;
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+
+        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
         Intent intent = getIntent();
 
@@ -255,7 +328,8 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
                     if (purchaseInfoDTOs.size() == 0){
                         nullPendingText.setVisibility(View.VISIBLE);
                     }else {
-                        pendingPurchaseAdapter = new PendingPurchaseAdapter(activity, purchaseInfoDTOs, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+                        Collections.sort(purchaseInfoDTOs, new PurchaseDateComparator());
+                        pendingPurchaseAdapter = new PendingPurchaseAdapter(activity, purchaseInfoDTOs, authToken);
                         pendingListView.setAdapter(pendingPurchaseAdapter);
                         paymentInfoDTOs = null;
                         nullPendingText.setVisibility(View.GONE);
@@ -284,7 +358,8 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
                         nullPendingText.setVisibility(View.VISIBLE);
                     }else {
                         pspInfoDTOs = pendingPaymentListResponseMessage.getService().getPspInfo();
-                        pendingPaymentAdapter = new PendingPaymentAdapter(activity, paymentInfoDTOs, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+                        Collections.sort(paymentInfoDTOs, new PaymentDateComparator());
+                        pendingPaymentAdapter = new PendingPaymentAdapter(activity, paymentInfoDTOs, authToken);
                         pendingListView.setAdapter(pendingPaymentAdapter);
                         purchaseInfoDTOs = null;
                         nullPendingText.setVisibility(View.GONE);
@@ -300,40 +375,10 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
         }
     }
 
-//    public class RequestCancelPurchasePaymentTaskCompleteListener implements
-//            AsyncTaskCompleteListener<ResponseMessage<CancelPurchasePaymentResponse>> {
-//
-//        int position;
-//
-//        RequestCancelPurchasePaymentTaskCompleteListener(int position){
-//            this.position = position;
-//        }
-//
-//
-//        @Override
-//        public void onTaskComplete(ResponseMessage<CancelPurchasePaymentResponse> cancelPurchasePaymentResponseMessage) {
-//
-//            hamPayDialog.dismisWaitingDialog();
-//
-//            if (cancelPurchasePaymentResponseMessage != null) {
-//                if (cancelPurchasePaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-//                    pendingPurchaseListResponse.getPendingList().remove(position);
-//                    pendingPurchaseAdapter.notifyDataSetChanged();
-//                }
-//            }
-//        }
-//
-//        @Override
-//        public void onTaskPreRun() {
-//            hamPayDialog.showWaitingdDialog("");
-//        }
-//    }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.purchase_rl:
-                selectedType = 1;
                 purchase_title.setTextColor(getResources().getColor(R.color.user_change_status));
                 purchase_sep.setBackgroundColor(getResources().getColor(R.color.user_change_status));
                 payment_title.setTextColor(getResources().getColor(R.color.normal_text));
@@ -346,7 +391,6 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
                 break;
 
             case R.id.payment_rl:
-                selectedType = 2;
                 payment_title.setTextColor(getResources().getColor(R.color.user_change_status));
                 payment_sep.setBackgroundColor(getResources().getColor(R.color.user_change_status));
                 purchase_title.setTextColor(getResources().getColor(R.color.normal_text));

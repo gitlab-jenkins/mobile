@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:geekui="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="right"
+    android:background="@drawable/menu_theme"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+
+    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+        android:id="@+id/sort_date"
+        geekui:customTypeface="fonts/iran_sans.ttf"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/normal_text"
+        android:textSize="14dp"
+        android:text="@string/sort_create"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"/>
+
+    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+        android:id="@+id/sort_expire"
+        geekui:customTypeface="fonts/iran_sans.ttf"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/normal_text"
+        android:textSize="14dp"
+        android:text="@string/sort_expire"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp"/>
+
+    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+        android:id="@+id/sort_amount"
+        geekui:customTypeface="fonts/iran_sans.ttf"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/normal_text"
+        android:textSize="14dp"
+        android:text="@string/sort_amount"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp"/>
+
+</LinearLayout>

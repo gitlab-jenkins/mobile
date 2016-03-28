@@ -540,4 +540,9 @@
     <string name="null_pending_business">پرداخت درحال انتظاری وجود ندارد.</string>
     <string name="null_pending_invoice">پرداخت درحال انتظاری وجود ندارد.</string>
 
+    <string name="sort_create">تاریخ ایجاد</string>
+    <string name="sort_expire">مهلت زمانی</string>
+    <string name="sort_amount">مبلغ</string>
+
+
 </resources>
