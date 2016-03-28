@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     private static String TAG = MainActivity.class.getSimpleName();
 
-    private Toolbar mToolbar;
+//    private Toolbar mToolbar;
     private FragmentDrawer drawerFragment;
 
     DrawerLayout drawerLayout;
@@ -288,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         nav_icon = (ImageView)findViewById(R.id.nav_icon);
         nav_icon.setOnClickListener(this);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+//        mToolbar = (Toolbar) findViewById(R.id.toolbar);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -297,7 +297,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         drawerFragment = (FragmentDrawer)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), mToolbar);
+        drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), null);
         drawerFragment.setDrawerListener(this);
 
 
