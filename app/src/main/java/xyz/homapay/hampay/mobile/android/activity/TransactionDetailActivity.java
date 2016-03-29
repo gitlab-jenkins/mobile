@@ -16,6 +16,7 @@ import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
@@ -46,6 +47,7 @@ public class TransactionDetailActivity extends AppCompatActivity implements View
     LinearLayout user_call;
     Context context;
     Activity activity;
+    private CurrencyFormatter currencyFormatter;
 
     public void backActionBar(View view){
         finish();
@@ -76,6 +78,7 @@ public class TransactionDetailActivity extends AppCompatActivity implements View
         setContentView(R.layout.activity_transaction_detail);
 
         persianEnglishDigit = new PersianEnglishDigit();
+        currencyFormatter = new CurrencyFormatter();
 
         context = this;
         activity = TransactionDetailActivity.this;
@@ -144,14 +147,14 @@ public class TransactionDetailActivity extends AppCompatActivity implements View
             responseMessage_ll.setVisibility(View.VISIBLE);
             reject_message.setText(transactionDTO.getRejectReasonMessage());
         }
-        price_pay.setText(persianEnglishDigit.E2P(String.format("%,d", transactionDTO.getAmount())));
+        price_pay.setText(persianEnglishDigit.E2P(currencyFormatter.format(transactionDTO.getAmount())));
         if (transactionDTO.getAmount() == 0){
             more_payment_info.setVisibility(View.GONE);
         }else {
             more_payment_info.setVisibility(View.VISIBLE);
-            user_fee_value.setText(persianEnglishDigit.E2P(String.format("%,d", transactionDTO.getFeeCharge())) + " ");
+            user_fee_value.setText(persianEnglishDigit.E2P(currencyFormatter.format(transactionDTO.getFeeCharge())) + " ");
             if (transactionDTO.getFeeCharge() != null && transactionDTO.getAmount() != null)
-                total_payment_value.setText(persianEnglishDigit.E2P(String.format("%,d", transactionDTO.getFeeCharge() + transactionDTO.getAmount())) + " ");
+                total_payment_value.setText(persianEnglishDigit.E2P(currencyFormatter.format(transactionDTO.getFeeCharge() + transactionDTO.getAmount())) + " ");
         }
 
         user_mobile_no.setText(persianEnglishDigit.E2P(transactionDTO.getPhoneNumber()));

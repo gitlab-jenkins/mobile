@@ -126,8 +126,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/black"
                         android:textSize="13dp"
-                        android:gravity="center"
-                        android:text=""/>
+                        android:gravity="center" />
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/user_fee_title"

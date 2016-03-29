@@ -110,9 +110,9 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
                 handler.post(new Runnable() {
                     public void run() {
 
-                        if (paymentInfoDTOs != null) {
+                        if (paymentInfoDTOs != null && pendingPaymentAdapter != null) {
                             pendingPaymentAdapter.notifyDataSetChanged();
-                        }else if (purchaseInfoDTOs != null){
+                        }else if (purchaseInfoDTOs != null && pendingPurchaseAdapter != null){
                             pendingPurchaseAdapter.notifyDataSetChanged();
                         }
                     }
@@ -197,45 +197,42 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
         sort_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (purchaseInfoDTOs != null){
+                if (purchaseInfoDTOs != null && pendingPurchaseAdapter != null){
                     Collections.sort(purchaseInfoDTOs, new PurchaseDateComparator());
                     pendingPurchaseAdapter.notifyDataSetChanged();
-                    dialog.dismiss();
-                }else if (paymentInfoDTOs != null){
+                }else if (paymentInfoDTOs != null && pendingPaymentAdapter != null){
                     Collections.sort(paymentInfoDTOs, new PaymentDateComparator());
                     pendingPaymentAdapter.notifyDataSetChanged();
-                    dialog.dismiss();
                 }
+                dialog.dismiss();
             }
         });
 
         sort_expire.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (purchaseInfoDTOs != null){
+                if (purchaseInfoDTOs != null && pendingPurchaseAdapter != null){
                     Collections.sort(purchaseInfoDTOs, new PurchaseExpireComparator());
                     pendingPurchaseAdapter.notifyDataSetChanged();
-                    dialog.dismiss();
-                }else if (paymentInfoDTOs != null){
+                }else if (paymentInfoDTOs != null && pendingPaymentAdapter != null){
                     Collections.sort(paymentInfoDTOs, new PaymentExpireComparator());
                     pendingPaymentAdapter.notifyDataSetChanged();
-                    dialog.dismiss();
                 }
+                dialog.dismiss();
             }
         });
 
         sort_amount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (purchaseInfoDTOs != null){
+                if (purchaseInfoDTOs != null && pendingPurchaseAdapter != null){
                     Collections.sort(purchaseInfoDTOs, new PurchaseAmountComparator());
                     pendingPurchaseAdapter.notifyDataSetChanged();
-                    dialog.dismiss();
-                }else if (paymentInfoDTOs != null){
+                }else if (paymentInfoDTOs != null && pendingPaymentAdapter != null){
                     Collections.sort(paymentInfoDTOs, new PaymentAmountComparator());
                     pendingPaymentAdapter.notifyDataSetChanged();
-                    dialog.dismiss();
                 }
+                dialog.dismiss();
             }
         });
 

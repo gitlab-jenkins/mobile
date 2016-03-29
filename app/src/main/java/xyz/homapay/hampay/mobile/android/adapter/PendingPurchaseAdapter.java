@@ -30,6 +30,8 @@ import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
+import xyz.homapay.hampay.mobile.android.util.DateUtil;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
@@ -51,6 +53,8 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
     private Date currentDate;
     private PersianEnglishDigit persianEnglishDigit;
     NumberFormat timeFormat;
+    private CurrencyFormatter currencyFormatter;
+    private DateUtil dateUtil;
 
     public PendingPurchaseAdapter(Context context, List<PurchaseInfoDTO> purchaseInfoDTOs, String authToken)
     {
@@ -62,20 +66,19 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
         this.authToken = authToken;
         persianEnglishDigit = new PersianEnglishDigit();
         timeFormat = new DecimalFormat("00");
+        currencyFormatter = new CurrencyFormatter();
+        dateUtil = new DateUtil();
     }
 
     public int getCount() {
-        // TODO Auto-generated method stub
         return purchaseInfoDTOs.size();
     }
 
     public Object getItem(int position) {
-        // TODO Auto-generated method stub
         return position;
     }
 
     public long getItemId(int position) {
-        // TODO Auto-generated method stub
         return position;
     }
 
@@ -84,8 +87,6 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
 
 
     public View getView(final int position, View convertView, ViewGroup parent) {
-        // TODO Auto-generated method stub
-
 
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -121,34 +122,10 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
         }
 
         viewHolder.createDateTime.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(purchaseInfoDTO.getCreatedBy())));
-        Date expireDate = purchaseInfoDTO.getExpirationDate();
-        long diff = expireDate.getTime() - currentDate.getTime();
 
-        String diffSeconds = timeFormat.format(diff / 1000 % 60);
-        String diffMinutes = timeFormat.format(diff / (60 * 1000) % 60);
-        String diffHours = timeFormat.format(diff / (60 * 60 * 1000) % 24);
-        long diffDays = diff / (24 * 60 * 60 * 1000);
+        viewHolder.expire_pay.setText(dateUtil.remainingTime(purchaseInfoDTO.getExpirationDate(), currentDate));
 
-        String expireTime = "";
-
-        if (diffDays == 0) {
-            expireTime = context.getString(R.string.pending_payment_remaining)
-                    + "\n"
-                    + persianEnglishDigit.E2P(diffHours + ":" + diffMinutes + ":" + diffSeconds)
-                    + " " + context.getString(R.string.time);
-        }else {
-            expireTime = context.getString(R.string.pending_payment_remaining)
-                    + "\n"
-                    + persianEnglishDigit.E2P(diffHours + ":" + diffMinutes + ":" + diffSeconds)
-                    + " " + context.getString(R.string.time)
-                    + "\n"
-                    + persianEnglishDigit.E2P(diffDays + "")
-                    + " " + context.getString(R.string.day);
-        }
-
-        viewHolder.expire_pay.setText(expireTime);
-
-        viewHolder.price_pay.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getAmount().toString()) + " ریال");
+        viewHolder.price_pay.setText(persianEnglishDigit.E2P(currencyFormatter.format(purchaseInfoDTO.getAmount()) + " ریال"));
 
         viewHolder.delete.setOnClickListener(new View.OnClickListener() {
             @Override

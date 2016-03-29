@@ -127,6 +127,7 @@ import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
 import xyz.homapay.hampay.mobile.android.model.RecentPay;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.EmailVerification;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.webservice.WebServices;
@@ -138,37 +139,25 @@ public class HamPayDialog {
 
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
-
     Activity activity;
-
     HamPayCustomDialog dialog;
-
     DatabaseHelper dbHelper;
-
     Tracker hamPayGaTracker;
-
     GaAnalyticsEvent gaAnalyticsEvent;
-
     String serverKey = "";
-
     Rect rect = new Rect();
+    private CurrencyFormatter currencyFormatter;
 
     public HamPayDialog(Activity activity){
 
         this.activity = activity;
-
-
         this.windowDisplayFrame();
-
         prefs = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE);
         editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE).edit();
-
-
         gaAnalyticsEvent = new GaAnalyticsEvent(activity);
-
         hamPayGaTracker = ((HamPayApplication) this.activity.getApplicationContext())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
-
+        currencyFormatter = new CurrencyFormatter();
     }
 
     private void windowDisplayFrame(){
@@ -974,9 +963,9 @@ public class HamPayDialog {
         });
 
         pay_one_confirm.setText(activity.getString(R.string.pay_one_confirm,
-                (new PersianEnglishDigit()).E2P(String.format("%,d", amountValue).replace(".", ",")),
+                (new PersianEnglishDigit()).E2P(currencyFormatter.format(amountValue)),
                 individualPaymentConfirmResponse.getFullName(),
-                (new PersianEnglishDigit().E2P(String.format("%,d", individualPaymentConfirmResponse.getFeeCharge()).replace(".", ","))),
+                (new PersianEnglishDigit().E2P(currencyFormatter.format(individualPaymentConfirmResponse.getFeeCharge()))),
                 individualPaymentConfirmResponse.getBankName()));
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));

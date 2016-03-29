@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO.TransactionStatus;
 import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO.TransactionType;
@@ -19,16 +20,17 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
  */
 public class UserTransactionAdapter extends UserTransactionGenericAdapter<TransactionDTO> {
 
-
-    Context context;
+    private Context context;
     private ViewHolder viewHolder;
-    TransactionDTO transactionDTO;
-    PersianEnglishDigit persianEnglishDigit;
+    private TransactionDTO transactionDTO;
+    private PersianEnglishDigit persianEnglishDigit;
+    private CurrencyFormatter currencyFormatter;
 
     public UserTransactionAdapter(Context context) {
         super(context);
         this.context = context;
         persianEnglishDigit = new PersianEnglishDigit();
+        currencyFormatter = new CurrencyFormatter();
     }
 
 
@@ -48,7 +50,6 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
             viewHolder.reject_message = (FacedTextView)convertView.findViewById(R.id.reject_message);
             viewHolder.user_fee_value = (FacedTextView)convertView.findViewById(R.id.user_fee_value);
             viewHolder.user_fee_ll = (LinearLayout)convertView.findViewById(R.id.user_fee_ll);
-
 
             convertView.setTag(viewHolder);
         }
@@ -96,12 +97,8 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
         viewHolder.date_time.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(transactionDTO.getTransactionDate())));
         viewHolder.message.setText(transactionDTO.getMessage());
         viewHolder.reject_message.setText(transactionDTO.getRejectReasonMessage());
-        viewHolder.user_fee_value.setText(" " + persianEnglishDigit.E2P(String.format("%,d", transactionDTO.getFeeCharge()).replace(".", ",") + " " + context.getString(R.string.currency_rials)));
-
-        viewHolder.price_pay.setText(persianEnglishDigit.E2P(String.format("%,d", transactionDTO.getAmount()).replace(".", ","))
-                        + "\n"
-                + context.getString(R.string.currency_rials)
-        );
+        viewHolder.user_fee_value.setText(persianEnglishDigit.E2P(currencyFormatter.format(transactionDTO.getFeeCharge())) + context.getString(R.string.currency_rials));
+        viewHolder.price_pay.setText(persianEnglishDigit.E2P(currencyFormatter.format(transactionDTO.getAmount())) + "\n" + context.getString(R.string.currency_rials));
 
         return convertView;
     }

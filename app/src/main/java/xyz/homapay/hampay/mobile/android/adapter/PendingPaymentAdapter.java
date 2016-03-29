@@ -30,6 +30,8 @@ import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTa
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
+import xyz.homapay.hampay.mobile.android.util.DateUtil;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
@@ -50,6 +52,8 @@ public class PendingPaymentAdapter extends BaseAdapter  {
     private Date currentDate;
     private PersianEnglishDigit persianEnglishDigit;
     NumberFormat timeFormat;
+    private CurrencyFormatter currencyFormatter;
+    private DateUtil dateUtil;
 
     public PendingPaymentAdapter(Context context, List<PaymentInfoDTO> paymentInfoDTOs, String authToken)
     {
@@ -61,30 +65,26 @@ public class PendingPaymentAdapter extends BaseAdapter  {
         this.authToken = authToken;
         persianEnglishDigit = new PersianEnglishDigit();
         timeFormat = new DecimalFormat("00");
+        currencyFormatter = new CurrencyFormatter();
+        dateUtil = new DateUtil();
     }
 
     public int getCount() {
-        // TODO Auto-generated method stub
         return paymentInfoDTOs.size();
     }
 
     public Object getItem(int position) {
-        // TODO Auto-generated method stub
         return position;
     }
 
     public long getItemId(int position) {
-        // TODO Auto-generated method stub
         return position;
     }
 
     private ViewHolder viewHolder;
 
 
-
     public View getView(final int position, View convertView, ViewGroup parent) {
-        // TODO Auto-generated method stub
-
 
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -103,7 +103,6 @@ public class PendingPaymentAdapter extends BaseAdapter  {
             viewHolder.delete = (FacedTextView)convertView.findViewById(R.id.delete);
             viewHolder.message = (FacedTextView)convertView.findViewById(R.id.message);
 
-
             convertView.setTag(viewHolder);
         }
         else{
@@ -115,34 +114,10 @@ public class PendingPaymentAdapter extends BaseAdapter  {
         viewHolder.callerName.setText(paymentInfoDTO.getCallerName());
         viewHolder.callerPhoneNo.setText(persianEnglishDigit.E2P(paymentInfoDTO.getCallerPhoneNumber()));
         viewHolder.date_time.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(paymentInfoDTO.getCreatedBy())));
-        viewHolder.price_pay.setText(persianEnglishDigit.E2P(paymentInfoDTO.getAmount().toString()) + " ریال");
+        viewHolder.price_pay.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount()) + " ریال"));
         viewHolder.message.setText(paymentInfoDTO.getMessage());
-        Date expireDate = paymentInfoDTO.getExpirationDate();
-        long diff = expireDate.getTime() - currentDate.getTime();
 
-        String diffSeconds = timeFormat.format(diff / 1000 % 60);
-        String diffMinutes = timeFormat.format(diff / (60 * 1000) % 60);
-        String diffHours = timeFormat.format(diff / (60 * 60 * 1000) % 24);
-        long diffDays = diff / (24 * 60 * 60 * 1000);
-
-        String expireTime = "";
-
-        if (diffDays == 0) {
-            expireTime = context.getString(R.string.pending_payment_remaining)
-                    + "\n"
-                    + persianEnglishDigit.E2P(diffHours + ":" + diffMinutes + ":" + diffSeconds)
-                    + " " + context.getString(R.string.time);
-        }else {
-            expireTime = context.getString(R.string.pending_payment_remaining)
-                    + "\n"
-                    + persianEnglishDigit.E2P(diffHours + ":" + diffMinutes + ":" + diffSeconds)
-                    + " " + context.getString(R.string.time)
-                    + "\n"
-                    + persianEnglishDigit.E2P(diffDays + "")
-                    + " " + context.getString(R.string.day);
-        }
-
-        viewHolder.expire_pay.setText(expireTime);
+        viewHolder.expire_pay.setText(dateUtil.remainingTime(paymentInfoDTO.getExpirationDate(), currentDate));
 
         if (paymentInfoDTO.getImageId() != null) {
             String userImageUrl = "/users/" + authToken + "/" + paymentInfoDTO.getImageId();

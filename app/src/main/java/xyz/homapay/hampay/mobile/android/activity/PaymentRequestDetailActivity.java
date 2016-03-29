@@ -303,15 +303,6 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
             if (userPaymentResponseMessage != null){
                 if (userPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
 
-//                    DatabaseHelper databaseHelper = new DatabaseHelper(context, serverKey);
-//                    RecentPay recentPay = new RecentPay();
-//                    recentPay.setName(contactName);
-//                    recentPay.setMessage(contact_message.getText().toString());
-//                    recentPay.setStatus("1");
-//                    recentPay.setId(2);
-//                    recentPay.setPhone(contactPhoneNo);
-//                    databaseHelper.createRecentPay(recentPay);
-
                     new HamPayDialog(activity).creditRequestDialog();
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
