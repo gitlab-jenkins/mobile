@@ -1,6 +1,7 @@
 package xyz.homapay.hampay.mobile.android.adapter;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -58,7 +59,7 @@ public class HamPayBusinessesAdapter extends HamPayBusinessesGenericAdapter<Busi
         if (businessDTO.getBusinessImageId() != null) {
             new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.business_image)).execute("/logo/" + authToken + "/" + businessDTO.getBusinessImageId());
         }else {
-            viewHolder.business_image.setBackgroundColor(context.getResources().getColor(R.color.user_change_status));
+            viewHolder.business_image.setBackgroundColor(ContextCompat.getColor(context, R.color.user_change_status));
         }
         return convertView;
     }

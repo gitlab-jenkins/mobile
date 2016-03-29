@@ -11,6 +11,7 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.support.annotation.ColorRes;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -84,7 +85,7 @@ public class RippleView extends RelativeLayout {
             return;
 
         final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RippleView);
-        rippleColor = typedArray.getColor(R.styleable.RippleView_rv_color, getResources().getColor(R.color.register_btn_color));
+        rippleColor = typedArray.getColor(R.styleable.RippleView_rv_color, ContextCompat.getColor(context, R.color.register_btn_color));
         rippleType = typedArray.getInt(R.styleable.RippleView_rv_type, 0);
         hasToZoom = typedArray.getBoolean(R.styleable.RippleView_rv_zoom, false);
         isCentered = typedArray.getBoolean(R.styleable.RippleView_rv_centered, false);
@@ -299,7 +300,7 @@ public class RippleView extends RelativeLayout {
      */
     @ColorRes
     public void setRippleColor(int rippleColor) {
-        this.rippleColor = getResources().getColor(rippleColor);
+        this.rippleColor = ContextCompat.getColor(getContext(), rippleColor);
     }
 
     public int getRippleColor() {

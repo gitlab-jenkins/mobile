@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -117,26 +118,26 @@ public class TransactionDetailActivity extends AppCompatActivity implements View
             if (transactionDTO.getTransactionType() == TransactionDTO.TransactionType.CREDIT){
                 from_to_text.setText(getString(R.string.transaction_from));
                 status_text.setText(getString(R.string.credit));
-                status_text.setTextColor(getResources().getColor(R.color.register_btn_color));
+                status_text.setTextColor(ContextCompat.getColor(context, R.color.register_btn_color));
                 status_icon.setImageResource(R.drawable.arrow_r);
             }
             else if (transactionDTO.getTransactionType() == TransactionDTO.TransactionType.DEBIT){
                 from_to_text.setText(getString(R.string.transaction_to));
                 status_text.setText(getString(R.string.debit));
-                status_text.setTextColor(getResources().getColor(R.color.user_change_status));
+                status_text.setTextColor(ContextCompat.getColor(context, R.color.user_change_status));
                 status_icon.setImageResource(R.drawable.arrow_p);
             }
 
         }else if (transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.PENDING) {
             from_to_text.setText(getString(R.string.transaction_to));
             status_text.setText(context.getString(R.string.pending));
-            status_text.setTextColor(getResources().getColor(R.color.pending_transaction));
+            status_text.setTextColor(ContextCompat.getColor(context, R.color.pending_transaction));
             status_icon.setImageResource(R.drawable.pending);
         }
         else {
             from_to_text.setText(getString(R.string.transaction_to));
             status_text.setText(getString(R.string.fail));
-            status_text.setTextColor(getResources().getColor(R.color.colorPrimary));
+            status_text.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
             status_icon.setImageResource(R.drawable.arrow_f);
         }
 

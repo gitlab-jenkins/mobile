@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,7 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
  */
 public class CreditRequestAdapter extends SectionedBaseAdapter{
 
-    Activity mContext;
+    Activity context;
     private List<RecentPay> recentPays;
     private List<EnabledHamPay> enabledHamPays;
     private String loginTokenId;
@@ -39,7 +40,7 @@ public class CreditRequestAdapter extends SectionedBaseAdapter{
     private PersianEnglishDigit persianEnglishDigit;
 
     public CreditRequestAdapter(Activity context, List<RecentPay> recentPays, List<EnabledHamPay> enabledHamPays, String loginTokenId){
-        mContext = context;
+        this.context = context;
         this.recentPays = recentPays;
         this.enabledHamPays = enabledHamPays;
         this.loginTokenId = loginTokenId;
@@ -126,34 +127,34 @@ public class CreditRequestAdapter extends SectionedBaseAdapter{
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + recentPay.getPhone()));
-                    mContext.startActivityForResult(intent, 1024);
+                    context.startActivityForResult(intent, 1024);
                 }
             });
             pay_icon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent();
-                    intent.setClass(mContext, PaymentRequestDetailActivity.class);
+                    intent.setClass(context, PaymentRequestDetailActivity.class);
                     intent.putExtra("contact_name", recentPay.getName());
                     intent.putExtra("contact_phone_no", recentPay.getPhone());
-                    mContext.startActivityForResult(intent, 1024);
+                    context.startActivityForResult(intent, 1024);
                 }
             });
             message.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent();
-                    intent.setClass(mContext, PaymentRequestDetailActivity.class);
+                    intent.setClass(context, PaymentRequestDetailActivity.class);
                     intent.putExtra("contact_name", recentPay.getName());
                     intent.putExtra("contact_phone_no", recentPay.getPhone());
-                    mContext.startActivityForResult(intent, 1024);
+                    context.startActivityForResult(intent, 1024);
                 }
             });
 
         }else{
 
             final EnabledHamPay enabledHamPay = enabledHamPays.get(position);
-            new RequestImageDownloader(mContext, new RequestImageDownloaderTaskCompleteListener(image_profile)).execute(Constants.HTTPS_SERVER_IP + "/users/" + loginTokenId + "/" + enabledHamPay.getPhotoId());
+            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile)).execute(Constants.HTTPS_SERVER_IP + "/users/" + loginTokenId + "/" + enabledHamPay.getPhotoId());
             contact_name.setText(persianEnglishDigit.E2P(enabledHamPay.getDisplayName()));
             contact_phone_no.setText(persianEnglishDigit.E2P(enabledHamPay.getCellNumber()));
 
@@ -161,10 +162,10 @@ public class CreditRequestAdapter extends SectionedBaseAdapter{
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent();
-                    intent.setClass(mContext, PaymentRequestDetailActivity.class);
+                    intent.setClass(context, PaymentRequestDetailActivity.class);
                     intent.putExtra("contact_name", enabledHamPay.getDisplayName());
                     intent.putExtra("contact_phone_no", enabledHamPay.getCellNumber());
-                    mContext.startActivityForResult(intent, 1024);
+                    context.startActivityForResult(intent, 1024);
                 }
             });
 
@@ -186,11 +187,11 @@ public class CreditRequestAdapter extends SectionedBaseAdapter{
 
         FacedTextView pinned_header_text = (FacedTextView) layout.findViewById(R.id.pinned_header_text);
         if(section == 0) {
-            pinned_header_text.setBackgroundColor(mContext.getResources().getColor(R.color.confirmation));
-            pinned_header_text.setText(mContext.getResources().getString(R.string.recent_credit_request));
+            pinned_header_text.setBackgroundColor(ContextCompat.getColor(context, R.color.confirmation));
+            pinned_header_text.setText(context.getResources().getString(R.string.recent_credit_request));
         }else{
-            pinned_header_text.setBackgroundColor(mContext.getResources().getColor(R.color.confirmation));
-            pinned_header_text.setText(mContext.getResources().getString(R.string.hampay_contacts));
+            pinned_header_text.setBackgroundColor(ContextCompat.getColor(context, R.color.confirmation));
+            pinned_header_text.setText(context.getResources().getString(R.string.hampay_contacts));
         }
 
 

@@ -10,6 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
@@ -432,10 +433,10 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.purchase_rl:
-                purchase_title.setTextColor(getResources().getColor(R.color.user_change_status));
-                purchase_sep.setBackgroundColor(getResources().getColor(R.color.user_change_status));
-                payment_title.setTextColor(getResources().getColor(R.color.normal_text));
-                payment_sep.setBackgroundColor(getResources().getColor(R.color.normal_text));
+                purchase_title.setTextColor(ContextCompat.getColor(activity, R.color.user_change_status));
+                purchase_sep.setBackgroundColor(ContextCompat.getColor(activity, R.color.user_change_status));
+                payment_title.setTextColor(ContextCompat.getColor(activity, R.color.normal_text));
+                payment_sep.setBackgroundColor(ContextCompat.getColor(activity, R.color.normal_text));
 
                 requestPendingPurchase = new RequestPendingPurchase(activity, new RequestPendingPurchaseTaskCompleteListener());
                 pendingPurchaseListRequest = new PendingPurchaseListRequest();
@@ -444,10 +445,10 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
                 break;
 
             case R.id.payment_rl:
-                payment_title.setTextColor(getResources().getColor(R.color.user_change_status));
-                payment_sep.setBackgroundColor(getResources().getColor(R.color.user_change_status));
-                purchase_title.setTextColor(getResources().getColor(R.color.normal_text));
-                purchase_sep.setBackgroundColor(getResources().getColor(R.color.normal_text));
+                payment_title.setTextColor(ContextCompat.getColor(activity, R.color.user_change_status));
+                payment_sep.setBackgroundColor(ContextCompat.getColor(activity, R.color.user_change_status));
+                purchase_title.setTextColor(ContextCompat.getColor(activity, R.color.normal_text));
+                purchase_sep.setBackgroundColor(ContextCompat.getColor(activity, R.color.normal_text));
 
                 requestPendingPayment = new RequestPendingPayment(activity, new RequestPendingPaymentTaskCompleteListener());
                 pendingPaymentListRequest = new PendingPaymentListRequest();

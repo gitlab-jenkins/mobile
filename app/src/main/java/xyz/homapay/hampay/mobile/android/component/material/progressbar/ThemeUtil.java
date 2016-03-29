@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.Resources.Theme;
 import android.content.res.TypedArray;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.internal.widget.TintTypedArray;
 import android.util.TypedValue;
 
@@ -33,7 +34,7 @@ public class ThemeUtil {
                 if (value.type >= TypedValue.TYPE_FIRST_INT && value.type <= TypedValue.TYPE_LAST_INT)
                     return value.data;
                 else if (value.type == TypedValue.TYPE_STRING)
-                    return context.getResources().getColor(value.resourceId);
+                    return ContextCompat.getColor(context, value.resourceId);
             }
 		}
 		catch(Exception ex){}

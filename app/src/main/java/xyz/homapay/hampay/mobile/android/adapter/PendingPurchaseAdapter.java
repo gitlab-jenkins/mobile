@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -118,7 +119,7 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
         if (purchaseInfoDTO.getMerchantImageId() != null) {
             new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.business_image)).execute("/logo/" + authToken + "/" + purchaseInfoDTO.getMerchantImageId());
         }else {
-            viewHolder.business_image.setBackgroundColor(context.getResources().getColor(R.color.user_change_status));
+            viewHolder.business_image.setBackgroundColor(ContextCompat.getColor(context, R.color.user_change_status));
         }
 
         viewHolder.createDateTime.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(purchaseInfoDTO.getCreatedBy())));

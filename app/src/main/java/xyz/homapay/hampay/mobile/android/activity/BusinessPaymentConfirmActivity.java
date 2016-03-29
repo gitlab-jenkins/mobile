@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -182,7 +183,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
                         + prefs.getString(Constants.LOGIN_TOKEN_ID, "")
                         + "/" + paymentInfoDTO.getImageId());
             }else {
-                business_image.setBackgroundColor(context.getResources().getColor(R.color.user_change_status));
+                business_image.setBackgroundColor(ContextCompat.getColor(context, R.color.user_change_status));
             }
         }
 

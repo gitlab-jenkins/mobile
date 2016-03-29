@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
@@ -165,20 +166,20 @@ public class PaymentRequestActivity extends AppCompatActivity implements View.On
 
         switch (v.getId()){
             case R.id.recent_rl:
-                recent_title.setTextColor(getResources().getColor(R.color.user_change_status));
-                recent_sep.setBackgroundColor(getResources().getColor(R.color.user_change_status));
-                hampay_title.setTextColor(getResources().getColor(R.color.normal_text));
-                hampay_sep.setBackgroundColor(getResources().getColor(R.color.normal_text));
+                recent_title.setTextColor(ContextCompat.getColor(context, R.color.user_change_status));
+                recent_sep.setBackgroundColor(ContextCompat.getColor(context, R.color.user_change_status));
+                hampay_title.setTextColor(ContextCompat.getColor(context, R.color.normal_text));
+                hampay_sep.setBackgroundColor(ContextCompat.getColor(context, R.color.normal_text));
                 latestInvoiceContactsRequest = new LatestInvoiceContactsRequest();
                 requestLatestInvoiceContacts = new RequestLatestInvoiceContacts(activity, new RequestLatestInvoiceContactsTaskCompleteListener());
                 requestLatestInvoiceContacts.execute(latestInvoiceContactsRequest);
                 break;
 
             case R.id.hampay_rl:
-                hampay_title.setTextColor(getResources().getColor(R.color.user_change_status));
-                hampay_sep.setBackgroundColor(getResources().getColor(R.color.user_change_status));
-                recent_title.setTextColor(getResources().getColor(R.color.normal_text));
-                recent_sep.setBackgroundColor(getResources().getColor(R.color.normal_text));
+                hampay_title.setTextColor(ContextCompat.getColor(context, R.color.user_change_status));
+                hampay_sep.setBackgroundColor(ContextCompat.getColor(context, R.color.user_change_status));
+                recent_title.setTextColor(ContextCompat.getColor(context, R.color.normal_text));
+                recent_sep.setBackgroundColor(ContextCompat.getColor(context, R.color.normal_text));
                 contactsHampayEnabledRequest = new ContactsHampayEnabledRequest();
                 requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());
                 requestContactHampayEnabled.execute(contactsHampayEnabledRequest);

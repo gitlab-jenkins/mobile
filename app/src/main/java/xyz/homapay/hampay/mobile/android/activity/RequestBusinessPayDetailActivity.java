@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -225,7 +226,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                         + prefs.getString(Constants.LOGIN_TOKEN_ID, "")
                         + "/" + purchaseInfoDTO.getMerchantImageId());
             }else {
-                business_image.setBackgroundColor(context.getResources().getColor(R.color.user_change_status));
+                business_image.setBackgroundColor(ContextCompat.getColor(context, R.color.user_change_status));
             }
 
             cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
@@ -511,7 +512,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                         if (purchaseInfoDTO.getMerchantImageId() != null) {
                             new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute(businessImageUrl);
                         }else {
-                            business_image.setBackgroundColor(context.getResources().getColor(R.color.user_change_status));
+                            business_image.setBackgroundColor(ContextCompat.getColor(context, R.color.user_change_status));
                         }
 
                         cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));

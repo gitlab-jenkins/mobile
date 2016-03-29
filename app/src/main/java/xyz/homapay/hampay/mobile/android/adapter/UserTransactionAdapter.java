@@ -1,6 +1,7 @@
 package xyz.homapay.hampay.mobile.android.adapter;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -66,13 +67,13 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
 
             if (transactionDTO.getTransactionType() == TransactionType.CREDIT){
                 viewHolder.status_text.setText(context.getString(R.string.credit));
-                viewHolder.status_text.setTextColor(convertView.getResources().getColor(R.color.register_btn_color));
+                viewHolder.status_text.setTextColor(ContextCompat.getColor(context, R.color.register_btn_color));
                 viewHolder.status_icon.setImageResource(R.drawable.arrow_r);
                 viewHolder.user_fee_ll.setVisibility(View.GONE);
             }
             else if (transactionDTO.getTransactionType() == TransactionType.DEBIT){
                 viewHolder.status_text.setText(context.getString(R.string.debit));
-                viewHolder.status_text.setTextColor(convertView.getResources().getColor(R.color.user_change_status));
+                viewHolder.status_text.setTextColor(ContextCompat.getColor(context, R.color.user_change_status));
                 viewHolder.status_icon.setImageResource(R.drawable.arrow_p);
                 viewHolder.user_fee_ll.setVisibility(View.VISIBLE);
             }
@@ -80,14 +81,14 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
         }else if (transactionDTO.getTransactionStatus() == TransactionStatus.PENDING) {
             viewHolder.reject_message.setVisibility(View.GONE);
             viewHolder.status_text.setText(context.getString(R.string.pending));
-            viewHolder.status_text.setTextColor(convertView.getResources().getColor(R.color.pending_transaction));
+            viewHolder.status_text.setTextColor(ContextCompat.getColor(context, R.color.pending_transaction));
             viewHolder.status_icon.setImageResource(R.drawable.pending);
             viewHolder.user_fee_ll.setVisibility(View.VISIBLE);
         }
         else {
             viewHolder.reject_message.setVisibility(View.VISIBLE);
             viewHolder.status_text.setText(context.getString(R.string.fail));
-            viewHolder.status_text.setTextColor(convertView.getResources().getColor(R.color.colorPrimary));
+            viewHolder.status_text.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
             viewHolder.status_icon.setImageResource(R.drawable.arrow_f);
             viewHolder.user_fee_ll.setVisibility(View.GONE);
         }

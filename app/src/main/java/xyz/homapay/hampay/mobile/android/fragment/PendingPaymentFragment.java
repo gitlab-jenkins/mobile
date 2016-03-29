@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -177,7 +178,7 @@ public class PendingPaymentFragment extends Fragment {
                             }
                         });
 
-                snackbar.setActionTextColor(getResources().getColor(R.color.colorPrimary));
+                snackbar.setActionTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
 
                 View sbView = snackbar.getView();
                 TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);

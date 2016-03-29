@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -44,7 +45,7 @@ public class ButtonRectangle extends Button {
 		// Color by resource
 		int bacgroundColor = attrs.getAttributeResourceValue(ANDROIDXML,"background",-1);
 		if(bacgroundColor != -1){
-			setBackgroundColor(getResources().getColor(bacgroundColor));
+			setBackgroundColor(ContextCompat.getColor(getContext(), bacgroundColor));
 		}else{
 			// Color by hexadecimal
 			// Color by hexadecimal
