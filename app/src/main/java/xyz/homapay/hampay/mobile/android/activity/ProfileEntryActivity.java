@@ -141,7 +141,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
 
         activity = this;
 
-        deviceInfo = new DeviceInfo(context);
+        deviceInfo = new DeviceInfo(activity);
 
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
@@ -372,7 +372,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
         emailTextWatcher = new EmailTextWatcher(emailValue, emailIcon);
 
         emailValue.addTextChangedListener(emailTextWatcher);
-        emailValue.setText(new DeviceInfo(context).getDeviceEmailAccount());
+        emailValue.setText(new DeviceInfo(activity).getDeviceEmailAccount());
 
         keepOn_button = (ButtonRectangle) findViewById(R.id.keepOn_button);
         keepOn_button.setOnClickListener(new View.OnClickListener() {
@@ -409,7 +409,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
                     registrationEntryRequest.setEmail(emailValue.getText().toString());
                     registrationEntryRequest.setNationalCode(new PersianEnglishDigit(nationalCodeValue.getText().toString()).P2E());
 
-                    requestRegistrationEntry = new RequestRegistrationEntry(context,
+                    requestRegistrationEntry = new RequestRegistrationEntry(activity,
                             new RequestRegistrationEntryTaskCompleteListener(),
                             latitute + "," + longitude);
 
@@ -561,7 +561,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
                             .build());
                 }
                 else {
-                    requestRegistrationEntry = new RequestRegistrationEntry(context,
+                    requestRegistrationEntry = new RequestRegistrationEntry(activity,
                             new RequestRegistrationEntryTaskCompleteListener(),
                             latitute + "," + longitude);
                     new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest,
@@ -575,7 +575,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
                             .build());
                 }
             }else {
-                requestRegistrationEntry = new RequestRegistrationEntry(context, new RequestRegistrationEntryTaskCompleteListener(),
+                requestRegistrationEntry = new RequestRegistrationEntry(activity, new RequestRegistrationEntryTaskCompleteListener(),
                         latitute + "," + longitude);
                 new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest,
                         Constants.LOCAL_ERROR_CODE,

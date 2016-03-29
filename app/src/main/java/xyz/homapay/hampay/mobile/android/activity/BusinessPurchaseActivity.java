@@ -68,8 +68,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
     private Context context;
     private Activity activity;
 
-    private int selectedType = 1;
-
     private ListView businessListView;
     private LinearLayout find_business_purchase;
 
@@ -135,9 +133,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
 
     private Dialog dialog;
 
-    Long MaxXferAmount = 0L;
-    Long MinXferAmount = 0L;
-
     private RelativeLayout search_layout;
 
     public void backActionBar(View view){
@@ -193,7 +188,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                 businessListView.setVisibility(View.VISIBLE);
                 find_business_purchase.setVisibility(View.GONE);
                 search_layout.setVisibility(View.VISIBLE);
-                selectedType = 1;
             }
         });
 
@@ -204,7 +198,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                 businessListView.setVisibility(View.GONE);
                 find_business_purchase.setVisibility(View.VISIBLE);
                 search_layout.setVisibility(View.GONE);
-                selectedType = 2;
             }
         });
 
@@ -291,9 +284,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-
-        MaxXferAmount = prefs.getLong(Constants.MAX_BUSINESS_XFER_AMOUNT, 0);
-        MinXferAmount = prefs.getLong(Constants.MIN_BUSINESS_XFER_AMOUNT, 0);
 
         hamPayBusinessesAdapter = new HamPayBusinessesAdapter(activity, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
 

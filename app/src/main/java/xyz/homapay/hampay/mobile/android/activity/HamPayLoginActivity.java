@@ -404,7 +404,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                     editor.putString(Constants.LOGIN_TOKEN_ID, successLoginResponse.getTokenId());
                     editor.commit();
                     tacRequest = new TACRequest();
-                    tacRequest.setDeviceId(new DeviceInfo(context).getAndroidId());
+                    tacRequest.setDeviceId(new DeviceInfo(activity).getAndroidId());
                     tacRequest.setAppVersion(new AppInfo(context).getVersionCode() + "");
                     requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
                     requestTAC.execute(tacRequest);
@@ -525,7 +525,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                 password = SecurityUtils.getInstance(this).
                         generatePassword(inputPassValue,
                                 memorableWord,
-                                new DeviceInfo(context).getAndroidId(),
+                                new DeviceInfo(activity).getAndroidId(),
                                 installationToken);
 
 //                password = "12345678";

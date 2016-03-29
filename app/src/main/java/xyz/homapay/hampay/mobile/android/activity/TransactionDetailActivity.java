@@ -169,14 +169,6 @@ public class TransactionDetailActivity extends AppCompatActivity implements View
     public void onClick(View v) {
 
         switch (v.getId()){
-            case R.id.pay_to_one_ll:
-                Intent intent = new Intent();
-                intent.setClass(TransactionDetailActivity.this, PayOneActivity.class);
-                intent.putExtra("contact_phone_no", transactionDTO.getPhoneNumber());
-                intent.putExtra("contact_name", transactionDTO.getPersonName());
-                startActivity(intent);
-                break;
-
             case R.id.send_message:
 
                 if (transactionDTO.getPhoneNumber() != null)

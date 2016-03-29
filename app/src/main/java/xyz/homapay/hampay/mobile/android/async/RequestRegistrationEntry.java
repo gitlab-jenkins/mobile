@@ -1,5 +1,6 @@
 package xyz.homapay.hampay.mobile.android.async;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 
@@ -22,11 +23,11 @@ public class RequestRegistrationEntry extends AsyncTask<RegistrationEntryRequest
 
     private static final String TAG = "RequestHttpRegistrationEntry";
 
-    private Context context;
+    private Activity context;
     private AsyncTaskCompleteListener<ResponseMessage<RegistrationEntryResponse>> listener;
     private String location;
 
-    public RequestRegistrationEntry(Context context, AsyncTaskCompleteListener<ResponseMessage<RegistrationEntryResponse>> listener, String location)
+    public RequestRegistrationEntry(Activity context, AsyncTaskCompleteListener<ResponseMessage<RegistrationEntryResponse>> listener, String location)
     {
         this.context = context;
         this.listener = listener;

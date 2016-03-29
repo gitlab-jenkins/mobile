@@ -203,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
 
 
-        databaseHelper = new DatabaseHelper(context);
+        databaseHelper = new DatabaseHelper(activity);
 
 //        List<LatestPurchase> latestPurchaseList = databaseHelper.getAllLatestPurchases();
 
@@ -603,7 +603,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 if (registerId != null) {
                     mobileRegistrationIdEntryRequest = new MobileRegistrationIdEntryRequest();
                     mobileRegistrationIdEntryRequest.setRegistrationId(registerId);
-                    mobileRegistrationIdEntryRequest.setDeviceId(new DeviceInfo(context).getAndroidId());
+                    mobileRegistrationIdEntryRequest.setDeviceId(new DeviceInfo(activity).getAndroidId());
                     mobileRegistrationIdEntryRequest.setRequestUUID(UUID.randomUUID().toString());
                     requestMobileRegistrationIdEntry = new RequestMobileRegistrationIdEntry(context, new RequestMobileRegistrationIdEntryTaskCompleteListener());
                     requestMobileRegistrationIdEntry.execute(mobileRegistrationIdEntryRequest);

@@ -1,5 +1,6 @@
 package xyz.homapay.hampay.mobile.android.Helper;
 
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -94,15 +95,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     DeviceInfo deviceInfo;
 
-    Context context;
+    Activity context;
 
-    public DatabaseHelper(Context context){
+    public DatabaseHelper(Activity context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
         this.context = context;
     }
 
-    public DatabaseHelper(Context context, String serverKey) {
+    public DatabaseHelper(Activity context, String serverKey) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
         this.context = context;

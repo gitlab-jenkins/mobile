@@ -2,6 +2,7 @@ package xyz.homapay.hampay.mobile.android.util;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -28,11 +29,11 @@ import java.util.Locale;
  */
 public class DeviceInfo {
 
-    Context context;
+    Activity context;
 
     TelephonyManager telephonyManager;
 
-    public DeviceInfo(Context context){
+    public DeviceInfo(Activity context){
 
         this.context = context;
         telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -87,7 +88,8 @@ public class DeviceInfo {
 
 
     public String getCpu_abi(){
-        return Build.CPU_ABI;
+//        return Build.CPU_ABI;
+        return "";
     }
 
     public String getDeviceAPI(){
@@ -100,9 +102,11 @@ public class DeviceInfo {
 
     public String getDisplaySize(){
 
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        return display.getWidth() + "," + display.getHeight();
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        context.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        int screenWidth = displaymetrics.widthPixels;
+        int screenHeight = displaymetrics.heightPixels;
+        return screenWidth + "," + screenHeight;
     }
 
     public String getDisplaymetrics(){
@@ -226,23 +230,6 @@ public class DeviceInfo {
         WifiManager manager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         WifiInfo info = manager.getConnectionInfo();
        return info.getMacAddress();
-    }
-
-    public String getNetworkIp(){
-        try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
-                NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress()) {
-                        String ip = Formatter.formatIpAddress(inetAddress.hashCode());
-
-                        return ip;
-                    }
-                }
-            }
-        } catch (SocketException ex) { }
-        return "";
     }
 
 }

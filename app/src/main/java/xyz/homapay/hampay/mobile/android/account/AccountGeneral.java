@@ -1,11 +1,5 @@
 package xyz.homapay.hampay.mobile.android.account;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Udini
- * Date: 20/03/13
- * Time: 18:11
- */
 public class AccountGeneral {
 
     /**

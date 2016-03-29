@@ -6,6 +6,7 @@ import android.graphics.*;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
+import android.support.v4.content.ContextCompat;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Interpolator;
 
@@ -645,7 +646,7 @@ public class SmoothProgressDrawable extends Drawable implements Animatable {
       Resources res = context.getResources();
       mInterpolator = new AccelerateInterpolator();
       mSectionsCount = res.getInteger(R.integer.spb_default_sections_count);
-      mColors = new int[]{res.getColor(R.color.spb_default_color)};
+      mColors = new int[]{ContextCompat.getColor(context, R.color.spb_default_color)};
       mSpeed = Float.parseFloat(res.getString(R.string.spb_default_speed));
       mProgressiveStartSpeed = mSpeed;
       mProgressiveStopSpeed = mSpeed;

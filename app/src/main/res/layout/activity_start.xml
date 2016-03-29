@@ -1,7 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:geekui="http://schemas.android.com/apk/res-auto"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -24,18 +22,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_centerInParent="true">
-
-        <!--<xyz.homapay.hampay.mobile.android.component.material.progressbar.ProgressView-->
-            <!--android:id="@+id/waitingProgress"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="4dp"-->
-            <!--android:layout_gravity="center"-->
-            <!--app:pv_autostart = "true"-->
-            <!--app:pv_circular="false"-->
-            <!--app:pv_progressStyle="@style/LinearProgressDrawableStyle"-->
-            <!--app:pv_progressMode="indeterminate"-->
-            <!--android:layout_margin="20dp"/>-->
-
 
         <RelativeLayout
             android:layout_width="wrap_content"

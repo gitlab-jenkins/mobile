@@ -20,10 +20,6 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
  */
 public class AboutFragment extends Fragment {
 
-
-    ListView guideListView;
-    GuideAdapter guideAdapter;
-
     public AboutFragment() {
         // Required empty public constructor
     }
@@ -43,10 +39,6 @@ public class AboutFragment extends Fragment {
         return rootView;
     }
 
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-    }
 
     @Override
     public void onDetach() {

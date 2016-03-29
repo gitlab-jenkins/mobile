@@ -142,7 +142,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         activity = RequestBusinessPayDetailActivity.this;
 
 
-        databaseHelper = new DatabaseHelper(context);
+        databaseHelper = new DatabaseHelper(activity);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();

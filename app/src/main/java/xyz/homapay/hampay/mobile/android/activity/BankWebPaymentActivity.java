@@ -35,7 +35,6 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
     String redirectedURL;
 
-    Activity activity;
 
     String postData;
 
@@ -65,8 +64,6 @@ public class BankWebPaymentActivity extends AppCompatActivity {
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
 
         Intent intent = getIntent();
-
-        activity = BankWebPaymentActivity.this;
 
         paymentInfoDTO = (PaymentInfoDTO)intent.getSerializableExtra(Constants.PAYMENT_INFO);
         purchaseInfoDTO = (PurchaseInfoDTO)intent.getSerializableExtra(Constants.PURCHASE_INFO);

@@ -46,11 +46,6 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
     ButtonRectangle pay_to_business_button;
     FacedTextView cancel_pay_to_business_button;
 
-
-    FacedTextView contact_name;
-    FacedEditText contact_message;
-    FacedTextView credit_value;
-    ImageView credit_value_icon;
     boolean intentContact = false;
     Context context;
     Activity activity;
@@ -61,8 +56,6 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
         finish();
     }
 
-    Long MaxXferAmount = 0L;
-    Long MinXferAmount = 0L;
 
     HamPayDialog hamPayDialog;
 
@@ -72,13 +65,10 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
     ImageView business_image;
 
     FacedTextView paymentPriceValue;
-    FacedTextView paymentVAT;
     FacedTextView paymentFeeValue;
     FacedTextView paymentTotalValue;
     FacedTextView cardNumberValue;
     FacedEditText pin2Value;
-
-    DatabaseHelper databaseHelper;
 
     PaymentInfoDTO paymentInfoDTO = null;
     PspInfoDTO pspInfoDTO = null;
@@ -118,20 +108,12 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
         context = this;
         activity = BusinessPaymentConfirmActivity.this;
-
-
-        databaseHelper = new DatabaseHelper(context);
-
         persianEnglishDigit = new PersianEnglishDigit();
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
         try {
-
-            MaxXferAmount = prefs.getLong(Constants.MAX_BUSINESS_XFER_AMOUNT, 0);
-            MinXferAmount = prefs.getLong(Constants.MIN_BUSINESS_XFER_AMOUNT, 0);
-
         }catch (Exception ex){
             Log.e("Error", ex.getStackTrace().toString());
         }
@@ -141,16 +123,9 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
         hamPayDialog = new HamPayDialog(activity);
 
-        credit_value = (FacedTextView)findViewById(R.id.credit_value);
-        credit_value_icon = (ImageView)findViewById(R.id.credit_value_icon);
-
-        contact_message = (FacedEditText)findViewById(R.id.contact_message);
-        contact_name = (FacedTextView)findViewById(R.id.contact_name);
-
         business_name = (FacedTextView)findViewById(R.id.business_name);
         business_image = (ImageView)findViewById(R.id.business_image);
         paymentPriceValue = (FacedTextView)findViewById(R.id.paymentPriceValue);
-        paymentVAT = (FacedTextView)findViewById(R.id.paymentVAT);
         paymentFeeValue = (FacedTextView)findViewById(R.id.paymentFeeValue);
         paymentTotalValue = (FacedTextView)findViewById(R.id.paymentTotalValue);
         cardNumberValue = (FacedTextView)findViewById(R.id.cardNumberValue);

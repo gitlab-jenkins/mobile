@@ -14,6 +14,7 @@ package xyz.homapay.hampay.mobile.android.component.slidinguppanel;
         import android.os.Parcel;
         import android.os.Parcelable;
         import android.support.annotation.NonNull;
+        import android.support.v4.content.ContextCompat;
         import android.support.v4.view.MotionEventCompat;
         import android.support.v4.view.ViewCompat;
         import android.util.AttributeSet;
@@ -370,9 +371,9 @@ public class SlidingUpPanelLayout extends ViewGroup {
         // If the shadow height is zero, don't show the shadow
         if (mShadowHeight > 0) {
             if (mIsSlidingUp) {
-                mShadowDrawable = getResources().getDrawable(R.drawable.above_shadow);
+                mShadowDrawable = ContextCompat.getDrawable(context, R.drawable.above_shadow);
             } else {
-                mShadowDrawable = getResources().getDrawable(R.drawable.below_shadow);
+                mShadowDrawable = ContextCompat.getDrawable(context, R.drawable.below_shadow);
             }
         } else {
             mShadowDrawable = null;

@@ -61,15 +61,12 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
     Activity activity;
 
     Long amountValue = 0l;
-    String businessMssage = "";
 
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
     private RequestBusinessPaymentConfirm requestBusinessPaymentConfirm;
     private BusinessPaymentConfirmRequest businessPaymentConfirmRequest;
-
-    FacedEditText pin2Value;
 
     Long MaxXferAmount = 0L;
     Long MinXferAmount = 0L;
@@ -78,12 +75,7 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
 
     Tracker hamPayGaTracker;
 
-    DeviceInfo deviceInfo;
-
     private BusinessDTO businessDTO;
-
-
-    FacedTextView cardNumberValue;
 
     public void backActionBar(View view){
         finish();
@@ -126,9 +118,6 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
-
-        deviceInfo = new DeviceInfo(context);
-
         try {
             MaxXferAmount = prefs.getLong(Constants.MAX_BUSINESS_XFER_AMOUNT, 0);
             MinXferAmount = prefs.getLong(Constants.MIN_BUSINESS_XFER_AMOUNT, 0);
@@ -139,8 +128,6 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         businessDTO = (BusinessDTO)intent.getSerializableExtra(Constants.BUSINESS_INFO);
-
-        pin2Value = (FacedEditText)findViewById(R.id.pin2Value);
 
         business_name = (FacedTextView)findViewById(R.id.business_name);
         business_name.setText(persianEnglishDigit.E2P(businessDTO.getTitle() + " " + "(" +businessDTO.getCode() + ")"));
@@ -153,8 +140,6 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
         }else {
             business_image.setBackgroundColor(ContextCompat.getColor(context, R.color.user_change_status));
         }
-
-        cardNumberValue = (FacedTextView)findViewById(R.id.cardNumberValue);
 
         contact_message = (FacedEditText)findViewById(R.id.contact_message);
 
@@ -190,7 +175,6 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
                 if (creditValueValidation) {
 
                     amountValue = Long.parseLong(new PersianEnglishDigit(credit_value.getText().toString()).P2E().replace(",", ""));
-                    businessMssage = contact_message.getText().toString();
 
                     if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
                         Intent intent = new Intent();

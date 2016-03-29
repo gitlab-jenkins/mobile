@@ -62,8 +62,6 @@ public class AppSliderActivity extends AppCompatActivity {
     Tracker hamPayGaTracker;
 
     private Activity activity;
-//    private Activity destinationActivity;
-    private String registeredActivityData = "";
 
     private Intent intent;
 
@@ -163,10 +161,6 @@ public class AppSliderActivity extends AppCompatActivity {
 
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
-
-
-        DeviceInfo deviceInfo = new DeviceInfo(this);
-
 
 
 
@@ -273,7 +267,7 @@ public class AppSliderActivity extends AppCompatActivity {
             }
         });
 
-        sliding_into_app.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        sliding_into_app.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -327,141 +321,83 @@ public class AppSliderActivity extends AppCompatActivity {
         });
 
 
-        registeredActivityData = prefs.getString(Constants.REGISTERED_ACTIVITY_DATA, "");
 
-//        if (registeredActivityData.length() != 0) {
-//            if (registeredActivityData.equalsIgnoreCase(ProfileEntryActivity.class.getName())) {
-//                destinationActivity = new ProfileEntryActivity();
-//            } else if (registeredActivityData.equalsIgnoreCase(VerificationActivity.class.getName())) {
-//                destinationActivity = new VerificationActivity();
-//            }
-//            else if (registeredActivityData.equalsIgnoreCase(ConfirmAccountNoActivity.class.getName())) {
-//                destinationActivity = new ConfirmAccountNoActivity();
-//            } else if (registeredActivityData.equalsIgnoreCase(ConfirmInfoActivity.class.getName())) {
-//                destinationActivity = new ConfirmInfoActivity();
-//            } else if (registeredActivityData.equalsIgnoreCase(RegVerifyAccountNoActivity.class.getName())) {
-//                destinationActivity = new RegVerifyAccountNoActivity();
-//            } else if (registeredActivityData.equalsIgnoreCase(PostRegVerifyAccountNoActivity.class.getName())) {
-//                destinationActivity = new PostRegVerifyAccountNoActivity();
-//            } else if (registeredActivityData.equalsIgnoreCase(PasswordEntryActivity.class.getName())) {
-//                destinationActivity = new PasswordEntryActivity();
-//            } else if (registeredActivityData.equalsIgnoreCase(MemorableWordEntryActivity.class.getName())) {
-//                destinationActivity = new MemorableWordEntryActivity();
-//            }
-//
-//            new HamPayDialog(activity).showResumeRegisterationDialog(destinationActivity);
-//
-//
-//        }
+        if (prefs.getBoolean(Constants.REGISTERED_USER, false)) {
 
-//        else {
-            if (prefs.getBoolean(Constants.REGISTERED_USER, false)) {
+            RelativeLayout hampay_login_splash = (RelativeLayout) findViewById(R.id.hampay_login_splash);
+            hampay_login_splash.setVisibility(View.VISIBLE);
 
-                RelativeLayout hampay_login_splash = (RelativeLayout) findViewById(R.id.hampay_login_splash);
-                hampay_login_splash.setVisibility(View.VISIBLE);
+            Thread thread = new Thread() {
+                public void run() {
 
-                Thread thread = new Thread() {
-                    public void run() {
-
-                        try {
-                            launchAppCount = prefs.getLong(Constants.LAUNCH_APP_COUNT, 0);
-                            editor.putLong(Constants.LAUNCH_APP_COUNT, launchAppCount + 1).commit();
-                            if ((launchAppCount % 10) == 0 || prefs.getBoolean(Constants.FORCE_FETCH_ILLEGAL_APPS, false)) {
-                                illegalAppListRequest = new IllegalAppListRequest();
-                                requestIllegalAppList = new RequestIllegalAppList(activity, new RequestIllegalAppListTaskCompleteListener());
-                                requestIllegalAppList.execute(illegalAppListRequest);
-                            }else {
-                                sleep(2 * 1000);
-                                intent.setClass(AppSliderActivity.this, HamPayLoginActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                finish();
-                                startActivity(intent);
-                            }
-
-                        } catch (Exception e) {
+                    try {
+                        launchAppCount = prefs.getLong(Constants.LAUNCH_APP_COUNT, 0);
+                        editor.putLong(Constants.LAUNCH_APP_COUNT, launchAppCount + 1).commit();
+                        if ((launchAppCount % 10) == 0 || prefs.getBoolean(Constants.FORCE_FETCH_ILLEGAL_APPS, false)) {
+                            illegalAppListRequest = new IllegalAppListRequest();
+                            requestIllegalAppList = new RequestIllegalAppList(activity, new RequestIllegalAppListTaskCompleteListener());
+                            requestIllegalAppList.execute(illegalAppListRequest);
+                        }else {
+                            sleep(2 * 1000);
+                            intent.setClass(AppSliderActivity.this, HamPayLoginActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            finish();
+                            startActivity(intent);
                         }
+
+                    } catch (Exception e) {
                     }
-                };
-                thread.start();
-
-            } else {
-
-                image_splash = (ImageView) findViewById(R.id.image_splash);
-                intro_icon = (ImageView) findViewById(R.id.intro_icon);
-
-                fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.splash_fadein);
-                splashLogoAnimation = AnimationUtils.loadAnimation(this, R.anim.splash_logo);
-                fadeInAnimation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        intro_icon.setVisibility(View.GONE);
-                        sliding_into_app.setOnTouchListener(null);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                fadeInAnimation.setFillAfter(false);
-                fadeInAnimation.setRepeatMode(0);
-                fadeInAnimation.setFillAfter(true);
-                image_splash.startAnimation(fadeInAnimation);
-
-                splashLogoAnimation.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        intro_icon.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-                intro_icon.startAnimation(splashLogoAnimation);
-            }
-//        }
-    }
-
-
-    public void getRegId() {
-        new AsyncTask<Void, Void, String>() {
-            @Override
-            protected String doInBackground(Void... params) {
-                String msg = "";
-                try {
-                    if (gcm == null) {
-                        gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
-                    }
-                    regid = gcm.register(PROJECT_NUMBER);
-                    msg = "Device registered, registration ID=" + regid;
-                    Log.e("GCM", msg);
-
-                } catch (IOException ex) {
-                    msg = "Error :" + ex.getMessage();
-
-                }catch (NullPointerException ex){
-                    msg = "Error :" + ex.getMessage();
                 }
-                return msg;
-            }
+            };
+            thread.start();
 
-            @Override
-            protected void onPostExecute(String msg) {
-                Log.e("GCM", msg);
-            }
-        }.execute(null, null, null);
+        } else {
+
+            image_splash = (ImageView) findViewById(R.id.image_splash);
+            intro_icon = (ImageView) findViewById(R.id.intro_icon);
+
+            fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.splash_fadein);
+            splashLogoAnimation = AnimationUtils.loadAnimation(this, R.anim.splash_logo);
+            fadeInAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    intro_icon.setVisibility(View.GONE);
+                    sliding_into_app.setOnTouchListener(null);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            fadeInAnimation.setFillAfter(false);
+            fadeInAnimation.setRepeatMode(0);
+            fadeInAnimation.setFillAfter(true);
+            image_splash.startAnimation(fadeInAnimation);
+
+            splashLogoAnimation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    intro_icon.setVisibility(View.GONE);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            intro_icon.startAnimation(splashLogoAnimation);
+        }
     }
 
 

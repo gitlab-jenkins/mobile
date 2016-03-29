@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Vibrator;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -530,57 +531,57 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                 case 0:
                     if (digit.equalsIgnoreCase("d")) {
                         input_digit_1.setText("");
-                        input_digit_1.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                        input_digit_1.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     } else {
                         input_digit_1.setText(persianEnglishDigit.E2P(digit));
                         input_digit_1.setBackgroundColor(Color.TRANSPARENT);
                     }
                     input_digit_2.setText("");
-                    input_digit_2.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_2.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     input_digit_3.setText("");
-                    input_digit_3.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_3.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     input_digit_4.setText("");
-                    input_digit_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_4.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     input_digit_5.setText("");
-                    input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_5.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     vibrator.vibrate(20);
                     break;
 
                 case 1:
                     if (digit.equalsIgnoreCase("d")) {
                         input_digit_2.setText("");
-                        input_digit_2.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                        input_digit_2.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     } else {
                         input_digit_2.setText(persianEnglishDigit.E2P(digit));
                         input_digit_2.setBackgroundColor(Color.TRANSPARENT);
                     }
                     input_digit_3.setText("");
-                    input_digit_3.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_3.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     input_digit_4.setText("");
-                    input_digit_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_4.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     input_digit_5.setText("");
-                    input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_5.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     vibrator.vibrate(20);
 
                     break;
                 case 2:
                     if (digit.equalsIgnoreCase("d")) {
                         input_digit_3.setText("");
-                        input_digit_3.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                        input_digit_3.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     } else {
                         input_digit_3.setText(persianEnglishDigit.E2P(digit));
                         input_digit_3.setBackgroundColor(Color.TRANSPARENT);
                     }
                     input_digit_4.setText("");
-                    input_digit_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_4.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     input_digit_5.setText("");
-                    input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_5.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     vibrator.vibrate(20);
                     break;
                 case 3:
                     if (digit.equalsIgnoreCase("d")) {
                         input_digit_4.setText("");
-                        input_digit_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                        input_digit_4.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     } else {
                         input_digit_4.setText(persianEnglishDigit.E2P(digit));
                         input_digit_4.setBackgroundColor(Color.TRANSPARENT);
@@ -590,7 +591,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                 case 4:
                     if (digit.equalsIgnoreCase("d")) {
                         input_digit_5.setText("");
-                        input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                        input_digit_5.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     } else {
                         input_digit_5.setText(persianEnglishDigit.E2P(digit));
                         input_digit_5.setBackgroundColor(Color.TRANSPARENT);
@@ -600,7 +601,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                 case 5:
                     if (digit.equalsIgnoreCase("d")) {
                         input_digit_5.setText("");
-                        input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                        input_digit_5.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     } else {
                         input_digit_5.setText(persianEnglishDigit.E2P(digit));
                         input_digit_5.setBackgroundColor(Color.TRANSPARENT);
@@ -616,23 +617,23 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                 receivedSmsValue = receivedSmsValue.substring(0, receivedSmsValue.length() - 1);
                 if (receivedSmsValue.length() == 4){
                     input_digit_5.setText("");
-                    input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_5.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                 }
                 else if (receivedSmsValue.length() == 3){
                     input_digit_4.setText("");
-                    input_digit_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_4.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                 }
                 else if (receivedSmsValue.length() == 2){
                     input_digit_3.setText("");
-                    input_digit_3.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_3.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                 }
                 else if (receivedSmsValue.length() == 1){
                     input_digit_2.setText("");
-                    input_digit_2.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_2.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                 }
                 else if (receivedSmsValue.length() == 0){
                     input_digit_1.setText("");
-                    input_digit_1.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_1.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                 }
             }
         }

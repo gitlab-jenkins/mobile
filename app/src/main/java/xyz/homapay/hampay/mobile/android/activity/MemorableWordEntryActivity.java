@@ -98,7 +98,7 @@ public class MemorableWordEntryActivity extends AppCompatActivity {
 
         bundle = getIntent().getExtras();
 
-        deviceInfo = new DeviceInfo(context);
+        deviceInfo = new DeviceInfo(activity);
 
         userEntryPassword = bundle.getString(Constants.USER_ENTRY_PASSWORD);
 
@@ -124,7 +124,7 @@ public class MemorableWordEntryActivity extends AppCompatActivity {
                 if (memorable_value.getText().toString().trim().length() != 0) {
                     registrationCredentialsRequest = new RegistrationCredentialsRequest();
                     registrationCredentialsRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
-                    registrationCredentialsRequest.setDeviceId(new DeviceInfo(getApplicationContext()).getAndroidId());
+                    registrationCredentialsRequest.setDeviceId(new DeviceInfo(activity).getAndroidId());
                     Uuid = UUID.randomUUID().toString();
                     registrationCredentialsRequest.setInstallationToken(Uuid);
                     registrationCredentialsRequest.setMemorableKey(memorable_value.getText().toString());

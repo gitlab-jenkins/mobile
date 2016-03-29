@@ -9,7 +9,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -63,8 +62,6 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
     private View payment_sep;
     private FacedTextView nullPendingText;
 
-
-    CoordinatorLayout coordinatorLayout;
 
     RequestPendingPurchase requestPendingPurchase;
     PendingPurchaseListRequest pendingPurchaseListRequest;
@@ -292,9 +289,6 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
             requestPendingPurchase.execute(pendingPurchaseListRequest);
         }
 
-
-        coordinatorLayout = (CoordinatorLayout)findViewById(R.id
-                .coordinatorLayout);
 
 
         pendingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

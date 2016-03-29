@@ -1,38 +1,30 @@
 package xyz.homapay.hampay.mobile.android.service;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-
-import br.com.goncalves.pugnotification.notification.PugNotification;
-import xyz.homapay.hampay.mobile.android.HamPayApplication;
-import xyz.homapay.hampay.mobile.android.R;
-import xyz.homapay.hampay.mobile.android.activity.AppSliderActivity;
-import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
-import xyz.homapay.hampay.mobile.android.activity.IndividualPaymentPendingActivity;
-import xyz.homapay.hampay.mobile.android.activity.InvoicePaymentPendingActivity;
-import xyz.homapay.hampay.mobile.android.activity.PendingPurchasePaymentActivity;
-import xyz.homapay.hampay.mobile.android.activity.RequestBusinessPayDetailActivity;
-import xyz.homapay.hampay.mobile.android.component.headsup.HeadsUp;
-import xyz.homapay.hampay.mobile.android.component.headsup.HeadsUpManager;
-import xyz.homapay.hampay.mobile.android.model.AppState;
-import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
-import xyz.homapay.hampay.mobile.android.receiver.GcmBroadcastReceiver;
-import xyz.homapay.hampay.mobile.android.util.Constants;
-import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
-
 import android.app.ActivityManager;
 import android.app.IntentService;
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.widget.Toast;
+
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.util.List;
+
+import br.com.goncalves.pugnotification.notification.PugNotification;
+import xyz.homapay.hampay.mobile.android.HamPayApplication;
+import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.activity.AppSliderActivity;
+import xyz.homapay.hampay.mobile.android.activity.InvoicePaymentPendingActivity;
+import xyz.homapay.hampay.mobile.android.activity.PendingPurchasePaymentActivity;
+import xyz.homapay.hampay.mobile.android.activity.RequestBusinessPayDetailActivity;
+import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
+import xyz.homapay.hampay.mobile.android.receiver.GcmBroadcastReceiver;
+import xyz.homapay.hampay.mobile.android.util.Constants;
 
 /**
  * Created by amir on 9/15/15.

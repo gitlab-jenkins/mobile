@@ -1,6 +1,5 @@
 package xyz.homapay.hampay.mobile.android.fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,36 +7,33 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import java.util.List;
+
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
 import xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
-import xyz.homapay.hampay.common.core.model.request.VerifyAccountRequest;
 import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
-import xyz.homapay.hampay.common.core.model.response.VerifyAccountResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.IntroIBANActivity;
 import xyz.homapay.hampay.mobile.android.activity.MainActivity;
-import xyz.homapay.hampay.mobile.android.activity.PayOneActivity;
-import xyz.homapay.hampay.mobile.android.activity.RequestPayBusinessListActivity;
 import xyz.homapay.hampay.mobile.android.activity.RequestBusinessPayDetailActivity;
+import xyz.homapay.hampay.mobile.android.activity.RequestPayBusinessListActivity;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.RequestUserProfile;
-import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
@@ -45,11 +41,7 @@ import xyz.homapay.hampay.mobile.android.component.material.RippleView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
-import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
-import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
-
-import java.util.List;
 
 /**
  * Created by amir on 6/5/15.
@@ -63,7 +55,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
     PersianEnglishDigit persianEnglishDigit;
 
-    ImageView user_image;
     FacedTextView user_name_text;
     FacedTextView user_account_no_text;
     FacedTextView user_bank_name;
@@ -72,8 +63,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     FacedTextView user_iban_value;
     FacedTextView user_iban_bank;
     FacedTextView user_national_code;
-    FacedTextView user_account_type;
-    FacedTextView user_account_title;
     LinearLayout selectedHampay;
     FacedTextView hampay_1;
     FacedTextView hampay_2;
@@ -83,10 +72,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     CircleImageView hampay_image_2;
     CircleImageView hampay_image_3;
     CircleImageView hampay_image_4;
-    LinearLayout hampay_1_ll;
-    LinearLayout hampay_2_ll;
-    LinearLayout hampay_3_ll;
-    LinearLayout hampay_4_ll;
 
     RippleView digit_1;
     RippleView digit_2;
@@ -110,9 +95,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
     ButtonRectangle business_request_pay_button;
 
-    RequestImageDownloader requestImageDownloader;
-//    CircleImageView image_profile;
-
     HamPayDialog hamPayDialog;
 
     ButtonRectangle intro_account_button;
@@ -128,9 +110,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     UserProfileRequest userProfileRequest;
 
     Tracker hamPayGaTracker;
-
-    byte[] mobileKey;
-    String serverKey;
 
     DeviceInfo deviceInfo;
 
@@ -165,17 +144,9 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
             this.userProfileDTO = (UserProfileDTO) bundle.getSerializable(Constants.USER_PROFILE_DTO);
         }
 
-        deviceInfo = new DeviceInfo(context);
+        deviceInfo = new DeviceInfo(getActivity());
 
         try {
-
-            mobileKey = SecurityUtils.getInstance(context).generateSHA_256(
-                    deviceInfo.getMacAddress(),
-                    deviceInfo.getIMEI(),
-                    deviceInfo.getAndroidId());
-
-            serverKey = prefs.getString(Constants.USER_ID_TOKEN, "");
-
             editor.putLong(Constants.MAX_BUSINESS_XFER_AMOUNT, this.userProfileDTO.getMaxBusinessXferAmount());
             editor.putLong(Constants.MIN_BUSINESS_XFER_AMOUNT, this.userProfileDTO.getMinBusinessXferAmount());
             editor.putLong(Constants.MAX_INDIVIDUAL_XFER_AMOUNT, this.userProfileDTO.getMaxIndividualXferAmount());
@@ -257,15 +228,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         hamPayDialog = new HamPayDialog(getActivity());
 
         selectedHampay = (LinearLayout)rootView.findViewById(R.id.selectedHampay);
-        hampay_1_ll = (LinearLayout)rootView.findViewById(R.id.hampay_1_ll);
-        hampay_2_ll = (LinearLayout)rootView.findViewById(R.id.hampay_2_ll);
-        hampay_3_ll = (LinearLayout)rootView.findViewById(R.id.hampay_3_ll);
-        hampay_4_ll = (LinearLayout)rootView.findViewById(R.id.hampay_4_ll);
-        hampay_1_ll.setOnClickListener(this);
-        hampay_2_ll.setOnClickListener(this);
-        hampay_3_ll.setOnClickListener(this);
-        hampay_4_ll.setOnClickListener(this);
-
 
         intro_account_button = (ButtonRectangle)rootView.findViewById(R.id.intro_account_button);
         intro_account_button.setOnClickListener(new View.OnClickListener() {
@@ -286,8 +248,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         user_iban_value = (FacedTextView)rootView.findViewById(R.id.user_iban_value);
         user_iban_bank = (FacedTextView)rootView.findViewById(R.id.user_iban_bank);
         user_national_code = (FacedTextView)rootView.findViewById(R.id.user_national_code);
-        user_account_type = (FacedTextView)rootView.findViewById(R.id.user_account_type);
-        user_account_title = (FacedTextView)rootView.findViewById(R.id.user_account_title);
 
         hampay_1 = (FacedTextView)rootView.findViewById(R.id.hampay_1);
         hampay_2 = (FacedTextView)rootView.findViewById(R.id.hampay_2);
@@ -323,11 +283,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-    }
-
-    @Override
     public void onDetach() {
         super.onDetach();
     }
@@ -338,31 +293,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         Intent intent = new Intent();
 
         switch (v.getId()){
-            case R.id.hampay_1_ll:
-                intent = new Intent(getActivity(), PayOneActivity.class);
-                intent.putExtra(Constants.CONTACT_PHONE_NO, userProfileDTO.getSelectedContacts().get(0).getCellNumber());
-                intent.putExtra(Constants.CONTACT_NAME, userProfileDTO.getSelectedContacts().get(0).getDisplayName());
-                startActivity(intent);
-                break;
-            case R.id.hampay_2_ll:
-                intent = new Intent(getActivity(), PayOneActivity.class);
-                intent.putExtra(Constants.CONTACT_PHONE_NO, userProfileDTO.getSelectedContacts().get(1).getCellNumber());
-                intent.putExtra(Constants.CONTACT_NAME, userProfileDTO.getSelectedContacts().get(1).getDisplayName());
-                startActivity(intent);
-                break;
-            case R.id.hampay_3_ll:
-                intent = new Intent(getActivity(), PayOneActivity.class);
-                intent.putExtra(Constants.CONTACT_PHONE_NO, userProfileDTO.getSelectedContacts().get(2).getCellNumber());
-                intent.putExtra(Constants.CONTACT_NAME, userProfileDTO.getSelectedContacts().get(2).getDisplayName());
-                startActivity(intent);
-                break;
-            case R.id.hampay_4_ll:
-                intent = new Intent(getActivity(), PayOneActivity.class);
-                intent.putExtra(Constants.CONTACT_PHONE_NO, userProfileDTO.getSelectedContacts().get(3).getCellNumber());
-                intent.putExtra(Constants.CONTACT_NAME, userProfileDTO.getSelectedContacts().get(3).getDisplayName());
-                startActivity(intent);
-                break;
-
             case R.id.activation_holder:
                 if (keyboard.getVisibility() != View.VISIBLE)
                     new Expand(keyboard).animate();
@@ -420,23 +350,20 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                 intent.setClass(context, RequestBusinessPayDetailActivity.class);
                 startActivity(intent);
                 input_digit_1.setText("");
-                input_digit_1.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                input_digit_1.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                 input_digit_2.setText("");
-                input_digit_2.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                input_digit_2.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                 input_digit_3.setText("");
-                input_digit_3.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                input_digit_3.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                 input_digit_4.setText("");
-                input_digit_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                input_digit_4.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                 input_digit_5.setText("");
-                input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                input_digit_5.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                 input_digit_6.setText("");
-                input_digit_6.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                input_digit_6.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                 break;
 
             case R.id.request_business_name:
-//                request_business_name.setTextColor(Color.WHITE);
-//                request_business_code.setTextColor(Color.BLACK);
-
                 intent.setClass(context, RequestPayBusinessListActivity.class);
                 startActivity(intent);
                 break;
@@ -457,89 +384,89 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                 case 0:
                     if (digit.equalsIgnoreCase("d")) {
                         input_digit_1.setText("");
-                        input_digit_1.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                        input_digit_1.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     } else {
                         input_digit_1.setText(persianEnglishDigit.E2P(digit));
                         input_digit_1.setBackgroundColor(Color.TRANSPARENT);
                     }
                     input_digit_2.setText("");
-                    input_digit_2.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_2.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     input_digit_3.setText("");
-                    input_digit_3.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_3.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     input_digit_4.setText("");
-                    input_digit_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_4.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     input_digit_5.setText("");
-                    input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_5.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     input_digit_6.setText("");
-                    input_digit_6.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_6.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     vibrator.vibrate(20);
                     break;
 
                 case 1:
                     if (digit.equalsIgnoreCase("d")) {
                         input_digit_2.setText("");
-                        input_digit_2.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                        input_digit_2.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     } else {
                         input_digit_2.setText(persianEnglishDigit.E2P(digit));
                         input_digit_2.setBackgroundColor(Color.TRANSPARENT);
                     }
                     input_digit_3.setText("");
-                    input_digit_3.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_3.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     input_digit_4.setText("");
-                    input_digit_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_4.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     input_digit_5.setText("");
-                    input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_5.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     input_digit_6.setText("");
-                    input_digit_6.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_6.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     vibrator.vibrate(20);
 
                     break;
                 case 2:
                     if (digit.equalsIgnoreCase("d")) {
                         input_digit_3.setText("");
-                        input_digit_3.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                        input_digit_3.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     } else {
                         input_digit_3.setText(persianEnglishDigit.E2P(digit));
                         input_digit_3.setBackgroundColor(Color.TRANSPARENT);
                     }
                     input_digit_4.setText("");
-                    input_digit_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_4.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     input_digit_5.setText("");
-                    input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_5.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     input_digit_6.setText("");
-                    input_digit_6.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_6.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     vibrator.vibrate(20);
                     break;
                 case 3:
                     if (digit.equalsIgnoreCase("d")) {
                         input_digit_4.setText("");
-                        input_digit_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                        input_digit_4.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     } else {
                         input_digit_4.setText(persianEnglishDigit.E2P(digit));
                         input_digit_4.setBackgroundColor(Color.TRANSPARENT);
                     }
                     input_digit_5.setText("");
-                    input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_5.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     input_digit_6.setText("");
-                    input_digit_6.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_6.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     vibrator.vibrate(20);
                     break;
                 case 4:
                     if (digit.equalsIgnoreCase("d")) {
                         input_digit_5.setText("");
-                        input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                        input_digit_5.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     } else {
                         input_digit_5.setText(persianEnglishDigit.E2P(digit));
                         input_digit_5.setBackgroundColor(Color.TRANSPARENT);
                     }
                     input_digit_6.setText("");
-                    input_digit_6.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_6.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     vibrator.vibrate(20);
                     break;
                 case 5:
                     if (digit.equalsIgnoreCase("d")) {
                         input_digit_6.setText("");
-                        input_digit_6.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                        input_digit_6.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                     } else {
                         input_digit_6.setText(persianEnglishDigit.E2P(digit));
                         input_digit_6.setBackgroundColor(Color.TRANSPARENT);
@@ -549,7 +476,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 //                case 6:
 //                    if (digit.equalsIgnoreCase("d")) {
 //                        input_digit_6.setText("");
-//                        input_digit_6.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+//                        input_digit_6.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
 //                    } else {
 //                        input_digit_6.setText(persianEnglishDigit.E2P(digit));
 //                        input_digit_6.setBackgroundColor(Color.TRANSPARENT);
@@ -565,27 +492,27 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                 inputPasswordValue = inputPasswordValue.substring(0, inputPasswordValue.length() - 1);
                 if (inputPasswordValue.length() == 5){
                     input_digit_6.setText("");
-                    input_digit_6.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_6.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                 }
                 if (inputPasswordValue.length() == 4){
                     input_digit_5.setText("");
-                    input_digit_5.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_5.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                 }
                 else if (inputPasswordValue.length() == 3){
                     input_digit_4.setText("");
-                    input_digit_4.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_4.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                 }
                 else if (inputPasswordValue.length() == 2){
                     input_digit_3.setText("");
-                    input_digit_3.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_3.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                 }
                 else if (inputPasswordValue.length() == 1){
                     input_digit_2.setText("");
-                    input_digit_2.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_2.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                 }
                 else if (inputPasswordValue.length() == 0){
                     input_digit_1.setText("");
-                    input_digit_1.setBackgroundDrawable(getResources().getDrawable(R.drawable.remember_edittext_bg));
+                    input_digit_1.setBackground(ContextCompat.getDrawable(context, R.drawable.remember_edittext_bg));
                 }
             }
         }
@@ -667,9 +594,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         }
     }
 
-
-    JalaliConvert jalaliConvert;
-
     private void fillUserProfile(UserProfileDTO userProfileDTO){
 
         editor.putLong(Constants.MAX_BUSINESS_XFER_AMOUNT, this.userProfileDTO.getMaxBusinessXferAmount());
@@ -677,8 +601,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         editor.putLong(Constants.MAX_INDIVIDUAL_XFER_AMOUNT, this.userProfileDTO.getMaxIndividualXferAmount());
         editor.putLong(Constants.MIN_INDIVIDUAL_XFER_AMOUNT, this.userProfileDTO.getMinIndividualXferAmount());
         editor.commit();
-
-        jalaliConvert = new JalaliConvert();
 
         user_name_text.setText(userProfileDTO.getFullName());
         MainActivity.user_account_name.setText(userProfileDTO.getFullName());
@@ -700,44 +622,5 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         if (contactDTOs.size() > 0){
             selectedHampay.setVisibility(View.VISIBLE);
         }
-
-        for (int contact = 0; contact < contactDTOs.size(); contact++){
-            switch (contact){
-                case 0:
-                    hampay_1_ll.setVisibility(View.VISIBLE);
-                    hampay_1.setText(contactDTOs.get(0).getDisplayName());
-                    if (contactDTOs.get(0).getContactImageId() != null) {
-                        user_image_url = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contactDTOs.get(0).getContactImageId();
-                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_1)).execute(user_image_url);
-                    }
-                    break;
-                case 1:
-                    hampay_2_ll.setVisibility(View.VISIBLE);
-                    hampay_2.setText(contactDTOs.get(1).getDisplayName());
-                    if (contactDTOs.get(1).getContactImageId() != null) {
-                        user_image_url = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contactDTOs.get(1).getContactImageId();
-                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_2)).execute(user_image_url);
-                    }
-                    break;
-                case 2:
-                    hampay_3_ll.setVisibility(View.VISIBLE);
-                    hampay_3.setText(contactDTOs.get(2).getDisplayName());
-                    if (contactDTOs.get(2).getContactImageId() != null) {
-                        user_image_url = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contactDTOs.get(2).getContactImageId();
-                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_3)).execute(user_image_url);
-                    }
-                    break;
-                case 3:
-                    hampay_4_ll.setVisibility(View.VISIBLE);
-                    hampay_4.setText(contactDTOs.get(3).getDisplayName());
-                    if (contactDTOs.get(3).getContactImageId() != null) {
-                        user_image_url = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contactDTOs.get(3).getContactImageId();
-                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_4)).execute(user_image_url);
-                    }
-                    break;
-
-            }
-        }
-
     }
 }
