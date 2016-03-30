@@ -301,7 +301,6 @@ public class ProfileEntryActivity extends AppCompatActivity {
                         cardNumberIcon.setImageResource(R.drawable.false_icon);
                     }
                 } else {
-
                     View view = getCurrentFocus();
                     if (view != null) {
                         InputMethodManager imm = (InputMethodManager) getSystemService(
@@ -342,7 +341,13 @@ public class ProfileEntryActivity extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+                if (cardNumberValue.getText().length() < 19){
+                    cardProfile.setText("");
+                    userNameFamily.setText("");
+                    userNameFamily.setEnabled(true);
+                }
+            }
         });
 
 
@@ -454,7 +459,9 @@ public class ProfileEntryActivity extends AppCompatActivity {
 
                     verifiedCardNumber = true;
 
-                    cardProfile.setText(cardProfileResponse.getFullName() + " - " + cardProfileResponse.getBankName());
+                    cardProfile.setText(cardProfileResponse.getBankName());
+                    userNameFamily.setText(cardProfileResponse.getFullName());
+                    userNameFamily.setEnabled(false);
 
                     byte[] bytes = new byte[0];
 

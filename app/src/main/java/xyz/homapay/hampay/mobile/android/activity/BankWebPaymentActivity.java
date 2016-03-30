@@ -82,7 +82,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
         bankWebView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 
         if (paymentInfoDTO != null) {
-            redirectedURL = Constants.IPG_URL + "/payment/saman-redirect/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
+            redirectedURL = Constants.IPG_URL + pspInfoDTO.getRedirectURL() + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
             postData =
                     "Amount=" + paymentInfoDTO.getAmount() +
                             "&TerminalId=" + pspInfoDTO.getTerminalID() +
@@ -91,7 +91,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                             "&RedirectURL=" + redirectedURL;
 
         }else if (purchaseInfoDTO != null){
-            redirectedURL = Constants.IPG_URL + "/purchase/saman-redirect/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
+            redirectedURL = Constants.IPG_URL + pspInfoDTO.getRedirectURL() + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
             postData =
                     "Amount=" + purchaseInfoDTO.getAmount() +
                             "&TerminalId=" + pspInfoDTO.getTerminalID() +
