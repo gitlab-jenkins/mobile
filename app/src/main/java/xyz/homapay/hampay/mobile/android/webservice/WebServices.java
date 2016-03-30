@@ -29,6 +29,7 @@ import xyz.homapay.hampay.common.core.model.request.ChangeMemorableWordRequest;
 import xyz.homapay.hampay.common.core.model.request.ChangePassCodeRequest;
 import xyz.homapay.hampay.common.core.model.request.ContactUsRequest;
 import xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
+import xyz.homapay.hampay.common.core.model.request.GetTokenForSamanPSPRequest;
 import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
 import xyz.homapay.hampay.common.core.model.request.IBANChangeRequest;
 import xyz.homapay.hampay.common.core.model.request.IBANConfirmationRequest;
@@ -65,6 +66,7 @@ import xyz.homapay.hampay.common.core.model.response.ChangeMemorableWordResponse
 import xyz.homapay.hampay.common.core.model.response.ChangePassCodeResponse;
 import xyz.homapay.hampay.common.core.model.response.ContactUsResponse;
 import xyz.homapay.hampay.common.core.model.response.ContactsHampayEnabledResponse;
+import xyz.homapay.hampay.common.core.model.response.GetTokenForSamanPSPResponse;
 import xyz.homapay.hampay.common.core.model.response.GetUserIdTokenResponse;
 import xyz.homapay.hampay.common.core.model.response.IBANChangeResponse;
 import xyz.homapay.hampay.common.core.model.response.IBANConfirmationResponse;
@@ -1172,6 +1174,37 @@ public class WebServices  {
         Gson gson = builder.getDatebuilder().create();
 
         responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<LatestInvoiceContactsResponse>>() {}.getType());
+
+        proxyService.closeConnection();
+
+        return responseMessage;
+    }
+
+    public ResponseMessage<GetTokenForSamanPSPResponse> getTokenForSamanPSP(GetTokenForSamanPSPRequest getTokenForSamanPSPRequest, int transactionType) throws IOException{
+
+        ResponseMessage<GetTokenForSamanPSPResponse> responseMessage = null;
+
+        if (transactionType == 0) {
+            url = new URL(serviceURL + "/purchase/saman-token");
+        }else if (transactionType == 1){
+            url = new URL(serviceURL + "/payment/saman-token");
+        }
+        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+
+        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
+
+        RequestMessage<GetTokenForSamanPSPRequest> message = new RequestMessage<>();
+        message.setRequestHeader(header);
+        getTokenForSamanPSPRequest.setRequestUUID(UUID.randomUUID().toString());
+        message.setService(getTokenForSamanPSPRequest);
+
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<GetTokenForSamanPSPRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
+
+        Gson gson = builder.getDatebuilder().create();
+
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<GetTokenForSamanPSPResponse>>() {}.getType());
 
         proxyService.closeConnection();
 
