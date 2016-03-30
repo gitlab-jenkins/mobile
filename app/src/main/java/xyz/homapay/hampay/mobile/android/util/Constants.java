@@ -38,7 +38,7 @@ public class Constants {
     public static final String REGISTERED_CELL_NUMBER = "registeredCellNumber";
     public static final String REGISTERED_BANK_ID = "registeredBankID";
     public static final String REGISTERED_BANK_ACCOUNT_NO_FORMAT = "registeredBankAccountNoFormat";
-    public static final String REGISTERED_ACCOUNT_NO = "registeredAccountNo";
+    public static final String REGISTERED_CARD_NO = "registeredCardNo";
     public static final String REGISTERED_NATIONAL_CODE = "registeredNatioalCode";
     public static final String REGISTERED_USER_ID_TOKEN = "registeredUserIdToken";
     public static final String REGISTERED_USER_EMAIL = "registeredUserEmail";
@@ -86,4 +86,5 @@ public class Constants {
     public static final String HAMPAY_CONTACT = "hamPayContact";
     public static final String ACTIVITY_RESULT = "result";
     public static final String CARD_NUMBER_FORMAT = "####-####-####-####";
+    public static final String NATIONAL_CODE_FORMAT = "###-######-#";
 }

@@ -2413,7 +2413,7 @@ public class HamPayDialog {
                     Intent intent = new Intent();
                     intent.setClass(activity, SMSVerificationActivity.class);
                     intent.putExtra(Constants.REGISTERED_CELL_NUMBER, cellNumber);
-                    intent.putExtra(Constants.REGISTERED_ACCOUNT_NO, cardNumber);
+                    intent.putExtra(Constants.REGISTERED_CARD_NO, cardNumber);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     activity.finish();
                     activity.startActivity(intent);

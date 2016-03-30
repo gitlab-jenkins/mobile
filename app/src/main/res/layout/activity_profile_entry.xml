@@ -313,7 +313,7 @@
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/black"
                         android:textSize="15dp"
-                        android:text="@string/bank_account_info"
+                        android:text="@string/bank_card_info"
                         android:layout_gravity="right"
                         android:layout_marginTop="16dp"/>
 
@@ -324,14 +324,14 @@
                         android:layout_marginTop="6dp">
 
                         <xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText
-                            android:id="@+id/accountNumberValue"
+                            android:id="@+id/cardNumberValue"
                             android:layout_width="fill_parent"
                             android:layout_height="fill_parent"
                             android:background="@android:color/transparent"
                             android:layout_marginLeft="48dp"
                             android:textSize="15dp"
                             android:inputType="number"
-                            android:hint="@string/account_no_entry"
+                            android:hint="@string/card_no_entry"
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
                             android:padding="8dp"
@@ -340,7 +340,7 @@
                             android:text="5859-4710-1018-8708"/>
 
                         <ImageView
-                            android:id="@+id/accountNumberIcon"
+                            android:id="@+id/cardNumberIcon"
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_centerVertical="true"
@@ -374,7 +374,7 @@
                             android:textSize="15dp"
                             android:inputType="number"
                             android:hint="@string/iter_code"
-                            android:maxLength="10"
+                            android:maxLength="12"
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
                             android:padding="8dp"

@@ -238,7 +238,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         bundle = getIntent().getExtras();
 
         cellNumber = bundle.getString(Constants.REGISTERED_CELL_NUMBER);
-        cardNumber = bundle.getString(Constants.REGISTERED_ACCOUNT_NO);
+        cardNumber = bundle.getString(Constants.REGISTERED_CARD_NO);
 
 
         activity = SMSVerificationActivity.this;

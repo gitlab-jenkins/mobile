@@ -23,18 +23,9 @@
 
     <string name="dear_user">عزیز</string>
 
-    <!--<string name="nav_item_transactions">تراکنشها</string>-->
-    <!--<string name="nav_item_pay_to_one">پرداخت به فرد</string>-->
-    <!--<string name="nav_item_pending_payment">صف پرداخت‌ها</string>-->
-    <!--<string name="nav_item_request_credit">درخواست وجه</string>-->
-    <!--<string name="nav_item_pay_to_business">پرداخت به کسب و کار</string>-->
     <string name="nav_item_settings">تنظیمات</string>
     <string name="nav_item_contacts_us">تماس با ما</string>
     <string name="nav_item_help">راهنما</string>
-    <!--<string name="nav_item_about">درباره ما</string>-->
-    <!--<string name="nav_item_rate">امتیاز دهی</string>-->
-    <!--<string name="nav_item_tc">شرایط استفاده</string>-->
-    <!--<string name="nav_item_privacy">حفظ حریم خصوصی</string>-->
     <string name="nav_item_exit">خروج</string>
 
     <string name="transaction_to">به: </string>
@@ -46,20 +37,12 @@
     <string name="transaction_message">پیام: </string>
     <string name="more_transaction_detail">جزئیات بیشتر: </string>
 
-    <!-- navigation drawer item labels  -->
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_main_fragmrnt</item>
         <item>@string/nav_item_account_detail</item>
-        <!--<item>@string/nav_item_transactions</item>-->
-        <!--<item>@string/nav_item_pending_payment</item>-->
-        <!--<item>@string/nav_item_request_credit</item>-->
         <item>@string/nav_item_settings</item>
         <item>@string/nav_item_contacts_us</item>
         <item>@string/nav_item_help</item>
-        <!--<item>@string/nav_item_about</item>-->
-        <!--<item>@string/nav_item_rate</item>-->
-        <!--<item>@string/nav_item_tc</item>-->
-        <!--<item>@string/nav_item_privacy</item>-->
         <item>@string/nav_item_exit</item>
     </string-array>
 
@@ -98,7 +81,7 @@
 
     <string name="fill_data">اطلاعات را کامل و دقیق وارد کنید.</string>
     <string name="msg_cellNumber_invalid">شماره همراه خود را صحیح وارد کنید</string>
-    <string name="msg_accountNo_invalid">شماره کارت خود را صحیح وارد نمایید</string>
+    <string name="msg_CardNo_invalid">شماره کارت خود را صحیح وارد نمایید</string>
     <string name="msg_nationalCode_invalid">کد ملی خود را صحیح وارد کنید</string>
     <string name="msg_invalid_email">ایمیل خود را صحیح وارد کنید</string>
     <string name="msg_family_invalid">نام و نام خانوادگی خود را صحیح وارد کنید</string>
@@ -129,7 +112,7 @@
     <string name="account_no">شماره کارت: </string>
     <string name="mobile_no">شماره همراه</string>
     <string name="cell_number">شماره همراه: </string>
-    <string name="account_no_entry">شماره کارت</string>
+    <string name="card_no_entry">شماره کارت</string>
     <string name="mobile_no_entry">شماره همراه </string>
     <string name="account_type">نوع حساب: </string>
     <string name="bank">بانک: </string>
@@ -141,7 +124,6 @@
     <string name="delegate_account">عادی</string>
 
     <string name="dialog_user_waiting">کاربر گرامی لطفا منتظر بمانید.</string>
-    <!--<string name="dialog_hampay_user_waiting">%1$s عزیز، لطفا منتظر باش</string>-->
     <string name="dialog_hampay_user_waiting">عزیز، لطفا منتظر باش</string>
 
 
@@ -209,7 +191,7 @@
     <string name="please_entry_info">لطفا اطلاعات خود را وارد نمایید.</string>
     <string name="phone_entry">لطفا شماره همراه خود را وارد نمایید</string>
     <string name="iran_prefix_cell_number">۰۹</string>
-    <string name="bank_account_info">اطلاعات بانکی</string>
+    <string name="bank_card_info">اطلاعات بانکی</string>
     <string name="bank_account_info_detail">لطفا اطلاعات زیر را وارد کنید</string>
     <string name="progress_dialog_message">در حال دريافت اطلاعات...</string>
 

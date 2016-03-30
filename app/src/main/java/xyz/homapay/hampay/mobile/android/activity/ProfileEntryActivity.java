@@ -59,11 +59,11 @@ public class ProfileEntryActivity extends AppCompatActivity {
     ImageView nationalCodeIcon;
     boolean nationalCodeIsValid = false;
 
-    FacedEditText accountNumberValue;
+    FacedEditText cardNumberValue;
     FacedTextView cardProfile;
-    boolean accountNumberIsValid = true;
+    boolean cardNumberIsValid = true;
     boolean verifiedCardNumber = false;
-    ImageView accountNumberIcon;
+    ImageView cardNumberIcon;
 
     ImageView userNameFamilyIcon;
     FacedEditText userNameFamily;
@@ -77,10 +77,16 @@ public class ProfileEntryActivity extends AppCompatActivity {
 
     Context context;
 
-    String rawAccountNumberValue = "";
-    int rawAccountNumberValueLength = 0;
-    int rawAccountNumberValueLengthOffset = 0;
-    String procAccountNumberValue = "";
+    String rawCardNumberValue = "";
+    int rawCardNumberValueLength = 0;
+    int rawCardNumberValueLengthOffset = 0;
+    String procCardNumberValue = "";
+
+
+    String rawNationalCode = "";
+    int rawNationalCodeLength = 0;
+    int rawNationalCodeLengthOffset = 0;
+    String procNationalCode = "";
 
     private CardProfileResponse cardProfileResponse;
 
@@ -199,9 +205,27 @@ public class ProfileEntryActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 nationalCodeValue.removeTextChangedListener(this);
+                if (nationalCodeValue.getText().toString().length() <= 12) {
+                    rawNationalCode = s.toString().replace("-", "");
+                    rawNationalCodeLength = rawNationalCode.length();
+                    rawNationalCodeLengthOffset = 0;
+                    procNationalCode = "";
+                    if (rawNationalCode.length() > 0) {
+                        for (int i = 0; i < rawNationalCodeLength; i++) {
+                            if (Constants.NATIONAL_CODE_FORMAT.charAt(i + rawNationalCodeLengthOffset) == '-') {
+                                procNationalCode += "-" + rawNationalCode.charAt(i);
+                                rawNationalCodeLengthOffset++;
+                            } else {
+                                procNationalCode += rawNationalCode.charAt(i);
+                            }
+                        }
+                        procNationalCode = new PersianEnglishDigit(procNationalCode).E2P();
+                        nationalCodeValue.setText(procNationalCode);
+                        nationalCodeValue.setSelection(nationalCodeValue.getText().toString().length());
+                    }
+                }
 
-                nationalCodeValue.setText(new PersianEnglishDigit(s.toString()).E2P());
-                nationalCodeValue.setSelection(s.toString().length());
+
                 nationalCodeValue.addTextChangedListener(this);
             }
 
@@ -214,8 +238,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-
-                    if (new NationalCodeVerification(nationalCodeValue.getText().toString()).isValidCode()) {
+                    if (new NationalCodeVerification(nationalCodeValue.getText().toString().replaceAll("-", "")).isValidCode()) {
                         nationalCodeIcon.setImageResource(R.drawable.right_icon);
                         nationalCodeIsValid = true;
                     } else {
@@ -231,15 +254,11 @@ public class ProfileEntryActivity extends AppCompatActivity {
         userNameFamily.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-
                 if (!hasFocus) {
-
                     userNameFamilyIsValid = true;
-
                     if (userNameFamily.getText().toString().length() == 0){
                         userNameFamilyIsValid = false;
                         userNameFamilyIcon.setImageResource(R.drawable.false_icon);
-
                     }else {
                         userNameFamilyIsValid = true;
                         userNameFamilyIcon.setImageResource(R.drawable.right_icon);
@@ -248,41 +267,40 @@ public class ProfileEntryActivity extends AppCompatActivity {
             }
         });
 
-        accountNumberValue = (FacedEditText)findViewById(R.id.accountNumberValue);
+        cardNumberValue = (FacedEditText)findViewById(R.id.cardNumberValue);
         cardProfile = (FacedTextView)findViewById(R.id.cardProfile);
-        accountNumberIcon = (ImageView)findViewById(R.id.accountNumberIcon);
-        accountNumberValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        cardNumberIcon = (ImageView)findViewById(R.id.cardNumberIcon);
+        cardNumberValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
 
                 if (!hasFocus) {
 
-                    accountNumberIsValid = true;
+                    cardNumberIsValid = true;
 
                     String splitedFormat[] = Constants.CARD_NUMBER_FORMAT.split("-");
-                    String splitedAccountNo[] = accountNumberValue.getText().toString().split("-");
+                    String splitedCardNo[] = cardNumberValue.getText().toString().split("-");
 
-                    if (splitedAccountNo.length != splitedFormat.length) {
-                        accountNumberIsValid = false;
+                    if (splitedCardNo.length != splitedFormat.length) {
+                        cardNumberIsValid = false;
 
                     } else {
-                        for (int i = 0; i < splitedAccountNo.length; i++) {
-                            if (splitedAccountNo[i].length() != splitedFormat[i].length()) {
-                                accountNumberIsValid = false;
+                        for (int i = 0; i < splitedCardNo.length; i++) {
+                            if (splitedCardNo[i].length() != splitedFormat[i].length()) {
+                                cardNumberIsValid = false;
                             }
                         }
                     }
 
-                    if (accountNumberIsValid) {
+                    if (cardNumberIsValid) {
                         cardProfileRequest = new CardProfileRequest();
-                        cardProfileRequest.setCardNumber(new PersianEnglishDigit().P2E(accountNumberValue.getText().toString()));
+                        cardProfileRequest.setCardNumber(new PersianEnglishDigit().P2E(cardNumberValue.getText().toString()));
                         requestCardProfile = new RequestCardProfile(activity, new RequestCardProfileTaskCompleteListener());
                         requestCardProfile.execute(cardProfileRequest);
                     } else {
-                        accountNumberIcon.setImageResource(R.drawable.false_icon);
+                        cardNumberIcon.setImageResource(R.drawable.false_icon);
                     }
-                }
-                else{
+                } else {
 
                     View view = getCurrentFocus();
                     if (view != null) {
@@ -294,73 +312,38 @@ public class ProfileEntryActivity extends AppCompatActivity {
             }
         });
 
-
-        accountNumberValue.addTextChangedListener(new TextWatcher() {
+        cardNumberValue.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                accountNumberValue.removeTextChangedListener(this);
-                accountNumberValue.addTextChangedListener(this);
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                accountNumberValue.removeTextChangedListener(this);
-
-                if (accountNumberValue.getText().toString().length() <= 19) {
-
-                    rawAccountNumberValue = s.toString().replace("-", "");
-                    rawAccountNumberValueLength = rawAccountNumberValue.length();
-                    rawAccountNumberValueLengthOffset = 0;
-                    procAccountNumberValue = "";
-                    if (rawAccountNumberValue.length() > 0) {
-                        for (int i = 0; i < rawAccountNumberValueLength; i++) {
-                            if (Constants.CARD_NUMBER_FORMAT.charAt(i + rawAccountNumberValueLengthOffset) == '-') {
-                                procAccountNumberValue += "-" + rawAccountNumberValue.charAt(i);
-                                rawAccountNumberValueLengthOffset++;
+                cardNumberValue.removeTextChangedListener(this);
+                if (cardNumberValue.getText().toString().length() <= 19) {
+                    rawCardNumberValue = s.toString().replace("-", "");
+                    rawCardNumberValueLength = rawCardNumberValue.length();
+                    rawCardNumberValueLengthOffset = 0;
+                    procCardNumberValue = "";
+                    if (rawCardNumberValue.length() > 0) {
+                        for (int i = 0; i < rawCardNumberValueLength; i++) {
+                            if (Constants.CARD_NUMBER_FORMAT.charAt(i + rawCardNumberValueLengthOffset) == '-') {
+                                procCardNumberValue += "-" + rawCardNumberValue.charAt(i);
+                                rawCardNumberValueLengthOffset++;
                             } else {
-                                procAccountNumberValue += rawAccountNumberValue.charAt(i);
+                                procCardNumberValue += rawCardNumberValue.charAt(i);
                             }
                         }
-
-                        procAccountNumberValue = new PersianEnglishDigit(procAccountNumberValue).E2P();
-
-                        accountNumberValue.setText(procAccountNumberValue);
-                        accountNumberValue.setSelection(accountNumberValue.getText().toString().length());
+                        procCardNumberValue = new PersianEnglishDigit(procCardNumberValue).E2P();
+                        cardNumberValue.setText(procCardNumberValue);
+                        cardNumberValue.setSelection(cardNumberValue.getText().toString().length());
                     }
                 }
-                accountNumberValue.addTextChangedListener(this);
+                cardNumberValue.addTextChangedListener(this);
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-                accountNumberValue.removeTextChangedListener(this);
-                accountNumberValue.addTextChangedListener(this);
-            }
+            public void afterTextChanged(Editable s) {}
         });
-
-
-
-//        bankSelection = (RelativeLayout)findViewById(R.id.bankSelection);
-//        bankSelection.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                cellNumberValue.clearFocus();
-//                accountNumberValue.clearFocus();
-//                nationalCodeValue.clearFocus();
-//                bankSelection.requestFocus();
-//
-//                if (bankListResponse != null) {
-//                    if (bankListResponse.getBanks().size() > 0)
-//                        showListBankDialog();
-//                }else {
-//                    hamPayDialog.showWaitingdDialog("");
-//                    bankListRequest = new BankListRequest();
-//                    requestBankList = new RequestBankList(context, new RequestBanksTaskCompleteListener(true));
-//                    requestBankList.execute(bankListRequest);
-//                }
-//            }
-//        });
 
 
         emailValue = (FacedEditText)findViewById(R.id.emailValue);
@@ -375,7 +358,6 @@ public class ProfileEntryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
                 View view = getCurrentFocus();
                 if (view != null) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(
@@ -386,13 +368,13 @@ public class ProfileEntryActivity extends AppCompatActivity {
                 cellNumberValue.clearFocus();
                 userNameFamily.clearFocus();
                 nationalCodeValue.clearFocus();
-                accountNumberValue.clearFocus();
+                cardNumberValue.clearFocus();
 
 
                 if (cellNumberIsValid && nationalCodeIsValid && verifiedCardNumber
                         && cellNumberValue.getText().toString().length() > 0
                         && nationalCodeValue.getText().toString().length() > 0
-                        && accountNumberValue.getText().toString().length() > 0
+                        && cardNumberValue.getText().toString().length() > 0
                         && emailTextWatcher.isValid()) {
 
                     keepOn_button.setEnabled(false);
@@ -400,10 +382,10 @@ public class ProfileEntryActivity extends AppCompatActivity {
                     registrationEntryRequest = new RegistrationEntryRequest();
 
                     registrationEntryRequest.setCellNumber(new PersianEnglishDigit(getString(R.string.iran_prefix_cell_number) + cellNumberValue.getText().toString()).P2E());
-                    registrationEntryRequest.setCardNumber(new PersianEnglishDigit(accountNumberValue.getText().toString()).P2E());
+                    registrationEntryRequest.setCardNumber(new PersianEnglishDigit(cardNumberValue.getText().toString()).P2E());
                     registrationEntryRequest.setFullName(userNameFamily.getText().toString());
                     registrationEntryRequest.setEmail(emailValue.getText().toString());
-                    registrationEntryRequest.setNationalCode(new PersianEnglishDigit(nationalCodeValue.getText().toString()).P2E());
+                    registrationEntryRequest.setNationalCode(new PersianEnglishDigit(nationalCodeValue.getText().toString().replaceAll("-", "")).P2E());
 
                     requestRegistrationEntry = new RequestRegistrationEntry(activity,
                             new RequestRegistrationEntryTaskCompleteListener(),
@@ -424,10 +406,10 @@ public class ProfileEntryActivity extends AppCompatActivity {
                         userNameFamily.requestFocus();
                     }
 
-                    else if (accountNumberValue.getText().toString().length() == 0 || !verifiedCardNumber){
-                        Toast.makeText(context, getString(R.string.msg_accountNo_invalid), Toast.LENGTH_SHORT).show();
-                        accountNumberIcon.setImageResource(R.drawable.false_icon);
-                        accountNumberValue.requestFocus();
+                    else if (cardNumberValue.getText().toString().length() == 0 || !verifiedCardNumber){
+                        Toast.makeText(context, getString(R.string.msg_CardNo_invalid), Toast.LENGTH_SHORT).show();
+                        cardNumberIcon.setImageResource(R.drawable.false_icon);
+                        cardNumberValue.requestFocus();
                     }
 
                     else if (nationalCodeValue.getText().toString().length() == 0 || !nationalCodeIsValid){
@@ -479,7 +461,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
                     bytes = Base64.decode(cardProfileResponse.getBankLogo(), Base64.DEFAULT);
 
                     Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    accountNumberIcon.setImageBitmap(bitmap);
+                    cardNumberIcon.setImageBitmap(bitmap);
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Bank List")
@@ -530,7 +512,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
                     editor.putString(Constants.REGISTERED_CELL_NUMBER, new PersianEnglishDigit(getString(R.string.iran_prefix_cell_number) + cellNumberValue.getText().toString()).P2E());
                     editor.putString(Constants.REGISTERED_BANK_ID, selectedBankCode);
                     editor.putString(Constants.REGISTERED_USER_NAME, userNameFamily.getText().toString());
-                    editor.putString(Constants.REGISTERED_ACCOUNT_NO, accountNumberValue.getText().toString());
+                    editor.putString(Constants.REGISTERED_CARD_NO, cardNumberValue.getText().toString());
                     editor.putString(Constants.REGISTERED_NATIONAL_CODE, new PersianEnglishDigit(nationalCodeValue.getText().toString()).P2E());
                     editor.putString(Constants.REGISTERED_USER_ID_TOKEN, registrationEntryResponse.getService().getUserIdToken());
                     editor.putString(Constants.REGISTERED_USER_EMAIL, emailValue.getText().toString());
@@ -538,7 +520,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
 
 
                     hamPayDialog.smsConfirmDialog(getString(R.string.iran_prefix_cell_number) + cellNumberValue.getText().toString(),
-                            accountNumberValue.getText().toString());
+                            cardNumberValue.getText().toString());
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Registration Entry")
