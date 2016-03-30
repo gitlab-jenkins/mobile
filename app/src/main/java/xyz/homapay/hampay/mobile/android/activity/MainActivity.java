@@ -17,7 +17,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -29,7 +28,6 @@ import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
@@ -49,7 +47,6 @@ import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageVi
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.fragment.AboutFragment;
 import xyz.homapay.hampay.mobile.android.fragment.AccountDetailFragment;
-import xyz.homapay.hampay.mobile.android.fragment.CreditRequestFragment;
 import xyz.homapay.hampay.mobile.android.fragment.FragmentDrawer;
 import xyz.homapay.hampay.mobile.android.fragment.GuideFragment;
 import xyz.homapay.hampay.mobile.android.fragment.MainFragment;
@@ -68,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     private static String TAG = MainActivity.class.getSimpleName();
 
-//    private Toolbar mToolbar;
+    //    private Toolbar mToolbar;
     private FragmentDrawer drawerFragment;
 
     DrawerLayout drawerLayout;
@@ -163,8 +160,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         Intent intent = getIntent();
 
-        pendingPurchaseCode = bundle.getString(Constants.PENDING_PURCHASE_CODE, "");
-        pendingPaymentCode = bundle.getString(Constants.PENDING_PAYMENT_CODE, "");
+        pendingPurchaseCode = bundle.getString(Constants.PENDING_PURCHASE_CODE);
+        pendingPaymentCode = bundle.getString(Constants.PENDING_PAYMENT_CODE);
         pendingPurchaseCount = bundle.getInt(Constants.PENDING_PURCHASE_COUNT, 0);
         pendingPaymentCount = bundle.getInt(Constants.PENDING_PAYMENT_COUNT, 0);
 
@@ -509,22 +506,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         Fragment fragment;
         String title;
 
-        if (requestCode == 1024) {
-            if(resultCode == 1024){
-//                String result = data.getStringExtra("result");
-                fragment = new CreditRequestFragment();
-                title = getString(R.string.title_credit_request);
-                currentFragmet = 2;
-                if (fragment != null) {
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.container_body, fragment);
-                    fragmentTransaction.commit();
-                    fragment_title.setText(title);
-                }
 
-            }
-        }else if (resultCode == 1023){
+        if (resultCode == 1023){
             if(resultCode == 1023){
                 fragment = new AccountDetailFragment();
                 bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);

@@ -62,7 +62,6 @@ import xyz.homapay.hampay.common.core.model.request.TransactionListRequest;
 import xyz.homapay.hampay.common.core.model.request.UnlinkUserRequest;
 import xyz.homapay.hampay.common.core.model.request.UploadImageRequest;
 import xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
-import xyz.homapay.hampay.common.core.model.request.VerifyAccountRequest;
 import xyz.homapay.hampay.common.core.model.response.BusinessPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.ChangeEmailResponse;
 import xyz.homapay.hampay.common.core.model.response.ContactUsResponse;
@@ -334,13 +333,13 @@ public class HamPayDialog {
         dialog.show();
     }
 
-    public void showNoResultSearchDialog(){
+    public void showIncorrectBusinessValue(){
 
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_no_result, null);
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_incorrect_business_value, null);
 
-        FacedTextView retry_search = (FacedTextView) view.findViewById(R.id.retry_search);
+        FacedTextView retry_price = (FacedTextView) view.findViewById(R.id.retry_price);
 
-        retry_search.setOnClickListener(new View.OnClickListener() {
+        retry_price.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -352,10 +351,9 @@ public class HamPayDialog {
         dialog.show();
     }
 
+    public void showIncorrectInvoiceValue(){
 
-    public void showIncorrectPrice(){
-
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_incorrect, null);
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_incorrect_invoice_value, null);
 
         FacedTextView retry_price = (FacedTextView) view.findViewById(R.id.retry_price);
 

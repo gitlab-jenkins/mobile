@@ -185,14 +185,15 @@
     <string name="retry_search">باشه</string>
 
     <string name="incorrect_price">برای پرداخت خود مبلغ صحیحی را وارد نمایید</string>
+    <string name="incorrect_invoice_value">مبلغ مورد نظر فاکتور را وارد نمایید</string>
     <string name="retry_price">باشه</string>
 
     <string name="fail_sms_verification">شماره اعتبار سنجی وارد شده صحیح نمی‌باشد. لطفا از صحت شماره اطمینان حاصل کرده و شماره را مجدد وارد کنید.</string>
 
 
     <string name="start_activity_title">به شبکه هم‌پی خوش آمدید</string>
-    <string name="start_activity_text_1">پرداخت به افراد و کسب و کارها</string>
-    <string name="start_activity_text_2">با نرم‌افزار ساده و امن هم‌پی</string>
+    <string name="start_activity_text_1">تولید فاکتور برای فرد</string>
+    <string name="start_activity_text_2">پرداخت به کسب و کار</string>
     <string name="tc_privacy_text">با شرایط استفاده از نرم‌افزار هم‌پی و قوانین حفظ حریم خصوصی کاربر موافقم.</string>
     <string name="tc_privacy_confirm_text">تایید می‌کنم.</string>
 
@@ -207,6 +208,7 @@
     <string name="profile_entry">ورود مشخصات</string>
     <string name="please_entry_info">لطفا اطلاعات خود را وارد نمایید.</string>
     <string name="phone_entry">لطفا شماره همراه خود را وارد نمایید</string>
+    <string name="iran_prefix_cell_number">۰۹</string>
     <string name="bank_account_info">اطلاعات بانکی</string>
     <string name="bank_account_info_detail">لطفا اطلاعات زیر را وارد کنید</string>
     <string name="progress_dialog_message">در حال دريافت اطلاعات...</string>
@@ -235,7 +237,7 @@
     <string name="alert_connection_error_message">خطا در ارتباط با اينترنت. لطفا تنظيمات مربوط به شبکه را بازبينی کرده و دوباره تلاش نماييد.</string>
 
 
-    <string name="sms_verification_text">یک کد فعالسازی ۵ رقمی به شماره %1$s  پیامک خواهد شد.</string>
+    <string name="sms_verification_text">کد فعال‌سازی "هم‌پی" به شماره %1$s ارسال خواهد شد</string>
     <string name="sms_request">تایید</string>
     <string name="sms_cancel">انصراف</string>
     <string name="mobile_no_verification">تایید شماره همراه</string>
@@ -287,7 +289,7 @@
 
 
     <string name="remember_phrase">یادآوری</string>
-    <string name="remember_phrase_text">لطفا یک کلمه کوتاه به عنوان یادآوری رمز عبور وارد نمایید.</string>
+    <string name="remember_phrase_text">لطفا یک کلمه کوتاه به عنوان یادآوری رمز عبور خود معرفی نمایید</string>
     <string name="complete_registarion">تکمیل ثبت نام</string>
     <string name="complete_registarion_text_1">به شبکه هم‌پی خوش آمدید.</string>
     <string name="complete_registarion_text_2">حالا دوستانتان در شبکه هم‌پی تنها با شماره موبایلتان به شما پول می‌دهند.</string>
@@ -296,6 +298,7 @@
     <string name="current_memorable">کلمه یادآوری جاری خود را وارد کنید.</string>
     <string name="new_memorable">کلمه یادآوری جدید خود را وارد کنید.</string>
 
+    <string name="enter">ورورد</string>
     <string name="login_hampay">ورود به شبکه هم‌پی </string>
     <string name="login_hello">سلام: </string>
 
@@ -379,7 +382,7 @@
 
     <string name="pay_one_search_hint">نام یا شماره همراه دریافت کننده را وارد کنید</string>
 
-    <string name="keyboard_help">راهنما</string>
+    <string name="password_recovery">بازیابی</string>
 
     <string name="exit_app_text">آیا مایل به خروج از هم‌پی هستید؟</string>
     <string name="exit_app_yes">خارج می‌شوم </string>

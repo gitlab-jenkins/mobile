@@ -50,8 +50,6 @@ public class ProfileEntryActivity extends AppCompatActivity {
     Activity activity;
 
     ButtonRectangle keepOn_button;
-    //    RelativeLayout bankSelection;
-    Dialog bankSelectionDialog;
 
     FacedEditText cellNumberValue;
     ImageView cellNumberIcon;
@@ -65,7 +63,6 @@ public class ProfileEntryActivity extends AppCompatActivity {
     FacedTextView cardProfile;
     boolean accountNumberIsValid = true;
     boolean verifiedCardNumber = false;
-    String accountNumberFormat = "####-####-####-####";
     ImageView accountNumberIcon;
 
     ImageView userNameFamilyIcon;
@@ -180,8 +177,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
             public void onFocusChange(View v, boolean hasFocus) {
 
                 if (!hasFocus) {
-                    if (cellNumberValue.getText().toString().length() == 11
-                            && cellNumberValue.getText().toString().startsWith("۰۹")) {
+                    if (cellNumberValue.getText().toString().length() == 9) {
                         cellNumberIcon.setImageResource(R.drawable.right_icon);
                         cellNumberIsValid = true;
                     } else {
@@ -263,7 +259,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
 
                     accountNumberIsValid = true;
 
-                    String splitedFormat[] = accountNumberFormat.split("-");
+                    String splitedFormat[] = Constants.CARD_NUMBER_FORMAT.split("-");
                     String splitedAccountNo[] = accountNumberValue.getText().toString().split("-");
 
                     if (splitedAccountNo.length != splitedFormat.length) {
@@ -318,7 +314,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
                     procAccountNumberValue = "";
                     if (rawAccountNumberValue.length() > 0) {
                         for (int i = 0; i < rawAccountNumberValueLength; i++) {
-                            if (accountNumberFormat.charAt(i + rawAccountNumberValueLengthOffset) == '-') {
+                            if (Constants.CARD_NUMBER_FORMAT.charAt(i + rawAccountNumberValueLengthOffset) == '-') {
                                 procAccountNumberValue += "-" + rawAccountNumberValue.charAt(i);
                                 rawAccountNumberValueLengthOffset++;
                             } else {
@@ -403,7 +399,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
 
                     registrationEntryRequest = new RegistrationEntryRequest();
 
-                    registrationEntryRequest.setCellNumber(new PersianEnglishDigit(cellNumberValue.getText().toString()).P2E());
+                    registrationEntryRequest.setCellNumber(new PersianEnglishDigit(getString(R.string.iran_prefix_cell_number) + cellNumberValue.getText().toString()).P2E());
                     registrationEntryRequest.setCardNumber(new PersianEnglishDigit(accountNumberValue.getText().toString()).P2E());
                     registrationEntryRequest.setFullName(userNameFamily.getText().toString());
                     registrationEntryRequest.setEmail(emailValue.getText().toString());
@@ -531,9 +527,8 @@ public class ProfileEntryActivity extends AppCompatActivity {
             if (registrationEntryResponse != null) {
 
                 if (registrationEntryResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    editor.putString(Constants.REGISTERED_CELL_NUMBER, new PersianEnglishDigit(cellNumberValue.getText().toString()).P2E());
+                    editor.putString(Constants.REGISTERED_CELL_NUMBER, new PersianEnglishDigit(getString(R.string.iran_prefix_cell_number) + cellNumberValue.getText().toString()).P2E());
                     editor.putString(Constants.REGISTERED_BANK_ID, selectedBankCode);
-                    editor.putString(Constants.REGISTERED_BANK_ACCOUNT_NO_FORMAT, accountNumberFormat);
                     editor.putString(Constants.REGISTERED_USER_NAME, userNameFamily.getText().toString());
                     editor.putString(Constants.REGISTERED_ACCOUNT_NO, accountNumberValue.getText().toString());
                     editor.putString(Constants.REGISTERED_NATIONAL_CODE, new PersianEnglishDigit(nationalCodeValue.getText().toString()).P2E());
@@ -542,7 +537,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
                     editor.commit();
 
 
-                    hamPayDialog.smsConfirmDialog(cellNumberValue.getText().toString(),
+                    hamPayDialog.smsConfirmDialog(getString(R.string.iran_prefix_cell_number) + cellNumberValue.getText().toString(),
                             accountNumberValue.getText().toString());
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()

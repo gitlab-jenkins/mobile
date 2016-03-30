@@ -271,7 +271,9 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp">
+            android:layout_marginRight="12dp"
+            android:layout_gravity="center"
+            android:gravity="center">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
@@ -294,22 +296,6 @@
                 android:layout_alignParentRight="true"/>
 
         </RelativeLayout>
-
-
-
-
-        <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            geekui:customTypeface="fonts/iran_sans.ttf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/normal_text"
-            android:textSize="15dp"
-            android:gravity="right"
-            android:layout_marginRight="20dp"
-            android:layout_gravity="right"
-            android:text="@string/complete_registarion_text_2" />
-
-
 
     </LinearLayout>
 
@@ -340,7 +326,7 @@
             android:textSize="15dp"
             android:gravity="center"
             android:layout_gravity="center"
-            android:text="@string/login_hampay"
+            android:text="@string/enter"
             android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp"/>
 

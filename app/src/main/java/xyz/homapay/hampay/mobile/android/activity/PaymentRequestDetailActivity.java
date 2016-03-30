@@ -223,11 +223,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                 credit_value.clearFocus();
                 pay_to_one_button.setEnabled(false);
 
-
-
                 if (creditValueValidation) {
-
-
                     contactMssage = contact_message.getText().toString();
                     amountValue = Long.parseLong(new PersianEnglishDigit(credit_value.getText().toString()).P2E().replace(",", ""));
 
@@ -256,7 +252,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
 
 
                 }else {
-                    (new HamPayDialog(activity)).showIncorrectPrice();
+                    (new HamPayDialog(activity)).showIncorrectInvoiceValue();
                     pay_to_one_button.setEnabled(true);
                 }
             }

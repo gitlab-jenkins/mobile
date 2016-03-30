@@ -200,8 +200,7 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
                     }
 
                 }else {
-                    (new HamPayDialog(activity)).showIncorrectPrice();
-
+                    (new HamPayDialog(activity)).showIncorrectBusinessValue();
                 }
             }
         });
