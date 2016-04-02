@@ -29,7 +29,7 @@ import xyz.homapay.hampay.common.core.model.request.ChangeMemorableWordRequest;
 import xyz.homapay.hampay.common.core.model.request.ChangePassCodeRequest;
 import xyz.homapay.hampay.common.core.model.request.ContactUsRequest;
 import xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
-import xyz.homapay.hampay.common.core.model.request.GetTokenForSamanPSPRequest;
+import xyz.homapay.hampay.common.core.model.request.GetTokenFromPSPRequest;
 import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
 import xyz.homapay.hampay.common.core.model.request.IBANChangeRequest;
 import xyz.homapay.hampay.common.core.model.request.IBANConfirmationRequest;
@@ -66,7 +66,7 @@ import xyz.homapay.hampay.common.core.model.response.ChangeMemorableWordResponse
 import xyz.homapay.hampay.common.core.model.response.ChangePassCodeResponse;
 import xyz.homapay.hampay.common.core.model.response.ContactUsResponse;
 import xyz.homapay.hampay.common.core.model.response.ContactsHampayEnabledResponse;
-import xyz.homapay.hampay.common.core.model.response.GetTokenForSamanPSPResponse;
+import xyz.homapay.hampay.common.core.model.response.GetTokenFromPSPResponse;
 import xyz.homapay.hampay.common.core.model.response.GetUserIdTokenResponse;
 import xyz.homapay.hampay.common.core.model.response.IBANChangeResponse;
 import xyz.homapay.hampay.common.core.model.response.IBANConfirmationResponse;
@@ -92,8 +92,6 @@ import xyz.homapay.hampay.common.core.model.response.UnlinkUserResponse;
 import xyz.homapay.hampay.common.core.model.response.UploadImageResponse;
 import xyz.homapay.hampay.common.core.model.response.UserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
-import xyz.homapay.hampay.common.psp.model.request.RegisterCardRequest;
-import xyz.homapay.hampay.common.psp.model.response.RegisterCardResponse;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
@@ -1180,9 +1178,9 @@ public class WebServices  {
         return responseMessage;
     }
 
-    public ResponseMessage<GetTokenForSamanPSPResponse> getTokenForSamanPSP(GetTokenForSamanPSPRequest getTokenForSamanPSPRequest, int transactionType) throws IOException{
+    public ResponseMessage<GetTokenFromPSPResponse> getTokenFromPSP(GetTokenFromPSPRequest getTokenFromPSPRequest, int transactionType) throws IOException{
 
-        ResponseMessage<GetTokenForSamanPSPResponse> responseMessage = null;
+        ResponseMessage<GetTokenFromPSPResponse> responseMessage = null;
 
         if (transactionType == 0) {
             url = new URL(serviceURL + "/purchase/saman-token");
@@ -1193,18 +1191,18 @@ public class WebServices  {
 
         RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
 
-        RequestMessage<GetTokenForSamanPSPRequest> message = new RequestMessage<>();
+        RequestMessage<GetTokenFromPSPRequest> message = new RequestMessage<>();
         message.setRequestHeader(header);
-        getTokenForSamanPSPRequest.setRequestUUID(UUID.randomUUID().toString());
-        message.setService(getTokenForSamanPSPRequest);
+        getTokenFromPSPRequest.setRequestUUID(UUID.randomUUID().toString());
+        message.setService(getTokenFromPSPRequest);
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<GetTokenForSamanPSPRequest>>() {}.getType();
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<GetTokenFromPSPRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<GetTokenForSamanPSPResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<GetTokenFromPSPResponse>>() {}.getType());
 
         proxyService.closeConnection();
 

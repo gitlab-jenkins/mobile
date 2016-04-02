@@ -16,19 +16,15 @@ import java.io.UnsupportedEncodingException;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
-import xyz.homapay.hampay.common.core.model.request.GetTokenForSamanPSPRequest;
-import xyz.homapay.hampay.common.core.model.response.GetTokenForSamanPSPResponse;
-import xyz.homapay.hampay.common.core.model.response.LatestInvoiceContactsResponse;
+import xyz.homapay.hampay.common.core.model.request.GetTokenFromPSPRequest;
+import xyz.homapay.hampay.common.core.model.response.GetTokenFromPSPResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
-import xyz.homapay.hampay.mobile.android.account.Log;
-import xyz.homapay.hampay.mobile.android.adapter.HamPayEnabledContactAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import xyz.homapay.hampay.mobile.android.async.RequestGetTokenForSamanPSP;
-import xyz.homapay.hampay.mobile.android.async.RequestLatestInvoiceContacts;
+import xyz.homapay.hampay.mobile.android.async.RequestGetTokenFromPSP;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -44,8 +40,8 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
     String redirectedURL;
 
-    RequestGetTokenForSamanPSP requestGetTokenForSamanPSP;
-    GetTokenForSamanPSPRequest getTokenForSamanPSPRequest;
+    RequestGetTokenFromPSP requestGetTokenForSamanPSP;
+    GetTokenFromPSPRequest getTokenFromPSPRequest;
 
     private Context context;
 
@@ -97,15 +93,15 @@ public class BankWebPaymentActivity extends AppCompatActivity {
         bankWebView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 
         if (paymentInfoDTO != null) {
-            getTokenForSamanPSPRequest = new GetTokenForSamanPSPRequest();
-            getTokenForSamanPSPRequest.setProductCode(paymentInfoDTO.getProductCode());
-            requestGetTokenForSamanPSP = new RequestGetTokenForSamanPSP(context, new RequestGetTokenForSamanPSPTaskCompleteListener(), 1);
-            requestGetTokenForSamanPSP.execute(getTokenForSamanPSPRequest);
+            getTokenFromPSPRequest = new GetTokenFromPSPRequest();
+            getTokenFromPSPRequest.setProductCode(paymentInfoDTO.getProductCode());
+            requestGetTokenForSamanPSP = new RequestGetTokenFromPSP(context, new RequestGetTokenFromPSPTaskCompleteListener(), 1);
+            requestGetTokenForSamanPSP.execute(getTokenFromPSPRequest);
         }else if (purchaseInfoDTO != null){
-            getTokenForSamanPSPRequest = new GetTokenForSamanPSPRequest();
-            getTokenForSamanPSPRequest.setProductCode(paymentInfoDTO.getProductCode());
-            requestGetTokenForSamanPSP = new RequestGetTokenForSamanPSP(context, new RequestGetTokenForSamanPSPTaskCompleteListener(), 0);
-            requestGetTokenForSamanPSP.execute(getTokenForSamanPSPRequest);
+            getTokenFromPSPRequest = new GetTokenFromPSPRequest();
+            getTokenFromPSPRequest.setProductCode(paymentInfoDTO.getProductCode());
+            requestGetTokenForSamanPSP = new RequestGetTokenFromPSP(context, new RequestGetTokenFromPSPTaskCompleteListener(), 0);
+            requestGetTokenForSamanPSP.execute(getTokenFromPSPRequest);
         }
 
         bankWebView.setWebViewClient(new WebViewClient() {
@@ -133,32 +129,44 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
     }
 
-    public class RequestGetTokenForSamanPSPTaskCompleteListener implements
-            AsyncTaskCompleteListener<ResponseMessage<GetTokenForSamanPSPResponse>> {
+    public class RequestGetTokenFromPSPTaskCompleteListener implements
+            AsyncTaskCompleteListener<ResponseMessage<GetTokenFromPSPResponse>> {
         @Override
-        public void onTaskComplete(ResponseMessage<GetTokenForSamanPSPResponse> getTokenForSamanPSPResponseMessage) {
+        public void onTaskComplete(ResponseMessage<GetTokenFromPSPResponse> getTokenFromPSPResponseMessage) {
 
             hamPayDialog.dismisWaitingDialog();
 
-            if (getTokenForSamanPSPResponseMessage != null){
-                if (getTokenForSamanPSPResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
+            if (getTokenFromPSPResponseMessage != null){
+                if (getTokenFromPSPResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
 
                     if (paymentInfoDTO != null) {
                         redirectedURL = Constants.IPG_URL + pspInfoDTO.getRedirectURL() + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
                         postData =
-                                "Amount=" + paymentInfoDTO.getAmount() +
-                                        "&TerminalId=" + pspInfoDTO.getTerminalID() +
-                                        "&ResNum=" + paymentInfoDTO.getProductCode() +
-                                        "&ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
-                                        "&RedirectURL=" + redirectedURL;
+                                "ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
+                                        "&RedirectURL=" + redirectedURL +
+                                        "&Token=" + getTokenFromPSPResponseMessage.getService().getToken();
+//                        postData =
+//                                "Amount=" + paymentInfoDTO.getAmount() +
+//                                        "&TerminalId=" + pspInfoDTO.getTerminalID() +
+//                                        "&ResNum=" + paymentInfoDTO.getProductCode() +
+//                                        "&ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
+//                                        "&RedirectURL=" + redirectedURL;
+
                     }else if (purchaseInfoDTO != null){
                         redirectedURL = Constants.IPG_URL + pspInfoDTO.getRedirectURL() + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
                         postData =
-                                "Amount=" + purchaseInfoDTO.getAmount() +
-                                        "&TerminalId=" + pspInfoDTO.getTerminalID() +
-                                        "&ResNum=" + purchaseInfoDTO.getProductCode() +
-                                        "&ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
-                                        "&RedirectURL=" + redirectedURL;
+
+                                "ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
+                                        "&RedirectURL=" + redirectedURL +
+                                        "&Token=" + getTokenFromPSPResponseMessage.getService().getToken();
+
+
+//                        postData =
+//                                "Amount=" + purchaseInfoDTO.getAmount() +
+//                                        "&TerminalId=" + pspInfoDTO.getTerminalID() +
+//                                        "&ResNum=" + purchaseInfoDTO.getProductCode() +
+//                                        "&ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
+//                                        "&RedirectURL=" + redirectedURL;
                     }
 
                     try {

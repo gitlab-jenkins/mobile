@@ -26,7 +26,6 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import java.io.IOException;
-import java.text.NumberFormat;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -72,7 +71,6 @@ import xyz.homapay.hampay.common.core.model.response.IndividualPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
 import xyz.homapay.hampay.common.core.model.response.TACAcceptResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
-import xyz.homapay.hampay.common.psp.model.request.RegisterCardRequest;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
@@ -106,7 +104,6 @@ import xyz.homapay.hampay.mobile.android.async.RequestLatestPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestLogout;
 import xyz.homapay.hampay.mobile.android.async.RequestMobileRegistrationIdEntry;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchaseInfo;
-import xyz.homapay.hampay.mobile.android.async.RequestRegisterCard;
 import xyz.homapay.hampay.mobile.android.async.RequestRegistrationEntry;
 import xyz.homapay.hampay.mobile.android.async.RequestRegistrationSendSmsToken;
 import xyz.homapay.hampay.mobile.android.async.RequestSearchHamPayBusiness;
@@ -925,239 +922,6 @@ public class HamPayDialog {
 
 
 
-    RequestIndividualPayment requestIndividualPayment;
-    IndividualPaymentRequest individualPaymentRequest;
-
-    public void individualPaymentConfirmDialog(final IndividualPaymentConfirmResponse individualPaymentConfirmResponse,
-                                               final Long amountValue,
-                                               final String userMessage){
-
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_pay_one, null);
-        FacedTextView pay_one_confirm = (FacedTextView) view.findViewById(R.id.pay_one_confirm);
-        FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
-        FacedTextView dis_confirmation = (FacedTextView) view.findViewById(R.id.dis_confirmation);
-
-        confirmation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-                individualPaymentRequest = new IndividualPaymentRequest();
-                individualPaymentRequest.setAmount(amountValue);
-                individualPaymentRequest.setCellNumber(individualPaymentConfirmResponse.getCellNumber());
-                individualPaymentRequest.setMessage(userMessage);
-                requestIndividualPayment = new RequestIndividualPayment(activity,
-                        new RequestIndividualPaymentTaskCompleteListener(individualPaymentRequest, individualPaymentConfirmResponse.getFullName()));
-                requestIndividualPayment.execute(individualPaymentRequest);
-            }
-        });
-
-
-        dis_confirmation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        pay_one_confirm.setText(activity.getString(R.string.pay_one_confirm,
-                (new PersianEnglishDigit()).E2P(currencyFormatter.format(amountValue)),
-                individualPaymentConfirmResponse.getFullName(),
-                (new PersianEnglishDigit().E2P(currencyFormatter.format(individualPaymentConfirmResponse.getFeeCharge()))),
-                individualPaymentConfirmResponse.getBankName()));
-
-        view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
-    }
-
-    public void individualPaymentDialog(final IndividualPaymentResponse individualPaymentResponse,
-                                        final IndividualPaymentRequest individualPaymentRequest,
-                                        final String contactName){
-
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_pay_one_ref, null);
-
-        FacedTextView pay_one_confirm_ref = (FacedTextView) view.findViewById(R.id.pay_one_confirm_ref);
-        FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
-
-
-        confirmation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                activity.setResult(1024);
-                activity.finish();
-                activity.onBackPressed();
-            }
-        });
-
-        pay_one_confirm_ref.setText((new PersianEnglishDigit(activity.getString(R.string.pay_one_ref, individualPaymentResponse.getRefCode()))).E2P());
-
-        RecentPay recentPay = new RecentPay();
-
-        if (!dbHelper.getExistRecentPay(individualPaymentRequest.getCellNumber())) {
-
-            recentPay = new RecentPay();
-            recentPay.setName(contactName);
-            recentPay.setPhone(individualPaymentRequest.getCellNumber());
-            recentPay.setMessage(individualPaymentRequest.getMessage());
-            dbHelper.createRecentPay(recentPay);
-
-        }else {
-            recentPay = new RecentPay();
-            recentPay = dbHelper.getRecentPay(individualPaymentRequest.getCellNumber());
-
-            recentPay.setMessage(individualPaymentRequest.getMessage());
-            dbHelper.updateRecentPay(recentPay);
-        }
-
-        view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
-    }
-
-
-    public class RequestIndividualPaymentTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<IndividualPaymentResponse>> {
-
-        String contactName;
-        IndividualPaymentRequest individualPaymentRequest;
-
-        public RequestIndividualPaymentTaskCompleteListener(IndividualPaymentRequest individualPaymentRequest, String contactName){
-            this.contactName = contactName;
-            this.individualPaymentRequest = individualPaymentRequest;
-        }
-
-        @Override
-        public void onTaskComplete(ResponseMessage<IndividualPaymentResponse> individualPaymentResponseMessage) {
-
-            dismisWaitingDialog();
-            if (individualPaymentResponseMessage != null){
-                if (individualPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-
-                    individualPaymentDialog(individualPaymentResponseMessage.getService(),
-                            individualPaymentRequest,
-                            contactName);
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Individual Payment")
-                            .setAction("Payment")
-                            .setLabel("Success")
-                            .build());
-
-                }else {
-                    showFailPaymentDialog(individualPaymentResponseMessage.getService().getResultStatus().getCode(),
-                            individualPaymentResponseMessage.getService().getResultStatus().getDescription());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Individual Payment")
-                            .setAction("Payment")
-                            .setLabel("Fail(Server)")
-                            .build());
-                }
-            }else {
-                new HamPayDialog(activity).showFailPaymentDialog(Constants.LOCAL_ERROR_CODE,
-                        activity.getString(R.string.msg_fail_payment));
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Individual Payment")
-                        .setAction("Payment")
-                        .setLabel("Fail(Mobile)")
-                        .build());
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() { }
-    }
-
-
-
-    RequestBusinessPayment requestBusinessPayment;
-    BusinessPaymentRequest businessPaymentRequest;
-
-
-    public class RequestBusinessPaymentTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<BusinessPaymentResponse>> {
-
-        String businessName;
-        BusinessPaymentRequest businessPaymentRequest;
-
-        public RequestBusinessPaymentTaskCompleteListener(BusinessPaymentRequest businessPaymentRequest, String businessName){
-            this.businessName = businessName;
-            this.businessPaymentRequest = businessPaymentRequest;
-        }
-
-        @Override
-        public void onTaskComplete(ResponseMessage<BusinessPaymentResponse> businessPaymentResponseMessage) {
-
-            dismisWaitingDialog();
-
-            if (businessPaymentResponseMessage != null){
-                if (businessPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-                    new HamPayDialog(activity).businessPaymentDialog(businessPaymentResponseMessage.getService(),
-                            businessPaymentRequest,
-                            businessName);
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Business Payment")
-                            .setAction("Payment")
-                            .setLabel("Success")
-                            .build());
-
-                }else {
-                    showFailPaymentDialog(businessPaymentResponseMessage.getService().getResultStatus().getCode(),
-                            businessPaymentResponseMessage.getService().getResultStatus().getDescription());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Business Payment")
-                            .setAction("Payment")
-                            .setLabel("Fail(Server)")
-                            .build());
-                }
-            }else {
-                new HamPayDialog(activity).showFailPaymentDialog(Constants.LOCAL_ERROR_CODE,
-                        activity.getString(R.string.msg_fail_payment));
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Business Payment")
-                        .setAction("Payment")
-                        .setLabel("Fail(Mobile)")
-                        .build());
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() { }
-    }
-
-
-    public void businessPaymentDialog(final BusinessPaymentResponse businessPaymentResponse,
-                                      final BusinessPaymentRequest businessPaymentRequest,
-                                      final String contactName){
-
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_pay_one_ref, null);
-
-        FacedTextView pay_one_confirm_ref = (FacedTextView) view.findViewById(R.id.pay_one_confirm_ref);
-        FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
-
-
-        confirmation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                activity.finish();
-                activity.onBackPressed();
-            }
-        });
-
-        pay_one_confirm_ref.setText((new PersianEnglishDigit(activity.getString(R.string.pay_one_ref, businessPaymentResponse.getRefCode()))).E2P());
-
-
-        view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
-    }
-
-
     public void showPreventRootDeviceDialog(){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_prevent_root_device, null);
@@ -1418,43 +1182,6 @@ public class HamPayDialog {
             public void onClick(View v) {
                 dialog.dismiss();
                 requestVerifyMobile.execute(registrationVerifyMobileRequest);
-            }
-        });
-
-        cancel_request.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
-    }
-
-    public void showFailRegisterCardDialog(final RequestRegisterCard requestRegisterCard,
-                                           final RegisterCardRequest registerCardRequest,
-                                           final String code,
-                                           final String message){
-
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_registration_verify_mobile_request, null);
-
-        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
-        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
-
-        responseCode.setText(activity.getString(R.string.error_code, code));
-        responseMessage.setText(message);
-
-        FacedTextView retry_registration_verify_mobile = (FacedTextView) view.findViewById(R.id.retry_registration_verify_mobile);
-        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
-
-
-        retry_registration_verify_mobile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                requestRegisterCard.execute(registerCardRequest);
             }
         });
 
@@ -1982,10 +1709,8 @@ public class HamPayDialog {
 
         FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
 
-        NumberFormat nf = NumberFormat.getInstance();
-
-        responseMessage.setText(activity.getString(R.string.msg_incorrect_amount, new PersianEnglishDigit(nf.format(MaxXferAmount)).E2P() + ""
-                , new PersianEnglishDigit(nf.format(MinXferAmount) + "").E2P()));
+        responseMessage.setText(activity.getString(R.string.msg_incorrect_amount, new PersianEnglishDigit(currencyFormatter.format(MaxXferAmount)).E2P() + ""
+                , new PersianEnglishDigit(currencyFormatter.format(MinXferAmount)).E2P()));
 
         FacedTextView payment_permission = (FacedTextView) view.findViewById(R.id.payment_permission);
 

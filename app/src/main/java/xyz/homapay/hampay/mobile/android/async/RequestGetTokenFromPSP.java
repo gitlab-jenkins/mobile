@@ -6,24 +6,24 @@ import android.os.AsyncTask;
 import java.io.IOException;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
-import xyz.homapay.hampay.common.core.model.request.GetTokenForSamanPSPRequest;
-import xyz.homapay.hampay.common.core.model.response.GetTokenForSamanPSPResponse;
+import xyz.homapay.hampay.common.core.model.request.GetTokenFromPSPRequest;
+import xyz.homapay.hampay.common.core.model.response.GetTokenFromPSPResponse;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.webservice.WebServices;
 
 /**
  * Created by amir on 3/30/16.
  */
-public class RequestGetTokenForSamanPSP  extends AsyncTask<GetTokenForSamanPSPRequest, Void, ResponseMessage<GetTokenForSamanPSPResponse>> {
+public class RequestGetTokenFromPSP extends AsyncTask<GetTokenFromPSPRequest, Void, ResponseMessage<GetTokenFromPSPResponse>> {
 
-    private static final String TAG = "RequestGetTokenForSamanPSP";
+    private static final String TAG = "RequestGetTokenFromPSP";
 
     private Context context;
-    private AsyncTaskCompleteListener<ResponseMessage<GetTokenForSamanPSPResponse>> listener;
+    private AsyncTaskCompleteListener<ResponseMessage<GetTokenFromPSPResponse>> listener;
 
     private int transactionType;
 
-    public RequestGetTokenForSamanPSP(Context context, AsyncTaskCompleteListener<ResponseMessage<GetTokenForSamanPSPResponse>> listener, int transactionType)
+    public RequestGetTokenFromPSP(Context context, AsyncTaskCompleteListener<ResponseMessage<GetTokenFromPSPResponse>> listener, int transactionType)
     {
         this.context = context;
         this.listener = listener;
@@ -38,12 +38,12 @@ public class RequestGetTokenForSamanPSP  extends AsyncTask<GetTokenForSamanPSPRe
     }
 
     @Override
-    protected ResponseMessage<GetTokenForSamanPSPResponse> doInBackground(GetTokenForSamanPSPRequest... params) {
+    protected ResponseMessage<GetTokenFromPSPResponse> doInBackground(GetTokenFromPSPRequest... params) {
 
         WebServices webServices = new WebServices(context, Constants.CONNECTION_TYPE);
 
         try {
-            return webServices.getTokenForSamanPSP(params[0], transactionType);
+            return webServices.getTokenFromPSP(params[0], transactionType);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -52,14 +52,14 @@ public class RequestGetTokenForSamanPSP  extends AsyncTask<GetTokenForSamanPSPRe
 
 
     @Override
-    protected void onPostExecute(ResponseMessage<GetTokenForSamanPSPResponse> tacResponseMessage)
+    protected void onPostExecute(ResponseMessage<GetTokenFromPSPResponse> tacResponseMessage)
     {
         super.onPostExecute(tacResponseMessage);
         listener.onTaskComplete(tacResponseMessage);
     }
 
     @Override
-    protected void onCancelled(ResponseMessage<GetTokenForSamanPSPResponse> tacResponseResponseMessage) {
+    protected void onCancelled(ResponseMessage<GetTokenFromPSPResponse> tacResponseResponseMessage) {
         super.onCancelled(tacResponseResponseMessage);
         cancel(true);
     }

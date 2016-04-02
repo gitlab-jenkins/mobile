@@ -520,7 +520,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
                     editor.putString(Constants.REGISTERED_BANK_ID, selectedBankCode);
                     editor.putString(Constants.REGISTERED_USER_NAME, userNameFamily.getText().toString());
                     editor.putString(Constants.REGISTERED_CARD_NO, cardNumberValue.getText().toString());
-                    editor.putString(Constants.REGISTERED_NATIONAL_CODE, new PersianEnglishDigit(nationalCodeValue.getText().toString()).P2E());
+                    editor.putString(Constants.REGISTERED_NATIONAL_CODE, new PersianEnglishDigit(nationalCodeValue.getText().toString().replaceAll("-", "")).P2E());
                     editor.putString(Constants.REGISTERED_USER_ID_TOKEN, registrationEntryResponse.getService().getUserIdToken());
                     editor.putString(Constants.REGISTERED_USER_EMAIL, emailValue.getText().toString());
                     editor.commit();

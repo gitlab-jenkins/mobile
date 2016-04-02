@@ -68,7 +68,7 @@
     <string name="payment">پرداخت</string>
     <string name="message">پیام</string>
     <string name="insert_message">پیام خود را بنویسید...</string>
-    <string name="insert_price">مبلغ دلخواه خود را به ریال وارد کنید</string>
+    <string name="insert_price">مبلغ مورد نظر را وارد نماید</string>
     <string name="transaction_user_call">تماس</string>
     <string name="transaction_user_message">پیامک</string>
 
@@ -223,7 +223,7 @@
     <string name="sms_request">تایید</string>
     <string name="sms_cancel">انصراف</string>
     <string name="mobile_no_verification">تایید شماره همراه</string>
-    <string name="deliver_verification">کد ۵ رقمی برای شما پیامک شد. در صورت عدم دریافت پیامک تا ۳ دقیقه، دکمه ارسال مجدد را فشار دهید.</string>
+    <string name="deliver_verification">کد فعالی</string>
     <string name="verification">بررسی</string>
 
     <string name="resend">ارسال مجدد</string>
@@ -262,7 +262,7 @@
     <string name="get_password_text_3">در مرحله بعد یک رمز عبور برای ورود به سیستم انتخاب خواهید کرد.</string>
     <string name="get_password_text_4">لطفا رمز عبوری پنج رقمی را به انتخاب خود وارد نمایید.دقت کنید که بیش از دو عدد تکراری قابل قبول نمی‌باشد.</string>
     <string name="get_password_text_5">لطفا رمز عبور مورد نظر خود را مجدد تکرار نمایید.</string>
-    <string name="current_password">لطفا رمز عبور جاری خود را وارد نمایید.</string>
+    <string name="current_password">لطفا رمز عبور فعلی خود را وارد نمایید</string>
 
     <string name="confirm">تایید</string>
 
