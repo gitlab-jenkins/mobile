@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
@@ -65,28 +66,15 @@ public class ChangeMemorableActivity extends AppCompatActivity {
         keepOn_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (memorable_value.getText().toString().length() > 0){
-                    if (currentMemorable.length() == 0){
-                        currentMemorable = memorable_value.getText().toString();
-                        memorable_text.setText(getString(R.string.new_memorable));
-                        keepOn_text.setText(getString(R.string.get_new_memorable));
-                        memorable_value.setText("");
-                    }
-                    else if (currentMemorable.length() > 0){
-                        newMemorable = memorable_value.getText().toString();
-                    }
-                }
-
-                if (currentMemorable.length() > 0 && newMemorable.length() > 0){
-
                     Intent intent = new Intent();
                     intent.setClass(ChangeMemorableActivity.this, ChangeMemorablePassActivity.class);
                     intent.putExtra("currentMemorable", prefs.getString(Constants.MEMORABLE_WORD, ""));
-                    intent.putExtra("newMemorable", newMemorable);
+                    intent.putExtra("newMemorable", memorable_value.getText().toString());
                     startActivity(intent);
                     finish();
-
+                }else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.enter_new_memorable_word), Toast.LENGTH_SHORT).show();
                 }
 
             }

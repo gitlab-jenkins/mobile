@@ -268,12 +268,13 @@
 
     <string name="get_current_memorable">دریافت کلمه یادآوری جاری</string>
     <string name="get_new_memorable">دریافت کلمه یادآوری جدید</string>
+    <string name="enter_new_memorable_word">کلمه یادآوری جدید خود را وارد نمایید</string>
 
 
     <string name="remember_phrase">یادآوری</string>
     <string name="remember_phrase_text">لطفا یک کلمه کوتاه به عنوان یادآوری رمز عبور خود معرفی نمایید</string>
     <string name="complete_registarion">تکمیل ثبت نام</string>
-    <string name="complete_registarion_text_1">به شبکه هم‌پی خوش آمدید.</string>
+    <string name="complete_registarion_text_1">به شبکه پرداخت همراه "هم پی" خوش آمدید</string>
     <string name="complete_registarion_text_2">حالا دوستانتان در شبکه هم‌پی تنها با شماره موبایلتان به شما پول می‌دهند.</string>
 
 
