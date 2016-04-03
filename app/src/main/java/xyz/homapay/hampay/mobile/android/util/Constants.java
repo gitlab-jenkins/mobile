@@ -9,7 +9,7 @@ public class Constants {
     public static String URL_PREFIX = "/hampay";
     public static String HTTP_SERVER_IP = "http://" + SERVER_IP + ":90" + URL_PREFIX;//England Server
     public static String IPG_URL = "http://" + SERVER_IP + ":9090" + URL_PREFIX;//England Server
-    public static String BANK_GATEWAY_URL = "http://" + SERVER_IP + "/assets/psp/index.php";
+    public static String BANK_GATEWAY_URL = "https://sep.shaparak.ir/Payment.aspx";
     public static ConnectionType CONNECTION_TYPE = ConnectionType.HTTPS;
     public static String HTTPS_SERVER_IP = "https://" + SERVER_IP + URL_PREFIX;//England Server
     public static final String HTTPS_OPENAM_LOGIN_URL = HTTPS_SERVER_IP + "/auth";

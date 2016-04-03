@@ -84,23 +84,21 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
         hamPayDialog = new HamPayDialog(this);
 
-        hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-
         WebSettings settings = bankWebView.getSettings();
 
 
         settings.setJavaScriptEnabled(true);
         bankWebView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 
-        if (paymentInfoDTO != null) {
+        if (purchaseInfoDTO != null) {
+            getTokenFromPSPRequest = new GetTokenFromPSPRequest();
+            getTokenFromPSPRequest.setProductCode(purchaseInfoDTO.getProductCode());
+            requestGetTokenForSamanPSP = new RequestGetTokenFromPSP(context, new RequestGetTokenFromPSPTaskCompleteListener(), 0);
+            requestGetTokenForSamanPSP.execute(getTokenFromPSPRequest);
+        }else if (paymentInfoDTO != null){
             getTokenFromPSPRequest = new GetTokenFromPSPRequest();
             getTokenFromPSPRequest.setProductCode(paymentInfoDTO.getProductCode());
             requestGetTokenForSamanPSP = new RequestGetTokenFromPSP(context, new RequestGetTokenFromPSPTaskCompleteListener(), 1);
-            requestGetTokenForSamanPSP.execute(getTokenFromPSPRequest);
-        }else if (purchaseInfoDTO != null){
-            getTokenFromPSPRequest = new GetTokenFromPSPRequest();
-            getTokenFromPSPRequest.setProductCode(paymentInfoDTO.getProductCode());
-            requestGetTokenForSamanPSP = new RequestGetTokenFromPSP(context, new RequestGetTokenFromPSPTaskCompleteListener(), 0);
             requestGetTokenForSamanPSP.execute(getTokenFromPSPRequest);
         }
 
@@ -134,13 +132,11 @@ public class BankWebPaymentActivity extends AppCompatActivity {
         @Override
         public void onTaskComplete(ResponseMessage<GetTokenFromPSPResponse> getTokenFromPSPResponseMessage) {
 
-            hamPayDialog.dismisWaitingDialog();
-
             if (getTokenFromPSPResponseMessage != null){
                 if (getTokenFromPSPResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
 
                     if (paymentInfoDTO != null) {
-                        redirectedURL = Constants.IPG_URL + pspInfoDTO.getRedirectURL() + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
+                        redirectedURL = Constants.IPG_URL + pspInfoDTO.getRedirectURL() + "/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
                         postData =
                                 "ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
                                         "&RedirectURL=" + redirectedURL +
@@ -153,7 +149,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 //                                        "&RedirectURL=" + redirectedURL;
 
                     }else if (purchaseInfoDTO != null){
-                        redirectedURL = Constants.IPG_URL + pspInfoDTO.getRedirectURL() + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
+                        redirectedURL = Constants.IPG_URL + pspInfoDTO.getRedirectURL() + "/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
                         postData =
 
                                 "ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +

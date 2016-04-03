@@ -1183,9 +1183,9 @@ public class WebServices  {
         ResponseMessage<GetTokenFromPSPResponse> responseMessage = null;
 
         if (transactionType == 0) {
-            url = new URL(serviceURL + "/purchase/saman-token");
+            url = new URL(serviceURL + "/purchase/token");
         }else if (transactionType == 1){
-            url = new URL(serviceURL + "/payment/saman-token");
+            url = new URL(serviceURL + "/payment/token");
         }
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
