@@ -124,7 +124,7 @@
     <string name="delegate_account">عادی</string>
 
     <string name="dialog_user_waiting">کاربر گرامی لطفا منتظر بمانید.</string>
-    <string name="dialog_hampay_user_waiting">عزیز، لطفا منتظر باش</string>
+    <string name="dialog_hampay_user_waiting">عزیز، منتظر بمانید</string>
 
 
     <string name="last_login">آخرین زمان ورود به سامانه </string>
@@ -176,11 +176,11 @@
     <string name="start_activity_title">به شبکه هم‌پی خوش آمدید</string>
     <string name="start_activity_text_1">تولید فاکتور برای فرد</string>
     <string name="start_activity_text_2">پرداخت به کسب و کار</string>
-    <string name="tc_privacy_text">با شرایط استفاده از نرم‌افزار هم‌پی و قوانین حفظ حریم خصوصی کاربر موافقم.</string>
+    <string name="tc_privacy_text">با شرایط استفاده از شبکه پرداخت همراه "هم‌پی" و قوانین حفظ حریم خصوصی کاربر موافقم.</string>
     <string name="tc_privacy_confirm_text">تایید می‌کنم.</string>
 
-    <string name="tc_privacy_confirm">موافق هستم</string>
-    <string name="tc_privacy_disconfirm">موافق نیستم</string>
+    <string name="tc_privacy_confirm">بله</string>
+    <string name="tc_privacy_disconfirm">خیر</string>
 
     <string name="user_profile">مشخصات فردی</string>
     <string name="user_info_for_hampy">اطلاعات مورد نیاز برای استفاده از هم‌پی</string>
@@ -260,7 +260,7 @@
     <string name="get_password_text_0">تایید مالکیت حساب</string>
     <string name="get_password_text_2">منتظر تماس هم‌پی یارتان برای ارتقا به کاربر عادی باشید.</string>
     <string name="get_password_text_3">در مرحله بعد یک رمز عبور برای ورود به سیستم انتخاب خواهید کرد.</string>
-    <string name="get_password_text_4">لطفا رمز عبوری پنج رقمی را به انتخاب خود وارد نمایید.دقت کنید که بیش از دو عدد تکراری قابل قبول نمی‌باشد.</string>
+    <string name="get_password_text_4">لطفا رمز عبور ۵ رقمی خود را انتخاب نمایید (دقت کنید که بیش از دو عدد تکراری قابل قبول نمی باشد)</string>
     <string name="get_password_text_5">لطفا رمز عبور مورد نظر خود را مجدد تکرار نمایید.</string>
     <string name="current_password">لطفا رمز عبور فعلی خود را وارد نمایید</string>
 
@@ -283,9 +283,9 @@
 
     <string name="enter">ورورد</string>
     <string name="login_hampay">ورود به شبکه هم‌پی </string>
-    <string name="login_hello">سلام: </string>
+    <string name="login_hello">سلام </string>
 
-    <string name="hampay_login_text">لطفا کد پنج رقمی خود را برای ورود به شبکه هم‌پی وارد کنید. </string>
+    <string name="hampay_login_text">لطفا رمز عبور خود را وارد نمایید</string>
 
     <string name="select">انتخاب</string>
     <string name="recent_pay_one">تازه ترین پرداخت ها</string>
@@ -390,9 +390,9 @@
     <string name="invalid_step_confrim">انجام میدم</string>
     <string name="invalid_step_disconfrim">منصرف شدم</string>
 
-    <string name="unlink_text">اطلاعات شما در موبایل پاک خواهد شد و باید مجددا ثبت نام کنید آیا مطمئن هستید؟</string>
+    <string name="unlink_text">تمامی اطلاعات شما پاک خواهد شد و برای استفاده مجدد از "هم پی" باید دوباره ثبت نام کنید</string>
     <string name="unlink_confirm">لغو عضویت</string>
-    <string name="unlink_disconfirm">منصرف شدم</string>
+    <string name="unlink_disconfirm">انصراف</string>
     <string name="unlink_current_password">لطفا رمز عبور خود را برای لغو عضویت وارد نمایید.</string>
 
     <string name="change_email">تغییر ایمیل</string>
@@ -496,8 +496,8 @@
     <string name="request_payment_fee">کارمزد: </string>
     <string name="request_payment_total">مبلغ نهایی: </string>
     <string name="user_pin2">رمز دوم کارت: </string>
-    <string name="msg_success_pending_payment">پرداخت شما با کد خرید %1$s با موفقیت انجام شد.</string>
-    <string name="msg_business_payment_success">پرداخت شما با کد خرید %1$s با موفقیت انجام شد.</string>
+    <string name="msg_success_pending_payment">پرداخت شما با کد پیگیری %1$s با موفقیت انجام شد.</string>
+    <string name="msg_business_payment_success">پرداخت شما با کد پیگیری %1$s با موفقیت انجام شد.</string>
     <string name="msg_business_payment_fail">پرداخت شما با مشکل مواجه شد. مجدد تلاش کنید</string>
     <string name="msg_pin2_incurrect">رمز دوم خود را به درستی وارد کنید.</string>
     <string name="msg_not_found_pending_payment_code">اطلاعات خرید شما با این کد یافت نشد </string>

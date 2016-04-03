@@ -20,8 +20,6 @@ public class StartActivity extends AppCompatActivity {
     Activity activity;
     SharedPreferences.Editor editor;
 
-//    ProgressView waitingProgress;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,10 +28,6 @@ public class StartActivity extends AppCompatActivity {
         activity = StartActivity.this;
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-
-
-//        waitingProgress = (ProgressView)findViewById(R.id.waitingProgress);
-//        waitingProgress.start();
 
         start_button = (ButtonRectangle)findViewById(R.id.start_button);
         start_button.setOnClickListener(new View.OnClickListener() {

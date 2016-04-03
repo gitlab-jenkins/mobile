@@ -4,9 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,6 +20,7 @@ import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
+import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.material.RippleView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
@@ -59,6 +64,8 @@ public class PasswordEntryActivity extends AppCompatActivity implements View.OnC
 
     HamPayDialog hamPayDialog;
 
+    private FacedTextView password_notify_text_1;
+
     public void contactUs(View view){
         new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/pass-a.html");
     }
@@ -95,6 +102,12 @@ public class PasswordEntryActivity extends AppCompatActivity implements View.OnC
         keyboard = (LinearLayout)findViewById(R.id.keyboard);
         password_holder = (LinearLayout)findViewById(R.id.password_holder);
         password_holder.setOnClickListener(this);
+
+        password_notify_text_1 = (FacedTextView)findViewById(R.id.password_notify_text_1);
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getString(R.string.get_password_text_4));
+        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.rgb(255, 158, 158));
+        spannableStringBuilder.setSpan(foregroundColorSpan, 65, 75, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        password_notify_text_1.setText(spannableStringBuilder);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
