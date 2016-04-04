@@ -129,7 +129,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                     hampay_1_ll.setVisibility(View.VISIBLE);
                     hampay_1.setText(contacts.get(0).getDisplayName());
                     if (contacts.get(0).getContactImageId() != null) {
-                        userImageId = "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contacts.get(0).getContactImageId();
+                        userImageId = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contacts.get(0).getContactImageId();
                         new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_1)).execute(userImageId);
                     }
                     break;
@@ -137,7 +137,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                     hampay_2_ll.setVisibility(View.VISIBLE);
                     hampay_2.setText(contacts.get(1).getDisplayName());
                     if (contacts.get(1).getContactImageId() != null) {
-                        userImageId = "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contacts.get(1).getContactImageId();
+                        userImageId = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contacts.get(1).getContactImageId();
                         new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_2)).execute(userImageId);
                     }
                     break;
@@ -145,7 +145,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                     hampay_3_ll.setVisibility(View.VISIBLE);
                     hampay_3.setText(contacts.get(2).getDisplayName());
                     if (contacts.get(2).getContactImageId() != null) {
-                        userImageId = "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contacts.get(2).getContactImageId();
+                        userImageId = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contacts.get(2).getContactImageId();
                         new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_3)).execute(userImageId);
                     }
                     break;
@@ -153,7 +153,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                     hampay_4_ll.setVisibility(View.VISIBLE);
                     hampay_4.setText(contacts.get(3).getDisplayName());
                     if (contacts.get(3).getContactImageId() != null) {
-                        userImageId = "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contacts.get(3).getContactImageId();
+                        userImageId = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contacts.get(3).getContactImageId();
                         new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_4)).execute(userImageId);
                     }
                     break;

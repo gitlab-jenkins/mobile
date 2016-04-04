@@ -33,7 +33,6 @@ import java.util.regex.Pattern;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
-import xyz.homapay.hampay.common.core.model.request.BusinessPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
 import xyz.homapay.hampay.common.core.model.request.CardProfileRequest;
 import xyz.homapay.hampay.common.core.model.request.ChangeEmailRequest;
@@ -45,7 +44,6 @@ import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
 import xyz.homapay.hampay.common.core.model.request.IBANChangeRequest;
 import xyz.homapay.hampay.common.core.model.request.IBANConfirmationRequest;
 import xyz.homapay.hampay.common.core.model.request.IllegalAppListRequest;
-import xyz.homapay.hampay.common.core.model.request.IndividualPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestInvoiceContactsRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
@@ -61,13 +59,10 @@ import xyz.homapay.hampay.common.core.model.request.TransactionListRequest;
 import xyz.homapay.hampay.common.core.model.request.UnlinkUserRequest;
 import xyz.homapay.hampay.common.core.model.request.UploadImageRequest;
 import xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
-import xyz.homapay.hampay.common.core.model.response.BusinessPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.ChangeEmailResponse;
 import xyz.homapay.hampay.common.core.model.response.ContactUsResponse;
 import xyz.homapay.hampay.common.core.model.response.IBANChangeResponse;
 import xyz.homapay.hampay.common.core.model.response.IBANConfirmationResponse;
-import xyz.homapay.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
-import xyz.homapay.hampay.common.core.model.response.IndividualPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
 import xyz.homapay.hampay.common.core.model.response.TACAcceptResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
@@ -86,7 +81,6 @@ import xyz.homapay.hampay.mobile.android.activity.StartActivity;
 import xyz.homapay.hampay.mobile.android.activity.UnlinkPassActivity;
 import xyz.homapay.hampay.mobile.android.analytics.GaAnalyticsEvent;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import xyz.homapay.hampay.mobile.android.async.RequestBusinessPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestCardProfile;
 import xyz.homapay.hampay.mobile.android.async.RequestChangeEmail;
 import xyz.homapay.hampay.mobile.android.async.RequestChangeMemorableWord;
@@ -97,7 +91,6 @@ import xyz.homapay.hampay.mobile.android.async.RequestHamPayBusiness;
 import xyz.homapay.hampay.mobile.android.async.RequestIBANChange;
 import xyz.homapay.hampay.mobile.android.async.RequestIBANConfirmation;
 import xyz.homapay.hampay.mobile.android.async.RequestIllegalAppList;
-import xyz.homapay.hampay.mobile.android.async.RequestIndividualPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestInvoiceContacts;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPurchase;
@@ -121,7 +114,6 @@ import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.model.FailedLoginResponse;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
-import xyz.homapay.hampay.mobile.android.model.RecentPay;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.EmailVerification;
@@ -2210,9 +2202,9 @@ public class HamPayDialog {
         dialog.show();
     }
 
-    public void businessPaymentSuccessDialog(String purchaseCode){
+    public void ipgSuccessDialog(String purchaseCode){
 
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_business_success, null);
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_ipg_success, null);
 
         FacedTextView request_payment_message = (FacedTextView) view.findViewById(R.id.request_payment_message);
         request_payment_message.setText(activity.getString(R.string.msg_business_payment_success, new PersianEnglishDigit().E2P(purchaseCode)));
@@ -2231,12 +2223,10 @@ public class HamPayDialog {
         dialog.show();
     }
 
-    public void businessPaymentFailDialog(){
+    public void ipgFailDialog(){
 
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_business_fail, null);
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_ipg_fail, null);
 
-        FacedTextView request_payment_message = (FacedTextView) view.findViewById(R.id.request_payment_message);
-        request_payment_message.setText(activity.getString(R.string.msg_business_payment_fail));
         FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
 
         confirmation.setOnClickListener(new View.OnClickListener() {

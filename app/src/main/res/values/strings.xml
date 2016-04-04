@@ -166,9 +166,9 @@
     <string name="no_result_search">جستجوی مورد نظر نتیجه‌ای در بر نداشت!</string>
     <string name="retry_search">باشه</string>
 
-    <string name="incorrect_price">برای پرداخت خود مبلغ صحیحی را وارد نمایید</string>
+    <string name="incorrect_price">لطفا مبلغ مورد نظر را وارد نمایید</string>
     <string name="incorrect_invoice_value">مبلغ مورد نظر فاکتور را وارد نمایید</string>
-    <string name="retry_price">باشه</string>
+    <string name="retry_price">تایید</string>
 
     <string name="fail_sms_verification">شماره اعتبار سنجی وارد شده صحیح نمی‌باشد. لطفا از صحت شماره اطمینان حاصل کرده و شماره را مجدد وارد کنید.</string>
 
@@ -197,7 +197,7 @@
 
     <string name="user_status_verification">بررسی صحت حساب</string>
     <string name="intro_account">معرفی حساب بانکی</string>
-    <string name="intro_account_text">لطفا شماره شبای خود را وارد کنید و سپس دکمه بررسی را انتخاب کنید</string>
+    <string name="intro_account_text">لطفا شماره شبای حساب خود را وارد نموده و سپس دکمه بررسی را لمس نمایید</string>
     <string name="sheba_text">IR</string>
     <string name="sheba_number_hint">شماره شبا</string>
     <string name="sheba_number_text">شماره شبا: </string>
@@ -281,7 +281,7 @@
     <string name="current_memorable">کلمه یادآوری جاری خود را وارد کنید.</string>
     <string name="new_memorable">کلمه یادآوری جدید خود را وارد کنید.</string>
 
-    <string name="enter">ورورد</string>
+    <string name="enter">ورود</string>
     <string name="login_hampay">ورود به شبکه هم‌پی </string>
     <string name="login_hello">سلام </string>
 
@@ -498,12 +498,12 @@
     <string name="user_pin2">رمز دوم کارت: </string>
     <string name="msg_success_pending_payment">پرداخت شما با کد پیگیری %1$s با موفقیت انجام شد.</string>
     <string name="msg_business_payment_success">پرداخت شما با کد پیگیری %1$s با موفقیت انجام شد.</string>
-    <string name="msg_business_payment_fail">پرداخت شما با مشکل مواجه شد. مجدد تلاش کنید</string>
+    <string name="msg_ipg_fail">انجام عملیات پرداخت موفقیت آمیز نبود لطفا مجددا تلاش نمایید</string>
+    <string name="ipg_fail_confirm">تلاش مجدد</string>
     <string name="msg_pin2_incurrect">رمز دوم خود را به درستی وارد کنید.</string>
     <string name="msg_not_found_pending_payment_code">اطلاعات خرید شما با این کد یافت نشد </string>
     <string name="msg_incorrect_pending_payment_code">کد را کامل و صحیح وارد کنید</string>
     <string name="delete_pending_request">پرداخت نمیکنم</string>
-    <string name="msg_delete_payment_pending">آیا مایل به حذف این پرداخت درحال انتظار هستید؟</string>
     <string name="business_pending">کسب و کارها</string>
     <string name="individual_pending">دوستان</string>
     <string name="payment_request_from">تولید فاکتور برای: </string>
@@ -523,8 +523,8 @@
     <string name="business_payment_preview">پرداخت</string>
     <string name="business_payment_create">درخواست پرداخت</string>
     <string name="invoice_payment_confirm">تایید پرداخت</string>
-    <string name="null_pending_business">پرداخت درحال انتظاری وجود ندارد.</string>
-    <string name="null_pending_invoice">پرداخت درحال انتظاری وجود ندارد.</string>
+    <string name="null_pending_business">در حال حاضر پرداخت در انتظاری وجود ندارد</string>
+    <string name="null_pending_invoice">در حال حاضر پرداخت در انتظاری وجود ندارد</string>
 
     <string name="sort_create">تاریخ ایجاد</string>
     <string name="sort_expire">مهلت زمانی</string>
@@ -532,6 +532,15 @@
     <string name="pending_payment_remaining">زمان باقی مانده</string>
     <string name="day">روز</string>
     <string name="time">ساعت</string>
+    <string name="msg_delete_payment_pending">آیا مایل به حذف فاکتور شماره %1$s هستید؟</string>
+
+    <string name="sort_transaction_default">همه</string>
+    <string name="sort_transaction_individual">شخصی</string>
+    <string name="sort_transaction_business">تجاری</string>
+    <string name="sort_transaction_success">موفق</string>
+    <string name="sort_transaction_failure">ناموفق</string>
+    <string name="sort_transaction_paid">پرداخت</string>
+    <string name="sort_transaction_received">دریافت</string>
 
 
 </resources>

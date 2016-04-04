@@ -179,7 +179,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
             contact_phone_no.setText(persianEnglishDigit.E2P(hamPayContact.getCellNumber()));
 
             if (hamPayContact.getContactImageId() != null) {
-                new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(user_image)).execute("/users/" + authToken + "/" + hamPayContact.getContactImageId());
+                new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(user_image)).execute(Constants.IMAGE_PREFIX + authToken + "/" + hamPayContact.getContactImageId());
             }else {
                 user_image.setImageResource(R.drawable.user_icon_blue);
             }

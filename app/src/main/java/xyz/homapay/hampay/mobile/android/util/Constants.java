@@ -4,8 +4,8 @@ package xyz.homapay.hampay.mobile.android.util;
 import xyz.homapay.hampay.mobile.android.webservice.ConnectionType;
 
 public class Constants {
-    public static String SERVER_IP = "176.58.104.158";//England Server IP
-//       public static String SERVER_IP = "139.162.147.189";//UAT Server IP
+//    public static String SERVER_IP = "176.58.104.158";//England Server IP
+       public static String SERVER_IP = "139.162.147.189";//UAT Server IP
     public static String URL_PREFIX = "/hampay";
     public static String HTTP_SERVER_IP = "http://" + SERVER_IP + ":90" + URL_PREFIX;//England Server
     public static String IPG_URL = "http://" + SERVER_IP + ":9090" + URL_PREFIX;//England Server
@@ -87,4 +87,5 @@ public class Constants {
     public static final String ACTIVITY_RESULT = "result";
     public static final String CARD_NUMBER_FORMAT = "####-####-####-####";
     public static final String NATIONAL_CODE_FORMAT = "###-######-#";
+    public static final String IMAGE_PREFIX = "/image/";
 }

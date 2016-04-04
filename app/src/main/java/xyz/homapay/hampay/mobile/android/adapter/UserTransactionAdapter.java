@@ -9,7 +9,11 @@ import android.widget.LinearLayout;
 
 import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO;
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
+import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
+import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO.TransactionStatus;
@@ -26,12 +30,14 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
     private TransactionDTO transactionDTO;
     private PersianEnglishDigit persianEnglishDigit;
     private CurrencyFormatter currencyFormatter;
+    private String authToken;
 
-    public UserTransactionAdapter(Context context) {
+    public UserTransactionAdapter(Context context, String authToken) {
         super(context);
         this.context = context;
         persianEnglishDigit = new PersianEnglishDigit();
         currencyFormatter = new CurrencyFormatter();
+        this.authToken = authToken;
     }
 
 
@@ -44,6 +50,7 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
 
             viewHolder.status_icon = (ImageView)convertView.findViewById(R.id.status_icon);
             viewHolder.status_text = (FacedTextView)convertView.findViewById(R.id.status_text);
+            viewHolder.image = (CircleImageView)convertView.findViewById(R.id.image);
             viewHolder.user_name = (FacedTextView)convertView.findViewById(R.id.user_name);
             viewHolder.date_time = (FacedTextView)convertView.findViewById(R.id.date_time);
             viewHolder.message = (FacedTextView)convertView.findViewById(R.id.message);
@@ -101,6 +108,13 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
         viewHolder.user_fee_value.setText(persianEnglishDigit.E2P(currencyFormatter.format(transactionDTO.getFeeCharge())) + context.getString(R.string.currency_rials));
         viewHolder.price_pay.setText(persianEnglishDigit.E2P(currencyFormatter.format(transactionDTO.getAmount())) + "\n" + context.getString(R.string.currency_rials));
 
+        if (transactionDTO.getImageId() != null) {
+            String userImageUrl = Constants.IMAGE_PREFIX + authToken + "/" + transactionDTO.getImageId();
+            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.image)).execute(userImageUrl);
+        }else {
+            viewHolder.image.setImageResource(R.drawable.user_icon_blue);
+        }
+
         return convertView;
     }
 
@@ -110,6 +124,7 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
         ViewHolder(){ }
 
         ImageView status_icon;
+        CircleImageView image;
         FacedTextView status_text;
         FacedTextView user_name;
         FacedTextView date_time;

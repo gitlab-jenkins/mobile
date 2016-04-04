@@ -131,7 +131,7 @@ public class AccountDetailFragment extends Fragment {
 
 //        image_profile = (CircleImageView)rootView.findViewById(R.id.image_profile);
 
-        String URL = Constants.HTTPS_SERVER_IP + "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
+        String URL = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
 
 //        requestImageDownloader = new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile));
 //        requestImageDownloader.execute(URL);

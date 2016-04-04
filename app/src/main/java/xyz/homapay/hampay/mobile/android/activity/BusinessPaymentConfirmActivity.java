@@ -154,7 +154,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
             paymentTotalValue.setText(persianEnglishDigit.E2P(paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + "") + " ریال");
 
             if (paymentInfoDTO.getImageId() != null) {
-                new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute("/logo/"
+                new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute(Constants.IMAGE_PREFIX
                         + prefs.getString(Constants.LOGIN_TOKEN_ID, "")
                         + "/" + paymentInfoDTO.getImageId());
             }else {

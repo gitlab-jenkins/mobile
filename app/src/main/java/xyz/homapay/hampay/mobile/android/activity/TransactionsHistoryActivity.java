@@ -1,13 +1,20 @@
 package xyz.homapay.hampay.mobile.android.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -17,6 +24,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
@@ -49,6 +57,12 @@ import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoListview
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.impl.comparator.PaymentAmountComparator;
+import xyz.homapay.hampay.mobile.android.impl.comparator.PaymentDateComparator;
+import xyz.homapay.hampay.mobile.android.impl.comparator.PaymentExpireComparator;
+import xyz.homapay.hampay.mobile.android.impl.comparator.PurchaseAmountComparator;
+import xyz.homapay.hampay.mobile.android.impl.comparator.PurchaseDateComparator;
+import xyz.homapay.hampay.mobile.android.impl.comparator.PurchaseExpireComparator;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -72,6 +86,7 @@ public class TransactionsHistoryActivity extends AppCompatActivity {
     RequestUserTransaction requestUserTransaction;
     TransactionListRequest transactionListRequest;
     int requestPageNumber = 0;
+    TransactionListRequest.SortFactor sortFactor = TransactionListRequest.SortFactor.DEFAULT;
 
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
@@ -81,6 +96,160 @@ public class TransactionsHistoryActivity extends AppCompatActivity {
     private Context context;
     private Activity activity;
 
+
+    private Dialog dialog;
+
+    public void sortView(View v) {
+
+        Rect displayRectangle = new Rect();
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_transaction_sort, null);
+
+        final FacedTextView sort_default = (FacedTextView) view.findViewById(R.id.sort_default);
+        final FacedTextView sort_individual = (FacedTextView) view.findViewById(R.id.sort_individual);
+        final FacedTextView sort_business = (FacedTextView) view.findViewById(R.id.sort_business);
+        final FacedTextView sort_success = (FacedTextView) view.findViewById(R.id.sort_success);
+        final FacedTextView sort_failure = (FacedTextView) view.findViewById(R.id.sort_failure);
+        final FacedTextView sort_paid = (FacedTextView) view.findViewById(R.id.sort_paid);
+        final FacedTextView sort_received = (FacedTextView) view.findViewById(R.id.sort_received);
+
+
+        sort_default.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userTransactionAdapter.clear();
+                transactionDTOs.clear();
+                requestPageNumber = 0;
+                sortFactor = TransactionListRequest.SortFactor.DEFAULT;
+                transactionListRequest = new TransactionListRequest();
+                transactionListRequest.setPageNumber(requestPageNumber);
+                transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+                transactionListRequest.setSortFactor(sortFactor);
+                requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
+                requestUserTransaction.execute(transactionListRequest);
+                dialog.dismiss();
+            }
+        });
+
+        sort_individual.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userTransactionAdapter.clear();
+                transactionDTOs.clear();
+                requestPageNumber = 0;
+                sortFactor = TransactionListRequest.SortFactor.INDIVIDUAL;
+                transactionListRequest = new TransactionListRequest();
+                transactionListRequest.setPageNumber(requestPageNumber);
+                transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+                transactionListRequest.setSortFactor(sortFactor);
+                requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
+                requestUserTransaction.execute(transactionListRequest);
+                dialog.dismiss();
+            }
+        });
+
+        sort_business.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userTransactionAdapter.clear();
+                transactionDTOs.clear();
+                requestPageNumber = 0;
+                sortFactor = TransactionListRequest.SortFactor.BUSINESS;
+                transactionListRequest = new TransactionListRequest();
+                transactionListRequest.setPageNumber(requestPageNumber);
+                transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+                transactionListRequest.setSortFactor(sortFactor);
+                requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
+                requestUserTransaction.execute(transactionListRequest);
+                dialog.dismiss();
+            }
+        });
+
+        sort_success.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userTransactionAdapter.clear();
+                transactionDTOs.clear();
+                requestPageNumber = 0;
+                sortFactor = TransactionListRequest.SortFactor.SUCCESS;
+                transactionListRequest = new TransactionListRequest();
+                transactionListRequest.setPageNumber(requestPageNumber);
+                transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+                transactionListRequest.setSortFactor(sortFactor);
+                requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
+                requestUserTransaction.execute(transactionListRequest);
+                dialog.dismiss();
+            }
+        });
+
+        sort_failure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userTransactionAdapter.clear();
+                transactionDTOs.clear();
+                requestPageNumber = 0;
+                sortFactor = TransactionListRequest.SortFactor.FAILURE;
+                transactionListRequest = new TransactionListRequest();
+                transactionListRequest.setPageNumber(requestPageNumber);
+                transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+                transactionListRequest.setSortFactor(sortFactor);
+                requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
+                requestUserTransaction.execute(transactionListRequest);
+                dialog.dismiss();
+            }
+        });
+
+        sort_paid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userTransactionAdapter.clear();
+                transactionDTOs.clear();
+                requestPageNumber = 0;
+                sortFactor = TransactionListRequest.SortFactor.PAID;
+                transactionListRequest = new TransactionListRequest();
+                transactionListRequest.setPageNumber(requestPageNumber);
+                transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+                transactionListRequest.setSortFactor(sortFactor);
+                requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
+                requestUserTransaction.execute(transactionListRequest);
+                dialog.dismiss();
+            }
+        });
+
+        sort_received.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userTransactionAdapter.clear();
+                transactionDTOs.clear();
+                requestPageNumber = 0;
+                sortFactor = TransactionListRequest.SortFactor.RECEIVED;
+                transactionListRequest = new TransactionListRequest();
+                transactionListRequest.setPageNumber(requestPageNumber);
+                transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+                transactionListRequest.setSortFactor(sortFactor);
+                requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
+                requestUserTransaction.execute(transactionListRequest);
+                dialog.dismiss();
+            }
+        });
+
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setDimAmount(0);
+        dialog.setContentView(view);
+        dialog.setTitle(null);
+        dialog.setCanceledOnTouchOutside(true);
+        WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
+        layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
+        layoutParams.x = 25;
+        layoutParams.y = 20;
+
+        dialog.show();
+    }
 
     public void backActionBar(View view){
         finish();
@@ -107,11 +276,10 @@ public class TransactionsHistoryActivity extends AppCompatActivity {
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
         transactionDTOs = new ArrayList<TransactionDTO>();
-        userTransactionAdapter = new UserTransactionAdapter(context);
+        userTransactionAdapter = new UserTransactionAdapter(context, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
 
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
-
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -144,6 +312,7 @@ public class TransactionsHistoryActivity extends AppCompatActivity {
             transactionListRequest = new TransactionListRequest();
             transactionListRequest.setPageNumber(requestPageNumber);
             transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+            transactionListRequest.setSortFactor(sortFactor);
             requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
             requestUserTransaction.execute(transactionListRequest);
         }

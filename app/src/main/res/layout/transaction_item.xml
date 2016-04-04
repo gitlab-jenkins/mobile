@@ -5,7 +5,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -26,18 +27,24 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_marginRight="20dp"
             android:gravity="right">
 
 
+            <!--<LinearLayout-->
+                <!--android:layout_width="fill_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical"-->
+                <!--android:gravity="right"-->
+                <!--android:layout_marginTop="6dp"-->
+                <!--android:paddingRight="8dp">-->
+
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="right"
-                android:layout_marginTop="6dp"
-                android:paddingRight="8dp">
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/status_text"
@@ -47,7 +54,25 @@
                     android:textColor="@android:color/black"
                     android:textSize="15dp"
                     android:gravity="center"
+                    android:layout_marginRight="4dp"
                     android:text="دریافت"/>
+
+                <xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView
+                    android:id="@+id/image"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center_horizontal"
+                    android:clickable="true"
+                    android:src="@drawable/user_icon_blue"
+                    app:civ_border="true"
+                    app:civ_borderColor="#FFFFFFFF"
+                    app:civ_borderWidth="1dp"
+                    app:civ_selector="true"
+                    app:civ_selectorColor="#4403a9f4"
+                    app:civ_selectorStrokeColor="#aa5677fc"
+                    app:civ_selectorStrokeWidth="1dp" />
+
+            </LinearLayout>
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/user_name"
@@ -140,7 +165,7 @@
 
                 </LinearLayout>
 
-            </LinearLayout>
+            <!--</LinearLayout>-->
 
 
 

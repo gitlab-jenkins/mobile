@@ -134,7 +134,7 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
         business_image = (ImageView)findViewById(R.id.business_image);
 
         if (businessDTO.getBusinessImageId() != null) {
-            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute("/logo/"
+            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute(Constants.IMAGE_PREFIX
                     + prefs.getString(Constants.LOGIN_TOKEN_ID, "")
                     + "/" + businessDTO.getBusinessImageId());
         }else {

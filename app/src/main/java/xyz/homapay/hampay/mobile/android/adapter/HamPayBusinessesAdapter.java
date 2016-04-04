@@ -11,6 +11,7 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 /**
@@ -57,7 +58,7 @@ public class HamPayBusinessesAdapter extends HamPayBusinessesGenericAdapter<Busi
         viewHolder.business_phone_no.setText(persianEnglishDigit.E2P("تلفن: " + businessDTO.getDefaultPhoneNumber()));
         viewHolder.business_hampay_id.setText(persianEnglishDigit.E2P("شناسه: " + businessDTO.getCode()));
         if (businessDTO.getBusinessImageId() != null) {
-            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.business_image)).execute("/logo/" + authToken + "/" + businessDTO.getBusinessImageId());
+            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.business_image)).execute(Constants.IMAGE_PREFIX + authToken + "/" + businessDTO.getBusinessImageId());
         }else {
             viewHolder.business_image.setBackgroundColor(ContextCompat.getColor(context, R.color.user_change_status));
         }

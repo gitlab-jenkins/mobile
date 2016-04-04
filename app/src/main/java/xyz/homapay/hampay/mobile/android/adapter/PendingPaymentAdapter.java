@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTa
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.DateUtil;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
@@ -120,9 +122,10 @@ public class PendingPaymentAdapter extends BaseAdapter  {
         viewHolder.expire_pay.setText(dateUtil.remainingTime(paymentInfoDTO.getExpirationDate(), currentDate));
 
         if (paymentInfoDTO.getImageId() != null) {
-            String userImageUrl = "/users/" + authToken + "/" + paymentInfoDTO.getImageId();
-
+            String userImageUrl = Constants.IMAGE_PREFIX + authToken + "/" + paymentInfoDTO.getImageId();
             new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.user_image)).execute(userImageUrl);
+        }else {
+            viewHolder.user_image.setBackgroundColor(ContextCompat.getColor(context, R.color.user_change_status));
         }
 
         viewHolder.delete.setOnClickListener(new View.OnClickListener() {
@@ -135,6 +138,8 @@ public class PendingPaymentAdapter extends BaseAdapter  {
                 Window window = activity.getWindow();
                 window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
                 View view = activity.getLayoutInflater().inflate(R.layout.dialog_delete_pending_payment, null);
+                FacedTextView deleteCodeNotify = (FacedTextView)view.findViewById(R.id.deleteCodeNotify);
+                deleteCodeNotify.setText(activity.getString(R.string.msg_delete_payment_pending, persianEnglishDigit.E2P(paymentInfoDTO.getProductCode())));
                 FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
                 FacedTextView dis_confirmation = (FacedTextView) view.findViewById(R.id.dis_confirmation);
 

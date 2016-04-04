@@ -162,7 +162,7 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
             payment_value.setText(persianEnglishDigit.E2P(paymentInfoDTO.getAmount() + ""));
 
             if (paymentInfoDTO.getImageId() != null) {
-                new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(user_image)).execute("/users/" + authToken + "/" + paymentInfoDTO.getImageId());
+                new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(user_image)).execute(Constants.IMAGE_PREFIX + authToken + "/" + paymentInfoDTO.getImageId());
             }else {
                 user_image.setImageResource(R.drawable.user_icon_blue);
             }
@@ -442,7 +442,7 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
                     payment_value.setText(paymentInfoDTO.getAmount() + "");
 
                     if (paymentInfoDTO.getImageId() != null) {
-                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(user_image)).execute("/users/" + authToken + "/" + paymentInfoDTO.getImageId());
+                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(user_image)).execute(Constants.IMAGE_PREFIX + authToken + "/" + paymentInfoDTO.getImageId());
                     }else {
                         user_image.setImageResource(R.drawable.user_icon_blue);
                     }

@@ -83,8 +83,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     UserProfileDTO userProfileDTO;
 
-    String pendingPurchaseCode = "";
-    String pendingPaymentCode = "";
+    String pendingPurchaseCode = null;
+    String pendingPaymentCode = null;
     int pendingPurchaseCount = 0;
     int pendingPaymentCount = 0;
 
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         HamPayApplication.setAppSate(AppState.Resumed);
 
         if (userProfileDTO.getUserImageId() != null) {
-            String userImageUrl = "/users/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
+            String userImageUrl = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
             new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile)).execute(userImageUrl);
         }
 
@@ -230,14 +230,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     break;
             }
         }else {
-            if (pendingPurchaseCode.length() != 0) {
+            if (pendingPurchaseCode != null) {
                 if (databaseHelper.getIsExistPurchaseRequest(pendingPurchaseCode)) {
                     LatestPurchase latestPurchase = databaseHelper.getPurchaseRequest(pendingPurchaseCode);
                     if (latestPurchase.getIsCanceled().equalsIgnoreCase("0")) {
                         if (pendingPurchaseCount > 0) {
                             intent.setClass(context, RequestBusinessPayDetailActivity.class);
                             startActivity(intent);
-                        } else if (pendingPaymentCount > 0) {
+                        } else if (pendingPaymentCode != null && pendingPaymentCount > 0) {
                             intent.setClass(context, InvoicePaymentPendingActivity.class);
                             startActivity(intent);
                         }
@@ -247,11 +247,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     intent.setClass(context, RequestBusinessPayDetailActivity.class);
                     startActivity(intent);
                 }
-            } else if (true) {
-                if (pendingPaymentCount > 0) {
-                    intent.setClass(context, InvoicePaymentPendingActivity.class);
-                    startActivity(intent);
-                }
+            } else if (pendingPaymentCount > 0) {
+                intent.setClass(context, InvoicePaymentPendingActivity.class);
+                startActivity(intent);
             }
         }
 

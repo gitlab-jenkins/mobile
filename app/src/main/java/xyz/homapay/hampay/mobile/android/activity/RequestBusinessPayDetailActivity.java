@@ -222,7 +222,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             business_name.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getMerchantName()));
 
             if (purchaseInfoDTO.getMerchantImageId() != null) {
-                new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute("/logo/"
+                new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute(Constants.IMAGE_PREFIX
                         + prefs.getString(Constants.LOGIN_TOKEN_ID, "")
                         + "/" + purchaseInfoDTO.getMerchantImageId());
             }else {
@@ -507,7 +507,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
 //                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute(businessImageUrl);
 
-                        String businessImageUrl = "/logo/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + purchaseInfoDTO.getMerchantImageId();
+                        String businessImageUrl = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + purchaseInfoDTO.getMerchantImageId();
 
                         if (purchaseInfoDTO.getMerchantImageId() != null) {
                             new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute(businessImageUrl);

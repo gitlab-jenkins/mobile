@@ -31,6 +31,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.DateUtil;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
@@ -117,7 +118,7 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
         viewHolder.business_name.setText(purchaseInfoDTO.getMerchantName());
 
         if (purchaseInfoDTO.getMerchantImageId() != null) {
-            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.business_image)).execute("/logo/" + authToken + "/" + purchaseInfoDTO.getMerchantImageId());
+            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.business_image)).execute(Constants.IMAGE_PREFIX + authToken + "/" + purchaseInfoDTO.getMerchantImageId());
         }else {
             viewHolder.business_image.setBackgroundColor(ContextCompat.getColor(context, R.color.user_change_status));
         }
@@ -137,6 +138,8 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
                 Window window = activity.getWindow();
                 window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
                 View view = activity.getLayoutInflater().inflate(R.layout.dialog_delete_pending_payment, null);
+                FacedTextView deleteCodeNotify = (FacedTextView)view.findViewById(R.id.deleteCodeNotify);
+                deleteCodeNotify.setText(activity.getString(R.string.msg_delete_payment_pending, persianEnglishDigit.E2P(purchaseInfoDTO.getProductCode())));
                 FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
                 FacedTextView dis_confirmation = (FacedTextView) view.findViewById(R.id.dis_confirmation);
 

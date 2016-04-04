@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/normal_text"
         android:textSize="15dp"
-        android:text="@string/msg_success_pending_payment"/>
+        android:text="@string/msg_ipg_fail"/>
 
 
     <xyz.homapay.hampay.mobile.android.component.FacedTextView
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/colorPrimary"
         android:textSize="14dp"
-        android:text="@string/pay_ok"
+        android:text="@string/ipg_fail_confirm"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
         android:contentDescription="finish"/>

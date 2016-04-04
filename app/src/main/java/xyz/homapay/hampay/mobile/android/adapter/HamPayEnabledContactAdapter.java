@@ -79,7 +79,7 @@ public class HamPayEnabledContactAdapter extends BaseAdapter {
 
         ContactDTO contact = contacts.get(position);
         if (contact.getContactImageId() != null) {
-            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.user_image)).execute("/users/" + authToken + "/" + contact.getContactImageId());
+            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.user_image)).execute(Constants.IMAGE_PREFIX + authToken + "/" + contact.getContactImageId());
         }else {
             viewHolder.user_image.setImageResource(R.drawable.user_icon_blue);
         }

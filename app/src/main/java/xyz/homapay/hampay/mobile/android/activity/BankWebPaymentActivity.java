@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.http.SslError;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
@@ -13,6 +14,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
@@ -47,6 +50,39 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
     String postData;
 
+    Timer timer;
+    TimerTask timerTask;
+    final Handler handler = new Handler();
+
+
+    public void startTimer() {
+        timer = new Timer();
+        initializeTimerTask();
+        timer.schedule(timerTask, 6000, 1000);
+    }
+
+    public void initializeTimerTask() {
+
+        timerTask = new TimerTask() {
+
+            public void run() {
+                handler.post(new Runnable() {
+                    public void run() {
+                        hamPayDialog.dismisWaitingDialog();
+                        finish();
+                    }
+                });
+            }
+        };
+    }
+
+    public void stoptimertask() {
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -57,6 +93,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         HamPayApplication.setAppSate(AppState.Stoped);
+        stoptimertask();
     }
 
     @Override
@@ -108,9 +145,11 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
                 if (url.toLowerCase().contains("c.php")) {
                     if (view.getTitle().equalsIgnoreCase("failure")) {
-                        hamPayDialog.businessPaymentFailDialog();
+                        hamPayDialog.ipgFailDialog();
+                        startTimer();
                     } else {
-                        hamPayDialog.businessPaymentSuccessDialog(view.getTitle());
+                        hamPayDialog.ipgSuccessDialog(view.getTitle());
+                        startTimer();
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra(Constants.ACTIVITY_RESULT, ResultStatus.SUCCESS.ordinal());
                         setResult(Activity.RESULT_OK, returnIntent);
