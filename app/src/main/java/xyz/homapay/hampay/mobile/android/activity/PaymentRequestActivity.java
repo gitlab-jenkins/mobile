@@ -68,6 +68,8 @@ public class PaymentRequestActivity extends AppCompatActivity implements View.On
 
     private HamPayDialog hamPayDialog;
 
+    private RelativeLayout search_layout;
+
     public void backActionBar(View view){
         finish();
     }
@@ -132,6 +134,8 @@ public class PaymentRequestActivity extends AppCompatActivity implements View.On
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+
+        search_layout = (RelativeLayout)findViewById(R.id.search_layout);
 
         paymentRequestList = (ListView)findViewById(R.id.paymentRequestList);
 
@@ -200,6 +204,12 @@ public class PaymentRequestActivity extends AppCompatActivity implements View.On
 
                     contacts = contactsHampayEnabledResponseMessage.getService().getContacts();
 
+                    if (contacts.size() > 0){
+                        search_layout.setVisibility(View.VISIBLE);
+                    }else {
+                        search_layout.setVisibility(View.GONE);
+                    }
+
                     hamPayContactAdapter = new HamPayEnabledContactAdapter(context, contacts,
                             prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
                     paymentRequestList.setAdapter(hamPayContactAdapter);
@@ -237,6 +247,12 @@ public class PaymentRequestActivity extends AppCompatActivity implements View.On
                 if (latestInvoiceContactsResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
 
                     contacts = latestInvoiceContactsResponseMessage.getService().getContacts();
+
+                    if (contacts.size() > 0){
+                        search_layout.setVisibility(View.VISIBLE);
+                    }else {
+                        search_layout.setVisibility(View.GONE);
+                    }
 
                     hamPayContactAdapter = new HamPayEnabledContactAdapter(context, contacts,
                             prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
