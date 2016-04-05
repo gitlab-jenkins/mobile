@@ -53,7 +53,6 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
             viewHolder.image = (CircleImageView)convertView.findViewById(R.id.image);
             viewHolder.user_name = (FacedTextView)convertView.findViewById(R.id.user_name);
             viewHolder.date_time = (FacedTextView)convertView.findViewById(R.id.date_time);
-            viewHolder.message = (FacedTextView)convertView.findViewById(R.id.message);
             viewHolder.price_pay = (FacedTextView)convertView.findViewById(R.id.price_pay);
             viewHolder.reject_message = (FacedTextView)convertView.findViewById(R.id.reject_message);
             viewHolder.user_fee_value = (FacedTextView)convertView.findViewById(R.id.user_fee_value);
@@ -103,7 +102,6 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
 
         viewHolder.user_name.setText(transactionDTO.getPersonName());
         viewHolder.date_time.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(transactionDTO.getTransactionDate())));
-        viewHolder.message.setText(transactionDTO.getMessage());
         viewHolder.reject_message.setText(transactionDTO.getRejectReasonMessage());
         viewHolder.user_fee_value.setText(persianEnglishDigit.E2P(currencyFormatter.format(transactionDTO.getFeeCharge())) + context.getString(R.string.currency_rials));
         viewHolder.price_pay.setText(persianEnglishDigit.E2P(currencyFormatter.format(transactionDTO.getAmount())) + "\n" + context.getString(R.string.currency_rials));
@@ -128,7 +126,6 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
         FacedTextView status_text;
         FacedTextView user_name;
         FacedTextView date_time;
-        FacedTextView message;
         FacedTextView price_pay;
         FacedTextView reject_message;
         FacedTextView user_fee_value;

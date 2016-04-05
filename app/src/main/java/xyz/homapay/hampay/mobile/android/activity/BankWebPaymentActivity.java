@@ -12,6 +12,8 @@ import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Timer;
@@ -35,6 +37,7 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 public class BankWebPaymentActivity extends AppCompatActivity {
 
     WebView bankWebView;
+    EditText urlText;
     HamPayDialog hamPayDialog;
     SharedPreferences prefs;
     PaymentInfoDTO paymentInfoDTO = null;
@@ -119,6 +122,8 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
         bankWebView = (WebView)findViewById(R.id.bankWebView);
 
+        urlText = (EditText)findViewById(R.id.urlText);
+
         hamPayDialog = new HamPayDialog(this);
 
         WebSettings settings = bankWebView.getSettings();
@@ -142,6 +147,8 @@ public class BankWebPaymentActivity extends AppCompatActivity {
         bankWebView.setWebViewClient(new WebViewClient() {
 
             public void onPageFinished(WebView view, String url) {
+
+                urlText.setText(url);
 
                 if (url.toLowerCase().contains("c.php")) {
                     if (view.getTitle().equalsIgnoreCase("failure")) {
