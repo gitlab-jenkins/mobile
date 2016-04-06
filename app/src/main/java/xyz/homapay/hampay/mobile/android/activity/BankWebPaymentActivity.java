@@ -182,7 +182,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                 if (getTokenFromPSPResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
 
                     if (paymentInfoDTO != null) {
-                        redirectedURL = Constants.IPG_URL + pspInfoDTO.getRedirectURL() + "/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
+                        redirectedURL = Constants.IPG_URL + pspInfoDTO.getRedirectURL() + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
                         postData =
                                 "ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
                                         "&RedirectURL=" + redirectedURL +
@@ -195,7 +195,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 //                                        "&RedirectURL=" + redirectedURL;
 
                     }else if (purchaseInfoDTO != null){
-                        redirectedURL = Constants.IPG_URL + pspInfoDTO.getRedirectURL() + "/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
+                        redirectedURL = Constants.IPG_URL + pspInfoDTO.getRedirectURL() + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
                         postData =
 
                                 "ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
