@@ -223,7 +223,7 @@
     <string name="sms_request">تایید</string>
     <string name="sms_cancel">انصراف</string>
     <string name="mobile_no_verification">تایید شماره همراه</string>
-    <string name="deliver_verification">کد فعالی</string>
+    <string name="deliver_verification">کد ۵ رقمی برای شما پیامک شد. در صورت عدم دریافت پیامک تا ۳ دقیقه، دکمه ارسال مجدد را لمس کنید.</string>
     <string name="verification">بررسی</string>
 
     <string name="resend">ارسال مجدد</string>
@@ -366,6 +366,7 @@
     <string name="pay_one_search_hint">نام یا شماره همراه دریافت کننده را وارد کنید</string>
 
     <string name="password_recovery">بازیابی</string>
+    <string name="keyboard_dismiss">بستن</string>
 
     <string name="exit_app_text">آیا مایل به خروج از هم‌پی هستید؟</string>
     <string name="exit_app_yes">خارج می‌شوم </string>

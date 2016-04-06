@@ -40,7 +40,7 @@ public class PasswordEntryActivity extends AppCompatActivity implements View.OnC
     RippleView digit_8;
     RippleView digit_9;
     RippleView digit_0;
-    RippleView keyboard_help;
+    RippleView keyboard_dismiss;
     RippleView backspace;
 
     String inputPasswordValue = "";
@@ -140,8 +140,8 @@ public class PasswordEntryActivity extends AppCompatActivity implements View.OnC
         digit_9.setOnClickListener(this);
         digit_0 = (RippleView)findViewById(R.id.digit_0);
         digit_0.setOnClickListener(this);
-        keyboard_help = (RippleView)findViewById(R.id.keyboard_help);
-        keyboard_help.setOnClickListener(this);
+        keyboard_dismiss = (RippleView)findViewById(R.id.keyboard_dismiss);
+        keyboard_dismiss.setOnClickListener(this);
         backspace = (RippleView)findViewById(R.id.backspace);
         backspace.setOnClickListener(this);
 
@@ -162,7 +162,10 @@ public class PasswordEntryActivity extends AppCompatActivity implements View.OnC
                 if (keyboard.getVisibility() != View.VISIBLE)
                     new Expand(keyboard).animate();
                 break;
-
+            case R.id.keyboard_dismiss:
+                if (keyboard.getVisibility() == View.VISIBLE)
+                    new Collapse(keyboard).animate();
+                break;
             case R.id.digit_1:
                 inputDigit("1");
                 break;

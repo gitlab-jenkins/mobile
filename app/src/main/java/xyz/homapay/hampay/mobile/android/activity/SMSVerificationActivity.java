@@ -12,6 +12,9 @@ import android.os.CountDownTimer;
 import android.os.Vibrator;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -58,8 +61,11 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
     RippleView digit_8;
     RippleView digit_9;
     RippleView digit_0;
+    RippleView keyboard_dismiss;
     RippleView resend_active_code;
     RippleView backspace;
+
+    FacedTextView sms_delivery_text;
 
     String receivedSmsValue = "";
 
@@ -93,7 +99,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
 
     CountDownTimer countDownTimer;
 
-    boolean sendSmsPermision = false;
+    boolean sendSmsPermission = false;
     int sendSmsCounter = 0;
 
     Tracker hamPayGaTracker;
@@ -208,15 +214,14 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                     sendSmsCounter++;
 
                     if (sendSmsCounter < 3) {
-                        sendSmsPermision = true;
+                        sendSmsPermission = true;
                         Toast.makeText(context, getString(R.string.msg_fail_receive_sms), Toast.LENGTH_LONG).show();
                     } else {
-                        sendSmsPermision = false;
+                        sendSmsPermission = false;
                         Toast.makeText(context, getString(R.string.sms_upper_reach_sms), Toast.LENGTH_LONG).show();
                     }
 
-                    if (keyboard.getVisibility() != View.VISIBLE)
-                        new Expand(keyboard).animate();
+                    resend_active_code.setVisibility(View.VISIBLE);
 
                 }
             }
@@ -232,6 +237,11 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         activation_holder = (LinearLayout)findViewById(R.id.activation_holder);
         activation_holder.setOnClickListener(this);
 
+        sms_delivery_text = (FacedTextView)findViewById(R.id.sms_delivery_text);
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getString(R.string.deliver_verification));
+        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.rgb(255, 158, 158));
+        spannableStringBuilder.setSpan(foregroundColorSpan, 70, 81, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        sms_delivery_text.setText(spannableStringBuilder);
 
         digit_1 = (RippleView)findViewById(R.id.digit_1);
         digit_1.setOnClickListener(this);
@@ -253,10 +263,12 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         digit_9.setOnClickListener(this);
         digit_0 = (RippleView)findViewById(R.id.digit_0);
         digit_0.setOnClickListener(this);
-        resend_active_code = (RippleView)findViewById(R.id.resend_active_code);
-        resend_active_code.setOnClickListener(this);
+        keyboard_dismiss = (RippleView)findViewById(R.id.keyboard_dismiss);
+        keyboard_dismiss.setOnClickListener(this);
         backspace = (RippleView)findViewById(R.id.backspace);
         backspace.setOnClickListener(this);
+        resend_active_code = (RippleView)findViewById(R.id.resend_active_code);
+        resend_active_code.setOnClickListener(this);
 
         input_digit_1 = (FacedTextView)findViewById(R.id.input_digit_1);
         input_digit_2 = (FacedTextView)findViewById(R.id.input_digit_2);
@@ -383,6 +395,11 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                     new Expand(keyboard).animate();
                 break;
 
+            case R.id.keyboard_dismiss:
+                if (keyboard.getVisibility() == View.VISIBLE)
+                    new Collapse(keyboard).animate();
+                break;
+
             case R.id.digit_1:
                 inputDigit("1");
                 break;
@@ -432,9 +449,8 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                 break;
 
             case R.id.resend_active_code:
-
-                if (sendSmsPermision){
-                    sendSmsPermision = false;
+                if (sendSmsPermission){
+                    sendSmsPermission = false;
                     hamPayDialog.showWaitingdDialog("");
                     requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
                     requestRegistrationSendSmsToken.execute(registrationSendSmsTokenRequest);
@@ -623,15 +639,14 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                             sendSmsCounter++;
 
                             if (sendSmsCounter < 3) {
-                                sendSmsPermision = true;
+                                sendSmsPermission = true;
                                 Toast.makeText(context, getString(R.string.msg_fail_receive_sms), Toast.LENGTH_LONG).show();
                             }else {
-                                sendSmsPermision = false;
+                                sendSmsPermission = false;
                                 Toast.makeText(context, getString(R.string.sms_upper_reach_sms), Toast.LENGTH_LONG).show();
                             }
 
-                            if (keyboard.getVisibility() != View.VISIBLE)
-                                new Expand(keyboard).animate();
+                            resend_active_code.setVisibility(View.VISIBLE);
 
                         }
                     }.start();

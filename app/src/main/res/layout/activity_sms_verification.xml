@@ -2,7 +2,8 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:geekui="http://schemas.android.com/apk/res-auto">
+    xmlns:geekui="http://schemas.android.com/apk/res-auto"
+    xmlns:ripple="http://schemas.android.com/apk/res-auto">
 
 
     <LinearLayout
@@ -246,6 +247,7 @@
                             android:layout_margin="12dp"/>
 
                         <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                            android:id="@+id/sms_delivery_text"
                             geekui:customTypeface="fonts/iran_sans.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -278,7 +280,7 @@
                         android:gravity="center"
                         android:layout_gravity="center"
                         android:text="۰۳:۰۰"
-                        android:layout_margin="8dp"/>
+                        android:layout_margin="4dp"/>
 
 
                     <xyz.homapay.hampay.mobile.android.component.numericalprogressbar.NumberProgressBar
@@ -293,6 +295,32 @@
                         custom:progress_text_size="17dp"
                         custom:progress_unreached_bar_height="1.5dp"
                         custom:progress_reached_bar_height="3.0dp"/>
+
+                    <xyz.homapay.hampay.mobile.android.component.material.RippleView
+                        android:id="@+id/resend_active_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        ripple:rv_type="rectangle"
+                        android:background="@drawable/selector_row"
+                        ripple:rv_zoom="true"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginRight="10dp"
+                        android:visibility="invisible">
+
+                        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                            geekui:customTypeface="fonts/iran_sans.ttf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/white"
+                            android:textSize="11dp"
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            android:text="@string/resend"
+                            android:background="@color/keyword_btn_color"
+                            android:padding="4dp"/>
+
+                    </xyz.homapay.hampay.mobile.android.component.material.RippleView>
 
                 </LinearLayout>
 
