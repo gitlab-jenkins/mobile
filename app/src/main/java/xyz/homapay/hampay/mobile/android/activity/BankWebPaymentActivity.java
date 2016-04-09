@@ -150,7 +150,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
                 urlText.setText(url);
 
-                if (url.toLowerCase().contains("c.php")) {
+                if (url.toLowerCase().contains(pspInfoDTO.getRedirectURL().toLowerCase())) {
                     if (view.getTitle().equalsIgnoreCase("failure")) {
                         hamPayDialog.ipgFailDialog();
                         startTimer();

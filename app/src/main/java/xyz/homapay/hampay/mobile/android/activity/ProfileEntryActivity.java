@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -40,6 +41,7 @@ import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.location.BestLocationListener;
 import xyz.homapay.hampay.mobile.android.location.BestLocationProvider;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.util.CardNumberValidator;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.NationalCodeVerification;
@@ -49,11 +51,14 @@ public class ProfileEntryActivity extends AppCompatActivity {
 
     Activity activity;
 
+    PersianEnglishDigit persianEnglishDigit;
+
     ButtonRectangle keepOn_button;
 
     FacedEditText cellNumberValue;
     ImageView cellNumberIcon;
     boolean cellNumberIsValid = false;
+    ProgressBar cardValidatorProgress;
 
     FacedEditText nationalCodeValue;
     ImageView nationalCodeIcon;
@@ -61,7 +66,6 @@ public class ProfileEntryActivity extends AppCompatActivity {
 
     FacedEditText cardNumberValue;
     FacedTextView cardProfile;
-    boolean cardNumberIsValid = true;
     boolean verifiedCardNumber = false;
     ImageView cardNumberIcon;
 
@@ -112,6 +116,8 @@ public class ProfileEntryActivity extends AppCompatActivity {
 
     DeviceInfo deviceInfo;
 
+    private CardNumberValidator cardNumberValidator;
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -146,6 +152,10 @@ public class ProfileEntryActivity extends AppCompatActivity {
 
         deviceInfo = new DeviceInfo(activity);
 
+        persianEnglishDigit = new PersianEnglishDigit();
+
+        cardNumberValidator = new CardNumberValidator();
+
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
@@ -167,7 +177,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 cellNumberValue.removeTextChangedListener(this);
-                cellNumberValue.setText(new PersianEnglishDigit(s.toString()).E2P());
+                cellNumberValue.setText(persianEnglishDigit.E2P(s.toString()));
                 cellNumberValue.setSelection(s.toString().length());
                 cellNumberValue.addTextChangedListener(this);
             }
@@ -219,7 +229,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
                                 procNationalCode += rawNationalCode.charAt(i);
                             }
                         }
-                        procNationalCode = new PersianEnglishDigit(procNationalCode).E2P();
+                        procNationalCode = persianEnglishDigit.E2P(procNationalCode);
                         nationalCodeValue.setText(procNationalCode);
                         nationalCodeValue.setSelection(nationalCodeValue.getText().toString().length());
                     }
@@ -267,6 +277,8 @@ public class ProfileEntryActivity extends AppCompatActivity {
             }
         });
 
+        cardValidatorProgress = (ProgressBar)findViewById(R.id.cardValidatorProgress);
+
         cardNumberValue = (FacedEditText)findViewById(R.id.cardNumberValue);
         cardProfile = (FacedTextView)findViewById(R.id.cardProfile);
         cardNumberIcon = (ImageView)findViewById(R.id.cardNumberIcon);
@@ -274,30 +286,20 @@ public class ProfileEntryActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
 
+                String cardNumber = persianEnglishDigit.P2E(cardNumberValue.getText().toString().replaceAll("-", ""));
+
+                cardNumberIcon.setVisibility(View.GONE);
+                cardValidatorProgress.setVisibility(View.GONE);
+
                 if (!hasFocus) {
-
-                    cardNumberIsValid = true;
-
-                    String splitedFormat[] = Constants.CARD_NUMBER_FORMAT.split("-");
-                    String splitedCardNo[] = cardNumberValue.getText().toString().split("-");
-
-                    if (splitedCardNo.length != splitedFormat.length) {
-                        cardNumberIsValid = false;
-
-                    } else {
-                        for (int i = 0; i < splitedCardNo.length; i++) {
-                            if (splitedCardNo[i].length() != splitedFormat[i].length()) {
-                                cardNumberIsValid = false;
-                            }
-                        }
-                    }
-
-                    if (cardNumberIsValid) {
+                    if (cardNumberValidator.validate(cardNumber)){
+                        cardValidatorProgress.setVisibility(View.VISIBLE);
                         cardProfileRequest = new CardProfileRequest();
-                        cardProfileRequest.setCardNumber(new PersianEnglishDigit().P2E(cardNumberValue.getText().toString()));
+                        cardProfileRequest.setCardNumber(cardNumber);
                         requestCardProfile = new RequestCardProfile(activity, new RequestCardProfileTaskCompleteListener());
                         requestCardProfile.execute(cardProfileRequest);
-                    } else {
+                    }else {
+                        cardNumberIcon.setVisibility(View.VISIBLE);
                         cardNumberIcon.setImageResource(R.drawable.false_icon);
                     }
                 } else {
@@ -332,7 +334,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
                                 procCardNumberValue += rawCardNumberValue.charAt(i);
                             }
                         }
-                        procCardNumberValue = new PersianEnglishDigit(procCardNumberValue).E2P();
+                        procCardNumberValue = persianEnglishDigit.E2P(procCardNumberValue);
                         cardNumberValue.setText(procCardNumberValue);
                         cardNumberValue.setSelection(cardNumberValue.getText().toString().length());
                     }
@@ -386,11 +388,11 @@ public class ProfileEntryActivity extends AppCompatActivity {
 
                     registrationEntryRequest = new RegistrationEntryRequest();
 
-                    registrationEntryRequest.setCellNumber(new PersianEnglishDigit(getString(R.string.iran_prefix_cell_number) + cellNumberValue.getText().toString()).P2E());
-                    registrationEntryRequest.setCardNumber(new PersianEnglishDigit(cardNumberValue.getText().toString()).P2E());
+                    registrationEntryRequest.setCellNumber(persianEnglishDigit.P2E(getString(R.string.iran_prefix_cell_number) + cellNumberValue.getText().toString()));
+                    registrationEntryRequest.setCardNumber(persianEnglishDigit.P2E(cardNumberValue.getText().toString()));
                     registrationEntryRequest.setFullName(userNameFamily.getText().toString());
                     registrationEntryRequest.setEmail(emailValue.getText().toString());
-                    registrationEntryRequest.setNationalCode(new PersianEnglishDigit(nationalCodeValue.getText().toString().replaceAll("-", "")).P2E());
+                    registrationEntryRequest.setNationalCode(persianEnglishDigit.P2E(nationalCodeValue.getText().toString().replaceAll("-", "")));
 
                     requestRegistrationEntry = new RequestRegistrationEntry(activity,
                             new RequestRegistrationEntryTaskCompleteListener(),
@@ -413,6 +415,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
 
                     else if (cardNumberValue.getText().toString().length() == 0 || !verifiedCardNumber){
                         Toast.makeText(context, getString(R.string.msg_CardNo_invalid), Toast.LENGTH_SHORT).show();
+                        cardNumberIcon.setVisibility(View.VISIBLE);
                         cardNumberIcon.setImageResource(R.drawable.false_icon);
                         cardNumberValue.requestFocus();
                     }
@@ -451,6 +454,9 @@ public class ProfileEntryActivity extends AppCompatActivity {
         @Override
         public void onTaskComplete(ResponseMessage<CardProfileResponse> cardProfileResponseMessage)
         {
+
+            cardValidatorProgress.setVisibility(View.GONE);
+
             if (cardProfileResponseMessage != null) {
 
                 cardProfileResponse = cardProfileResponseMessage.getService();
@@ -468,6 +474,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
                     bytes = Base64.decode(cardProfileResponse.getBankLogo(), Base64.DEFAULT);
 
                     Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    cardNumberIcon.setVisibility(View.VISIBLE);
                     cardNumberIcon.setImageBitmap(bitmap);
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
@@ -516,11 +523,11 @@ public class ProfileEntryActivity extends AppCompatActivity {
             if (registrationEntryResponse != null) {
 
                 if (registrationEntryResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    editor.putString(Constants.REGISTERED_CELL_NUMBER, new PersianEnglishDigit(getString(R.string.iran_prefix_cell_number) + cellNumberValue.getText().toString()).P2E());
+                    editor.putString(Constants.REGISTERED_CELL_NUMBER, persianEnglishDigit.P2E(getString(R.string.iran_prefix_cell_number) + cellNumberValue.getText().toString()));
                     editor.putString(Constants.REGISTERED_BANK_ID, selectedBankCode);
                     editor.putString(Constants.REGISTERED_USER_NAME, userNameFamily.getText().toString());
                     editor.putString(Constants.REGISTERED_CARD_NO, cardNumberValue.getText().toString());
-                    editor.putString(Constants.REGISTERED_NATIONAL_CODE, new PersianEnglishDigit(nationalCodeValue.getText().toString().replaceAll("-", "")).P2E());
+                    editor.putString(Constants.REGISTERED_NATIONAL_CODE, persianEnglishDigit.P2E(nationalCodeValue.getText().toString().replaceAll("-", "")));
                     editor.putString(Constants.REGISTERED_USER_ID_TOKEN, registrationEntryResponse.getService().getUserIdToken());
                     editor.putString(Constants.REGISTERED_USER_EMAIL, emailValue.getText().toString());
                     editor.commit();

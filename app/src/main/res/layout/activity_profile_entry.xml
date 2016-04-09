@@ -339,12 +339,22 @@
                             android:maxLength="19"
                             android:text="5859-4710-1018-8708"/>
 
+                        <ProgressBar
+                            android:id="@+id/cardValidatorProgress"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="12dp"
+                            android:visibility="gone"
+                            android:indeterminateDrawable="@drawable/fragment_progress"/>
+
                         <ImageView
                             android:id="@+id/cardNumberIcon"
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_centerVertical="true"
-                            android:layout_marginLeft="12dp"/>
+                            android:layout_marginLeft="12dp"
+                            android:visibility="gone"/>
 
                     </RelativeLayout>
 
