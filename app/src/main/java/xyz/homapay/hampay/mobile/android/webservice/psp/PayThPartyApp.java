@@ -95,7 +95,7 @@ public class PayThPartyApp {
         soapEnvelope.addMapping(NAMESPACE, "entry", Vectorstring2stringMapEntry.class);
         soapEnvelope.setOutputSoapObject(soapReq);
 //        HttpTransportSE httpTransport = new HttpTransportSE(url,timeOut);
-        KeepAliveHttpsTransportSE httpTransport = new KeepAliveHttpsTransportSE(Constants.PSP_SOAO_SERVICE_URL, 443, "/ptpa", timeOut);
+        KeepAliveHttpsTransportSE httpTransport = new KeepAliveHttpsTransportSE(Constants.PSP_SOAP_SERVICE_URL, 443, "/ptpa", timeOut);
         httpTransport.debug = true;
         try{
             if (headers!=null){

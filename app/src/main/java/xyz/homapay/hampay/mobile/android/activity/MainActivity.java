@@ -57,6 +57,7 @@ import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.LatestPurchase;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
+import xyz.homapay.hampay.mobile.android.util.CardNumberValidator;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 
@@ -197,7 +198,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         if (bundle != null) {
             hasNotification = bundle.getBoolean(Constants.HAS_NOTIFICATION);
         }
-
 
 
         databaseHelper = new DatabaseHelper(activity);

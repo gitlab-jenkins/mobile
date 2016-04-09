@@ -54,15 +54,6 @@ public class AccountDetailFragment extends Fragment {
     FacedTextView user_iban_value;
     FacedTextView user_iban_bank;
     FacedTextView user_national_code;
-    LinearLayout selectedHampay;
-    FacedTextView hampay_1;
-    FacedTextView hampay_2;
-    FacedTextView hampay_3;
-    FacedTextView hampay_4;
-    CircleImageView hampay_image_1;
-    CircleImageView hampay_image_2;
-    CircleImageView hampay_image_3;
-    CircleImageView hampay_image_4;
 
     HamPayDialog hamPayDialog;
 
@@ -146,8 +137,6 @@ public class AccountDetailFragment extends Fragment {
 
         hamPayDialog = new HamPayDialog(getActivity());
 
-        selectedHampay = (LinearLayout)rootView.findViewById(R.id.selectedHampay);
-
         intro_account_button = (ButtonRectangle)rootView.findViewById(R.id.intro_account_button);
         intro_account_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,15 +156,6 @@ public class AccountDetailFragment extends Fragment {
         user_iban_value = (FacedTextView)rootView.findViewById(R.id.user_iban_value);
         user_iban_bank = (FacedTextView)rootView.findViewById(R.id.user_iban_bank);
         user_national_code = (FacedTextView)rootView.findViewById(R.id.user_national_code);
-
-        hampay_1 = (FacedTextView)rootView.findViewById(R.id.hampay_1);
-        hampay_2 = (FacedTextView)rootView.findViewById(R.id.hampay_2);
-        hampay_3 = (FacedTextView)rootView.findViewById(R.id.hampay_3);
-        hampay_4 = (FacedTextView)rootView.findViewById(R.id.hampay_4);
-        hampay_image_1 = (CircleImageView)rootView.findViewById(R.id.hampay_image_1);
-        hampay_image_2 = (CircleImageView)rootView.findViewById(R.id.hampay_image_2);
-        hampay_image_3 = (CircleImageView)rootView.findViewById(R.id.hampay_image_3);
-        hampay_image_4 = (CircleImageView)rootView.findViewById(R.id.hampay_image_4);
 
 
         if (prefs.getBoolean(Constants.FORCE_USER_PROFILE, false)){
@@ -301,9 +281,5 @@ public class AccountDetailFragment extends Fragment {
         hide_bg.setVisibility(View.GONE);
 
         List<ContactDTO> contactDTOs = userProfileDTO.getSelectedContacts();
-
-        if (contactDTOs.size() > 0){
-            selectedHampay.setVisibility(View.VISIBLE);
-        }
     }
 }

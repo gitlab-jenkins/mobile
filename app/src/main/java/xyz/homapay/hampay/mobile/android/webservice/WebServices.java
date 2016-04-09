@@ -229,6 +229,7 @@ public class WebServices  {
         proxyService.closeConnection();
 
         return  responseMessage;
+
     }
 
     public ResponseMessage<RegistrationSendSmsTokenResponse> registrationSendSmsToken(RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest) throws IOException{
@@ -560,33 +561,6 @@ public class WebServices  {
         return responseMessage;
     }
 
-
-    public ResponseMessage<IndividualPaymentConfirmResponse> individualPaymentConfirm(IndividualPaymentConfirmRequest individualPaymentConfirmRequest) throws IOException{
-
-        ResponseMessage<IndividualPaymentConfirmResponse> responseMessage = null;
-        url = new URL(serviceURL + "/customers/individual-payment-confirm");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
-
-        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
-
-        RequestMessage<IndividualPaymentConfirmRequest> message = new RequestMessage<>();
-        message.setRequestHeader(header);
-        individualPaymentConfirmRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
-        message.setService(individualPaymentConfirmRequest);
-
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<IndividualPaymentConfirmRequest>>() {}.getType();
-        String jsonRequest = new Gson().toJson(message, requestType);
-        proxyService.setJsonBody(jsonRequest);
-
-        Gson gson = builder.getDatebuilder().create();
-
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<IndividualPaymentConfirmResponse>>() {}.getType());
-
-        proxyService.closeConnection();
-
-
-        return responseMessage;
-    }
 
     public ResponseMessage<IndividualPaymentResponse> individualPayment(IndividualPaymentRequest individualPaymentRequest) throws IOException{
 

@@ -54,10 +54,6 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.PostStartActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".activity.ProfileEntryActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"

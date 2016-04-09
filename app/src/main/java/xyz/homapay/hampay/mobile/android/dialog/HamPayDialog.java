@@ -499,33 +499,35 @@ public class HamPayDialog {
         FacedTextView tac_accept = (FacedTextView) view.findViewById(R.id.tac_accept);
         FacedTextView tac_reject = (FacedTextView) view.findViewById(R.id.tac_reject);
 
-        Pattern pattern = Pattern.compile(Constants.WEB_URL_REGEX);
-        Matcher matcher = pattern.matcher(accept_term);
-        while (matcher.find()) {
-            final String urlStr = matcher.group();
+        tac_term.setText(accept_term);
 
-            Spannable WordtoSpan = new SpannableString(accept_term);
-
-            ClickableSpan privacySpan = new ClickableSpan() {
-                @Override
-                public void onClick(View textView) {
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    if(urlStr.toLowerCase().contains("http://")) {
-                        i.setData(Uri.parse(urlStr));
-                    }else {
-                        i.setData(Uri.parse("http://" + urlStr));
-                    }
-                    activity.startActivity(i);
-                }
-            };
-
-            WordtoSpan.setSpan(privacySpan, accept_term.indexOf(urlStr), accept_term.indexOf(urlStr) + urlStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-            tac_term.setText(WordtoSpan);
-
-            tac_term.setMovementMethod(LinkMovementMethod.getInstance());
-
-        }
+//        Pattern pattern = Pattern.compile(Constants.WEB_URL_REGEX);
+//        Matcher matcher = pattern.matcher(accept_term);
+//        while (matcher.find()) {
+//            final String urlStr = matcher.group();
+//
+//            Spannable WordtoSpan = new SpannableString(accept_term);
+//
+//            ClickableSpan privacySpan = new ClickableSpan() {
+//                @Override
+//                public void onClick(View textView) {
+//                    Intent i = new Intent(Intent.ACTION_VIEW);
+//                    if(urlStr.toLowerCase().contains("http://")) {
+//                        i.setData(Uri.parse(urlStr));
+//                    }else {
+//                        i.setData(Uri.parse("http://" + urlStr));
+//                    }
+//                    activity.startActivity(i);
+//                }
+//            };
+//
+//            WordtoSpan.setSpan(privacySpan, accept_term.indexOf(urlStr), accept_term.indexOf(urlStr) + urlStr.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//
+//            tac_term.setText(WordtoSpan);
+//
+//            tac_term.setMovementMethod(LinkMovementMethod.getInstance());
+//
+//        }
 
 
         tacAcceptRequest = new TACAcceptRequest();

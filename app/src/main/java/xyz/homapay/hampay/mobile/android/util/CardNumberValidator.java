@@ -10,12 +10,27 @@ public class CardNumberValidator {
     }
 
     public boolean validate(String cardNumber){
-        if(cardNumber.length() != 16) return false;
+        if (cardNumber.length() < 16) return false;
         int sum = 0;
         boolean odd = true;
-        for (char ch : cardNumber.toCharArray())
-        { int digit = Integer.parseInt(String.valueOf(ch)); sum = odd ? (digit * 2 > 9 ? digit * 2 - 9 : digit * 2 ) : digit ; }
-        return (sum % 10) == 0;
+
+        cardNumber = cardNumber.replaceAll("-", "");
+
+        for (char ch : cardNumber.toCharArray()) {
+            int digit;
+
+            try {
+                digit = Integer.parseInt(String.valueOf(ch));
+            } catch (NumberFormatException e) {
+                return false;
+            }
+
+            sum += (odd ? (digit * 2 > 9 ? digit * 2 - 9 : digit * 2) : digit);
+            odd = !odd;
+        }
+
+        if ((sum % 10) == 0) return true;
+        return false;
     }
 
 }

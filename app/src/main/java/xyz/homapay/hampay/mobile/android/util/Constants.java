@@ -16,7 +16,7 @@ public class Constants {
     public static final String HTTPS_OPENAM_LOGOUT_URL = HTTPS_SERVER_IP + "/unauth";
     public static final String HTTP_OPENAM_LOGIN_URL = "http://" + SERVER_IP + URL_PREFIX + "/auth";
     public static final String HTTP_OPENAM_LOGOUT_URL = "http://" + SERVER_IP + URL_PREFIX + "/unauth";
-    public static final String PSP_SOAO_SERVICE_URL = SERVER_IP;
+    public static final String PSP_SOAP_SERVICE_URL = SERVER_IP;
     public static final String REQUEST_VERSION = "2.0-PA";
     public static final int SERVICE_CONNECTION_TIMEOUT = 30000;
     public static final int SERVICE_READ_TIMEOUT = 30000;
