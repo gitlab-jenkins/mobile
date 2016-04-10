@@ -27,8 +27,6 @@ import com.google.android.gms.analytics.Tracker;
 
 import java.io.IOException;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
@@ -2183,9 +2181,9 @@ public class HamPayDialog {
     }
 
 
-    public void pspResultDialog(String purchaseCode){
+    public void pspSuccessResultDialog(String purchaseCode){
 
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_request_pay, null);
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_psp_success, null);
 
         FacedTextView request_payment_message = (FacedTextView) view.findViewById(R.id.request_payment_message);
         request_payment_message.setText(activity.getString(R.string.msg_success_pending_payment, new PersianEnglishDigit().E2P(purchaseCode)));
@@ -2203,6 +2201,26 @@ public class HamPayDialog {
         dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
     }
+
+    public void pspFailResultDialog(){
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_ipg_fail, null);
+
+        FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
+
+        confirmation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                activity.finish();
+            }
+        });
+
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
+        dialog.show();
+    }
+
 
     public void ipgSuccessDialog(String purchaseCode){
 

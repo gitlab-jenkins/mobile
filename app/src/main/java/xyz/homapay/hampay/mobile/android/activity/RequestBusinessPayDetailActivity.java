@@ -44,6 +44,8 @@ import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
+import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
+import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring;
 import xyz.homapay.hampay.mobile.android.webservice.psp.Vectorstring2stringMapEntry;
 import xyz.homapay.hampay.mobile.android.webservice.psp.string2stringMapEntry;
 
@@ -263,46 +265,48 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                     requestPurchase = new RequestPurchase(activity, new RequestPurchaseTaskCompleteListener());
 
                     doWorkInfo = new DoWorkInfo();
-                    doWorkInfo.setUserName("test");
-                    doWorkInfo.setPassword("1234");
+                    doWorkInfo.setUserName("appstore");
+                    doWorkInfo.setPassword("sepapp");
                     doWorkInfo.setCellNumber(prefs.getString(Constants.REGISTERED_CELL_NUMBER, ""));
                     doWorkInfo.setLangAByte((byte) 0);
                     doWorkInfo.setLangABoolean(false);
-                    Vectorstring2stringMapEntry vectorstring2stringMapEntry = new Vectorstring2stringMapEntry();
-                    string2stringMapEntry s2sMapEntry = new string2stringMapEntry();
+                    TWAArrayOfKeyValueOfstringstring vectorstring2stringMapEntry = new TWAArrayOfKeyValueOfstringstring();
+                    TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
 
-                    s2sMapEntry.key = "Amount";
-                    s2sMapEntry.value = (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge()) + "";
+
+
+                    s2sMapEntry.Key = "Amount";
+                    s2sMapEntry.Value = (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge()) + "";
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                    s2sMapEntry = new string2stringMapEntry();
-                    s2sMapEntry.key = "Pin2";
-                    s2sMapEntry.value = pin2Value.getText().toString();
+                    s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry.Key = "Pin2";
+                    s2sMapEntry.Value = pin2Value.getText().toString();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                    s2sMapEntry = new string2stringMapEntry();
-                    s2sMapEntry.key = "ThirdParty";
-                    s2sMapEntry.value = purchaseInfoDTO.getProductCode();
+                    s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry.Key = "ThirdParty";
+                    s2sMapEntry.Value = purchaseInfoDTO.getProductCode();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                    s2sMapEntry = new string2stringMapEntry();
-                    s2sMapEntry.key = "TerminalId";
-                    s2sMapEntry.value = pspInfoDTO.getTerminalID();
+                    s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry.Key = "TerminalId";
+                    s2sMapEntry.Value = pspInfoDTO.getTerminalID();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                    s2sMapEntry = new string2stringMapEntry();
-                    s2sMapEntry.key = "CardId";
-                    s2sMapEntry.value = pspInfoDTO.getCardDTO().getMaskedCardNumber();
+                    s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry.Key = "CardId";
+                    s2sMapEntry.Value = pspInfoDTO.getCardDTO().getCardId();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                    s2sMapEntry = new string2stringMapEntry();
-                    s2sMapEntry.key = "Merchant";
-                    s2sMapEntry.value = pspInfoDTO.getMerchant();
+                    s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry.Key = "Merchant";
+                    s2sMapEntry.Value = pspInfoDTO.getMerchant();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                    s2sMapEntry = new string2stringMapEntry();
-                    s2sMapEntry.key = "IPAddress";
-                    s2sMapEntry.value = pspInfoDTO.getIpAddress();
+                    s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry.Key = "IPAddress";
+                    s2sMapEntry.Value = pspInfoDTO.getIpAddress();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     doWorkInfo.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
@@ -363,31 +367,46 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
     }
 
 
-    public class RequestPurchaseTaskCompleteListener implements AsyncTaskCompleteListener<Vectorstring2stringMapEntry> {
+    public class RequestPurchaseTaskCompleteListener implements AsyncTaskCompleteListener<TWAArrayOfKeyValueOfstringstring> {
 
         @Override
-        public void onTaskComplete(Vectorstring2stringMapEntry purchaseResponseResponseMessage) {
+        public void onTaskComplete(TWAArrayOfKeyValueOfstringstring purchaseResponseResponseMessage) {
 
             hamPayDialog.dismisWaitingDialog();
 
-            if (purchaseResponseResponseMessage != null){
+            String responseCode = null;
+            String description = null;
+            String SWTraceNum = null;
+
+            if (purchaseResponseResponseMessage != null) {
                 pspResultRequest = new PSPResultRequest();
-                pspResultRequest.setProductCode(purchaseInfoDTO.getProductCode());
-                for(string2stringMapEntry s2sMapEntry : purchaseResponseResponseMessage){
-                    if (s2sMapEntry.key.equalsIgnoreCase("ResponseCode")){
-                        pspResultRequest.setPspResponseCode(s2sMapEntry.value);
-                    }else if (s2sMapEntry.key.equalsIgnoreCase("SWTraceNum")){
-                        new HamPayDialog(activity).pspResultDialog(s2sMapEntry.value);
-                        pspResultRequest.setTrackingCode(s2sMapEntry.value);
+                for (TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry : purchaseResponseResponseMessage) {
+                    if (s2sMapEntry.Key.equalsIgnoreCase("ResponseCode")) {
+                        responseCode = s2sMapEntry.Value;
+                    }else if (s2sMapEntry.Key.equalsIgnoreCase("Description")){
+                        description = s2sMapEntry.Value;
+                    }else if (s2sMapEntry.Key.equalsIgnoreCase("SWTraceNum")){
+                        SWTraceNum = s2sMapEntry.Value;
                     }
                 }
+
+                if (responseCode != null){
+                    if (responseCode.equalsIgnoreCase("2000")) {
+                        new HamPayDialog(activity).pspSuccessResultDialog(SWTraceNum);
+                    }
+                }else {
+                    new HamPayDialog(activity).pspFailResultDialog();
+                }
+
+                pspResultRequest.setPspResponseCode(responseCode);
+                pspResultRequest.setProductCode(purchaseInfoDTO.getProductCode());
+                pspResultRequest.setTrackingCode(SWTraceNum);
+                requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener());
+                requestPSPResult.execute(pspResultRequest);
 
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra(Constants.ACTIVITY_RESULT, ResultStatus.SUCCESS.ordinal());
                 setResult(Activity.RESULT_OK, returnIntent);
-
-                requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener());
-                requestPSPResult.execute(pspResultRequest);
 
                 hamPayGaTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Pending Payment Request")
@@ -395,8 +414,10 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                         .setLabel("Success")
                         .build());
 
-            }
-            else {
+            } else {
+
+                new HamPayDialog(activity).pspFailResultDialog();
+
                 hamPayGaTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Pending Payment Request")
                         .setAction("Payment")

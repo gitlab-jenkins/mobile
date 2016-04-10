@@ -95,9 +95,12 @@ import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
+import xyz.homapay.hampay.mobile.android.ssl.AllowHamPaySSL;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.UserContacts;
+import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
+import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWABasicHttpBinding_ITokenPay;
 import xyz.homapay.hampay.mobile.android.webservice.psp.PayThPartyApp;
 import xyz.homapay.hampay.mobile.android.webservice.psp.Vectorstring2stringMapEntry;
 
@@ -807,16 +810,22 @@ public class WebServices  {
     }
 
 
-    public Vectorstring2stringMapEntry newPurchaseResponse(DoWorkInfo doWorkInfo){
+    public TWAArrayOfKeyValueOfstringstring newPurchaseResponse(DoWorkInfo doWorkInfo) throws Exception {
 
-        PayThPartyApp payThPartyApp = new PayThPartyApp(context);
-        Vectorstring2stringMapEntry responseMessage = payThPartyApp.DoWork(
-                doWorkInfo.getUserName(),
-                doWorkInfo.getPassword(),
-                doWorkInfo.getCellNumber(),
-                doWorkInfo.getLangAByte(),
-                doWorkInfo.isLangABoolean(),
-                doWorkInfo.getVectorstring2stringMapEntry());
+       AllowHamPaySSL   allowHamPaySSL = new AllowHamPaySSL(context);
+        allowHamPaySSL.enableHamPaySSL();
+
+        TWABasicHttpBinding_ITokenPay twaBasicHttpBinding_iTokenPay = new TWABasicHttpBinding_ITokenPay(null,"https://" + Constants.SERVER_IP + "/saman/psp/pay");
+        TWAArrayOfKeyValueOfstringstring responseMessage = twaBasicHttpBinding_iTokenPay.DoWork(doWorkInfo.getUserName(), doWorkInfo.getPassword(), doWorkInfo.getCellNumber(),null,doWorkInfo.getVectorstring2stringMapEntry());
+
+//        PayThPartyApp payThPartyApp = new PayThPartyApp(context);
+//        Vectorstring2stringMapEntry responseMessage = payThPartyApp.DoWork(
+//                doWorkInfo.getUserName(),
+//                doWorkInfo.getPassword(),
+//                doWorkInfo.getCellNumber(),
+//                null,
+//                doWorkInfo.isLangABoolean(),
+//                doWorkInfo.getVectorstring2stringMapEntry());
 
         return responseMessage;
     }

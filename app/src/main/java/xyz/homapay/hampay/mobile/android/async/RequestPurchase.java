@@ -6,20 +6,21 @@ import android.os.AsyncTask;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.webservice.WebServices;
+import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
 import xyz.homapay.hampay.mobile.android.webservice.psp.Vectorstring2stringMapEntry;
 
 /**
  * Created by amir on 7/3/15.
  */
-public class RequestPurchase extends AsyncTask<DoWorkInfo, Void, Vectorstring2stringMapEntry> {
+public class RequestPurchase extends AsyncTask<DoWorkInfo, Void, TWAArrayOfKeyValueOfstringstring> {
 
     private static final String TAG = "RequestPurchase";
 
     private Context context;
-    private AsyncTaskCompleteListener<Vectorstring2stringMapEntry> listener;
+    private AsyncTaskCompleteListener<TWAArrayOfKeyValueOfstringstring> listener;
 
 
-    public RequestPurchase(Context context, AsyncTaskCompleteListener<Vectorstring2stringMapEntry> listener)
+    public RequestPurchase(Context context, AsyncTaskCompleteListener<TWAArrayOfKeyValueOfstringstring> listener)
     {
         this.context = context;
         this.listener = listener;
@@ -33,23 +34,28 @@ public class RequestPurchase extends AsyncTask<DoWorkInfo, Void, Vectorstring2st
     }
 
     @Override
-    protected Vectorstring2stringMapEntry doInBackground(DoWorkInfo... params) {
+    protected TWAArrayOfKeyValueOfstringstring doInBackground(DoWorkInfo... params) {
 
         WebServices webServices = new WebServices(context);
 
-        return webServices.newPurchaseResponse(params[0]);
+        try {
+            return webServices.newPurchaseResponse(params[0]);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 
     @Override
-    protected void onPostExecute(Vectorstring2stringMapEntry purchaseResponseMessage)
+    protected void onPostExecute(TWAArrayOfKeyValueOfstringstring purchaseResponseMessage)
     {
         super.onPostExecute(purchaseResponseMessage);
         listener.onTaskComplete(purchaseResponseMessage);
     }
 
     @Override
-    protected void onCancelled(Vectorstring2stringMapEntry purchaseResponseMessage) {
+    protected void onCancelled(TWAArrayOfKeyValueOfstringstring purchaseResponseMessage) {
         super.onCancelled(purchaseResponseMessage);
         cancel(true);
     }
