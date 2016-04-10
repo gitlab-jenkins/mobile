@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<EasyWSDL>
+  <Info>
+    <Version>4.1.12.0</Version>
+    <AccountType>Basic</AccountType>
+    <LibrariesFolder>libs/easywsdl</LibrariesFolder>
+    <MainClass>TWABasicHttpBinding_ITokenPay</MainClass>
+  </Info>
+  <Settings>
+    <Url>/Users/amir/Desktop/ThPartyTokenPay.svc.wsdl</Url>
+    <ClassPrefix/>
+    <PackageName>xyz.homapay.hampay.mobile.android.webservice.newpsp</PackageName>
+    <AddDocumentation>false</AddDocumentation>
+    <EnableAdvancedFeatures>false</EnableAdvancedFeatures>
+    <EnableMTOM>false</EnableMTOM>
+    <EncodeIllegalCharacters>true</EncodeIllegalCharacters>
+    <GenerateAsyncOperations>true</GenerateAsyncOperations>
+    <ImplementSerializable>false</ImplementSerializable>
+    <AddAnyCollection>false</AddAnyCollection>
+    <UseJodaTime>false</UseJodaTime>
+    <Repackage/>
+  </Settings>
+  <Files>
+    <File>TWAArrayOfKeyValueOfstringstring.java</File>
+    <File>TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring.java</File>
+    <File>TWABasicHttpBinding_ITokenPay.java</File>
+    <File>TWAExtendedSoapSerializationEnvelope.java</File>
+    <File>TWAFunctions.java</File>
+    <File>TWAHelper.java</File>
+    <File>TWAIServiceEvents.java</File>
+    <File>TWAMarshalGuid.java</File>
+    <File>TWAOperationResult.java</File>
+  </Files>
+  <Libraries>
+    <File>ksoap2-android-assembly-3.6.0-jar-with-dependencies.jar</File>
+  </Libraries>
+</EasyWSDL>
