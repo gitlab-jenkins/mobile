@@ -34,7 +34,6 @@ import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
 import xyz.homapay.hampay.common.core.model.request.IBANChangeRequest;
 import xyz.homapay.hampay.common.core.model.request.IBANConfirmationRequest;
 import xyz.homapay.hampay.common.core.model.request.IllegalAppListRequest;
-import xyz.homapay.hampay.common.core.model.request.IndividualPaymentConfirmRequest;
 import xyz.homapay.hampay.common.core.model.request.IndividualPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestInvoiceContactsRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestPaymentRequest;
@@ -71,7 +70,6 @@ import xyz.homapay.hampay.common.core.model.response.GetUserIdTokenResponse;
 import xyz.homapay.hampay.common.core.model.response.IBANChangeResponse;
 import xyz.homapay.hampay.common.core.model.response.IBANConfirmationResponse;
 import xyz.homapay.hampay.common.core.model.response.IllegalAppListResponse;
-import xyz.homapay.hampay.common.core.model.response.IndividualPaymentConfirmResponse;
 import xyz.homapay.hampay.common.core.model.response.IndividualPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.LatestInvoiceContactsResponse;
 import xyz.homapay.hampay.common.core.model.response.LatestPaymentResponse;
@@ -101,8 +99,6 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.UserContacts;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWABasicHttpBinding_ITokenPay;
-import xyz.homapay.hampay.mobile.android.webservice.psp.PayThPartyApp;
-import xyz.homapay.hampay.mobile.android.webservice.psp.Vectorstring2stringMapEntry;
 
 /**
  * Created by amir on 6/6/15.
@@ -1048,6 +1044,9 @@ public class WebServices  {
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<IBANConfirmationRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
+
+
+
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();

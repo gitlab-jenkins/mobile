@@ -215,7 +215,8 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
             hamPayDialog.dismisWaitingDialog();
 
             if (cancelPurchasePaymentResponseMessage != null) {
-                if (cancelPurchasePaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                if (cancelPurchasePaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS
+                        || cancelPurchasePaymentResponseMessage.getService().getResultStatus() == ResultStatus.PURCHASE_NOT_ELIGIBLE_TO_CANCEL) {
                     cancelPurchasePaymentResponseMessage.getService().getRequestUUID();
                     purchaseInfoDTOs.remove(position);
                     notifyDataSetChanged();

@@ -2422,7 +2422,7 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 IBANChangeRequest ibanChangeRequest = new IBANChangeRequest();
-                ibanChangeRequest.setIban(iban);
+                ibanChangeRequest.setIban(new PersianEnglishDigit().P2E(iban));
                 RequestIBANChange requestIBANChange = new RequestIBANChange(activity, new RequestIBANChangeTaskCompleteListener(ibanChangeRequest));
                 requestIBANChange.execute(ibanChangeRequest);
             }
