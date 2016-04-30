@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.ColorRes;
 import android.support.v4.content.ContextCompat;
@@ -136,7 +137,9 @@ public class RippleView extends RelativeLayout {
                 timer = 0;
                 durationEmpty = -1;
                 timerEmpty = 0;
-                canvas.restore();
+                if(Build.VERSION.SDK_INT != 23) {
+                    canvas.restore();
+                }
                 invalidate();
                 if (onCompletionListener != null) onCompletionListener.onComplete(this);
                 return;

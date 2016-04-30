@@ -19,7 +19,6 @@ import xyz.homapay.hampay.common.common.request.RequestMessage;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessPaymentConfirmRequest;
-import xyz.homapay.hampay.common.core.model.request.BusinessPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
 import xyz.homapay.hampay.common.core.model.request.CancelPurchasePaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.CancelUserPaymentRequest;
@@ -56,7 +55,6 @@ import xyz.homapay.hampay.common.core.model.request.UserPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
 import xyz.homapay.hampay.common.core.model.response.BusinessListResponse;
 import xyz.homapay.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
-import xyz.homapay.hampay.common.core.model.response.BusinessPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.CancelPurchasePaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.CancelUserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.CardProfileResponse;
@@ -639,33 +637,6 @@ public class WebServices  {
     }
 
 
-    public ResponseMessage<BusinessPaymentResponse> businessPayment(BusinessPaymentRequest businessPaymentRequest) throws IOException{
-
-        ResponseMessage<BusinessPaymentResponse> responseMessage = null;
-        url = new URL(serviceURL + "/customers/business-payment");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
-
-        RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();
-
-        RequestMessage<BusinessPaymentRequest> message = new RequestMessage<>();
-        message.setRequestHeader(header);
-        businessPaymentRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
-        message.setService(businessPaymentRequest);
-
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<BusinessPaymentRequest>>() {}.getType();
-        String jsonRequest = new Gson().toJson(message, requestType);
-        proxyService.setJsonBody(jsonRequest);
-
-        Gson gson = builder.getDatebuilder().create();
-
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<BusinessPaymentResponse>>() {}.getType());
-        proxyService.closeConnection();
-
-        return responseMessage;
-    }
-
-
-
     public ResponseMessage<BusinessListResponse> searchBusinessList(BusinessSearchRequest businessSearchRequest) throws IOException{
 
         ResponseMessage<BusinessListResponse> responseMessage = null;
@@ -1006,7 +977,7 @@ public class WebServices  {
     public ResponseMessage<UserPaymentResponse> userPaymentResponse(UserPaymentRequest userPaymentRequest) throws IOException{
 
         ResponseMessage<UserPaymentResponse> responseMessage = null;
-        url = new URL(serviceURL +  "/users/credit-request");
+        url = new URL(serviceURL +  "/users/payment-request");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         RequestHeader header = new CreateHeader(authToken, Constants.REQUEST_VERSION).createHeader();

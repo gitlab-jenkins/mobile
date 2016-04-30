@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
+import android.hardware.camera2.params.Face;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,6 +104,7 @@ public class PendingPaymentAdapter extends BaseAdapter  {
             viewHolder.price_pay = (FacedTextView)convertView.findViewById(R.id.price_pay);
             viewHolder.expire_pay = (FacedTextView)convertView.findViewById(R.id.expire_pay);
             viewHolder.delete = (FacedTextView)convertView.findViewById(R.id.delete);
+            viewHolder.paymentCode = (FacedTextView)convertView.findViewById(R.id.paymentCode);
             viewHolder.message = (FacedTextView)convertView.findViewById(R.id.message);
 
             convertView.setTag(viewHolder);
@@ -118,7 +120,7 @@ public class PendingPaymentAdapter extends BaseAdapter  {
         viewHolder.date_time.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(paymentInfoDTO.getCreatedBy())));
         viewHolder.price_pay.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount()) + " ریال"));
         viewHolder.message.setText(paymentInfoDTO.getMessage());
-
+        viewHolder.paymentCode.setText(persianEnglishDigit.E2P(paymentInfoDTO.getProductCode()));
         viewHolder.expire_pay.setText(dateUtil.remainingTime(paymentInfoDTO.getExpirationDate(), currentDate));
 
         if (paymentInfoDTO.getImageId() != null) {
@@ -196,6 +198,7 @@ public class PendingPaymentAdapter extends BaseAdapter  {
         FacedTextView price_pay;
         FacedTextView expire_pay;
         FacedTextView delete;
+        FacedTextView paymentCode;
         FacedTextView message;
     }
 

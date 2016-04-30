@@ -4,19 +4,20 @@ package xyz.homapay.hampay.mobile.android.util;
 import xyz.homapay.hampay.mobile.android.webservice.ConnectionType;
 
 public class Constants {
-//    public static String SERVER_IP = "176.58.104.158";//England Server IP
-       public static String SERVER_IP = "139.162.147.189";//UAT Server IP
+    public static String SERVER_IP = "176.58.104.158";//England Server IP
+//       public static String SERVER_IP = "139.162.147.189";//UAT Server IP
     public static String URL_PREFIX = "/hampay";
     public static String HTTP_SERVER_IP = "http://" + SERVER_IP + ":90" + URL_PREFIX;//England Server
     public static String IPG_URL = "http://" + SERVER_IP + ":9091" + URL_PREFIX;//England Server
-    public static String BANK_GATEWAY_URL = "https://sep.shaparak.ir/Payment.aspx";
+//    public static String BANK_GATEWAY_URL = "https://sep.shaparak.ir/Payment.aspx";
+    public static String BANK_GATEWAY_URL = "http://" + SERVER_IP + "/assets/psp/index.php";
     public static ConnectionType CONNECTION_TYPE = ConnectionType.HTTPS;
     public static String HTTPS_SERVER_IP = "https://" + SERVER_IP + URL_PREFIX;//England Server
     public static final String HTTPS_OPENAM_LOGIN_URL = HTTPS_SERVER_IP + "/auth";
     public static final String HTTPS_OPENAM_LOGOUT_URL = HTTPS_SERVER_IP + "/unauth";
     public static final String HTTP_OPENAM_LOGIN_URL = "http://" + SERVER_IP + URL_PREFIX + "/auth";
     public static final String HTTP_OPENAM_LOGOUT_URL = "http://" + SERVER_IP + URL_PREFIX + "/unauth";
-    public static final String PSP_SOAP_SERVICE_URL = SERVER_IP ;
+    public static final String PSP_SOAP_SERVICE_URL = SERVER_IP;
     public static final String REQUEST_VERSION = "2.0-PA";
     public static final int SERVICE_CONNECTION_TIMEOUT = 30000;
     public static final int SERVICE_READ_TIMEOUT = 30000;

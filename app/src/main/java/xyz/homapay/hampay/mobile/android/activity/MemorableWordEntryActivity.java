@@ -164,7 +164,7 @@ public class MemorableWordEntryActivity extends AppCompatActivity {
                                 deviceInfo.getMacAddress(),
                                 deviceInfo.getIMEI(),
                                 deviceInfo.getAndroidId());
-                        serverKey = registrationMemorableWordEntryResponseMessage.getService().getUserIdToken();
+//                        serverKey = registrationMemorableWordEntryResponseMessage.getService().getUserIdToken();
 //                        encryptedData = AESHelper.encrypt(mobileKey, serverKey, memorable_value.getText().toString());
                         editor.putString(Constants.MEMORABLE_WORD, memorable_value.getText().toString());
 //                        encryptedData = AESHelper.encrypt(mobileKey, serverKey, Uuid);

@@ -150,7 +150,8 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
                 urlText.setText(url);
 
-                if (url.toLowerCase().contains(pspInfoDTO.getRedirectURL().toLowerCase())) {
+//                if (url.toLowerCase().startsWith("https://sep.shaparak.ir") && url.toLowerCase().contains(pspInfoDTO.getRedirectURL().toLowerCase())) {
+                if (url.toLowerCase().contains("c.php")) {
                     if (view.getTitle().equalsIgnoreCase("failure")) {
                         hamPayDialog.ipgFailDialog();
                         startTimer();
@@ -178,37 +179,38 @@ public class BankWebPaymentActivity extends AppCompatActivity {
         @Override
         public void onTaskComplete(ResponseMessage<GetTokenFromPSPResponse> getTokenFromPSPResponseMessage) {
 
+            hamPayDialog.dismisWaitingDialog();
+
             if (getTokenFromPSPResponseMessage != null){
                 if (getTokenFromPSPResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
 
                     if (paymentInfoDTO != null) {
-                        redirectedURL = Constants.IPG_URL + pspInfoDTO.getRedirectURL() + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
-                        postData =
-                                "ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
-                                        "&RedirectURL=" + redirectedURL +
-                                        "&Token=" + getTokenFromPSPResponseMessage.getService().getToken();
+                        redirectedURL = Constants.IPG_URL + pspInfoDTO.getRedirectURL() + "?authToken=" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 //                        postData =
-//                                "Amount=" + paymentInfoDTO.getAmount() +
-//                                        "&TerminalId=" + pspInfoDTO.getTerminalID() +
-//                                        "&ResNum=" + paymentInfoDTO.getProductCode() +
-//                                        "&ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
-//                                        "&RedirectURL=" + redirectedURL;
+//                                "ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
+//                                        "&RedirectURL=" + redirectedURL +
+//                                        "&Token=" + getTokenFromPSPResponseMessage.getService().getToken();
+                        postData =
+                                "Amount=" + paymentInfoDTO.getAmount() +
+                                        "&TerminalId=" + pspInfoDTO.getTerminalID() +
+                                        "&ResNum=" + paymentInfoDTO.getProductCode() +
+                                        "&ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
+                                        "&RedirectURL=" + redirectedURL;
 
                     }else if (purchaseInfoDTO != null){
-                        redirectedURL = Constants.IPG_URL + pspInfoDTO.getRedirectURL() + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
-                        postData =
-
-                                "ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
-                                        "&RedirectURL=" + redirectedURL +
-                                        "&Token=" + getTokenFromPSPResponseMessage.getService().getToken();
-
-
+                        redirectedURL = Constants.IPG_URL + pspInfoDTO.getRedirectURL() + "?authToken=" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 //                        postData =
-//                                "Amount=" + purchaseInfoDTO.getAmount() +
-//                                        "&TerminalId=" + pspInfoDTO.getTerminalID() +
-//                                        "&ResNum=" + purchaseInfoDTO.getProductCode() +
-//                                        "&ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
-//                                        "&RedirectURL=" + redirectedURL;
+//                                "ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
+//                                        "&RedirectURL=" + redirectedURL +
+//                                        "&Token=" + getTokenFromPSPResponseMessage.getService().getToken();
+
+
+                        postData =
+                                "Amount=" + /*purchaseInfoDTO.getAmount()*/ "10000" +
+                                        "&TerminalId=" + pspInfoDTO.getTerminalID() +
+                                        "&ResNum=" + purchaseInfoDTO.getProductCode() +
+                                        "&ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
+                                        "&RedirectURL=" + redirectedURL;
                     }
 
                     try {

@@ -67,6 +67,7 @@
 
     <string name="payment">پرداخت</string>
     <string name="message">پیام</string>
+    <string name="payment_code">کد پرداخت:</string>
     <string name="insert_message">پیام خود را بنویسید...</string>
     <string name="insert_price">مبلغ مورد نظر را وارد نماید</string>
     <string name="transaction_user_call">تماس</string>

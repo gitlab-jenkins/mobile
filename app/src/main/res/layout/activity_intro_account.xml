@@ -71,7 +71,7 @@
                 android:textColor="@android:color/black"
                 android:gravity="center_vertical"
                 android:contentDescription="account"
-                android:maxLength="24"
+                android:maxLength="26"
                 android:padding="8dp"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView

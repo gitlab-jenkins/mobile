@@ -4,10 +4,15 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,6 +27,8 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import java.util.ArrayList;
+
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.CardProfileRequest;
@@ -29,6 +36,7 @@ import xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
 import xyz.homapay.hampay.common.core.model.response.CardProfileResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationEntryResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
+import xyz.homapay.hampay.mobile.android.Manifest;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestCardProfile;
@@ -141,6 +149,92 @@ public class ProfileEntryActivity extends AppCompatActivity {
         mBestLocationProvider.startLocationUpdatesWithListener(mBestLocationListener);
     }
 
+
+
+    public interface PermissionListener {
+        boolean onResult(int requestCode, String[] requestPermissions, int[] grantResults);
+    }
+
+    private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
+
+    public void requestPermissions(int requestCode, String[] requestPermissions, PermissionListener permissionListener) {
+        int[] grantResults = new int[requestPermissions.length];
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            ArrayList<String> list_notGranted = new ArrayList<>();
+
+            for (String requestPermission : requestPermissions) {
+                int granted = ContextCompat.checkSelfPermission(this, requestPermission);
+
+                if (granted != PackageManager.PERMISSION_GRANTED)
+                    list_notGranted.add(requestPermission);
+            }
+
+            if (list_notGranted.size() > 0) {
+                permissionListeners.add(permissionListener);
+
+                requestPermissions = list_notGranted.toArray(new String[list_notGranted.size()]);
+
+                super.requestPermissions(requestPermissions, requestCode);
+            } else {
+                for (int i = 0; i < grantResults.length; i++)
+                    grantResults[i] = PackageManager.PERMISSION_GRANTED;
+
+                if (permissionListener != null)
+                    permissionListener.onResult(requestCode, requestPermissions, grantResults);
+            }
+        } else {
+            for (int i = 0; i < grantResults.length; i++)
+                grantResults[i] = PackageManager.PERMISSION_GRANTED;
+
+            if (permissionListener != null)
+                permissionListener.onResult(requestCode, requestPermissions, grantResults);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        for (PermissionListener permissionListener : permissionListeners)
+            if (permissionListener.onResult(requestCode, permissions, grantResults)) {
+                permissionListeners.remove(permissionListener);
+            }
+    }
+
+    int REQUEST_PERMISSIONS_CONTACTS = 1;
+
+    String imei = "";
+
+    private void requestAndLoadContacts() {
+        String[] permissions = new String[]{Manifest.permission.READ_PHONE_STATE};
+
+        requestPermissions(REQUEST_PERMISSIONS_CONTACTS, permissions, new PermissionListener() {
+
+            @Override
+            public boolean onResult(int requestCode, String[] requestPermissions, int[] grantResults) {
+                // Check if the requestCode is ours
+                if (requestCode == REQUEST_PERMISSIONS_CONTACTS) {
+                    // Check if the permission is correct and is granted
+                    if (requestPermissions[0].equals(Manifest.permission.READ_PHONE_STATE) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        // Permission granted
+                        // Calling a method to actually load the contacts
+                        imei = new DeviceInfo(activity).getIMEI();
+
+                        Log.e("IMEI", imei);
+
+                    } else {
+                        // Permission not granted
+                        Toast.makeText(activity, "Access denied!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    return true;
+                }
+
+                return false;
+            }
+        });
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,6 +252,35 @@ public class ProfileEntryActivity extends AppCompatActivity {
 
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
+
+
+        requestAndLoadContacts();
+
+//        if (ContextCompat.checkSelfPermission(activity,
+//                Manifest.permission.READ_PHONE_STATE)
+//                != PackageManager.PERMISSION_GRANTED) {
+//
+//            // Should we show an explanation?
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
+//                    Manifest.permission.READ_PHONE_STATE)) {
+//
+//                // Show an expanation to the user *asynchronously* -- don't block
+//                // this thread waiting for the user's response! After the user
+//                // sees the explanation, try again to request the permission.
+//
+//            } else {
+//
+//                // No explanation needed, we can request the permission.
+//
+//                ActivityCompat.requestPermissions(activity,
+//                        new String[]{Manifest.permission.READ_PHONE_STATE},
+//                        1);
+//
+//                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+//                // app-defined int constant. The callback method gets the
+//                // result of the request.
+//            }
+//        }
 
         initLocation();
 
@@ -365,6 +488,8 @@ public class ProfileEntryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+
+
                 View view = getCurrentFocus();
                 if (view != null) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(
@@ -469,13 +594,14 @@ public class ProfileEntryActivity extends AppCompatActivity {
                     userNameFamily.setText(cardProfileResponse.getFullName());
                     userNameFamily.setEnabled(false);
 
-                    byte[] bytes = new byte[0];
 
-                    bytes = Base64.decode(cardProfileResponse.getBankLogo(), Base64.DEFAULT);
-
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    cardNumberIcon.setVisibility(View.VISIBLE);
-                    cardNumberIcon.setImageBitmap(bitmap);
+                    if (cardProfileResponse.getBankLogo() != null) {
+                        byte[] bytes;
+                        bytes = Base64.decode(cardProfileResponse.getBankLogo(), Base64.DEFAULT);
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        cardNumberIcon.setVisibility(View.VISIBLE);
+                        cardNumberIcon.setImageBitmap(bitmap);
+                    }
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Bank List")

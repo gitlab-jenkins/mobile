@@ -76,7 +76,7 @@ public class IntroIBANActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 ibanConfirmationRequest = new IBANConfirmationRequest();
-                ibanConfirmationRequest.setIban(persianEnglishDigit.P2E(shebaNumberValue.getText().toString()));
+                ibanConfirmationRequest.setIban("IR" + persianEnglishDigit.P2E(shebaNumberValue.getText().toString()));
                 requestIBANConfirmation = new RequestIBANConfirmation(activity, new RequestIBANConfirmationTaskCompleteListener());
                 requestIBANConfirmation.execute(ibanConfirmationRequest);
 
