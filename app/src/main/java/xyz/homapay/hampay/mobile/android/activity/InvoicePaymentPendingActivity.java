@@ -216,7 +216,6 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
 //            }
 //        }
 
-
         pay_to_one_button = (ButtonRectangle) findViewById(R.id.pay_to_one_button);
         pay_to_one_button.setOnClickListener(new View.OnClickListener() {
             @Override

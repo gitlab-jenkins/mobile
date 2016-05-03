@@ -31,6 +31,9 @@
     <permission
         android:name="android.permission.READ_PHONE_STATE"
         android:protectionLevel="signature"/>
+    <permission
+        android:name="android.permission.READ_CONTACTS"
+        android:protectionLevel="signature"/>
 
     <uses-permission android:name="xyz.homapay.hampay.mobile.android.permission.C2D_MESSAGE" />
 
