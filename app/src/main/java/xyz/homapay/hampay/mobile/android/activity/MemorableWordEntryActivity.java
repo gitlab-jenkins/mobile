@@ -25,6 +25,7 @@ import xyz.homapay.hampay.mobile.android.Manifest;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestCredentialEntry;
+import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.edittext.MemorableTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
@@ -44,7 +45,7 @@ import java.util.UUID;
 
 public class MemorableWordEntryActivity extends AppCompatActivity {
 
-    ButtonRectangle keepOn_button;
+    FacedTextView keepOn_button;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
     FacedEditText memorable_value;
@@ -166,7 +167,7 @@ public class MemorableWordEntryActivity extends AppCompatActivity {
         editor.putString(Constants.REGISTERED_ACTIVITY_DATA, PasswordEntryActivity.class.getName());
         editor.commit();
 
-        keepOn_button = (ButtonRectangle) findViewById(R.id.keepOn_button);
+        keepOn_button = (FacedTextView) findViewById(R.id.keepOn_button);
         keepOn_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

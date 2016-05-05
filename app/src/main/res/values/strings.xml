@@ -256,7 +256,7 @@
     <string name="reg_verify_account_no_text_3">لطفا جهت تکمیل بررسی، مبلغ فوق(۲۱۴۱ ریال) را از حساب خود(۱۳۴۵۴) به یکی از روش‌های بالا به حساب هم‌پی (۸۰۰۰۴۵۹) باز گردانید.</string>
     <string name="reg_verify_account_no_keep_on">پس از انجام واریز، دکمه ادامه را کلیک کنید.</string>
 
-    <string name="get_password">ثبت رمزعبور</string>
+    <string name="get_password">دریافت رمز عبور</string>
     <string name="get_password_text_1">مالکیت حساب شما احراز شد</string>
     <string name="get_password_text_0">تایید مالکیت حساب</string>
     <string name="get_password_text_2">منتظر تماس هم‌پی یارتان برای ارتقا به کاربر عادی باشید.</string>

@@ -57,5 +57,6 @@
     <color name="navigation_gray">#d1d3d4</color>
     <color name="register_border">#eeefef</color>
     <color name="register_badge_bg">#757575</color>
+    <color name="keyboard_border_text">#737375</color>
 
 </resources>
