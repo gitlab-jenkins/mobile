@@ -14,6 +14,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Timer;
@@ -221,6 +222,11 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
                 }
                 else {
+
+                    finish();
+
+                    Toast.makeText(context, "خطا در انجام عملیات", Toast.LENGTH_SHORT).show();
+
 //                    requestLatestInvoiceContacts = new RequestLatestInvoiceContacts(context, new RequestLatestInvoiceContactsTaskCompleteListener());
 //                    new HamPayDialog(activity).showFailLatestInvoiceDialog(requestLatestInvoiceContacts, latestInvoiceContactsRequest,
 //                            latestInvoiceContactsResponseMessage.getService().getResultStatus().getCode(),

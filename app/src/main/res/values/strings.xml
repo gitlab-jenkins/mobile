@@ -5,10 +5,10 @@
     <string name="hampay_network">شبکه هم‌پی</string>
 
 
-    <string name="intro_1">هم‌پی \n پرداخت مدرن، ساده و مطمئن</string>
-    <string name="intro_2">تولید فاکتور</string>
-    <string name="intro_3">پرداخت‌های روزانه به کسب و کارهای گوناگون</string>
-    <string name="intro_4">مشاهده حساب و کارت مرتبط</string>
+    <string name="intro_1">پرداخت مدرن، ساده و مطمئن</string>
+    <string name="intro_2">پرداخت‌های روزانه به کسب و کارهای گوناگون</string>
+    <string name="intro_3">تولید فاکتور</string>
+    <string name="intro_4">لیست پرداخت‌های در انتظار</string>
     <string name="intro_5">نمایش پرداخت‌ها و دریافت‌های گذشته</string>
 
 
@@ -174,7 +174,7 @@
     <string name="fail_sms_verification">شماره اعتبار سنجی وارد شده صحیح نمی‌باشد. لطفا از صحت شماره اطمینان حاصل کرده و شماره را مجدد وارد کنید.</string>
 
 
-    <string name="start_activity_title">به شبکه هم‌پی خوش آمدید</string>
+    <string name="start_activity_title">پرداخت همراه هم‌پی</string>
     <string name="start_activity_text_1">تولید فاکتور برای فرد</string>
     <string name="start_activity_text_2">پرداخت به کسب و کار</string>
     <string name="tc_privacy_text">با شرایط استفاده از شبکه پرداخت همراه "هم‌پی" و قوانین حفظ حریم خصوصی کاربر موافقم.</string>
@@ -188,11 +188,11 @@
     <string name="phone_number">۱. شماره همراه</string>
     <string name="credit_info">۲. نام بانک، شماره حساب و کد ملی</string>
     <string name="keep_on">ادامه</string>
-    <string name="profile_entry">ورود مشخصات</string>
+    <string name="profile_entry">مشخصات فردی</string>
     <string name="please_entry_info">لطفا اطلاعات خود را وارد نمایید.</string>
     <string name="phone_entry">لطفا شماره همراه خود را وارد نمایید</string>
     <string name="iran_prefix_cell_number">۰۹</string>
-    <string name="bank_card_info">اطلاعات بانکی</string>
+    <string name="bank_card_info">اطلاعات حساب بانکی</string>
     <string name="bank_account_info_detail">لطفا اطلاعات زیر را وارد کنید</string>
     <string name="progress_dialog_message">در حال دريافت اطلاعات...</string>
 
@@ -224,7 +224,7 @@
     <string name="sms_request">تایید</string>
     <string name="sms_cancel">انصراف</string>
     <string name="mobile_no_verification">تایید شماره همراه</string>
-    <string name="deliver_verification">کد ۵ رقمی برای شما پیامک شد. در صورت عدم دریافت پیامک تا ۳ دقیقه، دکمه ارسال مجدد را لمس کنید.</string>
+    <string name="deliver_verification">کد ۵ رقمی برای شما پیامک شد. در صورت عدم دریافت پیامک، دکمه ارسال مجدد را لمس کنید.</string>
     <string name="verification">بررسی</string>
 
     <string name="resend">ارسال مجدد</string>

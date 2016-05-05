@@ -61,7 +61,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
 
     PersianEnglishDigit persianEnglishDigit;
 
-    ButtonRectangle keepOn_button;
+    FacedTextView keepOn_button;
 
     FacedEditText cellNumberValue;
     ImageView cellNumberIcon;
@@ -407,12 +407,10 @@ public class ProfileEntryActivity extends AppCompatActivity {
         emailValue.addTextChangedListener(emailTextWatcher);
         emailValue.setText(new DeviceInfo(activity).getDeviceEmailAccount());
 
-        keepOn_button = (ButtonRectangle) findViewById(R.id.keepOn_button);
+        keepOn_button = (FacedTextView) findViewById(R.id.keepOn_button);
         keepOn_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
 
                 View view = getCurrentFocus();
                 if (view != null) {

@@ -251,7 +251,7 @@
                 <ImageView
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:src="@drawable/hampay_colored"
+                    android:src="@drawable/hm_logo"
                     />
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView

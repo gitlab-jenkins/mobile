@@ -32,67 +32,56 @@
 
             <ImageView
                 android:id="@+id/indicator_1"
-                android:layout_width="6dp"
-                android:layout_height="6dp"
-                android:src="@drawable/circle_indicator_transparency"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:src="@drawable/slider_indicator_selected"
                 android:layout_margin="4dp"/>
 
             <ImageView
                 android:id="@+id/indicator_2"
-                android:layout_width="6dp"
-                android:layout_height="6dp"
-                android:src="@drawable/circle_indicator"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:src="@drawable/slider_indicator_unselected"
                 android:layout_margin="4dp"/>
 
 
             <ImageView
                 android:id="@+id/indicator_3"
-                android:layout_width="6dp"
-                android:layout_height="6dp"
-                android:src="@drawable/circle_indicator"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:src="@drawable/slider_indicator_unselected"
                 android:layout_margin="4dp"/>
 
             <ImageView
                 android:id="@+id/indicator_4"
-                android:layout_width="6dp"
-                android:layout_height="6dp"
-                android:src="@drawable/circle_indicator"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:src="@drawable/slider_indicator_unselected"
                 android:layout_margin="4dp"/>
 
             <ImageView
                 android:id="@+id/indicator_5"
-                android:layout_width="6dp"
-                android:layout_height="6dp"
-                android:src="@drawable/circle_indicator"
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:src="@drawable/slider_indicator_unselected"
                 android:layout_margin="4dp"/>
 
         </LinearLayout>
 
-
-        <RelativeLayout
-            android:layout_width="150dp"
-            android:layout_height="50dp">
-
-            <xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle
-                android:id="@+id/register_button"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_centerHorizontal="true"
-                android:background="@color/register_btn_color"
-                android:textSize="16dp"
-                android:contentDescription="register"/>
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/iran_sans.ttf"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:textColor="@android:color/white"
-                android:textSize="16dp"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:text="@string/register" />
-
-        </RelativeLayout>
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+            android:id="@+id/register_button"
+            geekui:customTypeface="fonts/iran_sans.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:textColor="@color/slider_button_text"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="@string/register"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:background="@drawable/slider_button_style"
+            android:layout_marginTop="18dp"/>
 
     </LinearLayout>
 
@@ -105,7 +94,7 @@
             android:id="@+id/image_splash"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/splash_bg_color"/>
+            />
 
 
         <LinearLayout
@@ -122,7 +111,7 @@
                 android:layout_height="48dp"
                 android:gravity="center"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/logo_hampay"/>
+                />
 
 
             <LinearLayout

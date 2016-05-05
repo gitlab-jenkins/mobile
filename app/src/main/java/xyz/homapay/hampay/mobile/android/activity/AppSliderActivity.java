@@ -33,6 +33,7 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.AppSliderAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestIllegalAppList;
+import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
@@ -44,7 +45,7 @@ import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 public class AppSliderActivity extends AppCompatActivity {
 
     private ViewPager sliding_into_app;
-    private ButtonRectangle register_button;
+    private FacedTextView register_button;
     private ImageView image_splash;
     private Animation fadeInAnimation;
     private Animation splashLogoAnimation;
@@ -202,7 +203,7 @@ public class AppSliderActivity extends AppCompatActivity {
         intent = new Intent();
 
 
-        register_button = (ButtonRectangle) findViewById(R.id.register_button);
+        register_button = (FacedTextView) findViewById(R.id.register_button);
         register_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -277,39 +278,39 @@ public class AppSliderActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 switch (position) {
                     case 0:
-                        indicator_1.setImageResource(R.drawable.circle_indicator_transparency);
-                        indicator_2.setImageResource(R.drawable.circle_indicator);
-                        indicator_3.setImageResource(R.drawable.circle_indicator);
-                        indicator_4.setImageResource(R.drawable.circle_indicator);
-                        indicator_5.setImageResource(R.drawable.circle_indicator);
+                        indicator_1.setImageResource(R.drawable.slider_indicator_selected);
+                        indicator_2.setImageResource(R.drawable.slider_indicator_unselected);
+                        indicator_3.setImageResource(R.drawable.slider_indicator_unselected);
+                        indicator_4.setImageResource(R.drawable.slider_indicator_unselected);
+                        indicator_5.setImageResource(R.drawable.slider_indicator_unselected);
                         break;
                     case 1:
-                        indicator_1.setImageResource(R.drawable.circle_indicator);
-                        indicator_2.setImageResource(R.drawable.circle_indicator_transparency);
-                        indicator_3.setImageResource(R.drawable.circle_indicator);
-                        indicator_4.setImageResource(R.drawable.circle_indicator);
-                        indicator_5.setImageResource(R.drawable.circle_indicator);
+                        indicator_1.setImageResource(R.drawable.slider_indicator_unselected);
+                        indicator_2.setImageResource(R.drawable.slider_indicator_selected);
+                        indicator_3.setImageResource(R.drawable.slider_indicator_unselected);
+                        indicator_4.setImageResource(R.drawable.slider_indicator_unselected);
+                        indicator_5.setImageResource(R.drawable.slider_indicator_unselected);
                         break;
                     case 2:
-                        indicator_1.setImageResource(R.drawable.circle_indicator);
-                        indicator_2.setImageResource(R.drawable.circle_indicator);
-                        indicator_3.setImageResource(R.drawable.circle_indicator_transparency);
-                        indicator_4.setImageResource(R.drawable.circle_indicator);
-                        indicator_5.setImageResource(R.drawable.circle_indicator);
+                        indicator_1.setImageResource(R.drawable.slider_indicator_unselected);
+                        indicator_2.setImageResource(R.drawable.slider_indicator_unselected);
+                        indicator_3.setImageResource(R.drawable.slider_indicator_selected);
+                        indicator_4.setImageResource(R.drawable.slider_indicator_unselected);
+                        indicator_5.setImageResource(R.drawable.slider_indicator_unselected);
                         break;
                     case 3:
-                        indicator_1.setImageResource(R.drawable.circle_indicator);
-                        indicator_2.setImageResource(R.drawable.circle_indicator);
-                        indicator_3.setImageResource(R.drawable.circle_indicator);
-                        indicator_4.setImageResource(R.drawable.circle_indicator_transparency);
-                        indicator_5.setImageResource(R.drawable.circle_indicator);
+                        indicator_1.setImageResource(R.drawable.slider_indicator_unselected);
+                        indicator_2.setImageResource(R.drawable.slider_indicator_unselected);
+                        indicator_3.setImageResource(R.drawable.slider_indicator_unselected);
+                        indicator_4.setImageResource(R.drawable.slider_indicator_selected);
+                        indicator_5.setImageResource(R.drawable.slider_indicator_unselected);
                         break;
                     case 4:
-                        indicator_1.setImageResource(R.drawable.circle_indicator);
-                        indicator_2.setImageResource(R.drawable.circle_indicator);
-                        indicator_3.setImageResource(R.drawable.circle_indicator);
-                        indicator_4.setImageResource(R.drawable.circle_indicator);
-                        indicator_5.setImageResource(R.drawable.circle_indicator_transparency);
+                        indicator_1.setImageResource(R.drawable.slider_indicator_unselected);
+                        indicator_2.setImageResource(R.drawable.slider_indicator_unselected);
+                        indicator_3.setImageResource(R.drawable.slider_indicator_unselected);
+                        indicator_4.setImageResource(R.drawable.slider_indicator_unselected);
+                        indicator_5.setImageResource(R.drawable.slider_indicator_selected);
                         break;
                 }
             }

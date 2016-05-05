@@ -44,8 +44,8 @@ public class NumberProgressBar extends View {
     private String mPrefix = "";
 
 
-    private final int default_text_color = Color.rgb(66, 145, 241);
-    private final int default_reached_color = Color.rgb(66, 145, 241);
+    private final int default_text_color = Color.rgb(36, 189, 195);
+    private final int default_reached_color = Color.rgb(36, 189, 195);
     private final int default_unreached_color = Color.rgb(204, 204, 204);
     private final float default_progress_text_offset;
     private final float default_text_size;

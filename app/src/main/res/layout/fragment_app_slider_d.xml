@@ -29,16 +29,17 @@
             android:orientation="vertical"
             android:gravity="center">
 
-
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                android:id="@+id/intro_text"
-                geekui:customTypeface="fonts/iran_sans.ttf"
+                geekui:customTypeface="fonts/iran_sans_bold.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
-                android:textSize="18sp"
+                android:textSize="18dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:lineSpacingExtra="8dp"
                 android:gravity="center"
-                android:layout_margin="8dp"
                 android:text="@string/intro_4"/>
 
 

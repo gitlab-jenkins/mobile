@@ -4,221 +4,137 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <RelativeLayout
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/help_blue"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"/>
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                geekui:customTypeface="fonts/iran_sans.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/page_title"
+                android:textSize="20sp"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/profile_entry"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"/>
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/page_title"
+            android:layout_marginTop="4dp"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="60dp"
-        android:background="@color/colorPrimary"
-        android:visibility="visible">
+        android:layout_height="32dp"
+        android:orientation="horizontal"
+        android:layout_margin="8dp">
 
-        <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            geekui:customTypeface="fonts/iran_sans.ttf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:textSize="16dp"
-            android:text="@string/profile_entry"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"/>
 
-        <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            geekui:customTypeface="fonts/iran_sans.ttf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:textSize="16dp"
-            android:text="@string/title_guide"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
-            android:onClick="contactUs"
-            android:clickable="true"/>
+        <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33"
+            android:background="@drawable/second_navigation_gray_fill">
 
-    </RelativeLayout>
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/lock_info"
+                android:layout_centerInParent="true"/>
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="32dp"
+                android:background="@android:color/white"/>
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/box_forward_wt"/>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33"
+            android:background="@drawable/second_navigation_gray_fill">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/mobile_info"
+                android:layout_centerInParent="true"/>
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="32dp"
+                android:src="@drawable/box_forward_tw"/>
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/box_forward_wt"/>
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33"
+            android:background="@drawable/first_navigation_unfill">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/personal_info_green"
+                android:layout_centerInParent="true"/>
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="32dp"
+                android:background="@android:color/white"
+                android:src="@drawable/box_forward_green"/>
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="60dp"
-                android:id="@+id/layoutContainer"
-                android:orientation="horizontal"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp">
-
-
-                <LinearLayout
-                    android:layout_width="0dip"
-                    android:layout_height="30dp"
-                    android:layout_weight="0.4"
-                    android:gravity="center_vertical">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/step_pass_con"
-                        android:layout_centerVertical="true"/>
-
-                    <RelativeLayout
-                        android:layout_width="0dip"
-                        android:layout_height="30dp"
-                        android:layout_weight="0.6">
-
-
-
-                        <View
-                            android:layout_width="fill_parent"
-                            android:layout_height="6dp"
-                            android:background="@color/normal_text"
-                            android:layout_centerInParent="true" />
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="30dp"
-                            android:src="@drawable/triangle_gray"
-                            android:layout_centerVertical="true"
-                            android:background="@android:color/white"/>
-
-
-
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="0dip"
-                        android:layout_height="30dp"
-                        android:layout_weight="0.4">
-
-                        <View
-                            android:layout_width="fill_parent"
-                            android:layout_height="6dp"
-                            android:background="@color/normal_text"
-                            android:layout_centerInParent="true" />
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/step_pay_icon"
-                            android:layout_centerVertical="true"
-                            android:layout_alignParentRight="true"
-                            android:background="@android:color/white"
-                            />
-
-                    </RelativeLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dip"
-                    android:layout_height="30dp"
-                    android:layout_weight="0.3"
-                    android:gravity="center_vertical">
-
-                    <RelativeLayout
-                        android:layout_width="0dip"
-                        android:layout_height="30dp"
-                        android:layout_weight="0.5">
-
-                        <View
-                            android:layout_width="fill_parent"
-                            android:layout_height="6dp"
-                            android:background="@color/normal_text"
-                            android:layout_centerInParent="true" />
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="30dp"
-                            android:src="@drawable/triangle_gray"
-                            android:layout_centerVertical="true"
-                            android:background="@android:color/white"/>
-
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="0dip"
-                        android:layout_height="30dp"
-                        android:layout_weight="0.5">
-
-                        <View
-                            android:layout_width="fill_parent"
-                            android:layout_height="6dp"
-                            android:background="@color/normal_text"
-                            android:layout_centerInParent="true" />
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/step_mobile_icon"
-                            android:layout_centerVertical="true"
-                            android:layout_alignParentRight="true"
-                            android:background="@android:color/white"/>
-
-                    </RelativeLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dip"
-                    android:layout_height="30dp"
-                    android:layout_weight="0.3"
-                    android:gravity="center_vertical">
-
-                    <RelativeLayout
-                        android:layout_width="0dip"
-                        android:layout_height="30dp"
-                        android:layout_weight="0.5">
-
-                        <View
-                            android:layout_width="fill_parent"
-                            android:layout_height="6dp"
-                            android:background="@color/normal_text"
-                            android:layout_centerInParent="true" />
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="30dp"
-                            android:src="@drawable/triangle_gray"
-                            android:layout_centerVertical="true"
-                            android:background="@android:color/white"/>
-
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="0dip"
-                        android:layout_height="30dp"
-                        android:layout_weight="0.5">
-
-                        <View
-                            android:layout_width="fill_parent"
-                            android:layout_height="6dp"
-                            android:background="@color/register_btn_color"
-                            android:layout_centerInParent="true" />
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/step_account_icon"
-                            android:layout_centerVertical="true"
-                            android:layout_alignParentRight="true"
-                            android:background="@android:color/white"/>
-
-                    </RelativeLayout>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
 
 
             <ScrollView
@@ -236,22 +152,43 @@
                         android:layout_width="fill_parent"
                         android:layout_height="74dp"
                         android:gravity="right|center_vertical"
-                        android:background="@drawable/stroke_bg"
+                        android:background="@drawable/register_border"
                         android:visibility="visible">
 
                         <xyz.homapay.hampay.mobile.android.component.FacedTextView
                             geekui:customTypeface="fonts/iran_sans.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/register_btn_color"
+                            android:textColor="@color/page_title"
                             android:textSize="15dp"
                             android:text="@string/please_entry_info" />
 
-                        <ImageView
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:src="@drawable/step_icon"
-                            android:layout_margin="12dp"/>
+                        <RelativeLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_marginRight="12dp">
+
+
+                            <ImageView
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:src="@drawable/icon_person"
+                                android:layout_centerInParent="true"/>
+
+                            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                                geekui:customTypeface="fonts/iran_sans.ttf"
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:text="۱"
+                                android:gravity="center"
+                                android:layout_alignParentRight="true"
+                                android:background="@drawable/badge_text"/>
+
+                        </RelativeLayout>
+
+
 
                     </LinearLayout>
 
@@ -259,7 +196,7 @@
                         geekui:customTypeface="fonts/iran_sans.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@android:color/black"
+                        android:textColor="@color/start_page_text"
                         android:textSize="15dp"
                         android:text="@string/mobile_no"
                         android:layout_gravity="right"
@@ -277,6 +214,7 @@
                             android:layout_height="fill_parent"
                             android:background="@android:color/transparent"
                             android:layout_marginLeft="58dp"
+                            android:layout_marginRight="4dp"
                             android:textSize="15dp"
                             android:inputType="number"
                             android:hint="@string/mobile_no_entry"
@@ -285,14 +223,14 @@
                             android:gravity="center_vertical"
                             android:paddingTop="8dp"
                             android:paddingBottom="8dp"
-                            android:text="09126157905"
+                            android:text="126157905"
                             android:contentDescription="phone"/>
 
                         <xyz.homapay.hampay.mobile.android.component.FacedTextView
                             geekui:customTypeface="fonts/iran_sans.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/normal_text"
+                            android:textColor="@color/start_page_text"
                             android:textSize="15dp"
                             android:text="@string/iran_prefix_cell_number"
                             android:layout_centerVertical="true"
@@ -303,7 +241,7 @@
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_centerVertical="true"
-                            android:layout_marginLeft="12dp"/>
+                            android:layout_marginLeft="12dp" />
 
                     </RelativeLayout>
 
@@ -329,6 +267,7 @@
                             android:layout_height="fill_parent"
                             android:background="@android:color/transparent"
                             android:layout_marginLeft="48dp"
+                            android:layout_marginRight="4dp"
                             android:textSize="15dp"
                             android:inputType="number"
                             android:hint="@string/card_no_entry"
@@ -336,8 +275,8 @@
                             android:gravity="center_vertical"
                             android:padding="8dp"
                             android:contentDescription="account"
-                            android:maxLength="19"
-                            android:text="5859-4710-1018-8708"/>
+                            android:text="6219-8610-2056-2269"
+                            android:maxLength="19" />
 
                         <ProgressBar
                             android:id="@+id/cardValidatorProgress"
@@ -381,6 +320,7 @@
                             android:layout_height="fill_parent"
                             android:background="@android:color/transparent"
                             android:layout_marginLeft="48dp"
+                            android:layout_marginRight="4dp"
                             android:textSize="15dp"
                             android:inputType="number"
                             android:hint="@string/iter_code"
@@ -388,8 +328,8 @@
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
                             android:padding="8dp"
-                            android:contentDescription="national"
-                            android:text="4899915667"/>
+                            android:text="489-991566-7"
+                            android:contentDescription="national" />
 
                         <ImageView
                             android:id="@+id/nationalCodeIcon"
@@ -412,13 +352,14 @@
                             android:layout_height="fill_parent"
                             android:background="@android:color/transparent"
                             android:layout_marginLeft="48dp"
+                            android:layout_marginRight="4dp"
                             android:textSize="15dp"
                             android:hint="@string/name_family"
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
                             android:padding="8dp"
-                            android:contentDescription="account"
-                            android:text="amir"/>
+                            android:text="amir"
+                            android:contentDescription="account" />
 
                         <ImageView
                             android:id="@+id/userNameFamilyIcon"
@@ -441,15 +382,14 @@
                             android:layout_height="fill_parent"
                             android:background="@android:color/transparent"
                             android:layout_marginLeft="48dp"
-                            android:layout_marginRight="34dp"
+                            android:layout_marginRight="4dp"
                             android:textSize="15dp"
                             android:inputType="textEmailAddress"
                             android:hint="@string/email"
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
                             android:padding="8dp"
-                            android:contentDescription="email"
-                            android:text="amirh.sharafkar@gmail.com"/>
+                            android:contentDescription="email" />
 
                         <ImageView
                             android:id="@+id/emailIcon"
@@ -460,37 +400,20 @@
 
                     </RelativeLayout>
 
-
-                    <RelativeLayout
-                        android:layout_width="150dp"
-                        android:layout_height="50dp"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="20dp">
-
-
-                        <xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle
-                            android:id="@+id/keepOn_button"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
-                            android:layout_centerHorizontal="true"
-                            android:background="@color/register_btn_color"
-                            android:textSize="16dp"
-                            android:contentDescription="keep_on"/>
-
-                        <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                            geekui:customTypeface="fonts/iran_sans.ttf"
-                            android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
-                            android:textColor="@android:color/white"
-                            android:textSize="16dp"
-                            android:gravity="center"
-                            android:layout_gravity="center"
-                            android:text="@string/keep_on"
-                            android:layout_marginTop="2dp"
-                            android:layout_marginBottom="2dp"/>
-
-                    </RelativeLayout>
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/keepOn_button"
+                        geekui:customTypeface="fonts/iran_sans.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:textColor="@android:color/white"
+                        android:textSize="20sp"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:text="@string/keep_on"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:background="@drawable/registration_button_style"
+                        android:layout_marginTop="16dp"/>
 
 
                 </LinearLayout>
