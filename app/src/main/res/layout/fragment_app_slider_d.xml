@@ -17,10 +17,10 @@
 
         <ImageView
             android:id="@+id/intro_icon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="84dp"
+            android:layout_height="84dp"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/account_icon"/>
+            android:src="@drawable/slider_expectation_icon"/>
 
         <LinearLayout
             android:id="@+id/intro_title"

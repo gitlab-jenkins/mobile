@@ -165,11 +165,11 @@
             android:gravity="center">
 
             <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="84dp"
+                android:layout_height="84dp"
                 android:gravity="center"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/logo_hampay"/>
+                android:src="@drawable/slider_hm"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"
