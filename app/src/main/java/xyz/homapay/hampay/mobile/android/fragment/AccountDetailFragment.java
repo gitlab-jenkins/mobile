@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -27,7 +28,9 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.IntroIBANActivity;
 import xyz.homapay.hampay.mobile.android.activity.MainActivity;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.RequestUserProfile;
+import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
@@ -47,17 +50,18 @@ public class AccountDetailFragment extends Fragment {
     PersianEnglishDigit persianEnglishDigit;
 
     FacedTextView user_name_text;
-    FacedTextView user_account_no_text;
+    FacedTextView user_card_number;
+    ImageView image_profile;
     FacedTextView user_bank_name;
     LinearLayout iban_ll;
-    FacedTextView user_mobile_no;
+    FacedTextView user_cell_number;
     FacedTextView user_iban_value;
     FacedTextView user_iban_bank;
     FacedTextView user_national_code;
 
     HamPayDialog hamPayDialog;
 
-    ButtonRectangle intro_account_button;
+    FacedTextView intro_iban_button;
 
     UserProfileDTO userProfileDTO;
 
@@ -120,9 +124,7 @@ public class AccountDetailFragment extends Fragment {
         hide_bg = (View)rootView.findViewById(R.id.hide_bg);
 
 
-//        image_profile = (CircleImageView)rootView.findViewById(R.id.image_profile);
-
-        String URL = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
+//        String URL = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
 
 //        requestImageDownloader = new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile));
 //        requestImageDownloader.execute(URL);
@@ -137,8 +139,8 @@ public class AccountDetailFragment extends Fragment {
 
         hamPayDialog = new HamPayDialog(getActivity());
 
-        intro_account_button = (ButtonRectangle)rootView.findViewById(R.id.intro_account_button);
-        intro_account_button.setOnClickListener(new View.OnClickListener() {
+        intro_iban_button = (FacedTextView) rootView.findViewById(R.id.intro_iban_button);
+        intro_iban_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -147,14 +149,14 @@ public class AccountDetailFragment extends Fragment {
             }
         });
 
-
+        image_profile = (ImageView)rootView.findViewById(R.id.image_profile);
         user_name_text = (FacedTextView)rootView.findViewById(R.id.user_name_text);
-        user_account_no_text = (FacedTextView)rootView.findViewById(R.id.user_account_no_text);
+        user_card_number = (FacedTextView)rootView.findViewById(R.id.user_card_number);
         user_bank_name = (FacedTextView)rootView.findViewById(R.id.user_bank_name);
         iban_ll = (LinearLayout)rootView.findViewById(R.id.iban_ll);
-        user_mobile_no = (FacedTextView)rootView.findViewById(R.id.user_mobile_no);
+        user_cell_number = (FacedTextView)rootView.findViewById(R.id.user_cell_number);
         user_iban_value = (FacedTextView)rootView.findViewById(R.id.user_iban_value);
-        user_iban_bank = (FacedTextView)rootView.findViewById(R.id.user_iban_bank);
+//        user_iban_bank = (FacedTextView)rootView.findViewById(R.id.user_iban_bank);
         user_national_code = (FacedTextView)rootView.findViewById(R.id.user_national_code);
 
 
@@ -266,20 +268,22 @@ public class AccountDetailFragment extends Fragment {
         editor.commit();
 
         user_name_text.setText(userProfileDTO.getFullName());
-        MainActivity.user_account_name.setText(userProfileDTO.getFullName());
-
-        user_account_no_text.setText(persianEnglishDigit.E2P(userProfileDTO.getCardDTO().getMaskedCardNumber()));
-        user_bank_name.setText(" " + userProfileDTO.getCardDTO().getBankName());
-        user_mobile_no.setText(persianEnglishDigit.E2P(userProfileDTO.getCellNumber()));
+        if (userProfileDTO.getUserImageId() != null) {
+            String userImageUrl = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
+            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile)).execute(userImageUrl);
+        }
+        user_card_number.setText(persianEnglishDigit.E2P(userProfileDTO.getCardDTO().getMaskedCardNumber().split("-")[3]));
+        user_bank_name.setText(userProfileDTO.getCardDTO().getBankName());
+        user_cell_number.setText(persianEnglishDigit.E2P(userProfileDTO.getCellNumber()));
         if (userProfileDTO.getIbanDTO() != null) {
             user_iban_value.setText("IR" + persianEnglishDigit.E2P(userProfileDTO.getIbanDTO().getIban()));
             user_iban_bank.setText(userProfileDTO.getIbanDTO().getBankName());
             iban_ll.setVisibility(View.VISIBLE);
         }
         user_national_code.setText(persianEnglishDigit.E2P(prefs.getString(Constants.REGISTERED_NATIONAL_CODE, "")));
-
-        hide_bg.setVisibility(View.GONE);
-
-        List<ContactDTO> contactDTOs = userProfileDTO.getSelectedContacts();
+//
+//        hide_bg.setVisibility(View.GONE);
+//
+//        List<ContactDTO> contactDTOs = userProfileDTO.getSelectedContacts();
     }
 }

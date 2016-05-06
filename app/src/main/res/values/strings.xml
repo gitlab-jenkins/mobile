@@ -2,7 +2,8 @@
 
     <string name="app_name">هم‌پی</string>
 
-    <string name="hampay_network">شبکه هم‌پی</string>
+    <string name="hampay_network">شبکه پرداخت همراه هم‌پی</string>
+    <string name="hampay_user">کاربر هم‌پی</string>
 
 
     <string name="intro_1">پرداخت مدرن، ساده و مطمئن</string>
@@ -490,7 +491,7 @@
     <string name="business_pay_name">براساس نام</string>
     <string name="business_name">نام کسب و کار</string>
     <string name="request_pay_detail">جزییات پرداخت</string>
-    <string name="card_nubmer">شماره کارت: </string>
+    <string name="card_number">شماره کارت: </string>
     <string name="pay_with_hampay">تایید پرداخت</string>
     <string name="cancel_pay_with_hampay">فعلا بیخیال</string>
     <string name="request_payment_rial">مبلغ: </string>
@@ -543,6 +544,13 @@
     <string name="sort_transaction_failure">ناموفق</string>
     <string name="sort_transaction_paid">پرداخت</string>
     <string name="sort_transaction_received">دریافت</string>
+    <string name="login_fast_info">نمایش سریع پرداخت‌های در انتظار</string>
+    <string name="good_time">ظهر به خیر
+    \n
+        اول خرداد ۱۳۹۵
+    </string>
+    <string name="image_edit">ویرایش تصویر</string>
+    <string name="iban_number">شماره شبا: </string>
 
 
 </resources>

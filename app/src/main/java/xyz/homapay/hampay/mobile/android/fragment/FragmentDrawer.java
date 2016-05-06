@@ -36,8 +36,8 @@ public class FragmentDrawer extends Fragment {
     private View containerView;
     private static String[] titles;
     private static int icons[] = {
-            R.drawable.ic_main_menu,
-            R.drawable.ic_account_settings,
+            R.drawable.ic_home,
+            R.drawable.ic_account,
             R.drawable.ic_settings,
             R.drawable.ic_contact_us,
             R.drawable.ic_help,

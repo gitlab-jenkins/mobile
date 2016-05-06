@@ -8,15 +8,12 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -25,7 +22,6 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -41,14 +37,12 @@ import xyz.homapay.hampay.common.core.model.response.MobileRegistrationIdEntryRe
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
-import xyz.homapay.hampay.mobile.android.Manifest;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.RequestMobileRegistrationIdEntry;
 import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
-import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.fragment.AboutFragment;
 import xyz.homapay.hampay.mobile.android.fragment.AccountDetailFragment;
@@ -59,10 +53,8 @@ import xyz.homapay.hampay.mobile.android.fragment.PrivacyFragment;
 import xyz.homapay.hampay.mobile.android.fragment.SettingFragment;
 import xyz.homapay.hampay.mobile.android.fragment.TCFragment;
 import xyz.homapay.hampay.mobile.android.model.AppState;
-import xyz.homapay.hampay.mobile.android.model.LatestPurchase;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
-import xyz.homapay.hampay.mobile.android.util.CardNumberValidator;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 
@@ -81,9 +73,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     FacedTextView fragment_title;
 
-    public static  FacedTextView user_account_name;
+    public  FacedTextView user_account_name;
 
-    CircleImageView image_profile;
+    ImageView image_profile;
 
     int currentFragmet = 0;
 
@@ -233,27 +225,27 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     break;
             }
         }else {
-            if (pendingPurchaseCode != null) {
-                if (databaseHelper.getIsExistPurchaseRequest(pendingPurchaseCode)) {
-                    LatestPurchase latestPurchase = databaseHelper.getPurchaseRequest(pendingPurchaseCode);
-                    if (latestPurchase.getIsCanceled().equalsIgnoreCase("0")) {
-                        if (pendingPurchaseCount > 0) {
-                            intent.setClass(context, RequestBusinessPayDetailActivity.class);
-                            startActivity(intent);
-                        } else if (pendingPaymentCode != null && pendingPaymentCount > 0) {
-                            intent.setClass(context, InvoicePaymentPendingActivity.class);
-                            startActivity(intent);
-                        }
-                    }
-                } else {
-                    databaseHelper.createPurchaseRequest(pendingPurchaseCode);
-                    intent.setClass(context, RequestBusinessPayDetailActivity.class);
-                    startActivity(intent);
-                }
-            } else if (pendingPaymentCount > 0) {
-                intent.setClass(context, InvoicePaymentPendingActivity.class);
-                startActivity(intent);
-            }
+//            if (pendingPurchaseCode != null) {
+//                if (databaseHelper.getIsExistPurchaseRequest(pendingPurchaseCode)) {
+//                    LatestPurchase latestPurchase = databaseHelper.getPurchaseRequest(pendingPurchaseCode);
+//                    if (latestPurchase.getIsCanceled().equalsIgnoreCase("0")) {
+//                        if (pendingPurchaseCount > 0) {
+//                            intent.setClass(context, RequestBusinessPayDetailActivity.class);
+//                            startActivity(intent);
+//                        } else if (pendingPaymentCode != null && pendingPaymentCount > 0) {
+//                            intent.setClass(context, InvoicePaymentPendingActivity.class);
+//                            startActivity(intent);
+//                        }
+//                    }
+//                } else {
+//                    databaseHelper.createPurchaseRequest(pendingPurchaseCode);
+//                    intent.setClass(context, RequestBusinessPayDetailActivity.class);
+//                    startActivity(intent);
+//                }
+//            } else if (pendingPaymentCount > 0) {
+//                intent.setClass(context, InvoicePaymentPendingActivity.class);
+//                startActivity(intent);
+//            }
         }
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
@@ -267,9 +259,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         fragment_title = (FacedTextView)findViewById(R.id.fragment_title);
 
-        user_account_name = (FacedTextView)findViewById(R.id.user_account_name);
-        user_account_name.setText(userProfileDTO.getFullName());
-        image_profile = (CircleImageView)findViewById(R.id.image_profile);
+//        user_account_name = (FacedTextView)findViewById(R.id.user_account_name);
+//        user_account_name.setText(userProfileDTO.getFullName());
+        image_profile = (ImageView)findViewById(R.id.image_profile);
         image_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

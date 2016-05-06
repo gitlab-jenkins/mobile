@@ -242,7 +242,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/normal_text"
                             android:textSize="15dp"
-                            android:text="@string/card_nubmer"
+                            android:text="@string/card_number"
                             android:gravity="center_vertical"
                             android:layout_gravity="center_vertical"
                             android:layout_alignParentRight="true"
