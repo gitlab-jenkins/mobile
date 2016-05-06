@@ -15,6 +15,7 @@ import xyz.homapay.hampay.common.core.model.response.IBANConfirmationResponse;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestIBANConfirmation;
+import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
@@ -24,8 +25,8 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 public class IntroIBANActivity extends AppCompatActivity {
 
     HamPayDialog hamPayDialog;
-    ButtonRectangle sheba_verify_button;
-    FacedEditText shebaNumberValue;
+    FacedTextView sheba_verify_button;
+    FacedEditText ibanNumberValue;
     PersianEnglishDigit persianEnglishDigit;
     Activity activity;
 
@@ -49,8 +50,8 @@ public class IntroIBANActivity extends AppCompatActivity {
 
         persianEnglishDigit = new PersianEnglishDigit();
 
-        shebaNumberValue = (FacedEditText)findViewById(R.id.shebaNumberValue);
-        shebaNumberValue.addTextChangedListener(new TextWatcher() {
+        ibanNumberValue = (FacedEditText)findViewById(R.id.ibanNumberValue);
+        ibanNumberValue.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -58,10 +59,10 @@ public class IntroIBANActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                shebaNumberValue.removeTextChangedListener(this);
-                shebaNumberValue.setText(persianEnglishDigit.E2P(shebaNumberValue.getText().toString()));
-                shebaNumberValue.setSelection(shebaNumberValue.getText().toString().length());
-                shebaNumberValue.addTextChangedListener(this);
+                ibanNumberValue.removeTextChangedListener(this);
+                ibanNumberValue.setText(persianEnglishDigit.E2P(ibanNumberValue.getText().toString()));
+                ibanNumberValue.setSelection(ibanNumberValue.getText().toString().length());
+                ibanNumberValue.addTextChangedListener(this);
             }
 
             @Override
@@ -70,13 +71,13 @@ public class IntroIBANActivity extends AppCompatActivity {
             }
         });
 
-        sheba_verify_button = (ButtonRectangle)findViewById(R.id.sheba_verify_button);
+        sheba_verify_button = (FacedTextView)findViewById(R.id.sheba_verify_button);
         sheba_verify_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 ibanConfirmationRequest = new IBANConfirmationRequest();
-                ibanConfirmationRequest.setIban("IR" + persianEnglishDigit.P2E(shebaNumberValue.getText().toString()));
+                ibanConfirmationRequest.setIban("IR" + persianEnglishDigit.P2E(ibanNumberValue.getText().toString()));
                 requestIBANConfirmation = new RequestIBANConfirmation(activity, new RequestIBANConfirmationTaskCompleteListener());
                 requestIBANConfirmation.execute(ibanConfirmationRequest);
 
@@ -97,7 +98,7 @@ public class IntroIBANActivity extends AppCompatActivity {
             if (ibanConfirmationResponseMessage != null) {
 
                 if (ibanConfirmationResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    hamPayDialog.showIBANConfirmationDialog(shebaNumberValue.getText().toString(), ibanConfirmationResponseMessage.getService());
+                    hamPayDialog.showIBANConfirmationDialog(ibanNumberValue.getText().toString(), ibanConfirmationResponseMessage.getService());
                 } else {
                     hamPayDialog.dismisWaitingDialog();
                     requestIBANConfirmation = new RequestIBANConfirmation(activity, new RequestIBANConfirmationTaskCompleteListener());

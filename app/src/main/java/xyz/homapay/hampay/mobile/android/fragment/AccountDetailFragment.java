@@ -156,7 +156,7 @@ public class AccountDetailFragment extends Fragment {
         iban_ll = (LinearLayout)rootView.findViewById(R.id.iban_ll);
         user_cell_number = (FacedTextView)rootView.findViewById(R.id.user_cell_number);
         user_iban_value = (FacedTextView)rootView.findViewById(R.id.user_iban_value);
-//        user_iban_bank = (FacedTextView)rootView.findViewById(R.id.user_iban_bank);
+        user_iban_bank = (FacedTextView)rootView.findViewById(R.id.user_iban_bank);
         user_national_code = (FacedTextView)rootView.findViewById(R.id.user_national_code);
 
 
