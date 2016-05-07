@@ -102,8 +102,8 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
 
         viewHolder.user_name.setText(transactionDTO.getPersonName());
         viewHolder.date_time.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(transactionDTO.getTransactionDate())));
-        viewHolder.reject_message.setText(transactionDTO.getRejectReasonMessage());
-        viewHolder.user_fee_value.setText(persianEnglishDigit.E2P(currencyFormatter.format(transactionDTO.getFeeCharge())) + context.getString(R.string.currency_rials));
+//        viewHolder.reject_message.setText(transactionDTO.getRejectReasonMessage());
+//        viewHolder.user_fee_value.setText(persianEnglishDigit.E2P(currencyFormatter.format(transactionDTO.getFeeCharge())) + context.getString(R.string.currency_rials));
         viewHolder.price_pay.setText(persianEnglishDigit.E2P(currencyFormatter.format(transactionDTO.getAmount())) + "\n" + context.getString(R.string.currency_rials));
 
         if (transactionDTO.getImageId() != null) {

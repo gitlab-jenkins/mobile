@@ -61,4 +61,5 @@
     <color name="main_menu_title">#686a6b</color>
     <color name="menu_divider">#d0d2d3</color>
     <color name="account_details_text">#67696b</color>
+    <color name="transaction_unselected_tab">#bcbec0</color>
 </resources>

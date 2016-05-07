@@ -1,6 +1,7 @@
 package xyz.homapay.hampay.mobile.android.webservice;
 
 import xyz.homapay.hampay.common.common.request.RequestHeader;
+import xyz.homapay.hampay.mobile.android.account.SyncAdapter;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
 /**
@@ -17,9 +18,7 @@ public class CreateHeader {
     }
 
     public RequestHeader createHeader(){
-        RequestHeader header = new RequestHeader();
-        header.setAuthToken(authToken);
-        header.setVersion(version);
+        RequestHeader header = new RequestHeader(authToken, version, System.currentTimeMillis());
         return header;
     }
 

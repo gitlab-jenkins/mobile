@@ -143,26 +143,27 @@ public class TransactionDetailActivity extends AppCompatActivity implements View
 
 
         user_name.setText(transactionDTO.getPersonName());
-        message.setText(transactionDTO.getMessage());
-        if (transactionDTO.getRejectReasonMessage() != null){
+//        message.setText(transactionDTO.getMessage());
+//        if (transactionDTO.getRejectReasonMessage() != null){
             responseMessage_ll.setVisibility(View.VISIBLE);
-            reject_message.setText(transactionDTO.getRejectReasonMessage());
+//            reject_message.setText(transactionDTO.getRejectReasonMessage());
         }
-        price_pay.setText(persianEnglishDigit.E2P(currencyFormatter.format(transactionDTO.getAmount())));
-        if (transactionDTO.getAmount() == 0){
-            more_payment_info.setVisibility(View.GONE);
-        }else {
-            more_payment_info.setVisibility(View.VISIBLE);
-            user_fee_value.setText(persianEnglishDigit.E2P(currencyFormatter.format(transactionDTO.getFeeCharge())) + " ");
-            if (transactionDTO.getFeeCharge() != null && transactionDTO.getAmount() != null)
-                total_payment_value.setText(persianEnglishDigit.E2P(currencyFormatter.format(transactionDTO.getFeeCharge() + transactionDTO.getAmount())) + " ");
-        }
+//        price_pay.setText(persianEnglishDigit.E2P(currencyFormatter.format(transactionDTO.getAmount())));
+//        if (transactionDTO.getAmount() == 0){
+//            more_payment_info.setVisibility(View.GONE);
+//        }else {
+//            more_payment_info.setVisibility(View.VISIBLE);
+//            user_fee_value.setText(persianEnglishDigit.E2P(currencyFormatter.format(transactionDTO.getFeeCharge())) + " ");
+//            if (transactionDTO.getFeeCharge() != null && transactionDTO.getAmount() != null)
+//                total_payment_value.setText(persianEnglishDigit.E2P(currencyFormatter.format(transactionDTO.getFeeCharge() + transactionDTO.getAmount())) + " ");
+//        }
+//
+//        user_mobile_no.setText(persianEnglishDigit.E2P(transactionDTO.getPhoneNumber()));
+//        date_time.setText(persianEnglishDigit.E2P((new JalaliConvert()).GregorianToPersian(transactionDTO.getTransactionDate())));
+//        tracking_code.setText(persianEnglishDigit.E2P(transactionDTO.getReference()));
 
-        user_mobile_no.setText(persianEnglishDigit.E2P(transactionDTO.getPhoneNumber()));
-        date_time.setText(persianEnglishDigit.E2P((new JalaliConvert()).GregorianToPersian(transactionDTO.getTransactionDate())));
-        tracking_code.setText(persianEnglishDigit.E2P(transactionDTO.getReference()));
+//    }
 
-    }
 
 
     @Override
@@ -171,14 +172,14 @@ public class TransactionDetailActivity extends AppCompatActivity implements View
         switch (v.getId()){
             case R.id.send_message:
 
-                if (transactionDTO.getPhoneNumber() != null)
-                    new HamPayDialog(activity).showCommunicateDialog(0, transactionDTO.getPhoneNumber());
-                break;
-
-            case R.id.user_call:
-                if (transactionDTO.getPhoneNumber() != null)
-                    new HamPayDialog(activity).showCommunicateDialog(1, transactionDTO.getPhoneNumber());
-                break;
+//                if (transactionDTO.getPhoneNumber() != null)
+//                    new HamPayDialog(activity).showCommunicateDialog(0, transactionDTO.getPhoneNumber());
+//                break;
+//
+//            case R.id.user_call:
+//                if (transactionDTO.getPhoneNumber() != null)
+//                    new HamPayDialog(activity).showCommunicateDialog(1, transactionDTO.getPhoneNumber());
+//                break;
         }
 
     }

@@ -105,7 +105,7 @@
     <string name="main_fragment_pending_payment">پرداخت‌های در انتظار</string>
     <string name="main_fragment_transactions">تراکنش‌ها</string>
 
-    <string name="transaction_history_title">تاریخچه تراکنش‌ها</string>
+    <string name="transaction_history_title">تراکنش‌ها</string>
     <string name="payment_request_title">تولید فاکتور</string>
     <string name="business_purchase_title">پرداخت کسب و کار</string>
     <string name="pending_purchase_payment_title">پرداخت‌های در انتظار</string>
