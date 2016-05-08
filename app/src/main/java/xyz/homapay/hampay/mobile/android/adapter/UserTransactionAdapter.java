@@ -50,13 +50,10 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
 
             viewHolder.status_icon = (ImageView)convertView.findViewById(R.id.status_icon);
             viewHolder.status_text = (FacedTextView)convertView.findViewById(R.id.status_text);
-            viewHolder.image = (CircleImageView)convertView.findViewById(R.id.image);
+            viewHolder.image = (ImageView) convertView.findViewById(R.id.image);
             viewHolder.user_name = (FacedTextView)convertView.findViewById(R.id.user_name);
             viewHolder.date_time = (FacedTextView)convertView.findViewById(R.id.date_time);
-            viewHolder.price_pay = (FacedTextView)convertView.findViewById(R.id.price_pay);
-            viewHolder.reject_message = (FacedTextView)convertView.findViewById(R.id.reject_message);
-            viewHolder.user_fee_value = (FacedTextView)convertView.findViewById(R.id.user_fee_value);
-            viewHolder.user_fee_ll = (LinearLayout)convertView.findViewById(R.id.user_fee_ll);
+            viewHolder.amountValue = (FacedTextView)convertView.findViewById(R.id.amountValue);
 
             convertView.setTag(viewHolder);
         }
@@ -69,34 +66,27 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
 
         if (transactionDTO.getTransactionStatus() == TransactionStatus.SUCCESS){
 
-            viewHolder.reject_message.setVisibility(View.GONE);
 
             if (transactionDTO.getTransactionType() == TransactionType.CREDIT){
                 viewHolder.status_text.setText(context.getString(R.string.credit));
                 viewHolder.status_text.setTextColor(ContextCompat.getColor(context, R.color.register_btn_color));
                 viewHolder.status_icon.setImageResource(R.drawable.arrow_r);
-                viewHolder.user_fee_ll.setVisibility(View.GONE);
             }
             else if (transactionDTO.getTransactionType() == TransactionType.DEBIT){
                 viewHolder.status_text.setText(context.getString(R.string.debit));
                 viewHolder.status_text.setTextColor(ContextCompat.getColor(context, R.color.user_change_status));
                 viewHolder.status_icon.setImageResource(R.drawable.arrow_p);
-                viewHolder.user_fee_ll.setVisibility(View.VISIBLE);
             }
 
         }else if (transactionDTO.getTransactionStatus() == TransactionStatus.PENDING) {
-            viewHolder.reject_message.setVisibility(View.GONE);
             viewHolder.status_text.setText(context.getString(R.string.pending));
             viewHolder.status_text.setTextColor(ContextCompat.getColor(context, R.color.pending_transaction));
             viewHolder.status_icon.setImageResource(R.drawable.pending);
-            viewHolder.user_fee_ll.setVisibility(View.VISIBLE);
         }
         else {
-            viewHolder.reject_message.setVisibility(View.VISIBLE);
             viewHolder.status_text.setText(context.getString(R.string.fail));
             viewHolder.status_text.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
             viewHolder.status_icon.setImageResource(R.drawable.arrow_f);
-            viewHolder.user_fee_ll.setVisibility(View.GONE);
         }
 
 
@@ -104,7 +94,7 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
         viewHolder.date_time.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(transactionDTO.getTransactionDate())));
 //        viewHolder.reject_message.setText(transactionDTO.getRejectReasonMessage());
 //        viewHolder.user_fee_value.setText(persianEnglishDigit.E2P(currencyFormatter.format(transactionDTO.getFeeCharge())) + context.getString(R.string.currency_rials));
-        viewHolder.price_pay.setText(persianEnglishDigit.E2P(currencyFormatter.format(transactionDTO.getAmount())) + "\n" + context.getString(R.string.currency_rials));
+        viewHolder.amountValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(transactionDTO.getAmount())));
 
         if (transactionDTO.getImageId() != null) {
             String userImageUrl = Constants.IMAGE_PREFIX + authToken + "/" + transactionDTO.getImageId();
@@ -122,14 +112,11 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
         ViewHolder(){ }
 
         ImageView status_icon;
-        CircleImageView image;
+        ImageView image;
         FacedTextView status_text;
         FacedTextView user_name;
         FacedTextView date_time;
-        FacedTextView price_pay;
-        FacedTextView reject_message;
-        FacedTextView user_fee_value;
-        LinearLayout user_fee_ll;
+        FacedTextView amountValue;
     }
 
 }

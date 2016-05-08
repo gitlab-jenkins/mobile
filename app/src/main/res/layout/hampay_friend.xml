@@ -20,24 +20,8 @@
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            android:contentDescription="hampay_2_ll">
-
-            <xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView
-                android:id="@+id/hampay_image_2"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_gravity="center_horizontal"
-                android:clickable="true"
-                android:src="@drawable/user_icon_blak"
-                app:civ_border="true"
-                app:civ_borderColor="#FFFFFFFF"
-                app:civ_borderWidth="1dp"
-                app:civ_selector="true"
-                app:civ_selectorColor="#4403a9f4"
-                app:civ_selectorStrokeColor="#aa5677fc"
-                app:civ_selectorStrokeWidth="1dp" />
+            android:gravity="center_vertical|right"
+            android:visibility="gone">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/hampay_2"
@@ -46,11 +30,28 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/normal_text"
                 android:textSize="14dp"
-                android:gravity="center"
-                android:layout_marginLeft="4dp"
-                android:layout_gravity="center_horizontal"
-                android:text="سعید کارخانه"
-                />
+                android:text="sss" />
+
+            <FrameLayout
+                android:layout_width="32dp"
+                android:layout_height="32dp">
+
+                <ImageView
+                    android:id="@+id/hampay_image_2"
+                    android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:src="@drawable/selected_contacts_placeholder"
+                    android:scaleType="fitXY"
+                    android:background="@color/page_title"
+                    android:layout_gravity="center"/>
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/curve_images"/>
+
+            </FrameLayout>
+
 
         </LinearLayout>
 
@@ -59,9 +60,8 @@
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:gravity="right"
-            android:visibility="gone"
-            android:contentDescription="hampay_1_ll">
+            android:gravity="center_vertical|right"
+            android:visibility="gone">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/hampay_1"
@@ -70,26 +70,27 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/normal_text"
                 android:textSize="14dp"
-                android:gravity="center"
-                android:layout_marginTop="12dp"
-                android:layout_gravity="center_horizontal"
-                android:text=""
-                android:layout_marginRight="4dp"/>
+                android:text="sss" />
 
-            <xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView
-                android:id="@+id/hampay_image_1"
+            <FrameLayout
                 android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_gravity="center_horizontal"
-                android:clickable="true"
-                android:src="@drawable/user_icon_blak"
-                app:civ_border="true"
-                app:civ_borderColor="#FFFFFFFF"
-                app:civ_borderWidth="1dp"
-                app:civ_selector="true"
-                app:civ_selectorColor="#4403a9f4"
-                app:civ_selectorStrokeColor="#aa5677fc"
-                app:civ_selectorStrokeWidth="1dp" />
+                android:layout_height="32dp">
+
+                <ImageView
+                    android:id="@+id/hampay_image_1"
+                    android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:src="@drawable/selected_contacts_placeholder"
+                    android:scaleType="fitXY"
+                    android:background="@color/page_title"
+                    android:layout_gravity="center"/>
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/curve_images"/>
+
+            </FrameLayout>
 
 
         </LinearLayout>
@@ -107,24 +108,8 @@
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            android:contentDescription="hampay_4_ll">
-
-            <xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView
-                android:id="@+id/hampay_image_4"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_gravity="center_horizontal"
-                android:clickable="true"
-                android:src="@drawable/user_icon_blak"
-                app:civ_border="true"
-                app:civ_borderColor="#FFFFFFFF"
-                app:civ_borderWidth="1dp"
-                app:civ_selector="true"
-                app:civ_selectorColor="#4403a9f4"
-                app:civ_selectorStrokeColor="#aa5677fc"
-                app:civ_selectorStrokeWidth="1dp" />
+            android:gravity="center_vertical|right"
+            android:visibility="gone">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/hampay_4"
@@ -133,11 +118,28 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/normal_text"
                 android:textSize="14dp"
-                android:gravity="center"
-                android:layout_marginLeft="4dp"
-                android:layout_gravity="center_horizontal"
-                android:text="هم‌پی‌یار تجارت"
-                />
+                android:text="sss" />
+
+            <FrameLayout
+                android:layout_width="32dp"
+                android:layout_height="32dp">
+
+                <ImageView
+                    android:id="@+id/hampay_image_4"
+                    android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:src="@drawable/selected_contacts_placeholder"
+                    android:scaleType="fitXY"
+                    android:background="@color/page_title"
+                    android:layout_gravity="center"/>
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/curve_images"/>
+
+            </FrameLayout>
+
 
         </LinearLayout>
 
@@ -146,10 +148,8 @@
             android:layout_width="0dip"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
-            android:gravity="right"
-            android:visibility="gone"
-            android:contentDescription="hampay_3_ll">
-
+            android:gravity="center_vertical|right"
+            android:visibility="gone">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/hampay_3"
@@ -158,26 +158,27 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/normal_text"
                 android:textSize="14dp"
-                android:gravity="center"
-                android:layout_marginTop="12dp"
-                android:layout_gravity="center_horizontal"
-                android:text="مجید زمانی"
-                android:layout_marginRight="4dp"/>
+                android:text="sss" />
 
-            <xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView
-                android:id="@+id/hampay_image_3"
+            <FrameLayout
                 android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_gravity="center_horizontal"
-                android:clickable="true"
-                android:src="@drawable/user_icon_blak"
-                app:civ_border="true"
-                app:civ_borderColor="#FFFFFFFF"
-                app:civ_borderWidth="1dp"
-                app:civ_selector="true"
-                app:civ_selectorColor="#4403a9f4"
-                app:civ_selectorStrokeColor="#aa5677fc"
-                app:civ_selectorStrokeWidth="1dp" />
+                android:layout_height="32dp">
+
+                <ImageView
+                    android:id="@+id/hampay_image_3"
+                    android:layout_width="27dp"
+                    android:layout_height="27dp"
+                    android:src="@drawable/selected_contacts_placeholder"
+                    android:scaleType="fitXY"
+                    android:background="@color/page_title"
+                    android:layout_gravity="center"/>
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/curve_images"/>
+
+            </FrameLayout>
 
 
         </LinearLayout>

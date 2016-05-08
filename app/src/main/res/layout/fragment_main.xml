@@ -143,12 +143,31 @@
                         android:layout_gravity="center"
                         android:text="@string/main_fragment_pending_payment" />
 
-                    <ImageView
+                    <RelativeLayout
                         android:layout_width="64dp"
                         android:layout_height="64dp"
-                        android:src="@drawable/expectation_icon"
-                        android:layout_marginRight="12dp"
-                        android:background="@color/page_title"/>
+                        android:layout_marginRight="12dp">
+
+                        <ImageView
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:src="@drawable/expectation_icon"
+                            android:background="@color/page_title"/>
+
+                        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                            geekui:customTypeface="fonts/iran_sans_bold.ttf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/white"
+                            android:textSize="14sp"
+                            android:text="۸۸"
+                            android:layout_alignParentRight="true"
+                            android:background="@drawable/pending_count_badge_style"
+                            android:padding="4dp"/>
+
+                    </RelativeLayout>
+
+
 
                 </LinearLayout>
 
@@ -202,10 +221,9 @@
                     android:text="آخرین ورودبه سیستم، "
                     android:lineSpacingExtra="8dp"/>
 
-
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="160dp"/>
+                    android:layout_height="40dp"/>
 
             </LinearLayout>
 

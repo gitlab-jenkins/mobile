@@ -29,7 +29,6 @@ import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
-import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
@@ -53,10 +52,10 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     LinearLayout hampay_2_ll;
     LinearLayout hampay_3_ll;
     LinearLayout hampay_4_ll;
-    CircleImageView hampay_image_1;
-    CircleImageView hampay_image_2;
-    CircleImageView hampay_image_3;
-    CircleImageView hampay_image_4;
+    ImageView hampay_image_1;
+    ImageView hampay_image_2;
+    ImageView hampay_image_3;
+    ImageView hampay_image_4;
     FacedTextView hampay_1;
     FacedTextView hampay_2;
     FacedTextView hampay_3;
@@ -110,10 +109,10 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         hampay_2 = (FacedTextView)rootView.findViewById(R.id.hampay_2);
         hampay_3 = (FacedTextView)rootView.findViewById(R.id.hampay_3);
         hampay_4 = (FacedTextView)rootView.findViewById(R.id.hampay_4);
-        hampay_image_1 = (CircleImageView)rootView.findViewById(R.id.hampay_image_1);
-        hampay_image_2 = (CircleImageView)rootView.findViewById(R.id.hampay_image_2);
-        hampay_image_3 = (CircleImageView)rootView.findViewById(R.id.hampay_image_3);
-        hampay_image_4 = (CircleImageView)rootView.findViewById(R.id.hampay_image_4);
+        hampay_image_1 = (ImageView)rootView.findViewById(R.id.hampay_image_1);
+        hampay_image_2 = (ImageView)rootView.findViewById(R.id.hampay_image_2);
+        hampay_image_3 = (ImageView)rootView.findViewById(R.id.hampay_image_3);
+        hampay_image_4 = (ImageView)rootView.findViewById(R.id.hampay_image_4);
         user_last_login = (FacedTextView)rootView.findViewById(R.id.user_last_login);
         if (userProfileDTO.getLastLoginDate() != null) {
             user_last_login.setText(getString(R.string.last_login) + ": "

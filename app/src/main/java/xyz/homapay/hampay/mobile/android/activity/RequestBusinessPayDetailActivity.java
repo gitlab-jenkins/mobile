@@ -43,6 +43,7 @@ import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring;
@@ -51,7 +52,7 @@ import xyz.homapay.hampay.mobile.android.webservice.psp.string2stringMapEntry;
 
 public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
-    ButtonRectangle pay_to_business_button;
+    ImageView pay_to_business_button;
     FacedTextView cancel_pay_to_business_button;
 
     Bundle bundle;
@@ -92,7 +93,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
     FacedTextView paymentFeeValue;
     FacedTextView paymentTotalValue;
     FacedTextView cardNumberValue;
-    //    FacedTextView user_bank_name;
+    FacedTextView bankName;
     FacedEditText pin2Value;
 
     RequestLatestPurchase requestLatestPurchase;
@@ -114,6 +115,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
     RequestPurchaseInfo requestPurchaseInfo;
     PurchaseInfoRequest purchaseInfoRequest;
+
+    private CurrencyFormatter currencyFormatter;
 
 
     @Override
@@ -163,6 +166,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
         hamPayDialog = new HamPayDialog(activity);
 
+        currencyFormatter = new CurrencyFormatter();
+
         credit_value = (FacedTextView)findViewById(R.id.credit_value);
         credit_value_icon = (ImageView)findViewById(R.id.credit_value_icon);
 
@@ -182,7 +187,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         paymentPriceValue = (FacedTextView)findViewById(R.id.paymentPriceValue);
         paymentVAT = (FacedTextView)findViewById(R.id.paymentVAT);
         paymentFeeValue = (FacedTextView)findViewById(R.id.paymentFeeValue);
-//        user_bank_name = (FacedTextView)findViewById(R.id.user_bank_name);
+        bankName = (FacedTextView)findViewById(R.id.bankName);
         cardNumberValue = (FacedTextView)findViewById(R.id.cardNumberValue);
         pin2Value = (FacedEditText)findViewById(R.id.pin2Value);
         paymentTotalValue = (FacedTextView)findViewById(R.id.paymentTotalValue);
@@ -198,9 +203,9 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
         if (pspInfoDTO != null) {
             if (pspInfoDTO.getCardDTO().getCardId() == null) {
-                creditInfo.setVisibility(View.GONE);
+//                creditInfo.setVisibility(View.GONE);
             } else {
-                creditInfo.setVisibility(View.VISIBLE);
+//                creditInfo.setVisibility(View.VISIBLE);
             }
         }
 
@@ -216,10 +221,10 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             input_digit_5.setText(persianPurchaseCode.charAt(4) + "");
             input_digit_6.setText(persianPurchaseCode.charAt(5) + "");
 
-            paymentPriceValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getAmount().toString()) + " ریال");
-            paymentVAT.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getVat().toString()) + " ریال");
-            paymentFeeValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getFeeCharge().toString()) + " ریال");
-            paymentTotalValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() + "") + " ریال");
+            paymentPriceValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(purchaseInfoDTO.getAmount())));
+            paymentVAT.setText(persianEnglishDigit.E2P(currencyFormatter.format(purchaseInfoDTO.getVat())));
+            paymentFeeValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(purchaseInfoDTO.getFeeCharge())));
+            paymentTotalValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat())));
 
             business_name.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getMerchantName()));
 
@@ -230,8 +235,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             }else {
                 business_image.setBackgroundColor(ContextCompat.getColor(context, R.color.user_change_status));
             }
-
-            cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
+            cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber().split("-")[3]));
+            bankName.setText(pspInfoDTO.getCardDTO().getBankName());
         }else if (purchaseCode != null){
             requestPurchaseInfo = new RequestPurchaseInfo(activity, new RequestPurchaseInfoTaskCompleteListener());
             purchaseInfoRequest = new PurchaseInfoRequest();
@@ -244,7 +249,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         }
 
 
-        pay_to_business_button = (ButtonRectangle)findViewById(R.id.pay_to_business_button);
+        pay_to_business_button = (ImageView)findViewById(R.id.pay_to_business_button);
         pay_to_business_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -316,23 +321,25 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             }
         });
 
-        cancel_pay_to_business_button = (FacedTextView)findViewById(R.id.cancel_pay_to_business_button);
-        cancel_pay_to_business_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (purchaseInfoDTO != null) {
-                    if (databaseHelper.getIsExistPurchaseRequest(purchaseInfoDTO.getProductCode())) {
-                        databaseHelper.updatePurchaseRequest(purchaseInfoDTO.getProductCode(), "1");
-                    } else {
-                        databaseHelper.createPurchaseRequest(purchaseInfoDTO.getProductCode());
-                        databaseHelper.updatePurchaseRequest(purchaseInfoDTO.getProductCode(), "1");
-                    }
-                }
 
-                finish();
-
-            }
-        });
+        //Enable Here
+//        cancel_pay_to_business_button = (FacedTextView)findViewById(R.id.cancel_pay_to_business_button);
+//        cancel_pay_to_business_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (purchaseInfoDTO != null) {
+//                    if (databaseHelper.getIsExistPurchaseRequest(purchaseInfoDTO.getProductCode())) {
+//                        databaseHelper.updatePurchaseRequest(purchaseInfoDTO.getProductCode(), "1");
+//                    } else {
+//                        databaseHelper.createPurchaseRequest(purchaseInfoDTO.getProductCode());
+//                        databaseHelper.updatePurchaseRequest(purchaseInfoDTO.getProductCode(), "1");
+//                    }
+//                }
+//
+//                finish();
+//
+//            }
+//        });
     }
 
 
@@ -501,10 +508,10 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                     if (purchaseInfoDTO != null) {
 
                         if (pspInfoDTO.getCardDTO().getCardId() == null) {
-                            creditInfo.setVisibility(View.GONE);
+//                            creditInfo.setVisibility(View.GONE);
                         }
                         else {
-                            creditInfo.setVisibility(View.VISIBLE);
+//                            creditInfo.setVisibility(View.VISIBLE);
                         }
 
                         PersianEnglishDigit persianEnglishDigit = new PersianEnglishDigit();
@@ -518,15 +525,11 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                         input_digit_5.setText(persianPurchaseCode.charAt(4) + "");
                         input_digit_6.setText(persianPurchaseCode.charAt(5) + "");
 
-                        paymentPriceValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getAmount().toString()) + " ریال");
-                        paymentVAT.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getVat().toString()) + " ریال");
-                        paymentFeeValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getFeeCharge().toString()) + " ریال");
-                        paymentTotalValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() + "") + " ریال");
+                        paymentPriceValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(purchaseInfoDTO.getAmount())));
+                        paymentVAT.setText(persianEnglishDigit.E2P(currencyFormatter.format(purchaseInfoDTO.getVat())));
+                        paymentFeeValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(purchaseInfoDTO.getFeeCharge())));
+                        paymentTotalValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat())));
                         business_name.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getMerchantName()));
-
-//                        String businessImageUrl = Constants.HTTPS_SERVER_IP + "/merchant-logo/" + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + purchaseInfoDTO.getMerchantImageId();
-
-//                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute(businessImageUrl);
 
                         String businessImageUrl = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + purchaseInfoDTO.getMerchantImageId();
 
@@ -536,7 +539,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                             business_image.setBackgroundColor(ContextCompat.getColor(context, R.color.user_change_status));
                         }
 
-                        cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
+                        bankName.setText(pspInfoDTO.getCardDTO().getBankName());
+                        cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber().split("-")[3]));
                     }
                     else {
                         Toast.makeText(context, getString(R.string.msg_not_found_pending_payment_code), Toast.LENGTH_LONG).show();
@@ -623,10 +627,10 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                     if (purchaseInfoDTO != null) {
 
                         if (pspInfoDTO.getCardDTO().getCardId() == null) {
-                            creditInfo.setVisibility(View.GONE);
+//                            creditInfo.setVisibility(View.GONE);
                         }
                         else {
-                            creditInfo.setVisibility(View.VISIBLE);
+//                            creditInfo.setVisibility(View.VISIBLE);
                         }
 
                         PersianEnglishDigit persianEnglishDigit = new PersianEnglishDigit();
@@ -640,17 +644,17 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                         input_digit_5.setText(persianPurchaseCode.charAt(4) + "");
                         input_digit_6.setText(persianPurchaseCode.charAt(5) + "");
 
-                        paymentPriceValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getAmount().toString()) + " ریال");
-                        paymentVAT.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getVat().toString()) + " ریال");
-                        paymentFeeValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getFeeCharge().toString()) + " ریال");
-                        paymentTotalValue.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() + "") + " ریال");
+                        paymentPriceValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(purchaseInfoDTO.getAmount())));
+                        paymentVAT.setText(persianEnglishDigit.E2P(currencyFormatter.format(purchaseInfoDTO.getVat())));
+                        paymentFeeValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(purchaseInfoDTO.getFeeCharge())));
+                        paymentTotalValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat())));
                         business_name.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getMerchantName()));
 
                         String LogoUrl = Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantImageId();
 
                         new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute(Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantImageId());
-
-                        cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
+                        bankName.setText(pspInfoDTO.getCardDTO().getBankName());
+                        cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber().split("-")[3]));
                     }
                     else {
                         Toast.makeText(context, getString(R.string.msg_not_found_pending_payment_code), Toast.LENGTH_LONG).show();
