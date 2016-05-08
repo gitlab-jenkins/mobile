@@ -38,11 +38,9 @@ public class HamPayBusinessesAdapter extends HamPayBusinessesGenericAdapter<Busi
 
         if (convertView == null) {
             viewHolder = new ViewHolder();
-            convertView = layoutInflater.inflate(R.layout.contact_pay_business_item, null);
+            convertView = layoutInflater.inflate(R.layout.business_item, null);
 
             viewHolder.business_name = (FacedTextView)convertView.findViewById(R.id.business_name);
-            viewHolder.business_description = (FacedTextView)convertView.findViewById(R.id.business_description);
-            viewHolder.business_phone_no = (FacedTextView)convertView.findViewById(R.id.business_phone_no);
             viewHolder.business_hampay_id = (FacedTextView)convertView.findViewById(R.id.business_hampay_id);
             viewHolder.business_image = (ImageView)convertView.findViewById(R.id.business_image);
             convertView.setTag(viewHolder);
@@ -54,13 +52,11 @@ public class HamPayBusinessesAdapter extends HamPayBusinessesGenericAdapter<Busi
         businessDTO = getItem(position);
 
         viewHolder.business_name.setText(businessDTO.getTitle());
-        viewHolder.business_description.setText(businessDTO.getCategory());
-        viewHolder.business_phone_no.setText(persianEnglishDigit.E2P("تلفن: " + businessDTO.getDefaultPhoneNumber()));
         viewHolder.business_hampay_id.setText(persianEnglishDigit.E2P("شناسه: " + businessDTO.getCode()));
         if (businessDTO.getBusinessImageId() != null) {
             new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.business_image)).execute(Constants.IMAGE_PREFIX + authToken + "/" + businessDTO.getBusinessImageId());
         }else {
-            viewHolder.business_image.setBackgroundColor(ContextCompat.getColor(context, R.color.user_change_status));
+            viewHolder.business_image.setImageResource(R.drawable.transaction_placeholder);
         }
         return convertView;
     }
@@ -71,8 +67,6 @@ public class HamPayBusinessesAdapter extends HamPayBusinessesGenericAdapter<Busi
         ViewHolder(){ }
 
         FacedTextView business_name;
-        FacedTextView business_description;
-        FacedTextView business_phone_no;
         FacedTextView business_hampay_id;
         ImageView business_image;
     }

@@ -37,6 +37,7 @@
         android:orientation="horizontal">
 
         <RelativeLayout
+            android:id="@+id/businesses_list"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="0.5"

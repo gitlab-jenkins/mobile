@@ -101,6 +101,8 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
 
     HamPayDialog hamPayDialog;
 
+    RelativeLayout businesses_list;
+
     private boolean onLoadMore = false;
     DobList dobList;
 
@@ -165,57 +167,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
         }
     }
 
-    public void menu(View v){
-
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_business_purchase, null);
-
-        final FacedTextView business_payment_per_name = (FacedTextView) view.findViewById(R.id.business_payment_per_name);
-        FacedTextView business_payment_per_code = (FacedTextView) view.findViewById(R.id.business_payment_per_code);
-
-        business_payment_per_name.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                if (keyboard.getVisibility() == View.VISIBLE){
-                    new Collapse(keyboard).animate();
-                }
-//                businessListView.setVisibility(View.VISIBLE);
-                find_business_purchase.setVisibility(View.GONE);
-                search_layout.setVisibility(View.VISIBLE);
-            }
-        });
-
-        business_payment_per_code.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-//                businessListView.setVisibility(View.GONE);
-                find_business_purchase.setVisibility(View.VISIBLE);
-                search_layout.setVisibility(View.GONE);
-            }
-        });
-
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().setDimAmount(0);
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
-        WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
-        layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
-        layoutParams.x = 25;
-        layoutParams.y = 20;
-
-        dialog.show();
-    }
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -279,6 +230,9 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
         keyboard_dismiss.setOnClickListener(this);
         backspace = (RelativeLayout) findViewById(R.id.backspace);
         backspace.setOnClickListener(this);
+
+        businesses_list = (RelativeLayout)findViewById(R.id.businesses_list);
+        businesses_list.setOnClickListener(this);
 
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
@@ -378,14 +332,23 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
 
     @Override
     public void onClick(View v) {
+
+        Intent intent;
+
         switch (v.getId()){
+
+            case R.id.businesses_list:
+                intent = new Intent();
+                intent.setClass(activity, BusinessesListActivity.class);
+                startActivity(intent);
+                break;
 
             case R.id.payment_button:
 
                 new Collapse(keyboard).animate();
 
                 if (inputPurchaseCode.length() == 6) {
-                    Intent intent = new Intent();
+                    intent = new Intent();
                     intent.putExtra(Constants.BUSINESS_PURCHASE_CODE, inputPurchaseCode);
                     intent.setClass(context, RequestBusinessPayDetailActivity.class);
                     startActivity(intent);
