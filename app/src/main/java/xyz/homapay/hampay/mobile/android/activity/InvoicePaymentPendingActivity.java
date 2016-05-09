@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -38,6 +39,7 @@ import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring;
@@ -48,10 +50,10 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
 
     ButtonRectangle pay_to_one_button;
 
-    CircleImageView user_image;
-    FacedTextView contact_name_1;
-    FacedTextView contact_name_2;
+    ImageView user_image;
+    FacedTextView callerName;
     FacedTextView received_message;
+    FacedTextView create_date;
 
     FacedEditText contact_message;
     FacedTextView payment_value;
@@ -143,10 +145,10 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
         persianEnglishDigit = new PersianEnglishDigit();
 
 
-        user_image = (CircleImageView)findViewById(R.id.user_image);
+        user_image = (ImageView)findViewById(R.id.user_image);
         contact_message = (FacedEditText) findViewById(R.id.contact_message);
-        contact_name_1 = (FacedTextView) findViewById(R.id.contact_name_1);
-        contact_name_2 = (FacedTextView) findViewById(R.id.contact_name_2);
+        callerName = (FacedTextView) findViewById(R.id.callerName);
+        create_date = (FacedTextView)findViewById(R.id.create_date);
         received_message = (FacedTextView) findViewById(R.id.received_message);
         payment_value = (FacedTextView) findViewById(R.id.payment_value);
         pin2Value = (FacedEditText) findViewById(R.id.pin2Value);
@@ -158,15 +160,14 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
         pspInfoDTO = (PspInfoDTO) intent.getSerializableExtra(Constants.PSP_INFO);
 
         if (paymentInfoDTO != null) {
-            contact_name_1.setText(paymentInfoDTO.getCallerName());
-            contact_name_2.setText(paymentInfoDTO.getCallerName());
+            callerName.setText(paymentInfoDTO.getCallerName());
             received_message.setText(paymentInfoDTO.getMessage());
+            create_date.setText(new JalaliConvert().GregorianToPersian(paymentInfoDTO.getCreatedBy()));
             payment_value.setText(persianEnglishDigit.E2P(paymentInfoDTO.getAmount() + ""));
 
             if (paymentInfoDTO.getImageId() != null) {
                 new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(user_image)).execute(Constants.IMAGE_PREFIX + authToken + "/" + paymentInfoDTO.getImageId());
             }else {
-                user_image.setImageResource(R.drawable.user_icon_blue);
             }
 
             if (pspInfoDTO.getCardDTO().getCardId() == null) {
@@ -450,8 +451,7 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
 
                     paymentInfoDTO = latestPaymentResponseMessage.getService().getPaymentInfoDTO();
                     pspInfoDTO = latestPaymentResponseMessage.getService().getPspInfo();
-                    contact_name_1.setText(paymentInfoDTO.getCallerName());
-                    contact_name_2.setText(paymentInfoDTO.getCallerName());
+                    callerName.setText(paymentInfoDTO.getCallerName());
                     received_message.setText(paymentInfoDTO.getMessage());
                     payment_value.setText(paymentInfoDTO.getAmount() + "");
 

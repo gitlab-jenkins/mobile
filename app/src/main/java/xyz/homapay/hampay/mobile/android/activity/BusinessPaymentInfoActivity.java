@@ -47,15 +47,13 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
     PersianEnglishDigit persianEnglishDigit;
 
     FacedTextView business_name;
+    FacedTextView business_hampay_id;
     ImageView business_image;
 
-    ButtonRectangle pay_to_business_button;
+    ImageView payment_button;
 
-    FacedEditText credit_value;
+    FacedEditText amount_value;
     boolean creditValueValidation = false;
-    ImageView credit_value_icon;
-
-    FacedEditText contact_message;
 
     Context context;
     Activity activity;
@@ -130,8 +128,11 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
         businessDTO = (BusinessDTO)intent.getSerializableExtra(Constants.BUSINESS_INFO);
 
         business_name = (FacedTextView)findViewById(R.id.business_name);
-        business_name.setText(persianEnglishDigit.E2P(businessDTO.getTitle() + " " + "(" +businessDTO.getCode() + ")"));
+        business_name.setText(persianEnglishDigit.E2P(businessDTO.getTitle() + " " + "(" + businessDTO.getCode() + ")"));
         business_image = (ImageView)findViewById(R.id.business_image);
+
+        business_hampay_id = (FacedTextView)findViewById(R.id.business_hampay_id);
+        business_hampay_id.setText("شناسه: " + persianEnglishDigit.E2P(businessDTO.getCode()));
 
         if (businessDTO.getBusinessImageId() != null) {
             new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute(Constants.IMAGE_PREFIX
@@ -141,40 +142,35 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
             business_image.setBackgroundColor(ContextCompat.getColor(context, R.color.user_change_status));
         }
 
-        contact_message = (FacedEditText)findViewById(R.id.contact_message);
 
-        credit_value = (FacedEditText)findViewById(R.id.credit_value);
-        credit_value.addTextChangedListener(new CurrencyFormatterTextWatcher(credit_value));
-        credit_value_icon = (ImageView)findViewById(R.id.credit_value_icon);
-        credit_value.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        amount_value = (FacedEditText)findViewById(R.id.amount_value);
+        amount_value.addTextChangedListener(new CurrencyFormatterTextWatcher(amount_value));
+        amount_value.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus){
-                    if (credit_value.getText().toString().length() == 0){
-                        credit_value_icon.setImageResource(R.drawable.false_icon);
+                    if (amount_value.getText().toString().length() == 0){
                         creditValueValidation = false;
                     }
                     else {
-                        credit_value_icon.setImageResource(R.drawable.right_icon);
                         creditValueValidation = true;
                     }
                 }else {
-                    credit_value_icon.setImageDrawable(null);
                 }
 
             }
         });
 
 
-        pay_to_business_button = (ButtonRectangle)findViewById(R.id.pay_to_business_button);
-        pay_to_business_button.setOnClickListener(new View.OnClickListener() {
+        payment_button = (ImageView)findViewById(R.id.payment_button);
+        payment_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                credit_value.clearFocus();
+                amount_value.clearFocus();
 
                 if (creditValueValidation) {
 
-                    amountValue = Long.parseLong(new PersianEnglishDigit(credit_value.getText().toString()).P2E().replace(",", ""));
+                    amountValue = Long.parseLong(new PersianEnglishDigit(amount_value.getText().toString()).P2E().replace(",", ""));
 
                     if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
                         Intent intent = new Intent();
@@ -190,7 +186,6 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
                             businessPaymentConfirmRequest = new BusinessPaymentConfirmRequest();
                             businessPaymentConfirmRequest.setAmount(amountValue);
                             businessPaymentConfirmRequest.setBusinessCode(businessDTO.getCode());
-                            businessPaymentConfirmRequest.setMessage(contact_message.getText().toString());
                             requestBusinessPaymentConfirm = new RequestBusinessPaymentConfirm(context, new RequestBusinessPaymentConfirmTaskCompleteListener());
                             requestBusinessPaymentConfirm.execute(businessPaymentConfirmRequest);
                         }else {

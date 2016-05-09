@@ -1,118 +1,128 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/coordinatorLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:geekui="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="60dp"
-        android:background="@color/colorPrimary">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="6dp"
-            android:clickable="true"
-            >
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="#FFFFFF"
-                android:onClick="typeView"/>
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="#FFFFFF"
-                android:layout_marginLeft="8dp"
-                android:onClick="sortView"/>
-
-        </LinearLayout>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/nav_icon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/back_actionbar"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="12dp"
-            android:padding="12dp"
-            android:clickable="true"
-            android:onClick="backActionBar"/>
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/back"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:padding="4dp"/>
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:textSize="15dp"
+            android:textColor="@color/page_title"
+            android:textSize="20sp"
+            android:layout_gravity="center_horizontal"
             android:text="@string/pending_purchase_payment_title"
-            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="64dp"/>
-
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"/>
 
     </RelativeLayout>
 
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="52dp"
-        android:orientation="horizontal"
-        android:visibility="gone">
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:orientation="horizontal">
 
         <RelativeLayout
-            android:id="@+id/payment_rl"
+            android:id="@+id/invoice_pending"
             android:layout_width="0dip"
-            android:layout_height="52dp"
-            android:layout_weight="0.5">
+            android:layout_height="match_parent"
+            android:layout_weight="0.33"
+            android:background="@color/transaction_unselected_tab"
+            android:layout_marginRight="1dp">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                android:id="@+id/payment_title"
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/normal_text"
-                android:textSize="15dp"
-                android:text="@string/pending_payment"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/sort_transaction_individual"
                 android:layout_centerInParent="true"/>
 
-            <View
-                android:id="@+id/payment_sep"
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:layout_alignParentBottom="true"
-                android:background="@color/normal_text"/>
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:src="@drawable/transaction_triangle"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"/>
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/purchase_rl"
+            android:id="@+id/purchase_pending"
             android:layout_width="0dip"
-            android:layout_height="52dp"
-            android:layout_weight="0.5">
+            android:layout_height="match_parent"
+            android:layout_weight="0.33"
+            android:background="@color/transaction_unselected_tab"
+            android:layout_marginRight="0.5dp"
+            android:layout_marginLeft="0.5dp">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                android:id="@+id/purchase_title"
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/user_change_status"
-                android:textSize="15dp"
-                android:text="@string/pending_purchase"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/sort_transaction_business"
                 android:layout_centerInParent="true"/>
 
-            <View
-                android:id="@+id/purchase_sep"
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:layout_alignParentBottom="true"
-                android:background="@color/user_change_status"/>
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:src="@drawable/transaction_triangle"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33"
+            android:background="@color/page_title"
+            android:layout_marginLeft="1dp">
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                geekui:customTypeface="fonts/iran_sans.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/sort_transaction_default"
+                android:layout_centerInParent="true"/>
+
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:src="@drawable/transaction_triangle"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"/>
 
         </RelativeLayout>
 
@@ -135,4 +145,7 @@
         android:layout_height="match_parent"/>
 
 
-</LinearLayout>
+    </LinearLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

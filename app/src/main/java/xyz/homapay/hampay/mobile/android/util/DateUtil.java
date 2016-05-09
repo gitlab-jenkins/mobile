@@ -27,16 +27,13 @@ public class DateUtil {
         long diffDays = diff / (24 * 60 * 60 * 1000);
 
         if (diffDays == 0) {
-             return  "زمان باقی مانده"
-                    + "\n"
-                    + persianEnglishDigit.E2P(diffHours + ":" + diffMinutes + ":" + diffSeconds)
+             return  "مهلت پرداخت"
+                    + " " + persianEnglishDigit.E2P(diffHours + ":" + diffMinutes + ":" + diffSeconds)
                     + " " + "ساعت";
         }else {
-             return  "زمان باقی مانده"
-                    + "\n"
-                    + persianEnglishDigit.E2P(diffHours + ":" + diffMinutes + ":" + diffSeconds)
+             return  "مهلت پرداخت"
+                     + " " + persianEnglishDigit.E2P(diffHours + ":" + diffMinutes + ":" + diffSeconds)
                     + " " + "ساعت"
-                    + "\n"
                     + persianEnglishDigit.E2P(diffDays + "")
                     + " " + "روز";
         }

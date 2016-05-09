@@ -554,4 +554,9 @@
     <string name="full_business_list">همه</string>
     <string name="most_popular_business_list">رایج‌ترین‌ها</string>
     <string name="latest_business_list">تازه‌ها</string>
+    <string name="amount_value">لطفا مبلغ مورد را وارد نمایید</string>
+    <string name="delete_pending_payment">مایل به حذف هستید؟</string>
+    <string name="delete_pending">حذف</string>
+
+
 </resources>

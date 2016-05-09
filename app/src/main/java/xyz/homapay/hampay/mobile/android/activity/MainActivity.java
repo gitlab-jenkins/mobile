@@ -226,27 +226,27 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     break;
             }
         }else {
-            if (pendingPurchaseCode != null) {
-                if (databaseHelper.getIsExistPurchaseRequest(pendingPurchaseCode)) {
-                    LatestPurchase latestPurchase = databaseHelper.getPurchaseRequest(pendingPurchaseCode);
-                    if (latestPurchase.getIsCanceled().equalsIgnoreCase("0")) {
-                        if (pendingPurchaseCount > 0) {
-                            intent.setClass(context, RequestBusinessPayDetailActivity.class);
-                            startActivity(intent);
-                        } else if (pendingPaymentCode != null && pendingPaymentCount > 0) {
-                            intent.setClass(context, InvoicePaymentPendingActivity.class);
-                            startActivity(intent);
-                        }
-                    }
-                } else {
-                    databaseHelper.createPurchaseRequest(pendingPurchaseCode);
-                    intent.setClass(context, RequestBusinessPayDetailActivity.class);
-                    startActivity(intent);
-                }
-            } else if (pendingPaymentCount > 0) {
-                intent.setClass(context, InvoicePaymentPendingActivity.class);
-                startActivity(intent);
-            }
+//            if (pendingPurchaseCode != null) {
+//                if (databaseHelper.getIsExistPurchaseRequest(pendingPurchaseCode)) {
+//                    LatestPurchase latestPurchase = databaseHelper.getPurchaseRequest(pendingPurchaseCode);
+//                    if (latestPurchase.getIsCanceled().equalsIgnoreCase("0")) {
+//                        if (pendingPurchaseCount > 0) {
+//                            intent.setClass(context, RequestBusinessPayDetailActivity.class);
+//                            startActivity(intent);
+//                        } else if (pendingPaymentCode != null && pendingPaymentCount > 0) {
+//                            intent.setClass(context, InvoicePaymentPendingActivity.class);
+//                            startActivity(intent);
+//                        }
+//                    }
+//                } else {
+//                    databaseHelper.createPurchaseRequest(pendingPurchaseCode);
+//                    intent.setClass(context, RequestBusinessPayDetailActivity.class);
+//                    startActivity(intent);
+//                }
+//            } else if (pendingPaymentCount > 0) {
+//                intent.setClass(context, InvoicePaymentPendingActivity.class);
+//                startActivity(intent);
+//            }
         }
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);

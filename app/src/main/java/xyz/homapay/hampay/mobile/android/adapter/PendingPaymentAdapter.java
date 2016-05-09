@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -98,14 +99,10 @@ public class PendingPaymentAdapter extends BaseAdapter  {
             convertView = inflater.inflate(R.layout.pending_payment_row, null);
 
             viewHolder.callerName = (FacedTextView)convertView.findViewById(R.id.callerName);
-            viewHolder.callerPhoneNo = (FacedTextView)convertView.findViewById(R.id.callerPhoneNo);
-            viewHolder.user_image = (CircleImageView)convertView.findViewById(R.id.user_image);
-            viewHolder.date_time = (FacedTextView)convertView.findViewById(R.id.date_time);
+            viewHolder.user_image = (ImageView)convertView.findViewById(R.id.user_image);
             viewHolder.price_pay = (FacedTextView)convertView.findViewById(R.id.price_pay);
             viewHolder.expire_pay = (FacedTextView)convertView.findViewById(R.id.expire_pay);
-            viewHolder.delete = (FacedTextView)convertView.findViewById(R.id.delete);
             viewHolder.paymentCode = (FacedTextView)convertView.findViewById(R.id.paymentCode);
-            viewHolder.message = (FacedTextView)convertView.findViewById(R.id.message);
 
             convertView.setTag(viewHolder);
         }
@@ -116,65 +113,62 @@ public class PendingPaymentAdapter extends BaseAdapter  {
         final PaymentInfoDTO paymentInfoDTO = paymentInfoDTOs.get(position);
 
         viewHolder.callerName.setText(paymentInfoDTO.getCallerName());
-        viewHolder.callerPhoneNo.setText(persianEnglishDigit.E2P(paymentInfoDTO.getCallerPhoneNumber()));
-        viewHolder.date_time.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(paymentInfoDTO.getCreatedBy())));
-        viewHolder.price_pay.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount()) + " ریال"));
-        viewHolder.message.setText(paymentInfoDTO.getMessage());
-        viewHolder.paymentCode.setText(persianEnglishDigit.E2P(paymentInfoDTO.getProductCode()));
+        viewHolder.price_pay.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount())));
+        viewHolder.paymentCode.setText(persianEnglishDigit.E2P("کد فاکتور " + paymentInfoDTO.getProductCode()));
         viewHolder.expire_pay.setText(dateUtil.remainingTime(paymentInfoDTO.getExpirationDate(), currentDate));
 
-        if (paymentInfoDTO.getImageId() != null) {
-            String userImageUrl = Constants.IMAGE_PREFIX + authToken + "/" + paymentInfoDTO.getImageId();
-            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.user_image)).execute(userImageUrl);
-        }else {
-            viewHolder.user_image.setBackgroundColor(ContextCompat.getColor(context, R.color.user_change_status));
-        }
+//        if (paymentInfoDTO.getImageId() != null) {
+//            String userImageUrl = Constants.IMAGE_PREFIX + authToken + "/" + paymentInfoDTO.getImageId();
+//            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.user_image)).execute(userImageUrl);
+//        }else {
+//            viewHolder.user_image.setBackgroundColor(ContextCompat.getColor(context, R.color.user_change_status));
+//        }
 
-        viewHolder.delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                Rect displayRectangle = new Rect();
-
-                Window window = activity.getWindow();
-                window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-                View view = activity.getLayoutInflater().inflate(R.layout.dialog_delete_pending_payment, null);
-                FacedTextView deleteCodeNotify = (FacedTextView)view.findViewById(R.id.deleteCodeNotify);
-                deleteCodeNotify.setText(activity.getString(R.string.msg_delete_payment_pending, persianEnglishDigit.E2P(paymentInfoDTO.getProductCode())));
-                FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
-                FacedTextView dis_confirmation = (FacedTextView) view.findViewById(R.id.dis_confirmation);
-
-                confirmation.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                        requestCancelPayment = new RequestCancelPayment(activity, new RequestCancelPaymentTaskCompleteListener(position));
-                        cancelUserPaymentRequest = new CancelUserPaymentRequest();
-                        cancelUserPaymentRequest.setProductCode(paymentInfoDTO.getProductCode());
-                        requestCancelPayment.execute(cancelUserPaymentRequest);
-                    }
-                });
-
-                dis_confirmation.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-
-
-                view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
-                dialog = new Dialog(activity);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.setContentView(view);
-                dialog.setTitle(null);
-                dialog.setCanceledOnTouchOutside(true);
-
-                dialog.show();
-            }
-        });
+//        viewHolder.delete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//
+//                Rect displayRectangle = new Rect();
+//
+//                Window window = activity.getWindow();
+//                window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+//                View view = activity.getLayoutInflater().inflate(R.layout.dialog_delete_pending_payment, null);
+//                FacedTextView deleteCodeNotify = (FacedTextView)view.findViewById(R.id.deleteCodeNotify);
+//                deleteCodeNotify.setText(activity.getString(R.string.msg_delete_payment_pending, persianEnglishDigit.E2P(paymentInfoDTO.getProductCode())));
+//                FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
+//                FacedTextView dis_confirmation = (FacedTextView) view.findViewById(R.id.dis_confirmation);
+//
+//                confirmation.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        dialog.dismiss();
+//                        requestCancelPayment = new RequestCancelPayment(activity, new RequestCancelPaymentTaskCompleteListener(position));
+//                        cancelUserPaymentRequest = new CancelUserPaymentRequest();
+//                        cancelUserPaymentRequest.setProductCode(paymentInfoDTO.getProductCode());
+//                        requestCancelPayment.execute(cancelUserPaymentRequest);
+//                    }
+//                });
+//
+//                dis_confirmation.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        dialog.dismiss();
+//                    }
+//                });
+//
+//
+//                view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
+//                dialog = new Dialog(activity);
+//                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//                dialog.setContentView(view);
+//                dialog.setTitle(null);
+//                dialog.setCanceledOnTouchOutside(true);
+//
+//                dialog.show();
+//            }
+//        });
 
         return convertView;
 
@@ -192,14 +186,10 @@ public class PendingPaymentAdapter extends BaseAdapter  {
         ViewHolder(){ }
 
         FacedTextView callerName;
-        FacedTextView callerPhoneNo;
-        CircleImageView user_image;
-        FacedTextView date_time;
+        ImageView user_image;
         FacedTextView price_pay;
         FacedTextView expire_pay;
-        FacedTextView delete;
         FacedTextView paymentCode;
-        FacedTextView message;
     }
 
     public class RequestCancelPaymentTaskCompleteListener implements

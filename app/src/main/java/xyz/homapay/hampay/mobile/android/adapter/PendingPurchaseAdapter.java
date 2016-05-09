@@ -98,15 +98,11 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
             viewHolder = new ViewHolder();
             convertView = inflater.inflate(R.layout.pending_purchase_row, null);
 
-
             viewHolder.business_name = (FacedTextView)convertView.findViewById(R.id.business_name);
+            viewHolder.purchase_code = (FacedTextView)convertView.findViewById(R.id.purchase_code);
             viewHolder.business_image = (ImageView)convertView.findViewById(R.id.business_image);
             viewHolder.price_pay = (FacedTextView)convertView.findViewById(R.id.price_pay);
-            viewHolder.createDateTime = (FacedTextView)convertView.findViewById(R.id.createDateTime);
             viewHolder.expire_pay = (FacedTextView)convertView.findViewById(R.id.expire_pay);
-            viewHolder.delete = (FacedTextView)convertView.findViewById(R.id.delete);
-
-
             convertView.setTag(viewHolder);
         }
         else{
@@ -115,6 +111,7 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
 
         final PurchaseInfoDTO purchaseInfoDTO = purchaseInfoDTOs.get(position);
 
+        viewHolder.purchase_code.setText("کد فاکتور " + persianEnglishDigit.E2P(purchaseInfoDTO.getPurchaseCode()));
         viewHolder.business_name.setText(purchaseInfoDTO.getMerchantName());
 
         if (purchaseInfoDTO.getMerchantImageId() != null) {
@@ -123,56 +120,54 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
             viewHolder.business_image.setBackgroundColor(ContextCompat.getColor(context, R.color.user_change_status));
         }
 
-        viewHolder.createDateTime.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(purchaseInfoDTO.getCreatedBy())));
-
         viewHolder.expire_pay.setText(dateUtil.remainingTime(purchaseInfoDTO.getExpirationDate(), currentDate));
 
-        viewHolder.price_pay.setText(persianEnglishDigit.E2P(currencyFormatter.format(purchaseInfoDTO.getAmount()) + " ریال"));
+        viewHolder.price_pay.setText(persianEnglishDigit.E2P(currencyFormatter.format(purchaseInfoDTO.getAmount())));
 
-        viewHolder.delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Rect displayRectangle = new Rect();
-
-                Window window = activity.getWindow();
-                window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-                View view = activity.getLayoutInflater().inflate(R.layout.dialog_delete_pending_payment, null);
-                FacedTextView deleteCodeNotify = (FacedTextView)view.findViewById(R.id.deleteCodeNotify);
-                deleteCodeNotify.setText(activity.getString(R.string.msg_delete_payment_pending, persianEnglishDigit.E2P(purchaseInfoDTO.getProductCode())));
-                FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
-                FacedTextView dis_confirmation = (FacedTextView) view.findViewById(R.id.dis_confirmation);
-
-                confirmation.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                        requestCancelPurchase = new RequestCancelPurchase(activity, new RequestCancelPurchasePaymentTaskCompleteListener(position));
-                        cancelPurchasePaymentRequest = new CancelPurchasePaymentRequest();
-                        cancelPurchasePaymentRequest.setProductCode(purchaseInfoDTO.getProductCode());
-                        requestCancelPurchase.execute(cancelPurchasePaymentRequest);
-                    }
-                });
-
-                dis_confirmation.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-
-
-                view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
-                dialog = new Dialog(activity);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                dialog.setContentView(view);
-                dialog.setTitle(null);
-                dialog.setCanceledOnTouchOutside(true);
-
-                dialog.show();
-            }
-        });
+//        viewHolder.delete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Rect displayRectangle = new Rect();
+//
+//                Window window = activity.getWindow();
+//                window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+//                View view = activity.getLayoutInflater().inflate(R.layout.dialog_delete_pending_payment, null);
+//                FacedTextView deleteCodeNotify = (FacedTextView)view.findViewById(R.id.deleteCodeNotify);
+//                deleteCodeNotify.setText(activity.getString(R.string.msg_delete_payment_pending, persianEnglishDigit.E2P(purchaseInfoDTO.getProductCode())));
+//                FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
+//                FacedTextView dis_confirmation = (FacedTextView) view.findViewById(R.id.dis_confirmation);
+//
+//                confirmation.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        dialog.dismiss();
+//                        requestCancelPurchase = new RequestCancelPurchase(activity, new RequestCancelPurchasePaymentTaskCompleteListener(position));
+//                        cancelPurchasePaymentRequest = new CancelPurchasePaymentRequest();
+//                        cancelPurchasePaymentRequest.setProductCode(purchaseInfoDTO.getProductCode());
+//                        requestCancelPurchase.execute(cancelPurchasePaymentRequest);
+//                    }
+//                });
+//
+//                dis_confirmation.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        dialog.dismiss();
+//                    }
+//                });
+//
+//
+//                view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
+//                dialog = new Dialog(activity);
+//                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//                dialog.setContentView(view);
+//                dialog.setTitle(null);
+//                dialog.setCanceledOnTouchOutside(true);
+//
+//                dialog.show();
+//            }
+//        });
 
         return convertView;
 
@@ -188,14 +183,11 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
     private class ViewHolder{
 
         ViewHolder(){ }
-
         FacedTextView business_name;
+        FacedTextView purchase_code;
         ImageView business_image;
-        FacedTextView date_time;
         FacedTextView price_pay;
-        FacedTextView createDateTime;
         FacedTextView expire_pay;
-        FacedTextView delete;
 
     }
 

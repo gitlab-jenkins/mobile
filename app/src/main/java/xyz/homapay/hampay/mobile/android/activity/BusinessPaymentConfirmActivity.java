@@ -45,8 +45,8 @@ import xyz.homapay.hampay.mobile.android.webservice.psp.string2stringMapEntry;
 
 public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
-    ButtonRectangle pay_to_business_button;
-    FacedTextView cancel_pay_to_business_button;
+    ImageView pay_to_business_button;
+//    FacedTextView cancel_pay_to_business_button;
 
     boolean intentContact = false;
     Context context;
@@ -140,7 +140,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
         if (pspInfoDTO.getCardDTO().getCardId() == null) {
             LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
-            creditInfo.setVisibility(View.GONE);
+//            creditInfo.setVisibility(View.GONE);
         }
         else {
             cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
@@ -151,9 +151,9 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
             PersianEnglishDigit persianEnglishDigit = new PersianEnglishDigit();
 
             business_name.setText(paymentInfoDTO.getCallerName());
-            paymentPriceValue.setText(persianEnglishDigit.E2P(paymentInfoDTO.getAmount().toString()) + " ریال");
-            paymentFeeValue.setText(persianEnglishDigit.E2P(paymentInfoDTO.getFeeCharge().toString()) + " ریال");
-            paymentTotalValue.setText(persianEnglishDigit.E2P(paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + "") + " ریال");
+            paymentPriceValue.setText(persianEnglishDigit.E2P(paymentInfoDTO.getAmount().toString()));
+            paymentFeeValue.setText(persianEnglishDigit.E2P(paymentInfoDTO.getFeeCharge().toString()));
+            paymentTotalValue.setText(persianEnglishDigit.E2P((paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge().toString())));
 
             if (paymentInfoDTO.getImageId() != null) {
                 new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute(Constants.IMAGE_PREFIX
@@ -164,7 +164,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
             }
         }
 
-        pay_to_business_button = (ButtonRectangle)findViewById(R.id.pay_to_business_button);
+        pay_to_business_button = (ImageView) findViewById(R.id.pay_to_business_button);
         pay_to_business_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -235,14 +235,14 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
             }
         });
 
-        cancel_pay_to_business_button = (FacedTextView)findViewById(R.id.cancel_pay_to_business_button);
-        cancel_pay_to_business_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-
-            }
-        });
+//        cancel_pay_to_business_button = (FacedTextView)findViewById(R.id.cancel_pay_to_business_button);
+//        cancel_pay_to_business_button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//
+//            }
+//        });
     }
 
 

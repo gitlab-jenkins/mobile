@@ -9,7 +9,8 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.content.ContextCompat;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
@@ -18,17 +19,21 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
+import xyz.homapay.hampay.common.core.model.request.CancelPurchasePaymentRequest;
+import xyz.homapay.hampay.common.core.model.request.CancelUserPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingPaymentListRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingPurchaseListRequest;
+import xyz.homapay.hampay.common.core.model.response.CancelPurchasePaymentResponse;
+import xyz.homapay.hampay.common.core.model.response.CancelUserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingPaymentListResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingPurchaseListResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
@@ -38,6 +43,8 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.PendingPaymentAdapter;
 import xyz.homapay.hampay.mobile.android.adapter.PendingPurchaseAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import xyz.homapay.hampay.mobile.android.async.RequestCancelPayment;
+import xyz.homapay.hampay.mobile.android.async.RequestCancelPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestPendingPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestPendingPurchase;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
@@ -50,18 +57,13 @@ import xyz.homapay.hampay.mobile.android.impl.comparator.PurchaseDateComparator;
 import xyz.homapay.hampay.mobile.android.impl.comparator.PurchaseExpireComparator;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
-public class PendingPurchasePaymentActivity extends AppCompatActivity implements View.OnClickListener {
+public class PendingPurchasePaymentActivity extends AppCompatActivity {
 
     private Activity activity;
 
-    private RelativeLayout purchase_rl;
-    private FacedTextView purchase_title;
-    private View purchase_sep;
-    private RelativeLayout payment_rl;
-    private FacedTextView payment_title;
-    private View payment_sep;
     private FacedTextView nullPendingText;
 
+    private CoordinatorLayout coordinatorLayout;
 
     RequestPendingPurchase requestPendingPurchase;
     PendingPurchaseListRequest pendingPurchaseListRequest;
@@ -88,6 +90,15 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
     private int itemPosition;
 
     private String authToken;
+
+    RequestCancelPurchase requestCancelPurchase;
+    CancelPurchasePaymentRequest cancelPurchasePaymentRequest;
+
+    RequestCancelPayment requestCancelPayment;
+    CancelUserPaymentRequest cancelUserPaymentRequest;
+
+    RelativeLayout invoice_pending;
+    RelativeLayout purchase_pending;
 
     Timer timer;
     TimerTask timerTask;
@@ -264,16 +275,11 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
         Intent intent = getIntent();
 
         nullPendingText = (FacedTextView)findViewById(R.id.nullPendingText);
-        purchase_rl = (RelativeLayout)findViewById(R.id.purchase_rl);
-        purchase_rl.setOnClickListener(this);
-        purchase_title = (FacedTextView)findViewById(R.id.purchase_title);
-        purchase_sep = (View)findViewById(R.id.purchase_sep);
-        payment_rl = (RelativeLayout)findViewById(R.id.payment_rl);
-        payment_rl.setOnClickListener(this);
-        payment_title = (FacedTextView)findViewById(R.id.payment_title);
-        payment_sep = (View)findViewById(R.id.payment_sep);
 
         hamPayDialog = new HamPayDialog(activity);
+
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id
+                .coordinatorLayout);
 
         pendingListView = (ListView)findViewById(R.id.pendingListView);
 
@@ -289,6 +295,26 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
             requestPendingPurchase.execute(pendingPurchaseListRequest);
         }
 
+        invoice_pending = (RelativeLayout)findViewById(R.id.invoice_pending);
+        purchase_pending = (RelativeLayout)findViewById(R.id.purchase_pending);
+
+        purchase_pending.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestPendingPurchase = new RequestPendingPurchase(activity, new RequestPendingPurchaseTaskCompleteListener());
+                pendingPurchaseListRequest = new PendingPurchaseListRequest();
+                requestPendingPurchase.execute(pendingPurchaseListRequest);
+            }
+        });
+
+        invoice_pending.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestPendingPayment = new RequestPendingPayment(activity, new RequestPendingPaymentTaskCompleteListener());
+                pendingPaymentListRequest = new PendingPaymentListRequest();
+                requestPendingPayment.execute(pendingPaymentListRequest);
+            }
+        });
 
 
         pendingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -308,6 +334,39 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
                     itemPosition = position;
                     startActivityForResult(intent, 46);
                 }
+            }
+        });
+
+        pendingListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+
+                Snackbar snackbar = Snackbar
+                        .make(coordinatorLayout, getString(R.string.delete_pending_payment), Snackbar.LENGTH_LONG)
+                        .setAction(getString(R.string.delete_pending), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (purchaseInfoDTOs != null) {
+                                    requestCancelPurchase = new RequestCancelPurchase(activity, new RequestCancelPurchasePaymentTaskCompleteListener(position));
+                                    cancelPurchasePaymentRequest = new CancelPurchasePaymentRequest();
+                                    cancelPurchasePaymentRequest.setProductCode(purchaseInfoDTOs.get(position).getProductCode());
+                                    requestCancelPurchase.execute(cancelPurchasePaymentRequest);
+                                } else if (paymentInfoDTOs != null) {
+                                    requestCancelPayment = new RequestCancelPayment(activity, new RequestCancelPaymentTaskCompleteListener(position));
+                                    cancelUserPaymentRequest = new CancelUserPaymentRequest();
+                                    cancelUserPaymentRequest.setProductCode(paymentInfoDTOs.get(position).getProductCode());
+                                    requestCancelPayment.execute(cancelUserPaymentRequest);
+                                }
+                            }
+                        });
+                snackbar.setActionTextColor(Color.RED);
+                View sbView = snackbar.getView();
+                TextView textView = (TextView) sbView.findViewById(android.support.design.R.id.snackbar_text);
+                textView.setTextColor(Color.YELLOW);
+
+                snackbar.show();
+
+                return true;
             }
         });
 
@@ -368,8 +427,6 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
 
             hamPayDialog.dismisWaitingDialog();
 
-            Date d = new Date();
-
             if (pendingPurchaseListResponseMessage != null) {
                 if (pendingPurchaseListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     purchaseInfoDTOs = pendingPurchaseListResponseMessage.getService().getPendingList();
@@ -423,31 +480,64 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity implements
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.purchase_rl:
-                purchase_title.setTextColor(ContextCompat.getColor(activity, R.color.user_change_status));
-                purchase_sep.setBackgroundColor(ContextCompat.getColor(activity, R.color.user_change_status));
-                payment_title.setTextColor(ContextCompat.getColor(activity, R.color.normal_text));
-                payment_sep.setBackgroundColor(ContextCompat.getColor(activity, R.color.normal_text));
+    public class RequestCancelPurchasePaymentTaskCompleteListener implements
+            AsyncTaskCompleteListener<ResponseMessage<CancelPurchasePaymentResponse>> {
 
-                requestPendingPurchase = new RequestPendingPurchase(activity, new RequestPendingPurchaseTaskCompleteListener());
-                pendingPurchaseListRequest = new PendingPurchaseListRequest();
-                requestPendingPurchase.execute(pendingPurchaseListRequest);
+        int position;
 
-                break;
+        RequestCancelPurchasePaymentTaskCompleteListener(int position){
+            this.position = position;
+        }
 
-            case R.id.payment_rl:
-                payment_title.setTextColor(ContextCompat.getColor(activity, R.color.user_change_status));
-                payment_sep.setBackgroundColor(ContextCompat.getColor(activity, R.color.user_change_status));
-                purchase_title.setTextColor(ContextCompat.getColor(activity, R.color.normal_text));
-                purchase_sep.setBackgroundColor(ContextCompat.getColor(activity, R.color.normal_text));
 
-                requestPendingPayment = new RequestPendingPayment(activity, new RequestPendingPaymentTaskCompleteListener());
-                pendingPaymentListRequest = new PendingPaymentListRequest();
-                requestPendingPayment.execute(pendingPaymentListRequest);
-                break;
+        @Override
+        public void onTaskComplete(ResponseMessage<CancelPurchasePaymentResponse> cancelPurchasePaymentResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+
+            if (cancelPurchasePaymentResponseMessage != null) {
+                if (cancelPurchasePaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS
+                        || cancelPurchasePaymentResponseMessage.getService().getResultStatus() == ResultStatus.PURCHASE_NOT_ELIGIBLE_TO_CANCEL) {
+                    cancelPurchasePaymentResponseMessage.getService().getRequestUUID();
+                    purchaseInfoDTOs.remove(position);
+                    pendingPurchaseAdapter.notifyDataSetChanged();
+                }
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingdDialog("");
+        }
+    }
+
+    public class RequestCancelPaymentTaskCompleteListener implements
+            AsyncTaskCompleteListener<ResponseMessage<CancelUserPaymentResponse>> {
+
+        int position;
+
+        RequestCancelPaymentTaskCompleteListener(int position){
+            this.position = position;
+        }
+
+
+        @Override
+        public void onTaskComplete(ResponseMessage<CancelUserPaymentResponse> cancelUserPaymentResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+
+            if (cancelUserPaymentResponseMessage != null) {
+                if (cancelUserPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS
+                        || cancelUserPaymentResponseMessage.getService().getResultStatus() == ResultStatus.PURCHASE_NOT_ELIGIBLE_TO_CANCEL) {
+                    paymentInfoDTOs.remove(position);
+                    pendingPaymentAdapter.notifyDataSetChanged();
+                }
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingdDialog("");
         }
     }
 }

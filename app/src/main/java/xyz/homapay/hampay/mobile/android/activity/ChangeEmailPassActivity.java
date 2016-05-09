@@ -25,7 +25,7 @@ import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestChangeEmail;
-import xyz.homapay.hampay.mobile.android.component.material.RippleView;
+import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -35,18 +35,18 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
 
     HamPayDialog hamPayDialog;
 
-    RippleView digit_1;
-    RippleView digit_2;
-    RippleView digit_3;
-    RippleView digit_4;
-    RippleView digit_5;
-    RippleView digit_6;
-    RippleView digit_7;
-    RippleView digit_8;
-    RippleView digit_9;
-    RippleView digit_0;
-    RippleView keyboard_dismiss;
-    RippleView backspace;
+    FacedTextView digit_1;
+    FacedTextView digit_2;
+    FacedTextView digit_3;
+    FacedTextView digit_4;
+    FacedTextView digit_5;
+    FacedTextView digit_6;
+    FacedTextView digit_7;
+    FacedTextView digit_8;
+    FacedTextView digit_9;
+    FacedTextView digit_0;
+    FacedTextView keyboard_dismiss;
+    RelativeLayout backspace;
 
     String inputPasswordValue = "";
 
@@ -126,29 +126,29 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
 
         password_0_rl = (RelativeLayout)findViewById(R.id.password_0_rl);
 
-        digit_1 = (RippleView)findViewById(R.id.digit_1);
+        digit_1 = (FacedTextView)findViewById(R.id.digit_1);
         digit_1.setOnClickListener(this);
-        digit_2 = (RippleView)findViewById(R.id.digit_2);
+        digit_2 = (FacedTextView)findViewById(R.id.digit_2);
         digit_2.setOnClickListener(this);
-        digit_3 = (RippleView)findViewById(R.id.digit_3);
+        digit_3 = (FacedTextView)findViewById(R.id.digit_3);
         digit_3.setOnClickListener(this);
-        digit_4 = (RippleView)findViewById(R.id.digit_4);
+        digit_4 = (FacedTextView)findViewById(R.id.digit_4);
         digit_4.setOnClickListener(this);
-        digit_5 = (RippleView)findViewById(R.id.digit_5);
+        digit_5 = (FacedTextView)findViewById(R.id.digit_5);
         digit_5.setOnClickListener(this);
-        digit_6 = (RippleView)findViewById(R.id.digit_6);
+        digit_6 = (FacedTextView)findViewById(R.id.digit_6);
         digit_6.setOnClickListener(this);
-        digit_7 = (RippleView)findViewById(R.id.digit_7);
+        digit_7 = (FacedTextView)findViewById(R.id.digit_7);
         digit_7.setOnClickListener(this);
-        digit_8 = (RippleView)findViewById(R.id.digit_8);
+        digit_8 = (FacedTextView)findViewById(R.id.digit_8);
         digit_8.setOnClickListener(this);
-        digit_9 = (RippleView)findViewById(R.id.digit_9);
+        digit_9 = (FacedTextView)findViewById(R.id.digit_9);
         digit_9.setOnClickListener(this);
-        digit_0 = (RippleView)findViewById(R.id.digit_0);
+        digit_0 = (FacedTextView)findViewById(R.id.digit_0);
         digit_0.setOnClickListener(this);
-        keyboard_dismiss = (RippleView)findViewById(R.id.keyboard_dismiss);
+        keyboard_dismiss = (FacedTextView)findViewById(R.id.keyboard_dismiss);
         keyboard_dismiss.setOnClickListener(this);
-        backspace = (RippleView)findViewById(R.id.backspace);
+        backspace = (RelativeLayout)findViewById(R.id.backspace);
         backspace.setOnClickListener(this);
 
         input_digit_1 = (ImageView)findViewById(R.id.input_digit_1);

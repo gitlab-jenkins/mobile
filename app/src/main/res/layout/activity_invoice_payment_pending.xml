@@ -6,35 +6,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="60dp"
-        android:background="@color/colorPrimary">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/nav_icon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/back_actionbar"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="12dp"
-            android:padding="12dp"
-            android:clickable="true"
-            android:onClick="backActionBar"/>
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/back"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:padding="4dp"/>
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:textSize="15dp"
+            android:textColor="@color/page_title"
+            android:textSize="20sp"
+            android:layout_gravity="center_horizontal"
             android:text="@string/invoice_payment_confirm"
-            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="64dp"/>
-
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"/>
 
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/page_title"/>
 
 
     <RelativeLayout
@@ -50,108 +50,165 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:gravity="center_vertical"
                 android:layout_gravity="right"
-                android:gravity="right"
                 android:layout_margin="12dp">
-
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:gravity="right|center_vertical"
-                    android:layout_gravity="center_vertical"
-                    android:layout_centerVertical="true">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                            android:id="@+id/contact_name_1"
-                            geekui:customTypeface="fonts/iran_sans.ttf"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/black"
-                            android:textSize="14sp"
-                            android:gravity="center"
-                            android:layout_marginRight="8dp" />
-
-                    </LinearLayout>
+                    android:gravity="right"
+                    android:layout_marginRight="2dp">
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                        android:id="@+id/received_message"
+                        android:id="@+id/callerName"
                         geekui:customTypeface="fonts/iran_sans.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@android:color/black"
-                        android:textSize="13sp"
-                        android:gravity="center"
-                        android:layout_marginRight="8dp"
-                        android:text="پیام"/>
+                        android:textColor="@color/main_menu_title"
+                        android:textSize="15sp"
+                        android:text="نام کسب و کار"/>
 
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/paymentCode"
+                        geekui:customTypeface="fonts/iran_sans.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/main_menu_title"
+                        android:textSize="15dp"
+                        android:text="کد فاکتور"/>
+
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/create_date"
+                        geekui:customTypeface="fonts/iran_sans.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/page_title"
+                        android:textSize="13dp"
+                        android:text="۱۲/۳/۹۴  ۲۲:۴۳"
+                        android:layout_alignParentRight="true"/>
 
                 </LinearLayout>
 
-
-                <xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView
-                    android:id="@+id/user_image"
+                <FrameLayout
                     android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center_horizontal"
-                    android:clickable="true"
-                    android:src="@drawable/user_icon_blue"
-                    app:civ_border="true"
-                    app:civ_borderColor="#FFFFFFFF"
-                    app:civ_borderWidth="1dp"
-                    app:civ_selector="true"
-                    app:civ_selectorColor="#4403a9f4"
-                    app:civ_selectorStrokeColor="#aa5677fc"
-                    app:civ_selectorStrokeWidth="1dp" />
+                    android:layout_height="48dp">
+
+                    <ImageView
+                        android:id="@+id/user_image"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:src="@drawable/transaction_placeholder"
+                        android:scaleType="fitXY"
+                        android:background="@color/page_title"
+                        android:layout_gravity="center"/>
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/curve_images"/>
+
+                </FrameLayout>
 
             </LinearLayout>
 
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/received_message"
+                geekui:customTypeface="fonts/iran_sans.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/main_menu_title"
+                android:textSize="14sp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"/>
+
+
+            <LinearLayout
+                android:id="@+id/password_holder"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:orientation="vertical"
+                android:background="@drawable/register_border"
+                android:padding="8dp"
+                android:layout_margin="12dp">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp">
+
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        geekui:customTypeface="fonts/iran_sans.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/main_menu_title"
+                        android:textSize="15dp"
+                        android:text="@string/currency_rials"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="4dp"/>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/page_title"
+                        android:layout_alignParentBottom="true"/>
+
+                    <View
+                        android:layout_width="2dp"
+                        android:layout_height="16dp"
+                        android:background="@color/page_title"
+                        android:layout_alignParentBottom="true"/>
+
+                    <View
+                        android:layout_width="2dp"
+                        android:layout_height="16dp"
+                        android:background="@color/page_title"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="center_vertical">
+
+                        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                            android:id="@+id/payment_value"
+                            geekui:customTypeface="fonts/iran_sans.ttf"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            android:textColor="@color/main_menu_title"
+                            android:singleLine="true"
+                            android:maxLength="15"
+                            android:inputType="number"
+                            android:background="@color/transparency"
+                            android:padding="6dp"
+                            android:gravity="center" />
+
+
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/entry_field_color"
                 android:layout_margin="12dp"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="right"
-                android:layout_margin="18dp">
-
-                <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                    android:id="@+id/contact_name_2"
-                    geekui:customTypeface="fonts/iran_sans.ttf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp"
-                    android:gravity="center"
-                    android:layout_marginRight="8dp" />
-
-                <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                    geekui:customTypeface="fonts/iran_sans.ttf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/normal_text"
-                    android:textSize="15dp"
-                    android:text="@string/payment_request_to"
-                    android:gravity="right"
-                    android:layout_gravity="right"
-                    />
-
-            </LinearLayout>
 
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
@@ -213,14 +270,14 @@
                         android:text="@string/price"
                         android:layout_alignParentRight="true"/>
 
-                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                        android:id="@+id/payment_value"
-                        geekui:customTypeface="fonts/iran_sans.ttf"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@android:color/black"
-                        android:textSize="15sp"
-                        android:gravity="center" />
+                    <!--<xyz.homapay.hampay.mobile.android.component.FacedTextView-->
+                        <!--android:id="@+id/payment_value"-->
+                        <!--geekui:customTypeface="fonts/iran_sans.ttf"-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:textColor="@android:color/black"-->
+                        <!--android:textSize="15sp"-->
+                        <!--android:gravity="center" />-->
 
 
                 </RelativeLayout>
