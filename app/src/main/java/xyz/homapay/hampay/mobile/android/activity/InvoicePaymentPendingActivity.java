@@ -48,7 +48,7 @@ import xyz.homapay.hampay.mobile.android.webservice.psp.string2stringMapEntry;
 
 public class InvoicePaymentPendingActivity extends AppCompatActivity {
 
-    ButtonRectangle pay_to_one_button;
+    ImageView pay_button;
 
     ImageView user_image;
     FacedTextView callerName;
@@ -170,12 +170,12 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
             }else {
             }
 
-            if (pspInfoDTO.getCardDTO().getCardId() == null) {
-                LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
-                creditInfo.setVisibility(View.GONE);
-            } else {
-                cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
-            }
+//            if (pspInfoDTO.getCardDTO().getCardId() == null) {
+//                LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
+//                creditInfo.setVisibility(View.GONE);
+//            } else {
+//                cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
+//            }
         } else {
             requestLatestPayment = new RequestLatestPayment(activity, new RequestLatestPaymentTaskCompleteListener());
             latestPaymentRequest = new LatestPaymentRequest();
@@ -217,8 +217,8 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
 //            }
 //        }
 
-        pay_to_one_button = (ButtonRectangle) findViewById(R.id.pay_to_one_button);
-        pay_to_one_button.setOnClickListener(new View.OnClickListener() {
+        pay_button = (ImageView) findViewById(R.id.pay_button);
+        pay_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (pspInfoDTO.getCardDTO().getCardId() == null) {
@@ -462,8 +462,8 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
                     }
 
                     if (pspInfoDTO.getCardDTO().getCardId() == null) {
-                        LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
-                        creditInfo.setVisibility(View.GONE);
+//                        LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
+//                        creditInfo.setVisibility(View.GONE);
                     } else {
                         cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
                     }
