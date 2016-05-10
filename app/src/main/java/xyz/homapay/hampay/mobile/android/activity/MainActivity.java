@@ -53,7 +53,6 @@ import xyz.homapay.hampay.mobile.android.fragment.PrivacyFragment;
 import xyz.homapay.hampay.mobile.android.fragment.SettingFragment;
 import xyz.homapay.hampay.mobile.android.fragment.TCFragment;
 import xyz.homapay.hampay.mobile.android.model.AppState;
-import xyz.homapay.hampay.mobile.android.model.LatestPurchase;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -215,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
                 case CREDIT_REQUEST:
                     notificationIntent = getIntent();
-                    notificationIntent.setClass(activity, InvoicePaymentPendingActivity.class);
+                    notificationIntent.setClass(activity, InvoicePendingConfirmationActivity.class);
                     startActivity(notificationIntent);
                     break;
 
@@ -234,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 //                            intent.setClass(context, RequestBusinessPayDetailActivity.class);
 //                            startActivity(intent);
 //                        } else if (pendingPaymentCode != null && pendingPaymentCount > 0) {
-//                            intent.setClass(context, InvoicePaymentPendingActivity.class);
+//                            intent.setClass(context, InvoicePendingConfirmationActivity.class);
 //                            startActivity(intent);
 //                        }
 //                    }
@@ -244,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 //                    startActivity(intent);
 //                }
 //            } else if (pendingPaymentCount > 0) {
-//                intent.setClass(context, InvoicePaymentPendingActivity.class);
+//                intent.setClass(context, InvoicePendingConfirmationActivity.class);
 //                startActivity(intent);
 //            }
         }

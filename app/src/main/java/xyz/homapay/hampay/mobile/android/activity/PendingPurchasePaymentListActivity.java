@@ -57,7 +57,7 @@ import xyz.homapay.hampay.mobile.android.impl.comparator.PurchaseDateComparator;
 import xyz.homapay.hampay.mobile.android.impl.comparator.PurchaseExpireComparator;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
-public class PendingPurchasePaymentActivity extends AppCompatActivity {
+public class PendingPurchasePaymentListActivity extends AppCompatActivity {
 
     private Activity activity;
 
@@ -264,9 +264,9 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pending_purchase_payment);
+        setContentView(R.layout.activity_pending_purchase_payment_list);
 
-        activity = PendingPurchasePaymentActivity.this;
+        activity = PendingPurchasePaymentListActivity.this;
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
 
@@ -328,7 +328,7 @@ public class PendingPurchasePaymentActivity extends AppCompatActivity {
                     itemPosition = position;
                     startActivityForResult(intent, 45);
                 } else if (paymentInfoDTOs != null) {
-                    intent.setClass(activity, InvoicePaymentPendingActivity.class);
+                    intent.setClass(activity, InvoicePendingConfirmationActivity.class);
                     intent.putExtra(Constants.PAYMENT_INFO, paymentInfoDTOs.get(position));
                     intent.putExtra(Constants.PSP_INFO, pspInfoDTOs);
                     itemPosition = position;

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 /**
  * Created by amir on 2/20/16.
  */
-public class HamPayEnabledContactAdapter extends BaseAdapter {
+public class HamPayContactsAdapter extends BaseAdapter {
 
     private Context context;
     List<ContactDTO> contacts;
@@ -28,7 +29,7 @@ public class HamPayEnabledContactAdapter extends BaseAdapter {
     private String authToken;
 
 
-    public HamPayEnabledContactAdapter(Context c, List<ContactDTO> contacts, String authToken)
+    public HamPayContactsAdapter(Context c, List<ContactDTO> contacts, String authToken)
     {
         // TODO Auto-generated method stub
         context = c;
@@ -66,10 +67,10 @@ public class HamPayEnabledContactAdapter extends BaseAdapter {
 
         if (convertView == null) {
             viewHolder = new ViewHolder();
-            convertView = inflater.inflate(R.layout.contact_pay_one_item, null);
-            viewHolder.user_image = (CircleImageView)convertView.findViewById(R.id.user_image);
+            convertView = inflater.inflate(R.layout.hampay_contact_item, null);
+            viewHolder.user_image = (ImageView)convertView.findViewById(R.id.user_image);
             viewHolder.contact_name = (FacedTextView)convertView.findViewById(R.id.contact_name);
-            viewHolder.contact_phone_no = (FacedTextView)convertView.findViewById(R.id.contact_phone_no);
+            viewHolder.cell_number = (FacedTextView)convertView.findViewById(R.id.cell_number);
             convertView.setTag(viewHolder);
         }
         else{
@@ -84,7 +85,7 @@ public class HamPayEnabledContactAdapter extends BaseAdapter {
             viewHolder.user_image.setImageResource(R.drawable.user_icon_blue);
         }
         viewHolder.contact_name.setText(persianEnglishDigit.E2P(contact.getDisplayName()));
-        viewHolder.contact_phone_no.setText(persianEnglishDigit.E2P(contact.getCellNumber()));
+        viewHolder.cell_number.setText(persianEnglishDigit.E2P(contact.getCellNumber()));
 
         return convertView;
 
@@ -94,8 +95,8 @@ public class HamPayEnabledContactAdapter extends BaseAdapter {
     private class ViewHolder{
         ViewHolder(){ }
         FacedTextView contact_name;
-        FacedTextView contact_phone_no;
-        CircleImageView user_image;
+        FacedTextView cell_number;
+        ImageView user_image;
     }
 
 

@@ -32,21 +32,18 @@ import xyz.homapay.hampay.mobile.android.async.RequestPSPResult;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
 import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
-import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
-import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring;
-import xyz.homapay.hampay.mobile.android.webservice.psp.Vectorstring2stringMapEntry;
-import xyz.homapay.hampay.mobile.android.webservice.psp.string2stringMapEntry;
 
-public class InvoicePaymentPendingActivity extends AppCompatActivity {
+public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
     ImageView pay_button;
 
@@ -54,11 +51,15 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
     FacedTextView callerName;
     FacedTextView received_message;
     FacedTextView create_date;
-
-    FacedEditText contact_message;
-    FacedTextView payment_value;
+    FacedTextView paymentPriceValue;
+    FacedTextView paymentVAT;
+    FacedTextView paymentFeeValue;
+    FacedTextView paymentTotalValue;
+    FacedTextView bankName;
     FacedTextView cardNumberValue;
     FacedEditText pin2Value;
+
+    CurrencyFormatter currencyFormatter;
 
     boolean intentContact = false;
 
@@ -120,7 +121,7 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_invoice_payment_pending);
 
         context = this;
-        activity = InvoicePaymentPendingActivity.this;
+        activity = InvoicePendingConfirmationActivity.this;
 
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
@@ -143,14 +144,16 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
         hamPayDialog = new HamPayDialog(activity);
 
         persianEnglishDigit = new PersianEnglishDigit();
-
-
+        currencyFormatter = new CurrencyFormatter();
         user_image = (ImageView)findViewById(R.id.user_image);
-        contact_message = (FacedEditText) findViewById(R.id.contact_message);
         callerName = (FacedTextView) findViewById(R.id.callerName);
         create_date = (FacedTextView)findViewById(R.id.create_date);
         received_message = (FacedTextView) findViewById(R.id.received_message);
-        payment_value = (FacedTextView) findViewById(R.id.payment_value);
+        paymentPriceValue = (FacedTextView) findViewById(R.id.paymentPriceValue);
+        paymentVAT = (FacedTextView)findViewById(R.id.paymentVAT);
+        paymentFeeValue = (FacedTextView)findViewById(R.id.paymentFeeValue);
+        paymentTotalValue = (FacedTextView)findViewById(R.id.paymentTotalValue);
+        bankName = (FacedTextView)findViewById(R.id.bankName);
         pin2Value = (FacedEditText) findViewById(R.id.pin2Value);
         cardNumberValue = (FacedTextView) findViewById(R.id.cardNumberValue);
 
@@ -162,20 +165,24 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
         if (paymentInfoDTO != null) {
             callerName.setText(paymentInfoDTO.getCallerName());
             received_message.setText(paymentInfoDTO.getMessage());
-            create_date.setText(new JalaliConvert().GregorianToPersian(paymentInfoDTO.getCreatedBy()));
-            payment_value.setText(persianEnglishDigit.E2P(paymentInfoDTO.getAmount() + ""));
-
+            create_date.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(paymentInfoDTO.getCreatedBy())));
+            paymentPriceValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount())));
+            paymentVAT.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount())));
+            paymentFeeValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getFeeCharge())));
+            paymentTotalValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount() + paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge())));
+            cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber().split("-")[3]));
+            bankName.setText(pspInfoDTO.getCardDTO().getBankName());
             if (paymentInfoDTO.getImageId() != null) {
                 new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(user_image)).execute(Constants.IMAGE_PREFIX + authToken + "/" + paymentInfoDTO.getImageId());
             }else {
             }
 
-//            if (pspInfoDTO.getCardDTO().getCardId() == null) {
-//                LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
+            if (pspInfoDTO.getCardDTO().getCardId() == null) {
+                LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
 //                creditInfo.setVisibility(View.GONE);
-//            } else {
-//                cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
-//            }
+            } else {
+                cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
+            }
         } else {
             requestLatestPayment = new RequestLatestPayment(activity, new RequestLatestPaymentTaskCompleteListener());
             latestPaymentRequest = new LatestPaymentRequest();
@@ -453,8 +460,12 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
                     pspInfoDTO = latestPaymentResponseMessage.getService().getPspInfo();
                     callerName.setText(paymentInfoDTO.getCallerName());
                     received_message.setText(paymentInfoDTO.getMessage());
-                    payment_value.setText(paymentInfoDTO.getAmount() + "");
-
+                    paymentPriceValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount())));
+                    paymentVAT.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount())));
+                    paymentFeeValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getFeeCharge())));
+                    paymentTotalValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount() + paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge())));
+                    cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber().split("-")[3]));
+                    bankName.setText(pspInfoDTO.getCardDTO().getBankName());
                     if (paymentInfoDTO.getImageId() != null) {
                         new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(user_image)).execute(Constants.IMAGE_PREFIX + authToken + "/" + paymentInfoDTO.getImageId());
                     }else {
@@ -462,7 +473,7 @@ public class InvoicePaymentPendingActivity extends AppCompatActivity {
                     }
 
                     if (pspInfoDTO.getCardDTO().getCardId() == null) {
-//                        LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
+                        LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
 //                        creditInfo.setVisibility(View.GONE);
                     } else {
                         cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));

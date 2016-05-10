@@ -23,7 +23,7 @@
             android:textColor="@color/page_title"
             android:textSize="20sp"
             android:layout_gravity="center_horizontal"
-            android:text="@string/payment_request_title"
+            android:text="@string/hampay_contacts"
             android:layout_alignParentRight="true"
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"/>
@@ -41,21 +41,11 @@
         android:orientation="horizontal"
         android:layout_margin="8dp">
 
-        <ImageView
-            android:id="@+id/hampay_contacts"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@drawable/add_payment_request"
-            android:background="@color/page_title"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true" />
-
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/stroke_bg"
-            android:padding="4dp"
-            android:layout_marginRight="32dp">
+            android:padding="4dp">
 
             <ImageView
                 android:layout_width="32dp"

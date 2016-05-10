@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -19,18 +18,15 @@ import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
 import xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
-import xyz.homapay.hampay.common.core.model.request.LatestInvoiceContactsRequest;
 import xyz.homapay.hampay.common.core.model.response.ContactsHampayEnabledResponse;
-import xyz.homapay.hampay.common.core.model.response.LatestInvoiceContactsResponse;
 import xyz.homapay.hampay.mobile.android.R;
-import xyz.homapay.hampay.mobile.android.adapter.LatestInvoiceAdapter;
+import xyz.homapay.hampay.mobile.android.adapter.HamPayContactsAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestContactHampayEnabled;
-import xyz.homapay.hampay.mobile.android.async.RequestLatestInvoiceContacts;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
-public class PaymentRequestActivity extends AppCompatActivity{
+public class HamPayContactsActivity extends AppCompatActivity{
 
 
     private Context context;
@@ -40,10 +36,7 @@ public class PaymentRequestActivity extends AppCompatActivity{
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
-    private LatestInvoiceAdapter latestInvoiceAdapter;
-
-    private RequestLatestInvoiceContacts requestLatestInvoiceContacts;
-    private LatestInvoiceContactsRequest latestInvoiceContactsRequest;
+    private HamPayContactsAdapter hamPayContactsAdapter;
 
     private Dialog dialog;
 
@@ -54,7 +47,6 @@ public class PaymentRequestActivity extends AppCompatActivity{
 
     private RelativeLayout search_layout;
 
-    private ImageView hampay_contacts;
 
     public void backActionBar(View view){
         finish();
@@ -63,19 +55,18 @@ public class PaymentRequestActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_payment_request);
+        setContentView(R.layout.activity_hampay_contacts);
 
         context = this;
-        activity = PaymentRequestActivity.this;
+        activity = HamPayContactsActivity.this;
         hamPayDialog = new HamPayDialog(activity);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         paymentRequestList = (ListView)findViewById(R.id.paymentRequestList);
-        hampay_contacts = (ImageView)findViewById(R.id.hampay_contacts);
-        latestInvoiceContactsRequest = new LatestInvoiceContactsRequest();
-        requestLatestInvoiceContacts = new RequestLatestInvoiceContacts(activity, new RequestLatestInvoiceContactsTaskCompleteListener());
-        requestLatestInvoiceContacts.execute(latestInvoiceContactsRequest);
+        contactsHampayEnabledRequest = new ContactsHampayEnabledRequest();
+        requestContactHampayEnabled = new RequestContactHampayEnabled(activity, new RequestContactHampayEnabledTaskCompleteListener());
+        requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
 
         paymentRequestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -84,15 +75,6 @@ public class PaymentRequestActivity extends AppCompatActivity{
                 intent.setClass(activity, PaymentRequestDetailActivity.class);
                 intent.putExtra(Constants.HAMPAY_CONTACT, contacts.get(position));
                 startActivityForResult(intent, 1024);
-            }
-        });
-
-        hampay_contacts.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(activity, HamPayContactsActivity.class);
-                startActivity(intent);
             }
         });
     }
@@ -111,14 +93,14 @@ public class PaymentRequestActivity extends AppCompatActivity{
                     contacts = contactsHampayEnabledResponseMessage.getService().getContacts();
 
                     if (contacts.size() > 0){
-                        search_layout.setVisibility(View.VISIBLE);
+//                        search_layout.setVisibility(View.VISIBLE);
                     }else {
-                        search_layout.setVisibility(View.GONE);
+//                        search_layout.setVisibility(View.GONE);
                     }
 
-                    latestInvoiceAdapter = new LatestInvoiceAdapter(context, contacts,
+                    hamPayContactsAdapter = new HamPayContactsAdapter(context, contacts,
                             prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-                    paymentRequestList.setAdapter(latestInvoiceAdapter);
+                    paymentRequestList.setAdapter(hamPayContactsAdapter);
                 }
                 else {
                     requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());
@@ -142,48 +124,6 @@ public class PaymentRequestActivity extends AppCompatActivity{
         }
     }
 
-    public class RequestLatestInvoiceContactsTaskCompleteListener implements
-            AsyncTaskCompleteListener<ResponseMessage<LatestInvoiceContactsResponse>> {
-        @Override
-        public void onTaskComplete(ResponseMessage<LatestInvoiceContactsResponse> latestInvoiceContactsResponseMessage) {
-
-            hamPayDialog.dismisWaitingDialog();
-
-            if (latestInvoiceContactsResponseMessage != null){
-                if (latestInvoiceContactsResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-
-                    contacts = latestInvoiceContactsResponseMessage.getService().getContacts();
-
-                    if (contacts.size() > 0){
-//                        search_layout.setVisibility(View.VISIBLE);
-                    }else {
-//                        search_layout.setVisibility(View.GONE);
-                    }
-
-                    latestInvoiceAdapter = new LatestInvoiceAdapter(context, contacts,
-                            prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-                    paymentRequestList.setAdapter(latestInvoiceAdapter);
-                }
-                else {
-                    requestLatestInvoiceContacts = new RequestLatestInvoiceContacts(context, new RequestLatestInvoiceContactsTaskCompleteListener());
-                    new HamPayDialog(activity).showFailLatestInvoiceDialog(requestLatestInvoiceContacts, latestInvoiceContactsRequest,
-                            latestInvoiceContactsResponseMessage.getService().getResultStatus().getCode(),
-                            latestInvoiceContactsResponseMessage.getService().getResultStatus().getDescription());
-
-                }
-            }else {
-                requestLatestInvoiceContacts = new RequestLatestInvoiceContacts(context, new RequestLatestInvoiceContactsTaskCompleteListener());
-                new HamPayDialog(activity).showFailLatestInvoiceDialog(requestLatestInvoiceContacts, latestInvoiceContactsRequest,
-                        Constants.LOCAL_ERROR_CODE,
-                        getString(R.string.msg_fail_contacts_enabled));
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
-    }
 }
 
 

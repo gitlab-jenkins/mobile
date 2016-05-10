@@ -64,4 +64,5 @@
     <color name="transaction_unselected_tab">#bcbec0</color>
     <color name="pending_count_badge_bg">#ec1c24</color>
     <color name="total_amount_bg">#e6e7e8</color>
+    <color name="create_payment_request">#25bdc2</color>
 </resources>

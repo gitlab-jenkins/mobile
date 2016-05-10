@@ -69,7 +69,7 @@
     <string name="payment">پرداخت</string>
     <string name="message">پیام</string>
     <string name="payment_code">کد پرداخت:</string>
-    <string name="insert_message">پیام خود را بنویسید...</string>
+    <string name="insert_message">پیام</string>
     <string name="insert_price">مبلغ مورد نظر را وارد نماید</string>
     <string name="transaction_user_call">تماس</string>
     <string name="transaction_user_message">پیامک</string>
@@ -291,7 +291,7 @@
 
     <string name="select">انتخاب</string>
     <string name="recent_pay_one">تازه ترین پرداخت ها</string>
-    <string name="hampay_contacts">لیست مخاطبین هم‌پی </string>
+    <string name="hampay_contacts">مخاطبین هم‌پی</string>
     <string name="recent_credit_request">تازه‌ترین درخواست‌ها</string>
 
     <string name="signup_title">Create new account</string>
@@ -557,6 +557,7 @@
     <string name="amount_value">لطفا مبلغ مورد را وارد نمایید</string>
     <string name="delete_pending_payment">مایل به حذف هستید؟</string>
     <string name="delete_pending">حذف</string>
+    <string name="payment_request_button_text">ارسال</string>
 
 
 </resources>

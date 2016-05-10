@@ -117,7 +117,6 @@
     </LinearLayout>
 
     <RelativeLayout
-        android:id="@+id/password_1_rl"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/stroke_bg"

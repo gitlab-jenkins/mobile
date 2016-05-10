@@ -1,6 +1,5 @@
 package xyz.homapay.hampay.mobile.android.fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,7 +21,7 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.BusinessPurchaseActivity;
 import xyz.homapay.hampay.mobile.android.activity.PaymentRequestActivity;
 import xyz.homapay.hampay.mobile.android.activity.PaymentRequestDetailActivity;
-import xyz.homapay.hampay.mobile.android.activity.PendingPurchasePaymentActivity;
+import xyz.homapay.hampay.mobile.android.activity.PendingPurchasePaymentListActivity;
 import xyz.homapay.hampay.mobile.android.activity.TransactionsHistoryActivity;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
@@ -217,7 +216,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                 break;
 
             case R.id.pendingPurchasePayment:
-                intent.setClass(getActivity(), PendingPurchasePaymentActivity.class);
+                intent.setClass(getActivity(), PendingPurchasePaymentListActivity.class);
                 startActivity(intent);
                 break;
 

@@ -108,8 +108,6 @@ public class BusinessesListActivity extends AppCompatActivity {
 
     private Dialog dialog;
 
-    private RelativeLayout search_layout;
-
     public void backActionBar(View view){
         finish();
     }
@@ -146,8 +144,6 @@ public class BusinessesListActivity extends AppCompatActivity {
         activity = BusinessesListActivity.this;
 
         persianEnglishDigit = new PersianEnglishDigit();
-
-        search_layout = (RelativeLayout)findViewById(R.id.search_layout);
 
         businessListView = (ListView)findViewById(R.id.businessListView);
         businessListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

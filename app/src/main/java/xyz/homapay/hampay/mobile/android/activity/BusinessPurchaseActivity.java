@@ -178,8 +178,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
 
         persianEnglishDigit = new PersianEnglishDigit();
 
-        search_layout = (RelativeLayout)findViewById(R.id.search_layout);
-
 //        businessListView = (ListView)findViewById(R.id.businessListView);
 //        businessListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override

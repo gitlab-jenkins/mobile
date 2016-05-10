@@ -18,8 +18,8 @@ import br.com.goncalves.pugnotification.notification.PugNotification;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.AppSliderActivity;
-import xyz.homapay.hampay.mobile.android.activity.InvoicePaymentPendingActivity;
-import xyz.homapay.hampay.mobile.android.activity.PendingPurchasePaymentActivity;
+import xyz.homapay.hampay.mobile.android.activity.InvoicePendingConfirmationActivity;
+import xyz.homapay.hampay.mobile.android.activity.PendingPurchasePaymentListActivity;
 import xyz.homapay.hampay.mobile.android.activity.RequestBusinessPayDetailActivity;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
@@ -210,7 +210,7 @@ public class GcmMessageHandler extends IntentService{
                                     .message(notificationMessage)
                                     .smallIcon(R.mipmap.ic_launcher)
                                     .flags(Notification.DEFAULT_ALL)
-                                    .click(PendingPurchasePaymentActivity.class, bundle)
+                                    .click(PendingPurchasePaymentListActivity.class, bundle)
                                     .color(R.color.colorPrimary)
                                     .ticker(Constants.NOTIFICATION_PAYMENT)
                                     .autoCancel(true)
@@ -260,7 +260,7 @@ public class GcmMessageHandler extends IntentService{
                                     .message(notificationMessage)
                                     .smallIcon(R.mipmap.ic_launcher)
                                     .flags(Notification.DEFAULT_ALL)
-                                    .click(InvoicePaymentPendingActivity.class, bundle)
+                                    .click(InvoicePendingConfirmationActivity.class, bundle)
                                     .color(R.color.colorPrimary)
                                     .ticker(Constants.NOTIFICATION_CREDIT_REQUEST)
                                     .autoCancel(true)

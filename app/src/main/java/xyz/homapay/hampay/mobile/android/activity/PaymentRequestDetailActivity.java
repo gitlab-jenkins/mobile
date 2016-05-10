@@ -48,22 +48,21 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
 
     private ContactDTO hamPayContact;
 
-    ButtonRectangle pay_to_one_button;
+    FacedTextView payment_request_button;
 
     PersianEnglishDigit persianEnglishDigit;
 
     private String contactPhoneNo;
     private String contactName;
 
-    private CircleImageView user_image;
+    private ImageView user_image;
     FacedTextView contact_name;
-    FacedTextView contact_phone_no;
+    FacedTextView cell_number;
     FacedEditText contact_message;
     String contactMssage = "";
-    FacedEditText credit_value;
+    FacedEditText amount_value;
     Long amountValue;
     boolean creditValueValidation = false;
-    ImageView credit_value_icon;
 
     String number = "";
 
@@ -143,22 +142,21 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
 
         hamPayDialog = new HamPayDialog(activity);
 
-        credit_value = (FacedEditText)findViewById(R.id.credit_value);
-        credit_value.addTextChangedListener(new CurrencyFormatterTextWatcher(credit_value));
-        credit_value_icon = (ImageView)findViewById(R.id.credit_value_icon);
-        credit_value.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        amount_value = (FacedEditText)findViewById(R.id.amount_value);
+        amount_value.addTextChangedListener(new CurrencyFormatterTextWatcher(amount_value));
+        amount_value.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    if (credit_value.getText().toString().length() == 0) {
-                        credit_value_icon.setImageResource(R.drawable.false_icon);
+                    if (amount_value.getText().toString().length() == 0) {
+//                        credit_value_icon.setImageResource(R.drawable.false_icon);
                         creditValueValidation = false;
                     } else {
-                        credit_value_icon.setImageResource(R.drawable.right_icon);
+//                        credit_value_icon.setImageResource(R.drawable.right_icon);
                         creditValueValidation = true;
                     }
                 } else {
-                    credit_value_icon.setImageDrawable(null);
+//                    credit_value_icon.setImageDrawable(null);
                 }
 
             }
@@ -166,8 +164,8 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
 
         contact_message = (FacedEditText)findViewById(R.id.contact_message);
         contact_name = (FacedTextView)findViewById(R.id.contact_name);
-        contact_phone_no = (FacedTextView)findViewById(R.id.contact_phone_no);
-        user_image = (CircleImageView)findViewById(R.id.user_image);
+        cell_number = (FacedTextView)findViewById(R.id.cell_number);
+        user_image = (ImageView)findViewById(R.id.user_image);
 
 
         Intent intent = getIntent();
@@ -176,7 +174,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
 
         if (hamPayContact != null) {
             contact_name.setText(hamPayContact.getDisplayName());
-            contact_phone_no.setText(persianEnglishDigit.E2P(hamPayContact.getCellNumber()));
+            cell_number.setText(persianEnglishDigit.E2P(hamPayContact.getCellNumber()));
 
             if (hamPayContact.getContactImageId() != null) {
                 new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(user_image)).execute(Constants.IMAGE_PREFIX + authToken + "/" + hamPayContact.getContactImageId());
@@ -215,17 +213,17 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
         }
 
 
-        pay_to_one_button = (ButtonRectangle)findViewById(R.id.pay_to_one_button);
-        pay_to_one_button.setOnClickListener(new View.OnClickListener() {
+        payment_request_button = (FacedTextView) findViewById(R.id.payment_request_button);
+        payment_request_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                credit_value.clearFocus();
-                pay_to_one_button.setEnabled(false);
+                amount_value.clearFocus();
+                payment_request_button.setEnabled(false);
 
                 if (creditValueValidation) {
                     contactMssage = contact_message.getText().toString();
-                    amountValue = Long.parseLong(new PersianEnglishDigit(credit_value.getText().toString()).P2E().replace(",", ""));
+                    amountValue = Long.parseLong(new PersianEnglishDigit(amount_value.getText().toString()).P2E().replace(",", ""));
 
                     if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
                         Intent intent = new Intent();
@@ -246,14 +244,14 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                             requestUserPayment.execute(userPaymentRequest);
                         } else {
                             new HamPayDialog(activity).showIncorrectAmountDialog(MinXferAmount, MaxXferAmount);
-                            pay_to_one_button.setEnabled(true);
+                            payment_request_button.setEnabled(true);
                         }
                     }
 
 
                 }else {
                     (new HamPayDialog(activity)).showIncorrectInvoiceValue();
-                    pay_to_one_button.setEnabled(true);
+                    payment_request_button.setEnabled(true);
                 }
             }
         });
@@ -328,7 +326,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                         .build());
             }
 
-            pay_to_one_button.setEnabled(true);
+            payment_request_button.setEnabled(true);
         }
 
         @Override
@@ -357,7 +355,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                     editor.commit();
 
                     contactMssage = contact_message.getText().toString();
-                    amountValue = Long.parseLong(new PersianEnglishDigit(credit_value.getText().toString()).P2E().replace(",", ""));
+                    amountValue = Long.parseLong(new PersianEnglishDigit(amount_value.getText().toString()).P2E().replace(",", ""));
 
                     if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
                         Intent intent = new Intent();
@@ -377,7 +375,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                             requestUserPayment.execute(userPaymentRequest);
                         } else {
                             new HamPayDialog(activity).showIncorrectAmountDialog(MinXferAmount, MaxXferAmount);
-                            pay_to_one_button.setEnabled(true);
+                            payment_request_button.setEnabled(true);
                         }
                     }
 

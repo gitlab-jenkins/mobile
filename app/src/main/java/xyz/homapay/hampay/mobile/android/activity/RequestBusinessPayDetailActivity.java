@@ -59,8 +59,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
     FacedTextView contact_name;
     FacedEditText contact_message;
-    FacedTextView credit_value;
-    ImageView credit_value_icon;
+    FacedTextView amount_value;
+//    ImageView credit_value_icon;
     boolean intentContact = false;
     Context context;
     Activity activity;
@@ -168,8 +168,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
         currencyFormatter = new CurrencyFormatter();
 
-        credit_value = (FacedTextView)findViewById(R.id.credit_value);
-        credit_value_icon = (ImageView)findViewById(R.id.credit_value_icon);
+        amount_value = (FacedTextView)findViewById(R.id.amount_value);
+//        credit_value_icon = (ImageView)findViewById(R.id.credit_value_icon);
 
         contact_message = (FacedEditText)findViewById(R.id.contact_message);
         contact_name = (FacedTextView)findViewById(R.id.contact_name);
