@@ -18,7 +18,7 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class ChangeMemorableActivity extends AppCompatActivity {
 
-    ButtonRectangle keepOn_button;
+    FacedTextView keepOn_button;
     SharedPreferences prefs;
     FacedEditText memorable_value;
 
@@ -55,14 +55,11 @@ public class ChangeMemorableActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_memorable);
 
-        memorable_text = (FacedTextView)findViewById(R.id.memorable_text);
-        keepOn_text = (FacedTextView)findViewById(R.id.keepOn_text);
-
         memorable_value = (FacedEditText)findViewById(R.id.memorable_value);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
 
-        keepOn_button = (ButtonRectangle) findViewById(R.id.keepOn_button);
+        keepOn_button = (FacedTextView) findViewById(R.id.keepOn_button);
         keepOn_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

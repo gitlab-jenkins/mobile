@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -28,7 +29,7 @@
                 android:textColor="@color/page_title"
                 android:textSize="20sp"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/memorable_word_change_title"
+                android:text="@string/change_password"
                 android:layout_alignParentRight="true"
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="8dp"/>
@@ -40,8 +41,6 @@
             android:layout_height="1dp"
             android:background="@color/page_title"/>
 
-
-
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
             android:id="@+id/pass_code_change_text"
             geekui:customTypeface="fonts/iran_sans.ttf"
@@ -49,7 +48,7 @@
             android:layout_height="50dp"
             android:textColor="@color/main_menu_title"
             android:textSize="15sp"
-            android:text="@string/change_activities_pass_code_text"
+            android:text="@string/change_pass_code_text_1"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             android:layout_marginTop="24dp"
@@ -148,7 +147,6 @@
     </LinearLayout>
 
 
-
     <LinearLayout
         android:id="@+id/keyboard"
         android:layout_width="fill_parent"
@@ -161,6 +159,7 @@
             android:layout_height="wrap_content"
             layout="@layout/password_keyboard"/>
     </LinearLayout>
+
 
 
 </RelativeLayout>

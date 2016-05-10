@@ -10,17 +10,10 @@
         geekui:customTypeface="fonts/iran_sans.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/normal_text"
+        android:textColor="@color/main_menu_title"
         android:textSize="14dp"
         android:text="@string/title_settings"
         android:layout_margin="12dp"
         android:layout_alignParentRight="true"/>
-
-    <ImageView
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:src="@drawable/bank_arrow"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="12dp"/>
 
 </RelativeLayout>

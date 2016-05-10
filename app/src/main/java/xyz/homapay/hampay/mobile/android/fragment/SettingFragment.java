@@ -1,6 +1,5 @@
 package xyz.homapay.hampay.mobile.android.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,7 +12,7 @@ import android.widget.ListView;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.ChangeEmailPassActivity;
 import xyz.homapay.hampay.mobile.android.activity.ChangeMemorableActivity;
-import xyz.homapay.hampay.mobile.android.activity.ChangePasswordActivity;
+import xyz.homapay.hampay.mobile.android.activity.ChangePassCodeActivity;
 import xyz.homapay.hampay.mobile.android.activity.IntroIBANActivity;
 import xyz.homapay.hampay.mobile.android.adapter.SettingAdapter;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
@@ -57,7 +56,7 @@ public class SettingFragment extends Fragment {
                 switch (position){
                     case 0:
                         intent = new Intent();
-                        intent.setClass(getActivity(), ChangePasswordActivity.class);
+                        intent.setClass(getActivity(), ChangePassCodeActivity.class);
                         startActivity(intent);
                         break;
 

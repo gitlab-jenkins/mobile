@@ -49,8 +49,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
 
     Activity activity;
 
-    ButtonRectangle verify_button;
-
     FacedTextView digit_1;
     FacedTextView digit_2;
     FacedTextView digit_3;
@@ -159,7 +157,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                     registrationVerifyMobileRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
                     registrationVerifyMobileRequest.setSmsToken(receivedSmsValue);
 
-                    verify_button.setEnabled(false);
                     requestVerifyMobile = new RequestVerifyMobile(context, new RequestRegistrationVerifyMobileTaskCompleteListener());
                     requestVerifyMobile.execute(registrationVerifyMobileRequest);
 
@@ -281,28 +278,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         registrationSendSmsTokenRequest = new RegistrationSendSmsTokenRequest();
         registrationSendSmsTokenRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
 
-        verify_button = (ButtonRectangle)findViewById(R.id.verify_button);
-        verify_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (receivedSmsValue.length() == 5) {
-
-                    registrationVerifyMobileRequest = new RegistrationVerifyMobileRequest();
-
-                    registrationVerifyMobileRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
-                    registrationVerifyMobileRequest.setSmsToken(receivedSmsValue);
-
-                    verify_button.setEnabled(false);
-                    requestVerifyMobile = new RequestVerifyMobile(context, new RequestRegistrationVerifyMobileTaskCompleteListener());
-                    requestVerifyMobile.execute(registrationVerifyMobileRequest);
-
-                }else {
-                    Toast.makeText(context, getString(R.string.msg_fail_sms_correct_entry), Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
     }
 
 
@@ -317,7 +292,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         {
 
             numberProgressBar.setProgress(0);
-            verify_button.setEnabled(true);
 
             hamPayDialog.dismisWaitingDialog();
             if (registrationVerifyMobileResponseMessage != null) {
@@ -564,7 +538,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
             registrationVerifyMobileRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
             registrationVerifyMobileRequest.setSmsToken(receivedSmsValue);
 
-            verify_button.setEnabled(false);
             requestVerifyMobile = new RequestVerifyMobile(context, new RequestRegistrationVerifyMobileTaskCompleteListener());
             requestVerifyMobile.execute(registrationVerifyMobileRequest);
 

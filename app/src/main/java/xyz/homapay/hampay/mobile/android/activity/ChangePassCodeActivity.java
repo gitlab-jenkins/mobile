@@ -8,14 +8,13 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.ChangePassCodeRequest;
@@ -26,27 +25,27 @@ import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestChangePassCode;
-import xyz.homapay.hampay.mobile.android.component.material.RippleView;
+import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
-public class ChangePasswordActivity extends AppCompatActivity implements View.OnClickListener {
+public class ChangePassCodeActivity extends AppCompatActivity implements View.OnClickListener {
 
     HamPayDialog hamPayDialog;
 
-    RippleView digit_1;
-    RippleView digit_2;
-    RippleView digit_3;
-    RippleView digit_4;
-    RippleView digit_5;
-    RippleView digit_6;
-    RippleView digit_7;
-    RippleView digit_8;
-    RippleView digit_9;
-    RippleView digit_0;
-    RippleView keyboard_dismiss;
-    RippleView backspace;
+    FacedTextView digit_1;
+    FacedTextView digit_2;
+    FacedTextView digit_3;
+    FacedTextView digit_4;
+    FacedTextView digit_5;
+    FacedTextView digit_6;
+    FacedTextView digit_7;
+    FacedTextView digit_8;
+    FacedTextView digit_9;
+    FacedTextView digit_0;
+    FacedTextView keyboard_dismiss;
+    RelativeLayout backspace;
 
     String currentPassword = "";
     String inputPasswordValue = "";
@@ -61,13 +60,15 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
-    RelativeLayout password_0_rl, password_1_rl, password_2_rl;
 
     LinearLayout keyboard;
     LinearLayout password_holder;
 
     RequestChangePassCode requestChangePassCode;
     ChangePassCodeRequest changePassCodeRequest;
+
+    FacedTextView pass_code_change_text;
+    int passCodeChangeStep = 1;
 
     Context context;
     Activity activity;
@@ -99,10 +100,10 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_change_password);
+        setContentView(R.layout.activity_change_pass_code);
 
         context = this;
-        activity = ChangePasswordActivity.this;
+        activity = ChangePassCodeActivity.this;
 
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
@@ -116,34 +117,29 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         password_holder = (LinearLayout)findViewById(R.id.password_holder);
         password_holder.setOnClickListener(this);
 
-        password_0_rl = (RelativeLayout)findViewById(R.id.password_0_rl);
-        password_1_rl = (RelativeLayout)findViewById(R.id.password_1_rl);
-        password_2_rl = (RelativeLayout)findViewById(R.id.password_2_rl);
-
-
-        digit_1 = (RippleView)findViewById(R.id.digit_1);
+        digit_1 = (FacedTextView)findViewById(R.id.digit_1);
         digit_1.setOnClickListener(this);
-        digit_2 = (RippleView)findViewById(R.id.digit_2);
+        digit_2 = (FacedTextView)findViewById(R.id.digit_2);
         digit_2.setOnClickListener(this);
-        digit_3 = (RippleView)findViewById(R.id.digit_3);
+        digit_3 = (FacedTextView)findViewById(R.id.digit_3);
         digit_3.setOnClickListener(this);
-        digit_4 = (RippleView)findViewById(R.id.digit_4);
+        digit_4 = (FacedTextView)findViewById(R.id.digit_4);
         digit_4.setOnClickListener(this);
-        digit_5 = (RippleView)findViewById(R.id.digit_5);
+        digit_5 = (FacedTextView)findViewById(R.id.digit_5);
         digit_5.setOnClickListener(this);
-        digit_6 = (RippleView)findViewById(R.id.digit_6);
+        digit_6 = (FacedTextView)findViewById(R.id.digit_6);
         digit_6.setOnClickListener(this);
-        digit_7 = (RippleView)findViewById(R.id.digit_7);
+        digit_7 = (FacedTextView)findViewById(R.id.digit_7);
         digit_7.setOnClickListener(this);
-        digit_8 = (RippleView)findViewById(R.id.digit_8);
+        digit_8 = (FacedTextView)findViewById(R.id.digit_8);
         digit_8.setOnClickListener(this);
-        digit_9 = (RippleView)findViewById(R.id.digit_9);
+        digit_9 = (FacedTextView)findViewById(R.id.digit_9);
         digit_9.setOnClickListener(this);
-        digit_0 = (RippleView)findViewById(R.id.digit_0);
+        digit_0 = (FacedTextView)findViewById(R.id.digit_0);
         digit_0.setOnClickListener(this);
-        keyboard_dismiss = (RippleView)findViewById(R.id.keyboard_dismiss);
+        keyboard_dismiss = (FacedTextView)findViewById(R.id.keyboard_dismiss);
         keyboard_dismiss.setOnClickListener(this);
-        backspace = (RippleView)findViewById(R.id.backspace);
+        backspace = (RelativeLayout)findViewById(R.id.backspace);
         backspace.setOnClickListener(this);
 
         input_digit_1 = (ImageView)findViewById(R.id.input_digit_1);
@@ -151,6 +147,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         input_digit_3 = (ImageView)findViewById(R.id.input_digit_3);
         input_digit_4 = (ImageView)findViewById(R.id.input_digit_4);
         input_digit_5 = (ImageView)findViewById(R.id.input_digit_5);
+        pass_code_change_text = (FacedTextView)findViewById(R.id.pass_code_change_text);
 
     }
 
@@ -216,7 +213,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
 
         Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 
-        if (password_0_rl.getVisibility() == View.VISIBLE) {
+        if (passCodeChangeStep == 1) {
             if (currentPassword.length() <= 4) {
 
                 if (digit.contains("d")) {
@@ -233,64 +230,63 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
                 switch (currentPassword.length()) {
 
                     case 0:
-                        input_digit_1.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_2.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_3.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_1.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_2.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_3.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_4.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_5.setImageResource(R.drawable.pass_value_empty);
                         vibrator.vibrate(20);
                         break;
 
                     case 1:
-                        input_digit_1.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_2.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_3.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_2.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_3.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_4.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_5.setImageResource(R.drawable.pass_value_empty);
                         vibrator.vibrate(20);
 
                         break;
                     case 2:
-                        input_digit_1.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_2.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_3.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_2.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_3.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_4.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_5.setImageResource(R.drawable.pass_value_empty);
                         vibrator.vibrate(20);
                         break;
                     case 3:
-                        input_digit_1.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_2.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_3.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_2.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_3.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_4.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_5.setImageResource(R.drawable.pass_value_empty);
                         vibrator.vibrate(20);
                         break;
                     case 4:
-                        input_digit_1.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_2.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_3.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_4.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_2.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_3.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_4.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_5.setImageResource(R.drawable.pass_value_empty);
                         vibrator.vibrate(20);
                         break;
                     case 5:
-                        input_digit_1.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_2.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_3.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_4.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_5.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_2.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_3.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_4.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_5.setImageResource(R.drawable.pass_value_placeholder);
                         vibrator.vibrate(20);
 
-                        password_0_rl.setVisibility(View.INVISIBLE);
+                        passCodeChangeStep = 2;
+                        pass_code_change_text.setText(getString(R.string.change_pass_code_text_2));
 
-                        password_1_rl.setVisibility(View.VISIBLE);
-
-                        input_digit_1.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_2.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_3.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_1.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_2.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_3.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_4.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_5.setImageResource(R.drawable.pass_value_empty);
 
 
                         break;
@@ -298,7 +294,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
             }
         }
 
-        else if (password_1_rl.getVisibility() == View.VISIBLE) {
+        else if (passCodeChangeStep == 2) {
 
 
             if (inputPasswordValue.length() <= 4) {
@@ -317,64 +313,63 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
                 switch (inputPasswordValue.length()) {
 
                     case 0:
-                        input_digit_1.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_2.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_3.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_1.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_2.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_3.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_4.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_5.setImageResource(R.drawable.pass_value_empty);
                         vibrator.vibrate(20);
                         break;
 
                     case 1:
-                        input_digit_1.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_2.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_3.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_2.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_3.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_4.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_5.setImageResource(R.drawable.pass_value_empty);
                         vibrator.vibrate(20);
 
                         break;
                     case 2:
-                        input_digit_1.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_2.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_3.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_2.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_3.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_4.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_5.setImageResource(R.drawable.pass_value_empty);
                         vibrator.vibrate(20);
                         break;
                     case 3:
-                        input_digit_1.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_2.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_3.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_2.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_3.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_4.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_5.setImageResource(R.drawable.pass_value_empty);
                         vibrator.vibrate(20);
                         break;
                     case 4:
-                        input_digit_1.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_2.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_3.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_4.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_2.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_3.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_4.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_5.setImageResource(R.drawable.pass_value_empty);
                         vibrator.vibrate(20);
                         break;
                     case 5:
-                        input_digit_1.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_2.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_3.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_4.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_5.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_2.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_3.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_4.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_5.setImageResource(R.drawable.pass_value_placeholder);
                         vibrator.vibrate(20);
 
-                        password_1_rl.setVisibility(View.INVISIBLE);
+                        passCodeChangeStep = 3;
+                        pass_code_change_text.setText(getString(R.string.change_pass_code_text_3));
 
-                        password_2_rl.setVisibility(View.VISIBLE);
-
-                        input_digit_1.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_2.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_3.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_1.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_2.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_3.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_4.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_5.setImageResource(R.drawable.pass_value_empty);
 
 
                         break;
@@ -398,53 +393,53 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
                 switch (inputRePasswordValue.length()) {
 
                     case 0:
-                        input_digit_1.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_2.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_3.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_1.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_2.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_3.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_4.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_5.setImageResource(R.drawable.pass_value_empty);
                         vibrator.vibrate(20);
                         break;
 
                     case 1:
-                        input_digit_1.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_2.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_3.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_2.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_3.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_4.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_5.setImageResource(R.drawable.pass_value_empty);
                         vibrator.vibrate(20);
 
                         break;
                     case 2:
-                        input_digit_1.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_2.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_3.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_2.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_3.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_4.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_5.setImageResource(R.drawable.pass_value_empty);
                         vibrator.vibrate(20);
                         break;
                     case 3:
-                        input_digit_1.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_2.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_3.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_2.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_3.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_4.setImageResource(R.drawable.pass_value_empty);
+                        input_digit_5.setImageResource(R.drawable.pass_value_empty);
                         vibrator.vibrate(20);
                         break;
                     case 4:
-                        input_digit_1.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_2.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_3.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_4.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                        input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_2.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_3.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_4.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_5.setImageResource(R.drawable.pass_value_empty);
                         vibrator.vibrate(20);
                         break;
                     case 5:
-                        input_digit_1.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_2.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_3.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_4.setImageResource(R.drawable.pass_icon_1);
-                        input_digit_5.setImageResource(R.drawable.pass_icon_1);
+                        input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_2.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_3.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_4.setImageResource(R.drawable.pass_value_placeholder);
+                        input_digit_5.setImageResource(R.drawable.pass_value_placeholder);
                         vibrator.vibrate(20);
 
                         if (inputPasswordValue.equalsIgnoreCase(inputRePasswordValue)) {
@@ -488,17 +483,16 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
             if (changePassCodeResponseMessage != null) {
                 if (changePassCodeResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
-                    password_0_rl.setVisibility(View.VISIBLE);
-                    password_1_rl.setVisibility(View.INVISIBLE);
-                    password_2_rl.setVisibility(View.INVISIBLE);
+                    passCodeChangeStep = 1;
+                    pass_code_change_text.setText(getString(R.string.change_pass_code_text_1));
                     currentPassword = "";
                     inputPasswordValue = "";
                     inputRePasswordValue = "";
-                    input_digit_1.setImageResource(R.drawable.pass_icon_2);
-                    input_digit_2.setImageResource(R.drawable.pass_icon_2);
-                    input_digit_3.setImageResource(R.drawable.pass_icon_2);
-                    input_digit_4.setImageResource(R.drawable.pass_icon_2);
-                    input_digit_5.setImageResource(R.drawable.pass_icon_2);
+                    input_digit_1.setImageResource(R.drawable.pass_value_empty);
+                    input_digit_2.setImageResource(R.drawable.pass_value_empty);
+                    input_digit_3.setImageResource(R.drawable.pass_value_empty);
+                    input_digit_4.setImageResource(R.drawable.pass_value_empty);
+                    input_digit_5.setImageResource(R.drawable.pass_value_empty);
                     new HamPayDialog(activity).showSuccessChangeSettingDialog(changePassCodeResponseMessage.getService().getResultStatus().getDescription());
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
@@ -543,19 +537,17 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
 
 
     private void resetLayout(){
-        password_0_rl.setVisibility(View.VISIBLE);
-        password_1_rl.setVisibility(View.INVISIBLE);
-        password_2_rl.setVisibility(View.INVISIBLE);
-
+        passCodeChangeStep = 1;
+        pass_code_change_text.setText(getString(R.string.change_pass_code_text_1));
         currentPassword = "";
         inputPasswordValue = "";
         inputRePasswordValue = "";
 
-        input_digit_1.setImageResource(R.drawable.pass_icon_2);
-        input_digit_2.setImageResource(R.drawable.pass_icon_2);
-        input_digit_3.setImageResource(R.drawable.pass_icon_2);
-        input_digit_4.setImageResource(R.drawable.pass_icon_2);
-        input_digit_5.setImageResource(R.drawable.pass_icon_2);
+        input_digit_1.setImageResource(R.drawable.pass_value_empty);
+        input_digit_2.setImageResource(R.drawable.pass_value_empty);
+        input_digit_3.setImageResource(R.drawable.pass_value_empty);
+        input_digit_4.setImageResource(R.drawable.pass_value_empty);
+        input_digit_5.setImageResource(R.drawable.pass_value_empty);
     }
 
     @Override
