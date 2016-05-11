@@ -371,8 +371,8 @@
     <string name="keyboard_dismiss">بستن</string>
 
     <string name="exit_app_text">آیا مایل به خروج از هم‌پی هستید؟</string>
-    <string name="exit_app_yes">خارج می‌شوم </string>
-    <string name="exit_app_no">ادامه می‌دهم</string>
+    <string name="exit_app_yes">بله</string>
+    <string name="exit_app_no">خیر</string>
 
     <string name="exit_registration_text">آیا مایل به خروج از ثبت نام هم‌پی هستید؟</string>
     <string name="exit_registration_yes">خارج می‌شوم </string>
@@ -398,7 +398,8 @@
     <string name="unlink_disconfirm">انصراف</string>
     <string name="unlink_current_password">لطفا رمز عبور خود را برای لغو عضویت وارد نمایید.</string>
 
-    <string name="change_email">تغییر ایمیل</string>
+    <string name="change_email_confirm">تایید</string>
+    <string name="change_email_cancel">انصراف</string>
     <string name="change_email_text">لطفا رمز عبور خود را برای تغییر ایمیل وارد نمایید.</string>
 
 

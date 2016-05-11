@@ -1958,21 +1958,9 @@ public class HamPayDialog {
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_change_email, null);
 
         ImageView emailIcon = (ImageView)view.findViewById(R.id.emailIcon);
-        final CheckBox email_confirm_check = (CheckBox)view.findViewById(R.id.email_confirm_check);
         final FacedEditText emailValue = (FacedEditText)view.findViewById(R.id.emailValue);
         FacedTextView change_email = (FacedTextView)view.findViewById(R.id.change_email);
         FacedTextView cancel_change_email = (FacedTextView)view.findViewById(R.id.cancel_change_email);
-
-        email_confirm_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    if (!new EmailVerification().isValid(emailValue.getText().toString())) {
-                        email_confirm_check.setChecked(false);
-                    }
-                }
-            }
-        });
         emailValue.addTextChangedListener(new EmailTextWatcher(emailValue, emailIcon));
         emailValue.setText(prefs.getString(Constants.REGISTERED_USER_EMAIL, ""));
 

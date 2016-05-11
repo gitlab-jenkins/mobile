@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="colorPrimary">#ef3220</color>
+    <color name="colorPrimary">#24bdc3</color>
     <color name="colorPrimaryDark">#A62b22</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
-    <color name="colorAccent">#FF80AB</color>
+    <color name="colorAccent">#24bdc3</color>
     <color name="notification_title">#202020</color>
     <color name="notification_message">#737373</color>
 

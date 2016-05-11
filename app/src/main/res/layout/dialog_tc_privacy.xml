@@ -3,50 +3,64 @@
     xmlns:geekui="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="right"
-    android:background="@drawable/dialog_pay_theme"
+    android:gravity="center_horizontal"
+    android:background="@drawable/dialog_success_style"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:layout_margin="8dp">
 
     <xyz.homapay.hampay.mobile.android.component.FacedTextView
         android:id="@+id/tc_privacy_text"
         geekui:customTypeface="fonts/iran_sans.ttf"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/normal_text"
+        android:textColor="@color/modal_text"
         android:textSize="15dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
         android:gravity="center"
-        android:layout_gravity="center"
-        android:text="@string/tc_privacy_text"
-        android:layout_marginTop="8dp"/>
+        android:text="@string/tc_privacy_text"/>
 
 
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp">
+        android:orientation="horizontal"
+        android:layout_margin="16dp"
+        android:gravity="center">
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
             android:id="@+id/tc_privacy_disconfirm"
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
-            android:textSize="14dp"
-            android:text="@string/tc_privacy_disconfirm" />
+            android:layout_height="32dp"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="@string/tc_privacy_disconfirm"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:background="@drawable/modal_success_button_style"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="4dp"/>
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
             android:id="@+id/tc_privacy_confirm"
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/register_btn_color"
-            android:textSize="14dp"
+            android:layout_height="32dp"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_gravity="center"
             android:text="@string/tc_privacy_confirm"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:background="@drawable/modal_success_button_style"
             android:layout_alignParentRight="true"
-            android:contentDescription="confirm"/>
+            android:layout_marginLeft="4dp"/>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>
