@@ -35,7 +35,7 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:gravity="center"
-        android:text="@string/msg_success_pending_payment"/>
+        android:text="@string/msg_success_payment_request"/>
 
 
     <xyz.homapay.hampay.mobile.android.component.FacedTextView

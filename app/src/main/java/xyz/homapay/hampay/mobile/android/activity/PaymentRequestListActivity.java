@@ -30,7 +30,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestLatestInvoiceContacts;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
-public class PaymentRequestActivity extends AppCompatActivity{
+public class PaymentRequestListActivity extends AppCompatActivity{
 
 
     private Context context;
@@ -63,10 +63,10 @@ public class PaymentRequestActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_payment_request);
+        setContentView(R.layout.activity_payment_request_list);
 
         context = this;
-        activity = PaymentRequestActivity.this;
+        activity = PaymentRequestListActivity.this;
         hamPayDialog = new HamPayDialog(activity);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);

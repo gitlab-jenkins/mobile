@@ -4,25 +4,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
-    android:background="@drawable/dialog_success_style"
+    android:background="@drawable/dialog_failure_style"
     android:orientation="vertical"
     android:layout_margin="8dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/dialog_success_title_style">
+        android:background="@drawable/dialog_failure_title_style">
 
         <ImageView
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:src="@drawable/modal_success"
+            android:src="@drawable/modal_failure"
             android:layout_centerInParent="true"
             android:padding="4dp"/>
 
     </RelativeLayout>
-
-
 
     <xyz.homapay.hampay.mobile.android.component.FacedTextView
         android:id="@+id/request_payment_message"
@@ -35,8 +33,7 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:gravity="center"
-        android:text="@string/msg_success_pending_payment"/>
-
+        android:text="@string/msg_failure_payment_request"/>
 
     <xyz.homapay.hampay.mobile.android.component.FacedTextView
         android:id="@+id/confirmation"
@@ -47,11 +44,13 @@
         android:textSize="20sp"
         android:gravity="center"
         android:layout_gravity="center"
-        android:text="@string/confirm_success_payment"
+        android:text="@string/confirm_failure_payment"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:background="@drawable/modal_success_button_style"
+        android:background="@drawable/modal_failure_button_style"
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"/>
+
+
 
 </LinearLayout>

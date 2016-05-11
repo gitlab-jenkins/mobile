@@ -1,6 +1,7 @@
 package xyz.homapay.hampay.mobile.android;
 
 import android.app.Application;
+import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -19,7 +20,7 @@ import xyz.homapay.hampay.mobile.android.model.AppState;
 
 @ReportsCrashes(mailTo = "amirh.sharafkar@gmail.com,defects@homapay.com")
 
-public class HamPayApplication extends Application {
+public class HamPayApplication extends MultiDexApplication {
 
     private static final String PROPERTY_ID = "UA-67427017-1";
 

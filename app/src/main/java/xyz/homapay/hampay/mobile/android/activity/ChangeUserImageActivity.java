@@ -36,6 +36,7 @@ import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestUploadImage;
+import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.cropper.CropImageView;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
@@ -49,8 +50,8 @@ public class ChangeUserImageActivity extends AppCompatActivity {
     private Bundle bundle;
     private String user_selected_source;
     private CropImageView cropImageView;
-    private ButtonRectangle user_profile_image_cancel;
-    private ButtonRectangle user_profile_image_select;
+    private FacedTextView user_profile_image_cancel;
+    private FacedTextView user_profile_image_select;
 
     private int mAspectRatioX = Constants.DEFAULT_ASPECT_RATIO_VALUES;
     private int mAspectRatioY = Constants.DEFAULT_ASPECT_RATIO_VALUES;
@@ -125,7 +126,7 @@ public class ChangeUserImageActivity extends AppCompatActivity {
         cropImageView = (CropImageView)findViewById(R.id.cropImageView);
 
 
-        user_profile_image_cancel = (ButtonRectangle)findViewById(R.id.user_profile_image_cancel);
+        user_profile_image_cancel = (FacedTextView)findViewById(R.id.user_profile_image_cancel);
         user_profile_image_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,7 +134,7 @@ public class ChangeUserImageActivity extends AppCompatActivity {
             }
         });
 
-        user_profile_image_select = (ButtonRectangle)findViewById(R.id.user_profile_image_select);
+        user_profile_image_select = (FacedTextView)findViewById(R.id.user_profile_image_select);
         user_profile_image_select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

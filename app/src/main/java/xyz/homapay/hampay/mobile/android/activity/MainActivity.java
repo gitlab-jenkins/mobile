@@ -53,6 +53,7 @@ import xyz.homapay.hampay.mobile.android.fragment.PrivacyFragment;
 import xyz.homapay.hampay.mobile.android.fragment.SettingFragment;
 import xyz.homapay.hampay.mobile.android.fragment.TCFragment;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.model.LatestPurchase;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -225,27 +226,27 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     break;
             }
         }else {
-//            if (pendingPurchaseCode != null) {
-//                if (databaseHelper.getIsExistPurchaseRequest(pendingPurchaseCode)) {
-//                    LatestPurchase latestPurchase = databaseHelper.getPurchaseRequest(pendingPurchaseCode);
-//                    if (latestPurchase.getIsCanceled().equalsIgnoreCase("0")) {
-//                        if (pendingPurchaseCount > 0) {
-//                            intent.setClass(context, RequestBusinessPayDetailActivity.class);
-//                            startActivity(intent);
-//                        } else if (pendingPaymentCode != null && pendingPaymentCount > 0) {
-//                            intent.setClass(context, InvoicePendingConfirmationActivity.class);
-//                            startActivity(intent);
-//                        }
-//                    }
-//                } else {
-//                    databaseHelper.createPurchaseRequest(pendingPurchaseCode);
-//                    intent.setClass(context, RequestBusinessPayDetailActivity.class);
-//                    startActivity(intent);
-//                }
-//            } else if (pendingPaymentCount > 0) {
-//                intent.setClass(context, InvoicePendingConfirmationActivity.class);
-//                startActivity(intent);
-//            }
+            if (pendingPurchaseCode != null) {
+                if (databaseHelper.getIsExistPurchaseRequest(pendingPurchaseCode)) {
+                    LatestPurchase latestPurchase = databaseHelper.getPurchaseRequest(pendingPurchaseCode);
+                    if (latestPurchase.getIsCanceled().equalsIgnoreCase("0")) {
+                        if (pendingPurchaseCount > 0) {
+                            intent.setClass(context, RequestBusinessPayDetailActivity.class);
+                            startActivity(intent);
+                        } else if (pendingPaymentCode != null && pendingPaymentCount > 0) {
+                            intent.setClass(context, InvoicePendingConfirmationActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                } else {
+                    databaseHelper.createPurchaseRequest(pendingPurchaseCode);
+                    intent.setClass(context, RequestBusinessPayDetailActivity.class);
+                    startActivity(intent);
+                }
+            } else if (pendingPaymentCount > 0) {
+                intent.setClass(context, InvoicePendingConfirmationActivity.class);
+                startActivity(intent);
+            }
         }
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);

@@ -297,7 +297,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
             if (userPaymentResponseMessage != null){
                 if (userPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
 
-                    new HamPayDialog(activity).creditRequestDialog();
+                    new HamPayDialog(activity).successPaymentRequestDialog("121224231");
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Individual Payment Confirm")
@@ -306,8 +306,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                             .build());
 
                 }else {
-                    new HamPayDialog(activity).showFailPaymentDialog(userPaymentResponseMessage.getService().getResultStatus().getCode(),
-                            userPaymentResponseMessage.getService().getResultStatus().getDescription());
+                    new HamPayDialog(activity).failurePaymentRequestDialog();
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Individual Payment Confirm")
@@ -316,8 +315,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                             .build());
                 }
             }else {
-                new HamPayDialog(activity).showFailPaymentDialog(Constants.LOCAL_ERROR_CODE,
-                        getString(R.string.msg_fail_payment));
+                new HamPayDialog(activity).failurePaymentRequestDialog();
 
                 hamPayGaTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Individual Payment Confirm")

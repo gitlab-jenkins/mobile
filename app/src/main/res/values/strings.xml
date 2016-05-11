@@ -206,7 +206,7 @@
     <string name="sheba_verify">بررسی</string>
     <string name="sheba_question_part1_text">آیا شماره: </string>
     <string name="sheba_question_part2_text">متعلق به %1$s در بانک %2$s می‌باشد؟</string>
-    <string name="sheba_question_part3_text">دقت کنید که این حساب برای دریافت مبالغ واریزی به شما استفاده می‌شود</string>
+    <string name="sheba_question_part3_text">(دقت کنید که این حساب برای دریافت مبالغ واریزی به شما استفاده می‌شود)</string>
     <string name="sheba_confirm">بله</string>
     <string name="sheba_cancel">خیر</string>
 
@@ -568,6 +568,10 @@
     <string name="change_memorable_word_text_1">لطفا یک کلمه کوتاه به عنوان کلمه یادآوری رمز عبور خود معرفی نمایید</string>
     <string name="change_activities_pass_code_text">لطفا رمز عبور خود را وارد نمایید</string>
     <string name="email_change_title">تغییر ایمیل</string>
+    <string name="confirm_success_payment">تایید</string>
+    <string name="confirm_failure_payment">بستن</string>
+    <string name="msg_success_payment_request">فاکتور شما با شماره %1$s با موفقیت ارسال شد</string>
+    <string name="msg_failure_payment_request">عملیات ارسال فاکتور موفقیت آمیز نبود. لطفا مجدد تلاش کنید</string>
 
 
 </resources>

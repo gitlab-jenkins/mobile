@@ -65,4 +65,7 @@
     <color name="pending_count_badge_bg">#ec1c24</color>
     <color name="total_amount_bg">#e6e7e8</color>
     <color name="create_payment_request">#25bdc2</color>
+    <color name="success_modal_color">#24bdc3</color>
+    <color name="failure_modal_color">#e9142b</color>
+    <color name="modal_text">#686a6b</color>
 </resources>

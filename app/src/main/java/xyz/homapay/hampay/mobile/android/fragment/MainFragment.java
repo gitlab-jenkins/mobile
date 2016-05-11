@@ -19,7 +19,7 @@ import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.BusinessPurchaseActivity;
-import xyz.homapay.hampay.mobile.android.activity.PaymentRequestActivity;
+import xyz.homapay.hampay.mobile.android.activity.PaymentRequestListActivity;
 import xyz.homapay.hampay.mobile.android.activity.PaymentRequestDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.PendingPurchasePaymentListActivity;
 import xyz.homapay.hampay.mobile.android.activity.TransactionsHistoryActivity;
@@ -206,7 +206,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                 break;
 
             case R.id.user_payment_request:
-                intent.setClass(getActivity(), PaymentRequestActivity.class);
+                intent.setClass(getActivity(), PaymentRequestListActivity.class);
                 startActivity(intent);
                 break;
 

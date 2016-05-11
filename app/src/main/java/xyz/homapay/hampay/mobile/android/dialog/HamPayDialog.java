@@ -2204,7 +2204,7 @@ public class HamPayDialog {
 
     public void pspFailResultDialog(){
 
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_ipg_fail, null);
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_ipg_failure, null);
 
         FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
 
@@ -2245,7 +2245,7 @@ public class HamPayDialog {
 
     public void ipgFailDialog(){
 
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_ipg_fail, null);
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_ipg_failure, null);
 
         FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
 
@@ -2381,13 +2381,14 @@ public class HamPayDialog {
     }
 
 
-    public void creditRequestDialog(){
+    public void successPaymentRequestDialog(String requestCode){
 
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_credit_request, null);
 
-        FacedTextView pay_one_confirm_ref = (FacedTextView) view.findViewById(R.id.pay_one_confirm_ref);
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_payment_request_success, null);
+
+        FacedTextView request_payment_message = (FacedTextView) view.findViewById(R.id.request_payment_message);
+        request_payment_message.setText(activity.getString(R.string.msg_success_payment_request, new PersianEnglishDigit().E2P(requestCode)));
         FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
-
 
         confirmation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -2396,6 +2397,24 @@ public class HamPayDialog {
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("result", 1024);
                 activity.setResult(1024);
+                activity.finish();
+            }
+        });
+
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
+        dialog.show();
+    }
+
+    public void failurePaymentRequestDialog(){
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_payment_request_failure, null);
+
+        FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
+
+        confirmation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
                 activity.finish();
             }
         });

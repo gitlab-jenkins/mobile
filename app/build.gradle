@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "xyz.homapay.hampay.mobile.android"
@@ -10,6 +10,7 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "HP-Release-Candidate-0.1.0"
+        multiDexEnabled true
 //        testApplicationId = "xyz.homapay.hampay.mobile.android.test"
 //        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //        testInstrumentationRunner "android.support.test.uiautomator.UiAutomatorInstrumentationTestRunner"
@@ -31,6 +32,8 @@ allprojects {
         options.compilerArgs << "-Xlint:deprecation"
     }
 }
+
+
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -58,4 +61,5 @@ dependencies {
     //    compile files('libs/easywsdl/ksoap2-android-assembly-3.6.0-jar-with-dependencies.jar')
     compile files('libs/easywsdl/ksoap2-android-assembly-3.6.0-jar-with-dependencies.jar')
     compile 'com.android.support:design:23.3.0'
+    compile 'com.android.support:multidex:1.0.1'
 }
