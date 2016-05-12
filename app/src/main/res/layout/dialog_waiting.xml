@@ -3,17 +3,17 @@
     xmlns:geekui="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/dialog_pay_theme"
+    android:gravity="right|center_vertical"
+    android:background="@drawable/dialog_success_style"
     android:orientation="horizontal"
-    android:padding="8dp"
-    android:gravity="right|center_vertical">
+    android:layout_margin="8dp">
 
     <xyz.homapay.hampay.mobile.android.component.FacedTextView
         android:id="@+id/wating_text"
         geekui:customTypeface="fonts/iran_sans.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
+        android:textColor="@color/modal_text"
         android:textSize="14dp"
         android:text="@string/dialog_user_waiting"
         android:layout_marginRight="2dp"/>
@@ -27,10 +27,11 @@
         android:textSize="14dp"
         android:layout_marginRight="2dp" />
 
-    <ProgressBar
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_margin="2dp"
-        android:indeterminateDrawable="@drawable/fragment_progress"/>
+    <xyz.homapay.hampay.mobile.android.component.preloader.Preloader
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/preloader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:indicator="LineScale" />
 
 </LinearLayout>

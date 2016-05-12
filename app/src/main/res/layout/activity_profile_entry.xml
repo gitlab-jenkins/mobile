@@ -2,7 +2,8 @@
     xmlns:geekui="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -274,14 +275,21 @@
                             android:text="6219-8610-2056-2269"
                             android:maxLength="19" />
 
-                        <ProgressBar
-                            android:id="@+id/cardValidatorProgress"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="12dp"
-                            android:visibility="gone"
-                            android:indeterminateDrawable="@drawable/fragment_progress"/>
+                        <xyz.homapay.hampay.mobile.android.component.preloader.Preloader
+                            android:id="@+id/preloader"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:indicator="LineScale"
+                            android:layout_centerVertical="true" />
+
+                        <!--<ProgressBar-->
+                            <!--android:id="@+id/cardValidatorProgress"-->
+                            <!--android:layout_width="25dp"-->
+                            <!--android:layout_height="25dp"-->
+                            <!--android:layout_centerVertical="true"-->
+                            <!--android:layout_marginLeft="12dp"-->
+                            <!--android:visibility="gone"-->
+                            <!--android:indeterminateDrawable="@drawable/fragment_progress"/>-->
 
                         <ImageView
                             android:id="@+id/cardNumberIcon"

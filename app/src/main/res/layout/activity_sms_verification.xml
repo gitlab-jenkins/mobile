@@ -200,6 +200,7 @@
 
                     </RelativeLayout>
 
+
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/remain_timer"
                         geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -213,18 +214,39 @@
                         android:layout_marginTop="18dp"/>
 
 
-                    <xyz.homapay.hampay.mobile.android.component.numericalprogressbar.NumberProgressBar
-                        android:id="@+id/numberProgressBar"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginBottom="10dp"
-                        style="@style/NumberProgressBar_Relax_Blue"
-                        custom:progress_current="0"
-                        custom:progress_max="180"
-                        android:layout_height="wrap_content"
-                        custom:progress_text_size="17dp"
-                        custom:progress_unreached_bar_height="1.5dp"
-                        custom:progress_reached_bar_height="3.0dp"/>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="5dip"
+                            android:background="@drawable/progress_unreached_dash"
+                            android:layerType="software"
+                            android:orientation="vertical" />
+
+                        <View
+                            android:id="@+id/reached_progress"
+                            android:layout_width="0dp"
+                            android:layout_height="5dip"
+                            android:background="@drawable/progress_reached_dash"
+                            android:layerType="software"
+                            android:orientation="vertical" />
+
+                    </RelativeLayout>
+
+                    <!--<xyz.homapay.hampay.mobile.android.component.numericalprogressbar.NumberProgressBar-->
+                        <!--android:id="@+id/numberProgressBar"-->
+                        <!--android:layout_marginLeft="10dp"-->
+                        <!--android:layout_marginRight="10dp"-->
+                        <!--android:layout_marginBottom="10dp"-->
+                        <!--style="@style/NumberProgressBar_Relax_Blue"-->
+                        <!--custom:progress_current="0"-->
+                        <!--custom:progress_max="180"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--custom:progress_text_size="17dp"-->
+                        <!--custom:progress_unreached_bar_height="1.5dp"-->
+                        <!--custom:progress_reached_bar_height="3.0dp"/>-->
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/resend_active_code"

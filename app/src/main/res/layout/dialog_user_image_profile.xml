@@ -3,23 +3,28 @@
     xmlns:geekui="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="right"
-    android:background="@drawable/dialog_pay_theme"
-    android:orientation="vertical">
+    android:gravity="center_horizontal"
+    android:background="@drawable/dialog_success_style"
+    android:orientation="vertical"
+    android:layout_margin="8dp">
 
-    <xyz.homapay.hampay.mobile.android.component.FacedTextView
-        geekui:customTypeface="fonts/iran_sans.ttf"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimary"
-        android:textSize="18dp"
-        android:text="@string/user_profile_image_title"
-        android:layout_margin="8dp"/>
+        android:background="@drawable/dialog_success_title_style">
 
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="2dp"
-        android:background="@color/colorPrimary"/>
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+            geekui:customTypeface="fonts/iran_sans.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="20dp"
+            android:layout_centerInParent="true"
+            android:layout_margin="4dp"
+            android:text="@string/user_profile_image_title" />
+
+    </RelativeLayout>
+
 
 
     <xyz.homapay.hampay.mobile.android.component.FacedTextView
@@ -27,7 +32,7 @@
         geekui:customTypeface="fonts/iran_sans.ttf"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:textColor="@color/normal_text"
+        android:textColor="@color/modal_text"
         android:textSize="15dp"
         android:text="@string/user_profile_image_camera"
         android:layout_margin="8dp"/>
@@ -35,14 +40,14 @@
     <View
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="@color/normal_text"/>
+        android:background="@color/menu_divider"/>
 
     <xyz.homapay.hampay.mobile.android.component.FacedTextView
         android:id="@+id/gallary_choose"
         geekui:customTypeface="fonts/iran_sans.ttf"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:textColor="@color/normal_text"
+        android:textColor="@color/modal_text"
         android:textSize="15dp"
         android:text="@string/user_profile_image_gallary"
         android:gravity="right"
@@ -51,14 +56,14 @@
     <View
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="@color/normal_text"/>
+        android:background="@color/menu_divider"/>
 
     <xyz.homapay.hampay.mobile.android.component.FacedTextView
         android:id="@+id/remove_choose"
         geekui:customTypeface="fonts/iran_sans.ttf"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:textColor="@color/normal_text"
+        android:textColor="@color/modal_text"
         android:textSize="15dp"
         android:text="@string/user_profile_image_remove"
         android:gravity="right"
@@ -67,18 +72,23 @@
     <View
         android:layout_width="fill_parent"
         android:layout_height="1dp"
-        android:background="@color/normal_text"/>
+        android:background="@color/menu_divider"/>
 
     <xyz.homapay.hampay.mobile.android.component.FacedTextView
         android:id="@+id/cancel_choose"
         geekui:customTypeface="fonts/iran_sans.ttf"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/normal_text"
-        android:textSize="15dp"
-        android:text="@string/user_profile_image_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
         android:gravity="center"
         android:layout_gravity="center"
-        android:layout_margin="8dp"/>
+        android:text="@string/user_profile_image_cancel"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:background="@drawable/modal_success_button_style"
+        android:layout_alignParentRight="true"
+        android:layout_margin="16dp"/>
+
 
 </LinearLayout>

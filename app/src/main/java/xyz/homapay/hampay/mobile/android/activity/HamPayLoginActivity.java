@@ -4,9 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,6 +26,8 @@ import com.google.gson.reflect.TypeToken;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.security.NoSuchAlgorithmException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
@@ -45,6 +51,7 @@ import xyz.homapay.hampay.mobile.android.util.AppInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
+import xyz.homapay.hampay.mobile.android.util.ScaleConverter;
 import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
 
 
@@ -115,12 +122,15 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     protected void onPause() {
         super.onPause();
         HamPayApplication.setAppSate(AppState.Paused);
+
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         HamPayApplication.setAppSate(AppState.Stoped);
+
+        stoptimertask();
 
         if (requestTAC != null){
             if (!requestTAC.isCancelled())
@@ -156,6 +166,55 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
     ImageView image;
 
+    RelativeLayout.LayoutParams params;
+    View reached_progress;
+
+    int leng = 0;
+    float screenWidthPercentage = 0;
+
+    Timer timer;
+    TimerTask timerTask;
+    final Handler handler = new Handler();
+    public void startTimer() {
+        timer = new Timer();
+        initializeTimerTask();
+        timer.schedule(timerTask, 1000, 1000);
+    }
+
+    public void initializeTimerTask() {
+
+        timerTask = new TimerTask() {
+
+            public void run() {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.e("Amir", leng + "");
+                        leng += 1;
+                        Log.e("W", (screenWidthPercentage * leng) + "");
+                        params.width = (int)(screenWidthPercentage * leng);
+                        reached_progress.setLayoutParams(params);
+                        hampay_memorableword_text.setText(leng + "");
+                    }
+                });
+
+                handler.post(new Runnable() {
+                    public void run() {
+
+                    }
+                });
+            }
+        };
+    }
+
+    public void stoptimertask() {
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,7 +222,16 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
         image = (ImageView)findViewById(R.id.image);
 
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        screenWidthPercentage = (size.x - ScaleConverter.dpToPx(38)) / 180f;
 
+        reached_progress = (View)findViewById(R.id.reached_progress);
+
+        params= (RelativeLayout.LayoutParams) reached_progress.getLayoutParams();
+
+        startTimer();
 
         instance = this;
 
@@ -360,7 +428,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
             SuccessLoginResponse successLoginResponse;
             FailedLoginResponse failedLoginResponse;
 
-            hamPayDialog.dismisWaitingDialog();
+//            hamPayDialog.dismisWaitingDialog();
             if (loginResponse != null) {
                 Gson gson = new Gson();
                 Type listType = new TypeToken<SuccessLoginResponse>() {}.getType();

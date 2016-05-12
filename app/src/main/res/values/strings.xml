@@ -125,7 +125,7 @@
     <string name="verified_account">محدود (در انتظار تایید)</string>
     <string name="delegate_account">عادی</string>
 
-    <string name="dialog_user_waiting">کاربر گرامی لطفا منتظر بمانید.</string>
+    <string name="dialog_user_waiting">کاربر گرامی منتظر بمانید</string>
     <string name="dialog_hampay_user_waiting">عزیز، منتظر بمانید</string>
 
 
@@ -393,7 +393,7 @@
     <string name="invalid_step_confrim">انجام میدم</string>
     <string name="invalid_step_disconfrim">منصرف شدم</string>
 
-    <string name="unlink_text">تمامی اطلاعات شما پاک خواهد شد و برای استفاده مجدد از "هم پی" باید دوباره ثبت نام کنید</string>
+
     <string name="unlink_confirm">لغو عضویت</string>
     <string name="unlink_disconfirm">انصراف</string>
     <string name="unlink_current_password">لطفا رمز عبور خود را برای لغو عضویت وارد نمایید.</string>
@@ -573,6 +573,8 @@
     <string name="confirm_failure_payment">بستن</string>
     <string name="msg_success_payment_request">فاکتور شما با شماره %1$s با موفقیت ارسال شد</string>
     <string name="msg_failure_payment_request">عملیات ارسال فاکتور موفقیت آمیز نبود. لطفا مجدد تلاش کنید</string>
+    <string name="msg_unlink_user">تمامی اطلاعات شما پاک خواهد شد و برای استفاده مجدد از "هم پی" باید دوباره ثبت نام کنید</string>
+    <string name="vat">مالیات بر ارزش افزوده</string>
 
 
 </resources>

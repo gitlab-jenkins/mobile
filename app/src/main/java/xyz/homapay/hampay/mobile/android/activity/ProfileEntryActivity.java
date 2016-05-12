@@ -43,6 +43,7 @@ import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.EmailTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
+import xyz.homapay.hampay.mobile.android.component.preloader.Preloader;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.location.BestLocationListener;
 import xyz.homapay.hampay.mobile.android.location.BestLocationProvider;
@@ -66,7 +67,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
     FacedEditText cellNumberValue;
     ImageView cellNumberIcon;
     boolean cellNumberIsValid = false;
-    ProgressBar cardValidatorProgress;
+    Preloader preloader;
 
     FacedEditText nationalCodeValue;
     ImageView nationalCodeIcon;
@@ -324,7 +325,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
             }
         });
 
-        cardValidatorProgress = (ProgressBar)findViewById(R.id.cardValidatorProgress);
+        preloader = (Preloader)findViewById(R.id.preloader);
 
         cardNumberValue = (FacedEditText)findViewById(R.id.cardNumberValue);
         cardProfile = (FacedTextView)findViewById(R.id.cardProfile);
@@ -336,11 +337,11 @@ public class ProfileEntryActivity extends AppCompatActivity {
                 String cardNumber = persianEnglishDigit.P2E(cardNumberValue.getText().toString().replaceAll("-", ""));
 
                 cardNumberIcon.setVisibility(View.GONE);
-                cardValidatorProgress.setVisibility(View.GONE);
+                preloader.setVisibility(View.GONE);
 
                 if (!hasFocus) {
                     if (cardNumberValidator.validate(cardNumber)){
-                        cardValidatorProgress.setVisibility(View.VISIBLE);
+                        preloader.setVisibility(View.VISIBLE);
                         cardProfileRequest = new CardProfileRequest();
                         cardProfileRequest.setCardNumber(cardNumber);
                         requestCardProfile = new RequestCardProfile(activity, new RequestCardProfileTaskCompleteListener());
@@ -502,7 +503,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
         public void onTaskComplete(ResponseMessage<CardProfileResponse> cardProfileResponseMessage)
         {
 
-            cardValidatorProgress.setVisibility(View.GONE);
+            preloader.setVisibility(View.GONE);
 
             if (cardProfileResponseMessage != null) {
 

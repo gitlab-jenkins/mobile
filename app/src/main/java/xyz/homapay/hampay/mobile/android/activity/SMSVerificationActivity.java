@@ -7,21 +7,23 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.Vibrator;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
+import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
@@ -37,12 +39,11 @@ import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestRegistrationSendSmsToken;
 import xyz.homapay.hampay.mobile.android.async.RequestVerifyMobile;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
-import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
-import xyz.homapay.hampay.mobile.android.component.numericalprogressbar.NumberProgressBar;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
+import xyz.homapay.hampay.mobile.android.util.ScaleConverter;
 
 public class SMSVerificationActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -92,7 +93,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
 
     private BroadcastReceiver mIntentReceiver;
 
-    private NumberProgressBar numberProgressBar;
+//    private NumberProgressBar numberProgressBar;
     private FacedTextView remain_timer;
 
     CountDownTimer countDownTimer;
@@ -112,12 +113,67 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
     protected void onStop() {
         super.onStop();
         HamPayApplication.setAppSate(AppState.Stoped);
-        if (countDownTimer != null)
-            countDownTimer.cancel();
-
+        stopTimerTask();
         if (requestVerifyMobile != null){
             if (!requestVerifyMobile.isCancelled())
                 requestVerifyMobile.cancel(true);
+        }
+    }
+
+
+    RelativeLayout.LayoutParams params;
+    View reached_progress;
+
+    int timeCounter = 0;
+    float screenWidthPercentage = 0;
+
+    Timer timer;
+    TimerTask timerTask;
+    final Handler handler = new Handler();
+    public void startTimer() {
+        timer = new Timer();
+        initializeTimerTask();
+        timer.schedule(timerTask, 1000, 1000);
+    }
+
+    public void initializeTimerTask() {
+
+        timerTask = new TimerTask() {
+
+            public void run() {
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        timeCounter += 1;
+                        Log.e("W", (screenWidthPercentage * timeCounter) + "");
+                        params.width = (int)(screenWidthPercentage * timeCounter);
+                        reached_progress.setLayoutParams(params);
+                        minutes =  (int)((180 - timeCounter) / (60));
+                        seconds = (int)(180 - timeCounter) % 60;
+                        remain_timer.setText(persianEnglishDigit.E2P(String.format("%02d:%02d", minutes, seconds)));
+
+                        if (timeCounter >= 180){
+                            stopTimerTask();
+                            if (keyboard.getVisibility() != View.VISIBLE)
+                                new Expand(keyboard).animate();
+                        }
+                    }
+                });
+
+                handler.post(new Runnable() {
+                    public void run() {
+
+                    }
+                });
+            }
+        };
+    }
+
+    public void stopTimerTask() {
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
         }
     }
 
@@ -134,10 +190,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                 receivedSmsValue = message.substring(message.lastIndexOf(":") + 1, message.length()).trim();
                 editor.putString(Constants.RECEIVED_SMS_ACTIVATION, receivedSmsValue);
                 editor.commit();
-
-                numberProgressBar.setProgress(0);
-                numberProgressBar.setVisibility(View.INVISIBLE);
-                countDownTimer.cancel();
 
                 input_digit_1.setText(persianEnglishDigit.E2P(receivedSmsValue.substring(0, 1)));
                 input_digit_1.setBackgroundColor(Color.TRANSPARENT);
@@ -189,40 +241,52 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         editor.putString(Constants.RECEIVED_SMS_ACTIVATION, "");
         editor.commit();
 
-        numberProgressBar = (NumberProgressBar)findViewById(R.id.numberProgressBar);
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        screenWidthPercentage = (size.x - ScaleConverter.dpToPx(16)) / 180f;
+
+        reached_progress = (View)findViewById(R.id.reached_progress);
+
+        params= (RelativeLayout.LayoutParams) reached_progress.getLayoutParams();
+
+        startTimer();
+
+//        numberProgressBar = (NumberProgressBar)findViewById(R.id.numberProgressBar);
         remain_timer = (FacedTextView)findViewById(R.id.remain_timer);
 
-        countDownTimer = new CountDownTimer(181000, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-                numberProgressBar.incrementProgressBy(1);
-                minutes =  (int)(millisUntilFinished / (60 * 1000));
-                seconds = (int)(millisUntilFinished / 1000) % 60;
-                remain_timer.setText(persianEnglishDigit.E2P(String.format("%02d:%02d", minutes, seconds)));
-            }
-
-            public void onFinish() {
-
-                numberProgressBar.setProgress(0);
-                remain_timer.setText("۰۰:۰۰");
-
-                if (prefs.getString(Constants.RECEIVED_SMS_ACTIVATION, "").length() == 0) {
-
-                    sendSmsCounter++;
-
-                    if (sendSmsCounter < 3) {
-                        sendSmsPermission = true;
-                        Toast.makeText(context, getString(R.string.msg_fail_receive_sms), Toast.LENGTH_LONG).show();
-                    } else {
-                        sendSmsPermission = false;
-                        Toast.makeText(context, getString(R.string.sms_upper_reach_sms), Toast.LENGTH_LONG).show();
-                    }
-
-                    resend_active_code.setVisibility(View.VISIBLE);
-
-                }
-            }
-        }.start();
+//        countDownTimer = new CountDownTimer(181000, 1000) {
+//
+//            public void onTick(long millisUntilFinished) {
+//                numberProgressBar.incrementProgressBy(1);
+//                minutes =  (int)(millisUntilFinished / (60 * 1000));
+//                seconds = (int)(millisUntilFinished / 1000) % 60;
+//                remain_timer.setText(persianEnglishDigit.E2P(String.format("%02d:%02d", minutes, seconds)));
+//            }
+//
+//            public void onFinish() {
+//
+//                numberProgressBar.setProgress(0);
+//                remain_timer.setText("۰۰:۰۰");
+//
+//                if (prefs.getString(Constants.RECEIVED_SMS_ACTIVATION, "").length() == 0) {
+//
+//                    sendSmsCounter++;
+//
+//                    if (sendSmsCounter < 3) {
+//                        sendSmsPermission = true;
+//                        Toast.makeText(context, getString(R.string.msg_fail_receive_sms), Toast.LENGTH_LONG).show();
+//                    } else {
+//                        sendSmsPermission = false;
+//                        Toast.makeText(context, getString(R.string.sms_upper_reach_sms), Toast.LENGTH_LONG).show();
+//                    }
+//
+//                    resend_active_code.setVisibility(View.VISIBLE);
+//
+//                }
+//            }
+//        }.start();
 
         bundle = getIntent().getExtras();
 
@@ -291,7 +355,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         public void onTaskComplete(ResponseMessage<RegistrationVerifyMobileResponse> registrationVerifyMobileResponseMessage)
         {
 
-            numberProgressBar.setProgress(0);
+//            numberProgressBar.setProgress(0);
 
             hamPayDialog.dismisWaitingDialog();
             if (registrationVerifyMobileResponseMessage != null) {
@@ -573,30 +637,31 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                             .build());
 
 
-                    numberProgressBar.setProgress(0);
+//                    numberProgressBar.setProgress(0);
 
-                    countDownTimer = new CountDownTimer(181000, 1000) {
+//                    countDownTimer = new CountDownTimer(181000, 1000) {
+//
+//                        public void onTick(long millisUntilFinished) {
+//                            numberProgressBar.incrementProgressBy(1);
+//                        }
+//
+//                        public void onFinish() {
+//
+//                            sendSmsCounter++;
+//
+//                            if (sendSmsCounter < 3) {
+//                                sendSmsPermission = true;
+//                                Toast.makeText(context, getString(R.string.msg_fail_receive_sms), Toast.LENGTH_LONG).show();
+//                            }else {
+//                                sendSmsPermission = false;
+//                                Toast.makeText(context, getString(R.string.sms_upper_reach_sms), Toast.LENGTH_LONG).show();
+//                            }
+//
+//                            resend_active_code.setVisibility(View.VISIBLE);
+//
+//                        }
+//                    }.start();
 
-                        public void onTick(long millisUntilFinished) {
-                            numberProgressBar.incrementProgressBy(1);
-                        }
-
-                        public void onFinish() {
-
-                            sendSmsCounter++;
-
-                            if (sendSmsCounter < 3) {
-                                sendSmsPermission = true;
-                                Toast.makeText(context, getString(R.string.msg_fail_receive_sms), Toast.LENGTH_LONG).show();
-                            }else {
-                                sendSmsPermission = false;
-                                Toast.makeText(context, getString(R.string.sms_upper_reach_sms), Toast.LENGTH_LONG).show();
-                            }
-
-                            resend_active_code.setVisibility(View.VISIBLE);
-
-                        }
-                    }.start();
                 }else if (registrationSendSmsTokenResponse.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
                     new HamPayDialog(activity).showInvalidStepDialog();
 
