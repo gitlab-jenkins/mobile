@@ -10,67 +10,38 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
-import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
-import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
 import xyz.homapay.hampay.common.core.model.request.TransactionListRequest;
-import xyz.homapay.hampay.common.core.model.response.LatestPurchaseResponse;
-import xyz.homapay.hampay.common.core.model.response.PSPResultResponse;
 import xyz.homapay.hampay.common.core.model.response.TransactionListResponse;
-import xyz.homapay.hampay.common.core.model.response.dto.CardDTO;
-import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
-import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.UserTransactionAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
-import xyz.homapay.hampay.mobile.android.async.RequestLatestPurchase;
-import xyz.homapay.hampay.mobile.android.async.RequestPSPResult;
-import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestUserTransaction;
-import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.doblist.DobList;
 import xyz.homapay.hampay.mobile.android.component.doblist.events.OnLoadMoreListener;
 import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoEmptyViewException;
 import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoListviewException;
-import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
-import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
-import xyz.homapay.hampay.mobile.android.impl.comparator.PaymentAmountComparator;
-import xyz.homapay.hampay.mobile.android.impl.comparator.PaymentDateComparator;
-import xyz.homapay.hampay.mobile.android.impl.comparator.PaymentExpireComparator;
-import xyz.homapay.hampay.mobile.android.impl.comparator.PurchaseAmountComparator;
-import xyz.homapay.hampay.mobile.android.impl.comparator.PurchaseDateComparator;
-import xyz.homapay.hampay.mobile.android.impl.comparator.PurchaseExpireComparator;
-import xyz.homapay.hampay.mobile.android.model.AppState;
-import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
-import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
-import xyz.homapay.hampay.mobile.android.webservice.psp.Vectorstring2stringMapEntry;
-import xyz.homapay.hampay.mobile.android.webservice.psp.string2stringMapEntry;
 
-public class TransactionsHistoryActivity extends AppCompatActivity {
+public class TransactionsListActivity extends AppCompatActivity {
 
     ListView transationListView;
     UserTransactionAdapter userTransactionAdapter;
@@ -267,10 +238,10 @@ public class TransactionsHistoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_transactions_history);
+        setContentView(R.layout.activity_transactions_list);
 
         context = this;
-        activity = TransactionsHistoryActivity.this;
+        activity = TransactionsListActivity.this;
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();

@@ -130,8 +130,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         super.onStop();
         HamPayApplication.setAppSate(AppState.Stoped);
 
-        stoptimertask();
-
         if (requestTAC != null){
             if (!requestTAC.isCancelled())
                 requestTAC.cancel(true);
@@ -166,54 +164,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
     ImageView image;
 
-    RelativeLayout.LayoutParams params;
-    View reached_progress;
 
-    int leng = 0;
-    float screenWidthPercentage = 0;
-
-    Timer timer;
-    TimerTask timerTask;
-    final Handler handler = new Handler();
-    public void startTimer() {
-        timer = new Timer();
-        initializeTimerTask();
-        timer.schedule(timerTask, 1000, 1000);
-    }
-
-    public void initializeTimerTask() {
-
-        timerTask = new TimerTask() {
-
-            public void run() {
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.e("Amir", leng + "");
-                        leng += 1;
-                        Log.e("W", (screenWidthPercentage * leng) + "");
-                        params.width = (int)(screenWidthPercentage * leng);
-                        reached_progress.setLayoutParams(params);
-                        hampay_memorableword_text.setText(leng + "");
-                    }
-                });
-
-                handler.post(new Runnable() {
-                    public void run() {
-
-                    }
-                });
-            }
-        };
-    }
-
-    public void stoptimertask() {
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -225,13 +176,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        screenWidthPercentage = (size.x - ScaleConverter.dpToPx(38)) / 180f;
-
-        reached_progress = (View)findViewById(R.id.reached_progress);
-
-        params= (RelativeLayout.LayoutParams) reached_progress.getLayoutParams();
-
-        startTimer();
 
         instance = this;
 

@@ -22,7 +22,7 @@ import xyz.homapay.hampay.mobile.android.activity.BusinessPurchaseActivity;
 import xyz.homapay.hampay.mobile.android.activity.PaymentRequestListActivity;
 import xyz.homapay.hampay.mobile.android.activity.PaymentRequestDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.PendingPurchasePaymentListActivity;
-import xyz.homapay.hampay.mobile.android.activity.TransactionsHistoryActivity;
+import xyz.homapay.hampay.mobile.android.activity.TransactionsListActivity;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
@@ -201,7 +201,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                 break;
 
             case R.id.user_transaction_history:
-                intent.setClass(getActivity(), TransactionsHistoryActivity.class);
+                intent.setClass(getActivity(), TransactionsListActivity.class);
                 startActivity(intent);
                 break;
 

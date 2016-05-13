@@ -127,8 +127,6 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
         password_holder = (LinearLayout)findViewById(R.id.password_holder);
         password_holder.setOnClickListener(this);
 
-        password_0_rl = (RelativeLayout)findViewById(R.id.password_0_rl);
-
         digit_1 = (FacedTextView)findViewById(R.id.digit_1);
         digit_1.setOnClickListener(this);
         digit_2 = (FacedTextView)findViewById(R.id.digit_2);

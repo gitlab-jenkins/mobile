@@ -51,9 +51,6 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
     ImageView input_digit_4;
     ImageView input_digit_5;
 
-
-    RelativeLayout password_0_rl;
-
     LinearLayout keyboard;
     LinearLayout password_holder;
 
@@ -118,8 +115,6 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
         keyboard = (LinearLayout)findViewById(R.id.keyboard);
         password_holder = (LinearLayout)findViewById(R.id.password_holder);
         password_holder.setOnClickListener(this);
-
-        password_0_rl = (RelativeLayout)findViewById(R.id.password_0_rl);
 
         digit_1 = (FacedTextView)findViewById(R.id.digit_1);
         digit_1.setOnClickListener(this);

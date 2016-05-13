@@ -62,29 +62,6 @@
                         android:visibility="gone"/>
 
 
-
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="5dip"
-                            android:background="@drawable/progress_unreached_dash"
-                            android:layerType="software"
-                            android:orientation="vertical" />
-
-                        <View
-                            android:id="@+id/reached_progress"
-                            android:layout_width="0dp"
-                            android:layout_height="5dip"
-                            android:background="@drawable/progress_reached_dash"
-                            android:layerType="software"
-                            android:orientation="vertical" />
-
-                    </RelativeLayout>
-
                     <ImageView
                         android:layout_width="84dp"
                         android:layout_height="84dp"

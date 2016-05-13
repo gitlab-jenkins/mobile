@@ -146,7 +146,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                     @Override
                     public void run() {
                         timeCounter += 1;
-                        Log.e("W", (screenWidthPercentage * timeCounter) + "");
+//                        Log.e("W", (screenWidthPercentage * timeCounter) + "");
                         params.width = (int)(screenWidthPercentage * timeCounter);
                         reached_progress.setLayoutParams(params);
                         minutes =  (int)((180 - timeCounter) / (60));
@@ -252,41 +252,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         params= (RelativeLayout.LayoutParams) reached_progress.getLayoutParams();
 
         startTimer();
-
-//        numberProgressBar = (NumberProgressBar)findViewById(R.id.numberProgressBar);
         remain_timer = (FacedTextView)findViewById(R.id.remain_timer);
-
-//        countDownTimer = new CountDownTimer(181000, 1000) {
-//
-//            public void onTick(long millisUntilFinished) {
-//                numberProgressBar.incrementProgressBy(1);
-//                minutes =  (int)(millisUntilFinished / (60 * 1000));
-//                seconds = (int)(millisUntilFinished / 1000) % 60;
-//                remain_timer.setText(persianEnglishDigit.E2P(String.format("%02d:%02d", minutes, seconds)));
-//            }
-//
-//            public void onFinish() {
-//
-//                numberProgressBar.setProgress(0);
-//                remain_timer.setText("۰۰:۰۰");
-//
-//                if (prefs.getString(Constants.RECEIVED_SMS_ACTIVATION, "").length() == 0) {
-//
-//                    sendSmsCounter++;
-//
-//                    if (sendSmsCounter < 3) {
-//                        sendSmsPermission = true;
-//                        Toast.makeText(context, getString(R.string.msg_fail_receive_sms), Toast.LENGTH_LONG).show();
-//                    } else {
-//                        sendSmsPermission = false;
-//                        Toast.makeText(context, getString(R.string.sms_upper_reach_sms), Toast.LENGTH_LONG).show();
-//                    }
-//
-//                    resend_active_code.setVisibility(View.VISIBLE);
-//
-//                }
-//            }
-//        }.start();
 
         bundle = getIntent().getExtras();
 
@@ -297,12 +263,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         keyboard = (LinearLayout)findViewById(R.id.keyboard);
         activation_holder = (LinearLayout)findViewById(R.id.activation_holder);
         activation_holder.setOnClickListener(this);
-
-//        sms_delivery_text = (FacedTextView)findViewById(R.id.sms_delivery_text);
-//        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getString(R.string.deliver_verification));
-//        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.rgb(255, 158, 158));
-//        spannableStringBuilder.setSpan(foregroundColorSpan, 60, 70, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-//        sms_delivery_text.setText(spannableStringBuilder);
 
         digit_1 = (FacedTextView)findViewById(R.id.digit_1);
         digit_1.setOnClickListener(this);

@@ -575,6 +575,7 @@
     <string name="msg_failure_payment_request">عملیات ارسال فاکتور موفقیت آمیز نبود. لطفا مجدد تلاش کنید</string>
     <string name="msg_unlink_user">تمامی اطلاعات شما پاک خواهد شد و برای استفاده مجدد از "هم پی" باید دوباره ثبت نام کنید</string>
     <string name="vat">مالیات بر ارزش افزوده</string>
+    <string name="payment_request_code">کد فاکتور: </string>
 
 
 </resources>

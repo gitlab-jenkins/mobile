@@ -59,9 +59,6 @@ public class ChangeMemorablePassActivity extends AppCompatActivity implements Vi
     ImageView input_digit_4;
     ImageView input_digit_5;
 
-
-    RelativeLayout password_0_rl;
-
     Bundle bundle;
 
     LinearLayout keyboard;
@@ -125,9 +122,6 @@ public class ChangeMemorablePassActivity extends AppCompatActivity implements Vi
 
         currentMemorable = bundle.getString("currentMemorable");
         newMemorable = bundle.getString("newMemorable");
-
-
-        password_0_rl = (RelativeLayout)findViewById(R.id.password_0_rl);
 
         digit_1 = (FacedTextView)findViewById(R.id.digit_1);
         digit_1.setOnClickListener(this);
