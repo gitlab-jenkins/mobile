@@ -552,7 +552,7 @@ public class WebServices  {
     public ResponseMessage<BusinessListResponse> searchBusinessList(BusinessSearchRequest businessSearchRequest) throws IOException{
 
         ResponseMessage<BusinessListResponse> responseMessage = null;
-        url = new URL(serviceURL + "/search");
+        url = new URL(serviceURL + "/businesses/search");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         businessSearchRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
