@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="app_origin">#30bcc2</color>
+
     <color name="colorPrimary">#24bdc3</color>
     <color name="colorPrimaryDark">#A62b22</color>
     <color name="textColorPrimary">#FFFFFF</color>
@@ -65,7 +67,8 @@
     <color name="pending_count_badge_bg">#ec1c24</color>
     <color name="total_amount_bg">#e6e7e8</color>
     <color name="create_payment_request">#25bdc2</color>
-    <color name="success_modal_color">#24bdc3</color>
+    <color name="success_modal_color">@color/app_origin</color>
     <color name="failure_modal_color">#e9142b</color>
     <color name="modal_text">#686a6b</color>
+    <color name="sms_digit">@android:color/black</color>
 </resources>

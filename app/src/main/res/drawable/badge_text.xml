@@ -4,10 +4,10 @@
         <shape>
             <solid android:color="@color/register_badge_bg" />
             <corners
-                android:topLeftRadius="30dp"
-                android:topRightRadius="30dp"
-                android:bottomLeftRadius="30dp"
-                android:bottomRightRadius="30dp"
+                android:topLeftRadius="2dp"
+                android:topRightRadius="2dp"
+                android:bottomLeftRadius="2dp"
+                android:bottomRightRadius="2dp"
                 />
         </shape>
     </item>

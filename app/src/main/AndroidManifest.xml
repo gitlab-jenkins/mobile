@@ -134,11 +134,6 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"/>
         <activity
-            android:name=".activity.RequestPayBusinessListActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity
             android:name=".activity.BusinessPaymentInfoActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"

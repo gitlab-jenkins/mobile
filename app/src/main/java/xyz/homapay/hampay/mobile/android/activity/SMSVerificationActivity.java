@@ -18,6 +18,7 @@ import android.view.Display;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -64,8 +65,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
     FacedTextView resend_active_code;
     RelativeLayout backspace;
 
-    FacedTextView sms_delivery_text;
-
     String receivedSmsValue = "";
 
     FacedTextView input_digit_1;
@@ -92,12 +91,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
     RegistrationVerifyMobileRequest registrationVerifyMobileRequest;
 
     private BroadcastReceiver mIntentReceiver;
-
-//    private NumberProgressBar numberProgressBar;
     private FacedTextView remain_timer;
-
-    CountDownTimer countDownTimer;
-
     boolean sendSmsPermission = false;
     int sendSmsCounter = 0;
 
@@ -131,6 +125,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
     TimerTask timerTask;
     final Handler handler = new Handler();
     public void startTimer() {
+        timeCounter = 0;
         timer = new Timer();
         initializeTimerTask();
         timer.schedule(timerTask, 1000, 1000);
@@ -146,7 +141,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                     @Override
                     public void run() {
                         timeCounter += 1;
-//                        Log.e("W", (screenWidthPercentage * timeCounter) + "");
                         params.width = (int)(screenWidthPercentage * timeCounter);
                         reached_progress.setLayoutParams(params);
                         minutes =  (int)((180 - timeCounter) / (60));
@@ -155,6 +149,8 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
 
                         if (timeCounter >= 180){
                             stopTimerTask();
+                            sendSmsPermission = true;
+                            resend_active_code.setVisibility(View.VISIBLE);
                             if (keyboard.getVisibility() != View.VISIBLE)
                                 new Expand(keyboard).animate();
                         }
@@ -314,9 +310,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         @Override
         public void onTaskComplete(ResponseMessage<RegistrationVerifyMobileResponse> registrationVerifyMobileResponseMessage)
         {
-
-//            numberProgressBar.setProgress(0);
-
             hamPayDialog.dismisWaitingDialog();
             if (registrationVerifyMobileResponseMessage != null) {
 
@@ -329,13 +322,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         finish();
                         startActivity(intent);
-
-//                        registerCardRequest = new RegisterCardRequest();
-//                        registerCardRequest.setMobileNumber(new PersianEnglishDigit().P2E(cellNumber));
-//                        registerCardRequest.setCardNumber(new PersianEnglishDigit().P2E(cardNumber));
-//                        requestRegisterCard = new RequestRegisterCard(context, new RequestRegisterCardTaskCompleteListener());
-//                        requestRegisterCard.execute(registerCardRequest);
-
                         hamPayGaTracker.send(new HitBuilders.EventBuilder()
                                 .setCategory("Verify Mobile")
                                 .setAction("Verify")
@@ -447,11 +433,16 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                 break;
 
             case R.id.resend_active_code:
-                if (sendSmsPermission){
-                    sendSmsPermission = false;
-                    hamPayDialog.showWaitingdDialog("");
-                    requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
-                    requestRegistrationSendSmsToken.execute(registrationSendSmsTokenRequest);
+                sendSmsCounter++;
+                if (sendSmsCounter < 3) {
+                    if (sendSmsPermission) {
+                        sendSmsPermission = false;
+                        hamPayDialog.showWaitingdDialog("");
+                        requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
+                        requestRegistrationSendSmsToken.execute(registrationSendSmsTokenRequest);
+                    }
+                }else {
+                    Toast.makeText(context, getString(R.string.sms_upper_reach_sms), Toast.LENGTH_LONG).show();
                 }
                 break;
 
@@ -590,37 +581,15 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
             if (registrationSendSmsTokenResponse != null) {
                 if (registrationSendSmsTokenResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
+
+                    resend_active_code.setVisibility(View.GONE);
+                    startTimer();
+
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Send Sms Token")
                             .setAction("Send")
                             .setLabel("Success")
                             .build());
-
-
-//                    numberProgressBar.setProgress(0);
-
-//                    countDownTimer = new CountDownTimer(181000, 1000) {
-//
-//                        public void onTick(long millisUntilFinished) {
-//                            numberProgressBar.incrementProgressBy(1);
-//                        }
-//
-//                        public void onFinish() {
-//
-//                            sendSmsCounter++;
-//
-//                            if (sendSmsCounter < 3) {
-//                                sendSmsPermission = true;
-//                                Toast.makeText(context, getString(R.string.msg_fail_receive_sms), Toast.LENGTH_LONG).show();
-//                            }else {
-//                                sendSmsPermission = false;
-//                                Toast.makeText(context, getString(R.string.sms_upper_reach_sms), Toast.LENGTH_LONG).show();
-//                            }
-//
-//                            resend_active_code.setVisibility(View.VISIBLE);
-//
-//                        }
-//                    }.start();
 
                 }else if (registrationSendSmsTokenResponse.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
                     new HamPayDialog(activity).showInvalidStepDialog();

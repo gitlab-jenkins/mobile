@@ -39,7 +39,7 @@
             android:textSize="20sp"
             android:gravity="center"
             android:layout_gravity="center"
-            android:text="@string/sms_request"
+            android:text="@string/sms_cancel"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:background="@drawable/modal_success_button_style"

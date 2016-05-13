@@ -4,28 +4,28 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="48dp"
+        android:gravity="center_vertical">
 
         <ImageView
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:src="@drawable/back"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="8dp"
             android:padding="4dp"/>
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/page_title"
-            android:textSize="20sp"
+            android:textColor="@color/app_origin"
+            android:textSize="18sp"
             android:layout_gravity="center_horizontal"
             android:text="@string/request_pay_detail"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"/>
 
     </RelativeLayout>
@@ -33,8 +33,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/page_title"/>
-
+        android:background="@color/app_origin" />
 
     <RelativeLayout
         android:layout_width="match_parent"

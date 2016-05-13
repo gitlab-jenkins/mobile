@@ -57,10 +57,4 @@ public class StartActivity extends AppCompatActivity {
         super.onResume();
         HamPayApplication.setAppSate(AppState.Resumed);
     }
-
-    @Override
-    public void onBackPressed() {
-        new HamPayDialog(activity).showExitRegistrationDialog();
-    }
-
 }

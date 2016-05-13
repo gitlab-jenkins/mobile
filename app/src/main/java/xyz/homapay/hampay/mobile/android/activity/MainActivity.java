@@ -22,6 +22,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -77,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     public  FacedTextView user_account_name;
 
     ImageView image_profile;
+    LinearLayout user_image_layout;
 
     int currentFragmet = 0;
 
@@ -263,7 +265,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 //        user_account_name = (FacedTextView)findViewById(R.id.user_account_name);
 //        user_account_name.setText(userProfileDTO.getFullName());
         image_profile = (ImageView)findViewById(R.id.image_profile);
-        image_profile.setOnClickListener(new View.OnClickListener() {
+
+        user_image_layout = (LinearLayout)findViewById(R.id.user_image_layout);
+        user_image_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new HamPayDialog(activity).showUserProfileImage();

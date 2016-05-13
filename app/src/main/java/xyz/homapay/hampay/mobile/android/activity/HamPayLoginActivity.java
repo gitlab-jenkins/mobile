@@ -620,9 +620,8 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     public void onBackPressed() {
         if (keyboard.getVisibility() == View.VISIBLE){
             new Collapse(keyboard).animate();
-        }
-        else {
-            new HamPayDialog(activity).showExitLoginDialog();
+        }else {
+            finish();
         }
     }
 }

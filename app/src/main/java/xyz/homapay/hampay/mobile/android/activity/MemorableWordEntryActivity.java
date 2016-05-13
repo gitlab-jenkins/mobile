@@ -121,11 +121,11 @@ public class MemorableWordEntryActivity extends AppCompatActivity {
                         UserContacts userContacts = new UserContacts(context);
                         List<ContactDTO> contact = userContacts.read();
 
-                        Toast.makeText(activity, "Access allowed!", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(activity, "Access allowed!", Toast.LENGTH_SHORT).show();
 
                     } else {
                         // Permission not granted
-                        Toast.makeText(activity, "Access denied!", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(activity, "Access denied!", Toast.LENGTH_SHORT).show();
                     }
 
                     return true;

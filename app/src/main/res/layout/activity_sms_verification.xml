@@ -4,50 +4,40 @@
     android:layout_height="match_parent"
     xmlns:geekui="http://schemas.android.com/apk/res-auto">
 
-
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="48dp"
+            android:gravity="center_vertical">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/help_transparent"
+                android:layout_marginLeft="8dp"
+                android:background="@color/app_origin" />
 
-                <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/help_blue"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="8dp"/>
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                geekui:customTypeface="fonts/iran_sans.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/app_origin"
+                android:textSize="18sp"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/mobile_no_verification"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="8dp"/>
 
-                <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                    geekui:customTypeface="fonts/iran_sans.ttf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/page_title"
-                    android:textSize="20sp"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/mobile_no_verification"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="8dp"/>
+        </RelativeLayout>
 
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/page_title"
-                android:layout_marginTop="4dp"/>
-
-        </LinearLayout>
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/app_origin" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -167,7 +157,8 @@
                                 android:layout_width="36dp"
                                 android:layout_height="36dp"
                                 android:src="@drawable/icon_mobile"
-                                android:layout_centerInParent="true"/>
+                                android:layout_centerInParent="true"
+                                android:background="@color/app_origin"/>
 
                             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                                 geekui:customTypeface="fonts/iran_sans.ttf"
@@ -187,7 +178,7 @@
                             geekui:customTypeface="fonts/iran_sans.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/page_title"
+                            android:textColor="@color/app_origin"
                             android:textSize="14dp"
                             android:paddingLeft="10dp"
                             android:paddingTop="10dp"
@@ -206,7 +197,7 @@
                         geekui:customTypeface="fonts/iran_sans_bold.ttf"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
-                        android:textColor="@color/page_title"
+                        android:textColor="@color/app_origin"
                         android:textSize="17dp"
                         android:gravity="center"
                         android:layout_gravity="center"
@@ -234,19 +225,6 @@
                             android:orientation="vertical" />
 
                     </RelativeLayout>
-
-                    <!--<xyz.homapay.hampay.mobile.android.component.numericalprogressbar.NumberProgressBar-->
-                        <!--android:id="@+id/numberProgressBar"-->
-                        <!--android:layout_marginLeft="10dp"-->
-                        <!--android:layout_marginRight="10dp"-->
-                        <!--android:layout_marginBottom="10dp"-->
-                        <!--style="@style/NumberProgressBar_Relax_Blue"-->
-                        <!--custom:progress_current="0"-->
-                        <!--custom:progress_max="180"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--custom:progress_text_size="17dp"-->
-                        <!--custom:progress_unreached_bar_height="1.5dp"-->
-                        <!--custom:progress_reached_bar_height="3.0dp"/>-->
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/resend_active_code"
@@ -288,19 +266,19 @@
                         <View
                             android:layout_width="230dp"
                             android:layout_height="2dp"
-                            android:background="@color/page_title"
+                            android:background="@color/app_origin"
                             android:layout_alignParentBottom="true"/>
 
                         <View
                             android:layout_width="2dp"
                             android:layout_height="16dp"
-                            android:background="@color/page_title"
+                            android:background="@color/app_origin"
                             android:layout_alignParentBottom="true"/>
 
                         <View
                             android:layout_width="2dp"
                             android:layout_height="16dp"
-                            android:background="@color/page_title"
+                            android:background="@color/app_origin"
                             android:layout_alignParentBottom="true"
                             android:layout_alignParentRight="true"/>
 
@@ -315,7 +293,7 @@
                                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
                                 android:layout_width="32dp"
                                 android:layout_height="32dp"
-                                android:textColor="@color/start_page_text"
+                                android:textColor="@color/sms_digit"
                                 android:textSize="20dp"
                                 android:gravity="bottom|center_horizontal"
                                 android:layout_gravity="center"
@@ -328,7 +306,7 @@
                                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
                                 android:layout_width="32dp"
                                 android:layout_height="32dp"
-                                android:textColor="@color/start_page_text"
+                                android:textColor="@color/sms_digit"
                                 android:textSize="20dp"
                                 android:gravity="bottom|center_horizontal"
                                 android:layout_gravity="center"
@@ -340,7 +318,7 @@
                                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
                                 android:layout_width="32dp"
                                 android:layout_height="32dp"
-                                android:textColor="@color/start_page_text"
+                                android:textColor="@color/sms_digit"
                                 android:textSize="20dp"
                                 android:gravity="bottom|center_horizontal"
                                 android:layout_gravity="center"
@@ -352,7 +330,7 @@
                                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
                                 android:layout_width="32dp"
                                 android:layout_height="32dp"
-                                android:textColor="@color/start_page_text"
+                                android:textColor="@color/sms_digit"
                                 android:textSize="20dp"
                                 android:gravity="bottom|center_horizontal"
                                 android:layout_gravity="center"
@@ -364,7 +342,7 @@
                                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
                                 android:layout_width="32dp"
                                 android:layout_height="32dp"
-                                android:textColor="@color/start_page_text"
+                                android:textColor="@color/sms_digit"
                                 android:textSize="20dp"
                                 android:gravity="bottom|center_horizontal"
                                 android:layout_gravity="center"

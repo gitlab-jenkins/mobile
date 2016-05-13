@@ -8,7 +8,7 @@
         android:dashGap="2dp"
         android:dashWidth="4dp"
         android:width="4dp"
-        android:color="@color/page_title" >
+        android:color="@color/app_origin" >
     </stroke>
 
 </shape>
