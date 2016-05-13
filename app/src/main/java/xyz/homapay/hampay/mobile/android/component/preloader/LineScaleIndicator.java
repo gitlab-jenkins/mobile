@@ -31,7 +31,7 @@ public class LineScaleIndicator extends BaseIndicatorController {
     public void draw(Canvas canvas, Paint paint) {
         float translateX=getWidth()/11;
         float translateY=getHeight() / 2;
-        paint.setColor(Color.rgb(36, 189, 195));
+        paint.setColor(Color.rgb(109, 9, 109));
         for (int i = 0; i < 4; i++) {
             canvas.save();
             canvas.translate((2 + i * 2) * translateX - translateX / 2, translateY);

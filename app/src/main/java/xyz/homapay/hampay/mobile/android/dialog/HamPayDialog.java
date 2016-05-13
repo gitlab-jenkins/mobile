@@ -759,34 +759,34 @@ public class HamPayDialog {
     }
 
 
-    public void showExitRegistrationDialog(){
-
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_exit_registration, null);
-
-        FacedTextView exit_registration_yes = (FacedTextView) view.findViewById(R.id.exit_registration_yes);
-        FacedTextView exit_registration_no = (FacedTextView) view.findViewById(R.id.exit_registration_no);
-
-        exit_registration_yes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                activity.finish();
-
-                gaAnalyticsEvent.GaTrackMobileEvent("User Exit HamPay", "Exit", activity.getLocalClassName());
-            }
-        });
-
-        exit_registration_no.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
-    }
+//    public void showExitRegistrationDialog(){
+//
+//        View view = activity.getLayoutInflater().inflate(R.layout.dialog_exit_registration, null);
+//
+//        FacedTextView exit_registration_yes = (FacedTextView) view.findViewById(R.id.exit_registration_yes);
+//        FacedTextView exit_registration_no = (FacedTextView) view.findViewById(R.id.exit_registration_no);
+//
+//        exit_registration_yes.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//                activity.finish();
+//
+//                gaAnalyticsEvent.GaTrackMobileEvent("User Exit HamPay", "Exit", activity.getLocalClassName());
+//            }
+//        });
+//
+//        exit_registration_no.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//            }
+//        });
+//
+//        view.setMinimumWidth((int) (rect.width() * 0.85f));
+//        dialog = new HamPayCustomDialog(view, activity, 0);
+//        dialog.show();
+//    }
 
     public void showExitLoginDialog(){
 

@@ -110,10 +110,4 @@ public class CompleteRegistrationActivity extends AppCompatActivity {
             }
         });
     }
-
-    @Override
-    public void onBackPressed() {
-        new HamPayDialog(activity).showExitRegistrationDialog();
-    }
-
 }

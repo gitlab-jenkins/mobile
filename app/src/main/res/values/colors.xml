@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="app_origin">#30bcc2</color>
+    <color name="app_origin">#6D096D</color>
 
     <color name="colorPrimary">#24bdc3</color>
     <color name="colorPrimaryDark">#A62b22</color>
@@ -53,7 +53,7 @@
     <color name="slider_button_bg">#fafafa</color>
     <color name="slider_button_text">#221f1f</color>
     <color name="slider_unselected_indicator">#aaaaaa</color>
-    <color name="page_title">#24bdc3</color>
+    <color name="page_title">@color/app_origin</color>
     <color name="start_page_text">#231f20</color>
     <color name="navigation_green">#8fc547</color>
     <color name="navigation_gray">#d1d3d4</color>

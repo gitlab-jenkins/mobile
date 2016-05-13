@@ -58,10 +58,10 @@
                     android:src="@drawable/lock_info"
                     android:layout_centerInParent="true"/>
 
-                <ImageView
-                    android:layout_width="16dp"
-                    android:layout_height="32dp"
-                    android:background="@android:color/white"/>
+                <!--<ImageView-->
+                    <!--android:layout_width="16dp"-->
+                    <!--android:layout_height="32dp"-->
+                    <!--android:background="@android:color/white"/>-->
 
                 <ImageView
                     android:layout_width="16dp"

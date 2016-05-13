@@ -350,7 +350,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
         @Override
         public void onTaskPreRun() {
-            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+//            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 
@@ -372,7 +372,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
             SuccessLoginResponse successLoginResponse;
             FailedLoginResponse failedLoginResponse;
 
-//            hamPayDialog.dismisWaitingDialog();
             if (loginResponse != null) {
                 Gson gson = new Gson();
                 Type listType = new TypeToken<SuccessLoginResponse>() {}.getType();
@@ -386,7 +385,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                     responseElement = jsonParser.parse(loginResponse.toString());
                     failedLoginResponse = gson.fromJson(responseElement.toString(), listType);
                     if (failedLoginResponse != null) {
-
+                        hamPayDialog.dismisWaitingDialog();
                         if (failedLoginResponse.getMessage().equalsIgnoreCase(Constants.USER_ACCOUNT_LOCKET)){
                             failedLoginResponse.setMessage(getString(R.string.msg_locked_hampay_login));
                         }else {
@@ -401,6 +400,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                                 .setLabel("Fail(Server)")
                                 .build());
                     }else {
+                        hamPayDialog.dismisWaitingDialog();
                         failedLoginResponse = new FailedLoginResponse();
                         failedLoginResponse.setCode(Constants.LOCAL_ERROR_CODE);
                         failedLoginResponse.setMessage(getString(R.string.msg_fail_hampay_server));
@@ -428,6 +428,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                             .build());
                 }
             }else {
+                hamPayDialog.dismisWaitingDialog();
                 failedLoginResponse = new FailedLoginResponse();
                 failedLoginResponse.setCode(Constants.LOCAL_ERROR_CODE);
                 failedLoginResponse.setMessage(getString(R.string.msg_fail_hampay_server));
