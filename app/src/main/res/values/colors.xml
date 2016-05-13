@@ -3,11 +3,11 @@
 
     <color name="app_origin">#6D096D</color>
 
-    <color name="colorPrimary">#24bdc3</color>
+    <color name="colorPrimary">@color/app_origin</color>
     <color name="colorPrimaryDark">#A62b22</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
-    <color name="colorAccent">#24bdc3</color>
+    <color name="colorAccent">@color/app_origin</color>
     <color name="notification_title">#202020</color>
     <color name="notification_message">#737373</color>
 
