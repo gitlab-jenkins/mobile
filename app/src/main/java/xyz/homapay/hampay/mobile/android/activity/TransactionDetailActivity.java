@@ -139,10 +139,12 @@ public class TransactionDetailActivity extends AppCompatActivity implements View
 
         if (transactionDTO.getPaymentType() == TransactionDTO.PaymentType.PAYMENT) {
             paymentDetailRequest = new PaymentDetailRequest();
+            paymentDetailRequest.setProviderId(transactionDTO.getReference());
             requestPaymentDetail = new RequestPaymentDetail(activity, new RequestPaymentDetailTaskCompleteListener());
             requestPaymentDetail.execute(paymentDetailRequest);
         }else if (transactionDTO.getPaymentType() == TransactionDTO.PaymentType.PURCHASE){
             purchaseDetailRequest = new PurchaseDetailRequest();
+            purchaseDetailRequest.setProviderId(transactionDTO.getReference());
             requestPurchaseDetail = new RequestPurchaseDetail(activity, new RequestPurchaseDetailTaskCompleteListener());
             requestPurchaseDetail.execute(purchaseDetailRequest);
         }
@@ -150,37 +152,37 @@ public class TransactionDetailActivity extends AppCompatActivity implements View
 
 //        if (transactionDTO.getPaymentType() == TransactionDTO.PaymentType.PAYMENT)
 
-        if (transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.SUCCESS) {
+//        if (transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.SUCCESS) {
+//
+//            if (transactionDTO.getTransactionType() == TransactionDTO.TransactionType.CREDIT) {
+//                from_to_text.setText(getString(R.string.transaction_from));
+//                status_text.setText(getString(R.string.credit));
+//                status_text.setTextColor(ContextCompat.getColor(context, R.color.register_btn_color));
+//                status_icon.setImageResource(R.drawable.arrow_r);
+//            } else if (transactionDTO.getTransactionType() == TransactionDTO.TransactionType.DEBIT) {
+//                from_to_text.setText(getString(R.string.transaction_to));
+//                status_text.setText(getString(R.string.debit));
+//                status_text.setTextColor(ContextCompat.getColor(context, R.color.user_change_status));
+//                status_icon.setImageResource(R.drawable.arrow_p);
+//            }
+//
+//        } else if (transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.PENDING) {
+//            from_to_text.setText(getString(R.string.transaction_to));
+//            status_text.setText(context.getString(R.string.pending));
+//            status_text.setTextColor(ContextCompat.getColor(context, R.color.pending_transaction));
+//            status_icon.setImageResource(R.drawable.pending);
+//        } else {
+//            from_to_text.setText(getString(R.string.transaction_to));
+//            status_text.setText(getString(R.string.fail));
+//            status_text.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
+//            status_icon.setImageResource(R.drawable.arrow_f);
+//        }
 
-            if (transactionDTO.getTransactionType() == TransactionDTO.TransactionType.CREDIT) {
-                from_to_text.setText(getString(R.string.transaction_from));
-                status_text.setText(getString(R.string.credit));
-                status_text.setTextColor(ContextCompat.getColor(context, R.color.register_btn_color));
-                status_icon.setImageResource(R.drawable.arrow_r);
-            } else if (transactionDTO.getTransactionType() == TransactionDTO.TransactionType.DEBIT) {
-                from_to_text.setText(getString(R.string.transaction_to));
-                status_text.setText(getString(R.string.debit));
-                status_text.setTextColor(ContextCompat.getColor(context, R.color.user_change_status));
-                status_icon.setImageResource(R.drawable.arrow_p);
-            }
 
-        } else if (transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.PENDING) {
-            from_to_text.setText(getString(R.string.transaction_to));
-            status_text.setText(context.getString(R.string.pending));
-            status_text.setTextColor(ContextCompat.getColor(context, R.color.pending_transaction));
-            status_icon.setImageResource(R.drawable.pending);
-        } else {
-            from_to_text.setText(getString(R.string.transaction_to));
-            status_text.setText(getString(R.string.fail));
-            status_text.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
-            status_icon.setImageResource(R.drawable.arrow_f);
-        }
-
-
-        user_name.setText(transactionDTO.getPersonName());
+//        user_name.setText(transactionDTO.getPersonName());
 //        message.setText(transactionDTO.getMessage());
 //        if (transactionDTO.getRejectReasonMessage() != null){
-        responseMessage_ll.setVisibility(View.VISIBLE);
+//        responseMessage_ll.setVisibility(View.VISIBLE);
 //            reject_message.setText(transactionDTO.getRejectReasonMessage());
     }
 //        price_pay.setText(persianEnglishDigit.E2P(currencyFormatter.format(transactionDTO.getAmount())));

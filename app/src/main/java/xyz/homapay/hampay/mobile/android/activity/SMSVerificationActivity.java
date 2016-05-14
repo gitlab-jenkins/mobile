@@ -195,10 +195,11 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                 input_digit_3.setBackgroundColor(Color.TRANSPARENT);
                 input_digit_4.setText(persianEnglishDigit.E2P(receivedSmsValue.substring(3, 4)));
                 input_digit_4.setBackgroundColor(Color.TRANSPARENT);
-                input_digit_5.setText(persianEnglishDigit.E2P(receivedSmsValue.substring(4, 5)));
-                input_digit_5.setBackgroundColor(Color.TRANSPARENT);
+//                input_digit_5.setText(persianEnglishDigit.E2P(receivedSmsValue.substring(4, 5)));
+//                input_digit_5.setBackgroundColor(Color.TRANSPARENT);
 
-                if (receivedSmsValue.length() == 5) {
+//                if (receivedSmsValue.length() == 5) {
+                if (receivedSmsValue.length() == 4) {
 
                     registrationVerifyMobileRequest = new RegistrationVerifyMobileRequest();
 
@@ -546,7 +547,8 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
             }
         }
 
-        if (receivedSmsValue.length() == 5) {
+//        if (receivedSmsValue.length() == 5) {
+        if (receivedSmsValue.length() == 4) {
 
             registrationVerifyMobileRequest = new RegistrationVerifyMobileRequest();
 

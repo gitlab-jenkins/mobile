@@ -96,12 +96,11 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
 //        viewHolder.user_fee_value.setText(persianEnglishDigit.E2P(currencyFormatter.format(transactionDTO.getFeeCharge())) + context.getString(R.string.currency_rials));
         viewHolder.amountValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(transactionDTO.getAmount())));
 
-        if (transactionDTO.getImageId() != null) {
-            String userImageUrl = Constants.IMAGE_PREFIX + authToken + "/" + transactionDTO.getImageId();
-            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.image)).execute(userImageUrl);
-        }else {
-            viewHolder.image.setImageResource(R.drawable.user_icon_blue);
-        }
+//        if (transactionDTO.getImageId() != null) {
+//            String userImageUrl = Constants.IMAGE_PREFIX + authToken + "/" + transactionDTO.getImageId();
+//            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.image)).execute(userImageUrl);
+//        }else {
+//        }
 
         return convertView;
     }

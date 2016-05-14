@@ -82,7 +82,7 @@ public class LatestInvoiceAdapter extends BaseAdapter {
         if (contact.getContactImageId() != null) {
             new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.user_image)).execute(Constants.IMAGE_PREFIX + authToken + "/" + contact.getContactImageId());
         }else {
-            viewHolder.user_image.setImageResource(R.drawable.user_icon_blue);
+//            viewHolder.user_image.setImageResource(R.drawable.user_icon_blue);
         }
         viewHolder.contact_name.setText(persianEnglishDigit.E2P(contact.getDisplayName()));
         viewHolder.create_date.setText(persianEnglishDigit.E2P(contact.getCellNumber()));

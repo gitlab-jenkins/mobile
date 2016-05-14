@@ -179,7 +179,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
             if (hamPayContact.getContactImageId() != null) {
                 new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(user_image)).execute(Constants.IMAGE_PREFIX + authToken + "/" + hamPayContact.getContactImageId());
             }else {
-                user_image.setImageResource(R.drawable.user_icon_blue);
+//                user_image.setImageResource(R.drawable.user_icon_blue);
             }
         }else {
 

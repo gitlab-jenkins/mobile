@@ -2,7 +2,8 @@
     xmlns:geekui="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@android:color/white">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -36,6 +37,7 @@
         android:orientation="horizontal">
 
         <RelativeLayout
+            android:id="@+id/recent_business"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="0.33"
@@ -53,15 +55,18 @@
                 android:layout_centerInParent="true"/>
 
             <ImageView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:src="@drawable/transaction_triangle"
+                android:id="@+id/recent_triangle"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:src="@drawable/ic_triangle"
                 android:layout_centerHorizontal="true"
-                android:layout_alignParentBottom="true"/>
+                android:layout_alignParentBottom="true"
+                android:visibility="gone"/>
 
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/popular_business"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="0.33"
@@ -80,15 +85,18 @@
                 android:layout_centerInParent="true"/>
 
             <ImageView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:src="@drawable/transaction_triangle"
+                android:id="@+id/popular_triangle"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:src="@drawable/ic_triangle"
                 android:layout_centerHorizontal="true"
-                android:layout_alignParentBottom="true"/>
+                android:layout_alignParentBottom="true"
+                android:visibility="gone"/>
 
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/full_business"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="0.33"
@@ -106,9 +114,10 @@
                 android:layout_centerInParent="true"/>
 
             <ImageView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:src="@drawable/transaction_triangle"
+                android:id="@+id/full_triangle"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:src="@drawable/ic_triangle"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true"/>
 

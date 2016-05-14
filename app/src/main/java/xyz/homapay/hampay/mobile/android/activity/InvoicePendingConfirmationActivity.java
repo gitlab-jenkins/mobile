@@ -468,8 +468,6 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                     bankName.setText(pspInfoDTO.getCardDTO().getBankName());
                     if (paymentInfoDTO.getImageId() != null) {
                         new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(user_image)).execute(Constants.IMAGE_PREFIX + authToken + "/" + paymentInfoDTO.getImageId());
-                    }else {
-                        user_image.setImageResource(R.drawable.user_icon_blue);
                     }
 
                     if (pspInfoDTO.getCardDTO().getCardId() == null) {

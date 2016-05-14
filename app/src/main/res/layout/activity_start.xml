@@ -55,9 +55,9 @@
             android:layout_gravity="center">
 
             <ImageView
-                android:layout_width="170dp"
-                android:layout_height="170dp"
-                android:src="@drawable/step_circle_1"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:src="@drawable/infographic_new"
                 android:background="@color/app_origin"/>
 
             <LinearLayout

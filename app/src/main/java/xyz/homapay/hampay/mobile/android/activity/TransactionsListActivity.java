@@ -15,7 +15,10 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -41,7 +44,7 @@ import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoListview
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
-public class TransactionsListActivity extends AppCompatActivity {
+public class TransactionsListActivity extends AppCompatActivity implements View.OnClickListener {
 
     ListView transationListView;
     UserTransactionAdapter userTransactionAdapter;
@@ -67,6 +70,12 @@ public class TransactionsListActivity extends AppCompatActivity {
     private Context context;
     private Activity activity;
 
+    private RelativeLayout full_transaction;
+    private RelativeLayout business_transaction;
+    private RelativeLayout invoice_transaction;
+    private ImageView full_triangle;
+    private ImageView business_triangle;
+    private ImageView invoice_triangle;
 
     private Dialog dialog;
 
@@ -246,13 +255,26 @@ public class TransactionsListActivity extends AppCompatActivity {
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
+        hamPayDialog = new HamPayDialog(activity);
+
+        full_transaction = (RelativeLayout)findViewById(R.id.full_transaction);
+        full_transaction.setOnClickListener(this);
+        business_transaction = (RelativeLayout)findViewById(R.id.business_transaction);
+        business_transaction.setOnClickListener(this);
+        invoice_transaction = (RelativeLayout)findViewById(R.id.invoice_transaction);
+        invoice_transaction.setOnClickListener(this);
+        full_triangle = (ImageView)findViewById(R.id.full_triangle);
+        business_triangle = (ImageView)findViewById(R.id.business_triangle);
+        invoice_triangle = (ImageView)findViewById(R.id.invoice_triangle);
+
+
         transactionDTOs = new ArrayList<TransactionDTO>();
         userTransactionAdapter = new UserTransactionAdapter(context, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
 
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
-        hamPayDialog = new HamPayDialog(activity);
+
 
 
         no_transaction = (FacedTextView)findViewById(R.id.no_transaction);
@@ -288,6 +310,83 @@ public class TransactionsListActivity extends AppCompatActivity {
             requestUserTransaction.execute(transactionListRequest);
         }
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.full_transaction:
+                userTransactionAdapter.clear();
+                transactionDTOs.clear();
+                requestPageNumber = 0;
+                sortFactor = TransactionListRequest.SortFactor.DEFAULT;
+                transactionListRequest = new TransactionListRequest();
+                transactionListRequest.setPageNumber(requestPageNumber);
+                transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+                transactionListRequest.setSortFactor(sortFactor);
+                requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
+                requestUserTransaction.execute(transactionListRequest);
+                changeTab(1);
+                break;
+
+            case R.id.business_transaction:
+                userTransactionAdapter.clear();
+                transactionDTOs.clear();
+                requestPageNumber = 0;
+                sortFactor = TransactionListRequest.SortFactor.BUSINESS;
+                transactionListRequest = new TransactionListRequest();
+                transactionListRequest.setPageNumber(requestPageNumber);
+                transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+                transactionListRequest.setSortFactor(sortFactor);
+                requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
+                requestUserTransaction.execute(transactionListRequest);
+                changeTab(2);
+                break;
+
+            case R.id.invoice_transaction:
+                userTransactionAdapter.clear();
+                transactionDTOs.clear();
+                requestPageNumber = 0;
+                sortFactor = TransactionListRequest.SortFactor.INDIVIDUAL;
+                transactionListRequest = new TransactionListRequest();
+                transactionListRequest.setPageNumber(requestPageNumber);
+                transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+                transactionListRequest.setSortFactor(sortFactor);
+                requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
+                requestUserTransaction.execute(transactionListRequest);
+                changeTab(3);
+                break;
+        }
+    }
+
+    private void changeTab(int index){
+        switch (index){
+            case 1:
+                full_transaction.setBackgroundColor(getResources().getColor(R.color.app_origin));
+                business_transaction.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
+                invoice_transaction.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
+                full_triangle.setVisibility(View.VISIBLE);
+                business_triangle.setVisibility(View.GONE);
+                invoice_triangle.setVisibility(View.GONE);
+                break;
+            case 2:
+                full_transaction.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
+                business_transaction.setBackgroundColor(getResources().getColor(R.color.app_origin));
+                invoice_transaction.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
+                full_triangle.setVisibility(View.GONE);
+                business_triangle.setVisibility(View.VISIBLE);
+                invoice_triangle.setVisibility(View.GONE);
+                break;
+
+            case 3:
+                full_transaction.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
+                business_transaction.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
+                invoice_transaction.setBackgroundColor(getResources().getColor(R.color.app_origin));
+                full_triangle.setVisibility(View.GONE);
+                business_triangle.setVisibility(View.GONE);
+                invoice_triangle.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 
     public class RequestUserTransactionsTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<TransactionListResponse>> {

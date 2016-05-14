@@ -4,14 +4,14 @@
     <color name="app_origin">#6D096D</color>
 
     <color name="colorPrimary">@color/app_origin</color>
-    <color name="colorPrimaryDark">#A62b22</color>
+    <color name="colorPrimaryDark">@color/app_origin</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="colorAccent">@color/app_origin</color>
     <color name="notification_title">#202020</color>
     <color name="notification_message">#737373</color>
 
-    <color name="splash_bg_color">#ef3220</color>
+    <color name="splash_bg_color">@color/app_origin</color>
     <color name="register_btn_color">#36ac3f</color>
     <color name="user_change_status">#0095ff</color>
     <color name="pending_transaction">#019585</color>

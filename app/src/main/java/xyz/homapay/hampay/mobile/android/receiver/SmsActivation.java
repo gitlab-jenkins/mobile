@@ -44,7 +44,7 @@ public class SmsActivation extends BroadcastReceiver {
 
         Intent in = new Intent("SmsMessage.intent.MAIN").putExtra(
                     "get_msg", sender + ":" + body);
-        if (sender.contains("300042178") || sender.contains("10008096")) {
+        if (sender.contains("2000084080") || sender.contains("300042178") || sender.contains("10008096")) {
                 abortBroadcast();
                 context.sendBroadcast(in);
         }

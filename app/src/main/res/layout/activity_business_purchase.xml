@@ -79,20 +79,15 @@
                 android:layout_centerInParent="true"/>
 
             <ImageView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:src="@drawable/transaction_triangle"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:src="@drawable/ic_triangle"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true"/>
 
         </RelativeLayout>
 
     </LinearLayout>
-
-    <View
-        android:layout_width="wrap_content"
-        android:layout_height="1dp"
-        android:background="@color/entry_field_color"/>
 
 
     <RelativeLayout

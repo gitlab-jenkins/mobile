@@ -59,7 +59,7 @@ import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
-public class BusinessesListActivity extends AppCompatActivity {
+public class BusinessesListActivity extends AppCompatActivity implements View.OnClickListener {
 
 
 
@@ -108,14 +108,15 @@ public class BusinessesListActivity extends AppCompatActivity {
 
     private Dialog dialog;
 
+    private RelativeLayout full_business;
+    private RelativeLayout popular_business;
+    private RelativeLayout recent_business;
+    private ImageView full_triangle;
+    private ImageView popular_triangle;
+    private ImageView recent_triangle;
+
     public void backActionBar(View view){
         finish();
-    }
-
-
-    @Override
-    public void onBackPressed() {
-
     }
 
     @Override
@@ -144,6 +145,16 @@ public class BusinessesListActivity extends AppCompatActivity {
         activity = BusinessesListActivity.this;
 
         persianEnglishDigit = new PersianEnglishDigit();
+
+        full_business = (RelativeLayout)findViewById(R.id.full_business);
+        full_business.setOnClickListener(this);
+        popular_business = (RelativeLayout)findViewById(R.id.popular_business);
+        popular_business.setOnClickListener(this);
+        recent_business = (RelativeLayout)findViewById(R.id.recent_business);
+        recent_business.setOnClickListener(this);
+        full_triangle = (ImageView)findViewById(R.id.full_triangle);
+        popular_triangle = (ImageView)findViewById(R.id.popular_triangle);
+        recent_triangle = (ImageView)findViewById(R.id.recent_triangle);
 
         businessListView = (ListView)findViewById(R.id.businessListView);
         businessListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -254,6 +265,54 @@ public class BusinessesListActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()){
+            case R.id.full_business:
+                changeTab(1);
+                break;
+
+            case R.id.popular_business:
+                changeTab(2);
+                break;
+
+            case R.id.recent_business:
+                changeTab(3);
+                break;
+        }
+
+    }
+
+    private void changeTab(int index){
+        switch (index){
+            case 1:
+                full_business.setBackgroundColor(getResources().getColor(R.color.app_origin));
+                popular_business.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
+                recent_business.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
+                full_triangle.setVisibility(View.VISIBLE);
+                popular_triangle.setVisibility(View.GONE);
+                recent_triangle.setVisibility(View.GONE);
+                break;
+            case 2:
+                full_business.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
+                popular_business.setBackgroundColor(getResources().getColor(R.color.app_origin));
+                recent_business.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
+                full_triangle.setVisibility(View.GONE);
+                popular_triangle.setVisibility(View.VISIBLE);
+                recent_triangle.setVisibility(View.GONE);
+                break;
+
+            case 3:
+                full_business.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
+                popular_business.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
+                recent_business.setBackgroundColor(getResources().getColor(R.color.app_origin));
+                full_triangle.setVisibility(View.GONE);
+                popular_triangle.setVisibility(View.GONE);
+                recent_triangle.setVisibility(View.VISIBLE);
+                break;
+        }
+    }
 
     private void performBusinessSearch(String searchTerm) {
         requestPageNumber = 0;
