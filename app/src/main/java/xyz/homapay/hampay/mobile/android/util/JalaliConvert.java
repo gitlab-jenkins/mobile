@@ -3,6 +3,7 @@ package xyz.homapay.hampay.mobile.android.util;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created by amir on 3/15/15.
@@ -16,7 +17,31 @@ public class JalaliConvert {
     private int jY, jM, jD;
     private int gY, gM, gD;
     private int leap, march;
+    private Date date;
 
+    public JalaliConvert(){
+
+    }
+
+    public JalaliConvert(Date date){
+
+        this.date = date;
+
+        Calendar calendar = dateToCalendar(date);
+
+        int jd = JG2JD(calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH) + 1,
+                calendar.get(Calendar.DAY_OF_MONTH),
+                0);
+
+        JD2Jal(jd);
+        this.year = jY;
+        this.month = jM;
+        this.dayFromMonth = jD;
+        this.dayFromWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        this.timeDay = sdf.format(calendar.getTime());
+    }
 
     private Calendar dateToCalendar(Date date){
         Calendar calendar = Calendar.getInstance();
@@ -128,6 +153,11 @@ public class JalaliConvert {
     }
 
     String[] persianDay = { "یک شنبه", "دوشنبه", "سه شنبه", "چهارشنبه", "پنج شنبه", "جمعه", "شنبه"};
+    String[] persianMonth = {"فرودین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"};
+
+    public String getPersianMonth(){
+        return persianMonth[month - 1];
+    }
 
     public String toString() {
 
@@ -174,11 +204,6 @@ public class JalaliConvert {
         this.dayFromMonth = gD;
     }
 
-    /**
-     * Get manipulated day
-     *
-     * @return Day as <code>int</code>
-     */
     public int getDayFromMonth() {
         return dayFromMonth;
     }
@@ -191,24 +216,48 @@ public class JalaliConvert {
         return timeDay;
     }
 
-    /**
-     * Get manipulated month
-     *
-     * @return Month as <code>int</code>
-     */
     public int getMonth() {
         return month;
     }
 
-    /**
-     * Get manipulated year
-     *
-     * @return Year as <code>int</code>
-     */
     public int getYear() {
         return year;
 
     }
 
+
+    public String homeMessage(){
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.setTime(date);
+        calendar.get(Calendar.HOUR_OF_DAY);
+        String message = homeMessage(calendar.get(Calendar.HOUR_OF_DAY)) + " " + "به خیر";
+         return message;
+    }
+
+    public String homeDate(){
+        String message = "";
+        message += this.dayFromMonth;
+        message += " ";
+        message += getPersianMonth();
+        message += " ";
+        message += getYear();
+        return message;
+    }
+
+
+    private String homeMessage(int time){
+
+        if (time >= 0 && time < 12){
+            return "صبح";
+        }
+        else if (time >= 12 && time < 14){
+            return "ظهر";
+        }else if (time >= 14 && time < 20){
+            return "عصر";
+        }else {
+            return "شب";
+        }
+
+    }
 
 }

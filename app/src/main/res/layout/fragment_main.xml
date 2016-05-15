@@ -39,23 +39,40 @@
                         android:scaleType="fitXY"
                         android:src="@drawable/main_fragment_banner"/>
 
-                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                        android:id="@+id/date_time"
-                        geekui:customTypeface="fonts/iran_sans_bold.ttf"
+                    <LinearLayout
+                        android:id="@+id/good_message"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@android:color/white"
-                        android:textSize="15dp"
-                        android:gravity="center"
-                        android:layout_gravity="center"
-                        android:text="@string/good_time"
-                        android:background="#55000000"
-                        android:paddingRight="18dp"
-                        android:paddingLeft="18dp"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
+                        android:orientation="vertical"
                         android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"/>
+                        android:layout_alignParentRight="true"
+                        android:background="#55000000"
+                        android:padding="12dp">
+
+                        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                            android:id="@+id/message_text"
+                            geekui:customTypeface="fonts/iran_sans_bold.ttf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/white"
+                            android:textSize="16sp"
+                            android:gravity="center"
+                            android:layout_gravity="center" />
+
+                        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                            android:id="@+id/date_text"
+                            geekui:customTypeface="fonts/iran_sans_bold.ttf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/white"
+                            android:textSize="14sp"
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            />
+
+                    </LinearLayout>
+
+
 
                 </RelativeLayout>
 
@@ -156,12 +173,12 @@
                             android:background="@color/page_title"/>
 
                         <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                            android:id="@+id/pending_badge"
                             geekui:customTypeface="fonts/iran_sans_bold.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@android:color/white"
                             android:textSize="14sp"
-                            android:text="۸۸"
                             android:layout_alignParentRight="true"
                             android:background="@drawable/pending_count_badge_style"
                             android:padding="4dp"/>

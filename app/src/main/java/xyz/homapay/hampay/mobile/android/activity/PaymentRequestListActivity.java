@@ -27,6 +27,7 @@ import xyz.homapay.hampay.common.core.model.response.PendingPOListResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.LatestInvoiceAdapter;
+import xyz.homapay.hampay.mobile.android.adapter.PendingPOAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestContactHampayEnabled;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestInvoiceContacts;
@@ -44,8 +45,10 @@ public class PaymentRequestListActivity extends AppCompatActivity{
     List<PaymentInfoDTO> paymentInfoList;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
+    private String authToken = "";
 
     private LatestInvoiceAdapter latestInvoiceAdapter;
+    private PendingPOAdapter pendingPOAdapter;
 
     private RequestLatestInvoiceContacts requestLatestInvoiceContacts;
     private LatestInvoiceContactsRequest latestInvoiceContactsRequest;
@@ -80,8 +83,12 @@ public class PaymentRequestListActivity extends AppCompatActivity{
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+        authToken =  prefs.getString(Constants.LOGIN_TOKEN_ID, "");
+
         paymentRequestList = (ListView)findViewById(R.id.paymentRequestList);
         hampay_contacts = (ImageView)findViewById(R.id.hampay_contacts);
+
+
 
         pendingPOListRequest = new PendingPOListRequest();
         requestPendingPOList = new RequestPendingPOList(activity, new RequestPendingPOListTaskCompleteListener());
@@ -211,6 +218,8 @@ public class PaymentRequestListActivity extends AppCompatActivity{
                 if (pendingPOListResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
 
                     paymentInfoList = pendingPOListResponseResponseMessage.getService().getPendingList();
+                    pendingPOAdapter = new PendingPOAdapter(activity, paymentInfoList, authToken);
+                    paymentRequestList.setAdapter(pendingPOAdapter);
 
                 }
                 else {

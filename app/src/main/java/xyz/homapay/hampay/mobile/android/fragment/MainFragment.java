@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.nineoldandroids.animation.ValueAnimator;
+
 import java.util.Date;
 import java.util.List;
 
@@ -68,6 +70,10 @@ public class MainFragment extends Fragment implements View.OnClickListener{
 
     private Context context;
 
+    private FacedTextView message_text;
+    private FacedTextView date_text;
+    private FacedTextView pending_badge;
+
     private PersianEnglishDigit persianEnglishDigit;
 
     public MainFragment() {
@@ -85,19 +91,34 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         context = getActivity();
+        persianEnglishDigit = new PersianEnglishDigit();
 
         Date currentDate = new Date();
+
+        message_text = (FacedTextView)rootView.findViewById(R.id.message_text);
+        date_text = (FacedTextView)rootView.findViewById(R.id.date_text);
+
+        JalaliConvert jalaliConvert = new JalaliConvert(currentDate);
+        message_text.setText(jalaliConvert.homeMessage());
+        date_text.setText(persianEnglishDigit.E2P(jalaliConvert.homeDate()));
+
+
 
         prefs = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
         editor = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE).edit();
 
-        persianEnglishDigit = new PersianEnglishDigit();
+
 
         bundle = getArguments();
 
         if (bundle != null){
-            this.userProfileDTO = (UserProfileDTO) bundle.getSerializable(Constants.USER_PROFILE_DTO);
+            userProfileDTO = (UserProfileDTO) bundle.getSerializable(Constants.USER_PROFILE_DTO);
         }
+
+
+        pending_badge = (FacedTextView)rootView.findViewById(R.id.pending_badge);
+        pending_badge.setText(bundle.getInt(Constants.PENDING_PURCHASE_COUNT) + bundle.getInt(Constants.PENDING_PAYMENT_COUNT) + "");
+
 
         hampay_1_ll = (LinearLayout)rootView.findViewById(R.id.hampay_1_ll);
         hampay_2_ll = (LinearLayout)rootView.findViewById(R.id.hampay_2_ll);

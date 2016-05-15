@@ -375,6 +375,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 fragment = new MainFragment();
                 if (userProfileDTO != null) {
                     bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
+                    bundle.putInt(Constants.PENDING_PAYMENT_COUNT, pendingPaymentCount);
+                    bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);
                     fragment.setArguments(bundle);
                 }
                 title = getString(R.string.title_main_fragment);
