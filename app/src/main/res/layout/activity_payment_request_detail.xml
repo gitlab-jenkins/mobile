@@ -326,9 +326,10 @@
                     android:background="@drawable/register_border"
                     android:textSize="13dp"
                     android:padding="6dp"
-                    android:textColor="@color/normal_text"
+                    android:textColor="@color/main_menu_title"
                     android:hint="@string/insert_message"
-                    android:gravity="top" />
+                    android:gravity="top"
+                    android:maxLength="140"/>
 
 
             </RelativeLayout>

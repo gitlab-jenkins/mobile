@@ -48,6 +48,7 @@ import xyz.homapay.hampay.common.core.model.request.RegistrationCredentialsReque
 import xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
+import xyz.homapay.hampay.common.core.model.request.RemoveUserImageRequest;
 import xyz.homapay.hampay.common.core.model.request.TACAcceptRequest;
 import xyz.homapay.hampay.common.core.model.request.TACRequest;
 import xyz.homapay.hampay.common.core.model.request.TransactionListRequest;
@@ -85,6 +86,7 @@ import xyz.homapay.hampay.common.core.model.response.RegistrationCredentialsResp
 import xyz.homapay.hampay.common.core.model.response.RegistrationEntryResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationVerifyMobileResponse;
+import xyz.homapay.hampay.common.core.model.response.RemoveUserImageResponse;
 import xyz.homapay.hampay.common.core.model.response.TACAcceptResponse;
 import xyz.homapay.hampay.common.core.model.response.TACResponse;
 import xyz.homapay.hampay.common.core.model.response.TransactionListResponse;
@@ -93,6 +95,7 @@ import xyz.homapay.hampay.common.core.model.response.UploadImageResponse;
 import xyz.homapay.hampay.common.core.model.response.UserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
+import xyz.homapay.hampay.mobile.android.model.DoWorkInfoTest;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
 import xyz.homapay.hampay.mobile.android.ssl.AllowHamPaySSL;
@@ -101,6 +104,8 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.UserContacts;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWABasicHttpBinding_ITokenPay;
+import xyz.homapay.hampay.mobile.android.webservice.psp.PayThPartyApp;
+import xyz.homapay.hampay.mobile.android.webservice.psp.Vectorstring2stringMapEntry;
 
 /**
  * Created by amir on 6/6/15.
@@ -671,7 +676,7 @@ public class WebServices  {
 
     public TWAArrayOfKeyValueOfstringstring newPurchaseResponse(DoWorkInfo doWorkInfo) throws Exception {
 
-       AllowHamPaySSL   allowHamPaySSL = new AllowHamPaySSL(context);
+       AllowHamPaySSL allowHamPaySSL = new AllowHamPaySSL(context);
         allowHamPaySSL.enableHamPaySSL();
 
         TWABasicHttpBinding_ITokenPay twaBasicHttpBinding_iTokenPay = new TWABasicHttpBinding_ITokenPay(null,"https://" + Constants.SERVER_IP + "/saman/psp/pay");
@@ -687,6 +692,27 @@ public class WebServices  {
 //                doWorkInfo.getVectorstring2stringMapEntry());
 
         return responseMessage;
+    }
+
+
+    public Vectorstring2stringMapEntry newPurchaseResponse(DoWorkInfoTest doWorkInfo) throws Exception {
+
+        AllowHamPaySSL allowHamPaySSL = new AllowHamPaySSL(context);
+        allowHamPaySSL.enableHamPaySSL();
+
+//        TWABasicHttpBinding_ITokenPay twaBasicHttpBinding_iTokenPay = new TWABasicHttpBinding_ITokenPay(null,"https://" + Constants.SERVER_IP + "/saman/psp/pay");
+//        TWAArrayOfKeyValueOfstringstring responseMessage = twaBasicHttpBinding_iTokenPay.DoWork(doWorkInfo.getUserName(), doWorkInfo.getPassword(), doWorkInfo.getCellNumber(),null,doWorkInfo.getVectorstring2stringMapEntry());
+
+//        PayThPartyApp payThPartyApp = new PayThPartyApp(context);
+//        Vectorstring2stringMapEntry responseMessage = payThPartyApp.DoWork(
+//                doWorkInfo.getUserName(),
+//                doWorkInfo.getPassword(),
+//                doWorkInfo.getCellNumber(),
+//                null,
+//                doWorkInfo.isLangABoolean(),
+//                doWorkInfo.getVectorstring2stringMapEntry());
+
+        return null;
     }
 
 
@@ -1037,6 +1063,28 @@ public class WebServices  {
         Gson gson = builder.getDatebuilder().create();
 
         responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<PurchaseDetailResponse>>() {}.getType());
+
+        proxyService.closeConnection();
+
+        return responseMessage;
+    }
+
+    public ResponseMessage<RemoveUserImageResponse> removeUserImageResponse(RemoveUserImageRequest removeUserImageRequest) throws IOException{
+
+        ResponseMessage<RemoveUserImageResponse> responseMessage = null;
+        url = new URL(serviceURL + "/users/remove-image");
+        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+
+        removeUserImageRequest.setRequestUUID(UUID.randomUUID().toString());
+        RequestMessage<RemoveUserImageRequest> message = new RequestMessage<>(removeUserImageRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RemoveUserImageRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
+
+        Gson gson = builder.getDatebuilder().create();
+
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<RemoveUserImageResponse>>() {}.getType());
 
         proxyService.closeConnection();
 

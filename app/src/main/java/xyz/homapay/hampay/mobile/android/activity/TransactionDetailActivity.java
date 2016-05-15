@@ -223,8 +223,6 @@ public class TransactionDetailActivity extends AppCompatActivity implements View
 
     public class RequestPaymentDetailTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PaymentDetailResponse>> {
 
-        List<TransactionDTO> newTransactionDTOs;
-
         @Override
         public void onTaskComplete(ResponseMessage<PaymentDetailResponse> paymentDetailResponseMessage) {
 
@@ -245,8 +243,6 @@ public class TransactionDetailActivity extends AppCompatActivity implements View
     }
 
     public class RequestPurchaseDetailTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PurchaseDetailResponse>> {
-
-        List<TransactionDTO> newTransactionDTOs;
 
         @Override
         public void onTaskComplete(ResponseMessage<PurchaseDetailResponse> purchaseDetailResponseMessage) {

@@ -63,11 +63,13 @@
                 android:layout_centerInParent="true"/>
 
             <ImageView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
+                android:id="@+id/invoice_triangle"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
                 android:src="@drawable/ic_triangle"
                 android:layout_centerHorizontal="true"
-                android:layout_alignParentBottom="true"/>
+                android:layout_alignParentBottom="true"
+                android:visibility="gone"/>
 
         </RelativeLayout>
 
@@ -76,7 +78,7 @@
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="0.33"
-            android:background="@color/transaction_unselected_tab"
+            android:background="@color/app_origin"
             android:layout_marginRight="0.5dp"
             android:layout_marginLeft="0.5dp">
 
@@ -91,8 +93,9 @@
                 android:layout_centerInParent="true"/>
 
             <ImageView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
+                android:id="@+id/business_triangle"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
                 android:src="@drawable/ic_triangle"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true"/>
@@ -100,10 +103,11 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/full_pending"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="0.33"
-            android:background="@color/page_title"
+            android:background="@color/transaction_unselected_tab"
             android:layout_marginLeft="1dp">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
@@ -117,11 +121,13 @@
                 android:layout_centerInParent="true"/>
 
             <ImageView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
+                android:id="@+id/full_triangle"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
                 android:src="@drawable/ic_triangle"
                 android:layout_centerHorizontal="true"
-                android:layout_alignParentBottom="true"/>
+                android:layout_alignParentBottom="true"
+                android:visibility="gone"/>
 
         </RelativeLayout>
 

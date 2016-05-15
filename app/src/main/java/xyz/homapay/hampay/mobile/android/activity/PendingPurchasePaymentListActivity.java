@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -57,7 +58,7 @@ import xyz.homapay.hampay.mobile.android.impl.comparator.PurchaseDateComparator;
 import xyz.homapay.hampay.mobile.android.impl.comparator.PurchaseExpireComparator;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
-public class PendingPurchasePaymentListActivity extends AppCompatActivity {
+public class PendingPurchasePaymentListActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Activity activity;
 
@@ -97,8 +98,12 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity {
     RequestCancelPayment requestCancelPayment;
     CancelUserPaymentRequest cancelUserPaymentRequest;
 
+    RelativeLayout full_pending;
     RelativeLayout invoice_pending;
     RelativeLayout purchase_pending;
+    ImageView full_triangle;
+    ImageView business_triangle;
+    ImageView invoice_triangle;
 
     Timer timer;
     TimerTask timerTask;
@@ -295,26 +300,33 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity {
             requestPendingPurchase.execute(pendingPurchaseListRequest);
         }
 
+        full_pending = (RelativeLayout)findViewById(R.id.full_pending);
+        full_pending.setOnClickListener(this);
         invoice_pending = (RelativeLayout)findViewById(R.id.invoice_pending);
+        invoice_pending.setOnClickListener(this);
         purchase_pending = (RelativeLayout)findViewById(R.id.purchase_pending);
+        purchase_pending.setOnClickListener(this);
+        full_triangle = (ImageView)findViewById(R.id.full_triangle);
+        business_triangle = (ImageView)findViewById(R.id.business_triangle);
+        invoice_triangle = (ImageView)findViewById(R.id.invoice_triangle);
 
-        purchase_pending.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                requestPendingPurchase = new RequestPendingPurchase(activity, new RequestPendingPurchaseTaskCompleteListener());
-                pendingPurchaseListRequest = new PendingPurchaseListRequest();
-                requestPendingPurchase.execute(pendingPurchaseListRequest);
-            }
-        });
-
-        invoice_pending.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                requestPendingPayment = new RequestPendingPayment(activity, new RequestPendingPaymentTaskCompleteListener());
-                pendingPaymentListRequest = new PendingPaymentListRequest();
-                requestPendingPayment.execute(pendingPaymentListRequest);
-            }
-        });
+//        purchase_pending.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                requestPendingPurchase = new RequestPendingPurchase(activity, new RequestPendingPurchaseTaskCompleteListener());
+//                pendingPurchaseListRequest = new PendingPurchaseListRequest();
+//                requestPendingPurchase.execute(pendingPurchaseListRequest);
+//            }
+//        });
+//
+//        invoice_pending.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                requestPendingPayment = new RequestPendingPayment(activity, new RequestPendingPaymentTaskCompleteListener());
+//                pendingPaymentListRequest = new PendingPaymentListRequest();
+//                requestPendingPayment.execute(pendingPaymentListRequest);
+//            }
+//        });
 
 
         pendingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -417,6 +429,62 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity {
             }
             if (resultCode == Activity.RESULT_CANCELED) {
             }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()){
+            case R.id.full_pending:
+                changeTab(1);
+                break;
+
+            case R.id.invoice_pending:
+                requestPendingPayment = new RequestPendingPayment(activity, new RequestPendingPaymentTaskCompleteListener());
+                pendingPaymentListRequest = new PendingPaymentListRequest();
+                requestPendingPayment.execute(pendingPaymentListRequest);
+                changeTab(2);
+                break;
+
+            case R.id.purchase_pending:
+                requestPendingPurchase = new RequestPendingPurchase(activity, new RequestPendingPurchaseTaskCompleteListener());
+                pendingPurchaseListRequest = new PendingPurchaseListRequest();
+                requestPendingPurchase.execute(pendingPurchaseListRequest);
+                changeTab(3);
+                break;
+        }
+
+    }
+
+    private void changeTab(int index){
+        switch (index){
+            case 1:
+                full_pending.setBackgroundColor(getResources().getColor(R.color.app_origin));
+                purchase_pending.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
+                invoice_pending.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
+                full_triangle.setVisibility(View.VISIBLE);
+                business_triangle.setVisibility(View.GONE);
+                invoice_triangle.setVisibility(View.GONE);
+                break;
+
+            case 2:
+                full_pending.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
+                purchase_pending.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
+                invoice_pending.setBackgroundColor(getResources().getColor(R.color.app_origin));
+                full_triangle.setVisibility(View.GONE);
+                business_triangle.setVisibility(View.GONE);
+                invoice_triangle.setVisibility(View.VISIBLE);
+                break;
+
+            case 3:
+                full_pending.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
+                purchase_pending.setBackgroundColor(getResources().getColor(R.color.app_origin));
+                invoice_pending.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
+                full_triangle.setVisibility(View.GONE);
+                business_triangle.setVisibility(View.VISIBLE);
+                invoice_triangle.setVisibility(View.GONE);
+                break;
         }
     }
 

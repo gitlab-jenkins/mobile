@@ -17,14 +17,13 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -51,6 +50,7 @@ import xyz.homapay.hampay.common.core.model.request.RegistrationCredentialsReque
 import xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
+import xyz.homapay.hampay.common.core.model.request.RemoveUserImageRequest;
 import xyz.homapay.hampay.common.core.model.request.TACAcceptRequest;
 import xyz.homapay.hampay.common.core.model.request.TACRequest;
 import xyz.homapay.hampay.common.core.model.request.TransactionListRequest;
@@ -62,6 +62,7 @@ import xyz.homapay.hampay.common.core.model.response.ContactUsResponse;
 import xyz.homapay.hampay.common.core.model.response.IBANChangeResponse;
 import xyz.homapay.hampay.common.core.model.response.IBANConfirmationResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
+import xyz.homapay.hampay.common.core.model.response.RemoveUserImageResponse;
 import xyz.homapay.hampay.common.core.model.response.TACAcceptResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
@@ -97,6 +98,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestMobileRegistrationIdEntry;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchaseInfo;
 import xyz.homapay.hampay.mobile.android.async.RequestRegistrationEntry;
 import xyz.homapay.hampay.mobile.android.async.RequestRegistrationSendSmsToken;
+import xyz.homapay.hampay.mobile.android.async.RequestRemoveUserImage;
 import xyz.homapay.hampay.mobile.android.async.RequestSearchHamPayBusiness;
 import xyz.homapay.hampay.mobile.android.async.RequestTAC;
 import xyz.homapay.hampay.mobile.android.async.RequestTACAccept;
@@ -1899,6 +1901,14 @@ public class HamPayDialog {
 
 
         FacedTextView remove_choose = (FacedTextView)view.findViewById(R.id.remove_choose);
+        remove_choose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RemoveUserImageRequest removeUserImageRequest = new RemoveUserImageRequest();
+                RequestRemoveUserImage requestRemoveUserImage = new RequestRemoveUserImage(activity, new RequestRemovePhotoTaskCompleteListener());
+                requestRemoveUserImage.execute(removeUserImageRequest);
+            }
+        });
         FacedTextView cancel_choose = (FacedTextView)view.findViewById(R.id.cancel_choose);
 
         cancel_choose.setOnClickListener(new View.OnClickListener() {
@@ -1912,6 +1922,48 @@ public class HamPayDialog {
         dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
 
+    }
+
+    public class RequestRemovePhotoTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RemoveUserImageResponse>> {
+
+
+        @Override
+        public void onTaskComplete(ResponseMessage<RemoveUserImageResponse> removeUserImageResponseMessage)
+        {
+
+            dismisWaitingDialog();
+
+            if (removeUserImageResponseMessage != null) {
+                if (removeUserImageResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+
+                    dialog.dismiss();
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Remove User Image")
+                            .setAction("Remove")
+                            .setLabel("Success")
+                            .build());
+                    String filePath = activity.getFilesDir().getPath().toString() + "/" + "userImage.jpeg";
+                    File file = new File(filePath);
+                    if (file.exists()) {
+                        file.delete();
+                    }
+
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra("result", 5000);
+                    activity.setResult(5000);
+                }
+                else {
+
+                }
+            }else {
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
     }
 
 
