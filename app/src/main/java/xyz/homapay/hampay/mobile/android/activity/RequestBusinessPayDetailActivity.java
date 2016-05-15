@@ -235,7 +235,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             }else {
                 business_image.setBackgroundColor(ContextCompat.getColor(context, R.color.user_change_status));
             }
-            cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber().split("-")[3]));
+            cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
             bankName.setText(pspInfoDTO.getCardDTO().getBankName());
         }else if (purchaseCode != null){
             requestPurchaseInfo = new RequestPurchaseInfo(activity, new RequestPurchaseInfoTaskCompleteListener());
@@ -540,7 +540,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                         }
 
                         bankName.setText(pspInfoDTO.getCardDTO().getBankName());
-                        cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber().split("-")[3]));
+                        cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
                     }
                     else {
                         Toast.makeText(context, getString(R.string.msg_not_found_pending_payment_code), Toast.LENGTH_LONG).show();
@@ -654,7 +654,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
                         new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute(Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantImageId());
                         bankName.setText(pspInfoDTO.getCardDTO().getBankName());
-                        cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber().split("-")[3]));
+                        cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
                     }
                     else {
                         Toast.makeText(context, getString(R.string.msg_not_found_pending_payment_code), Toast.LENGTH_LONG).show();

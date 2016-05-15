@@ -63,6 +63,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
     FacedTextView digit_0;
     FacedTextView keyboard_dismiss;
     FacedTextView resend_active_code;
+    LinearLayout progress_layout;
     RelativeLayout backspace;
 
     String receivedSmsValue = "";
@@ -150,6 +151,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                         if (timeCounter >= 180){
                             stopTimerTask();
                             sendSmsPermission = true;
+                            progress_layout.setVisibility(View.GONE);
                             resend_active_code.setVisibility(View.VISIBLE);
                             if (keyboard.getVisibility() != View.VISIBLE)
                                 new Expand(keyboard).animate();
@@ -287,6 +289,9 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         backspace.setOnClickListener(this);
         resend_active_code = (FacedTextView)findViewById(R.id.resend_active_code);
         resend_active_code.setOnClickListener(this);
+
+        progress_layout = (LinearLayout)findViewById(R.id.progress_layout);
+
 
         input_digit_1 = (FacedTextView)findViewById(R.id.input_digit_1);
         input_digit_2 = (FacedTextView)findViewById(R.id.input_digit_2);
@@ -583,8 +588,8 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
             if (registrationSendSmsTokenResponse != null) {
                 if (registrationSendSmsTokenResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
-
                     resend_active_code.setVisibility(View.GONE);
+                    progress_layout.setVisibility(View.VISIBLE);
                     startTimer();
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()

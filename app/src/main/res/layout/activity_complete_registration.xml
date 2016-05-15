@@ -156,7 +156,7 @@
             <ImageView
                 android:layout_width="180dp"
                 android:layout_height="180dp"
-                android:src="@drawable/step_circle_1"
+                android:src="@drawable/infographic_new"
                 android:background="@color/app_origin"/>
 
             <LinearLayout

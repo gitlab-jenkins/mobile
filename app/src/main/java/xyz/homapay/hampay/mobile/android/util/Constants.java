@@ -4,14 +4,15 @@ package xyz.homapay.hampay.mobile.android.util;
 import xyz.homapay.hampay.mobile.android.webservice.ConnectionType;
 
 public class Constants {
-    public static String SERVER_IP = "176.58.104.158";//England Server IP
+//    public static String SERVER_IP = "176.58.104.158";//England Server IP
 //    public static String SERVER_IP = "139.162.181.92";//Prod Server IP
-//       public static String SERVER_IP = "139.162.147.189";//UAT Server IP
+       public static String SERVER_IP = "139.162.147.189";//UAT Server IP
     public static String URL_PREFIX = "/hampay";
     public static String HTTP_SERVER_IP = "http://" + SERVER_IP + ":90" + URL_PREFIX;//England Server
     public static String IPG_URL = "http://" + SERVER_IP + ":9091" + URL_PREFIX;//England Server
 //    public static String BANK_GATEWAY_URL = "https://sep.shaparak.ir/Payment.aspx";
-    public static String BANK_GATEWAY_URL = "http://" + SERVER_IP + "/assets/psp/index.php";
+    public static String BANK_GATEWAY_URL = "https://sep.shaparak.ir/PgMobileAddData";
+//    public static String BANK_GATEWAY_URL = "http://" + SERVER_IP + "/assets/psp/index.php";
     public static ConnectionType CONNECTION_TYPE = ConnectionType.HTTPS;
     public static String HTTPS_SERVER_IP = "https://" + SERVER_IP + URL_PREFIX;//England Server
     public static final String HTTPS_OPENAM_LOGIN_URL = HTTPS_SERVER_IP + "/auth";

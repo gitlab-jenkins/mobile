@@ -170,7 +170,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
             paymentVAT.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount())));
             paymentFeeValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getFeeCharge())));
             paymentTotalValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount() + paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge())));
-            cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber().split("-")[3]));
+            cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
             bankName.setText(pspInfoDTO.getCardDTO().getBankName());
             if (paymentInfoDTO.getImageId() != null) {
                 new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(user_image)).execute(Constants.IMAGE_PREFIX + authToken + "/" + paymentInfoDTO.getImageId());
@@ -464,7 +464,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                     paymentVAT.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount())));
                     paymentFeeValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getFeeCharge())));
                     paymentTotalValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount() + paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge())));
-                    cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber().split("-")[3]));
+                    cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
                     bankName.setText(pspInfoDTO.getCardDTO().getBankName());
                     if (paymentInfoDTO.getImageId() != null) {
                         new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(user_image)).execute(Constants.IMAGE_PREFIX + authToken + "/" + paymentInfoDTO.getImageId());

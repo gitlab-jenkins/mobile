@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import java.util.Date;
 import java.util.List;
 
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
@@ -84,6 +85,8 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         context = getActivity();
+
+        Date currentDate = new Date();
 
         prefs = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
         editor = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE).edit();

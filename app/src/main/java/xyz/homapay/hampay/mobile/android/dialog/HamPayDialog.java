@@ -975,24 +975,22 @@ public class HamPayDialog {
                                        final String code,
                                        final String message){
 
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_bank_list, null);
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_card_info, null);
 
-        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
         FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
 
-        responseCode.setText(activity.getString(R.string.error_code, code));
-        responseMessage.setText(message);
+        responseMessage.setText((activity.getString(R.string.error_code, code) + " - " + message));
 
-        FacedTextView retry_fetch_bank_list = (FacedTextView) view.findViewById(R.id.retry_fetch_bank_list);
+//        FacedTextView retry_fetch_bank_list = (FacedTextView) view.findViewById(R.id.retry_fetch_bank_list);
         FacedTextView cancel_request = (FacedTextView)view.findViewById(R.id.cancel_request);
 
-        retry_fetch_bank_list.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                requestCardProfile.execute(cardProfileRequest);
-            }
-        });
+//        retry_fetch_bank_list.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                dialog.dismiss();
+//                requestCardProfile.execute(cardProfileRequest);
+//            }
+//        });
 
         cancel_request.setOnClickListener(new View.OnClickListener() {
             @Override

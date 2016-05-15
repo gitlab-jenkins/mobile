@@ -40,6 +40,7 @@
                         android:src="@drawable/main_fragment_banner"/>
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/date_time"
                         geekui:customTypeface="fonts/iran_sans_bold.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

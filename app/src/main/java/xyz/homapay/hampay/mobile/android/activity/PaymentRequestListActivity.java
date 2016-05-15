@@ -20,13 +20,17 @@ import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
 import xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestInvoiceContactsRequest;
+import xyz.homapay.hampay.common.core.model.request.PendingPOListRequest;
 import xyz.homapay.hampay.common.core.model.response.ContactsHampayEnabledResponse;
 import xyz.homapay.hampay.common.core.model.response.LatestInvoiceContactsResponse;
+import xyz.homapay.hampay.common.core.model.response.PendingPOListResponse;
+import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.LatestInvoiceAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestContactHampayEnabled;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestInvoiceContacts;
+import xyz.homapay.hampay.mobile.android.async.RequestPendingPOList;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
@@ -37,6 +41,7 @@ public class PaymentRequestListActivity extends AppCompatActivity{
     private Activity activity;
     private ListView paymentRequestList;
     List<ContactDTO> contacts;
+    List<PaymentInfoDTO> paymentInfoList;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
@@ -44,6 +49,10 @@ public class PaymentRequestListActivity extends AppCompatActivity{
 
     private RequestLatestInvoiceContacts requestLatestInvoiceContacts;
     private LatestInvoiceContactsRequest latestInvoiceContactsRequest;
+
+
+    private RequestPendingPOList requestPendingPOList;
+    private PendingPOListRequest pendingPOListRequest;
 
     private Dialog dialog;
 
@@ -73,9 +82,14 @@ public class PaymentRequestListActivity extends AppCompatActivity{
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         paymentRequestList = (ListView)findViewById(R.id.paymentRequestList);
         hampay_contacts = (ImageView)findViewById(R.id.hampay_contacts);
-        latestInvoiceContactsRequest = new LatestInvoiceContactsRequest();
-        requestLatestInvoiceContacts = new RequestLatestInvoiceContacts(activity, new RequestLatestInvoiceContactsTaskCompleteListener());
-        requestLatestInvoiceContacts.execute(latestInvoiceContactsRequest);
+
+        pendingPOListRequest = new PendingPOListRequest();
+        requestPendingPOList = new RequestPendingPOList(activity, new RequestPendingPOListTaskCompleteListener());
+        requestPendingPOList.execute(pendingPOListRequest);
+
+//        latestInvoiceContactsRequest = new LatestInvoiceContactsRequest();
+//        requestLatestInvoiceContacts = new RequestLatestInvoiceContacts(activity, new RequestLatestInvoiceContactsTaskCompleteListener());
+//        requestLatestInvoiceContacts.execute(latestInvoiceContactsRequest);
 
         paymentRequestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -176,6 +190,41 @@ public class PaymentRequestListActivity extends AppCompatActivity{
                 new HamPayDialog(activity).showFailLatestInvoiceDialog(requestLatestInvoiceContacts, latestInvoiceContactsRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_contacts_enabled));
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
+    }
+
+
+    public class RequestPendingPOListTaskCompleteListener implements
+            AsyncTaskCompleteListener<ResponseMessage<PendingPOListResponse>> {
+        @Override
+        public void onTaskComplete(ResponseMessage<PendingPOListResponse> pendingPOListResponseResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+
+            if (pendingPOListResponseResponseMessage != null){
+                if (pendingPOListResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
+
+                    paymentInfoList = pendingPOListResponseResponseMessage.getService().getPendingList();
+
+                }
+                else {
+//                    requestPendingPOList = new RequestPendingPOList(context, new RequestPendingPOListTaskCompleteListener());
+//                    new HamPayDialog(activity).showFailLatestInvoiceDialog(requestPendingPOList, latestInvoiceContactsRequest,
+//                            latestInvoiceContactsResponseMessage.getService().getResultStatus().getCode(),
+//                            latestInvoiceContactsResponseMessage.getService().getResultStatus().getDescription());
+
+                }
+            }else {
+//                requestLatestInvoiceContacts = new RequestLatestInvoiceContacts(context, new RequestLatestInvoiceContactsTaskCompleteListener());
+//                new HamPayDialog(activity).showFailLatestInvoiceDialog(requestLatestInvoiceContacts, latestInvoiceContactsRequest,
+//                        Constants.LOCAL_ERROR_CODE,
+//                        getString(R.string.msg_fail_contacts_enabled));
             }
         }
 

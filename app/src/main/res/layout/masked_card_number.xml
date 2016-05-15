@@ -12,25 +12,25 @@
         android:gravity="center_vertical">
 
         <ImageView
-            android:layout_width="12dp"
-            android:layout_height="12dp"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
             android:background="@drawable/mask_card_placeholder"
             android:layout_margin="1dp"/>
 
         <ImageView
-            android:layout_width="12dp"
-            android:layout_height="12dp"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
             android:background="@drawable/mask_card_placeholder"
             android:layout_margin="1dp"/>
 
         <ImageView
-            android:layout_width="12dp"
-            android:layout_height="12dp"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
             android:background="@drawable/mask_card_placeholder"
             android:layout_margin="1dp"/>
         <ImageView
-            android:layout_width="12dp"
-            android:layout_height="12dp"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
             android:background="@drawable/mask_card_placeholder"
             android:layout_margin="1dp"/>
 
@@ -39,30 +39,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/account_details_text"
-            android:textSize="12dp"
+            android:textSize="10dp"
             android:text="-"
             android:layout_margin="1dp"/>
 
         <ImageView
-            android:layout_width="12dp"
-            android:layout_height="12dp"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
             android:background="@drawable/mask_card_placeholder"
             android:layout_margin="1dp"/>
 
         <ImageView
-            android:layout_width="12dp"
-            android:layout_height="12dp"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
             android:background="@drawable/mask_card_placeholder"
             android:layout_margin="1dp"/>
 
         <ImageView
-            android:layout_width="12dp"
-            android:layout_height="12dp"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
             android:background="@drawable/mask_card_placeholder"
             android:layout_margin="1dp"/>
         <ImageView
-            android:layout_width="12dp"
-            android:layout_height="12dp"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
             android:background="@drawable/mask_card_placeholder"
             android:layout_margin="1dp"/>
 
@@ -71,30 +71,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/account_details_text"
-            android:textSize="12dp"
+            android:textSize="10dp"
             android:text="-"
             android:layout_margin="1dp"/>
 
         <ImageView
-            android:layout_width="12dp"
-            android:layout_height="12dp"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
             android:background="@drawable/mask_card_placeholder"
             android:layout_margin="1dp"/>
 
         <ImageView
-            android:layout_width="12dp"
-            android:layout_height="12dp"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
             android:background="@drawable/mask_card_placeholder"
             android:layout_margin="1dp"/>
 
         <ImageView
-            android:layout_width="12dp"
-            android:layout_height="12dp"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
             android:background="@drawable/mask_card_placeholder"
             android:layout_margin="1dp"/>
         <ImageView
-            android:layout_width="12dp"
-            android:layout_height="12dp"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
             android:background="@drawable/mask_card_placeholder"
             android:layout_margin="1dp"/>
 
@@ -103,7 +103,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/account_details_text"
-            android:textSize="12dp"
+            android:textSize="10dp"
             android:text="-"
             android:layout_margin="1dp"/>
 

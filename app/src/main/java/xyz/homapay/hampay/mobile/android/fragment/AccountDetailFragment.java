@@ -272,7 +272,7 @@ public class AccountDetailFragment extends Fragment {
             String userImageUrl = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
             new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile)).execute(userImageUrl);
         }
-        user_card_number.setText(persianEnglishDigit.E2P(userProfileDTO.getCardDTO().getMaskedCardNumber().split("-")[3]));
+        user_card_number.setText(persianEnglishDigit.E2P(userProfileDTO.getCardDTO().getMaskedCardNumber()));
         user_bank_name.setText(userProfileDTO.getCardDTO().getBankName());
         user_cell_number.setText(persianEnglishDigit.E2P(userProfileDTO.getCellNumber()));
         if (userProfileDTO.getIbanDTO() != null) {

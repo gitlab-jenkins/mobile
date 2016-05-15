@@ -87,7 +87,7 @@ public class CompleteRegistrationActivity extends AppCompatActivity {
 
         congrats_text = (FacedTextView)findViewById(R.id.congrats_text);
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getString(R.string.complete_registarion_text_1));
-        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.rgb(36, 189, 195));
+        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.rgb(109, 7, 109));
         spannableStringBuilder.setSpan(foregroundColorSpan, 21, 26, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         congrats_text.setText(spannableStringBuilder);
 
