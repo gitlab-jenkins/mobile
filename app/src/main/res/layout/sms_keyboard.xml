@@ -18,13 +18,13 @@
 
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/iran_sans.ttf"
+                geekui:customTypeface="fonts/iran_sans_bold.ttf"
                 android:id="@+id/digit_1"
                 android:layout_width="0dip"
                 android:layout_height="42dp"
                 android:layout_weight="0.3"
                 android:textColor="@color/keyboard_border_text"
-                android:textSize="18dp"
+                android:textSize="20sp"
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:text="۱"
@@ -33,13 +33,13 @@
 
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            geekui:customTypeface="fonts/iran_sans.ttf"
+            geekui:customTypeface="fonts/iran_sans_bold.ttf"
             android:id="@+id/digit_2"
             android:layout_width="0dip"
             android:layout_height="42dp"
             android:layout_weight="0.3"
             android:textColor="@color/keyboard_border_text"
-            android:textSize="18dp"
+            android:textSize="20sp"
             android:gravity="center"
             android:layout_gravity="center"
             android:text="۲"
@@ -47,13 +47,13 @@
             android:layout_margin="2dp"/>
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            geekui:customTypeface="fonts/iran_sans.ttf"
+            geekui:customTypeface="fonts/iran_sans_bold.ttf"
             android:id="@+id/digit_3"
             android:layout_width="0dip"
             android:layout_height="42dp"
             android:layout_weight="0.3"
             android:textColor="@color/keyboard_border_text"
-            android:textSize="18dp"
+            android:textSize="20sp"
             android:gravity="center"
             android:layout_gravity="center"
             android:text="۳"
@@ -70,13 +70,13 @@
 
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            geekui:customTypeface="fonts/iran_sans.ttf"
+            geekui:customTypeface="fonts/iran_sans_bold.ttf"
             android:id="@+id/digit_4"
             android:layout_width="0dip"
             android:layout_height="42dp"
             android:layout_weight="0.3"
             android:textColor="@color/keyboard_border_text"
-            android:textSize="18dp"
+            android:textSize="20sp"
             android:gravity="center"
             android:layout_gravity="center"
             android:text="۴"
@@ -85,13 +85,13 @@
 
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            geekui:customTypeface="fonts/iran_sans.ttf"
+            geekui:customTypeface="fonts/iran_sans_bold.ttf"
             android:id="@+id/digit_5"
             android:layout_width="0dip"
             android:layout_height="42dp"
             android:layout_weight="0.3"
             android:textColor="@color/keyboard_border_text"
-            android:textSize="18dp"
+            android:textSize="20sp"
             android:gravity="center"
             android:layout_gravity="center"
             android:text="۵"
@@ -99,13 +99,13 @@
             android:layout_margin="2dp"/>
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            geekui:customTypeface="fonts/iran_sans.ttf"
+            geekui:customTypeface="fonts/iran_sans_bold.ttf"
             android:id="@+id/digit_6"
             android:layout_width="0dip"
             android:layout_height="42dp"
             android:layout_weight="0.3"
             android:textColor="@color/keyboard_border_text"
-            android:textSize="18dp"
+            android:textSize="20sp"
             android:gravity="center"
             android:layout_gravity="center"
             android:text="۶"
@@ -122,13 +122,13 @@
 
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            geekui:customTypeface="fonts/iran_sans.ttf"
+            geekui:customTypeface="fonts/iran_sans_bold.ttf"
             android:id="@+id/digit_7"
             android:layout_width="0dip"
             android:layout_height="42dp"
             android:layout_weight="0.3"
             android:textColor="@color/keyboard_border_text"
-            android:textSize="18dp"
+            android:textSize="20sp"
             android:gravity="center"
             android:layout_gravity="center"
             android:text="۷"
@@ -137,13 +137,13 @@
 
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            geekui:customTypeface="fonts/iran_sans.ttf"
+            geekui:customTypeface="fonts/iran_sans_bold.ttf"
             android:id="@+id/digit_8"
             android:layout_width="0dip"
             android:layout_height="42dp"
             android:layout_weight="0.3"
             android:textColor="@color/keyboard_border_text"
-            android:textSize="18dp"
+            android:textSize="20sp"
             android:gravity="center"
             android:layout_gravity="center"
             android:text="۸"
@@ -151,13 +151,13 @@
             android:layout_margin="2dp"/>
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            geekui:customTypeface="fonts/iran_sans.ttf"
+            geekui:customTypeface="fonts/iran_sans_bold.ttf"
             android:id="@+id/digit_9"
             android:layout_width="0dip"
             android:layout_height="42dp"
             android:layout_weight="0.3"
             android:textColor="@color/keyboard_border_text"
-            android:textSize="18dp"
+            android:textSize="20sp"
             android:gravity="center"
             android:layout_gravity="center"
             android:text="۹"
@@ -175,13 +175,13 @@
 
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            geekui:customTypeface="fonts/iran_sans.ttf"
+            geekui:customTypeface="fonts/iran_sans_bold.ttf"
             android:id="@+id/keyboard_dismiss"
             android:layout_width="0dip"
             android:layout_height="42dp"
             android:layout_weight="0.3"
             android:textColor="@color/app_origin"
-            android:textSize="18dp"
+            android:textSize="20sp"
             android:gravity="center"
             android:layout_gravity="center"
             android:text="@string/keyboard_dismiss"
@@ -190,13 +190,13 @@
 
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            geekui:customTypeface="fonts/iran_sans.ttf"
+            geekui:customTypeface="fonts/iran_sans_bold.ttf"
             android:id="@+id/digit_0"
             android:layout_width="0dip"
             android:layout_height="42dp"
             android:layout_weight="0.3"
             android:textColor="@color/keyboard_border_text"
-            android:textSize="18dp"
+            android:textSize="20sp"
             android:gravity="center"
             android:layout_gravity="center"
             android:text="۰"
