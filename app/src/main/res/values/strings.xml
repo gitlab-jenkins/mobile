@@ -576,6 +576,8 @@
     <string name="msg_unlink_user">تمامی اطلاعات شما پاک خواهد شد و برای استفاده مجدد از "هم پی" باید دوباره ثبت نام کنید</string>
     <string name="vat">مالیات بر ارزش افزوده</string>
     <string name="payment_request_code">کد فاکتور: </string>
+    <string name="pending_po_details">جزییات فاکتور</string>
+    <string name="pending_po_status">وضعیت: </string>
 
 
 </resources>

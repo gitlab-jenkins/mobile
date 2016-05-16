@@ -102,8 +102,8 @@ public class PaymentRequestListActivity extends AppCompatActivity{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent();
-                intent.setClass(activity, PaymentRequestDetailActivity.class);
-                intent.putExtra(Constants.HAMPAY_CONTACT, contacts.get(position));
+                intent.setClass(activity, PendingPODetailActivity.class);
+                intent.putExtra(Constants.PAYMENT_INFO, paymentInfoList.get(position));
                 startActivityForResult(intent, 1024);
             }
         });

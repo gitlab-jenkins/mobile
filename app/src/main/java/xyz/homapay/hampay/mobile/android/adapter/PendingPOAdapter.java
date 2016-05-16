@@ -88,7 +88,7 @@ public class PendingPOAdapter extends BaseAdapter {
         }else {
 //            viewHolder.user_image.setImageResource(R.drawable.user_icon_blue);
         }
-        viewHolder.contact_name.setText(persianEnglishDigit.E2P(paymentInfo.getCallerName()));
+        viewHolder.contact_name.setText(persianEnglishDigit.E2P(paymentInfo.getCalleeName()));
         viewHolder.create_date.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(paymentInfo.getCreatedBy())));
         viewHolder.amount_value.setText(persianEnglishDigit.E2P(formatter.format(paymentInfo.getAmount())));
 

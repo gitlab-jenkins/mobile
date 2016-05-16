@@ -175,13 +175,14 @@
                         <xyz.homapay.hampay.mobile.android.component.FacedTextView
                             android:id="@+id/pending_badge"
                             geekui:customTypeface="fonts/iran_sans_bold.ttf"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
                             android:textColor="@android:color/white"
                             android:textSize="14sp"
+                            android:gravity="center"
                             android:layout_alignParentRight="true"
                             android:background="@drawable/pending_count_badge_style"
-                            android:padding="4dp"/>
+                            android:padding="4dp" />
 
                     </RelativeLayout>
 

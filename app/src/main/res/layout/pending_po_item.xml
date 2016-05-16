@@ -41,14 +41,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/main_menu_title"
-                    android:textSize="15dp"
+                    android:textSize="13sp"
                     android:text="هومن امینی"/>
 
             </LinearLayout>
 
             <FrameLayout
                 android:layout_width="48dp"
-                android:layout_height="48dp">
+                android:layout_height="48dp"
+                android:layout_marginRight="4dp">
 
                 <ImageView
                     android:id="@+id/user_image"

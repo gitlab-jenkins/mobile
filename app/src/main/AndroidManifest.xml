@@ -96,7 +96,11 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden"/>
-
+        <activity
+            android:name=".activity.PendingPODetailActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
         <activity
             android:name=".activity.HamPayContactsActivity"
             android:label="@string/app_name"

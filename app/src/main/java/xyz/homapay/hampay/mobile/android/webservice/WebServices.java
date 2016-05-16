@@ -20,6 +20,7 @@ import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessPaymentConfirmRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
+import xyz.homapay.hampay.common.core.model.request.CalculateVatRequest;
 import xyz.homapay.hampay.common.core.model.request.CancelPurchasePaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.CancelUserPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.CardProfileRequest;
@@ -59,6 +60,7 @@ import xyz.homapay.hampay.common.core.model.request.UserPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
 import xyz.homapay.hampay.common.core.model.response.BusinessListResponse;
 import xyz.homapay.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
+import xyz.homapay.hampay.common.core.model.response.CalculateVatResponse;
 import xyz.homapay.hampay.common.core.model.response.CancelPurchasePaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.CancelUserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.CardProfileResponse;
@@ -873,6 +875,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         userPaymentRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+//        userPaymentRequest.setVat(1222L);
         RequestMessage<UserPaymentRequest> message = new RequestMessage<>(userPaymentRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<UserPaymentRequest>>() {}.getType();
@@ -1109,6 +1112,28 @@ public class WebServices  {
         Gson gson = builder.getDatebuilder().create();
 
         responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<PendingPOListResponse>>() {}.getType());
+
+        proxyService.closeConnection();
+
+        return responseMessage;
+    }
+
+    public ResponseMessage<CalculateVatResponse> calculateVAT(CalculateVatRequest calculateVatRequest) throws IOException{
+
+        ResponseMessage<CalculateVatResponse> responseMessage = null;
+        url = new URL(serviceURL + "/payment/calculate-vat");
+        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+
+        calculateVatRequest.setRequestUUID(UUID.randomUUID().toString());
+        RequestMessage<CalculateVatRequest> message = new RequestMessage<>(calculateVatRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<CalculateVatRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
+
+        Gson gson = builder.getDatebuilder().create();
+
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<CalculateVatResponse>>() {}.getType());
 
         proxyService.closeConnection();
 

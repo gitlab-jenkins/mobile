@@ -91,7 +91,6 @@ public class Constants {
     public static final String NATIONAL_CODE_FORMAT = "###-######-#";
     public static final String IMAGE_PREFIX = "/image/";
 
-
     //Permissions and Group Permission
     public static final int READ_PHONE_STATE = 1;
     public static final int READ_CONTACTS = 2;

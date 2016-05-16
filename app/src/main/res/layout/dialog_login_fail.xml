@@ -3,47 +3,75 @@
     xmlns:geekui="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="right"
-    android:background="@drawable/dialog_pay_theme"
+    android:gravity="center_horizontal"
+    android:background="@drawable/dialog_failure_style"
     android:orientation="vertical"
-    android:padding="15dp">
+    android:layout_margin="8dp">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dialog_failure_title_style">
+
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/modal_failure"
+            android:layout_centerInParent="true"
+            android:padding="4dp"/>
+
+    </RelativeLayout>
 
     <xyz.homapay.hampay.mobile.android.component.FacedTextView
         android:id="@+id/failedLoginText"
         geekui:customTypeface="fonts/iran_sans.ttf"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/normal_text"
+        android:textColor="@color/modal_text"
         android:textSize="15dp"
-        android:text="@string/login_fail_text"
-        android:layout_marginTop="15dp"
-        android:gravity="right"/>
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:gravity="center"
+        android:text="@string/login_fail_text"/>
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp">
+        android:orientation="horizontal"
+        android:layout_margin="16dp"
+        android:gravity="center">
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
             android:id="@+id/remove_password"
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/exit_confirmation"
-            android:textSize="14dp"
-            android:text="@string/re_registeration" />
+            android:layout_height="32dp"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="@string/re_registeration"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:background="@drawable/modal_failure_button_style"
+            android:layout_marginRight="4dp"/>
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
             android:id="@+id/login_retry"
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/exit_dis_confirmation"
-            android:textSize="14dp"
+            android:layout_height="32dp"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:layout_gravity="center"
             android:text="@string/login_retry"
-            android:layout_alignParentRight="true"/>
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:background="@drawable/modal_failure_button_style"
+            android:layout_marginLeft="4dp"/>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>

@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -17,7 +18,9 @@ import com.google.android.gms.analytics.Tracker;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.BusinessPaymentConfirmRequest;
+import xyz.homapay.hampay.common.core.model.request.CalculateVatRequest;
 import xyz.homapay.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
+import xyz.homapay.hampay.common.core.model.response.CalculateVatResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.BusinessDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
@@ -25,6 +28,7 @@ import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestBusinessPaymentConfirm;
+import xyz.homapay.hampay.mobile.android.async.RequestCalculateVat;
 import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
 import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
@@ -36,6 +40,7 @@ import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.webservice.psp.Vectorstring2stringMapEntry;
@@ -58,7 +63,7 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
     Context context;
     Activity activity;
 
-    Long amountValue = 0l;
+    Long amountValue = 0L;
 
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
@@ -74,6 +79,13 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
     Tracker hamPayGaTracker;
 
     private BusinessDTO businessDTO;
+
+    private LinearLayout add_vat;
+    private Long calculatedVat = 0L;
+    private ImageView vat_icon;
+    private FacedTextView amount_total;
+    private CurrencyFormatter formatter;
+    private FacedTextView vat_value;
 
     public void backActionBar(View view){
         finish();
@@ -104,7 +116,7 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_business_payment_info);
 
         persianEnglishDigit = new PersianEnglishDigit();
-
+        formatter = new CurrencyFormatter();
         context = this;
         activity = BusinessPaymentInfoActivity.this;
 
@@ -161,6 +173,30 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
             }
         });
 
+        vat_value = (FacedTextView)findViewById(R.id.vat_value);
+        vat_icon = (ImageView)findViewById(R.id.vat_icon);
+        amount_total = (FacedTextView)findViewById(R.id.amount_total);
+        add_vat = (LinearLayout) findViewById(R.id.add_vat);
+        add_vat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (amount_value.getText().toString().length() > 0) {
+                    amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace(",", "")));
+                    if (calculatedVat == 0){
+                        CalculateVatRequest calculateVatRequest = new CalculateVatRequest();
+                        amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace(",", "")));
+                        calculateVatRequest.setAmount(amountValue);
+                        RequestCalculateVat requestCalculateVat = new RequestCalculateVat(activity, new RequestCalculateVatTaskCompleteListener());
+                        requestCalculateVat.execute(calculateVatRequest);
+                    }else {
+                        vat_icon.setImageResource(R.drawable.add_vat);
+                        vat_value.setText("۰");
+                        calculatedVat = 0L;
+                        amount_total.setText(persianEnglishDigit.E2P(formatter.format(amountValue)));
+                    }
+                }
+            }
+        });
 
         payment_button = (ImageView)findViewById(R.id.payment_button);
         payment_button.setOnClickListener(new View.OnClickListener() {
@@ -184,7 +220,7 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
                         if (amountValue >= MinXferAmount && amountValue <= MaxXferAmount) {
                             hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                             businessPaymentConfirmRequest = new BusinessPaymentConfirmRequest();
-                            businessPaymentConfirmRequest.setAmount(amountValue);
+                            businessPaymentConfirmRequest.setAmount(calculatedVat + amountValue);
                             businessPaymentConfirmRequest.setBusinessCode(businessDTO.getCode());
                             requestBusinessPaymentConfirm = new RequestBusinessPaymentConfirm(context, new RequestBusinessPaymentConfirmTaskCompleteListener());
                             requestBusinessPaymentConfirm.execute(businessPaymentConfirmRequest);
@@ -266,4 +302,31 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
         @Override
         public void onTaskPreRun() { }
     }
+
+    public class RequestCalculateVatTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<CalculateVatResponse>> {
+        public RequestCalculateVatTaskCompleteListener() {
+        }
+
+        @Override
+        public void onTaskComplete(ResponseMessage<CalculateVatResponse> calculateVatResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+            ResultStatus resultStatus;
+            if (calculateVatResponseMessage != null) {
+                resultStatus = calculateVatResponseMessage.getService().getResultStatus();
+                if (resultStatus == ResultStatus.SUCCESS) {
+                    vat_value.setText(persianEnglishDigit.E2P(formatter.format(calculateVatResponseMessage.getService().getAmount())));
+                    calculatedVat = calculateVatResponseMessage.getService().getAmount();
+                    amount_total.setText(persianEnglishDigit.E2P(formatter.format(calculatedVat + amountValue)));
+                    vat_icon.setImageResource(R.drawable.remove_vat);
+                }
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
+    }
+
 }

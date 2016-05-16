@@ -192,6 +192,7 @@
                 android:layout_margin="12dp">
 
                 <LinearLayout
+                    android:id="@+id/add_vat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -208,6 +209,7 @@
                         android:layout_marginRight="4dp"/>
 
                     <ImageView
+                        android:id="@+id/vat_icon"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:src="@drawable/add_vat"/>
@@ -231,6 +233,7 @@
                         android:layout_marginRight="4dp"/>
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/vat_value"
                         geekui:customTypeface="fonts/iran_sans_bold.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -286,13 +289,12 @@
                         android:text="@string/currency_rials"/>
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                        android:id="@+id/paymentTotalValue"
+                        android:id="@+id/amount_total"
                         geekui:customTypeface="fonts/iran_sans_bold.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/page_title"
                         android:textSize="22sp"
-                        android:text="ssss"
                         android:layout_marginLeft="2dp"/>
 
                 </LinearLayout>
