@@ -75,6 +75,10 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
 
     Tracker hamPayGaTracker;
 
+    public void backActionBar(View view){
+        finish();
+    }
+
     public void contactUs(View view){
         new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/changePassword.html");
     }

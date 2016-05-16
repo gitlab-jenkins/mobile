@@ -65,6 +65,9 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
 
     Tracker hamPayGaTracker;
 
+    public void backActionBar(View view){
+        finish();
+    }
 
     public void contactUs(View view){
         new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/user-unlink.html");

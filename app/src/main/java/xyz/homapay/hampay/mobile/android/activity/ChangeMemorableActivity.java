@@ -28,6 +28,10 @@ public class ChangeMemorableActivity extends AppCompatActivity {
     FacedTextView memorable_text;
     FacedTextView keepOn_text;
 
+    public void backActionBar(View view){
+        finish();
+    }
+
     public void contactUs(View view){
         new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/changeMemorableWord.html");
     }
