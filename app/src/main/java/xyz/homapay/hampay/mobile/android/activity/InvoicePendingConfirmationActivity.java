@@ -246,7 +246,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                     doWorkInfo = new DoWorkInfo();
                     doWorkInfo.setUserName("appstore");
                     doWorkInfo.setPassword("sepapp");
-                    doWorkInfo.setCellNumber(prefs.getString(Constants.REGISTERED_CELL_NUMBER, ""));
+                    doWorkInfo.setCellNumber(prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").substring(1, prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").length() - 1));
                     doWorkInfo.setLangAByte((byte) 0);
                     doWorkInfo.setLangABoolean(false);
                     TWAArrayOfKeyValueOfstringstring vectorstring2stringMapEntry = new TWAArrayOfKeyValueOfstringstring();
@@ -365,7 +365,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                 pspResultRequest.setPspResponseCode(responseCode);
                 pspResultRequest.setProductCode(paymentInfoDTO.getProductCode());
                 pspResultRequest.setTrackingCode(SWTraceNum);
-                requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener());
+                requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(), 2);
                 requestPSPResult.execute(pspResultRequest);
 
                 Intent returnIntent = new Intent();

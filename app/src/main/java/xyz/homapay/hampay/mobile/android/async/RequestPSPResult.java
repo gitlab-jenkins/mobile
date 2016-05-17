@@ -20,12 +20,14 @@ public class RequestPSPResult extends AsyncTask<PSPResultRequest, Void, Response
 
     private Context context;
     private AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> listener;
+    private int type = 0;
 
 
-    public RequestPSPResult(Context context, AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> listener)
+    public RequestPSPResult(Context context, AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> listener, int type)
     {
         this.context = context;
         this.listener = listener;
+        this.type = type;
     }
 
 
@@ -41,7 +43,7 @@ public class RequestPSPResult extends AsyncTask<PSPResultRequest, Void, Response
         WebServices webServices = new WebServices(context, Constants.CONNECTION_TYPE);
 
         try {
-            return webServices.pspResult(params[0]);
+            return webServices.pspResult(params[0], type);
         } catch (IOException e) {
             e.printStackTrace();
         }

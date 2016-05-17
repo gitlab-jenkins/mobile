@@ -762,10 +762,14 @@ public class WebServices  {
         return responseMessage;
     }
 
-    public ResponseMessage<PSPResultResponse> pspResult(PSPResultRequest pspResultRequest) throws IOException{
+    public ResponseMessage<PSPResultResponse> pspResult(PSPResultRequest pspResultRequest, int type) throws IOException{
 
         ResponseMessage<PSPResultResponse> responseMessage = null;
-        url = new URL(serviceURL + "/purchase/psp-result");
+        if (type == 1) {
+            url = new URL(serviceURL + "/purchase/psp-result");
+        }else if (type == 2){
+            url = new URL(serviceURL + "/payment/psp-result");
+        }
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         pspResultRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));

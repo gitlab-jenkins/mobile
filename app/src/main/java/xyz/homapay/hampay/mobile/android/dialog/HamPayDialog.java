@@ -917,7 +917,7 @@ public class HamPayDialog {
 
         FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
 
-        responseMessage.setText((activity.getString(R.string.error_code, code) + " - " + message));
+        responseMessage.setText((activity.getString(R.string.error_code, code) + "\n" + message));
 
 //        FacedTextView retry_fetch_bank_list = (FacedTextView) view.findViewById(R.id.retry_fetch_bank_list);
         FacedTextView cancel_request = (FacedTextView)view.findViewById(R.id.cancel_request);

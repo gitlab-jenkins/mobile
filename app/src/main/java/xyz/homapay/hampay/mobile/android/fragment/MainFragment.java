@@ -12,8 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
-import com.nineoldandroids.animation.ValueAnimator;
+import android.widget.Toast;
 
 import java.util.Date;
 import java.util.List;
@@ -22,8 +21,8 @@ import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.BusinessPurchaseActivity;
-import xyz.homapay.hampay.mobile.android.activity.PaymentRequestListActivity;
 import xyz.homapay.hampay.mobile.android.activity.PaymentRequestDetailActivity;
+import xyz.homapay.hampay.mobile.android.activity.PaymentRequestListActivity;
 import xyz.homapay.hampay.mobile.android.activity.PendingPurchasePaymentListActivity;
 import xyz.homapay.hampay.mobile.android.activity.TransactionsListActivity;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
@@ -31,6 +30,7 @@ import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.component.slidinguppanel.SlidingUpPanelLayout;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
@@ -41,6 +41,7 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 public class MainFragment extends Fragment implements View.OnClickListener{
 
 
+    private SlidingUpPanelLayout slidingUpPanelLayout;
     private ImageView main_banner;
     private LinearLayout hampay_friend;
     LinearLayout user_transaction_history;
@@ -62,6 +63,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     FacedTextView hampay_2;
     FacedTextView hampay_3;
     FacedTextView hampay_4;
+    private LinearLayout bottom_panel;
 
     FacedTextView user_last_login;
 
@@ -95,12 +97,16 @@ public class MainFragment extends Fragment implements View.OnClickListener{
 
         Date currentDate = new Date();
 
+        slidingUpPanelLayout = (SlidingUpPanelLayout)rootView.findViewById(R.id.sliding_layout);
+
+
         message_text = (FacedTextView)rootView.findViewById(R.id.message_text);
         date_text = (FacedTextView)rootView.findViewById(R.id.date_text);
 
         JalaliConvert jalaliConvert = new JalaliConvert(currentDate);
         message_text.setText(jalaliConvert.homeMessage());
         date_text.setText(persianEnglishDigit.E2P(jalaliConvert.homeDate()));
+        bottom_panel = (LinearLayout)rootView.findViewById(R.id.bottom_panel);
 
 
 
@@ -150,6 +156,9 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         }
 
         List<ContactDTO> contacts = userProfileDTO.getSelectedContacts();
+        if (contacts.size() == 0){
+            bottom_panel.setVisibility(View.GONE);
+        }
         for (int contact = 0; contact < contacts.size(); contact++){
             switch (contact){
                 case 0:
@@ -230,21 +239,37 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                 break;
 
             case R.id.user_transaction_history:
+                if (slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED){
+                    slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                    return;
+                }
                 intent.setClass(getActivity(), TransactionsListActivity.class);
                 startActivity(intent);
                 break;
 
             case R.id.user_payment_request:
+                if (slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED){
+                    slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                    return;
+                }
                 intent.setClass(getActivity(), PaymentRequestListActivity.class);
                 startActivity(intent);
                 break;
 
             case R.id.businessPurchase:
+                if (slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED){
+                    slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                    return;
+                }
                 intent.setClass(getActivity(), BusinessPurchaseActivity.class);
                 startActivity(intent);
                 break;
 
             case R.id.pendingPurchasePayment:
+                if (slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED){
+                    slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                    return;
+                }
                 intent.setClass(getActivity(), PendingPurchasePaymentListActivity.class);
                 startActivity(intent);
                 break;
