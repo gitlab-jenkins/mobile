@@ -617,7 +617,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 break;
 
             case REMOVE:
-                image_profile.setImageResource(R.drawable.ic_camera);
+                image_profile.setImageResource(R.drawable.transaction_placeholder);
                 break;
         }
     }

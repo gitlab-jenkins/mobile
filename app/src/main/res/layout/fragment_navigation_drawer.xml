@@ -1,6 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:geekui="http://schemas.android.com/apk/res-auto"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white">
@@ -37,9 +36,10 @@
                     android:id="@+id/image_profile"
                     android:layout_width="61dp"
                     android:layout_height="61dp"
-                    android:src="@drawable/ic_camera"
+                    android:src="@drawable/transaction_placeholder"
                     android:scaleType="fitXY"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center"
+                    android:background="@color/app_origin"/>
 
                 <ImageView
                     android:layout_width="64dp"
@@ -47,18 +47,6 @@
                     android:background="@drawable/curve_user_image"/>
 
             </FrameLayout>
-
-            <!--<xyz.homapay.hampay.mobile.android.component.FacedTextView-->
-            <!--android:id="@+id/user_account_name"-->
-            <!--geekui:customTypeface="fonts/iran_sans.ttf"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:textColor="@android:color/white"-->
-            <!--android:textSize="18dp"-->
-            <!--android:text=""-->
-            <!--android:layout_marginRight="4dp"-->
-            <!--android:layout_marginLeft="4dp"/>-->
-
 
             <LinearLayout
                 android:layout_width="wrap_content"

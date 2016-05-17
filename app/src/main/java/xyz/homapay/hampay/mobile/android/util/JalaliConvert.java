@@ -230,7 +230,7 @@ public class JalaliConvert {
         Calendar calendar = GregorianCalendar.getInstance();
         calendar.setTime(date);
         calendar.get(Calendar.HOUR_OF_DAY);
-        String message = homeMessage(calendar.get(Calendar.HOUR_OF_DAY)) + " " + "به خیر";
+        String message = homeMessage(calendar.get(Calendar.HOUR_OF_DAY)) + " " + "بخیر";
          return message;
     }
 

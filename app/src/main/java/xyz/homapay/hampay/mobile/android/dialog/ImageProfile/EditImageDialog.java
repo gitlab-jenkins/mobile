@@ -1,8 +1,10 @@
 package xyz.homapay.hampay.mobile.android.dialog.ImageProfile;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -10,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.TextView;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
@@ -21,6 +24,7 @@ import xyz.homapay.hampay.mobile.android.activity.ChangeUserImageActivity;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestRemoveUserImage;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.dialog.HamPayCustomDialog;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
 /**
@@ -34,6 +38,7 @@ public class EditImageDialog  extends DialogFragment implements TextView.OnEdito
 
     Context context;
     EditImageDialogListener activity;
+    private Rect rect = new Rect();
 
     @Override
     public void onClick(View v) {
@@ -50,6 +55,11 @@ public class EditImageDialog  extends DialogFragment implements TextView.OnEdito
         View view = inflater.inflate(R.layout.dialog_user_image_profile, container);
         context = getContext();
         activity = (EditImageDialogListener) getActivity();
+
+        Activity parent = (Activity) activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(rect);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
 
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
@@ -98,6 +108,7 @@ public class EditImageDialog  extends DialogFragment implements TextView.OnEdito
         });
 
         cancel_choose.setOnClickListener(this);
+
 
         return view;
     }

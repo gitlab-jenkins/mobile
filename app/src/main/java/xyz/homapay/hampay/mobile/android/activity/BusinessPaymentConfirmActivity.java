@@ -188,7 +188,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
                     doWorkInfo = new DoWorkInfo();
                     doWorkInfo.setUserName("appstore");
                     doWorkInfo.setPassword("sepapp");
-                    doWorkInfo.setCellNumber(prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").substring(1, prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").length() - 1));
+                    doWorkInfo.setCellNumber(prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").substring(1, prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").length()));
                     doWorkInfo.setLangAByte((byte) 0);
                     doWorkInfo.setLangABoolean(false);
                     TWAArrayOfKeyValueOfstringstring vectorstring2stringMapEntry = new TWAArrayOfKeyValueOfstringstring();

@@ -246,7 +246,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                     doWorkInfo = new DoWorkInfo();
                     doWorkInfo.setUserName("appstore");
                     doWorkInfo.setPassword("sepapp");
-                    doWorkInfo.setCellNumber(prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").substring(1, prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").length() - 1));
+                    doWorkInfo.setCellNumber(prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").substring(1, prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").length()));
                     doWorkInfo.setLangAByte((byte) 0);
                     doWorkInfo.setLangABoolean(false);
                     TWAArrayOfKeyValueOfstringstring vectorstring2stringMapEntry = new TWAArrayOfKeyValueOfstringstring();
@@ -276,14 +276,15 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                     s2sMapEntry.Value = pspInfoDTO.getCardDTO().getCardId();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
-//                    s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-//                    s2sMapEntry.Key = "Merchant";
-//                    s2sMapEntry.Value = pspInfoDTO.getMerchant();
-//                    vectorstring2stringMapEntry.add(s2sMapEntry);
+                    s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry.Key = "SenderTerminalId";
+                    s2sMapEntry.Value = pspInfoDTO.getTerminalID();
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "IPAddress";
-                    s2sMapEntry.Value = pspInfoDTO.getIpAddress();
+//                    s2sMapEntry.Value = pspInfoDTO.getIpAddress();
+                    s2sMapEntry.Value = "31.123.43.213";
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     doWorkInfo.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
