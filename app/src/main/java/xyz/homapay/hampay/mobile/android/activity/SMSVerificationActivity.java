@@ -72,7 +72,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
     FacedTextView input_digit_2;
     FacedTextView input_digit_3;
     FacedTextView input_digit_4;
-    FacedTextView input_digit_5;
+//    FacedTextView input_digit_5;
 
     Context context;
 
@@ -207,7 +207,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
 
                     registrationVerifyMobileRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
                     registrationVerifyMobileRequest.setSmsToken(receivedSmsValue);
-
+                    receivedSmsValue = "";
                     requestVerifyMobile = new RequestVerifyMobile(context, new RequestRegistrationVerifyMobileTaskCompleteListener());
                     requestVerifyMobile.execute(registrationVerifyMobileRequest);
 
@@ -297,7 +297,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         input_digit_2 = (FacedTextView)findViewById(R.id.input_digit_2);
         input_digit_3 = (FacedTextView)findViewById(R.id.input_digit_3);
         input_digit_4 = (FacedTextView)findViewById(R.id.input_digit_4);
-        input_digit_5 = (FacedTextView)findViewById(R.id.input_digit_5);
+//        input_digit_5 = (FacedTextView)findViewById(R.id.input_digit_5);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
 
@@ -316,6 +316,11 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         @Override
         public void onTaskComplete(ResponseMessage<RegistrationVerifyMobileResponse> registrationVerifyMobileResponseMessage)
         {
+
+            input_digit_1.setText("");
+            input_digit_2.setText("");
+            input_digit_3.setText("");
+            input_digit_4.setText("");
             hamPayDialog.dismisWaitingDialog();
             if (registrationVerifyMobileResponseMessage != null) {
 
@@ -472,7 +477,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                     input_digit_2.setText("");
                     input_digit_3.setText("");
                     input_digit_4.setText("");
-                    input_digit_5.setText("");
+//                    input_digit_5.setText("");
                     vibrator.vibrate(20);
                     break;
 
@@ -484,7 +489,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                     }
                     input_digit_3.setText("");
                     input_digit_4.setText("");
-                    input_digit_5.setText("");
+//                    input_digit_5.setText("");
                     vibrator.vibrate(20);
 
                     break;
@@ -495,7 +500,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                         input_digit_3.setText(persianEnglishDigit.E2P(digit));
                     }
                     input_digit_4.setText("");
-                    input_digit_5.setText("");
+//                    input_digit_5.setText("");
                     vibrator.vibrate(20);
                     break;
                 case 3:
@@ -508,17 +513,9 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                     break;
                 case 4:
                     if (digit.equalsIgnoreCase("d")) {
-                        input_digit_5.setText("");
+                        input_digit_4.setText("");
                     } else {
-                        input_digit_5.setText(persianEnglishDigit.E2P(digit));
-                    }
-                    vibrator.vibrate(20);
-                    break;
-                case 5:
-                    if (digit.equalsIgnoreCase("d")) {
-                        input_digit_5.setText("");
-                    } else {
-                        input_digit_5.setText(persianEnglishDigit.E2P(digit));
+                        input_digit_4.setText(persianEnglishDigit.E2P(digit));
                     }
                     vibrator.vibrate(20);
                     break;
@@ -529,10 +526,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         if (digit.contains("d")){
             if (receivedSmsValue.length() > 0) {
                 receivedSmsValue = receivedSmsValue.substring(0, receivedSmsValue.length() - 1);
-                if (receivedSmsValue.length() == 4){
-                    input_digit_5.setText("");
-                }
-                else if (receivedSmsValue.length() == 3){
+                if (receivedSmsValue.length() == 3){
                     input_digit_4.setText("");
                 }
                 else if (receivedSmsValue.length() == 2){
@@ -559,7 +553,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
 
             registrationVerifyMobileRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
             registrationVerifyMobileRequest.setSmsToken(receivedSmsValue);
-
+            receivedSmsValue = "";
             requestVerifyMobile = new RequestVerifyMobile(context, new RequestRegistrationVerifyMobileTaskCompleteListener());
             requestVerifyMobile.execute(registrationVerifyMobileRequest);
 

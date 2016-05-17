@@ -340,17 +340,17 @@
                                 android:background="@drawable/sms_value_border"
                                 android:layout_margin="4dp"/>
 
-                            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                                android:id="@+id/input_digit_5"
-                                geekui:customTypeface="fonts/iran_sans_bold.ttf"
-                                android:layout_width="32dp"
-                                android:layout_height="32dp"
-                                android:textColor="@color/sms_digit"
-                                android:textSize="20dp"
-                                android:gravity="bottom|center_horizontal"
-                                android:layout_gravity="center"
-                                android:background="@drawable/sms_value_border"
-                                android:layout_margin="4dp"/>
+                            <!--<xyz.homapay.hampay.mobile.android.component.FacedTextView-->
+                                <!--android:id="@+id/input_digit_5"-->
+                                <!--geekui:customTypeface="fonts/iran_sans_bold.ttf"-->
+                                <!--android:layout_width="32dp"-->
+                                <!--android:layout_height="32dp"-->
+                                <!--android:textColor="@color/sms_digit"-->
+                                <!--android:textSize="20dp"-->
+                                <!--android:gravity="bottom|center_horizontal"-->
+                                <!--android:layout_gravity="center"-->
+                                <!--android:background="@drawable/sms_value_border"-->
+                                <!--android:layout_margin="4dp"/>-->
 
 
                         </LinearLayout>
