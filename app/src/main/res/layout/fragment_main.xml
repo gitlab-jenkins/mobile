@@ -233,7 +233,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/main_menu_title"
-                    android:textSize="12dp"
+                    android:textSize="13dp"
                     android:layout_margin="10dp"
                     android:gravity="right"
                     android:layout_gravity="right"

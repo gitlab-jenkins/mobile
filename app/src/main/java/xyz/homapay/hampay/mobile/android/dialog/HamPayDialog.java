@@ -986,12 +986,8 @@ public class HamPayDialog {
                                                 final String message){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_registration_entry, null);
-
-        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
         FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
-
-        responseCode.setText(activity.getString(R.string.error_code, code));
-        responseMessage.setText(message);
+        responseMessage.setText(activity.getString(R.string.error_code, code)+ "\n" + message);
 
         FacedTextView retry_registration_entry = (FacedTextView) view.findViewById(R.id.retry_registration_entry);
         FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);

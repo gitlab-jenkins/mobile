@@ -27,14 +27,18 @@ import android.widget.LinearLayout;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
+import xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
 import xyz.homapay.hampay.common.core.model.response.MobileRegistrationIdEntryResponse;
+import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
@@ -42,8 +46,11 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.RequestMobileRegistrationIdEntry;
+import xyz.homapay.hampay.mobile.android.async.RequestUserProfile;
 import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.dialog.ImageProfile.ActionImage;
+import xyz.homapay.hampay.mobile.android.dialog.ImageProfile.EditImageDialog;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.fragment.AboutFragment;
 import xyz.homapay.hampay.mobile.android.fragment.AccountDetailFragment;
@@ -61,7 +68,7 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 
 
-public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener, View.OnClickListener, EditImageDialog.EditImageDialogListener {
 
     private static String TAG = MainActivity.class.getSimpleName();
 
@@ -127,13 +134,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     protected void onResume() {
         super.onResume();
         HamPayApplication.setAppSate(AppState.Resumed);
-
-        if (userProfileDTO.getUserImageId() != null) {
-            String userImageUrl = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
-            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile)).execute(userImageUrl);
-        }
-
-
         if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)){
             Intent intent = new Intent();
             intent.setClass(MainActivity.this, HamPayLoginActivity.class);
@@ -166,6 +166,17 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         pendingPaymentCount = bundle.getInt(Constants.PENDING_PAYMENT_COUNT, 0);
 
         userProfileDTO = (UserProfileDTO) intent.getSerializableExtra(Constants.USER_PROFILE_DTO);
+        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+        editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE).edit();
+
+        editor.putLong(Constants.MAX_BUSINESS_XFER_AMOUNT, this.userProfileDTO.getMaxBusinessXferAmount());
+        editor.putLong(Constants.MIN_BUSINESS_XFER_AMOUNT, this.userProfileDTO.getMinBusinessXferAmount());
+        editor.putLong(Constants.MAX_INDIVIDUAL_XFER_AMOUNT, this.userProfileDTO.getMaxIndividualXferAmount());
+        editor.putLong(Constants.MIN_INDIVIDUAL_XFER_AMOUNT, this.userProfileDTO.getMinIndividualXferAmount());
+        editor.commit();
+
+
+
 
 
 //        PugNotification.with(context)
@@ -251,14 +262,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             }
         }
 
-        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
-        editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE).edit();
-
-        editor.putLong(Constants.MAX_BUSINESS_XFER_AMOUNT, this.userProfileDTO.getMaxBusinessXferAmount());
-        editor.putLong(Constants.MIN_BUSINESS_XFER_AMOUNT, this.userProfileDTO.getMinBusinessXferAmount());
-        editor.putLong(Constants.MAX_INDIVIDUAL_XFER_AMOUNT, this.userProfileDTO.getMaxIndividualXferAmount());
-        editor.putLong(Constants.MIN_INDIVIDUAL_XFER_AMOUNT, this.userProfileDTO.getMinIndividualXferAmount());
-        editor.commit();
 
         fragment_title = (FacedTextView)findViewById(R.id.fragment_title);
 
@@ -270,7 +273,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         user_image_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new HamPayDialog(activity).showUserProfileImage();
+//                new HamPayDialog(activity).showUserProfileImage();
+
+                //cls
+                FragmentManager fm = getSupportFragmentManager();
+                EditImageDialog userEditPhotoDialog = new EditImageDialog();
+                userEditPhotoDialog.show(fm, "fragment_edit_name");
             }
         });
 
@@ -332,6 +340,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             }
 
         };
+
+        if (userProfileDTO.getUserImageId() != null) {
+            String userImageUrl = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
+            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile)).execute(userImageUrl);
+        }
 
         displayView(currentFragmet);
 
@@ -522,21 +535,23 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     fragment_title.setText(title);
                 }
             }
-        }else if (requestCode == 5000){
-            if (resultCode == 5000){
-                fragment = new AccountDetailFragment();
-                bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
-                fragment.setArguments(bundle);
-                title = getString(R.string.title_account_detail);
-                currentFragmet = 0;
-                if (fragment != null) {
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.container_body, fragment);
-                    fragmentTransaction.commit();
-                    fragment_title.setText(title);
-                }
-            }
+        }else if (resultCode == 5000) {
+            UserProfileRequest userProfileRequest = new UserProfileRequest();
+            RequestUserProfile requestUserProfile = new RequestUserProfile(activity, new RequestUserProfileTaskCompleteListener());
+            requestUserProfile.execute(userProfileRequest);
+
+//            fragment = new AccountDetailFragment();
+//            bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
+//            fragment.setArguments(bundle);
+//            title = getString(R.string.title_account_detail);
+//            currentFragmet = 0;
+//            if (fragment != null) {
+//                FragmentManager fragmentManager = getSupportFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.replace(R.id.container_body, fragment);
+//                fragmentTransaction.commit();
+//                fragment_title.setText(title);
+//            }
         }
 
     }
@@ -595,6 +610,18 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }.execute(null, null, null);
     }
 
+    @Override
+    public void onFinishEditDialog(ActionImage actionImage) {
+        switch (actionImage){
+            case NOPE:
+                break;
+
+            case REMOVE:
+                image_profile.setImageResource(R.drawable.ic_camera);
+                break;
+        }
+    }
+
     public class RequestMobileRegistrationIdEntryTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<MobileRegistrationIdEntryResponse>> {
         @Override
         public void onTaskComplete(ResponseMessage<MobileRegistrationIdEntryResponse> mobileRegistrationIdEntryResponseMessage)
@@ -632,6 +659,48 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         public void onTaskPreRun() {   }
     }
 
+
+    public class RequestUserProfileTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<UserProfileResponse>>
+    {
+        public RequestUserProfileTaskCompleteListener(){
+        }
+
+        @Override
+        public void onTaskComplete(ResponseMessage<UserProfileResponse> userProfileResponseMessage)
+        {
+            if (userProfileResponseMessage != null) {
+                if (userProfileResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
+                    userProfileDTO = userProfileResponseMessage.getService().getUserProfile();
+                    Fragment fragment = new MainFragment();
+                    if (userProfileDTO != null) {
+                        bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
+                        bundle.putInt(Constants.PENDING_PAYMENT_COUNT, pendingPaymentCount);
+                        bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);
+                        fragment.setArguments(bundle);
+                        if (userProfileDTO.getUserImageId() != null) {
+                            String userImageUrl = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
+                            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile)).execute(userImageUrl);
+                        }
+                        if (fragment != null) {
+                            FragmentManager fragmentManager = getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.container_body, fragment);
+                            fragmentTransaction.commit();
+                            fragment_title.setText(getString(R.string.title_main_fragment));
+                        }
+                    }
+                }
+                else{
+                }
+            }
+            else {
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+        }
+    }
 
 
 }

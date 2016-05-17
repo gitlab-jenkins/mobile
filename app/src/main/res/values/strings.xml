@@ -131,7 +131,7 @@
     <string name="dialog_hampay_user_waiting">عزیز، منتظر بمانید</string>
 
 
-    <string name="last_login">آخرین زمان ورود به سامانه </string>
+    <string name="last_login">آخرین بازدید شما </string>
 
     <string name="bank_name">انتخاب بانک</string>
 
@@ -457,7 +457,7 @@
     <string name="success_setting">باشه</string>
 
     <string name="retry_registration_entry">تلاش مجدد</string>
-    <string name="cancel_registration_entry">منصرف شدم</string>
+    <string name="cancel_registration_entry">انصراف</string>
     <string name="prevent_rooted_device">باشه</string>
 
 

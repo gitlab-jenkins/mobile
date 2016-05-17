@@ -117,8 +117,12 @@ public class MainFragment extends Fragment implements View.OnClickListener{
 
 
         pending_badge = (FacedTextView)rootView.findViewById(R.id.pending_badge);
-        pending_badge.setText(bundle.getInt(Constants.PENDING_PURCHASE_COUNT) + bundle.getInt(Constants.PENDING_PAYMENT_COUNT) + "");
-
+        int totalPendingCount = bundle.getInt(Constants.PENDING_PURCHASE_COUNT) + bundle.getInt(Constants.PENDING_PAYMENT_COUNT);
+        if (totalPendingCount == 0){
+            pending_badge.setVisibility(View.GONE);
+        }else {
+            pending_badge.setText(persianEnglishDigit.E2P(String.valueOf(totalPendingCount)));
+        }
 
         hampay_1_ll = (LinearLayout)rootView.findViewById(R.id.hampay_1_ll);
         hampay_2_ll = (LinearLayout)rootView.findViewById(R.id.hampay_2_ll);
@@ -137,9 +141,10 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         hampay_image_3 = (ImageView)rootView.findViewById(R.id.hampay_image_3);
         hampay_image_4 = (ImageView)rootView.findViewById(R.id.hampay_image_4);
         user_last_login = (FacedTextView)rootView.findViewById(R.id.user_last_login);
+        jalaliConvert = new JalaliConvert(userProfileDTO.getLastLoginDate());
         if (userProfileDTO.getLastLoginDate() != null) {
-            user_last_login.setText(getString(R.string.last_login) + ": "
-                    + persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(userProfileDTO.getLastLoginDate())));
+            user_last_login.setText(getString(R.string.last_login) + " "
+                    + persianEnglishDigit.E2P(jalaliConvert.homeDate() + " " + getString(R.string.time) + " " + jalaliConvert.getTimeDay()));
         }else {
             user_last_login.setText("");
         }
