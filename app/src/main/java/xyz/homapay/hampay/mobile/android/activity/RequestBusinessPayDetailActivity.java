@@ -203,9 +203,9 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
         if (pspInfoDTO != null) {
             if (pspInfoDTO.getCardDTO().getCardId() == null) {
-//                creditInfo.setVisibility(View.GONE);
+                creditInfo.setVisibility(View.GONE);
             } else {
-//                creditInfo.setVisibility(View.VISIBLE);
+                creditInfo.setVisibility(View.VISIBLE);
             }
         }
 
@@ -508,10 +508,10 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                     if (purchaseInfoDTO != null) {
 
                         if (pspInfoDTO.getCardDTO().getCardId() == null) {
-//                            creditInfo.setVisibility(View.GONE);
+                            creditInfo.setVisibility(View.GONE);
                         }
                         else {
-//                            creditInfo.setVisibility(View.VISIBLE);
+                            creditInfo.setVisibility(View.VISIBLE);
                         }
 
                         PersianEnglishDigit persianEnglishDigit = new PersianEnglishDigit();
@@ -627,10 +627,10 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                     if (purchaseInfoDTO != null) {
 
                         if (pspInfoDTO.getCardDTO().getCardId() == null) {
-//                            creditInfo.setVisibility(View.GONE);
+                            creditInfo.setVisibility(View.GONE);
                         }
                         else {
-//                            creditInfo.setVisibility(View.VISIBLE);
+                            creditInfo.setVisibility(View.VISIBLE);
                         }
 
                         PersianEnglishDigit persianEnglishDigit = new PersianEnglishDigit();

@@ -179,7 +179,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
             if (pspInfoDTO.getCardDTO().getCardId() == null) {
                 LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
-//                creditInfo.setVisibility(View.GONE);
+                creditInfo.setVisibility(View.GONE);
             } else {
                 cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
             }
@@ -473,7 +473,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
                     if (pspInfoDTO.getCardDTO().getCardId() == null) {
                         LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
-//                        creditInfo.setVisibility(View.GONE);
+                        creditInfo.setVisibility(View.GONE);
                     } else {
                         cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
                     }

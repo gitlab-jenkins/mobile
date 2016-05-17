@@ -461,7 +461,7 @@
     <string name="prevent_rooted_device">باشه</string>
 
 
-    <string name="no_transaction">در حال حاضر هیچ تراکنشی برای شما ثبت نشده است.لطفا بعد از تراکنش پرداخت به این بخش رجوع کنید.</string>
+    <string name="no_transaction">درحال حاضر تراکنشی وجود ندارد</string>
     <string name="title_activity_test_json">TestJson</string>
 
     <string name="user_profile_image_title">ویرایش عکس</string>
