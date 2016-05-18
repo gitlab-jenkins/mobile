@@ -337,11 +337,14 @@ public class ProfileEntryActivity extends AppCompatActivity {
 
                 if (!hasFocus) {
                     if (cardNumberValidator.validate(cardNumber)){
-                        preloader.setVisibility(View.VISIBLE);
-                        cardProfileRequest = new CardProfileRequest();
-                        cardProfileRequest.setCardNumber(cardNumber);
-                        requestCardProfile = new RequestCardProfile(activity, new RequestCardProfileTaskCompleteListener());
-                        requestCardProfile.execute(cardProfileRequest);
+                        verifiedCardNumber = true;
+                        cardNumberIcon.setImageResource(R.drawable.right_icon);
+                        cardNumberIcon.setVisibility(View.VISIBLE);
+//                        preloader.setVisibility(View.VISIBLE);
+//                        cardProfileRequest = new CardProfileRequest();
+//                        cardProfileRequest.setCardNumber(cardNumber);
+//                        requestCardProfile = new RequestCardProfile(activity, new RequestCardProfileTaskCompleteListener());
+//                        requestCardProfile.execute(cardProfileRequest);
                     }else {
                         cardNumberIcon.setVisibility(View.VISIBLE);
                         cardNumberIcon.setImageResource(R.drawable.false_icon);
@@ -587,14 +590,6 @@ public class ProfileEntryActivity extends AppCompatActivity {
                             .setLabel("Success")
                             .build());
 
-                }else if (registrationEntryResponse.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
-                    new HamPayDialog(activity).showInvalidStepDialog();
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Registration Entry")
-                            .setAction("Entry")
-                            .setLabel("Success(Invalid)")
-                            .build());
                 }
                 else {
                     requestRegistrationEntry = new RequestRegistrationEntry(activity,

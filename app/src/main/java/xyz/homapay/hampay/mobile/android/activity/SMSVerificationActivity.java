@@ -590,14 +590,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                             .setLabel("Success")
                             .build());
 
-                }else if (registrationSendSmsTokenResponse.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
-                    new HamPayDialog(activity).showInvalidStepDialog();
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Send Sms Token")
-                            .setAction("Send")
-                            .setLabel("Success(Invalid)")
-                            .build());
                 }
                 else {
                     requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());

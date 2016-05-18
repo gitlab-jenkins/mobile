@@ -454,7 +454,7 @@
     <string name="action_fail_payment_permission">باشه</string>
 
     <string name="msg_success_change_setting">خواسته شما با موفقیت انجام شد.</string>
-    <string name="success_setting">باشه</string>
+    <string name="success_setting">تایید</string>
 
     <string name="retry_registration_entry">تلاش مجدد</string>
     <string name="cancel_registration_entry">انصراف</string>

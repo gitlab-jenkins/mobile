@@ -237,14 +237,6 @@ public class MemorableWordEntryActivity extends AppCompatActivity {
                             .setAction("Registration")
                             .setLabel("Success")
                             .build());
-                }else if (registrationMemorableWordEntryResponseMessage.getService().getResultStatus() == ResultStatus.REGISTRATION_INVALID_STEP){
-                    new HamPayDialog(activity).showInvalidStepDialog();
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Registration Memorable Word Entry")
-                            .setAction("Registration")
-                            .setLabel("Success(Invalid)")
-                            .build());
                 }
                 else {
                     requestCredentialEntry = new RequestCredentialEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
