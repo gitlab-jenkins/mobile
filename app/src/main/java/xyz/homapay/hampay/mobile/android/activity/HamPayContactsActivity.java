@@ -7,11 +7,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
@@ -23,12 +25,14 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.HamPayContactsAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestContactHampayEnabled;
+import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class HamPayContactsActivity extends AppCompatActivity{
 
 
+    private String authToken;
     private Context context;
     private Activity activity;
     private ListView paymentRequestList;
@@ -43,11 +47,9 @@ public class HamPayContactsActivity extends AppCompatActivity{
     ContactsHampayEnabledRequest contactsHampayEnabledRequest;
     RequestContactHampayEnabled requestContactHampayEnabled;
 
+    private FacedEditText search_text;
+
     private HamPayDialog hamPayDialog;
-
-    private RelativeLayout search_layout;
-
-
     public void backActionBar(View view){
         finish();
     }
@@ -63,7 +65,31 @@ public class HamPayContactsActivity extends AppCompatActivity{
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
         paymentRequestList = (ListView)findViewById(R.id.paymentRequestList);
+        search_text = (FacedEditText)findViewById(R.id.search_text);
+        search_text.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                List<ContactDTO> searchContacts = new ArrayList<>();
+
+                for (ContactDTO contact: contacts){
+                    if (contact.getDisplayName().contains(search_text.getText().toString())){
+                        searchContacts.add(contact);
+                    }
+                }
+                hamPayContactsAdapter = new HamPayContactsAdapter(activity, searchContacts, authToken);
+                paymentRequestList.setAdapter(hamPayContactsAdapter);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
         contactsHampayEnabledRequest = new ContactsHampayEnabledRequest();
         requestContactHampayEnabled = new RequestContactHampayEnabled(activity, new RequestContactHampayEnabledTaskCompleteListener());
         requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
@@ -98,8 +124,7 @@ public class HamPayContactsActivity extends AppCompatActivity{
 //                        search_layout.setVisibility(View.GONE);
                     }
 
-                    hamPayContactsAdapter = new HamPayContactsAdapter(context, contacts,
-                            prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+                    hamPayContactsAdapter = new HamPayContactsAdapter(context, contacts, authToken);
                     paymentRequestList.setAdapter(hamPayContactsAdapter);
                 }
                 else {

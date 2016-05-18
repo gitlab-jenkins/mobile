@@ -580,6 +580,7 @@
     <string name="payment_request_code">کد فاکتور: </string>
     <string name="pending_po_details">جزییات فاکتور</string>
     <string name="pending_po_status">وضعیت: </string>
+    <string name="search_phrase">جستجو</string>
 
 
 </resources>

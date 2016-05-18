@@ -79,6 +79,7 @@
     </RelativeLayout>
 
 
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/drawerList"
         android:layout_width="match_parent"
