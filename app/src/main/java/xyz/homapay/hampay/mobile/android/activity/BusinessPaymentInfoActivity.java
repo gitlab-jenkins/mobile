@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -30,21 +29,15 @@ import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestBusinessPaymentConfirm;
 import xyz.homapay.hampay.mobile.android.async.RequestCalculateVat;
 import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
-import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
 import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.CurrencyFormatterTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
-import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
-import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
-import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
-import xyz.homapay.hampay.mobile.android.webservice.psp.Vectorstring2stringMapEntry;
-import xyz.homapay.hampay.mobile.android.webservice.psp.string2stringMapEntry;
 
 public class BusinessPaymentInfoActivity extends AppCompatActivity {
 
@@ -218,7 +211,7 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
                         editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                         editor.commit();
                         if (amountValue >= MinXferAmount && amountValue <= MaxXferAmount) {
-                            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+                            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                             businessPaymentConfirmRequest = new BusinessPaymentConfirmRequest();
                             businessPaymentConfirmRequest.setAmount(calculatedVat + amountValue);
                             businessPaymentConfirmRequest.setBusinessCode(businessDTO.getCode());
@@ -231,7 +224,6 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
                     }
 
                 }else {
-                    (new HamPayDialog(activity)).showIncorrectBusinessValue();
                 }
             }
         });
@@ -325,7 +317,7 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
 
         @Override
         public void onTaskPreRun() {
-            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 

@@ -61,7 +61,7 @@ public class GuideDetailActivity extends AppCompatActivity {
 
         hamPayDialog = new HamPayDialog(this);
 
-        hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
 
         WebSettings settings = guide_webview.getSettings();
 

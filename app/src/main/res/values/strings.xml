@@ -147,7 +147,7 @@
     <string name="communicate_disconfirm">منصرف شدم</string>
 
     <string name="dismatch_password">رمزعبور وارد شده تطابقی با هم ندارند.</string>
-    <string name="retry_password">باشه</string>
+    <string name="retry_password">تلاش مجدد</string>
 
     <string name="dismatch_memorable">کلمه یادآوری وارد شده اشتباه می باشد.</string>
     <string name="retry_memorable">باشه</string>
@@ -158,11 +158,11 @@
 
     <string name="remove_password_text">اطلاعات هم‌پی شما پاک خواهد شد و نیاز به ثبت نام مجدد دارید
         \n
-        مطمئنی؟
+اطمینان دارید؟
     </string>
     <string name="re_registeration">ثبت نام مجدد</string>
-    <string name="re_registration_done">انجام می‌دم</string>
-    <string name="cancel_remove_password">انصراف</string>
+    <string name="do_re_registration">بله</string>
+    <string name="cancel_remove_password">خیر</string>
 
 
     <string name="back_start_register">برای تصحیح اطلاعات به ثبت نام مجدد نیاز دارید</string>
@@ -175,7 +175,7 @@
     <string name="retry_price">تایید</string>
 
     <string name="fail_sms_verification">شماره اعتبار سنجی وارد شده صحیح نمی‌باشد. لطفا از صحت شماره اطمینان حاصل کرده و شماره را مجدد وارد کنید.</string>
-
+    <string name="retry_sms">تایید</string>
 
     <string name="start_activity_title">پرداخت همراه هم‌پی</string>
     <string name="start_activity_text_1">تولید فاکتور برای فرد</string>

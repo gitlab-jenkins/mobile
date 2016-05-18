@@ -6,10 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,8 +26,6 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
@@ -58,7 +54,6 @@ import xyz.homapay.hampay.mobile.android.util.AppInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
-import xyz.homapay.hampay.mobile.android.util.ScaleConverter;
 import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
 
 
@@ -117,6 +112,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     boolean fromNotification = false;
 
     String password = "";
+    private LinearLayout pendingFundLayout;
     private ListView recentPendingFundList;
     private RequestRecentPendingFund requestRecentPendingFund;
     private RecentPendingFundRequest recentPendingFundRequest;
@@ -195,6 +191,8 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
         requestRecentPendingFund = new RequestRecentPendingFund(activity, new RequestRecentFundTaskCompleteListener());
         recentPendingFundRequest = new RecentPendingFundRequest();
+        recentPendingFundRequest.setImei(new DeviceInfo(activity).getIMEI());
+        recentPendingFundRequest.setNationalCode(prefs.getString(Constants.REGISTERED_NATIONAL_CODE, ""));
         requestRecentPendingFund.execute(recentPendingFundRequest);
 
         editor.putBoolean(Constants.FETCHED_HAMPAY_ENABLED, false);
@@ -202,6 +200,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
         hampay_user = (FacedTextView)findViewById(R.id.hampay_user);
         hampay_user.setText(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        pendingFundLayout = (LinearLayout)findViewById(R.id.pending_fund_layout);
         recentPendingFundList = (ListView)findViewById(R.id.recent_pending_fund_list);
 
 
@@ -283,7 +282,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
                     if (tacResponseMessage.getService().getShouldAcceptTAC()) {
 
-                        (new HamPayDialog(activity)).showTACAcceptDialog(tacResponseMessage.getService().getTac());
 
                     } else {
 
@@ -365,7 +363,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
         @Override
         public void onTaskPreRun() {
-//            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+//            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 
@@ -466,7 +464,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onTaskPreRun() {
-        hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
     }
 }
 
@@ -487,9 +485,11 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
                     List<FundDTO> funds = recentPendingFundResponseMessage.getService().getFundDTOList();
 
-                    pendingFundAdapter = new PendingFundAdapter(activity, funds);
-                    recentPendingFundList.setAdapter(pendingFundAdapter);
-
+                    if (funds.size() > 0) {
+                        pendingFundLayout.setVisibility(View.VISIBLE);
+                        pendingFundAdapter = new PendingFundAdapter(activity, funds);
+                        recentPendingFundList.setAdapter(pendingFundAdapter);
+                    }
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Request TAC")
                             .setAction("Request")
@@ -506,7 +506,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
         @Override
         public void onTaskPreRun() {
-//            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+//            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 

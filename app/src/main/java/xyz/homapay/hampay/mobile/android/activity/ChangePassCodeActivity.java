@@ -535,7 +535,7 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
 
         @Override
         public void onTaskPreRun() {
-            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 

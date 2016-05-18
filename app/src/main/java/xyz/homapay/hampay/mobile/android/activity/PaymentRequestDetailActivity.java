@@ -25,11 +25,9 @@ import xyz.homapay.hampay.common.core.model.request.CalculateVatRequest;
 import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
 import xyz.homapay.hampay.common.core.model.request.UserPaymentRequest;
 import xyz.homapay.hampay.common.core.model.response.CalculateVatResponse;
-import xyz.homapay.hampay.common.core.model.response.GetUserIdTokenResponse;
 import xyz.homapay.hampay.common.core.model.response.UserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
-import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestCalculateVat;
@@ -38,13 +36,10 @@ import xyz.homapay.hampay.mobile.android.async.RequestUserIdToken;
 import xyz.homapay.hampay.mobile.android.async.RequestUserPayment;
 import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
-import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
 import xyz.homapay.hampay.mobile.android.component.edittext.CurrencyFormatterTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
-import xyz.homapay.hampay.mobile.android.component.material.ButtonRectangle;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
-import xyz.homapay.hampay.mobile.android.model.RecentPay;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
@@ -266,7 +261,6 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 amount_value.clearFocus();
-                payment_request_button.setEnabled(false);
 
                 if (creditValueValidation) {
                     contactMssage = contact_message.getText().toString();
@@ -282,7 +276,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                         editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                         editor.commit();
                         if (amountValue >= MinXferAmount && amountValue <= MaxXferAmount) {
-                            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+                            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                             userPaymentRequest = new UserPaymentRequest();
                             userPaymentRequest.setCalleeCellNumber(cellNumber);
                             userPaymentRequest.setAmount(calculatedVat + amountValue);
@@ -291,14 +285,9 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                             requestUserPayment.execute(userPaymentRequest);
                         } else {
                             new HamPayDialog(activity).showIncorrectAmountDialog(MinXferAmount, MaxXferAmount);
-                            payment_request_button.setEnabled(true);
                         }
                     }
-
-
                 } else {
-                    (new HamPayDialog(activity)).showIncorrectInvoiceValue();
-                    payment_request_button.setEnabled(true);
                 }
             }
         });
@@ -401,7 +390,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
 
         @Override
         public void onTaskPreRun() {
-            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 }

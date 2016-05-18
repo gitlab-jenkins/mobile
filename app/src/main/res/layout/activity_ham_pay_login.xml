@@ -16,26 +16,6 @@
         android:orientation="vertical"
         android:background="@android:color/transparent">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent">
-
-            <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:src="@drawable/help_white"
-                android:layout_marginLeft="18dp"
-                android:layout_marginTop="8dp"/>
-
-        </RelativeLayout>
-
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="18dp">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -62,10 +42,27 @@
                         android:visibility="gone"/>
 
 
-                    <ImageView
-                        android:layout_width="84dp"
-                        android:layout_height="84dp"
-                        android:src="@drawable/slider_hm"/>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent">
+
+                        <ImageView
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:src="@drawable/help_white"
+                            android:layout_marginLeft="18dp"
+                            android:layout_marginTop="8dp"/>
+
+                        <ImageView
+                            android:layout_width="84dp"
+                            android:layout_height="84dp"
+                            android:src="@drawable/slider_hm"
+                            android:layout_centerInParent="true"/>
+
+                    </RelativeLayout>
+
+
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         geekui:customTypeface="fonts/iran_sans.ttf"
@@ -75,7 +72,8 @@
                         android:textSize="18dp"
                         android:text="@string/hampay_network"
                         android:layout_marginTop="10dp"
-                        android:layout_gravity="center_horizontal"/>
+                        android:layout_gravity="center_horizontal"
+                        android:visibility="gone"/>
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/hampay_user"
@@ -85,7 +83,7 @@
                         android:textColor="@android:color/white"
                         android:textSize="18dp"
                         android:text="@string/hampay_user"
-                        android:layout_marginTop="18dp"
+                        android:layout_marginTop="4dp"
                         android:layout_gravity="center_horizontal"/>
 
 
@@ -97,7 +95,8 @@
                         android:textSize="18dp"
                         android:text="@string/hampay_login_text"
                         android:layout_marginTop="18dp"
-                        android:layout_gravity="center_horizontal"/>
+                        android:layout_gravity="center_horizontal"
+                        android:visibility="gone"/>
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/hampay_memorableword_text"
@@ -107,7 +106,7 @@
                         android:textColor="@android:color/white"
                         android:textSize="18dp"
                         android:text="@string/hampay_user"
-                        android:layout_marginTop="18dp"
+                        android:layout_marginTop="10dp"
                         android:gravity="center"
                         android:layout_gravity="center_horizontal"
                         android:background="#66000000"/>
@@ -167,12 +166,14 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/pending_fund_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:background="#55000000"
                     android:orientation="vertical"
                     android:gravity="center_horizontal"
-                    android:layout_marginTop="12dp">
+                    android:layout_marginTop="12dp"
+                    android:visibility="gone">
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -195,7 +196,7 @@
                     <ListView
                         android:id="@+id/recent_pending_fund_list"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="match_parent"/>
 
                 </LinearLayout>
 
@@ -204,8 +205,6 @@
                     android:layout_height="150dp"/>
 
             </LinearLayout>
-
-        </ScrollView>
 
 
     </LinearLayout>

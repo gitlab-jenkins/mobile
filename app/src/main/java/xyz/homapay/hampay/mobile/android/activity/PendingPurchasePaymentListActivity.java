@@ -513,7 +513,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
         @Override
         public void onTaskPreRun() {
-            hamPayDialog.showWaitingdDialog("");
+            hamPayDialog.showWaitingDialog("");
         }
     }
 
@@ -544,7 +544,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
         @Override
         public void onTaskPreRun() {
-            hamPayDialog.showWaitingdDialog("");
+            hamPayDialog.showWaitingDialog("");
         }
     }
 
@@ -575,7 +575,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
         @Override
         public void onTaskPreRun() {
-            hamPayDialog.showWaitingdDialog("");
+            hamPayDialog.showWaitingDialog("");
         }
     }
 
@@ -605,7 +605,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
         @Override
         public void onTaskPreRun() {
-            hamPayDialog.showWaitingdDialog("");
+            hamPayDialog.showWaitingDialog("");
         }
     }
 }

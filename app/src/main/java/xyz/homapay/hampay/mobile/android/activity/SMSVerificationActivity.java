@@ -9,11 +9,9 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -377,7 +375,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
 
         @Override
         public void onTaskPreRun() {
-            hamPayDialog.showWaitingdDialog("");
+            hamPayDialog.showWaitingDialog("");
         }
     }
 
@@ -448,7 +446,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                 if (sendSmsCounter < 3) {
                     if (sendSmsPermission) {
                         sendSmsPermission = false;
-                        hamPayDialog.showWaitingdDialog("");
+                        hamPayDialog.showWaitingDialog("");
                         requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
                         requestRegistrationSendSmsToken.execute(registrationSendSmsTokenRequest);
                     }

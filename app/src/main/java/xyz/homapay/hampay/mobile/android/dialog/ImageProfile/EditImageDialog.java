@@ -136,7 +136,7 @@ public class EditImageDialog  extends DialogFragment implements TextView.OnEdito
 
         @Override
         public void onTaskPreRun() {
-//            showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+//            showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 

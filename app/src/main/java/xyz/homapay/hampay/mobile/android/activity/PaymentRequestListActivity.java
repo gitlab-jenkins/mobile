@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +23,6 @@ import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
 import xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestInvoiceContactsRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingPOListRequest;
-import xyz.homapay.hampay.common.core.model.response.ContactsHampayEnabledResponse;
-import xyz.homapay.hampay.common.core.model.response.LatestInvoiceContactsResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingPOListResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.mobile.android.R;
@@ -174,7 +171,7 @@ public class PaymentRequestListActivity extends AppCompatActivity{
 
         @Override
         public void onTaskPreRun() {
-            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 }

@@ -106,6 +106,7 @@ import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
 import xyz.homapay.hampay.mobile.android.ssl.AllowHamPaySSL;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.UserContacts;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
@@ -1149,7 +1150,7 @@ public class WebServices  {
     public ResponseMessage<RecentPendingFundResponse> recentPendingFund(RecentPendingFundRequest recentPendingFundRequest) throws IOException{
 
         ResponseMessage<RecentPendingFundResponse> responseMessage = null;
-        url = new URL(serviceURL + "/user/pending-funds");
+        url = new URL(serviceURL + "/users/pending-funds");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         recentPendingFundRequest.setRequestUUID(UUID.randomUUID().toString());
@@ -1159,7 +1160,7 @@ public class WebServices  {
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
-        Gson gson = builder.getDatebuilder().create();
+        Gson gson = new Gson();
 
         responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<RecentPendingFundResponse>>() {}.getType());
 

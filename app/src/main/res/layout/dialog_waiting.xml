@@ -6,10 +6,11 @@
     android:gravity="right|center_vertical"
     android:background="@drawable/dialog_success_style"
     android:orientation="horizontal"
-    android:layout_margin="8dp">
+    android:layout_margin="8dp"
+    android:padding="6dp">
 
     <xyz.homapay.hampay.mobile.android.component.FacedTextView
-        android:id="@+id/wating_text"
+        android:id="@+id/waiting_text"
         geekui:customTypeface="fonts/iran_sans.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

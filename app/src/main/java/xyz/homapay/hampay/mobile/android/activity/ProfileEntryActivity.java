@@ -628,7 +628,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
         @Override
         public void onTaskPreRun() {
             keepOn_button.setEnabled(false);
-            hamPayDialog.showWaitingdDialog("");
+            hamPayDialog.showWaitingDialog("");
         }
     }
 
