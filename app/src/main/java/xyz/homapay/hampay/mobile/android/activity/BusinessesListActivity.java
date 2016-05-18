@@ -36,6 +36,7 @@ import java.util.List;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
+import xyz.homapay.hampay.common.core.model.enums.BizSortFactor;
 import xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
 import xyz.homapay.hampay.common.core.model.response.BusinessListResponse;
@@ -210,6 +211,7 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                     onLoadMore = false;
                     businessListRequest.setPageNumber(requestPageNumber);
                     businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+                    businessListRequest.setSortFactor(BizSortFactor.NAME);
                     requestHamPayBusiness = new RequestHamPayBusiness(context, new RequestBusinessListTaskCompleteListener(searchEnabled));
                     requestHamPayBusiness.execute(businessListRequest);
 
@@ -257,7 +259,7 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
             businessListRequest = new BusinessListRequest();
             businessListRequest.setPageNumber(requestPageNumber);
             businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-
+            businessListRequest.setSortFactor(BizSortFactor.NAME);
             requestHamPayBusiness = new RequestHamPayBusiness(this, new RequestBusinessListTaskCompleteListener(searchEnabled));
             requestHamPayBusiness.execute(businessListRequest);
         }
@@ -332,6 +334,7 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
             businessSearchRequest = new BusinessSearchRequest();
             businessSearchRequest.setPageNumber(requestPageNumber);
             businessSearchRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+            businessListRequest.setSortFactor(BizSortFactor.NAME);
             businessSearchRequest.setTerm(searchTerm);
             requestSearchHamPayBusiness = new RequestSearchHamPayBusiness(activity, new RequestBusinessListTaskCompleteListener(searchEnabled));
             requestSearchHamPayBusiness.execute(businessSearchRequest);
@@ -392,6 +395,7 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                     if (!searchEnabled) {
                         businessListRequest.setPageNumber(requestPageNumber);
                         businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+                        businessListRequest.setSortFactor(BizSortFactor.NAME);
                         requestHamPayBusiness = new RequestHamPayBusiness(activity, new RequestBusinessListTaskCompleteListener(false));
                         new HamPayDialog(activity).showFailBusinessListDialog(requestHamPayBusiness, businessListRequest,
                                 businessListResponseMessage.getService().getResultStatus().getCode(),
@@ -399,6 +403,7 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                     }else {
                         businessSearchRequest.setPageNumber(requestPageNumber);
                         businessSearchRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+                        businessListRequest.setSortFactor(BizSortFactor.NAME);
                         requestSearchHamPayBusiness = new RequestSearchHamPayBusiness(activity, new RequestBusinessListTaskCompleteListener(true));
                         new HamPayDialog(activity).showFailBusinessSearchListDialog(requestSearchHamPayBusiness, businessSearchRequest,
                                 businessListResponseMessage.getService().getResultStatus().getCode(),
@@ -416,6 +421,7 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                 if (!searchEnabled) {
                     businessListRequest.setPageNumber(requestPageNumber);
                     businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+                    businessListRequest.setSortFactor(BizSortFactor.NAME);
                     requestHamPayBusiness = new RequestHamPayBusiness(activity, new RequestBusinessListTaskCompleteListener(false));
                     new HamPayDialog(activity).showFailBusinessListDialog(requestHamPayBusiness, businessListRequest,
                             Constants.LOCAL_ERROR_CODE,
@@ -423,6 +429,7 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                 }else {
                     businessSearchRequest.setPageNumber(requestPageNumber);
                     businessSearchRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+                    businessListRequest.setSortFactor(BizSortFactor.NAME);
                     requestSearchHamPayBusiness = new RequestSearchHamPayBusiness(activity, new RequestBusinessListTaskCompleteListener(true));
                     new HamPayDialog(activity).showFailBusinessSearchListDialog(requestSearchHamPayBusiness, businessSearchRequest,
                             Constants.LOCAL_ERROR_CODE,
@@ -465,11 +472,13 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                             if (!searchEnabled) {
                                 businessListRequest.setPageNumber(requestPageNumber);
                                 businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+                                businessListRequest.setSortFactor(BizSortFactor.NAME);
                                 requestHamPayBusiness = new RequestHamPayBusiness(activity, new RequestBusinessListTaskCompleteListener(false));
                                 requestHamPayBusiness.execute(businessListRequest);
                             } else {
                                 businessSearchRequest.setPageNumber(requestPageNumber);
                                 businessSearchRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+                                businessListRequest.setSortFactor(BizSortFactor.NAME);
                                 requestSearchHamPayBusiness = new RequestSearchHamPayBusiness(activity, new RequestBusinessListTaskCompleteListener(searchEnabled));
                                 requestSearchHamPayBusiness.execute(businessSearchRequest);
                             }

@@ -60,6 +60,7 @@
     <color name="register_border">#eeefef</color>
     <color name="register_badge_bg">#757575</color>
     <color name="keyboard_border_text">#737375</color>
+    <color name="keyboard_solid_pressed">#9b2b89</color>
     <color name="main_menu_title">#686a6b</color>
     <color name="menu_divider">#d0d2d3</color>
     <color name="account_details_text">#67696b</color>

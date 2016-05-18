@@ -52,8 +52,6 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
             holder.action_divider.setVisibility(View.VISIBLE);
         }else if (position == 2){
             holder.action_divider.setVisibility(View.VISIBLE);
-        }else if (position == 5){
-            holder.action_divider.setVisibility(View.VISIBLE);
         }else {
             holder.action_divider.setVisibility(View.GONE);
         }

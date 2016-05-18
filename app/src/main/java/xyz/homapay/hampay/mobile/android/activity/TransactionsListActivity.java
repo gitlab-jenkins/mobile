@@ -28,6 +28,7 @@ import java.util.List;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
+import xyz.homapay.hampay.common.core.model.enums.TnxSortFactor;
 import xyz.homapay.hampay.common.core.model.request.TransactionListRequest;
 import xyz.homapay.hampay.common.core.model.response.TransactionListResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO;
@@ -60,7 +61,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
     RequestUserTransaction requestUserTransaction;
     TransactionListRequest transactionListRequest;
     int requestPageNumber = 0;
-    TransactionListRequest.SortFactor sortFactor = TransactionListRequest.SortFactor.DEFAULT;
+    TnxSortFactor sortFactor = TnxSortFactor.DEFAULT;
 
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
@@ -103,7 +104,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 userTransactionAdapter.clear();
                 transactionDTOs.clear();
                 requestPageNumber = 0;
-                sortFactor = TransactionListRequest.SortFactor.DEFAULT;
+                sortFactor = TnxSortFactor.DEFAULT;
                 transactionListRequest = new TransactionListRequest();
                 transactionListRequest.setPageNumber(requestPageNumber);
                 transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
@@ -120,7 +121,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 userTransactionAdapter.clear();
                 transactionDTOs.clear();
                 requestPageNumber = 0;
-                sortFactor = TransactionListRequest.SortFactor.INDIVIDUAL;
+                sortFactor = TnxSortFactor.INDIVIDUAL;
                 transactionListRequest = new TransactionListRequest();
                 transactionListRequest.setPageNumber(requestPageNumber);
                 transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
@@ -137,7 +138,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 userTransactionAdapter.clear();
                 transactionDTOs.clear();
                 requestPageNumber = 0;
-                sortFactor = TransactionListRequest.SortFactor.BUSINESS;
+                sortFactor = TnxSortFactor.BUSINESS_AND_PURCHASE;
                 transactionListRequest = new TransactionListRequest();
                 transactionListRequest.setPageNumber(requestPageNumber);
                 transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
@@ -154,7 +155,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 userTransactionAdapter.clear();
                 transactionDTOs.clear();
                 requestPageNumber = 0;
-                sortFactor = TransactionListRequest.SortFactor.SUCCESS;
+                sortFactor = TnxSortFactor.SUCCESS;
                 transactionListRequest = new TransactionListRequest();
                 transactionListRequest.setPageNumber(requestPageNumber);
                 transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
@@ -171,7 +172,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 userTransactionAdapter.clear();
                 transactionDTOs.clear();
                 requestPageNumber = 0;
-                sortFactor = TransactionListRequest.SortFactor.FAILURE;
+                sortFactor = TnxSortFactor.FAILURE;
                 transactionListRequest = new TransactionListRequest();
                 transactionListRequest.setPageNumber(requestPageNumber);
                 transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
@@ -188,7 +189,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 userTransactionAdapter.clear();
                 transactionDTOs.clear();
                 requestPageNumber = 0;
-                sortFactor = TransactionListRequest.SortFactor.PAID;
+                sortFactor = TnxSortFactor.PAID;
                 transactionListRequest = new TransactionListRequest();
                 transactionListRequest.setPageNumber(requestPageNumber);
                 transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
@@ -205,7 +206,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 userTransactionAdapter.clear();
                 transactionDTOs.clear();
                 requestPageNumber = 0;
-                sortFactor = TransactionListRequest.SortFactor.RECEIVED;
+                sortFactor = TnxSortFactor.RECEIVED;
                 transactionListRequest = new TransactionListRequest();
                 transactionListRequest.setPageNumber(requestPageNumber);
                 transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
@@ -319,7 +320,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 userTransactionAdapter.clear();
                 transactionDTOs.clear();
                 requestPageNumber = 0;
-                sortFactor = TransactionListRequest.SortFactor.DEFAULT;
+                sortFactor = TnxSortFactor.DEFAULT;
                 transactionListRequest = new TransactionListRequest();
                 transactionListRequest.setPageNumber(requestPageNumber);
                 transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
@@ -333,7 +334,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 userTransactionAdapter.clear();
                 transactionDTOs.clear();
                 requestPageNumber = 0;
-                sortFactor = TransactionListRequest.SortFactor.BUSINESS;
+                sortFactor = TnxSortFactor.BUSINESS_AND_PURCHASE;
                 transactionListRequest = new TransactionListRequest();
                 transactionListRequest.setPageNumber(requestPageNumber);
                 transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
@@ -347,7 +348,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 userTransactionAdapter.clear();
                 transactionDTOs.clear();
                 requestPageNumber = 0;
-                sortFactor = TransactionListRequest.SortFactor.INDIVIDUAL;
+                sortFactor = TnxSortFactor.INDIVIDUAL;
                 transactionListRequest = new TransactionListRequest();
                 transactionListRequest.setPageNumber(requestPageNumber);
                 transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);

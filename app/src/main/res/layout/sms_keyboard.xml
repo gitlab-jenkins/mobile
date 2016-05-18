@@ -28,7 +28,7 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:text="۱"
-                android:background="@drawable/keyboard_bg"
+                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="2dp"/>
 
 
@@ -43,7 +43,7 @@
             android:gravity="center"
             android:layout_gravity="center"
             android:text="۲"
-            android:background="@drawable/keyboard_bg"
+            android:background="@drawable/keyboard_button_selector"
             android:layout_margin="2dp"/>
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
@@ -57,7 +57,7 @@
             android:gravity="center"
             android:layout_gravity="center"
             android:text="۳"
-            android:background="@drawable/keyboard_bg"
+            android:background="@drawable/keyboard_button_selector"
             android:layout_margin="2dp"/>
 
     </LinearLayout>
@@ -80,7 +80,7 @@
             android:gravity="center"
             android:layout_gravity="center"
             android:text="۴"
-            android:background="@drawable/keyboard_bg"
+            android:background="@drawable/keyboard_button_selector"
             android:layout_margin="2dp"/>
 
 
@@ -95,7 +95,7 @@
             android:gravity="center"
             android:layout_gravity="center"
             android:text="۵"
-            android:background="@drawable/keyboard_bg"
+            android:background="@drawable/keyboard_button_selector"
             android:layout_margin="2dp"/>
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
@@ -109,7 +109,7 @@
             android:gravity="center"
             android:layout_gravity="center"
             android:text="۶"
-            android:background="@drawable/keyboard_bg"
+            android:background="@drawable/keyboard_button_selector"
             android:layout_margin="2dp"/>
 
     </LinearLayout>
@@ -132,7 +132,7 @@
             android:gravity="center"
             android:layout_gravity="center"
             android:text="۷"
-            android:background="@drawable/keyboard_bg"
+            android:background="@drawable/keyboard_button_selector"
             android:layout_margin="2dp"/>
 
 
@@ -147,7 +147,7 @@
             android:gravity="center"
             android:layout_gravity="center"
             android:text="۸"
-            android:background="@drawable/keyboard_bg"
+            android:background="@drawable/keyboard_button_selector"
             android:layout_margin="2dp"/>
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
@@ -161,7 +161,7 @@
             android:gravity="center"
             android:layout_gravity="center"
             android:text="۹"
-            android:background="@drawable/keyboard_bg"
+            android:background="@drawable/keyboard_button_selector"
             android:layout_margin="2dp"/>
 
     </LinearLayout>
@@ -185,7 +185,7 @@
             android:gravity="center"
             android:layout_gravity="center"
             android:text="@string/keyboard_dismiss"
-            android:background="@drawable/keyboard_bg"
+            android:background="@drawable/keyboard_button_selector"
             android:layout_margin="2dp"/>
 
 
@@ -200,7 +200,7 @@
             android:gravity="center"
             android:layout_gravity="center"
             android:text="۰"
-            android:background="@drawable/keyboard_bg"
+            android:background="@drawable/keyboard_button_selector"
             android:layout_margin="2dp"/>
 
        <RelativeLayout
@@ -208,7 +208,7 @@
            android:layout_width="0dip"
            android:layout_height="42dp"
            android:layout_weight="0.3"
-           android:background="@drawable/keyboard_bg"
+           android:background="@drawable/keyboard_button_selector"
            android:layout_margin="2dp">
 
            <ImageView

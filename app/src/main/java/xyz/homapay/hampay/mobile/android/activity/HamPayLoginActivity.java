@@ -14,6 +14,7 @@ import android.view.Display;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -26,19 +27,25 @@ import com.google.gson.reflect.TypeToken;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
+import xyz.homapay.hampay.common.core.model.request.RecentPendingFundRequest;
 import xyz.homapay.hampay.common.core.model.request.TACRequest;
+import xyz.homapay.hampay.common.core.model.response.RecentPendingFundResponse;
 import xyz.homapay.hampay.common.core.model.response.TACResponse;
+import xyz.homapay.hampay.common.core.model.response.dto.FundDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.adapter.PendingFundAdapter;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestLogin;
+import xyz.homapay.hampay.mobile.android.async.RequestRecentPendingFund;
 import xyz.homapay.hampay.mobile.android.async.RequestTAC;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
@@ -67,9 +74,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     String nationalCode = "";
     String memorableWord;
     String installationToken;
-
-
-
     FacedTextView digit_1;
     FacedTextView digit_2;
     FacedTextView digit_3;
@@ -113,6 +117,10 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     boolean fromNotification = false;
 
     String password = "";
+    private ListView recentPendingFundList;
+    private RequestRecentPendingFund requestRecentPendingFund;
+    private RecentPendingFundRequest recentPendingFundRequest;
+    private PendingFundAdapter pendingFundAdapter;
 
     public void contactUs(View view){
         new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/login.html");
@@ -185,11 +193,18 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
+        requestRecentPendingFund = new RequestRecentPendingFund(activity, new RequestRecentFundTaskCompleteListener());
+        recentPendingFundRequest = new RecentPendingFundRequest();
+        requestRecentPendingFund.execute(recentPendingFundRequest);
+
         editor.putBoolean(Constants.FETCHED_HAMPAY_ENABLED, false);
         editor.commit();
 
         hampay_user = (FacedTextView)findViewById(R.id.hampay_user);
         hampay_user.setText(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        recentPendingFundList = (ListView)findViewById(R.id.recent_pending_fund_list);
+
+
 
         bundle = getIntent().getExtras();
 
@@ -455,6 +470,45 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     }
 }
 
+
+
+    public class RequestRecentFundTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RecentPendingFundResponse>>
+    {
+        public RequestRecentFundTaskCompleteListener(){
+        }
+
+        @Override
+        public void onTaskComplete(ResponseMessage<RecentPendingFundResponse> recentPendingFundResponseMessage)
+        {
+            hamPayDialog.dismisWaitingDialog();
+            if (recentPendingFundResponseMessage != null) {
+
+                if (recentPendingFundResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+
+                    List<FundDTO> funds = recentPendingFundResponseMessage.getService().getFundDTOList();
+
+                    pendingFundAdapter = new PendingFundAdapter(activity, funds);
+                    recentPendingFundList.setAdapter(pendingFundAdapter);
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Request TAC")
+                            .setAction("Request")
+                            .setLabel("Success")
+                            .build());
+
+                }else {
+                }
+            }
+            else {
+            }
+
+        }
+
+        @Override
+        public void onTaskPreRun() {
+//            hamPayDialog.showWaitingdDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
+    }
 
 
     @Override
