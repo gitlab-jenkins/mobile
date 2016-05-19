@@ -115,7 +115,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
         fee_charge_value = (FacedTextView)findViewById(R.id.fee_charge_value);
         payment_request_code = (FacedTextView)findViewById(R.id.payment_request_code);
         date_time = (FacedTextView)findViewById(R.id.date_time);
-        card_number_value = (FacedTextView)findViewById(R.id.card_number_value);
+        card_number_value = (FacedTextView)findViewById(R.id.card_number);
         cell_number = (FacedTextView)findViewById(R.id.cell_number);
         bank_name = (FacedTextView)findViewById(R.id.bank_name);
         message = (FacedTextView)findViewById(R.id.message);

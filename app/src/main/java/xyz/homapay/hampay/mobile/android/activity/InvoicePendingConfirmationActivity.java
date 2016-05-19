@@ -49,6 +49,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
     ImageView user_image;
     FacedTextView callerName;
+    FacedTextView paymentCode;
     FacedTextView received_message;
     FacedTextView create_date;
     FacedTextView paymentPriceValue;
@@ -147,6 +148,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
         currencyFormatter = new CurrencyFormatter();
         user_image = (ImageView)findViewById(R.id.user_image);
         callerName = (FacedTextView) findViewById(R.id.callerName);
+        paymentCode = (FacedTextView)findViewById(R.id.paymentCode);
         create_date = (FacedTextView)findViewById(R.id.create_date);
         received_message = (FacedTextView) findViewById(R.id.received_message);
         paymentPriceValue = (FacedTextView) findViewById(R.id.paymentPriceValue);
@@ -164,12 +166,13 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
         if (paymentInfoDTO != null) {
             callerName.setText(paymentInfoDTO.getCallerName());
-            received_message.setText(paymentInfoDTO.getMessage());
+            paymentCode.setText(persianEnglishDigit.E2P("کد فاکتور " + paymentInfoDTO.getProductCode()));
+            received_message.setText(paymentInfoDTO.getMessage().trim());
             create_date.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(paymentInfoDTO.getCreatedBy())));
             paymentPriceValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount())));
-            paymentVAT.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount())));
+            paymentVAT.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getVat())));
             paymentFeeValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getFeeCharge())));
-            paymentTotalValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount() + paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge())));
+            paymentTotalValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount() + paymentInfoDTO.getVat() + paymentInfoDTO.getFeeCharge())));
             cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
             bankName.setText(pspInfoDTO.getCardDTO().getBankName());
             if (paymentInfoDTO.getImageId() != null) {
@@ -460,11 +463,13 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                     paymentInfoDTO = latestPaymentResponseMessage.getService().getPaymentInfoDTO();
                     pspInfoDTO = latestPaymentResponseMessage.getService().getPspInfo();
                     callerName.setText(paymentInfoDTO.getCallerName());
-                    received_message.setText(paymentInfoDTO.getMessage());
+                    paymentCode.setText(persianEnglishDigit.E2P("کد فاکتور " + paymentInfoDTO.getProductCode()));
+                    create_date.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(paymentInfoDTO.getCreatedBy())));
+                    received_message.setText(paymentInfoDTO.getMessage().trim());
                     paymentPriceValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount())));
-                    paymentVAT.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount())));
+                    paymentVAT.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getVat())));
                     paymentFeeValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getFeeCharge())));
-                    paymentTotalValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount() + paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge())));
+                    paymentTotalValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount() + paymentInfoDTO.getVat() + paymentInfoDTO.getFeeCharge())));
                     cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
                     bankName.setText(pspInfoDTO.getCardDTO().getBankName());
                     if (paymentInfoDTO.getImageId() != null) {

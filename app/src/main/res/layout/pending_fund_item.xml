@@ -42,6 +42,8 @@
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/white"
                     android:textSize="13sp"
+                    android:layout_gravity="right"
+                    android:gravity="right"
                     android:text="هومن امینی"/>
 
             </LinearLayout>

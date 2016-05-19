@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -150,6 +152,25 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
 
         amount_value = (FacedEditText)findViewById(R.id.amount_value);
         amount_value.addTextChangedListener(new CurrencyFormatterTextWatcher(amount_value));
+        amount_value.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                vat_icon.setImageResource(R.drawable.add_vat);
+                vat_value.setText("۰");
+                calculatedVat = 0L;
+                amount_total.setText(amount_value.getText().toString());
+            }
+        });
         amount_value.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {

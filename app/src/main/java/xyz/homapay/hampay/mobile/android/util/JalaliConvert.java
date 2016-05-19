@@ -39,7 +39,7 @@ public class JalaliConvert {
         this.month = jM;
         this.dayFromMonth = jD;
         this.dayFromWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         this.timeDay = sdf.format(calendar.getTime());
     }
 
@@ -164,8 +164,7 @@ public class JalaliConvert {
         return persianDay[getDayFromWeek()]
                 + " "
                 + String.format("%04d/%02d/%02d", getYear(), getMonth(), getDayFromMonth())
-                + "\n"
-                + "ساعت " + getTimeDay();
+                + " - " + getTimeDay();
     }
 
     public void GregorianToPersian(int year, int month, int day) {
@@ -190,7 +189,7 @@ public class JalaliConvert {
         this.month = jM;
         this.dayFromMonth = jD;
         this.dayFromWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
         this.timeDay = sdf.format(calendar.getTime());
 
         return this.toString();

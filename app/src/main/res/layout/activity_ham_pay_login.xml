@@ -29,19 +29,6 @@
                     android:orientation="vertical"
                     android:gravity="center_horizontal">
 
-                    <xyz.homapay.hampay.mobile.android.component.preloader.Preloader
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        app:indicator="BallPulse"
-                        android:visibility="gone"/>
-
-                    <xyz.homapay.hampay.mobile.android.component.preloader.Preloader
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:indicator="LineScale"
-                        android:visibility="gone"/>
-
-
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -72,9 +59,9 @@
                         android:textColor="@android:color/white"
                         android:textSize="18dp"
                         android:text="@string/hampay_network"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="6dp"
                         android:layout_gravity="center_horizontal"
-                        android:visibility="gone"/>
+                        android:visibility="visible"/>
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/hampay_user"
@@ -93,11 +80,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/white"
-                        android:textSize="18dp"
+                        android:textSize="13dp"
                         android:text="@string/hampay_login_text"
-                        android:layout_marginTop="18dp"
+                        android:layout_marginTop="10dp"
                         android:layout_gravity="center_horizontal"
-                        android:visibility="gone"/>
+                        android:visibility="visible"/>
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/hampay_memorableword_text"
@@ -114,17 +101,13 @@
 
                     <LinearLayout
                         android:id="@+id/password_holder"
-                        android:layout_marginTop="18dp"
+                        android:layout_marginTop="12dp"
                         android:layout_marginBottom="18dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_centerInParent="true"
-                        android:background="#44FFFFFF"
-                        android:paddingLeft="18dp"
-                        android:paddingRight="18dp"
-                        android:paddingBottom="8dp"
-                        android:paddingTop="8dp">
+                        >
 
                         <ImageView
                             android:id="@+id/input_digit_1"

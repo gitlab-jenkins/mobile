@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="right"
-                android:layout_margin="12dp"
+                android:layout_margin="8dp"
                 android:visibility="visible">
 
                 <LinearLayout
@@ -132,8 +132,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_gravity="right">
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
@@ -160,8 +160,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_gravity="right">
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
@@ -188,8 +188,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginLeft="12dp"
-                android:layout_marginRight="12dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_gravity="right">
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
@@ -216,13 +216,13 @@
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
                 android:background="@color/main_menu_title"
-                android:layout_margin="12dp"/>
+                android:layout_margin="8dp"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_margin="12dp"
+                android:layout_margin="8dp"
                 android:layout_gravity="right">
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
@@ -249,13 +249,13 @@
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
                 android:background="@color/main_menu_title"
-                android:layout_margin="12dp"/>
+                android:layout_margin="8dp"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_margin="12dp"
+                android:layout_margin="8dp"
                 android:layout_gravity="right">
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
@@ -274,7 +274,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
                 android:background="@color/main_menu_title"
-                android:layout_margin="12dp"/>
+                android:layout_margin="8dp"/>
 
 
             <LinearLayout
@@ -285,20 +285,11 @@
                 android:visibility="visible">
 
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_margin="12dp">
-
-                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                        geekui:customTypeface="fonts/iran_sans.ttf"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/account_details_text"
-                        android:textSize="18sp"
-                        android:text="@string/card_number"
-                        android:layout_gravity="right"/>
+                    android:orientation="horizontal"
+                    android:layout_margin="18dp">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -309,19 +300,28 @@
                         <include layout="@layout/masked_card_number"/>
 
                         <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                            android:id="@+id/card_number_value"
+                            android:id="@+id/card_number"
                             geekui:customTypeface="fonts/iran_sans.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/account_details_text"
-                            android:textSize="18dp"
+                            android:textSize="15dp"
                             android:text="@string/card_number"
                             android:layout_marginRight="8dp"/>
-
                     </LinearLayout>
 
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        geekui:customTypeface="fonts/iran_sans.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/account_details_text"
+                        android:textSize="15dp"
+                        android:text="@string/card_number"
+                        android:layout_gravity="right"
+                        android:layout_alignParentRight="true"/>
 
-                </LinearLayout>
+
+                </RelativeLayout>
 
 
                 <LinearLayout
@@ -329,7 +329,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="right"
-                    android:layout_margin="12dp">
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp">
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/bank_name"
@@ -352,13 +353,13 @@
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
                 android:background="@color/main_menu_title"
-                android:layout_margin="12dp"/>
+                android:layout_margin="8dp"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_margin="12dp"
+                android:layout_margin="8dp"
                 android:layout_gravity="right">
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
@@ -389,7 +390,7 @@
                 android:textColor="@color/main_menu_title"
                 android:textSize="15dp"
                 android:text="@string/message"
-                android:layout_margin="12dp"/>
+                android:layout_margin="8dp"/>
 
             <LinearLayout
                 android:id="@+id/pay_button"
@@ -397,8 +398,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:padding="12dp"
-                android:layout_marginTop="12dp">
+                android:padding="8dp"
+                android:layout_marginTop="8dp">
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     geekui:customTypeface="fonts/iran_sans.ttf"

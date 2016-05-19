@@ -492,6 +492,8 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                         pendingFundLayout.setVisibility(View.VISIBLE);
                         pendingFundAdapter = new PendingFundAdapter(activity, funds);
                         recentPendingFundList.setAdapter(pendingFundAdapter);
+                    }else {
+                        new Expand(keyboard).animate();
                     }
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Request TAC")
@@ -500,9 +502,11 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                             .build());
 
                 }else {
+                    new Expand(keyboard).animate();
                 }
             }
             else {
+                new Expand(keyboard).animate();
             }
 
         }
