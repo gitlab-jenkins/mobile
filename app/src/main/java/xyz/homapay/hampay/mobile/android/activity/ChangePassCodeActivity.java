@@ -80,7 +80,7 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
     }
 
     public void contactUs(View view){
-        new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/changePassword.html");
+
     }
 
     @Override

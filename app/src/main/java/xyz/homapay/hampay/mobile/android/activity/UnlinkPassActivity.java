@@ -81,7 +81,7 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
     }
 
     public void contactUs(View view){
-        new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/user-unlink.html");
+
     }
 
 

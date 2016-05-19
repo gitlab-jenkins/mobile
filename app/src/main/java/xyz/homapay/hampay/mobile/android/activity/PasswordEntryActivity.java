@@ -66,7 +66,7 @@ public class PasswordEntryActivity extends AppCompatActivity implements View.OnC
     private FacedTextView password_notify_text_1;
 
     public void contactUs(View view){
-        new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/pass-a.html");
+
     }
 
 

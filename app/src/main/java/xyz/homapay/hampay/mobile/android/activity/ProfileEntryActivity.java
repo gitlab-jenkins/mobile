@@ -412,6 +412,8 @@ public class ProfileEntryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                keepOn_button.requestFocus();
+
                 View view = getCurrentFocus();
                 if (view != null) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(
@@ -419,10 +421,10 @@ public class ProfileEntryActivity extends AppCompatActivity {
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
 
-                cellNumberValue.clearFocus();
-                userNameFamily.clearFocus();
-                nationalCodeValue.clearFocus();
-                cardNumberValue.clearFocus();
+//                cellNumberValue.clearFocus();
+//                userNameFamily.clearFocus();
+//                nationalCodeValue.clearFocus();
+//                cardNumberValue.clearFocus();
 
 
                 if (cellNumberIsValid && nationalCodeIsValid && verifiedCardNumber
@@ -477,15 +479,12 @@ public class ProfileEntryActivity extends AppCompatActivity {
                         emailValue.requestFocus();
                     }
                 }
-
-                keepOn_button.requestFocus();
-
             }
         });
     }
 
     public void contactUs(View view){
-        new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/reg-userInfo.html");
+
     }
 
 

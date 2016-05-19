@@ -74,7 +74,7 @@ public class MemorableWordEntryActivity extends AppCompatActivity {
     private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
 
     public void contactUs(View view){
-        new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/memorableKey.html");
+
     }
 
 

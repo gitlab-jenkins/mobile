@@ -306,7 +306,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
 
 
     public void contactUs(View view){
-        new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/reg-smsToken.html");
+
     }
 
     public class RequestRegistrationVerifyMobileTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationVerifyMobileResponse>>

@@ -70,7 +70,7 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
     }
 
     public void contactUs(View view){
-        new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/user-unlink.html");
+
     }
 
 

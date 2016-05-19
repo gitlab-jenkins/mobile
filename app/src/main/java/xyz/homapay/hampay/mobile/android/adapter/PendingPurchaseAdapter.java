@@ -119,51 +119,6 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
 
         viewHolder.price_pay.setText(persianEnglishDigit.E2P(currencyFormatter.format(purchaseInfoDTO.getAmount())));
 
-//        viewHolder.delete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                Rect displayRectangle = new Rect();
-//
-//                Window window = activity.getWindow();
-//                window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-//                View view = activity.getLayoutInflater().inflate(R.layout.dialog_delete_pending_payment, null);
-//                FacedTextView deleteCodeNotify = (FacedTextView)view.findViewById(R.id.deleteCodeNotify);
-//                deleteCodeNotify.setText(activity.getString(R.string.msg_delete_payment_pending, persianEnglishDigit.E2P(purchaseInfoDTO.getProductCode())));
-//                FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
-//                FacedTextView dis_confirmation = (FacedTextView) view.findViewById(R.id.dis_confirmation);
-//
-//                confirmation.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        dialog.dismiss();
-//                        requestCancelPurchase = new RequestCancelPurchase(activity, new RequestCancelPurchasePaymentTaskCompleteListener(position));
-//                        cancelPurchasePaymentRequest = new CancelPurchasePaymentRequest();
-//                        cancelPurchasePaymentRequest.setProductCode(purchaseInfoDTO.getProductCode());
-//                        requestCancelPurchase.execute(cancelPurchasePaymentRequest);
-//                    }
-//                });
-//
-//                dis_confirmation.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        dialog.dismiss();
-//                    }
-//                });
-//
-//
-//                view.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
-//                dialog = new Dialog(activity);
-//                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//                dialog.setContentView(view);
-//                dialog.setTitle(null);
-//                dialog.setCanceledOnTouchOutside(true);
-//
-//                dialog.show();
-//            }
-//        });
-
         return convertView;
 
     }

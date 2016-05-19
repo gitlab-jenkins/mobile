@@ -119,7 +119,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     private PendingFundAdapter pendingFundAdapter;
 
     public void contactUs(View view){
-        new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/login.html");
+
     }
 
     @Override

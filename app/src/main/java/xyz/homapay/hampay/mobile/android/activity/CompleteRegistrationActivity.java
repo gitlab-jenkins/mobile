@@ -48,7 +48,7 @@ public class CompleteRegistrationActivity extends AppCompatActivity {
 
 
     public void contactUs(View view){
-        new HamPayDialog(this).showHelpDialog(Constants.HTTPS_SERVER_IP + "/help/reg-com.html");
+
     }
 
     @Override
