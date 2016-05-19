@@ -134,9 +134,9 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
         paymentInfoDTO = (PaymentInfoDTO)intent.getSerializableExtra(Constants.PAYMENT_INFO);
         pspInfoDTO = (PspInfoDTO)intent.getSerializableExtra(Constants.PSP_INFO);
 
-        if (pspInfoDTO.getCardDTO().getCardId() == null) {
+        if (pspInfoDTO.getCardDTO().getCardId() != null) {
             LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
-            creditInfo.setVisibility(View.GONE);
+            creditInfo.setVisibility(View.VISIBLE);
         }
         else {
             cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));

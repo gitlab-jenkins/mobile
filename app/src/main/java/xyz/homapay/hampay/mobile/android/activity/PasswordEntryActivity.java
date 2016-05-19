@@ -65,10 +65,13 @@ public class PasswordEntryActivity extends AppCompatActivity implements View.OnC
 
     private FacedTextView password_notify_text_1;
 
-    public void contactUs(View view){
 
+    public void userManual(View view){
+        Intent intent = new Intent();
+        intent.setClass(activity, UserManualActivity.class);
+        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_pass_code_entry);
+        startActivity(intent);
     }
-
 
     @Override
     protected void onPause() {

@@ -177,9 +177,9 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
             }else {
             }
 
-            if (pspInfoDTO.getCardDTO().getCardId() == null) {
+            if (pspInfoDTO.getCardDTO().getCardId() != null) {
                 LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
-                creditInfo.setVisibility(View.GONE);
+                creditInfo.setVisibility(View.VISIBLE);
             } else {
                 cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
             }
@@ -471,9 +471,9 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                         new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(user_image)).execute(Constants.IMAGE_PREFIX + authToken + "/" + paymentInfoDTO.getImageId());
                     }
 
-                    if (pspInfoDTO.getCardDTO().getCardId() == null) {
+                    if (pspInfoDTO.getCardDTO().getCardId() != null) {
                         LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
-                        creditInfo.setVisibility(View.GONE);
+                        creditInfo.setVisibility(View.VISIBLE);
                     } else {
                         cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
                     }

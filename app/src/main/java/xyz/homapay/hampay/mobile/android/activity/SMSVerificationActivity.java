@@ -173,6 +173,13 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         }
     }
 
+    public void userManual(View view){
+        Intent intent = new Intent();
+        intent.setClass(activity, UserManualActivity.class);
+        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_sms_verification);
+        startActivity(intent);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();

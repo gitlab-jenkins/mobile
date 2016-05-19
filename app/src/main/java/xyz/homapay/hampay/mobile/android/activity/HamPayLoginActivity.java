@@ -118,8 +118,11 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     private RecentPendingFundRequest recentPendingFundRequest;
     private PendingFundAdapter pendingFundAdapter;
 
-    public void contactUs(View view){
-
+    public void userManual(View view){
+        Intent intent = new Intent();
+        intent.setClass(activity, UserManualActivity.class);
+        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_login);
+        startActivity(intent);
     }
 
     @Override

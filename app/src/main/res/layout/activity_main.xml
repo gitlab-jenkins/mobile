@@ -23,7 +23,8 @@
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:src="@drawable/help_gray"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                android:onClick="userManual"/>
 
             <ImageView
                 android:id="@+id/nav_icon"

@@ -47,8 +47,11 @@ public class CompleteRegistrationActivity extends AppCompatActivity {
     FacedTextView congrats_text;
 
 
-    public void contactUs(View view){
-
+    public void userManual(View view){
+        Intent intent = new Intent();
+        intent.setClass(activity, UserManualActivity.class);
+        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_complete);
+        startActivity(intent);
     }
 
     @Override

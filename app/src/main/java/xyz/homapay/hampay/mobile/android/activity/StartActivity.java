@@ -1,6 +1,7 @@
 package xyz.homapay.hampay.mobile.android.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,13 @@ public class StartActivity extends AppCompatActivity {
 
     Activity activity;
     SharedPreferences.Editor editor;
+
+    public void userManual(View view){
+        Intent intent = new Intent();
+        intent.setClass(activity, UserManualActivity.class);
+        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_start_activity);
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

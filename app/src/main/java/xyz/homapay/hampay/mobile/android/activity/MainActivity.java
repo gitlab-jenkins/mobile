@@ -75,6 +75,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     //    private Toolbar mToolbar;
     private FragmentDrawer drawerFragment;
 
+    private Fragment fragment = null;
+
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle mDrawerToggle;
 
@@ -117,6 +119,20 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     Intent intent;
 
     DatabaseHelper databaseHelper;
+
+    public void userManual(View view){
+        Intent intent = new Intent();
+        intent.setClass(activity, UserManualActivity.class);
+        if (currentFragmet == 0) {
+            intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_main);
+        }else if (currentFragmet == 1){
+            intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_account);
+        }
+        else if (currentFragmet == 2){
+            intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_setting);
+        }
+        startActivity(intent);
+    }
 
     @Override
     protected void onPause() {
@@ -380,7 +396,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     }
 
     private void displayView(int position) {
-        Fragment fragment = null;
+
         String title = getString(R.string.app_name);
         switch (position) {
 
@@ -406,30 +422,18 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 fragment = new SettingFragment();
                 title = getString(R.string.title_settings);
                 break;
-//                fragment = new UserTransactionFragment();
-//                title = getString(R.string.title_transactions);
-//                break;
             case 3:
                 new HamPayDialog(activity).fetchContactUsInfo();
                 break;
-//                fragment = new PendingPaymentFragment();
-//                title = getString(R.string.title_pending_payment);
-//                break;
             case 4:
                 fragment = new GuideFragment();
                 title = getString(R.string.title_guide);
                 break;
-//                fragment = new CreditRequestFragment();
-//                title = getString(R.string.title_credit_request);
-//                break;
             case 5:
                 LogoutData logoutData = new LogoutData();
                 logoutData.setIplanetDirectoryPro(prefs.getString(Constants.LOGIN_TOKEN_ID, null));
                 new HamPayDialog(activity).showExitDialog(logoutData);
                 break;
-//                fragment = new SettingFragment();
-//                title = getString(R.string.title_settings);
-//                break;
             case 6:
                 new HamPayDialog(activity).fetchContactUsInfo();
                 break;
@@ -476,6 +480,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container_body, fragment);
+//            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
             fragmentTransaction.commit();
 
             fragment_title.setText(title);
@@ -515,8 +520,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        Fragment fragment;
         String title;
 
 
@@ -539,19 +542,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             UserProfileRequest userProfileRequest = new UserProfileRequest();
             RequestUserProfile requestUserProfile = new RequestUserProfile(activity, new RequestUserProfileTaskCompleteListener());
             requestUserProfile.execute(userProfileRequest);
-
-//            fragment = new AccountDetailFragment();
-//            bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
-//            fragment.setArguments(bundle);
-//            title = getString(R.string.title_account_detail);
-//            currentFragmet = 0;
-//            if (fragment != null) {
-//                FragmentManager fragmentManager = getSupportFragmentManager();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                fragmentTransaction.replace(R.id.container_body, fragment);
-//                fragmentTransaction.commit();
-//                fragment_title.setText(title);
-//            }
         }
 
     }
@@ -671,7 +661,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             if (userProfileResponseMessage != null) {
                 if (userProfileResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
                     userProfileDTO = userProfileResponseMessage.getService().getUserProfile();
-                    Fragment fragment = new MainFragment();
+                    fragment = new MainFragment();
                     if (userProfileDTO != null) {
                         bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
                         bundle.putInt(Constants.PENDING_PAYMENT_COUNT, pendingPaymentCount);

@@ -2,6 +2,7 @@ package xyz.homapay.hampay.mobile.android.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -124,6 +125,13 @@ public class ProfileEntryActivity extends AppCompatActivity {
     private CardNumberValidator cardNumberValidator;
 
     private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
+
+    public void userManual(View view){
+        Intent intent = new Intent();
+        intent.setClass(activity, UserManualActivity.class);
+        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_profile_entry);
+        startActivity(intent);
+    }
 
     @Override
     protected void onPause() {
