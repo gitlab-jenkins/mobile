@@ -289,7 +289,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_margin="18dp">
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -306,7 +307,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/account_details_text"
                             android:textSize="15dp"
-                            android:text="@string/card_number"
+                            android:text="۸۸۸۸"
                             android:layout_marginRight="8dp"/>
                     </LinearLayout>
 
@@ -390,7 +391,8 @@
                 android:textColor="@color/main_menu_title"
                 android:textSize="15dp"
                 android:text="@string/message"
-                android:layout_margin="8dp"/>
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"/>
 
             <LinearLayout
                 android:id="@+id/pay_button"

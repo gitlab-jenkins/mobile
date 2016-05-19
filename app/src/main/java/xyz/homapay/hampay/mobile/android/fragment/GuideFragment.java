@@ -12,6 +12,7 @@ import android.widget.ListView;
 
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.GuideDetailActivity;
+import xyz.homapay.hampay.mobile.android.activity.UserManualActivity;
 import xyz.homapay.hampay.mobile.android.adapter.GuideAdapter;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
@@ -50,88 +51,56 @@ public class GuideFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Intent intent = new Intent();
-                intent.setClass(getActivity(), GuideDetailActivity.class);
+                intent.setClass(getActivity(), UserManualActivity.class);
 
                 switch (position){
 
                     case 0:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/reg-intro.html");
+                        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_merchant_payment);
                         break;
 
                     case 1:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/reg-userInfo.html");
+                        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_online_payment);
                         break;
 
                     case 2:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/reg-smsToken.html");
+                        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_charity_payment);
                         break;
 
                     case 3:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/userInfoCheck.html");
+                        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_payment_request);
                         break;
 
                     case 4:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/accountVerification.html");
+                        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_pending_payment);
                         break;
 
                     case 5:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/pass-a.html");
+                        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_iban_intro);
                         break;
 
                     case 6:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/memorableKey.html");
+                        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_transaction);
                         break;
 
                     case 7:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/accountDetail.html");
+                        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_change_password);
                         break;
 
                     case 8:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/limitedAccount.html");
+                        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_change_memorable_word);
                         break;
 
                     case 9:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/login.html");
+                        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_iban_change);
                         break;
 
                     case 10:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/transaction.html");
+                        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_unlink);
                         break;
 
                     case 11:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/user-unlink.html");
-                        break;
-
-                    case 12:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/payment.html");
-                        break;
-
-                    case 13:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/businessPayment.html");
-                        break;
-
-                    case 14:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/contactUs.html");
-                        break;
-
-                    case 15:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/logout.html");
-                        break;
-
-                    case 16:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/setting.html");
-                        break;
-
-                    case 17:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/changeMemorableWord.html");
-                        break;
-
-                    case 18:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/changePassword.html");
-                        break;
-
-                    case 19:
-                        intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/changePassword.html");
+                        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_contact_us);
                         break;
 
                 }
