@@ -28,7 +28,7 @@
                 android:textColor="@color/app_origin"
                 android:textSize="18sp"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/intro_account"
+                android:text="@string/iban_change"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="8dp"
                 android:layout_centerVertical="true"/>
@@ -41,37 +41,42 @@
             android:background="@color/app_origin" />
 
 
+
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            android:id="@+id/password_notify_text_0"
+            android:id="@+id/pass_code_change_text"
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:textColor="@color/main_menu_title"
-            android:textSize="15dp"
-            android:text="@string/intro_account_text"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:layout_margin="24dp"
-            android:lineSpacingExtra="8dp"/>
+            android:textSize="15sp"
+            android:text="@string/change_activities_pass_code_text"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="24dp"
+            android:gravity="center" />
 
 
         <LinearLayout
             android:id="@+id/password_holder"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="80dp"
             android:orientation="vertical"
-            android:layout_margin="8dp"
+            android:gravity="center"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_gravity="center_horizontal"
             android:background="@drawable/register_border"
-            android:padding="8dp">
+            android:contentDescription="activation_holder">
 
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="240dp"
+                android:layout_height="50dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp">
 
                 <View
-                    android:layout_width="match_parent"
+                    android:layout_width="230dp"
                     android:layout_height="2dp"
                     android:background="@color/page_title"
                     android:layout_alignParentBottom="true"/>
@@ -90,33 +95,45 @@
                     android:layout_alignParentRight="true"/>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_centerHorizontal="true"
-                    android:gravity="center_vertical">
+                    android:layout_centerInParent="true">
 
-                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                        geekui:customTypeface="fonts/iran_sans.ttf"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/register_btn_color"
-                        android:textSize="15sp"
-                        android:text="@string/sheba_text"
-                        android:gravity="center"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="2dp"/>
-
-                    <xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText
-                        android:id="@+id/ibanNumberValue"
-                        android:layout_width="match_parent"
+                    <ImageView
+                        android:id="@+id/input_digit_1"
+                        android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:textSize="15sp"
-                        android:textColor="@android:color/black"
-                        android:singleLine="true"
-                        android:maxLength="26"
-                        android:inputType="number"
-                        android:background="@color/transparency" />
+                        android:layout_margin="4dp"
+                        android:src="@drawable/pass_value_empty"/>
+
+                    <ImageView
+                        android:id="@+id/input_digit_2"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_margin="4dp"
+                        android:src="@drawable/pass_value_empty"/>
+
+                    <ImageView
+                        android:id="@+id/input_digit_3"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_margin="4dp"
+                        android:src="@drawable/pass_value_empty"/>
+
+                    <ImageView
+                        android:id="@+id/input_digit_4"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_margin="4dp"
+                        android:src="@drawable/pass_value_empty"/>
+
+                    <ImageView
+                        android:id="@+id/input_digit_5"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_margin="4dp"
+                        android:src="@drawable/pass_value_empty"/>
 
 
                 </LinearLayout>
@@ -128,21 +145,22 @@
         </LinearLayout>
 
 
-        <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            android:id="@+id/sheba_verify_button"
-            geekui:customTypeface="fonts/iran_sans.ttf"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:text="@string/sheba_verify"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:background="@drawable/registration_button_style"
-            android:layout_marginTop="16dp"/>
-
     </LinearLayout>
+
+
+
+    <LinearLayout
+        android:id="@+id/keyboard"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone">
+
+        <include
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/password_keyboard"/>
+    </LinearLayout>
+
 
 </RelativeLayout>

@@ -658,4 +658,6 @@
 
     <string name="amount_entry">لطفا مبلغ مورد نظر را وارد کنید</string>
 
+    <string name="iban_change">تغییر شماره شبا</string>
+
 </resources>

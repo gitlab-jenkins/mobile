@@ -91,6 +91,8 @@ public class Constants {
     public static final String NATIONAL_CODE_FORMAT = "###-######-#";
     public static final String IMAGE_PREFIX = "/image/";
     public static final String USER_MANUAL_TEXT = "userManualText";
+    public static final String USER_IBAN = "userIban";
+
 
     //Permissions and Group Permission
     public static final int READ_PHONE_STATE = 1;

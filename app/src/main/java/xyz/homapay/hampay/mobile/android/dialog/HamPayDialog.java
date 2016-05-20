@@ -61,6 +61,7 @@ import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.AppSliderActivity;
+import xyz.homapay.hampay.mobile.android.activity.ChangeIbanPassActivity;
 import xyz.homapay.hampay.mobile.android.activity.ChangeMemorableActivity;
 import xyz.homapay.hampay.mobile.android.activity.GuideDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
@@ -1778,10 +1779,9 @@ public class HamPayDialog {
         iban_request_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IBANChangeRequest ibanChangeRequest = new IBANChangeRequest();
-                ibanChangeRequest.setIban(new PersianEnglishDigit().P2E(iban));
-                RequestIBANChange requestIBANChange = new RequestIBANChange(activity, new RequestIBANChangeTaskCompleteListener(ibanChangeRequest));
-                requestIBANChange.execute(ibanChangeRequest);
+                Intent intent = new Intent(activity, ChangeIbanPassActivity.class);
+                intent.putExtra(Constants.USER_IBAN, iban);
+                activity.startActivity(intent);
             }
         });
 
@@ -1796,45 +1796,6 @@ public class HamPayDialog {
         view.setMinimumWidth((int) (rect.width() * 0.85f));
         dialog = new HamPayCustomDialog(view, activity, 0);
         dialog.show();
-    }
-
-
-    public class RequestIBANChangeTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<IBANChangeResponse>> {
-
-        IBANChangeRequest ibanChangeRequest;
-        RequestIBANChange requestIBANChange;
-
-        public RequestIBANChangeTaskCompleteListener(IBANChangeRequest ibanChangeRequest) {
-            this.ibanChangeRequest = ibanChangeRequest;
-        }
-
-        @Override
-        public void onTaskComplete(ResponseMessage<IBANChangeResponse> ibanChangeResponseMessage) {
-            dismisWaitingDialog();
-            if (ibanChangeResponseMessage != null) {
-                if (ibanChangeResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    Intent returnIntent = new Intent();
-                    returnIntent.putExtra("result", 1023);
-                    activity.setResult(1023);
-                    activity.finish();
-                } else {
-                    requestIBANChange = new RequestIBANChange(activity, new RequestIBANChangeTaskCompleteListener(ibanChangeRequest));
-                    showFailIBANChangeDialog(requestIBANChange, ibanChangeRequest,
-                            ibanChangeResponseMessage.getService().getResultStatus().getCode(),
-                            ibanChangeResponseMessage.getService().getResultStatus().getDescription());
-                }
-            } else {
-                requestIBANChange = new RequestIBANChange(activity, new RequestIBANChangeTaskCompleteListener(ibanChangeRequest));
-                showFailIBANChangeDialog(requestIBANChange, ibanChangeRequest,
-                        Constants.LOCAL_ERROR_CODE,
-                        activity.getString(R.string.msg_fail_iban_change));
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
     }
 
     public void showFailIBANChangeDialog(final RequestIBANChange requestIBANChange,
