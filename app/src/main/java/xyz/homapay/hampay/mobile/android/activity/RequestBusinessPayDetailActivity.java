@@ -307,6 +307,11 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry.Key = "SenderTerminalId";
+                    s2sMapEntry.Value = pspInfoDTO.getTerminalID();
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                    s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "IPAddress";
                     s2sMapEntry.Value = pspInfoDTO.getIpAddress();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
@@ -405,7 +410,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 pspResultRequest.setPspResponseCode(responseCode);
                 pspResultRequest.setProductCode(purchaseInfoDTO.getProductCode());
                 pspResultRequest.setTrackingCode(SWTraceNum);
-                requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(), 2);
+                requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(), 1);
                 requestPSPResult.execute(pspResultRequest);
 
                 Intent returnIntent = new Intent();

@@ -286,8 +286,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
                     s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "IPAddress";
-//                    s2sMapEntry.Value = pspInfoDTO.getIpAddress();
-                    s2sMapEntry.Value = "31.123.43.213";
+                    s2sMapEntry.Value = pspInfoDTO.getIpAddress();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     doWorkInfo.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);

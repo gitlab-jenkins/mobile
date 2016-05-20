@@ -1,6 +1,7 @@
 package xyz.homapay.hampay.mobile.android.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -78,10 +79,14 @@ public class IntroIBANActivity extends AppCompatActivity {
         sheba_verify_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ibanConfirmationRequest = new IBANConfirmationRequest();
-                ibanConfirmationRequest.setIban("IR" + persianEnglishDigit.P2E(ibanNumberValue.getText().toString()));
-                requestIBANConfirmation = new RequestIBANConfirmation(activity, new RequestIBANConfirmationTaskCompleteListener());
-                requestIBANConfirmation.execute(ibanConfirmationRequest);
+                Intent intent = new Intent(activity, ChangeIbanPassActivity.class);
+                intent.putExtra(Constants.USER_IBAN, ibanNumberValue.getText().toString());
+                activity.startActivity(intent);
+                finish();
+//                ibanConfirmationRequest = new IBANConfirmationRequest();
+//                ibanConfirmationRequest.setIban("IR" + persianEnglishDigit.P2E(ibanNumberValue.getText().toString()));
+//                requestIBANConfirmation = new RequestIBANConfirmation(activity, new RequestIBANConfirmationTaskCompleteListener());
+//                requestIBANConfirmation.execute(ibanConfirmationRequest);
             }
         });
 

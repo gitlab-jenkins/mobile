@@ -178,7 +178,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ham_pay_login);
 
-        image = (ImageView)findViewById(R.id.image);
+
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -188,6 +188,9 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
         context = this;
         activity = HamPayLoginActivity.this;
+
+        image = (ImageView)findViewById(R.id.image);
+        String userImageUrl = "http://www.asriran.com/files/fa/news/1395/2/31/586342_830.jpg";
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();

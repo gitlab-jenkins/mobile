@@ -214,10 +214,10 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
                     s2sMapEntry.Value = pspInfoDTO.getCardDTO().getCardId();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
-//                    s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-//                    s2sMapEntry.Key = "Merchant";
-//                    s2sMapEntry.Value = pspInfoDTO.getMerchant();
-//                    vectorstring2stringMapEntry.add(s2sMapEntry);
+                    s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry.Key = "SenderTerminalId";
+                    s2sMapEntry.Value = pspInfoDTO.getTerminalID();
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "IPAddress";

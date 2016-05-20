@@ -43,6 +43,7 @@
                             android:onClick="userManual"/>
 
                         <ImageView
+                            android:id="@+id/image"
                             android:layout_width="84dp"
                             android:layout_height="84dp"
                             android:src="@drawable/slider_hm"

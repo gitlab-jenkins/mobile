@@ -142,6 +142,9 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                             "&Amount=" + (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge()) +
                             "&ResNum=" + paymentInfoDTO.getProductCode() +
                             "&TerminalId=" + pspInfoDTO.getTerminalID();
+
+
+
 //                        postData =
 //                                "Amount=" + paymentInfoDTO.getAmount() +
 //                                        "&TerminalId=" + pspInfoDTO.getTerminalID() +
@@ -161,12 +164,19 @@ public class BankWebPaymentActivity extends AppCompatActivity {
             }
 
             postData =
-                    "ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
+//                    "ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
+//                            "&ResNum3=" + pspInfoDTO.getCardDTO().getSmsToken() +
+//                            "&RedirectURL=" + redirectedURL +
+//                            "&Amount=" + (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + vat) +
+//                            "&ResNum=" + purchaseInfoDTO.getProductCode() +
+//                            "&TerminalId=" + pspInfoDTO.getTerminalID();
+
+                        "ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
                             "&ResNum3=" + pspInfoDTO.getCardDTO().getSmsToken() +
                             "&RedirectURL=" + redirectedURL +
                             "&Amount=" + (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + vat) +
                             "&ResNum=" + purchaseInfoDTO.getProductCode() +
-                            "&TerminalId=" + pspInfoDTO.getTerminalID();
+                            "&TerminalId=" + "10516003";
 
 
 //                        postData =
