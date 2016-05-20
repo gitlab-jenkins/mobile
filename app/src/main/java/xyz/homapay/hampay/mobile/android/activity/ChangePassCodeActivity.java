@@ -11,9 +11,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
@@ -283,6 +287,26 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                         input_digit_5.setImageResource(R.drawable.pass_value_placeholder);
                         vibrator.vibrate(20);
 
+
+                        Map<String, Integer> passCodeMap = new HashMap<>();
+
+                        for(int i = 0; i < currentPassword.length(); i++) {
+                            if (passCodeMap.get(String.valueOf(currentPassword.charAt(i))) == null){
+                                passCodeMap.put(String.valueOf(currentPassword.charAt(i)), 1);
+                            }else {
+                                passCodeMap.put(String.valueOf(currentPassword.charAt(i)), passCodeMap.get(String.valueOf(currentPassword.charAt(i))) + 1);
+                            }
+                        }
+
+                        for (Map.Entry<String, Integer> entry : passCodeMap.entrySet())
+                        {
+                            if (entry.getValue() > 2){
+                                currentPassword = "";
+                                Toast.makeText(activity, getString(R.string.msg_invalid_password), Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+
                         passCodeChangeStep = 2;
                         pass_code_change_text.setText(getString(R.string.change_pass_code_text_2));
 
@@ -366,6 +390,26 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                         input_digit_5.setImageResource(R.drawable.pass_value_placeholder);
                         vibrator.vibrate(20);
 
+
+                        Map<String, Integer> passCodeMap = new HashMap<>();
+
+                        for(int i = 0; i < inputPasswordValue.length(); i++) {
+                            if (passCodeMap.get(String.valueOf(inputPasswordValue.charAt(i))) == null){
+                                passCodeMap.put(String.valueOf(inputPasswordValue.charAt(i)), 1);
+                            }else {
+                                passCodeMap.put(String.valueOf(inputPasswordValue.charAt(i)), passCodeMap.get(String.valueOf(inputPasswordValue.charAt(i))) + 1);
+                            }
+                        }
+
+                        for (Map.Entry<String, Integer> entry : passCodeMap.entrySet())
+                        {
+                            if (entry.getValue() > 2){
+                                inputPasswordValue = "";
+                                Toast.makeText(activity, getString(R.string.msg_invalid_password), Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+
                         passCodeChangeStep = 3;
                         pass_code_change_text.setText(getString(R.string.change_pass_code_text_3));
 
@@ -445,6 +489,25 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                         input_digit_4.setImageResource(R.drawable.pass_value_placeholder);
                         input_digit_5.setImageResource(R.drawable.pass_value_placeholder);
                         vibrator.vibrate(20);
+
+                        Map<String, Integer> passCodeMap = new HashMap<>();
+
+                        for(int i = 0; i < inputRePasswordValue.length(); i++) {
+                            if (passCodeMap.get(String.valueOf(inputRePasswordValue.charAt(i))) == null){
+                                passCodeMap.put(String.valueOf(inputRePasswordValue.charAt(i)), 1);
+                            }else {
+                                passCodeMap.put(String.valueOf(inputRePasswordValue.charAt(i)), passCodeMap.get(String.valueOf(inputRePasswordValue.charAt(i))) + 1);
+                            }
+                        }
+
+                        for (Map.Entry<String, Integer> entry : passCodeMap.entrySet())
+                        {
+                            if (entry.getValue() > 2){
+                                inputRePasswordValue = "";
+                                Toast.makeText(activity, getString(R.string.msg_invalid_password), Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
 
                         if (inputPasswordValue.equalsIgnoreCase(inputRePasswordValue)) {
 

@@ -254,6 +254,7 @@
                                         android:layout_gravity="center_horizontal"
                                         android:singleLine="true"
                                         android:maxLength="15"
+                                        android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzاآبپتثجچحخدذرزژسشصضطظعغفقکگلمنوهی"
                                         android:contentDescription="memorable"
                                         android:background="@color/transparency" />
 

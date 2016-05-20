@@ -8,12 +8,14 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -25,7 +27,9 @@ import com.google.gson.reflect.TypeToken;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
@@ -53,6 +57,7 @@ import xyz.homapay.hampay.mobile.android.model.SuccessLoginResponse;
 import xyz.homapay.hampay.mobile.android.util.AppInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
+import xyz.homapay.hampay.mobile.android.util.HamPayUtils;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
 
@@ -179,7 +184,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_ham_pay_login);
 
 
-
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -190,7 +194,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         activity = HamPayLoginActivity.this;
 
         image = (ImageView)findViewById(R.id.image);
-        String userImageUrl = "http://www.asriran.com/files/fa/news/1395/2/31/586342_830.jpg";
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();

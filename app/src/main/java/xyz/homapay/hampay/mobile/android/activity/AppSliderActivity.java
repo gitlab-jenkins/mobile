@@ -151,6 +151,14 @@ public class AppSliderActivity extends AppCompatActivity {
                         finish();
                         startActivity(intent);
                         break;
+
+                    case USER_PAYMENT_CONFIRM:
+                        intent = getIntent();
+                        intent.setClass(activity, HamPayLoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        finish();
+                        startActivity(intent);
+                        break;
                 }
 
             }

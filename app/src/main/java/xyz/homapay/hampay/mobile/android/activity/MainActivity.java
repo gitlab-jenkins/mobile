@@ -240,9 +240,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
             switch (notificationMessageType){
                 case PAYMENT:
-
                     displayView(2);
-
                     break;
 
                 case CREDIT_REQUEST:
@@ -254,6 +252,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 case PURCHASE:
                     notificationIntent = getIntent();
                     notificationIntent.setClass(activity, RequestBusinessPayDetailActivity.class);
+                    startActivity(notificationIntent);
+                    break;
+                case USER_PAYMENT_CONFIRM:
+                    notificationIntent = getIntent();
+                    notificationIntent.setClass(activity, TransactionsListActivity.class);
                     startActivity(notificationIntent);
                     break;
             }

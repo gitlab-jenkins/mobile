@@ -18,7 +18,7 @@ import xyz.homapay.hampay.mobile.android.model.AppState;
  * Created by amir on 7/10/15.
  */
 
-@ReportsCrashes(mailTo = "amirh.sharafkar@gmail.com,defects@homapay.com")
+@ReportsCrashes(mailTo = "defects@homapay.com")
 
 public class HamPayApplication extends MultiDexApplication {
 

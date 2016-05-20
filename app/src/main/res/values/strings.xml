@@ -146,6 +146,7 @@
     <string name="communicate_confirm">باشه</string>
     <string name="communicate_disconfirm">منصرف شدم</string>
 
+    <string name="msg_invalid_password">بیش از دو عدد تکراری قابل قبول نمی‌باشد</string>
     <string name="dismatch_password">رمزعبور وارد شده تطابقی با هم ندارند.</string>
     <string name="retry_password">تلاش مجدد</string>
 
@@ -659,5 +660,6 @@
     <string name="amount_entry">لطفا مبلغ مورد نظر را وارد کنید</string>
 
     <string name="iban_change">تغییر شماره شبا</string>
+    <string name="payment_request_issue">تولید فاکتور</string>
 
 </resources>

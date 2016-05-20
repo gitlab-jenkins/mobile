@@ -9,7 +9,10 @@ public enum NotificationMessageType {
     PAYMENT("PAYMENT"),
     CREDIT_REQUEST("CREDIT_REQUEST"),
     APP_UPDATE("APP_UPDATE"),
-    PURCHASE("PURCHASE");
+    PURCHASE("PURCHASE"),
+    USER_PAYMENT_CONFIRM("USER_PAYMENT_CONFIRM"),
+    USER_PAYMENT_CANCEL("USER_PAYMENT_CANCEL");
+
 
     private String messageType;
 

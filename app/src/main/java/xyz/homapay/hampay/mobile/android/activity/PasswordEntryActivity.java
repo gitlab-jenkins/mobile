@@ -11,10 +11,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
@@ -286,6 +291,26 @@ public class PasswordEntryActivity extends AppCompatActivity implements View.OnC
                         input_digit_5.setImageResource(R.drawable.pass_value_placeholder);
                         vibrator.vibrate(20);
 
+
+                        Map<String, Integer> passCodeMap = new HashMap<>();
+
+                        for(int i = 0; i < inputPasswordValue.length(); i++) {
+                            if (passCodeMap.get(String.valueOf(inputPasswordValue.charAt(i))) == null){
+                                passCodeMap.put(String.valueOf(inputPasswordValue.charAt(i)), 1);
+                            }else {
+                                passCodeMap.put(String.valueOf(inputPasswordValue.charAt(i)), passCodeMap.get(String.valueOf(inputPasswordValue.charAt(i))) + 1);
+                            }
+                        }
+
+                        for (Map.Entry<String, Integer> entry : passCodeMap.entrySet())
+                        {
+                            if (entry.getValue() > 2){
+                                inputPasswordValue = "";
+                                Toast.makeText(activity, getString(R.string.msg_invalid_password), Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+
                         password_1_rl.setVisibility(View.GONE);
 
                         password_2_rl.setVisibility(View.VISIBLE);
@@ -367,16 +392,27 @@ public class PasswordEntryActivity extends AppCompatActivity implements View.OnC
                         input_digit_5.setImageResource(R.drawable.pass_value_placeholder);
                         vibrator.vibrate(20);
 
+
+                        Map<String, Integer> passCodeMap = new HashMap<>();
+
+                        for(int i = 0; i < inputRePasswordValue.length(); i++) {
+                            if (passCodeMap.get(String.valueOf(inputRePasswordValue.charAt(i))) == null){
+                                passCodeMap.put(String.valueOf(inputRePasswordValue.charAt(i)), 1);
+                            }else {
+                                passCodeMap.put(String.valueOf(inputRePasswordValue.charAt(i)), passCodeMap.get(String.valueOf(inputRePasswordValue.charAt(i))) + 1);
+                            }
+                        }
+
+                        for (Map.Entry<String, Integer> entry : passCodeMap.entrySet())
+                        {
+                            if (entry.getValue() > 2){
+                                inputRePasswordValue = "";
+                                Toast.makeText(activity, getString(R.string.msg_invalid_password), Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+
                         if (inputPasswordValue.equalsIgnoreCase(inputRePasswordValue)) {
-
-//                            registrationPassCodeEntryRequest = new RegistrationPassCodeEntryRequest();
-//                            registrationPassCodeEntryRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
-//                            registrationPassCodeEntryRequest.setPassCode(inputPasswordValue);
-//
-//                            requestPassCodeEntry = new RequestPassCodeEntry(context, new RequestPassCodeEntryResponseTaskCompleteListener());
-//                            requestPassCodeEntry.execute(registrationPassCodeEntryRequest);
-
-
                             Intent intent = new Intent();
                             intent.setClass(PasswordEntryActivity.this, MemorableWordEntryActivity.class);
                             intent.putExtra(Constants.USER_ENTRY_PASSWORD, inputPasswordValue);

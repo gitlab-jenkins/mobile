@@ -253,7 +253,7 @@
                     android:textSize="18dp"
                     android:gravity="center"
                     android:layout_marginRight="4dp"
-                    android:text="@string/payment"/>
+                    android:text="@string/payment_request_issue"/>
 
                 <ImageView
                     android:layout_width="25dp"
