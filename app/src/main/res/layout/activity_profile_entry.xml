@@ -295,7 +295,8 @@
                         android:textSize="13dp"
                         android:gravity="left"
                         android:layout_gravity="left"
-                        android:layout_margin="3dp"/>
+                        android:layout_margin="3dp"
+                        android:visibility="gone"/>
 
                     <RelativeLayout
                         android:layout_width="fill_parent"
@@ -393,14 +394,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="32dp"
                         android:textColor="@android:color/white"
-                        android:textSize="20sp"
+                        android:textSize="18sp"
                         android:gravity="center"
                         android:layout_gravity="center"
                         android:text="@string/keep_on"
                         android:paddingLeft="16dp"
                         android:paddingRight="16dp"
                         android:background="@drawable/registration_button_style"
-                        android:layout_marginTop="16dp"/>
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"/>
 
 
                 </LinearLayout>

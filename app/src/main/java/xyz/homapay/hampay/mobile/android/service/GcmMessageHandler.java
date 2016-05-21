@@ -87,15 +87,15 @@ public class GcmMessageHandler extends IntentService{
             notificationName = extras.getString("name");
             notificationValue = extras.getLong("amount");
             notificationCallerCellNumber = extras.getString("callerCellNumber");
+        }else if (extras.getString("type").equalsIgnoreCase(NotificationMessageType.USER_PAYMENT_CONFIRM.getNotificationMessageType())){
+            notificationMessageType = NotificationMessageType.USER_PAYMENT_CONFIRM;
+            notificationMessage = extras.getString("message");
+            notificationName = extras.getString("name");
+        }else if (extras.getString("type").equalsIgnoreCase(NotificationMessageType.USER_PAYMENT_CANCEL.getNotificationMessageType())){
+            notificationMessageType = NotificationMessageType.USER_PAYMENT_CANCEL;
+            notificationMessage = extras.getString("message");
+            notificationName = extras.getString("name");
         }
-
-//        notificationMessageType = extras.getString("type");
-
-
-//        headsUpTitle = extras.getString("name");
-//        headsUpContent = extras.getString("message");
-
-
 
         sendMessage();
 

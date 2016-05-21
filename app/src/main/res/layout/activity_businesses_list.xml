@@ -131,7 +131,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/stroke_bg"
-        android:layout_margin="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
         android:padding="4dp">
 
         <ImageView

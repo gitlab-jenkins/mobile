@@ -32,8 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/main_menu_title"
-                    android:textSize="15sp"
-                    android:text="نام"/>
+                    android:textSize="15sp" />
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/create_date"
@@ -41,8 +40,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/main_menu_title"
-                    android:textSize="15dp"
-                    android:text="هومن امینی"/>
+                    android:textSize="15dp" />
 
             </LinearLayout>
 
@@ -81,8 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/account_details_text"
-                android:textSize="15sp"
-                android:text="۱۵۰.۰۰۰.۰۰۰"/>
+                android:textSize="15sp" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans.ttf"

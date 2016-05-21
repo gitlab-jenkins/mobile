@@ -1241,12 +1241,8 @@ public class HamPayDialog {
                                     final String message){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_unlink_user, null);
-
-        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
         FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
-
-        responseCode.setText(activity.getString(R.string.error_code, code));
-        responseMessage.setText(message);
+        responseMessage.setText(activity.getString(R.string.error_code, code) + "\n" + message);
 
         FacedTextView retry_unlink_user = (FacedTextView) view.findViewById(R.id.retry_unlink_user);
         FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
@@ -1608,14 +1604,8 @@ public class HamPayDialog {
                                               final String message){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_contacts_enabled, null);
-
-
-
-        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
         FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
-
-        responseCode.setText(activity.getString(R.string.error_code, code));
-        responseMessage.setText(message);
+        responseMessage.setText(activity.getString(R.string.error_code, code) + "\n" + message);
 
         FacedTextView retry_contacts_enabled = (FacedTextView) view.findViewById(R.id.retry_contacts_enabled);
         FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
@@ -1647,14 +1637,8 @@ public class HamPayDialog {
                                               final String message){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_contacts_enabled, null);
-
-
-
-        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
         FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
-
-        responseCode.setText(activity.getString(R.string.error_code, code));
-        responseMessage.setText(message);
+        responseMessage.setText(activity.getString(R.string.error_code, code) + "\n" + message);
 
         FacedTextView retry_contacts_enabled = (FacedTextView) view.findViewById(R.id.retry_contacts_enabled);
         FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
@@ -1686,14 +1670,8 @@ public class HamPayDialog {
                                               final String message){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_contacts_enabled, null);
-
-
-
-        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
         FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
-
-        responseCode.setText(activity.getString(R.string.error_code, code));
-        responseMessage.setText(message);
+        responseMessage.setText(activity.getString(R.string.error_code, code) + "\n" + message);
 
         FacedTextView retry_contacts_enabled = (FacedTextView) view.findViewById(R.id.retry_contacts_enabled);
         FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
@@ -1836,12 +1814,8 @@ public class HamPayDialog {
                                                final String message){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_request_iban_confirm, null);
-
-        FacedTextView responseCode = (FacedTextView)view.findViewById(R.id.responseCode);
         FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
-
-        responseCode.setText(activity.getString(R.string.error_code, code));
-        responseMessage.setText(message);
+        responseMessage.setText(activity.getString(R.string.error_code, code) + "\n" + message);
 
         FacedTextView retry_iban_request = (FacedTextView) view.findViewById(R.id.retry_iban_request);
         FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);

@@ -32,25 +32,26 @@
                     android:textSize="15dp"
                     android:layout_marginRight="8dp"/>
 
+
                 <FrameLayout
-                    android:layout_width="64dp"
-                    android:layout_height="64dp">
+                    android:layout_width="48dp"
+                    android:layout_height="48dp">
 
                     <ImageView
                         android:id="@+id/image_profile"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
                         android:src="@drawable/transaction_placeholder"
                         android:scaleType="fitXY"
+                        android:background="@color/page_title"
                         android:layout_gravity="center"/>
 
                     <ImageView
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
-                        android:background="@drawable/curve_user_image"/>
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@drawable/curve_images"/>
 
                 </FrameLayout>
-
 
             </LinearLayout>
 

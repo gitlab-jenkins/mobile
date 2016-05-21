@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:indeterminate="true"
     android:background="@android:color/transparent"
-    app:spb_color="@color/register_btn_color"
+    app:spb_color="@color/app_origin"
     app:spb_speed="0.7"
     android:layout_marginBottom="15dp"
     android:layout_marginTop="15dp"
