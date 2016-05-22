@@ -153,7 +153,7 @@ public class HamPayContactsActivity extends AppCompatActivity{
 //                        search_layout.setVisibility(View.GONE);
                     }
 
-                    hamPayContactsAdapter = new HamPayContactsAdapter(context, contacts, authToken);
+                    hamPayContactsAdapter = new HamPayContactsAdapter(activity, contacts, authToken);
                     paymentRequestList.setAdapter(hamPayContactsAdapter);
                 }
                 else {

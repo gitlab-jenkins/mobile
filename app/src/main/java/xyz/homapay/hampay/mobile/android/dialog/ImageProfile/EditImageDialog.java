@@ -93,6 +93,7 @@ public class EditImageDialog  extends DialogFragment implements TextView.OnEdito
             @Override
             public void onClick(View v) {
                 dismiss();
+                activity.onFinishEditDialog(ActionImage.REMOVE_SUCCESS);
                 RemoveUserImageRequest removeUserImageRequest = new RemoveUserImageRequest();
                 RequestRemoveUserImage requestRemoveUserImage = new RequestRemoveUserImage(getContext(), new RequestRemovePhotoTaskCompleteListener());
                 requestRemoveUserImage.execute(removeUserImageRequest);
@@ -128,15 +129,16 @@ public class EditImageDialog  extends DialogFragment implements TextView.OnEdito
         {
             if (removeUserImageResponseMessage != null) {
                 if (removeUserImageResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    activity.onFinishEditDialog(ActionImage.REMOVE);
-
+                }else {
+                    activity.onFinishEditDialog(ActionImage.REMOVE_FAIL);
                 }
+            }else {
+                activity.onFinishEditDialog(ActionImage.REMOVE_FAIL);
             }
         }
 
         @Override
         public void onTaskPreRun() {
-//            showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 

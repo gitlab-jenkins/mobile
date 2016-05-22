@@ -3,11 +3,14 @@ package xyz.homapay.hampay.mobile.android.adapter;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -24,6 +27,7 @@ import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestCancelPayment;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.DateUtil;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
@@ -105,6 +109,17 @@ public class PendingPaymentAdapter extends BaseAdapter  {
         viewHolder.price_pay.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount())));
         viewHolder.paymentCode.setText(persianEnglishDigit.E2P("کد فاکتور " + paymentInfoDTO.getProductCode()));
         viewHolder.expire_pay.setText(dateUtil.remainingTime(paymentInfoDTO.getExpirationDate(), currentDate));
+
+        if (paymentInfoDTO.getImageId() != null) {
+            String userImageUrl = Constants.HTTP_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + paymentInfoDTO.getImageId();
+            Log.e("URL", userImageUrl);
+            Picasso.with(context)
+                    .load(userImageUrl)
+                    .into(viewHolder.user_image);
+        }else {
+            viewHolder.user_image.setImageResource(R.drawable.transaction_placeholder);
+        }
+
         return convertView;
 
     }

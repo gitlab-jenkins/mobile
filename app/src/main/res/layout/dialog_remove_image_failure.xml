@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:geekui="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:background="@drawable/dialog_failure_style"
+    android:orientation="vertical"
+    android:layout_margin="8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dialog_failure_title_style">
+
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/modal_failure"
+            android:layout_centerInParent="true"
+            android:padding="4dp"/>
+
+    </RelativeLayout>
+
+    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+        geekui:customTypeface="fonts/iran_sans.ttf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/modal_text"
+        android:textSize="15dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:gravity="center"
+        android:text="@string/msg_fail_remove_image"/>
+
+    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+        android:id="@+id/confirmation"
+        geekui:customTypeface="fonts/iran_sans.ttf"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="@string/confirm_failure_payment"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:background="@drawable/modal_failure_button_style"
+        android:layout_alignParentRight="true"
+        android:layout_margin="16dp"/>
+
+
+
+</LinearLayout>

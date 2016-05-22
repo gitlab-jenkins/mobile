@@ -1840,4 +1840,23 @@ public class HamPayDialog {
         dialog.show();
     }
 
+    public void removeImageFailDialog(){
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_remove_image_failure, null);
+
+        FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
+
+        confirmation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                activity.finish();
+            }
+        });
+
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
+        dialog.show();
+    }
+
 }

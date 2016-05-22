@@ -79,7 +79,7 @@
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="0.33"
-            android:background="@color/app_origin"
+            android:background="@color/transaction_unselected_tab"
             android:layout_marginRight="0.5dp"
             android:layout_marginLeft="0.5dp">
 
@@ -99,7 +99,8 @@
                 android:layout_height="10dp"
                 android:src="@drawable/ic_triangle"
                 android:layout_centerHorizontal="true"
-                android:layout_alignParentBottom="true"/>
+                android:layout_alignParentBottom="true"
+                android:visibility="gone"/>
 
         </RelativeLayout>
 
@@ -108,7 +109,7 @@
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="0.33"
-            android:background="@color/transaction_unselected_tab"
+            android:background="@color/app_origin"
             android:layout_marginLeft="1dp">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
@@ -128,7 +129,7 @@
                 android:src="@drawable/ic_triangle"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true"
-                android:visibility="gone"/>
+                android:visibility="visible"/>
 
         </RelativeLayout>
 

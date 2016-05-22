@@ -7,6 +7,7 @@ public enum ActionImage {
     NOPE,
     UPLOAD,
     GALLERY,
-    REMOVE
+    REMOVE_SUCCESS,
+    REMOVE_FAIL
 
 }

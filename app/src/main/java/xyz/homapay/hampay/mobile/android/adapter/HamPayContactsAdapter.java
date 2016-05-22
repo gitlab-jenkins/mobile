@@ -1,11 +1,15 @@
 package xyz.homapay.hampay.mobile.android.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -16,6 +20,7 @@ import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTa
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 /**
@@ -23,19 +28,20 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
  */
 public class HamPayContactsAdapter extends BaseAdapter {
 
-    private Context context;
+    private Activity activity;
     List<ContactDTO> contacts;
     private PersianEnglishDigit persianEnglishDigit;
     private String authToken;
+    private ImageManager imageManager;
 
-
-    public HamPayContactsAdapter(Context c, List<ContactDTO> contacts, String authToken)
+    public HamPayContactsAdapter(Activity activity, List<ContactDTO> contacts, String authToken)
     {
         // TODO Auto-generated method stub
-        context = c;
+        this.activity = activity;
         this.contacts = contacts;
         persianEnglishDigit = new PersianEnglishDigit();
         this.authToken = authToken;
+        imageManager = new ImageManager(activity, 200000, false);
     }
 
     public int getCount() {
@@ -61,7 +67,7 @@ public class HamPayContactsAdapter extends BaseAdapter {
         // TODO Auto-generated method stub
 
 
-        LayoutInflater inflater = (LayoutInflater) context
+        LayoutInflater inflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 
@@ -79,10 +85,13 @@ public class HamPayContactsAdapter extends BaseAdapter {
 
 
         ContactDTO contact = contacts.get(position);
+
         if (contact.getContactImageId() != null) {
-            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.user_image)).execute(Constants.IMAGE_PREFIX + authToken + "/" + contact.getContactImageId());
+            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + contact.getContactImageId();
+            viewHolder.user_image.setTag(userImageUrl.split("/")[6]);
+            imageManager.displayImage(userImageUrl, viewHolder.user_image, R.drawable.transaction_placeholder);
         }else {
-//            viewHolder.user_image.setImageResource(R.drawable.user_icon_blue);
+            viewHolder.user_image.setImageResource(R.drawable.transaction_placeholder);
         }
         viewHolder.contact_name.setText(persianEnglishDigit.E2P(contact.getDisplayName()));
         viewHolder.cell_number.setText(persianEnglishDigit.E2P(contact.getCellNumber()));

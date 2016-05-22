@@ -27,7 +27,6 @@ import android.widget.LinearLayout;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,9 +48,9 @@ import xyz.homapay.hampay.mobile.android.async.RequestMobileRegistrationIdEntry;
 import xyz.homapay.hampay.mobile.android.async.RequestUserProfile;
 import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.dialog.ImageProfile.ActionImage;
 import xyz.homapay.hampay.mobile.android.dialog.ImageProfile.EditImageDialog;
-import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.fragment.AboutFragment;
 import xyz.homapay.hampay.mobile.android.fragment.AccountDetailFragment;
 import xyz.homapay.hampay.mobile.android.fragment.FragmentDrawer;
@@ -66,13 +65,10 @@ import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
+import xyz.homapay.hampay.mobile.android.util.ImageManager;
 
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener, View.OnClickListener, EditImageDialog.EditImageDialogListener {
-
-    private static String TAG = MainActivity.class.getSimpleName();
-
-    //    private Toolbar mToolbar;
     private FragmentDrawer drawerFragment;
 
     private Fragment fragment = null;
@@ -83,8 +79,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     ImageView nav_icon;
 
     FacedTextView fragment_title;
-
-    public  FacedTextView user_account_name;
 
     ImageView image_profile;
     LinearLayout user_image_layout;
@@ -119,6 +113,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     Intent intent;
 
     DatabaseHelper databaseHelper;
+
+    private String authToken = "";
+    private ImageManager imageManager;
 
     public void userManual(View view){
         Intent intent = new Intent();
@@ -175,6 +172,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         activity = MainActivity.this;
         context = this;
 
+        imageManager = new ImageManager(activity, 200000, false);
+
         bundle = getIntent().getExtras();
 
         Intent intent = getIntent();
@@ -187,39 +186,13 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         userProfileDTO = (UserProfileDTO) intent.getSerializableExtra(Constants.USER_PROFILE_DTO);
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE).edit();
+        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
         editor.putLong(Constants.MAX_BUSINESS_XFER_AMOUNT, this.userProfileDTO.getMaxBusinessXferAmount());
         editor.putLong(Constants.MIN_BUSINESS_XFER_AMOUNT, this.userProfileDTO.getMinBusinessXferAmount());
         editor.putLong(Constants.MAX_INDIVIDUAL_XFER_AMOUNT, this.userProfileDTO.getMaxIndividualXferAmount());
         editor.putLong(Constants.MIN_INDIVIDUAL_XFER_AMOUNT, this.userProfileDTO.getMinIndividualXferAmount());
         editor.commit();
-
-
-
-
-
-//        PugNotification.with(context)
-//                .load()
-//                .identifier(1020)
-//                .title("TEST")
-//                .message("WelCome")
-//                .bigTextStyle(":))))))))))))))")
-//                .smallIcon(R.mipmap.ic_launcher)
-////                .largeIcon(largeIcon)
-//                .flags(Notification.DEFAULT_ALL)
-////                .button(icon, title, pendingIntent)
-//                .click(UnlinkPassActivity.class, bundle)
-//                .dismiss(MainActivity.class, bundle)
-//                .color(R.color.colorPrimary)
-//                .ticker("ticker")
-////                .when(when)
-////                .vibrate(100)
-////                .lights(color, ledOnMs, ledOfMs)
-////                .sound(sound)
-//                .autoCancel(true)
-//                .simple()
-//                .build();
-
 
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
@@ -229,9 +202,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
 
         databaseHelper = new DatabaseHelper(activity);
-
-//        List<LatestPurchase> latestPurchaseList = databaseHelper.getAllLatestPurchases();
-
         if (hasNotification) {
             NotificationMessageType notificationMessageType;
             notificationMessageType = NotificationMessageType.valueOf(bundle.getString(Constants.NOTIFICATION_TYPE));
@@ -286,18 +256,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
 
         fragment_title = (FacedTextView)findViewById(R.id.fragment_title);
-
-//        user_account_name = (FacedTextView)findViewById(R.id.user_account_name);
-//        user_account_name.setText(userProfileDTO.getFullName());
         image_profile = (ImageView)findViewById(R.id.image_profile);
 
         user_image_layout = (LinearLayout)findViewById(R.id.user_image_layout);
         user_image_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                new HamPayDialog(activity).showUserProfileImage();
-
-                //cls
                 FragmentManager fm = getSupportFragmentManager();
                 EditImageDialog userEditPhotoDialog = new EditImageDialog();
                 userEditPhotoDialog.show(fm, "fragment_edit_name");
@@ -313,12 +277,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         nav_icon = (ImageView)findViewById(R.id.nav_icon);
         nav_icon.setOnClickListener(this);
 
-//        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        //setSupportActionBar(mToolbar);
-        //getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         drawerFragment = (FragmentDrawer)
                 getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
@@ -350,23 +309,28 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             }
 
             public void onDrawerClosed(View view) {
-                //getActionBar().setTitle(mTitle);
-                // calling onPrepareOptionsMenu() to show action bar icons
                 invalidateOptionsMenu();
             }
 
             public void onDrawerOpened(View drawerView) {
-                //getActionBar().setTitle(mDrawerTitle);
-                // calling onPrepareOptionsMenu() to hide action bar icons
                 invalidateOptionsMenu();
             }
 
         };
 
+
         if (userProfileDTO.getUserImageId() != null) {
-            String userImageUrl = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
-            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile)).execute(userImageUrl);
+            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + userProfileDTO.getUserImageId();
+            image_profile.setTag(userImageUrl.split("/")[6]);
+            imageManager.displayImage(userImageUrl, image_profile, R.drawable.transaction_placeholder);
+        }else {
+            image_profile.setImageResource(R.drawable.transaction_placeholder);
         }
+
+//        if (userProfileDTO.getUserImageId() != null) {
+//            String userImageUrl = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
+//            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile)).execute(userImageUrl);
+//        }
 
         displayView(currentFragmet);
 
@@ -612,8 +576,24 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             case NOPE:
                 break;
 
-            case REMOVE:
+            case REMOVE_SUCCESS:
                 image_profile.setImageResource(R.drawable.transaction_placeholder);
+                break;
+
+            case REMOVE_FAIL:
+                new HamPayDialog(activity).removeImageFailDialog();
+                if (userProfileDTO.getUserImageId() != null) {
+                    String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + userProfileDTO.getUserImageId();
+                    image_profile.setTag(userImageUrl.split("/")[6]);
+                    imageManager.displayImage(userImageUrl, image_profile, R.drawable.transaction_placeholder);
+                }else {
+                    image_profile.setImageResource(R.drawable.transaction_placeholder);
+                }
+
+//                if (userProfileDTO.getUserImageId() != null) {
+//                    String userImageUrl = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
+//                    new RequestImageDownloaderRequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile)).execute(userImageUrl);
+//                }
                 break;
         }
     }
@@ -674,9 +654,24 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                         bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);
                         fragment.setArguments(bundle);
                         if (userProfileDTO.getUserImageId() != null) {
-                            String userImageUrl = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
-                            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile)).execute(userImageUrl);
+                            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + userProfileDTO.getUserImageId();
+                            image_profile.setTag(userImageUrl.split("/")[6]);
+                            imageManager = new ImageManager(activity, 200000, true);
+                            imageManager.displayImage(userImageUrl, image_profile, R.drawable.transaction_placeholder);
+
+//                            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + userProfileDTO.getUserImageId();
+//                            File sdDir = android.os.Environment.getExternalStorageDirectory();
+//                            File cacheDir = new File(sdDir,activity.getFilesDir().getPath() + "/" + userProfileDTO.getUserImageId().hashCode());
+//                            cacheDir.delete();
+//                            image_profile.setTag(userImageUrl.split("/")[6]);
+//                            imageManager.displayImage(userImageUrl, image_profile, R.drawable.transaction_placeholder);
+                        }else {
+                            image_profile.setImageResource(R.drawable.transaction_placeholder);
                         }
+//                        if (userProfileDTO.getUserImageId() != null) {
+//                            String userImageUrl = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
+//                            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile)).execute(userImageUrl);
+//                        }
                         if (fragment != null) {
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

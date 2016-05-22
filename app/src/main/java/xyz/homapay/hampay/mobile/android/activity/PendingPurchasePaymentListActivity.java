@@ -334,9 +334,9 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
             editor.commit();
             requestPendingPayment.execute(pendingPaymentListRequest);
         }else {
-            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-            editor.commit();
-            requestPendingPurchase.execute(pendingPurchaseListRequest);
+//            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+//            editor.commit();
+//            requestPendingPurchase.execute(pendingPurchaseListRequest);
         }
 
         full_pending = (RelativeLayout)findViewById(R.id.full_pending);
@@ -348,25 +348,6 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
         full_triangle = (ImageView)findViewById(R.id.full_triangle);
         business_triangle = (ImageView)findViewById(R.id.business_triangle);
         invoice_triangle = (ImageView)findViewById(R.id.invoice_triangle);
-
-//        purchase_pending.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                requestPendingPurchase = new RequestPendingPurchase(activity, new RequestPendingPurchaseTaskCompleteListener());
-//                pendingPurchaseListRequest = new PendingPurchaseListRequest();
-//                requestPendingPurchase.execute(pendingPurchaseListRequest);
-//            }
-//        });
-//
-//        invoice_pending.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                requestPendingPayment = new RequestPendingPayment(activity, new RequestPendingPaymentTaskCompleteListener());
-//                pendingPaymentListRequest = new PendingPaymentListRequest();
-//                requestPendingPayment.execute(pendingPaymentListRequest);
-//            }
-//        });
-
 
         pendingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

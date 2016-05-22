@@ -661,5 +661,6 @@
 
     <string name="iban_change">تغییر شماره شبا</string>
     <string name="payment_request_issue">تولید فاکتور</string>
+    <string name="msg_fail_remove_image">حذف عکس با مشکل مواجه شد.</string>
 
 </resources>

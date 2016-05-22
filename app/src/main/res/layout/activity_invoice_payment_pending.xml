@@ -181,7 +181,6 @@
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/account_details_text"
                                 android:textSize="20sp"
-                                android:text="۰"
                                 android:layout_marginLeft="2dp"/>
 
                         </LinearLayout>
@@ -236,7 +235,6 @@
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/account_details_text"
                                 android:textSize="15sp"
-                                android:text="۰"
                                 android:layout_marginLeft="2dp"/>
 
                         </LinearLayout>
@@ -290,7 +288,6 @@
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/account_details_text"
                                 android:textSize="15sp"
-                                android:text="۰"
                                 android:layout_marginLeft="2dp"/>
 
                         </LinearLayout>
@@ -348,7 +345,6 @@
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/page_title"
                                 android:textSize="22sp"
-                                android:text="۰"
                                 android:layout_marginLeft="2dp"/>
 
                         </LinearLayout>
