@@ -3,6 +3,7 @@ package xyz.homapay.hampay.mobile.android.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -68,6 +69,8 @@ public class TransactionDetailActivity extends AppCompatActivity {
     private FacedTextView bank_name;
     private FacedTextView message;
     private LinearLayout pay_button;
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
 
 
     public void backActionBar(View view) {
@@ -90,6 +93,25 @@ public class TransactionDetailActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         HamPayApplication.setAppSate(AppState.Resumed);
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
     }
 
 
@@ -104,6 +126,9 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
         context = this;
         activity = TransactionDetailActivity.this;
+
+        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+        editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -151,11 +176,15 @@ public class TransactionDetailActivity extends AppCompatActivity {
         }
 
         if (transactionDTO.getPaymentType() == TransactionDTO.PaymentType.PAYMENT) {
+            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            editor.commit();
             paymentDetailRequest = new PaymentDetailRequest();
             paymentDetailRequest.setProviderId(transactionDTO.getReference());
             requestPaymentDetail = new RequestPaymentDetail(activity, new RequestPaymentDetailTaskCompleteListener());
             requestPaymentDetail.execute(paymentDetailRequest);
         }else if (transactionDTO.getPaymentType() == TransactionDTO.PaymentType.PURCHASE){
+            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            editor.commit();
             purchaseDetailRequest = new PurchaseDetailRequest();
             purchaseDetailRequest.setProviderId(transactionDTO.getReference());
             requestPurchaseDetail = new RequestPurchaseDetail(activity, new RequestPurchaseDetailTaskCompleteListener());

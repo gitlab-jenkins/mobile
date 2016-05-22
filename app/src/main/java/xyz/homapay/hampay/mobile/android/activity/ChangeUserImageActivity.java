@@ -88,6 +88,25 @@ public class ChangeUserImageActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         HamPayApplication.setAppSate(AppState.Resumed);
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
     }
 
 
@@ -137,9 +156,9 @@ public class ChangeUserImageActivity extends AppCompatActivity {
         user_profile_image_select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                editor.commit();
                 try {
-
                     croppedImage = cropImageView.getCroppedImage();
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     croppedImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
@@ -314,28 +333,28 @@ public class ChangeUserImageActivity extends AppCompatActivity {
         finish();
     }
 
-    private File savebitmap(Bitmap bitmap, String filename) {
-        OutputStream outStream = null;
-
-        String filePath = getFilesDir().getPath().toString() + "/" + filename;
-
-        File file = new File(filePath);
-        if (file.exists()) {
-            file.delete();
-            file = new File(filePath);
-        }
-        try {
-            outStream = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
-            outStream.flush();
-            outStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Log.e("file", "" + file);
-        return file;
-
-    }
+//    private File savebitmap(Bitmap bitmap, String filename) {
+//        OutputStream outStream = null;
+//
+//        String filePath = getFilesDir().getPath().toString() + "/" + filename;
+//
+//        File file = new File(filePath);
+//        if (file.exists()) {
+//            file.delete();
+//            file = new File(filePath);
+//        }
+//        try {
+//            outStream = new FileOutputStream(file);
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
+//            outStream.flush();
+//            outStream.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        Log.e("file", "" + file);
+//        return file;
+//
+//    }
 
 
     public class RequestUploadImageTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<UploadImageResponse>>
@@ -351,7 +370,7 @@ public class ChangeUserImageActivity extends AppCompatActivity {
 
                 if (uploadImageResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
-                    savebitmap(croppedImage, "userImage.jpeg");
+//                    savebitmap(croppedImage, "userImage.jpeg");
                     croppedImage.recycle();
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
@@ -369,10 +388,6 @@ public class ChangeUserImageActivity extends AppCompatActivity {
                     finish();
 
                 }else {
-
-                    //Remove below line
-                    Toast.makeText(context, "این سرویس هنوز فعال نمی باشد", Toast.LENGTH_LONG).show();
-
                     requestUploadImage = new RequestUploadImage(getApplicationContext(), new RequestUploadImageTaskCompleteListener());
                     new HamPayDialog(activity).showFailUploadImage(requestUploadImage, uploadImageRequest,
                             uploadImageResponseMessage.getService().getResultStatus().getCode(),

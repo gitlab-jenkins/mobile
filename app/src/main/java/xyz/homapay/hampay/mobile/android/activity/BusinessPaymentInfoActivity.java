@@ -103,6 +103,25 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         HamPayApplication.setAppSate(AppState.Resumed);
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -142,6 +161,8 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
         business_hampay_id.setText("شناسه: " + persianEnglishDigit.E2P(businessDTO.getCode()));
 
         if (businessDTO.getBusinessImageId() != null) {
+            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            editor.commit();
             new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute(Constants.IMAGE_PREFIX
                     + prefs.getString(Constants.LOGIN_TOKEN_ID, "")
                     + "/" + businessDTO.getBusinessImageId());
@@ -194,6 +215,8 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
         add_vat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                editor.commit();
                 if (amount_value.getText().toString().length() > 0) {
                     amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace(",", "")));
                     if (calculatedVat == 0){
@@ -217,43 +240,25 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 amount_value.clearFocus();
-
                 if (creditValueValidation) {
-
                     amountValue = Long.parseLong(new PersianEnglishDigit(amount_value.getText().toString()).P2E().replace(",", ""));
-
-                    if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
-                        Intent intent = new Intent();
-                        intent.setClass(context, HamPayLoginActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        finish();
-                        startActivity(intent);
+                    editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                    editor.commit();
+                    if (amountValue >= MinXferAmount && amountValue <= MaxXferAmount) {
+                        hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+                        businessPaymentConfirmRequest = new BusinessPaymentConfirmRequest();
+                        businessPaymentConfirmRequest.setAmount(calculatedVat + amountValue);
+                        businessPaymentConfirmRequest.setBusinessCode(businessDTO.getCode());
+                        requestBusinessPaymentConfirm = new RequestBusinessPaymentConfirm(context, new RequestBusinessPaymentConfirmTaskCompleteListener());
+                        requestBusinessPaymentConfirm.execute(businessPaymentConfirmRequest);
                     }else {
-                        editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-                        editor.commit();
-                        if (amountValue >= MinXferAmount && amountValue <= MaxXferAmount) {
-                            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-                            businessPaymentConfirmRequest = new BusinessPaymentConfirmRequest();
-                            businessPaymentConfirmRequest.setAmount(calculatedVat + amountValue);
-                            businessPaymentConfirmRequest.setBusinessCode(businessDTO.getCode());
-                            requestBusinessPaymentConfirm = new RequestBusinessPaymentConfirm(context, new RequestBusinessPaymentConfirmTaskCompleteListener());
-                            requestBusinessPaymentConfirm.execute(businessPaymentConfirmRequest);
-                        }else {
-                            new HamPayDialog(activity).showIncorrectAmountDialog(MinXferAmount, MaxXferAmount);
+                        new HamPayDialog(activity).showIncorrectAmountDialog(MinXferAmount, MaxXferAmount);
 
-                        }
                     }
-
-                }else {
                 }
             }
         });
 
-    }
-
-    @Override
-    public void onUserInteraction() {
-        super.onUserInteraction();
     }
 
     @Override

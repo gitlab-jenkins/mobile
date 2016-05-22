@@ -124,6 +124,31 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        HamPayApplication.setAppSate(AppState.Resumed);
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
+    }
+
 
 
     @Override
@@ -235,25 +260,14 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
 
         hamPayDialog = new HamPayDialog(activity);
         hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-
-        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
-            Intent intent = new Intent();
-            intent.setClass(activity, HamPayLoginActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            finish();
-            startActivity(intent);
-        }else {
-            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-            editor.commit();
-            businessListRequest = new BusinessListRequest();
-            businessListRequest.setPageNumber(requestPageNumber);
-            businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-            businessListRequest.setSortFactor(BizSortFactor.NAME);
-            requestHamPayBusiness = new RequestHamPayBusiness(this, new RequestBusinessListTaskCompleteListener(searchEnabled));
-            requestHamPayBusiness.execute(businessListRequest);
-        }
-
-
+        editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+        editor.commit();
+        businessListRequest = new BusinessListRequest();
+        businessListRequest.setPageNumber(requestPageNumber);
+        businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+        businessListRequest.setSortFactor(BizSortFactor.NAME);
+        requestHamPayBusiness = new RequestHamPayBusiness(this, new RequestBusinessListTaskCompleteListener(searchEnabled));
+        requestHamPayBusiness.execute(businessListRequest);
     }
 
     @Override
@@ -310,26 +324,15 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
         searchEnabled = true;
         FINISHED_SCROLLING = false;
         onLoadMore = false;
-
-        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
-            Intent intent = new Intent();
-            intent.setClass(activity, HamPayLoginActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            finish();
-            startActivity(intent);
-        }else {
-            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-            editor.commit();
-            businessSearchRequest = new BusinessSearchRequest();
-            businessSearchRequest.setPageNumber(requestPageNumber);
-            businessSearchRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-            businessListRequest.setSortFactor(BizSortFactor.NAME);
-            businessSearchRequest.setTerm(searchTerm);
-            requestSearchHamPayBusiness = new RequestSearchHamPayBusiness(activity, new RequestBusinessListTaskCompleteListener(searchEnabled));
-            requestSearchHamPayBusiness.execute(businessSearchRequest);
-        }
-
-
+        editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+        editor.commit();
+        businessSearchRequest = new BusinessSearchRequest();
+        businessSearchRequest.setPageNumber(requestPageNumber);
+        businessSearchRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+        businessListRequest.setSortFactor(BizSortFactor.NAME);
+        businessSearchRequest.setTerm(searchTerm);
+        requestSearchHamPayBusiness = new RequestSearchHamPayBusiness(activity, new RequestBusinessListTaskCompleteListener(searchEnabled));
+        requestSearchHamPayBusiness.execute(businessSearchRequest);
         inputMethodManager.hideSoftInputFromWindow(searchPhraseText.getWindowToken(), 0);
 
         hamPayBusinessesAdapter.clear();

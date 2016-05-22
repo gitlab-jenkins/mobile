@@ -97,6 +97,25 @@ public class ChangeIbanPassActivity extends AppCompatActivity implements View.On
     protected void onResume() {
         super.onResume();
         HamPayApplication.setAppSate(AppState.Resumed);
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
     }
 
 
@@ -289,27 +308,16 @@ public class ChangeIbanPassActivity extends AppCompatActivity implements View.On
                     input_digit_4.setImageResource(R.drawable.pass_value_empty);
                     input_digit_5.setImageResource(R.drawable.pass_value_empty);
 
+                    editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                    editor.commit();
 
-                    if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
-                        Intent intent = new Intent();
-                        intent.setClass(context, HamPayLoginActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        finish();
-                        startActivity(intent);
-                    }else {
-                        editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-                        editor.commit();
-
-                        ibanChangeRequest = new IBANChangeRequest();
-                        ibanChangeRequest.setIban(new PersianEnglishDigit().P2E(iban));
-                        ibanChangeRequest.setMemorableWord(prefs.getString(Constants.MEMORABLE_WORD, ""));
-                        ibanChangeRequest.setPassCode(inputPasswordValue);
-                        requestIBANChange = new RequestIBANChange(activity, new RequestIBANChangeTaskCompleteListener(ibanChangeRequest));
-                        requestIBANChange.execute(ibanChangeRequest);
-                        inputPasswordValue = "";
-                    }
-
-
+                    ibanChangeRequest = new IBANChangeRequest();
+                    ibanChangeRequest.setIban(new PersianEnglishDigit().P2E(iban));
+                    ibanChangeRequest.setMemorableWord(prefs.getString(Constants.MEMORABLE_WORD, ""));
+                    ibanChangeRequest.setPassCode(inputPasswordValue);
+                    requestIBANChange = new RequestIBANChange(activity, new RequestIBANChangeTaskCompleteListener(ibanChangeRequest));
+                    requestIBANChange.execute(ibanChangeRequest);
+                    inputPasswordValue = "";
                     break;
             }
         }

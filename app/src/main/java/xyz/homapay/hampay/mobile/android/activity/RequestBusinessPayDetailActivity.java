@@ -132,6 +132,25 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         HamPayApplication.setAppSate(AppState.Resumed);
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
     }
 
 
@@ -235,11 +254,15 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
             bankName.setText(pspInfoDTO.getCardDTO().getBankName());
         }else if (purchaseCode != null){
+            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            editor.commit();
             requestPurchaseInfo = new RequestPurchaseInfo(activity, new RequestPurchaseInfoTaskCompleteListener());
             purchaseInfoRequest = new PurchaseInfoRequest();
             purchaseInfoRequest.setPurchaseCode(purchaseCode);
             requestPurchaseInfo.execute(purchaseInfoRequest);
         }else {
+            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            editor.commit();
             requestLatestPurchase = new RequestLatestPurchase(activity, new RequestLatestPurchaseTaskCompleteListener());
             latestPurchaseRequest = new LatestPurchaseRequest();
             requestLatestPurchase.execute(latestPurchaseRequest);
@@ -263,7 +286,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                         Toast.makeText(context, getString(R.string.msg_pin2_incurrect), Toast.LENGTH_LONG).show();
                         return;
                     }
-
+                    editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                    editor.commit();
                     requestPurchase = new RequestPurchase(activity, new RequestPurchaseTaskCompleteListener());
 
                     doWorkInfo = new DoWorkInfo();
@@ -344,13 +368,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 //        });
     }
 
-
-    @Override
-    public void onUserInteraction() {
-        super.onUserInteraction();
-//        Log.e("EXIT", "onUserInteraction");
-    }
-
     @Override
     protected void onUserLeaveHint() {
         super.onUserLeaveHint();
@@ -407,6 +424,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                     new HamPayDialog(activity).pspFailResultDialog();
                 }
 
+                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                editor.commit();
                 pspResultRequest.setPspResponseCode(responseCode);
                 pspResultRequest.setProductCode(purchaseInfoDTO.getProductCode());
                 pspResultRequest.setTrackingCode(SWTraceNum);
@@ -651,8 +670,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                         paymentFeeValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(purchaseInfoDTO.getFeeCharge())));
                         paymentTotalValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat())));
                         business_name.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getMerchantName()));
-
-                        String LogoUrl = Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantImageId();
 
                         new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute(Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantImageId());
                         bankName.setText(pspInfoDTO.getCardDTO().getBankName());

@@ -114,6 +114,25 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         HamPayApplication.setAppSate(AppState.Resumed);
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -187,6 +206,8 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                 cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
             }
         } else {
+            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            editor.commit();
             requestLatestPayment = new RequestLatestPayment(activity, new RequestLatestPaymentTaskCompleteListener());
             latestPaymentRequest = new LatestPaymentRequest();
             requestLatestPayment.execute(latestPaymentRequest);
@@ -244,6 +265,10 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                         return;
                     }
 
+
+                    editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                    editor.commit();
+
                     requestPurchase = new RequestPurchase(activity, new RequestPurchaseTaskCompleteListener());
 
                     doWorkInfo = new DoWorkInfo();
@@ -288,7 +313,6 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                     s2sMapEntry.Key = "IPAddress";
                     s2sMapEntry.Value = pspInfoDTO.getIpAddress();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
-
                     doWorkInfo.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
                     requestPurchase.execute(doWorkInfo);
 
@@ -364,7 +388,8 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                 }else {
                     new HamPayDialog(activity).pspFailResultDialog();
                 }
-
+                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                editor.commit();
                 pspResultRequest.setPspResponseCode(responseCode);
                 pspResultRequest.setProductCode(paymentInfoDTO.getProductCode());
                 pspResultRequest.setTrackingCode(SWTraceNum);

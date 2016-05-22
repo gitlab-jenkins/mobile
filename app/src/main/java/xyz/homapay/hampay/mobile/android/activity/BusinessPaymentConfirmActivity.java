@@ -42,8 +42,6 @@ import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfs
 public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
     ImageView pay_to_business_button;
-//    FacedTextView cancel_pay_to_business_button;
-
     boolean intentContact = false;
     Context context;
     Activity activity;
@@ -96,6 +94,25 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         HamPayApplication.setAppSate(AppState.Resumed);
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
     }
 
 
@@ -152,6 +169,8 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
             paymentTotalValue.setText(persianEnglishDigit.E2P((paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge().toString())));
 
             if (paymentInfoDTO.getImageId() != null) {
+                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                editor.commit();
                 new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute(Constants.IMAGE_PREFIX
                         + prefs.getString(Constants.LOGIN_TOKEN_ID, "")
                         + "/" + paymentInfoDTO.getImageId());
@@ -165,6 +184,8 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                editor.commit();
 
                 if (pspInfoDTO.getCardDTO().getCardId() == null) {
                     Intent intent = new Intent();
@@ -261,21 +282,6 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
         }
     }
 
-
-    @Override
-    public void onUserInteraction() {
-        super.onUserInteraction();
-//        Log.e("EXIT", "onUserInteraction");
-    }
-
-    @Override
-    protected void onUserLeaveHint() {
-        super.onUserLeaveHint();
-        Log.e("EXIT", "onUserLeaveHint");
-        editor.putString(Constants.USER_ID_TOKEN, "");
-        editor.commit();
-    }
-
     @Override
     public void onBackPressed() {
 
@@ -322,6 +328,9 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
                 }else {
                     new HamPayDialog(activity).pspFailResultDialog();
                 }
+
+                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                editor.commit();
 
                 pspResultRequest.setPspResponseCode(responseCode);
                 pspResultRequest.setProductCode(paymentInfoDTO.getProductCode());

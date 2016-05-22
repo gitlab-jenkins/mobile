@@ -79,8 +79,6 @@ public class ChangeMemorablePassActivity extends AppCompatActivity implements Vi
         finish();
     }
 
-    public void contactUs(View view){
-    }
 
     @Override
     protected void onPause() {
@@ -98,6 +96,25 @@ public class ChangeMemorablePassActivity extends AppCompatActivity implements Vi
     protected void onResume() {
         super.onResume();
         HamPayApplication.setAppSate(AppState.Resumed);
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -292,31 +309,19 @@ public class ChangeMemorablePassActivity extends AppCompatActivity implements Vi
                     input_digit_3.setImageResource(R.drawable.pass_value_empty);
                     input_digit_4.setImageResource(R.drawable.pass_value_empty);
                     input_digit_5.setImageResource(R.drawable.pass_value_empty);
+                    editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                    editor.commit();
 
-
-                    if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
-                        Intent intent = new Intent();
-                        intent.setClass(context, HamPayLoginActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        finish();
-                        startActivity(intent);
+                    if (prefs.getString(Constants.MEMORABLE_WORD, "").compareTo(currentMemorable) == 0){
+                        changeMemorableWordRequest = new ChangeMemorableWordRequest();
+                        changeMemorableWordRequest.setPassCode(inputPasswordValue);
+                        changeMemorableWordRequest.setCurrentMemorableWord(currentMemorable);
+                        changeMemorableWordRequest.setNewMemorableWord(newMemorable);
+                        requestChangeMemorableWord = new RequestChangeMemorableWord(context, new RequestChangeMemorableWordTaskCompleteListener());
+                        requestChangeMemorableWord.execute(changeMemorableWordRequest);
                     }else {
-                        editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-                        editor.commit();
-
-                        if (prefs.getString(Constants.MEMORABLE_WORD, "").compareTo(currentMemorable) == 0){
-                            changeMemorableWordRequest = new ChangeMemorableWordRequest();
-                            changeMemorableWordRequest.setPassCode(inputPasswordValue);
-                            changeMemorableWordRequest.setCurrentMemorableWord(currentMemorable);
-                            changeMemorableWordRequest.setNewMemorableWord(newMemorable);
-                            requestChangeMemorableWord = new RequestChangeMemorableWord(context, new RequestChangeMemorableWordTaskCompleteListener());
-                            requestChangeMemorableWord.execute(changeMemorableWordRequest);
-                        }else {
-                            new HamPayDialog(activity).showDisMatchMemorableDialog();
-                        }
+                        new HamPayDialog(activity).showDisMatchMemorableDialog();
                     }
-
-
                     break;
             }
         }

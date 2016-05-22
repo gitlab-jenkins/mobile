@@ -40,6 +40,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
     EditText urlText;
     HamPayDialog hamPayDialog;
     SharedPreferences prefs;
+    SharedPreferences.Editor editor;
     PaymentInfoDTO paymentInfoDTO = null;
     PurchaseInfoDTO purchaseInfoDTO = null;
     PspInfoDTO pspInfoDTO = null;
@@ -90,6 +91,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         HamPayApplication.setAppSate(AppState.Paused);
+
     }
 
     @Override
@@ -103,6 +105,25 @@ public class BankWebPaymentActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         HamPayApplication.setAppSate(AppState.Resumed);
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -111,6 +132,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bank_web_payment);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+        editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
         context = this;
 
@@ -131,7 +153,6 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
         settings.setJavaScriptEnabled(true);
         bankWebView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
-
 
         if (paymentInfoDTO != null) {
             redirectedURL = Constants.IPG_URL + pspInfoDTO.getRedirectURL() + "?authToken=" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
@@ -188,22 +209,12 @@ public class BankWebPaymentActivity extends AppCompatActivity {
         }
 
         try {
+            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            editor.commit();
             bankWebView.postUrl(Constants.BANK_GATEWAY_URL, postData.getBytes("UTF-8"));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
-//        if (purchaseInfoDTO != null) {
-//            getTokenFromPSPRequest = new GetTokenFromPSPRequest();
-//            getTokenFromPSPRequest.setProductCode(purchaseInfoDTO.getProductCode());
-//            requestGetTokenForSamanPSP = new RequestGetTokenFromPSP(context, new RequestGetTokenFromPSPTaskCompleteListener(), 0);
-//            requestGetTokenForSamanPSP.execute(getTokenFromPSPRequest);
-//        }else if (paymentInfoDTO != null){
-//            getTokenFromPSPRequest = new GetTokenFromPSPRequest();
-//            getTokenFromPSPRequest.setProductCode(paymentInfoDTO.getProductCode());
-//            requestGetTokenForSamanPSP = new RequestGetTokenFromPSP(context, new RequestGetTokenFromPSPTaskCompleteListener(), 1);
-//            requestGetTokenForSamanPSP.execute(getTokenFromPSPRequest);
-//        }
 
         bankWebView.setWebViewClient(new WebViewClient() {
 

@@ -69,15 +69,29 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
         finish();
     }
 
-    public void contactUs(View view){
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        HamPayApplication.setAppSate(AppState.Resumed);
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
     }
 
-
     @Override
-    protected void onPause() {
-        super.onPause();
-        HamPayApplication.setAppSate(AppState.Paused);
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -91,11 +105,6 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        HamPayApplication.setAppSate(AppState.Resumed);
-    }
 
 
     @Override
@@ -296,16 +305,8 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
                     }else {
                         editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                         editor.commit();
-
                         new HamPayDialog(activity).showChangeEmail(inputPasswordValue, prefs.getString(Constants.MEMORABLE_WORD, ""));
-
                         inputPasswordValue = "";
-
-//                        unlinkUserRequest = new UnlinkUserRequest();
-//                        unlinkUserRequest.setPassCode(inputPasswordValue);
-//                        unlinkUserRequest.setMemorableWord(prefs.getString(Constants.MEMORABLE_WORD, ""));
-//                        requestUnlinkUser = new RequestUnlinkUser(context, new RequestUnlinkUserTaskCompleteListener());
-//                        requestUnlinkUser.execute(unlinkUserRequest);
                     }
 
 

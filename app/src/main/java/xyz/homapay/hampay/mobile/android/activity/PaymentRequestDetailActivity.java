@@ -13,6 +13,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -96,9 +97,6 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
     HamPayDialog hamPayDialog;
 
     Tracker hamPayGaTracker;
-
-    GetUserIdTokenRequest getUserIdTokenRequest;
-    RequestUserIdToken requestUserIdToken;
     private String authToken;
 
 
@@ -124,6 +122,25 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         HamPayApplication.setAppSate(AppState.Resumed);
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -280,53 +297,26 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
         payment_request_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 amount_value.clearFocus();
-
                 if (creditValueValidation) {
                     contactMssage = contact_message.getText().toString();
                     amountValue = Long.parseLong(new PersianEnglishDigit(amount_value.getText().toString()).P2E().replace(",", ""));
-
-                    if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
-                        Intent intent = new Intent();
-                        intent.setClass(context, HamPayLoginActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        finish();
-                        startActivity(intent);
+                    editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                    editor.commit();
+                    if (amountValue >= MinXferAmount && amountValue <= MaxXferAmount) {
+                        hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+                        userPaymentRequest = new UserPaymentRequest();
+                        userPaymentRequest.setCalleeCellNumber(cellNumber);
+                        userPaymentRequest.setAmount(calculatedVat + amountValue);
+                        userPaymentRequest.setMessage(contact_message.getText().toString());
+                        requestUserPayment = new RequestUserPayment(context, new RequestUserPaymentTaskCompleteListener());
+                        requestUserPayment.execute(userPaymentRequest);
                     } else {
-                        editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-                        editor.commit();
-                        if (amountValue >= MinXferAmount && amountValue <= MaxXferAmount) {
-                            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-                            userPaymentRequest = new UserPaymentRequest();
-                            userPaymentRequest.setCalleeCellNumber(cellNumber);
-                            userPaymentRequest.setAmount(calculatedVat + amountValue);
-                            userPaymentRequest.setMessage(contact_message.getText().toString());
-                            requestUserPayment = new RequestUserPayment(context, new RequestUserPaymentTaskCompleteListener());
-                            requestUserPayment.execute(userPaymentRequest);
-                        } else {
-                            new HamPayDialog(activity).showIncorrectAmountDialog(MinXferAmount, MaxXferAmount);
-                        }
+                        new HamPayDialog(activity).showIncorrectAmountDialog(MinXferAmount, MaxXferAmount);
                     }
-                } else {
                 }
             }
         });
-    }
-
-
-    @Override
-    public void onUserInteraction() {
-        super.onUserInteraction();
-//        Log.e("EXIT", "onUserInteraction");
-    }
-
-    @Override
-    protected void onUserLeaveHint() {
-        super.onUserLeaveHint();
-//        Log.e("EXIT", "onUserLeaveHint");
-//        editor.putString(Constants.USER_ID_TOKEN, "");
-//        editor.commit();
     }
 
     @Override
@@ -342,7 +332,6 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
         setResult(1024);
         finish();
     }
-
 
     public class RequestUserPaymentTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<UserPaymentResponse>> {
 

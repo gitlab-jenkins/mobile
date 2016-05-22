@@ -83,10 +83,6 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
         finish();
     }
 
-    public void contactUs(View view){
-
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -103,6 +99,25 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
     protected void onResume() {
         super.onResume();
         HamPayApplication.setAppSate(AppState.Resumed);
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -510,24 +525,14 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                         }
 
                         if (inputPasswordValue.equalsIgnoreCase(inputRePasswordValue)) {
-
-                            if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
-                                Intent intent = new Intent();
-                                intent.setClass(context, HamPayLoginActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                finish();
-                                startActivity(intent);
-                            }else {
-                                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-                                editor.commit();
-                                changePassCodeRequest = new ChangePassCodeRequest();
-                                changePassCodeRequest.setCurrentPassCode(currentPassword);
-                                changePassCodeRequest.setNewPassCode(inputPasswordValue);
-                                changePassCodeRequest.setMemorableCode(prefs.getString(Constants.MEMORABLE_WORD, ""));
-                                requestChangePassCode = new RequestChangePassCode(context, new RequestChangePassCodeTaskCompleteListener());
-                                requestChangePassCode.execute(changePassCodeRequest);
-                            }
-
+                            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                            editor.commit();
+                            changePassCodeRequest = new ChangePassCodeRequest();
+                            changePassCodeRequest.setCurrentPassCode(currentPassword);
+                            changePassCodeRequest.setNewPassCode(inputPasswordValue);
+                            changePassCodeRequest.setMemorableCode(prefs.getString(Constants.MEMORABLE_WORD, ""));
+                            requestChangePassCode = new RequestChangePassCode(context, new RequestChangePassCodeTaskCompleteListener());
+                            requestChangePassCode.execute(changePassCodeRequest);
                         } else {
                             (new HamPayDialog(this)).showDisMatchPasswordDialog();
                             resetLayout();

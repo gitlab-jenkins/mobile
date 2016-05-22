@@ -2,6 +2,7 @@ package xyz.homapay.hampay.mobile.android.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -40,6 +41,7 @@ import xyz.homapay.hampay.common.core.model.response.PendingPurchaseListResponse
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
+import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.PendingPaymentAdapter;
 import xyz.homapay.hampay.mobile.android.adapter.PendingPurchaseAdapter;
@@ -56,6 +58,7 @@ import xyz.homapay.hampay.mobile.android.impl.comparator.PaymentExpireComparator
 import xyz.homapay.hampay.mobile.android.impl.comparator.PurchaseAmountComparator;
 import xyz.homapay.hampay.mobile.android.impl.comparator.PurchaseDateComparator;
 import xyz.homapay.hampay.mobile.android.impl.comparator.PurchaseExpireComparator;
+import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class PendingPurchasePaymentListActivity extends AppCompatActivity implements View.OnClickListener {
@@ -87,6 +90,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
     private Dialog dialog;
 
     SharedPreferences prefs;
+    SharedPreferences.Editor editor;
 
     private int itemPosition;
 
@@ -108,6 +112,8 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
     Timer timer;
     TimerTask timerTask;
     final Handler handler = new Handler();
+
+    private Context context;
 
 
     public void startTimer() {
@@ -143,6 +149,31 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        HamPayApplication.setAppSate(AppState.Resumed);
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
+    }
+
 
     public void backActionBar(View view){
         finish();
@@ -164,6 +195,8 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                editor.commit();
                 requestPendingPurchase = new RequestPendingPurchase(activity, new RequestPendingPurchaseTaskCompleteListener());
                 pendingPurchaseListRequest = new PendingPurchaseListRequest();
                 requestPendingPurchase.execute(pendingPurchaseListRequest);
@@ -174,6 +207,8 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                editor.commit();
                 requestPendingPayment = new RequestPendingPayment(activity, new RequestPendingPaymentTaskCompleteListener());
                 pendingPaymentListRequest = new PendingPaymentListRequest();
                 requestPendingPayment.execute(pendingPaymentListRequest);
@@ -272,9 +307,9 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
         setContentView(R.layout.activity_pending_purchase_payment_list);
 
         activity = PendingPurchasePaymentListActivity.this;
-
+        context = this;
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
-
+        editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
         Intent intent = getIntent();
@@ -295,8 +330,12 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
         pendingPaymentListRequest = new PendingPaymentListRequest();
 
         if (intent.getStringExtra(Constants.CONTACT_NAME) != null){
+            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            editor.commit();
             requestPendingPayment.execute(pendingPaymentListRequest);
         }else {
+            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            editor.commit();
             requestPendingPurchase.execute(pendingPurchaseListRequest);
         }
 
@@ -359,11 +398,15 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                             @Override
                             public void onClick(View view) {
                                 if (purchaseInfoDTOs != null) {
+                                    editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                                    editor.commit();
                                     requestCancelPurchase = new RequestCancelPurchase(activity, new RequestCancelPurchasePaymentTaskCompleteListener(position));
                                     cancelPurchasePaymentRequest = new CancelPurchasePaymentRequest();
                                     cancelPurchasePaymentRequest.setProductCode(purchaseInfoDTOs.get(position).getProductCode());
                                     requestCancelPurchase.execute(cancelPurchasePaymentRequest);
                                 } else if (paymentInfoDTOs != null) {
+                                    editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                                    editor.commit();
                                     requestCancelPayment = new RequestCancelPayment(activity, new RequestCancelPaymentTaskCompleteListener(position));
                                     cancelUserPaymentRequest = new CancelUserPaymentRequest();
                                     cancelUserPaymentRequest.setProductCode(paymentInfoDTOs.get(position).getProductCode());
@@ -441,6 +484,8 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                 break;
 
             case R.id.invoice_pending:
+                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                editor.commit();
                 requestPendingPayment = new RequestPendingPayment(activity, new RequestPendingPaymentTaskCompleteListener());
                 pendingPaymentListRequest = new PendingPaymentListRequest();
                 requestPendingPayment.execute(pendingPaymentListRequest);
@@ -448,6 +493,8 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                 break;
 
             case R.id.purchase_pending:
+                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                editor.commit();
                 requestPendingPurchase = new RequestPendingPurchase(activity, new RequestPendingPurchaseTaskCompleteListener());
                 pendingPurchaseListRequest = new PendingPurchaseListRequest();
                 requestPendingPurchase.execute(pendingPurchaseListRequest);
