@@ -27,10 +27,11 @@
 
         <ImageView
             android:id="@+id/icon"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_marginRight="8dp"
-            android:background="@color/app_origin"/>
+            android:background="@color/app_origin"
+            android:scaleType="center"/>
 
     </LinearLayout>
 

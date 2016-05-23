@@ -76,20 +76,26 @@ public class ImageManager {
     private Bitmap getBitmap(String url) {
 
         try {
+            Bitmap bitmap = null;
             String filename = String.valueOf(url.split("/")[6].hashCode());
             File bitmapFile = new File(cacheDir, filename);
-            Bitmap bitmap = BitmapFactory.decodeFile(bitmapFile.getPath());
-            if (!forceDownload) {
-                if (bitmap != null) {
-                    return bitmap;
-                }
-            }
-            else {
+            if (forceDownload){
                 URL imageURL = new URL(url);
                 ProxyService proxyService = new ProxyService(activity, ConnectionType.HTTPS, ConnectionMethod.GET, imageURL);
                 bitmap = proxyService.imageInputStream();
                 proxyService.closeConnection();
                 writeFile(bitmap, bitmapFile);
+            }
+            else {
+                bitmap = BitmapFactory.decodeFile(bitmapFile.getPath());
+                if (bitmap != null) {
+                }else {
+                    URL imageURL = new URL(url);
+                    ProxyService proxyService = new ProxyService(activity, ConnectionType.HTTPS, ConnectionMethod.GET, imageURL);
+                    bitmap = proxyService.imageInputStream();
+                    proxyService.closeConnection();
+                    writeFile(bitmap, bitmapFile);
+                }
             }
 
             return bitmap;

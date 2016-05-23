@@ -31,6 +31,7 @@ import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
+import xyz.homapay.hampay.mobile.android.util.HamPayUtils;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 /**
@@ -73,6 +74,18 @@ public class AccountDetailFragment extends Fragment {
 
     Context context;
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.IBAN_CHANGE_RESULT_CODE) {
+            if(resultCode == getActivity().RESULT_OK){
+                iban_ll.setVisibility(View.VISIBLE);
+                user_iban_value.setText("IR" + persianEnglishDigit.E2P(new HamPayUtils().splitStringEvery(data.getStringExtra(Constants.RETURN_IBAN_CONFIRMED), 4)));
+                intro_iban_button.setVisibility(View.GONE);
+            }
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -139,7 +152,7 @@ public class AccountDetailFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClass(context, IntroIBANActivity.class);
-                startActivityForResult(intent, 1023);
+                startActivityForResult(intent, Constants.IBAN_CHANGE_RESULT_CODE);
             }
         });
 
@@ -270,9 +283,10 @@ public class AccountDetailFragment extends Fragment {
         user_bank_name.setText(userProfileDTO.getCardDTO().getBankName());
         user_cell_number.setText(persianEnglishDigit.E2P(userProfileDTO.getCellNumber()));
         if (userProfileDTO.getIbanDTO() != null) {
-            user_iban_value.setText("IR" + persianEnglishDigit.E2P(userProfileDTO.getIbanDTO().getIban()));
+            user_iban_value.setText("IR" + persianEnglishDigit.E2P(new HamPayUtils().splitStringEvery(userProfileDTO.getIbanDTO().getIban(), 4)));
             user_iban_bank.setText(userProfileDTO.getIbanDTO().getBankName());
             iban_ll.setVisibility(View.VISIBLE);
+            intro_iban_button.setVisibility(View.GONE);
         }
         user_national_code.setText(persianEnglishDigit.E2P(prefs.getString(Constants.REGISTERED_NATIONAL_CODE, "")));
 //

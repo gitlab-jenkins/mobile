@@ -87,7 +87,7 @@ public class ChangeMemorableActivity extends AppCompatActivity {
         keepOn_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (memorable_value.getText().toString().length() > 0){
+                if (memorable_value.getText().toString().length() > 1){
                     Intent intent = new Intent();
                     intent.setClass(ChangeMemorableActivity.this, ChangeMemorablePassActivity.class);
                     intent.putExtra("currentMemorable", prefs.getString(Constants.MEMORABLE_WORD, ""));
@@ -95,7 +95,7 @@ public class ChangeMemorableActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.enter_new_memorable_word), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.msg_memorable_incorrect), Toast.LENGTH_SHORT).show();
                 }
 
             }

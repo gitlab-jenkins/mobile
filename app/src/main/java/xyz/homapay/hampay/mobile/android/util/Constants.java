@@ -93,7 +93,9 @@ public class Constants {
     public static final String IMAGE_PREFIX = "/image/";
     public static final String USER_MANUAL_TEXT = "userManualText";
     public static final String USER_IBAN = "userIban";
-
+    public static final String SETTING_CHANGE_IBAN_STATUS = "setting_change_iban";
+    public static final int IBAN_CHANGE_RESULT_CODE = 2048;
+    public static final String RETURN_IBAN_CONFIRMED = "return_iban";
 
     //Permissions and Group Permission
     public static final int READ_PHONE_STATE = 1;

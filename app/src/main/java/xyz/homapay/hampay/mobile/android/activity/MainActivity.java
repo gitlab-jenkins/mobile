@@ -4,11 +4,9 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,12 +21,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -43,22 +41,17 @@ import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.RequestMobileRegistrationIdEntry;
 import xyz.homapay.hampay.mobile.android.async.RequestUserProfile;
-import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.dialog.ImageProfile.ActionImage;
 import xyz.homapay.hampay.mobile.android.dialog.ImageProfile.EditImageDialog;
-import xyz.homapay.hampay.mobile.android.fragment.AboutFragment;
 import xyz.homapay.hampay.mobile.android.fragment.AccountDetailFragment;
 import xyz.homapay.hampay.mobile.android.fragment.FragmentDrawer;
 import xyz.homapay.hampay.mobile.android.fragment.GuideFragment;
 import xyz.homapay.hampay.mobile.android.fragment.MainFragment;
-import xyz.homapay.hampay.mobile.android.fragment.PrivacyFragment;
 import xyz.homapay.hampay.mobile.android.fragment.SettingFragment;
-import xyz.homapay.hampay.mobile.android.fragment.TCFragment;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.LatestPurchase;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
@@ -186,6 +179,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         userProfileDTO = (UserProfileDTO) intent.getSerializableExtra(Constants.USER_PROFILE_DTO);
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE).edit();
+        if (!prefs.contains(Constants.SETTING_CHANGE_IBAN_STATUS)){
+            editor.putBoolean(Constants.SETTING_CHANGE_IBAN_STATUS, false);
+            editor.commit();
+        }
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
         editor.putLong(Constants.MAX_BUSINESS_XFER_AMOUNT, this.userProfileDTO.getMaxBusinessXferAmount());
@@ -359,7 +356,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     @Override
     public void onDrawerItemSelected(View view, int position) {
-        if (currentFragmet != position || position == 1 || position == 5 || position == 7 || position == 8 || position == 9 || position == 10 || position == 12) {
+        if (currentFragmet != position || position == 3 || position == 5) {
             currentFragmet = position;
             displayView(position);
         }
@@ -404,57 +401,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 logoutData.setIplanetDirectoryPro(prefs.getString(Constants.LOGIN_TOKEN_ID, null));
                 new HamPayDialog(activity).showExitDialog(logoutData);
                 break;
-            case 6:
-                new HamPayDialog(activity).fetchContactUsInfo();
-                break;
-            case 7:
-                fragment = new GuideFragment();
-                title = getString(R.string.title_guide);
-                break;
-            case 8:
-                fragment = new AboutFragment();
-                title = getString(R.string.title_about);
-                break;
-            case 9:
-                Uri uri = Uri.parse("http://play.google.com/store/apps/details?id=" + context.getPackageName());
-                Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
-                goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
-                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                try {
-                    startActivity(goToMarket);
-                } catch (ActivityNotFoundException e) {
-                    startActivity(new Intent(Intent.ACTION_VIEW,
-                            Uri.parse("market://details?id=" + context.getPackageName())));
-                }
-                break;
-            case 10:
-                fragment = new TCFragment();
-                title = getString(R.string.title_already_tc);
-                break;
-            case 11:
-                fragment = new PrivacyFragment();
-                title = getString(R.string.title_already_privacy);
-                break;
-            case 12:
-//                LogoutData logoutData = new LogoutData();
-//                logoutData.setIplanetDirectoryPro(prefs.getString(Constants.LOGIN_TOKEN_ID, null));
-//                new HamPayDialog(activity).showExitDialog(logoutData);
-                break;
-
-            default:
-                break;
         }
 
 
         if (fragment != null) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.container_body, fragment);
-//            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-            fragmentTransaction.commit();
-
-            fragment_title.setText(title);
-
+            setFragment(fragment, title);
         }
     }
 
@@ -490,25 +441,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        String title;
-
-
-        if (resultCode == 1023){
-            if(resultCode == 1023){
-                fragment = new AccountDetailFragment();
-                bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
-                fragment.setArguments(bundle);
-                title = getString(R.string.title_account_detail);
-                currentFragmet = 0;
-                if (fragment != null) {
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.container_body, fragment);
-                    fragmentTransaction.commit();
-                    fragment_title.setText(title);
-                }
-            }
-        }else if (resultCode == 5000) {
+        if (resultCode == 5000) {
             UserProfileRequest userProfileRequest = new UserProfileRequest();
             RequestUserProfile requestUserProfile = new RequestUserProfile(activity, new RequestUserProfileTaskCompleteListener());
             requestUserProfile.execute(userProfileRequest);
@@ -521,7 +454,17 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
             drawerLayout.closeDrawer(Gravity.RIGHT);
-        } else {
+        }else if (currentFragmet != 0){
+            fragment = new MainFragment();
+            if (userProfileDTO != null) {
+                currentFragmet = 0;
+                bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
+                bundle.putInt(Constants.PENDING_PAYMENT_COUNT, pendingPaymentCount);
+                bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);
+                fragment.setArguments(bundle);
+            }
+            setFragment(fragment, getString(R.string.title_main_fragment));
+        }else{
             LogoutData logoutData = new LogoutData();
             logoutData.setIplanetDirectoryPro(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
             new HamPayDialog(activity).showExitDialog(logoutData);
@@ -673,11 +616,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 //                            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile)).execute(userImageUrl);
 //                        }
                         if (fragment != null) {
-                            FragmentManager fragmentManager = getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            fragmentTransaction.replace(R.id.container_body, fragment);
-                            fragmentTransaction.commit();
-                            fragment_title.setText(getString(R.string.title_main_fragment));
+                            setFragment(fragment, getString(R.string.title_main_fragment));
                         }
                     }
                 }
@@ -693,5 +632,13 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
     }
 
+    private void setFragment(Fragment fragment, String title){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container_body, fragment);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.commit();
+        fragment_title.setText(title);
+    }
 
 }

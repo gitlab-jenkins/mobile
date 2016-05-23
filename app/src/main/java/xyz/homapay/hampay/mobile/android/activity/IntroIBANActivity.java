@@ -111,8 +111,8 @@ public class IntroIBANActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(activity, ChangeIbanPassActivity.class);
                 intent.putExtra(Constants.USER_IBAN, ibanNumberValue.getText().toString());
-                activity.startActivity(intent);
-                finish();
+                activity.startActivityForResult(intent, Constants.IBAN_CHANGE_RESULT_CODE);
+//                finish();
 //                ibanConfirmationRequest = new IBANConfirmationRequest();
 //                ibanConfirmationRequest.setIban("IR" + persianEnglishDigit.P2E(ibanNumberValue.getText().toString()));
 //                requestIBANConfirmation = new RequestIBANConfirmation(activity, new RequestIBANConfirmationTaskCompleteListener());
@@ -122,6 +122,18 @@ public class IntroIBANActivity extends AppCompatActivity {
 
     }
 
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.IBAN_CHANGE_RESULT_CODE) {
+            if(resultCode == RESULT_OK){
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra(Constants.RETURN_IBAN_CONFIRMED, data.getStringExtra(Constants.RETURN_IBAN_CONFIRMED));
+                setResult(RESULT_OK, returnIntent);
+                activity.finish();
+            }
+        }
+    }
 
     public class RequestIBANConfirmationTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<IBANConfirmationResponse>> {
         public RequestIBANConfirmationTaskCompleteListener() {

@@ -29,6 +29,7 @@ import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.PasswordComplexity;
 
 public class PasswordEntryActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -291,37 +292,20 @@ public class PasswordEntryActivity extends AppCompatActivity implements View.OnC
                         input_digit_5.setImageResource(R.drawable.pass_value_placeholder);
                         vibrator.vibrate(20);
 
-
-                        Map<String, Integer> passCodeMap = new HashMap<>();
-
-                        for(int i = 0; i < inputPasswordValue.length(); i++) {
-                            if (passCodeMap.get(String.valueOf(inputPasswordValue.charAt(i))) == null){
-                                passCodeMap.put(String.valueOf(inputPasswordValue.charAt(i)), 1);
-                            }else {
-                                passCodeMap.put(String.valueOf(inputPasswordValue.charAt(i)), passCodeMap.get(String.valueOf(inputPasswordValue.charAt(i))) + 1);
-                            }
-                        }
-
-                        for (Map.Entry<String, Integer> entry : passCodeMap.entrySet())
-                        {
-                            if (entry.getValue() > 2){
-                                inputPasswordValue = "";
-                                Toast.makeText(activity, getString(R.string.msg_invalid_password), Toast.LENGTH_SHORT).show();
-                                return;
-                            }
+                        int passwordComplexity = new PasswordComplexity(inputPasswordValue).check();
+                        if (passwordComplexity != 1){
+                            inputPasswordValue = "";
+                            Toast.makeText(activity, getString(passwordComplexity), Toast.LENGTH_SHORT).show();
+                            return;
                         }
 
                         password_1_rl.setVisibility(View.GONE);
-
                         password_2_rl.setVisibility(View.VISIBLE);
-
                         input_digit_1.setImageResource(R.drawable.pass_value_empty);
                         input_digit_2.setImageResource(R.drawable.pass_value_empty);
                         input_digit_3.setImageResource(R.drawable.pass_value_empty);
                         input_digit_4.setImageResource(R.drawable.pass_value_empty);
                         input_digit_5.setImageResource(R.drawable.pass_value_empty);
-
-
                         break;
                 }
             }
@@ -393,23 +377,11 @@ public class PasswordEntryActivity extends AppCompatActivity implements View.OnC
                         vibrator.vibrate(20);
 
 
-                        Map<String, Integer> passCodeMap = new HashMap<>();
-
-                        for(int i = 0; i < inputRePasswordValue.length(); i++) {
-                            if (passCodeMap.get(String.valueOf(inputRePasswordValue.charAt(i))) == null){
-                                passCodeMap.put(String.valueOf(inputRePasswordValue.charAt(i)), 1);
-                            }else {
-                                passCodeMap.put(String.valueOf(inputRePasswordValue.charAt(i)), passCodeMap.get(String.valueOf(inputRePasswordValue.charAt(i))) + 1);
-                            }
-                        }
-
-                        for (Map.Entry<String, Integer> entry : passCodeMap.entrySet())
-                        {
-                            if (entry.getValue() > 2){
-                                inputRePasswordValue = "";
-                                Toast.makeText(activity, getString(R.string.msg_invalid_password), Toast.LENGTH_SHORT).show();
-                                return;
-                            }
+                        int passwordComplexity = new PasswordComplexity(inputRePasswordValue).check();
+                        if (passwordComplexity != 1){
+                            inputRePasswordValue = "";
+                            Toast.makeText(activity, getString(passwordComplexity), Toast.LENGTH_SHORT).show();
+                            return;
                         }
 
                         if (inputPasswordValue.equalsIgnoreCase(inputRePasswordValue)) {

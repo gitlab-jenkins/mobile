@@ -7,7 +7,7 @@
 
 
     <string name="intro_1">پرداخت مدرن، ساده و مطمئن</string>
-    <string name="intro_2">پرداخت‌های روزانه به کسب و کارهای گوناگون</string>
+    <string name="intro_2">پرداخت به کسب و کارهای گوناگون</string>
     <string name="intro_3">تولید فاکتور</string>
     <string name="intro_4">لیست پرداخت‌های در انتظار</string>
     <string name="intro_5">نمایش پرداخت‌ها و دریافت‌های گذشته</string>
@@ -147,6 +147,7 @@
     <string name="communicate_disconfirm">منصرف شدم</string>
 
     <string name="msg_invalid_password">بیش از دو عدد تکراری قابل قبول نمی‌باشد</string>
+    <string name="msg_password_complexity">رمز عبور بهتری انتخاب کنید</string>
     <string name="dismatch_password">رمزعبور وارد شده تطابقی با هم ندارند.</string>
     <string name="retry_password">تلاش مجدد</string>
 
@@ -300,13 +301,23 @@
     <string name="signup_title">Create new account</string>
     <string name="login_label">Log in</string>
 
-    <string-array name="setting_list">
+
+
+    <string-array name="setting_key_list">
+        <item>setting_change_pass_code</item>
+        <item>setting_change_memorable_word</item>
+        <item>setting_user_unlink</item>
+        <item>setting_change_email</item>
+        <item>setting_change_iban</item>
+    </string-array>
+    <string-array name="setting_value_list">
         <item>تغییر رمز عبور</item>
         <item>تغییر کلمه یادآوری</item>
         <item>لغو عضویت</item>
         <item>تغییر ایمیل</item>
         <item>تغییر شماره شبا</item>
     </string-array>
+
 
     <string name="change_password">تغییر رمز عبور</string>
     <string name="change_memorable">تغییر کلمه یادآوری</string>
@@ -442,7 +453,7 @@
     <string name="msg_violation_image_size">اندازه عکس می‌بایستی از ۵۱۲ کیلو بایت کمتر باشد.</string>
     <string name="msg_incorrect_amount">مبلغ واریزی شما می بایستی بین %1$s ریال و %2$s ریال باشد.</string>
 
-    <string name="msg_memorable_incorrect">کلمه یادآوری می‌بایستی وارد شود</string>
+    <string name="msg_memorable_incorrect">کلمه یادآوری می‌بایستی بیشتر از ۲ حرف باشد</string>
 
     <string name="action_fail_payment_permission">باشه</string>
 

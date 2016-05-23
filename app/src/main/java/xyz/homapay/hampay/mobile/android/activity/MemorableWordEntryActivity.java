@@ -42,10 +42,10 @@ import java.util.UUID;
 
 public class MemorableWordEntryActivity extends AppCompatActivity {
 
-    FacedTextView keepOn_button;
-    SharedPreferences prefs;
-    SharedPreferences.Editor editor;
-    FacedEditText memorable_value;
+    private FacedTextView keepOn_button;
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
+    private FacedEditText memorable_value;
 
     Context context;
 
@@ -63,11 +63,6 @@ public class MemorableWordEntryActivity extends AppCompatActivity {
 
     RequestCredentialEntry requestCredentialEntry;
     RegistrationCredentialsRequest registrationCredentialsRequest;
-
-    byte[] mobileKey;
-    String serverKey;
-
-//    String encryptedData;
 
     DeviceInfo deviceInfo;
 
@@ -171,11 +166,7 @@ public class MemorableWordEntryActivity extends AppCompatActivity {
         keepOn_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-
-
-                if (memorable_value.getText().toString().trim().length() != 0) {
+                if (memorable_value.getText().toString().trim().length() > 1 ) {
                     registrationCredentialsRequest = new RegistrationCredentialsRequest();
                     registrationCredentialsRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
                     registrationCredentialsRequest.setDeviceId(new DeviceInfo(activity).getAndroidId());
@@ -213,22 +204,9 @@ public class MemorableWordEntryActivity extends AppCompatActivity {
                 resultStatus = registrationMemorableWordEntryResponseMessage.getService().getResultStatus();
 
                 if (resultStatus == ResultStatus.SUCCESS) {
-                    try {
-                        mobileKey = SecurityUtils.getInstance(context).generateSHA_256(
-                                deviceInfo.getMacAddress(),
-                                deviceInfo.getIMEI(),
-                                deviceInfo.getAndroidId());
-//                        serverKey = registrationMemorableWordEntryResponseMessage.getService().getUserIdToken();
-//                        encryptedData = AESHelper.encrypt(mobileKey, serverKey, memorable_value.getText().toString());
-                        editor.putString(Constants.MEMORABLE_WORD, memorable_value.getText().toString());
-//                        encryptedData = AESHelper.encrypt(mobileKey, serverKey, Uuid);
-                        editor.putString(Constants.UUID, Uuid);
-                        editor.commit();
-                    }
-                    catch (Exception ex){
-                        Log.e("Error", ex.getStackTrace().toString());
-                    }
-
+                    editor.putString(Constants.MEMORABLE_WORD, memorable_value.getText().toString());
+                    editor.putString(Constants.UUID, Uuid);
+                    editor.commit();
                     Intent intent = new Intent();
                     intent.setClass(MemorableWordEntryActivity.this, CompleteRegistrationActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

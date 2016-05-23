@@ -346,7 +346,11 @@
                             android:hint="@string/name_family"
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
+                            android:lines="1"
+                            android:maxLines="1"
+                            android:maxLength="30"
                             android:padding="8dp"
+                            android:digits=" ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzاآبپتثجچحخدذرزژسشصضطظعغفقکگلمنوهی"
                             android:contentDescription="account" />
 
                         <ImageView

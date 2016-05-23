@@ -97,11 +97,12 @@
                         android:text="@string/main_fragment_generate_factor" />
 
                     <ImageView
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
+                        android:layout_width="63dp"
+                        android:layout_height="63dp"
                         android:src="@drawable/factor_icon"
                         android:layout_marginRight="12dp"
-                        android:background="@color/page_title"/>
+                        android:background="@color/page_title"
+                        android:scaleType="center"/>
 
                 </LinearLayout>
 
@@ -130,11 +131,12 @@
                         android:text="@string/main_fragment_business_payment" />
 
                     <ImageView
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
+                        android:layout_width="63dp"
+                        android:layout_height="63dp"
                         android:src="@drawable/business_icon"
                         android:layout_marginRight="12dp"
-                        android:background="@color/page_title"/>
+                        android:background="@color/page_title"
+                        android:scaleType="center"/>
 
                 </LinearLayout>
 
@@ -167,10 +169,11 @@
                         android:layout_marginRight="12dp">
 
                         <ImageView
-                            android:layout_width="64dp"
-                            android:layout_height="64dp"
+                            android:layout_width="63dp"
+                            android:layout_height="63dp"
                             android:src="@drawable/expectation_icon"
-                            android:background="@color/page_title"/>
+                            android:background="@color/page_title"
+                            android:scaleType="center"/>
 
                         <xyz.homapay.hampay.mobile.android.component.FacedTextView
                             android:id="@+id/pending_badge"
@@ -214,11 +217,12 @@
                         android:text="@string/main_fragment_transactions" />
 
                     <ImageView
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
+                        android:layout_width="63dp"
+                        android:layout_height="63dp"
                         android:src="@drawable/transaction_icon"
                         android:layout_marginRight="12dp"
-                        android:background="@color/page_title"/>
+                        android:background="@color/page_title"
+                        android:scaleType="center"/>
 
                 </LinearLayout>
 
