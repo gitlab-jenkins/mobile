@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.widget.Toast;
 
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
@@ -33,6 +35,24 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+
+        int density= getResources().getDisplayMetrics().densityDpi;
+
+        switch(density)
+        {
+            case DisplayMetrics.DENSITY_LOW:
+                Toast.makeText(this, "LDPI", Toast.LENGTH_SHORT).show();
+                break;
+            case DisplayMetrics.DENSITY_MEDIUM:
+                Toast.makeText(this, "MDPI", Toast.LENGTH_SHORT).show();
+                break;
+            case DisplayMetrics.DENSITY_HIGH:
+                Toast.makeText(this, "HDPI", Toast.LENGTH_SHORT).show();
+                break;
+            case DisplayMetrics.DENSITY_XHIGH:
+                Toast.makeText(this, "XHDPI", Toast.LENGTH_SHORT).show();
+                break;
+        }
 
         activity = StartActivity.this;
 

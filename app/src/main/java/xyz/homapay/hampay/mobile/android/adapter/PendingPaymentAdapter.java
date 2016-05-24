@@ -117,7 +117,7 @@ public class PendingPaymentAdapter extends BaseAdapter  {
                     .load(userImageUrl)
                     .into(viewHolder.user_image);
         }else {
-            viewHolder.user_image.setImageResource(R.drawable.transaction_placeholder);
+            viewHolder.user_image.setImageResource(R.drawable.user_placeholder);
         }
 
         return convertView;

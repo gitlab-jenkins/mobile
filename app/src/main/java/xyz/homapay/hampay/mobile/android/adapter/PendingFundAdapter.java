@@ -12,12 +12,8 @@ import android.widget.ImageView;
 import java.util.List;
 
 import xyz.homapay.hampay.common.core.model.response.dto.FundDTO;
-import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.mobile.android.R;
-import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
-import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
-import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
@@ -88,7 +84,7 @@ public class PendingFundAdapter extends BaseAdapter {
             Bitmap bitmap = BitmapFactory.decodeByteArray(fund.getImage() , 0, fund.getImage().length);
             viewHolder.user_image.setImageBitmap(bitmap);
         }else {
-            viewHolder.user_image.setImageResource(R.drawable.transaction_placeholder);
+            viewHolder.user_image.setImageResource(R.drawable.user_placeholder);
         }
         viewHolder.contact_name.setText(persianEnglishDigit.E2P(fund.getName()));
         viewHolder.create_date.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(fund.getCreationDate())));

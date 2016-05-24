@@ -21,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -319,9 +318,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         if (userProfileDTO.getUserImageId() != null) {
             String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + userProfileDTO.getUserImageId();
             image_profile.setTag(userImageUrl.split("/")[6]);
-            imageManager.displayImage(userImageUrl, image_profile, R.drawable.transaction_placeholder);
+            imageManager.displayImage(userImageUrl, image_profile, R.drawable.user_placeholder);
         }else {
-            image_profile.setImageResource(R.drawable.transaction_placeholder);
+            image_profile.setImageResource(R.drawable.user_placeholder);
         }
 
 //        if (userProfileDTO.getUserImageId() != null) {
@@ -520,7 +519,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 break;
 
             case REMOVE_SUCCESS:
-                image_profile.setImageResource(R.drawable.transaction_placeholder);
+                image_profile.setImageResource(R.drawable.user_placeholder);
                 break;
 
             case REMOVE_FAIL:
@@ -528,9 +527,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 if (userProfileDTO.getUserImageId() != null) {
                     String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + userProfileDTO.getUserImageId();
                     image_profile.setTag(userImageUrl.split("/")[6]);
-                    imageManager.displayImage(userImageUrl, image_profile, R.drawable.transaction_placeholder);
+                    imageManager.displayImage(userImageUrl, image_profile, R.drawable.user_placeholder);
                 }else {
-                    image_profile.setImageResource(R.drawable.transaction_placeholder);
+                    image_profile.setImageResource(R.drawable.user_placeholder);
                 }
 
 //                if (userProfileDTO.getUserImageId() != null) {
@@ -600,16 +599,16 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                             String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + userProfileDTO.getUserImageId();
                             image_profile.setTag(userImageUrl.split("/")[6]);
                             imageManager = new ImageManager(activity, 200000, true);
-                            imageManager.displayImage(userImageUrl, image_profile, R.drawable.transaction_placeholder);
+                            imageManager.displayImage(userImageUrl, image_profile, R.drawable.user_placeholder);
 
 //                            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + userProfileDTO.getUserImageId();
 //                            File sdDir = android.os.Environment.getExternalStorageDirectory();
 //                            File cacheDir = new File(sdDir,activity.getFilesDir().getPath() + "/" + userProfileDTO.getUserImageId().hashCode());
 //                            cacheDir.delete();
 //                            image_profile.setTag(userImageUrl.split("/")[6]);
-//                            imageManager.displayImage(userImageUrl, image_profile, R.drawable.transaction_placeholder);
+//                            imageManager.displayImage(userImageUrl, image_profile, R.drawable.user_placeholder);
                         }else {
-                            image_profile.setImageResource(R.drawable.transaction_placeholder);
+                            image_profile.setImageResource(R.drawable.user_placeholder);
                         }
 //                        if (userProfileDTO.getUserImageId() != null) {
 //                            String userImageUrl = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();

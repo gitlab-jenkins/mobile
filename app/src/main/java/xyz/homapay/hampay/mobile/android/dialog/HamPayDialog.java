@@ -159,6 +159,34 @@ public class HamPayDialog {
 
     }
 
+    public void exitRegistrationDialog(){
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_exit_registeration, null);
+
+        FacedTextView continuation_registration = (FacedTextView) view.findViewById(R.id.continuation_registration);
+        FacedTextView confirm_exit = (FacedTextView) view.findViewById(R.id.confirm_exit);
+
+        continuation_registration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        confirm_exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                activity.finish();
+            }
+        });
+
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
+    }
 
     public void showWaitingDialog(String hampayUser){
 
@@ -170,8 +198,10 @@ public class HamPayDialog {
             waiting_text.setText(activity.getString(R.string.dialog_hampay_user_waiting));
         }
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void showTcPrivacyDialog(){
@@ -184,7 +214,7 @@ public class HamPayDialog {
             public void onClick(View textView) {
                 Intent intent = new Intent();
                 intent.setClass(activity, GuideDetailActivity.class);
-                intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/privacy.html");
+                intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/users/tac-file");
                 activity.startActivity(intent);
             }
         };
@@ -196,7 +226,7 @@ public class HamPayDialog {
             public void onClick(View textView) {
                 Intent intent = new Intent();
                 intent.setClass(activity, GuideDetailActivity.class);
-                intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/help/tc.html");
+                intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/users/privacy-file");
                 activity.startActivity(intent);
             }
         };
@@ -229,8 +259,10 @@ public class HamPayDialog {
             }
         });
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
 
@@ -254,8 +286,10 @@ public class HamPayDialog {
             }
         });
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void showDisMatchMemorableDialog(){
@@ -271,8 +305,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void fetchContactUsInfo(){
@@ -317,8 +353,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     String contactUsMail = "";
@@ -476,8 +514,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public class RequestLogoutResponseTaskCompleteListener implements AsyncTaskCompleteListener<LogoutResponse>
@@ -532,8 +572,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void showLoginFailDialog(FailedLoginResponse failedLoginResponse){
@@ -567,8 +609,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
 
@@ -586,8 +630,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
 
@@ -607,8 +653,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void showFailCardProfileDialog(final RequestCardProfile requestCardProfile,
@@ -632,8 +680,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
 
@@ -668,8 +718,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void showFailRegistrationEntryDialog(final RequestRegistrationEntry requestRegistrationEntry,
@@ -701,8 +753,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void showFailRegistrationSendSmsTokenDialog(final RequestRegistrationSendSmsToken requestRegistrationSendSmsToken,
@@ -735,8 +789,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
 
@@ -763,8 +819,10 @@ public class HamPayDialog {
             }
         });
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void showFailUserProfileDialog(final RequestUserProfile requestUserProfile,
@@ -796,8 +854,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
 
@@ -831,8 +891,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void showFailTCRequestDialog(final RequestTAC requestTAC,
@@ -866,8 +928,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
 
@@ -896,8 +960,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void showSuccessChangeSettingDialog(final String message){
@@ -914,8 +980,10 @@ public class HamPayDialog {
             }
         });
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void showFailChangePassCodeDialog(final RequestChangePassCode requestChangePassCode,
@@ -949,8 +1017,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
 
@@ -988,8 +1058,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
 
@@ -1017,8 +1089,10 @@ public class HamPayDialog {
             }
         });
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void showFailBusinessListDialog(final RequestHamPayBusiness requestHamPayBusiness,
@@ -1048,8 +1122,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void showFailBusinessSearchListDialog(final RequestSearchHamPayBusiness requestSearchHamPayBusiness,
@@ -1077,8 +1153,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void showFailContactsHamPayEnabledDialog(final RequestContactHampayEnabled requestContactHampayEnabled,
@@ -1109,8 +1187,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void showFailPaymentDialog(final String code,
@@ -1139,8 +1219,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void showIncorrectAmountDialog(Long MaxXferAmount, Long MinXferAmount){
@@ -1162,8 +1244,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
 
@@ -1192,8 +1276,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void showFailUnlinkDialog(final RequestUnlinkUser requestUnlinkUser,
@@ -1231,8 +1317,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void showFailChnageEmail(final RequestChangeEmail requestChangeEmail,
@@ -1270,8 +1358,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
 
@@ -1304,8 +1394,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
 
@@ -1348,8 +1440,10 @@ public class HamPayDialog {
 
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public class RequestChangeEmailTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<ChangeEmailResponse>> {
@@ -1444,8 +1538,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public class RequestRegistrationSendSmsTokenTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationSendSmsTokenResponse>> {
@@ -1533,8 +1629,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void pspFailResultDialog(){
@@ -1552,8 +1650,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
 
@@ -1574,8 +1674,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void ipgFailDialog(){
@@ -1593,8 +1695,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
 
@@ -1627,8 +1731,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void showFailPurchaseInfoDialog(final RequestPurchaseInfo requestPurchaseInfo,
@@ -1660,8 +1766,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void showFailPendingPaymentDialog(final RequestLatestPayment requestLatestPayment,
@@ -1693,8 +1801,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
 
@@ -1719,8 +1829,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void failurePaymentRequestDialog(){
@@ -1737,8 +1849,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void showIBANConfirmationDialog(final String iban, final IBANConfirmationResponse ibanConfirmationResponse){
@@ -1772,8 +1886,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void showFailIBANChangeDialog(final RequestIBANChange requestIBANChange,
@@ -1804,8 +1920,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void showFailIBANConfirmationDialog(final RequestIBANConfirmation requestIBANConfirmation,
@@ -1836,8 +1954,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
     public void removeImageFailDialog(){
@@ -1855,8 +1975,10 @@ public class HamPayDialog {
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
-        dialog = new HamPayCustomDialog(view, activity, 0);
-        dialog.show();
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
     }
 
 }

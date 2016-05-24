@@ -251,4 +251,9 @@ public class MemorableWordEntryActivity extends AppCompatActivity {
             hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        new HamPayDialog(activity).exitRegistrationDialog();
+    }
 }

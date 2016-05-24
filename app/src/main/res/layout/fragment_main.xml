@@ -45,7 +45,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentLeft="true"
                         android:background="#55000000"
                         android:padding="12dp">
 
@@ -97,12 +97,12 @@
                         android:text="@string/main_fragment_generate_factor" />
 
                     <ImageView
-                        android:layout_width="63dp"
-                        android:layout_height="63dp"
-                        android:src="@drawable/factor_icon"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:src="@drawable/test_"
                         android:layout_marginRight="12dp"
-                        android:background="@color/page_title"
-                        android:scaleType="center"/>
+                        android:background="@color/app_origin"
+                        android:adjustViewBounds="true"/>
 
                 </LinearLayout>
 
@@ -131,8 +131,8 @@
                         android:text="@string/main_fragment_business_payment" />
 
                     <ImageView
-                        android:layout_width="63dp"
-                        android:layout_height="63dp"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
                         android:src="@drawable/business_icon"
                         android:layout_marginRight="12dp"
                         android:background="@color/page_title"
@@ -169,8 +169,8 @@
                         android:layout_marginRight="12dp">
 
                         <ImageView
-                            android:layout_width="63dp"
-                            android:layout_height="63dp"
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
                             android:src="@drawable/expectation_icon"
                             android:background="@color/page_title"
                             android:scaleType="center"/>
@@ -217,8 +217,8 @@
                         android:text="@string/main_fragment_transactions" />
 
                     <ImageView
-                        android:layout_width="63dp"
-                        android:layout_height="63dp"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
                         android:src="@drawable/transaction_icon"
                         android:layout_marginRight="12dp"
                         android:background="@color/page_title"

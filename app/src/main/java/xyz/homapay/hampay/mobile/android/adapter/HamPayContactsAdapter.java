@@ -2,23 +2,17 @@ package xyz.homapay.hampay.mobile.android.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.List;
 
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
 import xyz.homapay.hampay.mobile.android.R;
-import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
-import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
-import xyz.homapay.hampay.mobile.android.component.circleimageview.CircleImageView;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
@@ -89,9 +83,9 @@ public class HamPayContactsAdapter extends BaseAdapter {
         if (contact.getContactImageId() != null) {
             String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + contact.getContactImageId();
             viewHolder.user_image.setTag(userImageUrl.split("/")[6]);
-            imageManager.displayImage(userImageUrl, viewHolder.user_image, R.drawable.transaction_placeholder);
+            imageManager.displayImage(userImageUrl, viewHolder.user_image, R.drawable.user_placeholder);
         }else {
-            viewHolder.user_image.setImageResource(R.drawable.transaction_placeholder);
+            viewHolder.user_image.setImageResource(R.drawable.user_placeholder);
         }
         viewHolder.contact_name.setText(persianEnglishDigit.E2P(contact.getDisplayName()));
         viewHolder.cell_number.setText(persianEnglishDigit.E2P(contact.getCellNumber()));

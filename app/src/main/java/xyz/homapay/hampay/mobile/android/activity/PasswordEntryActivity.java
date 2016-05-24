@@ -422,7 +422,7 @@ public class PasswordEntryActivity extends AppCompatActivity implements View.OnC
             new Collapse(keyboard).animate();
         }
         else {
-            finish();
+            new HamPayDialog(activity).exitRegistrationDialog();
         }
     }
 }

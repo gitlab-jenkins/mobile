@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import java.util.Date;
 import java.util.List;
@@ -27,11 +26,10 @@ import xyz.homapay.hampay.mobile.android.activity.PendingPurchasePaymentListActi
 import xyz.homapay.hampay.mobile.android.activity.TransactionsListActivity;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
-import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
-import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.slidinguppanel.SlidingUpPanelLayout;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
@@ -50,7 +48,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     LinearLayout pendingPurchasePayment;
     UserProfileDTO userProfileDTO;
     Bundle bundle;
-    private String userImageId = "";
+    private String userImageUrl = "";
     LinearLayout hampay_1_ll;
     LinearLayout hampay_2_ll;
     LinearLayout hampay_3_ll;
@@ -77,6 +75,8 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     private FacedTextView pending_badge;
 
     private PersianEnglishDigit persianEnglishDigit;
+    private ImageManager imageManager;
+    private String authToken;
 
     public MainFragment() {
     }
@@ -84,7 +84,6 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -94,6 +93,8 @@ public class MainFragment extends Fragment implements View.OnClickListener{
 
         context = getActivity();
         persianEnglishDigit = new PersianEnglishDigit();
+
+        imageManager = new ImageManager(getActivity(), 200000, false);
 
         Date currentDate = new Date();
 
@@ -108,11 +109,9 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         date_text.setText(persianEnglishDigit.E2P(jalaliConvert.homeDate()));
         bottom_panel = (LinearLayout)rootView.findViewById(R.id.bottom_panel);
 
-
-
         prefs = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
         editor = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE).edit();
-
+        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
 
         bundle = getArguments();
@@ -160,37 +159,49 @@ public class MainFragment extends Fragment implements View.OnClickListener{
             bottom_panel.setVisibility(View.GONE);
         }
         for (int contact = 0; contact < contacts.size(); contact++){
-            switch (contact){
+            switch (contact) {
                 case 0:
                     hampay_1_ll.setVisibility(View.VISIBLE);
                     hampay_1.setText(contacts.get(0).getDisplayName());
                     if (contacts.get(0).getContactImageId() != null) {
-                        userImageId = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contacts.get(0).getContactImageId();
-                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_1)).execute(userImageId);
+                        userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + contacts.get(0).getContactImageId();
+                        hampay_image_1.setTag(userImageUrl.split("/")[6]);
+                        imageManager.displayImage(userImageUrl, hampay_image_1, R.drawable.user_placeholder);
+                    } else {
+                        hampay_image_1.setImageResource(R.drawable.user_placeholder);
                     }
                     break;
                 case 1:
                     hampay_2_ll.setVisibility(View.VISIBLE);
                     hampay_2.setText(contacts.get(1).getDisplayName());
                     if (contacts.get(1).getContactImageId() != null) {
-                        userImageId = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contacts.get(1).getContactImageId();
-                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_2)).execute(userImageId);
+                        userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + contacts.get(1).getContactImageId();
+                        hampay_image_2.setTag(userImageUrl.split("/")[6]);
+                        imageManager.displayImage(userImageUrl, hampay_image_2, R.drawable.user_placeholder);
+                    } else {
+                        hampay_image_2.setImageResource(R.drawable.user_placeholder);
                     }
                     break;
                 case 2:
                     hampay_3_ll.setVisibility(View.VISIBLE);
                     hampay_3.setText(contacts.get(2).getDisplayName());
                     if (contacts.get(2).getContactImageId() != null) {
-                        userImageId = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contacts.get(2).getContactImageId();
-                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_3)).execute(userImageId);
+                        userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + contacts.get(2).getContactImageId();
+                        hampay_image_3.setTag(userImageUrl.split("/")[6]);
+                        imageManager.displayImage(userImageUrl, hampay_image_3, R.drawable.user_placeholder);
+                    } else {
+                        hampay_image_3.setImageResource(R.drawable.user_placeholder);
                     }
                     break;
                 case 3:
                     hampay_4_ll.setVisibility(View.VISIBLE);
                     hampay_4.setText(contacts.get(3).getDisplayName());
                     if (contacts.get(3).getContactImageId() != null) {
-                        userImageId = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + contacts.get(3).getContactImageId();
-                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(hampay_image_4)).execute(userImageId);
+                        userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + contacts.get(3).getContactImageId();
+                        hampay_image_4.setTag(userImageUrl.split("/")[6]);
+                        imageManager.displayImage(userImageUrl, hampay_image_4, R.drawable.user_placeholder);
+                    } else {
+                        hampay_image_4.setImageResource(R.drawable.user_placeholder);
                     }
                     break;
 

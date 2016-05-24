@@ -674,5 +674,10 @@ public class ProfileEntryActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        new HamPayDialog(activity).exitRegistrationDialog();
+    }
+
 }
 

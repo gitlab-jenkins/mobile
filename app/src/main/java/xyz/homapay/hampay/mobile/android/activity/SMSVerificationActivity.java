@@ -565,18 +565,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         }
     }
 
-    @Override
-    public void onBackPressed() {
-
-        if (keyboard.getVisibility() == View.VISIBLE){
-            new Collapse(keyboard).animate();
-        }
-        else {
-            finish();
-        }
-    }
-
-
     public class RequestRegistrationSendSmsTokenTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationSendSmsTokenResponse>> {
         @Override
         public void onTaskComplete(ResponseMessage<RegistrationSendSmsTokenResponse> registrationSendSmsTokenResponse)
@@ -628,5 +616,13 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         @Override
         public void onTaskPreRun() {   }
     }
-
+    @Override
+    public void onBackPressed() {
+        if (keyboard.getVisibility() == View.VISIBLE){
+            new Collapse(keyboard).animate();
+        }
+        else {
+            new HamPayDialog(activity).exitRegistrationDialog();
+        }
+    }
 }

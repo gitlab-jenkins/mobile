@@ -130,6 +130,9 @@
     <string name="dialog_user_waiting">کاربر گرامی منتظر بمانید</string>
     <string name="dialog_hampay_user_waiting">عزیز، منتظر بمانید</string>
 
+    <string name="msg_exit_registration">با خروج در این مرحله، ثبت نام لغو می شود. آیا مطمئن هستید؟‌</string>
+    <string name="confirm_exit_registration">بله</string>
+    <string name="continuation_registration">خیر</string>
 
     <string name="last_login">آخرین بازدید شما </string>
 
