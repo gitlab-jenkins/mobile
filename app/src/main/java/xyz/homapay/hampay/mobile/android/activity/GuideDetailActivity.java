@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -13,22 +14,21 @@ import android.webkit.WebViewClient;
 
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class GuideDetailActivity extends AppCompatActivity {
 
-    WebView guide_webview;
-    Bundle bundle;
-    String webPageUrl;
-
-
-    HamPayDialog hamPayDialog;
-
-    SharedPreferences prefs;
-
+    private WebView guide_webview;
+    private Bundle bundle;
+    private String webPageUrl;
+    private HamPayDialog hamPayDialog;
+    private SharedPreferences prefs;
     private Context context;
+    private FacedTextView title;
+    private FacedTextView close_tc_privacy;
 
     @Override
     protected void onPause() {
@@ -73,13 +73,18 @@ public class GuideDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_guide_detail);
         context = this;
         bundle = getIntent().getExtras();
-
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
-
         webPageUrl = bundle.getString(Constants.WEB_PAGE_ADDRESS);
-
+        title = (FacedTextView)findViewById(R.id.title);
+        title.setText(bundle.getString(Constants.TAC_PRIVACY_TITLE));
+        close_tc_privacy = (FacedTextView)findViewById(R.id.close_tc_privacy);
+        close_tc_privacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         guide_webview = (WebView)findViewById(R.id.guide_webview);
-
         hamPayDialog = new HamPayDialog(this);
 
         hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));

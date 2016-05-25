@@ -46,6 +46,7 @@ import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.dialog.ImageProfile.ActionImage;
 import xyz.homapay.hampay.mobile.android.dialog.ImageProfile.EditImageDialog;
+import xyz.homapay.hampay.mobile.android.fragment.AboutFragment;
 import xyz.homapay.hampay.mobile.android.fragment.AccountDetailFragment;
 import xyz.homapay.hampay.mobile.android.fragment.FragmentDrawer;
 import xyz.homapay.hampay.mobile.android.fragment.GuideFragment;
@@ -104,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     Intent intent;
 
-    DatabaseHelper databaseHelper;
+    DatabaseHelper dbHelper;
 
     private String authToken = "";
     private ImageManager imageManager;
@@ -197,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             hasNotification = bundle.getBoolean(Constants.HAS_NOTIFICATION);
         }
 
-        databaseHelper = new DatabaseHelper(activity);
+        dbHelper = new DatabaseHelper(context);
         if (hasNotification) {
             NotificationMessageType notificationMessageType;
             notificationMessageType = NotificationMessageType.valueOf(bundle.getString(Constants.NOTIFICATION_TYPE));
@@ -228,8 +229,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             }
         }else {
             if (pendingPurchaseCode != null) {
-                if (databaseHelper.getIsExistPurchaseRequest(pendingPurchaseCode)) {
-                    LatestPurchase latestPurchase = databaseHelper.getPurchaseRequest(pendingPurchaseCode);
+                if (dbHelper.getIsExistPurchaseRequest(pendingPurchaseCode)) {
+                    LatestPurchase latestPurchase = dbHelper.getPurchaseRequest(pendingPurchaseCode);
                     if (latestPurchase.getIsCanceled().equalsIgnoreCase("0")) {
                         if (pendingPurchaseCount > 0) {
                             intent.setClass(context, RequestBusinessPayDetailActivity.class);
@@ -240,13 +241,15 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                         }
                     }
                 } else {
-                    databaseHelper.createPurchaseRequest(pendingPurchaseCode);
+                    dbHelper.createPurchaseRequest(pendingPurchaseCode);
                     intent.setClass(context, RequestBusinessPayDetailActivity.class);
                     startActivity(intent);
                 }
-            } else if (pendingPaymentCount > 0) {
-                intent.setClass(context, InvoicePendingConfirmationActivity.class);
-                startActivity(intent);
+            } else if (pendingPaymentCount > 0 && pendingPaymentCode != null) {
+                if (!dbHelper.checkPaymentRequest(pendingPaymentCode)) {
+                    intent.setClass(context, InvoicePendingConfirmationActivity.class);
+                    startActivity(intent);
+                }
             }
         }
 
@@ -365,7 +368,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         String title = getString(R.string.app_name);
         switch (position) {
-
             case 0:
                 fragment = new MainFragment();
                 if (userProfileDTO != null) {
@@ -399,6 +401,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 LogoutData logoutData = new LogoutData();
                 logoutData.setIplanetDirectoryPro(prefs.getString(Constants.LOGIN_TOKEN_ID, null));
                 new HamPayDialog(activity).showExitDialog(logoutData);
+                break;
+            case 6:
+                fragment = new AboutFragment();
+                title = getString(R.string.title_hampay_about);
                 break;
         }
 
@@ -600,13 +606,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                             image_profile.setTag(userImageUrl.split("/")[6]);
                             imageManager = new ImageManager(activity, 200000, true);
                             imageManager.displayImage(userImageUrl, image_profile, R.drawable.user_placeholder);
-
-//                            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + userProfileDTO.getUserImageId();
-//                            File sdDir = android.os.Environment.getExternalStorageDirectory();
-//                            File cacheDir = new File(sdDir,activity.getFilesDir().getPath() + "/" + userProfileDTO.getUserImageId().hashCode());
-//                            cacheDir.delete();
-//                            image_profile.setTag(userImageUrl.split("/")[6]);
-//                            imageManager.displayImage(userImageUrl, image_profile, R.drawable.user_placeholder);
                         }else {
                             image_profile.setImageResource(R.drawable.user_placeholder);
                         }

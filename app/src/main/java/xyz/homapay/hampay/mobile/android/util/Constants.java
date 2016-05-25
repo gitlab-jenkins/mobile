@@ -4,9 +4,9 @@ package xyz.homapay.hampay.mobile.android.util;
 import xyz.homapay.hampay.mobile.android.webservice.ConnectionType;
 
 public class Constants {
-//    public static String SERVER_IP = "176.58.104.158";//England Server IP
-    public static String SERVER = "mobile.hampay.ir";//Prod Server IP
-//       public static String SERVER_IP = "139.162.147.189";//UAT Server IP
+//    public static String SERVER = "176.58.104.158";//England Server IP
+//    public static String SERVER = "mobile.hampay.ir";//Prod Server IP
+    public static String SERVER = "139.162.181.92";//UAT Server IP
     public static String URL_PREFIX = "/hampay";
     public static String HTTP_SERVER_IP = "http://" + SERVER + ":90" + URL_PREFIX;//England Server
     public static String IPG_URL = "http://" + SERVER + ":9091" + URL_PREFIX;//England Server
@@ -96,6 +96,7 @@ public class Constants {
     public static final String SETTING_CHANGE_IBAN_STATUS = "setting_change_iban";
     public static final int IBAN_CHANGE_RESULT_CODE = 2048;
     public static final String RETURN_IBAN_CONFIRMED = "return_iban";
+    public static final String TAC_PRIVACY_TITLE = "tac_privacy_title";
 
     //Permissions and Group Permission
     public static final int READ_PHONE_STATE = 1;

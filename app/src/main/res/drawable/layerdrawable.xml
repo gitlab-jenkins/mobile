@@ -5,32 +5,32 @@
         <bitmap
             android:id="@+id/Idofbg5"
             android:gravity="fill"
-            android:src="@drawable/p05_1" />
+            android:src="@drawable/image_5" />
     </item>
     <item>
         <bitmap
             android:id="@+id/Idofbg4"
             android:gravity="fill"
-            android:src="@drawable/p04_1" />
+            android:src="@drawable/image_4" />
     </item>
 
     <item>
         <bitmap
             android:id="@+id/Idofbg3"
             android:gravity="fill"
-            android:src="@drawable/p03_1" />
+            android:src="@drawable/image_3" />
     </item>
     <item>
         <bitmap
             android:id="@+id/Idofbg2"
             android:gravity="fill"
-            android:src="@drawable/p02_1" />
+            android:src="@drawable/image_2" />
     </item>
     <item>
         <bitmap
             android:id="@+id/Idofbg1"
             android:gravity="fill"
-            android:src="@drawable/p01_1" />
+            android:src="@drawable/image_1" />
     </item>
 
 </layer-list>

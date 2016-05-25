@@ -38,24 +38,19 @@ public class HamPayContactsActivity extends AppCompatActivity{
     private Context context;
     private Activity activity;
     private ListView paymentRequestList;
-    List<ContactDTO> contacts;
-    SharedPreferences prefs;
-    SharedPreferences.Editor editor;
-
+    private List<ContactDTO> contacts;
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
     private HamPayContactsAdapter hamPayContactsAdapter;
-
-    private Dialog dialog;
-
-    ContactsHampayEnabledRequest contactsHampayEnabledRequest;
-    RequestContactHampayEnabled requestContactHampayEnabled;
-
+    private ContactsHampayEnabledRequest contactsHampayEnabledRequest;
+    private RequestContactHampayEnabled requestContactHampayEnabled;
     private FacedEditText search_text;
-
     private HamPayDialog hamPayDialog;
+    private String searchPhrase = "";
+
     public void backActionBar(View view){
         finish();
     }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -101,12 +96,17 @@ public class HamPayContactsActivity extends AppCompatActivity{
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                searchPhrase = search_text.getText().toString();
                 List<ContactDTO> searchContacts = new ArrayList<>();
-
                 for (ContactDTO contact: contacts){
-                    if (contact.getDisplayName().contains(search_text.getText().toString())){
-                        searchContacts.add(contact);
+                    if (searchPhrase.length() == 0 || searchPhrase.length() == 1){
+                        if (contact.getDisplayName().startsWith(searchPhrase)){
+                            searchContacts.add(contact);
+                        }
+                    }else if (searchPhrase.length() > 1){
+                        if (contact.getDisplayName().contains(searchPhrase)){
+                            searchContacts.add(contact);
+                        }
                     }
                 }
                 hamPayContactsAdapter = new HamPayContactsAdapter(activity, searchContacts, authToken);
@@ -144,15 +144,7 @@ public class HamPayContactsActivity extends AppCompatActivity{
 
             if (contactsHampayEnabledResponseMessage != null){
                 if (contactsHampayEnabledResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-
                     contacts = contactsHampayEnabledResponseMessage.getService().getContacts();
-
-                    if (contacts.size() > 0){
-//                        search_layout.setVisibility(View.VISIBLE);
-                    }else {
-//                        search_layout.setVisibility(View.GONE);
-                    }
-
                     hamPayContactsAdapter = new HamPayContactsAdapter(activity, contacts, authToken);
                     paymentRequestList.setAdapter(hamPayContactsAdapter);
                 }

@@ -215,6 +215,7 @@ public class HamPayDialog {
                 Intent intent = new Intent();
                 intent.setClass(activity, GuideDetailActivity.class);
                 intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/users/tac-file");
+                intent.putExtra(Constants.TAC_PRIVACY_TITLE, activity.getString(R.string.tac_title_activity));
                 activity.startActivity(intent);
             }
         };
@@ -227,6 +228,7 @@ public class HamPayDialog {
                 Intent intent = new Intent();
                 intent.setClass(activity, GuideDetailActivity.class);
                 intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/users/privacy-file");
+                intent.putExtra(Constants.TAC_PRIVACY_TITLE, activity.getString(R.string.privacy_title_activity));
                 activity.startActivity(intent);
             }
         };

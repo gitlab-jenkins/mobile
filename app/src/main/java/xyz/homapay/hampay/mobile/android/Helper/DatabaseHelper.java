@@ -14,6 +14,7 @@ import android.util.Log;
 import xyz.homapay.hampay.mobile.android.model.EnabledHamPay;
 import xyz.homapay.hampay.mobile.android.model.LatestPurchase;
 import xyz.homapay.hampay.mobile.android.model.RecentPay;
+import xyz.homapay.hampay.mobile.android.model.ViewedPaymentRequest;
 import xyz.homapay.hampay.mobile.android.util.AESHelper;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
@@ -41,6 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_RECENT_PAY = "recent_pay";
     private static final String TABLE_ENABLED_HAMPAY = "enabled_hampay";
     private static final String TABLE_CANCELED_PENDING_PAYMENT = "canceled_pending_payment";
+    private static final String TABLE_VIEWED_PAYMENT_REQUEST = "viewed_payment_request";
 
 
     // Recent Pay Table - column names
@@ -58,6 +60,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Canceled Pending Payment PurchaseRequestId
     private static final String KEY_PURCHASE_REQUEST_ID = "purchase_request_id";
     private static final String KEY_PURCHASE_REQUEST_IS_CANCELED = "is_canceled";
+
+    // Viewed Payment Request
+    private static final String KEY_VIEWED_PAYMENT_REQUEST_ID = "payment_id";
+    private static final String KEY_VIEWED_PAYMENT_REQUEST_CODE = "payment_code";
 
     // recent pay table create statement
     private static final String CREATE_TABLE_RECENT_PAY = "CREATE TABLE "
@@ -85,6 +91,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + ")";
 
 
+    //Viewed payment request table create statement
+    // recent pay table create statement
+    private static final String CREATE_TABLE_VIEWED_PAYMENT_REQUEST = "CREATE TABLE "
+            + TABLE_VIEWED_PAYMENT_REQUEST + "("
+            + KEY_VIEWED_PAYMENT_REQUEST_ID + " INTEGER PRIMARY KEY,"
+            + KEY_VIEWED_PAYMENT_REQUEST_CODE + " TEXT"
+            + ")";
+
+
     SharedPreferences prefs;
 
     byte[] mobileKey;
@@ -95,9 +110,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     DeviceInfo deviceInfo;
 
-    Activity context;
+    Context context;
 
-    public DatabaseHelper(Activity context){
+    public DatabaseHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
         this.context = context;
@@ -134,6 +149,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_RECENT_PAY);
         db.execSQL(CREATE_TABLE_HAMPAY_ENABLED);
         db.execSQL(CREATE_TABLE_CANCELED_PENDING_PAYMENT);
+        db.execSQL(CREATE_TABLE_VIEWED_PAYMENT_REQUEST);
     }
 
     @Override
@@ -142,6 +158,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECENT_PAY);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ENABLED_HAMPAY);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CANCELED_PENDING_PAYMENT);
+        db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_VIEWED_PAYMENT_REQUEST);
         // create new tables
         onCreate(db);
     }
@@ -421,6 +438,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         return enabledHamPays;
+    }
+
+    public long createViewedPaymentRequest(String paymentCode) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_VIEWED_PAYMENT_REQUEST_CODE, paymentCode);
+        long viewed_payment_request_id = db.insert(TABLE_VIEWED_PAYMENT_REQUEST, null, values);
+        return viewed_payment_request_id;
+    }
+
+    public boolean checkPaymentRequest(String paymentCode) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT  * FROM " + TABLE_VIEWED_PAYMENT_REQUEST + " WHERE "
+                + KEY_VIEWED_PAYMENT_REQUEST_CODE + " = '" + paymentCode + "'";
+        Log.e(LOG, selectQuery);
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.getCount() > 0)
+            return true;
+        else
+            return false;
+
     }
 
 }

@@ -1,6 +1,50 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:geekui="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center_vertical">
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/close_tc_privacy"
+                geekui:customTypeface="fonts/iran_sans.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/app_origin"
+                android:textSize="14sp"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/user_manual_close"
+                android:layout_marginLeft="8dp"/>
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/title"
+                geekui:customTypeface="fonts/iran_sans.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/app_origin"
+                android:textSize="14sp"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/user_manual_title_activity"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="8dp"/>
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/app_origin" />
+    </LinearLayout>
 
     <WebView
         android:id="@+id/guide_webview"
@@ -8,6 +52,4 @@
         android:layout_height="match_parent">
 
     </WebView>
-
-
-</RelativeLayout>
+</LinearLayout>

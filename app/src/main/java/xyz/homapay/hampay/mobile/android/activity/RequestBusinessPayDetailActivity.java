@@ -354,11 +354,11 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 //            @Override
 //            public void onClick(View v) {
 //                if (purchaseInfoDTO != null) {
-//                    if (databaseHelper.getIsExistPurchaseRequest(purchaseInfoDTO.getProductCode())) {
-//                        databaseHelper.updatePurchaseRequest(purchaseInfoDTO.getProductCode(), "1");
+//                    if (dbHelper.getIsExistPurchaseRequest(purchaseInfoDTO.getProductCode())) {
+//                        dbHelper.updatePurchaseRequest(purchaseInfoDTO.getProductCode(), "1");
 //                    } else {
-//                        databaseHelper.createPurchaseRequest(purchaseInfoDTO.getProductCode());
-//                        databaseHelper.updatePurchaseRequest(purchaseInfoDTO.getProductCode(), "1");
+//                        dbHelper.createPurchaseRequest(purchaseInfoDTO.getProductCode());
+//                        dbHelper.updatePurchaseRequest(purchaseInfoDTO.getProductCode(), "1");
 //                    }
 //                }
 //

@@ -10,6 +10,9 @@
     <color name="colorAccent">@color/app_origin</color>
     <color name="notification_title">#202020</color>
     <color name="notification_message">#737373</color>
+    <color name="navigation_banner_start">#9E248A</color>
+    <color name="navigation_banner_center">#6B246C</color>
+    <color name="navigation_banner_end">#371F59</color>
 
     <color name="splash_bg_color">@color/app_origin</color>
     <color name="register_btn_color">#36ac3f</color>

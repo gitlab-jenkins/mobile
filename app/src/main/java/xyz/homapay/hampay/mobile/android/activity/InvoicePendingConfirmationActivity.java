@@ -24,6 +24,7 @@ import xyz.homapay.hampay.common.core.model.response.PSPResultResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
+import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
@@ -45,8 +46,8 @@ import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfs
 
 public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
+    private DatabaseHelper dbHelper;
     ImageView pay_button;
-
     ImageView user_image;
     FacedTextView callerName;
     FacedTextView paymentCode;
@@ -142,7 +143,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
         context = this;
         activity = InvoicePendingConfirmationActivity.this;
-
+        dbHelper = new DatabaseHelper(context);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
@@ -150,7 +151,6 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
         try {
-
             MaxXferAmount = prefs.getLong(Constants.MAX_INDIVIDUAL_XFER_AMOUNT, 0);
             MinXferAmount = prefs.getLong(Constants.MIN_INDIVIDUAL_XFER_AMOUNT, 0);
 
@@ -435,9 +435,6 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
             if (pspResultResponseMessage != null) {
                 if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
-
-//                    new HamPayDialog(activity).pspResultDialog(pspResultResponseMessage.getService().getResultStatus().getCode() + "");
-
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Pending Payment Request")
                             .setAction("Payment")
@@ -483,7 +480,6 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
             if (latestPaymentResponseMessage != null) {
                 if (latestPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-
                     paymentInfoDTO = latestPaymentResponseMessage.getService().getPaymentInfoDTO();
                     pspInfoDTO = latestPaymentResponseMessage.getService().getPspInfo();
                     callerName.setText(paymentInfoDTO.getCallerName());
@@ -499,13 +495,13 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                     if (paymentInfoDTO.getImageId() != null) {
                         new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(user_image)).execute(Constants.IMAGE_PREFIX + authToken + "/" + paymentInfoDTO.getImageId());
                     }
-
                     if (pspInfoDTO.getCardDTO().getCardId() != null) {
                         LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
                         creditInfo.setVisibility(View.VISIBLE);
                     } else {
                         cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
                     }
+                    dbHelper.createViewedPaymentRequest(paymentInfoDTO.getProductCode());
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Latest Pending Payment")
                             .setAction("Fetch")
@@ -527,7 +523,6 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                 }
             }
                 else
-
                 {
                     requestLatestPayment = new RequestLatestPayment(context, new RequestLatestPaymentTaskCompleteListener());
 

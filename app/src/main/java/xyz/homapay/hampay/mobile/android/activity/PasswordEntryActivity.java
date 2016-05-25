@@ -114,7 +114,7 @@ public class PasswordEntryActivity extends AppCompatActivity implements View.OnC
         password_notify_text_1 = (FacedTextView)findViewById(R.id.password_notify_text_1);
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getString(R.string.get_password_text_4));
         ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.rgb(255, 158, 158));
-        spannableStringBuilder.setSpan(foregroundColorSpan, 65, 75, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        spannableStringBuilder.setSpan(foregroundColorSpan, 70, 83, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         password_notify_text_1.setText(spannableStringBuilder);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);

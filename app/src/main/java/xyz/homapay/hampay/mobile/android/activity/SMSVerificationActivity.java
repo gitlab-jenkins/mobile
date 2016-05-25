@@ -106,7 +106,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
     protected void onStop() {
         super.onStop();
         HamPayApplication.setAppSate(AppState.Stoped);
-        stopTimerTask();
+//        stopTimerTask();
         if (requestVerifyMobile != null){
             if (!requestVerifyMobile.isCancelled())
                 requestVerifyMobile.cancel(true);
@@ -326,6 +326,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
             input_digit_2.setText("");
             input_digit_3.setText("");
             input_digit_4.setText("");
+            stopTimerTask();
             hamPayDialog.dismisWaitingDialog();
             if (registrationVerifyMobileResponseMessage != null) {
 

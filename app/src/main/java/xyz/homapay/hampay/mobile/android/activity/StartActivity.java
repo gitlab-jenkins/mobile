@@ -36,23 +36,23 @@ public class StartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
-        int density= getResources().getDisplayMetrics().densityDpi;
-
-        switch(density)
-        {
-            case DisplayMetrics.DENSITY_LOW:
-                Toast.makeText(this, "LDPI", Toast.LENGTH_SHORT).show();
-                break;
-            case DisplayMetrics.DENSITY_MEDIUM:
-                Toast.makeText(this, "MDPI", Toast.LENGTH_SHORT).show();
-                break;
-            case DisplayMetrics.DENSITY_HIGH:
-                Toast.makeText(this, "HDPI", Toast.LENGTH_SHORT).show();
-                break;
-            case DisplayMetrics.DENSITY_XHIGH:
-                Toast.makeText(this, "XHDPI", Toast.LENGTH_SHORT).show();
-                break;
-        }
+//        int density= getResources().getDisplayMetrics().densityDpi;
+//
+//        switch(density)
+//        {
+//            case DisplayMetrics.DENSITY_LOW:
+//                Toast.makeText(this, "LDPI", Toast.LENGTH_SHORT).show();
+//                break;
+//            case DisplayMetrics.DENSITY_MEDIUM:
+//                Toast.makeText(this, "MDPI", Toast.LENGTH_SHORT).show();
+//                break;
+//            case DisplayMetrics.DENSITY_HIGH:
+//                Toast.makeText(this, "HDPI", Toast.LENGTH_SHORT).show();
+//                break;
+//            case DisplayMetrics.DENSITY_XHIGH:
+//                Toast.makeText(this, "XHDPI", Toast.LENGTH_SHORT).show();
+//                break;
+//        }
 
         activity = StartActivity.this;
 
