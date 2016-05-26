@@ -64,7 +64,6 @@ public class HamPayContactsAdapter extends BaseAdapter {
         LayoutInflater inflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = inflater.inflate(R.layout.hampay_contact_item, null);
@@ -80,6 +79,8 @@ public class HamPayContactsAdapter extends BaseAdapter {
 
         ContactDTO contact = contacts.get(position);
 
+
+
         if (contact.getContactImageId() != null) {
             String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + contact.getContactImageId();
             viewHolder.user_image.setTag(userImageUrl.split("/")[6]);
@@ -87,6 +88,8 @@ public class HamPayContactsAdapter extends BaseAdapter {
         }else {
             viewHolder.user_image.setImageResource(R.drawable.user_placeholder);
         }
+
+
         viewHolder.contact_name.setText(persianEnglishDigit.E2P(contact.getDisplayName()));
         viewHolder.cell_number.setText(persianEnglishDigit.E2P(contact.getCellNumber()));
 

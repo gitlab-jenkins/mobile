@@ -452,7 +452,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "SELECT  * FROM " + TABLE_VIEWED_PAYMENT_REQUEST + " WHERE "
                 + KEY_VIEWED_PAYMENT_REQUEST_CODE + " = '" + paymentCode + "'";
-        Log.e(LOG, selectQuery);
+//        Log.e(LOG, selectQuery);
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.getCount() > 0)
             return true;

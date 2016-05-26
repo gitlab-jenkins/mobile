@@ -32,6 +32,7 @@ import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.HamPayUtils;
+import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 /**
@@ -74,6 +75,9 @@ public class AccountDetailFragment extends Fragment {
 
     Context context;
 
+    private String authToken = "";
+    private ImageManager imageManager;
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -98,6 +102,8 @@ public class AccountDetailFragment extends Fragment {
         prefs = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE);
         editor = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE).edit();
 
+        imageManager = new ImageManager(getActivity(), 200000, false);
+        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
         hamPayGaTracker = ((HamPayApplication) getActivity().getApplicationContext())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
@@ -275,10 +281,15 @@ public class AccountDetailFragment extends Fragment {
         editor.commit();
 
         user_name_text.setText(userProfileDTO.getFullName());
+
         if (userProfileDTO.getUserImageId() != null) {
-            String userImageUrl = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
-            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile)).execute(userImageUrl);
+            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + userProfileDTO.getUserImageId();
+            image_profile.setTag(userImageUrl.split("/")[6]);
+            imageManager.displayImage(userImageUrl, image_profile, R.drawable.user_placeholder);
+        }else {
+            image_profile.setImageResource(R.drawable.user_placeholder);
         }
+
         user_card_number.setText(persianEnglishDigit.E2P(userProfileDTO.getCardDTO().getMaskedCardNumber()));
         user_bank_name.setText(userProfileDTO.getCardDTO().getBankName());
         user_cell_number.setText(persianEnglishDigit.E2P(userProfileDTO.getCellNumber()));

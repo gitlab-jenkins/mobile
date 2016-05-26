@@ -1,5 +1,6 @@
 package xyz.homapay.hampay.mobile.android.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -11,7 +12,9 @@ import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO.Transact
 import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO.TransactionType;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
+import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
@@ -20,19 +23,21 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
  */
 public class UserTransactionAdapter extends UserTransactionGenericAdapter<TransactionDTO> {
 
-    private Context context;
+    private Activity activity;
     private ViewHolder viewHolder;
     private TransactionDTO transactionDTO;
     private PersianEnglishDigit persianEnglishDigit;
     private CurrencyFormatter currencyFormatter;
     private String authToken;
+    private ImageManager imageManager;
 
-    public UserTransactionAdapter(Context context, String authToken) {
-        super(context);
-        this.context = context;
+    public UserTransactionAdapter(Activity activity, String authToken) {
+        super(activity);
+        this.activity = activity;
         persianEnglishDigit = new PersianEnglishDigit();
         currencyFormatter = new CurrencyFormatter();
         this.authToken = authToken;
+        imageManager = new ImageManager(activity, 200000, false);
     }
 
 
@@ -63,39 +68,38 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
 
 
             if (transactionDTO.getTransactionType() == TransactionType.CREDIT){
-                viewHolder.status_text.setText(context.getString(R.string.credit));
-                viewHolder.status_text.setTextColor(ContextCompat.getColor(context, R.color.register_btn_color));
+                viewHolder.status_text.setText(activity.getString(R.string.credit));
+                viewHolder.status_text.setTextColor(ContextCompat.getColor(activity, R.color.register_btn_color));
                 viewHolder.status_icon.setImageResource(R.drawable.arrow_r);
             }
             else if (transactionDTO.getTransactionType() == TransactionType.DEBIT){
-                viewHolder.status_text.setText(context.getString(R.string.debit));
-                viewHolder.status_text.setTextColor(ContextCompat.getColor(context, R.color.user_change_status));
+                viewHolder.status_text.setText(activity.getString(R.string.debit));
+                viewHolder.status_text.setTextColor(ContextCompat.getColor(activity, R.color.user_change_status));
                 viewHolder.status_icon.setImageResource(R.drawable.arrow_p);
             }
 
         }else if (transactionDTO.getTransactionStatus() == TransactionStatus.PENDING) {
-            viewHolder.status_text.setText(context.getString(R.string.pending));
-            viewHolder.status_text.setTextColor(ContextCompat.getColor(context, R.color.pending_transaction));
+            viewHolder.status_text.setText(activity.getString(R.string.pending));
+            viewHolder.status_text.setTextColor(ContextCompat.getColor(activity, R.color.pending_transaction));
             viewHolder.status_icon.setImageResource(R.drawable.pending);
         }
         else {
-            viewHolder.status_text.setText(context.getString(R.string.fail));
-            viewHolder.status_text.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
+            viewHolder.status_text.setText(activity.getString(R.string.fail));
+            viewHolder.status_text.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary));
             viewHolder.status_icon.setImageResource(R.drawable.arrow_f);
         }
 
+        if (transactionDTO.getImageId() != null) {
+            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + transactionDTO.getImageId();
+            viewHolder.image.setTag(userImageUrl.split("/")[6]);
+            imageManager.displayImage(userImageUrl, viewHolder.image, R.drawable.user_placeholder);
+        }else {
+            viewHolder.image.setImageResource(R.drawable.user_placeholder);
+        }
 
         viewHolder.user_name.setText(transactionDTO.getPersonName());
         viewHolder.date_time.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(transactionDTO.getTransactionDate())));
-//        viewHolder.reject_message.setText(transactionDTO.getRejectReasonMessage());
-//        viewHolder.user_fee_value.setText(persianEnglishDigit.E2P(currencyFormatter.format(transactionDTO.getFeeCharge())) + context.getString(R.string.currency_rials));
         viewHolder.amountValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(transactionDTO.getAmount())));
-
-//        if (transactionDTO.getImageId() != null) {
-//            String userImageUrl = Constants.IMAGE_PREFIX + authToken + "/" + transactionDTO.getImageId();
-//            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.image)).execute(userImageUrl);
-//        }else {
-//        }
 
         return convertView;
     }

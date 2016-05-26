@@ -30,6 +30,7 @@ import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.DateUtil;
+import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 
@@ -39,12 +40,8 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 public class PendingPurchaseAdapter extends BaseAdapter  {
 
     private Context context;
-
     List<PurchaseInfoDTO> purchaseInfoDTOs;
-    Dialog dialog;
     HamPayDialog hamPayDialog;
-    RequestCancelPurchase requestCancelPurchase;
-    CancelPurchasePaymentRequest cancelPurchasePaymentRequest;
     Activity activity;
     private String authToken;
     private Date currentDate;
@@ -52,6 +49,7 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
     NumberFormat timeFormat;
     private CurrencyFormatter currencyFormatter;
     private DateUtil dateUtil;
+    private ImageManager imageManager;
 
     public PendingPurchaseAdapter(Context context, List<PurchaseInfoDTO> purchaseInfoDTOs, String authToken)
     {
@@ -65,6 +63,7 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
         timeFormat = new DecimalFormat("00");
         currencyFormatter = new CurrencyFormatter();
         dateUtil = new DateUtil();
+        imageManager = new ImageManager(activity, 200000, false);
     }
 
     public int getCount() {
@@ -110,9 +109,11 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
         viewHolder.business_name.setText(purchaseInfoDTO.getMerchantName());
 
         if (purchaseInfoDTO.getMerchantImageId() != null) {
-            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.business_image)).execute(Constants.IMAGE_PREFIX + authToken + "/" + purchaseInfoDTO.getMerchantImageId());
+            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + purchaseInfoDTO.getMerchantImageId();
+            viewHolder.business_image.setTag(userImageUrl.split("/")[6]);
+            imageManager.displayImage(userImageUrl, viewHolder.business_image, R.drawable.user_placeholder);
         }else {
-            viewHolder.business_image.setBackgroundColor(ContextCompat.getColor(context, R.color.user_change_status));
+            viewHolder.business_image.setImageResource(R.drawable.user_placeholder);
         }
 
         viewHolder.expire_pay.setText(dateUtil.remainingTime(purchaseInfoDTO.getExpirationDate(), currentDate));

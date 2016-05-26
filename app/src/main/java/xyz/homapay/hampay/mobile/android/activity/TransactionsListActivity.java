@@ -44,6 +44,7 @@ import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoListview
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.ImageManager;
 
 public class TransactionsListActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -77,6 +78,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
     private ImageView full_triangle;
     private ImageView business_triangle;
     private ImageView invoice_triangle;
+
 
     private Dialog dialog;
 
@@ -143,7 +145,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
 
 
         transactionDTOs = new ArrayList<TransactionDTO>();
-        userTransactionAdapter = new UserTransactionAdapter(context, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+        userTransactionAdapter = new UserTransactionAdapter(activity, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
 
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
@@ -281,6 +283,8 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                     if (transactionDTOs.size() == 0){
                         no_transaction.setVisibility(View.VISIBLE);
                         transationListView.setVisibility(View.GONE);
+                    }else {
+                        no_transaction.setVisibility(View.GONE);
                     }
 
                     if (transactionDTOs != null) {

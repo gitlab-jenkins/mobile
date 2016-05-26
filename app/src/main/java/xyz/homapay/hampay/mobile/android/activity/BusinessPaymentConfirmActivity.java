@@ -35,6 +35,7 @@ import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring;
@@ -76,6 +77,8 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
     RequestPSPResult requestPSPResult;
     PSPResultRequest pspResultRequest;
+    private ImageManager imageManager;
+    private String authToken;
 
 
     @Override
@@ -127,6 +130,8 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
+        imageManager = new ImageManager(activity, 200000, false);
 
         try {
         }catch (Exception ex){
@@ -171,11 +176,12 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
             if (paymentInfoDTO.getImageId() != null) {
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
-                new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute(Constants.IMAGE_PREFIX
-                        + prefs.getString(Constants.LOGIN_TOKEN_ID, "")
-                        + "/" + paymentInfoDTO.getImageId());
-            }else {
-                business_image.setBackgroundColor(ContextCompat.getColor(context, R.color.user_change_status));
+                String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + paymentInfoDTO.getImageId();
+                business_image.setTag(userImageUrl.split("/")[6]);
+                imageManager.displayImage(userImageUrl, business_image, R.drawable.user_placeholder);
+            }
+            else {
+                business_image.setImageResource(R.drawable.user_placeholder);
             }
         }
 

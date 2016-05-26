@@ -39,6 +39,7 @@ import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
+import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class BusinessPaymentInfoActivity extends AppCompatActivity {
@@ -81,6 +82,9 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
     private FacedTextView amount_total;
     private CurrencyFormatter formatter;
     private FacedTextView vat_value;
+
+    private ImageManager imageManager;
+    private String authToken;
 
     public void backActionBar(View view){
         finish();
@@ -141,6 +145,8 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
+        imageManager = new ImageManager(activity, 200000, false);
 
         try {
             MaxXferAmount = prefs.getLong(Constants.MAX_BUSINESS_XFER_AMOUNT, 0);
@@ -163,11 +169,11 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
         if (businessDTO.getBusinessImageId() != null) {
             editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
             editor.commit();
-            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute(Constants.IMAGE_PREFIX
-                    + prefs.getString(Constants.LOGIN_TOKEN_ID, "")
-                    + "/" + businessDTO.getBusinessImageId());
+            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + businessDTO.getBusinessImageId();
+            business_image.setTag(userImageUrl.split("/")[6]);
+            imageManager.displayImage(userImageUrl, business_image, R.drawable.user_placeholder);
         }else {
-            business_image.setBackgroundColor(ContextCompat.getColor(context, R.color.user_change_status));
+            business_image.setImageResource(R.drawable.user_placeholder);
         }
 
 

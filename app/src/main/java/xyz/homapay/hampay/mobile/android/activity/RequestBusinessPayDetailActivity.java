@@ -43,6 +43,7 @@ import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
+import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring;
@@ -114,6 +115,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
     PurchaseInfoRequest purchaseInfoRequest;
 
     private CurrencyFormatter currencyFormatter;
+    private ImageManager imageManager;
+    private String authToken;
 
 
     @Override
@@ -167,6 +170,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
+        imageManager = new ImageManager(activity, 200000, false);
 
         try {
 
@@ -244,13 +249,17 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
             business_name.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getMerchantName()));
 
+
             if (purchaseInfoDTO.getMerchantImageId() != null) {
-                new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute(Constants.IMAGE_PREFIX
-                        + prefs.getString(Constants.LOGIN_TOKEN_ID, "")
-                        + "/" + purchaseInfoDTO.getMerchantImageId());
+                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                editor.commit();
+                String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + purchaseInfoDTO.getMerchantImageId();
+                business_image.setTag(userImageUrl.split("/")[6]);
+                imageManager.displayImage(userImageUrl, business_image, R.drawable.user_placeholder);
             }else {
-                business_image.setBackgroundColor(ContextCompat.getColor(context, R.color.user_change_status));
+                business_image.setImageResource(R.drawable.user_placeholder);
             }
+
             cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
             bankName.setText(pspInfoDTO.getCardDTO().getBankName());
         }else if (purchaseCode != null){
@@ -552,13 +561,17 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                         paymentTotalValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat())));
                         business_name.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getMerchantName()));
 
-                        String businessImageUrl = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + purchaseInfoDTO.getMerchantImageId();
 
                         if (purchaseInfoDTO.getMerchantImageId() != null) {
-                            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute(businessImageUrl);
+                            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                            editor.commit();
+                            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + purchaseInfoDTO.getMerchantImageId();
+                            business_image.setTag(userImageUrl.split("/")[6]);
+                            imageManager.displayImage(userImageUrl, business_image, R.drawable.user_placeholder);
                         }else {
-                            business_image.setBackgroundColor(ContextCompat.getColor(context, R.color.user_change_status));
+                            business_image.setImageResource(R.drawable.user_placeholder);
                         }
+
 
                         bankName.setText(pspInfoDTO.getCardDTO().getBankName());
                         cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
@@ -671,7 +684,16 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                         paymentTotalValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat())));
                         business_name.setText(persianEnglishDigit.E2P(purchaseInfoDTO.getMerchantName()));
 
-                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(business_image)).execute(Constants.HTTPS_SERVER_IP + "/merchant-logo/" + purchaseInfoDTO.getMerchantImageId());
+                        if (purchaseInfoDTO.getMerchantImageId() != null) {
+                            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                            editor.commit();
+                            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + purchaseInfoDTO.getMerchantImageId();
+                            business_image.setTag(userImageUrl.split("/")[6]);
+                            imageManager.displayImage(userImageUrl, business_image, R.drawable.user_placeholder);
+                        }else {
+                            business_image.setImageResource(R.drawable.user_placeholder);
+                        }
+
                         bankName.setText(pspInfoDTO.getCardDTO().getBankName());
                         cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
                     }

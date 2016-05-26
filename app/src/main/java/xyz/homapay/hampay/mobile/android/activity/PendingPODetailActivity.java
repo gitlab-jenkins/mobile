@@ -107,7 +107,7 @@ public class PendingPODetailActivity extends AppCompatActivity {
         paymentInfo = (PaymentInfoDTO) intent.getSerializableExtra(Constants.PAYMENT_INFO);
 
         caller_name = (FacedTextView)findViewById(R.id.caller_name);
-        caller_name.setText(paymentInfo.getCallerName());
+        caller_name.setText(paymentInfo.getCalleeName());
         caller_phone_number = (FacedTextView)findViewById(R.id.caller_phone_number);
         caller_phone_number.setText(persianEnglishDigit.E2P(paymentInfo.getCalleePhoneNumber()));
         amount_value = (FacedTextView)findViewById(R.id.amount_value);

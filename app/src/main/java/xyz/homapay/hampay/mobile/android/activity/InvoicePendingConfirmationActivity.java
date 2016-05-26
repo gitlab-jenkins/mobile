@@ -39,6 +39,7 @@ import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
+import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
@@ -98,6 +99,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
     LatestPaymentRequest latestPaymentRequest;
 
     private String authToken;
+    private ImageManager imageManager;
 
     @Override
     protected void onPause() {
@@ -148,6 +150,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
+        imageManager = new ImageManager(activity, 200000, false);
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
         try {
@@ -194,9 +197,13 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
             paymentTotalValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount() + paymentInfoDTO.getVat() + paymentInfoDTO.getFeeCharge())));
             cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
             bankName.setText(pspInfoDTO.getCardDTO().getBankName());
+
             if (paymentInfoDTO.getImageId() != null) {
-                new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(user_image)).execute(Constants.IMAGE_PREFIX + authToken + "/" + paymentInfoDTO.getImageId());
+                String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + paymentInfoDTO.getImageId();
+                user_image.setTag(userImageUrl.split("/")[6]);
+                imageManager.displayImage(userImageUrl, user_image, R.drawable.user_placeholder);
             }else {
+                user_image.setImageResource(R.drawable.user_placeholder);
             }
 
             if (pspInfoDTO.getCardDTO().getCardId() != null) {
@@ -492,9 +499,15 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                     paymentTotalValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount() + paymentInfoDTO.getVat() + paymentInfoDTO.getFeeCharge())));
                     cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
                     bankName.setText(pspInfoDTO.getCardDTO().getBankName());
+
                     if (paymentInfoDTO.getImageId() != null) {
-                        new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(user_image)).execute(Constants.IMAGE_PREFIX + authToken + "/" + paymentInfoDTO.getImageId());
+                        String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + paymentInfoDTO.getImageId();
+                        user_image.setTag(userImageUrl.split("/")[6]);
+                        imageManager.displayImage(userImageUrl, user_image, R.drawable.user_placeholder);
+                    }else {
+                        user_image.setImageResource(R.drawable.user_placeholder);
                     }
+
                     if (pspInfoDTO.getCardDTO().getCardId() != null) {
                         LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
                         creditInfo.setVisibility(View.VISIBLE);

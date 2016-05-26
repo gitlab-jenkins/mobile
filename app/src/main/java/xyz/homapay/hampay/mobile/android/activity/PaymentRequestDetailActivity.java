@@ -45,6 +45,7 @@ import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
+import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class PaymentRequestDetailActivity extends AppCompatActivity {
@@ -98,6 +99,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
 
     Tracker hamPayGaTracker;
     private String authToken;
+    private ImageManager imageManager;
 
 
     private LinearLayout add_vat;
@@ -156,6 +158,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
+        imageManager = new ImageManager(activity, 200000, false);
 
         try {
             MaxXferAmount = prefs.getLong(Constants.MAX_INDIVIDUAL_XFER_AMOUNT, 0);
@@ -260,7 +263,29 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
         if (hamPayContact != null || paymentInfo != null) {
             contact_name.setText(displayName);
             cell_number.setText(persianEnglishDigit.E2P(cellNumber));
-            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(user_image)).execute(Constants.IMAGE_PREFIX + authToken + "/" + imageId);
+
+            String imageId = null;
+
+            if (hamPayContact != null){
+                if (hamPayContact.getContactImageId() != null){
+                    imageId = hamPayContact.getContactImageId();
+                }
+            }
+            if (paymentInfo != null){
+                if (paymentInfo.getImageId() != null){
+                    imageId = paymentInfo.getImageId();
+                }
+            }
+
+            if (imageId != null) {
+                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                editor.commit();
+                String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + imageId;
+                user_image.setTag(userImageUrl.split("/")[6]);
+                imageManager.displayImage(userImageUrl, user_image, R.drawable.user_placeholder);
+            }else {
+                user_image.setImageResource(R.drawable.user_placeholder);
+            }
         } else {
 
             intentContact = true;

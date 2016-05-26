@@ -1,5 +1,6 @@
 package xyz.homapay.hampay.mobile.android.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTa
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
+import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
@@ -24,21 +26,23 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
  */
 public class PendingPOAdapter extends BaseAdapter {
 
-    private Context context;
+    private Activity activity;
     List<PaymentInfoDTO> paymentInfoList;
     private PersianEnglishDigit persianEnglishDigit;
     private String authToken;
     private CurrencyFormatter formatter;
+    private ImageManager imageManager;
 
 
-    public PendingPOAdapter(Context c, List<PaymentInfoDTO> paymentInfoList, String authToken)
+    public PendingPOAdapter(Activity activity, List<PaymentInfoDTO> paymentInfoList, String authToken)
     {
         // TODO Auto-generated method stub
-        context = c;
+        this.activity = activity;
         this.paymentInfoList = paymentInfoList;
         persianEnglishDigit = new PersianEnglishDigit();
         this.authToken = authToken;
         formatter = new CurrencyFormatter();
+        imageManager = new ImageManager(activity, 200000, false);
     }
 
     public int getCount() {
@@ -64,7 +68,7 @@ public class PendingPOAdapter extends BaseAdapter {
         // TODO Auto-generated method stub
 
 
-        LayoutInflater inflater = (LayoutInflater) context
+        LayoutInflater inflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 
@@ -81,13 +85,21 @@ public class PendingPOAdapter extends BaseAdapter {
             viewHolder = (ViewHolder)convertView.getTag();
         }
 
-
         PaymentInfoDTO paymentInfo = paymentInfoList.get(position);
+
         if (paymentInfo.getImageId() != null) {
-            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.user_image)).execute(Constants.IMAGE_PREFIX + authToken + "/" + paymentInfo.getImageId());
+            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + paymentInfo.getImageId();
+            viewHolder.user_image.setTag(userImageUrl.split("/")[6]);
+            imageManager.displayImage(userImageUrl, viewHolder.user_image, R.drawable.user_placeholder);
         }else {
-//            viewHolder.user_image.setImageResource(R.drawable.user_icon_blue);
+            viewHolder.user_image.setImageResource(R.drawable.user_placeholder);
         }
+
+//        if (paymentInfo.getImageId() != null) {
+//            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.user_image)).execute(Constants.IMAGE_PREFIX + authToken + "/" + paymentInfo.getImageId());
+//        }else {
+//            viewHolder.user_image.setImageResource(R.drawable.user_icon_blue);
+//        }
         viewHolder.contact_name.setText(persianEnglishDigit.E2P(paymentInfo.getCalleeName()));
         viewHolder.create_date.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(paymentInfo.getCreatedBy())));
         viewHolder.amount_value.setText(persianEnglishDigit.E2P(formatter.format(paymentInfo.getAmount())));

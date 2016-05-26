@@ -325,12 +325,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }else {
             image_profile.setImageResource(R.drawable.user_placeholder);
         }
-
-//        if (userProfileDTO.getUserImageId() != null) {
-//            String userImageUrl = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
-//            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile)).execute(userImageUrl);
-//        }
-
         displayView(currentFragmet);
 
         if (!prefs.getBoolean(Constants.SEND_MOBILE_REGISTER_ID, false)) {

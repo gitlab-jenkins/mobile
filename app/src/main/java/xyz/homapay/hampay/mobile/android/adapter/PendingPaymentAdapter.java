@@ -30,6 +30,7 @@ import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.DateUtil;
+import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 
@@ -40,10 +41,7 @@ public class PendingPaymentAdapter extends BaseAdapter  {
 
     private Context context;
     List<PaymentInfoDTO> paymentInfoDTOs;
-    Dialog dialog;
     HamPayDialog hamPayDialog;
-    RequestCancelPayment requestCancelPayment;
-    CancelUserPaymentRequest cancelUserPaymentRequest;
     Activity activity;
     private String authToken;
     private Date currentDate;
@@ -51,6 +49,7 @@ public class PendingPaymentAdapter extends BaseAdapter  {
     NumberFormat timeFormat;
     private CurrencyFormatter currencyFormatter;
     private DateUtil dateUtil;
+    private ImageManager imageManager;
 
     public PendingPaymentAdapter(Context context, List<PaymentInfoDTO> paymentInfoDTOs, String authToken)
     {
@@ -64,6 +63,7 @@ public class PendingPaymentAdapter extends BaseAdapter  {
         timeFormat = new DecimalFormat("00");
         currencyFormatter = new CurrencyFormatter();
         dateUtil = new DateUtil();
+        imageManager = new ImageManager(activity, 200000, false);
     }
 
     public int getCount() {
@@ -111,15 +111,12 @@ public class PendingPaymentAdapter extends BaseAdapter  {
         viewHolder.expire_pay.setText(dateUtil.remainingTime(paymentInfoDTO.getExpirationDate(), currentDate));
 
         if (paymentInfoDTO.getImageId() != null) {
-            String userImageUrl = Constants.HTTP_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + paymentInfoDTO.getImageId();
-            Log.e("URL", userImageUrl);
-            Picasso.with(context)
-                    .load(userImageUrl)
-                    .into(viewHolder.user_image);
+            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + paymentInfoDTO.getImageId();
+            viewHolder.user_image.setTag(userImageUrl.split("/")[6]);
+            imageManager.displayImage(userImageUrl, viewHolder.user_image, R.drawable.user_placeholder);
         }else {
             viewHolder.user_image.setImageResource(R.drawable.user_placeholder);
         }
-
         return convertView;
 
     }

@@ -1,5 +1,6 @@
 package xyz.homapay.hampay.mobile.android.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 /**
@@ -19,16 +21,18 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 public class HamPayBusinessesAdapter extends HamPayBusinessesGenericAdapter<BusinessDTO> {
 
 
-    private Context context;
+    private Activity activity;
     private BusinessDTO businessDTO;
     private PersianEnglishDigit persianEnglishDigit;
     private String authToken;
+    private ImageManager imageManager;
 
-    public HamPayBusinessesAdapter(Context context, String authToken) {
-        super(context);
-        this.context = context;
+    public HamPayBusinessesAdapter(Activity activity, String authToken) {
+        super(activity);
+        this.activity = activity;
         persianEnglishDigit = new PersianEnglishDigit();
         this.authToken = authToken;
+        imageManager = new ImageManager(activity, 200000, false);
     }
 
     private ViewHolder viewHolder;
@@ -52,8 +56,11 @@ public class HamPayBusinessesAdapter extends HamPayBusinessesGenericAdapter<Busi
 
         viewHolder.business_name.setText(businessDTO.getTitle());
         viewHolder.business_hampay_id.setText(persianEnglishDigit.E2P("شناسه: " + businessDTO.getCode()));
+
         if (businessDTO.getBusinessImageId() != null) {
-            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(viewHolder.business_image)).execute(Constants.IMAGE_PREFIX + authToken + "/" + businessDTO.getBusinessImageId());
+            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + businessDTO.getBusinessImageId();
+            viewHolder.business_image.setTag(userImageUrl.split("/")[6]);
+            imageManager.displayImage(userImageUrl, viewHolder.business_image, R.drawable.user_placeholder);
         }else {
             viewHolder.business_image.setImageResource(R.drawable.user_placeholder);
         }
