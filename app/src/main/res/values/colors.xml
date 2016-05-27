@@ -72,7 +72,7 @@
     <color name="total_amount_bg">#e6e7e8</color>
     <color name="create_payment_request">#25bdc2</color>
     <color name="success_modal_color">@color/app_origin</color>
-    <color name="failure_modal_color">#973b3a</color>
+    <color name="failure_modal_color">#F4768B</color>
     <color name="modal_text">#686a6b</color>
     <color name="sms_digit">@android:color/black</color>
 </resources>

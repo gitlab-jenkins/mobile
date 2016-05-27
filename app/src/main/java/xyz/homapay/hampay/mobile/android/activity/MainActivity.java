@@ -359,7 +359,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     }
 
     private void displayView(int position) {
-
+        Intent intent = new Intent();
         String title = getString(R.string.app_name);
         switch (position) {
             case 0:
@@ -399,6 +399,18 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             case 6:
                 fragment = new AboutFragment();
                 title = getString(R.string.title_hampay_about);
+                break;
+            case 7:
+                intent.setClass(activity, GuideDetailActivity.class);
+                intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/users/tac-file");
+                intent.putExtra(Constants.TAC_PRIVACY_TITLE, activity.getString(R.string.tac_title_activity));
+                activity.startActivity(intent);
+                break;
+            case 8:
+                intent.setClass(activity, GuideDetailActivity.class);
+                intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/users/privacy-file");
+                intent.putExtra(Constants.TAC_PRIVACY_TITLE, activity.getString(R.string.privacy_title_activity));
+                activity.startActivity(intent);
                 break;
         }
 

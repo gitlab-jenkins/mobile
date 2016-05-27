@@ -39,23 +39,18 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 public class TransactionDetailActivity extends AppCompatActivity {
 
     Bundle bundle;
-
     TransactionDTO transactionDTO;
-
+    private PaymentInfoDTO paymentInfo = null;
+    private PurchaseInfoDTO purchaseInfo = null;
     PersianEnglishDigit persianEnglishDigit;
-
     Context context;
     Activity activity;
     private CurrencyFormatter formatter;
-
     HamPayDialog hamPayDialog;
-
     RequestPaymentDetail requestPaymentDetail;
     PaymentDetailRequest paymentDetailRequest;
-
     RequestPurchaseDetail requestPurchaseDetail;
     PurchaseDetailRequest purchaseDetailRequest;
-
     private FacedTextView caller_name;
     private FacedTextView callee_name;
     private FacedTextView total_amount_value;
@@ -145,7 +140,16 @@ public class TransactionDetailActivity extends AppCompatActivity {
         bank_name = (FacedTextView)findViewById(R.id.bank_name);
         message = (FacedTextView)findViewById(R.id.message);
         pay_button = (LinearLayout)findViewById(R.id.pay_button);
-
+        pay_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (paymentInfo != null){
+                    Intent intent = new Intent(activity, PaymentRequestDetailActivity.class);
+                    intent.putExtra(Constants.PAYMENT_INFO, paymentInfo);
+                    startActivity(intent);
+                }
+            }
+        });
 
 
         bundle = getIntent().getExtras();
@@ -202,9 +206,9 @@ public class TransactionDetailActivity extends AppCompatActivity {
             hamPayDialog.dismisWaitingDialog();
 
             if (paymentDetailResponseMessage != null) {
-
                 if (paymentDetailResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    PaymentInfoDTO paymentInfo = paymentDetailResponseMessage.getService().getPaymentInfo();
+                    pay_button.setVisibility(View.VISIBLE);
+                    paymentInfo = paymentDetailResponseMessage.getService().getPaymentInfo();
                     callee_name.setText(paymentInfo.getCalleeName());
                     total_amount_value.setText(persianEnglishDigit.E2P(formatter.format(paymentInfo.getAmount() + paymentInfo.getFeeCharge() + paymentInfo.getVat())));
                     amount_value.setText(persianEnglishDigit.E2P(formatter.format(paymentInfo.getAmount())));
@@ -234,7 +238,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
             if (purchaseDetailResponseMessage != null) {
 
                 if (purchaseDetailResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    PurchaseInfoDTO purchaseInfo = purchaseDetailResponseMessage.getService().getpurchaseInfo();
+                    purchaseInfo = purchaseDetailResponseMessage.getService().getpurchaseInfo();
                     callee_name.setText(purchaseInfo.getMerchantName());
                     total_amount_value.setText(persianEnglishDigit.E2P(formatter.format(purchaseInfo.getAmount() + purchaseInfo.getFeeCharge() + purchaseInfo.getVat())));
                     amount_value.setText(persianEnglishDigit.E2P(formatter.format(purchaseInfo.getAmount())));

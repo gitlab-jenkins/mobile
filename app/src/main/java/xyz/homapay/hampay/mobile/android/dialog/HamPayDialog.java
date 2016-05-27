@@ -219,7 +219,7 @@ public class HamPayDialog {
                 activity.startActivity(intent);
             }
         };
-        tcPrivacySpannable.setSpan(tcClickableSpan, 3, 16, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tcPrivacySpannable.setSpan(tcClickableSpan, 3, 18, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         tc_privacy_text.setText(tcPrivacySpannable);
         tc_privacy_text.setMovementMethod(LinkMovementMethod.getInstance());
         ClickableSpan privacySpan = new ClickableSpan() {
@@ -233,7 +233,7 @@ public class HamPayDialog {
             }
         };
 
-        tcPrivacySpannable.setSpan(privacySpan, 46, 68, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tcPrivacySpannable.setSpan(privacySpan, 60, 92, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         tc_privacy_text.setText(tcPrivacySpannable);
         tc_privacy_text.setMovementMethod(LinkMovementMethod.getInstance());
 

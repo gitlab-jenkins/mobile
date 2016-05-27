@@ -9,7 +9,7 @@
     <string name="intro_1">پرداخت مدرن، ساده و مطمئن</string>
     <string name="intro_2">پرداخت به کسب و کارهای گوناگون</string>
     <string name="intro_3">تولید فاکتور</string>
-    <string name="intro_4">لیست پرداخت‌های در انتظار</string>
+    <string name="intro_4">فهرست پرداخت‌های در انتظار</string>
     <string name="intro_5">نمایش پرداخت‌ها و دریافت‌های گذشته</string>
 
 
@@ -26,6 +26,8 @@
     <string name="nav_item_help">راهنما</string>
     <string name="nav_item_exit">خروج</string>
     <string name="nav_item_hampay_about">درباره هم‌پی</string>
+    <string name="nav_item_tac">قوانین و مقررات</string>
+    <string name="nav_item_privacy">حریم خصوصی و امنیت</string>
     <string name="dear_user">عزیز</string>
     <string name="transaction_to">به: </string>
     <string name="transaction_from">از: </string>
@@ -46,6 +48,8 @@
         <item>@string/nav_item_help</item>
         <item>@string/nav_item_exit</item>
         <item>@string/nav_item_hampay_about</item>
+        <item>@string/nav_item_tac</item>
+        <item>@string/nav_item_privacy</item>
     </string-array>
 
     <string name="title_main_fragment">صفحه اصلی</string>
@@ -99,7 +103,7 @@
 
     <string name="no_network">عدم اتصال به اینترنت
     \n
-        مجدد تلاش کنید
+        دوباره تلاش کنید
     </string>
 
     <string name="main_fragment_generate_factor">تولید فاکتور</string>
@@ -138,7 +142,7 @@
 
     <string name="bank_name">انتخاب بانک</string>
 
-    <string name="contact_us">تماس با ما</string>
+    <string name="contact_us">ارتباط با شبکه پرداخت همراه هم‌پی</string>
     <string name="user_help">راهنمای این مرحله از ثبت نام</string>
     <string name="user_mail">ایمیل شما</string>
     <string name="user_text_contact">پیام خود را بنویسید</string>
@@ -179,13 +183,13 @@
     <string name="incorrect_invoice_value">مبلغ مورد نظر فاکتور را وارد نمایید</string>
     <string name="retry_price">تایید</string>
 
-    <string name="fail_sms_verification">شماره اعتبار سنجی وارد شده صحیح نمی‌باشد. لطفا از صحت شماره اطمینان حاصل کرده و شماره را مجدد وارد کنید.</string>
+    <string name="fail_sms_verification">کد اعتبار سنجی وارد شده صحیح نمی‌باشد. لطفا از صحت کد اطمینان حاصل کرده و کد را دوباره وارد کنید.</string>
     <string name="retry_sms">تایید</string>
 
     <string name="start_activity_title">پرداخت همراه هم‌پی</string>
     <string name="start_activity_text_1">تولید فاکتور برای فرد</string>
     <string name="start_activity_text_2">پرداخت به کسب و کار</string>
-    <string name="tc_privacy_text">با شرایط استفاده از شبکه پرداخت همراه "هم‌پی" و قوانین حفظ حریم خصوصی کاربر موافقم.</string>
+    <string name="tc_privacy_text">با قوانین و مقررات استفاده از شبکه پرداخت همراه هم‌پی و نیز سیاست‌های حفظ حریم خصوصی و امنیت کاربر موافق هستم.</string>
     <string name="tc_privacy_confirm_text">تایید می‌کنم.</string>
 
     <string name="tc_privacy_confirm">بله</string>
@@ -395,7 +399,7 @@
     <string name="remove_password">حذف رمزعبور</string>
     <string name="login_retry">تلاش مجدد</string>
 
-    <string name="msg_rooted_device">دستگاه شما به دلیل روت شدن مجوز استفاده از این اپ را نخواهد داشت!</string>
+    <string name="msg_rooted_device">از آنجا که امنیت دستگاه شما با روت شدن کاهش پیدا کرده است، مجوز استفاده از هم‌پی را نخواهید داشت.</string>
 
     <string name="invalid_step_code">کد خطا: 1001</string>
     <string name="invalid_step_message">مرحله جاری ثبت نام به علت خطای سیستمی صحیح نمیباشد. لطفا مجددا ثبت نام کنید.</string>
@@ -413,50 +417,50 @@
 
 
     <string name="msg_found_illegal_app">کاربر گرامی به دلیل بهبود امنیت شما، قبل از استفاده از هم‌پی نیاز به حذف یا غیرفعالسازی اپلیکیشن فوق هستیم.</string>
-    <string name="msg_fail_illegal_app_list">اطلاعاتی از سامانه هم‌پی دریافت نشد، لطفا مجدد تلاش کنید.</string>
-    <string name="msg_fail_fetch_card_profile">اطلاعات کارت شما یافت نشد. مجدد تلاش کنید</string>
+    <string name="msg_fail_illegal_app_list">اطلاعاتی از سامانه هم‌پی دریافت نشد، لطفا دوباره تلاش کنید.</string>
+    <string name="msg_fail_fetch_card_profile">اطلاعات کارت شما یافت نشد. دوباره تلاش کنید</string>
     <string name="msg_fail_fetch_bank_list"></string>
-    <string name="msg_fail_registration_entry">ثبت اطلاعات شخصی شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
-    <string name="mgs_fail_registration_send_sms_token">درخواست پیامک فعالسازی با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
-    <string name="msg_fail_registration_verify_mobile">ارسال کد فعالسازی با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
-    <string name="msg_fail_verify_account">درخواست بررسی حساب شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
-    <string name="msg_fail_user_profile">دریافت جزییات حساب با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
-    <string name="msg_fail_registration_fetch_user_data">دریافت اطلاعات کاربری شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
-    <string name="msg_fail_registration_confirm_user_data">تایید اطلاعات کاربری شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
-    <string name="mgs_fail_verify_transfer_money">درخواست شما برای بررسی انتقال وجه با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
-    <string name="msg_fail_pass_code_entry">ثبت رمزعبور شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
-    <string name="msg_fail_memorable_entry">ثبت کلمه یادآوری با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
+    <string name="msg_fail_registration_entry">ثبت اطلاعات شخصی شما با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
+    <string name="mgs_fail_registration_send_sms_token">درخواست پیامک فعالسازی با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
+    <string name="msg_fail_registration_verify_mobile">ارسال کد فعالسازی با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
+    <string name="msg_fail_verify_account">درخواست بررسی حساب شما با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
+    <string name="msg_fail_user_profile">دریافت جزییات حساب با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
+    <string name="msg_fail_registration_fetch_user_data">دریافت اطلاعات کاربری شما با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
+    <string name="msg_fail_registration_confirm_user_data">تایید اطلاعات کاربری شما با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
+    <string name="mgs_fail_verify_transfer_money">درخواست شما برای بررسی انتقال وجه با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
+    <string name="msg_fail_pass_code_entry">ثبت رمزعبور شما با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
+    <string name="msg_fail_memorable_entry">ثبت کلمه یادآوری با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
     <string name="msg_fail_mobile_reg_id"></string>
-    <string name="msg_fail_upload_image">درخواست ارسال تصویر با مشکل مواجه شد، لطفا مجدد تلاش کنید.</string>
-    <string name="msg_fail_tac_request">درخواست قوانین استفاده با اشکال مواجه شد. لطفا مجدد تلاش کنید.</string>
-    <string name="msg_fail_tac_accept_request">درخواست تایید قوانین استفاده با اشکال مواجه شد. لطفا مجدد تلاش کنید.</string>
-    <string name="msg_fail_user_transation">بارگیری تراکنش‌ها با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
-    <string name="msg_fail_contacts_enabled">دریافت مخاطبین هم‌پی شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
-    <string name="msg_fail_business_list">دریافت لیست کسب و کار با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
-    <string name="msg_fail_business_search_list">دریافت لیست جستجوی کسب و کار با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
-    <string name="msg_fail_payment">واریز مبلغ مورد نظر شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
-    <string name="msg_fail_hampay_server">اطلاعاتی از سامانه هم‌پی دریافت نشد. لطفا مجدد تلاش کنید.</string>
+    <string name="msg_fail_upload_image">درخواست ارسال تصویر با مشکل مواجه شد، لطفا دوباره تلاش کنید.</string>
+    <string name="msg_fail_tac_request">درخواست قوانین استفاده با اشکال مواجه شد. لطفا دوباره تلاش کنید.</string>
+    <string name="msg_fail_tac_accept_request">درخواست تایید قوانین استفاده با اشکال مواجه شد. لطفا دوباره تلاش کنید.</string>
+    <string name="msg_fail_user_transation">بارگیری تراکنش‌ها با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
+    <string name="msg_fail_contacts_enabled">دریافت مخاطبین هم‌پی شما با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
+    <string name="msg_fail_business_list">دریافت فهرست کسب و کار با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
+    <string name="msg_fail_business_search_list">دریافت فهرست جستجوی کسب و کار با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
+    <string name="msg_fail_payment">واریز مبلغ مورد نظر شما با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
+    <string name="msg_fail_hampay_server">اطلاعاتی از سامانه هم‌پی دریافت نشد. لطفا دوباره تلاش کنید.</string>
     <string name="msg_fail_hampay_login">رمز عبور صحیح نمی باشد. لطفا با دقت رمز عبور خود را وارد کنید.</string>
     <string name="msg_locked_hampay_login">کاربر گرامی، حساب کاربری شما به علت تلاش در استفاده از رمز عبور اشتباه غیر فعال شده است. برای فعال کردن حساب کاربری با پشتیبانی تماس حاصل نمایید.</string>
-    <string name="msg_fail_send_sms">درخواست فعالسازی شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
-    <string name="msg_fail_send_card_info">درخواست فعالسازی شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
+    <string name="msg_fail_send_sms">درخواست فعالسازی شما با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
+    <string name="msg_fail_send_card_info">درخواست فعالسازی شما با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
     <string name="msg_fail_receive_sms">دریافت پیامک فعالسازی با مشکل مواجه شد. لطفا دکمه ارسال مجدد را انتخاب کنید.</string>
     <string name="sms_upper_reach_sms">حداکثر درخواست برای ارسال مجدد پیامک فعالسازی به اتمام رسید. لطفا در ساعات دیگر تلاش کنید.</string>
-    <string name="msg_fail_change_pass_code">تغییر رمز عبور با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
-    <string name="msg_fail_change_memorable_word">تغییر کلمه یادآوری با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
-    <string name="msg_fail_unlink_user">درخواست لغو اشتراک شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
-    <string name="msg_gail_change_email">درخواست تغییر ایمیل شما با مشکل مواجه شد. لطفا مجدد تلاش کنید.</string>
-    <string name="msg_fail_server_key">دریافت کلید امنیتی با مشکل مواجه شد، لطفا مجدد تلاش کنید.</string>
+    <string name="msg_fail_change_pass_code">تغییر رمز عبور با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
+    <string name="msg_fail_change_memorable_word">تغییر کلمه یادآوری با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
+    <string name="msg_fail_unlink_user">درخواست لغو اشتراک شما با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
+    <string name="msg_gail_change_email">درخواست تغییر ایمیل شما با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
+    <string name="msg_fail_server_key">دریافت کلید امنیتی با مشکل مواجه شد، لطفا دوباره تلاش کنید.</string>
     <string name="msg_fail_payment_permission">نوع حساب شما %1$s می باشد و برای پرداخت می بایستی به نوع عادی تبدیل شود.
     \n اما شما کماکان میتونید از اعضای عادی هم‌پی پول دریافت کنید.
     </string>
-    <string name="msg_fail_iban_confirm">بررسی شماره شبا با مشکل مواجه شد، مجدد تلاش کنید</string>
-    <string name="msg_fail_iban_change">تایید شماره شبا با مشکل مواجه شد، مجدد تلاش کنید</string>
-    <string name="msg_fail_fetch_latest_payment">دریافت اطلاعات آخرین پرداخت شما با مشکل مواجه شد. مجدد تلاش کنید.</string>
-    <string name="msg_violation_image_size">اندازه عکس می‌بایستی از ۵۱۲ کیلو بایت کمتر باشد.</string>
-    <string name="msg_incorrect_amount">مبلغ واریزی شما می بایستی بین %1$s ریال و %2$s ریال باشد.</string>
+    <string name="msg_fail_iban_confirm">بررسی شماره شبا با مشکل مواجه شد، دوباره تلاش کنید</string>
+    <string name="msg_fail_iban_change">تایید شماره شبا با مشکل مواجه شد، دوباره تلاش کنید</string>
+    <string name="msg_fail_fetch_latest_payment">دریافت اطلاعات آخرین پرداخت شما با مشکل مواجه شد. دوباره تلاش کنید.</string>
+    <string name="msg_violation_image_size">اندازه عکس باید از ۵۱۲ کیلو بایت کمتر باشد.</string>
+    <string name="msg_incorrect_amount">مبلغ واریزی شما باید بین %1$s ریال و %2$s ریال باشد.</string>
 
-    <string name="msg_memorable_incorrect">کلمه یادآوری می‌بایستی بیشتر از ۲ حرف باشد</string>
+    <string name="msg_memorable_incorrect">کلمه یادآوری باید بیشتر از ۲ حرف باشد</string>
 
     <string name="action_fail_payment_permission">باشه</string>
 
@@ -511,7 +515,7 @@
     <string name="user_pin2">رمز دوم کارت</string>
     <string name="msg_success_pending_payment">پرداخت شما با کد پیگیری %1$s با موفقیت انجام شد.</string>
     <string name="msg_business_payment_success">پرداخت شما با کد پیگیری %1$s با موفقیت انجام شد.</string>
-    <string name="msg_ipg_fail">انجام عملیات پرداخت موفقیت آمیز نبود لطفا مجددا تلاش نمایید</string>
+    <string name="msg_ipg_fail">انجام عملیات پرداخت موفقیت آمیز نبود. لطفا دوباره تلاش کنید</string>
     <string name="ipg_fail_confirm">تلاش مجدد</string>
     <string name="msg_pin2_incurrect">رمز دوم خود را به درستی وارد کنید.</string>
     <string name="msg_not_found_pending_payment_code">اطلاعات خرید شما با این کد یافت نشد </string>
@@ -581,7 +585,7 @@
     <string name="confirm_success_payment">تایید</string>
     <string name="confirm_failure_payment">بستن</string>
     <string name="msg_success_payment_request">فاکتور شما با شماره %1$s با موفقیت ارسال شد</string>
-    <string name="msg_failure_payment_request">عملیات ارسال فاکتور موفقیت آمیز نبود. لطفا مجدد تلاش کنید</string>
+    <string name="msg_failure_payment_request"> ارسال فاکتور موفقیت آمیز نبود. لطفا دوباره تلاش کنید</string>
     <string name="msg_unlink_user">تمامی اطلاعات شما پاک خواهد شد و برای استفاده مجدد از "هم پی" باید دوباره ثبت نام کنید</string>
     <string name="vat">مالیات بر ارزش افزوده</string>
     <string name="payment_request_code">کد فاکتور: </string>
@@ -617,7 +621,7 @@
         \n
          پرداخت به کسب و کار: برای پرداخت به فروشگاه ها و خیریه های مختلف فقط نیاز است شناسه اختصاصی یا نام کسب و کار مورد نظر را در این بخش جستجو کرده و سپس مبلغ خرید و رمز دوم کارت بانکی ثبت شده خود را وارد نمایید. 
         \n
-         پرداخت های در انتظار:‌ فاکتور خریدهای آنلاین شما و همچنین فاکتورهایی که توسط مخاطبین همپی برای شما ارسال شده اند، به منظور تکمیل فرآیند پرداخت، دربخش پرداختهای در انتظار به سر می برند. در لیست پرداختهای در انتظار، علاوه بر مبلغ و مشخصات صادرکننده فاکتور، مهلت پرداخت هر فاکتور نیز نمایش داده خواهد شد و در صورت عدم پرداخت در زمان مقرر، فاکتور ذکر شده منقضی خواهد شد. 
+         پرداخت های در انتظار:‌ فاکتور خریدهای آنلاین شما و همچنین فاکتورهایی که توسط مخاطبین همپی برای شما ارسال شده اند، به منظور تکمیل فرآیند پرداخت، دربخش پرداختهای در انتظار به سر می برند. در فهرست پرداختهای در انتظار، علاوه بر مبلغ و مشخصات صادرکننده فاکتور، مهلت پرداخت هر فاکتور نیز نمایش داده خواهد شد و در صورت عدم پرداخت در زمان مقرر، فاکتور ذکر شده منقضی خواهد شد. 
         \n
         تراکنشها:
  در این بخش کليه تراکنشهای صورت گرفته، تمام دریافت ها و پرداخت های انجام شده به همراه جزییات آنها، به تفکيک قابل مشاهده می‌باشند. این امکان باعث می شود شما در جریان ریز فعالیت عملکرد خود در شبکه همپی باشید و نیازی به بررسی مجدد آن از طریق درگاه بانکی نداشته باشید و در سریعترین زمان ممکن با امنیت بالا به جزییات تراکنش های خود دسترسی داشته باشید. 
@@ -643,7 +647,7 @@
         برای پرداخت به خیریههای طرف قرارداد همپی, به بخش پرداخت به کسب کار در صفحه اصلی مراجعه نموده و بخش پرداخت بر اساس نام را انتخاب نمایید. سپس شناسه اختصاصی یا نام خیریه مورد نظر را در این بخش جستجو کرده و مبلغ خرید و رمز دوم کارت بانکی ثبت شده خود را وارد نمایید
     </string>
     <string name="user_manual_payment_request">
-        جهت تولید و ارسال فاکتور برای مخاطبین خود در شبکه پرداخت همراه همپی به بخش تولید فاکتور در صفحه اصلی مراجعه نموده  و بعد از انتخاب دریافت کننده فاکتور از لیست مخاطبین همپی، فاکتور خود را تا سقف مبلغ دو میلیون ریال تولید و ارسال نمایید. همچنین جهت اضافه نمودن مالیات بر ارزش افزوده می توانید دکمه + را فشار دهید تا مالیات بر ارزش افزوده به صورت خودکار به مبلغ نهایی اضافه گردد.  
+        جهت تولید و ارسال فاکتور برای مخاطبین خود در شبکه پرداخت همراه همپی به بخش تولید فاکتور در صفحه اصلی مراجعه نموده  و بعد از انتخاب دریافت کننده فاکتور از فهرست مخاطبین همپی، فاکتور خود را تا سقف مبلغ دو میلیون ریال تولید و ارسال نمایید. همچنین جهت اضافه نمودن مالیات بر ارزش افزوده می توانید دکمه + را فشار دهید تا مالیات بر ارزش افزوده به صورت خودکار به مبلغ نهایی اضافه گردد.  
     </string>
     <string name="user_manual_transaction">
         جهت مشاهده کليه تراکنشهای صورت گرفته، تمام دریافت ها و پرداخت های انجام شده به همراه جزییات آنها، به صفحه اصلی مراجعه نموده و گزینه تراکنشها را انتخاب نمایید. مستحضر باشید شما می توانید تراکنش های شخصی و تجاری خود را به تفکیک مشاهده نمایید.
@@ -668,7 +672,7 @@
         جهت تماس با سامانه پشتیبانی کاربران همپی به بخش تماس با ما در منو کشویی مراجعه نمایید. لازم به ذکر است سامانه پشتیبانی کاربران همپی هر روز (بجز ایام تعطیل) از ساعت ۹ الی۱۷ پاسخگو کاربران شبکه پرداخت همراه همپی خواهد بود. شماره تماس سامانه پشتیبانی کاربران همپی:  ۰۲۱-۲۲۶۳۸۳۱۹ 
     </string>
     <string name="user_manual_pending_payment">
-        جهت مشاهده و پرداخت، فاکتور خریدهای آنلاین و همچنین فاکتورهایی که توسط مخاطبین همپی برای شما ارسال شده اند، به بخش پرداخت های در انتظار در صفحه اصلی مراجعه نمایید. در لیست پرداختهای در انتظار، علاوه بر مبلغ و مشخصات صادرکننده فاکتور، مهلت پرداخت هر فاکتور نیز نمایش داده خواهد شد و در صورت عدم پرداخت در زمان مقرر، فاکتور ذکر شده منقضی خواهد شد.
+        جهت مشاهده و پرداخت، فاکتور خریدهای آنلاین و همچنین فاکتورهایی که توسط مخاطبین همپی برای شما ارسال شده اند، به بخش پرداخت های در انتظار در صفحه اصلی مراجعه نمایید. در فهرست پرداختهای در انتظار، علاوه بر مبلغ و مشخصات صادرکننده فاکتور، مهلت پرداخت هر فاکتور نیز نمایش داده خواهد شد و در صورت عدم پرداخت در زمان مقرر، فاکتور ذکر شده منقضی خواهد شد.
     </string>
 
     <string name="amount_entry">لطفا مبلغ مورد نظر را وارد کنید</string>

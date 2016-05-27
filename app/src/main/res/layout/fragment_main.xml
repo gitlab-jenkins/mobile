@@ -99,7 +99,7 @@
                     <ImageView
                         android:layout_width="64dp"
                         android:layout_height="64dp"
-                        android:src="@drawable/test_"
+                        android:src="@drawable/factor_icon"
                         android:layout_marginRight="12dp"
                         android:background="@color/app_origin"
                         android:adjustViewBounds="true"/>
