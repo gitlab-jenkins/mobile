@@ -176,7 +176,8 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
     public void userManual(View view){
         Intent intent = new Intent();
         intent.setClass(activity, UserManualActivity.class);
-        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_sms_verification);
+        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_sms_verification);
+        intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_sms_verification);
         startActivity(intent);
     }
 

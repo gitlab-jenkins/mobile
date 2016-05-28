@@ -21,17 +21,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/app_origin"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/user_manual_close"
                 android:layout_marginLeft="8dp"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/user_manual_title"
                 geekui:customTypeface="fonts/iran_sans.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/app_origin"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/user_manual_title_activity"
                 android:layout_alignParentRight="true"
@@ -46,7 +47,8 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp">
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
             android:id="@+id/user_manual_text"
@@ -54,9 +56,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/main_menu_title"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="8dp"
             android:lineSpacingExtra="6dp"/>
 
 

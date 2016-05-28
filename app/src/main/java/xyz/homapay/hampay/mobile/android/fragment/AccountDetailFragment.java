@@ -136,20 +136,6 @@ public class AccountDetailFragment extends Fragment {
 
         hide_bg = (View)rootView.findViewById(R.id.hide_bg);
 
-
-//        String URL = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
-
-//        requestImageDownloader = new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile));
-//        requestImageDownloader.execute(URL);
-
-//        String filePath = context.getFilesDir().getPath().toString() + "/" + "userImage.png";
-//        File file = new File(filePath);
-//        if (file.exists()){
-//            Picasso.with(context).invalidate(file);
-//            Picasso.with(context).load(file).into(image_profile);
-//        }
-
-
         hamPayDialog = new HamPayDialog(getActivity());
 
         intro_iban_button = (FacedTextView) rootView.findViewById(R.id.intro_iban_button);

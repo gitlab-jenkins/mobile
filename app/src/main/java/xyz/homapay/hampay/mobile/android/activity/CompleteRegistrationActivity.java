@@ -50,7 +50,8 @@ public class CompleteRegistrationActivity extends AppCompatActivity {
     public void userManual(View view){
         Intent intent = new Intent();
         intent.setClass(activity, UserManualActivity.class);
-        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_complete);
+        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_complete);
+        intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_complete);
         startActivity(intent);
     }
 

@@ -391,9 +391,11 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                 if (responseCode != null){
                     if (responseCode.equalsIgnoreCase("2000")) {
                         new HamPayDialog(activity).pspSuccessResultDialog(SWTraceNum);
+                    }else {
+                        new HamPayDialog(activity).pspFailResultDialog(responseCode, description);
                     }
                 }else {
-                    new HamPayDialog(activity).pspFailResultDialog();
+                    new HamPayDialog(activity).pspFailResultDialog("", "");
                 }
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
@@ -415,7 +417,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
             } else {
 
-                new HamPayDialog(activity).pspFailResultDialog();
+                new HamPayDialog(activity).pspFailResultDialog("", "");
 
                 hamPayGaTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Pending Payment Request")

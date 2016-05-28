@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -246,6 +247,10 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 amount_value.clearFocus();
+                if (amount_value.getText().toString().length() == 0){
+                    Toast.makeText(activity, getString(R.string.msg_null_amount), Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (creditValueValidation) {
                     amountValue = Long.parseLong(new PersianEnglishDigit(amount_value.getText().toString()).P2E().replace(",", ""));
                     editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());

@@ -114,14 +114,17 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         Intent intent = new Intent();
         intent.setClass(activity, UserManualActivity.class);
         if (currentFragmet == 0) {
-            intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_main);
+            intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_main);
+            intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_main);
             startActivity(intent);
         }else if (currentFragmet == 1){
-            intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_account);
+            intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_account_details);
+            intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_account_details);
             startActivity(intent);
         }
         else if (currentFragmet == 2){
-            intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_setting);
+            intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_setting);
+            intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_setting);
             startActivity(intent);
         }
 

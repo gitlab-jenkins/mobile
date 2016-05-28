@@ -17,6 +17,7 @@ public class UserManualActivity extends AppCompatActivity {
 
     FacedTextView close_user_manual;
     FacedTextView user_manual_text;
+    FacedTextView user_manual_title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +27,9 @@ public class UserManualActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
 
         user_manual_text = (FacedTextView)findViewById(R.id.user_manual_text);
+        user_manual_title = (FacedTextView)findViewById(R.id.user_manual_title);
         user_manual_text.setText(getString(bundle.getInt(Constants.USER_MANUAL_TEXT)));
+        user_manual_title.setText(getString(bundle.getInt(Constants.USER_MANUAL_TITLE)));
 
         close_user_manual = (FacedTextView) findViewById(R.id.close_user_manual);
         close_user_manual.setOnClickListener(new View.OnClickListener() {

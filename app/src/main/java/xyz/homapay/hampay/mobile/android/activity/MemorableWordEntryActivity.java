@@ -71,7 +71,8 @@ public class MemorableWordEntryActivity extends AppCompatActivity {
     public void userManual(View view){
         Intent intent = new Intent();
         intent.setClass(activity, UserManualActivity.class);
-        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_memorable_word_entry);
+        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_memorable_word_entry);
+        intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_memorable_word_entry);
         startActivity(intent);
     }
 

@@ -41,6 +41,7 @@ import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
 import xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
 import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
 import xyz.homapay.hampay.common.core.model.request.PaymentDetailRequest;
+import xyz.homapay.hampay.common.core.model.request.PendingFundListRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingPOListRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingPaymentListRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingPurchaseListRequest;
@@ -82,6 +83,7 @@ import xyz.homapay.hampay.common.core.model.response.LatestPurchaseResponse;
 import xyz.homapay.hampay.common.core.model.response.MobileRegistrationIdEntryResponse;
 import xyz.homapay.hampay.common.core.model.response.PSPResultResponse;
 import xyz.homapay.hampay.common.core.model.response.PaymentDetailResponse;
+import xyz.homapay.hampay.common.core.model.response.PendingFundListResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingPOListResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingPaymentListResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingPurchaseListResponse;
@@ -1150,7 +1152,7 @@ public class WebServices  {
     public ResponseMessage<RecentPendingFundResponse> recentPendingFund(RecentPendingFundRequest recentPendingFundRequest) throws IOException{
 
         ResponseMessage<RecentPendingFundResponse> responseMessage = null;
-        url = new URL(serviceURL + "/users/pending-funds");
+        url = new URL(serviceURL + "/fund/recent-pending");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         recentPendingFundRequest.setRequestUUID(UUID.randomUUID().toString());
@@ -1163,6 +1165,28 @@ public class WebServices  {
         Gson gson = new Gson();
 
         responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<RecentPendingFundResponse>>() {}.getType());
+
+        proxyService.closeConnection();
+
+        return responseMessage;
+    }
+
+    public ResponseMessage<PendingFundListResponse> fundListResponse(PendingFundListRequest pendingFundListRequest) throws IOException{
+
+        ResponseMessage<PendingFundListResponse> responseMessage = null;
+        url = new URL(serviceURL + "/fund/pending-list");
+        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+
+        pendingFundListRequest.setRequestUUID(UUID.randomUUID().toString());
+        RequestMessage<PendingFundListRequest> message = new RequestMessage<>(pendingFundListRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<PendingFundListRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
+
+        Gson gson = builder.getDatebuilder().create();
+
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<PendingFundListResponse>>() {}.getType());
 
         proxyService.closeConnection();
 

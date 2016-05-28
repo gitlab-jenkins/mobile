@@ -432,7 +432,7 @@ public class HamPayDialog {
                     Intent intent = new Intent();
                     intent.setClass(activity, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.putExtra(Constants.PENDING_PURCHASE_CODE, tacAcceptResponseMessage.getService().getProductCode());
+                    intent.putExtra(Constants.PENDING_PURCHASE_CODE, tacAcceptResponseMessage.getService().getPurchaseProductCode());
                     intent.putExtra(Constants.PENDING_PAYMENT_CODE, tacAcceptResponseMessage.getService().getPaymentProductCode());
                     intent.putExtra(Constants.PENDING_PURCHASE_COUNT, tacAcceptResponseMessage.getService().getPendingPurchasesCount());
                     intent.putExtra(Constants.PENDING_PAYMENT_COUNT, tacAcceptResponseMessage.getService().getPendingPaymentCount());
@@ -1637,11 +1637,16 @@ public class HamPayDialog {
         }
     }
 
-    public void pspFailResultDialog(){
+    public void pspFailResultDialog(String responseCode, String description){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_ipg_failure, null);
 
+        FacedTextView message = (FacedTextView)view.findViewById(R.id.message);
         FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
+
+        if (responseCode.length() > 0){
+            message.setText("کد خطا: " + responseCode + "\n" + description);
+        }
 
         confirmation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1952,6 +1957,36 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+            }
+        });
+
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
+    }
+
+    public void showFailIBANConfirmationDialog(){
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_request_iban_confirm, null);
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+
+        FacedTextView retry_iban_request = (FacedTextView) view.findViewById(R.id.retry_iban_request);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
+        retry_iban_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        cancel_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                activity.finish();
             }
         });
 

@@ -8,8 +8,8 @@ android {
         applicationId "xyz.homapay.hampay.mobile.android"
         minSdkVersion 10
         targetSdkVersion 23
-        versionCode 1
-        versionName "HP-Release-Candidate-0.1.0"
+        versionCode 17
+        versionName "HamPay-Beta-0.15.2"
         multiDexEnabled true
 //        testApplicationId = "xyz.homapay.hampay.mobile.android.test"
 //        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -54,11 +54,8 @@ dependencies {
     //    androidTestCompile 'com.android.support.test:rules:0.4'
     compile files('libs/common-common-3.0.0-PA.jar')
     compile files('libs/common-core-3.0.0-PA.jar')
-    //    compile files('libs/common-psp-1.0.0-SNAPSHOT.jar')
     compile 'com.github.halysongoncalves:pugnotification:1.8.1'
     compile files('libs/ksoap2-android-assembly-3.6.0.jar')
-    //    compile files('libs/httpcore.jar')
-    //    compile files('libs/easywsdl/ksoap2-android-assembly-3.6.0-jar-with-dependencies.jar')
     compile files('libs/easywsdl/ksoap2-android-assembly-3.6.0-jar-with-dependencies.jar')
     compile 'com.android.support:design:23.3.0'
     compile 'com.android.support:multidex:1.0.1'

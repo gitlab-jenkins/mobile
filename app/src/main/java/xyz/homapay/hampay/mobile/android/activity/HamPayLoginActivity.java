@@ -126,7 +126,8 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     public void userManual(View view){
         Intent intent = new Intent();
         intent.setClass(activity, UserManualActivity.class);
-        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_login);
+        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_login);
+        intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_login);
         startActivity(intent);
     }
 
@@ -325,7 +326,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                         intent.setClass(activity, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.putExtra(Constants.USER_PROFILE_DTO, tacResponseMessage.getService().getUserProfile());
-                        intent.putExtra(Constants.PENDING_PURCHASE_CODE, tacResponseMessage.getService().getProductCode());
+                        intent.putExtra(Constants.PENDING_PURCHASE_CODE, tacResponseMessage.getService().getPurchaseProductCode());
                         intent.putExtra(Constants.PENDING_PAYMENT_CODE, tacResponseMessage.getService().getPaymentProductCode());
                         intent.putExtra(Constants.PENDING_PURCHASE_COUNT, tacResponseMessage.getService().getPendingPurchasesCount());
                         intent.putExtra(Constants.PENDING_PAYMENT_COUNT, tacResponseMessage.getService().getPendingPaymentCount());

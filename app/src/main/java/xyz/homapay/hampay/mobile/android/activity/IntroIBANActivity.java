@@ -109,8 +109,15 @@ public class IntroIBANActivity extends AppCompatActivity {
         sheba_verify_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                String iban = ibanNumberValue.getText().toString();
+                if (iban.length() <= 23){
+                    hamPayDialog.showFailIBANConfirmationDialog();
+                    return;
+                }
+
                 Intent intent = new Intent(activity, ChangeIbanPassActivity.class);
-                intent.putExtra(Constants.USER_IBAN, ibanNumberValue.getText().toString());
+                intent.putExtra(Constants.USER_IBAN, iban);
                 activity.startActivityForResult(intent, Constants.IBAN_CHANGE_RESULT_CODE);
 //                finish();
 //                ibanConfirmationRequest = new IBANConfirmationRequest();

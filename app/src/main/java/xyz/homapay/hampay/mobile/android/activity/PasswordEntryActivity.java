@@ -75,7 +75,8 @@ public class PasswordEntryActivity extends AppCompatActivity implements View.OnC
     public void userManual(View view){
         Intent intent = new Intent();
         intent.setClass(activity, UserManualActivity.class);
-        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_pass_code_entry);
+        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_pass_code_entry);
+        intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_pass_code_entry);
         startActivity(intent);
     }
 

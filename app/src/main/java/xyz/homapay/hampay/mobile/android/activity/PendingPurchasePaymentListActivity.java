@@ -32,22 +32,28 @@ import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.CancelPurchasePaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.CancelUserPaymentRequest;
+import xyz.homapay.hampay.common.core.model.request.PendingFundListRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingPaymentListRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingPurchaseListRequest;
 import xyz.homapay.hampay.common.core.model.response.CancelPurchasePaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.CancelUserPaymentResponse;
+import xyz.homapay.hampay.common.core.model.response.PendingFundListResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingPaymentListResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingPurchaseListResponse;
+import xyz.homapay.hampay.common.core.model.response.dto.FundDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.adapter.PendingFundAdapter;
+import xyz.homapay.hampay.mobile.android.adapter.PendingFundListAdapter;
 import xyz.homapay.hampay.mobile.android.adapter.PendingPaymentAdapter;
 import xyz.homapay.hampay.mobile.android.adapter.PendingPurchaseAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestCancelPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestCancelPurchase;
+import xyz.homapay.hampay.mobile.android.async.RequestPendingFundList;
 import xyz.homapay.hampay.mobile.android.async.RequestPendingPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestPendingPurchase;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
@@ -69,6 +75,9 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
     private CoordinatorLayout coordinatorLayout;
 
+    RequestPendingFundList requestPendingFundList;
+    PendingFundListRequest pendingFundListRequest;
+
     RequestPendingPurchase requestPendingPurchase;
     PendingPurchaseListRequest pendingPurchaseListRequest;
 
@@ -77,13 +86,15 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
     PendingPurchaseAdapter pendingPurchaseAdapter;
     PendingPaymentAdapter pendingPaymentAdapter;
+    PendingFundListAdapter pendingFundListAdapter;
 
     ListView pendingListView;
 
     HamPayDialog hamPayDialog;
 
     private List<PurchaseInfoDTO> purchaseInfoDTOs;
-    List<PaymentInfoDTO> paymentInfoDTOs;
+    private List<PaymentInfoDTO> paymentInfoDTOs;
+    private List<FundDTO> fundDTOList;
     PspInfoDTO pspInfoDTOs;
 
 
@@ -134,6 +145,8 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                             pendingPaymentAdapter.notifyDataSetChanged();
                         }else if (purchaseInfoDTOs != null && pendingPurchaseAdapter != null){
                             pendingPurchaseAdapter.notifyDataSetChanged();
+                        }else if (fundDTOList != null && pendingFundListAdapter != null){
+                            pendingFundListAdapter.notifyDataSetChanged();
                         }
                     }
                 });
@@ -323,6 +336,11 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
         pendingListView = (ListView)findViewById(R.id.pendingListView);
 
+
+        requestPendingFundList = new RequestPendingFundList(activity, new RequestPendingFundTaskCompleteListener());
+        pendingFundListRequest = new PendingFundListRequest();
+        requestPendingFundList.execute(pendingFundListRequest);
+
         requestPendingPurchase = new RequestPendingPurchase(activity, new RequestPendingPurchaseTaskCompleteListener());
         pendingPurchaseListRequest = new PendingPurchaseListRequest();
 
@@ -461,6 +479,11 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
         switch (v.getId()){
             case R.id.full_pending:
+                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                editor.commit();
+                requestPendingFundList = new RequestPendingFundList(activity, new RequestPendingFundTaskCompleteListener());
+                pendingFundListRequest = new PendingFundListRequest();
+                requestPendingFundList.execute(pendingFundListRequest);
                 changeTab(1);
                 break;
 
@@ -516,6 +539,36 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
         }
     }
 
+    public class RequestPendingFundTaskCompleteListener implements
+            AsyncTaskCompleteListener<ResponseMessage<PendingFundListResponse>> {
+        @Override
+        public void onTaskComplete(ResponseMessage<PendingFundListResponse> pendingFundListResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+
+            if (pendingFundListResponseMessage != null) {
+                if (pendingFundListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    fundDTOList = pendingFundListResponseMessage.getService().getFundDTOList();
+                    if (fundDTOList.size() == 0){
+                        nullPendingText.setVisibility(View.VISIBLE);
+                    }else {
+                        pendingFundListAdapter = new PendingFundListAdapter(activity, fundDTOList, authToken);
+                        pendingListView.setAdapter(pendingFundListAdapter);
+                        purchaseInfoDTOs = null;
+                        paymentInfoDTOs = null;
+                        nullPendingText.setVisibility(View.GONE);
+                    }
+
+                }
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingDialog("");
+        }
+    }
+
     public class RequestPendingPurchaseTaskCompleteListener implements
             AsyncTaskCompleteListener<ResponseMessage<PendingPurchaseListResponse>> {
         @Override
@@ -533,6 +586,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                         pendingPurchaseAdapter = new PendingPurchaseAdapter(activity, purchaseInfoDTOs, authToken);
                         pendingListView.setAdapter(pendingPurchaseAdapter);
                         paymentInfoDTOs = null;
+                        fundDTOList = null;
                         nullPendingText.setVisibility(View.GONE);
                     }
                 }
@@ -563,6 +617,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                         pendingPaymentAdapter = new PendingPaymentAdapter(activity, paymentInfoDTOs, authToken);
                         pendingListView.setAdapter(pendingPaymentAdapter);
                         purchaseInfoDTOs = null;
+                        fundDTOList = null;
                         nullPendingText.setVisibility(View.GONE);
                     }
 

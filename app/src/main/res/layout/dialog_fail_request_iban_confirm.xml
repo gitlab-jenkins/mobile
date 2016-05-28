@@ -33,7 +33,7 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:gravity="center"
-        android:text="@string/msg_fail_verify_account"/>
+        android:text="@string/msg_invalid_iban"/>
 
     <LinearLayout
         android:layout_width="match_parent"
