@@ -37,14 +37,16 @@ public class FragmentDrawer extends Fragment {
     private static String[] titles;
     private static int icons[] = {
             R.drawable.ic_home,
+
             R.drawable.ic_account,
             R.drawable.ic_settings,
-            R.drawable.ic_contact_us,
+
             R.drawable.ic_help,
-            R.drawable.ic_exit,
             R.drawable.ic_about,
+            R.drawable.ic_contact_us,
             R.drawable.ic_tac,
             R.drawable.ic_privacy,
+            R.drawable.ic_exit,
     };
     private FragmentDrawerListener drawerListener;
 

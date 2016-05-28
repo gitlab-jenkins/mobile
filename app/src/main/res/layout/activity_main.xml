@@ -20,6 +20,7 @@
             android:padding="8dp">
 
             <ImageView
+                android:id="@+id/user_manual"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:src="@drawable/help_gray"

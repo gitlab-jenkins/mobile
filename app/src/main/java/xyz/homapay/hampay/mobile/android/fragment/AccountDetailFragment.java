@@ -284,6 +284,8 @@ public class AccountDetailFragment extends Fragment {
             user_iban_bank.setText(userProfileDTO.getIbanDTO().getBankName());
             iban_ll.setVisibility(View.VISIBLE);
             intro_iban_button.setVisibility(View.GONE);
+            editor.putBoolean(Constants.SETTING_CHANGE_IBAN_STATUS, true);
+            editor.commit();
         }
         user_national_code.setText(persianEnglishDigit.E2P(prefs.getString(Constants.REGISTERED_NATIONAL_CODE, "")));
 //

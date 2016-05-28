@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     private String authToken = "";
     private ImageManager imageManager;
+    private ImageView user_manual;
 
     public void userManual(View view){
         Intent intent = new Intent();
@@ -257,6 +258,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
 
 
+        user_manual = (ImageView)findViewById(R.id.user_manual);
         fragment_title = (FacedTextView)findViewById(R.id.fragment_title);
         image_profile = (ImageView)findViewById(R.id.image_profile);
 
@@ -366,6 +368,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         String title = getString(R.string.app_name);
         switch (position) {
             case 0:
+                user_manual.setVisibility(View.VISIBLE);
                 fragment = new MainFragment();
                 if (userProfileDTO != null) {
                     bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
@@ -376,6 +379,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 title = getString(R.string.title_main_fragment);
                 break;
             case 1:
+                user_manual.setVisibility(View.VISIBLE);
                 fragment = new AccountDetailFragment();
                 if (userProfileDTO != null) {
                     bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
@@ -384,36 +388,44 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 title = getString(R.string.title_account_detail);
                 break;
             case 2:
+                user_manual.setVisibility(View.VISIBLE);
                 fragment = new SettingFragment();
                 title = getString(R.string.title_settings);
                 break;
+
             case 3:
-                new HamPayDialog(activity).fetchContactUsInfo();
-                break;
-            case 4:
+                user_manual.setVisibility(View.GONE);
                 fragment = new GuideFragment();
                 title = getString(R.string.title_guide);
                 break;
-            case 5:
-                LogoutData logoutData = new LogoutData();
-                logoutData.setIplanetDirectoryPro(prefs.getString(Constants.LOGIN_TOKEN_ID, null));
-                new HamPayDialog(activity).showExitDialog(logoutData);
-                break;
-            case 6:
+
+            case 4:
+                user_manual.setVisibility(View.GONE);
                 fragment = new AboutFragment();
                 title = getString(R.string.title_hampay_about);
                 break;
-            case 7:
+
+            case 5:
+                new HamPayDialog(activity).fetchContactUsInfo();
+                break;
+
+            case 6:
                 intent.setClass(activity, GuideDetailActivity.class);
                 intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/users/tac-file");
                 intent.putExtra(Constants.TAC_PRIVACY_TITLE, activity.getString(R.string.tac_title_activity));
                 activity.startActivity(intent);
                 break;
-            case 8:
+            case 7:
                 intent.setClass(activity, GuideDetailActivity.class);
                 intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/users/privacy-file");
                 intent.putExtra(Constants.TAC_PRIVACY_TITLE, activity.getString(R.string.privacy_title_activity));
                 activity.startActivity(intent);
+                break;
+
+            case 8:
+                LogoutData logoutData = new LogoutData();
+                logoutData.setIplanetDirectoryPro(prefs.getString(Constants.LOGIN_TOKEN_ID, null));
+                new HamPayDialog(activity).showExitDialog(logoutData);
                 break;
         }
 

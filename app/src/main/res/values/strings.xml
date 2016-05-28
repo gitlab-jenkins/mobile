@@ -42,14 +42,18 @@
 
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_main_fragmrnt</item>
+
         <item>@string/nav_item_account_detail</item>
         <item>@string/nav_item_settings</item>
-        <item>@string/nav_item_contacts_us</item>
+
         <item>@string/nav_item_help</item>
-        <item>@string/nav_item_exit</item>
         <item>@string/nav_item_hampay_about</item>
+        <item>@string/nav_item_contacts_us</item>
         <item>@string/nav_item_tac</item>
         <item>@string/nav_item_privacy</item>
+        <item>@string/nav_item_exit</item>
+
+
     </string-array>
 
     <string name="title_main_fragment">صفحه اصلی</string>
