@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import br.com.goncalves.pugnotification.notification.PugNotification;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
@@ -134,6 +135,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        PugNotification.with(context).cancel(Constants.MERCHANT_NOTIFICATION_IDENTIFIER);
         HamPayApplication.setAppSate(AppState.Resumed);
         if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
             Intent intent = new Intent();
@@ -147,6 +149,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
     @Override
     public void onUserInteraction() {
         super.onUserInteraction();
+        PugNotification.with(context).cancel(Constants.MERCHANT_NOTIFICATION_IDENTIFIER);
         if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
             Intent intent = new Intent();
             intent.setClass(context, HamPayLoginActivity.class);
@@ -164,8 +167,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
         context = this;
         activity = RequestBusinessPayDetailActivity.this;
-
-
+        PugNotification.with(context).cancel(Constants.MERCHANT_NOTIFICATION_IDENTIFIER);
         databaseHelper = new DatabaseHelper(activity);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
@@ -174,8 +176,10 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         imageManager = new ImageManager(activity, 200000, false);
 
         try {
+
             MaxXferAmount = prefs.getLong(Constants.MAX_BUSINESS_XFER_AMOUNT, 0);
             MinXferAmount = prefs.getLong(Constants.MIN_BUSINESS_XFER_AMOUNT, 0);
+
         }catch (Exception ex){
             Log.e("Error", ex.getStackTrace().toString());
         }

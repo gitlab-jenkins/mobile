@@ -34,6 +34,7 @@ public class Constants {
     public static final String PENDING_PAYMENT_CODE = "pendingPaymentCode";
     public static final String PENDING_PURCHASE_COUNT = "pendingPurchaseCount";
     public static final String PENDING_PAYMENT_COUNT = "pendingPaymentCount";
+    public static final String PENDING_CODE = "pendingCode";
     public static final String USER_TRANSACTION_DTO = "UserTransaction";
     public static final String CONTACT_PHONE_NO = "contact_phone_no";
     public static final String CONTACT_NAME = "contact_name";
@@ -54,7 +55,7 @@ public class Constants {
     public static final String REGISTERED_USER = "registeredUser";
     public static final String FETCHED_HAMPAY_ENABLED = "fetched_hampay_enabled";
     public static final String  MOBILE_TIME_OUT = "mobile_time_out";
-    public static final long MOBILE_TIME_OUT_INTERVAL = 600000;
+    public static final long MOBILE_TIME_OUT_INTERVAL = 300000;
     public static final String FORCE_USER_PROFILE = "force_user_profile";
     public static final String RECEIVED_SMS_ACTIVATION = "received_sms_activation";
     public static final String MAX_BUSINESS_XFER_AMOUNT = "MaxBusinessXferAmount";
@@ -98,6 +99,11 @@ public class Constants {
     public static final int IBAN_CHANGE_RESULT_CODE = 2048;
     public static final String RETURN_IBAN_CONFIRMED = "return_iban";
     public static final String TAC_PRIVACY_TITLE = "tac_privacy_title";
+    public static final int COMMON_NOTIFICATION_IDENTIFIER = 999;
+    public static final int INVOICE_NOTIFICATION_IDENTIFIER = 1000;
+    public static final int MERCHANT_NOTIFICATION_IDENTIFIER = 1001;
+    public static final int TRANSACTIONS_NOTIFICATION_IDENTIFIER = 1002;
+    public static final int PAYMENT_NOTIFICATION_IDENTIFIER = 1003;
 
     //Permissions and Group Permission
     public static final int READ_PHONE_STATE = 1;

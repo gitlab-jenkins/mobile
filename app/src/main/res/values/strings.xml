@@ -548,7 +548,9 @@
     <string name="pending_payment_remaining">زمان باقی مانده</string>
     <string name="day">روز</string>
     <string name="time">ساعت</string>
-    <string name="msg_delete_payment_pending">آیا مایل به حذف فاکتور شماره %1$s هستید؟</string>
+    <string name="msg_cancel_pending">آیا مایل به حذف فاکتور شماره %1$s هستید؟</string>
+    <string name="cancel_pending_confirm">بله</string>
+    <string name="cancel_pending_cancel">خیر</string>
 
     <string name="sort_transaction_default">همه</string>
     <string name="sort_transaction_individual">شخصی</string>
@@ -595,9 +597,6 @@
     <string name="user_manual_close">بستن</string>
     <string name="user_manual_title_activity">راهنما</string>
 
-
-
-
     <string name="amount_entry">لطفا مبلغ مورد نظر را وارد کنید</string>
 
     <string name="iban_change">تغییر شماره شبا</string>
@@ -605,6 +604,5 @@
     <string name="msg_fail_remove_image">حذف عکس با مشکل مواجه شد.</string>
     <string name="tac_title_activity">قوانین و مقررات</string>
     <string name="privacy_title_activity">حفظ حریم خصوصی و امنیت</string>
-
 
 </resources>

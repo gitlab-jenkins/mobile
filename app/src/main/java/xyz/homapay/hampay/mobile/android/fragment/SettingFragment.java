@@ -99,7 +99,7 @@ public class SettingFragment extends Fragment {
                         break;
 
                     case 3:
-                        new HamPayDialog(getActivity()).showChangeEmail("", prefs.getString(Constants.MEMORABLE_WORD, ""));
+                        new HamPayDialog(getActivity()).showChangeEmail();
                         break;
 
                     case 4:

@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import br.com.goncalves.pugnotification.notification.PugNotification;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.LatestPaymentRequest;
@@ -116,6 +117,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        PugNotification.with(context).cancel(Constants.INVOICE_NOTIFICATION_IDENTIFIER);
         HamPayApplication.setAppSate(AppState.Resumed);
         if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
             Intent intent = new Intent();
@@ -129,6 +131,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
     @Override
     public void onUserInteraction() {
         super.onUserInteraction();
+        PugNotification.with(context).cancel(Constants.INVOICE_NOTIFICATION_IDENTIFIER);
         if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
             Intent intent = new Intent();
             intent.setClass(context, HamPayLoginActivity.class);
@@ -145,6 +148,9 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
         context = this;
         activity = InvoicePendingConfirmationActivity.this;
+
+        PugNotification.with(context).cancel(Constants.INVOICE_NOTIFICATION_IDENTIFIER);
+
         dbHelper = new DatabaseHelper(context);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);

@@ -1404,7 +1404,7 @@ public class HamPayDialog {
     }
 
 
-    public void showChangeEmail(final String password, final String memorableWord){
+    public void showChangeEmail(){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_change_email, null);
 
@@ -1418,9 +1418,7 @@ public class HamPayDialog {
         change_email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String userEmail = emailValue.getText().toString();
-
                 if (new EmailVerification().isValid(userEmail)) {
                     dialog.dismiss();
                     Intent intent = new Intent();
@@ -1437,7 +1435,6 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                activity.finish();
             }
         });
 
@@ -1949,6 +1946,37 @@ public class HamPayDialog {
             public void onClick(View v) {
                 dialog.dismiss();
                 activity.finish();
+            }
+        });
+
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
+    }
+
+    public void showPendingCancelDialog(String code){
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_pending_cancel_confirm, null);
+
+        FacedTextView message = (FacedTextView) view.findViewById(R.id.message);
+        message.setText(activity.getString(R.string.msg_cancel_pending, code));
+        FacedTextView cancel_pending_confirm = (FacedTextView) view.findViewById(R.id.cancel_pending_confirm);
+        FacedTextView cancel_pending_cancel = (FacedTextView) view.findViewById(R.id.cancel_pending_cancel);
+
+        cancel_pending_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        cancel_pending_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
             }
         });
 

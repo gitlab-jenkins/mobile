@@ -46,13 +46,13 @@ public class ProxyHamPayLogin {
             case HTTP:
                 httpURLConnection = (HttpURLConnection)url.openConnection();
                 httpURLConnection.setDoOutput(true);
-                httpURLConnection.setRequestMethod(connectionMethod.name());
+                httpURLConnection.setRequestMethod("POST");
                 httpURLConnection.setConnectTimeout(Constants.SERVICE_CONNECTION_TIMEOUT);
                 httpURLConnection.setReadTimeout(Constants.SERVICE_READ_TIMEOUT);
                 httpURLConnection.setRequestProperty("username", loginData.getUserName());
                 httpURLConnection.setRequestProperty("password", loginData.getUserPassword());
                 httpURLConnection.setRequestProperty("Content-Type", Constants.SERVICE_CONTENT_TYPE);
-                httpURLConnection.setRequestProperty("Accept-Encoding", "UTF-8");
+//                httpURLConnection.setRequestProperty("Accept-Encoding", "UTF-8");
                 try {
                     output = new BufferedWriter(new OutputStreamWriter(httpURLConnection.getOutputStream()));
                     output.write("{}");
@@ -66,7 +66,7 @@ public class ProxyHamPayLogin {
             case HTTPS:
                 httpsURLConnection = new SSLConnection(context, url).setUpHttpsURLConnection();
                 httpsURLConnection.setDoOutput(true);
-                httpsURLConnection.setRequestMethod(connectionMethod.name());
+                httpsURLConnection.setRequestMethod("POST");
                 httpsURLConnection.setConnectTimeout(Constants.SERVICE_CONNECTION_TIMEOUT);
                 httpsURLConnection.setReadTimeout(Constants.SERVICE_READ_TIMEOUT);
                 httpsURLConnection.setRequestProperty("username", loginData.getUserName());
@@ -79,9 +79,12 @@ public class ProxyHamPayLogin {
                     output.flush();
                     output.close();
                 } catch (Exception e) {}
-                bufferedReader = new BufferedReader(new InputStreamReader(httpsURLConnection.getInputStream()));
                 responseCode = httpsURLConnection.getResponseCode();
-
+                if (responseCode == 200) {
+                    bufferedReader = new BufferedReader(new InputStreamReader(httpsURLConnection.getInputStream()));
+                }else {
+                    bufferedReader = new BufferedReader(new InputStreamReader(httpsURLConnection.getErrorStream()));
+                }
                 break;
         }
         return responseCode;

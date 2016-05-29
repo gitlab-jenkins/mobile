@@ -378,12 +378,12 @@ public class PasswordEntryActivity extends AppCompatActivity implements View.OnC
                         vibrator.vibrate(20);
 
 
-                        int passwordComplexity = new PasswordComplexity(inputRePasswordValue).check();
-                        if (passwordComplexity != 1){
-                            inputRePasswordValue = "";
-                            Toast.makeText(activity, getString(passwordComplexity), Toast.LENGTH_SHORT).show();
-                            return;
-                        }
+//                        int passwordComplexity = new PasswordComplexity(inputRePasswordValue).check();
+//                        if (passwordComplexity != 1){
+//                            inputRePasswordValue = "";
+//                            Toast.makeText(activity, getString(passwordComplexity), Toast.LENGTH_SHORT).show();
+//                            return;
+//                        }
 
                         if (inputPasswordValue.equalsIgnoreCase(inputRePasswordValue)) {
                             Intent intent = new Intent();
@@ -392,13 +392,8 @@ public class PasswordEntryActivity extends AppCompatActivity implements View.OnC
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             finish();
                             startActivity(intent);
-
-
                         } else {
-
                             (new HamPayDialog(this)).showDisMatchPasswordDialog();
-
-
                             password_1_rl.setVisibility(View.VISIBLE);
                             password_2_rl.setVisibility(View.GONE);
 

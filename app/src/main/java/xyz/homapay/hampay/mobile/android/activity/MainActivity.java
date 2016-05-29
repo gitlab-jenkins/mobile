@@ -232,29 +232,36 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     break;
             }
         }else {
-            if (pendingPurchaseCode != null) {
-                if (dbHelper.getIsExistPurchaseRequest(pendingPurchaseCode)) {
-                    LatestPurchase latestPurchase = dbHelper.getPurchaseRequest(pendingPurchaseCode);
-                    if (latestPurchase.getIsCanceled().equalsIgnoreCase("0")) {
-                        if (pendingPurchaseCount > 0) {
-                            intent.setClass(context, RequestBusinessPayDetailActivity.class);
-                            startActivity(intent);
-                        } else if (pendingPaymentCode != null && pendingPaymentCount > 0) {
-                            intent.setClass(context, InvoicePendingConfirmationActivity.class);
-                            startActivity(intent);
-                        }
-                    }
-                } else {
-                    dbHelper.createPurchaseRequest(pendingPurchaseCode);
-                    intent.setClass(context, RequestBusinessPayDetailActivity.class);
-                    startActivity(intent);
-                }
-            } else if (pendingPaymentCount > 0 && pendingPaymentCode != null) {
-                if (!dbHelper.checkPaymentRequest(pendingPaymentCode)) {
-                    intent.setClass(context, InvoicePendingConfirmationActivity.class);
-                    startActivity(intent);
-                }
+            if (pendingPurchaseCode != null){
+                intent.setClass(context, RequestBusinessPayDetailActivity.class);
+                startActivity(intent);
+            }else if (pendingPaymentCode != null){
+                intent.setClass(context, InvoicePendingConfirmationActivity.class);
+                startActivity(intent);
             }
+//            if (pendingPurchaseCode != null) {
+//                if (dbHelper.getIsExistPurchaseRequest(pendingPurchaseCode)) {
+//                    LatestPurchase latestPurchase = dbHelper.getPurchaseRequest(pendingPurchaseCode);
+//                    if (latestPurchase.getIsCanceled().equalsIgnoreCase("0")) {
+//                        if (pendingPurchaseCount > 0) {
+//                            intent.setClass(context, RequestBusinessPayDetailActivity.class);
+//                            startActivity(intent);
+//                        } else if (pendingPaymentCode != null && pendingPaymentCount > 0) {
+//                            intent.setClass(context, InvoicePendingConfirmationActivity.class);
+//                            startActivity(intent);
+//                        }
+//                    }
+//                } else {
+//                    dbHelper.createPurchaseRequest(pendingPurchaseCode);
+//                    intent.setClass(context, RequestBusinessPayDetailActivity.class);
+//                    startActivity(intent);
+//                }
+//            } else if (pendingPaymentCount > 0 && pendingPaymentCode != null) {
+//                if (!dbHelper.checkPaymentRequest(pendingPaymentCode)) {
+//                    intent.setClass(context, InvoicePendingConfirmationActivity.class);
+//                    startActivity(intent);
+//                }
+//            }
         }
 
 

@@ -36,7 +36,12 @@
                 android:layout_gravity="center_horizontal"
                 android:text="@string/user_manual_title_activity"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="8dp"/>
+                android:layout_toRightOf="@id/close_user_manual"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp"
+                android:lines="1"
+                android:maxLines="1"
+                android:singleLine="true"/>
 
         </RelativeLayout>
 

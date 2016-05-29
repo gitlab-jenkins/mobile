@@ -24,7 +24,6 @@ import xyz.homapay.hampay.mobile.android.activity.ChangeUserImageActivity;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestRemoveUserImage;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
-import xyz.homapay.hampay.mobile.android.dialog.HamPayCustomDialog;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
 /**

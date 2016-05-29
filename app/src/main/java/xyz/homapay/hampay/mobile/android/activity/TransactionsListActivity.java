@@ -25,6 +25,7 @@ import com.google.android.gms.analytics.Tracker;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.goncalves.pugnotification.notification.PugNotification;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.enums.TnxSortFactor;
@@ -85,6 +86,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
     @Override
     protected void onResume() {
         super.onResume();
+        PugNotification.with(context).cancel(Constants.TRANSACTIONS_NOTIFICATION_IDENTIFIER);
         HamPayApplication.setAppSate(AppState.Resumed);
         if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
             Intent intent = new Intent();
@@ -98,6 +100,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
     @Override
     public void onUserInteraction() {
         super.onUserInteraction();
+        PugNotification.with(context).cancel(Constants.TRANSACTIONS_NOTIFICATION_IDENTIFIER);
         if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
             Intent intent = new Intent();
             intent.setClass(context, HamPayLoginActivity.class);
@@ -127,6 +130,8 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
 
         context = this;
         activity = TransactionsListActivity.this;
+
+        PugNotification.with(context).cancel(Constants.TRANSACTIONS_NOTIFICATION_IDENTIFIER);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
