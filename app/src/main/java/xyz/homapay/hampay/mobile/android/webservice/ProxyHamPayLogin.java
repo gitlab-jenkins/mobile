@@ -52,21 +52,25 @@ public class ProxyHamPayLogin {
                 httpURLConnection.setRequestProperty("username", loginData.getUserName());
                 httpURLConnection.setRequestProperty("password", loginData.getUserPassword());
                 httpURLConnection.setRequestProperty("Content-Type", Constants.SERVICE_CONTENT_TYPE);
-//                httpURLConnection.setRequestProperty("Accept-Encoding", "UTF-8");
+                httpURLConnection.setRequestProperty("Accept-Encoding", "UTF-8");
                 try {
                     output = new BufferedWriter(new OutputStreamWriter(httpURLConnection.getOutputStream()));
                     output.write("{}");
                     output.flush();
                     output.close();
                 } catch (Exception e) {}
-                bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
-                responseCode = httpURLConnection.getResponseCode();
+                responseCode = httpsURLConnection.getResponseCode();
+                if (responseCode == 200) {
+                    bufferedReader = new BufferedReader(new InputStreamReader(httpsURLConnection.getInputStream()));
+                }else {
+                    bufferedReader = new BufferedReader(new InputStreamReader(httpsURLConnection.getErrorStream()));
+                }
                 break;
 
             case HTTPS:
                 httpsURLConnection = new SSLConnection(context, url).setUpHttpsURLConnection();
                 httpsURLConnection.setDoOutput(true);
-                httpsURLConnection.setRequestMethod("POST");
+                httpsURLConnection.setRequestMethod(connectionMethod.name());
                 httpsURLConnection.setConnectTimeout(Constants.SERVICE_CONNECTION_TIMEOUT);
                 httpsURLConnection.setReadTimeout(Constants.SERVICE_READ_TIMEOUT);
                 httpsURLConnection.setRequestProperty("username", loginData.getUserName());
