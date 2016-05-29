@@ -99,9 +99,7 @@ public class SettingFragment extends Fragment {
                         break;
 
                     case 3:
-                        intent = new Intent();
-                        intent.setClass(getActivity(), ChangeEmailPassActivity.class);
-                        startActivity(intent);
+                        new HamPayDialog(getActivity()).showChangeEmail("", prefs.getString(Constants.MEMORABLE_WORD, ""));
                         break;
 
                     case 4:

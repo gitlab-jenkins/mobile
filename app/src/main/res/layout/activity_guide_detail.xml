@@ -12,8 +12,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:gravity="center_vertical">
+            android:layout_height="48dp">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/close_tc_privacy"
@@ -24,7 +23,8 @@
                 android:textSize="14sp"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/user_manual_close"
-                android:layout_marginLeft="8dp"/>
+                android:layout_marginLeft="8dp"
+                android:layout_centerVertical="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/title"
@@ -35,7 +35,7 @@
                 android:textSize="14sp"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/user_manual_title_activity"
-                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
                 android:layout_marginRight="8dp"/>
 
         </RelativeLayout>

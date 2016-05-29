@@ -604,7 +604,7 @@
     <string name="payment_request_issue">تولید فاکتور</string>
     <string name="msg_fail_remove_image">حذف عکس با مشکل مواجه شد.</string>
     <string name="tac_title_activity">قوانین و مقررات</string>
-    <string name="privacy_title_activity">سیاست‌های حفظ حریم خصوصی و امنیت</string>
+    <string name="privacy_title_activity">حفظ حریم خصوصی و امنیت</string>
 
 
 </resources>

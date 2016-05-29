@@ -12,13 +12,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import xyz.homapay.hampay.common.common.response.ResponseMessage;
+import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.ChangeEmailRequest;
+import xyz.homapay.hampay.common.core.model.response.ChangeEmailResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
+import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestChangeEmail;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
@@ -64,6 +69,7 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
     SharedPreferences.Editor editor;
 
     Tracker hamPayGaTracker;
+    private String userEmail = "";
 
     public void backActionBar(View view){
         finish();
@@ -115,7 +121,6 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
 
-
         context = this;
         activity = ChangeEmailPassActivity.this;
 
@@ -123,6 +128,8 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
         hamPayDialog = new HamPayDialog(activity);
+
+        userEmail = getIntent().getExtras().getString(Constants.REGISTERED_USER_EMAIL);
 
         keyboard = (LinearLayout)findViewById(R.id.keyboard);
         password_holder = (LinearLayout)findViewById(R.id.password_holder);
@@ -305,7 +312,12 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
                     }else {
                         editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                         editor.commit();
-                        new HamPayDialog(activity).showChangeEmail(inputPasswordValue, prefs.getString(Constants.MEMORABLE_WORD, ""));
+                        ChangeEmailRequest changeEmailRequest = new ChangeEmailRequest();
+                        changeEmailRequest.setEmail(userEmail);
+                        changeEmailRequest.setPassCode(inputPasswordValue);
+                        changeEmailRequest.setMemorableWord(prefs.getString(Constants.MEMORABLE_WORD, ""));
+                        RequestChangeEmail requestChangeEmail = new RequestChangeEmail(activity, new RequestChangeEmailTaskCompleteListener(changeEmailRequest));
+                        requestChangeEmail.execute(changeEmailRequest);
                         inputPasswordValue = "";
                     }
 
@@ -314,10 +326,6 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
             }
         }
     }
-
-
-
-
 
     @Override
     public void onBackPressed() {
@@ -329,5 +337,66 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
             finish();
         }
     }
+
+
+    public class RequestChangeEmailTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<ChangeEmailResponse>> {
+
+        private RequestChangeEmail requestChangeEmail = null;
+        private ChangeEmailRequest changeEmailRequest;
+
+        public RequestChangeEmailTaskCompleteListener(ChangeEmailRequest changeEmailRequest){
+            this.changeEmailRequest = changeEmailRequest;
+
+        }
+
+        @Override
+        public void onTaskComplete(ResponseMessage<ChangeEmailResponse> changeEmailResponseResponseMessage)
+        {
+
+            hamPayDialog.dismisWaitingDialog();
+
+            if (changeEmailResponseResponseMessage != null) {
+                if (changeEmailResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    editor.putString(Constants.REGISTERED_USER_EMAIL, userEmail);
+                    editor.commit();
+                    new HamPayDialog(activity).showSuccessChangeSettingDialog(changeEmailResponseResponseMessage.getService().getResultStatus().getDescription());
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Change Email User")
+                            .setAction("Change")
+                            .setLabel("Success")
+                            .build());
+                }
+                else {
+                    requestChangeEmail = new RequestChangeEmail(activity, new RequestChangeEmailTaskCompleteListener(changeEmailRequest));
+                    new HamPayDialog(activity).showFailChnageEmail(requestChangeEmail, changeEmailRequest,
+                            changeEmailResponseResponseMessage.getService().getResultStatus().getCode(),
+                            changeEmailResponseResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Change Email User")
+                            .setAction("Change")
+                            .setLabel("Fail(Server)")
+                            .build());
+                }
+            }else {
+                RequestChangeEmail requestChangeEmail = new RequestChangeEmail(activity, new RequestChangeEmailTaskCompleteListener(changeEmailRequest));
+                new HamPayDialog(activity).showFailChnageEmail(requestChangeEmail, changeEmailRequest,
+                        Constants.LOCAL_ERROR_CODE,
+                        activity.getString(R.string.msg_gail_change_email));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Change Email User")
+                        .setAction("Change")
+                        .setLabel("Fail(Mobile)")
+                        .build());
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
+    }
+
 
 }
