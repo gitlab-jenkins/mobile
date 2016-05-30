@@ -1001,9 +1001,9 @@ public class HamPayDialog {
         FacedTextView retry_change_pass_code = (FacedTextView) view.findViewById(R.id.retry_change_pass_code);
         FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
 
-        if ((code.compareTo("1005") == 0) || (code.compareTo("۱۰۰۵") == 0) ){
-            retry_change_pass_code.setVisibility(View.INVISIBLE);
-        }
+//        if ((code.compareTo("1005") == 0) || (code.compareTo("۱۰۰۵") == 0) ){
+//            retry_change_pass_code.setVisibility(View.INVISIBLE);
+//        }
 
         retry_change_pass_code.setOnClickListener(new View.OnClickListener() {
             @Override

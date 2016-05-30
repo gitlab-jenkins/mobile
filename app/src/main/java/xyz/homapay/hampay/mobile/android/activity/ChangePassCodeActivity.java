@@ -303,12 +303,12 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                         input_digit_5.setImageResource(R.drawable.pass_value_placeholder);
                         vibrator.vibrate(20);
 
-                        int passwordComplexity = new PasswordComplexity(currentPassword).check();
-                        if (passwordComplexity != 1){
-                            currentPassword = "";
-                            Toast.makeText(activity, getString(passwordComplexity), Toast.LENGTH_SHORT).show();
-                            return;
-                        }
+//                        int passwordComplexity = new PasswordComplexity(currentPassword).check();
+//                        if (passwordComplexity != 1){
+//                            currentPassword = "";
+//                            Toast.makeText(activity, getString(passwordComplexity), Toast.LENGTH_SHORT).show();
+//                            return;
+//                        }
 
                         passCodeChangeStep = 2;
                         pass_code_change_text.setText(getString(R.string.change_pass_code_text_2));
@@ -480,12 +480,12 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                         input_digit_5.setImageResource(R.drawable.pass_value_placeholder);
                         vibrator.vibrate(20);
 
-                        int passwordComplexity = new PasswordComplexity(inputRePasswordValue).check();
-                        if (passwordComplexity != 1){
-                            inputRePasswordValue = "";
-                            Toast.makeText(activity, getString(passwordComplexity), Toast.LENGTH_SHORT).show();
-                            return;
-                        }
+//                        int passwordComplexity = new PasswordComplexity(inputRePasswordValue).check();
+//                        if (passwordComplexity != 1){
+//                            inputRePasswordValue = "";
+//                            Toast.makeText(activity, getString(passwordComplexity), Toast.LENGTH_SHORT).show();
+//                            return;
+//                        }
 
                         if (inputPasswordValue.equalsIgnoreCase(inputRePasswordValue)) {
                             editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());

@@ -5,8 +5,8 @@ import xyz.homapay.hampay.mobile.android.webservice.ConnectionType;
 
 public class Constants {
 //    public static String SERVER = "176.58.104.158";//England Server IP
-    public static String SERVER = "mobile.hampay.ir";//Prod Server IP
-//    public static String SERVER = "139.162.181.92";//UAT Server IP
+//    public static String SERVER = "mobile.hampay.ir";//Prod Server IP
+    public static String SERVER = "139.162.181.92";//UAT Server IP
     public static String URL_PREFIX = "/hampay";
     public static String HTTP_SERVER_IP = "http://" + SERVER + ":90" + URL_PREFIX;//England Server
     public static String IPG_URL = "http://" + SERVER + ":9091" + URL_PREFIX;//England Server
@@ -63,7 +63,7 @@ public class Constants {
     public static final String MAX_INDIVIDUAL_XFER_AMOUNT = "MaxIndividualXferAmount";
     public static final String MIN_INDIVIDUAL_XFER_AMOUNT = "MinIndividualXferAmount";
     public static final String USER_ENTRY_PASSWORD = "userEntryPassword";
-    public static final String LOCAL_ERROR_CODE = "۲۰۰۰";
+    public static final String LOCAL_ERROR_CODE = "۱۰۰۰";
     public static final String NOTIFICATION = "notification";
     public static final String USER_ID_TOKEN = "userIdToken";
     public static final String UUID = "uuid";
@@ -104,6 +104,7 @@ public class Constants {
     public static final int MERCHANT_NOTIFICATION_IDENTIFIER = 1001;
     public static final int TRANSACTIONS_NOTIFICATION_IDENTIFIER = 1002;
     public static final int PAYMENT_NOTIFICATION_IDENTIFIER = 1003;
+    public static final String PROVIDER_ID = "providerId";
 
     //Permissions and Group Permission
     public static final int READ_PHONE_STATE = 1;

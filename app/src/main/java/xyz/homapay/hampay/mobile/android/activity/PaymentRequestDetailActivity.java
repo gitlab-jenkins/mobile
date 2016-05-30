@@ -368,7 +368,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
             if (userPaymentResponseMessage != null) {
                 if (userPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
-                    new HamPayDialog(activity).successPaymentRequestDialog("121224231");
+                    new HamPayDialog(activity).successPaymentRequestDialog(userPaymentResponseMessage.getService().getProductCode());
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Individual Payment Confirm")

@@ -17,17 +17,21 @@ import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.PaymentDetailRequest;
 import xyz.homapay.hampay.common.core.model.request.PurchaseDetailRequest;
+import xyz.homapay.hampay.common.core.model.request.TransactionDetailRequest;
 import xyz.homapay.hampay.common.core.model.response.PaymentDetailResponse;
 import xyz.homapay.hampay.common.core.model.response.PurchaseDetailResponse;
+import xyz.homapay.hampay.common.core.model.response.TransactionDetailResponse;
 import xyz.homapay.hampay.common.core.model.response.TransactionListResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
+import xyz.homapay.hampay.common.core.model.response.dto.TnxDetailDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestPaymentDetail;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchaseDetail;
+import xyz.homapay.hampay.mobile.android.async.RequestTransactionDetail;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
@@ -40,8 +44,13 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
     Bundle bundle;
     TransactionDTO transactionDTO;
+    private TnxDetailDTO tnxDetailDTO = null;
     private PaymentInfoDTO paymentInfo = null;
     private PurchaseInfoDTO purchaseInfo = null;
+    private TransactionDetailRequest transactionDetailRequest;
+    private RequestTransactionDetail requestTransactionDetail;
+
+
     PersianEnglishDigit persianEnglishDigit;
     Context context;
     Activity activity;
@@ -160,12 +169,12 @@ public class TransactionDetailActivity extends AppCompatActivity {
             if (transactionDTO.getTransactionType() == TransactionDTO.TransactionType.CREDIT){
                 caller_name.setText(context.getString(R.string.credit));
                 caller_name.setTextColor(ContextCompat.getColor(context, R.color.register_btn_color));
-//                viewHolder.status_icon.setImageResource(R.drawable.arrow_r);
+//                status_icon.setImageResource(R.drawable.arrow_r);
             }
             else if (transactionDTO.getTransactionType() == TransactionDTO.TransactionType.DEBIT){
                 caller_name.setText(context.getString(R.string.debit));
                 caller_name.setTextColor(ContextCompat.getColor(context, R.color.user_change_status));
-//                viewHolder.status_icon.setImageResource(R.drawable.arrow_p);
+//                status_icon.setImageResource(R.drawable.arrow_p);
             }
 
         }else if (transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.PENDING) {
@@ -179,24 +188,79 @@ public class TransactionDetailActivity extends AppCompatActivity {
 //            viewHolder.status_icon.setImageResource(R.drawable.arrow_f);
         }
 
-        if (transactionDTO.getPaymentType() == TransactionDTO.PaymentType.PAYMENT) {
-            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-            editor.commit();
-            paymentDetailRequest = new PaymentDetailRequest();
-            paymentDetailRequest.setProviderId(transactionDTO.getReference());
-            requestPaymentDetail = new RequestPaymentDetail(activity, new RequestPaymentDetailTaskCompleteListener());
-            requestPaymentDetail.execute(paymentDetailRequest);
-        }else if (transactionDTO.getPaymentType() == TransactionDTO.PaymentType.PURCHASE){
-            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-            editor.commit();
-            purchaseDetailRequest = new PurchaseDetailRequest();
-            purchaseDetailRequest.setProviderId(transactionDTO.getReference());
-            requestPurchaseDetail = new RequestPurchaseDetail(activity, new RequestPurchaseDetailTaskCompleteListener());
-            requestPurchaseDetail.execute(purchaseDetailRequest);
-        }
+
+        transactionDetailRequest = new TransactionDetailRequest();
+        transactionDetailRequest.setReference(transactionDTO.getReference());
+        requestTransactionDetail = new RequestTransactionDetail(activity, new RequestTransactionDetailTaskCompleteListener());
+        requestTransactionDetail.execute(transactionDetailRequest);
+
+
+//        if (transactionDTO.getPaymentType() == TransactionDTO.PaymentType.PAYMENT) {
+//            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+//            editor.commit();
+//            paymentDetailRequest = new PaymentDetailRequest();
+//            paymentDetailRequest.setProviderId(transactionDTO.getReference());
+//            requestPaymentDetail = new RequestPaymentDetail(activity, new RequestPaymentDetailTaskCompleteListener());
+//            requestPaymentDetail.execute(paymentDetailRequest);
+//        }else if (transactionDTO.getPaymentType() == TransactionDTO.PaymentType.PURCHASE){
+//            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+//            editor.commit();
+//            purchaseDetailRequest = new PurchaseDetailRequest();
+//            purchaseDetailRequest.setProviderId(transactionDTO.getReference());
+//            requestPurchaseDetail = new RequestPurchaseDetail(activity, new RequestPurchaseDetailTaskCompleteListener());
+//            requestPurchaseDetail.execute(purchaseDetailRequest);
+//        }
 
     }
 
+    public class RequestTransactionDetailTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<TransactionDetailResponse>> {
+
+        @Override
+        public void onTaskComplete(ResponseMessage<TransactionDetailResponse> transactionDetailResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+
+            if (transactionDetailResponseMessage != null) {
+                if (transactionDetailResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    tnxDetailDTO = transactionDetailResponseMessage.getService().getTransactionDetail();
+                    if (transactionDTO.getPaymentType() == TransactionDTO.PaymentType.PAYMENT) {
+                        if (tnxDetailDTO.getUserStatus() == TnxDetailDTO.UserStatus.ACTIVE) {
+                            pay_button.setVisibility(View.VISIBLE);
+                        }
+                        callee_name.setText(tnxDetailDTO.getName());
+                        total_amount_value.setText(persianEnglishDigit.E2P(formatter.format(tnxDetailDTO.getAmount() + tnxDetailDTO.getFeeCharge() + tnxDetailDTO.getVat())));
+                        amount_value.setText(persianEnglishDigit.E2P(formatter.format(tnxDetailDTO.getAmount())));
+                        vat_value.setText(persianEnglishDigit.E2P(formatter.format(tnxDetailDTO.getVat())));
+                        fee_charge_value.setText(persianEnglishDigit.E2P(formatter.format(tnxDetailDTO.getFeeCharge())));
+                        payment_request_code.setText(persianEnglishDigit.E2P(tnxDetailDTO.getCode()));
+                        date_time.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(tnxDetailDTO.getDate())));
+                        if (transactionDTO.getPersonType() == TransactionDTO.PersonType.INDIVIDUAL) {
+                            cell_number.setText(persianEnglishDigit.E2P(tnxDetailDTO.getCellNumber()));
+                        }
+                        if (tnxDetailDTO.getMessage() != null) {
+                            message.setText(tnxDetailDTO.getMessage());
+                        }
+                    }else if (transactionDTO.getPaymentType() == TransactionDTO.PaymentType.PURCHASE){
+                        callee_name.setText(tnxDetailDTO.getName());
+                        total_amount_value.setText(persianEnglishDigit.E2P(formatter.format(tnxDetailDTO.getAmount() + tnxDetailDTO.getFeeCharge() + tnxDetailDTO.getVat())));
+                        amount_value.setText(persianEnglishDigit.E2P(formatter.format(tnxDetailDTO.getAmount())));
+                        vat_value.setText(persianEnglishDigit.E2P(formatter.format(tnxDetailDTO.getVat())));
+                        fee_charge_value.setText(persianEnglishDigit.E2P(formatter.format(tnxDetailDTO.getFeeCharge())));
+                        payment_request_code.setText(persianEnglishDigit.E2P(tnxDetailDTO.getCode()));
+                        date_time.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(tnxDetailDTO.getDate())));
+                        cell_number.setText(persianEnglishDigit.E2P(tnxDetailDTO.getCode()));
+//                        card_number_value.setText(persianEnglishDigit.E2P(tnxDetailDTO.getPspInfo().getCardDTO().getMaskedCardNumber()));
+//                        bank_name.setText(tnxDetailDTO.getPspInfo().getCardDTO().getBankName());
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
+    }
 
     public class RequestPaymentDetailTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PaymentDetailResponse>> {
 

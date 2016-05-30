@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.NavigationDrawerAdapter;
@@ -42,7 +41,7 @@ public class FragmentDrawer extends Fragment {
             R.drawable.ic_settings,
 
             R.drawable.ic_help,
-            R.drawable.about_hampay,
+            R.drawable.ic_about,
             R.drawable.ic_contact_us,
             R.drawable.ic_tac,
             R.drawable.ic_privacy,

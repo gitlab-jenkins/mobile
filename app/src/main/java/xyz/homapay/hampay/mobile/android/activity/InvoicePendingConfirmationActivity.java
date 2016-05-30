@@ -20,8 +20,10 @@ import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.LatestPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
+import xyz.homapay.hampay.common.core.model.request.PaymentDetailRequest;
 import xyz.homapay.hampay.common.core.model.response.LatestPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.PSPResultResponse;
+import xyz.homapay.hampay.common.core.model.response.PaymentDetailResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
@@ -31,6 +33,7 @@ import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestPSPResult;
+import xyz.homapay.hampay.mobile.android.async.RequestPaymentDetail;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
 import xyz.homapay.hampay.mobile.android.async.listener.RequestImageDownloaderTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
@@ -87,6 +90,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
     PaymentInfoDTO paymentInfoDTO = null;
     PspInfoDTO pspInfoDTO = null;
+    String providerId = null;
 
     private RequestPurchase requestPurchase;
     private DoWorkInfo doWorkInfo;
@@ -191,34 +195,16 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
         paymentInfoDTO = (PaymentInfoDTO) intent.getSerializableExtra(Constants.PAYMENT_INFO);
         pspInfoDTO = (PspInfoDTO) intent.getSerializableExtra(Constants.PSP_INFO);
+        providerId = intent.getStringExtra(Constants.PROVIDER_ID);
 
         if (paymentInfoDTO != null) {
-            callerName.setText(paymentInfoDTO.getCallerName());
-            paymentCode.setText(persianEnglishDigit.E2P("کد فاکتور " + paymentInfoDTO.getProductCode()));
-            received_message.setText(paymentInfoDTO.getMessage().trim());
-            create_date.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(paymentInfoDTO.getCreatedBy())));
-            paymentPriceValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount())));
-            paymentVAT.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getVat())));
-            paymentFeeValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getFeeCharge())));
-            paymentTotalValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount() + paymentInfoDTO.getVat() + paymentInfoDTO.getFeeCharge())));
-            cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
-            bankName.setText(pspInfoDTO.getCardDTO().getBankName());
-
-            if (paymentInfoDTO.getImageId() != null) {
-                String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + paymentInfoDTO.getImageId();
-                user_image.setTag(userImageUrl.split("/")[6]);
-                imageManager.displayImage(userImageUrl, user_image, R.drawable.user_placeholder);
-            }else {
-                user_image.setImageResource(R.drawable.user_placeholder);
-            }
-
-            if (pspInfoDTO.getCardDTO().getCardId() != null) {
-                LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
-                creditInfo.setVisibility(View.VISIBLE);
-            } else {
-                cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
-            }
-        } else {
+            fillPayment(paymentInfoDTO, pspInfoDTO);
+        }else if (providerId != null){
+            PaymentDetailRequest paymentDetailRequest = new PaymentDetailRequest();
+            paymentDetailRequest.setProviderId(providerId);
+            RequestPaymentDetail requestPaymentDetail = new RequestPaymentDetail(activity, new RequestPaymentDetailTaskCompleteListener());
+            requestPaymentDetail.execute(paymentDetailRequest);
+        }else {
             editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
             editor.commit();
             requestLatestPayment = new RequestLatestPayment(activity, new RequestLatestPaymentTaskCompleteListener());
@@ -401,7 +387,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, description);
                     }
                 }else {
-                    new HamPayDialog(activity).pspFailResultDialog("", "");
+                    new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
                 }
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
@@ -423,7 +409,8 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
             } else {
 
-                new HamPayDialog(activity).pspFailResultDialog("", "");
+                new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
+
 
                 hamPayGaTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Pending Payment Request")
@@ -497,31 +484,15 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                 if (latestPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     paymentInfoDTO = latestPaymentResponseMessage.getService().getPaymentInfoDTO();
                     pspInfoDTO = latestPaymentResponseMessage.getService().getPspInfo();
-                    callerName.setText(paymentInfoDTO.getCallerName());
-                    paymentCode.setText(persianEnglishDigit.E2P("کد فاکتور " + paymentInfoDTO.getProductCode()));
-                    create_date.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(paymentInfoDTO.getCreatedBy())));
-                    received_message.setText(paymentInfoDTO.getMessage().trim());
-                    paymentPriceValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount())));
-                    paymentVAT.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getVat())));
-                    paymentFeeValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getFeeCharge())));
-                    paymentTotalValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount() + paymentInfoDTO.getVat() + paymentInfoDTO.getFeeCharge())));
-                    cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
-                    bankName.setText(pspInfoDTO.getCardDTO().getBankName());
-
-                    if (paymentInfoDTO.getImageId() != null) {
-                        String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + paymentInfoDTO.getImageId();
-                        user_image.setTag(userImageUrl.split("/")[6]);
-                        imageManager.displayImage(userImageUrl, user_image, R.drawable.user_placeholder);
-                    }else {
-                        user_image.setImageResource(R.drawable.user_placeholder);
+                    if (paymentInfoDTO == null){
+                        new HamPayDialog(activity).showFailPendingPaymentDialog(requestLatestPayment, latestPaymentRequest,
+                                Constants.LOCAL_ERROR_CODE,
+                                getString(R.string.msg_pending_not_found));
+                        return;
                     }
 
-                    if (pspInfoDTO.getCardDTO().getCardId() != null) {
-                        LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
-                        creditInfo.setVisibility(View.VISIBLE);
-                    } else {
-                        cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
-                    }
+                    fillPayment(paymentInfoDTO, pspInfoDTO);
+
                     dbHelper.createViewedPaymentRequest(paymentInfoDTO.getProductCode());
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Latest Pending Payment")
@@ -562,6 +533,58 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
         public void onTaskPreRun() {
             hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
+    }
 
+
+    public class RequestPaymentDetailTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PaymentDetailResponse>> {
+
+        @Override
+        public void onTaskComplete(ResponseMessage<PaymentDetailResponse> paymentDetailResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+
+            if (paymentDetailResponseMessage != null) {
+                if (paymentDetailResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    pay_button.setVisibility(View.VISIBLE);
+                    fillPayment(paymentDetailResponseMessage.getService().getPaymentInfo(), null);
+                }
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+
+        }
+    }
+
+
+    private void fillPayment(PaymentInfoDTO paymentInfo, PspInfoDTO pspInfo){
+        callerName.setText(paymentInfo.getCallerName());
+        paymentCode.setText(persianEnglishDigit.E2P("کد فاکتور " + paymentInfo.getProductCode()));
+        create_date.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(paymentInfo.getCreatedBy())));
+        received_message.setText(paymentInfo.getMessage().trim());
+        paymentPriceValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfo.getAmount())));
+        paymentVAT.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfo.getVat())));
+        paymentFeeValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfo.getFeeCharge())));
+        paymentTotalValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfo.getAmount() + paymentInfo.getVat() + paymentInfo.getFeeCharge())));
+
+
+        if (paymentInfo.getImageId() != null) {
+            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + paymentInfo.getImageId();
+            user_image.setTag(userImageUrl.split("/")[6]);
+            imageManager.displayImage(userImageUrl, user_image, R.drawable.user_placeholder);
+        }else {
+            user_image.setImageResource(R.drawable.user_placeholder);
+        }
+
+        if (pspInfo != null) {
+            LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
+            creditInfo.setVisibility(View.VISIBLE);
+            cardNumberValue.setText(persianEnglishDigit.E2P(pspInfo.getCardDTO().getMaskedCardNumber()));
+            bankName.setText(pspInfo.getCardDTO().getBankName());
+            cardNumberValue.setText(persianEnglishDigit.E2P(pspInfo.getCardDTO().getMaskedCardNumber()));
+        } else {
+
+        }
     }
 }

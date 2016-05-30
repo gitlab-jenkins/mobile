@@ -55,6 +55,7 @@ import xyz.homapay.hampay.common.core.model.request.RegistrationVerifyMobileRequ
 import xyz.homapay.hampay.common.core.model.request.RemoveUserImageRequest;
 import xyz.homapay.hampay.common.core.model.request.TACAcceptRequest;
 import xyz.homapay.hampay.common.core.model.request.TACRequest;
+import xyz.homapay.hampay.common.core.model.request.TransactionDetailRequest;
 import xyz.homapay.hampay.common.core.model.request.TransactionListRequest;
 import xyz.homapay.hampay.common.core.model.request.UnlinkUserRequest;
 import xyz.homapay.hampay.common.core.model.request.UploadImageRequest;
@@ -97,6 +98,7 @@ import xyz.homapay.hampay.common.core.model.response.RegistrationVerifyMobileRes
 import xyz.homapay.hampay.common.core.model.response.RemoveUserImageResponse;
 import xyz.homapay.hampay.common.core.model.response.TACAcceptResponse;
 import xyz.homapay.hampay.common.core.model.response.TACResponse;
+import xyz.homapay.hampay.common.core.model.response.TransactionDetailResponse;
 import xyz.homapay.hampay.common.core.model.response.TransactionListResponse;
 import xyz.homapay.hampay.common.core.model.response.UnlinkUserResponse;
 import xyz.homapay.hampay.common.core.model.response.UploadImageResponse;
@@ -1172,24 +1174,32 @@ public class WebServices  {
     }
 
     public ResponseMessage<PendingFundListResponse> fundListResponse(PendingFundListRequest pendingFundListRequest) throws IOException{
-
         ResponseMessage<PendingFundListResponse> responseMessage = null;
         url = new URL(serviceURL + "/fund/pending-list");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
-
         pendingFundListRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<PendingFundListRequest> message = new RequestMessage<>(pendingFundListRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
-
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<PendingFundListRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
-
         Gson gson = builder.getDatebuilder().create();
-
         responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<PendingFundListResponse>>() {}.getType());
-
         proxyService.closeConnection();
+        return responseMessage;
+    }
 
+    public ResponseMessage<TransactionDetailResponse> transactionDetailResponse(TransactionDetailRequest transactionDetailRequest) throws IOException{
+        ResponseMessage<TransactionDetailResponse> responseMessage = null;
+        url = new URL(serviceURL + "/transactions/detail");
+        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        transactionDetailRequest.setRequestUUID(UUID.randomUUID().toString());
+        RequestMessage<TransactionDetailRequest> message = new RequestMessage<>(transactionDetailRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<TransactionDetailRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
+        Gson gson = builder.getDatebuilder().create();
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<TransactionDetailResponse>>() {}.getType());
+        proxyService.closeConnection();
         return responseMessage;
     }
 

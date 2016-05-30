@@ -224,15 +224,19 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
                 if (url.toLowerCase().contains(pspInfoDTO.getRedirectURL().toLowerCase())) {
 //                if (url.toLowerCase().contains("c.php")) {
-                    if (view.getTitle().equalsIgnoreCase("failure")) {
-                        hamPayDialog.ipgFailDialog();
-                        startTimer();
-                    } else {
-                        hamPayDialog.ipgSuccessDialog(view.getTitle());
+                    if (view.getTitle().toLowerCase().contains("ref:")) {
+                        if (view.getTitle().split(":").length == 2){
+                            hamPayDialog.ipgSuccessDialog(view.getTitle().split(":")[1]);
+                        }else {
+                            hamPayDialog.ipgSuccessDialog("");
+                        }
                         startTimer();
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra(Constants.ACTIVITY_RESULT, ResultStatus.SUCCESS.ordinal());
                         setResult(Activity.RESULT_OK, returnIntent);
+                    } else {
+                        hamPayDialog.ipgFailDialog();
+                        startTimer();
                     }
                 } else {
                     hamPayDialog.dismisWaitingDialog();

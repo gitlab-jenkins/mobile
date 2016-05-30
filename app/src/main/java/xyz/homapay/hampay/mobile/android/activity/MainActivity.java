@@ -236,8 +236,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 intent.setClass(context, RequestBusinessPayDetailActivity.class);
                 startActivity(intent);
             }else if (pendingPaymentCode != null){
-                intent.setClass(context, InvoicePendingConfirmationActivity.class);
-                startActivity(intent);
+                if (!dbHelper.checkPaymentRequest(pendingPaymentCode)) {
+                    intent.setClass(context, InvoicePendingConfirmationActivity.class);
+                    startActivity(intent);
+                }
             }
 //            if (pendingPurchaseCode != null) {
 //                if (dbHelper.getIsExistPurchaseRequest(pendingPurchaseCode)) {
@@ -364,7 +366,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     @Override
     public void onDrawerItemSelected(View view, int position) {
-        if (currentFragmet != position || position == 3 || position == 5) {
+        if (currentFragmet != position || position == 5|| position == 6|| position == 7|| position == 8) {
             currentFragmet = position;
             displayView(position);
         }

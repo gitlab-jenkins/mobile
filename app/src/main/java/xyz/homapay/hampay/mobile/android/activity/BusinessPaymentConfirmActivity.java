@@ -334,7 +334,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, description);
                     }
                 }else {
-                    new HamPayDialog(activity).pspFailResultDialog("", "");
+                    new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
                 }
 
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
@@ -358,7 +358,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
             } else {
 
-                new HamPayDialog(activity).pspFailResultDialog("", "");
+                new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
 
                 hamPayGaTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Pending Payment Request")
