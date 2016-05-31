@@ -364,6 +364,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
             String responseCode = null;
             String description = null;
             String SWTraceNum = null;
+            ResultStatus resultStatus = ResultStatus.FAILURE;
 
             if (purchaseResponseResponseMessage != null) {
                 pspResultRequest = new PSPResultRequest();
@@ -380,8 +381,10 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                 if (responseCode != null){
                     if (responseCode.equalsIgnoreCase("2000")) {
                         new HamPayDialog(activity).pspSuccessResultDialog(SWTraceNum);
+                        resultStatus = ResultStatus.SUCCESS;
                     }else {
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, description);
+                        resultStatus = ResultStatus.FAILURE;
                     }
                 }else {
                     new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
@@ -395,7 +398,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                 requestPSPResult.execute(pspResultRequest);
 
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra(Constants.ACTIVITY_RESULT, ResultStatus.SUCCESS.ordinal());
+                returnIntent.putExtra(Constants.ACTIVITY_RESULT, resultStatus.ordinal());
                 setResult(Activity.RESULT_OK, returnIntent);
 
                 hamPayGaTracker.send(new HitBuilders.EventBuilder()

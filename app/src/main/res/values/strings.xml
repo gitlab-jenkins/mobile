@@ -462,7 +462,7 @@
     <string name="msg_fail_iban_change">تایید شماره شبا با مشکل مواجه شد، دوباره تلاش کنید</string>
     <string name="msg_pending_not_found">امکان پرداخت برای این درخواست میسر نمی‌باشد.</string>
     <string name="msg_fail_fetch_latest_payment">دریافت اطلاعات آخرین پرداخت شما با مشکل مواجه شد. دوباره تلاش کنید.</string>
-    <string name="msg_violation_image_size">اندازه عکس باید از ۵۱۲ کیلو بایت کمتر باشد.</string>
+    <string name="msg_violation_image_size">اندازه عکس باید از یک مگا بایت کمتر باشد.</string>
     <string name="msg_incorrect_amount">مبلغ واریزی شما باید بین %1$s ریال و %2$s ریال باشد.</string>
     <string name="msg_null_amount">لطفا برای درخواست خود مبلغ را وارد کنید</string>
     <string name="msg_invalid_iban">شماره شبا وارد شده معتبر نمی‌باشد</string>
@@ -606,5 +606,7 @@
     <string name="tac_title_activity">قوانین و مقررات</string>
     <string name="privacy_title_activity">حفظ حریم خصوصی و امنیت</string>
     <string name="msg_soap_timeout">پیمامی از سرویس دریافت نشد. در صورت موفقیت تراکنش می‌توانید آن را در فهرست تراکنش‌ها مشاهده نمایید.</string>
+    <string name="msg_insufficient_credit">موجودی کارت شما کافی نمی‌باشد.</string>
+
 
 </resources>

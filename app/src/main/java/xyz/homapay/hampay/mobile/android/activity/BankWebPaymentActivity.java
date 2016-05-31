@@ -221,18 +221,21 @@ public class BankWebPaymentActivity extends AppCompatActivity {
             public void onPageFinished(WebView view, String url) {
 
                 urlText.setText(url);
+                ResultStatus resultStatus = ResultStatus.FAILURE;
 
                 if (url.toLowerCase().contains(pspInfoDTO.getRedirectURL().toLowerCase())) {
 //                if (url.toLowerCase().contains("c.php")) {
                     if (view.getTitle().toLowerCase().contains("ref:")) {
                         if (view.getTitle().split(":").length == 2){
                             hamPayDialog.ipgSuccessDialog(view.getTitle().split(":")[1]);
+                            resultStatus = ResultStatus.SUCCESS;
                         }else {
                             hamPayDialog.ipgSuccessDialog("");
+                            resultStatus = ResultStatus.FAILURE;
                         }
                         startTimer();
                         Intent returnIntent = new Intent();
-                        returnIntent.putExtra(Constants.ACTIVITY_RESULT, ResultStatus.SUCCESS.ordinal());
+                        returnIntent.putExtra(Constants.ACTIVITY_RESULT, resultStatus.ordinal());
                         setResult(Activity.RESULT_OK, returnIntent);
                     } else {
                         hamPayDialog.ipgFailDialog();

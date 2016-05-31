@@ -54,20 +54,13 @@ public class PaymentRequestListActivity extends AppCompatActivity{
     SharedPreferences.Editor editor;
     private String authToken = "";
 
-    private LatestInvoiceAdapter latestInvoiceAdapter;
     private PendingPOAdapter pendingPOAdapter;
-
-    private RequestLatestInvoiceContacts requestLatestInvoiceContacts;
-    private LatestInvoiceContactsRequest latestInvoiceContactsRequest;
 
 
     private RequestPendingPOList requestPendingPOList;
     private PendingPOListRequest pendingPOListRequest;
 
     private Dialog dialog;
-
-    ContactsHampayEnabledRequest contactsHampayEnabledRequest;
-    RequestContactHampayEnabled requestContactHampayEnabled;
 
     private HamPayDialog hamPayDialog;
 

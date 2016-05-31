@@ -63,6 +63,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
     private LinearLayout pay_button;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
+    private LinearLayout creditInfo;
 
 
     public void backActionBar(View view) {
@@ -137,17 +138,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
         bank_name = (FacedTextView) findViewById(R.id.bank_name);
         message = (FacedTextView) findViewById(R.id.message);
         pay_button = (LinearLayout) findViewById(R.id.pay_button);
-        pay_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (paymentInfo != null) {
-                    Intent intent = new Intent(activity, PaymentRequestDetailActivity.class);
-                    intent.putExtra(Constants.PAYMENT_INFO, paymentInfo);
-                    startActivity(intent);
-                }
-            }
-        });
-
+        creditInfo = (LinearLayout)findViewById(R.id.creditInfo);
 
         bundle = getIntent().getExtras();
         Intent intent = getIntent();
@@ -238,6 +229,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
                             message.setText(tnxDetailDTO.getMessage());
                         }
                         if (tnxDetailDTO.getAppliedCard() != null) {
+                            creditInfo.setVisibility(View.VISIBLE);
                             card_number.setText(persianEnglishDigit.E2P(tnxDetailDTO.getAppliedCard().getMaskedCardNumber()));
                             bank_name.setText(tnxDetailDTO.getAppliedCard().getBankName());
                         }
@@ -251,6 +243,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
                         date_time.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(tnxDetailDTO.getDate())));
                         cell_number.setText(persianEnglishDigit.E2P(tnxDetailDTO.getCode()));
                         if (tnxDetailDTO.getAppliedCard() != null) {
+                            creditInfo.setVisibility(View.VISIBLE);
                             card_number.setText(persianEnglishDigit.E2P(tnxDetailDTO.getAppliedCard().getMaskedCardNumber()));
                             bank_name.setText(tnxDetailDTO.getAppliedCard().getBankName());
                         }

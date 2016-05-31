@@ -311,8 +311,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/account_details_text"
                             android:textSize="15dp"
-                            android:layout_marginRight="8dp"
-                            android:text="2223"/>
+                            android:layout_marginRight="8dp" />
                     </LinearLayout>
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView

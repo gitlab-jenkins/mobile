@@ -164,7 +164,7 @@ public class ChangeUserImageActivity extends AppCompatActivity {
                     croppedImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                     byte[] croppedImageByteArray = stream.toByteArray();
 
-                    if (croppedImageByteArray.length <= 1024 * 512) {
+                    if (croppedImageByteArray.length <= 1024 * 1024) {
                         ImageView croppedImageView = (ImageView) findViewById(R.id.croppedImageView);
                         cropImageView.setVisibility(View.INVISIBLE);
                         croppedImageView.setImageBitmap(croppedImage);
