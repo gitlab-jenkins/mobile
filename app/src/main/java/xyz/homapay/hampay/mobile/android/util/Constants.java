@@ -53,7 +53,6 @@ public class Constants {
     public static final int DEFAULT_PAGE_SIZE = 15;
     public static final String WEB_URL_REGEX = "\\(?\\b(http://|https://|www[.]|app[.])[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]";
     public static final String REGISTERED_USER = "registeredUser";
-    public static final String FETCHED_HAMPAY_ENABLED = "fetched_hampay_enabled";
     public static final String  MOBILE_TIME_OUT = "mobile_time_out";
     public static final long MOBILE_TIME_OUT_INTERVAL = 300000;
     public static final String FORCE_USER_PROFILE = "force_user_profile";
@@ -105,6 +104,7 @@ public class Constants {
     public static final int TRANSACTIONS_NOTIFICATION_IDENTIFIER = 1002;
     public static final int PAYMENT_NOTIFICATION_IDENTIFIER = 1003;
     public static final String PROVIDER_ID = "providerId";
+    public static final String IMAGE_ID = "imageId";
 
     //Permissions and Group Permission
     public static final int READ_PHONE_STATE = 1;

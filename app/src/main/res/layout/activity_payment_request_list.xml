@@ -76,7 +76,9 @@
                 android:layout_marginLeft="38dp"
                 android:textSize="15sp"
                 android:hint="@string/search_phrase"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"
+                android:singleLine = "true"
+                android:imeOptions="actionSearch"/>
 
         </RelativeLayout>
 

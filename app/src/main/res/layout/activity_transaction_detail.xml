@@ -286,7 +286,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="visible">
 
 
                 <RelativeLayout
@@ -311,7 +311,8 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/account_details_text"
                             android:textSize="15dp"
-                            android:layout_marginRight="8dp"/>
+                            android:layout_marginRight="8dp"
+                            android:text="2223"/>
                     </LinearLayout>
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView

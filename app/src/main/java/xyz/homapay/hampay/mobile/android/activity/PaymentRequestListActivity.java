@@ -9,10 +9,14 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +71,7 @@ public class PaymentRequestListActivity extends AppCompatActivity{
 
     private HamPayDialog hamPayDialog;
 
+    private InputMethodManager inputMethodManager;
     private ImageView hampay_contacts;
     private FacedEditText search_text;
 
@@ -112,6 +117,9 @@ public class PaymentRequestListActivity extends AppCompatActivity{
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         authToken =  prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
+        inputMethodManager = (InputMethodManager) getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+
         paymentRequestList = (ListView)findViewById(R.id.paymentRequestList);
         hampay_contacts = (ImageView)findViewById(R.id.hampay_contacts);
         search_text = (FacedEditText)findViewById(R.id.search_text);
@@ -135,6 +143,18 @@ public class PaymentRequestListActivity extends AppCompatActivity{
 
             @Override
             public void afterTextChanged(Editable s) {}
+        });
+
+        search_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    inputMethodManager.hideSoftInputFromWindow(search_text.getWindowToken(), 0);
+//                    performBusinessSearch(searchPhraseText.getText().toString());
+                    return true;
+                }
+                return false;
+            }
         });
 
         editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());

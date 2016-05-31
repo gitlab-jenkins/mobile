@@ -11,10 +11,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -23,7 +21,6 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import java.util.Collections;
 import java.util.List;
@@ -37,8 +34,6 @@ import xyz.homapay.hampay.common.core.model.enums.FundType;
 import xyz.homapay.hampay.common.core.model.request.CancelPurchasePaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.CancelUserPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingFundListRequest;
-import xyz.homapay.hampay.common.core.model.request.PendingPaymentListRequest;
-import xyz.homapay.hampay.common.core.model.request.PendingPurchaseListRequest;
 import xyz.homapay.hampay.common.core.model.response.CancelPurchasePaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.CancelUserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingFundListResponse;
@@ -50,7 +45,6 @@ import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
-import xyz.homapay.hampay.mobile.android.adapter.PendingFundAdapter;
 import xyz.homapay.hampay.mobile.android.adapter.PendingFundListAdapter;
 import xyz.homapay.hampay.mobile.android.adapter.PendingPaymentAdapter;
 import xyz.homapay.hampay.mobile.android.adapter.PendingPurchaseAdapter;
@@ -58,8 +52,6 @@ import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestCancelPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestCancelPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestPendingFundList;
-import xyz.homapay.hampay.mobile.android.async.RequestPendingPayment;
-import xyz.homapay.hampay.mobile.android.async.RequestPendingPurchase;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.dialog.cancelPending.ActionPending;
@@ -366,7 +358,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                 }else if (purchaseInfoDTOs != null){
                     code = purchaseInfoDTOs.get(position).getProductCode();
                 }else if (fundDTOList != null){
-                    code = fundDTOList.get(position).getProductCode();
+                    code = fundDTOList.get(position).getCode();
                 }
 
                 FragmentManager fragmentManager = getSupportFragmentManager();
@@ -401,9 +393,9 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
             if(resultCode == Activity.RESULT_OK){
                 int result = data.getIntExtra(Constants.ACTIVITY_RESULT, 0);
                 if (result == 1){
-                    paymentInfoDTOs.remove(itemPosition);
-                    pendingPaymentAdapter.notifyDataSetChanged();
-                    if (paymentInfoDTOs.size() == 0) {
+                    fundDTOList.remove(itemPosition);
+                    pendingFundListAdapter.notifyDataSetChanged();
+                    if (fundDTOList.size() == 0) {
                         nullPendingText.setVisibility(View.VISIBLE);
                     }
                 }
@@ -417,9 +409,9 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
             if(resultCode == Activity.RESULT_OK){
                 int result = data.getIntExtra(Constants.ACTIVITY_RESULT, 0);
                 if (result == 1){
-                    purchaseInfoDTOs.remove(itemPosition);
-                    pendingPurchaseAdapter.notifyDataSetChanged();
-                    if (purchaseInfoDTOs.size() == 0){
+                    fundDTOList.remove(itemPosition);
+                    pendingFundListAdapter.notifyDataSetChanged();
+                    if (fundDTOList.size() == 0){
                         nullPendingText.setVisibility(View.VISIBLE);
                     }
                 }
@@ -523,7 +515,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                     if (fundDTOList.get(pos).getPaymentType() == FundDTO.PaymentType.PURCHASE){
                         requestCancelPurchase = new RequestCancelPurchase(activity, new RequestCancelPurchasePaymentTaskCompleteListener(pos));
                         cancelPurchasePaymentRequest = new CancelPurchasePaymentRequest();
-                        cancelPurchasePaymentRequest.setProductCode(fundDTOList.get(pos).getCode());
+                        cancelPurchasePaymentRequest.setProductCode(fundDTOList.get(pos).getProductCode());
                         requestCancelPurchase.execute(cancelPurchasePaymentRequest);
                     }else if (fundDTOList.get(pos).getPaymentType() == FundDTO.PaymentType.PAYMENT){
                         requestCancelPayment = new RequestCancelPayment(activity, new RequestCancelPaymentTaskCompleteListener(pos));

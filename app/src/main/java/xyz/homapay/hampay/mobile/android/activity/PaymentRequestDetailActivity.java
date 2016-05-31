@@ -49,6 +49,8 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
 
     private ContactDTO hamPayContact;
     private PaymentInfoDTO paymentInfo;
+    private String calleeName;
+    private String calleeCellNumber;
     private String displayName;
     private String cellNumber;
     private String imageId;
@@ -244,23 +246,24 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
 
         hamPayContact = (ContactDTO) intent.getSerializableExtra(Constants.HAMPAY_CONTACT);
         paymentInfo = (PaymentInfoDTO) intent.getSerializableExtra(Constants.PAYMENT_INFO);
+        displayName = intent.getStringExtra(Constants.CONTACT_NAME);
+        cellNumber = intent.getStringExtra(Constants.CONTACT_PHONE_NO);
+        imageId = intent.getStringExtra(Constants.IMAGE_ID);
 
         if (hamPayContact != null) {
             displayName = hamPayContact.getDisplayName();
             cellNumber = hamPayContact.getCellNumber();
             imageId = hamPayContact.getContactImageId();
         } else if (paymentInfo != null) {
-            displayName = paymentInfo.getCallerName();
+            displayName = paymentInfo.getCalleeName();
             cellNumber = paymentInfo.getCalleePhoneNumber();
             imageId = paymentInfo.getImageId();
         }
 
 
-        if (hamPayContact != null || paymentInfo != null) {
+        if (hamPayContact != null || paymentInfo != null || displayName != null) {
             contact_name.setText(displayName);
             cell_number.setText(persianEnglishDigit.E2P(cellNumber));
-
-            String imageId = null;
 
             if (hamPayContact != null){
                 if (hamPayContact.getContactImageId() != null){
@@ -332,7 +335,8 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                         hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                         userPaymentRequest = new UserPaymentRequest();
                         userPaymentRequest.setCalleeCellNumber(cellNumber);
-                        userPaymentRequest.setAmount(calculatedVat + amountValue);
+                        userPaymentRequest.setAmount(amountValue);
+                        userPaymentRequest.setVat(calculatedVat);
                         userPaymentRequest.setMessage(contact_message.getText().toString());
                         requestUserPayment = new RequestUserPayment(context, new RequestUserPaymentTaskCompleteListener());
                         requestUserPayment.execute(userPaymentRequest);

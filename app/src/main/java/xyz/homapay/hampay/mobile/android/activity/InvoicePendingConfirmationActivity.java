@@ -258,13 +258,10 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                     intent.putExtra(Constants.PSP_INFO, pspInfoDTO);
                     startActivityForResult(intent, 46);
                 } else {
-
                     if (pin2Value.getText().toString().length() <= 4) {
                         Toast.makeText(context, getString(R.string.msg_pin2_incurrect), Toast.LENGTH_LONG).show();
                         return;
                     }
-
-
                     editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                     editor.commit();
 
@@ -514,20 +511,20 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                             .build());
                 }
             }
-                else
-                {
-                    requestLatestPayment = new RequestLatestPayment(context, new RequestLatestPaymentTaskCompleteListener());
+            else
+            {
+                requestLatestPayment = new RequestLatestPayment(context, new RequestLatestPaymentTaskCompleteListener());
 
-                    new HamPayDialog(activity).showFailPendingPaymentDialog(requestLatestPayment, latestPaymentRequest,
-                            Constants.LOCAL_ERROR_CODE,
-                            getString(R.string.msg_fail_fetch_latest_payment));
+                new HamPayDialog(activity).showFailPendingPaymentDialog(requestLatestPayment, latestPaymentRequest,
+                        Constants.LOCAL_ERROR_CODE,
+                        getString(R.string.msg_fail_fetch_latest_payment));
 
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Latest Pending Payment")
-                            .setAction("Fetch")
-                            .setLabel("Fail(Mobile)")
-                            .build());
-                }
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Latest Pending Payment")
+                        .setAction("Fetch")
+                        .setLabel("Fail(Mobile)")
+                        .build());
+            }
         }
         @Override
         public void onTaskPreRun() {
@@ -546,7 +543,9 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
             if (paymentDetailResponseMessage != null) {
                 if (paymentDetailResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     pay_button.setVisibility(View.VISIBLE);
-                    fillPayment(paymentDetailResponseMessage.getService().getPaymentInfo(), null);
+                    paymentInfoDTO = paymentDetailResponseMessage.getService().getPaymentInfo();
+                    pspInfoDTO = paymentDetailResponseMessage.getService().getPspInfo();
+                    fillPayment(paymentInfoDTO, pspInfoDTO);
                 }
             }
         }
@@ -577,12 +576,11 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
             user_image.setImageResource(R.drawable.user_placeholder);
         }
 
-        if (pspInfo != null) {
+        if (pspInfo.getCardDTO().getCardId() != null) {
             LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
             creditInfo.setVisibility(View.VISIBLE);
             cardNumberValue.setText(persianEnglishDigit.E2P(pspInfo.getCardDTO().getMaskedCardNumber()));
             bankName.setText(pspInfo.getCardDTO().getBankName());
-            cardNumberValue.setText(persianEnglishDigit.E2P(pspInfo.getCardDTO().getMaskedCardNumber()));
         } else {
 
         }

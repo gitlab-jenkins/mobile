@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -153,6 +154,12 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                 requestLogin.cancel(true);
             }
         }
+
+        if (requestRecentPendingFund != null){
+            if (!requestRecentPendingFund.isCancelled()){
+                requestRecentPendingFund.cancel(true);
+            }
+        }
     }
 
     @Override
@@ -205,14 +212,16 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         recentPendingFundRequest.setNationalCode(prefs.getString(Constants.REGISTERED_NATIONAL_CODE, ""));
         requestRecentPendingFund.execute(recentPendingFundRequest);
 
-        editor.putBoolean(Constants.FETCHED_HAMPAY_ENABLED, false);
-        editor.commit();
-
         hampay_user = (FacedTextView)findViewById(R.id.hampay_user);
         hampay_user.setText(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         pendingFundLayout = (LinearLayout)findViewById(R.id.pending_fund_layout);
         recentPendingFundList = (ListView)findViewById(R.id.recent_pending_fund_list);
-
+        recentPendingFundList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                new Expand(keyboard).animate();
+            }
+        });
 
 
         bundle = getIntent().getExtras();
@@ -615,8 +624,13 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
             }catch (NoSuchAlgorithmException ex){}
             catch (UnsupportedEncodingException ex){}
 
-            LoginData loginData = new LoginData();
+            if (requestRecentPendingFund != null){
+                if (!requestRecentPendingFund.isCancelled()){
+                    requestRecentPendingFund.cancel(true);
+                }
+            }
 
+            LoginData loginData = new LoginData();
             loginData.setUserPassword(password);
             loginData.setUserName(new PersianEnglishDigit(nationalCode).P2E());
 

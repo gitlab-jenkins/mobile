@@ -28,6 +28,7 @@ import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
+import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
@@ -48,6 +49,10 @@ public class PendingPODetailActivity extends AppCompatActivity {
     private FacedTextView message_text;
     private LinearLayout re_payment_request;
     SharedPreferences prefs;
+    private ImageView user_image;
+    private ImageManager imageManager;
+    private String authToken;
+
 
     public void backActionBar(View view) {
         finish();
@@ -98,16 +103,26 @@ public class PendingPODetailActivity extends AppCompatActivity {
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
 
+        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
         persianEnglishDigit = new PersianEnglishDigit();
         formatter = new CurrencyFormatter();
         context = this;
         activity = PendingPODetailActivity.this;
+        imageManager = new ImageManager(activity, 200000, false);
         bundle = getIntent().getExtras();
         Intent intent = getIntent();
         paymentInfo = (PaymentInfoDTO) intent.getSerializableExtra(Constants.PAYMENT_INFO);
 
         caller_name = (FacedTextView)findViewById(R.id.caller_name);
+        user_image = (ImageView)findViewById(R.id.user_image);
         caller_name.setText(paymentInfo.getCalleeName());
+        if (paymentInfo.getImageId() != null) {
+            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + paymentInfo.getImageId();
+            user_image.setTag(userImageUrl.split("/")[6]);
+            imageManager.displayImage(userImageUrl, user_image, R.drawable.user_placeholder);
+        }else {
+            user_image.setImageResource(R.drawable.user_placeholder);
+        }
         caller_phone_number = (FacedTextView)findViewById(R.id.caller_phone_number);
         caller_phone_number.setText(persianEnglishDigit.E2P(paymentInfo.getCalleePhoneNumber()));
         amount_value = (FacedTextView)findViewById(R.id.amount_value);
