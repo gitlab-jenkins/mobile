@@ -5,8 +5,8 @@ import xyz.homapay.hampay.mobile.android.webservice.ConnectionType;
 
 public class Constants {
 //    public static String SERVER = "176.58.104.158";//England Server IP
-//    public static String SERVER = "mobile.hampay.ir";//Prod Server IP
-    public static String SERVER = "139.162.181.92";//UAT Server IP
+    public static String SERVER = "mobile.hampay.ir";//Prod Server IP
+//    public static String SERVER = "139.162.181.92";//UAT Server IP
     public static String URL_PREFIX = "/hampay";
     public static String HTTP_SERVER_IP = "http://" + SERVER + ":90" + URL_PREFIX;//England Server
     public static String IPG_URL = "http://" + SERVER + ":9091" + URL_PREFIX;//England Server
@@ -54,7 +54,7 @@ public class Constants {
     public static final String WEB_URL_REGEX = "\\(?\\b(http://|https://|www[.]|app[.])[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]";
     public static final String REGISTERED_USER = "registeredUser";
     public static final String  MOBILE_TIME_OUT = "mobile_time_out";
-    public static final long MOBILE_TIME_OUT_INTERVAL = 300000;
+    public static final long MOBILE_TIME_OUT_INTERVAL = 600000;
     public static final String FORCE_USER_PROFILE = "force_user_profile";
     public static final String RECEIVED_SMS_ACTIVATION = "received_sms_activation";
     public static final String MAX_BUSINESS_XFER_AMOUNT = "MaxBusinessXferAmount";

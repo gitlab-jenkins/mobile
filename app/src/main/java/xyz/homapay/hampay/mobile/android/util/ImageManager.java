@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.lang.ref.SoftReference;
 import java.net.URL;
@@ -82,17 +84,18 @@ public class ImageManager {
             if (forceDownload){
                 URL imageURL = new URL(url);
                 ProxyService proxyService = new ProxyService(activity, ConnectionType.HTTPS, ConnectionMethod.GET, imageURL);
-                bitmap = proxyService.imageInputStream();
+                bitmap = scaleDown(proxyService.imageInputStream(), 100, true);
                 proxyService.closeConnection();
                 writeFile(bitmap, bitmapFile);
             }
             else {
-                bitmap = BitmapFactory.decodeFile(bitmapFile.getPath());
+//                bitmap = BitmapFactory.decodeFile(bitmapFile.getPath());
+                bitmap = decodeFile(bitmapFile, 100, 100);
                 if (bitmap != null) {
                 }else {
                     URL imageURL = new URL(url);
                     ProxyService proxyService = new ProxyService(activity, ConnectionType.HTTPS, ConnectionMethod.GET, imageURL);
-                    bitmap = proxyService.imageInputStream();
+                    bitmap = scaleDown(proxyService.imageInputStream(), 100, true);
                     proxyService.closeConnection();
                     writeFile(bitmap, bitmapFile);
                 }
@@ -104,6 +107,42 @@ public class ImageManager {
             ex.printStackTrace();
             return null;
         }
+    }
+
+    public static Bitmap scaleDown(Bitmap realImage, float maxImageSize,
+                                   boolean filter) {
+        float ratio = Math.min(
+                (float) maxImageSize / realImage.getWidth(),
+                (float) maxImageSize / realImage.getHeight());
+        int width = Math.round((float) ratio * realImage.getWidth());
+        int height = Math.round((float) ratio * realImage.getHeight());
+
+        Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
+                height, filter);
+        return newBitmap;
+    }
+
+    public static Bitmap decodeFile(File f,int WIDTH,int HIGHT){
+        try {
+            //Decode image size
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(new FileInputStream(f),null,o);
+
+            //The new size we want to scale to
+            final int REQUIRED_WIDTH=WIDTH;
+            final int REQUIRED_HIGHT=HIGHT;
+            //Find the correct scale value. It should be the power of 2.
+            int scale=1;
+            while(o.outWidth/scale/2>=REQUIRED_WIDTH && o.outHeight/scale/2>=REQUIRED_HIGHT)
+                scale*=2;
+
+            //Decode with inSampleSize
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize=scale;
+            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+        } catch (FileNotFoundException e) {}
+        return null;
     }
 
     private void writeFile(Bitmap bmp, File f) {
@@ -170,14 +209,14 @@ public class ImageManager {
                             imageToLoad = imageQueue.imageRefs.pop();
                         }
 
-                        Bitmap bmp = getBitmap(imageToLoad.url);
-                        imageMap.put(imageToLoad.url, new SoftReference<Bitmap>(bmp));
+                        Bitmap bitmap = getBitmap(imageToLoad.url);
+                        imageMap.put(imageToLoad.url, new SoftReference<Bitmap>(bitmap));
                         Object tag = imageToLoad.imageView.getTag();
 
                         // Make sure we have the right view - thread safety defender
                         if(tag != null && tag.equals(imageToLoad.url.split("/")[6])) {
                             BitmapDisplayer bmpDisplayer =
-                                    new BitmapDisplayer(bmp, imageToLoad.imageView, imageToLoad.defDrawableId);
+                                    new BitmapDisplayer(bitmap, imageToLoad.imageView, imageToLoad.defDrawableId);
                             activity.runOnUiThread(bmpDisplayer);
                         }
                     }
