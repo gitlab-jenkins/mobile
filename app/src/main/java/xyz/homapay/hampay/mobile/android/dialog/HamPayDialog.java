@@ -495,9 +495,10 @@ public class HamPayDialog {
         exit_app_yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                editor.remove(Constants.LOGIN_TOKEN_ID);
+                editor.commit();
                 dialog.dismiss();
                 activity.finish();
-
                 Intent intent = new Intent();
                 intent.setClass(activity, HamPayLoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

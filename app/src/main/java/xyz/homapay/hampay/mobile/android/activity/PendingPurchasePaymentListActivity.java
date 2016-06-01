@@ -5,24 +5,16 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -37,12 +29,7 @@ import xyz.homapay.hampay.common.core.model.request.PendingFundListRequest;
 import xyz.homapay.hampay.common.core.model.response.CancelPurchasePaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.CancelUserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingFundListResponse;
-import xyz.homapay.hampay.common.core.model.response.PendingPaymentListResponse;
-import xyz.homapay.hampay.common.core.model.response.PendingPurchaseListResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.FundDTO;
-import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
-import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
-import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.PendingFundListAdapter;
@@ -56,12 +43,6 @@ import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.dialog.cancelPending.ActionPending;
 import xyz.homapay.hampay.mobile.android.dialog.cancelPending.CancelPendingDialog;
-import xyz.homapay.hampay.mobile.android.impl.comparator.PaymentAmountComparator;
-import xyz.homapay.hampay.mobile.android.impl.comparator.PaymentDateComparator;
-import xyz.homapay.hampay.mobile.android.impl.comparator.PaymentExpireComparator;
-import xyz.homapay.hampay.mobile.android.impl.comparator.PurchaseAmountComparator;
-import xyz.homapay.hampay.mobile.android.impl.comparator.PurchaseDateComparator;
-import xyz.homapay.hampay.mobile.android.impl.comparator.PurchaseExpireComparator;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
@@ -72,29 +53,17 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
     private FacedTextView nullPendingText;
 
-    private CoordinatorLayout coordinatorLayout;
-
     RequestPendingFundList requestPendingFundList;
     PendingFundListRequest pendingFundListRequest;
 
-//    RequestPendingPurchase requestPendingPurchase;
-//    PendingPurchaseListRequest pendingPurchaseListRequest;
-
-//    RequestPendingPayment requestPendingPayment;
-//    PendingPaymentListRequest pendingPaymentListRequest;
 
     PendingPurchaseAdapter pendingPurchaseAdapter;
     PendingPaymentAdapter pendingPaymentAdapter;
     PendingFundListAdapter pendingFundListAdapter;
 
     ListView pendingListView;
-
     HamPayDialog hamPayDialog;
-
-    private List<PurchaseInfoDTO> purchaseInfoDTOs;
-    private List<PaymentInfoDTO> paymentInfoDTOs;
     private List<FundDTO> fundDTOList;
-    PspInfoDTO pspInfoDTOs;
     private int pos = -1;
 
 
@@ -142,12 +111,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
             public void run() {
                 handler.post(new Runnable() {
                     public void run() {
-
-                        if (paymentInfoDTOs != null && pendingPaymentAdapter != null) {
-                            pendingPaymentAdapter.notifyDataSetChanged();
-                        }else if (purchaseInfoDTOs != null && pendingPurchaseAdapter != null){
-                            pendingPurchaseAdapter.notifyDataSetChanged();
-                        }else if (fundDTOList != null && pendingFundListAdapter != null){
+                        if (fundDTOList != null && pendingFundListAdapter != null) {
                             pendingFundListAdapter.notifyDataSetChanged();
                         }
                     }
@@ -197,78 +161,6 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
     }
 
 
-
-    public void sortView(View v){
-
-        Rect displayRectangle = new Rect();
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_pending_sort, null);
-
-        final FacedTextView sort_date = (FacedTextView) view.findViewById(R.id.sort_date);
-        final FacedTextView sort_expire = (FacedTextView) view.findViewById(R.id.sort_expire);
-        final FacedTextView sort_amount = (FacedTextView) view.findViewById(R.id.sort_amount);
-
-        sort_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (purchaseInfoDTOs != null && pendingPurchaseAdapter != null){
-                    Collections.sort(purchaseInfoDTOs, new PurchaseDateComparator());
-                    pendingPurchaseAdapter.notifyDataSetChanged();
-                }else if (paymentInfoDTOs != null && pendingPaymentAdapter != null){
-                    Collections.sort(paymentInfoDTOs, new PaymentDateComparator());
-                    pendingPaymentAdapter.notifyDataSetChanged();
-                }
-                dialog.dismiss();
-            }
-        });
-
-        sort_expire.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (purchaseInfoDTOs != null && pendingPurchaseAdapter != null){
-                    Collections.sort(purchaseInfoDTOs, new PurchaseExpireComparator());
-                    pendingPurchaseAdapter.notifyDataSetChanged();
-                }else if (paymentInfoDTOs != null && pendingPaymentAdapter != null){
-                    Collections.sort(paymentInfoDTOs, new PaymentExpireComparator());
-                    pendingPaymentAdapter.notifyDataSetChanged();
-                }
-                dialog.dismiss();
-            }
-        });
-
-        sort_amount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (purchaseInfoDTOs != null && pendingPurchaseAdapter != null){
-                    Collections.sort(purchaseInfoDTOs, new PurchaseAmountComparator());
-                    pendingPurchaseAdapter.notifyDataSetChanged();
-                }else if (paymentInfoDTOs != null && pendingPaymentAdapter != null){
-                    Collections.sort(paymentInfoDTOs, new PaymentAmountComparator());
-                    pendingPaymentAdapter.notifyDataSetChanged();
-                }
-                dialog.dismiss();
-            }
-        });
-
-
-        dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().setDimAmount(0);
-        dialog.setContentView(view);
-        dialog.setTitle(null);
-        dialog.setCanceledOnTouchOutside(true);
-        WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
-        layoutParams.gravity = Gravity.TOP | Gravity.LEFT;
-        layoutParams.x = 25;
-        layoutParams.y = 20;
-
-        dialog.show();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -289,9 +181,6 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
         hamPayDialog = new HamPayDialog(activity);
 
-        coordinatorLayout = (CoordinatorLayout) findViewById(R.id
-                .coordinatorLayout);
-
         pendingListView = (ListView)findViewById(R.id.pendingListView);
 
 
@@ -299,23 +188,6 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
         pendingFundListRequest = new PendingFundListRequest();
         pendingFundListRequest.setType(FundType.ALL);
         requestPendingFundList.execute(pendingFundListRequest);
-
-
-//        requestPendingPurchase = new RequestPendingPurchase(activity, new RequestPendingPurchaseTaskCompleteListener());
-//        pendingPurchaseListRequest = new PendingPurchaseListRequest();
-
-//        requestPendingPayment = new RequestPendingPayment(activity, new RequestPendingPaymentTaskCompleteListener());
-//        pendingPaymentListRequest = new PendingPaymentListRequest();
-
-        if (intent.getStringExtra(Constants.CONTACT_NAME) != null){
-            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-            editor.commit();
-//            requestPendingPayment.execute(pendingPaymentListRequest);
-        }else {
-//            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-//            editor.commit();
-//            requestPendingPurchase.execute(pendingPurchaseListRequest);
-        }
 
         full_pending = (RelativeLayout)findViewById(R.id.full_pending);
         full_pending.setOnClickListener(this);
@@ -350,21 +222,14 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 
                 pos = position;
-
-                String code = "";
-
-                if (paymentInfoDTOs != null){
-                    code = paymentInfoDTOs.get(position).getProductCode();
-                }else if (purchaseInfoDTOs != null){
-                    code = purchaseInfoDTOs.get(position).getProductCode();
-                }else if (fundDTOList != null){
-                    code = fundDTOList.get(position).getCode();
+                String productCode = "";
+                if (fundDTOList != null){
+                    productCode = fundDTOList.get(position).getCode();
                 }
-
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 CancelPendingDialog cancelPendingDialog = new CancelPendingDialog();
                 Bundle bundle = new Bundle();
-                bundle.putString(Constants.PENDING_CODE, persianEnglishDigit.E2P(code));
+                bundle.putString(Constants.PENDING_CODE, persianEnglishDigit.E2P(productCode));
                 cancelPendingDialog.setArguments(bundle);
                 cancelPendingDialog.show(fragmentManager, "fragment_edit_name");
 
@@ -442,9 +307,6 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                 pendingFundListRequest = new PendingFundListRequest();
                 pendingFundListRequest.setType(FundType.PAYMENT);
                 requestPendingFundList.execute(pendingFundListRequest);
-//                requestPendingPayment = new RequestPendingPayment(activity, new RequestPendingPaymentTaskCompleteListener());
-//                pendingPaymentListRequest = new PendingPaymentListRequest();
-//                requestPendingPayment.execute(pendingPaymentListRequest);
                 changeTab(2);
                 break;
 
@@ -455,9 +317,6 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                 pendingFundListRequest = new PendingFundListRequest();
                 pendingFundListRequest.setType(FundType.PURCHASE);
                 requestPendingFundList.execute(pendingFundListRequest);
-//                requestPendingPurchase = new RequestPendingPurchase(activity, new RequestPendingPurchaseTaskCompleteListener());
-//                pendingPurchaseListRequest = new PendingPurchaseListRequest();
-//                requestPendingPurchase.execute(pendingPurchaseListRequest);
                 changeTab(3);
                 break;
         }
@@ -501,17 +360,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
             case CANCEL:
                 break;
             case REMOVE:
-                if (purchaseInfoDTOs != null) {
-                    requestCancelPurchase = new RequestCancelPurchase(activity, new RequestCancelPurchasePaymentTaskCompleteListener(pos));
-                    cancelPurchasePaymentRequest = new CancelPurchasePaymentRequest();
-                    cancelPurchasePaymentRequest.setProductCode(purchaseInfoDTOs.get(pos).getProductCode());
-                    requestCancelPurchase.execute(cancelPurchasePaymentRequest);
-                }else if (paymentInfoDTOs != null){
-                    requestCancelPayment = new RequestCancelPayment(activity, new RequestCancelPaymentTaskCompleteListener(pos));
-                    cancelUserPaymentRequest = new CancelUserPaymentRequest();
-                    cancelUserPaymentRequest.setProductCode(paymentInfoDTOs.get(pos).getProductCode());
-                    requestCancelPayment.execute(cancelUserPaymentRequest);
-                }else if (fundDTOList != null){
+                if (fundDTOList != null){
                     if (fundDTOList.get(pos).getPaymentType() == FundDTO.PaymentType.PURCHASE){
                         requestCancelPurchase = new RequestCancelPurchase(activity, new RequestCancelPurchasePaymentTaskCompleteListener(pos));
                         cancelPurchasePaymentRequest = new CancelPurchasePaymentRequest();
@@ -543,70 +392,6 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                     }else {
                         pendingFundListAdapter = new PendingFundListAdapter(activity, fundDTOList, authToken);
                         pendingListView.setAdapter(pendingFundListAdapter);
-                        purchaseInfoDTOs = null;
-                        paymentInfoDTOs = null;
-                        nullPendingText.setVisibility(View.GONE);
-                    }
-
-                }
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog("");
-        }
-    }
-
-    public class RequestPendingPurchaseTaskCompleteListener implements
-            AsyncTaskCompleteListener<ResponseMessage<PendingPurchaseListResponse>> {
-        @Override
-        public void onTaskComplete(ResponseMessage<PendingPurchaseListResponse> pendingPurchaseListResponseMessage) {
-
-            hamPayDialog.dismisWaitingDialog();
-
-            if (pendingPurchaseListResponseMessage != null) {
-                if (pendingPurchaseListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    purchaseInfoDTOs = pendingPurchaseListResponseMessage.getService().getPendingList();
-                    if (purchaseInfoDTOs.size() == 0){
-                        nullPendingText.setVisibility(View.VISIBLE);
-                    }else {
-                        Collections.sort(purchaseInfoDTOs, new PurchaseDateComparator());
-                        pendingPurchaseAdapter = new PendingPurchaseAdapter(activity, purchaseInfoDTOs, authToken);
-                        pendingListView.setAdapter(pendingPurchaseAdapter);
-                        paymentInfoDTOs = null;
-                        fundDTOList = null;
-                        nullPendingText.setVisibility(View.GONE);
-                    }
-                }
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog("");
-        }
-    }
-
-    public class RequestPendingPaymentTaskCompleteListener implements
-            AsyncTaskCompleteListener<ResponseMessage<PendingPaymentListResponse>> {
-        @Override
-        public void onTaskComplete(ResponseMessage<PendingPaymentListResponse> pendingPaymentListResponseMessage) {
-
-            hamPayDialog.dismisWaitingDialog();
-
-            if (pendingPaymentListResponseMessage != null) {
-                if (pendingPaymentListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    paymentInfoDTOs = pendingPaymentListResponseMessage.getService().getPendingList();
-                    if (paymentInfoDTOs.size() == 0){
-                        nullPendingText.setVisibility(View.VISIBLE);
-                    }else {
-                        pspInfoDTOs = pendingPaymentListResponseMessage.getService().getPspInfo();
-                        Collections.sort(paymentInfoDTOs, new PaymentDateComparator());
-                        pendingPaymentAdapter = new PendingPaymentAdapter(activity, paymentInfoDTOs, authToken);
-                        pendingListView.setAdapter(pendingPaymentAdapter);
-                        purchaseInfoDTOs = null;
-                        fundDTOList = null;
                         nullPendingText.setVisibility(View.GONE);
                     }
 
@@ -639,12 +424,12 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                 if (cancelPurchasePaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS
                         || cancelPurchasePaymentResponseMessage.getService().getResultStatus() == ResultStatus.PURCHASE_NOT_ELIGIBLE_TO_CANCEL) {
                     cancelPurchasePaymentResponseMessage.getService().getRequestUUID();
-                    if (purchaseInfoDTOs != null) {
-                        purchaseInfoDTOs.remove(position);
-                        pendingPurchaseAdapter.notifyDataSetChanged();
-                    }else if (fundDTOList != null){
+                    if (fundDTOList != null){
                         fundDTOList.remove(pos);
                         pendingFundListAdapter.notifyDataSetChanged();
+                        if (fundDTOList.size() == 0){
+                            nullPendingText.setVisibility(View.VISIBLE);
+                        }
                     }
                 }
             }
@@ -674,12 +459,12 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
             if (cancelUserPaymentResponseMessage != null) {
                 if (cancelUserPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS
                         || cancelUserPaymentResponseMessage.getService().getResultStatus() == ResultStatus.PURCHASE_NOT_ELIGIBLE_TO_CANCEL) {
-                    if (paymentInfoDTOs != null) {
-                        paymentInfoDTOs.remove(position);
-                        pendingPaymentAdapter.notifyDataSetChanged();
-                    }else if (fundDTOList != null){
+                    if (fundDTOList != null){
                         fundDTOList.remove(pos);
                         pendingFundListAdapter.notifyDataSetChanged();
+                        if (fundDTOList.size() == 0){
+                            nullPendingText.setVisibility(View.VISIBLE);
+                        }
                     }
                 }
             }
