@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +17,11 @@ import android.widget.LinearLayout;
 import java.util.Date;
 import java.util.List;
 
+import xyz.homapay.hampay.common.common.response.ResponseMessage;
+import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
+import xyz.homapay.hampay.common.core.model.request.PendingCountRequest;
+import xyz.homapay.hampay.common.core.model.response.PendingCountResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.BusinessPurchaseActivity;
@@ -26,6 +31,8 @@ import xyz.homapay.hampay.mobile.android.activity.PendingPurchasePaymentListActi
 import xyz.homapay.hampay.mobile.android.activity.TransactionsListActivity;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
+import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import xyz.homapay.hampay.mobile.android.async.RequestPendingCount;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.slidinguppanel.SlidingUpPanelLayout;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -231,6 +238,14 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        PendingCountRequest pendingCountRequest = new PendingCountRequest();
+        RequestPendingCount requestPendingCount = new RequestPendingCount(getActivity(), new RequestPendingCountTaskCompleteListener());
+        requestPendingCount.execute(pendingCountRequest);
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
     }
@@ -307,6 +322,30 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                 break;
         }
 
+    }
+
+    public class RequestPendingCountTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PendingCountResponse>>
+    {
+
+        @Override
+        public void onTaskComplete(ResponseMessage<PendingCountResponse> pendingCountResponseMessage)
+        {
+            if (pendingCountResponseMessage != null) {
+                if (pendingCountResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
+                    int pendingCount = pendingCountResponseMessage.getService().getPendingCount();
+                    if (pendingCount == 0){
+                        pending_badge.setVisibility(View.GONE);
+                    }else if (pendingCount > 0) {
+                        pending_badge.setVisibility(View.VISIBLE);
+                        pending_badge.setText(persianEnglishDigit.E2P(String.valueOf(pendingCount)));
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+        }
     }
 }
 

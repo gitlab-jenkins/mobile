@@ -41,6 +41,7 @@ import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
 import xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
 import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
 import xyz.homapay.hampay.common.core.model.request.PaymentDetailRequest;
+import xyz.homapay.hampay.common.core.model.request.PendingCountRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingFundListRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingPOListRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingPaymentListRequest;
@@ -84,6 +85,7 @@ import xyz.homapay.hampay.common.core.model.response.LatestPurchaseResponse;
 import xyz.homapay.hampay.common.core.model.response.MobileRegistrationIdEntryResponse;
 import xyz.homapay.hampay.common.core.model.response.PSPResultResponse;
 import xyz.homapay.hampay.common.core.model.response.PaymentDetailResponse;
+import xyz.homapay.hampay.common.core.model.response.PendingCountResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingFundListResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingPOListResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingPaymentListResponse;
@@ -1199,6 +1201,21 @@ public class WebServices  {
         proxyService.setJsonBody(jsonRequest);
         Gson gson = builder.getDatebuilder().create();
         responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<TransactionDetailResponse>>() {}.getType());
+        proxyService.closeConnection();
+        return responseMessage;
+    }
+
+    public ResponseMessage<PendingCountResponse> pendingCount(PendingCountRequest pendingCountRequest) throws IOException{
+        ResponseMessage<PendingCountResponse> responseMessage = null;
+        url = new URL(serviceURL + "/fund/count-pending");
+        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        pendingCountRequest.setRequestUUID(UUID.randomUUID().toString());
+        RequestMessage<PendingCountRequest> message = new RequestMessage<>(pendingCountRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<PendingCountRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
+        Gson gson = builder.getDatebuilder().create();
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<PendingCountResponse>>() {}.getType());
         proxyService.closeConnection();
         return responseMessage;
     }

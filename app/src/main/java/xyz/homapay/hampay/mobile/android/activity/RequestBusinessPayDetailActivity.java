@@ -683,7 +683,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             if (purchaseDetailResponseMessage != null) {
 
                 if (purchaseDetailResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    fillPurchase(purchaseDetailResponseMessage.getService().getpurchaseInfo());
+                    purchaseInfoDTO = purchaseDetailResponseMessage.getService().getpurchaseInfo();
+                    fillPurchase(purchaseInfoDTO);
                 }
             }
         }

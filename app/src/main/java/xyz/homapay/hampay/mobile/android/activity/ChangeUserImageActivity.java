@@ -56,6 +56,7 @@ public class ChangeUserImageActivity extends AppCompatActivity {
     private int mAspectRatioY = Constants.DEFAULT_ASPECT_RATIO_VALUES;
 
     Bitmap croppedImage;
+    Bitmap resizedImage;
 
     UploadImageRequest uploadImageRequest;
     RequestUploadImage requestUploadImage;
@@ -160,18 +161,19 @@ public class ChangeUserImageActivity extends AppCompatActivity {
                 editor.commit();
                 try {
                     croppedImage = cropImageView.getCroppedImage();
+                    resizedImage = scaleDown(croppedImage, 100, true);
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    croppedImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                    byte[] croppedImageByteArray = stream.toByteArray();
-
-                    if (croppedImageByteArray.length <= 1024 * 1024) {
+                    resizedImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    byte[] resizedImageByteArray = stream.toByteArray();
+                    if (resizedImageByteArray.length <= 1024 * 1024) {
                         ImageView croppedImageView = (ImageView) findViewById(R.id.croppedImageView);
                         cropImageView.setVisibility(View.INVISIBLE);
-                        croppedImageView.setImageBitmap(croppedImage);
-
+                        if (croppedImage != null) {
+                            croppedImageView.setImageBitmap(croppedImage);
+                        }
                         uploadImageRequest = new UploadImageRequest();
                         requestUploadImage = new RequestUploadImage(context, new RequestUploadImageTaskCompleteListener());
-                        uploadImageRequest.setImage(croppedImageByteArray);
+                        uploadImageRequest.setImage(resizedImageByteArray);
                         requestUploadImage.execute(uploadImageRequest);
                     } else {
                         Toast.makeText(context, getString(R.string.msg_violation_image_size), Toast.LENGTH_LONG).show();
@@ -196,6 +198,19 @@ public class ChangeUserImageActivity extends AppCompatActivity {
             startActivityForResult(getPickImageChooserIntent(), 200);
         }
 
+    }
+
+    public static Bitmap scaleDown(Bitmap realImage, float maxImageSize,
+                                   boolean filter) {
+        float ratio = Math.min(
+                (float) maxImageSize / realImage.getWidth(),
+                (float) maxImageSize / realImage.getHeight());
+        int width = Math.round((float) ratio * realImage.getWidth());
+        int height = Math.round((float) ratio * realImage.getHeight());
+
+        Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
+                height, filter);
+        return newBitmap;
     }
 
     @Override
