@@ -142,7 +142,8 @@ public class ProxyService {
                 httpURLConnection.setReadTimeout(Constants.SERVICE_READ_TIMEOUT);
                 httpURLConnection.setRequestMethod(connectionMethod.name());
                 httpURLConnection.setDoOutput(true);
-                httpURLConnection.setRequestProperty("iplanetDirectoryPro", logoutData.getIplanetDirectoryPro());
+//                httpURLConnection.setRequestProperty("iplanetDirectoryPro", logoutData.getIplanetDirectoryPro());
+                httpURLConnection.setRequestProperty("password", logoutData.getIplanetDirectoryPro());
                 httpURLConnection.setRequestProperty("Accept-Encoding", "UTF-8");
                 output = new BufferedWriter(new OutputStreamWriter(httpURLConnection.getOutputStream()));
                 output.write("");
@@ -163,7 +164,7 @@ public class ProxyService {
                 httpsURLConnection.setReadTimeout(Constants.SERVICE_READ_TIMEOUT);
                 httpsURLConnection.setRequestMethod(connectionMethod.name());
                 httpsURLConnection.setDoOutput(true);
-                httpsURLConnection.setRequestProperty("iplanetDirectoryPro", logoutData.getIplanetDirectoryPro());
+                httpsURLConnection.setRequestProperty("password", logoutData.getIplanetDirectoryPro());
                 httpsURLConnection.setRequestProperty("Accept-Encoding", "UTF-8");
                 output = new BufferedWriter(new OutputStreamWriter(httpsURLConnection.getOutputStream()));
                 output.write("");

@@ -272,7 +272,7 @@ public class HamPayDialog {
 
     public void dismisWaitingDialog(){
 
-        if (dialog != null){
+        if (dialog != null && !activity.isFinishing()){
             if (dialog.isShowing())
                 dialog.dismiss();
         }
@@ -919,8 +919,8 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                if (requestTAC.getStatus() == AsyncTask.Status.FINISHED)
-                    requestTAC.execute(tacRequest);
+//                if (requestTAC.getStatus() == AsyncTask.Status.FINISHED)
+//                    requestTAC.execute(tacRequest);
             }
         });
         cancel_request.setOnClickListener(new View.OnClickListener() {

@@ -8,11 +8,13 @@ import android.net.http.SslError;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
@@ -37,7 +39,7 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 public class BankWebPaymentActivity extends AppCompatActivity {
 
     WebView bankWebView;
-    EditText urlText;
+    TextView urlText;
     HamPayDialog hamPayDialog;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
@@ -46,9 +48,6 @@ public class BankWebPaymentActivity extends AppCompatActivity {
     PspInfoDTO pspInfoDTO = null;
 
     String redirectedURL;
-
-    RequestGetTokenFromPSP requestGetTokenForSamanPSP;
-    GetTokenFromPSPRequest getTokenFromPSPRequest;
 
     private Context context;
 
@@ -144,7 +143,11 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
         bankWebView = (WebView)findViewById(R.id.bankWebView);
 
-        urlText = (EditText)findViewById(R.id.urlText);
+        urlText = (TextView)findViewById(R.id.urlText);
+        urlText.setHorizontallyScrolling(true);
+        urlText.setScrollbarFadingEnabled(true);
+        urlText.setHorizontallyScrolling(true);
+        urlText.setMovementMethod(new ScrollingMovementMethod());
 
         hamPayDialog = new HamPayDialog(this);
 
@@ -212,6 +215,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
             editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
             editor.commit();
             bankWebView.postUrl(Constants.BANK_GATEWAY_URL, postData.getBytes("UTF-8"));
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

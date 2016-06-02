@@ -691,7 +691,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
         @Override
         public void onTaskPreRun() {
-
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 

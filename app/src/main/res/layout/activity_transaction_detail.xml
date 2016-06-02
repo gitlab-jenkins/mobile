@@ -268,26 +268,22 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/main_menu_title"
                 android:textSize="15dp"
-                android:text="123456"
                 android:layout_marginRight="8dp"
                 android:layout_marginLeft="8dp"
                 android:gravity="right"/>
-
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:background="@color/main_menu_title"
-                android:layout_margin="8dp"
-                android:visibility="gone"/>
-
 
             <LinearLayout
                 android:id="@+id/creditInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="visible">
+                android:visibility="gone">
 
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/main_menu_title"
+                    android:layout_margin="8dp" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"

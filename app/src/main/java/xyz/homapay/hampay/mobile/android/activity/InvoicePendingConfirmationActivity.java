@@ -555,7 +555,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
         @Override
         public void onTaskPreRun() {
-
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 

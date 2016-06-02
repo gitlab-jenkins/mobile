@@ -3,15 +3,35 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/urlText"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/normal_text"
-        android:singleLine="true"
-        android:lines="1"
-        android:background="@android:color/transparent"
-        android:padding="6dp"/>
+        android:background="@color/app_origin"
+        android:paddingBottom="1dp"
+        android:paddingTop="1dp">
+
+        <TextView
+            android:id="@+id/urlText"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:textColor="@color/normal_text"
+            android:background="@android:color/white"
+            android:padding="6dp"
+            android:layout_marginRight="40dp"
+            android:gravity="center_vertical"/>
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/slider_hm"
+            android:layout_centerVertical="true"
+            android:layout_margin="4dp"/>
+
+
+    </RelativeLayout>
+
+
 
     <WebView
         android:id="@+id/bankWebView"
