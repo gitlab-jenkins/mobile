@@ -160,6 +160,16 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
+        String LOGIN_TOKEN = prefs.getString(Constants.LOGIN_TOKEN_ID, null);
+        if (LOGIN_TOKEN == null){
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+            return;
+        }
+
         imageManager = new ImageManager(activity, 200000, false);
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
@@ -211,41 +221,6 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
             latestPaymentRequest = new LatestPaymentRequest();
             requestLatestPayment.execute(latestPaymentRequest);
         }
-
-
-//        else {
-//
-//            intentContact = true;
-//
-//            Uri uri = getIntent().getData();
-//
-//            Cursor phonesCursor = getContentResolver().query(uri, null, null, null,
-//                    ContactsContract.CommonDataKinds.Phone.IS_PRIMARY + " DESC");
-//            if (phonesCursor != null) {
-//                if (phonesCursor.moveToNext()) {
-//                    String id = phonesCursor.getString(phonesCursor
-//                            .getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
-//                    Cursor pCur = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-//                            null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", new String[]{id}, null);
-//                    while (pCur.moveToNext()) {
-//                        contactPhoneNo = pCur.getString(pCur
-//                                .getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-//                        contactName = pCur.getString(pCur
-//                                .getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-//                        if (TextUtils.isEmpty(contactPhoneNo)) continue;
-//                        if (!number.equals("")) number = number + "&";
-////                        contactPhoneNo = PhoneNumberUtils.stripSeparators(contactPhoneNo);
-//
-//                        //number = number + searchReplaceNumber(getApplicationContext(), n);
-//                    }
-//                    pCur.close();
-//                }
-//                phonesCursor.close();
-//
-//                Log.e("URL", contactPhoneNo);
-//
-//            }
-//        }
 
         pay_button = (ImageView) findViewById(R.id.pay_button);
         pay_button.setOnClickListener(new View.OnClickListener() {

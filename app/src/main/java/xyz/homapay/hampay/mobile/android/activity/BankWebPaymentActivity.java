@@ -38,6 +38,7 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class BankWebPaymentActivity extends AppCompatActivity {
 
+    private Activity activity;
     WebView bankWebView;
     TextView urlText;
     HamPayDialog hamPayDialog;
@@ -129,6 +130,8 @@ public class BankWebPaymentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bank_web_payment);
+
+        activity = BankWebPaymentActivity.this;
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
@@ -223,6 +226,13 @@ public class BankWebPaymentActivity extends AppCompatActivity {
         bankWebView.setWebViewClient(new WebViewClient() {
 
             public void onPageFinished(WebView view, String url) {
+
+                if (url.startsWith("https://sep.shaparak.ir")) {
+                    if (!view.getTitle().contains("سامان")){
+                        Toast.makeText(activity, getString(R.string.msg_fail_ipg_loading), Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                }
 
                 urlText.setText(url);
                 ResultStatus resultStatus = ResultStatus.FAILURE;

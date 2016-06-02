@@ -607,6 +607,7 @@
     <string name="privacy_title_activity">حفظ حریم خصوصی و امنیت</string>
     <string name="msg_soap_timeout">پیمامی از سرویس دریافت نشد. در صورت موفقیت تراکنش می‌توانید آن را در فهرست تراکنش‌ها مشاهده نمایید.</string>
     <string name="msg_insufficient_credit">موجودی کارت شما کافی نمی‌باشد.</string>
+    <string name="msg_fail_ipg_loading">مشکل در سمت سرویس پرداخت بانک. لطفا مجدد تلاش کنید</string>
 
 
 </resources>
