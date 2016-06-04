@@ -47,15 +47,15 @@ public class RequestImageDownloader extends AsyncTask<String, Integer, Bitmap> {
 
 
     @Override
-    protected void onPostExecute(Bitmap tacResponseMessage)
+    protected void onPostExecute(Bitmap bitmap)
     {
-        super.onPostExecute(tacResponseMessage);
-        listener.onTaskComplete(tacResponseMessage);
+        super.onPostExecute(bitmap);
+        listener.onTaskComplete(bitmap);
     }
 
     @Override
-    protected void onCancelled(Bitmap tacResponseResponseMessage) {
-        super.onCancelled(tacResponseResponseMessage);
+    protected void onCancelled(Bitmap bitmap) {
+        super.onCancelled(bitmap);
         cancel(true);
     }
 

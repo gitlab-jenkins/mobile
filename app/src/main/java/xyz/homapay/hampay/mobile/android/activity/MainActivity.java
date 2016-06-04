@@ -32,11 +32,8 @@ import java.util.UUID;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
-import xyz.homapay.hampay.common.core.model.request.PendingCountRequest;
-import xyz.homapay.hampay.common.core.model.request.PendingPOListRequest;
 import xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
 import xyz.homapay.hampay.common.core.model.response.MobileRegistrationIdEntryResponse;
-import xyz.homapay.hampay.common.core.model.response.PendingCountResponse;
 import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
@@ -44,7 +41,6 @@ import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestMobileRegistrationIdEntry;
-import xyz.homapay.hampay.mobile.android.async.RequestPendingCount;
 import xyz.homapay.hampay.mobile.android.async.RequestUserProfile;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
@@ -569,11 +565,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 }else {
                     image_profile.setImageResource(R.drawable.user_placeholder);
                 }
-
-//                if (userProfileDTO.getUserImageId() != null) {
-//                    String userImageUrl = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
-//                    new RequestImageDownloaderRequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile)).execute(userImageUrl);
-//                }
                 break;
         }
     }
@@ -643,10 +634,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                         }else {
                             image_profile.setImageResource(R.drawable.user_placeholder);
                         }
-//                        if (userProfileDTO.getUserImageId() != null) {
-//                            String userImageUrl = Constants.IMAGE_PREFIX + prefs.getString(Constants.LOGIN_TOKEN_ID, "") + "/" + userProfileDTO.getUserImageId();
-//                            new RequestImageDownloader(context, new RequestImageDownloaderTaskCompleteListener(image_profile)).execute(userImageUrl);
-//                        }
                         if (fragment != null) {
                             setFragment(fragment, getString(R.string.title_main_fragment));
                         }
