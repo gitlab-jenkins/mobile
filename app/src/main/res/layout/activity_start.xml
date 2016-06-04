@@ -58,7 +58,7 @@
             <ImageView
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:src="@drawable/infographic_new"
+                android:src="@drawable/start_cycle"
                 android:background="@color/app_origin"/>
 
             <LinearLayout
