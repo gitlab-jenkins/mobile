@@ -349,6 +349,8 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
                             .setAction("Unlink")
                             .setLabel("Success")
                             .build());
+                }else if (unlinkUserResponseResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
                 }
                 else {
                     requestUnlinkUser = new RequestUnlinkUser(context, new RequestUnlinkUserTaskCompleteListener());
@@ -392,6 +394,16 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
         else {
             finish();
         }
+    }
+
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(context, HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
+        startActivity(intent);
     }
 
 }

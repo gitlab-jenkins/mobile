@@ -365,6 +365,8 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
                             .setAction("Change")
                             .setLabel("Success")
                             .build());
+                }else if (changeEmailResponseResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
                 }
                 else {
                     requestChangeEmail = new RequestChangeEmail(activity, new RequestChangeEmailTaskCompleteListener(changeEmailRequest));
@@ -397,6 +399,14 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
             hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
-
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(context, HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
+        startActivity(intent);
+    }
 
 }

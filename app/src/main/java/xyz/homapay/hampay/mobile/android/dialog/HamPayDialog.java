@@ -407,13 +407,10 @@ public class HamPayDialog {
     TACAcceptRequest tacAcceptRequest;
     RequestTACAccept requestTACAccept;
 
-    private ResponseMessage<TACAcceptResponse> tACAcceptResponse;
     private UserProfileDTO userProfileDTO;
 
     public class RequestTACAcceptResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<TACAcceptResponse>>
     {
-        public RequestTACAcceptResponseTaskCompleteListener(){
-        }
 
         @Override
         public void onTaskComplete(ResponseMessage<TACAcceptResponse> tacAcceptResponseMessage)
@@ -453,7 +450,10 @@ public class HamPayDialog {
                             .setLabel("Success")
                             .build());
 
-                }else {
+                }else if (tacAcceptResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
+                }
+                else {
                     requestTACAccept = new RequestTACAccept(activity, new RequestTACAcceptResponseTaskCompleteListener());
                     showFailTACAcceeptRequestDialog(requestTACAccept, tacAcceptRequest,
                             tacAcceptResponseMessage.getService().getResultStatus().getCode(),
@@ -1986,6 +1986,16 @@ public class HamPayDialog {
             dialog = new HamPayCustomDialog(view, activity, 0);
             dialog.show();
         }
+    }
+
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(activity, HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        activity.finish();
+        activity.startActivity(intent);
     }
 
 }

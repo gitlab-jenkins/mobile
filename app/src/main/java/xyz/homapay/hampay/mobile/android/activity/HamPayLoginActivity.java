@@ -172,6 +172,8 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     protected void onResume() {
         super.onResume();
         HamPayApplication.setAppSate(AppState.Resumed);
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
     }
 
     @Override
@@ -205,6 +207,9 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
 
         requestRecentPendingFund = new RequestRecentPendingFund(activity, new RequestRecentFundTaskCompleteListener());
         recentPendingFundRequest = new RecentPendingFundRequest();
@@ -310,27 +315,10 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                             if (bundle.getBoolean(Constants.HAS_NOTIFICATION)) {
                                 NotificationMessageType notificationMessageType;
                                 notificationMessageType = NotificationMessageType.valueOf(bundle.getString(Constants.NOTIFICATION_TYPE));
-
                                 intent = getIntent();
-
-//                                Intent intent;
-//
-//                                switch (notificationMessageType){
-//                                    case PAYMENT:
-//                                        break;
-//
-//                                    case CREDIT_REQUEST:
-//                                        intent = getIntent();
-//                                        intent.setClass(activity, IndividualPaymentPendingActivity.class);
-//                                        startActivity(intent);
-//                                        break;
-//                                }
-
                             }
                         }
 
-                        editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-                        editor.commit();
 
                         intent.setClass(activity, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -446,6 +434,8 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                     }
                 }else {
                     editor.putString(Constants.LOGIN_TOKEN_ID, successLoginResponse.getTokenId());
+                    editor.commit();
+                    editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                     editor.commit();
                     tacRequest = new TACRequest();
                     tacRequest.setDeviceId(new DeviceInfo(activity).getAndroidId());

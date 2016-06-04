@@ -384,10 +384,7 @@ public class ChangeUserImageActivity extends AppCompatActivity {
             if (uploadImageResponseMessage != null && uploadImageResponseMessage.getService().getResultStatus() != null) {
 
                 if (uploadImageResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-
-//                    savebitmap(croppedImage, "userImage.jpeg");
                     croppedImage.recycle();
-
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Request Upload Image")
                             .setAction("Request")
@@ -402,7 +399,10 @@ public class ChangeUserImageActivity extends AppCompatActivity {
 
                     finish();
 
-                }else {
+                } else if (uploadImageResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
+                }
+                else {
                     requestUploadImage = new RequestUploadImage(getApplicationContext(), new RequestUploadImageTaskCompleteListener());
                     new HamPayDialog(activity).showFailUploadImage(requestUploadImage, uploadImageRequest,
                             uploadImageResponseMessage.getService().getResultStatus().getCode(),
@@ -443,4 +443,14 @@ public class ChangeUserImageActivity extends AppCompatActivity {
         }
     }
 
+
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(context, HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
+        startActivity(intent);
+    }
 }

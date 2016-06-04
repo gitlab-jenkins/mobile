@@ -25,6 +25,7 @@ import xyz.homapay.hampay.common.core.model.response.PendingCountResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.BusinessPurchaseActivity;
+import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.activity.PaymentRequestDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.PaymentRequestListActivity;
 import xyz.homapay.hampay.mobile.android.activity.PendingPurchasePaymentListActivity;
@@ -339,6 +340,8 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                         pending_badge.setVisibility(View.VISIBLE);
                         pending_badge.setText(persianEnglishDigit.E2P(String.valueOf(pendingCount)));
                     }
+                }else if (pendingCountResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
                 }
             }
         }
@@ -346,6 +349,16 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         @Override
         public void onTaskPreRun() {
         }
+    }
+
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(context, HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        getActivity().finish();
+        getActivity().startActivity(intent);
     }
 }
 

@@ -177,6 +177,16 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+        String LOGIN_TOKEN = prefs.getString(Constants.LOGIN_TOKEN_ID, null);
+        if (LOGIN_TOKEN == null){
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+            return;
+        }
+
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
         imageManager = new ImageManager(activity, 200000, false);
 
@@ -473,16 +483,16 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             if (pspResultResponseMessage != null){
                 if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
 
-
-//                    new HamPayDialog(activity).pspResultDialog(pspResultResponseMessage.getService().getResultStatus().getCode() + "");
-
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Pending Payment Request")
                             .setAction("Payment")
                             .setLabel("Success")
                             .build());
 
-                }else {
+                }else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
+                }
+                else {
 
 //                    new HamPayDialog(activity).showFailPaymentDialog(pspResultResponseMessage.getService().getResultStatus().getCode(),
 //                            pspResultResponseMessage.getService().getResultStatus().getDescription());
@@ -551,7 +561,10 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                             .setLabel("Success")
                             .build());
 
-                }else {
+                } else if (latestPurchaseResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
+                }
+                else {
                     requestLatestPurchase = new RequestLatestPurchase(context, new RequestLatestPurchaseTaskCompleteListener());
 
                     new HamPayDialog(activity).showFailPendingPurchaseDialog(requestLatestPurchase, latestPurchaseRequest,
@@ -637,7 +650,10 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                             .setLabel("Success")
                             .build());
 
-                }else {
+                }else if (purchaseInfoResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
+                }
+                else {
                     requestPurchaseInfo = new RequestPurchaseInfo(context, new RequestPurchaseInfoTaskCompleteListener());
                     new HamPayDialog(activity).showFailPurchaseInfoDialog(requestPurchaseInfo, purchaseInfoRequest,
                             purchaseInfoResponseMessage.getService().getResultStatus().getCode(),
@@ -685,6 +701,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 if (purchaseDetailResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     purchaseInfoDTO = purchaseDetailResponseMessage.getService().getpurchaseInfo();
                     fillPurchase(purchaseInfoDTO);
+                }else if (purchaseDetailResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
                 }
             }
         }
@@ -736,6 +754,16 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
         bankName.setText(pspInfoDTO.getCardDTO().getBankName());
         cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
+    }
+
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(context, HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
+        startActivity(intent);
     }
 
 }

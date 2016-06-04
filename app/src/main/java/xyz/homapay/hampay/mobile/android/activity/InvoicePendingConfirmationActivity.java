@@ -418,7 +418,10 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                             .setLabel("Success")
                             .build());
 
-                } else {
+                } else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
+                }
+                else {
 
 //                    new HamPayDialog(activity).showFailPaymentDialog(pspResultResponseMessage.getService().getResultStatus().getCode(),
 //                            pspResultResponseMessage.getService().getResultStatus().getDescription());
@@ -475,7 +478,10 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                             .setLabel("Success")
                             .build());
 
-                } else {
+                }else if (latestPaymentResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
+                }
+                else {
                     requestLatestPayment = new RequestLatestPayment(context, new RequestLatestPaymentTaskCompleteListener());
 
                     new HamPayDialog(activity).showFailPendingPaymentDialog(requestLatestPayment, latestPaymentRequest,
@@ -524,6 +530,8 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                     paymentInfoDTO = paymentDetailResponseMessage.getService().getPaymentInfo();
                     pspInfoDTO = paymentDetailResponseMessage.getService().getPspInfo();
                     fillPayment(paymentInfoDTO, pspInfoDTO);
+                }else if (paymentDetailResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
                 }
             }
         }
@@ -562,5 +570,15 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
         } else {
 
         }
+    }
+
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(context, HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
+        startActivity(intent);
     }
 }

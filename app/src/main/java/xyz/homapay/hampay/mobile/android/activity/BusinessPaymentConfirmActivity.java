@@ -393,10 +393,10 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
                             .setLabel("Success")
                             .build());
 
-                }else {
-
-//                    new HamPayDialog(activity).showFailPaymentDialog(pspResultResponseMessage.getService().getResultStatus().getCode(),
-//                            pspResultResponseMessage.getService().getResultStatus().getDescription());
+                }else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
+                }
+                else {
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Pending Payment Request")
@@ -424,4 +424,13 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
         }
     }
 
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(context, HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
+        startActivity(intent);
+    }
 }

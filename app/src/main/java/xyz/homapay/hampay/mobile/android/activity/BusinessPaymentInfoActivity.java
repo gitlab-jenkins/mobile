@@ -305,7 +305,10 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
                             .setAction("Payment Confirm")
                             .setLabel("Success")
                             .build());
-                }else {
+                }else if (businessPaymentConfirmResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
+                }
+                else {
                     new HamPayDialog(activity).showFailPaymentDialog(businessPaymentConfirmResponseMessage.getService().getResultStatus().getCode(),
                             businessPaymentConfirmResponseMessage.getService().getResultStatus().getDescription());
 
@@ -348,6 +351,8 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
                     calculatedVat = calculateVatResponseMessage.getService().getAmount();
                     amount_total.setText(persianEnglishDigit.E2P(formatter.format(calculatedVat + amountValue)));
                     vat_icon.setImageResource(R.drawable.remove_vat);
+                }else if (calculateVatResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
                 }
             }
         }
@@ -356,6 +361,16 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
         public void onTaskPreRun() {
             hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
+    }
+
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(context, HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
+        startActivity(intent);
     }
 
 }

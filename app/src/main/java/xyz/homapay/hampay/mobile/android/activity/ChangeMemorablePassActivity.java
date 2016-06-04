@@ -346,6 +346,8 @@ public class ChangeMemorablePassActivity extends AppCompatActivity implements Vi
                             .setAction("Change")
                             .setLabel("Success")
                             .build());
+                } else if (changeMemorableWordResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
                 }
                 else {
                     requestChangeMemorableWord = new RequestChangeMemorableWord(context, new RequestChangeMemorableWordTaskCompleteListener());
@@ -391,4 +393,13 @@ public class ChangeMemorablePassActivity extends AppCompatActivity implements Vi
         }
     }
 
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(context, HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
+        startActivity(intent);
+    }
 }

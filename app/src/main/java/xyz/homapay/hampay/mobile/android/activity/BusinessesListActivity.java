@@ -57,10 +57,6 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
     private Activity activity;
 
     private ListView businessListView;
-    private LinearLayout find_business_purchase;
-
-    private PersianEnglishDigit persianEnglishDigit;
-
 
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
@@ -159,8 +155,6 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
         context = this;
         activity = BusinessesListActivity.this;
 
-        persianEnglishDigit = new PersianEnglishDigit();
-
         full_business = (RelativeLayout)findViewById(R.id.full_business);
         full_business.setOnClickListener(this);
         popular_business = (RelativeLayout)findViewById(R.id.popular_business);
@@ -181,9 +175,6 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                 context.startActivity(intent);
             }
         });
-
-        find_business_purchase = (LinearLayout)findViewById(R.id.find_business_purchase);
-
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
@@ -383,6 +374,8 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                             .setLabel("Success")
                             .build());
 
+                }else if (businessListResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
                 }else {
                     if (!searchEnabled) {
                         businessListRequest.setPageNumber(requestPageNumber);
@@ -505,6 +498,16 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                 hamPayBusinessesAdapter.addItem(businessDTOs.get(i));
             }
         }
+    }
+
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(context, HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
+        startActivity(intent);
     }
 
 }

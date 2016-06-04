@@ -319,7 +319,10 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                             .setLabel("Success")
                             .build());
 
-                } else {
+                } else if (transactionListResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
+                }
+                else {
                     transactionListRequest.setPageNumber(requestPageNumber);
                     requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
                     new HamPayDialog(activity).showFailUserTransactionDialog(requestUserTransaction, transactionListRequest,
@@ -416,6 +419,16 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
         for (int i = from; i < to; i++) {
             userTransactionAdapter.addItem(transactionDTOs.get(i));
         }
+    }
+
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(context, HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
+        startActivity(intent);
     }
 
 }

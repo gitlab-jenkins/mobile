@@ -355,9 +355,10 @@ public class ChangeIbanPassActivity extends AppCompatActivity implements View.On
                     returnIntent.putExtra(Constants.RETURN_IBAN_CONFIRMED, iban);
                     setResult(RESULT_OK, returnIntent);
                     activity.finish();
-
-
-                } else {
+                }else if (ibanChangeResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
+                }
+                else {
                     requestIBANChange = new RequestIBANChange(activity, new RequestIBANChangeTaskCompleteListener(ibanChangeRequest));
                     hamPayDialog.showFailIBANChangeDialog(requestIBANChange, ibanChangeRequest,
                             ibanChangeResponseMessage.getService().getResultStatus().getCode(),
@@ -377,5 +378,14 @@ public class ChangeIbanPassActivity extends AppCompatActivity implements View.On
         }
     }
 
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(context, HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
+        startActivity(intent);
+    }
 
 }

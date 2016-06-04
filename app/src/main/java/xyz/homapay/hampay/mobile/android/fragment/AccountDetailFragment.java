@@ -22,6 +22,7 @@ import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.activity.IntroIBANActivity;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestImageDownloader;
@@ -219,6 +220,8 @@ public class AccountDetailFragment extends Fragment {
                             .setLabel("Success")
                             .build());
 
+                } else if (userProfileResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
                 }
                 else{
                     requestUserProfile = new RequestUserProfile(getActivity(), new RequestUserProfileTaskCompleteListener());
@@ -288,9 +291,15 @@ public class AccountDetailFragment extends Fragment {
             editor.commit();
         }
         user_national_code.setText(persianEnglishDigit.E2P(prefs.getString(Constants.REGISTERED_NATIONAL_CODE, "")));
-//
-//        hide_bg.setVisibility(View.GONE);
-//
-//        List<ContactDTO> contactDTOs = userProfileDTO.getSelectedContacts();
+    }
+
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(context, HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        getActivity().finish();
+        getActivity().startActivity(intent);
     }
 }

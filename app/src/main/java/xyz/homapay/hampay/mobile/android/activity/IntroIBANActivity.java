@@ -154,7 +154,10 @@ public class IntroIBANActivity extends AppCompatActivity {
 
                 if (ibanConfirmationResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     hamPayDialog.showIBANConfirmationDialog(ibanNumberValue.getText().toString(), ibanConfirmationResponseMessage.getService());
-                } else {
+                } else if (ibanConfirmationResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
+                }
+                else {
                     hamPayDialog.dismisWaitingDialog();
                     requestIBANConfirmation = new RequestIBANConfirmation(activity, new RequestIBANConfirmationTaskCompleteListener());
 
@@ -179,4 +182,13 @@ public class IntroIBANActivity extends AppCompatActivity {
         }
     }
 
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(context, HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
+        startActivity(intent);
+    }
 }

@@ -380,7 +380,10 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                             .setLabel("Success")
                             .build());
 
-                } else {
+                }else if (userPaymentResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
+                }
+                else {
                     new HamPayDialog(activity).failurePaymentRequestDialog();
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
@@ -423,6 +426,8 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                     calculatedVat = calculateVatResponseMessage.getService().getAmount();
                     amount_total.setText(persianEnglishDigit.E2P(formatter.format(calculatedVat + amountValue)));
                     vat_icon.setImageResource(R.drawable.remove_vat);
+                }else if (calculateVatResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
                 }
             }
         }
@@ -431,5 +436,15 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
         public void onTaskPreRun() {
             hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
+    }
+
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(context, HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
+        startActivity(intent);
     }
 }

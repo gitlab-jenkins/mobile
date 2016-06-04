@@ -593,6 +593,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                             .setAction("Registration")
                             .setLabel("Success")
                             .build());
+                }else if (mobileRegistrationIdEntryResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
                 }
                 else {
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
@@ -649,6 +651,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                             setFragment(fragment, getString(R.string.title_main_fragment));
                         }
                     }
+                }else if (userProfileResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
                 }
                 else{
                 }
@@ -669,6 +673,16 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fragmentTransaction.commit();
         fragment_title.setText(title);
+    }
+
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(context, HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
+        startActivity(intent);
     }
 
 }

@@ -536,7 +536,10 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                             .setLabel("Success")
                             .build());
 
-                }else {
+                }else if (changePassCodeResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
+                }
+                else {
                     resetLayout();
                     requestChangePassCode = new RequestChangePassCode(context, new RequestChangePassCodeTaskCompleteListener());
                     new HamPayDialog(activity).showFailChangePassCodeDialog(requestChangePassCode, changePassCodeRequest,
@@ -594,6 +597,16 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
         else {
             finish();
         }
+    }
+
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(context, HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
+        startActivity(intent);
     }
 
 }

@@ -248,6 +248,8 @@ public class TransactionDetailActivity extends AppCompatActivity {
                             bank_name.setText(tnxDetailDTO.getAppliedCard().getBankName());
                         }
                     }
+                }else if (transactionDetailResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
                 }
             }
         }
@@ -255,6 +257,16 @@ public class TransactionDetailActivity extends AppCompatActivity {
         @Override
         public void onTaskPreRun() {
             hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
+
+        private void forceLogout() {
+            editor.remove(Constants.LOGIN_TOKEN_ID);
+            editor.commit();
+            Intent intent = new Intent();
+            intent.setClass(context, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
         }
     }
 }

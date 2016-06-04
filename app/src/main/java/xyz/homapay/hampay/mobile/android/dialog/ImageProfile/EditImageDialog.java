@@ -21,6 +21,7 @@ import xyz.homapay.hampay.common.core.model.request.RemoveUserImageRequest;
 import xyz.homapay.hampay.common.core.model.response.RemoveUserImageResponse;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.ChangeUserImageActivity;
+import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestRemoveUserImage;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
@@ -128,7 +129,8 @@ public class EditImageDialog  extends DialogFragment implements TextView.OnEdito
         {
             if (removeUserImageResponseMessage != null) {
                 if (removeUserImageResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                }else {
+                }
+                else {
                     activity.onFinishEditDialog(ActionImage.REMOVE_FAIL);
                 }
             }else {
@@ -140,5 +142,4 @@ public class EditImageDialog  extends DialogFragment implements TextView.OnEdito
         public void onTaskPreRun() {
         }
     }
-
 }
