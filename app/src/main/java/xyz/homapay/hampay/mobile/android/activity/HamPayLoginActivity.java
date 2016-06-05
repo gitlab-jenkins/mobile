@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
@@ -28,6 +30,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +43,7 @@ import xyz.homapay.hampay.common.core.model.response.RecentPendingFundResponse;
 import xyz.homapay.hampay.common.core.model.response.TACResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.FundDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
+import xyz.homapay.hampay.mobile.android.Manifest;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.PendingFundAdapter;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
@@ -55,6 +59,8 @@ import xyz.homapay.hampay.mobile.android.model.FailedLoginResponse;
 import xyz.homapay.hampay.mobile.android.model.LoginData;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
 import xyz.homapay.hampay.mobile.android.model.SuccessLoginResponse;
+import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
+import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
 import xyz.homapay.hampay.mobile.android.util.AppInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
@@ -182,11 +188,40 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         instance = null;
     }
 
-    Bundle bundle;
+    private Bundle bundle;
 
-    ImageView image;
+    private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        for (PermissionListener permissionListener : permissionListeners)
+            if (permissionListener.onResult(requestCode, permissions, grantResults)) {
+                permissionListeners.remove(permissionListener);
+            }
+    }
 
+    private void requestAndLoadPhoneState() {
+        String[] permissions = new String[]{Manifest.permission.READ_PHONE_STATE};
+        permissionListeners = new RequestPermissions().request(activity, Constants.READ_PHONE_STATE, permissions, new PermissionListener() {
+            @Override
+            public boolean onResult(int requestCode, String[] requestPermissions, int[] grantResults) {
+                if (requestCode == Constants.READ_PHONE_STATE) {
+                    if (requestPermissions[0].equals(Manifest.permission.READ_PHONE_STATE) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        // Permission granted
+                        requestRecentPendingFund = new RequestRecentPendingFund(activity, new RequestRecentFundTaskCompleteListener());
+                        recentPendingFundRequest = new RecentPendingFundRequest();
+                        recentPendingFundRequest.setImei(new DeviceInfo(activity).getIMEI());
+                        recentPendingFundRequest.setNationalCode(prefs.getString(Constants.REGISTERED_NATIONAL_CODE, ""));
+                        requestRecentPendingFund.execute(recentPendingFundRequest);
+                    } else {
+                        // Permission not granted
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,19 +238,15 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         context = this;
         activity = HamPayLoginActivity.this;
 
-        image = (ImageView)findViewById(R.id.image);
-
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
         editor.remove(Constants.LOGIN_TOKEN_ID);
         editor.commit();
 
-        requestRecentPendingFund = new RequestRecentPendingFund(activity, new RequestRecentFundTaskCompleteListener());
-        recentPendingFundRequest = new RecentPendingFundRequest();
-        recentPendingFundRequest.setImei(new DeviceInfo(activity).getIMEI());
-        recentPendingFundRequest.setNationalCode(prefs.getString(Constants.REGISTERED_NATIONAL_CODE, ""));
-        requestRecentPendingFund.execute(recentPendingFundRequest);
+        requestAndLoadPhoneState();
+
+
 
         hampay_user = (FacedTextView)findViewById(R.id.hampay_user);
         hampay_user.setText(prefs.getString(Constants.REGISTERED_USER_NAME, ""));

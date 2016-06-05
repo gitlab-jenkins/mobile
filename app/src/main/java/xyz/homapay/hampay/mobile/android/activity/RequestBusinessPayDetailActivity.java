@@ -564,7 +564,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                     requestLatestPurchase = new RequestLatestPurchase(context, new RequestLatestPurchaseTaskCompleteListener());
 
                     new HamPayDialog(activity).showFailPendingPurchaseDialog(requestLatestPurchase, latestPurchaseRequest,
-                            latestPurchaseResponseMessage.getService().getServiceDefinition().getCode(),
+                            latestPurchaseResponseMessage.getService().getResultStatus().getCode(),
                             /*latestPurchaseResponseMessage.getService().getMessage()*/"");
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()

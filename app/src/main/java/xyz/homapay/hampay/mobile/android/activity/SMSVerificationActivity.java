@@ -327,11 +327,13 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
             input_digit_2.setText("");
             input_digit_3.setText("");
             input_digit_4.setText("");
-            stopTimerTask();
+
             hamPayDialog.dismisWaitingDialog();
             if (registrationVerifyMobileResponseMessage != null) {
 
                 if (registrationVerifyMobileResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+
+                    stopTimerTask();
 
                     if (registrationVerifyMobileResponseMessage.getService().getIsVerified()) {
 
@@ -357,8 +359,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                     }
                 }else {
                     requestVerifyMobile = new RequestVerifyMobile(context, new RequestRegistrationVerifyMobileTaskCompleteListener());
-                    new HamPayDialog(activity).showFailRegistrationVerifyMobileDialog(requestVerifyMobile, registrationVerifyMobileRequest,
-                            registrationVerifyMobileResponseMessage.getService().getResultStatus().getCode(),
+                    new HamPayDialog(activity).showFailRegistrationVerifyMobileDialog(registrationVerifyMobileResponseMessage.getService().getResultStatus().getCode(),
                             registrationVerifyMobileResponseMessage.getService().getResultStatus().getDescription());
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
@@ -370,8 +371,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
 
             }else {
                 requestVerifyMobile = new RequestVerifyMobile(context, new RequestRegistrationVerifyMobileTaskCompleteListener());
-                new HamPayDialog(activity).showFailRegistrationVerifyMobileDialog(requestVerifyMobile, registrationVerifyMobileRequest,
-                        Constants.LOCAL_ERROR_CODE,
+                new HamPayDialog(activity).showFailRegistrationVerifyMobileDialog(Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_send_sms));
 
                 hamPayGaTracker.send(new HitBuilders.EventBuilder()

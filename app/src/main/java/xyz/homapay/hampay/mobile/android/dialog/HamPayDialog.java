@@ -800,9 +800,7 @@ public class HamPayDialog {
     }
 
 
-    public void showFailRegistrationVerifyMobileDialog(final RequestVerifyMobile requestVerifyMobile,
-                                                       final RegistrationVerifyMobileRequest registrationVerifyMobileRequest,
-                                                       final String code,
+    public void showFailRegistrationVerifyMobileDialog(final String code,
                                                        final String message){
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_registration_verify_mobile_request, null);
         FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
@@ -813,7 +811,7 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                requestVerifyMobile.execute(registrationVerifyMobileRequest);
+//                requestVerifyMobile.execute(registrationVerifyMobileRequest);
             }
         });
         cancel_request.setOnClickListener(new View.OnClickListener() {

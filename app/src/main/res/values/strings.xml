@@ -98,7 +98,7 @@
     <string name="msg_invalid_email">ایمیل خود را صحیح وارد کنید</string>
     <string name="msg_family_invalid">نام و نام خانوادگی خود را صحیح وارد کنید</string>
     <string name="msg_email_invalid">ایمیل خود را صحیح وارد کنید</string>
-    <string name="msg_username_invalid">نام و نام خانوادگی خود را وارد کنید</string>
+    <string name="msg_username_invalid">نام و نام خانوادگی می‌بایستی بیشتر از ۲ حرف باشد</string>
 
 
     <string name="some_people_at_hampay">بعضی از دوستان شما در هم‌پی</string>

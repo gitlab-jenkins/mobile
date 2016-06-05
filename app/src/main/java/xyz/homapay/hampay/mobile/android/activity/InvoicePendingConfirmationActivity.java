@@ -483,7 +483,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                     requestLatestPayment = new RequestLatestPayment(context, new RequestLatestPaymentTaskCompleteListener());
 
                     new HamPayDialog(activity).showFailPendingPaymentDialog(requestLatestPayment, latestPaymentRequest,
-                            latestPaymentResponseMessage.getService().getServiceDefinition().getCode(),
+                            latestPaymentResponseMessage.getService().getResultStatus().getCode(),
                             latestPaymentResponseMessage.getService().getResultStatus().getDescription());
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()

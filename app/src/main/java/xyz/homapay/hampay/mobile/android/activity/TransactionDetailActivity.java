@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
@@ -29,6 +30,7 @@ import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
+import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
@@ -50,6 +52,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
     HamPayDialog hamPayDialog;
     private FacedTextView caller_name;
     private FacedTextView callee_name;
+    private ImageView image;
     private FacedTextView total_amount_value;
     private FacedTextView amount_value;
     private FacedTextView vat_value;
@@ -57,6 +60,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
     private FacedTextView payment_request_code;
     private FacedTextView date_time;
     private FacedTextView card_number;
+    private LinearLayout cell_number_layout;
     private FacedTextView cell_number;
     private FacedTextView bank_name;
     private FacedTextView message;
@@ -64,6 +68,8 @@ public class TransactionDetailActivity extends AppCompatActivity {
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
     private LinearLayout creditInfo;
+    private String authToken = "";
+    private ImageManager imageManager;
 
 
     public void backActionBar(View view) {
@@ -119,14 +125,17 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
         context = this;
         activity = TransactionDetailActivity.this;
+        imageManager = new ImageManager(activity, 200000, false);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
         hamPayDialog = new HamPayDialog(activity);
 
         caller_name = (FacedTextView) findViewById(R.id.caller_name);
         callee_name = (FacedTextView) findViewById(R.id.callee_name);
+        image = (ImageView)findViewById(R.id.image);
         total_amount_value = (FacedTextView) findViewById(R.id.total_amount_value);
         amount_value = (FacedTextView) findViewById(R.id.amount_value);
         vat_value = (FacedTextView) findViewById(R.id.vat_value);
@@ -134,6 +143,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
         payment_request_code = (FacedTextView) findViewById(R.id.payment_request_code);
         date_time = (FacedTextView) findViewById(R.id.date_time);
         card_number = (FacedTextView) findViewById(R.id.card_number);
+        cell_number_layout = (LinearLayout)findViewById(R.id.cell_number_layout);
         cell_number = (FacedTextView) findViewById(R.id.cell_number);
         bank_name = (FacedTextView) findViewById(R.id.bank_name);
         message = (FacedTextView) findViewById(R.id.message);
@@ -143,6 +153,13 @@ public class TransactionDetailActivity extends AppCompatActivity {
         bundle = getIntent().getExtras();
         Intent intent = getIntent();
         transactionDTO = (TransactionDTO) intent.getSerializableExtra(Constants.USER_TRANSACTION_DTO);
+        if (transactionDTO.getImageId() != null) {
+            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + transactionDTO.getImageId();
+            image.setTag(userImageUrl.split("/")[6]);
+            imageManager.displayImage(userImageUrl, image, R.drawable.user_placeholder);
+        }else {
+            image.setImageResource(R.drawable.user_placeholder);
+        }
 
         if (transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.SUCCESS) {
             if (transactionDTO.getTransactionType() == TransactionDTO.TransactionType.CREDIT) {
@@ -223,7 +240,10 @@ public class TransactionDetailActivity extends AppCompatActivity {
                         payment_request_code.setText(persianEnglishDigit.E2P(tnxDetailDTO.getCode()));
                         date_time.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(tnxDetailDTO.getDate())));
                         if (transactionDTO.getPersonType() == TransactionDTO.PersonType.INDIVIDUAL) {
-                            cell_number.setText(persianEnglishDigit.E2P(tnxDetailDTO.getCellNumber()));
+                            if (tnxDetailDTO.getCellNumber() != null) {
+                                cell_number.setText(persianEnglishDigit.E2P(tnxDetailDTO.getCellNumber()));
+                                cell_number_layout.setVisibility(View.VISIBLE);
+                            }
                         }
                         if (tnxDetailDTO.getMessage() != null) {
                             message.setText(tnxDetailDTO.getMessage());
@@ -241,7 +261,6 @@ public class TransactionDetailActivity extends AppCompatActivity {
                         fee_charge_value.setText(persianEnglishDigit.E2P(formatter.format(tnxDetailDTO.getFeeCharge())));
                         payment_request_code.setText(persianEnglishDigit.E2P(tnxDetailDTO.getCode()));
                         date_time.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(tnxDetailDTO.getDate())));
-                        cell_number.setText(persianEnglishDigit.E2P(tnxDetailDTO.getCode()));
                         if (tnxDetailDTO.getAppliedCard() != null) {
                             creditInfo.setVisibility(View.VISIBLE);
                             card_number.setText(persianEnglishDigit.E2P(tnxDetailDTO.getAppliedCard().getMaskedCardNumber()));

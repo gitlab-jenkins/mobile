@@ -106,7 +106,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
     RegistrationEntryRequest registrationEntryRequest;
     RequestRegistrationEntry requestRegistrationEntry;
 
-    double latitute = 0.0;
+    double latitude = 0.0;
     double longitude = 0.0;
 
     private static String TAG = "BestLocationProvider";
@@ -154,7 +154,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
         super.onResume();
         HamPayApplication.setAppSate(AppState.Resumed);
         initLocation();
-        mBestLocationProvider.startLocationUpdatesWithListener(mBestLocationListener);
+        requestReadFineLocation();
     }
 
     @Override
@@ -165,9 +165,25 @@ public class ProfileEntryActivity extends AppCompatActivity {
             }
     }
 
+    private void requestReadFineLocation() {
+        String[] permissions = new String[]{Manifest.permission.ACCESS_FINE_LOCATION};
+        permissionListeners = new RequestPermissions().request(activity, Constants.ACCESS_FINE_LOCATION, permissions, new PermissionListener() {
+            @Override
+            public boolean onResult(int requestCode, String[] requestPermissions, int[] grantResults) {
+                if (requestCode == Constants.ACCESS_FINE_LOCATION) {
+                    if (requestPermissions[0].equals(Manifest.permission.ACCESS_FINE_LOCATION) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        mBestLocationProvider.startLocationUpdatesWithListener(mBestLocationListener);
+                    } else {
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
     private void requestAndLoadPhoneState() {
         String[] permissions = new String[]{Manifest.permission.READ_PHONE_STATE};
-
         permissionListeners = new RequestPermissions().request(activity, Constants.READ_PHONE_STATE, permissions, new PermissionListener() {
             @Override
             public boolean onResult(int requestCode, String[] requestPermissions, int[] grantResults) {
@@ -182,10 +198,8 @@ public class ProfileEntryActivity extends AppCompatActivity {
                         // Permission not granted
 //                        Toast.makeText(activity, "Access denied!", Toast.LENGTH_SHORT).show();
                     }
-
                     return true;
                 }
-
                 return false;
             }
         });
@@ -319,7 +333,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
                     userNameFamilyIsValid = true;
-                    if (userNameFamily.getText().toString().length() == 0){
+                    if (userNameFamily.getText().toString().length() <= 1){
                         userNameFamilyIsValid = false;
                         userNameFamilyIcon.setImageResource(R.drawable.false_icon);
                     }else {
@@ -430,16 +444,17 @@ public class ProfileEntryActivity extends AppCompatActivity {
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
 
-//                cellNumberValue.clearFocus();
-//                userNameFamily.clearFocus();
-//                nationalCodeValue.clearFocus();
-//                cardNumberValue.clearFocus();
+                cellNumberValue.clearFocus();
+                userNameFamily.clearFocus();
+                nationalCodeValue.clearFocus();
+                cardNumberValue.clearFocus();
 
 
                 if (cellNumberIsValid && nationalCodeIsValid && verifiedCardNumber
                         && cellNumberValue.getText().toString().length() > 0
                         && nationalCodeValue.getText().toString().length() > 0
                         && cardNumberValue.getText().toString().length() > 0
+                        && userNameFamily.getText().toString().length() > 0
                         && emailTextWatcher.isValid()) {
 
                     keepOn_button.setEnabled(false);
@@ -454,7 +469,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
 
                     requestRegistrationEntry = new RequestRegistrationEntry(activity,
                             new RequestRegistrationEntryTaskCompleteListener(),
-                            latitute + "," + longitude);
+                            latitude + "," + longitude);
 
                     requestRegistrationEntry.execute(registrationEntryRequest);
                 } else {
@@ -465,7 +480,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
                         cellNumberValue.requestFocus();
                     }
 
-                    else if (userNameFamily.getText().toString().length() == 0 || !userNameFamilyIsValid){
+                    else if (userNameFamily.getText().toString().length() <= 1 || !userNameFamilyIsValid){
                         Toast.makeText(context, getString(R.string.msg_username_invalid), Toast.LENGTH_SHORT).show();
                         userNameFamilyIcon.setImageResource(R.drawable.false_icon);
                         userNameFamily.requestFocus();
@@ -602,7 +617,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
                 else {
                     requestRegistrationEntry = new RequestRegistrationEntry(activity,
                             new RequestRegistrationEntryTaskCompleteListener(),
-                            latitute + "," + longitude);
+                            latitude + "," + longitude);
                     new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest,
                             registrationEntryResponse.getService().getResultStatus().getCode(),
                             registrationEntryResponse.getService().getResultStatus().getDescription());
@@ -615,7 +630,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
                 }
             }else {
                 requestRegistrationEntry = new RequestRegistrationEntry(activity, new RequestRegistrationEntryTaskCompleteListener(),
-                        latitute + "," + longitude);
+                        latitude + "," + longitude);
                 new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_registration_entry));
@@ -663,7 +678,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
                 @Override
                 public void onLocationUpdate(Location location, BestLocationProvider.LocationType type,
                                              boolean isFresh) {
-                    latitute = location.getLatitude();
+                    latitude = location.getLatitude();
                     longitude = location.getLongitude();
 
                 }

@@ -9,7 +9,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.webkit.SslErrorHandler;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -198,7 +201,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 //                            "&ResNum=" + purchaseInfoDTO.getProductCode() +
 //                            "&TerminalId=" + pspInfoDTO.getTerminalID();
 
-                        "ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
+                    "ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
                             "&ResNum3=" + pspInfoDTO.getCardDTO().getSmsToken() +
                             "&RedirectURL=" + redirectedURL +
                             "&Amount=" + (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + vat) +
@@ -225,14 +228,20 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
         bankWebView.setWebViewClient(new WebViewClient() {
 
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+                Log.e("ERROR", String.valueOf(error));
+            }
+
             public void onPageFinished(WebView view, String url) {
 
-                if (url.startsWith("https://sep.shaparak.ir")) {
-                    if (!view.getTitle().contains("سامان")){
-                        Toast.makeText(activity, getString(R.string.msg_fail_ipg_loading), Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                }
+//                if (url.startsWith("https://sep.shaparak.ir")) {
+//                    if (!view.getTitle().contains("سامان")){
+//                        Toast.makeText(activity, getString(R.string.msg_fail_ipg_loading), Toast.LENGTH_SHORT).show();
+//                        finish();
+//                    }
+//                }
 
                 urlText.setText(url);
                 ResultStatus resultStatus = ResultStatus.FAILURE;
