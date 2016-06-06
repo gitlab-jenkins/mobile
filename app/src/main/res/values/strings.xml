@@ -117,7 +117,7 @@
 
     <string name="transaction_history_title">تراکنش‌ها</string>
     <string name="payment_request_title">تولید فاکتور</string>
-    <string name="business_purchase_title">پرداخت کسب و کار</string>
+    <string name="business_purchase_title">پرداخت به کسب و کار</string>
     <string name="pending_purchase_payment_title">پرداخت‌های در انتظار</string>
 
     <string name="detail_transaction">جزئیات تراکنش</string>
@@ -335,7 +335,7 @@
 
     <string-array name="guide_list">
         <item>پرداخت به فروشگاه‌ها</item>
-        <item>پرداخت به کسب و کارهای اینترنتی از طریق دکمه هم‌پی</item>
+        <item>پرداخت به کسب و کارهای اینترنتی با دکمه هم‌پی</item>
         <item>پرداخت به خیریه‌ها</item>
         <item>تولید فاکتور</item>
         <item>پرداخت‌های در انتظار</item>
@@ -499,7 +499,7 @@
     <string name="about_text_6">حقوق مربوط به کپی رایت عکسهای استفاده شده متعلق به محمد امیر خسروی است.</string>
     <string name="about_text_7">شما درحال استفاده از نسخه %1$s هم‌پی هستید.</string>
     <string name="title_activity_tc">TCActivity</string>
-    <string name="business_request">پرداخت کسب و کار</string>
+    <string name="business_request">پرداخت به کسب و کار</string>
     <string name="one_request">پرداخت به فرد</string>
     <string name="business_pay_code">براساس کد</string>
     <string name="business_pay_name">براساس نام</string>

@@ -74,8 +74,8 @@ public class GuideFragment extends Fragment {
                         break;
 
                     case 4:
-                        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_title_pending_payment);
-                        intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_text_pending_payment);
+                        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_pending_payment);
+                        intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_pending_payment);
                         break;
 
                     case 5:

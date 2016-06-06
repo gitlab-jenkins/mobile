@@ -507,12 +507,6 @@ public class ProfileEntryActivity extends AppCompatActivity {
         });
     }
 
-    public void contactUs(View view){
-
-    }
-
-
-
     public class RequestCardProfileTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<CardProfileResponse>>
     {
 
