@@ -357,8 +357,10 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         Intent intent = new Intent();
         intent.setClass(context, HamPayLoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        getActivity().finish();
-        getActivity().startActivity(intent);
+        if (getActivity() != null) {
+            getActivity().finish();
+            getActivity().startActivity(intent);
+        }
     }
 }
 

@@ -51,6 +51,8 @@ import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfs
 
 public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
+
+    private DatabaseHelper dbHelper;
     ImageView pay_to_business_button;
     FacedTextView cancel_pay_to_business_button;
 
@@ -170,6 +172,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         activity = RequestBusinessPayDetailActivity.this;
         PugNotification.with(context).cancel(Constants.MERCHANT_NOTIFICATION_IDENTIFIER);
         databaseHelper = new DatabaseHelper(activity);
+        dbHelper = new DatabaseHelper(context);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
@@ -532,6 +535,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
                     purchaseInfoDTO = latestPurchaseResponseMessage.getService().getPurchaseInfo();
 
+                    dbHelper.createViewedPurchaseRequest(purchaseInfoDTO.getProductCode());
+
                     if (purchaseInfoDTO == null){
                         new HamPayDialog(activity).showFailPendingPurchaseDialog(requestLatestPurchase, latestPurchaseRequest,
                                 Constants.LOCAL_ERROR_CODE,
@@ -758,8 +763,10 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setClass(context, HamPayLoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        finish();
-        startActivity(intent);
+        if (activity != null) {
+            finish();
+            startActivity(intent);
+        }
     }
 
 }

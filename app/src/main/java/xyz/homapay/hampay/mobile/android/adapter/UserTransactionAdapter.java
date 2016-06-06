@@ -85,7 +85,7 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
         }
         else {
             viewHolder.status_text.setText(activity.getString(R.string.fail));
-            viewHolder.status_text.setTextColor(ContextCompat.getColor(activity, R.color.colorPrimary));
+            viewHolder.status_text.setTextColor(ContextCompat.getColor(activity, R.color.failed_transaction));
             viewHolder.status_icon.setImageResource(R.drawable.arrow_f);
         }
 

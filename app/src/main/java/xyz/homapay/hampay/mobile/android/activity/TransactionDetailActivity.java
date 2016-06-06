@@ -50,7 +50,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
     Activity activity;
     private CurrencyFormatter formatter;
     HamPayDialog hamPayDialog;
-    private FacedTextView caller_name;
+    private FacedTextView status_text;
     private FacedTextView callee_name;
     private ImageView image;
     private FacedTextView total_amount_value;
@@ -60,7 +60,6 @@ public class TransactionDetailActivity extends AppCompatActivity {
     private FacedTextView payment_request_code;
     private FacedTextView date_time;
     private FacedTextView card_number;
-    private LinearLayout cell_number_layout;
     private FacedTextView cell_number;
     private FacedTextView bank_name;
     private FacedTextView message;
@@ -133,7 +132,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
         hamPayDialog = new HamPayDialog(activity);
 
-        caller_name = (FacedTextView) findViewById(R.id.caller_name);
+        status_text = (FacedTextView) findViewById(R.id.status_text);
         callee_name = (FacedTextView) findViewById(R.id.callee_name);
         image = (ImageView)findViewById(R.id.image);
         total_amount_value = (FacedTextView) findViewById(R.id.total_amount_value);
@@ -143,7 +142,6 @@ public class TransactionDetailActivity extends AppCompatActivity {
         payment_request_code = (FacedTextView) findViewById(R.id.payment_request_code);
         date_time = (FacedTextView) findViewById(R.id.date_time);
         card_number = (FacedTextView) findViewById(R.id.card_number);
-        cell_number_layout = (LinearLayout)findViewById(R.id.cell_number_layout);
         cell_number = (FacedTextView) findViewById(R.id.cell_number);
         bank_name = (FacedTextView) findViewById(R.id.bank_name);
         message = (FacedTextView) findViewById(R.id.message);
@@ -163,22 +161,22 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
         if (transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.SUCCESS) {
             if (transactionDTO.getTransactionType() == TransactionDTO.TransactionType.CREDIT) {
-                caller_name.setText(context.getString(R.string.credit));
-                caller_name.setTextColor(ContextCompat.getColor(context, R.color.register_btn_color));
+                status_text.setText(context.getString(R.string.credit));
+                status_text.setTextColor(ContextCompat.getColor(context, R.color.register_btn_color));
 //                status_icon.setImageResource(R.drawable.arrow_r);
             } else if (transactionDTO.getTransactionType() == TransactionDTO.TransactionType.DEBIT) {
-                caller_name.setText(context.getString(R.string.debit));
-                caller_name.setTextColor(ContextCompat.getColor(context, R.color.user_change_status));
+                status_text.setText(context.getString(R.string.debit));
+                status_text.setTextColor(ContextCompat.getColor(context, R.color.user_change_status));
 //                status_icon.setImageResource(R.drawable.arrow_p);
             }
 
         } else if (transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.PENDING) {
-            caller_name.setText(context.getString(R.string.pending));
-            caller_name.setTextColor(ContextCompat.getColor(context, R.color.pending_transaction));
+            status_text.setText(context.getString(R.string.pending));
+            status_text.setTextColor(ContextCompat.getColor(context, R.color.pending_transaction));
 //            viewHolder.status_icon.setImageResource(R.drawable.pending);
         } else {
-            caller_name.setText(context.getString(R.string.fail));
-            caller_name.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
+            status_text.setText(context.getString(R.string.fail));
+            status_text.setTextColor(ContextCompat.getColor(context, R.color.failed_transaction));
 //            viewHolder.status_icon.setImageResource(R.drawable.arrow_f);
         }
 
@@ -242,11 +240,11 @@ public class TransactionDetailActivity extends AppCompatActivity {
                         if (transactionDTO.getPersonType() == TransactionDTO.PersonType.INDIVIDUAL) {
                             if (tnxDetailDTO.getCellNumber() != null) {
                                 cell_number.setText(persianEnglishDigit.E2P(tnxDetailDTO.getCellNumber()));
-                                cell_number_layout.setVisibility(View.VISIBLE);
                             }
                         }
                         if (tnxDetailDTO.getMessage() != null) {
                             message.setText(tnxDetailDTO.getMessage());
+                            message.setVisibility(View.VISIBLE);
                         }
                         if (tnxDetailDTO.getAppliedCard() != null) {
                             creditInfo.setVisibility(View.VISIBLE);
@@ -284,8 +282,10 @@ public class TransactionDetailActivity extends AppCompatActivity {
             Intent intent = new Intent();
             intent.setClass(context, HamPayLoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            finish();
-            startActivity(intent);
+            if (activity != null) {
+                finish();
+                startActivity(intent);
+            }
         }
     }
 }

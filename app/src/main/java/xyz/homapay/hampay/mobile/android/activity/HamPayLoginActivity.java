@@ -35,6 +35,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import xyz.homapay.hampay.common.common.encrypt.AESMessageEncryptor;
+import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
+import xyz.homapay.hampay.common.common.encrypt.MessageEncryptor;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.RecentPendingFundRequest;
@@ -227,6 +230,15 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ham_pay_login);
+
+        final String message = "this is a test message";
+        final MessageEncryptor messageEncryptor = new AESMessageEncryptor(Constants.APP_KEY);
+        try {
+            final String encrypted =  messageEncryptor.encrypt(message);
+            final String decrypted = messageEncryptor.decrypt(encrypted);
+        } catch (EncryptionException e) {
+            e.printStackTrace();
+        }
 
 
         Display display = getWindowManager().getDefaultDisplay();

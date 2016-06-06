@@ -3,17 +3,25 @@ package xyz.homapay.hampay.mobile.android.webservice;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.UUID;
 
+import xyz.homapay.hampay.common.common.encrypt.AESMessageEncryptor;
+import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
+import xyz.homapay.hampay.common.common.encrypt.MessageEncryptor;
 import xyz.homapay.hampay.common.common.request.RequestHeader;
 import xyz.homapay.hampay.common.common.request.RequestMessage;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
@@ -1167,7 +1175,6 @@ public class WebServices  {
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = new Gson();
-
         responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<RecentPendingFundResponse>>() {}.getType());
 
         proxyService.closeConnection();
@@ -1175,7 +1182,33 @@ public class WebServices  {
         return responseMessage;
     }
 
+//    public ResponseMessage<RecentPendingFundResponse> recentPendingFund(RecentPendingFundRequest recentPendingFundRequest) throws IOException, EncryptionException {
+//        ResponseMessage<RecentPendingFundResponse> responseMessage = null;
+//        url = new URL(serviceURL + "/fund/recent-pending");
+//        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+//        recentPendingFundRequest.setRequestUUID(UUID.randomUUID().toString());
+//        RequestMessage<RecentPendingFundRequest> message = new RequestMessage<>(recentPendingFundRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+//        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RecentPendingFundRequest>>() {}.getType();
+//        String jsonRequest = new Gson().toJson(message, requestType);
+//        final MessageEncryptor messageEncryptor = new AESMessageEncryptor(Constants.APP_KEY);
+//        proxyService.setJsonBody(messageEncryptor.encrypt(jsonRequest));
+//        Gson gson = new Gson();
+//        InputStreamReader inputStreamReader = proxyService.getInputStreamReader();
+//        String line;
+//        StringBuilder sb = new StringBuilder();
+//        BufferedReader br = new BufferedReader(inputStreamReader);
+//        while ((line = br.readLine()) != null) {
+//            sb.append(line);
+//        }
+//        final String decrypted = messageEncryptor.decrypt(sb.toString());
+//        responseMessage = gson.fromJson(decrypted, new TypeToken<ResponseMessage<RecentPendingFundResponse>>() {}.getType());
+//        proxyService.closeConnection();
+//        return responseMessage;
+//    }
+
+
     public ResponseMessage<PendingFundListResponse> fundListResponse(PendingFundListRequest pendingFundListRequest) throws IOException{
+        Log.e("Time Stamp", String.valueOf(System.currentTimeMillis()));
         ResponseMessage<PendingFundListResponse> responseMessage = null;
         url = new URL(serviceURL + "/fund/pending-list");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
@@ -1187,8 +1220,42 @@ public class WebServices  {
         Gson gson = builder.getDatebuilder().create();
         responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<PendingFundListResponse>>() {}.getType());
         proxyService.closeConnection();
+        Log.e("Time Stamp", String.valueOf(System.currentTimeMillis()));
         return responseMessage;
     }
+
+
+
+//    public ResponseMessage<PendingFundListResponse> fundListResponse(PendingFundListRequest pendingFundListRequest) throws IOException, EncryptionException {
+//        Log.e("Time Stamp", String.valueOf(System.currentTimeMillis()));
+//        ResponseMessage<PendingFundListResponse> responseMessage = null;
+//        url = new URL(serviceURL + "/fund/pending-list");
+//        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+//        pendingFundListRequest.setRequestUUID(UUID.randomUUID().toString());
+//        RequestMessage<PendingFundListRequest> message = new RequestMessage<>(pendingFundListRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+//        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<PendingFundListRequest>>() {}.getType();
+//        String jsonRequest = new Gson().toJson(message, requestType);
+//        proxyService.setJsonBody(jsonRequest);
+//        Gson gson = builder.getDatebuilder().create();
+//
+//        final MessageEncryptor messageEncryptor = new AESMessageEncryptor(Constants.APP_KEY);
+//
+//        InputStreamReader inputStreamReader = proxyService.getInputStreamReader();
+//
+//        String line;
+//        StringBuilder sb = new StringBuilder();
+//        BufferedReader br = new BufferedReader(inputStreamReader);
+//        while ((line = br.readLine()) != null) {
+//            sb.append(line);
+//        }
+//
+//        final String decrypted = messageEncryptor.decrypt(sb.toString());
+//
+//        responseMessage = gson.fromJson(decrypted, new TypeToken<ResponseMessage<PendingFundListResponse>>() {}.getType());
+//        proxyService.closeConnection();
+//        Log.e("Time Stamp", String.valueOf(System.currentTimeMillis()));
+//        return responseMessage;
+//    }
 
     public ResponseMessage<TransactionDetailResponse> transactionDetailResponse(TransactionDetailRequest transactionDetailRequest) throws IOException{
         ResponseMessage<TransactionDetailResponse> responseMessage = null;

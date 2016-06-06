@@ -43,6 +43,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_ENABLED_HAMPAY = "enabled_hampay";
     private static final String TABLE_CANCELED_PENDING_PAYMENT = "canceled_pending_payment";
     private static final String TABLE_VIEWED_PAYMENT_REQUEST = "viewed_payment_request";
+    private static final String TABLE_VIEWED_PURCHASE_REQUEST = "viewed_purchase_request";
 
 
     // Recent Pay Table - column names
@@ -64,6 +65,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Viewed Payment Request
     private static final String KEY_VIEWED_PAYMENT_REQUEST_ID = "payment_id";
     private static final String KEY_VIEWED_PAYMENT_REQUEST_CODE = "payment_code";
+
+    // Viewed Purchase Request
+    private static final String KEY_VIEWED_PURCHASE_REQUEST_ID = "purchase_id";
+    private static final String KEY_VIEWED_PURCHASE_REQUEST_CODE = "purchase_code";
 
     // recent pay table create statement
     private static final String CREATE_TABLE_RECENT_PAY = "CREATE TABLE "
@@ -92,11 +97,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     //Viewed payment request table create statement
-    // recent pay table create statement
     private static final String CREATE_TABLE_VIEWED_PAYMENT_REQUEST = "CREATE TABLE "
             + TABLE_VIEWED_PAYMENT_REQUEST + "("
             + KEY_VIEWED_PAYMENT_REQUEST_ID + " INTEGER PRIMARY KEY,"
             + KEY_VIEWED_PAYMENT_REQUEST_CODE + " TEXT"
+            + ")";
+
+    private static final String CREATE_TABLE_VIEWED_PURCHASE_REQUEST = "CREATE TABLE "
+            + TABLE_VIEWED_PURCHASE_REQUEST + "("
+            + KEY_VIEWED_PURCHASE_REQUEST_ID + " INTEGER PRIMARY KEY,"
+            + KEY_VIEWED_PURCHASE_REQUEST_CODE + " TEXT"
             + ")";
 
 
@@ -145,11 +155,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
         db.execSQL(CREATE_TABLE_RECENT_PAY);
         db.execSQL(CREATE_TABLE_HAMPAY_ENABLED);
         db.execSQL(CREATE_TABLE_CANCELED_PENDING_PAYMENT);
         db.execSQL(CREATE_TABLE_VIEWED_PAYMENT_REQUEST);
+        db.execSQL(CREATE_TABLE_VIEWED_PURCHASE_REQUEST);
     }
 
     @Override
@@ -159,6 +169,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ENABLED_HAMPAY);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CANCELED_PENDING_PAYMENT);
         db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_VIEWED_PAYMENT_REQUEST);
+        db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_VIEWED_PURCHASE_REQUEST);
         // create new tables
         onCreate(db);
     }
@@ -452,13 +463,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String selectQuery = "SELECT  * FROM " + TABLE_VIEWED_PAYMENT_REQUEST + " WHERE "
                 + KEY_VIEWED_PAYMENT_REQUEST_CODE + " = '" + paymentCode + "'";
-//        Log.e(LOG, selectQuery);
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.getCount() > 0)
             return true;
         else
             return false;
+    }
 
+    public long createViewedPurchaseRequest(String purchaseCode) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_VIEWED_PURCHASE_REQUEST_CODE, purchaseCode);
+        long viewed_purchase_request_id = db.insert(TABLE_VIEWED_PURCHASE_REQUEST, null, values);
+        return viewed_purchase_request_id;
+    }
+
+    public boolean checkPurchaseRequest(String purchaseCode) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT  * FROM " + TABLE_VIEWED_PURCHASE_REQUEST + " WHERE "
+                + KEY_VIEWED_PURCHASE_REQUEST_CODE + " = '" + purchaseCode + "'";
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.getCount() > 0)
+            return true;
+        else
+            return false;
     }
 
 }

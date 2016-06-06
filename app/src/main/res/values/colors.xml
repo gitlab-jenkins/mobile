@@ -18,6 +18,7 @@
     <color name="register_btn_color">#36ac3f</color>
     <color name="user_change_status">#0095ff</color>
     <color name="pending_transaction">#019585</color>
+    <color name="failed_transaction">#FF3300</color>
 
     <color name="entry_field_color">#e6e7e8</color>
     <color name="normal_text">#6e6f71</color>

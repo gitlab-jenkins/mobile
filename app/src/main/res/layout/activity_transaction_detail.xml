@@ -70,20 +70,20 @@
                             android:layout_marginRight="2dp">
 
                             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                                android:id="@+id/caller_name"
-                                geekui:customTypeface="fonts/iran_sans.ttf"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textColor="@color/main_menu_title"
-                                android:textSize="15sp" />
-
-                            <xyz.homapay.hampay.mobile.android.component.FacedTextView
                                 android:id="@+id/callee_name"
                                 geekui:customTypeface="fonts/iran_sans.ttf"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/main_menu_title"
                                 android:textSize="15dp" />
+
+                            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                                android:id="@+id/cell_number"
+                                geekui:customTypeface="fonts/iran_sans.ttf"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/main_menu_title"
+                                android:textSize="14dp" />
 
                         </LinearLayout>
 
@@ -114,30 +114,48 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="8dp">
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp">
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                    android:id="@+id/total_amount_value"
-                    geekui:customTypeface="fonts/iran_sans_bold.ttf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/account_details_text"
-                    android:textSize="22sp" />
-
-                <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                    android:id="@+id/status_text"
                     geekui:customTypeface="fonts/iran_sans.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/account_details_text"
-                    android:textSize="12sp"
-                    android:text="@string/currency_rials"/>
+                    android:textColor="@color/main_menu_title"
+                    android:textSize="15sp"
+                    android:layout_alignParentRight="true"/>
 
-            </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_centerVertical="true">
+
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/total_amount_value"
+                        geekui:customTypeface="fonts/iran_sans_bold.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/account_details_text"
+                        android:textSize="22sp" />
+
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        geekui:customTypeface="fonts/iran_sans.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/account_details_text"
+                        android:textSize="12sp"
+                        android:text="@string/currency_rials"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -337,47 +355,6 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/cell_number_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <View
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/main_menu_title"
-                    android:layout_margin="8dp"/>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_gravity="right">
-
-                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                        android:id="@+id/cell_number"
-                        geekui:customTypeface="fonts/iran_sans.ttf"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/main_menu_title"
-                        android:textSize="15dp"
-                        android:layout_marginRight="2dp"/>
-
-                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                        geekui:customTypeface="fonts/iran_sans.ttf"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/main_menu_title"
-                        android:textSize="15dp"
-                        android:text="@string/cell_number"/>
-
-                </LinearLayout>
-
-            </LinearLayout>
 
             <View
                 android:layout_width="fill_parent"
@@ -394,7 +371,8 @@
                 android:textSize="15dp"
                 android:text="@string/message"
                 android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"/>
+                android:layout_marginRight="8dp"
+                android:visibility="invisible"/>
 
             <LinearLayout
                 android:id="@+id/pay_button"
@@ -414,7 +392,7 @@
                     android:textSize="18dp"
                     android:gravity="center"
                     android:layout_marginRight="4dp"
-                    android:text="@string/payment"/>
+                    android:text="@string/payment_request_issue"/>
 
                 <ImageView
                     android:layout_width="25dp"

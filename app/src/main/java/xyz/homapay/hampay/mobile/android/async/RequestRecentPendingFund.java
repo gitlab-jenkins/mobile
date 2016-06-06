@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 
 import java.io.IOException;
 
+import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.request.RecentPendingFundRequest;
 import xyz.homapay.hampay.common.core.model.response.RecentPendingFundResponse;
@@ -45,6 +46,9 @@ public class RequestRecentPendingFund extends AsyncTask<RecentPendingFundRequest
         } catch (IOException e) {
             e.printStackTrace();
         }
+//        catch (EncryptionException e) {
+//            e.printStackTrace();
+//        }
         return null;
     }
 

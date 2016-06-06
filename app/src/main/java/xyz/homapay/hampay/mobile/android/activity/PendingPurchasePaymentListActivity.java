@@ -5,10 +5,12 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -183,11 +185,11 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
         pendingListView = (ListView)findViewById(R.id.pendingListView);
 
-
         requestPendingFundList = new RequestPendingFundList(activity, new RequestPendingFundTaskCompleteListener());
         pendingFundListRequest = new PendingFundListRequest();
         pendingFundListRequest.setType(FundType.ALL);
-        requestPendingFundList.execute(pendingFundListRequest);
+        requestPendingFundList.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, pendingFundListRequest);
+//        requestPendingFundList.execute(pendingFundListRequest);
 
         full_pending = (RelativeLayout)findViewById(R.id.full_pending);
         full_pending.setOnClickListener(this);
@@ -401,6 +403,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
         @Override
         public void onTaskPreRun() {
+            Log.e("Time Stamp", String.valueOf(System.currentTimeMillis()));
             hamPayDialog.showWaitingDialog("");
         }
     }

@@ -231,8 +231,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             }
         }else {
             if (pendingPurchaseCode != null){
-                intent.setClass(context, RequestBusinessPayDetailActivity.class);
-                startActivity(intent);
+                if (!dbHelper.checkPurchaseRequest(pendingPurchaseCode)) {
+                    intent.setClass(context, RequestBusinessPayDetailActivity.class);
+                    startActivity(intent);
+                }
             }else if (pendingPaymentCode != null){
                 if (!dbHelper.checkPaymentRequest(pendingPaymentCode)) {
                     intent.setClass(context, InvoicePendingConfirmationActivity.class);
@@ -668,8 +670,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         Intent intent = new Intent();
         intent.setClass(context, HamPayLoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        finish();
-        startActivity(intent);
+        if (activity != null) {
+            finish();
+            startActivity(intent);
+        }
     }
 
 }

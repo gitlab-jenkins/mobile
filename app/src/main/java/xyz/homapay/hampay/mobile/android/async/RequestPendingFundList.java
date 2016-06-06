@@ -2,9 +2,11 @@ package xyz.homapay.hampay.mobile.android.async;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.IOException;
 
+import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.request.PendingFundListRequest;
 import xyz.homapay.hampay.common.core.model.response.PendingFundListResponse;
@@ -20,7 +22,6 @@ public class RequestPendingFundList extends AsyncTask<PendingFundListRequest, Vo
 
     private Context context;
     private AsyncTaskCompleteListener<ResponseMessage<PendingFundListResponse>> listener;
-
 
     public RequestPendingFundList(Context context, AsyncTaskCompleteListener<ResponseMessage<PendingFundListResponse>> listener)
     {
@@ -38,13 +39,18 @@ public class RequestPendingFundList extends AsyncTask<PendingFundListRequest, Vo
     @Override
     protected ResponseMessage<PendingFundListResponse> doInBackground(PendingFundListRequest... params) {
 
+        Log.e("Time Stamp", String.valueOf(System.currentTimeMillis()));
         WebServices webServices = new WebServices(context, Constants.CONNECTION_TYPE);
+        Log.e("Time Stamp", String.valueOf(System.currentTimeMillis()));
 
         try {
             return webServices.fundListResponse(params[0]);
         } catch (IOException e) {
             e.printStackTrace();
         }
+//        catch (EncryptionException e) {
+//            e.printStackTrace();
+//        }
         return null;
     }
 

@@ -1992,8 +1992,10 @@ public class HamPayDialog {
         Intent intent = new Intent();
         intent.setClass(activity, HamPayLoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        activity.finish();
-        activity.startActivity(intent);
+        if (activity != null) {
+            activity.finish();
+            activity.startActivity(intent);
+        }
     }
 
 }

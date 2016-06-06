@@ -17,7 +17,7 @@
         <ImageView
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:src="@drawable/modal_failure"
+            android:src="@drawable/ic_warning"
             android:layout_centerInParent="true"
             android:padding="4dp"/>
 

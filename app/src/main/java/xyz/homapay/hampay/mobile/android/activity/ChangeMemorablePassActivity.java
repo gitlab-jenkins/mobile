@@ -399,7 +399,9 @@ public class ChangeMemorablePassActivity extends AppCompatActivity implements Vi
         Intent intent = new Intent();
         intent.setClass(context, HamPayLoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        finish();
-        startActivity(intent);
+        if (activity != null) {
+            finish();
+            startActivity(intent);
+        }
     }
 }
