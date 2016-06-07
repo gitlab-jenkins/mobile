@@ -10,19 +10,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.UUID;
 
-import xyz.homapay.hampay.common.common.encrypt.AESMessageEncryptor;
 import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
-import xyz.homapay.hampay.common.common.encrypt.MessageEncryptor;
-import xyz.homapay.hampay.common.common.request.RequestHeader;
 import xyz.homapay.hampay.common.common.request.RequestMessage;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
@@ -120,20 +113,17 @@ import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
 import xyz.homapay.hampay.mobile.android.ssl.AllowHamPaySSL;
 import xyz.homapay.hampay.mobile.android.util.Constants;
-import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
-import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.UserContacts;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWABasicHttpBinding_ITokenPay;
-import xyz.homapay.hampay.mobile.android.webservice.psp.PayThPartyApp;
 import xyz.homapay.hampay.mobile.android.webservice.psp.Vectorstring2stringMapEntry;
 
 /**
  * Created by amir on 6/6/15.
  */
-public class WebServices  {
+public class SecuredWebServices {
 
-    public WebServices(){}
+    public SecuredWebServices(){}
     private Context context;
     private SharedPreferences prefs;
     private DateGsonBuilder builder;
@@ -142,7 +132,7 @@ public class WebServices  {
     private String serviceURL = "";
     private String authToken = "";
 
-    public WebServices(Context context, ConnectionType connectionType){
+    public SecuredWebServices(Context context, ConnectionType connectionType){
         this.context = context;
         prefs =  context.getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
         builder = new DateGsonBuilder();
@@ -156,7 +146,7 @@ public class WebServices  {
         this.authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
     }
 
-    public WebServices(Context context){
+    public SecuredWebServices(Context context){
         this.context = context;
         prefs =  context.getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
         builder = new DateGsonBuilder();
@@ -178,11 +168,11 @@ public class WebServices  {
         return (LogoutResponse) gson.fromJson(responseElement.toString(), listType);
     }
 
-    public ResponseMessage<IllegalAppListResponse> getIllegalAppList() throws IOException{
+    public ResponseMessage<IllegalAppListResponse> getIllegalAppList() throws IOException, EncryptionException {
 
         ResponseMessage<IllegalAppListResponse> responseMessage = null;
         url = new URL(serviceURL + "/illegal-apps");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
 
         IllegalAppListRequest illegalAppListRequest = new IllegalAppListRequest();
@@ -190,59 +180,60 @@ public class WebServices  {
 
         RequestMessage<IllegalAppListRequest> message = new RequestMessage<>(illegalAppListRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<IllegalAppListRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<IllegalAppListRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = new Gson();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<IllegalAppListResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<IllegalAppListResponse>>() {}.getType());
 
         proxyService.closeConnection();
 
         return  responseMessage;
     }
 
-    public ResponseMessage<RegistrationEntryResponse> registrationEntry(RegistrationEntryRequest registrationEntryRequest) throws IOException {
+    public ResponseMessage<RegistrationEntryResponse> registrationEntry(RegistrationEntryRequest registrationEntryRequest) throws IOException, EncryptionException {
 
         ResponseMessage<RegistrationEntryResponse> responseMessage = null;
         url = new URL(serviceURL + "/users/reg-entry");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url, true);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url, true);
 
         registrationEntryRequest.setRequestUUID(UUID.randomUUID().toString());
 
         RequestMessage<RegistrationEntryRequest> message = new RequestMessage<>(registrationEntryRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationEntryRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<RegistrationEntryRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
+
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = new Gson();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<RegistrationEntryResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<RegistrationEntryResponse>>() {}.getType());
 
         proxyService.closeConnection();
 
         return  responseMessage;
     }
 
-    public ResponseMessage<ContactUsResponse> contactUsResponse(ContactUsRequest contactUsRequest) throws IOException{
+    public ResponseMessage<ContactUsResponse> contactUsResponse(ContactUsRequest contactUsRequest) throws IOException, EncryptionException {
 
 
         ResponseMessage<ContactUsResponse> responseMessage = null;
         url = new URL(serviceURL + "/contactus");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         contactUsRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<ContactUsRequest> message = new RequestMessage<>(contactUsRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<ContactUsRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<ContactUsRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = new Gson();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<ContactUsResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<ContactUsResponse>>() {}.getType());
 
         proxyService.closeConnection();
 
@@ -250,22 +241,23 @@ public class WebServices  {
 
     }
 
-    public ResponseMessage<RegistrationSendSmsTokenResponse> registrationSendSmsToken(RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest) throws IOException{
+    public ResponseMessage<RegistrationSendSmsTokenResponse> registrationSendSmsToken(RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest) throws IOException, EncryptionException {
 
         ResponseMessage<RegistrationSendSmsTokenResponse> responseMessage = null;
         url = new URL(serviceURL + "/users/reg-sms-token");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+//        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         registrationSendSmsTokenRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<RegistrationSendSmsTokenRequest> message = new RequestMessage<>(registrationSendSmsTokenRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationSendSmsTokenRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<RegistrationSendSmsTokenRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = new Gson();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<RegistrationSendSmsTokenResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<RegistrationSendSmsTokenResponse>>() {}.getType());
 
         proxyService.closeConnection();
 
@@ -273,22 +265,22 @@ public class WebServices  {
     }
 
 
-    public ResponseMessage<RegistrationVerifyMobileResponse> registrationVerifyMobileResponse(RegistrationVerifyMobileRequest registrationVerifyMobileRequest) throws IOException{
+    public ResponseMessage<RegistrationVerifyMobileResponse> registrationVerifyMobileResponse(RegistrationVerifyMobileRequest registrationVerifyMobileRequest) throws IOException, EncryptionException {
 
         ResponseMessage<RegistrationVerifyMobileResponse> responseMessage = null;
         url = new URL(serviceURL + "/users/reg-verify-mobile");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         registrationVerifyMobileRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<RegistrationVerifyMobileRequest> message = new RequestMessage<>(registrationVerifyMobileRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationVerifyMobileRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<RegistrationVerifyMobileRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = new Gson();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<RegistrationVerifyMobileResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<RegistrationVerifyMobileResponse>>() {}.getType());
 
         proxyService.closeConnection();
 
@@ -296,25 +288,25 @@ public class WebServices  {
     }
 
 
-    public ResponseMessage<RegistrationCredentialsResponse> registrationCredentialsResponse(RegistrationCredentialsRequest registrationCredentialsRequest) throws IOException{
+    public ResponseMessage<RegistrationCredentialsResponse> registrationCredentialsResponse(RegistrationCredentialsRequest registrationCredentialsRequest) throws IOException, EncryptionException {
 
 
         ResponseMessage<RegistrationCredentialsResponse> responseMessage = null;
         url = new URL(serviceURL + "/users/reg-credential-entry");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url, true);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url, true);
 
         UserContacts userContacts = new UserContacts(context);
         registrationCredentialsRequest.setContacts(userContacts.read());
         registrationCredentialsRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<RegistrationCredentialsRequest> message = new RequestMessage<>(registrationCredentialsRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationCredentialsRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<RegistrationCredentialsRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = new Gson();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<RegistrationCredentialsResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<RegistrationCredentialsResponse>>() {}.getType());
 
         proxyService.closeConnection();
 
@@ -322,22 +314,22 @@ public class WebServices  {
     }
 
 
-    public ResponseMessage<MobileRegistrationIdEntryResponse> registrationDeviceRegId(MobileRegistrationIdEntryRequest mobileRegistrationIdEntryRequest) throws IOException{
+    public ResponseMessage<MobileRegistrationIdEntryResponse> registrationDeviceRegId(MobileRegistrationIdEntryRequest mobileRegistrationIdEntryRequest) throws IOException, EncryptionException {
 
         ResponseMessage<MobileRegistrationIdEntryResponse> responseMessage = null;
         url = new URL(serviceURL + "/users/mobile-reg-id-entry");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         mobileRegistrationIdEntryRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<MobileRegistrationIdEntryRequest> message = new RequestMessage<>(mobileRegistrationIdEntryRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<MobileRegistrationIdEntryRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<MobileRegistrationIdEntryRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = new Gson();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<MobileRegistrationIdEntryResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<MobileRegistrationIdEntryResponse>>() {}.getType());
 
         proxyService.closeConnection();
 
@@ -345,44 +337,44 @@ public class WebServices  {
     }
 
 
-    public ResponseMessage<TACResponse> tacResponse(TACRequest tacRequest) throws IOException{
+    public ResponseMessage<TACResponse> tacResponse(TACRequest tacRequest) throws IOException, EncryptionException {
 
         ResponseMessage<TACResponse> responseMessage = null;
         url = new URL(serviceURL + "/users/tac");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         tacRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<TACRequest> message = new RequestMessage<>(tacRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<TACRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<TACRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<TACResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<TACResponse>>() {}.getType());
 
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
-    public ResponseMessage<UploadImageResponse> uploadImage(UploadImageRequest uploadImageRequest) throws IOException{
+    public ResponseMessage<UploadImageResponse> uploadImage(UploadImageRequest uploadImageRequest) throws IOException, EncryptionException {
 
         ResponseMessage<UploadImageResponse> responseMessage = null;
         url = new URL(serviceURL + "/users/upload-image");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         uploadImageRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
         RequestMessage<UploadImageRequest> message = new RequestMessage<>(uploadImageRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<UploadImageRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<UploadImageRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<UploadImageResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UploadImageResponse>>() {}.getType());
 
         proxyService.closeConnection();
 
@@ -390,22 +382,22 @@ public class WebServices  {
     }
 
 
-    public ResponseMessage<GetUserIdTokenResponse> getUserIdTokenResponse(GetUserIdTokenRequest getUserIdTokenRequest) throws IOException{
+    public ResponseMessage<GetUserIdTokenResponse> getUserIdTokenResponse(GetUserIdTokenRequest getUserIdTokenRequest) throws IOException, EncryptionException {
 
         ResponseMessage<GetUserIdTokenResponse> responseMessage = null;
         url = new URL(serviceURL + "/users/get-user-id-token");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         getUserIdTokenRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
         RequestMessage<GetUserIdTokenRequest> message = new RequestMessage<>(getUserIdTokenRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<GetUserIdTokenRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<GetUserIdTokenRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<GetUserIdTokenResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<GetUserIdTokenResponse>>() {}.getType());
 
         proxyService.closeConnection();
 
@@ -413,22 +405,22 @@ public class WebServices  {
     }
 
 
-    public ResponseMessage<TACAcceptResponse> tacAcceptResponse(TACAcceptRequest tacAcceptRequest) throws IOException{
+    public ResponseMessage<TACAcceptResponse> tacAcceptResponse(TACAcceptRequest tacAcceptRequest) throws IOException, EncryptionException {
 
         ResponseMessage<TACAcceptResponse> responseMessage = null;
         url = new URL(serviceURL + "/users/tacaccept");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         tacAcceptRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
         RequestMessage<TACAcceptRequest> message = new RequestMessage<>(tacAcceptRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<TACAcceptRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<TACAcceptRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<TACAcceptResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<TACAcceptResponse>>() {}.getType());
 
         proxyService.closeConnection();
 
@@ -436,22 +428,22 @@ public class WebServices  {
     }
 
 
-    public ResponseMessage<UserProfileResponse> getUserProfile(UserProfileRequest userProfileRequest) throws IOException{
+    public ResponseMessage<UserProfileResponse> getUserProfile(UserProfileRequest userProfileRequest) throws IOException, EncryptionException {
 
         ResponseMessage<UserProfileResponse> responseMessage = null;
         url = new URL(serviceURL + "/users/profile");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         userProfileRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
         RequestMessage<UserProfileRequest> message = new RequestMessage<>(userProfileRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<UserProfileRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<UserProfileRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<UserProfileResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UserProfileResponse>>() {}.getType());
 
         proxyService.closeConnection();
 
@@ -460,23 +452,23 @@ public class WebServices  {
     }
 
 
-    public ResponseMessage<TransactionListResponse> userTransaction(TransactionListRequest transactionListRequest) throws IOException{
+    public ResponseMessage<TransactionListResponse> userTransaction(TransactionListRequest transactionListRequest) throws IOException, EncryptionException {
 
         ResponseMessage<TransactionListResponse> responseMessage = null;
         url = new URL(serviceURL + "/transactions");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
 
         transactionListRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
         RequestMessage<TransactionListRequest> message = new RequestMessage<>(transactionListRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<TransactionListRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<TransactionListRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<TransactionListResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<TransactionListResponse>>() {}.getType());
 
         proxyService.closeConnection();
 
@@ -484,24 +476,24 @@ public class WebServices  {
     }
 
 
-    public ResponseMessage<ContactsHampayEnabledResponse> getEnabledHamPayContacts(ContactsHampayEnabledRequest contactsHampayEnabledRequest) throws IOException{
+    public ResponseMessage<ContactsHampayEnabledResponse> getEnabledHamPayContacts(ContactsHampayEnabledRequest contactsHampayEnabledRequest) throws IOException, EncryptionException {
 
         ResponseMessage<ContactsHampayEnabledResponse> responseMessage = null;
         url = new URL(serviceURL + "/customer/contacts/hp-enabled");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url, true);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url, true);
 
         UserContacts userContacts = new UserContacts(context);
         contactsHampayEnabledRequest.setContacts(userContacts.read());
         contactsHampayEnabledRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
         RequestMessage<ContactsHampayEnabledRequest> message = new RequestMessage<>(contactsHampayEnabledRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<ContactsHampayEnabledRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<ContactsHampayEnabledRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<ContactsHampayEnabledResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<ContactsHampayEnabledResponse>>() {}.getType());
 
         proxyService.closeConnection();
 
@@ -509,131 +501,131 @@ public class WebServices  {
     }
 
 
-    public ResponseMessage<IndividualPaymentResponse> individualPayment(IndividualPaymentRequest individualPaymentRequest) throws IOException{
+    public ResponseMessage<IndividualPaymentResponse> individualPayment(IndividualPaymentRequest individualPaymentRequest) throws IOException, EncryptionException {
 
         ResponseMessage<IndividualPaymentResponse> responseMessage = null;
         url = new URL(serviceURL + "/customers/individual-payment");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         individualPaymentRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
         RequestMessage<IndividualPaymentRequest> message = new RequestMessage<>(individualPaymentRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<IndividualPaymentRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<IndividualPaymentRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<IndividualPaymentResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<IndividualPaymentResponse>>() {}.getType());
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
 
-    public ResponseMessage<BusinessListResponse> getHamPayBusinesses(BusinessListRequest businessListRequest) throws IOException{
+    public ResponseMessage<BusinessListResponse> getHamPayBusinesses(BusinessListRequest businessListRequest) throws IOException, EncryptionException {
 
         ResponseMessage<BusinessListResponse> responseMessage = null;
         url = new URL(serviceURL + "/businesses");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         businessListRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
         RequestMessage<BusinessListRequest> message = new RequestMessage<>(businessListRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<BusinessListRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<BusinessListRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<BusinessListResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<BusinessListResponse>>() {}.getType());
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
 
-    public ResponseMessage<BusinessPaymentConfirmResponse> businessPaymentConfirm(BusinessPaymentConfirmRequest businessPaymentConfirmRequest) throws IOException{
+    public ResponseMessage<BusinessPaymentConfirmResponse> businessPaymentConfirm(BusinessPaymentConfirmRequest businessPaymentConfirmRequest) throws IOException, EncryptionException {
 
         ResponseMessage<BusinessPaymentConfirmResponse> responseMessage = null;
         url = new URL(serviceURL + "/businesses/business-payment-confirm");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         businessPaymentConfirmRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
         RequestMessage<BusinessPaymentConfirmRequest> message = new RequestMessage<>(businessPaymentConfirmRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<BusinessPaymentConfirmRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<BusinessPaymentConfirmRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<BusinessPaymentConfirmResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<BusinessPaymentConfirmResponse>>() {}.getType());
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
 
-    public ResponseMessage<BusinessListResponse> searchBusinessList(BusinessSearchRequest businessSearchRequest) throws IOException{
+    public ResponseMessage<BusinessListResponse> searchBusinessList(BusinessSearchRequest businessSearchRequest) throws IOException, EncryptionException {
 
         ResponseMessage<BusinessListResponse> responseMessage = null;
         url = new URL(serviceURL + "/businesses/search");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         businessSearchRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
         RequestMessage<BusinessSearchRequest> message = new RequestMessage<>(businessSearchRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<BusinessListRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<BusinessListRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<BusinessListResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<BusinessListResponse>>() {}.getType());
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
 
-    public ResponseMessage<ChangePassCodeResponse> changePassCodeResponse(ChangePassCodeRequest changePassCodeRequest) throws IOException{
+    public ResponseMessage<ChangePassCodeResponse> changePassCodeResponse(ChangePassCodeRequest changePassCodeRequest) throws IOException, EncryptionException {
 
         ResponseMessage<ChangePassCodeResponse> responseMessage = null;
         url = new URL(serviceURL + "/users/passcode");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.PUT, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.PUT, url);
 
         changePassCodeRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
         RequestMessage<ChangePassCodeRequest> message = new RequestMessage<>(changePassCodeRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<ChangePassCodeRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<ChangePassCodeRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<ChangePassCodeResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<ChangePassCodeResponse>>() {}.getType());
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
-    public ResponseMessage<ChangeMemorableWordResponse> changeMemorableWordResponse(ChangeMemorableWordRequest changeMemorableWordRequest) throws IOException{
+    public ResponseMessage<ChangeMemorableWordResponse> changeMemorableWordResponse(ChangeMemorableWordRequest changeMemorableWordRequest) throws IOException, EncryptionException {
 
         ResponseMessage<ChangeMemorableWordResponse> responseMessage = null;
         url = new URL(serviceURL + "/users/memorable-word");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.PUT, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.PUT, url);
 
         changeMemorableWordRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
         RequestMessage<ChangeMemorableWordRequest> message = new RequestMessage<>(changeMemorableWordRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<ChangeMemorableWordRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<ChangeMemorableWordRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<ChangeMemorableWordResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<ChangeMemorableWordResponse>>() {}.getType());
         proxyService.closeConnection();
 
         return responseMessage;
@@ -641,44 +633,44 @@ public class WebServices  {
 
 
 
-    public ResponseMessage<UnlinkUserResponse> unlinkUserResponse(UnlinkUserRequest unlinkUserRequest) throws IOException{
+    public ResponseMessage<UnlinkUserResponse> unlinkUserResponse(UnlinkUserRequest unlinkUserRequest) throws IOException, EncryptionException {
 
         ResponseMessage<UnlinkUserResponse> responseMessage = null;
         url = new URL(serviceURL + "/users/unlink");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         unlinkUserRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
         RequestMessage<UnlinkUserRequest> message = new RequestMessage<>(unlinkUserRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<UnlinkUserRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<UnlinkUserRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<UnlinkUserResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UnlinkUserResponse>>() {}.getType());
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
 
-    public ResponseMessage<ChangeEmailResponse> changeEmailResponse(ChangeEmailRequest changeEmailRequest) throws IOException{
+    public ResponseMessage<ChangeEmailResponse> changeEmailResponse(ChangeEmailRequest changeEmailRequest) throws IOException, EncryptionException {
 
         ResponseMessage<ChangeEmailResponse> responseMessage = null;
         url = new URL(serviceURL + "/users/change-email");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         changeEmailRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
         RequestMessage<ChangeEmailRequest> message = new RequestMessage<>(changeEmailRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<ChangeEmailRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<ChangeEmailRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = new Gson();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<ChangeEmailResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<ChangeEmailResponse>>() {}.getType());
         proxyService.closeConnection();
 
         return responseMessage;
@@ -737,49 +729,49 @@ public class WebServices  {
     }
 
 
-    public ResponseMessage<LatestPurchaseResponse> latestUserPurchase(LatestPurchaseRequest latestPurchaseRequest) throws IOException{
+    public ResponseMessage<LatestPurchaseResponse> latestUserPurchase(LatestPurchaseRequest latestPurchaseRequest) throws IOException, EncryptionException {
 
         ResponseMessage<LatestPurchaseResponse> responseMessage = null;
         url = new URL(serviceURL + "/purchase/latest");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         latestPurchaseRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
         RequestMessage<LatestPurchaseRequest> message = new RequestMessage<>(latestPurchaseRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<LatestPurchaseRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<LatestPurchaseRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<LatestPurchaseResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<LatestPurchaseResponse>>() {}.getType());
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
-    public ResponseMessage<LatestPaymentResponse> latestUserPayment(LatestPaymentRequest latestPaymentRequest) throws IOException{
+    public ResponseMessage<LatestPaymentResponse> latestUserPayment(LatestPaymentRequest latestPaymentRequest) throws IOException, EncryptionException {
 
         ResponseMessage<LatestPaymentResponse> responseMessage = null;
         url = new URL(serviceURL + "/payment/latest");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         latestPaymentRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
         RequestMessage<LatestPaymentRequest> message = new RequestMessage<>(latestPaymentRequest, authToken, Constants.REQUEST_VERSION);
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<LatestPaymentRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<LatestPaymentRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<LatestPaymentResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<LatestPaymentResponse>>() {}.getType());
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
-    public ResponseMessage<PSPResultResponse> pspResult(PSPResultRequest pspResultRequest, int type) throws IOException{
+    public ResponseMessage<PSPResultResponse> pspResult(PSPResultRequest pspResultRequest, int type) throws IOException, EncryptionException {
 
         ResponseMessage<PSPResultResponse> responseMessage = null;
         if (type == 1) {
@@ -787,140 +779,140 @@ public class WebServices  {
         }else if (type == 2){
             url = new URL(serviceURL + "/payment/psp-result");
         }
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         pspResultRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
         RequestMessage<PSPResultRequest> message = new RequestMessage<>(pspResultRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<PSPResultRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<PSPResultRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<PSPResultResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PSPResultResponse>>() {}.getType());
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
-    public ResponseMessage<PendingPurchaseListResponse> pendingPurchase(PendingPurchaseListRequest pendingPurchaseListRequest) throws IOException{
+    public ResponseMessage<PendingPurchaseListResponse> pendingPurchase(PendingPurchaseListRequest pendingPurchaseListRequest) throws IOException, EncryptionException {
 
         ResponseMessage<PendingPurchaseListResponse> responseMessage = null;
         url = new URL(serviceURL + "/purchase/pendingList");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         pendingPurchaseListRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
         RequestMessage<PendingPurchaseListRequest> message = new RequestMessage<>(pendingPurchaseListRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<PendingPurchaseListRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<PendingPurchaseListRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<PendingPurchaseListResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PendingPurchaseListResponse>>() {}.getType());
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
 
-    public ResponseMessage<PendingPaymentListResponse> pendingPayment(PendingPaymentListRequest pendingPaymentListRequest) throws IOException{
+    public ResponseMessage<PendingPaymentListResponse> pendingPayment(PendingPaymentListRequest pendingPaymentListRequest) throws IOException, EncryptionException {
 
         ResponseMessage<PendingPaymentListResponse> responseMessage = null;
         url = new URL(serviceURL +  "/payment/pendingList");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         pendingPaymentListRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
         RequestMessage<PendingPaymentListRequest> message = new RequestMessage<>(pendingPaymentListRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<PendingPaymentListRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<PendingPaymentListRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<PendingPaymentListResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PendingPaymentListResponse>>() {}.getType());
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
-    public ResponseMessage<CancelPurchasePaymentResponse> cancelPurchasePaymentResponse(CancelPurchasePaymentRequest cancelPurchasePaymentRequest) throws IOException{
+    public ResponseMessage<CancelPurchasePaymentResponse> cancelPurchasePaymentResponse(CancelPurchasePaymentRequest cancelPurchasePaymentRequest) throws IOException, EncryptionException {
 
         ResponseMessage<CancelPurchasePaymentResponse> responseMessage = null;
         url = new URL(serviceURL +  "/purchase/cancel");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         cancelPurchasePaymentRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
         RequestMessage<CancelPurchasePaymentRequest> message = new RequestMessage<>(cancelPurchasePaymentRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<CancelPurchasePaymentRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<CancelPurchasePaymentRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<CancelPurchasePaymentResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<CancelPurchasePaymentResponse>>() {}.getType());
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
-    public ResponseMessage<CancelUserPaymentResponse> cancelUserPaymentResponse(CancelUserPaymentRequest cancelUserPaymentRequest) throws IOException{
+    public ResponseMessage<CancelUserPaymentResponse> cancelUserPaymentResponse(CancelUserPaymentRequest cancelUserPaymentRequest) throws IOException, EncryptionException {
 
         ResponseMessage<CancelUserPaymentResponse> responseMessage = null;
         url = new URL(serviceURL +  "/payment/cancel");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         cancelUserPaymentRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
         RequestMessage<CancelUserPaymentRequest> message = new RequestMessage<>(cancelUserPaymentRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<CancelUserPaymentRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<CancelUserPaymentRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<CancelUserPaymentResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<CancelUserPaymentResponse>>() {}.getType());
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
-    public ResponseMessage<UserPaymentResponse> userPaymentResponse(UserPaymentRequest userPaymentRequest) throws IOException{
+    public ResponseMessage<UserPaymentResponse> userPaymentResponse(UserPaymentRequest userPaymentRequest) throws IOException, EncryptionException {
 
         ResponseMessage<UserPaymentResponse> responseMessage = null;
         url = new URL(serviceURL +  "/users/payment-request");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         userPaymentRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
         RequestMessage<UserPaymentRequest> message = new RequestMessage<>(userPaymentRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<UserPaymentRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<UserPaymentRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<UserPaymentResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UserPaymentResponse>>() {}.getType());
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
 
-    public ResponseMessage<IBANConfirmationResponse> ibanConfirmation(IBANConfirmationRequest ibanConfirmationRequest) throws IOException{
+    public ResponseMessage<IBANConfirmationResponse> ibanConfirmation(IBANConfirmationRequest ibanConfirmationRequest) throws IOException, EncryptionException {
 
         ResponseMessage<IBANConfirmationResponse> responseMessage = null;
         url = new URL(serviceURL +  "/iban/confirmation");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         ibanConfirmationRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
         RequestMessage<IBANConfirmationRequest> message = new RequestMessage<>(ibanConfirmationRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<IBANConfirmationRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<IBANConfirmationRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
 
 
@@ -929,7 +921,7 @@ public class WebServices  {
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<IBANConfirmationResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<IBANConfirmationResponse>>() {}.getType());
         proxyService.closeConnection();
 
         return responseMessage;
@@ -937,93 +929,93 @@ public class WebServices  {
 
 
 
-    public ResponseMessage<IBANChangeResponse> ibanChange(IBANChangeRequest ibanChangeRequest) throws IOException{
+    public ResponseMessage<IBANChangeResponse> ibanChange(IBANChangeRequest ibanChangeRequest) throws IOException, EncryptionException {
 
         ResponseMessage<IBANChangeResponse> responseMessage = null;
         url = new URL(serviceURL +  "/iban/change");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         ibanChangeRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
         RequestMessage<IBANChangeRequest> message = new RequestMessage<>(ibanChangeRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<IBANChangeRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<IBANChangeRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<IBANChangeResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<IBANChangeResponse>>() {}.getType());
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
-    public ResponseMessage<CardProfileResponse> getCardProfile(CardProfileRequest cardProfileRequest) throws IOException {
+    public ResponseMessage<CardProfileResponse> getCardProfile(CardProfileRequest cardProfileRequest) throws IOException, EncryptionException {
 
         ResponseMessage<CardProfileResponse> responseMessage = null;
         url = new URL(serviceURL + "/card/info");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         cardProfileRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<CardProfileRequest> message = new RequestMessage<CardProfileRequest>(cardProfileRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<CardProfileRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<CardProfileRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<CardProfileResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<CardProfileResponse>>() {}.getType());
         proxyService.closeConnection();
 
         return  responseMessage;
     }
 
-    public ResponseMessage<PurchaseInfoResponse> purchaseInfo(PurchaseInfoRequest purchaseInfoRequest) throws IOException{
+    public ResponseMessage<PurchaseInfoResponse> purchaseInfo(PurchaseInfoRequest purchaseInfoRequest) throws IOException, EncryptionException {
 
         ResponseMessage<PurchaseInfoResponse> responseMessage = null;
         url = new URL(serviceURL + "/purchase/info");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         purchaseInfoRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<PurchaseInfoRequest> message = new RequestMessage<>(purchaseInfoRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<PurchaseInfoRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<PurchaseInfoRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<PurchaseInfoResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PurchaseInfoResponse>>() {}.getType());
 
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
-    public ResponseMessage<LatestInvoiceContactsResponse> latestInvoiceContacts(LatestInvoiceContactsRequest latestInvoiceContactsRequest) throws IOException{
+    public ResponseMessage<LatestInvoiceContactsResponse> latestInvoiceContacts(LatestInvoiceContactsRequest latestInvoiceContactsRequest) throws IOException, EncryptionException {
 
         ResponseMessage<LatestInvoiceContactsResponse> responseMessage = null;
         url = new URL(serviceURL + "/payment/recent-contacts");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         latestInvoiceContactsRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<LatestInvoiceContactsRequest> message = new RequestMessage<>(latestInvoiceContactsRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<LatestInvoiceContactsRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<LatestInvoiceContactsRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<LatestInvoiceContactsResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<LatestInvoiceContactsResponse>>() {}.getType());
 
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
-    public ResponseMessage<GetTokenFromPSPResponse> getTokenFromPSP(GetTokenFromPSPRequest getTokenFromPSPRequest, int transactionType) throws IOException{
+    public ResponseMessage<GetTokenFromPSPResponse> getTokenFromPSP(GetTokenFromPSPRequest getTokenFromPSPRequest, int transactionType) throws IOException, EncryptionException {
 
         ResponseMessage<GetTokenFromPSPResponse> responseMessage = null;
 
@@ -1032,198 +1024,198 @@ public class WebServices  {
         }else if (transactionType == 1){
             url = new URL(serviceURL + "/payment/token");
         }
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         getTokenFromPSPRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<GetTokenFromPSPRequest> message = new RequestMessage<>(getTokenFromPSPRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<GetTokenFromPSPRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<GetTokenFromPSPRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<GetTokenFromPSPResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<GetTokenFromPSPResponse>>() {}.getType());
 
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
-    public ResponseMessage<PaymentDetailResponse> paymentDetail(PaymentDetailRequest paymentDetailRequest) throws IOException{
+    public ResponseMessage<PaymentDetailResponse> paymentDetail(PaymentDetailRequest paymentDetailRequest) throws IOException, EncryptionException {
 
         ResponseMessage<PaymentDetailResponse> responseMessage = null;
         url = new URL(serviceURL + "/payment/detail");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         paymentDetailRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<PaymentDetailRequest> message = new RequestMessage<>(paymentDetailRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<PaymentDetailRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<PaymentDetailRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<PaymentDetailResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PaymentDetailResponse>>() {}.getType());
 
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
-    public ResponseMessage<PurchaseDetailResponse> purchaseDetail(PurchaseDetailRequest purchaseDetailRequest) throws IOException{
+    public ResponseMessage<PurchaseDetailResponse> purchaseDetail(PurchaseDetailRequest purchaseDetailRequest) throws IOException, EncryptionException {
 
         ResponseMessage<PurchaseDetailResponse> responseMessage = null;
         url = new URL(serviceURL + "/purchase/detail");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         purchaseDetailRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<PurchaseDetailRequest> message = new RequestMessage<>(purchaseDetailRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<PurchaseDetailRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<PurchaseDetailRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<PurchaseDetailResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PurchaseDetailResponse>>() {}.getType());
 
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
-    public ResponseMessage<RemoveUserImageResponse> removeUserImageResponse(RemoveUserImageRequest removeUserImageRequest) throws IOException{
+    public ResponseMessage<RemoveUserImageResponse> removeUserImageResponse(RemoveUserImageRequest removeUserImageRequest) throws IOException, EncryptionException {
 
         ResponseMessage<RemoveUserImageResponse> responseMessage = null;
         url = new URL(serviceURL + "/users/remove-image");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         removeUserImageRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<RemoveUserImageRequest> message = new RequestMessage<>(removeUserImageRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RemoveUserImageRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<RemoveUserImageRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<RemoveUserImageResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<RemoveUserImageResponse>>() {}.getType());
 
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
-    public ResponseMessage<PendingPOListResponse> pendingPOList(PendingPOListRequest pendingPOListRequest) throws IOException{
+    public ResponseMessage<PendingPOListResponse> pendingPOList(PendingPOListRequest pendingPOListRequest) throws IOException, EncryptionException {
 
         ResponseMessage<PendingPOListResponse> responseMessage = null;
         url = new URL(serviceURL + "/payment/pending-po-list");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         pendingPOListRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<PendingPOListRequest> message = new RequestMessage<>(pendingPOListRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<PendingPOListRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<PendingPOListRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<PendingPOListResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PendingPOListResponse>>() {}.getType());
 
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
-    public ResponseMessage<CalculateVatResponse> calculateVAT(CalculateVatRequest calculateVatRequest) throws IOException{
+    public ResponseMessage<CalculateVatResponse> calculateVAT(CalculateVatRequest calculateVatRequest) throws IOException, EncryptionException {
 
         ResponseMessage<CalculateVatResponse> responseMessage = null;
         url = new URL(serviceURL + "/payment/calculate-vat");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         calculateVatRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<CalculateVatRequest> message = new RequestMessage<>(calculateVatRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<CalculateVatRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<CalculateVatRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<CalculateVatResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<CalculateVatResponse>>() {}.getType());
 
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
-    public ResponseMessage<RecentPendingFundResponse> recentPendingFund(RecentPendingFundRequest recentPendingFundRequest) throws IOException{
+    public ResponseMessage<RecentPendingFundResponse> recentPendingFund(RecentPendingFundRequest recentPendingFundRequest) throws IOException, EncryptionException {
 
         ResponseMessage<RecentPendingFundResponse> responseMessage = null;
         url = new URL(serviceURL + "/fund/recent-pending");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         recentPendingFundRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<RecentPendingFundRequest> message = new RequestMessage<>(recentPendingFundRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RecentPendingFundRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<RecentPendingFundRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = new Gson();
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<RecentPendingFundResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<RecentPendingFundResponse>>() {}.getType());
 
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
-    public ResponseMessage<PendingFundListResponse> fundListResponse(PendingFundListRequest pendingFundListRequest) throws IOException{
+    public ResponseMessage<PendingFundListResponse> fundListResponse(PendingFundListRequest pendingFundListRequest) throws IOException, EncryptionException {
         Log.e("Time Stamp", String.valueOf(System.currentTimeMillis()));
         ResponseMessage<PendingFundListResponse> responseMessage = null;
         url = new URL(serviceURL + "/fund/pending-list");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
         pendingFundListRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<PendingFundListRequest> message = new RequestMessage<>(pendingFundListRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<PendingFundListRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<PendingFundListRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
         Gson gson = builder.getDatebuilder().create();
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<PendingFundListResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PendingFundListResponse>>() {}.getType());
         proxyService.closeConnection();
         Log.e("Time Stamp", String.valueOf(System.currentTimeMillis()));
         return responseMessage;
     }
 
-    public ResponseMessage<TransactionDetailResponse> transactionDetailResponse(TransactionDetailRequest transactionDetailRequest) throws IOException{
+    public ResponseMessage<TransactionDetailResponse> transactionDetailResponse(TransactionDetailRequest transactionDetailRequest) throws IOException, EncryptionException {
         ResponseMessage<TransactionDetailResponse> responseMessage = null;
         url = new URL(serviceURL + "/transactions/detail");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
         transactionDetailRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<TransactionDetailRequest> message = new RequestMessage<>(transactionDetailRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<TransactionDetailRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<TransactionDetailRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
         Gson gson = builder.getDatebuilder().create();
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<TransactionDetailResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<TransactionDetailResponse>>() {}.getType());
         proxyService.closeConnection();
         return responseMessage;
     }
 
-    public ResponseMessage<PendingCountResponse> pendingCount(PendingCountRequest pendingCountRequest) throws IOException{
+    public ResponseMessage<PendingCountResponse> pendingCount(PendingCountRequest pendingCountRequest) throws IOException, EncryptionException {
         ResponseMessage<PendingCountResponse> responseMessage = null;
         url = new URL(serviceURL + "/fund/count-pending");
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
         pendingCountRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<PendingCountRequest> message = new RequestMessage<>(pendingCountRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<PendingCountRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<PendingCountRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
         Gson gson = builder.getDatebuilder().create();
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<PendingCountResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PendingCountResponse>>() {}.getType());
         proxyService.closeConnection();
         return responseMessage;
     }

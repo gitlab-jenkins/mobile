@@ -277,7 +277,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (pspInfoDTO.getCardDTO().getCardId() == null) {
+                if (pspInfoDTO.getCardDTO().getCardId() == null || (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() >= Constants.SOAP_AMOUNT_MAX)) {
                     Intent intent = new Intent();
                     intent.setClass(activity, BankWebPaymentActivity.class);
                     intent.putExtra(Constants.PURCHASE_INFO, purchaseInfoDTO);
@@ -305,7 +305,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
 
                     s2sMapEntry.Key = "Amount";
-                    s2sMapEntry.Value = (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge()) + "";
+                    s2sMapEntry.Value = String.valueOf(purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat());
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();

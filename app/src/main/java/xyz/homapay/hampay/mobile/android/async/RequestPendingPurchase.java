@@ -5,10 +5,12 @@ import android.os.AsyncTask;
 
 import java.io.IOException;
 
+import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.request.PendingPurchaseListRequest;
 import xyz.homapay.hampay.common.core.model.response.PendingPurchaseListResponse;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.webservice.SecuredWebServices;
 import xyz.homapay.hampay.mobile.android.webservice.WebServices;
 
 /**
@@ -38,11 +40,13 @@ public class RequestPendingPurchase extends AsyncTask<PendingPurchaseListRequest
     @Override
     protected ResponseMessage<PendingPurchaseListResponse> doInBackground(PendingPurchaseListRequest... params) {
 
-        WebServices webServices = new WebServices(context, Constants.CONNECTION_TYPE);
+        SecuredWebServices webServices = new SecuredWebServices(context, Constants.CONNECTION_TYPE);
 
         try {
             return webServices.pendingPurchase(params[0]);
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (EncryptionException e) {
             e.printStackTrace();
         }
         return null;

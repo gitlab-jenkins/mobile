@@ -5,10 +5,12 @@ import android.os.AsyncTask;
 
 import java.io.IOException;
 
+import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.request.CalculateVatRequest;
 import xyz.homapay.hampay.common.core.model.response.CalculateVatResponse;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.webservice.SecuredWebServices;
 import xyz.homapay.hampay.mobile.android.webservice.WebServices;
 
 /**
@@ -38,11 +40,13 @@ public class RequestCalculateVat extends AsyncTask<CalculateVatRequest, Void, Re
     @Override
     protected ResponseMessage<CalculateVatResponse> doInBackground(CalculateVatRequest... params) {
 
-        WebServices webServices = new WebServices(context, Constants.CONNECTION_TYPE);
+        SecuredWebServices webServices = new SecuredWebServices(context, Constants.CONNECTION_TYPE);
 
         try {
             return webServices.calculateVAT(params[0]);
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (EncryptionException e) {
             e.printStackTrace();
         }
         return null;

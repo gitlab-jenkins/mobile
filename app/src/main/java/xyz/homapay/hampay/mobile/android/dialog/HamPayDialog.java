@@ -24,6 +24,7 @@ import com.google.android.gms.analytics.Tracker;
 import java.io.IOException;
 import java.util.UUID;
 
+import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
@@ -106,6 +107,7 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.EmailVerification;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
+import xyz.homapay.hampay.mobile.android.webservice.SecuredWebServices;
 import xyz.homapay.hampay.mobile.android.webservice.WebServices;
 
 /**
@@ -371,10 +373,13 @@ public class HamPayDialog {
         @Override
         protected String doInBackground(ContactUsRequest... params) {
 
-            WebServices webServices = new WebServices(activity, Constants.CONNECTION_TYPE);
+//            WebServices webServices = new WebServices(activity, Constants.CONNECTION_TYPE);
+            SecuredWebServices webServices = new SecuredWebServices(activity, Constants.CONNECTION_TYPE);
             try {
                 contactUsResponseResponseMessage = webServices.contactUsResponse(params[0]);
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (EncryptionException e) {
                 e.printStackTrace();
             }
 

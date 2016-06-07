@@ -13,7 +13,7 @@
     <string name="intro_5">نمایش پرداخت‌ها و دریافت‌های گذشته</string>
 
 
-    <string name="msg_fail_sms_correct_entry">کد 4 رقمی را کامل وارد کنید.</string>
+    <string name="msg_fail_sms_correct_entry">کد ۴ رقمی را کامل وارد کنید.</string>
 
     <string name="action_search">Search</string>
     <string name="drawer_open">Open</string>
@@ -240,7 +240,7 @@
     <string name="sms_request">تایید</string>
     <string name="sms_cancel">انصراف</string>
     <string name="mobile_no_verification">تایید شماره همراه</string>
-    <string name="deliver_verification">کد 4 رقمی برای شما پیامک شد. در صورت عدم دریافت پیامک، دکمه ارسال مجدد را لمس کنید.</string>
+    <string name="deliver_verification">کد ۴ رقمی برای شما پیامک شد. در صورت عدم دریافت پیامک، دکمه ارسال مجدد را لمس کنید.</string>
     <string name="verification">بررسی</string>
 
     <string name="resend">ارسال مجدد</string>
@@ -268,8 +268,8 @@
     <string name="verify_account_no">بررسی شماره حساب</string>
 
     <string name="reg_verify_account_no_text_1">انتقال وجه زیر را خارج از برنامه هم‌پی و از طریق یکی از روش‌های اینترنت بانک، همراه بانک و یا عابر بانک انجام دهید.</string>
-    <string name="reg_verify_account_no_text_2">برای بررسی صحت شماره حساب شما مبلغ ۲۱4۱ ریال از حساب هم‌پی ۸۰۰۰4۵۹ به حساب شما ۱۲۳4۵۶۷۷ واریز شد.</string>
-    <string name="reg_verify_account_no_text_3">لطفا جهت تکمیل بررسی، مبلغ فوق(۲۱4۱ ریال) را از حساب خود(۱۳4۵4) به یکی از روش‌های بالا به حساب هم‌پی (۸۰۰۰4۵۹) باز گردانید.</string>
+    <string name="reg_verify_account_no_text_2">برای بررسی صحت شماره حساب شما مبلغ ۲۱۴۱ ریال از حساب هم‌پی ۸۰۰۰۴۵۹ به حساب شما ۱۲۳۴۵۶۷۷ واریز شد.</string>
+    <string name="reg_verify_account_no_text_3">لطفا جهت تکمیل بررسی، مبلغ فوق(۲۱۴۱ ریال) را از حساب خود(۱۳۴۵۴) به یکی از روش‌های بالا به حساب هم‌پی (۸۰۰۰۴۵۹) باز گردانید.</string>
     <string name="reg_verify_account_no_keep_on">پس از انجام واریز، دکمه ادامه را کلیک کنید.</string>
 
     <string name="get_password">دریافت رمز عبور</string>

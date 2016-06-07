@@ -5,8 +5,8 @@ import xyz.homapay.hampay.mobile.android.webservice.ConnectionType;
 
 public class Constants {
 //    public static String SERVER = "176.58.104.158";//England Server IP
-    public static String SERVER = "mobile.hampay.ir";//Prod Server IP
-//    public static String SERVER = "139.162.181.92";//UAT Server IP
+//    public static String SERVER = "mobile.hampay.ir";//Prod Server IP
+    public static String SERVER = "139.162.181.92";//UAT Server IP
     public static String URL_PREFIX = "/hampay";
     public static String HTTP_SERVER_IP = "http://" + SERVER + ":90" + URL_PREFIX;//England Server
     public static String IPG_URL = "http://" + SERVER + ":9091" + URL_PREFIX;//England Server
@@ -105,6 +105,7 @@ public class Constants {
     public static final int PAYMENT_NOTIFICATION_IDENTIFIER = 1003;
     public static final String PROVIDER_ID = "providerId";
     public static final String IMAGE_ID = "imageId";
+    public static final int SOAP_AMOUNT_MAX = 2000001;
 
     //Permissions and Group Permission
     public static final int READ_PHONE_STATE = 1;

@@ -5,10 +5,12 @@ import android.os.AsyncTask;
 
 import java.io.IOException;
 
+import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.request.ChangeEmailRequest;
 import xyz.homapay.hampay.common.core.model.response.ChangeEmailResponse;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.webservice.SecuredWebServices;
 import xyz.homapay.hampay.mobile.android.webservice.WebServices;
 
 /**
@@ -38,10 +40,12 @@ public class RequestChangeEmail extends AsyncTask<ChangeEmailRequest, Void, Resp
     protected ResponseMessage<ChangeEmailResponse> doInBackground(ChangeEmailRequest... params) {
 
 
-        WebServices webServices = new WebServices(context, Constants.CONNECTION_TYPE);
+        SecuredWebServices webServices = new SecuredWebServices(context, Constants.CONNECTION_TYPE);
         try {
             return webServices.changeEmailResponse(params[0]);
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (EncryptionException e) {
             e.printStackTrace();
         }
         return null;

@@ -224,7 +224,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
         pay_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (pspInfoDTO.getCardDTO().getCardId() == null) {
+                if (pspInfoDTO.getCardDTO().getCardId() == null || (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + paymentInfoDTO.getVat() >= Constants.SOAP_AMOUNT_MAX)) {
                     Intent intent = new Intent();
                     intent.setClass(activity, BankWebPaymentActivity.class);
                     intent.putExtra(Constants.PAYMENT_INFO, paymentInfoDTO);
