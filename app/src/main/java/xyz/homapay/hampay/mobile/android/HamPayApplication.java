@@ -52,7 +52,6 @@ public class HamPayApplication extends MultiDexApplication {
     @Override
     public void onTerminate() {
         super.onTerminate();
-        Log.e("ee", "");
     }
 
 
@@ -80,6 +79,7 @@ public class HamPayApplication extends MultiDexApplication {
 
     static AppState applicationState;
 
+
     public static AppState getAppState(){
         return applicationState;
     }
@@ -87,5 +87,7 @@ public class HamPayApplication extends MultiDexApplication {
     public static void setAppSate(AppState appState){
         applicationState = appState;
     }
+
+
 
 }

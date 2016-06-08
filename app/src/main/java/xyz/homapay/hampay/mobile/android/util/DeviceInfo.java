@@ -67,7 +67,11 @@ public class DeviceInfo {
 
     public String getNetworkOperator() {
         if (telephonyManager.getSubscriberId() != null) {
-            return telephonyManager.getSubscriberId().substring(0, 5);
+            if (telephonyManager.getSubscriberId().length() > 0) {
+                return telephonyManager.getSubscriberId().substring(0, 5);
+            }else {
+                return "";
+            }
         }else {
             return "";
         }

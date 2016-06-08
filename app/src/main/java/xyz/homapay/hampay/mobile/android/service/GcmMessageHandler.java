@@ -5,6 +5,7 @@ import android.app.IntentService;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,21 +34,16 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
  */
 public class GcmMessageHandler extends IntentService{
 
-
-    String headsUpTitle;
-    String headsUpContent;
     private Handler handler;
 
-    private int code = 1;
-
     String googleMessageType;
-//    String notificationMessageType;
 
     NotificationMessageType notificationMessageType;
     String notificationMessage;
     String notificationName;
     Long notificationValue;
     String notificationCallerCellNumber;
+    SharedPreferences prefs;
 
 
 
@@ -60,10 +56,15 @@ public class GcmMessageHandler extends IntentService{
         // TODO Auto-generated method stub
         super.onCreate();
         handler = new Handler();
+        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
     }
     @Override
     protected void onHandleIntent(Intent intent) {
         Bundle extras = intent.getExtras();
+
+        if (!prefs.getBoolean(Constants.REGISTERED_USER, false)){
+            return;
+        }
 
         GoogleCloudMessaging googleCloudMessaging = GoogleCloudMessaging.getInstance(this);
 

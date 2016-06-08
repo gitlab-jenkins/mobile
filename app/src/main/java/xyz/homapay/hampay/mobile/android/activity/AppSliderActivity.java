@@ -326,6 +326,8 @@ public class AppSliderActivity extends AppCompatActivity {
 
         if (prefs.getBoolean(Constants.REGISTERED_USER, false)) {
 
+
+
             RelativeLayout hampay_login_splash = (RelativeLayout) findViewById(R.id.hampay_login_splash);
             hampay_login_splash.setVisibility(View.VISIBLE);
 

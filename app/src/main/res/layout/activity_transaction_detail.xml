@@ -347,7 +347,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/account_details_text"
-                    android:textSize="15sp"
+                    android:textSize="15dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginLeft="8dp"
                     android:gravity="right"

@@ -55,6 +55,8 @@ import xyz.homapay.hampay.mobile.android.fragment.SettingFragment;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
+import xyz.homapay.hampay.mobile.android.receiver.GcmBroadcastReceiver;
+import xyz.homapay.hampay.mobile.android.service.GcmMessageHandler;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.ImageManager;
@@ -109,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private String authToken = "";
     private ImageManager imageManager;
     private ImageView user_manual;
+    private String fragmentTitle = "";
 
     public void userManual(View view){
         Intent intent = new Intent();
@@ -166,6 +169,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         activity = MainActivity.this;
         context = this;
+
+        Intent serviceIntent = new Intent(this, GcmMessageHandler.class);
+//        startService(serviceIntent);
+        context.stopService(serviceIntent);
 
         imageManager = new ImageManager(activity, 200000, false);
 
@@ -366,17 +373,17 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     @Override
     public void onDrawerItemSelected(View view, int position) {
-        if (currentFragmet != position || position == 5|| position == 6|| position == 7|| position == 8) {
-            currentFragmet = position;
+        if (currentFragmet != position || position == 5|| position == 6 || position == 7|| position == 8) {
+//            currentFragmet = position;
             displayView(position);
         }
     }
 
     private void displayView(int position) {
         Intent intent = new Intent();
-        String title = getString(R.string.app_name);
         switch (position) {
             case 0:
+                currentFragmet = 0;
                 user_manual.setVisibility(View.VISIBLE);
                 fragment = new MainFragment();
                 if (userProfileDTO != null) {
@@ -385,33 +392,37 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);
                     fragment.setArguments(bundle);
                 }
-                title = getString(R.string.title_main_fragment);
+                fragmentTitle = getString(R.string.title_main_fragment);
                 break;
             case 1:
+                currentFragmet = 1;
                 user_manual.setVisibility(View.VISIBLE);
                 fragment = new AccountDetailFragment();
                 if (userProfileDTO != null) {
                     bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
                     fragment.setArguments(bundle);
                 }
-                title = getString(R.string.title_account_detail);
+                fragmentTitle = getString(R.string.title_account_detail);
                 break;
             case 2:
+                currentFragmet = 2;
                 user_manual.setVisibility(View.VISIBLE);
                 fragment = new SettingFragment();
-                title = getString(R.string.title_settings);
+                fragmentTitle = getString(R.string.title_settings);
                 break;
 
             case 3:
+                currentFragmet = 3;
                 user_manual.setVisibility(View.GONE);
                 fragment = new GuideFragment();
-                title = getString(R.string.title_guide);
+                fragmentTitle = getString(R.string.title_guide);
                 break;
 
             case 4:
+                currentFragmet = 4;
                 user_manual.setVisibility(View.GONE);
                 fragment = new AboutFragment();
-                title = getString(R.string.title_hampay_about);
+                fragmentTitle = getString(R.string.title_hampay_about);
                 break;
 
             case 5:
@@ -440,7 +451,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
 
         if (fragment != null) {
-            setFragment(fragment, title);
+            setFragment(fragment, fragmentTitle);
         }
     }
 
@@ -493,6 +504,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             fragment = new MainFragment();
             if (userProfileDTO != null) {
                 currentFragmet = 0;
+                fragmentTitle = getString(R.string.title_main_fragment);
+                user_manual.setVisibility(View.VISIBLE);
                 bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
                 bundle.putInt(Constants.PENDING_PAYMENT_COUNT, pendingPaymentCount);
                 bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);

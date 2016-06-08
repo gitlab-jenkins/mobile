@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
@@ -215,7 +216,8 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                         recentPendingFundRequest = new RecentPendingFundRequest();
                         recentPendingFundRequest.setImei(new DeviceInfo(activity).getIMEI());
                         recentPendingFundRequest.setNationalCode(prefs.getString(Constants.REGISTERED_NATIONAL_CODE, ""));
-                        requestRecentPendingFund.execute(recentPendingFundRequest);
+                        requestRecentPendingFund.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, recentPendingFundRequest);
+//                        requestRecentPendingFund.execute(recentPendingFundRequest);
                     } else {
                         // Permission not granted
                     }
