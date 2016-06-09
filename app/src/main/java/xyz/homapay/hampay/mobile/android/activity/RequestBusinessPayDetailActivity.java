@@ -206,7 +206,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         currencyFormatter = new CurrencyFormatter();
 
         amount_value = (FacedTextView)findViewById(R.id.amount_value);
-//        credit_value_icon = (ImageView)findViewById(R.id.credit_value_icon);
 
         contact_message = (FacedEditText)findViewById(R.id.contact_message);
         contact_name = (FacedTextView)findViewById(R.id.contact_name);
@@ -230,7 +229,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         paymentTotalValue = (FacedTextView)findViewById(R.id.paymentTotalValue);
 
         bundle = getIntent().getExtras();
-
 
         Intent intent = getIntent();
 

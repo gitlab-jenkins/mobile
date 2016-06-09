@@ -43,6 +43,7 @@ public class GcmMessageHandler extends IntentService{
     String notificationName;
     Long notificationValue;
     String notificationCallerCellNumber;
+    String purchaseCode;
     SharedPreferences prefs;
 
 
@@ -88,6 +89,7 @@ public class GcmMessageHandler extends IntentService{
             notificationName = extras.getString("name");
             notificationValue = extras.getLong("amount");
             notificationCallerCellNumber = extras.getString("callerCellNumber");
+            purchaseCode = extras.getString("purchaseCode");
         }else if (extras.getString("type").equalsIgnoreCase(NotificationMessageType.USER_PAYMENT_CONFIRM.getNotificationMessageType())){
             notificationMessageType = NotificationMessageType.USER_PAYMENT_CONFIRM;
             notificationMessage = extras.getString("message");
@@ -275,10 +277,11 @@ public class GcmMessageHandler extends IntentService{
                     break;
 
                 case PURCHASE:
+                    bundle.putBoolean(Constants.HAS_NOTIFICATION, true);
+                    bundle.putString(Constants.NOTIFICATION_TYPE, notificationMessageType.getNotificationMessageType());
+                    bundle.putString(Constants.BUSINESS_PURCHASE_CODE, purchaseCode);
                     switch (appState){
                         case Stoped:
-                            bundle.putBoolean(Constants.HAS_NOTIFICATION, true);
-                            bundle.putString(Constants.NOTIFICATION_TYPE, notificationMessageType.getNotificationMessageType());
                             PugNotification.with(getApplicationContext())
                                     .load()
                                     .identifier(Constants.MERCHANT_NOTIFICATION_IDENTIFIER)

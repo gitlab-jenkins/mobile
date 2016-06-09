@@ -178,6 +178,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         bundle = getIntent().getExtras();
 
+
+
         Intent intent = getIntent();
 
         pendingPurchaseCode = bundle.getString(Constants.PENDING_PURCHASE_CODE);
