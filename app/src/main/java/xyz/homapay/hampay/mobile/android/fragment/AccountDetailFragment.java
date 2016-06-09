@@ -27,6 +27,7 @@ import xyz.homapay.hampay.mobile.android.activity.IntroIBANActivity;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestUserProfile;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.receiver.GcmBroadcastReceiver;
 import xyz.homapay.hampay.mobile.android.service.GcmMessageHandler;
@@ -55,6 +56,8 @@ public class AccountDetailFragment extends Fragment {
     FacedTextView user_iban_value;
     FacedTextView user_iban_bank;
     FacedTextView user_national_code;
+    private LinearLayout emailLayout;
+    private FacedTextView user_email;
 
     HamPayDialog hamPayDialog;
 
@@ -158,6 +161,8 @@ public class AccountDetailFragment extends Fragment {
         user_iban_value = (FacedTextView)rootView.findViewById(R.id.user_iban_value);
         user_iban_bank = (FacedTextView)rootView.findViewById(R.id.user_iban_bank);
         user_national_code = (FacedTextView)rootView.findViewById(R.id.user_national_code);
+        emailLayout = (LinearLayout)rootView.findViewById(R.id.email_layout);
+        user_email = (FacedTextView) rootView.findViewById(R.id.user_email);
 
 
         if (prefs.getBoolean(Constants.FORCE_USER_PROFILE, false)){
@@ -258,6 +263,17 @@ public class AccountDetailFragment extends Fragment {
         public void onTaskPreRun() {
             hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
             hide_bg.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (prefs.getString(Constants.REGISTERED_USER_EMAIL, "").length() != 0) {
+            user_email.setText(prefs.getString(Constants.REGISTERED_USER_EMAIL, ""));
+            emailLayout.setVisibility(View.VISIBLE);
+        }else {
+            emailLayout.setVisibility(View.GONE);
         }
     }
 

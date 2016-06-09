@@ -130,6 +130,7 @@
     <string name="bank">بانک: </string>
     <string name="user_account_name">نام کاربری: </string>
     <string name="national_code">کد ملی: </string>
+    <string name="email_address">ایمیل: </string>
     <string name="unverified_account">محدود</string>
     <string name="pending_review_account">محدود (در انتظار تایید کاربر)</string>
     <string name="verified_account">محدود (در انتظار تایید)</string>

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -67,6 +68,7 @@ public class PaymentRequestListActivity extends AppCompatActivity{
     private InputMethodManager inputMethodManager;
     private ImageView hampay_contacts;
     private FacedEditText search_text;
+    private SwipeRefreshLayout pullToRefresh;
 
     public void backActionBar(View view){
         finish();
@@ -113,6 +115,15 @@ public class PaymentRequestListActivity extends AppCompatActivity{
         inputMethodManager = (InputMethodManager) getSystemService(
                 Context.INPUT_METHOD_SERVICE);
 
+        pullToRefresh = (SwipeRefreshLayout)findViewById(R.id.pullToRefresh);
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                pendingPOListRequest = new PendingPOListRequest();
+                requestPendingPOList = new RequestPendingPOList(activity, new RequestPendingPOListTaskCompleteListener());
+                requestPendingPOList.execute(pendingPOListRequest);
+            }
+        });
         paymentRequestList = (ListView)findViewById(R.id.paymentRequestList);
         hampay_contacts = (ImageView)findViewById(R.id.hampay_contacts);
         search_text = (FacedEditText)findViewById(R.id.search_text);
@@ -187,6 +198,8 @@ public class PaymentRequestListActivity extends AppCompatActivity{
         public void onTaskComplete(ResponseMessage<PendingPOListResponse> pendingPOListResponseResponseMessage) {
 
             hamPayDialog.dismisWaitingDialog();
+
+            pullToRefresh.setRefreshing(false);
 
             if (pendingPOListResponseResponseMessage != null){
                 if (pendingPOListResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
