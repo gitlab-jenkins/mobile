@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
@@ -29,6 +30,7 @@ import br.com.goncalves.pugnotification.notification.PugNotification;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.enums.TnxSortFactor;
+import xyz.homapay.hampay.common.core.model.request.PendingPOListRequest;
 import xyz.homapay.hampay.common.core.model.request.TransactionListRequest;
 import xyz.homapay.hampay.common.core.model.response.TransactionListResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO;
@@ -36,6 +38,7 @@ import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.UserTransactionAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import xyz.homapay.hampay.mobile.android.async.RequestPendingPOList;
 import xyz.homapay.hampay.mobile.android.async.RequestUserTransaction;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.doblist.DobList;
@@ -49,7 +52,8 @@ import xyz.homapay.hampay.mobile.android.util.ImageManager;
 
 public class TransactionsListActivity extends AppCompatActivity implements View.OnClickListener {
 
-    ListView transationListView;
+    private SwipeRefreshLayout pullToRefresh;
+    private ListView transactionListView;
     UserTransactionAdapter userTransactionAdapter;
     private boolean FINISHED_SCROLLING = false;
 
@@ -160,10 +164,23 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
 
         no_transaction = (FacedTextView)findViewById(R.id.no_transaction);
 
-        transationListView = (ListView)findViewById(R.id.transationListView);
-
-
-        transationListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        transactionListView = (ListView)findViewById(R.id.transactionListView);
+        pullToRefresh = (SwipeRefreshLayout)findViewById(R.id.pullToRefresh);
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                userTransactionAdapter.clear();
+                transactionDTOs.clear();
+                requestPageNumber = 0;
+                transactionListRequest = new TransactionListRequest();
+                transactionListRequest.setPageNumber(requestPageNumber);
+                transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+                transactionListRequest.setSortFactor(sortFactor);
+                requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
+                requestUserTransaction.execute(transactionListRequest);
+            }
+        });
+        transactionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent();
@@ -277,6 +294,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
 
 
             hamPayDialog.dismisWaitingDialog();
+            pullToRefresh.setRefreshing(false);
 
             if (transactionListResponseMessage != null) {
 
@@ -287,7 +305,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
 
                     if (transactionDTOs.size() == 0){
                         no_transaction.setVisibility(View.VISIBLE);
-                        transationListView.setVisibility(View.GONE);
+                        transactionListView.setVisibility(View.GONE);
                     }else {
                         no_transaction.setVisibility(View.GONE);
                     }
@@ -306,8 +324,8 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                                 if (newTransactionDTOs != null)
                                     addDummyData(newTransactionDTOs.size());
                             } else {
-                                initDobList(getWindow().getDecorView().getRootView(), transationListView);
-                                transationListView.setAdapter(userTransactionAdapter);
+                                initDobList(getWindow().getDecorView().getRootView(), transactionListView);
+                                transactionListView.setAdapter(userTransactionAdapter);
                             }
                         }
 

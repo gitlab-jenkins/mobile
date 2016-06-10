@@ -238,14 +238,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         providerId = intent.getStringExtra(Constants.PROVIDER_ID);
 
 
-        if (pspInfoDTO != null) {
-            if (pspInfoDTO.getCardDTO().getCardId() == null) {
-                creditInfo.setVisibility(View.GONE);
-            } else {
-                creditInfo.setVisibility(View.VISIBLE);
-            }
-        }
-
         if (purchaseInfoDTO != null) {
             fillPurchase(purchaseInfoDTO);
         }else if (purchaseCode != null){
@@ -717,13 +709,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
         pspInfoDTO = purchaseInfo.getPspInfo();
 
-        if (pspInfoDTO.getCardDTO().getCardId() == null) {
-            creditInfo.setVisibility(View.GONE);
-        }
-        else {
-            creditInfo.setVisibility(View.VISIBLE);
-        }
-
         PersianEnglishDigit persianEnglishDigit = new PersianEnglishDigit();
 
         String persianPurchaseCode = persianEnglishDigit.E2P(purchaseInfo.getPurchaseCode());
@@ -751,8 +736,13 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             business_image.setImageResource(R.drawable.user_placeholder);
         }
 
-        bankName.setText(pspInfoDTO.getCardDTO().getBankName());
-        cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
+        if (pspInfoDTO.getCardDTO().getCardId() != null && (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() < Constants.SOAP_AMOUNT_MAX)) {
+            LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
+            creditInfo.setVisibility(View.VISIBLE);
+            cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
+            bankName.setText(pspInfoDTO.getCardDTO().getBankName());
+        } else {
+        }
     }
 
     private void forceLogout() {

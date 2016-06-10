@@ -84,7 +84,6 @@
 
     </RelativeLayout>
 
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/pullToRefresh"
         android:layout_width="match_parent"

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -55,7 +56,7 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
 
     private Context context;
     private Activity activity;
-
+    private SwipeRefreshLayout pullToRefresh;
     private ListView businessListView;
 
     SharedPreferences prefs;
@@ -164,7 +165,19 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
         full_triangle = (ImageView)findViewById(R.id.full_triangle);
         popular_triangle = (ImageView)findViewById(R.id.popular_triangle);
         recent_triangle = (ImageView)findViewById(R.id.recent_triangle);
-
+        pullToRefresh = (SwipeRefreshLayout)findViewById(R.id.pullToRefresh);
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                searchEnabled = false;
+                businessListRequest = new BusinessListRequest();
+                businessListRequest.setPageNumber(requestPageNumber);
+                businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+                businessListRequest.setSortFactor(BizSortFactor.NAME);
+                requestHamPayBusiness = new RequestHamPayBusiness(context, new RequestBusinessListTaskCompleteListener(searchEnabled));
+                requestHamPayBusiness.execute(businessListRequest);
+            }
+        });
         businessListView = (ListView)findViewById(R.id.businessListView);
         businessListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -347,6 +360,7 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
         public void onTaskComplete(ResponseMessage<BusinessListResponse> businessListResponseMessage) {
 
             hamPayDialog.dismisWaitingDialog();
+            pullToRefresh.setRefreshing(false);
 
             if (businessListResponseMessage != null) {
                 if (businessListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {

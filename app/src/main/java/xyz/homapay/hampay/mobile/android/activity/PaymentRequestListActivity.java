@@ -45,26 +45,17 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class PaymentRequestListActivity extends AppCompatActivity{
 
-
     private Context context;
     private Activity activity;
     private ListView paymentRequestList;
-    List<ContactDTO> contacts;
-    List<PaymentInfoDTO> paymentInfoList;
-    SharedPreferences prefs;
-    SharedPreferences.Editor editor;
+    private List<PaymentInfoDTO> paymentInfoList;
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
     private String authToken = "";
-
     private PendingPOAdapter pendingPOAdapter;
-
-
     private RequestPendingPOList requestPendingPOList;
     private PendingPOListRequest pendingPOListRequest;
-
-    private Dialog dialog;
-
     private HamPayDialog hamPayDialog;
-
     private InputMethodManager inputMethodManager;
     private ImageView hampay_contacts;
     private FacedEditText search_text;

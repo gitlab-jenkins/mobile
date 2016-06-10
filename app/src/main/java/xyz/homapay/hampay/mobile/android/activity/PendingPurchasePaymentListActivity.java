@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -28,6 +29,7 @@ import xyz.homapay.hampay.common.core.model.enums.FundType;
 import xyz.homapay.hampay.common.core.model.request.CancelPurchasePaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.CancelUserPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingFundListRequest;
+import xyz.homapay.hampay.common.core.model.request.PendingPOListRequest;
 import xyz.homapay.hampay.common.core.model.response.CancelPurchasePaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.CancelUserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingFundListResponse;
@@ -41,6 +43,7 @@ import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestCancelPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestCancelPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestPendingFundList;
+import xyz.homapay.hampay.mobile.android.async.RequestPendingPOList;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.dialog.cancelPending.ActionPending;
@@ -58,18 +61,13 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
     RequestPendingFundList requestPendingFundList;
     PendingFundListRequest pendingFundListRequest;
 
-
-    PendingPurchaseAdapter pendingPurchaseAdapter;
-    PendingPaymentAdapter pendingPaymentAdapter;
     PendingFundListAdapter pendingFundListAdapter;
-
-    ListView pendingListView;
+    private SwipeRefreshLayout pullToRefresh;
+    private ListView pendingListView;
     HamPayDialog hamPayDialog;
     private List<FundDTO> fundDTOList;
     private int pos = -1;
-
-
-    private Dialog dialog;
+    private FundType fundType = FundType.ALL;
 
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
@@ -183,13 +181,22 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
         hamPayDialog = new HamPayDialog(activity);
 
+        pullToRefresh = (SwipeRefreshLayout)findViewById(R.id.pullToRefresh);
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                requestPendingFundList = new RequestPendingFundList(activity, new RequestPendingFundTaskCompleteListener());
+                pendingFundListRequest = new PendingFundListRequest();
+                pendingFundListRequest.setType(fundType);
+                requestPendingFundList.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, pendingFundListRequest);
+            }
+        });
         pendingListView = (ListView)findViewById(R.id.pendingListView);
 
         requestPendingFundList = new RequestPendingFundList(activity, new RequestPendingFundTaskCompleteListener());
         pendingFundListRequest = new PendingFundListRequest();
-        pendingFundListRequest.setType(FundType.ALL);
+        pendingFundListRequest.setType(fundType);
         requestPendingFundList.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, pendingFundListRequest);
-//        requestPendingFundList.execute(pendingFundListRequest);
 
         full_pending = (RelativeLayout)findViewById(R.id.full_pending);
         full_pending.setOnClickListener(this);
@@ -296,8 +303,10 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
             case R.id.full_pending:
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
+                fundType = FundType.ALL;
                 requestPendingFundList = new RequestPendingFundList(activity, new RequestPendingFundTaskCompleteListener());
                 pendingFundListRequest = new PendingFundListRequest();
+                pendingFundListRequest.setType(fundType);
                 requestPendingFundList.execute(pendingFundListRequest);
                 changeTab(1);
                 break;
@@ -305,9 +314,10 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
             case R.id.invoice_pending:
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
+                fundType = FundType.PAYMENT;
                 requestPendingFundList = new RequestPendingFundList(activity, new RequestPendingFundTaskCompleteListener());
                 pendingFundListRequest = new PendingFundListRequest();
-                pendingFundListRequest.setType(FundType.PAYMENT);
+                pendingFundListRequest.setType(fundType);
                 requestPendingFundList.execute(pendingFundListRequest);
                 changeTab(2);
                 break;
@@ -315,9 +325,10 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
             case R.id.purchase_pending:
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
+                fundType = FundType.PURCHASE;
                 requestPendingFundList = new RequestPendingFundList(activity, new RequestPendingFundTaskCompleteListener());
                 pendingFundListRequest = new PendingFundListRequest();
-                pendingFundListRequest.setType(FundType.PURCHASE);
+                pendingFundListRequest.setType(fundType);
                 requestPendingFundList.execute(pendingFundListRequest);
                 changeTab(3);
                 break;
@@ -385,12 +396,14 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
         public void onTaskComplete(ResponseMessage<PendingFundListResponse> pendingFundListResponseMessage) {
 
             hamPayDialog.dismisWaitingDialog();
+            pullToRefresh.setRefreshing(false);
 
             if (pendingFundListResponseMessage != null) {
                 if (pendingFundListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     fundDTOList = pendingFundListResponseMessage.getService().getFundDTOList();
                     if (fundDTOList.size() == 0){
                         nullPendingText.setVisibility(View.VISIBLE);
+                        pendingListView.setAdapter(null);
                     }else {
                         pendingFundListAdapter = new PendingFundListAdapter(activity, fundDTOList, authToken);
                         pendingListView.setAdapter(pendingFundListAdapter);

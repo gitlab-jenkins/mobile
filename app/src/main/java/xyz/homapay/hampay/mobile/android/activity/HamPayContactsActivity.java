@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,12 +21,14 @@ import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
 import xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
+import xyz.homapay.hampay.common.core.model.request.PendingPOListRequest;
 import xyz.homapay.hampay.common.core.model.response.ContactsHampayEnabledResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.HamPayContactsAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestContactHampayEnabled;
+import xyz.homapay.hampay.mobile.android.async.RequestPendingPOList;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
@@ -38,6 +41,7 @@ public class HamPayContactsActivity extends AppCompatActivity{
     private Context context;
     private Activity activity;
     private ListView paymentRequestList;
+    private SwipeRefreshLayout pullToRefresh;
     private List<ContactDTO> contacts;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
@@ -88,6 +92,15 @@ public class HamPayContactsActivity extends AppCompatActivity{
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
+        pullToRefresh = (SwipeRefreshLayout)findViewById(R.id.pullToRefresh);
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                contactsHampayEnabledRequest = new ContactsHampayEnabledRequest();
+                requestContactHampayEnabled = new RequestContactHampayEnabled(activity, new RequestContactHampayEnabledTaskCompleteListener());
+                requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
+            }
+        });
         paymentRequestList = (ListView)findViewById(R.id.paymentRequestList);
         search_text = (FacedEditText)findViewById(R.id.search_text);
         search_text.addTextChangedListener(new TextWatcher() {
@@ -141,6 +154,7 @@ public class HamPayContactsActivity extends AppCompatActivity{
         public void onTaskComplete(ResponseMessage<ContactsHampayEnabledResponse> contactsHampayEnabledResponseMessage) {
 
             hamPayDialog.dismisWaitingDialog();
+            pullToRefresh.setRefreshing(false);
 
             if (contactsHampayEnabledResponseMessage != null){
                 if (contactsHampayEnabledResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){

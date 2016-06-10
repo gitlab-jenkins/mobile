@@ -62,6 +62,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
     FacedTextView paymentFeeValue;
     FacedTextView paymentTotalValue;
     FacedTextView cardNumberValue;
+    FacedTextView bankName;
     FacedEditText pin2Value;
 
     PaymentInfoDTO paymentInfoDTO = null;
@@ -146,6 +147,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
         paymentFeeValue = (FacedTextView)findViewById(R.id.paymentFeeValue);
         paymentTotalValue = (FacedTextView)findViewById(R.id.paymentTotalValue);
         cardNumberValue = (FacedTextView)findViewById(R.id.cardNumberValue);
+        bankName = (FacedTextView)findViewById(R.id.bankName);
         pin2Value = (FacedEditText)findViewById(R.id.pin2Value);
 
         Intent intent = getIntent();
@@ -153,12 +155,13 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
         paymentInfoDTO = (PaymentInfoDTO)intent.getSerializableExtra(Constants.PAYMENT_INFO);
         pspInfoDTO = (PspInfoDTO)intent.getSerializableExtra(Constants.PSP_INFO);
 
-        if (pspInfoDTO.getCardDTO().getCardId() != null) {
+
+        if (pspInfoDTO.getCardDTO().getCardId() != null && (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + paymentInfoDTO.getVat() < Constants.SOAP_AMOUNT_MAX)) {
             LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
             creditInfo.setVisibility(View.VISIBLE);
-        }
-        else {
             cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
+            bankName.setText(pspInfoDTO.getCardDTO().getBankName());
+        } else {
         }
 
 

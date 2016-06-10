@@ -146,27 +146,34 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
-        <ListView
-            android:id="@+id/transationListView"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/pullToRefresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@color/normal_text"
-            android:dividerHeight="0.5dp"
-            android:footerDividersEnabled="false" />
+            android:layout_height="match_parent">
+
+            <ListView
+                android:id="@+id/transactionListView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@color/normal_text"
+                android:dividerHeight="0.5dp"
+                android:footerDividersEnabled="false"
+                android:visibility="visible"/>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:id="@+id/no_transaction"
             android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="14dp"
             android:textColor="@color/normal_text"
             android:padding="8dp"
-            android:text="@string/no_transaction"/>
+            android:text="@string/no_transaction"
+            android:layout_marginTop="24dp"/>
 
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView

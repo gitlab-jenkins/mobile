@@ -560,7 +560,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
             user_image.setImageResource(R.drawable.user_placeholder);
         }
 
-        if (pspInfo.getCardDTO().getCardId() != null) {
+        if (pspInfo.getCardDTO().getCardId() != null && (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + paymentInfoDTO.getVat() < Constants.SOAP_AMOUNT_MAX)) {
             LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
             creditInfo.setVisibility(View.VISIBLE);
             cardNumberValue.setText(persianEnglishDigit.E2P(pspInfo.getCardDTO().getMaskedCardNumber()));
