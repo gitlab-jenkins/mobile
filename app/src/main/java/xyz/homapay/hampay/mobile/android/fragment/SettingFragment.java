@@ -74,8 +74,8 @@ public class SettingFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-
                 if (hamPaySettings.get(position).getSettingStatus() == SettingStatus.Inactive){
+                    new HamPayDialog(getActivity()).showUnknownIban();
                     return;
                 }
 

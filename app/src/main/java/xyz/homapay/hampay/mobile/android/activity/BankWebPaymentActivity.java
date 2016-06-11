@@ -10,13 +10,16 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.View;
 import android.webkit.SslErrorHandler;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +46,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
     private Activity activity;
     WebView bankWebView;
+    ImageView reload;
     TextView urlText;
     HamPayDialog hamPayDialog;
     SharedPreferences prefs;
@@ -149,6 +153,14 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
         bankWebView = (WebView)findViewById(R.id.bankWebView);
 
+        reload = (ImageView)findViewById(R.id.reload);
+        reload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bankWebView.reload();
+            }
+        });
+
         urlText = (TextView)findViewById(R.id.urlText);
         urlText.setHorizontallyScrolling(true);
         urlText.setScrollbarFadingEnabled(true);
@@ -161,7 +173,10 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
 
         settings.setJavaScriptEnabled(true);
-        bankWebView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
+        settings.setSupportZoom(true);
+        settings.setDomStorageEnabled(true);
+        settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+
 
         if (paymentInfoDTO != null) {
             redirectedURL = Constants.IPG_URL + pspInfoDTO.getRedirectURL() + "?authToken=" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
@@ -221,6 +236,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
             editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
             editor.commit();
             bankWebView.postUrl(Constants.BANK_GATEWAY_URL, postData.getBytes("UTF-8"));
+
             hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -232,6 +248,12 @@ public class BankWebPaymentActivity extends AppCompatActivity {
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
                 Log.e("ERROR", String.valueOf(error));
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url){
+                view.loadUrl(url);
+                return false;
             }
 
             public void onPageFinished(WebView view, String url) {

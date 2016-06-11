@@ -1991,6 +1991,26 @@ public class HamPayDialog {
         }
     }
 
+    public void showUnknownIban(){
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_known_iban, null);
+
+        FacedTextView unknown_iban_confirm = (FacedTextView) view.findViewById(R.id.unknown_iban_confirm);
+
+        unknown_iban_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
+    }
+
     private void forceLogout() {
         editor.remove(Constants.LOGIN_TOKEN_ID);
         editor.commit();

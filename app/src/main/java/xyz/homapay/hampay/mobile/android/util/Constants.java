@@ -5,11 +5,12 @@ import xyz.homapay.hampay.mobile.android.webservice.ConnectionType;
 
 public class Constants {
 //    public static String SERVER = "176.58.104.158";//England Server IP
-    public static String SERVER = "mobile.hampay.ir";//Prod Server IP
-//    public static String SERVER = "139.162.181.92";//UAT Server IP
+//    public static String SERVER = "mobile.hampay.ir";//Prod Server IP
+    public static String SERVER = "139.162.181.92";//UAT Server IP
     public static String URL_PREFIX = "/hampay";
     public static String HTTP_SERVER_IP = "http://" + SERVER + ":90" + URL_PREFIX;//England Server
-    public static String IPG_URL = "http://" + SERVER + ":9091" + URL_PREFIX;//England Server
+//    public static String IPG_URL = "http://" + SERVER + ":9091" + URL_PREFIX;//England Server
+    public static String IPG_URL = "https://" + SERVER + URL_PREFIX;//England Server
 //    public static String BANK_GATEWAY_URL = "https://sep.shaparak.ir/Payment.aspx";
     public static String BANK_GATEWAY_URL = "https://sep.shaparak.ir/PgMobileAddData";
 //    public static String BANK_GATEWAY_URL = "http://" + SERVER_IP + "/assets/psp/index.php";

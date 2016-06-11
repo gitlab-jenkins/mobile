@@ -83,7 +83,11 @@ public class ProxyHamPayLogin {
                     output.flush();
                     output.close();
                 } catch (Exception e) {}
-                responseCode = httpsURLConnection.getResponseCode();
+                try {
+                    responseCode = httpsURLConnection.getResponseCode();
+                }catch (IOException ex){
+                    responseCode = httpsURLConnection.getResponseCode();
+                }
                 if (responseCode == 200) {
                     bufferedReader = new BufferedReader(new InputStreamReader(httpsURLConnection.getInputStream()));
                 }else {

@@ -35,7 +35,7 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:gravity="center"
-        android:text="@string/msg_cancel_pending"/>
+        android:text="@string/msg_unknown_iban"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -44,24 +44,9 @@
         android:layout_margin="16dp"
         android:gravity="center">
 
-        <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            android:id="@+id/cancel_pending_cancel"
-            geekui:customTypeface="fonts/iran_sans.ttf"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:textColor="@android:color/white"
-            android:textSize="15sp"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:text="@string/cancel_pending_cancel"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:background="@drawable/modal_success_button_style"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="4dp"/>
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            android:id="@+id/cancel_pending_confirm"
+            android:id="@+id/unknown_iban_confirm"
             geekui:customTypeface="fonts/iran_sans.ttf"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
@@ -69,12 +54,11 @@
             android:textSize="15sp"
             android:gravity="center"
             android:layout_gravity="center"
-            android:text="@string/cancel_pending_confirm"
+            android:text="@string/unknown_iban_confirm"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:background="@drawable/modal_success_button_style"
-            android:layout_alignParentRight="true"
-            android:layout_marginLeft="4dp"/>
+            android:layout_alignParentRight="true" />
 
     </LinearLayout>
 </LinearLayout>

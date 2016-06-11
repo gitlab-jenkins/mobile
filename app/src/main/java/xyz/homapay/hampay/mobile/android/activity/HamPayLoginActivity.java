@@ -672,7 +672,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
             keyboard.setEnabled(false);
 
             requestLogin = new RequestLogin(context, new RequestLoginResponseTaskCompleteListener());
-            requestLogin.execute(loginData);
+            requestLogin.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, loginData);
 
         }
 

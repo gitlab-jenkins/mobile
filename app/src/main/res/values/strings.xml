@@ -214,7 +214,7 @@
     <string name="progress_dialog_message">در حال دريافت اطلاعات...</string>
 
     <string name="user_status_verification">بررسی صحت حساب</string>
-    <string name="intro_account">معرفی حساب بانکی</string>
+    <string name="intro_account">معرفی شماره شبا</string>
     <string name="intro_account_text">لطفا شماره شبای حساب خود را وارد نموده و سپس دکمه بررسی را لمس نمایید</string>
     <string name="sheba_text">IR</string>
     <string name="sheba_number_hint">شماره شبا</string>
@@ -340,7 +340,7 @@
         <item>پرداخت به خیریه‌ها</item>
         <item>تولید فاکتور</item>
         <item>پرداخت‌های در انتظار</item>
-        <item>معرفی حساب بانکی</item>
+        <item>معرفی شماره شبا</item>
         <item>تراکنش‌ها</item>
         <item>تغییر رمز عبور</item>
         <item>تغییر کلمه یادآوری</item>
@@ -609,6 +609,8 @@
     <string name="msg_soap_timeout">پیمامی از سرویس دریافت نشد. در صورت موفقیت تراکنش می‌توانید آن را در فهرست تراکنش‌ها مشاهده نمایید.</string>
     <string name="msg_insufficient_credit">موجودی کارت شما کافی نمی‌باشد.</string>
     <string name="msg_fail_ipg_loading">مشکل در سمت سرویس پرداخت بانک. لطفا مجدد تلاش کنید</string>
+    <string name="msg_unknown_iban">شماره شبا معرفی نشده است. جهت معرفی شماره شبا به صفحه جزییات حساب در منو مراجعه فرمایید.</string>
+    <string name="unknown_iban_confirm">تایید</string>
 
 
 </resources>
