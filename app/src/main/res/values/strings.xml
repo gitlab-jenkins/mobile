@@ -543,6 +543,11 @@
     <string name="invoice_payment_confirm">تایید پرداخت</string>
     <string name="null_pending_business">در حال حاضر پرداخت در انتظاری وجود ندارد</string>
     <string name="null_pending_invoice">در حال حاضر پرداخت در انتظاری وجود ندارد</string>
+    <string name="null_hampay_contacts">
+        هم اکنون هیچ یک از مخاطبین شما عضو شبکه پرداخت همراه هم پی نیست
+\n
+        برای تولید فاکتور حداقل یک نفر از دوستان شما باید عضو هم پی باشد
+    </string>
 
     <string name="sort_create">تاریخ ایجاد</string>
     <string name="sort_expire">مهلت زمانی</string>
@@ -592,6 +597,7 @@
     <string name="msg_unlink_user">تمامی اطلاعات شما پاک خواهد شد و برای استفاده مجدد از "هم‌پی" باید دوباره ثبت نام کنید</string>
     <string name="vat">مالیات بر ارزش افزوده</string>
     <string name="payment_request_code">کد فاکتور: </string>
+
     <string name="pending_po_details">جزییات فاکتور</string>
     <string name="pending_po_status">وضعیت: </string>
     <string name="search_phrase">جستجو</string>

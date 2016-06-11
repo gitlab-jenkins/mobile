@@ -416,7 +416,6 @@ public class ProfileEntryActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if (cardNumberValue.getText().length() < 19){
                     cardProfile.setText("");
-                    userNameFamily.setText("");
                     userNameFamily.setEnabled(true);
                 }
             }

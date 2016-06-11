@@ -58,6 +58,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
     private FacedTextView vat_value;
     private FacedTextView fee_charge_value;
     private FacedTextView payment_request_code;
+    private FacedTextView reference_code;
     private FacedTextView date_time;
     private FacedTextView card_number;
     private FacedTextView cell_number;
@@ -140,6 +141,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
         vat_value = (FacedTextView) findViewById(R.id.vat_value);
         fee_charge_value = (FacedTextView) findViewById(R.id.fee_charge_value);
         payment_request_code = (FacedTextView) findViewById(R.id.payment_request_code);
+        reference_code = (FacedTextView)findViewById(R.id.reference_code);
         date_time = (FacedTextView) findViewById(R.id.date_time);
         card_number = (FacedTextView) findViewById(R.id.card_number);
         cell_number = (FacedTextView) findViewById(R.id.cell_number);
@@ -214,6 +216,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
             if (transactionDetailResponseMessage != null) {
                 if (transactionDetailResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    reference_code.setText(persianEnglishDigit.E2P(transactionDTO.getReference()));
                     tnxDetailDTO = transactionDetailResponseMessage.getService().getTransactionDetail();
                     if (transactionDTO.getPaymentType() == TransactionDTO.PaymentType.PAYMENT) {
                         if (tnxDetailDTO.getUserStatus() == TnxDetailDTO.UserStatus.ACTIVE) {

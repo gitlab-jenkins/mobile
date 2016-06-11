@@ -29,6 +29,7 @@ import xyz.homapay.hampay.mobile.android.adapter.HamPayContactsAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestContactHampayEnabled;
 import xyz.homapay.hampay.mobile.android.async.RequestPendingPOList;
+import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
@@ -51,6 +52,7 @@ public class HamPayContactsActivity extends AppCompatActivity{
     private FacedEditText search_text;
     private HamPayDialog hamPayDialog;
     private String searchPhrase = "";
+    private FacedTextView nullHampayContactsText;
 
     public void backActionBar(View view){
         finish();
@@ -92,6 +94,7 @@ public class HamPayContactsActivity extends AppCompatActivity{
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
+        nullHampayContactsText = (FacedTextView)findViewById(R.id.nullHampayContactsText);
         pullToRefresh = (SwipeRefreshLayout)findViewById(R.id.pullToRefresh);
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -159,8 +162,14 @@ public class HamPayContactsActivity extends AppCompatActivity{
             if (contactsHampayEnabledResponseMessage != null){
                 if (contactsHampayEnabledResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
                     contacts = contactsHampayEnabledResponseMessage.getService().getContacts();
-                    hamPayContactsAdapter = new HamPayContactsAdapter(activity, contacts, authToken);
-                    paymentRequestList.setAdapter(hamPayContactsAdapter);
+                    if (contacts.size() == 0){
+                        nullHampayContactsText.setVisibility(View.VISIBLE);
+                        paymentRequestList.setVisibility(View.GONE);
+                    }else {
+                        nullHampayContactsText.setVisibility(View.GONE);
+                        hamPayContactsAdapter = new HamPayContactsAdapter(activity, contacts, authToken);
+                        paymentRequestList.setAdapter(hamPayContactsAdapter);
+                    }
                 }
                 else {
                     requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());

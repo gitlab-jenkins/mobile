@@ -271,6 +271,42 @@
 
             </LinearLayout>
 
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@color/main_menu_title"
+                android:layout_margin="8dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_gravity="right">
+
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                    android:id="@+id/reference_code"
+                    geekui:customTypeface="fonts/iran_sans.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/page_title"
+                    android:textSize="15dp"
+                    android:layout_marginRight="2dp"
+                    android:text="-"/>
+
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                    geekui:customTypeface="fonts/iran_sans.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/main_menu_title"
+                    android:textSize="15dp"
+                    android:text="@string/transaction_tacking_code"/>
+
+            </LinearLayout>
+
+
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
