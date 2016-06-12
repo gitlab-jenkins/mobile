@@ -1174,7 +1174,6 @@ public class SecuredWebServices {
     }
 
     public ResponseMessage<PendingFundListResponse> fundListResponse(PendingFundListRequest pendingFundListRequest) throws IOException, EncryptionException {
-        Log.e("Time Stamp", String.valueOf(System.currentTimeMillis()));
         ResponseMessage<PendingFundListResponse> responseMessage = null;
         url = new URL(serviceURL + "/fund/pending-list");
         SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
@@ -1186,7 +1185,6 @@ public class SecuredWebServices {
         Gson gson = builder.getDatebuilder().create();
         responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PendingFundListResponse>>() {}.getType());
         proxyService.closeConnection();
-        Log.e("Time Stamp", String.valueOf(System.currentTimeMillis()));
         return responseMessage;
     }
 

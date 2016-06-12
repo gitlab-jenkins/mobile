@@ -417,7 +417,6 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
         @Override
         public void onTaskPreRun() {
-            Log.e("Time Stamp", String.valueOf(System.currentTimeMillis()));
             hamPayDialog.showWaitingDialog("");
         }
     }

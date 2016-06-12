@@ -39,10 +39,7 @@ public class RequestPendingFundList extends AsyncTask<PendingFundListRequest, Vo
 
     @Override
     protected ResponseMessage<PendingFundListResponse> doInBackground(PendingFundListRequest... params) {
-
-        Log.e("Time Stamp", String.valueOf(System.currentTimeMillis()));
         SecuredWebServices webServices = new SecuredWebServices(context, Constants.CONNECTION_TYPE);
-        Log.e("Time Stamp", String.valueOf(System.currentTimeMillis()));
 
         try {
             return webServices.fundListResponse(params[0]);

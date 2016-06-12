@@ -1182,7 +1182,6 @@ public class WebServices  {
     }
 
     public ResponseMessage<PendingFundListResponse> fundListResponse(PendingFundListRequest pendingFundListRequest) throws IOException{
-        Log.e("Time Stamp", String.valueOf(System.currentTimeMillis()));
         ResponseMessage<PendingFundListResponse> responseMessage = null;
         url = new URL(serviceURL + "/fund/pending-list");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
@@ -1194,7 +1193,6 @@ public class WebServices  {
         Gson gson = builder.getDatebuilder().create();
         responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<PendingFundListResponse>>() {}.getType());
         proxyService.closeConnection();
-        Log.e("Time Stamp", String.valueOf(System.currentTimeMillis()));
         return responseMessage;
     }
 
