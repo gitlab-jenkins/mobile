@@ -101,6 +101,7 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
     private ImageView full_triangle;
     private ImageView popular_triangle;
     private ImageView recent_triangle;
+    private BizSortFactor bizSortFactor = BizSortFactor.NAME;
 
     public void backActionBar(View view){
         finish();
@@ -173,7 +174,7 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                 businessListRequest = new BusinessListRequest();
                 businessListRequest.setPageNumber(requestPageNumber);
                 businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-                businessListRequest.setSortFactor(BizSortFactor.NAME);
+                businessListRequest.setSortFactor(bizSortFactor);
                 requestHamPayBusiness = new RequestHamPayBusiness(context, new RequestBusinessListTaskCompleteListener(searchEnabled));
                 requestHamPayBusiness.execute(businessListRequest);
             }
@@ -296,6 +297,14 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
     private void changeTab(int index){
         switch (index){
             case 1:
+                businessListRequest = new BusinessListRequest();
+                requestPageNumber = 0;
+                bizSortFactor = BizSortFactor.NAME;
+                businessListRequest.setPageNumber(requestPageNumber);
+                businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+                businessListRequest.setSortFactor(bizSortFactor);
+                requestHamPayBusiness = new RequestHamPayBusiness(this, new RequestBusinessListTaskCompleteListener(searchEnabled));
+                requestHamPayBusiness.execute(businessListRequest);
                 full_business.setBackgroundColor(getResources().getColor(R.color.app_origin));
                 popular_business.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
                 recent_business.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
@@ -304,6 +313,14 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                 recent_triangle.setVisibility(View.GONE);
                 break;
             case 2:
+                businessListRequest = new BusinessListRequest();
+                requestPageNumber = 0;
+                bizSortFactor = BizSortFactor.DATE;
+                businessListRequest.setPageNumber(requestPageNumber);
+                businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+                businessListRequest.setSortFactor(bizSortFactor);
+                requestHamPayBusiness = new RequestHamPayBusiness(this, new RequestBusinessListTaskCompleteListener(searchEnabled));
+                requestHamPayBusiness.execute(businessListRequest);
                 full_business.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
                 popular_business.setBackgroundColor(getResources().getColor(R.color.app_origin));
                 recent_business.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
@@ -313,6 +330,14 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                 break;
 
             case 3:
+                businessListRequest = new BusinessListRequest();
+                requestPageNumber = 0;
+                bizSortFactor = BizSortFactor.DATE;
+                businessListRequest.setPageNumber(requestPageNumber);
+                businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+                businessListRequest.setSortFactor(bizSortFactor);
+                requestHamPayBusiness = new RequestHamPayBusiness(this, new RequestBusinessListTaskCompleteListener(searchEnabled));
+                requestHamPayBusiness.execute(businessListRequest);
                 full_business.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
                 popular_business.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
                 recent_business.setBackgroundColor(getResources().getColor(R.color.app_origin));

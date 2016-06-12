@@ -295,6 +295,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
 
             hamPayDialog.dismisWaitingDialog();
             pullToRefresh.setRefreshing(false);
+            PugNotification.with(context).cancel(Constants.TRANSACTIONS_NOTIFICATION_IDENTIFIER);
 
             if (transactionListResponseMessage != null) {
 

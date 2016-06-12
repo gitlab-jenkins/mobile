@@ -714,7 +714,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 purchase_status.setText(getString(R.string.purchase_status_succeed));
                 if (purchaseInfo.getPayerName() != null) {
                     purchase_payer_name.setText(purchaseInfo.getPayerName());
-                    purchase_payer_cell.setText(purchaseInfo.getPayerCellNumber());
+                    purchase_payer_cell.setText(persianEnglishDigit.E2P(purchaseInfo.getPayerCellNumber()));
                 }
                 purchase_status_layout.setVisibility(View.VISIBLE);
                 purchase_payer_name_layout.setVisibility(View.VISIBLE);
@@ -726,7 +726,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 purchase_status.setText(getString(R.string.purchase_status_failed));
                 if (purchaseInfo.getPayerName() != null) {
                     purchase_payer_name.setText(purchaseInfo.getPayerName());
-                    purchase_payer_cell.setText(purchaseInfo.getPayerCellNumber());
+                    purchase_payer_cell.setText(persianEnglishDigit.E2P(purchaseInfo.getPayerCellNumber()));
                 }
                 purchase_status_layout.setVisibility(View.VISIBLE);
                 purchase_payer_name_layout.setVisibility(View.GONE);
@@ -738,7 +738,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 purchase_status.setText(getString(R.string.purchase_status_processing));
                 if (purchaseInfo.getPayerName() != null) {
                     purchase_payer_name.setText(purchaseInfo.getPayerName());
-                    purchase_payer_cell.setText(purchaseInfo.getPayerCellNumber());
+                    purchase_payer_cell.setText(persianEnglishDigit.E2P(purchaseInfo.getPayerCellNumber()));
                 }
                 purchase_status_layout.setVisibility(View.VISIBLE);
                 purchase_payer_name_layout.setVisibility(View.GONE);
@@ -750,13 +750,17 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 purchase_status.setText(getString(R.string.purchase_status_pending));
                 if (purchaseInfo.getPayerName() != null) {
                     purchase_payer_name.setText(purchaseInfo.getPayerName());
-                    purchase_payer_cell.setText(purchaseInfo.getPayerCellNumber());
+                    purchase_payer_cell.setText(persianEnglishDigit.E2P(purchaseInfo.getPayerCellNumber()));
                 }
                 purchase_status_layout.setVisibility(View.GONE);
                 purchase_payer_name_layout.setVisibility(View.GONE);
                 purchase_payer_cell_layout.setVisibility(View.GONE);
-                creditInfo.setVisibility(View.VISIBLE);
                 pay_to_business_button.setVisibility(View.VISIBLE);
+                if (pspInfoDTO.getCardDTO().getCardId() != null && (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() < Constants.SOAP_AMOUNT_MAX)) {
+                    creditInfo.setVisibility(View.VISIBLE);
+                    cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
+                    bankName.setText(pspInfoDTO.getCardDTO().getBankName());
+                }
                 break;
         }
 
@@ -774,14 +778,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             imageManager.displayImage(userImageUrl, business_image, R.drawable.user_placeholder);
         }else {
             business_image.setImageResource(R.drawable.user_placeholder);
-        }
-
-        if (pspInfoDTO.getCardDTO().getCardId() != null && (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() < Constants.SOAP_AMOUNT_MAX)) {
-            LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
-            creditInfo.setVisibility(View.VISIBLE);
-            cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
-            bankName.setText(pspInfoDTO.getCardDTO().getBankName());
-        } else {
         }
     }
 

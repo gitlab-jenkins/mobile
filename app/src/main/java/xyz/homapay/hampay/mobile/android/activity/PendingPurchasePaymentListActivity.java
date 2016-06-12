@@ -397,6 +397,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
             hamPayDialog.dismisWaitingDialog();
             pullToRefresh.setRefreshing(false);
+            PugNotification.with(context).cancel(Constants.PAYMENT_NOTIFICATION_IDENTIFIER);
 
             if (pendingFundListResponseMessage != null) {
                 if (pendingFundListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {

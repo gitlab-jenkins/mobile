@@ -222,7 +222,7 @@ public class ChangeUserImageActivity extends AppCompatActivity {
             Uri imageUri = getPickImageResultUri(data);
             cropImageView.setImageUri(imageUri);
         }else {
-//            finish();
+            finish();
         }
     }
 

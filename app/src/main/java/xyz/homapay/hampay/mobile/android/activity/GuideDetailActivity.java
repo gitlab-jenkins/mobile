@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.http.SslError;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -85,13 +86,20 @@ public class GuideDetailActivity extends AppCompatActivity {
             }
         });
         guide_webview = (WebView)findViewById(R.id.guide_webview);
+        guide_webview.clearCache(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            guide_webview.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         hamPayDialog = new HamPayDialog(this);
 
         hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
 
+//        guide_webview.getSettings().setDomStorageEnabled(true);
+//        guide_webview.getSettings().setLoadsImagesAutomatically(true);
+
         WebSettings settings = guide_webview.getSettings();
 
         settings.setJavaScriptEnabled(true);
+//        settings.setDomStorageEnabled(true);
         guide_webview.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 
         guide_webview.loadUrl(webPageUrl);
