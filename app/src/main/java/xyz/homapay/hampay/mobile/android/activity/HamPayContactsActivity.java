@@ -1,7 +1,6 @@
 package xyz.homapay.hampay.mobile.android.activity;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,9 +9,13 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,14 +24,12 @@ import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
 import xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
-import xyz.homapay.hampay.common.core.model.request.PendingPOListRequest;
 import xyz.homapay.hampay.common.core.model.response.ContactsHampayEnabledResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.HamPayContactsAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestContactHampayEnabled;
-import xyz.homapay.hampay.mobile.android.async.RequestPendingPOList;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
@@ -49,6 +50,7 @@ public class HamPayContactsActivity extends AppCompatActivity{
     private HamPayContactsAdapter hamPayContactsAdapter;
     private ContactsHampayEnabledRequest contactsHampayEnabledRequest;
     private RequestContactHampayEnabled requestContactHampayEnabled;
+    private InputMethodManager inputMethodManager;
     private FacedEditText search_text;
     private HamPayDialog hamPayDialog;
     private String searchPhrase = "";
@@ -105,6 +107,8 @@ public class HamPayContactsActivity extends AppCompatActivity{
             }
         });
         paymentRequestList = (ListView)findViewById(R.id.paymentRequestList);
+        inputMethodManager = (InputMethodManager) getSystemService(
+                Context.INPUT_METHOD_SERVICE);
         search_text = (FacedEditText)findViewById(R.id.search_text);
         search_text.addTextChangedListener(new TextWatcher() {
             @Override
@@ -131,6 +135,17 @@ public class HamPayContactsActivity extends AppCompatActivity{
 
             @Override
             public void afterTextChanged(Editable s) {}
+        });
+
+        search_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    inputMethodManager.hideSoftInputFromWindow(search_text.getWindowToken(), 0);
+                    return true;
+                }
+                return false;
+            }
         });
 
         editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());

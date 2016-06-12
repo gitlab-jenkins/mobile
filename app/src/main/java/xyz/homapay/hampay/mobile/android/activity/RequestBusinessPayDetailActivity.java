@@ -54,14 +54,10 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
     private DatabaseHelper dbHelper;
     ImageView pay_to_business_button;
-    FacedTextView cancel_pay_to_business_button;
-
     Bundle bundle;
-
     FacedTextView contact_name;
     FacedEditText contact_message;
     FacedTextView amount_value;
-//    ImageView credit_value_icon;
     boolean intentContact = false;
     Context context;
     Activity activity;
@@ -89,6 +85,12 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
     FacedTextView input_digit_5;
     FacedTextView input_digit_6;
 
+    private LinearLayout purchase_status_layout;
+    private LinearLayout purchase_payer_name_layout;
+    private LinearLayout purchase_payer_cell_layout;
+    private FacedTextView purchase_status;
+    private FacedTextView purchase_payer_name;
+    private FacedTextView purchase_payer_cell;
     FacedTextView paymentPriceValue;
     FacedTextView paymentVAT;
     FacedTextView paymentFeeValue;
@@ -220,7 +222,14 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         input_digit_6 = (FacedTextView)findViewById(R.id.input_digit_6);
         business_name = (FacedTextView)findViewById(R.id.business_name);
         business_image = (ImageView)findViewById(R.id.business_image);
+
         paymentPriceValue = (FacedTextView)findViewById(R.id.paymentPriceValue);
+        purchase_status_layout = (LinearLayout)findViewById(R.id.purchase_status_layout);
+        purchase_payer_name_layout = (LinearLayout)findViewById(R.id.purchase_payer_name_layout);
+        purchase_payer_cell_layout = (LinearLayout)findViewById(R.id.purchase_payer_cell_layout);
+        purchase_status = (FacedTextView)findViewById(R.id.purchase_status);
+        purchase_payer_cell = (FacedTextView)findViewById(R.id.purchase_payer_cell);
+        purchase_payer_name = (FacedTextView)findViewById(R.id.purchase_payer_name);
         paymentVAT = (FacedTextView)findViewById(R.id.paymentVAT);
         paymentFeeValue = (FacedTextView)findViewById(R.id.paymentFeeValue);
         bankName = (FacedTextView)findViewById(R.id.bankName);
@@ -339,26 +348,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-        //Enable Here
-//        cancel_pay_to_business_button = (FacedTextView)findViewById(R.id.cancel_pay_to_business_button);
-//        cancel_pay_to_business_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (purchaseInfoDTO != null) {
-//                    if (dbHelper.getIsExistPurchaseRequest(purchaseInfoDTO.getProductCode())) {
-//                        dbHelper.updatePurchaseRequest(purchaseInfoDTO.getProductCode(), "1");
-//                    } else {
-//                        dbHelper.createPurchaseRequest(purchaseInfoDTO.getProductCode());
-//                        dbHelper.updatePurchaseRequest(purchaseInfoDTO.getProductCode(), "1");
-//                    }
-//                }
-//
-//                finish();
-//
-//            }
-//        });
     }
 
     @Override
@@ -719,6 +708,57 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         input_digit_4.setText(persianPurchaseCode.charAt(3) + "");
         input_digit_5.setText(persianPurchaseCode.charAt(4) + "");
         input_digit_6.setText(persianPurchaseCode.charAt(5) + "");
+
+        switch (purchaseInfo.getStatus()){
+            case SUCCESSFUL:
+                purchase_status.setText(getString(R.string.purchase_status_succeed));
+                if (purchaseInfo.getPayerName() != null) {
+                    purchase_payer_name.setText(purchaseInfo.getPayerName());
+                    purchase_payer_cell.setText(purchaseInfo.getPayerCellNumber());
+                }
+                purchase_status_layout.setVisibility(View.VISIBLE);
+                purchase_payer_name_layout.setVisibility(View.VISIBLE);
+                purchase_payer_cell_layout.setVisibility(View.VISIBLE);
+                creditInfo.setVisibility(View.GONE);
+                pay_to_business_button.setVisibility(View.GONE);
+                break;
+            case FAILED:
+                purchase_status.setText(getString(R.string.purchase_status_failed));
+                if (purchaseInfo.getPayerName() != null) {
+                    purchase_payer_name.setText(purchaseInfo.getPayerName());
+                    purchase_payer_cell.setText(purchaseInfo.getPayerCellNumber());
+                }
+                purchase_status_layout.setVisibility(View.VISIBLE);
+                purchase_payer_name_layout.setVisibility(View.GONE);
+                purchase_payer_cell_layout.setVisibility(View.GONE);
+                creditInfo.setVisibility(View.GONE);
+                pay_to_business_button.setVisibility(View.GONE);
+                break;
+            case  PROCESSING:
+                purchase_status.setText(getString(R.string.purchase_status_processing));
+                if (purchaseInfo.getPayerName() != null) {
+                    purchase_payer_name.setText(purchaseInfo.getPayerName());
+                    purchase_payer_cell.setText(purchaseInfo.getPayerCellNumber());
+                }
+                purchase_status_layout.setVisibility(View.VISIBLE);
+                purchase_payer_name_layout.setVisibility(View.GONE);
+                purchase_payer_cell_layout.setVisibility(View.GONE);
+                creditInfo.setVisibility(View.GONE);
+                pay_to_business_button.setVisibility(View.GONE);
+                break;
+            case PENDING:
+                purchase_status.setText(getString(R.string.purchase_status_pending));
+                if (purchaseInfo.getPayerName() != null) {
+                    purchase_payer_name.setText(purchaseInfo.getPayerName());
+                    purchase_payer_cell.setText(purchaseInfo.getPayerCellNumber());
+                }
+                purchase_status_layout.setVisibility(View.GONE);
+                purchase_payer_name_layout.setVisibility(View.GONE);
+                purchase_payer_cell_layout.setVisibility(View.GONE);
+                creditInfo.setVisibility(View.VISIBLE);
+                pay_to_business_button.setVisibility(View.VISIBLE);
+                break;
+        }
 
         paymentPriceValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(purchaseInfo.getAmount())));
         paymentVAT.setText(persianEnglishDigit.E2P(currencyFormatter.format(purchaseInfo.getVat())));

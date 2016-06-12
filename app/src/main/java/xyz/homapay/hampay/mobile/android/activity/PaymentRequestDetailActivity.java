@@ -331,7 +331,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                     amountValue = Long.parseLong(new PersianEnglishDigit(amount_value.getText().toString()).P2E().replace(",", ""));
                     editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                     editor.commit();
-                    if (amountValue >= MinXferAmount && amountValue <= MaxXferAmount) {
+                    if (amountValue + calculatedVat >= MinXferAmount && amountValue + calculatedVat <= MaxXferAmount) {
                         hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                         userPaymentRequest = new UserPaymentRequest();
                         userPaymentRequest.setCalleeCellNumber(cellNumber);

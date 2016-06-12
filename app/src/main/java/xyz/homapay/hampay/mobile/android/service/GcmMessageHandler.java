@@ -20,7 +20,6 @@ import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.AppSliderActivity;
 import xyz.homapay.hampay.mobile.android.activity.InvoicePendingConfirmationActivity;
-import xyz.homapay.hampay.mobile.android.activity.MainActivity;
 import xyz.homapay.hampay.mobile.android.activity.PendingPurchasePaymentListActivity;
 import xyz.homapay.hampay.mobile.android.activity.RequestBusinessPayDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.TransactionsListActivity;
@@ -166,6 +165,7 @@ public class GcmMessageHandler extends IntentService{
                             .identifier(Constants.COMMON_NOTIFICATION_IDENTIFIER)
                             .title(notificationName)
                             .message(notificationMessage)
+                            .bigTextStyle(notificationMessage)
                             .smallIcon(R.mipmap.ic_notification)
                             .flags(Notification.DEFAULT_ALL)
                             .click(pendingIntent)
@@ -190,6 +190,8 @@ public class GcmMessageHandler extends IntentService{
                                     .identifier(Constants.PAYMENT_NOTIFICATION_IDENTIFIER)
                                     .title(notificationName)
                                     .message(notificationMessage)
+                                    .message(notificationMessage)
+                                    .bigTextStyle(notificationMessage)
                                     .smallIcon(R.mipmap.ic_notification)
                                     .flags(Notification.DEFAULT_ALL)
                                     .click(AppSliderActivity.class, bundle)
@@ -212,6 +214,7 @@ public class GcmMessageHandler extends IntentService{
                                     .identifier(Constants.PAYMENT_NOTIFICATION_IDENTIFIER)
                                     .title(notificationName)
                                     .message(notificationMessage)
+                                    .bigTextStyle(notificationMessage)
                                     .smallIcon(R.mipmap.ic_notification)
                                     .flags(Notification.DEFAULT_ALL)
                                     .click(PendingPurchasePaymentListActivity.class, bundle)
@@ -240,6 +243,7 @@ public class GcmMessageHandler extends IntentService{
                                     .identifier(Constants.INVOICE_NOTIFICATION_IDENTIFIER)
                                     .title(notificationName)
                                     .message(notificationMessage)
+                                    .bigTextStyle(notificationMessage)
                                     .smallIcon(R.mipmap.ic_notification)
                                     .flags(Notification.DEFAULT_ALL)
                                     .click(AppSliderActivity.class, bundle)
@@ -262,6 +266,7 @@ public class GcmMessageHandler extends IntentService{
                                     .identifier(Constants.INVOICE_NOTIFICATION_IDENTIFIER)
                                     .title(notificationName)
                                     .message(notificationMessage)
+                                    .bigTextStyle(notificationMessage)
                                     .smallIcon(R.mipmap.ic_notification)
                                     .flags(Notification.DEFAULT_ALL)
                                     .click(InvoicePendingConfirmationActivity.class, bundle)
@@ -287,6 +292,7 @@ public class GcmMessageHandler extends IntentService{
                                     .identifier(Constants.MERCHANT_NOTIFICATION_IDENTIFIER)
                                     .title(notificationName)
                                     .message(notificationMessage)
+                                    .bigTextStyle(notificationMessage)
                                     .smallIcon(R.mipmap.ic_notification)
                                     .flags(Notification.DEFAULT_ALL)
                                     .click(AppSliderActivity.class, bundle)
@@ -303,6 +309,7 @@ public class GcmMessageHandler extends IntentService{
                                     .identifier(Constants.MERCHANT_NOTIFICATION_IDENTIFIER)
                                     .title(notificationName)
                                     .message(notificationMessage)
+                                    .bigTextStyle(notificationMessage)
                                     .smallIcon(R.mipmap.ic_notification)
                                     .flags(Notification.DEFAULT_ALL)
                                     .click(RequestBusinessPayDetailActivity.class, bundle)
@@ -327,6 +334,7 @@ public class GcmMessageHandler extends IntentService{
                                     .identifier(Constants.TRANSACTIONS_NOTIFICATION_IDENTIFIER)
                                     .title(notificationName)
                                     .message(notificationMessage)
+                                    .bigTextStyle(notificationMessage)
                                     .smallIcon(R.mipmap.ic_notification)
                                     .flags(Notification.DEFAULT_ALL)
                                     .click(AppSliderActivity.class, bundle)
@@ -343,6 +351,7 @@ public class GcmMessageHandler extends IntentService{
                                     .identifier(Constants.TRANSACTIONS_NOTIFICATION_IDENTIFIER)
                                     .title(notificationName)
                                     .message(notificationMessage)
+                                    .bigTextStyle(notificationMessage)
                                     .smallIcon(R.mipmap.ic_notification)
                                     .flags(Notification.DEFAULT_ALL)
                                     .click(TransactionsListActivity.class, bundle)
@@ -362,9 +371,10 @@ public class GcmMessageHandler extends IntentService{
                             bundle.putString(Constants.NOTIFICATION_TYPE, notificationMessageType.getNotificationMessageType());
                             PugNotification.with(getApplicationContext())
                                     .load()
-                                    .identifier(Constants.COMMON_NOTIFICATION_IDENTIFIER)
+                                    .identifier(Constants.TRANSACTIONS_NOTIFICATION_IDENTIFIER)
                                     .title(notificationName)
                                     .message(notificationMessage)
+                                    .bigTextStyle(notificationMessage)
                                     .smallIcon(R.mipmap.ic_notification)
                                     .flags(Notification.DEFAULT_ALL)
                                     .click(AppSliderActivity.class, bundle)
@@ -378,9 +388,10 @@ public class GcmMessageHandler extends IntentService{
                         case Resumed:
                             PugNotification.with(getApplicationContext())
                                     .load()
-                                    .identifier(Constants.COMMON_NOTIFICATION_IDENTIFIER)
+                                    .identifier(Constants.TRANSACTIONS_NOTIFICATION_IDENTIFIER)
                                     .title(notificationName)
                                     .message(notificationMessage)
+                                    .bigTextStyle(notificationMessage)
                                     .smallIcon(R.mipmap.ic_notification)
                                     .flags(Notification.DEFAULT_ALL)
                                     .click(TransactionsListActivity.class, bundle)

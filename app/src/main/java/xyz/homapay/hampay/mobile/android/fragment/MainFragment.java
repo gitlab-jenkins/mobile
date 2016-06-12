@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,7 +99,6 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-
         context = getActivity();
         persianEnglishDigit = new PersianEnglishDigit();
 
@@ -241,6 +241,23 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onResume() {
         super.onResume();
+
+        getView().setFocusableInTouchMode(true);
+        getView().requestFocus();
+        getView().setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if( keyCode == KeyEvent.KEYCODE_BACK )
+                {
+                    if (slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED){
+                        slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+
         PendingCountRequest pendingCountRequest = new PendingCountRequest();
         RequestPendingCount requestPendingCount = new RequestPendingCount(getActivity(), new RequestPendingCountTaskCompleteListener());
         requestPendingCount.execute(pendingCountRequest);

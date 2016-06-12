@@ -1738,7 +1738,7 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                requestLatestPayment.execute(latestPaymentRequest);
+//                requestLatestPayment.execute(latestPaymentRequest);
             }
         });
         cancel_request.setOnClickListener(new View.OnClickListener() {

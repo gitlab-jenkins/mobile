@@ -514,7 +514,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 fragment.setArguments(bundle);
             }
             setFragment(fragment, getString(R.string.title_main_fragment));
-        }else{
+        }else if(false){
+
+        }
+        else{
             LogoutData logoutData = new LogoutData();
             logoutData.setIplanetDirectoryPro(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
             new HamPayDialog(activity).showExitDialog(logoutData);
@@ -673,9 +676,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private void setFragment(Fragment fragment, String title){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.container_body, fragment);
+
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        fragmentTransaction.commit();
+        fragmentTransaction.replace(R.id.container_body, fragment).addToBackStack("tag").commit();
+//        fragmentTransaction.commit();
         fragment_title.setText(title);
     }
 
