@@ -269,7 +269,8 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         recentPendingFundList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                new Expand(keyboard).animate();
+                if (keyboard.getVisibility() == View.GONE)
+                    new Expand(keyboard).animate();
             }
         });
 
@@ -451,13 +452,20 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                     failedLoginResponse = gson.fromJson(responseElement.toString(), listType);
                     if (failedLoginResponse != null) {
                         hamPayDialog.dismisWaitingDialog();
-                        if (failedLoginResponse.getMessage().equalsIgnoreCase(Constants.USER_ACCOUNT_LOCKET)){
+                        boolean blockedUser = false;
+                        String failedMessage = failedLoginResponse.getMessage();
+                        if (failedMessage.split(" ").length == 12){
+                            String time = new PersianEnglishDigit().E2P(failedMessage.split(" ")[9]);
+                            failedLoginResponse.setMessage(getString(R.string.msg_incorrect_pass_code_countdown, time));
+                        }
+                        else if (failedLoginResponse.getMessage().equalsIgnoreCase(Constants.USER_ACCOUNT_LOCKET)){
+                            blockedUser = true;
                             failedLoginResponse.setMessage(getString(R.string.msg_locked_hampay_login));
                         }else {
                             failedLoginResponse.setMessage(getString(R.string.msg_fail_hampay_login));
                         }
 
-                        new HamPayDialog(activity).showLoginFailDialog(failedLoginResponse);
+                        new HamPayDialog(activity).showLoginFailDialog(failedLoginResponse, blockedUser);
 
                         hamPayGaTracker.send(new HitBuilders.EventBuilder()
                                 .setCategory("User Login")
@@ -469,7 +477,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                         failedLoginResponse = new FailedLoginResponse();
                         failedLoginResponse.setCode(Constants.LOCAL_ERROR_CODE);
                         failedLoginResponse.setMessage(getString(R.string.msg_fail_hampay_server));
-                        new HamPayDialog(activity).showLoginFailDialog(failedLoginResponse);
+                        new HamPayDialog(activity).showLoginFailDialog(failedLoginResponse, false);
 
                         hamPayGaTracker.send(new HitBuilders.EventBuilder()
                                 .setCategory("User Login")
@@ -499,7 +507,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                 failedLoginResponse = new FailedLoginResponse();
                 failedLoginResponse.setCode(Constants.LOCAL_ERROR_CODE);
                 failedLoginResponse.setMessage(getString(R.string.msg_fail_hampay_server));
-                new HamPayDialog(activity).showLoginFailDialog(failedLoginResponse);
+                new HamPayDialog(activity).showLoginFailDialog(failedLoginResponse, false);
 
                 hamPayGaTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("User Login")
@@ -544,7 +552,8 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                         pendingFundAdapter = new PendingFundAdapter(activity, funds);
                         recentPendingFundList.setAdapter(pendingFundAdapter);
                     }else {
-                        new Expand(keyboard).animate();
+                        if (keyboard.getVisibility() == View.GONE)
+                            new Expand(keyboard).animate();
                     }
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Request TAC")
@@ -553,11 +562,13 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                             .build());
 
                 }else {
-                    new Expand(keyboard).animate();
+                    if (keyboard.getVisibility() == View.GONE)
+                        new Expand(keyboard).animate();
                 }
             }
             else {
-                new Expand(keyboard).animate();
+                if (keyboard.getVisibility() == View.GONE)
+                    new Expand(keyboard).animate();
             }
 
         }
@@ -574,7 +585,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         switch (v.getId()){
 
             case R.id.password_holder:
-                if (keyboard.getVisibility() != View.VISIBLE)
+                if (keyboard.getVisibility() == View.GONE)
                     new Expand(keyboard).animate();
                 break;
 

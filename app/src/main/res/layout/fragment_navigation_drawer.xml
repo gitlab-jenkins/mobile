@@ -33,8 +33,8 @@
 
                 <ImageView
                     android:id="@+id/image_profile"
-                    android:layout_width="61dp"
-                    android:layout_height="61dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:src="@drawable/user_placeholder"
                     android:scaleType="fitXY"
                     android:layout_gravity="center"

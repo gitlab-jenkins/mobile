@@ -587,7 +587,7 @@ public class HamPayDialog {
         }
     }
 
-    public void showLoginFailDialog(FailedLoginResponse failedLoginResponse){
+    public void showLoginFailDialog(FailedLoginResponse failedLoginResponse, boolean blockedUser){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_login_fail, null);
 
@@ -598,8 +598,10 @@ public class HamPayDialog {
                         + failedLoginResponse.getMessage()
         );
 
-
         FacedTextView login_retry = (FacedTextView) view.findViewById(R.id.login_retry);
+        if (blockedUser){
+            login_retry.setVisibility(View.GONE);
+        }
         FacedTextView remove_password = (FacedTextView) view.findViewById(R.id.remove_password);
 
         login_retry.setOnClickListener(new View.OnClickListener() {
