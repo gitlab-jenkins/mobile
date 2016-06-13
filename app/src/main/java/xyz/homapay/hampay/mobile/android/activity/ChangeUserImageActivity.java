@@ -228,7 +228,7 @@ public class ChangeUserImageActivity extends AppCompatActivity {
 
     public Intent getPickImageChooserIntent() {
 
-        // Determine Uri of camera image to save.
+        // Determine Uri of ic_camera image to save.
         Uri outputFileUri = getCaptureImageOutputUri();
 
         List<Intent> allIntents = new ArrayList<>();
