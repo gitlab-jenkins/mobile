@@ -257,15 +257,6 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
                 }
             }
         });
-
-//        cancel_pay_to_business_button = (FacedTextView)findViewById(R.id.cancel_pay_to_business_button);
-//        cancel_pay_to_business_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                finish();
-//
-//            }
-//        });
     }
 
 
@@ -330,7 +321,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
                 if (responseCode != null){
                     if (responseCode.equalsIgnoreCase("2000")) {
-                        new HamPayDialog(activity).pspSuccessResultDialog(SWTraceNum);
+                        new HamPayDialog(activity).pspSuccessResultDialog(paymentInfoDTO.getProductCode());
                         resultStatus = ResultStatus.SUCCESS;
                     }else {
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, description);

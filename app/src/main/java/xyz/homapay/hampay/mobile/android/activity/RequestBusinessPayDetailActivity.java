@@ -401,7 +401,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
                 if (responseCode != null){
                     if (responseCode.equalsIgnoreCase("2000")) {
-                        new HamPayDialog(activity).pspSuccessResultDialog(SWTraceNum);
+                        new HamPayDialog(activity).pspSuccessResultDialog(purchaseInfoDTO.getProductCode());
                         resultStatus = ResultStatus.SUCCESS;
                     }else if (responseCode.equalsIgnoreCase("51")) {
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.msg_insufficient_credit));

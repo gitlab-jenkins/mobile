@@ -353,7 +353,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
                 if (responseCode != null){
                     if (responseCode.equalsIgnoreCase("2000")) {
-                        new HamPayDialog(activity).pspSuccessResultDialog(SWTraceNum);
+                        new HamPayDialog(activity).pspSuccessResultDialog(paymentInfoDTO.getProductCode());
                         resultStatus = ResultStatus.SUCCESS;
                     }else {
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, description);
