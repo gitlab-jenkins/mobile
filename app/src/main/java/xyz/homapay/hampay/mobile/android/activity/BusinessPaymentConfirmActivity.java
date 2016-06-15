@@ -22,6 +22,7 @@ import xyz.homapay.hampay.common.core.model.response.PSPResultResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
+import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestPSPResult;
@@ -31,6 +32,7 @@ import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
+import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
@@ -39,6 +41,8 @@ import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfs
 
 public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
+
+    private DatabaseHelper dbHelper;
     ImageView pay_to_business_button;
     boolean intentContact = false;
     Context context;
@@ -124,6 +128,9 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
         context = this;
         activity = BusinessPaymentConfirmActivity.this;
+
+        dbHelper = new DatabaseHelper(context);
+
         persianEnglishDigit = new PersianEnglishDigit();
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
@@ -323,10 +330,29 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
                     if (responseCode.equalsIgnoreCase("2000")) {
                         new HamPayDialog(activity).pspSuccessResultDialog(paymentInfoDTO.getProductCode());
                         resultStatus = ResultStatus.SUCCESS;
+                    }else if (responseCode.equalsIgnoreCase("51")) {
+                        new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.msg_insufficient_credit));
+                        resultStatus = ResultStatus.FAILURE;
                     }else {
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, description);
                         resultStatus = ResultStatus.FAILURE;
                     }
+
+                    SyncPspResult syncPspResult = new SyncPspResult();
+                    syncPspResult.setResponseCode(responseCode);
+                    syncPspResult.setProductCode(paymentInfoDTO.getProductCode());
+                    syncPspResult.setType("PURCHASE");
+                    syncPspResult.setSwTrace(SWTraceNum);
+                    syncPspResult.setTimestamp(System.currentTimeMillis());
+                    syncPspResult.setStatus(0);
+                    dbHelper.createSyncPspResult(syncPspResult);
+
+                    pspResultRequest.setPspResponseCode(responseCode);
+                    pspResultRequest.setProductCode(paymentInfoDTO.getProductCode());
+                    pspResultRequest.setTrackingCode(SWTraceNum);
+                    requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(SWTraceNum), 1);
+                    requestPSPResult.execute(pspResultRequest);
+
                 }else {
                     new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
                 }
@@ -334,11 +360,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
 
-                pspResultRequest.setPspResponseCode(responseCode);
-                pspResultRequest.setProductCode(paymentInfoDTO.getProductCode());
-                pspResultRequest.setTrackingCode(SWTraceNum);
-                requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(), 1);
-                requestPSPResult.execute(pspResultRequest);
+
 
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra(Constants.ACTIVITY_RESULT, resultStatus.ordinal());
@@ -370,6 +392,12 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
     public class RequestPSPResultTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> {
 
+        private String SWTrace;
+
+        public RequestPSPResultTaskCompleteListener(String SWTrace){
+            this.SWTrace = SWTrace;
+        }
+
         @Override
         public void onTaskComplete(ResponseMessage<PSPResultResponse> pspResultResponseMessage) {
 
@@ -377,7 +405,9 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
             if (pspResultResponseMessage != null){
                 if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-
+                    if (SWTrace != null) {
+                        dbHelper.syncPspResult(SWTrace);
+                    }
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Pending Payment Request")
                             .setAction("Payment")

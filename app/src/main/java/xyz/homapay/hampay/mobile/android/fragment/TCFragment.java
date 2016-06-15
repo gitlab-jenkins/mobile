@@ -37,7 +37,7 @@ public class TCFragment extends Fragment {
         hamPayDialog = new HamPayDialog(getActivity());
         hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
 
-        settings.setJavaScriptEnabled(true);
+//        settings.setJavaScriptEnabled(true);
         webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 
 

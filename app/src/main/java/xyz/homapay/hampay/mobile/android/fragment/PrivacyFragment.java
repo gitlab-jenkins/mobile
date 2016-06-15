@@ -36,7 +36,7 @@ public class PrivacyFragment extends Fragment {
         hamPayDialog = new HamPayDialog(getActivity());
         hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
 
-        settings.setJavaScriptEnabled(true);
+//        settings.setJavaScriptEnabled(true);
         webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 
 //        webView.loadUrl(Constants.HTTPS_SERVER_IP + "/help/privacy.html");

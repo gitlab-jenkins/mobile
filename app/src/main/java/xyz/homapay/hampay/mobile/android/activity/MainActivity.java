@@ -27,13 +27,16 @@ import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
+import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
 import xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
 import xyz.homapay.hampay.common.core.model.response.MobileRegistrationIdEntryResponse;
+import xyz.homapay.hampay.common.core.model.response.PSPResultResponse;
 import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
@@ -41,6 +44,7 @@ import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestMobileRegistrationIdEntry;
+import xyz.homapay.hampay.mobile.android.async.RequestPSPResult;
 import xyz.homapay.hampay.mobile.android.async.RequestUserProfile;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
@@ -55,6 +59,7 @@ import xyz.homapay.hampay.mobile.android.fragment.SettingFragment;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
+import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
 import xyz.homapay.hampay.mobile.android.receiver.GcmBroadcastReceiver;
 import xyz.homapay.hampay.mobile.android.service.GcmMessageHandler;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -66,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private FragmentDrawer drawerFragment;
 
     private Fragment fragment = null;
+    private RequestPSPResult requestPSPResult;
+    private PSPResultRequest pspResultRequest;
 
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle mDrawerToggle;
@@ -170,15 +177,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         activity = MainActivity.this;
         context = this;
 
-        Intent serviceIntent = new Intent(this, GcmMessageHandler.class);
-//        startService(serviceIntent);
-        context.stopService(serviceIntent);
-
         imageManager = new ImageManager(activity, 200000, false);
 
         bundle = getIntent().getExtras();
-
-
 
         Intent intent = getIntent();
 
@@ -210,6 +211,25 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
 
         dbHelper = new DatabaseHelper(context);
+
+        List<SyncPspResult> syncPspResults = dbHelper.allSyncPspResult();
+        if (syncPspResults.size() > 0) {
+            SyncPspResult syncPspResult = syncPspResults.get(0);
+            pspResultRequest = new PSPResultRequest();
+            pspResultRequest.setPspResponseCode(syncPspResult.getResponseCode());
+            pspResultRequest.setProductCode(syncPspResult.getProductCode());
+            pspResultRequest.setTrackingCode(syncPspResult.getSwTrace());
+            if (syncPspResult.getType().equalsIgnoreCase("PURCHASE")) {
+                requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(syncPspResult.getSwTrace()), 1);
+                requestPSPResult.execute(pspResultRequest);
+            }else if (syncPspResult.getType().equalsIgnoreCase("PAYMENT")){
+                requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(syncPspResult.getSwTrace()), 2);
+                requestPSPResult.execute(pspResultRequest);
+            }
+        }
+
+
+
         if (hasNotification) {
             NotificationMessageType notificationMessageType;
             notificationMessageType = NotificationMessageType.valueOf(bundle.getString(Constants.NOTIFICATION_TYPE));
@@ -628,6 +648,38 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         public void onTaskPreRun() {   }
     }
 
+
+    public class RequestPSPResultTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> {
+
+        private String SWTrace;
+
+        public RequestPSPResultTaskCompleteListener(String SWTrace){
+            this.SWTrace = SWTrace;
+        }
+
+        @Override
+        public void onTaskComplete(ResponseMessage<PSPResultResponse> pspResultResponseMessage) {
+
+            if (pspResultResponseMessage != null){
+                if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
+                    if (SWTrace != null) {
+                        dbHelper.syncPspResult(SWTrace);
+                    }
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Pending Payment Request")
+                            .setAction("Payment")
+                            .setLabel("Success")
+                            .build());
+                }else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
+                }
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+        }
+    }
 
     public class RequestUserProfileTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<UserProfileResponse>>
     {

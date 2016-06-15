@@ -11,9 +11,11 @@ import android.database.sqlite.SQLiteStatement;
 import android.os.Build;
 import android.util.Log;
 
+import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
 import xyz.homapay.hampay.mobile.android.model.EnabledHamPay;
 import xyz.homapay.hampay.mobile.android.model.LatestPurchase;
 import xyz.homapay.hampay.mobile.android.model.RecentPay;
+import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
 import xyz.homapay.hampay.mobile.android.model.ViewedPaymentRequest;
 import xyz.homapay.hampay.mobile.android.util.AESHelper;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -44,6 +46,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TABLE_CANCELED_PENDING_PAYMENT = "canceled_pending_payment";
     private static final String TABLE_VIEWED_PAYMENT_REQUEST = "viewed_payment_request";
     private static final String TABLE_VIEWED_PURCHASE_REQUEST = "viewed_purchase_request";
+    private static final String TABLE_SYNC_PSP_RESULT = "sync_psp_result";
 
 
     // Recent Pay Table - column names
@@ -69,6 +72,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Viewed Purchase Request
     private static final String KEY_VIEWED_PURCHASE_REQUEST_ID = "purchase_id";
     private static final String KEY_VIEWED_PURCHASE_REQUEST_CODE = "purchase_code";
+
+    // Sync PSP Result
+    private static final String KEY_SYNC_PSP_ID = "id";
+    private static final String KEY_SYNC_PSP_RESPONSE_CODE = "response_code";
+    private static final String KEY_SYNC_PSP_PRODUCT_CODE = "product_code";
+    private static final String KEY_SYNC_PSP_SWTRACE = "swtrace";
+    private static final String KEY_SYNC_PSP_TYPE = "type";
+    private static final String KEY_SYNC_PSP_TIME_STAMP = "timestamp";
+    private static final String KEY_SYNC_PSP_STATUS = "status";
+
+
+    // Sync PSP result table create statement
+    private static final String CREATE_TABLE_SYNC_PSP_RESULT = "CREATE TABLE "
+            + TABLE_SYNC_PSP_RESULT + "("
+            + KEY_SYNC_PSP_ID + " INTEGER PRIMARY KEY,"
+            + KEY_SYNC_PSP_RESPONSE_CODE + " TEXT,"
+            + KEY_SYNC_PSP_PRODUCT_CODE + " TEXT,"
+            + KEY_SYNC_PSP_SWTRACE + " TEXT,"
+            + KEY_SYNC_PSP_TYPE + " TEXT,"
+            + KEY_SYNC_PSP_TIME_STAMP + " INTEGER,"
+            + KEY_SYNC_PSP_STATUS + " INTEGER"
+            + ")";
 
     // recent pay table create statement
     private static final String CREATE_TABLE_RECENT_PAY = "CREATE TABLE "
@@ -160,6 +185,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_CANCELED_PENDING_PAYMENT);
         db.execSQL(CREATE_TABLE_VIEWED_PAYMENT_REQUEST);
         db.execSQL(CREATE_TABLE_VIEWED_PURCHASE_REQUEST);
+        db.execSQL(CREATE_TABLE_SYNC_PSP_RESULT);
     }
 
     @Override
@@ -170,7 +196,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CANCELED_PENDING_PAYMENT);
         db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_VIEWED_PAYMENT_REQUEST);
         db.execSQL("DROP TABLE IF EXISTS " + CREATE_TABLE_VIEWED_PURCHASE_REQUEST);
-        // create new tables
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SYNC_PSP_RESULT);
         onCreate(db);
     }
 
@@ -487,6 +513,59 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return true;
         else
             return false;
+    }
+
+    public long createSyncPspResult(SyncPspResult syncPspResult) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_SYNC_PSP_RESPONSE_CODE, syncPspResult.getResponseCode());
+        values.put(KEY_SYNC_PSP_PRODUCT_CODE, syncPspResult.getProductCode());
+        values.put(KEY_SYNC_PSP_SWTRACE, syncPspResult.getSwTrace());
+        values.put(KEY_SYNC_PSP_TYPE, syncPspResult.getType());
+        values.put(KEY_SYNC_PSP_TIME_STAMP, syncPspResult.getTimestamp());
+        values.put(KEY_SYNC_PSP_STATUS, syncPspResult.getStatus());
+        long sync_psp_result_id = db.insert(TABLE_SYNC_PSP_RESULT, null, values);
+        return sync_psp_result_id;
+    }
+
+    public List<SyncPspResult> allSyncPspResult() {
+        List<SyncPspResult> syncPspResults = new ArrayList<SyncPspResult>();
+        String selectQuery = "SELECT  * FROM " + TABLE_SYNC_PSP_RESULT + " WHERE "
+                + KEY_SYNC_PSP_STATUS + " = " + 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                SyncPspResult syncPspResult = new SyncPspResult();
+                syncPspResult.setId(cursor.getInt(cursor.getColumnIndex(KEY_SYNC_PSP_ID)));
+                syncPspResult.setResponseCode(cursor.getString(cursor.getColumnIndex(KEY_SYNC_PSP_RESPONSE_CODE)));
+                syncPspResult.setProductCode(cursor.getString(cursor.getColumnIndex(KEY_SYNC_PSP_PRODUCT_CODE)));
+                syncPspResult.setSwTrace(cursor.getString(cursor.getColumnIndex(KEY_SYNC_PSP_SWTRACE)));
+                syncPspResult.setType(cursor.getString(cursor.getColumnIndex(KEY_SYNC_PSP_TYPE)));
+                syncPspResult.setTimestamp(cursor.getLong(cursor.getColumnIndex(KEY_SYNC_PSP_TIME_STAMP)));
+                syncPspResult.setStatus(cursor.getInt(cursor.getColumnIndex(KEY_SYNC_PSP_STATUS)));
+                syncPspResults.add(syncPspResult);
+            } while (cursor.moveToNext());
+        }
+        return syncPspResults;
+    }
+
+    public int syncPspResult(String SWTrace) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        final SQLiteStatement statement = db.compileStatement("UPDATE " + TABLE_SYNC_PSP_RESULT
+                + " SET " + KEY_SYNC_PSP_STATUS + "=?"
+                + " WHERE " + KEY_SYNC_PSP_SWTRACE + "=?");
+
+        statement.bindLong(1, 1);
+        statement.bindString(2, SWTrace);
+
+        if (Build.VERSION.SDK_INT >= 11) {
+            return statement.executeUpdateDelete();
+        }else {
+            statement.execute();
+            return 1;
+        }
     }
 
 }

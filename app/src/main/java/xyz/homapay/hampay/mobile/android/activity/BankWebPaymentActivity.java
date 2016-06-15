@@ -174,7 +174,6 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
         settings.setJavaScriptEnabled(true);
         settings.setSupportZoom(true);
-        settings.setDomStorageEnabled(true);
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
 
 

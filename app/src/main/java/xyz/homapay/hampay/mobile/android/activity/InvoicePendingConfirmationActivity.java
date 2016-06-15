@@ -39,6 +39,7 @@ import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
+import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.ImageManager;
@@ -355,20 +356,34 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                     if (responseCode.equalsIgnoreCase("2000")) {
                         new HamPayDialog(activity).pspSuccessResultDialog(paymentInfoDTO.getProductCode());
                         resultStatus = ResultStatus.SUCCESS;
+                    }else if (responseCode.equalsIgnoreCase("51")) {
+                        new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.msg_insufficient_credit));
+                        resultStatus = ResultStatus.FAILURE;
                     }else {
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, description);
                         resultStatus = ResultStatus.FAILURE;
                     }
+
+                    SyncPspResult syncPspResult = new SyncPspResult();
+                    syncPspResult.setResponseCode(responseCode);
+                    syncPspResult.setProductCode(paymentInfoDTO.getProductCode());
+                    syncPspResult.setType("PAYMENT");
+                    syncPspResult.setSwTrace(SWTraceNum);
+                    syncPspResult.setTimestamp(System.currentTimeMillis());
+                    syncPspResult.setStatus(0);
+                    dbHelper.createSyncPspResult(syncPspResult);
+
+                    pspResultRequest.setPspResponseCode(responseCode);
+                    pspResultRequest.setProductCode(paymentInfoDTO.getProductCode());
+                    pspResultRequest.setTrackingCode(SWTraceNum);
+                    requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(SWTraceNum), 2);
+                    requestPSPResult.execute(pspResultRequest);
+
                 }else {
                     new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
                 }
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
-                pspResultRequest.setPspResponseCode(responseCode);
-                pspResultRequest.setProductCode(paymentInfoDTO.getProductCode());
-                pspResultRequest.setTrackingCode(SWTraceNum);
-                requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(), 2);
-                requestPSPResult.execute(pspResultRequest);
 
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra(Constants.ACTIVITY_RESULT, resultStatus.ordinal());
@@ -402,6 +417,12 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
     public class RequestPSPResultTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> {
 
+        private String SWTrace;
+
+        public RequestPSPResultTaskCompleteListener(String SWTrace){
+            this.SWTrace = SWTrace;
+        }
+
         @Override
         public void onTaskComplete(ResponseMessage<PSPResultResponse> pspResultResponseMessage) {
 
@@ -409,7 +430,9 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
             if (pspResultResponseMessage != null) {
                 if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-
+                    if (SWTrace != null) {
+                        dbHelper.syncPspResult(SWTrace);
+                    }
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Pending Payment Request")
                             .setAction("Payment")
