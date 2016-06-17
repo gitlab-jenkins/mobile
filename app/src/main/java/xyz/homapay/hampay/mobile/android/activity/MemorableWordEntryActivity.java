@@ -8,12 +8,16 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
@@ -33,12 +37,7 @@ import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
-import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
 import xyz.homapay.hampay.mobile.android.util.UserContacts;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class MemorableWordEntryActivity extends AppCompatActivity {
 

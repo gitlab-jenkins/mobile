@@ -1,20 +1,12 @@
 package xyz.homapay.hampay.mobile.android.webservice;
 
 import android.content.Context;
-import android.util.Log;
 
-import xyz.homapay.hampay.mobile.android.model.LoginData;
-import xyz.homapay.hampay.mobile.android.ssl.SSLConnection;
-import xyz.homapay.hampay.mobile.android.util.Constants;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.URL;
 
-import javax.net.ssl.HttpsURLConnection;
+import xyz.homapay.hampay.mobile.android.model.LoginData;
+import xyz.homapay.hampay.mobile.android.util.Constants;
 
 /**
  * Created by amir on 8/4/15.

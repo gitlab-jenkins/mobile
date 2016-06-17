@@ -1,7 +1,6 @@
 package xyz.homapay.hampay.mobile.android.dialog.cancelPending;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;

@@ -1,7 +1,6 @@
 package xyz.homapay.hampay.mobile.android.activity;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,8 +19,6 @@ import com.google.android.gms.analytics.Tracker;
 import java.util.ArrayList;
 import java.util.List;
 
-import xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
-import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
 import xyz.homapay.hampay.common.core.model.response.dto.BusinessDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
@@ -31,7 +28,6 @@ import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.RequestHamPayBusiness;
 import xyz.homapay.hampay.mobile.android.async.RequestSearchHamPayBusiness;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
-import xyz.homapay.hampay.mobile.android.component.doblist.DobList;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;

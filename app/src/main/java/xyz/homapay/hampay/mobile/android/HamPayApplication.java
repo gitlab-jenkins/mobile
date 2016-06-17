@@ -1,12 +1,12 @@
 package xyz.homapay.hampay.mobile.android;
 
-import android.app.Application;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Logger;
 import com.google.android.gms.analytics.Tracker;
+
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 

@@ -16,7 +16,6 @@ import com.google.android.gms.analytics.Tracker;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
-import xyz.homapay.hampay.common.core.model.request.ChangeEmailRequest;
 import xyz.homapay.hampay.common.core.model.request.IBANChangeRequest;
 import xyz.homapay.hampay.common.core.model.response.IBANChangeResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
@@ -24,7 +23,6 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import xyz.homapay.hampay.mobile.android.async.RequestChangeEmail;
 import xyz.homapay.hampay.mobile.android.async.RequestIBANChange;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;

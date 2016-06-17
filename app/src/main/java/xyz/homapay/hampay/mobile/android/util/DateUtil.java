@@ -4,8 +4,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Date;
 
-import xyz.homapay.hampay.mobile.android.R;
-
 /**
  * Created by amir on 3/29/16.
  */

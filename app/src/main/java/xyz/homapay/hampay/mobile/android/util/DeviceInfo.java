@@ -12,15 +12,8 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
-import android.text.format.Formatter;
 import android.util.DisplayMetrics;
-import android.view.Display;
-import android.view.WindowManager;
 
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 

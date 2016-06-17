@@ -1,12 +1,11 @@
 package xyz.homapay.hampay.mobile.android.component.edittext;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.text.ParseException;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
+
+import java.text.DecimalFormat;
+import java.text.ParseException;
 
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 

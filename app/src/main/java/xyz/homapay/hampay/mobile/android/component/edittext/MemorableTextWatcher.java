@@ -2,8 +2,6 @@ package xyz.homapay.hampay.mobile.android.component.edittext;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.widget.Toast;
 
 /**
  * Created by amir on 7/2/15.

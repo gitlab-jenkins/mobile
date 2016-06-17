@@ -1,7 +1,6 @@
 package xyz.homapay.hampay.mobile.android.dialog.ImageProfile;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -21,7 +20,6 @@ import xyz.homapay.hampay.common.core.model.request.RemoveUserImageRequest;
 import xyz.homapay.hampay.common.core.model.response.RemoveUserImageResponse;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.ChangeUserImageActivity;
-import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestRemoveUserImage;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;

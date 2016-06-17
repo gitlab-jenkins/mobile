@@ -60,8 +60,6 @@ import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
-import xyz.homapay.hampay.mobile.android.receiver.GcmBroadcastReceiver;
-import xyz.homapay.hampay.mobile.android.service.GcmMessageHandler;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.ImageManager;

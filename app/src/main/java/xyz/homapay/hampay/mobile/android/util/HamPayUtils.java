@@ -1,8 +1,5 @@
 package xyz.homapay.hampay.mobile.android.util;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 /**
  * Created by amir on 5/20/16.
  */

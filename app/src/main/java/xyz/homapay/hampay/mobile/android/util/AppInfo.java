@@ -1,7 +1,5 @@
 package xyz.homapay.hampay.mobile.android.util;
 
-import android.content.Context;
-
 import xyz.homapay.hampay.mobile.android.BuildConfig;
 
 /**

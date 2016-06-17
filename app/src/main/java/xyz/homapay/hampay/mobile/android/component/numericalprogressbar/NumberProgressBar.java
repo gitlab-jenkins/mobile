@@ -6,16 +6,15 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.View;
 
+import xyz.homapay.hampay.mobile.android.R;
+
 import static xyz.homapay.hampay.mobile.android.component.numericalprogressbar.NumberProgressBar.ProgressTextVisibility.Invisible;
 import static xyz.homapay.hampay.mobile.android.component.numericalprogressbar.NumberProgressBar.ProgressTextVisibility.Visible;
-
-import xyz.homapay.hampay.mobile.android.R;
 
 
 public class NumberProgressBar extends View {

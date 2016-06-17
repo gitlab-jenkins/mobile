@@ -1,7 +1,6 @@
 package xyz.homapay.hampay.mobile.android.component.cropper.cropwindow.edge;
 
 import android.graphics.Rect;
-import android.view.View;
 
 import xyz.homapay.hampay.mobile.android.component.cropper.util.AspectRatioUtil;
 

@@ -1,10 +1,10 @@
 package xyz.homapay.hampay.mobile.android.analytics;
 
 import android.app.Activity;
-import android.content.Context;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 
 /**

@@ -1,29 +1,21 @@
 package xyz.homapay.hampay.mobile.android.account;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
-import android.content.ContentProvider;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Entity;
 import android.database.Cursor;
 import android.net.Uri;
-//import android.provider.Contacts;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Email;
-import android.provider.ContactsContract.CommonDataKinds.Im;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.provider.ContactsContract.CommonDataKinds.StructuredName;
 import android.provider.ContactsContract.Data;
-import android.provider.ContactsContract.Groups;
 import android.provider.ContactsContract.RawContacts;
 import android.provider.ContactsContract.Settings;
-import android.webkit.WebChromeClient.CustomViewCallback;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ContactsManager {
 	//	private static String MIMETYPE = "vnd.android.cursor.item/com.sample.profile";

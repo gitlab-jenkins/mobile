@@ -1,8 +1,6 @@
 package xyz.homapay.hampay.mobile.android.webservice;
 
 import xyz.homapay.hampay.common.common.request.RequestHeader;
-import xyz.homapay.hampay.mobile.android.account.SyncAdapter;
-import xyz.homapay.hampay.mobile.android.util.Constants;
 
 /**
  * Created by amir on 3/7/16.

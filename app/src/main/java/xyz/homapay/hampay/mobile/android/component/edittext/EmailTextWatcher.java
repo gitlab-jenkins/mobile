@@ -3,7 +3,6 @@ package xyz.homapay.hampay.mobile.android.component.edittext;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 
 import xyz.homapay.hampay.mobile.android.R;

@@ -1,7 +1,5 @@
 package xyz.homapay.hampay.mobile.android.ssl;
 
-import android.util.Log;
-
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;

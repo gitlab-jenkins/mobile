@@ -1,7 +1,5 @@
 package xyz.homapay.hampay.mobile.android.util;
 
-import android.widget.Toast;
-
 import java.util.HashMap;
 import java.util.Map;
 
