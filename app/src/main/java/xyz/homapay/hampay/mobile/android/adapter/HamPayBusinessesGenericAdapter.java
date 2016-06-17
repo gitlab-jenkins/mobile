@@ -15,8 +15,6 @@ import java.util.List;
 
 public abstract class HamPayBusinessesGenericAdapter<T> extends BaseAdapter {
 
-	public static final String TAG = HamPayBusinessesGenericAdapter.class.getName();
-
 	protected List<BusinessDTO> businessDTOs = new ArrayList<BusinessDTO>();
 	protected LayoutInflater layoutInflater;
 

@@ -75,7 +75,6 @@ public class AccountDetailFragment extends Fragment {
 
     Tracker hamPayGaTracker;
 
-    DeviceInfo deviceInfo;
 
     Context context;
 
@@ -117,8 +116,6 @@ public class AccountDetailFragment extends Fragment {
         if (bundle != null){
             this.userProfileDTO = (UserProfileDTO) bundle.getSerializable(Constants.USER_PROFILE_DTO);
         }
-
-        deviceInfo = new DeviceInfo(getActivity());
 
         try {
             editor.putLong(Constants.MAX_BUSINESS_XFER_AMOUNT, this.userProfileDTO.getMaxBusinessXferAmount());

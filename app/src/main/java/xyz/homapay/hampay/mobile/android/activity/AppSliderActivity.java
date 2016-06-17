@@ -61,10 +61,6 @@ public class AppSliderActivity extends AppCompatActivity {
 
     HamPayDialog hamPayDialog;
 
-    GoogleCloudMessaging gcm;
-    String regid;
-    String PROJECT_NUMBER = "936219454834";
-
     IllegalAppListRequest illegalAppListRequest;
     RequestIllegalAppList requestIllegalAppList;
     long launchAppCount = 0;
@@ -163,28 +159,6 @@ public class AppSliderActivity extends AppCompatActivity {
 
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
-
-
-
-//        try {
-//            key = SecurityUtils.getInstance(this).generateSHA_256(
-//                    deviceInfo.getMacAddress(),
-//                    deviceInfo.getIMEI(),
-//                    deviceInfo.getAndroidId()
-//            );
-//        } catch (NoSuchAlgorithmException e) {
-//            e.printStackTrace();
-//        } catch (UnsupportedEncodingException e) {
-//            e.printStackTrace();
-//        }
-
-//        getRegId();
-
-//        if (new RootUtil(this).checkRootedDevice()){
-//            new HamPayDialog(this).showPreventRootDeviceDialog();
-//            return;
-//        }
-
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();

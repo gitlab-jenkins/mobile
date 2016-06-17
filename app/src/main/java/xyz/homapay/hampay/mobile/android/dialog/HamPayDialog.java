@@ -119,7 +119,6 @@ public class HamPayDialog {
     SharedPreferences.Editor editor;
     Activity activity;
     HamPayCustomDialog dialog;
-    DatabaseHelper dbHelper;
     Tracker hamPayGaTracker;
     GaAnalyticsEvent gaAnalyticsEvent;
     String serverKey = "";
@@ -154,9 +153,6 @@ public class HamPayDialog {
         editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE).edit();
 
         gaAnalyticsEvent = new GaAnalyticsEvent(activity);
-
-        dbHelper = new DatabaseHelper(activity, serverKey);
-
         hamPayGaTracker = ((HamPayApplication) this.activity.getApplicationContext())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 

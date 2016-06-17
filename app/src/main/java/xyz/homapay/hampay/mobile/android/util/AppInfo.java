@@ -9,14 +9,9 @@ import xyz.homapay.hampay.mobile.android.BuildConfig;
  */
 public class AppInfo {
 
-    Context context;
+    public AppInfo(){
 
-
-    public AppInfo(Context context){
-
-        this.context = context;
     }
-
 
     public int getVersionCode() {
 

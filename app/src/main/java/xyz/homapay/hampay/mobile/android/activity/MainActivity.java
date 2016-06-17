@@ -68,6 +68,9 @@ import xyz.homapay.hampay.mobile.android.util.ImageManager;
 
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener, View.OnClickListener, EditImageDialog.EditImageDialogListener {
+
+    private GoogleCloudMessaging googleCloudMessaging;
+    private String registrationId;
     private FragmentDrawer drawerFragment;
 
     private Fragment fragment = null;
@@ -270,29 +273,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     startActivity(intent);
                 }
             }
-//            if (pendingPurchaseCode != null) {
-//                if (dbHelper.getIsExistPurchaseRequest(pendingPurchaseCode)) {
-//                    LatestPurchase latestPurchase = dbHelper.getPurchaseRequest(pendingPurchaseCode);
-//                    if (latestPurchase.getIsCanceled().equalsIgnoreCase("0")) {
-//                        if (pendingPurchaseCount > 0) {
-//                            intent.setClass(context, RequestBusinessPayDetailActivity.class);
-//                            startActivity(intent);
-//                        } else if (pendingPaymentCode != null && pendingPaymentCount > 0) {
-//                            intent.setClass(context, InvoicePendingConfirmationActivity.class);
-//                            startActivity(intent);
-//                        }
-//                    }
-//                } else {
-//                    dbHelper.createPurchaseRequest(pendingPurchaseCode);
-//                    intent.setClass(context, RequestBusinessPayDetailActivity.class);
-//                    startActivity(intent);
-//                }
-//            } else if (pendingPaymentCount > 0 && pendingPaymentCode != null) {
-//                if (!dbHelper.checkPaymentRequest(pendingPaymentCode)) {
-//                    intent.setClass(context, InvoicePendingConfirmationActivity.class);
-//                    startActivity(intent);
-//                }
-//            }
         }
 
 
@@ -544,23 +524,17 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
     }
 
-
-
-    GoogleCloudMessaging gcm;
-    String regid;
-    String PROJECT_NUMBER = "936219454834";
-
     public void getRegId(){
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
                 String msg = "";
                 try {
-                    if (gcm == null) {
-                        gcm = GoogleCloudMessaging.getInstance(getApplicationContext());
+                    if (googleCloudMessaging == null) {
+                        googleCloudMessaging = GoogleCloudMessaging.getInstance(getApplicationContext());
                     }
-                    regid = gcm.register(PROJECT_NUMBER);
-                    msg = "Device registered, registration ID=" + regid;
+                    registrationId = googleCloudMessaging.register(Constants.PROJECT_NUMBER);
+                    msg = "Device registered, registration ID=" + registrationId;
                     Log.e("GCM", msg);
 
                 } catch (IOException ex) {
@@ -569,7 +543,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 }catch (NullPointerException ex){
                     msg = "Error :" + ex.getMessage();
                 }
-                return regid;
+                return registrationId;
             }
 
             @Override

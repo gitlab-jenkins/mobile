@@ -16,9 +16,6 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
  * Created by amir on 6/26/15.
  */
 public class HamPayBusinessesAdapter extends HamPayBusinessesGenericAdapter<BusinessDTO> {
-
-
-    private Activity activity;
     private BusinessDTO businessDTO;
     private PersianEnglishDigit persianEnglishDigit;
     private String authToken;
@@ -26,7 +23,6 @@ public class HamPayBusinessesAdapter extends HamPayBusinessesGenericAdapter<Busi
 
     public HamPayBusinessesAdapter(Activity activity, String authToken) {
         super(activity);
-        this.activity = activity;
         persianEnglishDigit = new PersianEnglishDigit();
         this.authToken = authToken;
         imageManager = new ImageManager(activity, 200000, false);

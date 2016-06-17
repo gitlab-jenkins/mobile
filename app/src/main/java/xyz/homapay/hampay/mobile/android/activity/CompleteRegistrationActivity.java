@@ -26,12 +26,8 @@ public class CompleteRegistrationActivity extends AppCompatActivity {
     FacedTextView hampay_login_button;
 
     Activity activity;
-    Context context;
 
-    SharedPreferences prefs;
     SharedPreferences.Editor editor;
-
-    HamPayDialog hamPayDialog;
 
     Tracker hamPayGaTracker;
 
@@ -69,11 +65,6 @@ public class CompleteRegistrationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_complete_registration);
-
-
-        context = this;
-
-        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         editor.putBoolean(Constants.REGISTERED_USER, true);
         editor.putString(Constants.REGISTERED_ACTIVITY_DATA, "");
@@ -90,8 +81,6 @@ public class CompleteRegistrationActivity extends AppCompatActivity {
 
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
-
-        hamPayDialog = new HamPayDialog(activity);
 
         hampay_login_button = (FacedTextView) findViewById(R.id.hampay_login_button);
         hampay_login_button.setOnClickListener(new View.OnClickListener() {

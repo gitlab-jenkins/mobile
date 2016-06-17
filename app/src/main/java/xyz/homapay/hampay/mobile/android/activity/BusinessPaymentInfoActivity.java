@@ -59,7 +59,6 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
     Activity activity;
 
     Long amountValue = 0L;
-    Long totalValue = 0L;
 
     SharedPreferences prefs;
     SharedPreferences.Editor editor;

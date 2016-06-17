@@ -43,8 +43,6 @@ import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class BankWebPaymentActivity extends AppCompatActivity {
-
-    private Activity activity;
     WebView bankWebView;
     ImageView reload;
     TextView urlText;
@@ -137,8 +135,6 @@ public class BankWebPaymentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bank_web_payment);
-
-        activity = BankWebPaymentActivity.this;
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();

@@ -22,30 +22,23 @@ import xyz.homapay.hampay.mobile.android.model.AppState;
 
 public class HamPayApplication extends MultiDexApplication {
 
-    private static final String PROPERTY_ID = "UA-67427017-1";
+
 
     public static int GENERAL_TRACKER = 0;
 
     public enum TrackerName {
         APP_TRACKER, // Tracker used only in this app.
-        GLOBAL_TRACKER, // Tracker used by all the apps from a company. eg: roll-up tracking.
-        ECOMMERCE_TRACKER, // Tracker used by all ecommerce transactions from a company.
     }
 
     HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
 
     public static final String TAG = HamPayApplication.class.getSimpleName();
 
-    private static HamPayApplication mInstance;
-
 
     @Override
     public void onCreate()
     {
         super.onCreate();
-
-        mInstance = this;
-
         ACRA.init(this);
     }
 

@@ -21,12 +21,6 @@ public class ChangeMemorableActivity extends AppCompatActivity {
     SharedPreferences prefs;
     FacedEditText memorable_value;
 
-    String currentMemorable = "";
-    String newMemorable = "";
-
-    FacedTextView memorable_text;
-    FacedTextView keepOn_text;
-
     private Context context;
 
     public void backActionBar(View view){

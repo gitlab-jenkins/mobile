@@ -80,9 +80,6 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
         finish();
     }
 
-    Long MaxXferAmount = 0L;
-    Long MinXferAmount = 0L;
-
     HamPayDialog hamPayDialog;
 
     Tracker hamPayGaTracker;
@@ -171,14 +168,6 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
         imageManager = new ImageManager(activity, 200000, false);
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
-
-        try {
-            MaxXferAmount = prefs.getLong(Constants.MAX_INDIVIDUAL_XFER_AMOUNT, 0);
-            MinXferAmount = prefs.getLong(Constants.MIN_INDIVIDUAL_XFER_AMOUNT, 0);
-
-        } catch (Exception ex) {
-            Log.e("Error", ex.getStackTrace().toString());
-        }
 
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);

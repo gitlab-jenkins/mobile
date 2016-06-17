@@ -64,7 +64,6 @@ public class MemorableWordEntryActivity extends AppCompatActivity {
     RequestCredentialEntry requestCredentialEntry;
     RegistrationCredentialsRequest registrationCredentialsRequest;
 
-    DeviceInfo deviceInfo;
 
     private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
 
@@ -144,8 +143,6 @@ public class MemorableWordEntryActivity extends AppCompatActivity {
 
 
         requestAndLoadUserContact();
-
-        deviceInfo = new DeviceInfo(activity);
 
         userEntryPassword = bundle.getString(Constants.USER_ENTRY_PASSWORD);
 

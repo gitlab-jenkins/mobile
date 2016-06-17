@@ -93,8 +93,6 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
 
     Tracker hamPayGaTracker;
 
-    private Dialog dialog;
-
     private RelativeLayout full_business;
     private RelativeLayout popular_business;
     private RelativeLayout recent_business;

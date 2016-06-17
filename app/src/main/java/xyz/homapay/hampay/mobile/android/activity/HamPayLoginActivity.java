@@ -492,7 +492,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                     editor.commit();
                     tacRequest = new TACRequest();
                     tacRequest.setDeviceId(new DeviceInfo(activity).getAndroidId());
-                    tacRequest.setAppVersion(new AppInfo(context).getVersionCode() + "");
+                    tacRequest.setAppVersion(new AppInfo().getVersionCode() + "");
                     requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
                     requestTAC.execute(tacRequest);
 

@@ -39,7 +39,6 @@ public class CancelPendingDialog extends DialogFragment implements TextView.OnEd
         void onFinishEditDialog(ActionPending actionPending);
     }
 
-    Context context;
     CancelPendingDialogListener activity;
     private Rect rect = new Rect();
 
@@ -56,12 +55,11 @@ public class CancelPendingDialog extends DialogFragment implements TextView.OnEd
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.dialog_pending_cancel_confirm, container);
-        context = getContext();
         activity = (CancelPendingDialogListener) getActivity();
 
         bundle = this.getArguments();
         if (bundle != null) {
-            code  = bundle.getString(Constants.PENDING_CODE, "");
+            code  = bundle.getString(Constants.PENDING_CODE);
         }
 
         Activity parent = (Activity) activity;

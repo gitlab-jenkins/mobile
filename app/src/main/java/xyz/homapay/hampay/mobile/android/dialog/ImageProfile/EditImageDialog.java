@@ -35,8 +35,6 @@ public class EditImageDialog  extends DialogFragment implements TextView.OnEdito
     public interface EditImageDialogListener {
         void onFinishEditDialog(ActionImage actionImage);
     }
-
-    Context context;
     EditImageDialogListener activity;
     private Rect rect = new Rect();
 
@@ -53,7 +51,6 @@ public class EditImageDialog  extends DialogFragment implements TextView.OnEdito
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.dialog_user_image_profile, container);
-        context = getContext();
         activity = (EditImageDialogListener) getActivity();
 
         Activity parent = (Activity) activity;

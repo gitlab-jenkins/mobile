@@ -8,8 +8,6 @@
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="colorAccent">@color/app_origin</color>
-    <color name="notification_title">#202020</color>
-    <color name="notification_message">#737373</color>
     <color name="navigation_banner_start">#9E248A</color>
     <color name="navigation_banner_center">#6B246C</color>
     <color name="navigation_banner_end">#371F59</color>
@@ -23,37 +21,15 @@
     <color name="entry_field_color">#e6e7e8</color>
     <color name="normal_text">#6e6f71</color>
     <color name="help_strok">#CECECE</color>
-    <color name="keyword_btn_color">#6c6d71</color>
-    <color name="me_action_bar_bg">#354c75</color>
-    <color name="me_list_titles_text">#808184</color>
-    <color name="me_action_bar_icon_unselected">#f7931d</color>
-
-    <color name="tac_accept">#36ac3f</color>
-    <color name="tac_reject">#ef3220</color>
-    <color name="tac_title">#6e6f71</color>
-
-    <color name="exit_dis_confirmation">#36ac3f</color>
-    <color name="exit_confirmation">#ef3220</color>
-    
-    <color name="confirmation">#0095ff</color>
-    <color name="dis_confirmation">#36ac3f</color>
-
-    <color name="pay_confirm">#36ac3f</color>
-    <color name="pay_disconfirm">#ef3220</color>
-
     <color name="spb_default_color">#33b5e5</color>
     <dimen name="spb_default_stroke_separator_length">4dp</dimen>
     <dimen name="spb_default_stroke_width">4dp</dimen>
     <integer name="spb_default_sections_count">4</integer>
-    <integer name="spb_default_interpolator">0</integer>
     <item name="spb_default_speed" format="float" type="string">1.0</item>
     <bool name="spb_default_reversed">false</bool>
     <bool name="spb_default_mirror_mode">false</bool>
     <bool name="spb_default_progressiveStart_activated">false</bool>
-    <color name="md_grey_300">#e0e0e0</color>
     <color name="transparency">#00000000</color>
-    <color name="white">#ffffff</color>
-
     <color name="slider_button_bg">#fafafa</color>
     <color name="slider_button_text">#221f1f</color>
     <color name="slider_unselected_indicator">#aaaaaa</color>
@@ -71,7 +47,6 @@
     <color name="transaction_unselected_tab">#bcbec0</color>
     <color name="pending_count_badge_bg">#ec1c24</color>
     <color name="total_amount_bg">#e6e7e8</color>
-    <color name="create_payment_request">#25bdc2</color>
     <color name="success_modal_color">@color/app_origin</color>
     <color name="failure_modal_color">#F4768B</color>
     <color name="modal_text">#686a6b</color>

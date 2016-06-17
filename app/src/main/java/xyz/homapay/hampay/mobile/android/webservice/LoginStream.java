@@ -20,15 +20,12 @@ import javax.net.ssl.HttpsURLConnection;
  * Created by amir on 8/4/15.
  */
 public class LoginStream {
-
-    Context context;
     LoginData loginData;
     ProxyHamPayLogin proxyHamPayLogin;
     URL url;
 
 
     public LoginStream(Context context, LoginData loginData) throws IOException{
-        this.context = context;
         this.loginData = loginData;
         if (Constants.CONNECTION_TYPE == ConnectionType.HTTPS) {
             url = new URL(Constants.HTTPS_OPENAM_LOGIN_URL);

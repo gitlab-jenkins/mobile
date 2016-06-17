@@ -44,7 +44,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
 
     private Context context;
     private Activity activity;
-    private LinearLayout find_business_purchase;
 
     private PersianEnglishDigit persianEnglishDigit;
 
@@ -73,44 +72,28 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
     RelativeLayout backspace;
 
     SharedPreferences prefs;
-    SharedPreferences.Editor editor;
 
     HamPayDialog hamPayDialog;
 
     RelativeLayout businesses_list;
-
-    private boolean onLoadMore = false;
-    DobList dobList;
 
 
     private List<BusinessDTO> businessDTOs;
 
     private HamPayBusinessesAdapter hamPayBusinessesAdapter;
 
-    private boolean FINISHED_SCROLLING = false;
-
-
-    ImageView searchImage;
     FacedEditText searchPhraseText;
 
     InputMethodManager inputMethodManager;
 
 
-    BusinessListRequest businessListRequest;
-    BusinessSearchRequest businessSearchRequest;
-
     RequestSearchHamPayBusiness requestSearchHamPayBusiness;
     RequestHamPayBusiness requestHamPayBusiness;
 
-    int requestPageNumber = 0;
 
-    boolean searchEnabled = false;
 
     Tracker hamPayGaTracker;
 
-    private Dialog dialog;
-
-    private RelativeLayout search_layout;
 
     public void backActionBar(View view){
         finish();
@@ -178,19 +161,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
 
         persianEnglishDigit = new PersianEnglishDigit();
 
-//        businessListView = (ListView)findViewById(R.id.businessListView);
-//        businessListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Intent intent = new Intent();
-//                intent.setClass(context, BusinessPaymentInfoActivity.class);
-//                intent.putExtra(Constants.BUSINESS_INFO, businessDTOs.get(position));
-//                context.startActivity(intent);
-//            }
-//        });
-
-        find_business_purchase = (LinearLayout)findViewById(R.id.find_business_purchase);
-
         payment_button = (ImageView)findViewById(R.id.payment_button);
         payment_button.setOnClickListener(this);
 
@@ -231,11 +201,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
 
         businesses_list = (RelativeLayout)findViewById(R.id.businesses_list);
         businesses_list.setOnClickListener(this);
-
-
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
-        editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-
         hamPayBusinessesAdapter = new HamPayBusinessesAdapter(activity, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
 
         hamPayGaTracker = ((HamPayApplication) getApplication())
@@ -421,39 +387,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                 break;
 
         }
-    }
-
-    private void performBusinessSearch(String searchTerm) {
-        requestPageNumber = 0;
-        searchEnabled = true;
-        FINISHED_SCROLLING = false;
-        onLoadMore = false;
-
-//        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
-//            Intent intent = new Intent();
-//            intent.setClass(activity, HamPayLoginActivity.class);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            finish();
-//            startActivity(intent);
-//        }else {
-//            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-//            editor.commit();
-//            businessSearchRequest = new BusinessSearchRequest();
-//            businessSearchRequest.setPageNumber(requestPageNumber);
-//            businessSearchRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-//            businessSearchRequest.setTerm(searchTerm);
-//            requestSearchHamPayBusiness = new RequestSearchHamPayBusiness(activity, new RequestBusinessListTaskCompleteListener(searchEnabled));
-//            requestSearchHamPayBusiness.execute(businessSearchRequest);
-//        }
-
-
-        inputMethodManager.hideSoftInputFromWindow(searchPhraseText.getWindowToken(), 0);
-
-        hamPayBusinessesAdapter.clear();
-        businessDTOs.clear();
-
-        hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-
     }
 
 

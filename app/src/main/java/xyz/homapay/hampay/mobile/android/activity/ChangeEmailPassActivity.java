@@ -59,9 +59,6 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
     LinearLayout keyboard;
     LinearLayout password_holder;
 
-    RequestChangeEmail requestChangeEmail;
-    ChangeEmailRequest changeEmailRequest;
-
     Context context;
     Activity activity;
 
@@ -104,11 +101,6 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
     protected void onStop() {
         super.onStop();
         HamPayApplication.setAppSate(AppState.Stoped);
-
-        if (requestChangeEmail != null){
-            if (!requestChangeEmail.isCancelled())
-                requestChangeEmail.cancel(true);
-        }
     }
 
 

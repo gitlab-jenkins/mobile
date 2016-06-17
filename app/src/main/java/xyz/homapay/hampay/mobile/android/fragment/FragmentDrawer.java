@@ -25,9 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentDrawer extends Fragment {
-
-    private static String TAG = FragmentDrawer.class.getSimpleName();
-
     private RecyclerView recyclerView;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
