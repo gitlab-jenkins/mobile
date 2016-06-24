@@ -158,10 +158,6 @@ public class PaymentRequestListActivity extends AppCompatActivity{
         requestPendingPOList = new RequestPendingPOList(activity, new RequestPendingPOListTaskCompleteListener());
         requestPendingPOList.execute(pendingPOListRequest);
 
-//        latestInvoiceContactsRequest = new LatestInvoiceContactsRequest();
-//        requestLatestInvoiceContacts = new RequestLatestInvoiceContacts(activity, new RequestLatestInvoiceContactsTaskCompleteListener());
-//        requestLatestInvoiceContacts.execute(latestInvoiceContactsRequest);
-
         paymentRequestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

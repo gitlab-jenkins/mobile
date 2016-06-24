@@ -58,7 +58,7 @@ public class SecuredProxyService {
         this.connectionType = connectionType;
         this.connectionMethod = connectionMethod;
         this.url = url;
-        messageEncryptor= new AESMessageEncryptor(Constants.APP_KEY);
+        messageEncryptor = new AESMessageEncryptor(Constants.APP_KEY);
     }
 
     public SecuredProxyService(Context context, ConnectionType connectionType, ConnectionMethod connectionMethod, URL url, boolean enableGZip){
@@ -130,10 +130,7 @@ public class SecuredProxyService {
                 break;
         }
 
-
-        String test = new ConvertUtils().streamToString(inputStreamReader);
-
-        return messageEncryptor.decrypt(test);
+        return messageEncryptor.decrypt(new ConvertUtils().streamToString(inputStreamReader));
 
     }
 

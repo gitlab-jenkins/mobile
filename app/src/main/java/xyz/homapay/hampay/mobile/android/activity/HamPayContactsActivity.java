@@ -185,6 +185,8 @@ public class HamPayContactsActivity extends AppCompatActivity{
                         hamPayContactsAdapter = new HamPayContactsAdapter(activity, contacts, authToken);
                         paymentRequestList.setAdapter(hamPayContactsAdapter);
                     }
+                }else if (contactsHampayEnabledResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE){
+                    forceLogout();
                 }
                 else {
                     requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());
@@ -205,6 +207,18 @@ public class HamPayContactsActivity extends AppCompatActivity{
         @Override
         public void onTaskPreRun() {
             hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
+    }
+
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(context, HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        if (activity != null) {
+            finish();
+            startActivity(intent);
         }
     }
 

@@ -13,6 +13,7 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -327,7 +328,9 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                     return;
                 }
                 if (creditValueValidation) {
+
                     contactMssage = contact_message.getText().toString();
+                    contactMssage = contactMssage.replaceAll(Constants.ENTER_CHARACTERS_REGEX, " ");
                     amountValue = Long.parseLong(new PersianEnglishDigit(amount_value.getText().toString()).P2E().replace(",", ""));
                     editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                     editor.commit();
@@ -337,7 +340,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                         userPaymentRequest.setCalleeCellNumber(cellNumber);
                         userPaymentRequest.setAmount(amountValue);
                         userPaymentRequest.setVat(calculatedVat);
-                        userPaymentRequest.setMessage(contact_message.getText().toString());
+                        userPaymentRequest.setMessage(contactMssage);
                         requestUserPayment = new RequestUserPayment(context, new RequestUserPaymentTaskCompleteListener());
                         requestUserPayment.execute(userPaymentRequest);
                     } else {

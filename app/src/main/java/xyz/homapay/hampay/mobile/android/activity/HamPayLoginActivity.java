@@ -228,7 +228,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ham_pay_login);
 
-        final String message = "this is a test message";
+        final String message = "H";
         final MessageEncryptor messageEncryptor = new AESMessageEncryptor(Constants.APP_KEY);
         try {
             final String encrypted =  messageEncryptor.encrypt(message);

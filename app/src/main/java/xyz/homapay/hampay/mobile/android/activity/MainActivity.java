@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.security.KeyPairGeneratorSpec;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -21,15 +22,32 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.UUID;
 
+import javax.security.auth.x500.X500Principal;
+
+import xyz.homapay.hampay.common.common.encrypt.AESMessageEncryptor;
+import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
+import xyz.homapay.hampay.common.common.encrypt.MessageEncryptor;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
@@ -63,7 +81,6 @@ import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.ImageManager;
-
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener, View.OnClickListener, EditImageDialog.EditImageDialogListener {
 
@@ -183,6 +200,22 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         bundle = getIntent().getExtras();
 
         Intent intent = getIntent();
+
+
+        MessageEncryptor messageEncryptor;
+
+        messageEncryptor = new AESMessageEncryptor(Constants.APP_KEY);
+
+        String a = null;
+
+        try {
+             a = messageEncryptor.encrypt("amir");
+        } catch (EncryptionException e) {
+            e.printStackTrace();
+        }
+
+
+
 
         pendingPurchaseCode = bundle.getString(Constants.PENDING_PURCHASE_CODE);
         pendingPaymentCode = bundle.getString(Constants.PENDING_PAYMENT_CODE);

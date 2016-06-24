@@ -339,7 +339,8 @@
                         android:textColor="@color/main_menu_title"
                         android:hint="@string/insert_message"
                         android:gravity="top"
-                        android:maxLength="140"/>
+                        android:maxLength="140"
+                        android:imeOptions="actionNext"/>
 
 
                 </RelativeLayout>
