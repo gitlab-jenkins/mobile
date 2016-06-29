@@ -126,7 +126,7 @@ public class PendingPODetailActivity extends AppCompatActivity {
         caller_phone_number = (FacedTextView)findViewById(R.id.caller_phone_number);
         caller_phone_number.setText(persianEnglishDigit.E2P(paymentInfo.getCalleePhoneNumber()));
         amount_value = (FacedTextView)findViewById(R.id.amount_value);
-        amount_value.setText(persianEnglishDigit.E2P(formatter.format(paymentInfo.getAmount())));
+        amount_value.setText(persianEnglishDigit.E2P(formatter.format(paymentInfo.getAmount() + paymentInfo.getVat())));
         payment_request_code = (FacedTextView)findViewById(R.id.payment_request_code);
         payment_request_code.setText(persianEnglishDigit.E2P(paymentInfo.getProductCode()));
         create_date = (FacedTextView)findViewById(R.id.create_date);

@@ -186,11 +186,11 @@ public class DeviceInfo {
     private String userDeviceEmail = "";
 
     public String getDeviceEmailAccount(){
-        AccountManager accManager = AccountManager.get(context);
-        Account accounts[] = accManager.getAccounts();
+        AccountManager accountManager = AccountManager.get(context);
+        Account accounts[] = accountManager.getAccounts();
         int accCount = accounts.length;
         for(int i = 0; i < accCount; i++){
-            if (accounts[i].type.equalsIgnoreCase("google")){
+            if (accounts[i].type.equalsIgnoreCase("google") || accounts[i].type.contains("mail")){
                 userDeviceEmail = accounts[i].name;
             }
         }

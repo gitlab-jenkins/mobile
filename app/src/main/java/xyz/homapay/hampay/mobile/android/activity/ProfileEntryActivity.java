@@ -153,8 +153,8 @@ public class ProfileEntryActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         HamPayApplication.setAppSate(AppState.Resumed);
-        initLocation();
-        requestReadFineLocation();
+//        initLocation();
+//        requestReadFineLocation();
     }
 
     @Override
@@ -194,9 +194,30 @@ public class ProfileEntryActivity extends AppCompatActivity {
 
 //                        Toast.makeText(activity, "Access allowed!", Toast.LENGTH_SHORT).show();
 
+                        requestUserAccount();
+
                     } else {
                         // Permission not granted
 //                        Toast.makeText(activity, "Access denied!", Toast.LENGTH_SHORT).show();
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void requestUserAccount() {
+        String[] permissions = new String[]{Manifest.permission.GET_ACCOUNTS};
+        permissionListeners = new RequestPermissions().request(activity, Constants.GET_ACCOUNTS, permissions, new PermissionListener() {
+            @Override
+            public boolean onResult(int requestCode, String[] requestPermissions, int[] grantResults) {
+                if (requestCode == Constants.GET_ACCOUNTS) {
+                    if (requestPermissions[0].equals(Manifest.permission.GET_ACCOUNTS) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        emailValue.setText(new DeviceInfo(activity).getDeviceEmailAccount());
+                        requestReadFineLocation();
+                        initLocation();
+                    } else {
                     }
                     return true;
                 }
@@ -427,7 +448,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
         emailTextWatcher = new EmailTextWatcher(emailValue, emailIcon);
 
         emailValue.addTextChangedListener(emailTextWatcher);
-        emailValue.setText(new DeviceInfo(activity).getDeviceEmailAccount());
+//        emailValue.setText(new DeviceInfo(activity).getDeviceEmailAccount());
 
         keepOn_button = (FacedTextView) findViewById(R.id.keepOn_button);
         keepOn_button.setOnClickListener(new View.OnClickListener() {

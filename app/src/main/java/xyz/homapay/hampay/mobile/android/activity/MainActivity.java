@@ -666,7 +666,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         public void onTaskComplete(ResponseMessage<PSPResultResponse> pspResultResponseMessage) {
 
             if (pspResultResponseMessage != null){
-                if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
+
+                ResultStatus resultStatus = pspResultResponseMessage.getService().getResultStatus();
+
+                if (resultStatus == ResultStatus.SUCCESS || resultStatus == ResultStatus.PAYMENT_NOT_FOUND || resultStatus == ResultStatus.PURCHASE_NOT_FOUND){
                     if (SWTrace != null) {
                         dbHelper.syncPspResult(SWTrace);
                     }
