@@ -1413,11 +1413,11 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 String userEmail = emailValue.getText().toString();
-                if (new EmailVerification().isValid(userEmail)) {
+                if (new EmailVerification().isValid(userEmail.trim())) {
                     dialog.dismiss();
                     Intent intent = new Intent();
                     intent.setClass(activity, ChangeEmailPassActivity.class);
-                    intent.putExtra(Constants.REGISTERED_USER_EMAIL, userEmail);
+                    intent.putExtra(Constants.REGISTERED_USER_EMAIL, userEmail.trim());
                     activity.startActivity(intent);
                 } else {
                     Toast.makeText(activity, activity.getString(R.string.msg_email_invalid), Toast.LENGTH_SHORT).show();
@@ -1774,8 +1774,11 @@ public class HamPayDialog {
         }
     }
 
-    public void failurePaymentRequestDialog(){
+    public void failurePaymentRequestDialog(final String code, final String message){
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_payment_request_failure, null);
+
+        FacedTextView request_payment_message = (FacedTextView)view.findViewById(R.id.request_payment_message);
+        request_payment_message.setText(code + "\n" + message);
 
         FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
 

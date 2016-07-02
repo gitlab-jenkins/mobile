@@ -38,7 +38,6 @@ public class EmailTextWatcher implements TextWatcher {
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after)
     {
-
     }
 
     @Override
@@ -47,7 +46,7 @@ public class EmailTextWatcher implements TextWatcher {
         emailValue.removeTextChangedListener(this);
         emailIcon.setVisibility(View.VISIBLE);
 
-        if (new EmailVerification().isValid(emailValue.getText().toString())){
+        if (new EmailVerification().isValid(charSequence.toString().trim())){
             emailIcon.setImageResource(R.drawable.right_icon);
             isValidEmail = true;
         }else {

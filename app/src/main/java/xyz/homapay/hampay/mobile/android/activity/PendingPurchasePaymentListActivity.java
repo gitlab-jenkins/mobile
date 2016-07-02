@@ -271,6 +271,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                     pendingFundListAdapter.notifyDataSetChanged();
                     if (fundDTOList.size() == 0) {
                         nullPendingText.setVisibility(View.VISIBLE);
+                        finish();
                     }
                 }
 
@@ -287,6 +288,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                     pendingFundListAdapter.notifyDataSetChanged();
                     if (fundDTOList.size() == 0){
                         nullPendingText.setVisibility(View.VISIBLE);
+                        finish();
                     }
                 }
 
@@ -443,6 +445,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                     if (fundDTOList != null){
                         fundDTOList.remove(pos);
                         pendingFundListAdapter.notifyDataSetChanged();
+                        PugNotification.with(context).cancel(Constants.INVOICE_NOTIFICATION_IDENTIFIER);
                         if (fundDTOList.size() == 0){
                             nullPendingText.setVisibility(View.VISIBLE);
                         }
@@ -478,6 +481,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                     if (fundDTOList != null){
                         fundDTOList.remove(pos);
                         pendingFundListAdapter.notifyDataSetChanged();
+                        PugNotification.with(context).cancel(Constants.INVOICE_NOTIFICATION_IDENTIFIER);
                         if (fundDTOList.size() == 0){
                             nullPendingText.setVisibility(View.VISIBLE);
                         }

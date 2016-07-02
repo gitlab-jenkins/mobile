@@ -373,6 +373,9 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
             hamPayDialog.dismisWaitingDialog();
 
             if (userPaymentResponseMessage != null) {
+
+
+
                 if (userPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
                     new HamPayDialog(activity).successPaymentRequestDialog(userPaymentResponseMessage.getService().getProductCode());
@@ -387,7 +390,8 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                     forceLogout();
                 }
                 else {
-                    new HamPayDialog(activity).failurePaymentRequestDialog();
+                    new HamPayDialog(activity).failurePaymentRequestDialog(userPaymentResponseMessage.getService().getResultStatus().getCode(),
+                            userPaymentResponseMessage.getService().getResultStatus().getDescription());
 
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Individual Payment Confirm")
@@ -396,7 +400,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                             .build());
                 }
             } else {
-                new HamPayDialog(activity).failurePaymentRequestDialog();
+                new HamPayDialog(activity).failurePaymentRequestDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_failure_payment_request));
 
                 hamPayGaTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Individual Payment Confirm")

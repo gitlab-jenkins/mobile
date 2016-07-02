@@ -41,6 +41,7 @@ import xyz.homapay.hampay.mobile.android.util.UserContacts;
 
 public class MemorableWordEntryActivity extends AppCompatActivity {
 
+    private List<ContactDTO> contacts;
     private FacedTextView keepOn_button;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
@@ -110,16 +111,12 @@ public class MemorableWordEntryActivity extends AppCompatActivity {
                 if (requestCode == Constants.READ_CONTACTS) {
                     // Check if the permission is correct and is granted
                     if (requestPermissions[0].equals(Manifest.permission.READ_CONTACTS) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        // Permission granted
-
                         UserContacts userContacts = new UserContacts(context);
-                        List<ContactDTO> contact = userContacts.read();
-
-//                        Toast.makeText(activity, "Access allowed!", Toast.LENGTH_SHORT).show();
-
+                        contacts = userContacts.read();
+                        registrationCredentialsRequest.setContacts(contacts);
                     } else {
-                        // Permission not granted
-//                        Toast.makeText(activity, "Access denied!", Toast.LENGTH_SHORT).show();
+                        contacts = new ArrayList<ContactDTO>();
+                        registrationCredentialsRequest.setContacts(contacts);
                     }
 
                     return true;
@@ -140,7 +137,7 @@ public class MemorableWordEntryActivity extends AppCompatActivity {
 
         bundle = getIntent().getExtras();
 
-
+        registrationCredentialsRequest = new RegistrationCredentialsRequest();
         requestAndLoadUserContact();
 
         userEntryPassword = bundle.getString(Constants.USER_ENTRY_PASSWORD);
@@ -164,7 +161,6 @@ public class MemorableWordEntryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (memorable_value.getText().toString().trim().length() > 1 ) {
-                    registrationCredentialsRequest = new RegistrationCredentialsRequest();
                     registrationCredentialsRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
                     registrationCredentialsRequest.setDeviceId(new DeviceInfo(activity).getAndroidId());
                     Uuid = UUID.randomUUID().toString();

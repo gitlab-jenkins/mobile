@@ -295,7 +295,7 @@ public class SecuredWebServices {
         SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url, true);
 
         UserContacts userContacts = new UserContacts(context);
-        registrationCredentialsRequest.setContacts(userContacts.read());
+//        registrationCredentialsRequest.setContacts(userContacts.read());
         registrationCredentialsRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<RegistrationCredentialsRequest> message = new RequestMessage<>(registrationCredentialsRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
@@ -482,7 +482,7 @@ public class SecuredWebServices {
         SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url, true);
 
         UserContacts userContacts = new UserContacts(context);
-        contactsHampayEnabledRequest.setContacts(userContacts.read());
+//        contactsHampayEnabledRequest.setContacts(userContacts.read());
         contactsHampayEnabledRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
         RequestMessage<ContactsHampayEnabledRequest> message = new RequestMessage<>(contactsHampayEnabledRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 

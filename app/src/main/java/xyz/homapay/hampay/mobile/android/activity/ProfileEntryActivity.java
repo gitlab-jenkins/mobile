@@ -15,6 +15,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
@@ -199,6 +200,8 @@ public class ProfileEntryActivity extends AppCompatActivity {
                     } else {
                         // Permission not granted
 //                        Toast.makeText(activity, "Access denied!", Toast.LENGTH_SHORT).show();
+
+                        finish();
                     }
                     return true;
                 }
@@ -214,10 +217,12 @@ public class ProfileEntryActivity extends AppCompatActivity {
             public boolean onResult(int requestCode, String[] requestPermissions, int[] grantResults) {
                 if (requestCode == Constants.GET_ACCOUNTS) {
                     if (requestPermissions[0].equals(Manifest.permission.GET_ACCOUNTS) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        emailValue.setText(new DeviceInfo(activity).getDeviceEmailAccount());
+                        emailValue.setText(new DeviceInfo(activity).getDeviceEmailAccount().trim());
                         requestReadFineLocation();
                         initLocation();
                     } else {
+                        requestReadFineLocation();
+                        initLocation();
                     }
                     return true;
                 }
@@ -245,7 +250,6 @@ public class ProfileEntryActivity extends AppCompatActivity {
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
-        requestAndLoadPhoneState();
 
         initLocation();
 
@@ -484,7 +488,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
                     registrationEntryRequest.setCellNumber(persianEnglishDigit.P2E(getString(R.string.iran_prefix_cell_number) + cellNumberValue.getText().toString()));
                     registrationEntryRequest.setCardNumber(persianEnglishDigit.P2E(cardNumberValue.getText().toString()));
                     registrationEntryRequest.setFullName(userNameFamily.getText().toString());
-                    registrationEntryRequest.setEmail(emailValue.getText().toString());
+                    registrationEntryRequest.setEmail(emailValue.getText().toString().trim());
                     registrationEntryRequest.setNationalCode(persianEnglishDigit.P2E(nationalCodeValue.getText().toString().replaceAll("-", "")));
 
                     requestRegistrationEntry = new RequestRegistrationEntry(activity,
@@ -525,6 +529,9 @@ public class ProfileEntryActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+        requestAndLoadPhoneState();
     }
 
     public class RequestCardProfileTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<CardProfileResponse>>
@@ -614,7 +621,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
                     editor.putString(Constants.REGISTERED_CARD_NO, cardNumberValue.getText().toString());
                     editor.putString(Constants.REGISTERED_NATIONAL_CODE, persianEnglishDigit.P2E(nationalCodeValue.getText().toString().replaceAll("-", "")));
                     editor.putString(Constants.REGISTERED_USER_ID_TOKEN, registrationEntryResponse.getService().getUserIdToken());
-                    editor.putString(Constants.REGISTERED_USER_EMAIL, emailValue.getText().toString());
+                    editor.putString(Constants.REGISTERED_USER_EMAIL, emailValue.getText().toString().trim());
                     editor.commit();
 
 

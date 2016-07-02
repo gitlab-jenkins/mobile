@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +27,7 @@ import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
 import xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
 import xyz.homapay.hampay.common.core.model.response.ContactsHampayEnabledResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
+import xyz.homapay.hampay.mobile.android.Manifest;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.HamPayContactsAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
@@ -34,11 +36,14 @@ import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
+import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.UserContacts;
 
 public class HamPayContactsActivity extends AppCompatActivity{
 
-
+    private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
     private String authToken;
     private Context context;
     private Activity activity;
@@ -84,6 +89,33 @@ public class HamPayContactsActivity extends AppCompatActivity{
         }
     }
 
+    private void requestAndLoadUserContact() {
+        String[] permissions = new String[]{Manifest.permission.READ_CONTACTS};
+
+        permissionListeners = new RequestPermissions().request(activity, Constants.READ_CONTACTS, permissions, new PermissionListener() {
+            @Override
+            public boolean onResult(int requestCode, String[] requestPermissions, int[] grantResults) {
+                if (requestCode == Constants.READ_CONTACTS) {
+                    // Check if the permission is correct and is granted
+                    if (requestPermissions[0].equals(Manifest.permission.READ_CONTACTS) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        UserContacts userContacts = new UserContacts(context);
+                        contacts = userContacts.read();
+                        contactsHampayEnabledRequest.setContacts(contacts);
+                        requestContactHampayEnabled = new RequestContactHampayEnabled(activity, new RequestContactHampayEnabledTaskCompleteListener());
+                        requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
+                    } else {
+                        contacts = new ArrayList<ContactDTO>();
+                        contactsHampayEnabledRequest.setContacts(contacts);
+                    }
+
+                    return true;
+                }
+
+                return false;
+            }
+        });
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,8 +134,7 @@ public class HamPayContactsActivity extends AppCompatActivity{
             @Override
             public void onRefresh() {
                 contactsHampayEnabledRequest = new ContactsHampayEnabledRequest();
-                requestContactHampayEnabled = new RequestContactHampayEnabled(activity, new RequestContactHampayEnabledTaskCompleteListener());
-                requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
+                requestAndLoadUserContact();
             }
         });
         paymentRequestList = (ListView)findViewById(R.id.paymentRequestList);
@@ -150,9 +181,7 @@ public class HamPayContactsActivity extends AppCompatActivity{
 
         editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
         editor.commit();
-        contactsHampayEnabledRequest = new ContactsHampayEnabledRequest();
-        requestContactHampayEnabled = new RequestContactHampayEnabled(activity, new RequestContactHampayEnabledTaskCompleteListener());
-        requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
+
 
         paymentRequestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -163,6 +192,9 @@ public class HamPayContactsActivity extends AppCompatActivity{
                 startActivityForResult(intent, 1024);
             }
         });
+
+        contactsHampayEnabledRequest = new ContactsHampayEnabledRequest();
+        requestAndLoadUserContact();
     }
 
 

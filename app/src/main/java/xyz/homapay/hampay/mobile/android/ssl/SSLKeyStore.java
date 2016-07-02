@@ -26,7 +26,6 @@ public class SSLKeyStore {
     public KeyStore getAppKeyStore(){
         try{
             CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-//            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/tejarat_nginx.crt"));
 //            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/uat-http-v1.crt"));
             InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/nginx.crt"));
 //            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/prod-http-v1.crt"));
