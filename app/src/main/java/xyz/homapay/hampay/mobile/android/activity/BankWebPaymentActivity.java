@@ -259,10 +259,21 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 //                if (url.toLowerCase().contains("c.php")) {
                     if (view.getTitle().toLowerCase().contains("ref:")) {
                         if (view.getTitle().split(":").length == 2){
-                            hamPayDialog.ipgSuccessDialog(view.getTitle().split(":")[1]);
+                            Intent intent = new Intent(context, PaymentCompletedActivity.class);
+                            if (paymentInfoDTO != null) {
+                                intent.putExtra(Constants.SUCCESS_PAYMENT_AMOUNT, paymentInfoDTO.getAmount());
+                                intent.putExtra(Constants.SUCCESS_PAYMENT_CODE, paymentInfoDTO.getProductCode());
+
+                            }else if (purchaseInfoDTO != null){
+                                intent.putExtra(Constants.SUCCESS_PAYMENT_AMOUNT, purchaseInfoDTO.getAmount());
+                                intent.putExtra(Constants.SUCCESS_PAYMENT_CODE, purchaseInfoDTO.getProductCode());
+                            }
+                            intent.putExtra(Constants.SUCCESS_PAYMENT_TRACE, view.getTitle().split(":")[1]);
+                            startActivity(intent);
+//                            hamPayDialog.ipgSuccessDialog(view.getTitle().split(":")[1]);
                             resultStatus = ResultStatus.SUCCESS;
                         }else {
-                            hamPayDialog.ipgSuccessDialog("");
+                            hamPayDialog.ipgFailDialog();
                             resultStatus = ResultStatus.FAILURE;
                         }
                         startTimer();

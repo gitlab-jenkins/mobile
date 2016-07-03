@@ -402,7 +402,14 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
                 if (responseCode != null){
                     if (responseCode.equalsIgnoreCase("2000")) {
-                        new HamPayDialog(activity).pspSuccessResultDialog(purchaseInfoDTO.getProductCode());
+                        if (purchaseInfoDTO != null) {
+                            Intent intent = new Intent(context, PaymentCompletedActivity.class);
+                            intent.putExtra(Constants.SUCCESS_PAYMENT_AMOUNT, purchaseInfoDTO.getAmount());
+                            intent.putExtra(Constants.SUCCESS_PAYMENT_CODE, purchaseInfoDTO.getProductCode());
+                            intent.putExtra(Constants.SUCCESS_PAYMENT_TRACE, SWTraceNum);
+                            startActivity(intent);
+                        }
+//                        new HamPayDialog(activity).pspSuccessResultDialog(purchaseInfoDTO.getProductCode());
                         resultStatus = ResultStatus.SUCCESS;
                     }else if (responseCode.equalsIgnoreCase("51")) {
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.msg_insufficient_credit));

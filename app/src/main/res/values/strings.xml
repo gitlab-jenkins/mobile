@@ -264,6 +264,12 @@
     <string name="user_pin2">رمز دوم کارت</string>
     <string name="msg_success_pending_payment">پرداخت شما با کد پیگیری %1$s با موفقیت انجام شد.</string>
     <string name="msg_business_payment_success">پرداخت شما با کد پیگیری %1$s با موفقیت انجام شد.</string>
+    <string name="msg_payment_success">پرداخت شما با موفقیت انجام شد</string>
+    <string name="payment_info">اطلاعات پرداخت</string>
+    <string name="payment_success_amount">مبلغ: </string>
+    <string name="payment_success_code">کد فاکتور: </string>
+    <string name="payment_success_trace">کد پیگیری: </string>
+    <string name="payment_success_confirm">تایید</string>
     <string name="msg_ipg_fail">انجام عملیات پرداخت موفقیت آمیز نبود. لطفا دوباره تلاش کنید</string>
     <string name="msg_pin2_incurrect">رمز دوم خود را به درستی وارد کنید.</string>
     <string name="msg_not_found_pending_payment_code">اطلاعات خرید شما با این کد یافت نشد </string>
