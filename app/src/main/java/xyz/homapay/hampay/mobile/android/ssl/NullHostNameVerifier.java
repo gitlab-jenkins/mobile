@@ -12,8 +12,8 @@ public class NullHostNameVerifier implements HostnameVerifier {
     public boolean verify(String hostname, SSLSession session) {
 //       Log.e("RestUtilImpl", "Approving certificate for " + hostname);
         HostnameVerifier hostnameVerifier = HttpsURLConnection.getDefaultHostnameVerifier();
-        return hostnameVerifier.verify("uat.hampay.ir", session);
+//        return hostnameVerifier.verify("uat.hampay.ir", session);
 //        return hostnameVerifier.verify("mobile.hampay.ir", session);
-//        return true;
+        return true;
     }
 }

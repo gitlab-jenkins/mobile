@@ -44,8 +44,6 @@ import xyz.homapay.hampay.common.core.model.request.PaymentDetailRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingCountRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingFundListRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingPOListRequest;
-import xyz.homapay.hampay.common.core.model.request.PendingPaymentListRequest;
-import xyz.homapay.hampay.common.core.model.request.PendingPurchaseListRequest;
 import xyz.homapay.hampay.common.core.model.request.PurchaseDetailRequest;
 import xyz.homapay.hampay.common.core.model.request.PurchaseInfoRequest;
 import xyz.homapay.hampay.common.core.model.request.RecentPendingFundRequest;
@@ -88,8 +86,6 @@ import xyz.homapay.hampay.common.core.model.response.PaymentDetailResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingCountResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingFundListResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingPOListResponse;
-import xyz.homapay.hampay.common.core.model.response.PendingPaymentListResponse;
-import xyz.homapay.hampay.common.core.model.response.PendingPurchaseListResponse;
 import xyz.homapay.hampay.common.core.model.response.PurchaseDetailResponse;
 import xyz.homapay.hampay.common.core.model.response.PurchaseInfoResponse;
 import xyz.homapay.hampay.common.core.model.response.RecentPendingFundResponse;
@@ -790,49 +786,6 @@ public class SecuredWebServices {
         Gson gson = builder.getDatebuilder().create();
 
         responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PSPResultResponse>>() {}.getType());
-        proxyService.closeConnection();
-
-        return responseMessage;
-    }
-
-    public ResponseMessage<PendingPurchaseListResponse> pendingPurchase(PendingPurchaseListRequest pendingPurchaseListRequest) throws IOException, EncryptionException {
-
-        ResponseMessage<PendingPurchaseListResponse> responseMessage = null;
-        url = new URL(serviceURL + "/purchase/pendingList");
-        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
-
-        pendingPurchaseListRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
-        RequestMessage<PendingPurchaseListRequest> message = new RequestMessage<>(pendingPurchaseListRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
-
-        Type requestType = new TypeToken<RequestMessage<PendingPurchaseListRequest>>() {}.getType();
-        String jsonRequest = new Gson().toJson(message, requestType);
-        proxyService.setJsonBody(jsonRequest);
-
-        Gson gson = builder.getDatebuilder().create();
-
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PendingPurchaseListResponse>>() {}.getType());
-        proxyService.closeConnection();
-
-        return responseMessage;
-    }
-
-
-    public ResponseMessage<PendingPaymentListResponse> pendingPayment(PendingPaymentListRequest pendingPaymentListRequest) throws IOException, EncryptionException {
-
-        ResponseMessage<PendingPaymentListResponse> responseMessage = null;
-        url = new URL(serviceURL +  "/payment/pendingList");
-        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
-
-        pendingPaymentListRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
-        RequestMessage<PendingPaymentListRequest> message = new RequestMessage<>(pendingPaymentListRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
-
-        Type requestType = new TypeToken<RequestMessage<PendingPaymentListRequest>>() {}.getType();
-        String jsonRequest = new Gson().toJson(message, requestType);
-        proxyService.setJsonBody(jsonRequest);
-
-        Gson gson = builder.getDatebuilder().create();
-
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PendingPaymentListResponse>>() {}.getType());
         proxyService.closeConnection();
 
         return responseMessage;

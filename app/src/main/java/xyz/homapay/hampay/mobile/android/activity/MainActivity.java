@@ -300,8 +300,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 }
             }else if (pendingPaymentCode != null){
                 if (!dbHelper.checkPaymentRequest(pendingPaymentCode)) {
-                    intent.setClass(context, InvoicePendingConfirmationActivity.class);
-                    startActivity(intent);
+//                    intent.setClass(context, InvoicePendingConfirmationActivity.class);
+//                    startActivity(intent);
                 }
             }
         }

@@ -477,7 +477,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
             if (latestPaymentResponseMessage != null) {
                 if (latestPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     paymentInfoDTO = latestPaymentResponseMessage.getService().getPaymentInfoDTO();
-                    pspInfoDTO = latestPaymentResponseMessage.getService().getPspInfo();
+                    pspInfoDTO = latestPaymentResponseMessage.getService().getPaymentInfoDTO().getPspInfo();
                     if (paymentInfoDTO == null){
                         new HamPayDialog(activity).showFailPendingPaymentDialog(requestLatestPayment, latestPaymentRequest,
                                 Constants.LOCAL_ERROR_CODE,
@@ -544,7 +544,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                 if (paymentDetailResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     pay_button.setVisibility(View.VISIBLE);
                     paymentInfoDTO = paymentDetailResponseMessage.getService().getPaymentInfo();
-                    pspInfoDTO = paymentDetailResponseMessage.getService().getPspInfo();
+                    pspInfoDTO = paymentDetailResponseMessage.getService().getPaymentInfo().getPspInfo();
                     fillPayment(paymentInfoDTO, pspInfoDTO);
                 }else if (paymentDetailResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();

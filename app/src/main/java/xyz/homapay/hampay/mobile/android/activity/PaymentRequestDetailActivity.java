@@ -225,10 +225,13 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (amount_value.getText().toString().length() > 0) {
-                    amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace(",", "")));
+                    if (amount_value.getText().toString().indexOf("٬") != -1){
+                        amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace("٬", "")));
+                    }else if (amount_value.getText().toString().indexOf(",") != -1){
+                        amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace(",", "")));
+                    }
                     if (calculatedVat == 0){
                         CalculateVatRequest calculateVatRequest = new CalculateVatRequest();
-                        amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace(",", "")));
                         calculateVatRequest.setAmount(amountValue);
                         RequestCalculateVat requestCalculateVat = new RequestCalculateVat(activity, new RequestCalculateVatTaskCompleteListener());
                         requestCalculateVat.execute(calculateVatRequest);
@@ -328,12 +331,15 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                     return;
                 }
                 if (creditValueValidation) {
-
                     contactMssage = contact_message.getText().toString();
                     contactMssage = contactMssage.replaceAll(Constants.ENTER_CHARACTERS_REGEX, " ");
-                    amountValue = Long.parseLong(new PersianEnglishDigit(amount_value.getText().toString()).P2E().replace(",", ""));
                     editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                     editor.commit();
+                    if (amount_value.getText().toString().indexOf("٬") != -1){
+                        amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace("٬", "")));
+                    }else if (amount_value.getText().toString().indexOf(",") != -1){
+                        amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace(",", "")));
+                    }
                     if (amountValue + calculatedVat >= MinXferAmount && amountValue + calculatedVat <= MaxXferAmount) {
                         hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                         userPaymentRequest = new UserPaymentRequest();

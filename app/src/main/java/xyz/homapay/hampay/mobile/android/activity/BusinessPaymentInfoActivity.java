@@ -223,10 +223,13 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
                 if (amount_value.getText().toString().length() > 0) {
-                    amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace(",", "")));
+                    if (amount_value.getText().toString().indexOf("٬") != -1){
+                        amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace("٬", "")));
+                    }else if (amount_value.getText().toString().indexOf(",") != -1){
+                        amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace(",", "")));
+                    }
                     if (calculatedVat == 0){
                         CalculateVatRequest calculateVatRequest = new CalculateVatRequest();
-                        amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace(",", "")));
                         calculateVatRequest.setAmount(amountValue);
                         RequestCalculateVat requestCalculateVat = new RequestCalculateVat(activity, new RequestCalculateVatTaskCompleteListener());
                         requestCalculateVat.execute(calculateVatRequest);
@@ -250,9 +253,13 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
                     return;
                 }
                 if (creditValueValidation) {
-                    amountValue = Long.parseLong(new PersianEnglishDigit(amount_value.getText().toString()).P2E().replace(",", ""));
                     editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                     editor.commit();
+                    if (amount_value.getText().toString().indexOf("٬") != -1){
+                        amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace("٬", "")));
+                    }else if (amount_value.getText().toString().indexOf(",") != -1){
+                        amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace(",", "")));
+                    }
                     if (amountValue + calculatedVat >= MinXferAmount && amountValue + calculatedVat <= MaxXferAmount) {
                         hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                         businessPaymentConfirmRequest = new BusinessPaymentConfirmRequest();
@@ -288,7 +295,7 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
             if (businessPaymentConfirmResponseMessage != null){
                 if (businessPaymentConfirmResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
                     PaymentInfoDTO paymentInfo = businessPaymentConfirmResponseMessage.getService().getPaymentInfo();
-                    PspInfoDTO pspInfo = businessPaymentConfirmResponseMessage.getService().getPspInfo();
+                    PspInfoDTO pspInfo = businessPaymentConfirmResponseMessage.getService().getPaymentInfo().getPspInfo();
 
                     Intent intent = new Intent();
                     intent.putExtra(Constants.PAYMENT_INFO, paymentInfo);
