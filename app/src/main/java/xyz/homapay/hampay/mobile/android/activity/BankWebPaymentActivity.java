@@ -164,9 +164,10 @@ public class BankWebPaymentActivity extends AppCompatActivity {
         settings.setSupportZoom(true);
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
 
+        redirectedURL = Constants.IPG_URL + pspInfoDTO.getRedirectURL() + "?authToken=" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
         if (paymentInfoDTO != null) {
-            redirectedURL = Constants.IPG_URL + pspInfoDTO.getRedirectURL() + "?authToken=" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
+
             postData =
                     "ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
                             "&ResNum3=" + pspInfoDTO.getCardDTO().getSmsToken() +
@@ -175,48 +176,23 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                             "&ResNum=" + paymentInfoDTO.getProductCode() +
                             "&TerminalId=" + pspInfoDTO.getTerminalID();
 
-
-
-//                        postData =
-//                                "Amount=" + paymentInfoDTO.getAmount() +
-//                                        "&TerminalId=" + pspInfoDTO.getTerminalID() +
-//                                        "&ResNum=" + paymentInfoDTO.getProductCode() +
-//                                        "&ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
-//                                        "&RedirectURL=" + redirectedURL;
-
         }else if (purchaseInfoDTO != null){
-            redirectedURL = Constants.IPG_URL + pspInfoDTO.getRedirectURL() + "?authToken=" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
             long vat = 0;
 
-            if(purchaseInfoDTO.getVat() == null){
+            if(purchaseInfoDTO.getVat() == 0){
                 vat = 0;
             }else {
                 vat = purchaseInfoDTO.getVat();
             }
 
             postData =
-//                    "ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
-//                            "&ResNum3=" + pspInfoDTO.getCardDTO().getSmsToken() +
-//                            "&RedirectURL=" + redirectedURL +
-//                            "&Amount=" + (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + vat) +
-//                            "&ResNum=" + purchaseInfoDTO.getProductCode() +
-//                            "&TerminalId=" + pspInfoDTO.getTerminalID();
-
                     "ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
                             "&ResNum3=" + pspInfoDTO.getCardDTO().getSmsToken() +
                             "&RedirectURL=" + redirectedURL +
                             "&Amount=" + (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + vat) +
                             "&ResNum=" + purchaseInfoDTO.getProductCode() +
-                            "&TerminalId=" + "10516003";
-
-
-//                        postData =
-//                                "Amount=" + /*purchaseInfoDTO.getAmount()*/ "10000" +
-//                                        "&TerminalId=" + pspInfoDTO.getTerminalID() +
-//                                        "&ResNum=" + purchaseInfoDTO.getProductCode() +
-//                                        "&ResNum4=" + prefs.getString(Constants.REGISTERED_CELL_NUMBER, "") +
-//                                        "&RedirectURL=" + redirectedURL;
+                            "&TerminalId=" + pspInfoDTO.getTerminalID();
         }
 
         try {
@@ -245,18 +221,10 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
             public void onPageFinished(WebView view, String url) {
 
-//                if (url.startsWith("https://sep.shaparak.ir")) {
-//                    if (!view.getTitle().contains("سامان")){
-//                        Toast.makeText(activity, getString(R.string.msg_fail_ipg_loading), Toast.LENGTH_SHORT).show();
-//                        finish();
-//                    }
-//                }
-
                 urlText.setText(url);
                 ResultStatus resultStatus = ResultStatus.FAILURE;
 
                 if (url.toLowerCase().contains(pspInfoDTO.getRedirectURL().toLowerCase())) {
-//                if (url.toLowerCase().contains("c.php")) {
                     if (view.getTitle().toLowerCase().contains("ref:")) {
                         if (view.getTitle().split(":").length == 2){
                             Intent intent = new Intent(context, PaymentCompletedActivity.class);
@@ -270,6 +238,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                             }
                             intent.putExtra(Constants.SUCCESS_PAYMENT_TRACE, view.getTitle().split(":")[1]);
                             startActivity(intent);
+                            finish();
 //                            hamPayDialog.ipgSuccessDialog(view.getTitle().split(":")[1]);
                             resultStatus = ResultStatus.SUCCESS;
                         }else {

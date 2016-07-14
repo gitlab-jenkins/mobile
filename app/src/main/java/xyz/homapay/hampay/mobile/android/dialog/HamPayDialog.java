@@ -418,15 +418,15 @@ public class HamPayDialog {
                     editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                     editor.commit();
 
-                    userProfileDTO = tacAcceptResponseMessage.getService().getUserProfile();
+                    userProfileDTO = tacAcceptResponseMessage.getService().getTacDTO().getUserProfile();
 
                     Intent intent = new Intent();
                     intent.setClass(activity, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.putExtra(Constants.PENDING_PURCHASE_CODE, tacAcceptResponseMessage.getService().getPurchaseProductCode());
-                    intent.putExtra(Constants.PENDING_PAYMENT_CODE, tacAcceptResponseMessage.getService().getPaymentProductCode());
-                    intent.putExtra(Constants.PENDING_PURCHASE_COUNT, tacAcceptResponseMessage.getService().getPendingPurchasesCount());
-                    intent.putExtra(Constants.PENDING_PAYMENT_COUNT, tacAcceptResponseMessage.getService().getPendingPaymentCount());
+                    intent.putExtra(Constants.PENDING_PURCHASE_CODE, tacAcceptResponseMessage.getService().getTacDTO().getPurchaseProductCode());
+                    intent.putExtra(Constants.PENDING_PAYMENT_CODE, tacAcceptResponseMessage.getService().getTacDTO().getPaymentProductCode());
+                    intent.putExtra(Constants.PENDING_PURCHASE_COUNT, tacAcceptResponseMessage.getService().getTacDTO().getPendingPurchasesCount());
+                    intent.putExtra(Constants.PENDING_PAYMENT_COUNT, tacAcceptResponseMessage.getService().getTacDTO().getPendingPaymentCount());
                     intent.putExtra(Constants.USER_PROFILE_DTO, userProfileDTO);
                     editor.putBoolean(Constants.FORCE_USER_PROFILE, false);
                     editor.commit();

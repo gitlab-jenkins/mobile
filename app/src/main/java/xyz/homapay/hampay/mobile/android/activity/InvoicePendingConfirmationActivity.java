@@ -348,6 +348,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                             intent.putExtra(Constants.SUCCESS_PAYMENT_CODE, paymentInfoDTO.getProductCode());
                             intent.putExtra(Constants.SUCCESS_PAYMENT_TRACE, SWTraceNum);
                             startActivity(intent);
+                            finish();
                         }
 //                        new HamPayDialog(activity).pspSuccessResultDialog(paymentInfoDTO.getProductCode());
                         resultStatus = ResultStatus.SUCCESS;
@@ -563,7 +564,9 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
         callerName.setText(paymentInfo.getCallerName());
         paymentCode.setText(persianEnglishDigit.E2P("کد فاکتور " + paymentInfo.getProductCode()));
         create_date.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(paymentInfo.getCreatedBy())));
-        received_message.setText(paymentInfo.getMessage().trim());
+        if (paymentInfo.getMessage() != null) {
+            received_message.setText(paymentInfo.getMessage().trim());
+        }
         paymentPriceValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfo.getAmount())));
         paymentVAT.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfo.getVat())));
         paymentFeeValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfo.getFeeCharge())));

@@ -27,9 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.goncalves.pugnotification.notification.PugNotification;
+import xyz.homapay.hampay.common.common.TnxSortFactor;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
-import xyz.homapay.hampay.common.core.model.enums.TnxSortFactor;
 import xyz.homapay.hampay.common.core.model.request.PendingPOListRequest;
 import xyz.homapay.hampay.common.core.model.request.TransactionListRequest;
 import xyz.homapay.hampay.common.core.model.response.TransactionListResponse;

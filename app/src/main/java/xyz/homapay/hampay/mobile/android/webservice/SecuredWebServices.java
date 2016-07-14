@@ -1117,7 +1117,7 @@ public class SecuredWebServices {
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
-        Gson gson = new Gson();
+        Gson gson = builder.getDatebuilder().create();
         responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<RecentPendingFundResponse>>() {}.getType());
 
         proxyService.closeConnection();

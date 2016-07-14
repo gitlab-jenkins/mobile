@@ -176,9 +176,9 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
             PersianEnglishDigit persianEnglishDigit = new PersianEnglishDigit();
 
             business_name.setText(paymentInfoDTO.getCallerName());
-            paymentPriceValue.setText(persianEnglishDigit.E2P(paymentInfoDTO.getAmount().toString()));
-            paymentFeeValue.setText(persianEnglishDigit.E2P(paymentInfoDTO.getFeeCharge().toString()));
-            paymentTotalValue.setText(persianEnglishDigit.E2P((paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge().toString())));
+            paymentPriceValue.setText(persianEnglishDigit.E2P(String.valueOf(paymentInfoDTO.getAmount())));
+            paymentFeeValue.setText(persianEnglishDigit.E2P(String.valueOf(paymentInfoDTO.getFeeCharge())));
+            paymentTotalValue.setText(persianEnglishDigit.E2P(String.valueOf(paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge())));
 
             if (paymentInfoDTO.getImageId() != null) {
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
@@ -334,6 +334,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
                             intent.putExtra(Constants.SUCCESS_PAYMENT_CODE, paymentInfoDTO.getProductCode());
                             intent.putExtra(Constants.SUCCESS_PAYMENT_TRACE, SWTraceNum);
                             startActivity(intent);
+                            finish();
                         }
 //                        new HamPayDialog(activity).pspSuccessResultDialog(paymentInfoDTO.getProductCode());
                         resultStatus = ResultStatus.SUCCESS;

@@ -408,6 +408,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                             intent.putExtra(Constants.SUCCESS_PAYMENT_CODE, purchaseInfoDTO.getProductCode());
                             intent.putExtra(Constants.SUCCESS_PAYMENT_TRACE, SWTraceNum);
                             startActivity(intent);
+                            finish();
                         }
 //                        new HamPayDialog(activity).pspSuccessResultDialog(purchaseInfoDTO.getProductCode());
                         resultStatus = ResultStatus.SUCCESS;
