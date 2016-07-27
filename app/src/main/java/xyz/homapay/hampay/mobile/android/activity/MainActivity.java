@@ -201,22 +201,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         Intent intent = getIntent();
 
-
-        MessageEncryptor messageEncryptor;
-
-        messageEncryptor = new AESMessageEncryptor(Constants.APP_KEY);
-
-        String a = null;
-
-        try {
-             a = messageEncryptor.encrypt("amir");
-        } catch (EncryptionException e) {
-            e.printStackTrace();
-        }
-
-
-
-
         pendingPurchaseCode = bundle.getString(Constants.PENDING_PURCHASE_CODE);
         pendingPaymentCode = bundle.getString(Constants.PENDING_PAYMENT_CODE);
         pendingPurchaseCount = bundle.getInt(Constants.PENDING_PURCHASE_COUNT, 0);

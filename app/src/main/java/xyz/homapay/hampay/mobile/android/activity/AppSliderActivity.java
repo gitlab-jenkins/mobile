@@ -1,13 +1,17 @@
 package xyz.homapay.hampay.mobile.android.activity;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -22,6 +26,7 @@ import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.IllegalAppListRequest;
 import xyz.homapay.hampay.common.core.model.response.IllegalAppListResponse;
+import xyz.homapay.hampay.common.core.model.response.KeyAgreementResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.AppSliderAdapter;
@@ -30,11 +35,24 @@ import xyz.homapay.hampay.mobile.android.async.RequestIllegalAppList;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
+import xyz.homapay.hampay.mobile.android.service.KeyExchangeService;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 
 
 public class AppSliderActivity extends AppCompatActivity {
+
+
+//    BroadcastReceiver receiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            Bundle bundle = intent.getExtras();
+//            if (bundle != null){
+//                byte[] a = bundle.getByteArray("client_enc_key");
+//                Log.e("", "");
+//            }
+//        }
+//    };
 
     private ViewPager sliding_into_app;
     private FacedTextView register_button;
@@ -68,12 +86,6 @@ public class AppSliderActivity extends AppCompatActivity {
     Bundle bundle;
 
     @Override
-    protected void onPause() {
-        super.onPause();
-//        HamPayApplication.setAppSate(AppState.Paused);
-    }
-
-    @Override
     protected void onStop() {
         super.onStop();
 //        HamPayApplication.setAppSate(AppState.Stoped);
@@ -86,7 +98,18 @@ public class AppSliderActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        HamPayApplication.setAppSate(AppState.Resumed);
+
+//        registerReceiver(receiver, new IntentFilter(
+//                KeyExchangeService.NOTIFICATION));
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+//        unregisterReceiver(receiver);
+
     }
 
     @Override
@@ -96,13 +119,24 @@ public class AppSliderActivity extends AppCompatActivity {
 
         activity = AppSliderActivity.this;
 
+
         bundle = getIntent().getExtras();
+
+//        Intent serviceIntent = new Intent(this, KeyExchangeService.class);
+//        startService(serviceIntent);
+
+//        requestKeyAgreement = new RequestKeyAgreement(activity, new RequestKeyAgreementTaskCompleteListener());
+//        keyAgreementRequest = new KeyAgreementRequest();
+//        requestKeyAgreement.execute(keyAgreementRequest);
 
 //        try {
 //            soapTest();
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
+
+
+
 
         if (bundle != null) {
             if (bundle.getBoolean(Constants.HAS_NOTIFICATION)) {
@@ -308,19 +342,19 @@ public class AppSliderActivity extends AppCompatActivity {
                 public void run() {
 
                     try {
-                        launchAppCount = prefs.getLong(Constants.LAUNCH_APP_COUNT, 0);
-                        editor.putLong(Constants.LAUNCH_APP_COUNT, launchAppCount + 1).commit();
-                        if ((launchAppCount % 10) == 0 || prefs.getBoolean(Constants.FORCE_FETCH_ILLEGAL_APPS, false)) {
-                            illegalAppListRequest = new IllegalAppListRequest();
-                            requestIllegalAppList = new RequestIllegalAppList(activity, new RequestIllegalAppListTaskCompleteListener());
-                            requestIllegalAppList.execute(illegalAppListRequest);
-                        }else {
+//                        launchAppCount = prefs.getLong(Constants.LAUNCH_APP_COUNT, 0);
+//                        editor.putLong(Constants.LAUNCH_APP_COUNT, launchAppCount + 1).commit();
+//                        if ((launchAppCount % 10) == 0 || prefs.getBoolean(Constants.FORCE_FETCH_ILLEGAL_APPS, false)) {
+//                            illegalAppListRequest = new IllegalAppListRequest();
+//                            requestIllegalAppList = new RequestIllegalAppList(activity, new RequestIllegalAppListTaskCompleteListener());
+//                            requestIllegalAppList.execute(illegalAppListRequest);
+//                        }else {
                             sleep(2 * 1000);
                             intent.setClass(AppSliderActivity.this, HamPayLoginActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                             finish();
                             startActivity(intent);
-                        }
+//                        }
 
                     } catch (Exception e) {
                     }
@@ -448,5 +482,38 @@ public class AppSliderActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    public class RequestKeyAgreementTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<KeyAgreementResponse>>
+    {
+        public RequestKeyAgreementTaskCompleteListener(){
+        }
+
+        @Override
+        public void onTaskComplete(ResponseMessage<KeyAgreementResponse> keyAgreementResponseMessage)
+        {
+            hamPayDialog.dismisWaitingDialog();
+            if (keyAgreementResponseMessage != null) {
+
+                if (keyAgreementResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Request TAC")
+                            .setAction("Request")
+                            .setLabel("Success")
+                            .build());
+
+                }else {
+
+                }
+            }
+            else {
+
+            }
+
+        }
+
+        @Override
+        public void onTaskPreRun() {}
     }
 }

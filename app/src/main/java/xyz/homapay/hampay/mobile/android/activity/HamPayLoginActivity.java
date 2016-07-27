@@ -32,9 +32,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-import xyz.homapay.hampay.common.common.encrypt.AESMessageEncryptor;
-import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
-import xyz.homapay.hampay.common.common.encrypt.MessageEncryptor;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.RecentPendingFundRequest;
@@ -70,7 +67,19 @@ import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
 
 public class HamPayLoginActivity extends AppCompatActivity implements View.OnClickListener {
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        HamPayApplication.setAppSate(AppState.Resumed);
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        HamPayApplication.setAppSate(AppState.Paused);
+    }
 
     public static HamPayLoginActivity instance = null;
 
@@ -129,19 +138,14 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     private RecentPendingFundRequest recentPendingFundRequest;
     private PendingFundAdapter pendingFundAdapter;
 
+
+
     public void userManual(View view){
         Intent intent = new Intent();
         intent.setClass(activity, UserManualActivity.class);
         intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_login);
         intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_login);
         startActivity(intent);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        HamPayApplication.setAppSate(AppState.Paused);
-
     }
 
     @Override
@@ -171,14 +175,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     protected void onDestroy() {
         super.onDestroy();
         HamPayApplication.setAppSate(AppState.Resumed);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        HamPayApplication.setAppSate(AppState.Resumed);
-        editor.remove(Constants.LOGIN_TOKEN_ID);
-        editor.commit();
     }
 
     @Override
@@ -228,16 +224,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ham_pay_login);
 
-        final String message = "H";
-        final MessageEncryptor messageEncryptor = new AESMessageEncryptor(Constants.APP_KEY);
-        try {
-            final String encrypted =  messageEncryptor.encrypt(message);
-            final String decrypted = messageEncryptor.decrypt(encrypted);
-        } catch (EncryptionException e) {
-            e.printStackTrace();
-        }
-
-
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -254,8 +240,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         editor.commit();
 
         requestAndLoadPhoneState();
-
-
 
         hampay_user = (FacedTextView)findViewById(R.id.hampay_user);
         hampay_user.setText(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
@@ -342,10 +326,10 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
                 if (tacResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
-                    editor.putString(Constants.USER_ID_TOKEN, tacResponseMessage.getService().getTacDTO().getUserIdToken());
+                    editor.putString(Constants.USER_ID_TOKEN, tacResponseMessage.getService().getUserIdToken());
                     editor.commit();
 
-                    if (tacResponseMessage.getService().isShouldAcceptTAC()) {
+                    if (tacResponseMessage.getService().getShouldAcceptTAC()) {
 
 
                     } else {
@@ -363,11 +347,11 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
                         intent.setClass(activity, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.putExtra(Constants.USER_PROFILE_DTO, tacResponseMessage.getService().getTacDTO().getUserProfile());
-                        intent.putExtra(Constants.PENDING_PURCHASE_CODE, tacResponseMessage.getService().getTacDTO().getPurchaseProductCode());
-                        intent.putExtra(Constants.PENDING_PAYMENT_CODE, tacResponseMessage.getService().getTacDTO().getPaymentProductCode());
-                        intent.putExtra(Constants.PENDING_PURCHASE_COUNT, tacResponseMessage.getService().getTacDTO().getPendingPurchasesCount());
-                        intent.putExtra(Constants.PENDING_PAYMENT_COUNT, tacResponseMessage.getService().getTacDTO().getPendingPaymentCount());
+                        intent.putExtra(Constants.USER_PROFILE_DTO, tacResponseMessage.getService().getUserProfile());
+                        intent.putExtra(Constants.PENDING_PURCHASE_CODE, tacResponseMessage.getService().getPurchaseProductCode());
+                        intent.putExtra(Constants.PENDING_PAYMENT_CODE, tacResponseMessage.getService().getPaymentProductCode());
+                        intent.putExtra(Constants.PENDING_PURCHASE_COUNT, tacResponseMessage.getService().getPendingPurchasesCount());
+                        intent.putExtra(Constants.PENDING_PAYMENT_COUNT, tacResponseMessage.getService().getPendingPaymentCount());
                         intent.putExtra(Constants.NOTIFICATION, fromNotification);
                         editor.putBoolean(Constants.FORCE_USER_PROFILE, false);
                         editor.commit();
@@ -569,11 +553,8 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         }
 
         @Override
-        public void onTaskPreRun() {
-//            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
+        public void onTaskPreRun() {}
     }
-
 
     @Override
     public void onClick(View v) {

@@ -21,6 +21,7 @@ import xyz.homapay.hampay.common.common.encrypt.AESMessageEncryptor;
 import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
 import xyz.homapay.hampay.common.common.encrypt.MessageEncryptor;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
+import xyz.homapay.hampay.mobile.android.service.KeyExchangeService;
 import xyz.homapay.hampay.mobile.android.ssl.SSLConnection;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.ConvertUtils;
@@ -40,9 +41,17 @@ public class SecuredProxyService {
     private URL url;
     private boolean enableGZip = false;
     private MessageEncryptor messageEncryptor;
+    private boolean encryptionEnabled = false;
+    private byte[] clientEncKey = KeyExchangeService.clientEncKey;
+    private byte[] clientEncIv = KeyExchangeService.clientEncIv;
+    private String encryptionId = KeyExchangeService.encryptionId;
 
     public void setJsonBody(String jsonBody) throws EncryptionException {
-        this.jsonBody = messageEncryptor.encrypt(jsonBody);
+        if (encryptionEnabled){
+            this.jsonBody = messageEncryptor.encryptRequest(jsonBody, clientEncKey, clientEncIv, encryptionId);
+        }else {
+            this.jsonBody = jsonBody;
+        }
     }
 
     private byte[] getJsonBody(){
@@ -53,12 +62,31 @@ public class SecuredProxyService {
         }
     }
 
+    public SecuredProxyService(boolean encryptionEnabled, Context context, ConnectionType connectionType, ConnectionMethod connectionMethod, URL url){
+        this.encryptionEnabled = encryptionEnabled;
+        this.context = context;
+        this.connectionType = connectionType;
+        this.connectionMethod = connectionMethod;
+        this.url = url;
+        messageEncryptor = new AESMessageEncryptor();
+    }
+
     public SecuredProxyService(Context context, ConnectionType connectionType, ConnectionMethod connectionMethod, URL url){
         this.context = context;
         this.connectionType = connectionType;
         this.connectionMethod = connectionMethod;
         this.url = url;
-        messageEncryptor = new AESMessageEncryptor(Constants.APP_KEY);
+        messageEncryptor = new AESMessageEncryptor();
+    }
+
+    public SecuredProxyService(boolean encryptionEnabled, Context context, ConnectionType connectionType, ConnectionMethod connectionMethod, URL url, boolean enableGZip){
+        this.encryptionEnabled = encryptionEnabled;
+        this.context = context;
+        this.connectionType = connectionType;
+        this.connectionMethod = connectionMethod;
+        this.url = url;
+        this.enableGZip = enableGZip;
+        messageEncryptor = new AESMessageEncryptor();
     }
 
     public SecuredProxyService(Context context, ConnectionType connectionType, ConnectionMethod connectionMethod, URL url, boolean enableGZip){
@@ -67,7 +95,7 @@ public class SecuredProxyService {
         this.connectionMethod = connectionMethod;
         this.url = url;
         this.enableGZip = enableGZip;
-        messageEncryptor= new AESMessageEncryptor(Constants.APP_KEY);
+        messageEncryptor = new AESMessageEncryptor();
     }
 
 
@@ -130,7 +158,14 @@ public class SecuredProxyService {
                 break;
         }
 
-        return messageEncryptor.decrypt(new ConvertUtils().streamToString(inputStreamReader));
+        if (encryptionEnabled){
+            return messageEncryptor.decryptResponse(new ConvertUtils().streamToString(inputStreamReader), clientEncKey, clientEncIv).getPayload();
+        }else {
+            return new ConvertUtils().streamToString(inputStreamReader);
+        }
+
+//
+
 
     }
 

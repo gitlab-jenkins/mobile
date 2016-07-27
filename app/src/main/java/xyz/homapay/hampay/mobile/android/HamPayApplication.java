@@ -1,5 +1,10 @@
 package xyz.homapay.hampay.mobile.android;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.Bundle;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
@@ -13,6 +18,7 @@ import org.acra.annotation.ReportsCrashes;
 import java.util.HashMap;
 
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.service.KeyExchangeService;
 
 /**
  * Created by amir on 7/10/15.
@@ -22,6 +28,15 @@ import xyz.homapay.hampay.mobile.android.model.AppState;
 
 public class HamPayApplication extends MultiDexApplication {
 
+//    BroadcastReceiver receiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            Bundle bundle = intent.getExtras();
+//            if (bundle != null){
+//
+//            }
+//        }
+//    };
 
 
     public static int GENERAL_TRACKER = 0;
@@ -40,11 +55,20 @@ public class HamPayApplication extends MultiDexApplication {
     {
         super.onCreate();
         ACRA.init(this);
+
+        Intent intent = new Intent(getApplicationContext(), KeyExchangeService.class);
+        getApplicationContext().startService(intent);
+//        getApplicationContext().registerReceiver(receiver, new IntentFilter(KeyExchangeService.NOTIFICATION));
+
+//        stopService(new Intent(this, KeyExchangeService.class));
+//        startService(new Intent(this, KeyExchangeService.class));
     }
 
     @Override
     public void onTerminate() {
         super.onTerminate();
+
+//        unregisterReceiver(receiver);
     }
 
 
