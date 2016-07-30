@@ -1,8 +1,10 @@
 package xyz.homapay.hampay.mobile.android.activity;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
@@ -34,8 +36,10 @@ import java.util.List;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
+import xyz.homapay.hampay.common.core.model.request.LoginRequest;
 import xyz.homapay.hampay.common.core.model.request.RecentPendingFundRequest;
 import xyz.homapay.hampay.common.core.model.request.TACRequest;
+import xyz.homapay.hampay.common.core.model.response.LoginResponse;
 import xyz.homapay.hampay.common.core.model.response.RecentPendingFundResponse;
 import xyz.homapay.hampay.common.core.model.response.TACResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.FundDTO;
@@ -47,6 +51,7 @@ import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestLogin;
+import xyz.homapay.hampay.mobile.android.async.RequestNewLogin;
 import xyz.homapay.hampay.mobile.android.async.RequestRecentPendingFund;
 import xyz.homapay.hampay.mobile.android.async.RequestTAC;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
@@ -58,6 +63,7 @@ import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
 import xyz.homapay.hampay.mobile.android.model.SuccessLoginResponse;
 import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
+import xyz.homapay.hampay.mobile.android.service.KeyExchangeService;
 import xyz.homapay.hampay.mobile.android.util.AppInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
@@ -67,17 +73,32 @@ import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
 
 public class HamPayLoginActivity extends AppCompatActivity implements View.OnClickListener {
 
+    BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle bundle = intent.getExtras();
+            if (bundle != null){
+
+            }
+        }
+    };
+
     @Override
     protected void onResume() {
         super.onResume();
+
+        registerReceiver(receiver, new IntentFilter(
+                KeyExchangeService.NOTIFICATION));
+
         HamPayApplication.setAppSate(AppState.Resumed);
-        editor.remove(Constants.LOGIN_TOKEN_ID);
-        editor.commit();
+//        editor.remove(Constants.LOGIN_TOKEN_ID);
+//        editor.commit();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        unregisterReceiver(receiver);
         HamPayApplication.setAppSate(AppState.Paused);
     }
 
@@ -208,7 +229,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                         recentPendingFundRequest.setImei(new DeviceInfo(activity).getIMEI());
                         recentPendingFundRequest.setNationalCode(prefs.getString(Constants.REGISTERED_NATIONAL_CODE, ""));
                         requestRecentPendingFund.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, recentPendingFundRequest);
-//                        requestRecentPendingFund.execute(recentPendingFundRequest);
                     } else {
                         // Permission not granted
                     }
@@ -233,11 +253,15 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         context = this;
         activity = HamPayLoginActivity.this;
 
+        Intent intent = new Intent(this, KeyExchangeService.class);
+//        stopService(intent);
+        startService(intent);
+
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
-        editor.remove(Constants.LOGIN_TOKEN_ID);
-        editor.commit();
+//        editor.remove(Constants.LOGIN_TOKEN_ID);
+//        editor.commit();
 
         requestAndLoadPhoneState();
 
@@ -326,10 +350,10 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
                 if (tacResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
-                    editor.putString(Constants.USER_ID_TOKEN, tacResponseMessage.getService().getUserIdToken());
+                    editor.putString(Constants.USER_ID_TOKEN, tacResponseMessage.getService().getTacDTO().getUserIdToken());
                     editor.commit();
 
-                    if (tacResponseMessage.getService().getShouldAcceptTAC()) {
+                    if (tacResponseMessage.getService().isShouldAcceptTAC()) {
 
 
                     } else {
@@ -347,11 +371,12 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
                         intent.setClass(activity, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.putExtra(Constants.USER_PROFILE_DTO, tacResponseMessage.getService().getUserProfile());
-                        intent.putExtra(Constants.PENDING_PURCHASE_CODE, tacResponseMessage.getService().getPurchaseProductCode());
-                        intent.putExtra(Constants.PENDING_PAYMENT_CODE, tacResponseMessage.getService().getPaymentProductCode());
-                        intent.putExtra(Constants.PENDING_PURCHASE_COUNT, tacResponseMessage.getService().getPendingPurchasesCount());
-                        intent.putExtra(Constants.PENDING_PAYMENT_COUNT, tacResponseMessage.getService().getPendingPaymentCount());
+                        intent.putExtra(Constants.USER_PROFILE_DTO, tacResponseMessage.getService().getTacDTO().getUserProfile());
+                        intent.putExtra(Constants.PENDING_PURCHASE_CODE, tacResponseMessage.getService().getTacDTO().getPurchaseProductCode());
+                        intent.putExtra(Constants.PENDING_PAYMENT_CODE, tacResponseMessage.getService().getTacDTO().getPaymentProductCode());
+                        intent.putExtra(Constants.PENDING_PURCHASE_COUNT, tacResponseMessage.getService().getTacDTO().getPendingPurchasesCount());
+                        intent.putExtra(Constants.PENDING_PAYMENT_COUNT, tacResponseMessage.getService().getTacDTO().getPendingPaymentCount());
+                        intent.putExtra(Constants.SHOW_CREATE_INVOICE, tacResponseMessage.getService().getTacDTO().isShowCreateInvoice());
                         intent.putExtra(Constants.NOTIFICATION, fromNotification);
                         editor.putBoolean(Constants.FORCE_USER_PROFILE, false);
                         editor.commit();
@@ -466,7 +491,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                     }
                 }else {
                     editor.putString(Constants.LOGIN_TOKEN_ID, successLoginResponse.getTokenId());
-                    editor.commit();
                     editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                     editor.commit();
                     tacRequest = new TACRequest();
@@ -652,14 +676,24 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                 }
             }
 
+
+
             LoginData loginData = new LoginData();
             loginData.setUserPassword(password);
             loginData.setUserName(new PersianEnglishDigit(nationalCode).P2E());
 
             keyboard.setEnabled(false);
 
-            requestLogin = new RequestLogin(context, new RequestLoginResponseTaskCompleteListener());
-            requestLogin.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, loginData);
+
+            LoginRequest loginRequest = new LoginRequest();
+            loginRequest.setPassword(password);
+            loginRequest.setUsername(new PersianEnglishDigit(nationalCode).P2E());
+
+            RequestNewLogin requestNewLogin = new RequestNewLogin(activity, new RequestLoginTaskCompleteListener());
+            requestNewLogin.execute(loginRequest);
+
+//            requestLogin = new RequestLogin(context, new RequestLoginResponseTaskCompleteListener());
+//            requestLogin.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, loginData);
 
         }
 
@@ -727,6 +761,35 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
             new Collapse(keyboard).animate();
         }else {
             finish();
+        }
+    }
+
+
+    public class RequestLoginTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<LoginResponse>>
+    {
+        public RequestLoginTaskCompleteListener(){
+        }
+
+        @Override
+        public void onTaskComplete(ResponseMessage<LoginResponse> loginResponseResponseMessage)
+        {
+            if (loginResponseResponseMessage != null) {
+                editor.putString(Constants.LOGIN_TOKEN_ID, loginResponseResponseMessage.getService().getAuthToken());
+                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                editor.commit();
+
+                tacRequest = new TACRequest();
+                tacRequest.setDeviceId(new DeviceInfo(activity).getAndroidId());
+                tacRequest.setAppVersion(new AppInfo().getVersionCode() + "");
+                requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
+                requestTAC.execute(tacRequest);
+
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 }

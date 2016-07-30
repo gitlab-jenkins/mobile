@@ -7,23 +7,23 @@ import java.io.IOException;
 
 import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
-import xyz.homapay.hampay.common.core.model.request.TACRequest;
-import xyz.homapay.hampay.common.core.model.response.TACResponse;
+import xyz.homapay.hampay.common.core.model.request.CalcFeeChargeRequest;
+import xyz.homapay.hampay.common.core.model.response.ClacFeeChargeResponse;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.webservice.SecuredWebServices;
 
 /**
  * Created by amir on 7/3/15.
  */
-public class RequestTAC extends AsyncTask<TACRequest, Void, ResponseMessage<TACResponse>> {
+public class RequestCalcFeeCharge extends AsyncTask<CalcFeeChargeRequest, Void, ResponseMessage<ClacFeeChargeResponse>> {
 
-    private static final String TAG = "RequestTAC";
+    private static final String TAG = "RequestCalcFeeCharge";
 
     private Context context;
-    private AsyncTaskCompleteListener<ResponseMessage<TACResponse>> listener;
+    private AsyncTaskCompleteListener<ResponseMessage<ClacFeeChargeResponse>> listener;
 
 
-    public RequestTAC(Context context, AsyncTaskCompleteListener<ResponseMessage<TACResponse>> listener)
+    public RequestCalcFeeCharge(Context context, AsyncTaskCompleteListener<ResponseMessage<ClacFeeChargeResponse>> listener)
     {
         this.context = context;
         this.listener = listener;
@@ -37,12 +37,12 @@ public class RequestTAC extends AsyncTask<TACRequest, Void, ResponseMessage<TACR
     }
 
     @Override
-    protected ResponseMessage<TACResponse> doInBackground(TACRequest... params) {
+    protected ResponseMessage<ClacFeeChargeResponse> doInBackground(CalcFeeChargeRequest... params) {
 
         SecuredWebServices webServices = new SecuredWebServices(context, Constants.CONNECTION_TYPE);
 
         try {
-            return webServices.tacResponse(params[0]);
+            return webServices.calculateFeeCharge(params[0]);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (EncryptionException e) {
@@ -53,14 +53,14 @@ public class RequestTAC extends AsyncTask<TACRequest, Void, ResponseMessage<TACR
 
 
     @Override
-    protected void onPostExecute(ResponseMessage<TACResponse> tacResponseMessage)
+    protected void onPostExecute(ResponseMessage<ClacFeeChargeResponse> tacResponseMessage)
     {
         super.onPostExecute(tacResponseMessage);
         listener.onTaskComplete(tacResponseMessage);
     }
 
     @Override
-    protected void onCancelled(ResponseMessage<TACResponse> tacResponseResponseMessage) {
+    protected void onCancelled(ResponseMessage<ClacFeeChargeResponse> tacResponseResponseMessage) {
         super.onCancelled(tacResponseResponseMessage);
         cancel(true);
     }

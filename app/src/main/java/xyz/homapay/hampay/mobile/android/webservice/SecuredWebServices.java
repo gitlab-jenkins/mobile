@@ -35,6 +35,7 @@ import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessPaymentConfirmRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
+import xyz.homapay.hampay.common.core.model.request.CalcFeeChargeRequest;
 import xyz.homapay.hampay.common.core.model.request.CalculateVatRequest;
 import xyz.homapay.hampay.common.core.model.request.CancelPurchasePaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.CancelUserPaymentRequest;
@@ -54,6 +55,8 @@ import xyz.homapay.hampay.common.core.model.request.KeyAgreementRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestInvoiceContactsRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
+import xyz.homapay.hampay.common.core.model.request.LoginRequest;
+import xyz.homapay.hampay.common.core.model.request.LogoutRequest;
 import xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
 import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
 import xyz.homapay.hampay.common.core.model.request.PaymentDetailRequest;
@@ -85,6 +88,7 @@ import xyz.homapay.hampay.common.core.model.response.CardProfileResponse;
 import xyz.homapay.hampay.common.core.model.response.ChangeEmailResponse;
 import xyz.homapay.hampay.common.core.model.response.ChangeMemorableWordResponse;
 import xyz.homapay.hampay.common.core.model.response.ChangePassCodeResponse;
+import xyz.homapay.hampay.common.core.model.response.ClacFeeChargeResponse;
 import xyz.homapay.hampay.common.core.model.response.ContactUsResponse;
 import xyz.homapay.hampay.common.core.model.response.ContactsHampayEnabledResponse;
 import xyz.homapay.hampay.common.core.model.response.GetTokenFromPSPResponse;
@@ -97,6 +101,8 @@ import xyz.homapay.hampay.common.core.model.response.KeyAgreementResponse;
 import xyz.homapay.hampay.common.core.model.response.LatestInvoiceContactsResponse;
 import xyz.homapay.hampay.common.core.model.response.LatestPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.LatestPurchaseResponse;
+import xyz.homapay.hampay.common.core.model.response.LoginResponse;
+import xyz.homapay.hampay.common.core.model.response.LogoutResponse;
 import xyz.homapay.hampay.common.core.model.response.MobileRegistrationIdEntryResponse;
 import xyz.homapay.hampay.common.core.model.response.PSPResultResponse;
 import xyz.homapay.hampay.common.core.model.response.PaymentDetailResponse;
@@ -122,7 +128,7 @@ import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfoTest;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
-import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
+//import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
 import xyz.homapay.hampay.mobile.android.service.KeyExchangeService;
 import xyz.homapay.hampay.mobile.android.ssl.AllowHamPaySSL;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -172,15 +178,14 @@ public class SecuredWebServices extends BroadcastReceiver{
         this.authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
         context.registerReceiver(this, new IntentFilter(KeyExchangeService.NOTIFICATION));
-
-//        Intent intent = new Intent(context, KeyExchangeService.class);
-//        context.startService(intent);
     }
 
     public SecuredWebServices(Context context){
         this.context = context;
         prefs =  context.getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
         builder = new DateGsonBuilder();
+
+        this.authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
         context.registerReceiver(this, new IntentFilter(KeyExchangeService.NOTIFICATION));
     }
@@ -206,21 +211,21 @@ public class SecuredWebServices extends BroadcastReceiver{
         return  responseMessage;
     }
 
-    public LogoutResponse logoutRequest(LogoutData logoutData) throws Exception {
-
-        if (connectionType == ConnectionType.HTTPS) {
-            url = new URL(Constants.HTTPS_OPENAM_LOGOUT_URL);
-        }else {
-            url = new URL(Constants.HTTP_OPENAM_LOGOUT_URL);
-        }
-        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
-        Gson gson = new Gson();
-        Type listType = new TypeToken<LogoutResponse>(){}.getType();
-        JsonParser jsonParser = new JsonParser();
-        JsonElement responseElement = jsonParser.parse(proxyService.hamPayLogout(logoutData).toString());
-        proxyService.closeConnection();
-        return (LogoutResponse) gson.fromJson(responseElement.toString(), listType);
-    }
+//    public LogoutResponse logoutRequest(LogoutData logoutData) throws Exception {
+//
+//        if (connectionType == ConnectionType.HTTPS) {
+//            url = new URL(Constants.HTTPS_OPENAM_LOGOUT_URL);
+//        }else {
+//            url = new URL(Constants.HTTP_OPENAM_LOGOUT_URL);
+//        }
+//        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
+//        Gson gson = new Gson();
+//        Type listType = new TypeToken<LogoutResponse>(){}.getType();
+//        JsonParser jsonParser = new JsonParser();
+//        JsonElement responseElement = jsonParser.parse(proxyService.hamPayLogout(logoutData).toString());
+//        proxyService.closeConnection();
+//        return (LogoutResponse) gson.fromJson(responseElement.toString(), listType);
+//    }
 
     public ResponseMessage<IllegalAppListResponse> getIllegalAppList() throws IOException, EncryptionException {
 
@@ -406,10 +411,11 @@ public class SecuredWebServices extends BroadcastReceiver{
         return responseMessage;
     }
 
+
     public ResponseMessage<UploadImageResponse> uploadImage(UploadImageRequest uploadImageRequest) throws IOException, EncryptionException {
 
         ResponseMessage<UploadImageResponse> responseMessage = null;
-        url = new URL(serviceURL + "/users/upload-image");
+        url = new URL(serviceURL + "/image/upload");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
         uploadImageRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
@@ -529,8 +535,6 @@ public class SecuredWebServices extends BroadcastReceiver{
         url = new URL(serviceURL + "/customer/contacts/hp-enabled");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url, true);
 
-        UserContacts userContacts = new UserContacts(context);
-//        contactsHampayEnabledRequest.setContacts(userContacts.read());
         contactsHampayEnabledRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
         RequestMessage<ContactsHampayEnabledRequest> message = new RequestMessage<>(contactsHampayEnabledRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
@@ -1093,7 +1097,7 @@ public class SecuredWebServices extends BroadcastReceiver{
     public ResponseMessage<RemoveUserImageResponse> removeUserImageResponse(RemoveUserImageRequest removeUserImageRequest) throws IOException, EncryptionException {
 
         ResponseMessage<RemoveUserImageResponse> responseMessage = null;
-        url = new URL(serviceURL + "/users/remove-image");
+        url = new URL(serviceURL + "/image/remove");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
         removeUserImageRequest.setRequestUUID(UUID.randomUUID().toString());
@@ -1150,6 +1154,28 @@ public class SecuredWebServices extends BroadcastReceiver{
         Gson gson = builder.getDatebuilder().create();
 
         responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<CalculateVatResponse>>() {}.getType());
+
+        proxyService.closeConnection();
+
+        return responseMessage;
+    }
+
+    public ResponseMessage<ClacFeeChargeResponse> calculateFeeCharge(CalcFeeChargeRequest calcFeeChargeRequest) throws IOException, EncryptionException {
+
+        ResponseMessage<ClacFeeChargeResponse> responseMessage = null;
+        url = new URL(serviceURL + "/payment/calculate-vat");
+        SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
+
+        calcFeeChargeRequest.setRequestUUID(UUID.randomUUID().toString());
+        RequestMessage<CalcFeeChargeRequest> message = new RequestMessage<>(calcFeeChargeRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+
+        Type requestType = new TypeToken<RequestMessage<CalcFeeChargeRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
+
+        Gson gson = builder.getDatebuilder().create();
+
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<ClacFeeChargeResponse>>() {}.getType());
 
         proxyService.closeConnection();
 
@@ -1219,6 +1245,50 @@ public class SecuredWebServices extends BroadcastReceiver{
         Gson gson = builder.getDatebuilder().create();
         responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PendingCountResponse>>() {}.getType());
         proxyService.closeConnection();
+        return responseMessage;
+    }
+
+    public ResponseMessage<LoginResponse> newLogin(LoginRequest loginRequest) throws IOException, EncryptionException {
+
+        ResponseMessage<LoginResponse> responseMessage = null;
+        url = new URL(serviceURL + "/auth");
+        SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
+
+        loginRequest.setRequestUUID(UUID.randomUUID().toString());
+        RequestMessage<LoginRequest> message = new RequestMessage<>(loginRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+
+        Type requestType = new TypeToken<RequestMessage<LoginRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
+
+        Gson gson = builder.getDatebuilder().create();
+
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<LoginResponse>>() {}.getType());
+
+        proxyService.closeConnection();
+
+        return responseMessage;
+    }
+
+    public ResponseMessage<LogoutResponse> newLogout(LogoutRequest logoutRequest) throws IOException, EncryptionException {
+
+        ResponseMessage<LogoutResponse> responseMessage = null;
+        url = new URL(serviceURL + "/unauth");
+        SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
+
+        logoutRequest.setRequestUUID(UUID.randomUUID().toString());
+        RequestMessage<LogoutRequest> message = new RequestMessage<>(logoutRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+
+        Type requestType = new TypeToken<RequestMessage<LogoutRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
+
+        Gson gson = builder.getDatebuilder().create();
+
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<LogoutResponse>>() {}.getType());
+
+        proxyService.closeConnection();
+
         return responseMessage;
     }
 

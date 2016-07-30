@@ -95,7 +95,7 @@ public class GuideDetailActivity extends AppCompatActivity {
 
         WebSettings settings = guide_webview.getSettings();
 
-//        settings.setJavaScriptEnabled(true);
+        settings.setJavaScriptEnabled(true);
         guide_webview.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 
         guide_webview.loadUrl(webPageUrl);

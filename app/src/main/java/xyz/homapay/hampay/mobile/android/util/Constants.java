@@ -40,7 +40,11 @@ public class Constants {
     public static final String PENDING_CODE = "pendingCode";
     public static final String USER_TRANSACTION_DTO = "UserTransaction";
     public static final String CONTACT_PHONE_NO = "contact_phone_no";
-    public static final String CONTACT_NAME = "contact_name";
+    public static final String CONTACT_NAME = "contactName";
+    public static final String CONTACT_AMOUNT = "contactAmount";
+    public static final String CONTACT_VAT = "contactVat";
+    public static final String CONTACT_FEE = "contactFee";
+    public static final String CONTACT_MESSAGE = "contactMessage";
     public static final String REGISTERED_ACTIVITY_DATA = "registeredActivityData";
     public static final String REGISTERED_CELL_NUMBER = "registeredCellNumber";
     public static final String REGISTERED_BANK_ID = "registeredBankID";
@@ -113,6 +117,7 @@ public class Constants {
     public static final String SUCCESS_PAYMENT_AMOUNT = "amount";
     public static final String SUCCESS_PAYMENT_CODE = "code";
     public static final String SUCCESS_PAYMENT_TRACE = "trace";
+    public static final String SHOW_CREATE_INVOICE = "showCreateInvoice";
 
     //Permissions and Group Permission
     public static final int READ_PHONE_STATE = 1;

@@ -125,23 +125,52 @@
 
         </LinearLayout>
 
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+            android:id="@+id/start_button"
+            geekui:customTypeface="fonts/iran_sans.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="@string/start"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:background="@drawable/registration_button_style"
+            android:layout_marginTop="8dp"/>
+
+        <ImageView
+            android:layout_width="144dp"
+            android:layout_height="48dp"
+            android:src="@drawable/homapay_logo"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="12dp"/>
+
     </LinearLayout>
 
-    <xyz.homapay.hampay.mobile.android.component.FacedTextView
-        android:id="@+id/start_button"
-        geekui:customTypeface="fonts/iran_sans.ttf"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:text="@string/start"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:background="@drawable/registration_button_style"
-        android:layout_centerHorizontal="true"
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="8dp">
+
+        <ImageView
+            android:layout_width="96dp"
+            android:layout_height="48dp"
+            android:src="@drawable/saman_logo"
+            android:layout_gravity="center_horizontal" />
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/sarava_logo"
+            android:layout_gravity="center_horizontal"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
 
 </RelativeLayout>

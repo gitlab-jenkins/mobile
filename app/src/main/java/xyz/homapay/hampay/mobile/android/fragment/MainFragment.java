@@ -228,6 +228,10 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         user_payment_request = (LinearLayout)rootView.findViewById(R.id.user_payment_request);
         user_payment_request.setOnClickListener(this);
 
+        if (!bundle.getBoolean(Constants.SHOW_CREATE_INVOICE)){
+            user_payment_request.setVisibility(View.GONE);
+        }
+
         businessPurchase = (LinearLayout)rootView.findViewById(R.id.businessPurchase);
         businessPurchase.setOnClickListener(this);
 

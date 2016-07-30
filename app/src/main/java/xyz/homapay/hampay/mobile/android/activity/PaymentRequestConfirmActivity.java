@@ -4,16 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -48,7 +43,7 @@ import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
-public class PaymentRequestDetailActivity extends AppCompatActivity {
+public class PaymentRequestConfirmActivity extends AppCompatActivity {
 
 
     private ContactDTO hamPayContact;
@@ -56,6 +51,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
     private String displayName;
     private String cellNumber;
     private String imageId;
+    private long contactAmount = 0;
 
     FacedTextView payment_request_button;
 
@@ -64,15 +60,13 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
     private ImageView user_image;
     FacedTextView contact_name;
     FacedTextView cell_number;
-    FacedEditText contact_message;
+    FacedTextView contact_message;
     String contactMssage = "";
     private long amountValue = 0;
     private long calcFeeCharge = 0;
-    FacedEditText amount_value;
+    FacedTextView amount_value;
+    FacedTextView fee_value;
     FacedTextView vat_value;
-    boolean creditValueValidation = false;
-
-    String number = "";
 
     boolean intentContact = false;
 
@@ -83,8 +77,8 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
-    RequestCalcFeeCharge requestCalcFeeCharge;
-    CalcFeeChargeRequest calcFeeChargeRequest;
+    RequestUserPayment requestUserPayment;
+    UserPaymentRequest userPaymentRequest;
 
     public void backActionBar(View view) {
         finish();
@@ -100,9 +94,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
     private ImageManager imageManager;
 
 
-    private LinearLayout add_vat;
     private long calculatedVat = 0;
-    private ImageView vat_icon;
     private FacedTextView amount_total;
     private CurrencyFormatter formatter;
 
@@ -146,10 +138,10 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_payment_request_detail);
+        setContentView(R.layout.activity_payment_request_confirm);
 
         context = this;
-        activity = PaymentRequestDetailActivity.this;
+        activity = PaymentRequestConfirmActivity.this;
 
         persianEnglishDigit = new PersianEnglishDigit();
         formatter = new CurrencyFormatter();
@@ -171,74 +163,15 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
 
         hamPayDialog = new HamPayDialog(activity);
 
-        amount_value = (FacedEditText) findViewById(R.id.amount_value);
-        amount_value.addTextChangedListener(new CurrencyFormatterTextWatcher(amount_value));
-        amount_value.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                vat_icon.setImageResource(R.drawable.add_vat);
-                vat_value.setText("۰");
-                calculatedVat = 0;
-                amount_total.setText(amount_value.getText().toString());
-            }
-        });
-        amount_value.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    if (amount_value.getText().toString().length() == 0) {
-                        creditValueValidation = false;
-                    } else {
-                        creditValueValidation = true;
-                    }
-                }
-
-            }
-        });
+        amount_value = (FacedTextView) findViewById(R.id.amount_value);
+        fee_value = (FacedTextView) findViewById(R.id.fee_value);
 
         vat_value = (FacedTextView)findViewById(R.id.vat_value);
-        vat_icon = (ImageView)findViewById(R.id.vat_icon);
         amount_total = (FacedTextView)findViewById(R.id.amount_total);
-        contact_message = (FacedEditText) findViewById(R.id.contact_message);
+        contact_message = (FacedTextView) findViewById(R.id.contact_message);
         contact_name = (FacedTextView) findViewById(R.id.contact_name);
         cell_number = (FacedTextView) findViewById(R.id.cell_number);
         user_image = (ImageView) findViewById(R.id.user_image);
-
-
-        add_vat = (LinearLayout) findViewById(R.id.add_vat);
-        add_vat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (amount_value.getText().toString().length() > 0) {
-                    if (amount_value.getText().toString().indexOf("٬") != -1){
-                        amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace("٬", "")));
-                    }else if (amount_value.getText().toString().indexOf(",") != -1){
-                        amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace(",", "")));
-                    }
-                    if (calculatedVat == 0){
-                        CalculateVatRequest calculateVatRequest = new CalculateVatRequest();
-                        calculateVatRequest.setAmount(amountValue);
-                        RequestCalculateVat requestCalculateVat = new RequestCalculateVat(activity, new RequestCalculateVatTaskCompleteListener());
-                        requestCalculateVat.execute(calculateVatRequest);
-                    }else {
-                        vat_icon.setImageResource(R.drawable.add_vat);
-                        vat_value.setText("۰");
-                        calculatedVat = 0;
-                        amount_total.setText(persianEnglishDigit.E2P(formatter.format(amountValue)));
-                    }
-                }
-            }
-        });
 
         Intent intent = getIntent();
 
@@ -248,6 +181,14 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
         displayName = intent.getStringExtra(Constants.CONTACT_NAME);
         cellNumber = intent.getStringExtra(Constants.CONTACT_PHONE_NO);
         imageId = intent.getStringExtra(Constants.IMAGE_ID);
+        contactAmount = intent.getLongExtra(Constants.CONTACT_AMOUNT, 0);
+        calculatedVat = intent.getLongExtra(Constants.CONTACT_VAT, 0);
+        calcFeeCharge = intent.getLongExtra(Constants.CONTACT_FEE, 0);
+        amount_value.setText(persianEnglishDigit.E2P(formatter.format(contactAmount)));
+        vat_value.setText(persianEnglishDigit.E2P(formatter.format(calculatedVat)));
+        fee_value.setText(persianEnglishDigit.E2P(formatter.format(calcFeeCharge)));
+        amount_total.setText(persianEnglishDigit.E2P(formatter.format(contactAmount + calculatedVat + calcFeeCharge)));
+        contact_message.setText(intent.getStringExtra(Constants.CONTACT_MESSAGE));
 
         if (hamPayContact != null) {
             displayName = hamPayContact.getDisplayName();
@@ -297,26 +238,29 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                     Toast.makeText(activity, getString(R.string.msg_null_amount), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (creditValueValidation) {
-                    contactMssage = contact_message.getText().toString();
-                    contactMssage = contactMssage.replaceAll(Constants.ENTER_CHARACTERS_REGEX, " ");
-                    editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-                    editor.commit();
-                    if (amount_value.getText().toString().indexOf("٬") != -1){
-                        amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace("٬", "")));
-                    }else if (amount_value.getText().toString().indexOf(",") != -1){
-                        amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace(",", "")));
-                    }
-                    if (amountValue + calculatedVat >= MinXferAmount && amountValue + calculatedVat <= MaxXferAmount) {
-                        calcFeeChargeRequest = new CalcFeeChargeRequest();
-                        calcFeeChargeRequest.setAmount(amountValue);
-                        requestCalcFeeCharge = new RequestCalcFeeCharge(activity, new RequestCalculateFeeTaskCompleteListener());
-                        requestCalcFeeCharge.execute(calcFeeChargeRequest);
-                    } else {
-                        new HamPayDialog(activity).showIncorrectAmountDialog(MinXferAmount, MaxXferAmount);
-                    }
+
+                contactMssage = contact_message.getText().toString();
+                contactMssage = contactMssage.replaceAll(Constants.ENTER_CHARACTERS_REGEX, " ");
+                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                editor.commit();
+                if (amount_value.getText().toString().indexOf("٬") != -1){
+                    amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace("٬", "")));
+                }else if (amount_value.getText().toString().indexOf(",") != -1){
+                    amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace(",", "")));
+                }
+                if (amountValue + calculatedVat >= MinXferAmount && amountValue + calculatedVat <= MaxXferAmount) {
+                    userPaymentRequest = new UserPaymentRequest();
+                    userPaymentRequest.setCalleeCellNumber(cellNumber);
+                    userPaymentRequest.setAmount(amountValue);
+                    userPaymentRequest.setVat(calculatedVat);
+                    userPaymentRequest.setMessage(contactMssage);
+                    requestUserPayment = new RequestUserPayment(context, new RequestUserPaymentTaskCompleteListener());
+                    requestUserPayment.execute(userPaymentRequest);
+                } else {
+                    new HamPayDialog(activity).showIncorrectAmountDialog(MinXferAmount, MaxXferAmount);
                 }
             }
+
         });
     }
 
@@ -342,8 +286,6 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
             hamPayDialog.dismisWaitingDialog();
 
             if (userPaymentResponseMessage != null) {
-
-
 
                 if (userPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
@@ -383,68 +325,6 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
 
         @Override
         public void onTaskPreRun() {
-        }
-    }
-
-    public class RequestCalculateVatTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<CalculateVatResponse>> {
-        public RequestCalculateVatTaskCompleteListener() {
-        }
-
-        @Override
-        public void onTaskComplete(ResponseMessage<CalculateVatResponse> calculateVatResponseMessage) {
-
-            hamPayDialog.dismisWaitingDialog();
-            ResultStatus resultStatus;
-            if (calculateVatResponseMessage != null) {
-                resultStatus = calculateVatResponseMessage.getService().getResultStatus();
-                if (resultStatus == ResultStatus.SUCCESS) {
-                    vat_value.setText(persianEnglishDigit.E2P(formatter.format(calculateVatResponseMessage.getService().getAmount())));
-                    calculatedVat = calculateVatResponseMessage.getService().getAmount();
-                    amount_total.setText(persianEnglishDigit.E2P(formatter.format(calculatedVat + amountValue)));
-                    vat_icon.setImageResource(R.drawable.remove_vat);
-                }else if (calculateVatResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    forceLogout();
-                }
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
-    }
-
-    public class RequestCalculateFeeTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<ClacFeeChargeResponse>> {
-        public RequestCalculateFeeTaskCompleteListener() {
-        }
-
-        @Override
-        public void onTaskComplete(ResponseMessage<ClacFeeChargeResponse> clacFeeChargeResponseMessage) {
-
-            hamPayDialog.dismisWaitingDialog();
-            ResultStatus resultStatus;
-            if (clacFeeChargeResponseMessage != null) {
-                resultStatus = clacFeeChargeResponseMessage.getService().getResultStatus();
-                if (resultStatus == ResultStatus.SUCCESS) {
-                    calcFeeCharge = clacFeeChargeResponseMessage.getService().getFeeCharge();
-                    Intent intent = new Intent(PaymentRequestDetailActivity.this, PaymentRequestConfirmActivity.class);
-                    intent.putExtra(Constants.CONTACT_NAME, displayName);
-                    intent.putExtra(Constants.CONTACT_PHONE_NO, cellNumber);
-                    intent.putExtra(Constants.IMAGE_ID, imageId);
-                    intent.putExtra(Constants.CONTACT_AMOUNT, amountValue);
-                    intent.putExtra(Constants.CONTACT_VAT, calculatedVat);
-                    intent.putExtra(Constants.CONTACT_FEE, calcFeeCharge);
-                    intent.putExtra(Constants.CONTACT_MESSAGE, contact_message.getText().toString());
-                    startActivity(intent);
-                }else if (clacFeeChargeResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    forceLogout();
-                }
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 

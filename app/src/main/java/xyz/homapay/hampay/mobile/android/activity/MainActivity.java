@@ -110,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     String pendingPaymentCode = null;
     int pendingPurchaseCount = 0;
     int pendingPaymentCount = 0;
+    private boolean showCreateInvoice = true;
 
     Activity activity;
 
@@ -205,6 +206,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         pendingPaymentCode = bundle.getString(Constants.PENDING_PAYMENT_CODE);
         pendingPurchaseCount = bundle.getInt(Constants.PENDING_PURCHASE_COUNT, 0);
         pendingPaymentCount = bundle.getInt(Constants.PENDING_PAYMENT_COUNT, 0);
+        showCreateInvoice = bundle.getBoolean(Constants.SHOW_CREATE_INVOICE, true);
 
         userProfileDTO = (UserProfileDTO) intent.getSerializableExtra(Constants.USER_PROFILE_DTO);
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
@@ -407,6 +409,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
                     bundle.putInt(Constants.PENDING_PAYMENT_COUNT, pendingPaymentCount);
                     bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);
+                    bundle.putBoolean(Constants.SHOW_CREATE_INVOICE, showCreateInvoice);
                     fragment.setArguments(bundle);
                 }
                 fragmentTitle = getString(R.string.title_main_fragment);
@@ -455,6 +458,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             case 7:
                 intent.setClass(activity, GuideDetailActivity.class);
                 intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/users/privacy-file");
+                Log.e("URL", Constants.HTTPS_SERVER_IP + "/users/privacy-file");
                 intent.putExtra(Constants.TAC_PRIVACY_TITLE, activity.getString(R.string.privacy_title_activity));
                 activity.startActivity(intent);
                 break;

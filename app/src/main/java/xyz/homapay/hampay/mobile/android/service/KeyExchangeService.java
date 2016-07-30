@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.gson.Gson;
@@ -37,6 +38,7 @@ import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.KeyAgreementRequest;
 import xyz.homapay.hampay.common.core.model.response.KeyAgreementResponse;
+import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestKeyAgreement;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -88,8 +90,6 @@ public class KeyExchangeService extends IntentService {
         super.onStart(intent, startId);
         Log.d("onStart", "onStart");
 
-
-
     }
 
     @Override
@@ -103,6 +103,9 @@ public class KeyExchangeService extends IntentService {
         }
         PublicKeyPair publicKeyPair = keyExchanger.getPublicKey();
 
+        if (clientEncIv == null) {
+            Toast.makeText(getApplicationContext(), getApplication().getString(R.string.start_key_exchange), Toast.LENGTH_SHORT).show();
+        }
 
         RequestKeyAgreement requestKeyAgreement = new RequestKeyAgreement(getApplicationContext(), new RequestKeyAgreementTaskCompleteListener());
         keyAgreementRequest.setRequestUUID(UUID.randomUUID().toString());
@@ -163,23 +166,12 @@ public class KeyExchangeService extends IntentService {
                         e.printStackTrace();
                     }
 
+                    if (clientEncIv == null) {
+                        Toast.makeText(getApplicationContext(), getApplication().getString(R.string.finish_key_exchange), Toast.LENGTH_SHORT).show();
+                    }
+
                     clientEncKey = secretKeyPair.getEncSecretKey().getEncoded();
                     clientEncIv = secretKeyPair.getIvSecretKey().getEncoded();
-
-//                    final String text = "{\"service\":{\"requestUUID\":\"ruuid\"},\"requestHeader\":{\"version\":\"1.0-PA\",\"authToken\":\"auth\"}}";
-//
-//                    final MessageEncryptor messageEncryptor = new AESMessageEncryptor();
-//                    System.err.println("--enckey: " + new String(Hex.encodeHex(clientEncKey)));
-//                    System.err.println("--iv: " + new String(Hex.encodeHex(clientEncIv)));
-//                    try {
-//                        String encrypted = messageEncryptor.encryptRequest(text, clientEncKey,clientEncIv, encryptionId);
-//                        DecryptedRequestInfo decrypted = messageEncryptor.decryptRequest(encrypted,clientEncKey,clientEncIv);
-//
-//                        Log.e("DEC", decrypted.getPayload());
-//
-//                    } catch (EncryptionException e) {
-//                        e.printStackTrace();
-//                    }
 
                     exchangeKey(result, clientEncKey, clientEncIv);
 

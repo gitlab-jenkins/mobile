@@ -38,6 +38,8 @@ import xyz.homapay.hampay.common.core.model.request.IBANConfirmationRequest;
 import xyz.homapay.hampay.common.core.model.request.IllegalAppListRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
+import xyz.homapay.hampay.common.core.model.request.LoginRequest;
+import xyz.homapay.hampay.common.core.model.request.LogoutRequest;
 import xyz.homapay.hampay.common.core.model.request.PurchaseInfoRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationCredentialsRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
@@ -50,6 +52,8 @@ import xyz.homapay.hampay.common.core.model.request.UploadImageRequest;
 import xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
 import xyz.homapay.hampay.common.core.model.response.ContactUsResponse;
 import xyz.homapay.hampay.common.core.model.response.IBANConfirmationResponse;
+import xyz.homapay.hampay.common.core.model.response.LoginResponse;
+import xyz.homapay.hampay.common.core.model.response.LogoutResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
 import xyz.homapay.hampay.common.core.model.response.TACAcceptResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
@@ -80,6 +84,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestIllegalAppList;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestLogout;
+import xyz.homapay.hampay.mobile.android.async.RequestNewLogout;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchaseInfo;
 import xyz.homapay.hampay.mobile.android.async.RequestRegistrationEntry;
 import xyz.homapay.hampay.mobile.android.async.RequestRegistrationSendSmsToken;
@@ -95,9 +100,11 @@ import xyz.homapay.hampay.mobile.android.component.edittext.EmailTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.model.FailedLoginResponse;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
-import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
+//import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
+import xyz.homapay.hampay.mobile.android.util.AppInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
+import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.EmailVerification;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.webservice.SecuredWebServices;
@@ -418,15 +425,15 @@ public class HamPayDialog {
                     editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                     editor.commit();
 
-                    userProfileDTO = tacAcceptResponseMessage.getService().getUserProfile();
+                    userProfileDTO = tacAcceptResponseMessage.getService().getTacDTO().getUserProfile();
 
                     Intent intent = new Intent();
                     intent.setClass(activity, MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.putExtra(Constants.PENDING_PURCHASE_CODE, tacAcceptResponseMessage.getService().getPurchaseProductCode());
-                    intent.putExtra(Constants.PENDING_PAYMENT_CODE, tacAcceptResponseMessage.getService().getPaymentProductCode());
-                    intent.putExtra(Constants.PENDING_PURCHASE_COUNT, tacAcceptResponseMessage.getService().getPendingPurchasesCount());
-                    intent.putExtra(Constants.PENDING_PAYMENT_COUNT, tacAcceptResponseMessage.getService().getPendingPaymentCount());
+                    intent.putExtra(Constants.PENDING_PURCHASE_CODE, tacAcceptResponseMessage.getService().getTacDTO().getPurchaseProductCode());
+                    intent.putExtra(Constants.PENDING_PAYMENT_CODE, tacAcceptResponseMessage.getService().getTacDTO().getPaymentProductCode());
+                    intent.putExtra(Constants.PENDING_PURCHASE_COUNT, tacAcceptResponseMessage.getService().getTacDTO().getPendingPurchasesCount());
+                    intent.putExtra(Constants.PENDING_PAYMENT_COUNT, tacAcceptResponseMessage.getService().getTacDTO().getPendingPaymentCount());
                     intent.putExtra(Constants.USER_PROFILE_DTO, userProfileDTO);
                     editor.putBoolean(Constants.FORCE_USER_PROFILE, false);
                     editor.commit();
@@ -488,8 +495,6 @@ public class HamPayDialog {
         exit_app_yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                editor.remove(Constants.LOGIN_TOKEN_ID);
-                editor.commit();
                 dialog.dismiss();
                 activity.finish();
                 Intent intent = new Intent();
@@ -497,9 +502,9 @@ public class HamPayDialog {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 activity.startActivity(intent);
 
-                new RequestLogout(activity, new RequestLogoutResponseTaskCompleteListener()).execute(logoutData);
-
-
+                LogoutRequest logoutRequest = new LogoutRequest();
+                RequestNewLogout requestNewLogout = new RequestNewLogout(activity, new RequestLoginTaskCompleteListener());
+                requestNewLogout.execute(logoutRequest);
             }
         });
 
@@ -517,26 +522,22 @@ public class HamPayDialog {
         }
     }
 
-    public class RequestLogoutResponseTaskCompleteListener implements AsyncTaskCompleteListener<LogoutResponse>
+    public class RequestLoginTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<LogoutResponse>>
     {
-        public RequestLogoutResponseTaskCompleteListener(){
+        public RequestLoginTaskCompleteListener(){
         }
 
         @Override
-        public void onTaskComplete(LogoutResponse logoutResponse)
+        public void onTaskComplete(ResponseMessage<LogoutResponse> logoutResponseResponseMessage)
         {
-            if (logoutResponse != null) {
-
+            if (logoutResponseResponseMessage != null) {
+                editor.remove(Constants.LOGIN_TOKEN_ID);
+                editor.commit();
             }
-            else {
-
-            }
-
         }
 
         @Override
-        public void onTaskPreRun() {
-        }
+        public void onTaskPreRun() {}
     }
 
     public void showRemovePasswordDialog(){

@@ -256,6 +256,7 @@
     <string name="card_number">شماره کارت: </string>
     <string name="request_payment_rial">مبلغ: </string>
     <string name="request_payment_vat">مالیات بر ارزش افزوده: </string>
+    <string name="request_payment_hampay_fee">کارمزد هم‌پی: </string>
     <string name="request_payment_fee">کارمزد: </string>
     <string name="request_payment_total">مبلغ نهایی: </string>
     <string name="purchase_payment_status">وضعیت: </string>
@@ -300,7 +301,8 @@
     <string name="most_popular_business_list">رایج‌ترین‌ها</string>
     <string name="latest_business_list">تازه‌ها</string>
     <string name="amount_value">لطفا مبلغ مورد را وارد نمایید</string>
-    <string name="payment_request_button_text">ارسال</string>
+    <string name="payment_request_button_confirm">تایید</string>
+    <string name="payment_request_button_send">ارسال</string>
     <string name="change_pass_code_text_1">لطفا رمز عبور فعلی خود را وارد کنید</string>
     <string name="change_pass_code_text_2">لطفا رمز عبور ۵ رقمی خود را وارد نمایید
     \n
@@ -342,6 +344,7 @@
     <string name="purchase_status_pending">در حال انتظار</string>
     <string name="purchase_status_processing">درحال پردازش</string>
     <string name="purchase_status_succeed">پرداخت موفق</string>
-
+    <string name="start_key_exchange">تبادل کلید آغاز شد، لطفا منتظر بمانید</string>
+    <string name="finish_key_exchange">اتمام تبادل کلید</string>
 
 </resources>
