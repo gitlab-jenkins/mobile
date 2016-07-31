@@ -98,9 +98,8 @@ public class PendingFundListAdapter extends BaseAdapter {
         FundDTO fund = fundList.get(position);
 
         if (fund.getImageId() != null) {
-            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + fund.getImageId();
-            viewHolder.user_image.setTag(userImageUrl.split("/")[6]);
-            imageManager.displayImage(userImageUrl, viewHolder.user_image, R.drawable.user_placeholder);
+            viewHolder.user_image.setTag(fund.getImageId());
+            imageManager.displayImage(fund.getImageId(), viewHolder.user_image, R.drawable.user_placeholder);
         }else {
             viewHolder.user_image.setImageResource(R.drawable.user_placeholder);
         }

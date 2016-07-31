@@ -154,9 +154,8 @@ public class TransactionDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         transactionDTO = (TransactionDTO) intent.getSerializableExtra(Constants.USER_TRANSACTION_DTO);
         if (transactionDTO.getImageId() != null) {
-            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + transactionDTO.getImageId();
-            image.setTag(userImageUrl.split("/")[6]);
-            imageManager.displayImage(userImageUrl, image, R.drawable.user_placeholder);
+            image.setTag(transactionDTO.getImageId());
+            imageManager.displayImage(transactionDTO.getImageId(), image, R.drawable.user_placeholder);
         }else {
             image.setImageResource(R.drawable.user_placeholder);
         }

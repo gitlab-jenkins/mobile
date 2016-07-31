@@ -232,7 +232,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                     doWorkInfo = new DoWorkInfo();
                     doWorkInfo.setUserName("appstore");
                     doWorkInfo.setPassword("sepapp");
-                    doWorkInfo.setCellNumber(prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").substring(1, prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").length()));
+                    doWorkInfo.setCellNumber(pspInfoDTO.getCellNumber().substring(1, pspInfoDTO.getCellNumber().length()));
                     doWorkInfo.setLangAByte((byte) 0);
                     doWorkInfo.setLangABoolean(false);
                     TWAArrayOfKeyValueOfstringstring vectorstring2stringMapEntry = new TWAArrayOfKeyValueOfstringstring();
@@ -574,9 +574,8 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
 
         if (paymentInfo.getImageId() != null) {
-            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + paymentInfo.getImageId();
-            user_image.setTag(userImageUrl.split("/")[6]);
-            imageManager.displayImage(userImageUrl, user_image, R.drawable.user_placeholder);
+            user_image.setTag(paymentInfo.getImageId());
+            imageManager.displayImage(paymentInfo.getImageId(), user_image, R.drawable.user_placeholder);
         }else {
             user_image.setImageResource(R.drawable.user_placeholder);
         }

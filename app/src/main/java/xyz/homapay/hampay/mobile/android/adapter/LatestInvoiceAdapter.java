@@ -82,9 +82,8 @@ public class LatestInvoiceAdapter extends BaseAdapter {
         ContactDTO contact = contacts.get(position);
 
         if (contact.getContactImageId() != null) {
-            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + contact.getContactImageId();
-            viewHolder.user_image.setTag(userImageUrl.split("/")[6]);
-            imageManager.displayImage(userImageUrl, viewHolder.user_image, R.drawable.user_placeholder);
+            viewHolder.user_image.setTag(contact.getContactImageId());
+            imageManager.displayImage(contact.getContactImageId(), viewHolder.user_image, R.drawable.user_placeholder);
         }else {
             viewHolder.user_image.setImageResource(R.drawable.user_placeholder);
         }

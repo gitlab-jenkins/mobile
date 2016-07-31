@@ -117,9 +117,8 @@ public class PendingPODetailActivity extends AppCompatActivity {
         user_image = (ImageView)findViewById(R.id.user_image);
         caller_name.setText(paymentInfo.getCalleeName());
         if (paymentInfo.getImageId() != null) {
-            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + paymentInfo.getImageId();
-            user_image.setTag(userImageUrl.split("/")[6]);
-            imageManager.displayImage(userImageUrl, user_image, R.drawable.user_placeholder);
+            user_image.setTag(paymentInfo.getImageId());
+            imageManager.displayImage(paymentInfo.getImageId(), user_image, R.drawable.user_placeholder);
         }else {
             user_image.setImageResource(R.drawable.user_placeholder);
         }

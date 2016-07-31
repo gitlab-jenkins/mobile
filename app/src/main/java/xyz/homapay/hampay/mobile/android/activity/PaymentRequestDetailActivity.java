@@ -4,16 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,9 +22,8 @@ import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
 import xyz.homapay.hampay.common.core.model.request.CalcFeeChargeRequest;
 import xyz.homapay.hampay.common.core.model.request.CalculateVatRequest;
-import xyz.homapay.hampay.common.core.model.request.UserPaymentRequest;
+import xyz.homapay.hampay.common.core.model.response.CalcFeeChargeResponse;
 import xyz.homapay.hampay.common.core.model.response.CalculateVatResponse;
-import xyz.homapay.hampay.common.core.model.response.ClacFeeChargeResponse;
 import xyz.homapay.hampay.common.core.model.response.UserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
@@ -37,7 +31,6 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestCalcFeeCharge;
 import xyz.homapay.hampay.mobile.android.async.RequestCalculateVat;
-import xyz.homapay.hampay.mobile.android.async.RequestUserPayment;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.CurrencyFormatterTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
@@ -278,9 +271,8 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
             if (imageId != null) {
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
-                String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + imageId;
-                user_image.setTag(userImageUrl.split("/")[6]);
-                imageManager.displayImage(userImageUrl, user_image, R.drawable.user_placeholder);
+                user_image.setTag(imageId);
+                imageManager.displayImage(imageId, user_image, R.drawable.user_placeholder);
             }else {
                 user_image.setImageResource(R.drawable.user_placeholder);
             }
@@ -414,19 +406,19 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
         }
     }
 
-    public class RequestCalculateFeeTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<ClacFeeChargeResponse>> {
+    public class RequestCalculateFeeTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<CalcFeeChargeResponse>> {
         public RequestCalculateFeeTaskCompleteListener() {
         }
 
         @Override
-        public void onTaskComplete(ResponseMessage<ClacFeeChargeResponse> clacFeeChargeResponseMessage) {
+        public void onTaskComplete(ResponseMessage<CalcFeeChargeResponse> calcFeeChargeResponseMessage) {
 
             hamPayDialog.dismisWaitingDialog();
             ResultStatus resultStatus;
-            if (clacFeeChargeResponseMessage != null) {
-                resultStatus = clacFeeChargeResponseMessage.getService().getResultStatus();
+            if (calcFeeChargeResponseMessage != null) {
+                resultStatus = calcFeeChargeResponseMessage.getService().getResultStatus();
                 if (resultStatus == ResultStatus.SUCCESS) {
-                    calcFeeCharge = clacFeeChargeResponseMessage.getService().getFeeCharge();
+                    calcFeeCharge = calcFeeChargeResponseMessage.getService().getFeeCharge();
                     Intent intent = new Intent(PaymentRequestDetailActivity.this, PaymentRequestConfirmActivity.class);
                     intent.putExtra(Constants.CONTACT_NAME, displayName);
                     intent.putExtra(Constants.CONTACT_PHONE_NO, cellNumber);
@@ -436,7 +428,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                     intent.putExtra(Constants.CONTACT_FEE, calcFeeCharge);
                     intent.putExtra(Constants.CONTACT_MESSAGE, contact_message.getText().toString());
                     startActivity(intent);
-                }else if (clacFeeChargeResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                }else if (calcFeeChargeResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();
                 }
             }

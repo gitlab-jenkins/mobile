@@ -168,9 +168,8 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
         if (businessDTO.getBusinessImageId() != null) {
             editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
             editor.commit();
-            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + businessDTO.getBusinessImageId();
-            business_image.setTag(userImageUrl.split("/")[6]);
-            imageManager.displayImage(userImageUrl, business_image, R.drawable.user_placeholder);
+            business_image.setTag(businessDTO.getBusinessImageId());
+            imageManager.displayImage(businessDTO.getBusinessImageId(), business_image, R.drawable.user_placeholder);
         }else {
             business_image.setImageResource(R.drawable.user_placeholder);
         }

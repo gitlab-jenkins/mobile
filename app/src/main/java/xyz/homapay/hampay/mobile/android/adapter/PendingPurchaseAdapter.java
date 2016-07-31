@@ -103,9 +103,8 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
         viewHolder.business_name.setText(purchaseInfoDTO.getMerchantName());
 
         if (purchaseInfoDTO.getMerchantImageId() != null) {
-            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + purchaseInfoDTO.getMerchantImageId();
-            viewHolder.business_image.setTag(userImageUrl.split("/")[6]);
-            imageManager.displayImage(userImageUrl, viewHolder.business_image, R.drawable.user_placeholder);
+            viewHolder.business_image.setTag(purchaseInfoDTO.getMerchantImageId());
+            imageManager.displayImage(purchaseInfoDTO.getMerchantImageId(), viewHolder.business_image, R.drawable.user_placeholder);
         }else {
             viewHolder.business_image.setImageResource(R.drawable.user_placeholder);
         }

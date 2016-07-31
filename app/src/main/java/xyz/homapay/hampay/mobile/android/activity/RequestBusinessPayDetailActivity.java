@@ -296,7 +296,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                     doWorkInfo = new DoWorkInfo();
                     doWorkInfo.setUserName("appstore");
                     doWorkInfo.setPassword("sepapp");
-                    doWorkInfo.setCellNumber(prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").substring(1, prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").length()));
+                    doWorkInfo.setCellNumber(pspInfoDTO.getCellNumber().substring(1, pspInfoDTO.getCellNumber().length()));
                     doWorkInfo.setLangAByte((byte) 0);
                     doWorkInfo.setLangABoolean(false);
                     TWAArrayOfKeyValueOfstringstring vectorstring2stringMapEntry = new TWAArrayOfKeyValueOfstringstring();
@@ -795,9 +795,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         if (purchaseInfo.getMerchantImageId() != null) {
             editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
             editor.commit();
-            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + purchaseInfo.getMerchantImageId();
-            business_image.setTag(userImageUrl.split("/")[6]);
-            imageManager.displayImage(userImageUrl, business_image, R.drawable.user_placeholder);
+            business_image.setTag(purchaseInfo.getMerchantImageId());
+            imageManager.displayImage(purchaseInfo.getMerchantImageId(), business_image, R.drawable.user_placeholder);
         }else {
             business_image.setImageResource(R.drawable.user_placeholder);
         }

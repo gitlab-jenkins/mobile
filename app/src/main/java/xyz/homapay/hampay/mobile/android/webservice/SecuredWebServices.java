@@ -81,6 +81,7 @@ import xyz.homapay.hampay.common.core.model.request.UserPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
 import xyz.homapay.hampay.common.core.model.response.BusinessListResponse;
 import xyz.homapay.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
+import xyz.homapay.hampay.common.core.model.response.CalcFeeChargeResponse;
 import xyz.homapay.hampay.common.core.model.response.CalculateVatResponse;
 import xyz.homapay.hampay.common.core.model.response.CancelPurchasePaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.CancelUserPaymentResponse;
@@ -88,7 +89,6 @@ import xyz.homapay.hampay.common.core.model.response.CardProfileResponse;
 import xyz.homapay.hampay.common.core.model.response.ChangeEmailResponse;
 import xyz.homapay.hampay.common.core.model.response.ChangeMemorableWordResponse;
 import xyz.homapay.hampay.common.core.model.response.ChangePassCodeResponse;
-import xyz.homapay.hampay.common.core.model.response.ClacFeeChargeResponse;
 import xyz.homapay.hampay.common.core.model.response.ContactUsResponse;
 import xyz.homapay.hampay.common.core.model.response.ContactsHampayEnabledResponse;
 import xyz.homapay.hampay.common.core.model.response.GetTokenFromPSPResponse;
@@ -1160,9 +1160,9 @@ public class SecuredWebServices extends BroadcastReceiver{
         return responseMessage;
     }
 
-    public ResponseMessage<ClacFeeChargeResponse> calculateFeeCharge(CalcFeeChargeRequest calcFeeChargeRequest) throws IOException, EncryptionException {
+    public ResponseMessage<CalcFeeChargeResponse> calculateFeeCharge(CalcFeeChargeRequest calcFeeChargeRequest) throws IOException, EncryptionException {
 
-        ResponseMessage<ClacFeeChargeResponse> responseMessage = null;
+        ResponseMessage<CalcFeeChargeResponse> responseMessage = null;
         url = new URL(serviceURL + "/payment/calculate-vat");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
@@ -1175,7 +1175,7 @@ public class SecuredWebServices extends BroadcastReceiver{
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<ClacFeeChargeResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<CalcFeeChargeResponse>>() {}.getType());
 
         proxyService.closeConnection();
 

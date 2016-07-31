@@ -281,9 +281,8 @@ public class AccountDetailFragment extends Fragment {
         user_name_text.setText(userProfileDTO.getFullName());
 
         if (userProfileDTO.getUserImageId() != null) {
-            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + userProfileDTO.getUserImageId();
-            image_profile.setTag(userImageUrl.split("/")[6]);
-            imageManager.displayImage(userImageUrl, image_profile, R.drawable.user_placeholder);
+            image_profile.setTag(userProfileDTO.getUserImageId());
+            imageManager.displayImage(userProfileDTO.getUserImageId(), image_profile, R.drawable.user_placeholder);
         }else {
             image_profile.setImageResource(R.drawable.user_placeholder);
         }

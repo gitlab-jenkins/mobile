@@ -90,9 +90,8 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
         }
 
         if (transactionDTO.getImageId() != null) {
-            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + transactionDTO.getImageId();
-            viewHolder.image.setTag(userImageUrl.split("/")[6]);
-            imageManager.displayImage(userImageUrl, viewHolder.image, R.drawable.user_placeholder);
+            viewHolder.image.setTag(transactionDTO.getImageId());
+            imageManager.displayImage(transactionDTO.getImageId(), viewHolder.image, R.drawable.user_placeholder);
         }else {
             viewHolder.image.setImageResource(R.drawable.user_placeholder);
         }

@@ -21,6 +21,7 @@ import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
 import xyz.homapay.hampay.common.core.model.request.PendingCountRequest;
+import xyz.homapay.hampay.common.core.model.request.RetrieveImageRequest;
 import xyz.homapay.hampay.common.core.model.response.PendingCountResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.R;
@@ -56,7 +57,6 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     LinearLayout pendingPurchasePayment;
     UserProfileDTO userProfileDTO;
     Bundle bundle;
-    private String userImageUrl = "";
     LinearLayout hampay_1_ll;
     LinearLayout hampay_2_ll;
     LinearLayout hampay_3_ll;
@@ -171,9 +171,8 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                     hampay_1_ll.setVisibility(View.VISIBLE);
                     hampay_1.setText(contacts.get(0).getDisplayName());
                     if (contacts.get(0).getContactImageId() != null) {
-                        userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + contacts.get(0).getContactImageId();
-                        hampay_image_1.setTag(userImageUrl.split("/")[6]);
-                        imageManager.displayImage(userImageUrl, hampay_image_1, R.drawable.user_placeholder);
+                        hampay_image_1.setTag(contacts.get(0).getContactImageId());
+                        imageManager.displayImage(contacts.get(0).getContactImageId(), hampay_image_1, R.drawable.user_placeholder);
                     } else {
                         hampay_image_1.setImageResource(R.drawable.user_placeholder);
                     }
@@ -182,9 +181,8 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                     hampay_2_ll.setVisibility(View.VISIBLE);
                     hampay_2.setText(contacts.get(1).getDisplayName());
                     if (contacts.get(1).getContactImageId() != null) {
-                        userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + contacts.get(1).getContactImageId();
-                        hampay_image_2.setTag(userImageUrl.split("/")[6]);
-                        imageManager.displayImage(userImageUrl, hampay_image_2, R.drawable.user_placeholder);
+                        hampay_image_2.setTag(contacts.get(1).getContactImageId());
+                        imageManager.displayImage(contacts.get(1).getContactImageId(), hampay_image_2, R.drawable.user_placeholder);
                     } else {
                         hampay_image_2.setImageResource(R.drawable.user_placeholder);
                     }
@@ -193,9 +191,8 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                     hampay_3_ll.setVisibility(View.VISIBLE);
                     hampay_3.setText(contacts.get(2).getDisplayName());
                     if (contacts.get(2).getContactImageId() != null) {
-                        userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + contacts.get(2).getContactImageId();
-                        hampay_image_3.setTag(userImageUrl.split("/")[6]);
-                        imageManager.displayImage(userImageUrl, hampay_image_3, R.drawable.user_placeholder);
+                        hampay_image_3.setTag(contacts.get(2).getContactImageId());
+                        imageManager.displayImage(contacts.get(2).getContactImageId(), hampay_image_3, R.drawable.user_placeholder);
                     } else {
                         hampay_image_3.setImageResource(R.drawable.user_placeholder);
                     }
@@ -204,9 +201,8 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                     hampay_4_ll.setVisibility(View.VISIBLE);
                     hampay_4.setText(contacts.get(3).getDisplayName());
                     if (contacts.get(3).getContactImageId() != null) {
-                        userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + contacts.get(3).getContactImageId();
-                        hampay_image_4.setTag(userImageUrl.split("/")[6]);
-                        imageManager.displayImage(userImageUrl, hampay_image_4, R.drawable.user_placeholder);
+                        hampay_image_4.setTag(contacts.get(3).getContactImageId());
+                        imageManager.displayImage(contacts.get(3).getContactImageId(), hampay_image_4, R.drawable.user_placeholder);
                     } else {
                         hampay_image_4.setImageResource(R.drawable.user_placeholder);
                     }

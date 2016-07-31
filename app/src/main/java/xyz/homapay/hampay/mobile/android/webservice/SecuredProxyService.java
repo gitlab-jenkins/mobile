@@ -227,6 +227,7 @@ public class SecuredProxyService {
 
     public Bitmap imageInputStream() throws IOException {
 
+        OutputStream outputStream;
         InputStream inputStream;
         Bitmap bitmap = null;
 
@@ -234,6 +235,9 @@ public class SecuredProxyService {
             case HTTP:
                 httpURLConnection = (HttpURLConnection)url.openConnection();
                 httpURLConnection.setRequestMethod(connectionMethod.name());
+                outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(getJsonBody());
+                outputStream.flush();
                 inputStream = httpURLConnection.getInputStream();
                 bitmap = BitmapFactory.decodeStream(inputStream);
                 break;
@@ -241,6 +245,9 @@ public class SecuredProxyService {
             case HTTPS:
                 httpsURLConnection = new SSLConnection(context, url).setUpHttpsURLConnection();
                 httpsURLConnection.setRequestMethod(connectionMethod.name());
+                outputStream = httpsURLConnection.getOutputStream();
+                outputStream.write(getJsonBody());
+                outputStream.flush();
                 inputStream = httpsURLConnection.getInputStream();
                 bitmap = BitmapFactory.decodeStream(inputStream);
                 break;

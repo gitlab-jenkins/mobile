@@ -51,9 +51,8 @@ public class HamPayBusinessesAdapter extends HamPayBusinessesGenericAdapter<Busi
         viewHolder.business_hampay_id.setText(persianEnglishDigit.E2P("شناسه: " + businessDTO.getCode()));
 
         if (businessDTO.getBusinessImageId() != null) {
-            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + businessDTO.getBusinessImageId();
-            viewHolder.business_image.setTag(userImageUrl.split("/")[6]);
-            imageManager.displayImage(userImageUrl, viewHolder.business_image, R.drawable.user_placeholder);
+            viewHolder.business_image.setTag(businessDTO.getBusinessImageId());
+            imageManager.displayImage(businessDTO.getBusinessImageId(), viewHolder.business_image, R.drawable.user_placeholder);
         }else {
             viewHolder.business_image.setImageResource(R.drawable.user_placeholder);
         }

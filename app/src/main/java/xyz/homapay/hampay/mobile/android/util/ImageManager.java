@@ -1,27 +1,36 @@
 package xyz.homapay.hampay.mobile.android.util;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.lang.ref.SoftReference;
+import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Stack;
 
+import xyz.homapay.hampay.common.common.request.RequestMessage;
+import xyz.homapay.hampay.common.core.model.request.RetrieveImageRequest;
 import xyz.homapay.hampay.mobile.android.webservice.ConnectionMethod;
 import xyz.homapay.hampay.mobile.android.webservice.ConnectionType;
-import xyz.homapay.hampay.mobile.android.webservice.ProxyService;
+import xyz.homapay.hampay.mobile.android.webservice.SecuredProxyService;
 
 public class ImageManager {
 
     private HashMap<String, SoftReference<Bitmap>> imageMap = new HashMap<String, SoftReference<Bitmap>>();
 
+    private SharedPreferences prefs;
+    private String authToken = "";
     private File cacheDir;
     private ImageQueue imageQueue = new ImageQueue();
     private Thread imageLoaderThread = new Thread(new ImageQueueManager());
@@ -36,6 +45,8 @@ public class ImageManager {
 
         this.activity = activity;
         imageLoaderThread.setPriority(Thread.NORM_PRIORITY-1);
+        prefs =  activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE);
+        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
         String sdState = android.os.Environment.getExternalStorageState();
         if (sdState.equals(android.os.Environment.MEDIA_MOUNTED)) {
@@ -51,20 +62,20 @@ public class ImageManager {
         }
     }
 
-    public void displayImage(String url, ImageView imageView, int defaultDrawableId) {
+    public void displayImage(String imageId, ImageView imageView, int defaultDrawableId) {
 
-        if(imageMap.containsKey(url)) {
-            imageView.setImageBitmap(imageMap.get(url).get());
+        if(imageMap.containsKey(imageId)) {
+            imageView.setImageBitmap(imageMap.get(imageId).get());
 
         } else {
-            queueImage(url, imageView, defaultDrawableId);
+            queueImage(imageId, imageView, defaultDrawableId);
             imageView.setImageResource(defaultDrawableId);
         }
     }
 
-    private void queueImage(String url, ImageView imageView, int defaultDrawableId) {
+    private void queueImage(String imageId, ImageView imageView, int defaultDrawableId) {
         imageQueue.Clean(imageView);
-        ImageRef p = new ImageRef(url, imageView, defaultDrawableId);
+        ImageRef p = new ImageRef(imageId, imageView, defaultDrawableId);
 
         synchronized(imageQueue.imageRefs) {
             imageQueue.imageRefs.push(p);
@@ -75,26 +86,41 @@ public class ImageManager {
         }
     }
 
-    private Bitmap getBitmap(String url) {
+    private Bitmap getBitmap(String imageId) {
 
         try {
             Bitmap bitmap = null;
-            String filename = String.valueOf(url.split("/")[6].hashCode());
+            String filename = String.valueOf(imageId);
             File bitmapFile = new File(cacheDir, filename);
             if (forceDownload){
-                URL imageURL = new URL(url);
-                ProxyService proxyService = new ProxyService(activity, ConnectionType.HTTPS, ConnectionMethod.GET, imageURL);
+                URL imageURL = new URL(Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + "retrieve");
+                SecuredProxyService proxyService = new SecuredProxyService(true, activity, ConnectionType.HTTPS, ConnectionMethod.POST, imageURL);
+                RetrieveImageRequest retrieveImageRequest = new RetrieveImageRequest();
+                retrieveImageRequest.setImageId(imageId);
+                retrieveImageRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+                RequestMessage<RetrieveImageRequest> message = new RequestMessage<>(retrieveImageRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+                Type requestType = new TypeToken<RequestMessage<RetrieveImageRequest>>() {}.getType();
+                String jsonRequest = new Gson().toJson(message, requestType);
+                proxyService.setJsonBody(jsonRequest);
+
                 bitmap = scaleDown(proxyService.imageInputStream(), 100, true);
                 proxyService.closeConnection();
                 writeFile(bitmap, bitmapFile);
             }
             else {
-//                bitmap = BitmapFactory.decodeFile(bitmapFile.getPath());
                 bitmap = decodeFile(bitmapFile, 100, 100);
                 if (bitmap != null) {
                 }else {
-                    URL imageURL = new URL(url);
-                    ProxyService proxyService = new ProxyService(activity, ConnectionType.HTTPS, ConnectionMethod.GET, imageURL);
+                    URL imageURL = new URL(Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + "retrieve");
+                    SecuredProxyService proxyService = new SecuredProxyService(true, activity, ConnectionType.HTTPS, ConnectionMethod.POST, imageURL);
+                    RetrieveImageRequest retrieveImageRequest = new RetrieveImageRequest();
+                    retrieveImageRequest.setImageId(imageId);
+                    retrieveImageRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+                    RequestMessage<RetrieveImageRequest> message = new RequestMessage<>(retrieveImageRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+                    Type requestType = new TypeToken<RequestMessage<RetrieveImageRequest>>() {}.getType();
+                    String jsonRequest = new Gson().toJson(message, requestType);
+                    proxyService.setJsonBody(jsonRequest);
+
                     bitmap = scaleDown(proxyService.imageInputStream(), 100, true);
                     proxyService.closeConnection();
                     writeFile(bitmap, bitmapFile);
@@ -161,13 +187,13 @@ public class ImageManager {
     }
 
     private class ImageRef {
-        public String url;
+        public String imageId;
         public ImageView imageView;
         public int defDrawableId;
 
-        public ImageRef(String u, ImageView i, int defaultDrawableId) {
-            url=u;
-            imageView=i;
+        public ImageRef(String imageId, ImageView i, int defaultDrawableId) {
+            this.imageId = imageId;
+            imageView = i;
             defDrawableId = defaultDrawableId;
         }
     }
@@ -209,12 +235,12 @@ public class ImageManager {
                             imageToLoad = imageQueue.imageRefs.pop();
                         }
 
-                        Bitmap bitmap = getBitmap(imageToLoad.url);
-                        imageMap.put(imageToLoad.url, new SoftReference<Bitmap>(bitmap));
+                        Bitmap bitmap = getBitmap(imageToLoad.imageId);
+                        imageMap.put(imageToLoad.imageId, new SoftReference<Bitmap>(bitmap));
                         Object tag = imageToLoad.imageView.getTag();
 
                         // Make sure we have the right view - thread safety defender
-                        if(tag != null && tag.equals(imageToLoad.url.split("/")[6])) {
+                        if(tag != null && tag.equals(imageToLoad.imageId)) {
                             BitmapDisplayer bmpDisplayer =
                                     new BitmapDisplayer(bitmap, imageToLoad.imageView, imageToLoad.defDrawableId);
                             activity.runOnUiThread(bmpDisplayer);

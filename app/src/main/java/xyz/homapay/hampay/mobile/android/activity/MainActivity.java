@@ -359,9 +359,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
 
         if (userProfileDTO.getUserImageId() != null) {
-            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + userProfileDTO.getUserImageId();
-            image_profile.setTag(userImageUrl.split("/")[6]);
-            imageManager.displayImage(userImageUrl, image_profile, R.drawable.user_placeholder);
+            image_profile.setTag(userProfileDTO.getUserImageId());
+            imageManager.displayImage(userProfileDTO.getUserImageId(), image_profile, R.drawable.user_placeholder);
         }else {
             image_profile.setImageResource(R.drawable.user_placeholder);
         }
@@ -371,10 +370,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             getRegId();
         }
     }
-
-
-
-
 
 
     @Override
@@ -592,9 +587,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             case REMOVE_FAIL:
                 new HamPayDialog(activity).removeImageFailDialog();
                 if (userProfileDTO.getUserImageId() != null) {
-                    String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + userProfileDTO.getUserImageId();
-                    image_profile.setTag(userImageUrl.split("/")[6]);
-                    imageManager.displayImage(userImageUrl, image_profile, R.drawable.user_placeholder);
+                    image_profile.setTag( userProfileDTO.getUserImageId());
+                    imageManager.displayImage( userProfileDTO.getUserImageId(), image_profile, R.drawable.user_placeholder);
                 }else {
                     image_profile.setImageResource(R.drawable.user_placeholder);
                 }
@@ -695,10 +689,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                         bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);
                         fragment.setArguments(bundle);
                         if (userProfileDTO.getUserImageId() != null) {
-                            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + userProfileDTO.getUserImageId();
-                            image_profile.setTag(userImageUrl.split("/")[6]);
+                            image_profile.setTag(userProfileDTO.getUserImageId());
                             imageManager = new ImageManager(activity, 200000, true);
-                            imageManager.displayImage(userImageUrl, image_profile, R.drawable.user_placeholder);
+                            imageManager.displayImage(userProfileDTO.getUserImageId(), image_profile, R.drawable.user_placeholder);
                         }else {
                             image_profile.setImageResource(R.drawable.user_placeholder);
                         }

@@ -111,9 +111,9 @@ public class PendingPaymentAdapter extends BaseAdapter  {
         viewHolder.expire_pay.setText(dateUtil.remainingTime(paymentInfoDTO.getExpirationDate(), currentDate));
 
         if (paymentInfoDTO.getImageId() != null) {
-            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + paymentInfoDTO.getImageId();
-            viewHolder.user_image.setTag(userImageUrl.split("/")[6]);
-            imageManager.displayImage(userImageUrl, viewHolder.user_image, R.drawable.user_placeholder);
+//            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + paymentInfoDTO.getImageId();
+            viewHolder.user_image.setTag(paymentInfoDTO.getImageId());
+            imageManager.displayImage(paymentInfoDTO.getImageId(), viewHolder.user_image, R.drawable.user_placeholder);
         }else {
             viewHolder.user_image.setImageResource(R.drawable.user_placeholder);
         }

@@ -96,11 +96,7 @@ public class KeyExchangeService extends IntentService {
     public int onStartCommand(Intent intent, int flags, int startId) {
         onHandleIntent(intent);
 
-        try {
-            keyExchanger = new DiffieHellmanKeyExchanger();
-        } catch (EncryptionException e) {
-            e.printStackTrace();
-        }
+        keyExchanger = new DiffieHellmanKeyExchanger();
         PublicKeyPair publicKeyPair = keyExchanger.getPublicKey();
 
         if (clientEncIv == null) {

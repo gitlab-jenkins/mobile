@@ -86,9 +86,8 @@ public class PendingPOAdapter extends BaseAdapter {
         PaymentInfoDTO paymentInfo = paymentInfoList.get(position);
 
         if (paymentInfo.getImageId() != null) {
-            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + paymentInfo.getImageId();
-            viewHolder.user_image.setTag(userImageUrl.split("/")[6]);
-            imageManager.displayImage(userImageUrl, viewHolder.user_image, R.drawable.user_placeholder);
+            viewHolder.user_image.setTag(paymentInfo.getImageId());
+            imageManager.displayImage(paymentInfo.getImageId(), viewHolder.user_image, R.drawable.user_placeholder);
         }else {
             viewHolder.user_image.setImageResource(R.drawable.user_placeholder);
         }

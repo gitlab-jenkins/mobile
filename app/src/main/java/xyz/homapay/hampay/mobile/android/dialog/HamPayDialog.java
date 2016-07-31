@@ -1449,7 +1449,7 @@ public class HamPayDialog {
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_sms_confirm, null);
         FacedTextView sms_user_notify = (FacedTextView) view.findViewById(R.id.sms_user_notify);
-        sms_user_notify.setText(activity.getString(R.string.sms_verification_text, new PersianEnglishDigit().E2P(prefs.getString(Constants.REGISTERED_CELL_NUMBER, ""))));
+        sms_user_notify.setText(activity.getString(R.string.sms_verification_text, new PersianEnglishDigit().E2P(cellNumber)));
         FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
         FacedTextView dis_confirmation = (FacedTextView) view.findViewById(R.id.dis_confirmation);
 
@@ -1502,7 +1502,6 @@ public class HamPayDialog {
                     Intent intent = new Intent();
                     intent.setClass(activity, SMSVerificationActivity.class);
                     intent.putExtra(Constants.REGISTERED_CELL_NUMBER, cellNumber);
-                    intent.putExtra(Constants.REGISTERED_CARD_NO, cardNumber);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     activity.finish();
                     activity.startActivity(intent);

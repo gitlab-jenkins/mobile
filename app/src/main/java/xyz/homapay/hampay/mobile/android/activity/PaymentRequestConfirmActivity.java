@@ -6,12 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -20,22 +17,14 @@ import com.google.android.gms.analytics.Tracker;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
-import xyz.homapay.hampay.common.core.model.request.CalcFeeChargeRequest;
-import xyz.homapay.hampay.common.core.model.request.CalculateVatRequest;
 import xyz.homapay.hampay.common.core.model.request.UserPaymentRequest;
-import xyz.homapay.hampay.common.core.model.response.CalculateVatResponse;
-import xyz.homapay.hampay.common.core.model.response.ClacFeeChargeResponse;
 import xyz.homapay.hampay.common.core.model.response.UserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import xyz.homapay.hampay.mobile.android.async.RequestCalcFeeCharge;
-import xyz.homapay.hampay.mobile.android.async.RequestCalculateVat;
 import xyz.homapay.hampay.mobile.android.async.RequestUserPayment;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
-import xyz.homapay.hampay.mobile.android.component.edittext.CurrencyFormatterTextWatcher;
-import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -219,9 +208,8 @@ public class PaymentRequestConfirmActivity extends AppCompatActivity {
             if (imageId != null) {
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
-                String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + imageId;
-                user_image.setTag(userImageUrl.split("/")[6]);
-                imageManager.displayImage(userImageUrl, user_image, R.drawable.user_placeholder);
+                user_image.setTag(imageId);
+                imageManager.displayImage(imageId, user_image, R.drawable.user_placeholder);
             }else {
                 user_image.setImageResource(R.drawable.user_placeholder);
             }
