@@ -243,7 +243,7 @@
             <include
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                layout="@layout/password_keyboard"/>
+                layout="@layout/business_keyboard"/>
         </LinearLayout>
 
 

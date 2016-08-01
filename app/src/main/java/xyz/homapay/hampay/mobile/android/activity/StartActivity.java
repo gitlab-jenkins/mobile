@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.webkit.WebView;
 
 import com.google.android.gms.analytics.HitBuilders;
 
@@ -81,6 +82,10 @@ public class StartActivity extends AppCompatActivity {
             }
         });
 
+
+        WebView webView = (WebView)findViewById(R.id.webview);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.loadUrl("file:///android_asset/certification.html");
 
         illegalAppListRequest = new IllegalAppListRequest();
         requestIllegalAppList = new RequestIllegalAppList(activity, new RequestIllegalAppListTaskCompleteListener());

@@ -211,22 +211,6 @@ public class SecuredWebServices extends BroadcastReceiver{
         return  responseMessage;
     }
 
-//    public LogoutResponse logoutRequest(LogoutData logoutData) throws Exception {
-//
-//        if (connectionType == ConnectionType.HTTPS) {
-//            url = new URL(Constants.HTTPS_OPENAM_LOGOUT_URL);
-//        }else {
-//            url = new URL(Constants.HTTP_OPENAM_LOGOUT_URL);
-//        }
-//        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
-//        Gson gson = new Gson();
-//        Type listType = new TypeToken<LogoutResponse>(){}.getType();
-//        JsonParser jsonParser = new JsonParser();
-//        JsonElement responseElement = jsonParser.parse(proxyService.hamPayLogout(logoutData).toString());
-//        proxyService.closeConnection();
-//        return (LogoutResponse) gson.fromJson(responseElement.toString(), listType);
-//    }
-
     public ResponseMessage<IllegalAppListResponse> getIllegalAppList() throws IOException, EncryptionException {
 
         ResponseMessage<IllegalAppListResponse> responseMessage = null;

@@ -576,21 +576,23 @@ public class HamPayDialog {
         }
     }
 
-    public void showLoginFailDialog(FailedLoginResponse failedLoginResponse, boolean blockedUser){
+    public void showLoginFailDialog(Integer remainRetryCount){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_login_fail, null);
 
         FacedTextView failedLoginText = (FacedTextView)view.findViewById(R.id.failedLoginText);
 
-        failedLoginText.setText("کد خطای: " + new PersianEnglishDigit(failedLoginResponse.getCode()).E2P()
-                        + "\n"
-                        + failedLoginResponse.getMessage()
-        );
+
 
         FacedTextView login_retry = (FacedTextView) view.findViewById(R.id.login_retry);
-        if (blockedUser){
-            login_retry.setVisibility(View.GONE);
+
+        if (remainRetryCount != null){
+            failedLoginText.setText(activity.getString(R.string.msg_login_failure, new PersianEnglishDigit().E2P(remainRetryCount.toString())));
         }
+
+//        if (blockedUser){
+//            login_retry.setVisibility(View.GONE);
+//        }
         FacedTextView remove_password = (FacedTextView) view.findViewById(R.id.remove_password);
 
         login_retry.setOnClickListener(new View.OnClickListener() {

@@ -1,6 +1,7 @@
 package xyz.homapay.hampay.mobile.android.ssl;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 
 /**
  * Created by amir on 2/8/16.
@@ -26,6 +28,7 @@ public class SSLKeyStore {
     public KeyStore getAppKeyStore(){
         try{
             CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
+//            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/live_pub_key.cer"));
             InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/uat-http-v1.crt"));
 //            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/nginx.crt"));
 //            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/prod-http-v1.crt"));

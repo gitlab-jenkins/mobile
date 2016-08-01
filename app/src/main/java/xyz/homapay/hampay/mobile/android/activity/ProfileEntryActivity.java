@@ -614,7 +614,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
 
                 if (registrationEntryResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     editor.putString(Constants.REGISTERED_USER_NAME, userNameFamily.getText().toString());
-                    editor.putString(Constants.REGISTERED_NATIONAL_CODE, persianEnglishDigit.P2E(nationalCodeValue.getText().toString().replaceAll("-", "")));
+//                    editor.putString(Constants.REGISTERED_NATIONAL_CODE, persianEnglishDigit.P2E(nationalCodeValue.getText().toString().replaceAll("-", "")));
                     editor.putString(Constants.REGISTERED_USER_ID_TOKEN, registrationEntryResponse.getService().getUserIdToken());
                     editor.putString(Constants.REGISTERED_USER_EMAIL, emailValue.getText().toString().trim());
                     editor.commit();

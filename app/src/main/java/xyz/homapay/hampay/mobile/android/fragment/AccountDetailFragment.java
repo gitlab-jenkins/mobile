@@ -298,7 +298,7 @@ public class AccountDetailFragment extends Fragment {
             editor.putBoolean(Constants.SETTING_CHANGE_IBAN_STATUS, true);
             editor.commit();
         }
-        user_national_code.setText(persianEnglishDigit.E2P(prefs.getString(Constants.REGISTERED_NATIONAL_CODE, "")));
+        user_national_code.setText(persianEnglishDigit.E2P(userProfileDTO.getNationalCode()));
     }
 
     private void forceLogout() {

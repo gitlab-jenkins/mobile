@@ -8,16 +8,6 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import org.apache.commons.codec.binary.Hex;
-
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
@@ -25,15 +15,11 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.UUID;
 
-import xyz.homapay.hampay.common.common.encrypt.AESMessageEncryptor;
 import xyz.homapay.hampay.common.common.encrypt.DiffieHellmanKeyExchanger;
 import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
 import xyz.homapay.hampay.common.common.encrypt.KeyExchanger;
-import xyz.homapay.hampay.common.common.encrypt.MessageEncryptor;
 import xyz.homapay.hampay.common.common.encrypt.PublicKeyPair;
 import xyz.homapay.hampay.common.common.encrypt.SecretKeyPair;
-import xyz.homapay.hampay.common.common.request.DecryptedRequestInfo;
-import xyz.homapay.hampay.common.common.request.RequestMessage;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.KeyAgreementRequest;
@@ -41,10 +27,6 @@ import xyz.homapay.hampay.common.core.model.response.KeyAgreementResponse;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestKeyAgreement;
-import xyz.homapay.hampay.mobile.android.util.Constants;
-import xyz.homapay.hampay.mobile.android.webservice.ConnectionMethod;
-import xyz.homapay.hampay.mobile.android.webservice.ConnectionType;
-import xyz.homapay.hampay.mobile.android.webservice.SecuredProxyService;
 
 /**
  * Created by amir on 7/24/16.
@@ -96,7 +78,11 @@ public class KeyExchangeService extends IntentService {
     public int onStartCommand(Intent intent, int flags, int startId) {
         onHandleIntent(intent);
 
-        keyExchanger = new DiffieHellmanKeyExchanger();
+        try {
+            keyExchanger = new DiffieHellmanKeyExchanger();
+        } catch (EncryptionException e) {
+            e.printStackTrace();
+        }
         PublicKeyPair publicKeyPair = keyExchanger.getPublicKey();
 
         if (clientEncIv == null) {

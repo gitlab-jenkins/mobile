@@ -22,6 +22,7 @@ import java.util.List;
 import xyz.homapay.hampay.common.core.model.response.dto.BusinessDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.account.Log;
 import xyz.homapay.hampay.mobile.android.adapter.HamPayBusinessesAdapter;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
@@ -37,6 +38,8 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 public class BusinessPurchaseActivity extends AppCompatActivity implements View.OnClickListener {
 
 
+    private LinearLayout letter_layout;
+    private LinearLayout digit_layout;
 
     private Context context;
     private Activity activity;
@@ -54,29 +57,11 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
     FacedTextView input_digit_5;
     FacedTextView input_digit_6;
 
-    FacedTextView digit_1;
-    FacedTextView digit_2;
-    FacedTextView digit_3;
-    FacedTextView digit_4;
-    FacedTextView digit_5;
-    FacedTextView digit_6;
-    FacedTextView digit_7;
-    FacedTextView digit_8;
-    FacedTextView digit_9;
-    FacedTextView digit_0;
-    FacedTextView keyboard_dismiss;
-    RelativeLayout backspace;
-
     SharedPreferences prefs;
 
     HamPayDialog hamPayDialog;
 
     RelativeLayout businesses_list;
-
-
-    private List<BusinessDTO> businessDTOs;
-
-    private HamPayBusinessesAdapter hamPayBusinessesAdapter;
 
     FacedEditText searchPhraseText;
 
@@ -157,6 +142,10 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
 
         persianEnglishDigit = new PersianEnglishDigit();
 
+        letter_layout = (LinearLayout)findViewById(R.id.letter_layout);
+        digit_layout = (LinearLayout)findViewById(R.id.digit_layout);
+
+
         payment_button = (ImageView)findViewById(R.id.payment_button);
         payment_button.setOnClickListener(this);
 
@@ -170,123 +159,19 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
         input_digit_5 = (FacedTextView) findViewById(R.id.input_digit_5);
         input_digit_6 = (FacedTextView) findViewById(R.id.input_digit_6);
 
-        digit_1 = (FacedTextView) findViewById(R.id.digit_1);
-        digit_1.setOnClickListener(this);
-        digit_2 = (FacedTextView) findViewById(R.id.digit_2);
-        digit_2.setOnClickListener(this);
-        digit_3 = (FacedTextView) findViewById(R.id.digit_3);
-        digit_3.setOnClickListener(this);
-        digit_4 = (FacedTextView) findViewById(R.id.digit_4);
-        digit_4.setOnClickListener(this);
-        digit_5 = (FacedTextView) findViewById(R.id.digit_5);
-        digit_5.setOnClickListener(this);
-        digit_6 = (FacedTextView) findViewById(R.id.digit_6);
-        digit_6.setOnClickListener(this);
-        digit_7 = (FacedTextView) findViewById(R.id.digit_7);
-        digit_7.setOnClickListener(this);
-        digit_8 = (FacedTextView) findViewById(R.id.digit_8);
-        digit_8.setOnClickListener(this);
-        digit_9 = (FacedTextView) findViewById(R.id.digit_9);
-        digit_9.setOnClickListener(this);
-        digit_0 = (FacedTextView) findViewById(R.id.digit_0);
-        digit_0.setOnClickListener(this);
-        keyboard_dismiss = (FacedTextView) findViewById(R.id.keyboard_dismiss);
-        keyboard_dismiss.setOnClickListener(this);
-        backspace = (RelativeLayout) findViewById(R.id.backspace);
-        backspace.setOnClickListener(this);
-
         businesses_list = (RelativeLayout)findViewById(R.id.businesses_list);
         businesses_list.setOnClickListener(this);
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
-        hamPayBusinessesAdapter = new HamPayBusinessesAdapter(activity, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
 
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
-
         inputMethodManager = (InputMethodManager) getSystemService(
                 Context.INPUT_METHOD_SERVICE);
 
-//        searchImage = (ImageView) findViewById(R.id.searchImage);
-//        searchImage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (searchPhraseText.getText().toString().length() > 0) {
-//                    performBusinessSearch(searchPhraseText.getText().toString());
-//                }
-//            }
-//        });
-
         searchPhraseText = (FacedEditText) findViewById(R.id.searchPhraseText);
 
-//        searchPhraseText.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//                if (s.toString().length() == 0) {
-//                    requestPageNumber = 0;
-//                    searchEnabled = false;
-//                    FINISHED_SCROLLING = false;
-//                    onLoadMore = false;
-//                    businessListRequest.setPageNumber(requestPageNumber);
-//                    businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-//                    requestHamPayBusiness = new RequestHamPayBusiness(context, new RequestBusinessListTaskCompleteListener(searchEnabled));
-//                    requestHamPayBusiness.execute(businessListRequest);
-//
-//                    inputMethodManager.hideSoftInputFromWindow(searchPhraseText.getWindowToken(), 0);
-//
-//                    hamPayBusinessesAdapter.clear();
-//                    businessDTOs.clear();
-//
-//                    hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-//
-//                }
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//
-//            }
-//        });
-
-//        searchPhraseText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-//                    performBusinessSearch(searchPhraseText.getText().toString());
-//                    return true;
-//                }
-//                return false;
-//            }
-//        });
-
-        businessDTOs = new ArrayList<BusinessDTO>();
-
         hamPayDialog = new HamPayDialog(activity);
-//        hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-//
-//        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
-//            Intent intent = new Intent();
-//            intent.setClass(activity, HamPayLoginActivity.class);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            finish();
-//            startActivity(intent);
-//        }else {
-//            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-//            editor.commit();
-//            businessListRequest = new BusinessListRequest();
-//            businessListRequest.setPageNumber(requestPageNumber);
-//            businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-//
-//            requestHamPayBusiness = new RequestHamPayBusiness(this, new RequestBusinessListTaskCompleteListener(searchEnabled));
-//            requestHamPayBusiness.execute(businessListRequest);
-//        }
-
 
     }
 
@@ -309,7 +194,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
 
                 if (inputPurchaseCode.length() == 6) {
                     intent = new Intent();
-                    intent.putExtra(Constants.BUSINESS_PURCHASE_CODE, inputPurchaseCode);
+                    intent.putExtra(Constants.BUSINESS_PURCHASE_CODE, persianEnglishDigit.P2E(inputPurchaseCode));
                     intent.setClass(context, RequestBusinessPayDetailActivity.class);
                     startActivity(intent);
                     input_digit_1.setText("");
@@ -333,217 +218,8 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                 if (keyboard.getVisibility() == View.VISIBLE)
                     new Collapse(keyboard).animate();
                 break;
-
-            case R.id.digit_1:
-                inputDigit("1");
-                break;
-
-            case R.id.rect:
-                inputDigit("1");
-                break;
-
-            case R.id.digit_2:
-                inputDigit("2");
-                break;
-
-            case R.id.digit_3:
-                inputDigit("3");
-                break;
-
-            case R.id.digit_4:
-                inputDigit("4");
-                break;
-
-            case R.id.digit_5:
-                inputDigit("5");
-                break;
-
-            case R.id.digit_6:
-                inputDigit("6");
-                break;
-
-            case R.id.digit_7:
-                inputDigit("7");
-                break;
-
-            case R.id.digit_8:
-                inputDigit("8");
-                break;
-
-            case R.id.digit_9:
-                inputDigit("9");
-                break;
-
-            case R.id.digit_0:
-                inputDigit("0");
-                break;
-
-            case R.id.backspace:
-                inputDigit("d");
-                break;
-
         }
     }
-
-
-//    public class RequestBusinessListTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<BusinessListResponse>> {
-//
-//        List<BusinessDTO> newBusinessDTOs;
-//        boolean searchEnabled;
-//
-//        public RequestBusinessListTaskCompleteListener(boolean searchEnabled){
-//            this.searchEnabled = searchEnabled;
-//        }
-//
-//        @Override
-//        public void onTaskComplete(ResponseMessage<BusinessListResponse> businessListResponseMessage) {
-//
-//            hamPayDialog.dismisWaitingDialog();
-//
-//            if (businessListResponseMessage != null) {
-//                if (businessListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-//                    newBusinessDTOs = businessListResponseMessage.getService().getBusinesses();
-//                    businessDTOs.addAll(newBusinessDTOs);
-//                    if (businessDTOs != null) {
-//                        if (newBusinessDTOs.size() == 0 || newBusinessDTOs.size() < Constants.DEFAULT_PAGE_SIZE) {
-//                            FINISHED_SCROLLING = true;
-//                        }
-//                        if (businessDTOs.size() > 0) {
-//                            requestPageNumber++;
-//                            if (onLoadMore) {
-//                                if (newBusinessDTOs != null)
-//                                    addDummyData(newBusinessDTOs.size());
-//                            } else {
-//                                initDobList(getWindow().getDecorView().getRootView(), businessListView);
-//                                businessListView.setAdapter(hamPayBusinessesAdapter);
-//                            }
-//                        }
-//                    }
-//
-//                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-//                            .setCategory("Business List")
-//                            .setAction("Fetch")
-//                            .setLabel("Success")
-//                            .build());
-//
-//                }else {
-//                    if (!searchEnabled) {
-//                        businessListRequest.setPageNumber(requestPageNumber);
-//                        businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-//                        requestHamPayBusiness = new RequestHamPayBusiness(activity, new RequestBusinessListTaskCompleteListener(false));
-//                        new HamPayDialog(activity).showFailBusinessListDialog(requestHamPayBusiness, businessListRequest,
-//                                businessListResponseMessage.getService().getResultStatus().getCode(),
-//                                businessListResponseMessage.getService().getResultStatus().getDescription());
-//                    }else {
-//                        businessSearchRequest.setPageNumber(requestPageNumber);
-//                        businessSearchRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-//                        requestSearchHamPayBusiness = new RequestSearchHamPayBusiness(activity, new RequestBusinessListTaskCompleteListener(true));
-//                        new HamPayDialog(activity).showFailBusinessSearchListDialog(requestSearchHamPayBusiness, businessSearchRequest,
-//                                businessListResponseMessage.getService().getResultStatus().getCode(),
-//                                businessListResponseMessage.getService().getResultStatus().getDescription());
-////                        requestSearchHamPayBusiness.execute(businessSearchRequest);
-//                    }
-//
-//                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-//                            .setCategory("Business List")
-//                            .setAction("Fetch")
-//                            .setLabel("Fail(Server)")
-//                            .build());
-//                }
-//            }else {
-//                if (!searchEnabled) {
-//                    businessListRequest.setPageNumber(requestPageNumber);
-//                    businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-//                    requestHamPayBusiness = new RequestHamPayBusiness(activity, new RequestBusinessListTaskCompleteListener(false));
-//                    new HamPayDialog(activity).showFailBusinessListDialog(requestHamPayBusiness, businessListRequest,
-//                            Constants.LOCAL_ERROR_CODE,
-//                            getString(R.string.msg_fail_business_list));
-//                }else {
-//                    businessSearchRequest.setPageNumber(requestPageNumber);
-//                    businessSearchRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-//                    requestSearchHamPayBusiness = new RequestSearchHamPayBusiness(activity, new RequestBusinessListTaskCompleteListener(true));
-//                    new HamPayDialog(activity).showFailBusinessSearchListDialog(requestSearchHamPayBusiness, businessSearchRequest,
-//                            Constants.LOCAL_ERROR_CODE,
-//                            getString(R.string.msg_fail_business_search_list));
-////                    requestSearchHamPayBusiness.execute(businessSearchRequest);
-//                }
-//
-//                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-//                        .setCategory("Business List")
-//                        .setAction("Fetch")
-//                        .setLabel("Fail(Mobile)")
-//                        .build());
-//            }
-//        }
-//
-//        @Override
-//        public void onTaskPreRun() {
-//        }
-//
-//        private void initDobList(View rootView, ListView listView) {
-//
-//            dobList = new DobList();
-//            try {
-//
-//                dobList.register(listView);
-//
-//                dobList.addDefaultLoadingFooterView();
-//
-//                View noItems = rootView.findViewById(R.id.noItems);
-//                dobList.setEmptyView(noItems);
-//
-//                dobList.setOnLoadMoreListener(new OnLoadMoreListener() {
-//
-//                    @Override
-//                    public void onLoadMore(final int totalItemCount) {
-//
-//                        onLoadMore = true;
-//
-//                        if (!FINISHED_SCROLLING) {
-//                            if (!searchEnabled) {
-//                                businessListRequest.setPageNumber(requestPageNumber);
-//                                businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-//                                requestHamPayBusiness = new RequestHamPayBusiness(activity, new RequestBusinessListTaskCompleteListener(false));
-//                                requestHamPayBusiness.execute(businessListRequest);
-//                            } else {
-//                                businessSearchRequest.setPageNumber(requestPageNumber);
-//                                businessSearchRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-//                                requestSearchHamPayBusiness = new RequestSearchHamPayBusiness(activity, new RequestBusinessListTaskCompleteListener(searchEnabled));
-//                                requestSearchHamPayBusiness.execute(businessSearchRequest);
-//                            }
-//                        } else
-//                            dobList.finishLoading();
-//
-//                    }
-//                });
-//
-//            } catch (NoListviewException e) {
-//                e.printStackTrace();
-//            }
-//
-//            try {
-//
-//                dobList.startCentralLoading();
-//
-//            } catch (NoEmptyViewException e) {
-//                e.printStackTrace();
-//            }
-//
-//            addDummyData(businessDTOs.size());
-//        }
-//
-//        protected void addDummyData(int itemsCount) {
-//            addItems(hamPayBusinessesAdapter.getCount(), hamPayBusinessesAdapter.getCount() + itemsCount);
-//            dobList.finishLoading();
-//        }
-//
-//        protected void addItems(int from, int to) {
-//            for (int i = from; i < to; i++) {
-//                hamPayBusinessesAdapter.addItem(businessDTOs.get(i));
-//            }
-//        }
-//    }
-
 
     private void inputDigit(String digit){
         Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
@@ -647,6 +323,19 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
             if (inputPurchaseCode.length() <= 5) {
                 inputPurchaseCode += digit;
             }
+        }
+    }
+
+    public void pressKey(View view){
+        if (view.getTag().toString().equalsIgnoreCase("-")){
+            letter_layout.setVisibility(View.GONE);
+            digit_layout.setVisibility(View.VISIBLE);
+        }else if (view.getTag().toString().equalsIgnoreCase("+")) {
+            letter_layout.setVisibility(View.VISIBLE);
+            digit_layout.setVisibility(View.GONE);
+        }
+        else {
+            inputDigit(view.getTag().toString());
         }
     }
 
