@@ -1,10 +1,7 @@
 package xyz.homapay.hampay.mobile.android.account;
 
-import android.accounts.AccountManager;
-import android.accounts.AccountManagerFuture;
 import android.app.Service;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.IBinder;
 
 public class ContactUpdateService extends Service {

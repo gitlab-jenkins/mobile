@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import xyz.homapay.hampay.mobile.android.R;
-import xyz.homapay.hampay.mobile.android.activity.ChangeEmailPassActivity;
 import xyz.homapay.hampay.mobile.android.activity.ChangeMemorableActivity;
 import xyz.homapay.hampay.mobile.android.activity.ChangePassCodeActivity;
 import xyz.homapay.hampay.mobile.android.activity.IntroIBANActivity;

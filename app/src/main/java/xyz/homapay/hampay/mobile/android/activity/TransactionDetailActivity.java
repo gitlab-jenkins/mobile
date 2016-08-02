@@ -14,8 +14,6 @@ import android.widget.LinearLayout;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.TransactionDetailRequest;
-import xyz.homapay.hampay.common.core.model.response.PaymentDetailResponse;
-import xyz.homapay.hampay.common.core.model.response.PurchaseDetailResponse;
 import xyz.homapay.hampay.common.core.model.response.TransactionDetailResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;

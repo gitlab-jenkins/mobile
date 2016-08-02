@@ -9,10 +9,8 @@ import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.request.GetUserIdTokenRequest;
 import xyz.homapay.hampay.common.core.model.response.GetUserIdTokenResponse;
-
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.webservice.SecuredWebServices;
-import xyz.homapay.hampay.mobile.android.webservice.WebServices;
 
 /**
  * Created by amir on 7/3/15.

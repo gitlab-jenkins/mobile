@@ -38,7 +38,6 @@ import xyz.homapay.hampay.common.core.model.request.IBANConfirmationRequest;
 import xyz.homapay.hampay.common.core.model.request.IllegalAppListRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
-import xyz.homapay.hampay.common.core.model.request.LoginRequest;
 import xyz.homapay.hampay.common.core.model.request.LogoutRequest;
 import xyz.homapay.hampay.common.core.model.request.PurchaseInfoRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationCredentialsRequest;
@@ -52,7 +51,6 @@ import xyz.homapay.hampay.common.core.model.request.UploadImageRequest;
 import xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
 import xyz.homapay.hampay.common.core.model.response.ContactUsResponse;
 import xyz.homapay.hampay.common.core.model.response.IBANConfirmationResponse;
-import xyz.homapay.hampay.common.core.model.response.LoginResponse;
 import xyz.homapay.hampay.common.core.model.response.LogoutResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
 import xyz.homapay.hampay.common.core.model.response.TACAcceptResponse;
@@ -83,7 +81,6 @@ import xyz.homapay.hampay.mobile.android.async.RequestIBANConfirmation;
 import xyz.homapay.hampay.mobile.android.async.RequestIllegalAppList;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPurchase;
-import xyz.homapay.hampay.mobile.android.async.RequestLogout;
 import xyz.homapay.hampay.mobile.android.async.RequestNewLogout;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchaseInfo;
 import xyz.homapay.hampay.mobile.android.async.RequestRegistrationEntry;
@@ -98,16 +95,14 @@ import xyz.homapay.hampay.mobile.android.async.RequestUserTransaction;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.EmailTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
-import xyz.homapay.hampay.mobile.android.model.FailedLoginResponse;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
-//import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
-import xyz.homapay.hampay.mobile.android.util.AppInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
-import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.EmailVerification;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.webservice.SecuredWebServices;
+
+//import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
 
 /**
  * Created by amir on 7/8/15.
@@ -586,13 +581,16 @@ public class HamPayDialog {
 
         FacedTextView login_retry = (FacedTextView) view.findViewById(R.id.login_retry);
 
-        if (remainRetryCount != null){
-            failedLoginText.setText(activity.getString(R.string.msg_login_failure, new PersianEnglishDigit().E2P(remainRetryCount.toString())));
+        if (remainRetryCount != null) {
+            if (remainRetryCount == 0) {
+                login_retry.setVisibility(View.GONE);
+                failedLoginText.setText(activity.getString(R.string.msg_locked_hampay_login));
+            } else {
+                failedLoginText.setText(activity.getString(R.string.msg_login_failure, new PersianEnglishDigit().E2P(remainRetryCount.toString())));
+            }
         }
 
-//        if (blockedUser){
-//            login_retry.setVisibility(View.GONE);
-//        }
+
         FacedTextView remove_password = (FacedTextView) view.findViewById(R.id.remove_password);
 
         login_retry.setOnClickListener(new View.OnClickListener() {

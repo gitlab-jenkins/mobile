@@ -2,7 +2,6 @@ package xyz.homapay.hampay.mobile.android.async;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.IOException;
 
@@ -12,10 +11,6 @@ import xyz.homapay.hampay.common.core.model.request.IllegalAppListRequest;
 import xyz.homapay.hampay.common.core.model.response.IllegalAppListResponse;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.webservice.SecuredWebServices;
-import xyz.homapay.hampay.mobile.android.webservice.WebServices;
-import xyz.homapay.hampay.mobile.android.webservice.psp.PayThPartyApp;
-import xyz.homapay.hampay.mobile.android.webservice.psp.Vectorstring2stringMapEntry;
-import xyz.homapay.hampay.mobile.android.webservice.psp.string2stringMapEntry;
 
 /**
  * Created by amir on 7/3/15.

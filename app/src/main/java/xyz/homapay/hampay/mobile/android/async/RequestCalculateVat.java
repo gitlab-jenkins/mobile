@@ -11,7 +11,6 @@ import xyz.homapay.hampay.common.core.model.request.CalculateVatRequest;
 import xyz.homapay.hampay.common.core.model.response.CalculateVatResponse;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.webservice.SecuredWebServices;
-import xyz.homapay.hampay.mobile.android.webservice.WebServices;
 
 /**
  * Created by amir on 7/3/15.

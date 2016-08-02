@@ -12,8 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.WebView;
 
-import com.google.android.gms.analytics.HitBuilders;
-
 import java.io.IOException;
 
 import xyz.homapay.hampay.common.common.encrypt.EncryptionException;

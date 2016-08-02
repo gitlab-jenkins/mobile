@@ -47,9 +47,6 @@ public class Constants {
     public static final String CONTACT_MESSAGE = "contactMessage";
     public static final String REGISTERED_ACTIVITY_DATA = "registeredActivityData";
     public static final String REGISTERED_CELL_NUMBER = "registeredCellNumber";
-    public static final String REGISTERED_BANK_ID = "registeredBankID";
-    public static final String REGISTERED_CARD_NO = "registeredCardNo";
-//    public static final String REGISTERED_NATIONAL_CODE = "registeredNatioalCode";
     public static final String REGISTERED_USER_ID_TOKEN = "registeredUserIdToken";
     public static final String REGISTERED_USER_EMAIL = "registeredUserEmail";
     public static final String REGISTERED_USER_NAME = "registeredUserName";

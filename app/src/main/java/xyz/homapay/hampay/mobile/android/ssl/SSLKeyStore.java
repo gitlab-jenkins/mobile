@@ -1,7 +1,6 @@
 package xyz.homapay.hampay.mobile.android.ssl;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -12,7 +11,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
 
 /**
  * Created by amir on 2/8/16.

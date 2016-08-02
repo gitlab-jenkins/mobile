@@ -317,6 +317,7 @@
     <string name="confirm_failure_payment">بستن</string>
     <string name="msg_success_payment_request">فاکتور شما با شماره %1$s با موفقیت ارسال شد</string>
     <string name="msg_login_failure">رمز ورودی اشتباه می‌باشد، شما %1$s بار دیگر فرصت ورود رمز را دارید.</string>
+
     <string name="msg_failure_payment_request"> ارسال فاکتور موفقیت آمیز نبود. لطفا دوباره تلاش کنید</string>
     <string name="msg_unlink_user">تمامی اطلاعات شما پاک خواهد شد و برای استفاده مجدد از "هم‌پی" باید دوباره ثبت نام کنید</string>
     <string name="vat">مالیات بر ارزش افزوده</string>

@@ -54,7 +54,6 @@ import xyz.homapay.hampay.mobile.android.async.RequestTAC;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
-import xyz.homapay.hampay.mobile.android.model.LoginData;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
 import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
@@ -62,7 +61,6 @@ import xyz.homapay.hampay.mobile.android.service.KeyExchangeService;
 import xyz.homapay.hampay.mobile.android.util.AppInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
-import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
 
 
@@ -654,11 +652,9 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
             if (loginResponseResponseMessage != null) {
 
                 if (loginResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-
                     editor.putString(Constants.LOGIN_TOKEN_ID, loginResponseResponseMessage.getService().getAuthToken());
                     editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                     editor.commit();
-
                     tacRequest = new TACRequest();
                     tacRequest.setDeviceId(new DeviceInfo(activity).getAndroidId());
                     tacRequest.setAppVersion(new AppInfo().getVersionCode() + "");
@@ -666,24 +662,16 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                     requestTAC.execute(tacRequest);
                 }else if (loginResponseResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE){
 
-                    inputPassValue = "";
-                    input_digit_1.setImageResource(R.drawable.pass_login_value_empty);
-                    input_digit_2.setImageResource(R.drawable.pass_login_value_empty);
-                    input_digit_3.setImageResource(R.drawable.pass_login_value_empty);
-                    input_digit_4.setImageResource(R.drawable.pass_login_value_empty);
-                    input_digit_5.setImageResource(R.drawable.pass_login_value_empty);
-                    hamPayDialog.dismisWaitingDialog();
+                    resetLogin();
                     hamPayDialog.showLoginFailDialog(loginResponseResponseMessage.getService().getRemainRetryCount());
+                }else if (loginResponseResponseMessage.getService().getResultStatus() == ResultStatus.BLOCKED_IDP_USER){
+                    resetLogin();
+                    hamPayDialog.showLoginFailDialog(0);
                 }
+
             }
             else {
-                inputPassValue = "";
-                input_digit_1.setImageResource(R.drawable.pass_login_value_empty);
-                input_digit_2.setImageResource(R.drawable.pass_login_value_empty);
-                input_digit_3.setImageResource(R.drawable.pass_login_value_empty);
-                input_digit_4.setImageResource(R.drawable.pass_login_value_empty);
-                input_digit_5.setImageResource(R.drawable.pass_login_value_empty);
-                hamPayDialog.dismisWaitingDialog();
+                resetLogin();
             }
         }
 
@@ -691,5 +679,15 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         public void onTaskPreRun() {
             hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
+    }
+
+    private void resetLogin(){
+        inputPassValue = "";
+        input_digit_1.setImageResource(R.drawable.pass_login_value_empty);
+        input_digit_2.setImageResource(R.drawable.pass_login_value_empty);
+        input_digit_3.setImageResource(R.drawable.pass_login_value_empty);
+        input_digit_4.setImageResource(R.drawable.pass_login_value_empty);
+        input_digit_5.setImageResource(R.drawable.pass_login_value_empty);
+        hamPayDialog.dismisWaitingDialog();
     }
 }

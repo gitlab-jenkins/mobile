@@ -3,26 +3,17 @@ package xyz.homapay.hampay.mobile.android.webservice;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.UUID;
 
-import xyz.homapay.hampay.common.common.encrypt.AESMessageEncryptor;
-import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
-import xyz.homapay.hampay.common.common.encrypt.MessageEncryptor;
-import xyz.homapay.hampay.common.common.request.RequestHeader;
 import xyz.homapay.hampay.common.common.request.RequestMessage;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
@@ -116,12 +107,9 @@ import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
 import xyz.homapay.hampay.mobile.android.ssl.AllowHamPaySSL;
 import xyz.homapay.hampay.mobile.android.util.Constants;
-import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
-import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.UserContacts;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWABasicHttpBinding_ITokenPay;
-import xyz.homapay.hampay.mobile.android.webservice.psp.PayThPartyApp;
 import xyz.homapay.hampay.mobile.android.webservice.psp.Vectorstring2stringMapEntry;
 
 /**

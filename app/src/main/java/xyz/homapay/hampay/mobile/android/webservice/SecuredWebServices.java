@@ -7,29 +7,16 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.URL;
-import java.security.KeyFactory;
-import java.security.PublicKey;
-import java.security.spec.X509EncodedKeySpec;
 import java.util.UUID;
 
-import xyz.homapay.hampay.common.common.encrypt.AESMessageEncryptor;
-import xyz.homapay.hampay.common.common.encrypt.DiffieHellmanKeyExchanger;
 import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
-import xyz.homapay.hampay.common.common.encrypt.KeyExchanger;
-import xyz.homapay.hampay.common.common.encrypt.MessageEncryptor;
-import xyz.homapay.hampay.common.common.encrypt.PublicKeyPair;
-import xyz.homapay.hampay.common.common.encrypt.SecretKeyPair;
-import xyz.homapay.hampay.common.common.request.DecryptedRequestInfo;
 import xyz.homapay.hampay.common.common.request.RequestMessage;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
@@ -127,8 +114,6 @@ import xyz.homapay.hampay.common.core.model.response.UserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfoTest;
-import xyz.homapay.hampay.mobile.android.model.LogoutData;
-//import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
 import xyz.homapay.hampay.mobile.android.service.KeyExchangeService;
 import xyz.homapay.hampay.mobile.android.ssl.AllowHamPaySSL;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -136,6 +121,8 @@ import xyz.homapay.hampay.mobile.android.util.UserContacts;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWABasicHttpBinding_ITokenPay;
 import xyz.homapay.hampay.mobile.android.webservice.psp.Vectorstring2stringMapEntry;
+
+//import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
 
 /**
  * Created by amir on 6/6/15.

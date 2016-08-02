@@ -11,7 +11,6 @@ import xyz.homapay.hampay.common.core.model.request.LatestInvoiceContactsRequest
 import xyz.homapay.hampay.common.core.model.response.LatestInvoiceContactsResponse;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.webservice.SecuredWebServices;
-import xyz.homapay.hampay.mobile.android.webservice.WebServices;
 
 /**
  * Created by amir on 3/18/16.

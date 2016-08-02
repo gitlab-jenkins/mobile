@@ -1,7 +1,6 @@
 package xyz.homapay.hampay.mobile.android.async;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.AsyncTask;
 
 import java.io.IOException;
@@ -12,11 +11,9 @@ import xyz.homapay.hampay.common.core.model.dto.DeviceDTO;
 import xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
 import xyz.homapay.hampay.common.core.model.response.RegistrationEntryResponse;
 
-import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.webservice.SecuredWebServices;
-import xyz.homapay.hampay.mobile.android.webservice.WebServices;
 
 /**
  * Created by amir on 7/3/15.

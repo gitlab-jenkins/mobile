@@ -3,13 +3,12 @@ package xyz.homapay.hampay.mobile.android.webservice.psp;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+
 import org.ksoap2.HeaderProperty;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.HttpTransportSE;
-import org.ksoap2.transport.KeepAliveHttpTransportSE;
 import org.ksoap2.transport.KeepAliveHttpsTransportSE;
 
 import java.util.List;

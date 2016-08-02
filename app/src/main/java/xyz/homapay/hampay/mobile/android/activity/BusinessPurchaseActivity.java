@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -16,36 +15,23 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.Tracker;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import xyz.homapay.hampay.common.core.model.response.dto.BusinessDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
-import xyz.homapay.hampay.mobile.android.account.Log;
-import xyz.homapay.hampay.mobile.android.adapter.HamPayBusinessesAdapter;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.RequestHamPayBusiness;
 import xyz.homapay.hampay.mobile.android.async.RequestSearchHamPayBusiness;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
-import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
-import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class BusinessPurchaseActivity extends AppCompatActivity implements View.OnClickListener {
 
-
     private LinearLayout letter_layout;
     private LinearLayout digit_layout;
-
     private Context context;
     private Activity activity;
-
-    private PersianEnglishDigit persianEnglishDigit;
-
     ImageView payment_button;
     LinearLayout displayKeyboard;
     LinearLayout keyboard;
@@ -56,23 +42,11 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
     FacedTextView input_digit_4;
     FacedTextView input_digit_5;
     FacedTextView input_digit_6;
-
     SharedPreferences prefs;
-
     HamPayDialog hamPayDialog;
-
     RelativeLayout businesses_list;
-
-    FacedEditText searchPhraseText;
-
-    InputMethodManager inputMethodManager;
-
-
     RequestSearchHamPayBusiness requestSearchHamPayBusiness;
     RequestHamPayBusiness requestHamPayBusiness;
-
-
-
     Tracker hamPayGaTracker;
 
 
@@ -140,8 +114,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
         context = this;
         activity = BusinessPurchaseActivity.this;
 
-        persianEnglishDigit = new PersianEnglishDigit();
-
         letter_layout = (LinearLayout)findViewById(R.id.letter_layout);
         digit_layout = (LinearLayout)findViewById(R.id.digit_layout);
 
@@ -166,11 +138,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
-        inputMethodManager = (InputMethodManager) getSystemService(
-                Context.INPUT_METHOD_SERVICE);
-
-        searchPhraseText = (FacedEditText) findViewById(R.id.searchPhraseText);
-
         hamPayDialog = new HamPayDialog(activity);
 
     }
@@ -194,7 +161,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
 
                 if (inputPurchaseCode.length() == 6) {
                     intent = new Intent();
-                    intent.putExtra(Constants.BUSINESS_PURCHASE_CODE, persianEnglishDigit.P2E(inputPurchaseCode));
+                    intent.putExtra(Constants.BUSINESS_PURCHASE_CODE, inputPurchaseCode);
                     intent.setClass(context, RequestBusinessPayDetailActivity.class);
                     startActivity(intent);
                     input_digit_1.setText("");
@@ -231,7 +198,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                     if (digit.equalsIgnoreCase("d")) {
                         input_digit_1.setText("");
                     } else {
-                        input_digit_1.setText(persianEnglishDigit.E2P(digit));
+                        input_digit_1.setText(digit);
                     }
                     input_digit_2.setText("");
                     input_digit_3.setText("");
@@ -245,7 +212,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                     if (digit.equalsIgnoreCase("d")) {
                         input_digit_2.setText("");
                     } else {
-                        input_digit_2.setText(persianEnglishDigit.E2P(digit));
+                        input_digit_2.setText(digit);
                     }
                     input_digit_3.setText("");
                     input_digit_4.setText("");
@@ -258,7 +225,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                     if (digit.equalsIgnoreCase("d")) {
                         input_digit_3.setText("");
                     } else {
-                        input_digit_3.setText(persianEnglishDigit.E2P(digit));
+                        input_digit_3.setText(digit);
                     }
                     input_digit_4.setText("");
                     input_digit_5.setText("");
@@ -269,7 +236,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                     if (digit.equalsIgnoreCase("d")) {
                         input_digit_4.setText("");
                     } else {
-                        input_digit_4.setText(persianEnglishDigit.E2P(digit));
+                        input_digit_4.setText(digit);
                     }
                     input_digit_5.setText("");
                     input_digit_6.setText("");
@@ -279,7 +246,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                     if (digit.equalsIgnoreCase("d")) {
                         input_digit_5.setText("");
                     } else {
-                        input_digit_5.setText(persianEnglishDigit.E2P(digit));
+                        input_digit_5.setText(digit);
                     }
                     input_digit_6.setText("");
                     vibrator.vibrate(20);
@@ -288,7 +255,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                     if (digit.equalsIgnoreCase("d")) {
                         input_digit_6.setText("");
                     } else {
-                        input_digit_6.setText(persianEnglishDigit.E2P(digit));
+                        input_digit_6.setText(digit);
                     }
                     vibrator.vibrate(20);
                     break;

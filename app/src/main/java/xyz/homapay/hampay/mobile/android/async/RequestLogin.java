@@ -6,9 +6,7 @@ import android.os.AsyncTask;
 import java.io.IOException;
 
 import xyz.homapay.hampay.mobile.android.model.LoginData;
-import xyz.homapay.hampay.mobile.android.model.SuccessLoginResponse;
 import xyz.homapay.hampay.mobile.android.webservice.LoginStream;
-import xyz.homapay.hampay.mobile.android.webservice.WebServices;
 
 /**
  * Created by amir on 7/23/15.
