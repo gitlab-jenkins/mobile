@@ -256,7 +256,6 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                         input_digit_3.setImageResource(R.drawable.pass_value_empty);
                         input_digit_4.setImageResource(R.drawable.pass_value_empty);
                         input_digit_5.setImageResource(R.drawable.pass_value_empty);
-                        vibrator.vibrate(20);
                         break;
 
                     case 1:
@@ -265,8 +264,6 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                         input_digit_3.setImageResource(R.drawable.pass_value_empty);
                         input_digit_4.setImageResource(R.drawable.pass_value_empty);
                         input_digit_5.setImageResource(R.drawable.pass_value_empty);
-                        vibrator.vibrate(20);
-
                         break;
                     case 2:
                         input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
@@ -274,7 +271,6 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                         input_digit_3.setImageResource(R.drawable.pass_value_empty);
                         input_digit_4.setImageResource(R.drawable.pass_value_empty);
                         input_digit_5.setImageResource(R.drawable.pass_value_empty);
-                        vibrator.vibrate(20);
                         break;
                     case 3:
                         input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
@@ -282,7 +278,6 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                         input_digit_3.setImageResource(R.drawable.pass_value_placeholder);
                         input_digit_4.setImageResource(R.drawable.pass_value_empty);
                         input_digit_5.setImageResource(R.drawable.pass_value_empty);
-                        vibrator.vibrate(20);
                         break;
                     case 4:
                         input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
@@ -290,7 +285,6 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                         input_digit_3.setImageResource(R.drawable.pass_value_placeholder);
                         input_digit_4.setImageResource(R.drawable.pass_value_placeholder);
                         input_digit_5.setImageResource(R.drawable.pass_value_empty);
-                        vibrator.vibrate(20);
                         break;
                     case 5:
                         input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
@@ -298,14 +292,6 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                         input_digit_3.setImageResource(R.drawable.pass_value_placeholder);
                         input_digit_4.setImageResource(R.drawable.pass_value_placeholder);
                         input_digit_5.setImageResource(R.drawable.pass_value_placeholder);
-                        vibrator.vibrate(20);
-
-//                        int passwordComplexity = new PasswordComplexity(currentPassword).check();
-//                        if (passwordComplexity != 1){
-//                            currentPassword = "";
-//                            Toast.makeText(activity, getString(passwordComplexity), Toast.LENGTH_SHORT).show();
-//                            return;
-//                        }
 
                         passCodeChangeStep = 2;
                         pass_code_change_text.setText(getString(R.string.change_pass_code_text_2));
@@ -346,7 +332,6 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                         input_digit_3.setImageResource(R.drawable.pass_value_empty);
                         input_digit_4.setImageResource(R.drawable.pass_value_empty);
                         input_digit_5.setImageResource(R.drawable.pass_value_empty);
-                        vibrator.vibrate(20);
                         break;
 
                     case 1:
@@ -355,8 +340,6 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                         input_digit_3.setImageResource(R.drawable.pass_value_empty);
                         input_digit_4.setImageResource(R.drawable.pass_value_empty);
                         input_digit_5.setImageResource(R.drawable.pass_value_empty);
-                        vibrator.vibrate(20);
-
                         break;
                     case 2:
                         input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
@@ -364,7 +347,6 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                         input_digit_3.setImageResource(R.drawable.pass_value_empty);
                         input_digit_4.setImageResource(R.drawable.pass_value_empty);
                         input_digit_5.setImageResource(R.drawable.pass_value_empty);
-                        vibrator.vibrate(20);
                         break;
                     case 3:
                         input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
@@ -372,7 +354,6 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                         input_digit_3.setImageResource(R.drawable.pass_value_placeholder);
                         input_digit_4.setImageResource(R.drawable.pass_value_empty);
                         input_digit_5.setImageResource(R.drawable.pass_value_empty);
-                        vibrator.vibrate(20);
                         break;
                     case 4:
                         input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
@@ -380,7 +361,6 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                         input_digit_3.setImageResource(R.drawable.pass_value_placeholder);
                         input_digit_4.setImageResource(R.drawable.pass_value_placeholder);
                         input_digit_5.setImageResource(R.drawable.pass_value_empty);
-                        vibrator.vibrate(20);
                         break;
                     case 5:
                         input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
@@ -388,8 +368,6 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                         input_digit_3.setImageResource(R.drawable.pass_value_placeholder);
                         input_digit_4.setImageResource(R.drawable.pass_value_placeholder);
                         input_digit_5.setImageResource(R.drawable.pass_value_placeholder);
-                        vibrator.vibrate(20);
-
                         int passwordComplexity = new PasswordComplexity(inputPasswordValue).check();
                         if (passwordComplexity != 1){
                             inputPasswordValue = "";
@@ -433,7 +411,6 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                         input_digit_3.setImageResource(R.drawable.pass_value_empty);
                         input_digit_4.setImageResource(R.drawable.pass_value_empty);
                         input_digit_5.setImageResource(R.drawable.pass_value_empty);
-                        vibrator.vibrate(20);
                         break;
 
                     case 1:
@@ -442,8 +419,6 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                         input_digit_3.setImageResource(R.drawable.pass_value_empty);
                         input_digit_4.setImageResource(R.drawable.pass_value_empty);
                         input_digit_5.setImageResource(R.drawable.pass_value_empty);
-                        vibrator.vibrate(20);
-
                         break;
                     case 2:
                         input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
@@ -451,7 +426,6 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                         input_digit_3.setImageResource(R.drawable.pass_value_empty);
                         input_digit_4.setImageResource(R.drawable.pass_value_empty);
                         input_digit_5.setImageResource(R.drawable.pass_value_empty);
-                        vibrator.vibrate(20);
                         break;
                     case 3:
                         input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
@@ -459,7 +433,6 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                         input_digit_3.setImageResource(R.drawable.pass_value_placeholder);
                         input_digit_4.setImageResource(R.drawable.pass_value_empty);
                         input_digit_5.setImageResource(R.drawable.pass_value_empty);
-                        vibrator.vibrate(20);
                         break;
                     case 4:
                         input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
@@ -467,7 +440,6 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                         input_digit_3.setImageResource(R.drawable.pass_value_placeholder);
                         input_digit_4.setImageResource(R.drawable.pass_value_placeholder);
                         input_digit_5.setImageResource(R.drawable.pass_value_empty);
-                        vibrator.vibrate(20);
                         break;
                     case 5:
                         input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
@@ -475,14 +447,6 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                         input_digit_3.setImageResource(R.drawable.pass_value_placeholder);
                         input_digit_4.setImageResource(R.drawable.pass_value_placeholder);
                         input_digit_5.setImageResource(R.drawable.pass_value_placeholder);
-                        vibrator.vibrate(20);
-
-//                        int passwordComplexity = new PasswordComplexity(inputRePasswordValue).check();
-//                        if (passwordComplexity != 1){
-//                            inputRePasswordValue = "";
-//                            Toast.makeText(activity, getString(passwordComplexity), Toast.LENGTH_SHORT).show();
-//                            return;
-//                        }
 
                         if (inputPasswordValue.equalsIgnoreCase(inputRePasswordValue)) {
                             editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());

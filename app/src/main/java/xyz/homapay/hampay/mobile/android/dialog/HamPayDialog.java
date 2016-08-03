@@ -340,9 +340,9 @@ public class HamPayDialog {
                 dialog.dismiss();
 
                 if (contactUsPhone.length() != 0) {
-
-                    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + contactUsPhone));
-                    activity.startActivity(intent);
+                    Intent callIntent = new Intent(Intent.ACTION_VIEW);
+                    callIntent.setData(Uri.parse("tel:" + contactUsPhone));
+                    activity.startActivity(callIntent);
                 }
             }
         });

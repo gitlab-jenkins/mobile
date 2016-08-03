@@ -1,12 +1,8 @@
 package xyz.homapay.hampay.mobile.android.webservice;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.os.Bundle;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -114,32 +110,18 @@ import xyz.homapay.hampay.common.core.model.response.UserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfoTest;
-import xyz.homapay.hampay.mobile.android.service.KeyExchangeService;
 import xyz.homapay.hampay.mobile.android.ssl.AllowHamPaySSL;
 import xyz.homapay.hampay.mobile.android.util.Constants;
-import xyz.homapay.hampay.mobile.android.util.UserContacts;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWABasicHttpBinding_ITokenPay;
 import xyz.homapay.hampay.mobile.android.webservice.psp.Vectorstring2stringMapEntry;
 
-//import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
-
 /**
  * Created by amir on 6/6/15.
  */
-public class SecuredWebServices extends BroadcastReceiver{
+public class SecuredWebServices{
 
     public SecuredWebServices(){}
-
-    @Override
-    public void onReceive(Context context, Intent intent) {
-
-        Bundle bundle = intent.getExtras();
-        if (bundle != null){
-
-        }
-
-    }
 
     private Context context;
     private SharedPreferences prefs;
@@ -148,10 +130,8 @@ public class SecuredWebServices extends BroadcastReceiver{
     private URL url;
     private String serviceURL = "";
     private String authToken = "";
-    private byte[] clientEncKey = KeyExchangeService.clientEncKey;
-    private byte[] clientEncIv = KeyExchangeService.clientEncIv;
 
-    public SecuredWebServices(Context context, ConnectionType connectionType){
+    public SecuredWebServices(Context context, ConnectionType connectionType) {
         this.context = context;
         prefs =  context.getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
         builder = new DateGsonBuilder();
@@ -161,10 +141,7 @@ public class SecuredWebServices extends BroadcastReceiver{
         }else {
             serviceURL = Constants.HTTP_SERVER_IP;
         }
-
         this.authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
-
-        context.registerReceiver(this, new IntentFilter(KeyExchangeService.NOTIFICATION));
     }
 
     public SecuredWebServices(Context context){
@@ -174,7 +151,6 @@ public class SecuredWebServices extends BroadcastReceiver{
 
         this.authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
-        context.registerReceiver(this, new IntentFilter(KeyExchangeService.NOTIFICATION));
     }
 
     public ResponseMessage<KeyAgreementResponse> keyAgreement(KeyAgreementRequest keyAgreementRequest) throws Exception {
@@ -212,7 +188,6 @@ public class SecuredWebServices extends BroadcastReceiver{
         Gson gson = new Gson();
         responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<IllegalAppListResponse>>() {}.getType());
         proxyService.closeConnection();
-        context.unregisterReceiver(this);
         return  responseMessage;
     }
 
@@ -234,6 +209,7 @@ public class SecuredWebServices extends BroadcastReceiver{
         Gson gson = new Gson();
 
         responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<RegistrationEntryResponse>>() {}.getType());
+
 
         proxyService.closeConnection();
 
@@ -268,7 +244,6 @@ public class SecuredWebServices extends BroadcastReceiver{
 
         ResponseMessage<RegistrationSendSmsTokenResponse> responseMessage = null;
         url = new URL(serviceURL + "/users/reg-sms-token");
-//        ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
         registrationSendSmsTokenRequest.setRequestUUID(UUID.randomUUID().toString());
@@ -313,13 +288,9 @@ public class SecuredWebServices extends BroadcastReceiver{
 
     public ResponseMessage<RegistrationCredentialsResponse> registrationCredentialsResponse(RegistrationCredentialsRequest registrationCredentialsRequest) throws IOException, EncryptionException {
 
-
         ResponseMessage<RegistrationCredentialsResponse> responseMessage = null;
         url = new URL(serviceURL + "/users/reg-credential-entry");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url, true);
-
-        UserContacts userContacts = new UserContacts(context);
-//        registrationCredentialsRequest.setContacts(userContacts.read());
         registrationCredentialsRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<RegistrationCredentialsRequest> message = new RequestMessage<>(registrationCredentialsRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
@@ -1160,7 +1131,7 @@ public class SecuredWebServices extends BroadcastReceiver{
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
         recentPendingFundRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<RecentPendingFundRequest> message = new RequestMessage<>(recentPendingFundRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<RecentPendingFundRequest> message = new RequestMessage<>(recentPendingFundRequest, "", Constants.REQUEST_VERSION, System.currentTimeMillis());
 
         Type requestType = new TypeToken<RequestMessage<RecentPendingFundRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);

@@ -428,6 +428,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                     intent.putExtra(Constants.CONTACT_FEE, calcFeeCharge);
                     intent.putExtra(Constants.CONTACT_MESSAGE, contact_message.getText().toString());
                     startActivity(intent);
+                    finish();
                 }else if (calcFeeChargeResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();
                 }

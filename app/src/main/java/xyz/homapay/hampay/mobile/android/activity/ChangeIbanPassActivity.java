@@ -256,7 +256,6 @@ public class ChangeIbanPassActivity extends AppCompatActivity implements View.On
                     input_digit_3.setImageResource(R.drawable.pass_value_empty);
                     input_digit_4.setImageResource(R.drawable.pass_value_empty);
                     input_digit_5.setImageResource(R.drawable.pass_value_empty);
-                    vibrator.vibrate(20);
                     break;
 
                 case 1:
@@ -265,7 +264,6 @@ public class ChangeIbanPassActivity extends AppCompatActivity implements View.On
                     input_digit_3.setImageResource(R.drawable.pass_value_empty);
                     input_digit_4.setImageResource(R.drawable.pass_value_empty);
                     input_digit_5.setImageResource(R.drawable.pass_value_empty);
-                    vibrator.vibrate(20);
 
                     break;
                 case 2:
@@ -274,7 +272,6 @@ public class ChangeIbanPassActivity extends AppCompatActivity implements View.On
                     input_digit_3.setImageResource(R.drawable.pass_value_empty);
                     input_digit_4.setImageResource(R.drawable.pass_value_empty);
                     input_digit_5.setImageResource(R.drawable.pass_value_empty);
-                    vibrator.vibrate(20);
                     break;
                 case 3:
                     input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
@@ -282,7 +279,6 @@ public class ChangeIbanPassActivity extends AppCompatActivity implements View.On
                     input_digit_3.setImageResource(R.drawable.pass_value_placeholder);
                     input_digit_4.setImageResource(R.drawable.pass_value_empty);
                     input_digit_5.setImageResource(R.drawable.pass_value_empty);
-                    vibrator.vibrate(20);
                     break;
                 case 4:
                     input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
@@ -290,7 +286,6 @@ public class ChangeIbanPassActivity extends AppCompatActivity implements View.On
                     input_digit_3.setImageResource(R.drawable.pass_value_placeholder);
                     input_digit_4.setImageResource(R.drawable.pass_value_placeholder);
                     input_digit_5.setImageResource(R.drawable.pass_value_empty);
-                    vibrator.vibrate(20);
                     break;
                 case 5:
                     input_digit_1.setImageResource(R.drawable.pass_value_placeholder);
@@ -298,7 +293,6 @@ public class ChangeIbanPassActivity extends AppCompatActivity implements View.On
                     input_digit_3.setImageResource(R.drawable.pass_value_placeholder);
                     input_digit_4.setImageResource(R.drawable.pass_value_placeholder);
                     input_digit_5.setImageResource(R.drawable.pass_value_placeholder);
-                    vibrator.vibrate(20);
 
                     input_digit_1.setImageResource(R.drawable.pass_value_empty);
                     input_digit_2.setImageResource(R.drawable.pass_value_empty);

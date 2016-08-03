@@ -37,18 +37,6 @@ import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 
 public class AppSliderActivity extends AppCompatActivity {
 
-
-//    BroadcastReceiver receiver = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            Bundle bundle = intent.getExtras();
-//            if (bundle != null){
-//                byte[] a = bundle.getByteArray("client_enc_key");
-//                Log.e("", "");
-//            }
-//        }
-//    };
-
     private ViewPager sliding_into_app;
     private FacedTextView register_button;
     private ImageView image_splash;
@@ -93,18 +81,11 @@ public class AppSliderActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-//        registerReceiver(receiver, new IntentFilter(
-//                KeyExchangeService.NOTIFICATION));
-
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
-//        unregisterReceiver(receiver);
-
     }
 
     @Override
@@ -114,23 +95,13 @@ public class AppSliderActivity extends AppCompatActivity {
 
         activity = AppSliderActivity.this;
 
-
         bundle = getIntent().getExtras();
-
-//        Intent serviceIntent = new Intent(this, KeyExchangeService.class);
-//        startService(serviceIntent);
-
-//        requestKeyAgreement = new RequestKeyAgreement(activity, new RequestKeyAgreementTaskCompleteListener());
-//        keyAgreementRequest = new KeyAgreementRequest();
-//        requestKeyAgreement.execute(keyAgreementRequest);
 
 //        try {
 //            soapTest();
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
-
-
 
 
         if (bundle != null) {

@@ -348,5 +348,6 @@
     <string name="purchase_status_succeed">پرداخت موفق</string>
     <string name="start_key_exchange">تبادل کلید آغاز شد، لطفا منتظر بمانید</string>
     <string name="finish_key_exchange">اتمام تبادل کلید</string>
+    <string name="system_connectivity">عدم ایجاد ارتباط با هم‌پی، لطفا مجدد تلاش کنید</string>
 
 </resources>

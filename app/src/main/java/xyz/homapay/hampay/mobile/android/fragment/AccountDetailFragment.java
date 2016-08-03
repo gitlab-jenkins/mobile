@@ -38,43 +38,29 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
  */
 public class AccountDetailFragment extends Fragment {
 
-
-    View hide_bg;
-
-    PersianEnglishDigit persianEnglishDigit;
-
-    FacedTextView user_name_text;
-    FacedTextView user_card_number;
-    ImageView image_profile;
-    FacedTextView user_bank_name;
-    LinearLayout iban_ll;
-    FacedTextView user_cell_number;
-    FacedTextView user_iban_value;
-    FacedTextView user_iban_bank;
-    FacedTextView user_national_code;
+    private View hide_bg;
+    private PersianEnglishDigit persianEnglishDigit;
+    private FacedTextView user_name_text;
+    private FacedTextView user_card_number;
+    private ImageView image_profile;
+    private FacedTextView user_bank_name;
+    private LinearLayout iban_ll;
+    private FacedTextView user_cell_number;
+    private FacedTextView user_iban_value;
+    private FacedTextView user_iban_bank;
+    private FacedTextView user_national_code;
     private LinearLayout emailLayout;
     private FacedTextView user_email;
-
-    HamPayDialog hamPayDialog;
-
-    FacedTextView intro_iban_button;
-
-    UserProfileDTO userProfileDTO;
-
-    Bundle bundle;
-
-    SharedPreferences prefs;
-    SharedPreferences.Editor editor;
-
-    RequestUserProfile requestUserProfile;
-    UserProfileRequest userProfileRequest;
-
-    Tracker hamPayGaTracker;
-
-
-    Context context;
-
-    private String authToken = "";
+    private HamPayDialog hamPayDialog;
+    private FacedTextView intro_iban_button;
+    private UserProfileDTO userProfileDTO;
+    private Bundle bundle;
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
+    private RequestUserProfile requestUserProfile;
+    private UserProfileRequest userProfileRequest;
+    private Tracker hamPayGaTracker;
+    private Context context;
     private ImageManager imageManager;
 
 
@@ -102,7 +88,6 @@ public class AccountDetailFragment extends Fragment {
         editor = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE).edit();
 
         imageManager = new ImageManager(getActivity(), 200000, false);
-        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
         hamPayGaTracker = ((HamPayApplication) getActivity().getApplicationContext())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 

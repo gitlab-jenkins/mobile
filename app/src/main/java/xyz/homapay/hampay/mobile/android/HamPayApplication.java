@@ -1,6 +1,5 @@
 package xyz.homapay.hampay.mobile.android;
 
-import android.content.Intent;
 import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 
@@ -14,7 +13,6 @@ import org.acra.annotation.ReportsCrashes;
 import java.util.HashMap;
 
 import xyz.homapay.hampay.mobile.android.model.AppState;
-import xyz.homapay.hampay.mobile.android.service.KeyExchangeService;
 
 /**
  * Created by amir on 7/10/15.
@@ -40,11 +38,6 @@ public class HamPayApplication extends MultiDexApplication {
     {
         super.onCreate();
         ACRA.init(this);
-
-        Intent intent = new Intent(getApplicationContext(), KeyExchangeService.class);
-        getApplicationContext().startService(intent);
-
-
     }
 
     @Override

@@ -484,8 +484,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                     input_digit_2.setText("");
                     input_digit_3.setText("");
                     input_digit_4.setText("");
-//                    input_digit_5.setText("");
-                    vibrator.vibrate(20);
                     break;
 
                 case 1:
@@ -496,9 +494,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                     }
                     input_digit_3.setText("");
                     input_digit_4.setText("");
-//                    input_digit_5.setText("");
-                    vibrator.vibrate(20);
-
                     break;
                 case 2:
                     if (digit.equalsIgnoreCase("d")) {
@@ -507,8 +502,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                         input_digit_3.setText(persianEnglishDigit.E2P(digit));
                     }
                     input_digit_4.setText("");
-//                    input_digit_5.setText("");
-                    vibrator.vibrate(20);
                     break;
                 case 3:
                     if (digit.equalsIgnoreCase("d")) {
@@ -516,7 +509,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                     } else {
                         input_digit_4.setText(persianEnglishDigit.E2P(digit));
                     }
-                    vibrator.vibrate(20);
                     break;
                 case 4:
                     if (digit.equalsIgnoreCase("d")) {
@@ -524,7 +516,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                     } else {
                         input_digit_4.setText(persianEnglishDigit.E2P(digit));
                     }
-                    vibrator.vibrate(20);
                     break;
             }
 

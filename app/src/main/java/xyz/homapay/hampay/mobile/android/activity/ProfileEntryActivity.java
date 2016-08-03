@@ -47,6 +47,7 @@ import xyz.homapay.hampay.mobile.android.location.BestLocationProvider;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
+import xyz.homapay.hampay.mobile.android.security.KeyExchange;
 import xyz.homapay.hampay.mobile.android.util.CardNumberValidator;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
@@ -56,72 +57,52 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 public class ProfileEntryActivity extends AppCompatActivity {
 
     Activity activity;
-
+    private KeyExchange keyExchange;
+    private String encryptionId = "";
     PersianEnglishDigit persianEnglishDigit;
-
     FacedTextView keepOn_button;
-
     FacedEditText cellNumberValue;
     ImageView cellNumberIcon;
     boolean cellNumberIsValid = false;
     Preloader preloader;
-
     FacedEditText nationalCodeValue;
     ImageView nationalCodeIcon;
     boolean nationalCodeIsValid = false;
-
     FacedEditText cardNumberValue;
     FacedTextView cardProfile;
     boolean verifiedCardNumber = false;
     ImageView cardNumberIcon;
-
     ImageView userNameFamilyIcon;
     FacedEditText userNameFamily;
     boolean userNameFamilyIsValid = true;
-
     EmailTextWatcher emailTextWatcher;
     FacedEditText emailValue;
     ImageView emailIcon;
-
     Context context;
-
     String rawCardNumberValue = "";
     int rawCardNumberValueLength = 0;
     int rawCardNumberValueLengthOffset = 0;
     String procCardNumberValue = "";
-
-
     String rawNationalCode = "";
     int rawNationalCodeLength = 0;
     int rawNationalCodeLengthOffset = 0;
     String procNationalCode = "";
-
     private CardProfileResponse cardProfileResponse;
-
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
-
     RegistrationEntryRequest registrationEntryRequest;
     RequestRegistrationEntry requestRegistrationEntry;
-
     double latitude = 0.0;
     double longitude = 0.0;
-
     private static String TAG = "BestLocationProvider";
     private BestLocationProvider mBestLocationProvider;
     private BestLocationListener mBestLocationListener;
-
     CardProfileRequest cardProfileRequest;
     RequestCardProfile requestCardProfile;
-
     HamPayDialog hamPayDialog;
-
     Tracker hamPayGaTracker;
-
     DeviceInfo deviceInfo;
-
     private CardNumberValidator cardNumberValidator;
-
     private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
 
     public void userManual(View view){
@@ -233,26 +214,20 @@ public class ProfileEntryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_entry);
-
         context = this;
-
         activity = this;
-
         deviceInfo = new DeviceInfo(activity);
-
         persianEnglishDigit = new PersianEnglishDigit();
-
         cardNumberValidator = new CardNumberValidator();
-
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
-
-
         initLocation();
-
+        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ProfileEntryActivity.class.getName());
         editor.commit();
+        encryptionId = prefs.getString(Constants.ENCRYPTION_ID, "");
+        keyExchange = new KeyExchange(activity, encryptionId);
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -455,6 +430,10 @@ public class ProfileEntryActivity extends AppCompatActivity {
         keepOn_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (keyExchange.getKey() == null || keyExchange.getIv() == null) {
+                    return;
+                }
 
                 keepOn_button.requestFocus();
 

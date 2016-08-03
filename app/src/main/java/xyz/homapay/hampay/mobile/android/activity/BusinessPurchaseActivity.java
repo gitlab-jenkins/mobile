@@ -205,7 +205,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                     input_digit_4.setText("");
                     input_digit_5.setText("");
                     input_digit_6.setText("");
-                    vibrator.vibrate(20);
                     break;
 
                 case 1:
@@ -218,8 +217,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                     input_digit_4.setText("");
                     input_digit_5.setText("");
                     input_digit_6.setText("");
-                    vibrator.vibrate(20);
-
                     break;
                 case 2:
                     if (digit.equalsIgnoreCase("d")) {
@@ -230,7 +227,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                     input_digit_4.setText("");
                     input_digit_5.setText("");
                     input_digit_6.setText("");
-                    vibrator.vibrate(20);
                     break;
                 case 3:
                     if (digit.equalsIgnoreCase("d")) {
@@ -240,7 +236,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                     }
                     input_digit_5.setText("");
                     input_digit_6.setText("");
-                    vibrator.vibrate(20);
                     break;
                 case 4:
                     if (digit.equalsIgnoreCase("d")) {
@@ -249,7 +244,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                         input_digit_5.setText(digit);
                     }
                     input_digit_6.setText("");
-                    vibrator.vibrate(20);
                     break;
                 case 5:
                     if (digit.equalsIgnoreCase("d")) {
@@ -257,7 +251,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                     } else {
                         input_digit_6.setText(digit);
                     }
-                    vibrator.vibrate(20);
                     break;
             }
 

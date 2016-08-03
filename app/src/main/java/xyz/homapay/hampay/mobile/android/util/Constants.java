@@ -9,11 +9,8 @@ public class Constants {
     public static String SERVER = "uat.hampay.ir";//UAT Server IP
     public static String URL_PREFIX = "/hampay";
     public static String HTTP_SERVER_IP = "http://" + SERVER + ":90" + URL_PREFIX;//England Server
-//    public static String IPG_URL = "http://" + SERVER + ":9091" + URL_PREFIX;//England Server
     public static String IPG_URL = "https://" + SERVER + URL_PREFIX;//England Server
-//    public static String BANK_GATEWAY_URL = "https://sep.shaparak.ir/Payment.aspx";
     public static String BANK_GATEWAY_URL = "https://sep.shaparak.ir/PgMobileAddData";
-//    public static String BANK_GATEWAY_URL = "http://" + SERVER_IP + "/assets/psp/index.php";
     public static ConnectionType CONNECTION_TYPE = ConnectionType.HTTPS;
     public static String HTTPS_SERVER_IP = "https://" + SERVER + URL_PREFIX;//England Server
     public static final String HTTPS_OPENAM_LOGIN_URL = HTTPS_SERVER_IP + "/auth";
@@ -29,7 +26,6 @@ public class Constants {
     public static final String SERVICE_CONTENT_TYPE = "application/json";
     public static final String WEB_PAGE_ADDRESS = "web_page_address";
     public static final String MEMORABLE_WORD = "MemorableWord";
-    public static final String LAUNCH_APP_COUNT = "launch_app_count";
     public static final String FORCE_FETCH_ILLEGAL_APPS = "forceFetchIllegalApps";
     public static final String APP_PREFERENCE_NAME = "HamPay_Preferences";
     public static final String USER_PROFILE_DTO = "UserProfile";
@@ -51,11 +47,8 @@ public class Constants {
     public static final String REGISTERED_USER_EMAIL = "registeredUserEmail";
     public static final String REGISTERED_USER_NAME = "registeredUserName";
     public static final String LOGIN_TOKEN_ID = "login_token_id";
-    public static final String USER_ACCOUNT_LOCKET = "Your account has been locked.";
     public static final String SEND_MOBILE_REGISTER_ID = "send_mobile_register_id";
-    public static final String RECENT_PAY_TO_ONE_LIMIT = "10";
     public static final int DEFAULT_PAGE_SIZE = 15;
-    public static final String WEB_URL_REGEX = "\\(?\\b(http://|https://|www[.]|app[.])[-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]";
     public static final String REGISTERED_USER = "registeredUser";
     public static final String  MOBILE_TIME_OUT = "mobile_time_out";
     public static final long MOBILE_TIME_OUT_INTERVAL = 420000;
@@ -80,7 +73,6 @@ public class Constants {
     public static final String HAS_NOTIFICATION = "has_notification";
     public static final String NOTIFICATION_TYPE = "notification_type";
     public static final String NOTIFICATION_APP_UPDATE = "نسخه جدید هم‌پی";
-    public static final String NOTIFICATION_JOINT = "دوست هم‌پی جدید";
     public static final String NOTIFICATION_PAYMENT = "انتقال وجه";
     public static final String NOTIFICATION_CREDIT_REQUEST = "درخواست وجه";
     public static final String NOTIFICATION_USER_PAYMENT_CONFIRM = "تایید پرداخت";
@@ -115,14 +107,11 @@ public class Constants {
     public static final String SUCCESS_PAYMENT_CODE = "code";
     public static final String SUCCESS_PAYMENT_TRACE = "trace";
     public static final String SHOW_CREATE_INVOICE = "showCreateInvoice";
+    public static final String ENCRYPTION_ID = "encryptionId";
 
     //Permissions and Group Permission
     public static final int READ_PHONE_STATE = 1;
     public static final int READ_CONTACTS = 2;
     public static final int ACCESS_FINE_LOCATION = 3;
     public static final int GET_ACCOUNTS = 4;
-
-
-    public static final byte[] APP_KEY = {(byte)0x11, (byte)0x22, (byte)0x31, (byte)0x98, (byte)0x02, (byte)0x77, (byte)0x91, (byte)0x21, (byte)0x00, (byte)0x2F, (byte)0xfa, (byte)0xc1, (byte)0x76, (byte)0xc9, (byte)0xb0, (byte)0xff};
-
 }
