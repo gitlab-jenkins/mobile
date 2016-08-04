@@ -225,13 +225,10 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-        encryptionId = UUID.randomUUID().toString();
-        editor.putString(Constants.ENCRYPTION_ID, encryptionId);
-        editor.commit();
         userIdToken = prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, "");
 
 
-        keyExchange = new KeyExchange(context, encryptionId);
+        keyExchange = new KeyExchange(context);
 
         new KeyExchangeTask().execute();
 
@@ -665,6 +662,8 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         @Override
         protected void onPostExecute(String result) {
             if (keyExchange.getKey() != null && keyExchange.getIv() != null){
+                editor.putString(Constants.ENCRYPTION_ID, keyExchange.getEncId());
+                editor.commit();
                 requestAndLoadPhoneState();
             }else {
                 Toast.makeText(activity, getString(R.string.system_connectivity), Toast.LENGTH_SHORT).show();

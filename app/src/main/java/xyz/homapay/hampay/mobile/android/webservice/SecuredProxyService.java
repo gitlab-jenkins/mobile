@@ -70,7 +70,7 @@ public class SecuredProxyService {
         this.connectionType = connectionType;
         this.connectionMethod = connectionMethod;
         this.url = url;
-        keyExchange = new KeyExchange(context, prefs.getString(Constants.ENCRYPTION_ID, ""));
+        keyExchange = new KeyExchange(context);
         messageEncryptor = new AESMessageEncryptor();
     }
 
@@ -80,7 +80,7 @@ public class SecuredProxyService {
         this.connectionType = connectionType;
         this.connectionMethod = connectionMethod;
         this.url = url;
-        keyExchange = new KeyExchange(context, prefs.getString(Constants.ENCRYPTION_ID, ""));
+        keyExchange = new KeyExchange(context);
         messageEncryptor = new AESMessageEncryptor();
     }
 
@@ -92,7 +92,7 @@ public class SecuredProxyService {
         this.connectionMethod = connectionMethod;
         this.url = url;
         this.enableGZip = enableGZip;
-        keyExchange = new KeyExchange(context, prefs.getString(Constants.ENCRYPTION_ID, ""));
+        keyExchange = new KeyExchange(context);
         messageEncryptor = new AESMessageEncryptor();
     }
 
@@ -103,7 +103,7 @@ public class SecuredProxyService {
         this.connectionMethod = connectionMethod;
         this.url = url;
         this.enableGZip = enableGZip;
-        keyExchange = new KeyExchange(context, prefs.getString(Constants.ENCRYPTION_ID, ""));
+        keyExchange = new KeyExchange(context);
         messageEncryptor = new AESMessageEncryptor();
     }
 

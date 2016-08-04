@@ -36,13 +36,13 @@ public class KeyExchange {
 
     private Context context;
     private KeyExchanger keyExchanger;
-    private String encryptionId;
     private KeyAgreementRequest keyAgreementRequest;
     private static SecretKeyPair secretKeyPair;
+    private static String encryptionId;
 
-    public KeyExchange(Context context, String encryptionId){
+    public KeyExchange(Context context){
         this.context = context;
-        this.encryptionId = encryptionId;
+//        this.encryptionId = encryptionId;
     }
 
     public void exchange() throws EncryptionException, IOException {
@@ -50,7 +50,7 @@ public class KeyExchange {
         PublicKeyPair publicKeyPair = keyExchanger.getPublicKey();
         keyAgreementRequest = new KeyAgreementRequest();
         keyAgreementRequest.setRequestUUID(UUID.randomUUID().toString());
-        keyAgreementRequest.setId(encryptionId);
+//        keyAgreementRequest.setId(encryptionId);
         keyAgreementRequest.setKeyData(publicKeyPair.getEncPublicKey().getEncoded());
         keyAgreementRequest.setIvData(publicKeyPair.getIvPublicKey().getEncoded());
 
@@ -67,6 +67,8 @@ public class KeyExchange {
         Gson gson = new Gson();
 
         keyAgreementResponseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<KeyAgreementResponse>>() {}.getType());
+
+        encryptionId = keyAgreementResponseMessage.getService().getId();
 
         if (keyAgreementResponseMessage != null) {
             if (keyAgreementResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
@@ -114,6 +116,10 @@ public class KeyExchange {
     }
 
     public String getEncId(){
-        return encryptionId;
+        if (encryptionId != null) {
+            return encryptionId;
+        }else {
+            return "";
+        }
     }
 }

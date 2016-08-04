@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -54,18 +55,19 @@ public class StartActivity extends AppCompatActivity {
         activity = StartActivity.this;
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-        encryptionId = UUID.randomUUID().toString();
-        editor.putString(Constants.ENCRYPTION_ID, encryptionId);
-        editor.commit();
 
-        keyExchange = new KeyExchange(activity, encryptionId);
+        keyExchange = new KeyExchange(activity);
         new KeyExchangeTask().execute();
 
         start_button = (FacedTextView) findViewById(R.id.start_button);
         start_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new HamPayDialog(StartActivity.this).showTcPrivacyDialog();
+                if (keyExchange.getKey() != null && keyExchange.getIv() != null) {
+                    new HamPayDialog(StartActivity.this).showTcPrivacyDialog();
+                }else {
+                    new KeyExchangeTask().execute();
+                }
             }
         });
 
@@ -155,9 +157,13 @@ public class StartActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             if (keyExchange.getKey() != null && keyExchange.getIv() != null) {
+                editor.putString(Constants.ENCRYPTION_ID, keyExchange.getEncId());
+                editor.commit();
                 illegalAppListRequest = new IllegalAppListRequest();
                 requestIllegalAppList = new RequestIllegalAppList(activity, new RequestIllegalAppListTaskCompleteListener());
                 requestIllegalAppList.execute(illegalAppListRequest);
+            }else {
+                Toast.makeText(activity, getString(R.string.system_connectivity), Toast.LENGTH_LONG).show();
             }
         }
 

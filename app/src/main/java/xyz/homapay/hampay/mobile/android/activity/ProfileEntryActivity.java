@@ -227,7 +227,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
         editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ProfileEntryActivity.class.getName());
         editor.commit();
         encryptionId = prefs.getString(Constants.ENCRYPTION_ID, "");
-        keyExchange = new KeyExchange(activity, encryptionId);
+        keyExchange = new KeyExchange(activity);
 
         hamPayDialog = new HamPayDialog(activity);
 

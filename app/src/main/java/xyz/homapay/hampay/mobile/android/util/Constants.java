@@ -7,6 +7,7 @@ public class Constants {
 //    public static String SERVER = "176.58.104.158";//England Server IP
 //    public static String SERVER = "mobile.hampay.ir";//Prod Server IP
     public static String SERVER = "uat.hampay.ir";//UAT Server IP
+//    public static String SERVER = "mobile.hampay.homapay.com";//LIVE Server IP
     public static String URL_PREFIX = "/hampay";
     public static String HTTP_SERVER_IP = "http://" + SERVER + ":90" + URL_PREFIX;//England Server
     public static String IPG_URL = "https://" + SERVER + URL_PREFIX;//England Server
