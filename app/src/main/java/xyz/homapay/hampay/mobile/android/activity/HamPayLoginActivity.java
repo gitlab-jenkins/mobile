@@ -614,7 +614,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         public void onTaskComplete(ResponseMessage<LoginResponse> loginResponseResponseMessage)
         {
             if (loginResponseResponseMessage != null) {
-
                 if (loginResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     editor.putString(Constants.LOGIN_TOKEN_ID, loginResponseResponseMessage.getService().getAuthToken());
                     editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
@@ -625,16 +624,15 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                     requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
                     requestTAC.execute(tacRequest);
                 }else if (loginResponseResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE){
-
                     resetLogin();
                     hamPayDialog.showLoginFailDialog(loginResponseResponseMessage.getService().getRemainRetryCount());
                 }else if (loginResponseResponseMessage.getService().getResultStatus() == ResultStatus.BLOCKED_IDP_USER){
                     resetLogin();
                     hamPayDialog.showLoginFailDialog(0);
                 }
-
             }
             else {
+                Toast.makeText(activity, getString(R.string.system_connectivity), Toast.LENGTH_SHORT).show();
                 resetLogin();
             }
         }

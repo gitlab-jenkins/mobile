@@ -260,9 +260,6 @@ public class PaymentRequestConfirmActivity extends AppCompatActivity {
             i.setClass(this, MainActivity.class);
             startActivity(i);
         }
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra("result", 1024);
-        setResult(1024);
         finish();
     }
 
@@ -300,7 +297,6 @@ public class PaymentRequestConfirmActivity extends AppCompatActivity {
                 }
             } else {
                 new HamPayDialog(activity).failurePaymentRequestDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_failure_payment_request));
-
                 hamPayGaTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Individual Payment Confirm")
                         .setAction("Payment Confirm")
@@ -313,6 +309,7 @@ public class PaymentRequestConfirmActivity extends AppCompatActivity {
 
         @Override
         public void onTaskPreRun() {
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 

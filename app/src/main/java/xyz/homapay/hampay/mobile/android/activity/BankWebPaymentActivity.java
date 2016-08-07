@@ -236,10 +236,8 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                                 intent.putExtra(Constants.SUCCESS_PAYMENT_AMOUNT, purchaseInfoDTO.getAmount());
                                 intent.putExtra(Constants.SUCCESS_PAYMENT_CODE, purchaseInfoDTO.getProductCode());
                             }
-                            intent.putExtra(Constants.SUCCESS_PAYMENT_TRACE, view.getTitle().split(":")[1]);
-                            startActivity(intent);
-                            finish();
-//                            hamPayDialog.ipgSuccessDialog(view.getTitle().split(":")[1]);
+                            intent.putExtra(Constants.SUCCESS_PAYMENT_TRACE, pspInfoDTO.getProviderId());
+                            startActivityForResult(intent, 0);
                             resultStatus = ResultStatus.SUCCESS;
                         }else {
                             hamPayDialog.ipgFailDialog();
@@ -263,5 +261,22 @@ public class BankWebPaymentActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 0) {
+            if(resultCode == Activity.RESULT_OK){
+                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, 0);
+                if (result == 1){
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra(Constants.ACTIVITY_RESULT, ResultStatus.SUCCESS.ordinal());
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    finish();
+                }
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+            }
+        }
     }
 }

@@ -11,7 +11,6 @@ import android.webkit.WebView;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.util.UUID;
 
 import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
@@ -32,7 +31,6 @@ import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 public class StartActivity extends AppCompatActivity {
 
     private FacedTextView start_button;
-    private String encryptionId = "";
     private KeyExchange keyExchange;
     private Activity activity;
     private SharedPreferences.Editor editor;

@@ -283,7 +283,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                     intent.putExtra(Constants.PURCHASE_INFO, purchaseInfoDTO);
                     intent.putExtra(Constants.PSP_INFO, pspInfoDTO);
                     startActivityForResult(intent, 45);
-//                    finish();
                 } else {
                     if (pin2Value.getText().toString().length() <= 4) {
                         Toast.makeText(context, getString(R.string.msg_pin2_incurrect), Toast.LENGTH_LONG).show();
@@ -406,11 +405,9 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                             Intent intent = new Intent(context, PaymentCompletedActivity.class);
                             intent.putExtra(Constants.SUCCESS_PAYMENT_AMOUNT, purchaseInfoDTO.getAmount());
                             intent.putExtra(Constants.SUCCESS_PAYMENT_CODE, purchaseInfoDTO.getProductCode());
-                            intent.putExtra(Constants.SUCCESS_PAYMENT_TRACE, SWTraceNum);
-                            startActivity(intent);
-                            finish();
+                            intent.putExtra(Constants.SUCCESS_PAYMENT_TRACE, pspInfoDTO.getProviderId());
+                            startActivityForResult(intent, 45);
                         }
-//                        new HamPayDialog(activity).pspSuccessResultDialog(purchaseInfoDTO.getProductCode());
                         resultStatus = ResultStatus.SUCCESS;
                     }else if (responseCode.equalsIgnoreCase("51")) {
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.msg_insufficient_credit));
@@ -616,7 +613,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                     setResult(Activity.RESULT_OK, returnIntent);
                     finish();
                 }
-
             }
             if (resultCode == Activity.RESULT_CANCELED) {
             }

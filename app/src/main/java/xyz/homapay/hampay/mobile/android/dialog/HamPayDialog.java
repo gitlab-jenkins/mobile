@@ -1761,8 +1761,8 @@ public class HamPayDialog {
             public void onClick(View v) {
                 dialog.dismiss();
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra("result", 1024);
-                activity.setResult(1024);
+                returnIntent.putExtra(Constants.ACTIVITY_RESULT, ResultStatus.SUCCESS.ordinal());
+                activity.setResult(Activity.RESULT_OK, returnIntent);
                 activity.finish();
             }
         });

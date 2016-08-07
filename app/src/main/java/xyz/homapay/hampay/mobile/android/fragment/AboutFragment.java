@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 
 import xyz.homapay.hampay.mobile.android.BuildConfig;
 import xyz.homapay.hampay.mobile.android.R;
@@ -35,6 +36,10 @@ public class AboutFragment extends Fragment {
         version = (FacedTextView)rootView.findViewById(R.id.version);
 
         version.setText(getString(R.string.about_text_7, BuildConfig.VERSION_NAME + " - "+ BuildConfig.VERSION_CODE));
+
+        WebView webView = (WebView)rootView.findViewById(R.id.webview);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.loadUrl("file:///android_asset/certification.html");
 
         return rootView;
     }

@@ -326,58 +326,6 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
         finish();
     }
 
-    public class RequestUserPaymentTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<UserPaymentResponse>> {
-
-        @Override
-        public void onTaskComplete(ResponseMessage<UserPaymentResponse> userPaymentResponseMessage) {
-
-            hamPayDialog.dismisWaitingDialog();
-
-            if (userPaymentResponseMessage != null) {
-
-
-
-                if (userPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-
-                    new HamPayDialog(activity).successPaymentRequestDialog(userPaymentResponseMessage.getService().getProductCode());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Individual Payment Confirm")
-                            .setAction("Payment Confirm")
-                            .setLabel("Success")
-                            .build());
-
-                }else if (userPaymentResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    forceLogout();
-                }
-                else {
-                    new HamPayDialog(activity).failurePaymentRequestDialog(userPaymentResponseMessage.getService().getResultStatus().getCode(),
-                            userPaymentResponseMessage.getService().getResultStatus().getDescription());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Individual Payment Confirm")
-                            .setAction("Payment Confirm")
-                            .setLabel("Fail(Server)")
-                            .build());
-                }
-            } else {
-                new HamPayDialog(activity).failurePaymentRequestDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_failure_payment_request));
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Individual Payment Confirm")
-                        .setAction("Payment Confirm")
-                        .setLabel("Fail(Mobile)")
-                        .build());
-            }
-
-            payment_request_button.setEnabled(true);
-        }
-
-        @Override
-        public void onTaskPreRun() {
-        }
-    }
-
     public class RequestCalculateVatTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<CalculateVatResponse>> {
         public RequestCalculateVatTaskCompleteListener() {
         }
@@ -427,17 +375,37 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                     intent.putExtra(Constants.CONTACT_VAT, calculatedVat);
                     intent.putExtra(Constants.CONTACT_FEE, calcFeeCharge);
                     intent.putExtra(Constants.CONTACT_MESSAGE, contact_message.getText().toString());
-                    startActivity(intent);
-                    finish();
+                    startActivityForResult(intent, 10);
                 }else if (calcFeeChargeResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();
+                }else {
+                    new HamPayDialog(activity).failurePaymentRequestDialog(calcFeeChargeResponseMessage.getService().getResultStatus().getCode(),
+                            calcFeeChargeResponseMessage.getService().getResultStatus().getDescription());
                 }
+            }else {
+                new HamPayDialog(activity).failurePaymentRequestDialog(Constants.LOCAL_ERROR_CODE,
+                        getString(R.string.msg_fail_illegal_app_list));
             }
         }
 
         @Override
         public void onTaskPreRun() {
             hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 10) {
+            if (resultCode == Activity.RESULT_OK) {
+                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, 0);
+                if (result == 0) {
+                    finish();
+                }
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+            }
         }
     }
 
