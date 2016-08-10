@@ -57,8 +57,6 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 public class ProfileEntryActivity extends AppCompatActivity {
 
     Activity activity;
-    private KeyExchange keyExchange;
-    private String encryptionId = "";
     PersianEnglishDigit persianEnglishDigit;
     FacedTextView keepOn_button;
     FacedEditText cellNumberValue;
@@ -167,18 +165,9 @@ public class ProfileEntryActivity extends AppCompatActivity {
             @Override
             public boolean onResult(int requestCode, String[] requestPermissions, int[] grantResults) {
                 if (requestCode == Constants.READ_PHONE_STATE) {
-                    // Check if the permission is correct and is granted
                     if (requestPermissions[0].equals(Manifest.permission.READ_PHONE_STATE) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        // Permission granted
-
-//                        Toast.makeText(activity, "Access allowed!", Toast.LENGTH_SHORT).show();
-
                         requestUserAccount();
-
                     } else {
-                        // Permission not granted
-//                        Toast.makeText(activity, "Access denied!", Toast.LENGTH_SHORT).show();
-
                         finish();
                     }
                     return true;
@@ -226,8 +215,6 @@ public class ProfileEntryActivity extends AppCompatActivity {
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ProfileEntryActivity.class.getName());
         editor.commit();
-        encryptionId = prefs.getString(Constants.ENCRYPTION_ID, "");
-        keyExchange = new KeyExchange(activity);
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -430,13 +417,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
         keepOn_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (keyExchange.getKey() == null || keyExchange.getIv() == null) {
-                    return;
-                }
-
                 keepOn_button.requestFocus();
-
                 View view = getCurrentFocus();
                 if (view != null) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(

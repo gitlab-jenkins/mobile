@@ -75,9 +75,6 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
     private ImageView business_triangle;
     private ImageView invoice_triangle;
 
-
-    private Dialog dialog;
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -144,7 +141,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
         invoice_triangle = (ImageView)findViewById(R.id.invoice_triangle);
 
 
-        transactionDTOs = new ArrayList<TransactionDTO>();
+        transactionDTOs = new ArrayList<>();
         userTransactionAdapter = new UserTransactionAdapter(activity, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
 
         hamPayGaTracker = ((HamPayApplication) getApplication())
@@ -160,6 +157,8 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                FINISHED_SCROLLING = false;
+                onLoadMore = false;
                 userTransactionAdapter.clear();
                 transactionDTOs.clear();
                 requestPageNumber = 0;
@@ -199,6 +198,8 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
             case R.id.full_transaction:
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
+                FINISHED_SCROLLING = false;
+                onLoadMore = false;
                 userTransactionAdapter.clear();
                 transactionDTOs.clear();
                 requestPageNumber = 0;
@@ -215,6 +216,8 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
             case R.id.business_transaction:
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
+                FINISHED_SCROLLING = false;
+                onLoadMore = false;
                 userTransactionAdapter.clear();
                 transactionDTOs.clear();
                 requestPageNumber = 0;
@@ -231,6 +234,8 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
             case R.id.invoice_transaction:
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
+                FINISHED_SCROLLING = false;
+                onLoadMore = false;
                 userTransactionAdapter.clear();
                 transactionDTOs.clear();
                 requestPageNumber = 0;
@@ -283,9 +288,10 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
         @Override
         public void onTaskComplete(ResponseMessage<TransactionListResponse> transactionListResponseMessage) {
 
-
             hamPayDialog.dismisWaitingDialog();
+
             pullToRefresh.setRefreshing(false);
+
             PugNotification.with(context).cancel(Constants.TRANSACTIONS_NOTIFICATION_IDENTIFIER);
 
             if (transactionListResponseMessage != null) {

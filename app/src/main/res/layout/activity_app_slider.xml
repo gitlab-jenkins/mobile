@@ -74,7 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="32dp"
             android:textColor="@color/slider_button_text"
-            android:textSize="18sp"
+            android:textSize="16dp"
             android:gravity="center"
             android:layout_gravity="center"
             android:text="@string/register"

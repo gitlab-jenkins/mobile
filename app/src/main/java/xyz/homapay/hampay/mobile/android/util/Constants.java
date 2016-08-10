@@ -4,10 +4,10 @@ package xyz.homapay.hampay.mobile.android.util;
 import xyz.homapay.hampay.mobile.android.webservice.ConnectionType;
 
 public class Constants {
-//    public static String SERVER = "176.58.104.158";//England Server IP
-//    public static String SERVER = "mobile.hampay.ir";//Prod Server IP
-    public static String SERVER = "uat.hampay.ir";//UAT Server IP
-//    public static String SERVER = "mobile.hampay.homapay.com";//LIVE Server IP
+//    public static String SERVER = "176.58.104.158";//England Server
+//    public static String SERVER = "mobile.hampay.ir";//Prod Server
+    public static String SERVER = "uat.hampay.ir";//UAT Server
+//    public static String SERVER = "mobile.hampay.homapay.com";//LIVE Server
     public static String URL_PREFIX = "/hampay";
     public static String HTTP_SERVER_IP = "http://" + SERVER + ":90" + URL_PREFIX;//England Server
     public static String IPG_URL = "https://" + SERVER + URL_PREFIX;//England Server
@@ -62,7 +62,6 @@ public class Constants {
     public static final String USER_ENTRY_PASSWORD = "userEntryPassword";
     public static final String LOCAL_ERROR_CODE = "۱۰۰۰";
     public static final String NOTIFICATION = "notification";
-    public static final String USER_ID_TOKEN = "userIdToken";
     public static final String UUID = "uuid";
     public static final String IMAGE_PROFILE_SOURCE = "image_source";
     public static final String CAMERA_SELECT = "camera_select";

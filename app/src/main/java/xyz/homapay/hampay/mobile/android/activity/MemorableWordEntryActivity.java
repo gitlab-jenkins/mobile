@@ -172,7 +172,6 @@ public class MemorableWordEntryActivity extends AppCompatActivity {
                 }else {
                     Toast.makeText(context, getString(R.string.msg_memorable_incorrect), Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
     }

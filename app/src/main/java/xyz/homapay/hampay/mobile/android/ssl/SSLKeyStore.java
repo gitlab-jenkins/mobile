@@ -29,8 +29,6 @@ public class SSLKeyStore {
 //            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/live_pub_key.cer"));
             InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/uat-http-v1.crt"));
 //            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/nginx.crt"));
-//            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/prod-http-v1.crt"));
-//            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/hampay_prod_key.crt"));
             Certificate certificate = certificateFactory.generateCertificate(caInput);
 //            Log.e("ca=", ((X509Certificate) certificate).getSubjectDN() + "");
             String keyStoreType = KeyStore.getDefaultType();

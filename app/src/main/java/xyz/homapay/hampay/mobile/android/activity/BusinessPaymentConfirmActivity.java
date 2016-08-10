@@ -271,8 +271,8 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
         if (requestCode == 46) {
             if(resultCode == Activity.RESULT_OK){
-                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, 0);
-                if (result == 1){
+                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, -1);
+                if (result == 0){
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra(Constants.ACTIVITY_RESULT, ResultStatus.SUCCESS.ordinal());
                     setResult(Activity.RESULT_OK, returnIntent);

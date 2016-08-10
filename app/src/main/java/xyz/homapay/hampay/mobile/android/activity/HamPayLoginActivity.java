@@ -2,8 +2,10 @@ package xyz.homapay.hampay.mobile.android.activity;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
@@ -12,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.AdapterView;
@@ -62,6 +65,7 @@ import xyz.homapay.hampay.mobile.android.security.KeyExchange;
 import xyz.homapay.hampay.mobile.android.util.AppInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
+import xyz.homapay.hampay.mobile.android.util.NetworkChangeReceiver;
 import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
 
 
@@ -69,6 +73,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
 
     private KeyExchange keyExchange;
+    private BroadcastReceiver mIntentReceiver;
 
     @Override
     protected void onResume() {
@@ -222,14 +227,27 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
         context = this;
         activity = HamPayLoginActivity.this;
+        hamPayDialog = new HamPayDialog(activity);
+
+        IntentFilter intentFilter = new IntentFilter("network.intent.MAIN");
+        mIntentReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getBooleanExtra("get_status", false)){
+                    keyExchange = new KeyExchange(context);
+                    new KeyExchangeTask().execute();
+                }
+            }
+        };
+
+        this.registerReceiver(mIntentReceiver, intentFilter);
+
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         userIdToken = prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, "");
 
-
         keyExchange = new KeyExchange(context);
-
         new KeyExchangeTask().execute();
 
         hampay_user = (FacedTextView)findViewById(R.id.hampay_user);
@@ -249,8 +267,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
-
-        hamPayDialog = new HamPayDialog(activity);
 
         keyboard = (LinearLayout)findViewById(R.id.keyboard);
         password_holder = (LinearLayout)findViewById(R.id.password_holder);
@@ -312,19 +328,10 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         {
             hamPayDialog.dismisWaitingDialog();
             if (tacResponseMessage != null) {
-
                 if (tacResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-
-                    editor.putString(Constants.USER_ID_TOKEN, tacResponseMessage.getService().getTacDTO().getUserIdToken());
-                    editor.commit();
-
                     if (tacResponseMessage.getService().isShouldAcceptTAC()) {
-
-
                     } else {
-
                         Intent intent = new Intent();
-
                         if (bundle != null) {
                             if (bundle.getBoolean(Constants.HAS_NOTIFICATION)) {
                                 NotificationMessageType notificationMessageType;
@@ -332,8 +339,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                                 intent = getIntent();
                             }
                         }
-
-
                         intent.setClass(activity, MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.putExtra(Constants.USER_PROFILE_DTO, tacResponseMessage.getService().getTacDTO().getUserProfile());
@@ -659,9 +664,8 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
         @Override
         protected void onPostExecute(String result) {
+            hamPayDialog.dismisWaitingDialog();
             if (keyExchange.getKey() != null && keyExchange.getIv() != null){
-                editor.putString(Constants.ENCRYPTION_ID, keyExchange.getEncId());
-                editor.commit();
                 requestAndLoadPhoneState();
             }else {
                 Toast.makeText(activity, getString(R.string.system_connectivity), Toast.LENGTH_SHORT).show();
@@ -669,7 +673,9 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         }
 
         @Override
-        protected void onPreExecute() {}
+        protected void onPreExecute() {
+            hamPayDialog.showHamPayCommunication();
+        }
 
     }
 

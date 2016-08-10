@@ -197,6 +197,16 @@ public class HamPayDialog {
         }
     }
 
+    public void showHamPayCommunication(){
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_communication, null);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
+    }
+
     public void showTcPrivacyDialog(){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_tc_privacy, null);
@@ -492,11 +502,6 @@ public class HamPayDialog {
             public void onClick(View v) {
                 dialog.dismiss();
                 activity.finish();
-                Intent intent = new Intent();
-                intent.setClass(activity, HamPayLoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                activity.startActivity(intent);
-
                 LogoutRequest logoutRequest = new LogoutRequest();
                 RequestNewLogout requestNewLogout = new RequestNewLogout(activity, new RequestLoginTaskCompleteListener());
                 requestNewLogout.execute(logoutRequest);

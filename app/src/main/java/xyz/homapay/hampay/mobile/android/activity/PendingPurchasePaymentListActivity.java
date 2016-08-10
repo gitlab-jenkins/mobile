@@ -259,16 +259,14 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
         if (requestCode == 46) {
             if(resultCode == Activity.RESULT_OK){
-                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, 0);
-                if (result == 1){
+                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, -1);
+                if (result == 0){
                     fundDTOList.remove(itemPosition);
                     pendingFundListAdapter.notifyDataSetChanged();
                     if (fundDTOList.size() == 0) {
                         nullPendingText.setVisibility(View.VISIBLE);
-                        finish();
                     }
                 }
-
             }
             if (resultCode == Activity.RESULT_CANCELED) {
             }
@@ -276,16 +274,14 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
         if (requestCode == 45) {
             if(resultCode == Activity.RESULT_OK){
-                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, 0);
-                if (result == 1){
+                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, -1);
+                if (result == 0){
                     fundDTOList.remove(itemPosition);
                     pendingFundListAdapter.notifyDataSetChanged();
                     if (fundDTOList.size() == 0){
                         nullPendingText.setVisibility(View.VISIBLE);
-                        finish();
                     }
                 }
-
             }
             if (resultCode == Activity.RESULT_CANCELED) {
             }

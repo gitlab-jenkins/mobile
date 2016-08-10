@@ -178,66 +178,6 @@ public class SecuredProxyService {
         }else {
             return new ConvertUtils().streamToString(inputStreamReader);
         }
-
-//
-
-
-    }
-
-    public StringBuffer hamPayLogout(LogoutData logoutData) throws IOException {
-
-        BufferedWriter output;
-        StringBuffer response = null;
-        BufferedReader bufferedReader;
-        String inputLine;
-
-        switch (connectionType){
-            case HTTP:
-                httpURLConnection = (HttpURLConnection)url.openConnection();
-                httpURLConnection.setConnectTimeout(Constants.SERVICE_CONNECTION_TIMEOUT);
-                httpURLConnection.setReadTimeout(Constants.SERVICE_READ_TIMEOUT);
-                httpURLConnection.setRequestMethod(connectionMethod.name());
-                httpURLConnection.setDoOutput(true);
-//                httpURLConnection.setRequestProperty("iplanetDirectoryPro", logoutData.getIplanetDirectoryPro());
-                httpURLConnection.setRequestProperty("password", logoutData.getIplanetDirectoryPro());
-                httpURLConnection.setRequestProperty("Accept-Encoding", "UTF-8");
-                output = new BufferedWriter(new OutputStreamWriter(httpURLConnection.getOutputStream()));
-                output.write("");
-                output.flush();
-                output.close();
-                bufferedReader = new BufferedReader(
-                        new InputStreamReader(httpURLConnection.getInputStream()));
-                response = new StringBuffer();
-                while ((inputLine = bufferedReader.readLine()) != null) {
-                    response.append(inputLine);
-                }
-                bufferedReader.close();
-                break;
-
-            case HTTPS:
-                httpsURLConnection = new SSLConnection(context, url).setUpHttpsURLConnection();
-                httpsURLConnection.setConnectTimeout(Constants.SERVICE_CONNECTION_TIMEOUT);
-                httpsURLConnection.setReadTimeout(Constants.SERVICE_READ_TIMEOUT);
-                httpsURLConnection.setRequestMethod(connectionMethod.name());
-                httpsURLConnection.setDoOutput(true);
-                httpsURLConnection.setRequestProperty("password", logoutData.getIplanetDirectoryPro());
-                httpsURLConnection.setRequestProperty("Accept-Encoding", "UTF-8");
-                output = new BufferedWriter(new OutputStreamWriter(httpsURLConnection.getOutputStream()));
-                output.write("");
-                output.flush();
-                output.close();
-
-                bufferedReader = new BufferedReader(
-                        new InputStreamReader(httpsURLConnection.getInputStream()));
-                response = new StringBuffer();
-                while ((inputLine = bufferedReader.readLine()) != null) {
-                    response.append(inputLine);
-                }
-                bufferedReader.close();
-                break;
-        }
-        return response;
-
     }
 
     public Bitmap imageInputStream() throws IOException {

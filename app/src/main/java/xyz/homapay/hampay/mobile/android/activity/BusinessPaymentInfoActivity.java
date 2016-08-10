@@ -279,8 +279,6 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
     @Override
     protected void onUserLeaveHint() {
         super.onUserLeaveHint();
-        editor.putString(Constants.USER_ID_TOKEN, "");
-        editor.commit();
     }
 
 

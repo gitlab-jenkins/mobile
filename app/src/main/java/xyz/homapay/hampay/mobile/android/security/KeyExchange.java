@@ -42,7 +42,6 @@ public class KeyExchange {
 
     public KeyExchange(Context context){
         this.context = context;
-//        this.encryptionId = encryptionId;
     }
 
     public void exchange() throws EncryptionException, IOException {
@@ -50,7 +49,6 @@ public class KeyExchange {
         PublicKeyPair publicKeyPair = keyExchanger.getPublicKey();
         keyAgreementRequest = new KeyAgreementRequest();
         keyAgreementRequest.setRequestUUID(UUID.randomUUID().toString());
-//        keyAgreementRequest.setId(encryptionId);
         keyAgreementRequest.setKeyData(publicKeyPair.getEncPublicKey().getEncoded());
         keyAgreementRequest.setIvData(publicKeyPair.getIvPublicKey().getEncoded());
 

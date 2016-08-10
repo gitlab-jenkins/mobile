@@ -362,8 +362,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     @Override
     protected void onUserLeaveHint() {
         super.onUserLeaveHint();
-        editor.putString(Constants.USER_ID_TOKEN, "");
-        editor.commit();
     }
 
 
@@ -531,8 +529,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     }
                     registrationId = googleCloudMessaging.register(Constants.PROJECT_NUMBER);
                     msg = "Device registered, registration ID=" + registrationId;
-                    Log.e("GCM", msg);
-
                 } catch (IOException ex) {
                     msg = "Error :" + ex.getMessage();
 

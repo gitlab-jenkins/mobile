@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ripple="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -37,7 +36,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="Q"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
@@ -53,7 +53,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="W"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -68,7 +69,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="E"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -83,7 +85,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="R"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -98,7 +101,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="T"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -113,7 +117,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="Y"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -128,7 +133,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="U"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -143,7 +149,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="I"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -158,7 +165,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="O"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -173,7 +181,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="P"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
         </LinearLayout>
 
@@ -208,7 +217,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="A"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -223,7 +233,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="S"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -238,7 +249,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="D"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -253,7 +265,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="F"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -268,7 +281,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="G"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -283,7 +297,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="H"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -298,7 +313,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="J"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -313,7 +329,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="K"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -328,7 +345,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="L"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -363,7 +381,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="-"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -378,7 +397,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="Z"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -393,7 +413,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="X"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -408,7 +429,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="C"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -423,7 +445,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="V"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -438,7 +461,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="B"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -453,7 +477,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="N"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -468,7 +493,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="M"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <RelativeLayout
                 android:id="@+id/letter_backspace"
@@ -478,7 +504,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="d"
-                android:onClick="pressKey">
+                android:onClick="pressKey"
+                android:clickable="true">
 
                 <ImageView
                     android:layout_width="28dp"
@@ -526,7 +553,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="1"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
@@ -543,7 +571,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="2"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -559,7 +588,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="3"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
         </LinearLayout>
 
@@ -584,7 +614,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="4"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
@@ -601,7 +632,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="5"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -617,7 +649,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="6"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
         </LinearLayout>
 
@@ -642,7 +675,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="7"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
@@ -659,7 +693,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="8"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/iran_sans_bold.ttf"
@@ -675,7 +710,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="9"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
         </LinearLayout>
 
@@ -699,6 +735,7 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:onClick="pressKey"
+                android:clickable="true"
                 android:tag="+"/>
 
 
@@ -716,7 +753,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="0"
-                android:onClick="pressKey"/>
+                android:onClick="pressKey"
+                android:clickable="true"/>
 
             <RelativeLayout
                 android:id="@+id/backspace"
@@ -726,7 +764,8 @@
                 android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
                 android:tag="d"
-                android:onClick="pressKey">
+                android:onClick="pressKey"
+                android:clickable="true">
 
                 <ImageView
                     android:layout_width="28dp"

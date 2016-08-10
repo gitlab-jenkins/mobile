@@ -203,22 +203,14 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                 input_digit_3.setBackgroundColor(Color.TRANSPARENT);
                 input_digit_4.setText(persianEnglishDigit.E2P(receivedSmsValue.substring(3, 4)));
                 input_digit_4.setBackgroundColor(Color.TRANSPARENT);
-//                input_digit_5.setText(persianEnglishDigit.E2P(receivedSmsValue.substring(4, 5)));
-//                input_digit_5.setBackgroundColor(Color.TRANSPARENT);
-
-//                if (receivedSmsValue.length() == 5) {
                 if (receivedSmsValue.length() == 4) {
-
                     registrationVerifyMobileRequest = new RegistrationVerifyMobileRequest();
-
                     registrationVerifyMobileRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
                     registrationVerifyMobileRequest.setSmsToken(receivedSmsValue);
                     receivedSmsValue = "";
                     requestVerifyMobile = new RequestVerifyMobile(context, new RequestRegistrationVerifyMobileTaskCompleteListener());
                     requestVerifyMobile.execute(registrationVerifyMobileRequest);
-
                 }
-
             }
         };
         this.registerReceiver(mIntentReceiver, intentFilter);
@@ -309,11 +301,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
 
         registrationSendSmsTokenRequest = new RegistrationSendSmsTokenRequest();
         registrationSendSmsTokenRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
-
-    }
-
-
-    public void contactUs(View view){
 
     }
 
@@ -544,7 +531,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
             }
         }
 
-//        if (receivedSmsValue.length() == 5) {
         if (receivedSmsValue.length() == 4) {
 
             registrationVerifyMobileRequest = new RegistrationVerifyMobileRequest();

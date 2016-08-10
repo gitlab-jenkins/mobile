@@ -189,22 +189,6 @@
             android:name=".account.AuthenticatorActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
-
-        <!-- cls -->
-        <!-- <activity -->
-        <!-- android:name=".account.ViewingActivity" -->
-        <!-- android:exported="true" -->
-        <!-- android:screenOrientation="portrait" > -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="android.intent.action.VIEW" /> -->
-
-
-        <!-- <category android:name="android.intent.category.DEFAULT" /> -->
-
-
-        <!-- <data android:mimeType="vnd.android.cursor.item/com.hampay.mobile" /> -->
-        <!-- </intent-filter> -->
-        <!-- </activity> -->
         <activity
             android:name=".activity.ChangePassCodeActivity"
             android:label="@string/app_name"
@@ -288,6 +272,14 @@
             android:label="@string/app_name"
             android:theme="@style/MyMaterialTheme">
         </activity>
+
+        <receiver android:name=".util.NetworkChangeReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

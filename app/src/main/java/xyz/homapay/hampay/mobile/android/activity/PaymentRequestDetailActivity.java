@@ -399,7 +399,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
 
         if (requestCode == 10) {
             if (resultCode == Activity.RESULT_OK) {
-                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, 0);
+                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, -1);
                 if (result == 0) {
                     finish();
                 }

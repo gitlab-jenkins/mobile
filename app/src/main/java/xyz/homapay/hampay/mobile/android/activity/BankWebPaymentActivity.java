@@ -243,13 +243,13 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                             hamPayDialog.ipgFailDialog();
                             resultStatus = ResultStatus.FAILURE;
                         }
-                        startTimer();
-                        Intent returnIntent = new Intent();
-                        returnIntent.putExtra(Constants.ACTIVITY_RESULT, resultStatus.ordinal());
-                        setResult(Activity.RESULT_OK, returnIntent);
+//                        startTimer();
+//                        Intent returnIntent = new Intent();
+//                        returnIntent.putExtra(Constants.ACTIVITY_RESULT, resultStatus.ordinal());
+//                        setResult(Activity.RESULT_OK, returnIntent);
                     } else {
                         hamPayDialog.ipgFailDialog();
-                        startTimer();
+//                        startTimer();
                     }
                 } else {
                     hamPayDialog.dismisWaitingDialog();
@@ -267,8 +267,8 @@ public class BankWebPaymentActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 0) {
             if(resultCode == Activity.RESULT_OK){
-                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, 0);
-                if (result == 1){
+                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, -1);
+                if (result == 0){
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra(Constants.ACTIVITY_RESULT, ResultStatus.SUCCESS.ordinal());
                     setResult(Activity.RESULT_OK, returnIntent);

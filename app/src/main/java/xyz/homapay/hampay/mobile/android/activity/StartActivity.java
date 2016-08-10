@@ -30,10 +30,10 @@ import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 
 public class StartActivity extends AppCompatActivity {
 
+    private HamPayDialog hamPayDialog;
     private FacedTextView start_button;
     private KeyExchange keyExchange;
     private Activity activity;
-    private SharedPreferences.Editor editor;
     private IllegalAppListRequest illegalAppListRequest;
     private RequestIllegalAppList requestIllegalAppList;
 
@@ -51,21 +51,14 @@ public class StartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start);
 
         activity = StartActivity.this;
-
-        editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-
+        hamPayDialog = new HamPayDialog(activity);
         keyExchange = new KeyExchange(activity);
-        new KeyExchangeTask().execute();
 
         start_button = (FacedTextView) findViewById(R.id.start_button);
         start_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (keyExchange.getKey() != null && keyExchange.getIv() != null) {
-                    new HamPayDialog(StartActivity.this).showTcPrivacyDialog();
-                }else {
-                    new KeyExchangeTask().execute();
-                }
+                new KeyExchangeTask().execute();
             }
         });
 
@@ -111,9 +104,6 @@ public class StartActivity extends AppCompatActivity {
                             new HamPayDialog(activity).showFailIllegalAppListDialog(requestIllegalAppList, illegalAppListRequest,
                                     illegalAppName,
                                     getString(R.string.msg_found_illegal_app));
-
-                            editor.putBoolean(Constants.FORCE_FETCH_ILLEGAL_APPS, true).commit();
-
                             return;
                         }
                     }
@@ -154,19 +144,21 @@ public class StartActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
+            hamPayDialog.dismisWaitingDialog();
             if (keyExchange.getKey() != null && keyExchange.getIv() != null) {
-                editor.putString(Constants.ENCRYPTION_ID, keyExchange.getEncId());
-                editor.commit();
-                illegalAppListRequest = new IllegalAppListRequest();
-                requestIllegalAppList = new RequestIllegalAppList(activity, new RequestIllegalAppListTaskCompleteListener());
-                requestIllegalAppList.execute(illegalAppListRequest);
+                hamPayDialog.showTcPrivacyDialog();
+//                illegalAppListRequest = new IllegalAppListRequest();
+//                requestIllegalAppList = new RequestIllegalAppList(activity, new RequestIllegalAppListTaskCompleteListener());
+//                requestIllegalAppList.execute(illegalAppListRequest);
             }else {
                 Toast.makeText(activity, getString(R.string.system_connectivity), Toast.LENGTH_LONG).show();
             }
         }
 
         @Override
-        protected void onPreExecute() {}
+        protected void onPreExecute() {
+            hamPayDialog.showHamPayCommunication();
+        }
 
     }
 }
