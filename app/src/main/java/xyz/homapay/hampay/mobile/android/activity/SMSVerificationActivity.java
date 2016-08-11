@@ -106,11 +106,12 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
     protected void onStop() {
         super.onStop();
         HamPayApplication.setAppSate(AppState.Stoped);
-//        stopTimerTask();
         if (requestVerifyMobile != null){
             if (!requestVerifyMobile.isCancelled())
                 requestVerifyMobile.cancel(true);
         }
+
+        unregisterReceiver(mIntentReceiver);
     }
 
 
@@ -238,7 +239,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         editor.putString(Constants.RECEIVED_SMS_ACTIVATION, "");
         editor.commit();
 
-
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -290,18 +290,15 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
 
         progress_layout = (LinearLayout)findViewById(R.id.progress_layout);
 
-
         input_digit_1 = (FacedTextView)findViewById(R.id.input_digit_1);
         input_digit_2 = (FacedTextView)findViewById(R.id.input_digit_2);
         input_digit_3 = (FacedTextView)findViewById(R.id.input_digit_3);
         input_digit_4 = (FacedTextView)findViewById(R.id.input_digit_4);
-//        input_digit_5 = (FacedTextView)findViewById(R.id.input_digit_5);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
 
         registrationSendSmsTokenRequest = new RegistrationSendSmsTokenRequest();
         registrationSendSmsTokenRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
-
     }
 
     public class RequestRegistrationVerifyMobileTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationVerifyMobileResponse>>

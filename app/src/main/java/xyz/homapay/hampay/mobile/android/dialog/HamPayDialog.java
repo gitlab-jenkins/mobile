@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.provider.Settings;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -273,7 +274,6 @@ public class HamPayDialog {
 
 
     public void dismisWaitingDialog(){
-
         if (dialog != null && !activity.isFinishing()){
             if (dialog.isShowing())
                 dialog.dismiss();
@@ -373,7 +373,6 @@ public class HamPayDialog {
         @Override
         protected String doInBackground(ContactUsRequest... params) {
 
-//            WebServices webServices = new WebServices(activity, Constants.CONNECTION_TYPE);
             SecuredWebServices webServices = new SecuredWebServices(activity, Constants.CONNECTION_TYPE);
             try {
                 contactUsResponseResponseMessage = webServices.contactUsResponse(params[0]);
@@ -1959,27 +1958,26 @@ public class HamPayDialog {
         }
     }
 
-    public void showPendingCancelDialog(String code){
+    public void showNoNetwork(){
 
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_pending_cancel_confirm, null);
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_no_network, null);
 
-        FacedTextView message = (FacedTextView) view.findViewById(R.id.message);
-        message.setText(activity.getString(R.string.msg_cancel_pending, code));
-        FacedTextView cancel_pending_confirm = (FacedTextView) view.findViewById(R.id.cancel_pending_confirm);
-        FacedTextView cancel_pending_cancel = (FacedTextView) view.findViewById(R.id.cancel_pending_cancel);
+        FacedTextView networkSetting = (FacedTextView) view.findViewById(R.id.network_setting);
+        FacedTextView networkCancel = (FacedTextView) view.findViewById(R.id.network_cancel);
 
-        cancel_pending_confirm.setOnClickListener(new View.OnClickListener() {
+        networkSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                activity.startActivity(new Intent(Settings.ACTION_SETTINGS));
             }
         });
 
-        cancel_pending_cancel.setOnClickListener(new View.OnClickListener() {
+        networkCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-
+                activity.finish();
             }
         });
 

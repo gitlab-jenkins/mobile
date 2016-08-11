@@ -277,6 +277,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                if (pspInfoDTO == null) return;
+
                 if (pspInfoDTO.getCardDTO().getCardId() == null || (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() >= Constants.SOAP_AMOUNT_MAX)) {
                     Intent intent = new Intent();
                     intent.setClass(activity, BankWebPaymentActivity.class);

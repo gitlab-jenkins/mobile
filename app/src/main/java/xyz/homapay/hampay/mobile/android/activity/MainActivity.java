@@ -466,19 +466,19 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     }
 
 
-    private void addNewAccount(String accountType, String authTokenType) {
-        final AccountManagerFuture<Bundle> future = AccountManager.get(this).addAccount(accountType, authTokenType, null, null, this, new AccountManagerCallback<Bundle>() {
-            @Override
-            public void run(AccountManagerFuture<Bundle> future) {
-                try {
-                    Bundle bnd = future.getResult();
-                    Log.i("", "Account was created");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }, null);
-    }
+//    private void addNewAccount(String accountType, String authTokenType) {
+//        final AccountManagerFuture<Bundle> future = AccountManager.get(this).addAccount(accountType, authTokenType, null, null, this, new AccountManagerCallback<Bundle>() {
+//            @Override
+//            public void run(AccountManagerFuture<Bundle> future) {
+//                try {
+//                    Bundle bnd = future.getResult();
+//                    Log.i("", "Account was created");
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }, null);
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -629,7 +629,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
                 ResultStatus resultStatus = pspResultResponseMessage.getService().getResultStatus();
 
-                if (resultStatus == ResultStatus.SUCCESS || resultStatus == ResultStatus.PAYMENT_NOT_FOUND || resultStatus == ResultStatus.PURCHASE_NOT_FOUND){
+                if (resultStatus == ResultStatus.SUCCESS || resultStatus == ResultStatus.PAYMENT_NOT_FOUND || resultStatus == ResultStatus.PURCHASE_NOT_FOUND || resultStatus == ResultStatus.INVALID_FUND_STATUS_EXCEPTION){
                     if (SWTrace != null) {
                         dbHelper.syncPspResult(SWTrace);
                     }

@@ -189,13 +189,11 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
     }
 
     private void inputDigit(String digit){
-        Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-
         if (inputPurchaseCode.length() <= 5) {
 
             switch (inputPurchaseCode.length()) {
                 case 0:
-                    if (digit.equalsIgnoreCase("d")) {
+                    if (digit.equals("d")) {
                         input_digit_1.setText("");
                     } else {
                         input_digit_1.setText(digit);
@@ -208,7 +206,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                     break;
 
                 case 1:
-                    if (digit.equalsIgnoreCase("d")) {
+                    if (digit.equals("d")) {
                         input_digit_2.setText("");
                     } else {
                         input_digit_2.setText(digit);
@@ -219,7 +217,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                     input_digit_6.setText("");
                     break;
                 case 2:
-                    if (digit.equalsIgnoreCase("d")) {
+                    if (digit.equals("d")) {
                         input_digit_3.setText("");
                     } else {
                         input_digit_3.setText(digit);
@@ -229,7 +227,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                     input_digit_6.setText("");
                     break;
                 case 3:
-                    if (digit.equalsIgnoreCase("d")) {
+                    if (digit.equals("d")) {
                         input_digit_4.setText("");
                     } else {
                         input_digit_4.setText(digit);
@@ -238,7 +236,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                     input_digit_6.setText("");
                     break;
                 case 4:
-                    if (digit.equalsIgnoreCase("d")) {
+                    if (digit.equals("d")) {
                         input_digit_5.setText("");
                     } else {
                         input_digit_5.setText(digit);
@@ -246,7 +244,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                     input_digit_6.setText("");
                     break;
                 case 5:
-                    if (digit.equalsIgnoreCase("d")) {
+                    if (digit.equals("d")) {
                         input_digit_6.setText("");
                     } else {
                         input_digit_6.setText(digit);
@@ -287,10 +285,10 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
     }
 
     public void pressKey(View view){
-        if (view.getTag().toString().equalsIgnoreCase("-")){
+        if (view.getTag().toString().equals("-")){
             letter_layout.setVisibility(View.GONE);
             digit_layout.setVisibility(View.VISIBLE);
-        }else if (view.getTag().toString().equalsIgnoreCase("+")) {
+        }else if (view.getTag().toString().equals("+")) {
             letter_layout.setVisibility(View.VISIBLE);
             digit_layout.setVisibility(View.GONE);
         }

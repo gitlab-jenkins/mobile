@@ -315,4 +315,7 @@
     <string name="purchase_status_processing">درحال پردازش</string>
     <string name="purchase_status_succeed">پرداخت موفق</string>
     <string name="system_connectivity">عدم ایجاد ارتباط با هم‌پی، لطفا مجدد تلاش کنید</string>
+    <string name="not_connectivity">اتصال اینترنت خود را بررسی نمایید</string>
+    <string name="network_setting">تنظیمات</string>
+    <string name="network_cancel">انصراف</string>
 </resources>

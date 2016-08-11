@@ -14,7 +14,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,7 +31,6 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
@@ -65,7 +63,7 @@ import xyz.homapay.hampay.mobile.android.security.KeyExchange;
 import xyz.homapay.hampay.mobile.android.util.AppInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
-import xyz.homapay.hampay.mobile.android.util.NetworkChangeReceiver;
+import xyz.homapay.hampay.mobile.android.util.NetworkConnectivity;
 import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
 
 
@@ -74,10 +72,22 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
     private KeyExchange keyExchange;
     private BroadcastReceiver mIntentReceiver;
+    private NetworkConnectivity networkConnectivity;
+
 
     @Override
     protected void onResume() {
         super.onResume();
+        intentFilter = new IntentFilter("network.intent.MAIN");
+        mIntentReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getBooleanExtra("get_status", false)){
+                    new KeyExchangeTask().execute();
+                }
+            }
+        };
+        this.registerReceiver(mIntentReceiver, intentFilter);
         HamPayApplication.setAppSate(AppState.Resumed);
     }
 
@@ -88,6 +98,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     }
 
     public static HamPayLoginActivity instance = null;
+
 
     RequestLogin requestLogin;
     FacedTextView hampay_memorableword_text;
@@ -116,7 +127,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     LinearLayout password_holder;
     Context context;
     Activity activity;
-    private String encryptionId = "";
+    private IntentFilter intentFilter;
     SharedPreferences.Editor editor;
     SharedPreferences prefs;
     HamPayDialog hamPayDialog;
@@ -132,8 +143,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     private RequestRecentPendingFund requestRecentPendingFund;
     private RecentPendingFundRequest recentPendingFundRequest;
     private PendingFundAdapter pendingFundAdapter;
-
-
 
     public void userManual(View view){
         Intent intent = new Intent();
@@ -164,6 +173,8 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                 requestRecentPendingFund.cancel(true);
             }
         }
+
+        unregisterReceiver(mIntentReceiver);
     }
 
     @Override
@@ -218,37 +229,26 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ham_pay_login);
-
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-
         instance = this;
-
         context = this;
         activity = HamPayLoginActivity.this;
         hamPayDialog = new HamPayDialog(activity);
+        keyExchange = new KeyExchange(context);
 
-        IntentFilter intentFilter = new IntentFilter("network.intent.MAIN");
-        mIntentReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (intent.getBooleanExtra("get_status", false)){
-                    keyExchange = new KeyExchange(context);
-                    new KeyExchangeTask().execute();
-                }
-            }
-        };
-
-        this.registerReceiver(mIntentReceiver, intentFilter);
-
+        networkConnectivity = new NetworkConnectivity();
+        if (!networkConnectivity.isOnline(context)){
+            hamPayDialog.showNoNetwork();
+        }else {
+            keyExchange = new KeyExchange(context);
+            new KeyExchangeTask().execute();
+        }
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         userIdToken = prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, "");
-
-        keyExchange = new KeyExchange(context);
-        new KeyExchangeTask().execute();
 
         hampay_user = (FacedTextView)findViewById(R.id.hampay_user);
         hampay_user.setText(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
@@ -536,16 +536,20 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
             keyboard.setEnabled(false);
 
-            if (keyExchange.getKey() != null && keyExchange.getIv() != null){
-                LoginRequest loginRequest = new LoginRequest();
-                loginRequest.setPassword(password);
-                loginRequest.setUsername(userIdToken);
-                RequestNewLogin requestNewLogin = new RequestNewLogin(activity, new RequestLoginTaskCompleteListener());
-                requestNewLogin.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, loginRequest);
+            if (!networkConnectivity.isOnline(context)){
+                hamPayDialog.showNoNetwork();
             }else {
-                resetLogin();
-                Toast.makeText(activity, getString(R.string.system_connectivity), Toast.LENGTH_SHORT).show();
-                new KeyExchangeTask().execute();
+                if (keyExchange.getKey() != null && keyExchange.getIv() != null) {
+                    LoginRequest loginRequest = new LoginRequest();
+                    loginRequest.setPassword(password);
+                    loginRequest.setUsername(userIdToken);
+                    RequestNewLogin requestNewLogin = new RequestNewLogin(activity, new RequestLoginTaskCompleteListener());
+                    requestNewLogin.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, loginRequest);
+                } else {
+                    resetLogin();
+                    Toast.makeText(activity, getString(R.string.system_connectivity), Toast.LENGTH_SHORT).show();
+                    new KeyExchangeTask().execute();
+                }
             }
         }
 
@@ -674,6 +678,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
         @Override
         protected void onPreExecute() {
+            hamPayDialog.dismisWaitingDialog();
             hamPayDialog.showHamPayCommunication();
         }
 

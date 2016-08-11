@@ -12,17 +12,13 @@ import android.util.Log;
  */
 public class NetworkChangeReceiver extends BroadcastReceiver {
 
-
     @Override
     public void onReceive(Context context, Intent intent) {
-        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
 
-        if (isConnected) {
-            Intent in = new Intent("network.intent.MAIN").putExtra(
-                    "get_status", isConnected);
+        NetworkConnectivity networkConnectivity = new NetworkConnectivity();
+        boolean isOnline = networkConnectivity.isOnline(context);
+        if (isOnline) {
+            Intent in = new Intent("network.intent.MAIN").putExtra("get_status", isOnline);
             context.sendBroadcast(in);
         }
     }
