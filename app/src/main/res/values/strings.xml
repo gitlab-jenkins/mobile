@@ -318,4 +318,6 @@
     <string name="not_connectivity">اتصال اینترنت خود را بررسی نمایید</string>
     <string name="network_setting">تنظیمات</string>
     <string name="network_cancel">انصراف</string>
+    <string name="prevent_payment_request">تنها کاربران دارای کد پذیرندگی می‌توانند از این امکان استفاده کنند. لطفا نسبت به دریافت کد پذیرندگی هماپی اقدام بفرمایید</string>
+    <string name="prevent_payment_request_cancel">تایید</string>
 </resources>

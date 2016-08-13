@@ -32,6 +32,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.crypto.SecretKey;
+
 import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
@@ -173,14 +175,13 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                 requestRecentPendingFund.cancel(true);
             }
         }
-
-        unregisterReceiver(mIntentReceiver);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         HamPayApplication.setAppSate(AppState.Resumed);
+        unregisterReceiver(mIntentReceiver);
     }
 
     @Override
@@ -237,7 +238,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         activity = HamPayLoginActivity.this;
         hamPayDialog = new HamPayDialog(activity);
         keyExchange = new KeyExchange(context);
-
         networkConnectivity = new NetworkConnectivity();
         if (!networkConnectivity.isOnline(context)){
             hamPayDialog.showNoNetwork();

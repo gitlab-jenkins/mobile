@@ -36,6 +36,7 @@ import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestPendingCount;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.slidinguppanel.SlidingUpPanelLayout;
+import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
@@ -46,7 +47,7 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
  */
 public class MainFragment extends Fragment implements View.OnClickListener{
 
-
+    private HamPayDialog hamPayDialog;
     private SlidingUpPanelLayout slidingUpPanelLayout;
     private ImageView main_banner;
     private LinearLayout hampay_friend;
@@ -69,21 +70,15 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     FacedTextView hampay_3;
     FacedTextView hampay_4;
     private LinearLayout bottom_panel;
-
     FacedTextView user_last_login;
-
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
-
     private Context context;
-
     private FacedTextView message_text;
     private FacedTextView date_text;
     private FacedTextView pending_badge;
-
     private PersianEnglishDigit persianEnglishDigit;
     private ImageManager imageManager;
-    private String authToken;
 
     public MainFragment() {
     }
@@ -104,8 +99,8 @@ public class MainFragment extends Fragment implements View.OnClickListener{
 
         Date currentDate = new Date();
 
+        hamPayDialog = new HamPayDialog(getActivity());
         slidingUpPanelLayout = (SlidingUpPanelLayout)rootView.findViewById(R.id.sliding_layout);
-
 
         message_text = (FacedTextView)rootView.findViewById(R.id.message_text);
         date_text = (FacedTextView)rootView.findViewById(R.id.date_text);
@@ -117,8 +112,6 @@ public class MainFragment extends Fragment implements View.OnClickListener{
 
         prefs = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
         editor = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE).edit();
-        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
-
 
         bundle = getArguments();
 
@@ -223,10 +216,6 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         user_payment_request = (LinearLayout)rootView.findViewById(R.id.user_payment_request);
         user_payment_request.setOnClickListener(this);
 
-        if (!bundle.getBoolean(Constants.SHOW_CREATE_INVOICE)){
-            user_payment_request.setVisibility(View.GONE);
-        }
-
         businessPurchase = (LinearLayout)rootView.findViewById(R.id.businessPurchase);
         businessPurchase.setOnClickListener(this);
 
@@ -294,8 +283,12 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                     slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
                     return;
                 }
-                intent.setClass(getActivity(), PaymentRequestListActivity.class);
-                startActivity(intent);
+                if (!bundle.getBoolean(Constants.SHOW_CREATE_INVOICE)){
+                    hamPayDialog.preventPaymentRequest();
+                }else {
+                    intent.setClass(getActivity(), PaymentRequestListActivity.class);
+                    startActivity(intent);
+                }
                 break;
 
             case R.id.businessPurchase:

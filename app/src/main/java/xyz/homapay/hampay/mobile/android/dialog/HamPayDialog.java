@@ -1989,18 +1989,30 @@ public class HamPayDialog {
     }
 
     public void showUnknownIban(){
-
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_known_iban, null);
-
         FacedTextView unknown_iban_confirm = (FacedTextView) view.findViewById(R.id.unknown_iban_confirm);
-
         unknown_iban_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
             }
         });
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
+    }
 
+    public void preventPaymentRequest(){
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_pevent_payment_request, null);
+        FacedTextView preventPaymentRequest = (FacedTextView) view.findViewById(R.id.prevent_payment_request);
+        preventPaymentRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
         view.setMinimumWidth((int) (rect.width() * 0.85f));
         if (!activity.isFinishing()) {
             dialog = new HamPayCustomDialog(view, activity, 0);
