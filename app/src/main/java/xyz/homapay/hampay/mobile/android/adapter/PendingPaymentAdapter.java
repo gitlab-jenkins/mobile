@@ -100,7 +100,7 @@ public class PendingPaymentAdapter extends BaseAdapter  {
 
         viewHolder.callerName.setText(paymentInfoDTO.getCallerName());
         viewHolder.price_pay.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfoDTO.getAmount())));
-        viewHolder.paymentCode.setText(persianEnglishDigit.E2P("کد فاکتور " + paymentInfoDTO.getProductCode()));
+        viewHolder.paymentCode.setText(persianEnglishDigit.E2P(activity.getString(R.string.payment_request_code) + paymentInfoDTO.getProductCode()));
         viewHolder.expire_pay.setText(dateUtil.remainingTime(paymentInfoDTO.getExpirationDate(), currentDate));
 
         if (paymentInfoDTO.getImageId() != null) {

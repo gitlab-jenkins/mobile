@@ -172,25 +172,17 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                     "ResNum4=" + pspInfoDTO.getCellNumber() +
                             "&ResNum3=" + pspInfoDTO.getCardDTO().getSmsToken() +
                             "&RedirectURL=" + redirectedURL +
-                            "&Amount=" + (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge()) +
+                            "&Amount=" + (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + paymentInfoDTO.getVat()) +
                             "&ResNum=" + paymentInfoDTO.getProductCode() +
                             "&TerminalId=" + pspInfoDTO.getTerminalID();
 
         }else if (purchaseInfoDTO != null){
 
-            long vat = 0;
-
-            if(purchaseInfoDTO.getVat() == 0){
-                vat = 0;
-            }else {
-                vat = purchaseInfoDTO.getVat();
-            }
-
             postData =
                     "ResNum4=" + pspInfoDTO.getCellNumber() +
                             "&ResNum3=" + pspInfoDTO.getCardDTO().getSmsToken() +
                             "&RedirectURL=" + redirectedURL +
-                            "&Amount=" + (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + vat) +
+                            "&Amount=" + (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + paymentInfoDTO.getVat()) +
                             "&ResNum=" + purchaseInfoDTO.getProductCode() +
                             "&TerminalId=" + pspInfoDTO.getTerminalID();
         }

@@ -441,7 +441,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             case 8:
                 LogoutData logoutData = new LogoutData();
                 logoutData.setIplanetDirectoryPro(prefs.getString(Constants.LOGIN_TOKEN_ID, null));
-                new HamPayDialog(activity).showExitDialog(logoutData);
+                new HamPayDialog(activity).showLogoutDialog(logoutData);
                 break;
         }
 
@@ -514,7 +514,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         else{
             LogoutData logoutData = new LogoutData();
             logoutData.setIplanetDirectoryPro(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            new HamPayDialog(activity).showExitDialog(logoutData);
+            new HamPayDialog(activity).showLogoutDialog(logoutData);
         }
     }
 

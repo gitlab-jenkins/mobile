@@ -101,7 +101,7 @@ public class PendingFundListAdapter extends BaseAdapter {
         }
 
         viewHolder.contact_name.setText(persianEnglishDigit.E2P(fund.getName()));
-        viewHolder.code.setText("کد فاکتور " + persianEnglishDigit.E2P(fund.getCode()));
+        viewHolder.code.setText(activity.getString(R.string.payment_request_code) + persianEnglishDigit.E2P(fund.getCode()));
         viewHolder.remaining_time.setText(dateUtil.remainingTime(fund.getExpirationDate(), currentDate));
         viewHolder.amount_value.setText(persianEnglishDigit.E2P(formatter.format(fund.getAmount())));
 

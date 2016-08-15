@@ -98,7 +98,7 @@ public class PendingPurchaseAdapter extends BaseAdapter  {
 
         final PurchaseInfoDTO purchaseInfoDTO = purchaseInfoDTOs.get(position);
 
-        viewHolder.purchase_code.setText("کد فاکتور " + persianEnglishDigit.E2P(purchaseInfoDTO.getPurchaseCode()));
+        viewHolder.purchase_code.setText(activity.getString(R.string.payment_request_code) + persianEnglishDigit.E2P(purchaseInfoDTO.getPurchaseCode()));
         viewHolder.business_name.setText(purchaseInfoDTO.getMerchantName());
 
         if (purchaseInfoDTO.getMerchantImageId() != null) {

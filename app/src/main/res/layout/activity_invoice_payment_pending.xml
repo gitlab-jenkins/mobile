@@ -91,7 +91,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/app_origin"
                             android:textSize="13dp"
-                            android:text="کد فاکتور"/>
+                            android:text="@string/payment_request_code"/>
 
                     </LinearLayout>
 

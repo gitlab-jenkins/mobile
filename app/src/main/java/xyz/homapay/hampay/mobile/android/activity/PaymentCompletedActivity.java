@@ -54,6 +54,13 @@ public class PaymentCompletedActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra(Constants.ACTIVITY_RESULT, ResultStatus.SUCCESS.ordinal());
+        setResult(Activity.RESULT_OK, returnIntent);
+        finish();
+    }
 
     @Override
     protected void onPause() {

@@ -521,6 +521,42 @@ public class HamPayDialog {
         }
     }
 
+
+    public void showLogoutDialog(final LogoutData logoutData){
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_exit_app, null);
+
+        FacedTextView exit_app_yes = (FacedTextView) view.findViewById(R.id.exit_app_yes);
+        FacedTextView exit_app_no = (FacedTextView) view.findViewById(R.id.exit_app_no);
+
+        exit_app_yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LogoutRequest logoutRequest = new LogoutRequest();
+                RequestNewLogout requestNewLogout = new RequestNewLogout(activity, new RequestLoginTaskCompleteListener());
+                requestNewLogout.execute(logoutRequest);
+                dialog.dismiss();
+                activity.finish();
+                Intent intent = new Intent(activity, HamPayLoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                activity.startActivity(intent);
+            }
+        });
+
+        exit_app_no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
+    }
+
     public class RequestLoginTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<LogoutResponse>>
     {
         public RequestLoginTaskCompleteListener(){
@@ -1581,7 +1617,7 @@ public class HamPayDialog {
         FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
 
         if (responseCode.length() > 0){
-            message.setText("کد خطا: " + responseCode + "\n" + description);
+            message.setText("کد خطا: " + new PersianEnglishDigit().E2P(responseCode) + "\n" + description);
         }
 
         confirmation.setOnClickListener(new View.OnClickListener() {
@@ -1854,7 +1890,7 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                requestIBANChange.execute(ibanChangeRequest);
+//                requestIBANChange.execute(ibanChangeRequest);
             }
         });
 

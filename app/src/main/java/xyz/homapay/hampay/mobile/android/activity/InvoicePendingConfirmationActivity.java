@@ -44,6 +44,7 @@ import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
+import xyz.homapay.hampay.mobile.android.util.PspCode;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring;
 
@@ -239,7 +240,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                     TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
 
                     s2sMapEntry.Key = "Amount";
-                    s2sMapEntry.Value = (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge()) + "";
+                    s2sMapEntry.Value = (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + paymentInfoDTO.getVat()) + "";
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
@@ -354,7 +355,8 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.msg_insufficient_credit));
                         resultStatus = ResultStatus.FAILURE;
                     }else {
-                        new HamPayDialog(activity).pspFailResultDialog(responseCode, description);
+                        PspCode pspCode = new PspCode(context);
+                        new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(responseCode));
                         resultStatus = ResultStatus.FAILURE;
                     }
 
@@ -437,10 +439,6 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                     forceLogout();
                 }
                 else {
-
-//                    new HamPayDialog(activity).showFailPaymentDialog(pspResultResponseMessage.getService().getResultStatus().getCode(),
-//                            pspResultResponseMessage.getService().getResultStatus().getDescription());
-
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Pending Payment Request")
                             .setAction("Payment")
@@ -448,9 +446,6 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                             .build());
                 }
             } else {
-//                new HamPayDialog(activity).showFailPaymentDialog(Constants.LOCAL_ERROR_CODE,
-//                        getString(R.string.msg_fail_payment));
-
                 hamPayGaTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Pending Payment Request")
                         .setAction("Payment")
@@ -560,7 +555,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
     private void fillPayment(PaymentInfoDTO paymentInfo, PspInfoDTO pspInfo){
         callerName.setText(paymentInfo.getCallerName());
-        paymentCode.setText(persianEnglishDigit.E2P("کد فاکتور " + paymentInfo.getProductCode()));
+        paymentCode.setText(persianEnglishDigit.E2P(getString(R.string.payment_request_code) + paymentInfo.getProductCode()));
         create_date.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(paymentInfo.getCreatedBy())));
         if (paymentInfo.getMessage() != null) {
             received_message.setText(paymentInfo.getMessage().trim());
