@@ -342,7 +342,6 @@
                         android:maxLength="140"
                         android:imeOptions="actionNext"/>
 
-
                 </RelativeLayout>
 
 

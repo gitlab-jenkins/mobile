@@ -182,7 +182,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                     "ResNum4=" + pspInfoDTO.getCellNumber() +
                             "&ResNum3=" + pspInfoDTO.getCardDTO().getSmsToken() +
                             "&RedirectURL=" + redirectedURL +
-                            "&Amount=" + (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + paymentInfoDTO.getVat()) +
+                            "&Amount=" + (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat()) +
                             "&ResNum=" + purchaseInfoDTO.getProductCode() +
                             "&TerminalId=" + pspInfoDTO.getTerminalID();
         }
@@ -226,7 +226,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
                             }else if (purchaseInfoDTO != null){
                                 intent.putExtra(Constants.SUCCESS_PAYMENT_AMOUNT, purchaseInfoDTO.getAmount());
-                                intent.putExtra(Constants.SUCCESS_PAYMENT_CODE, purchaseInfoDTO.getProductCode());
+                                intent.putExtra(Constants.SUCCESS_PAYMENT_CODE, purchaseInfoDTO.getPurchaseCode());
                             }
                             intent.putExtra(Constants.SUCCESS_PAYMENT_TRACE, pspInfoDTO.getProviderId());
                             startActivityForResult(intent, 0);

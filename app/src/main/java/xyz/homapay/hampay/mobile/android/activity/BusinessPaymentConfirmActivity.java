@@ -209,7 +209,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
                 } else {
 
                     if (pin2Value.getText().toString().length() <= 4) {
-                        Toast.makeText(context, getString(R.string.msg_pin2_incurrect), Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, getString(R.string.msg_pin2_incurrect), Toast.LENGTH_SHORT).show();
                         return;
                     }
 

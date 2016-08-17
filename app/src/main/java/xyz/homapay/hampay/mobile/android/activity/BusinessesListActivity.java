@@ -99,6 +99,8 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
     private BizSortFactor bizSortFactor = BizSortFactor.NAME;
 
     public void backActionBar(View view){
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
         finish();
     }
 
@@ -115,6 +117,7 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
             if (!requestSearchHamPayBusiness.isCancelled())
                 requestSearchHamPayBusiness.cancel(true);
         }
+
     }
 
     @Override

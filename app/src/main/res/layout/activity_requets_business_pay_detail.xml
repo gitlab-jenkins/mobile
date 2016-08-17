@@ -680,7 +680,8 @@
                             android:layout_gravity="left"
                             android:background="@drawable/purchase_input_text"
                             android:inputType="numberPassword"
-                            android:layout_marginRight="120dp"/>
+                            android:layout_marginRight="120dp"
+                            android:maxLength="12"/>
 
                         <xyz.homapay.hampay.mobile.android.component.FacedTextView
                             geekui:customTypeface="fonts/iran_sans.ttf"

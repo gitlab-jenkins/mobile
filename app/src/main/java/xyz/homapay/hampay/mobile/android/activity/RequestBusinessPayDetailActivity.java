@@ -405,7 +405,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                         if (purchaseInfoDTO != null) {
                             Intent intent = new Intent(context, PaymentCompletedActivity.class);
                             intent.putExtra(Constants.SUCCESS_PAYMENT_AMOUNT, purchaseInfoDTO.getAmount());
-                            intent.putExtra(Constants.SUCCESS_PAYMENT_CODE, purchaseInfoDTO.getProductCode());
+                            intent.putExtra(Constants.SUCCESS_PAYMENT_CODE, purchaseInfoDTO.getPurchaseCode());
                             intent.putExtra(Constants.SUCCESS_PAYMENT_TRACE, pspInfoDTO.getProviderId());
                             startActivityForResult(intent, 45);
                         }
@@ -636,7 +636,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                     pspInfoDTO = purchaseInfoResponseMessage.getService().getPurchaseInfo().getPspInfo();
 
                     if (purchaseInfoDTO != null) {
-
                         fillPurchase(purchaseInfoDTO);
                     }
                     else {

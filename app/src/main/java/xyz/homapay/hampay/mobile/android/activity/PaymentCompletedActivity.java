@@ -43,6 +43,7 @@ public class PaymentCompletedActivity extends AppCompatActivity {
         paymentCode.setText(persianEnglishDigit.E2P(bundle.getString(Constants.SUCCESS_PAYMENT_CODE)));
         traceCode.setText(persianEnglishDigit.E2P(bundle.getString(Constants.SUCCESS_PAYMENT_TRACE)));
 
+
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -317,7 +317,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
                     userNameFamilyIsValid = true;
-                    if (userNameFamily.getText().toString().length() <= 1){
+                    if (userNameFamily.getText().toString().trim().length() <= 1){
                         userNameFamilyIsValid = false;
                         userNameFamilyIcon.setImageResource(R.drawable.false_icon);
                     }else {
@@ -432,10 +432,10 @@ public class ProfileEntryActivity extends AppCompatActivity {
 
 
                 if (cellNumberIsValid && nationalCodeIsValid && verifiedCardNumber
-                        && cellNumberValue.getText().toString().length() > 0
-                        && nationalCodeValue.getText().toString().length() > 0
-                        && cardNumberValue.getText().toString().length() > 0
-                        && userNameFamily.getText().toString().length() > 0
+                        && cellNumberValue.getText().toString().trim().length() > 0
+                        && nationalCodeValue.getText().toString().trim().length() > 0
+                        && cardNumberValue.getText().toString().trim().length() > 0
+                        && userNameFamily.getText().toString().trim().length() >= 2
                         && emailTextWatcher.isValid()) {
 
                     keepOn_button.setEnabled(false);
@@ -444,7 +444,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
 
                     registrationEntryRequest.setCellNumber(persianEnglishDigit.P2E(getString(R.string.iran_prefix_cell_number) + cellNumberValue.getText().toString()));
                     registrationEntryRequest.setCardNumber(persianEnglishDigit.P2E(cardNumberValue.getText().toString()));
-                    registrationEntryRequest.setFullName(userNameFamily.getText().toString());
+                    registrationEntryRequest.setFullName(userNameFamily.getText().toString().trim());
                     registrationEntryRequest.setEmail(emailValue.getText().toString().trim());
                     registrationEntryRequest.setNationalCode(persianEnglishDigit.P2E(nationalCodeValue.getText().toString().replaceAll("-", "")));
 
@@ -461,7 +461,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
                         cellNumberValue.requestFocus();
                     }
 
-                    else if (userNameFamily.getText().toString().length() <= 1 || !userNameFamilyIsValid){
+                    else if (userNameFamily.getText().toString().trim().length() <= 1 || !userNameFamilyIsValid){
                         Toast.makeText(context, getString(R.string.msg_username_invalid), Toast.LENGTH_SHORT).show();
                         userNameFamilyIcon.setImageResource(R.drawable.false_icon);
                         userNameFamily.requestFocus();
@@ -572,8 +572,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
             if (registrationEntryResponse != null) {
 
                 if (registrationEntryResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    editor.putString(Constants.REGISTERED_USER_NAME, userNameFamily.getText().toString());
-//                    editor.putString(Constants.REGISTERED_NATIONAL_CODE, persianEnglishDigit.P2E(nationalCodeValue.getText().toString().replaceAll("-", "")));
+                    editor.putString(Constants.REGISTERED_USER_NAME, userNameFamily.getText().toString().trim());
                     editor.putString(Constants.REGISTERED_USER_ID_TOKEN, registrationEntryResponse.getService().getUserIdToken());
                     editor.putString(Constants.REGISTERED_USER_EMAIL, emailValue.getText().toString().trim());
                     editor.commit();

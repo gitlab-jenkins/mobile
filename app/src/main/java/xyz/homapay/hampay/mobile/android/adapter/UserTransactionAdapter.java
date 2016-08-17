@@ -26,15 +26,13 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
     private TransactionDTO transactionDTO;
     private PersianEnglishDigit persianEnglishDigit;
     private CurrencyFormatter currencyFormatter;
-    private String authToken;
     private ImageManager imageManager;
 
-    public UserTransactionAdapter(Activity activity, String authToken) {
+    public UserTransactionAdapter(Activity activity) {
         super(activity);
         this.activity = activity;
         persianEnglishDigit = new PersianEnglishDigit();
         currencyFormatter = new CurrencyFormatter();
-        this.authToken = authToken;
         imageManager = new ImageManager(activity, 200000, false);
     }
 

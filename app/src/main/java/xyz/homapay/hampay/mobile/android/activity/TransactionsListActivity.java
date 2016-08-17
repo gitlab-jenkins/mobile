@@ -142,13 +142,10 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
 
 
         transactionDTOs = new ArrayList<>();
-        userTransactionAdapter = new UserTransactionAdapter(activity, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
+        userTransactionAdapter = new UserTransactionAdapter(activity);
 
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
-
-
-
 
         no_transaction = (FacedTextView)findViewById(R.id.no_transaction);
 
@@ -189,6 +186,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
         transactionListRequest.setSortFactor(sortFactor);
         requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
         requestUserTransaction.execute(transactionListRequest);
+        hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
 
     }
 
@@ -210,6 +208,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 transactionListRequest.setSortFactor(sortFactor);
                 requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
                 requestUserTransaction.execute(transactionListRequest);
+                hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                 changeTab(1);
                 break;
 
@@ -228,6 +227,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 transactionListRequest.setSortFactor(sortFactor);
                 requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
                 requestUserTransaction.execute(transactionListRequest);
+                hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                 changeTab(2);
                 break;
 
@@ -246,6 +246,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 transactionListRequest.setSortFactor(sortFactor);
                 requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
                 requestUserTransaction.execute(transactionListRequest);
+                hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                 changeTab(3);
                 break;
         }
@@ -369,7 +370,6 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
 
         @Override
         public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 
@@ -433,7 +433,8 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
 
     protected void addItems(int from, int to) {
         for (int i = from; i < to; i++) {
-            userTransactionAdapter.addItem(transactionDTOs.get(i));
+            if (i < transactionDTOs.size())
+                userTransactionAdapter.addItem(transactionDTOs.get(i));
         }
     }
 

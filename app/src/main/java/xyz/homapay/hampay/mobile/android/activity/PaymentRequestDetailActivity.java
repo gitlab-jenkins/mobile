@@ -22,6 +22,7 @@ import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
 import xyz.homapay.hampay.common.core.model.request.CalcFeeChargeRequest;
 import xyz.homapay.hampay.common.core.model.request.CalculateVatRequest;
+import xyz.homapay.hampay.common.core.model.request.UserPaymentRequest;
 import xyz.homapay.hampay.common.core.model.response.CalcFeeChargeResponse;
 import xyz.homapay.hampay.common.core.model.response.CalculateVatResponse;
 import xyz.homapay.hampay.common.core.model.response.UserPaymentResponse;
@@ -31,6 +32,7 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestCalcFeeCharge;
 import xyz.homapay.hampay.mobile.android.async.RequestCalculateVat;
+import xyz.homapay.hampay.mobile.android.async.RequestUserPayment;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.CurrencyFormatterTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
@@ -78,6 +80,9 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
 
     RequestCalcFeeCharge requestCalcFeeCharge;
     CalcFeeChargeRequest calcFeeChargeRequest;
+
+    RequestUserPayment requestUserPayment;
+    UserPaymentRequest userPaymentRequest;
 
     public void backActionBar(View view) {
         finish();
@@ -217,6 +222,8 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                         amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace("٬", "")));
                     }else if (amount_value.getText().toString().indexOf(",") != -1){
                         amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace(",", "")));
+                    }else {
+                        amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString()));
                     }
                     if (calculatedVat == 0){
                         CalculateVatRequest calculateVatRequest = new CalculateVatRequest();
@@ -298,12 +305,24 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
                         amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace("٬", "")));
                     }else if (amount_value.getText().toString().indexOf(",") != -1){
                         amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace(",", "")));
+                    }else {
+                        amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString()));
                     }
                     if (amountValue + calculatedVat >= MinXferAmount && amountValue + calculatedVat <= MaxXferAmount) {
-                        calcFeeChargeRequest = new CalcFeeChargeRequest();
-                        calcFeeChargeRequest.setAmount(amountValue);
-                        requestCalcFeeCharge = new RequestCalcFeeCharge(activity, new RequestCalculateFeeTaskCompleteListener());
-                        requestCalcFeeCharge.execute(calcFeeChargeRequest);
+                        Intent intent = new Intent(PaymentRequestDetailActivity.this, PaymentRequestConfirmActivity.class);
+                        intent.putExtra(Constants.CONTACT_NAME, displayName);
+                        intent.putExtra(Constants.CONTACT_PHONE_NO, cellNumber);
+                        intent.putExtra(Constants.IMAGE_ID, imageId);
+                        intent.putExtra(Constants.CONTACT_AMOUNT, amountValue);
+                        intent.putExtra(Constants.CONTACT_VAT, calculatedVat);
+//                        intent.putExtra(Constants.CONTACT_FEE, calcFeeCharge);
+                        intent.putExtra(Constants.CONTACT_MESSAGE, contact_message.getText().toString());
+                        startActivityForResult(intent, 10);
+
+//                        calcFeeChargeRequest = new CalcFeeChargeRequest();
+//                        calcFeeChargeRequest.setAmount(amountValue);
+//                        requestCalcFeeCharge = new RequestCalcFeeCharge(activity, new RequestCalculateFeeTaskCompleteListener());
+//                        requestCalcFeeCharge.execute(calcFeeChargeRequest);
                     } else {
                         new HamPayDialog(activity).showIncorrectAmountDialog(MinXferAmount, MaxXferAmount);
                     }
@@ -354,45 +373,45 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
         }
     }
 
-    public class RequestCalculateFeeTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<CalcFeeChargeResponse>> {
-        public RequestCalculateFeeTaskCompleteListener() {
-        }
-
-        @Override
-        public void onTaskComplete(ResponseMessage<CalcFeeChargeResponse> calcFeeChargeResponseMessage) {
-
-            hamPayDialog.dismisWaitingDialog();
-            ResultStatus resultStatus;
-            if (calcFeeChargeResponseMessage != null) {
-                resultStatus = calcFeeChargeResponseMessage.getService().getResultStatus();
-                if (resultStatus == ResultStatus.SUCCESS) {
-                    calcFeeCharge = calcFeeChargeResponseMessage.getService().getFeeCharge();
-                    Intent intent = new Intent(PaymentRequestDetailActivity.this, PaymentRequestConfirmActivity.class);
-                    intent.putExtra(Constants.CONTACT_NAME, displayName);
-                    intent.putExtra(Constants.CONTACT_PHONE_NO, cellNumber);
-                    intent.putExtra(Constants.IMAGE_ID, imageId);
-                    intent.putExtra(Constants.CONTACT_AMOUNT, amountValue);
-                    intent.putExtra(Constants.CONTACT_VAT, calculatedVat);
-                    intent.putExtra(Constants.CONTACT_FEE, calcFeeCharge);
-                    intent.putExtra(Constants.CONTACT_MESSAGE, contact_message.getText().toString());
-                    startActivityForResult(intent, 10);
-                }else if (calcFeeChargeResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    forceLogout();
-                }else {
-                    new HamPayDialog(activity).failurePaymentRequestDialog(calcFeeChargeResponseMessage.getService().getResultStatus().getCode(),
-                            calcFeeChargeResponseMessage.getService().getResultStatus().getDescription());
-                }
-            }else {
-                new HamPayDialog(activity).failurePaymentRequestDialog(Constants.LOCAL_ERROR_CODE,
-                        getString(R.string.msg_fail_illegal_app_list));
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
-    }
+//    public class RequestCalculateFeeTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<CalcFeeChargeResponse>> {
+//        public RequestCalculateFeeTaskCompleteListener() {
+//        }
+//
+//        @Override
+//        public void onTaskComplete(ResponseMessage<CalcFeeChargeResponse> calcFeeChargeResponseMessage) {
+//
+//            hamPayDialog.dismisWaitingDialog();
+//            ResultStatus resultStatus;
+//            if (calcFeeChargeResponseMessage != null) {
+//                resultStatus = calcFeeChargeResponseMessage.getService().getResultStatus();
+//                if (resultStatus == ResultStatus.SUCCESS) {
+//                    calcFeeCharge = calcFeeChargeResponseMessage.getService().getFeeCharge();
+//                    Intent intent = new Intent(PaymentRequestDetailActivity.this, PaymentRequestConfirmActivity.class);
+//                    intent.putExtra(Constants.CONTACT_NAME, displayName);
+//                    intent.putExtra(Constants.CONTACT_PHONE_NO, cellNumber);
+//                    intent.putExtra(Constants.IMAGE_ID, imageId);
+//                    intent.putExtra(Constants.CONTACT_AMOUNT, amountValue);
+//                    intent.putExtra(Constants.CONTACT_VAT, calculatedVat);
+//                    intent.putExtra(Constants.CONTACT_FEE, calcFeeCharge);
+//                    intent.putExtra(Constants.CONTACT_MESSAGE, contact_message.getText().toString());
+//                    startActivityForResult(intent, 10);
+//                }else if (calcFeeChargeResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+//                    forceLogout();
+//                }else {
+//                    new HamPayDialog(activity).failurePaymentRequestDialog(calcFeeChargeResponseMessage.getService().getResultStatus().getCode(),
+//                            calcFeeChargeResponseMessage.getService().getResultStatus().getDescription());
+//                }
+//            }else {
+//                new HamPayDialog(activity).failurePaymentRequestDialog(Constants.LOCAL_ERROR_CODE,
+//                        getString(R.string.msg_fail_illegal_app_list));
+//            }
+//        }
+//
+//        @Override
+//        public void onTaskPreRun() {
+//            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+//        }
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -408,6 +427,57 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
             }
         }
     }
+
+    public class RequestUserPaymentTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<UserPaymentResponse>> {
+
+        @Override
+        public void onTaskComplete(ResponseMessage<UserPaymentResponse> userPaymentResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+
+            if (userPaymentResponseMessage != null) {
+
+                if (userPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+
+                    new HamPayDialog(activity).successPaymentRequestDialog(userPaymentResponseMessage.getService().getProductCode());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Individual Payment Confirm")
+                            .setAction("Payment Confirm")
+                            .setLabel("Success")
+                            .build());
+
+                }else if (userPaymentResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
+                }
+                else {
+                    new HamPayDialog(activity).failurePaymentRequestDialog(userPaymentResponseMessage.getService().getResultStatus().getCode(),
+                            userPaymentResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Individual Payment Confirm")
+                            .setAction("Payment Confirm")
+                            .setLabel("Fail(Server)")
+                            .build());
+                }
+            } else {
+                new HamPayDialog(activity).failurePaymentRequestDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_failure_payment_request));
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Individual Payment Confirm")
+                        .setAction("Payment Confirm")
+                        .setLabel("Fail(Mobile)")
+                        .build());
+            }
+
+            payment_request_button.setEnabled(true);
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
+    }
+
 
     private void forceLogout() {
         editor.remove(Constants.LOGIN_TOKEN_ID);
