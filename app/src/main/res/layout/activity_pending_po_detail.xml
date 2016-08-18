@@ -18,7 +18,7 @@
             android:padding="12dp"/>
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            geekui:customTypeface="fonts/iran_sans.ttf"
+            geekui:customTypeface="fonts/vazir_regular.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/app_origin"
@@ -66,7 +66,7 @@
 
                         <xyz.homapay.hampay.mobile.android.component.FacedTextView
                             android:id="@+id/caller_name"
-                            geekui:customTypeface="fonts/iran_sans.ttf"
+                            geekui:customTypeface="fonts/vazir_regular.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/main_menu_title"
@@ -74,7 +74,7 @@
 
                         <xyz.homapay.hampay.mobile.android.component.FacedTextView
                             android:id="@+id/caller_phone_number"
-                            geekui:customTypeface="fonts/iran_sans.ttf"
+                            geekui:customTypeface="fonts/vazir_regular.ttf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/main_menu_title"
@@ -116,14 +116,14 @@
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/amount_value"
-                    geekui:customTypeface="fonts/iran_sans_bold.ttf"
+                    geekui:customTypeface="fonts/vazir_regular_bold.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/account_details_text"
                     android:textSize="22sp" />
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                    geekui:customTypeface="fonts/iran_sans.ttf"
+                    geekui:customTypeface="fonts/vazir_regular.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/account_details_text"
@@ -148,7 +148,7 @@
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/payment_request_code"
-                    geekui:customTypeface="fonts/iran_sans.ttf"
+                    geekui:customTypeface="fonts/vazir_regular.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/page_title"
@@ -156,7 +156,7 @@
                     android:layout_marginRight="2dp"/>
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                    geekui:customTypeface="fonts/iran_sans.ttf"
+                    geekui:customTypeface="fonts/vazir_regular.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/main_menu_title"
@@ -174,7 +174,7 @@
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/create_date"
-                geekui:customTypeface="fonts/iran_sans.ttf"
+                geekui:customTypeface="fonts/vazir_regular.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/main_menu_title"
@@ -201,7 +201,7 @@
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/pending_po_status"
-                    geekui:customTypeface="fonts/iran_sans.ttf"
+                    geekui:customTypeface="fonts/vazir_regular.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/main_menu_title"
@@ -210,7 +210,7 @@
                     android:layout_marginRight="4dp"/>
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                    geekui:customTypeface="fonts/iran_sans.ttf"
+                    geekui:customTypeface="fonts/vazir_regular.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/main_menu_title"
@@ -228,7 +228,7 @@
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/message_text"
-                geekui:customTypeface="fonts/iran_sans.ttf"
+                geekui:customTypeface="fonts/vazir_regular.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/main_menu_title"
@@ -248,7 +248,7 @@
                 android:padding="8dp">
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                    geekui:customTypeface="fonts/iran_sans.ttf"
+                    geekui:customTypeface="fonts/vazir_regular.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/page_title"

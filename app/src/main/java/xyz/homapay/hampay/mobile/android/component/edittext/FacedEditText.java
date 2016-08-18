@@ -27,7 +27,7 @@ public class FacedEditText extends EditText {
 
     private void init() {
         if (!isInEditMode()) {
-            Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/iran_sans.ttf");
+            Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "fonts/vazir_regular.ttf");
             setTypeface(tf);
         }
     }

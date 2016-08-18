@@ -29,7 +29,7 @@
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/status_text"
-                    geekui:customTypeface="fonts/iran_sans.ttf"
+                    geekui:customTypeface="fonts/vazir_regular.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/black"
@@ -37,7 +37,7 @@
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/user_name"
-                    geekui:customTypeface="fonts/iran_sans.ttf"
+                    geekui:customTypeface="fonts/vazir_regular.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/main_menu_title"
@@ -45,7 +45,7 @@
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/date_time"
-                    geekui:customTypeface="fonts/iran_sans.ttf"
+                    geekui:customTypeface="fonts/vazir_regular.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/main_menu_title"
@@ -94,14 +94,14 @@
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/amountValue"
-                geekui:customTypeface="fonts/iran_sans_bold.ttf"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/account_details_text"
                 android:textSize="15sp" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/iran_sans.ttf"
+                geekui:customTypeface="fonts/vazir_regular.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/account_details_text"

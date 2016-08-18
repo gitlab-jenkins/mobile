@@ -360,7 +360,7 @@ public class SecuredWebServices{
         url = new URL(serviceURL + "/image/upload");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
-        uploadImageRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        uploadImageRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<UploadImageRequest> message = new RequestMessage<>(uploadImageRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
         Type requestType = new TypeToken<RequestMessage<UploadImageRequest>>() {}.getType();
@@ -383,7 +383,7 @@ public class SecuredWebServices{
         url = new URL(serviceURL + "/users/get-user-id-token");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
-        getUserIdTokenRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        getUserIdTokenRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<GetUserIdTokenRequest> message = new RequestMessage<>(getUserIdTokenRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
         Type requestType = new TypeToken<RequestMessage<GetUserIdTokenRequest>>() {}.getType();
@@ -406,7 +406,7 @@ public class SecuredWebServices{
         url = new URL(serviceURL + "/users/tacaccept");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
-        tacAcceptRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        tacAcceptRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<TACAcceptRequest> message = new RequestMessage<>(tacAcceptRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
         Type requestType = new TypeToken<RequestMessage<TACAcceptRequest>>() {}.getType();
@@ -429,7 +429,7 @@ public class SecuredWebServices{
         url = new URL(serviceURL + "/users/profile");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
-        userProfileRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        userProfileRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<UserProfileRequest> message = new RequestMessage<>(userProfileRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
         Type requestType = new TypeToken<RequestMessage<UserProfileRequest>>() {}.getType();
@@ -454,7 +454,7 @@ public class SecuredWebServices{
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
 
-        transactionListRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        transactionListRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<TransactionListRequest> message = new RequestMessage<>(transactionListRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
         Type requestType = new TypeToken<RequestMessage<TransactionListRequest>>() {}.getType();
@@ -477,7 +477,7 @@ public class SecuredWebServices{
         url = new URL(serviceURL + "/customer/contacts/hp-enabled");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url, true);
 
-        contactsHampayEnabledRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        contactsHampayEnabledRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<ContactsHampayEnabledRequest> message = new RequestMessage<>(contactsHampayEnabledRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
         Type requestType = new TypeToken<RequestMessage<ContactsHampayEnabledRequest>>() {}.getType();
@@ -500,7 +500,7 @@ public class SecuredWebServices{
         url = new URL(serviceURL + "/customers/individual-payment");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
-        individualPaymentRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        individualPaymentRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<IndividualPaymentRequest> message = new RequestMessage<>(individualPaymentRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
         Type requestType = new TypeToken<RequestMessage<IndividualPaymentRequest>>() {}.getType();
@@ -522,7 +522,7 @@ public class SecuredWebServices{
         url = new URL(serviceURL + "/businesses");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
-        businessListRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        businessListRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<BusinessListRequest> message = new RequestMessage<>(businessListRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
         Type requestType = new TypeToken<RequestMessage<BusinessListRequest>>() {}.getType();
@@ -544,7 +544,7 @@ public class SecuredWebServices{
         url = new URL(serviceURL + "/businesses/business-payment-confirm");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
-        businessPaymentConfirmRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        businessPaymentConfirmRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<BusinessPaymentConfirmRequest> message = new RequestMessage<>(businessPaymentConfirmRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
         Type requestType = new TypeToken<RequestMessage<BusinessPaymentConfirmRequest>>() {}.getType();
@@ -566,7 +566,7 @@ public class SecuredWebServices{
         url = new URL(serviceURL + "/businesses/search");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
-        businessSearchRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        businessSearchRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<BusinessSearchRequest> message = new RequestMessage<>(businessSearchRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
         Type requestType = new TypeToken<RequestMessage<BusinessListRequest>>() {}.getType();
@@ -588,7 +588,7 @@ public class SecuredWebServices{
         url = new URL(serviceURL + "/users/passcode");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.PUT, url);
 
-        changePassCodeRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        changePassCodeRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<ChangePassCodeRequest> message = new RequestMessage<>(changePassCodeRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
         Type requestType = new TypeToken<RequestMessage<ChangePassCodeRequest>>() {}.getType();
@@ -609,7 +609,7 @@ public class SecuredWebServices{
         url = new URL(serviceURL + "/users/memorable-word");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.PUT, url);
 
-        changeMemorableWordRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        changeMemorableWordRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<ChangeMemorableWordRequest> message = new RequestMessage<>(changeMemorableWordRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
         Type requestType = new TypeToken<RequestMessage<ChangeMemorableWordRequest>>() {}.getType();
@@ -632,7 +632,7 @@ public class SecuredWebServices{
         url = new URL(serviceURL + "/users/unlink");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
-        unlinkUserRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        unlinkUserRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<UnlinkUserRequest> message = new RequestMessage<>(unlinkUserRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
         Type requestType = new TypeToken<RequestMessage<UnlinkUserRequest>>() {}.getType();
@@ -654,7 +654,7 @@ public class SecuredWebServices{
         url = new URL(serviceURL + "/users/change-email");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
-        changeEmailRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        changeEmailRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<ChangeEmailRequest> message = new RequestMessage<>(changeEmailRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
         Type requestType = new TypeToken<RequestMessage<ChangeEmailRequest>>() {}.getType();
@@ -728,7 +728,7 @@ public class SecuredWebServices{
         url = new URL(serviceURL + "/purchase/latest");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
-        latestPurchaseRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        latestPurchaseRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<LatestPurchaseRequest> message = new RequestMessage<>(latestPurchaseRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
         Type requestType = new TypeToken<RequestMessage<LatestPurchaseRequest>>() {}.getType();
@@ -749,7 +749,7 @@ public class SecuredWebServices{
         url = new URL(serviceURL + "/payment/latest");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
-        latestPaymentRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        latestPaymentRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<LatestPaymentRequest> message = new RequestMessage<>(latestPaymentRequest, authToken, Constants.REQUEST_VERSION);
 
         Type requestType = new TypeToken<RequestMessage<LatestPaymentRequest>>() {}.getType();
@@ -774,7 +774,7 @@ public class SecuredWebServices{
         }
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
-        pspResultRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        pspResultRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<PSPResultRequest> message = new RequestMessage<>(pspResultRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
         Type requestType = new TypeToken<RequestMessage<PSPResultRequest>>() {}.getType();
@@ -795,7 +795,7 @@ public class SecuredWebServices{
         url = new URL(serviceURL +  "/purchase/cancel");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
-        cancelPurchasePaymentRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        cancelPurchasePaymentRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<CancelPurchasePaymentRequest> message = new RequestMessage<>(cancelPurchasePaymentRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
         Type requestType = new TypeToken<RequestMessage<CancelPurchasePaymentRequest>>() {}.getType();
@@ -816,7 +816,7 @@ public class SecuredWebServices{
         url = new URL(serviceURL +  "/payment/cancel");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
-        cancelUserPaymentRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        cancelUserPaymentRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<CancelUserPaymentRequest> message = new RequestMessage<>(cancelUserPaymentRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
         Type requestType = new TypeToken<RequestMessage<CancelUserPaymentRequest>>() {}.getType();
@@ -837,7 +837,7 @@ public class SecuredWebServices{
         url = new URL(serviceURL +  "/users/payment-request");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
-        userPaymentRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        userPaymentRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<UserPaymentRequest> message = new RequestMessage<>(userPaymentRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
         Type requestType = new TypeToken<RequestMessage<UserPaymentRequest>>() {}.getType();
@@ -859,7 +859,7 @@ public class SecuredWebServices{
         url = new URL(serviceURL +  "/iban/confirmation");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
-        ibanConfirmationRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        ibanConfirmationRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<IBANConfirmationRequest> message = new RequestMessage<>(ibanConfirmationRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
         Type requestType = new TypeToken<RequestMessage<IBANConfirmationRequest>>() {}.getType();
@@ -885,7 +885,7 @@ public class SecuredWebServices{
         url = new URL(serviceURL +  "/iban/change");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
-        ibanChangeRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+        ibanChangeRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<IBANChangeRequest> message = new RequestMessage<>(ibanChangeRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
 
         Type requestType = new TypeToken<RequestMessage<IBANChangeRequest>>() {}.getType();

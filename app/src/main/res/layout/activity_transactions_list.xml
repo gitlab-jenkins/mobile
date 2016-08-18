@@ -17,7 +17,7 @@
             android:padding="12dp"/>
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            geekui:customTypeface="fonts/iran_sans.ttf"
+            geekui:customTypeface="fonts/vazir_regular.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/app_origin"
@@ -44,7 +44,7 @@
             android:layout_marginRight="1dp">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/iran_sans.ttf"
+                geekui:customTypeface="fonts/vazir_regular.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
@@ -74,7 +74,7 @@
             android:layout_marginLeft="0.5dp">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/iran_sans.ttf"
+                geekui:customTypeface="fonts/vazir_regular.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
@@ -103,7 +103,7 @@
             android:layout_marginLeft="1dp">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/iran_sans.ttf"
+                geekui:customTypeface="fonts/vazir_regular.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
@@ -163,7 +163,7 @@
         </android.support.v4.widget.SwipeRefreshLayout>
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            geekui:customTypeface="fonts/iran_sans.ttf"
+            geekui:customTypeface="fonts/vazir_regular.ttf"
             android:id="@+id/no_transaction"
             android:visibility="gone"
             android:layout_width="match_parent"
@@ -177,7 +177,7 @@
 
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            geekui:customTypeface="fonts/iran_sans.ttf"
+            geekui:customTypeface="fonts/vazir_regular.ttf"
             android:id="@+id/noItems"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

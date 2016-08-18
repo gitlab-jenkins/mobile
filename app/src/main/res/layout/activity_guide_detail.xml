@@ -16,7 +16,7 @@
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/close_tc_privacy"
-                geekui:customTypeface="fonts/iran_sans.ttf"
+                geekui:customTypeface="fonts/vazir_regular.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/app_origin"
@@ -28,7 +28,7 @@
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/title"
-                geekui:customTypeface="fonts/iran_sans.ttf"
+                geekui:customTypeface="fonts/vazir_regular.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/app_origin"

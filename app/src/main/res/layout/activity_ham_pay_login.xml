@@ -53,7 +53,7 @@
 
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                        geekui:customTypeface="fonts/iran_sans.ttf"
+                        geekui:customTypeface="fonts/vazir_regular.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/white"
@@ -65,7 +65,7 @@
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/hampay_user"
-                        geekui:customTypeface="fonts/iran_sans_bold.ttf"
+                        geekui:customTypeface="fonts/vazir_regular_bold.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/white"
@@ -76,7 +76,7 @@
 
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                        geekui:customTypeface="fonts/iran_sans.ttf"
+                        geekui:customTypeface="fonts/vazir_regular.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/white"
@@ -88,7 +88,7 @@
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/hampay_memorableword_text"
-                        geekui:customTypeface="fonts/iran_sans_bold.ttf"
+                        geekui:customTypeface="fonts/vazir_regular_bold.ttf"
                         android:layout_width="140dp"
                         android:layout_height="32dp"
                         android:textColor="@android:color/white"
@@ -160,7 +160,7 @@
                     android:visibility="gone">
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                        geekui:customTypeface="fonts/iran_sans_bold.ttf"
+                        geekui:customTypeface="fonts/vazir_regular_bold.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/white"

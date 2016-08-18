@@ -18,6 +18,7 @@ import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Stack;
+import java.util.UUID;
 
 import xyz.homapay.hampay.common.common.request.RequestMessage;
 import xyz.homapay.hampay.common.core.model.request.RetrieveImageRequest;
@@ -97,7 +98,7 @@ public class ImageManager {
                 SecuredProxyService proxyService = new SecuredProxyService(true, activity, ConnectionType.HTTPS, ConnectionMethod.POST, imageURL);
                 RetrieveImageRequest retrieveImageRequest = new RetrieveImageRequest();
                 retrieveImageRequest.setImageId(imageId);
-                retrieveImageRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+                retrieveImageRequest.setRequestUUID(UUID.randomUUID().toString());
                 RequestMessage<RetrieveImageRequest> message = new RequestMessage<>(retrieveImageRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
                 Type requestType = new TypeToken<RequestMessage<RetrieveImageRequest>>() {}.getType();
                 String jsonRequest = new Gson().toJson(message, requestType);
@@ -115,7 +116,7 @@ public class ImageManager {
                     SecuredProxyService proxyService = new SecuredProxyService(true, activity, ConnectionType.HTTPS, ConnectionMethod.POST, imageURL);
                     RetrieveImageRequest retrieveImageRequest = new RetrieveImageRequest();
                     retrieveImageRequest.setImageId(imageId);
-                    retrieveImageRequest.setRequestUUID(prefs.getString(Constants.UUID, ""));
+                    retrieveImageRequest.setRequestUUID(UUID.randomUUID().toString());
                     RequestMessage<RetrieveImageRequest> message = new RequestMessage<>(retrieveImageRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
                     Type requestType = new TypeToken<RequestMessage<RetrieveImageRequest>>() {}.getType();
                     String jsonRequest = new Gson().toJson(message, requestType);

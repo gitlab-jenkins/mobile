@@ -30,7 +30,7 @@
             android:gravity="center">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/iran_sans_bold.ttf"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
@@ -39,7 +39,7 @@
                 android:text="@string/app_name"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/iran_sans_bold.ttf"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"

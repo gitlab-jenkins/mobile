@@ -14,7 +14,7 @@
         android:background="@drawable/dialog_success_title_style">
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            geekui:customTypeface="fonts/iran_sans.ttf"
+            geekui:customTypeface="fonts/vazir_regular.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
@@ -30,7 +30,7 @@
 
     <xyz.homapay.hampay.mobile.android.component.FacedTextView
         android:id="@+id/camera_choose"
-        geekui:customTypeface="fonts/iran_sans.ttf"
+        geekui:customTypeface="fonts/vazir_regular.ttf"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/modal_text"
@@ -45,7 +45,7 @@
 
     <xyz.homapay.hampay.mobile.android.component.FacedTextView
         android:id="@+id/gallary_choose"
-        geekui:customTypeface="fonts/iran_sans.ttf"
+        geekui:customTypeface="fonts/vazir_regular.ttf"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/modal_text"
@@ -61,7 +61,7 @@
 
     <xyz.homapay.hampay.mobile.android.component.FacedTextView
         android:id="@+id/remove_choose"
-        geekui:customTypeface="fonts/iran_sans.ttf"
+        geekui:customTypeface="fonts/vazir_regular.ttf"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/modal_text"
@@ -77,7 +77,7 @@
 
     <xyz.homapay.hampay.mobile.android.component.FacedTextView
         android:id="@+id/cancel_choose"
-        geekui:customTypeface="fonts/iran_sans.ttf"
+        geekui:customTypeface="fonts/vazir_regular.ttf"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
         android:textColor="@android:color/white"
