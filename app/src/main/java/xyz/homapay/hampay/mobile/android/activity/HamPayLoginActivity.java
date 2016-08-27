@@ -13,7 +13,9 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.AdapterView;
@@ -38,6 +40,7 @@ import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.LoginRequest;
+import xyz.homapay.hampay.common.core.model.request.PendingFundListRequest;
 import xyz.homapay.hampay.common.core.model.request.RecentPendingFundRequest;
 import xyz.homapay.hampay.common.core.model.request.TACRequest;
 import xyz.homapay.hampay.common.core.model.response.LoginResponse;
@@ -53,6 +56,7 @@ import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestLogin;
 import xyz.homapay.hampay.mobile.android.async.RequestNewLogin;
+import xyz.homapay.hampay.mobile.android.async.RequestPendingFundList;
 import xyz.homapay.hampay.mobile.android.async.RequestRecentPendingFund;
 import xyz.homapay.hampay.mobile.android.async.RequestTAC;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
@@ -71,11 +75,13 @@ import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
 
 public class HamPayLoginActivity extends AppCompatActivity implements View.OnClickListener {
 
-
+    public static HamPayLoginActivity instance = null;
     private KeyExchange keyExchange;
     private BroadcastReceiver mIntentReceiver;
     private NetworkConnectivity networkConnectivity;
-
+    private IntentFilter notificationIntentFilter;
+    private BroadcastReceiver notificationIntentReceiver;
+    private SwipeRefreshLayout pullToRefresh;
 
     @Override
     protected void onResume() {
@@ -90,6 +96,20 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
             }
         };
         this.registerReceiver(mIntentReceiver, intentFilter);
+
+
+        notificationIntentFilter = new IntentFilter("notification.intent.MAIN");
+        notificationIntentReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getBooleanExtra("get_update", false)){
+                    requestAndLoadPhoneState();
+                }
+            }
+        };
+        registerReceiver(notificationIntentReceiver, notificationIntentFilter);
+
+
         HamPayApplication.setAppSate(AppState.Resumed);
     }
 
@@ -98,9 +118,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         super.onPause();
         HamPayApplication.setAppSate(AppState.Paused);
     }
-
-    public static HamPayLoginActivity instance = null;
-
 
     RequestLogin requestLogin;
     FacedTextView hampay_memorableword_text;
@@ -182,6 +199,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         super.onDestroy();
         HamPayApplication.setAppSate(AppState.Resumed);
         unregisterReceiver(mIntentReceiver);
+        unregisterReceiver(notificationIntentReceiver);
     }
 
     @Override
@@ -315,6 +333,14 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
         installationToken = prefs.getString(Constants.UUID, "");
 
+        pullToRefresh = (SwipeRefreshLayout)findViewById(R.id.pullToRefresh);
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                requestAndLoadPhoneState();
+            }
+        });
+
     }
 
 
@@ -406,6 +432,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         public void onTaskComplete(ResponseMessage<RecentPendingFundResponse> recentPendingFundResponseMessage)
         {
             hamPayDialog.dismisWaitingDialog();
+            pullToRefresh.setRefreshing(false);
             if (recentPendingFundResponseMessage != null) {
 
                 if (recentPendingFundResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
