@@ -245,10 +245,6 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                     hamPayDialog.dismisWaitingDialog();
                 }
             }
-
-            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                handler.proceed();
-            }
         });
 
     }

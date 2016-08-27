@@ -103,8 +103,6 @@ import xyz.homapay.hampay.mobile.android.util.EmailVerification;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.webservice.SecuredWebServices;
 
-//import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
-
 /**
  * Created by amir on 7/8/15.
  */

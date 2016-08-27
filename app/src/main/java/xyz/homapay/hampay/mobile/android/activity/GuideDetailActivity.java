@@ -89,10 +89,6 @@ public class GuideDetailActivity extends AppCompatActivity {
         hamPayDialog = new HamPayDialog(this);
 
         hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-
-        WebSettings settings = guide_webview.getSettings();
-
-        settings.setJavaScriptEnabled(true);
         guide_webview.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
 
         guide_webview.loadUrl(webPageUrl);

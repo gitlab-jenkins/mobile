@@ -113,7 +113,7 @@
     <string name="sheba_cancel">خیر</string>
     <string name="currency_rials">ريال</string>
     <string name="sms_verification_text">کد فعال‌سازی "هم‌پی" به شماره %1$s ارسال خواهد شد</string>
-    <string name="sms_request">تایید</string>
+    <string name="sms_request">ارسال</string>
     <string name="sms_cancel">انصراف</string>
     <string name="mobile_no_verification">تایید شماره همراه</string>
     <string name="deliver_verification">کد ۴ رقمی برای شما پیامک شد. در صورت عدم دریافت پیامک، دکمه ارسال مجدد را لمس کنید.</string>
