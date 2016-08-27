@@ -52,8 +52,7 @@ public class GuideDetailActivity extends AppCompatActivity {
             intent.setClass(context, HamPayLoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             finish();
-            startActivity(intent);
-        }
+            startActivity(intent);        }
     }
 
     @Override
@@ -65,8 +64,7 @@ public class GuideDetailActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             finish();
             startActivity(intent);
-        }
-    }
+        }    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +84,6 @@ public class GuideDetailActivity extends AppCompatActivity {
             }
         });
         guide_webview = (WebView)findViewById(R.id.guide_webview);
-        guide_webview.clearCache(true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             guide_webview.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         hamPayDialog = new HamPayDialog(this);

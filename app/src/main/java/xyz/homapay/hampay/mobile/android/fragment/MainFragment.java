@@ -1,7 +1,9 @@
 package xyz.homapay.hampay.mobile.android.fragment;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -79,6 +81,8 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     private FacedTextView pending_badge;
     private PersianEnglishDigit persianEnglishDigit;
     private ImageManager imageManager;
+    private IntentFilter intentFilter;
+    private BroadcastReceiver mIntentReceiver;
 
     public MainFragment() {
     }
@@ -248,6 +252,25 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         PendingCountRequest pendingCountRequest = new PendingCountRequest();
         RequestPendingCount requestPendingCount = new RequestPendingCount(getActivity(), new RequestPendingCountTaskCompleteListener());
         requestPendingCount.execute(pendingCountRequest);
+
+        intentFilter = new IntentFilter("notification.intent.MAIN");
+        mIntentReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getBooleanExtra("get_update", false)){
+                    PendingCountRequest pendingCountRequest = new PendingCountRequest();
+                    RequestPendingCount requestPendingCount = new RequestPendingCount(getActivity(), new RequestPendingCountTaskCompleteListener());
+                    requestPendingCount.execute(pendingCountRequest);
+                }
+            }
+        };
+        getActivity().registerReceiver(mIntentReceiver, intentFilter);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        getActivity().unregisterReceiver(mIntentReceiver);
     }
 
     @Override

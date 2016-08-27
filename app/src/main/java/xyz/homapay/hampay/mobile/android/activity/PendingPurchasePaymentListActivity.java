@@ -1,8 +1,10 @@
 package xyz.homapay.hampay.mobile.android.activity;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,6 +28,7 @@ import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.enums.FundType;
 import xyz.homapay.hampay.common.core.model.request.CancelPurchasePaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.CancelUserPaymentRequest;
+import xyz.homapay.hampay.common.core.model.request.PendingCountRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingFundListRequest;
 import xyz.homapay.hampay.common.core.model.response.CancelPurchasePaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.CancelUserPaymentResponse;
@@ -37,6 +40,7 @@ import xyz.homapay.hampay.mobile.android.adapter.PendingFundListAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestCancelPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestCancelPurchase;
+import xyz.homapay.hampay.mobile.android.async.RequestPendingCount;
 import xyz.homapay.hampay.mobile.android.async.RequestPendingFundList;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
@@ -62,35 +66,27 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
     private List<FundDTO> fundDTOList;
     private int pos = -1;
     private FundType fundType = FundType.ALL;
-
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
-
     private int itemPosition;
-
     private String authToken;
-
     RequestCancelPurchase requestCancelPurchase;
     CancelPurchasePaymentRequest cancelPurchasePaymentRequest;
-
     RequestCancelPayment requestCancelPayment;
     CancelUserPaymentRequest cancelUserPaymentRequest;
-
     RelativeLayout full_pending;
     RelativeLayout invoice_pending;
     RelativeLayout purchase_pending;
     ImageView full_triangle;
     ImageView business_triangle;
     ImageView invoice_triangle;
-
     Timer timer;
     TimerTask timerTask;
     final Handler handler = new Handler();
-
     private PersianEnglishDigit persianEnglishDigit;
-
     private Context context;
-
+    private IntentFilter intentFilter;
+    private BroadcastReceiver mIntentReceiver;
 
     public void startTimer() {
         timer = new Timer();
@@ -134,6 +130,20 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
             finish();
             startActivity(intent);
         }
+
+        intentFilter = new IntentFilter("notification.intent.MAIN");
+        mIntentReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getBooleanExtra("get_update", false)){
+                    requestPendingFundList = new RequestPendingFundList(activity, new RequestPendingFundTaskCompleteListener());
+                    pendingFundListRequest = new PendingFundListRequest();
+                    pendingFundListRequest.setType(fundType);
+                    requestPendingFundList.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, pendingFundListRequest);
+                }
+            }
+        };
+        registerReceiver(mIntentReceiver, intentFilter);
     }
 
     @Override
@@ -240,6 +250,12 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
             }
         });
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(mIntentReceiver);
     }
 
     @Override

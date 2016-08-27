@@ -103,29 +103,20 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
     RequestLatestPurchase requestLatestPurchase;
     LatestPurchaseRequest latestPurchaseRequest;
-
     DatabaseHelper databaseHelper;
-
     PurchaseInfoDTO purchaseInfoDTO = null;
     PspInfoDTO pspInfoDTO = null;
     String purchaseCode = null;
     String providerId = null;
-
     LinearLayout creditInfo;
-
     RequestPSPResult requestPSPResult;
     PSPResultRequest pspResultRequest;
-
     private RequestPurchase requestPurchase;
     private DoWorkInfo doWorkInfo;
-
-    RequestPurchaseInfo requestPurchaseInfo;
-    PurchaseInfoRequest purchaseInfoRequest;
-
+    private RequestPurchaseInfo requestPurchaseInfo;
+    private PurchaseInfoRequest purchaseInfoRequest;
     private CurrencyFormatter currencyFormatter;
     private ImageManager imageManager;
-    private String authToken;
-
 
     @Override
     protected void onPause() {
@@ -190,14 +181,11 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             return;
         }
 
-        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
         imageManager = new ImageManager(activity, 200000, false);
 
         try {
-
             MaxXferAmount = prefs.getLong(Constants.MAX_BUSINESS_XFER_AMOUNT, 0);
             MinXferAmount = prefs.getLong(Constants.MIN_BUSINESS_XFER_AMOUNT, 0);
-
         }catch (Exception ex){
             Log.e("Error", ex.getStackTrace().toString());
         }

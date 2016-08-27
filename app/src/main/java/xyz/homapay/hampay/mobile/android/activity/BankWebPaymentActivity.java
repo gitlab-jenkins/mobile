@@ -159,9 +159,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
         WebSettings settings = bankWebView.getSettings();
 
-
         settings.setJavaScriptEnabled(true);
-        settings.setSupportZoom(true);
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
 
         redirectedURL = Constants.IPG_URL + pspInfoDTO.getRedirectURL() + "?authToken=" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");

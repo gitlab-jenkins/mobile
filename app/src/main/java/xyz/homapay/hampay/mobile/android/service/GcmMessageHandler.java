@@ -409,6 +409,8 @@ public class GcmMessageHandler extends IntentService{
             if (HamPayApplication.getAppState() == AppState.Stoped){
             }
 
+            Intent intent = new Intent("notification.intent.MAIN").putExtra("get_update", true);
+            sendBroadcast(intent);
 
         }
     };

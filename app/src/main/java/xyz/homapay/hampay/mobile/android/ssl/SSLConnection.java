@@ -41,7 +41,6 @@ public class SSLConnection  {
             urlConnection.setConnectTimeout(Constants.SERVICE_CONNECTION_TIMEOUT);
             urlConnection.setReadTimeout(Constants.SERVICE_READ_TIMEOUT);
             urlConnection.setRequestProperty("Content-Type", Constants.SERVICE_CONTENT_TYPE);
-            urlConnection.setHostnameVerifier(new NullHostNameVerifier());
             return urlConnection;
         }
 
