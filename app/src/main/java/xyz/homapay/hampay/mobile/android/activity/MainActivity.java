@@ -290,13 +290,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 userEditPhotoDialog.show(fm, "fragment_edit_name");
             }
         });
-
-
-//        addNewAccount(AccountGeneral.ACCOUNT_TYPE, AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS);
-//        ContactsManager.addContact(MainActivity.this, new HamPayContact("", "Sharafkar", "", "09122020200"));
-//        ContactsManager.addContact(MainActivity.this, new HamPayContact("", "Sharafkar", "", "09122020200"));
-
-
         nav_icon = (ImageView)findViewById(R.id.nav_icon);
         nav_icon.setOnClickListener(this);
 
@@ -443,7 +436,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             case 8:
                 LogoutData logoutData = new LogoutData();
                 logoutData.setIplanetDirectoryPro(prefs.getString(Constants.LOGIN_TOKEN_ID, null));
-                new HamPayDialog(activity).showLogoutDialog(logoutData);
+                new HamPayDialog(activity).showLogoutDialog();
                 break;
         }
 
@@ -516,7 +509,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         else{
             LogoutData logoutData = new LogoutData();
             logoutData.setIplanetDirectoryPro(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-            new HamPayDialog(activity).showLogoutDialog(logoutData);
+            new HamPayDialog(activity).showLogoutDialog();
         }
     }
 

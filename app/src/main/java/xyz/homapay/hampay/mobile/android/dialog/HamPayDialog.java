@@ -486,41 +486,7 @@ public class HamPayDialog {
         public void onTaskPreRun() { }
     }
 
-
-    public void showExitDialog(final LogoutData logoutData){
-
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_exit_app, null);
-
-        FacedTextView exit_app_yes = (FacedTextView) view.findViewById(R.id.exit_app_yes);
-        FacedTextView exit_app_no = (FacedTextView) view.findViewById(R.id.exit_app_no);
-
-        exit_app_yes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                activity.finish();
-                LogoutRequest logoutRequest = new LogoutRequest();
-                RequestNewLogout requestNewLogout = new RequestNewLogout(activity, new RequestLoginTaskCompleteListener());
-                requestNewLogout.execute(logoutRequest);
-            }
-        });
-
-        exit_app_no.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        view.setMinimumWidth((int) (rect.width() * 0.85f));
-        if (!activity.isFinishing()) {
-            dialog = new HamPayCustomDialog(view, activity, 0);
-            dialog.show();
-        }
-    }
-
-
-    public void showLogoutDialog(final LogoutData logoutData){
+    public void showLogoutDialog(){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_exit_app, null);
 
@@ -535,9 +501,6 @@ public class HamPayDialog {
                 requestNewLogout.execute(logoutRequest);
                 dialog.dismiss();
                 activity.finish();
-                Intent intent = new Intent(activity, HamPayLoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                activity.startActivity(intent);
             }
         });
 

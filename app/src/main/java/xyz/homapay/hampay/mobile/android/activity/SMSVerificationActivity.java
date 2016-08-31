@@ -598,7 +598,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
             new Collapse(keyboard).animate();
         }
         else {
-            new HamPayDialog(activity).exitRegistrationDialog();
+            finish();
         }
     }
 }
