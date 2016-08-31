@@ -181,7 +181,7 @@
     <string name="msg_found_illegal_app">کاربر گرامی به دلیل بهبود امنیت شما، قبل از استفاده از هم‌پی نیاز به حذف یا غیرفعالسازی اپلیکیشن فوق هستیم.</string>
     <string name="msg_fail_illegal_app_list">اطلاعاتی از سامانه هم‌پی دریافت نشد، لطفا دوباره تلاش کنید.</string>
     <string name="msg_fail_fetch_card_profile">اطلاعات کارت شما یافت نشد. دوباره تلاش کنید</string>
-    <string name="msg_fail_registration_entry">ثبت اطلاعات شخصی شما با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
+    <string name="msg_fail_registration_entry">ثبت اطلاعات شما با مشکل مواجه شد، لطفا اتصال اینترنت خود را بررسی کنید</string>
     <string name="mgs_fail_registration_send_sms_token">درخواست پیامک فعالسازی با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
     <string name="msg_fail_registration_verify_mobile">ارسال کد فعالسازی با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
     <string name="msg_fail_user_profile">دریافت جزییات حساب با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
