@@ -23,6 +23,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -71,10 +73,17 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private GoogleCloudMessaging googleCloudMessaging;
     private String registrationId;
     private FragmentDrawer drawerFragment;
-
     private Fragment fragment = null;
     private RequestPSPResult requestPSPResult;
     private PSPResultRequest pspResultRequest;
+    private RelativeLayout wtContainer;
+    private int walkThroughStep = 0;
+    private RelativeLayout wtFirstLayout;
+    private RelativeLayout wtSecondLayout;
+    private RelativeLayout wtThirdLayout;
+    private RelativeLayout wtFourthLayout;
+    private RelativeLayout wtFifthLayout;
+    private RelativeLayout wtSixthLayout;
 
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle mDrawerToggle;
@@ -118,7 +127,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     DatabaseHelper dbHelper;
 
-    private String authToken = "";
     private ImageManager imageManager;
     private ImageView user_manual;
     private String fragmentTitle = "";
@@ -199,7 +207,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             editor.putBoolean(Constants.SETTING_CHANGE_IBAN_STATUS, false);
             editor.commit();
         }
-        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
         editor.putLong(Constants.MAX_BUSINESS_XFER_AMOUNT, this.userProfileDTO.getMaxBusinessXferAmount());
         editor.putLong(Constants.MIN_BUSINESS_XFER_AMOUNT, this.userProfileDTO.getMinBusinessXferAmount());
@@ -276,6 +283,17 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             }
         }
 
+        wtContainer = (RelativeLayout)findViewById(R.id.wt_container);
+        wtFirstLayout = (RelativeLayout)findViewById(R.id.wt_first_layout);
+        wtSecondLayout = (RelativeLayout)findViewById(R.id.wt_second_layout);
+        wtThirdLayout = (RelativeLayout)findViewById(R.id.wt_third_layout);
+        wtFourthLayout = (RelativeLayout)findViewById(R.id.wt_fourth_layout);
+        wtFifthLayout = (RelativeLayout)findViewById(R.id.wt_fifth_layout);
+        wtSixthLayout = (RelativeLayout)findViewById(R.id.wt_sixth_layout);
+
+        if (prefs.getBoolean(Constants.SHOW_WALK_THROUGH, true)){
+            wtContainer.setVisibility(View.VISIBLE);
+        }
 
         user_manual = (ImageView)findViewById(R.id.user_manual);
         fragment_title = (FacedTextView)findViewById(R.id.fragment_title);
@@ -461,19 +479,84 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     }
 
 
-//    private void addNewAccount(String accountType, String authTokenType) {
-//        final AccountManagerFuture<Bundle> future = AccountManager.get(this).addAccount(accountType, authTokenType, null, null, this, new AccountManagerCallback<Bundle>() {
-//            @Override
-//            public void run(AccountManagerFuture<Bundle> future) {
-//                try {
-//                    Bundle bnd = future.getResult();
-//                    Log.i("", "Account was created");
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }, null);
-//    }
+    public void wt_click(View view){
+        switch (view.getId()){
+
+            case R.id.next_wt:
+                walkThroughStep = (walkThroughStep + 1) % 7;
+                switch (walkThroughStep){
+                    case 1:
+                        wtFirstLayout.setVisibility(View.INVISIBLE);
+                        wtSecondLayout.setVisibility(View.VISIBLE);
+                        break;
+                    case 2:
+                        wtSecondLayout.setVisibility(View.INVISIBLE);
+                        wtThirdLayout.setVisibility(View.VISIBLE);
+                        break;
+                    case 3:
+                        wtThirdLayout.setVisibility(View.INVISIBLE);
+                        wtFourthLayout.setVisibility(View.VISIBLE);
+                        break;
+                    case 4:
+                        wtFourthLayout.setVisibility(View.INVISIBLE);
+                        wtFifthLayout.setVisibility(View.VISIBLE);
+                        break;
+                    case 5:
+                        wtFifthLayout.setVisibility(View.INVISIBLE);
+                        wtSixthLayout.setVisibility(View.VISIBLE);
+                        editor.putBoolean(Constants.SHOW_WALK_THROUGH, false).commit();
+                        break;
+                    case 6:
+                        wtSixthLayout.setVisibility(View.INVISIBLE);
+                        break;
+                }
+
+                break;
+
+            case R.id.pre_wt:
+
+                if (walkThroughStep > 0)    walkThroughStep--;
+
+                switch (walkThroughStep) {
+
+                    case 0:
+                        wtFirstLayout.setVisibility(View.VISIBLE);
+                        wtSecondLayout.setVisibility(View.INVISIBLE);
+                        break;
+                    case 1:
+                        wtSecondLayout.setVisibility(View.VISIBLE);
+                        wtThirdLayout.setVisibility(View.INVISIBLE);
+                        break;
+                    case 2:
+                        wtThirdLayout.setVisibility(View.VISIBLE);
+                        wtFourthLayout.setVisibility(View.INVISIBLE);
+                        break;
+                    case 3:
+                        wtFourthLayout.setVisibility(View.VISIBLE);
+                        wtFifthLayout.setVisibility(View.INVISIBLE);
+                        break;
+                    case 4:
+                        wtFifthLayout.setVisibility(View.VISIBLE);
+                        wtSixthLayout.setVisibility(View.INVISIBLE);
+                        break;
+                    case 5:
+                        wtSixthLayout.setVisibility(View.VISIBLE);
+                        break;
+                }
+                break;
+
+            case R.id.wt_dismiss:
+                wtFirstLayout.setVisibility(View.GONE);
+                wtSecondLayout.setVisibility(View.GONE);
+                wtThirdLayout.setVisibility(View.GONE);
+                wtFourthLayout.setVisibility(View.GONE);
+                wtFifthLayout.setVisibility(View.GONE);
+                wtSixthLayout.setVisibility(View.GONE);
+                editor.putBoolean(Constants.SHOW_WALK_THROUGH, false).commit();
+                break;
+
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -107,6 +107,7 @@ public class Constants {
     public static final String SUCCESS_PAYMENT_CODE = "code";
     public static final String SUCCESS_PAYMENT_TRACE = "trace";
     public static final String SHOW_CREATE_INVOICE = "showCreateInvoice";
+    public static final String SHOW_WALK_THROUGH = "show_wt";
 
     //Permissions and Group Permission
     public static final int READ_PHONE_STATE = 1;
