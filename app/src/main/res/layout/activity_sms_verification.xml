@@ -10,16 +10,14 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:gravity="center_vertical">
+            android:layout_height="48dp">
 
             <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:src="@drawable/help_transparent"
-                android:layout_marginLeft="8dp"
-                android:background="@color/app_origin"
-                android:onClick="userManual"/>
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/back"
+                android:onClick="backActionBar"
+                android:padding="12dp"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/vazir_regular.ttf"
@@ -30,6 +28,7 @@
                 android:layout_gravity="center_horizontal"
                 android:text="@string/mobile_no_verification"
                 android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
                 android:layout_marginRight="8dp"/>
 
         </RelativeLayout>
