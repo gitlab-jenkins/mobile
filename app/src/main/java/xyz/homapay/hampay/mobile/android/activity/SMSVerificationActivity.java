@@ -1,5 +1,6 @@
 package xyz.homapay.hampay.mobile.android.activity;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -46,9 +48,7 @@ import xyz.homapay.hampay.mobile.android.util.ScaleConverter;
 
 public class SMSVerificationActivity extends AppCompatActivity implements View.OnClickListener{
 
-
     Activity activity;
-
     FacedTextView digit_1;
     FacedTextView digit_2;
     FacedTextView digit_3;
@@ -63,15 +63,11 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
     FacedTextView resend_active_code;
     LinearLayout progress_layout;
     RelativeLayout backspace;
-
     String receivedSmsValue = "";
-
     FacedTextView input_digit_1;
     FacedTextView input_digit_2;
     FacedTextView input_digit_3;
     FacedTextView input_digit_4;
-//    FacedTextView input_digit_5;
-
     Context context;
 
     RequestRegistrationSendSmsToken requestRegistrationSendSmsToken;
@@ -89,7 +85,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
     RequestVerifyMobile requestVerifyMobile;
     RegistrationVerifyMobileRequest registrationVerifyMobileRequest;
 
-    private BroadcastReceiver mIntentReceiver;
     private FacedTextView remain_timer;
     boolean sendSmsPermission = false;
     int sendSmsCounter = 0;
@@ -110,8 +105,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
             if (!requestVerifyMobile.isCancelled())
                 requestVerifyMobile.cancel(true);
         }
-
-        unregisterReceiver(mIntentReceiver);
     }
 
 
@@ -186,35 +179,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
     protected void onResume() {
         super.onResume();
         HamPayApplication.setAppSate(AppState.Resumed);
-
-        IntentFilter intentFilter = new IntentFilter("SmsMessage.intent.MAIN");
-        mIntentReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                String message = intent.getStringExtra("get_msg");
-                receivedSmsValue = message.substring(message.lastIndexOf(":") + 1, message.length()).trim();
-                editor.putString(Constants.RECEIVED_SMS_ACTIVATION, receivedSmsValue);
-                editor.commit();
-
-                input_digit_1.setText(persianEnglishDigit.E2P(receivedSmsValue.substring(0, 1)));
-                input_digit_1.setBackgroundColor(Color.TRANSPARENT);
-                input_digit_2.setText(persianEnglishDigit.E2P(receivedSmsValue.substring(1, 2)));
-                input_digit_2.setBackgroundColor(Color.TRANSPARENT);
-                input_digit_3.setText(persianEnglishDigit.E2P(receivedSmsValue.substring(2, 3)));
-                input_digit_3.setBackgroundColor(Color.TRANSPARENT);
-                input_digit_4.setText(persianEnglishDigit.E2P(receivedSmsValue.substring(3, 4)));
-                input_digit_4.setBackgroundColor(Color.TRANSPARENT);
-                if (receivedSmsValue.length() == 4) {
-                    registrationVerifyMobileRequest = new RegistrationVerifyMobileRequest();
-                    registrationVerifyMobileRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
-                    registrationVerifyMobileRequest.setSmsToken(receivedSmsValue);
-                    receivedSmsValue = "";
-                    requestVerifyMobile = new RequestVerifyMobile(context, new RequestRegistrationVerifyMobileTaskCompleteListener());
-                    requestVerifyMobile.execute(registrationVerifyMobileRequest);
-                }
-            }
-        };
-        this.registerReceiver(mIntentReceiver, intentFilter);
     }
 
     Bundle bundle;
@@ -223,6 +187,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
     private int seconds = 0;
     private PersianEnglishDigit persianEnglishDigit;
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
