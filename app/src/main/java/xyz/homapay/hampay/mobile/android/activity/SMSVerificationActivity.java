@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
 import android.view.View;
@@ -167,6 +168,10 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         }
     }
 
+    public void backActionBar(View view){
+        finish();
+    }
+
     public void userManual(View view){
         Intent intent = new Intent();
         intent.setClass(activity, UserManualActivity.class);
@@ -288,7 +293,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
 
                         Intent intent = new Intent();
                         intent.setClass(SMSVerificationActivity.this, PasswordEntryActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
                         finish();
                         startActivity(intent);
                         hamPayGaTracker.send(new HitBuilders.EventBuilder()

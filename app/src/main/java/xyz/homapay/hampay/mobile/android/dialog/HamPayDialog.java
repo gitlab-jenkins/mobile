@@ -1503,8 +1503,6 @@ public class HamPayDialog {
                     Intent intent = new Intent();
                     intent.setClass(activity, SMSVerificationActivity.class);
                     intent.putExtra(Constants.REGISTERED_CELL_NUMBER, cellNumber);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    activity.finish();
                     activity.startActivity(intent);
 
 
