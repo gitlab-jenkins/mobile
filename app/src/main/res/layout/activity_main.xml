@@ -64,6 +64,66 @@
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/wt_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:clickable="true"
+        android:onClick="wt_click">
+
+        <RelativeLayout
+            android:id="@+id/wt_first_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible">
+            <include layout="@layout/wt_first_layout"/>
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/wt_second_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible">
+            <include layout="@layout/wt_second_layout"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/wt_third_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible">
+            <include layout="@layout/wt_third_layout"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/wt_fourth_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible">
+            <include layout="@layout/wt_fourth_layout"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/wt_fifth_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible">
+            <include layout="@layout/wt_fifth_layout"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/wt_sixth_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible">
+            <include layout="@layout/wt_sixth_layout"/>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
     <fragment
         android:id="@+id/fragment_navigation_drawer"
         android:name="xyz.homapay.hampay.mobile.android.fragment.FragmentDrawer"
