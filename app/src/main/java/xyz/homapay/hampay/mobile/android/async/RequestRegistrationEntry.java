@@ -24,13 +24,11 @@ public class RequestRegistrationEntry extends AsyncTask<RegistrationEntryRequest
 
     private Activity context;
     private AsyncTaskCompleteListener<ResponseMessage<RegistrationEntryResponse>> listener;
-    private String location;
 
-    public RequestRegistrationEntry(Activity context, AsyncTaskCompleteListener<ResponseMessage<RegistrationEntryResponse>> listener, String location)
+    public RequestRegistrationEntry(Activity context, AsyncTaskCompleteListener<ResponseMessage<RegistrationEntryResponse>> listener)
     {
         this.context = context;
         this.listener = listener;
-        this.location = location;
     }
 
 
@@ -64,13 +62,9 @@ public class RequestRegistrationEntry extends AsyncTask<RegistrationEntryRequest
         deviceDTO.setSimState(deviceInfo.getSimState());
         deviceDTO.setLocale(deviceInfo.getLocale());
         deviceDTO.setMacAddress(deviceInfo.getMacAddress());
-        deviceDTO.setUserLocation(location);
-
 
         params[0].setDeviceDTO(deviceDTO);
 
-
-//        WebServices webServices = new WebServices(context, Constants.CONNECTION_TYPE);
         SecuredWebServices webServices = new SecuredWebServices(context, Constants.CONNECTION_TYPE);
         try {
             return webServices.registrationEntry(params[0]);

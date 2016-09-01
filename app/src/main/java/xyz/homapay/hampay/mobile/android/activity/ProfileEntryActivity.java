@@ -90,11 +90,6 @@ public class ProfileEntryActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
     RegistrationEntryRequest registrationEntryRequest;
     RequestRegistrationEntry requestRegistrationEntry;
-    double latitude = 0.0;
-    double longitude = 0.0;
-    private static String TAG = "BestLocationProvider";
-    private BestLocationProvider mBestLocationProvider;
-    private BestLocationListener mBestLocationListener;
     CardProfileRequest cardProfileRequest;
     RequestCardProfile requestCardProfile;
     HamPayDialog hamPayDialog;
@@ -115,9 +110,6 @@ public class ProfileEntryActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         HamPayApplication.setAppSate(AppState.Paused);
-
-        initLocation();
-        mBestLocationProvider.stopLocationUpdates();
     }
 
     @Override
@@ -130,8 +122,6 @@ public class ProfileEntryActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         HamPayApplication.setAppSate(AppState.Resumed);
-//        initLocation();
-//        requestReadFineLocation();
     }
 
     @Override
@@ -142,23 +132,6 @@ public class ProfileEntryActivity extends AppCompatActivity {
             }
     }
 
-    private void requestReadFineLocation() {
-        String[] permissions = new String[]{Manifest.permission.ACCESS_FINE_LOCATION};
-        permissionListeners = new RequestPermissions().request(activity, Constants.ACCESS_FINE_LOCATION, permissions, new PermissionListener() {
-            @Override
-            public boolean onResult(int requestCode, String[] requestPermissions, int[] grantResults) {
-                if (requestCode == Constants.ACCESS_FINE_LOCATION) {
-                    if (requestPermissions[0].equals(Manifest.permission.ACCESS_FINE_LOCATION) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        mBestLocationProvider.startLocationUpdatesWithListener(mBestLocationListener);
-                    } else {
-                    }
-                    return true;
-                }
-                return false;
-            }
-        });
-    }
-
     private void requestAndLoadPhoneState() {
         String[] permissions = new String[]{Manifest.permission.READ_PHONE_STATE};
         permissionListeners = new RequestPermissions().request(activity, Constants.READ_PHONE_STATE, permissions, new PermissionListener() {
@@ -166,30 +139,8 @@ public class ProfileEntryActivity extends AppCompatActivity {
             public boolean onResult(int requestCode, String[] requestPermissions, int[] grantResults) {
                 if (requestCode == Constants.READ_PHONE_STATE) {
                     if (requestPermissions[0].equals(Manifest.permission.READ_PHONE_STATE) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        requestUserAccount();
                     } else {
                         finish();
-                    }
-                    return true;
-                }
-                return false;
-            }
-        });
-    }
-
-    private void requestUserAccount() {
-        String[] permissions = new String[]{Manifest.permission.GET_ACCOUNTS};
-        permissionListeners = new RequestPermissions().request(activity, Constants.GET_ACCOUNTS, permissions, new PermissionListener() {
-            @Override
-            public boolean onResult(int requestCode, String[] requestPermissions, int[] grantResults) {
-                if (requestCode == Constants.GET_ACCOUNTS) {
-                    if (requestPermissions[0].equals(Manifest.permission.GET_ACCOUNTS) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        emailValue.setText(new DeviceInfo(activity).getDeviceEmailAccount().trim());
-                        requestReadFineLocation();
-                        initLocation();
-                    } else {
-                        requestReadFineLocation();
-                        initLocation();
                     }
                     return true;
                 }
@@ -210,7 +161,6 @@ public class ProfileEntryActivity extends AppCompatActivity {
         cardNumberValidator = new CardNumberValidator();
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
-        initLocation();
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ProfileEntryActivity.class.getName());
@@ -448,9 +398,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
                     registrationEntryRequest.setEmail(emailValue.getText().toString().trim());
                     registrationEntryRequest.setNationalCode(persianEnglishDigit.P2E(nationalCodeValue.getText().toString().replaceAll("-", "")));
 
-                    requestRegistrationEntry = new RequestRegistrationEntry(activity,
-                            new RequestRegistrationEntryTaskCompleteListener(),
-                            latitude + "," + longitude);
+                    requestRegistrationEntry = new RequestRegistrationEntry(activity, new RequestRegistrationEntryTaskCompleteListener());
 
                     requestRegistrationEntry.execute(registrationEntryRequest);
                 } else {
@@ -590,8 +538,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
                 }
                 else {
                     requestRegistrationEntry = new RequestRegistrationEntry(activity,
-                            new RequestRegistrationEntryTaskCompleteListener(),
-                            latitude + "," + longitude);
+                            new RequestRegistrationEntryTaskCompleteListener());
                     new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest,
                             registrationEntryResponse.getService().getResultStatus().getCode(),
                             registrationEntryResponse.getService().getResultStatus().getDescription());
@@ -603,8 +550,7 @@ public class ProfileEntryActivity extends AppCompatActivity {
                             .build());
                 }
             }else {
-                requestRegistrationEntry = new RequestRegistrationEntry(activity, new RequestRegistrationEntryTaskCompleteListener(),
-                        latitude + "," + longitude);
+                requestRegistrationEntry = new RequestRegistrationEntry(activity, new RequestRegistrationEntryTaskCompleteListener());
                 new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_registration_entry));
@@ -621,46 +567,6 @@ public class ProfileEntryActivity extends AppCompatActivity {
         public void onTaskPreRun() {
             keepOn_button.setEnabled(false);
             hamPayDialog.showWaitingDialog("");
-        }
-    }
-
-
-    private void initLocation(){
-        if(mBestLocationListener == null){
-            mBestLocationListener = new BestLocationListener() {
-
-                @Override
-                public void onStatusChanged(String provider, int status, Bundle extras) {
-                    Log.i(TAG, "onStatusChanged PROVIDER:" + provider + " STATUS:" + String.valueOf(status));
-                }
-
-                @Override
-                public void onProviderEnabled(String provider) {
-                    Log.i(TAG, "onProviderEnabled PROVIDER:" + provider);
-                }
-
-                @Override
-                public void onProviderDisabled(String provider) {
-                    Log.i(TAG, "onProviderDisabled PROVIDER:" + provider);
-                }
-
-                @Override
-                public void onLocationUpdateTimeoutExceeded(BestLocationProvider.LocationType type) {
-                    Log.w(TAG, "onLocationUpdateTimeoutExceeded PROVIDER:" + type);
-                }
-
-                @Override
-                public void onLocationUpdate(Location location, BestLocationProvider.LocationType type,
-                                             boolean isFresh) {
-                    latitude = location.getLatitude();
-                    longitude = location.getLongitude();
-
-                }
-            };
-
-            if(mBestLocationProvider == null){
-                mBestLocationProvider = new BestLocationProvider(this, true, true, 0, 0, 0, 0);
-            }
         }
     }
 
