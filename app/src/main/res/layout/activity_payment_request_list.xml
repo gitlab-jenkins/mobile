@@ -84,6 +84,20 @@
 
     </RelativeLayout>
 
+
+    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+        android:id="@+id/nullPendingText"
+        geekui:customTypeface="fonts/vazir_regular.ttf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        android:text="@string/payment_request_null_message"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_vertical"
+        android:padding="8dp"
+        android:visibility="gone"/>
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/pullToRefresh"
         android:layout_width="match_parent"

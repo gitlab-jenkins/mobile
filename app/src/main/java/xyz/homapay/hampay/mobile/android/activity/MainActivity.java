@@ -486,28 +486,29 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 walkThroughStep = (walkThroughStep + 1) % 7;
                 switch (walkThroughStep){
                     case 1:
-                        wtFirstLayout.setVisibility(View.INVISIBLE);
+                        wtFirstLayout.setVisibility(View.GONE);
                         wtSecondLayout.setVisibility(View.VISIBLE);
                         break;
                     case 2:
-                        wtSecondLayout.setVisibility(View.INVISIBLE);
+                        wtSecondLayout.setVisibility(View.GONE);
                         wtThirdLayout.setVisibility(View.VISIBLE);
                         break;
                     case 3:
-                        wtThirdLayout.setVisibility(View.INVISIBLE);
+                        wtThirdLayout.setVisibility(View.GONE);
                         wtFourthLayout.setVisibility(View.VISIBLE);
                         break;
                     case 4:
-                        wtFourthLayout.setVisibility(View.INVISIBLE);
+                        wtFourthLayout.setVisibility(View.GONE);
                         wtFifthLayout.setVisibility(View.VISIBLE);
                         break;
                     case 5:
-                        wtFifthLayout.setVisibility(View.INVISIBLE);
+                        wtFifthLayout.setVisibility(View.GONE);
                         wtSixthLayout.setVisibility(View.VISIBLE);
                         editor.putBoolean(Constants.SHOW_WALK_THROUGH, false).commit();
                         break;
                     case 6:
-                        wtSixthLayout.setVisibility(View.INVISIBLE);
+                        wtSixthLayout.setVisibility(View.GONE);
+                        wtContainer.setVisibility(View.GONE);
                         break;
                 }
 
@@ -521,23 +522,23 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
                     case 0:
                         wtFirstLayout.setVisibility(View.VISIBLE);
-                        wtSecondLayout.setVisibility(View.INVISIBLE);
+                        wtSecondLayout.setVisibility(View.GONE);
                         break;
                     case 1:
                         wtSecondLayout.setVisibility(View.VISIBLE);
-                        wtThirdLayout.setVisibility(View.INVISIBLE);
+                        wtThirdLayout.setVisibility(View.GONE);
                         break;
                     case 2:
                         wtThirdLayout.setVisibility(View.VISIBLE);
-                        wtFourthLayout.setVisibility(View.INVISIBLE);
+                        wtFourthLayout.setVisibility(View.GONE);
                         break;
                     case 3:
                         wtFourthLayout.setVisibility(View.VISIBLE);
-                        wtFifthLayout.setVisibility(View.INVISIBLE);
+                        wtFifthLayout.setVisibility(View.GONE);
                         break;
                     case 4:
                         wtFifthLayout.setVisibility(View.VISIBLE);
-                        wtSixthLayout.setVisibility(View.INVISIBLE);
+                        wtSixthLayout.setVisibility(View.GONE);
                         break;
                     case 5:
                         wtSixthLayout.setVisibility(View.VISIBLE);
@@ -546,12 +547,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 break;
 
             case R.id.wt_dismiss:
-                wtFirstLayout.setVisibility(View.GONE);
-                wtSecondLayout.setVisibility(View.GONE);
-                wtThirdLayout.setVisibility(View.GONE);
-                wtFourthLayout.setVisibility(View.GONE);
-                wtFifthLayout.setVisibility(View.GONE);
-                wtSixthLayout.setVisibility(View.GONE);
+                wtContainer.setVisibility(View.GONE);
                 editor.putBoolean(Constants.SHOW_WALK_THROUGH, false).commit();
                 break;
 
