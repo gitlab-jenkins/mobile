@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -49,8 +50,7 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class BusinessesListActivity extends AppCompatActivity implements View.OnClickListener {
 
-
-
+    private RelativeLayout searchLayout;
     private Context context;
     private Activity activity;
     private SwipeRefreshLayout pullToRefresh;
@@ -155,6 +155,7 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
         context = this;
         activity = BusinessesListActivity.this;
 
+        searchLayout = (RelativeLayout)findViewById(R.id.search_layout);
         full_business = (RelativeLayout)findViewById(R.id.full_business);
         full_business.setOnClickListener(this);
         popular_business = (RelativeLayout)findViewById(R.id.popular_business);
@@ -384,11 +385,20 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
 
             hamPayDialog.dismisWaitingDialog();
             pullToRefresh.setRefreshing(false);
-
             if (businessListResponseMessage != null) {
                 if (businessListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     newBusinessDTOs = businessListResponseMessage.getService().getBusinesses();
                     businessDTOs.addAll(newBusinessDTOs);
+                    if (!searchEnabled && businessDTOs.size() > 0){
+                        searchLayout.setVisibility(View.VISIBLE);
+                    }else if (!searchEnabled){
+                        searchLayout.setVisibility(View.GONE);
+                    }
+
+                    if (searchEnabled && businessDTOs.size() == 0){
+                        Toast.makeText(activity, getString(R.string.no_search_result), Toast.LENGTH_SHORT).show();
+                    }
+
                     if (businessDTOs != null) {
                         if (newBusinessDTOs.size() == 0 || newBusinessDTOs.size() < Constants.DEFAULT_PAGE_SIZE) {
                             FINISHED_SCROLLING = true;

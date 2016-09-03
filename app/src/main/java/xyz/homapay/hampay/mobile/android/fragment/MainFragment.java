@@ -207,13 +207,8 @@ public class MainFragment extends Fragment implements View.OnClickListener{
             }
         }
 
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
         main_banner = (ImageView)rootView.findViewById(R.id.main_banner);
-//        main_banner.getLayoutParams().height =  (int)(size.x / 2.5);
         hampay_friend = (LinearLayout)rootView.findViewById(R.id.hampay_friend);
-
         user_transaction_history = (LinearLayout)rootView.findViewById(R.id.user_transaction_history);
         user_transaction_history.setOnClickListener(this);
 

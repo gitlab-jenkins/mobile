@@ -1999,6 +1999,24 @@ public class HamPayDialog {
         }
     }
 
+    public void showFirstIpg(String userName){
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_first_ipg, null);
+        FacedTextView message = (FacedTextView) view.findViewById(R.id.message);
+        message.setText(userName + "\n" + activity.getString(R.string.first_ipg_loading));
+        FacedTextView ipgConfirm = (FacedTextView) view.findViewById(R.id.ipg_confirm);
+        ipgConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
+    }
+
     public void preventPaymentRequest(){
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_pevent_payment_request, null);
 
