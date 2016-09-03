@@ -239,6 +239,7 @@
     <string name="purchase_payment_payer_name">نام پرداخت کننده: </string>
     <string name="purchase_payment_payer_cell">همراه پرداخت کننده: </string>
     <string name="user_pin2">رمز دوم کارت</string>
+    <string name="shaparak_privacy_message">مطابق الزامات شاپرک رمز دوم شما در سیستم هم پی ذخیره نمی شود.</string>
     <string name="msg_success_pending_payment">پرداخت شما با کد پیگیری %1$s با موفقیت انجام شد.</string>
     <string name="msg_business_payment_success">پرداخت شما با کد پیگیری %1$s با موفقیت انجام شد.</string>
     <string name="msg_payment_success">پرداخت شما با موفقیت انجام شد</string>
@@ -248,6 +249,8 @@
     <string name="payment_success_trace">کد پیگیری: </string>
     <string name="payment_success_confirm">تایید</string>
     <string name="msg_ipg_fail">انجام عملیات پرداخت موفقیت آمیز نبود. لطفا دوباره تلاش کنید</string>
+    <string name="first_ipg_loading">به دلیل اینکه اولین باریست که شما از طریق این درگاه پرداخت می کنید نیازمندیم تا اطلاعات کامل کارت بانکی خود را وارد نمایید</string>
+    <string name="first_ipg_loading_confirm">تایید</string>
     <string name="msg_pin2_incurrect">رمز دوم خود را به درستی وارد کنید.</string>
     <string name="msg_not_found_pending_payment_code">اطلاعات خرید شما با این کد یافت نشد </string>
     <string name="msg_incorrect_pending_payment_code">کد را کامل و صحیح وارد کنید</string>
@@ -299,6 +302,7 @@
     <string name="pending_po_details">جزییات درخواست پرداخت</string>
     <string name="pending_po_status">وضعیت: </string>
     <string name="search_phrase">جستجو</string>
+    <string name="no_search_result">هیچ موردی یافت نشد.</string>
     <string name="user_manual_close">بستن</string>
     <string name="user_manual_title_activity">راهنما</string>
     <string name="amount_entry">لطفا مبلغ مورد نظر را وارد کنید</string>

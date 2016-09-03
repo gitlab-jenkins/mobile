@@ -4,14 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.http.SslError;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
-import android.webkit.SslErrorHandler;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -59,18 +57,15 @@ public class BankWebPaymentActivity extends AppCompatActivity {
     public void startTimer() {
         timer = new Timer();
         initializeTimerTask();
-        timer.schedule(timerTask, 6000, 1000);
+        timer.schedule(timerTask, 10000, 1000);
     }
 
     public void initializeTimerTask() {
-
         timerTask = new TimerTask() {
-
             public void run() {
                 handler.post(new Runnable() {
                     public void run() {
                         hamPayDialog.dismisWaitingDialog();
-                        finish();
                     }
                 });
             }
@@ -189,8 +184,8 @@ public class BankWebPaymentActivity extends AppCompatActivity {
             editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
             editor.commit();
             bankWebView.postUrl(Constants.BANK_GATEWAY_URL, postData.getBytes("UTF-8"));
-
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+            hamPayDialog.showFirstIpg(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+            startTimer();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -233,16 +228,10 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                             hamPayDialog.ipgFailDialog();
                             resultStatus = ResultStatus.FAILURE;
                         }
-//                        startTimer();
-//                        Intent returnIntent = new Intent();
-//                        returnIntent.putExtra(Constants.ACTIVITY_RESULT, resultStatus.ordinal());
-//                        setResult(Activity.RESULT_OK, returnIntent);
                     } else {
                         hamPayDialog.ipgFailDialog();
-//                        startTimer();
                     }
                 } else {
-                    hamPayDialog.dismisWaitingDialog();
                 }
             }
         });

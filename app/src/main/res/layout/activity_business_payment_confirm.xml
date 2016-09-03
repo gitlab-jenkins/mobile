@@ -443,6 +443,15 @@
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"/>
                     </RelativeLayout>
+
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        geekui:customTypeface="fonts/vazir_regular.ttf"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/app_origin"
+                        android:textSize="12dp"
+                        android:layout_margin="4dp"
+                        android:text="@string/shaparak_privacy_message" />
                 </LinearLayout>
 
 
