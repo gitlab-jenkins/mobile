@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -84,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private RelativeLayout wtFourthLayout;
     private RelativeLayout wtFifthLayout;
     private RelativeLayout wtSixthLayout;
+    private FacedTextView transactionNote;
 
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle mDrawerToggle;
@@ -290,8 +295,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         wtFourthLayout = (RelativeLayout)findViewById(R.id.wt_fourth_layout);
         wtFifthLayout = (RelativeLayout)findViewById(R.id.wt_fifth_layout);
         wtSixthLayout = (RelativeLayout)findViewById(R.id.wt_sixth_layout);
+        transactionNote = (FacedTextView)findViewById(R.id.transaction_note);
 
-        if (prefs.getBoolean(Constants.SHOW_WALK_THROUGH, true)){
+        if (!prefs.getBoolean(Constants.SHOW_WALK_THROUGH, true)){
             wtContainer.setVisibility(View.VISIBLE);
         }
 
@@ -500,6 +506,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     case 4:
                         wtFourthLayout.setVisibility(View.GONE);
                         wtFifthLayout.setVisibility(View.VISIBLE);
+                        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getString(R.string.wt_note_6));
+                        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.rgb(117, 198, 219));
+                        spannableStringBuilder.setSpan(foregroundColorSpan, 8, 14, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                        foregroundColorSpan = new ForegroundColorSpan(Color.rgb(114, 189, 119));
+                        spannableStringBuilder.setSpan(foregroundColorSpan, 20, 26, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                        foregroundColorSpan = new ForegroundColorSpan(Color.rgb(213, 61, 66));
+                        spannableStringBuilder.setSpan(foregroundColorSpan, 300, 307, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                        transactionNote.setText(spannableStringBuilder);
                         break;
                     case 5:
                         wtFifthLayout.setVisibility(View.GONE);

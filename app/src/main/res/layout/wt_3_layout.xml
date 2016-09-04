@@ -11,10 +11,15 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="0.70"
+            android:background="#f7f7f7">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="#f7f7f7"
             android:orientation="vertical">
 
@@ -23,7 +28,7 @@
                 android:layout_height="160dp"
                 android:layout_centerHorizontal="true"
                 android:layout_margin="12dp"
-                android:src="@drawable/wt_pending"
+                android:src="@drawable/wt_business_name"
                 android:scaleType="center"/>
 
             <LinearLayout
@@ -39,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/page_title"
                     android:textSize="14dp"
-                    android:text="@string/wt_note_5"
+                    android:text="@string/wt_note_4"
                     android:padding="6dp" />
 
             </LinearLayout>
@@ -47,7 +52,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp">
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp">
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/next_wt"
@@ -84,9 +90,9 @@
 
             </RelativeLayout>
 
-
-
         </LinearLayout>
+
+        </ScrollView>
 
         <RelativeLayout
             android:layout_width="0dip"
@@ -107,7 +113,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:paddingRight="8dp"
-                android:layout_marginTop="300dp">
+                android:layout_marginTop="226dp">
 
                 <RelativeLayout
                     android:layout_width="58dp"
@@ -124,7 +130,7 @@
                     <ImageView
                         android:layout_width="52dp"
                         android:layout_height="52dp"
-                        android:src="@drawable/expectation_icon" />
+                        android:src="@drawable/business_icon" />
 
                 </RelativeLayout>
 
