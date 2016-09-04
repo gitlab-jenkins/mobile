@@ -77,7 +77,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="visible">
-            <include layout="@layout/wt_first_layout"/>
+            <include layout="@layout/wt_1_layout"/>
         </RelativeLayout>
 
 
@@ -86,7 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="invisible">
-            <include layout="@layout/wt_second_layout"/>
+            <include layout="@layout/wt_2_layout"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -94,7 +94,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="invisible">
-            <include layout="@layout/wt_third_layout"/>
+            <include layout="@layout/wt_3_layout"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -102,7 +102,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="invisible">
-            <include layout="@layout/wt_fourth_layout"/>
+            <include layout="@layout/wt_4_layout"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -110,7 +110,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="invisible">
-            <include layout="@layout/wt_fifth_layout"/>
+            <include layout="@layout/wt_5_layout"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -118,7 +118,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="invisible">
-            <include layout="@layout/wt_sixth_layout"/>
+            <include layout="@layout/wt_end_layout"/>
         </RelativeLayout>
 
     </RelativeLayout>

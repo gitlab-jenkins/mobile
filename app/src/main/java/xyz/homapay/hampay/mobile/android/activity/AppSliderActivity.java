@@ -15,24 +15,11 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
-import xyz.homapay.hampay.common.common.response.ResponseMessage;
-import xyz.homapay.hampay.common.common.response.ResultStatus;
-import xyz.homapay.hampay.common.core.model.request.IllegalAppListRequest;
-import xyz.homapay.hampay.common.core.model.response.IllegalAppListResponse;
-import xyz.homapay.hampay.common.core.model.response.KeyAgreementResponse;
-import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.AppSliderAdapter;
-import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import xyz.homapay.hampay.mobile.android.async.RequestIllegalAppList;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
-import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
 import xyz.homapay.hampay.mobile.android.util.Constants;
-import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 
 
 public class AppSliderActivity extends AppCompatActivity {
@@ -48,34 +35,14 @@ public class AppSliderActivity extends AppCompatActivity {
     private ImageView indicator_3;
     private ImageView indicator_4;
     private ImageView indicator_5;
-
-
     private SharedPreferences prefs;
-    SharedPreferences.Editor editor;
-
-    Tracker hamPayGaTracker;
-
     private Activity activity;
-
     private Intent intent;
-
-    HamPayDialog hamPayDialog;
-
-    IllegalAppListRequest illegalAppListRequest;
-    RequestIllegalAppList requestIllegalAppList;
-    long launchAppCount = 0;
-
-
-    Bundle bundle;
+    private Bundle bundle;
 
     @Override
     protected void onStop() {
         super.onStop();
-//        HamPayApplication.setAppSate(AppState.Stoped);
-        if (requestIllegalAppList != null){
-            if (!requestIllegalAppList.isCancelled())
-                requestIllegalAppList.cancel(true);
-        }
     }
 
     @Override
@@ -96,13 +63,6 @@ public class AppSliderActivity extends AppCompatActivity {
         activity = AppSliderActivity.this;
 
         bundle = getIntent().getExtras();
-
-//        try {
-//            soapTest();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
 
         if (bundle != null) {
             if (bundle.getBoolean(Constants.HAS_NOTIFICATION)) {
@@ -152,31 +112,8 @@ public class AppSliderActivity extends AppCompatActivity {
             }
         }
 
-
-
-        hamPayDialog = new HamPayDialog(activity);
-
-        hamPayGaTracker = ((HamPayApplication) getApplication())
-                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
-
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
-        editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-
-//        editor.clear().commit();
-
-//        launchAppCount = prefs.getLong(Constants.LAUNCH_APP_COUNT, 0);
-//        editor.putLong(Constants.LAUNCH_APP_COUNT, launchAppCount + 1).commit();
-//        launchAppCount = 0;
-//        if ((launchAppCount % 10) == 0) {
-//            illegalAppListRequest = new IllegalAppListRequest();
-//            requestIllegalAppList = new RequestIllegalAppList(activity, new RequestIllegalAppListTaskCompleteListener());
-//            requestIllegalAppList.execute(illegalAppListRequest);
-//        }
-
-
         intent = new Intent();
-
-
         register_button = (FacedTextView) findViewById(R.id.register_button);
         register_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,22 +138,9 @@ public class AppSliderActivity extends AppCompatActivity {
                 return true;
             }
         });
-
         sliding_into_app.setAdapter(new AppSliderAdapter(getSupportFragmentManager()));
-        sliding_into_app.setOffscreenPageLimit(5);
-
-//        handler = new Handler(Looper.getMainLooper());
-//        runnable = new Runnable() {
-//            public void run() {
-//                slideIndex = (++slideIndex) % 5;
-//                sliding_into_app.setCurrentItem(slideIndex, true);
-//                handler.postDelayed(runnable, 5000);
-//            }
-//        };
-//        handler.postDelayed(runnable, 5000);
-
+        sliding_into_app.setOffscreenPageLimit(1);
         final LayerDrawable background = (LayerDrawable) sliding_into_app.getBackground();
-
         background.getDrawable(0).setAlpha(255);
         background.getDrawable(1).setAlpha(0);
         background.getDrawable(2).setAlpha(0);
@@ -295,33 +219,18 @@ public class AppSliderActivity extends AppCompatActivity {
             }
         });
 
-
-
         if (prefs.getBoolean(Constants.REGISTERED_USER, false)) {
-
-
 
             RelativeLayout hampay_login_splash = (RelativeLayout) findViewById(R.id.hampay_login_splash);
             hampay_login_splash.setVisibility(View.VISIBLE);
-
             Thread thread = new Thread() {
                 public void run() {
-
                     try {
-//                        launchAppCount = prefs.getLong(Constants.LAUNCH_APP_COUNT, 0);
-//                        editor.putLong(Constants.LAUNCH_APP_COUNT, launchAppCount + 1).commit();
-//                        if ((launchAppCount % 10) == 0 || prefs.getBoolean(Constants.FORCE_FETCH_ILLEGAL_APPS, false)) {
-//                            illegalAppListRequest = new IllegalAppListRequest();
-//                            requestIllegalAppList = new RequestIllegalAppList(activity, new RequestIllegalAppListTaskCompleteListener());
-//                            requestIllegalAppList.execute(illegalAppListRequest);
-//                        }else {
-                            sleep(2 * 1000);
-                            intent.setClass(AppSliderActivity.this, HamPayLoginActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            finish();
-                            startActivity(intent);
-//                        }
-
+                        sleep(2 * 1000);
+                        intent.setClass(AppSliderActivity.this, HamPayLoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        finish();
+                        startActivity(intent);
                     } catch (Exception e) {
                     }
                 }
@@ -329,7 +238,6 @@ public class AppSliderActivity extends AppCompatActivity {
             thread.start();
 
         } else {
-
             image_splash = (ImageView) findViewById(R.id.image_splash);
             intro_icon = (ImageView) findViewById(R.id.intro_icon);
 
@@ -375,111 +283,5 @@ public class AppSliderActivity extends AppCompatActivity {
             });
             intro_icon.startAnimation(splashLogoAnimation);
         }
-    }
-
-
-    public class RequestIllegalAppListTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<IllegalAppListResponse>> {
-
-
-        @Override
-        public void onTaskComplete(ResponseMessage<IllegalAppListResponse> illegalAppListResponseMessage) {
-
-            hamPayDialog.dismisWaitingDialog();
-
-            if (illegalAppListResponseMessage != null) {
-
-                if (illegalAppListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Illegal App List")
-                            .setAction("Fetch")
-                            .setLabel("Success")
-                            .build());
-
-                    String downloadedAppNames = new DeviceInfo(activity).getDownloadedAppNames();
-                    for (String illegalAppName : illegalAppListResponseMessage.getService().getIllegalAppList()){
-                        if (downloadedAppNames.equalsIgnoreCase(illegalAppName)){
-                            requestIllegalAppList = new RequestIllegalAppList(activity, new RequestIllegalAppListTaskCompleteListener());
-                            new HamPayDialog(activity).showFailIllegalAppListDialog(requestIllegalAppList, illegalAppListRequest,
-                                    illegalAppName,
-                                    getString(R.string.msg_found_illegal_app));
-
-                            editor.putBoolean(Constants.FORCE_FETCH_ILLEGAL_APPS, true).commit();
-
-                            return;
-                        }
-                    }
-
-                    editor.putBoolean(Constants.FORCE_FETCH_ILLEGAL_APPS, false).commit();
-
-                    intent.setClass(AppSliderActivity.this, HamPayLoginActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    finish();
-                    startActivity(intent);
-
-                } else {
-                    illegalAppListResponseMessage.getService().getResultStatus().getDescription();
-                    requestIllegalAppList = new RequestIllegalAppList(activity, new RequestIllegalAppListTaskCompleteListener());
-                    new HamPayDialog(activity).showFailIllegalAppListDialog(requestIllegalAppList, illegalAppListRequest,
-                            illegalAppListResponseMessage.getService().getResultStatus().getCode(),
-                            illegalAppListResponseMessage.getService().getResultStatus().getDescription());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Illegal App List")
-                            .setAction("Fetch")
-                            .setLabel("Fail(Server)")
-                            .build());
-                }
-            } else {
-                requestIllegalAppList = new RequestIllegalAppList(activity, new RequestIllegalAppListTaskCompleteListener());
-                new HamPayDialog(activity).showFailIllegalAppListDialog(requestIllegalAppList, illegalAppListRequest,
-                        Constants.LOCAL_ERROR_CODE,
-                        getString(R.string.msg_fail_illegal_app_list));
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Illegal App List")
-                        .setAction("Fetch")
-                        .setLabel("Fail(Mobile)")
-                        .build());
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {
-        }
-
-
-    }
-
-    public class RequestKeyAgreementTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<KeyAgreementResponse>>
-    {
-        public RequestKeyAgreementTaskCompleteListener(){
-        }
-
-        @Override
-        public void onTaskComplete(ResponseMessage<KeyAgreementResponse> keyAgreementResponseMessage)
-        {
-            hamPayDialog.dismisWaitingDialog();
-            if (keyAgreementResponseMessage != null) {
-
-                if (keyAgreementResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Request TAC")
-                            .setAction("Request")
-                            .setLabel("Success")
-                            .build());
-
-                }else {
-
-                }
-            }
-            else {
-
-            }
-
-        }
-
-        @Override
-        public void onTaskPreRun() {}
     }
 }
