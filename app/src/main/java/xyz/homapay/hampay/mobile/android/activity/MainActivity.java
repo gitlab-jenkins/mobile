@@ -297,7 +297,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         wtSixthLayout = (RelativeLayout)findViewById(R.id.wt_sixth_layout);
         transactionNote = (FacedTextView)findViewById(R.id.transaction_note);
 
-        if (!prefs.getBoolean(Constants.SHOW_WALK_THROUGH, true)){
+        if (prefs.getBoolean(Constants.SHOW_WALK_THROUGH, true)){
             wtContainer.setVisibility(View.VISIBLE);
         }
 

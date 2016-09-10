@@ -14,6 +14,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.ImageSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.view.KeyEvent;
@@ -111,8 +112,12 @@ public class PaymentRequestListActivity extends AppCompatActivity{
         nullPendingText = (FacedTextView)findViewById(R.id.nullPendingText);
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getString(R.string.payment_request_null_message));
         ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.rgb(109, 7, 109));
-        spannableStringBuilder.setSpan(new RelativeSizeSpan(2f), 40, 42, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spannableStringBuilder.setSpan(foregroundColorSpan, 40, 42, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+//        spannableStringBuilder.setSpan(new RelativeSizeSpan(2f), 40, 42, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        spannableStringBuilder.setSpan(foregroundColorSpan, 40, 42, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+//        nullPendingText.setText(spannableStringBuilder);
+
+        ImageSpan is = new ImageSpan(context, R.drawable.right_icon);
+        spannableStringBuilder.setSpan(is, 40, 42, 0);
         nullPendingText.setText(spannableStringBuilder);
 
 
