@@ -35,7 +35,6 @@ import xyz.homapay.hampay.mobile.android.util.GZip;
 public class SecuredProxyService {
 
     private Context context;
-    private SharedPreferences prefs;
     private HttpURLConnection httpURLConnection;
     private HttpsURLConnection httpsURLConnection;
     private ConnectionType connectionType;
@@ -66,7 +65,6 @@ public class SecuredProxyService {
     public SecuredProxyService(boolean encryptionEnabled, Context context, ConnectionType connectionType, ConnectionMethod connectionMethod, URL url){
         this.encryptionEnabled = encryptionEnabled;
         this.context = context;
-        prefs = context.getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
         this.connectionType = connectionType;
         this.connectionMethod = connectionMethod;
         this.url = url;
@@ -76,7 +74,6 @@ public class SecuredProxyService {
 
     public SecuredProxyService(Context context, ConnectionType connectionType, ConnectionMethod connectionMethod, URL url){
         this.context = context;
-        prefs = context.getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
         this.connectionType = connectionType;
         this.connectionMethod = connectionMethod;
         this.url = url;
@@ -86,7 +83,6 @@ public class SecuredProxyService {
 
     public SecuredProxyService(boolean encryptionEnabled, Context context, ConnectionType connectionType, ConnectionMethod connectionMethod, URL url, boolean enableGZip){
         this.encryptionEnabled = encryptionEnabled;
-        prefs = context.getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
         this.context = context;
         this.connectionType = connectionType;
         this.connectionMethod = connectionMethod;
@@ -98,7 +94,6 @@ public class SecuredProxyService {
 
     public SecuredProxyService(Context context, ConnectionType connectionType, ConnectionMethod connectionMethod, URL url, boolean enableGZip){
         this.context = context;
-        prefs = context.getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
         this.connectionType = connectionType;
         this.connectionMethod = connectionMethod;
         this.url = url;
