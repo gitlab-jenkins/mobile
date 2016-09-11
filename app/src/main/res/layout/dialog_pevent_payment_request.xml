@@ -32,8 +32,8 @@
         android:textColor="@color/modal_text"
         android:textSize="15dp"
         android:layout_marginTop="12dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
         android:gravity="center"
         android:text="@string/prevent_payment_request"/>
 
