@@ -2040,6 +2040,35 @@ public class HamPayDialog {
 
     public void preventPaymentRequest(){
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_pevent_payment_request, null);
+
+        FacedTextView message = (FacedTextView)view.findViewById(R.id.message);
+
+
+        Spannable tcPrivacySpannable = new SpannableString(activity.getString(R.string.prevent_payment_request));
+        ClickableSpan tcClickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                Intent merchantIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://hampay.ir/form/HPP-OnlineMerchantForm-MilMe-05June16-V(1.1).pdf"));
+                activity.startActivity(merchantIntent);
+            }
+        };
+        tcPrivacySpannable.setSpan(tcClickableSpan, 17, 35, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        message.setText(tcPrivacySpannable);
+        message.setMovementMethod(LinkMovementMethod.getInstance());
+        ClickableSpan privacySpan = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", activity.getString(R.string.merchent_document_email), null));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, activity.getString(R.string.merchant_id));
+                emailIntent.putExtra(Intent.EXTRA_TEXT, activity.getString(R.string.merchant_id_document));
+                activity.startActivity(Intent.createChooser(emailIntent, activity.getString(R.string.hampay_contact)));
+            }
+        };
+
+        tcPrivacySpannable.setSpan(privacySpan, 122, 137, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        message.setText(tcPrivacySpannable);
+        message.setMovementMethod(LinkMovementMethod.getInstance());
+
         FacedTextView preventPaymentRequest = (FacedTextView) view.findViewById(R.id.prevent_payment_request);
         preventPaymentRequest.setOnClickListener(new View.OnClickListener() {
             @Override
