@@ -322,7 +322,7 @@
     <string name="prevent_payment_request_cancel">تایید</string>
     <string name="merchant_id">کد پذیرندگی</string>
     <string name="merchant_id_document">مدارک پذیرندگی</string>
-    <string name="merchent_document_email">info@hampay.ir</string>
+    <string name="merchent_document_email">info@homapay.com</string>
 
     <string-array name="psp_code">
 

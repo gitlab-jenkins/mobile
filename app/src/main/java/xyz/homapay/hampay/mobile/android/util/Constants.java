@@ -107,6 +107,7 @@ public class Constants {
     public static final String SUCCESS_PAYMENT_CODE = "code";
     public static final String SUCCESS_PAYMENT_TRACE = "trace";
     public static final String SHOW_CREATE_INVOICE = "showCreateInvoice";
+    public static final String MERCHANT_DOCUMENT_URL = "http://hampay.ir/form/HPP-OnlineUserMerchant-MilMe-13Sep16-V(1.2).pdf";
 
     //Permissions and Group Permission
     public static final int READ_PHONE_STATE = 1;
