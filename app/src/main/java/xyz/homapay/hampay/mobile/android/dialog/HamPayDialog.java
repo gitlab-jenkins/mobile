@@ -2052,7 +2052,7 @@ public class HamPayDialog {
                 activity.startActivity(merchantIntent);
             }
         };
-        tcPrivacySpannable.setSpan(tcClickableSpan, 17, 37, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tcPrivacySpannable.setSpan(tcClickableSpan, 17, 35, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         message.setText(tcPrivacySpannable);
         message.setMovementMethod(LinkMovementMethod.getInstance());
         ClickableSpan privacySpan = new ClickableSpan() {
