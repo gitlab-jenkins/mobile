@@ -392,7 +392,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                     if (responseCode.equalsIgnoreCase("2000")) {
                         if (purchaseInfoDTO != null) {
                             Intent intent = new Intent(context, PaymentCompletedActivity.class);
-                            intent.putExtra(Constants.SUCCESS_PAYMENT_AMOUNT, purchaseInfoDTO.getAmount());
+                            intent.putExtra(Constants.SUCCESS_PAYMENT_AMOUNT, purchaseInfoDTO.getAmount() + purchaseInfoDTO.getVat() + purchaseInfoDTO.getFeeCharge());
                             intent.putExtra(Constants.SUCCESS_PAYMENT_CODE, purchaseInfoDTO.getPurchaseCode());
                             intent.putExtra(Constants.SUCCESS_PAYMENT_TRACE, pspInfoDTO.getProviderId());
                             startActivityForResult(intent, 45);
