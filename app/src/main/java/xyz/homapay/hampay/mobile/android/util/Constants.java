@@ -4,7 +4,8 @@ package xyz.homapay.hampay.mobile.android.util;
 import xyz.homapay.hampay.mobile.android.webservice.ConnectionType;
 
 public class Constants {
-//    public static String SERVER = "176.58.104.158";//England Server
+    //    public static String SERVER = "176.58.104.158";//England Server
+//    public static String SERVER = "mobile.hampay.ir";//Prod Server
 //    public static String SERVER = "uat.hampay.ir";//UAT Server
     public static String SERVER = "mobile.hampay.homapay.com";//LIVE Server
     public static String URL_PREFIX = "/hampay";
@@ -106,13 +107,12 @@ public class Constants {
     public static final String SUCCESS_PAYMENT_CODE = "code";
     public static final String SUCCESS_PAYMENT_TRACE = "trace";
     public static final String SHOW_CREATE_INVOICE = "showCreateInvoice";
-    public static final String SHOW_WALK_THROUGH = "show_wt";
-    public static final int HAMPAY_RED = 109;
-    public static final int HAMPAY_GREEN = 7;
-    public static final int HAMPAY_BLUE = 109;
     public static final String MERCHANT_DOCUMENT_URL = "http://hampay.ir/form/Merchantcode.pdf";
+    public static final String SHOW_WALK_THROUGH = "show_wt";
 
     //Permissions and Group Permission
     public static final int READ_PHONE_STATE = 1;
     public static final int READ_CONTACTS = 2;
+    public static final int ACCESS_FINE_LOCATION = 3;
+    public static final int GET_ACCOUNTS = 4;
 }
