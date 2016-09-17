@@ -113,6 +113,4 @@ public class Constants {
     //Permissions and Group Permission
     public static final int READ_PHONE_STATE = 1;
     public static final int READ_CONTACTS = 2;
-    public static final int ACCESS_FINE_LOCATION = 3;
-    public static final int GET_ACCOUNTS = 4;
 }
