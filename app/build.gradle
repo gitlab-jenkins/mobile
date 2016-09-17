@@ -8,8 +8,8 @@ android {
         applicationId "xyz.homapay.hampay.mobile.android"
         minSdkVersion 11
         targetSdkVersion 23
-        versionCode 10
-        versionName "HamPay-V1.0.9"
+        versionCode 6
+        versionName "HamPay-V1.0.2.3"
         multiDexEnabled true
 //        testApplicationId = "xyz.homapay.hampay.mobile.android.test"
 //        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

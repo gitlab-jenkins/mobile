@@ -323,11 +323,11 @@
     <string name="not_connectivity">اتصال اینترنت خود را بررسی نمایید</string>
     <string name="network_setting">تنظیمات</string>
     <string name="network_cancel">انصراف</string>
-    <string name="prevent_payment_request">کاربران هم‌پی با دریافت کد پذیرندگی، قادر به استفاده از این امکان خواهند بود. جهت ثبت‌نام، لطفا مدارک پذیرندگی را به ایمیل info@hampay.ir ارسال فرمایید.</string>
+    <string name="prevent_payment_request">کاربران هم‌پی با دریافت کد پذیرندگی، قادر به استفاده از این امکان خواهند بود. جهت ثبت‌نام، لطفا مدارک پذیرندگی را به ایمیل info@homapay.com ارسال فرمایید.</string>
     <string name="prevent_payment_request_cancel">تایید</string>
     <string name="merchant_id">کد پذیرندگی</string>
     <string name="merchant_id_document">مدارک پذیرندگی</string>
-    <string name="merchent_document_email">info@hampay.ir</string>
+    <string name="merchent_document_email">info@homapay.com</string>
 
     <string-array name="psp_code">
 

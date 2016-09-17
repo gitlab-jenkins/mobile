@@ -214,7 +214,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                         if (view.getTitle().split(":").length == 2){
                             Intent intent = new Intent(context, PaymentCompletedActivity.class);
                             if (paymentInfoDTO != null) {
-                                intent.putExtra(Constants.SUCCESS_PAYMENT_AMOUNT, paymentInfoDTO.getAmount());
+                                intent.putExtra(Constants.SUCCESS_PAYMENT_AMOUNT, paymentInfoDTO.getAmount() + paymentInfoDTO.getVat() + paymentInfoDTO.getFeeCharge());
                                 intent.putExtra(Constants.SUCCESS_PAYMENT_CODE, paymentInfoDTO.getProductCode());
 
                             }else if (purchaseInfoDTO != null){

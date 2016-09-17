@@ -2026,7 +2026,7 @@ public class HamPayDialog {
         ClickableSpan tcClickableSpan = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                Intent merchantIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://hampay.ir/form/HPP-OnlineMerchantForm-MilMe-05June16-V(1.1).pdf"));
+                Intent merchantIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.MERCHANT_DOCUMENT_URL));
                 activity.startActivity(merchantIntent);
             }
         };
@@ -2043,7 +2043,7 @@ public class HamPayDialog {
             }
         };
 
-        tcPrivacySpannable.setSpan(privacySpan, 122, 137, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tcPrivacySpannable.setSpan(privacySpan, 122, 139, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         message.setText(tcPrivacySpannable);
         message.setMovementMethod(LinkMovementMethod.getInstance());
 
