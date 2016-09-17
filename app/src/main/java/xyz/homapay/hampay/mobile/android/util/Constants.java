@@ -110,6 +110,7 @@ public class Constants {
     public static final int HAMPAY_RED = 109;
     public static final int HAMPAY_GREEN = 7;
     public static final int HAMPAY_BLUE = 109;
+    public static final String MERCHANT_DOCUMENT_URL = "http://hampay.ir/form/Merchantcode.pdf";
 
     //Permissions and Group Permission
     public static final int READ_PHONE_STATE = 1;
