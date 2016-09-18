@@ -301,7 +301,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                     slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
                     return;
                 }
-                if (!bundle.getBoolean(Constants.SHOW_CREATE_INVOICE)){
+                if (bundle.getBoolean(Constants.SHOW_CREATE_INVOICE)){
                     hamPayDialog.preventPaymentRequest();
                 }else {
                     intent.setClass(getActivity(), PaymentRequestListActivity.class);

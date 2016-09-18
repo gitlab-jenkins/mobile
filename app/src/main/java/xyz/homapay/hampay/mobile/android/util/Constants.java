@@ -109,6 +109,9 @@ public class Constants {
     public static final String SHOW_CREATE_INVOICE = "showCreateInvoice";
     public static final String MERCHANT_DOCUMENT_URL = "http://hampay.ir/form/Merchantcode.pdf";
     public static final String SHOW_WALK_THROUGH = "show_wt";
+    public static final int HAMPAY_RED = 109;
+    public static final int HAMPAY_GREEN = 7;
+    public static final int HAMPAY_BLUE = 109;
 
     //Permissions and Group Permission
     public static final int READ_PHONE_STATE = 1;

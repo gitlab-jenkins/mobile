@@ -112,11 +112,8 @@ public class PaymentRequestListActivity extends AppCompatActivity{
         nullPendingText = (FacedTextView)findViewById(R.id.nullPendingText);
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getString(R.string.payment_request_null_message));
         ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.rgb(109, 7, 109));
-//        spannableStringBuilder.setSpan(new RelativeSizeSpan(2f), 40, 42, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        spannableStringBuilder.setSpan(foregroundColorSpan, 40, 42, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-//        nullPendingText.setText(spannableStringBuilder);
 
-        ImageSpan is = new ImageSpan(context, R.drawable.right_icon);
+        ImageSpan is = new ImageSpan(context, R.drawable.add_payment_note);
         spannableStringBuilder.setSpan(is, 40, 42, 0);
         nullPendingText.setText(spannableStringBuilder);
 
@@ -160,7 +157,6 @@ public class PaymentRequestListActivity extends AppCompatActivity{
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     inputMethodManager.hideSoftInputFromWindow(search_text.getWindowToken(), 0);
-//                    performBusinessSearch(searchPhraseText.getText().toString());
                     return true;
                 }
                 return false;
