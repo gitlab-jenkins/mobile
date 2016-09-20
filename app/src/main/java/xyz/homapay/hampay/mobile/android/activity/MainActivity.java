@@ -1,13 +1,8 @@
 package xyz.homapay.hampay.mobile.android.activity;
 
-import android.accounts.AccountManager;
-import android.accounts.AccountManagerCallback;
-import android.accounts.AccountManagerFuture;
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -28,7 +23,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -89,71 +83,74 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private RelativeLayout wtFifthLayout;
     private RelativeLayout wtSixthLayout;
     private FacedTextView transactionNote;
-
-    DrawerLayout drawerLayout;
-    ActionBarDrawerToggle mDrawerToggle;
-
-    ImageView nav_icon;
-
-    FacedTextView fragment_title;
-
-    ImageView image_profile;
-    LinearLayout user_image_layout;
-
-    int currentFragmet = 0;
-
-    UserProfileDTO userProfileDTO;
-
-    String pendingPurchaseCode = null;
-    String pendingPaymentCode = null;
-    int pendingPurchaseCount = 0;
-    int pendingPaymentCount = 0;
+    private DrawerLayout drawerLayout;
+    private ImageView nav_icon;
+    private FacedTextView fragment_title;
+    private ImageView image_profile;
+    private LinearLayout user_image_layout;
+    private int currentFragment = 0;
+    private UserProfileDTO userProfileDTO;
+    private String pendingPurchaseCode = null;
+    private String pendingPaymentCode = null;
+    private int pendingPurchaseCount = 0;
+    private int pendingPaymentCount = 0;
     private boolean showCreateInvoice = true;
-
-    Activity activity;
-
-    Bundle bundle;
-
-    SharedPreferences prefs;
-    SharedPreferences.Editor editor;
-
-    boolean hasNotification = false;
-
-    HamPayDialog hamPayDialog;
-
-    Tracker hamPayGaTracker;
-
-    Context context;
-
-    RequestMobileRegistrationIdEntry requestMobileRegistrationIdEntry;
-    MobileRegistrationIdEntryRequest mobileRegistrationIdEntryRequest;
-
-    Intent intent;
-
-    DatabaseHelper dbHelper;
-
+    private Activity activity;
+    private Bundle bundle;
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
+    private boolean hasNotification = false;
+    private Tracker hamPayGaTracker;
+    private Context context;
+    private RequestMobileRegistrationIdEntry requestMobileRegistrationIdEntry;
+    private MobileRegistrationIdEntryRequest mobileRegistrationIdEntryRequest;
+    private Intent intent;
+    private DatabaseHelper dbHelper;
     private ImageManager imageManager;
     private ImageView user_manual;
+    private ImageView walkThrough;
     private String fragmentTitle = "";
+
+    public void walkThrough(View view){
+        if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
+            drawerLayout.closeDrawer(Gravity.RIGHT);
+        }
+        currentFragment = 0;
+        user_manual.setVisibility(View.VISIBLE);
+        walkThrough.setVisibility(View.GONE);
+        fragment = new MainFragment();
+        if (userProfileDTO != null) {
+            bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
+            bundle.putInt(Constants.PENDING_PAYMENT_COUNT, pendingPaymentCount);
+            bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);
+            bundle.putBoolean(Constants.SHOW_CREATE_INVOICE, showCreateInvoice);
+            fragment.setArguments(bundle);
+        }
+        fragmentTitle = getString(R.string.title_main_fragment);
+        if (fragment != null) {
+            setFragment(fragment, fragmentTitle);
+        }
+        wtFirstLayout.setVisibility(View.VISIBLE);
+        wtContainer.setVisibility(View.VISIBLE);
+    }
 
     public void userManual(View view){
         Intent intent = new Intent();
         intent.setClass(activity, UserManualActivity.class);
-        if (currentFragmet == 0) {
+        if (currentFragment == 0) {
             intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_main);
             intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_main);
             startActivity(intent);
-        }else if (currentFragmet == 1){
+        }else if (currentFragment == 1){
             intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_account_details);
             intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_account_details);
             startActivity(intent);
         }
-        else if (currentFragmet == 2){
+        else if (currentFragment == 2){
             intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_setting);
             intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_setting);
             startActivity(intent);
         }
-
     }
 
     @Override
@@ -282,8 +279,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 }
             }else if (pendingPaymentCode != null){
                 if (!dbHelper.checkPaymentRequest(pendingPaymentCode)) {
-//                    intent.setClass(context, InvoicePendingConfirmationActivity.class);
-//                    startActivity(intent);
                 }
             }
         }
@@ -302,6 +297,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
 
         user_manual = (ImageView)findViewById(R.id.user_manual);
+        walkThrough = (ImageView)findViewById(R.id.walkThrough);
         fragment_title = (FacedTextView)findViewById(R.id.fragment_title);
         image_profile = (ImageView)findViewById(R.id.image_profile);
 
@@ -324,48 +320,13 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), null);
         drawerFragment.setDrawerListener(this);
 
-
-        mDrawerToggle = new ActionBarDrawerToggle(
-                this, drawerLayout,
-                R.string.drawer_open,
-                R.string.drawer_close){
-
-            @Override
-            public boolean onOptionsItemSelected(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.home:
-                        if(!drawerLayout.isDrawerOpen(Gravity.RIGHT))
-                            drawerLayout.openDrawer(Gravity.RIGHT);
-                        else
-                            drawerLayout.closeDrawer(Gravity.RIGHT);
-
-                        return true;
-
-                    default:
-                        break;
-                }
-
-                return super.onOptionsItemSelected(item);
-            }
-
-            public void onDrawerClosed(View view) {
-                invalidateOptionsMenu();
-            }
-
-            public void onDrawerOpened(View drawerView) {
-                invalidateOptionsMenu();
-            }
-
-        };
-
-
         if (userProfileDTO.getUserImageId() != null) {
             image_profile.setTag(userProfileDTO.getUserImageId());
             imageManager.displayImage(userProfileDTO.getUserImageId(), image_profile, R.drawable.user_placeholder);
         }else {
             image_profile.setImageResource(R.drawable.user_placeholder);
         }
-        displayView(currentFragmet);
+        displayView(currentFragment);
 
         if (!prefs.getBoolean(Constants.SEND_MOBILE_REGISTER_ID, false)) {
             getRegId();
@@ -386,8 +347,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     @Override
     public void onDrawerItemSelected(View view, int position) {
-        if (currentFragmet != position || position == 5|| position == 6 || position == 7|| position == 8) {
-//            currentFragmet = position;
+        if (currentFragment != position || position == 5|| position == 6 || position == 7|| position == 8) {
             displayView(position);
         }
     }
@@ -396,8 +356,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         Intent intent = new Intent();
         switch (position) {
             case 0:
-                currentFragmet = 0;
+                currentFragment = 0;
                 user_manual.setVisibility(View.VISIBLE);
+                walkThrough.setVisibility(View.GONE);
                 fragment = new MainFragment();
                 if (userProfileDTO != null) {
                     bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
@@ -409,8 +370,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 fragmentTitle = getString(R.string.title_main_fragment);
                 break;
             case 1:
-                currentFragmet = 1;
+                currentFragment = 1;
                 user_manual.setVisibility(View.VISIBLE);
+                walkThrough.setVisibility(View.GONE);
                 fragment = new AccountDetailFragment();
                 if (userProfileDTO != null) {
                     bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
@@ -419,22 +381,25 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 fragmentTitle = getString(R.string.title_account_detail);
                 break;
             case 2:
-                currentFragmet = 2;
+                currentFragment = 2;
                 user_manual.setVisibility(View.VISIBLE);
+                walkThrough.setVisibility(View.GONE);
                 fragment = new SettingFragment();
                 fragmentTitle = getString(R.string.title_settings);
                 break;
 
             case 3:
-                currentFragmet = 3;
+                currentFragment = 3;
                 user_manual.setVisibility(View.GONE);
+                walkThrough.setVisibility(View.VISIBLE);
                 fragment = new GuideFragment();
                 fragmentTitle = getString(R.string.title_guide);
                 break;
 
             case 4:
-                currentFragmet = 4;
+                currentFragment = 4;
                 user_manual.setVisibility(View.GONE);
+                walkThrough.setVisibility(View.GONE);
                 fragment = new AboutFragment();
                 fragmentTitle = getString(R.string.title_hampay_about);
                 break;
@@ -463,7 +428,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 new HamPayDialog(activity).showLogoutDialog();
                 break;
         }
-
 
         if (fragment != null) {
             setFragment(fragment, fragmentTitle);
@@ -521,6 +485,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                         editor.putBoolean(Constants.SHOW_WALK_THROUGH, false).commit();
                         break;
                     case 6:
+                        walkThroughStep = 0;
+                        wtSixthLayout.setVisibility(View.GONE);
+                        wtSecondLayout.setVisibility(View.GONE);
+                        wtThirdLayout.setVisibility(View.GONE);
+                        wtFourthLayout.setVisibility(View.GONE);
+                        wtFifthLayout.setVisibility(View.GONE);
                         wtSixthLayout.setVisibility(View.GONE);
                         wtContainer.setVisibility(View.GONE);
                         break;
@@ -561,6 +531,13 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 break;
 
             case R.id.wt_dismiss:
+                walkThroughStep = 0;
+                wtFirstLayout.setVisibility(View.GONE);
+                wtSecondLayout.setVisibility(View.GONE);
+                wtThirdLayout.setVisibility(View.GONE);
+                wtFourthLayout.setVisibility(View.GONE);
+                wtFifthLayout.setVisibility(View.GONE);
+                wtSixthLayout.setVisibility(View.GONE);
                 wtContainer.setVisibility(View.GONE);
                 editor.putBoolean(Constants.SHOW_WALK_THROUGH, false).commit();
                 break;
@@ -584,12 +561,13 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
             drawerLayout.closeDrawer(Gravity.RIGHT);
-        }else if (currentFragmet != 0){
+        }else if (currentFragment != 0){
             fragment = new MainFragment();
             if (userProfileDTO != null) {
-                currentFragmet = 0;
+                currentFragment = 0;
                 fragmentTitle = getString(R.string.title_main_fragment);
                 user_manual.setVisibility(View.VISIBLE);
+                walkThrough.setVisibility(View.GONE);
                 bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
                 bundle.putInt(Constants.PENDING_PAYMENT_COUNT, pendingPaymentCount);
                 bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);

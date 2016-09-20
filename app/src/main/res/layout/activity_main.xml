@@ -17,15 +17,34 @@
             android:layout_width="fill_parent"
             android:layout_height="48dp"
             android:background="@android:color/white"
-            android:padding="8dp">
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp">
 
-            <ImageView
-                android:id="@+id/user_manual"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:src="@drawable/help_gray"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:layout_centerVertical="true"
-                android:onClick="userManual"/>
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/user_manual"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:src="@drawable/help_gray"
+                    android:onClick="userManual"/>
+
+                <ImageView
+                    android:id="@+id/walkThrough"
+                    android:layout_width="35dp"
+                    android:layout_height="42dp"
+                    android:src="@drawable/ic_walk_through_top"
+                    android:onClick="walkThrough"
+                    android:visibility="visible" />
+
+            </LinearLayout>
+
+
 
             <ImageView
                 android:id="@+id/nav_icon"

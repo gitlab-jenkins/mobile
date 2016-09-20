@@ -180,12 +180,7 @@ public class AccountDetailFragment extends Fragment {
         @Override
         public void onTaskComplete(ResponseMessage<UserProfileResponse> userProfileResponseMessage)
         {
-
-            Log.e("FINISH", "FINISH");
-
             hamPayDialog.dismisWaitingDialog();
-
-
             if (userProfileResponseMessage != null) {
 
 
