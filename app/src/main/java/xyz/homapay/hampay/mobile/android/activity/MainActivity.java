@@ -104,35 +104,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private Context context;
     private RequestMobileRegistrationIdEntry requestMobileRegistrationIdEntry;
     private MobileRegistrationIdEntryRequest mobileRegistrationIdEntryRequest;
-    private Intent intent;
     private DatabaseHelper dbHelper;
     private ImageManager imageManager;
     private ImageView user_manual;
-    private ImageView walkThrough;
     private String fragmentTitle = "";
-
-    public void walkThrough(View view){
-        if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
-            drawerLayout.closeDrawer(Gravity.RIGHT);
-        }
-        currentFragment = 0;
-        user_manual.setVisibility(View.VISIBLE);
-        walkThrough.setVisibility(View.GONE);
-        fragment = new MainFragment();
-        if (userProfileDTO != null) {
-            bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
-            bundle.putInt(Constants.PENDING_PAYMENT_COUNT, pendingPaymentCount);
-            bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);
-            bundle.putBoolean(Constants.SHOW_CREATE_INVOICE, showCreateInvoice);
-            fragment.setArguments(bundle);
-        }
-        fragmentTitle = getString(R.string.title_main_fragment);
-        if (fragment != null) {
-            setFragment(fragment, fragmentTitle);
-        }
-        wtFirstLayout.setVisibility(View.VISIBLE);
-        wtContainer.setVisibility(View.VISIBLE);
-    }
 
     public void userManual(View view){
         Intent intent = new Intent();
@@ -297,7 +272,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
 
         user_manual = (ImageView)findViewById(R.id.user_manual);
-        walkThrough = (ImageView)findViewById(R.id.walkThrough);
         fragment_title = (FacedTextView)findViewById(R.id.fragment_title);
         image_profile = (ImageView)findViewById(R.id.image_profile);
 
@@ -358,7 +332,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             case 0:
                 currentFragment = 0;
                 user_manual.setVisibility(View.VISIBLE);
-                walkThrough.setVisibility(View.GONE);
                 fragment = new MainFragment();
                 if (userProfileDTO != null) {
                     bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
@@ -372,7 +345,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             case 1:
                 currentFragment = 1;
                 user_manual.setVisibility(View.VISIBLE);
-                walkThrough.setVisibility(View.GONE);
                 fragment = new AccountDetailFragment();
                 if (userProfileDTO != null) {
                     bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
@@ -383,7 +355,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             case 2:
                 currentFragment = 2;
                 user_manual.setVisibility(View.VISIBLE);
-                walkThrough.setVisibility(View.GONE);
                 fragment = new SettingFragment();
                 fragmentTitle = getString(R.string.title_settings);
                 break;
@@ -391,30 +362,46 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             case 3:
                 currentFragment = 3;
                 user_manual.setVisibility(View.GONE);
-                walkThrough.setVisibility(View.VISIBLE);
                 fragment = new GuideFragment();
                 fragmentTitle = getString(R.string.title_guide);
                 break;
 
             case 4:
-                currentFragment = 4;
-                user_manual.setVisibility(View.GONE);
-                walkThrough.setVisibility(View.GONE);
-                fragment = new AboutFragment();
-                fragmentTitle = getString(R.string.title_hampay_about);
+                currentFragment = 0;
+                user_manual.setVisibility(View.VISIBLE);
+                fragment = new MainFragment();
+                if (userProfileDTO != null) {
+                    bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
+                    bundle.putInt(Constants.PENDING_PAYMENT_COUNT, pendingPaymentCount);
+                    bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);
+                    bundle.putBoolean(Constants.SHOW_CREATE_INVOICE, showCreateInvoice);
+                    fragment.setArguments(bundle);
+                }
+                fragmentTitle = getString(R.string.title_main_fragment);
+                wtFirstLayout.setVisibility(View.VISIBLE);
+                wtContainer.setVisibility(View.VISIBLE);
                 break;
 
             case 5:
-                new HamPayDialog(activity).fetchContactUsInfo();
+                currentFragment = 4;
+                user_manual.setVisibility(View.GONE);
+                fragment = new AboutFragment();
+                fragmentTitle = getString(R.string.title_hampay_about);
+                wtFirstLayout.setVisibility(View.VISIBLE);
+                wtContainer.setVisibility(View.VISIBLE);
                 break;
 
             case 6:
+                new HamPayDialog(activity).fetchContactUsInfo();
+                break;
+
+            case 7:
                 intent.setClass(activity, GuideDetailActivity.class);
                 intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/users/tac-file");
                 intent.putExtra(Constants.TAC_PRIVACY_TITLE, activity.getString(R.string.tac_title_activity));
                 activity.startActivity(intent);
                 break;
-            case 7:
+            case 8:
                 intent.setClass(activity, GuideDetailActivity.class);
                 intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/users/privacy-file");
                 Log.e("URL", Constants.HTTPS_SERVER_IP + "/users/privacy-file");
@@ -422,7 +409,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 activity.startActivity(intent);
                 break;
 
-            case 8:
+            case 9:
                 LogoutData logoutData = new LogoutData();
                 logoutData.setIplanetDirectoryPro(prefs.getString(Constants.LOGIN_TOKEN_ID, null));
                 new HamPayDialog(activity).showLogoutDialog();
@@ -567,7 +554,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 currentFragment = 0;
                 fragmentTitle = getString(R.string.title_main_fragment);
                 user_manual.setVisibility(View.VISIBLE);
-                walkThrough.setVisibility(View.GONE);
                 bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
                 bundle.putInt(Constants.PENDING_PAYMENT_COUNT, pendingPaymentCount);
                 bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);

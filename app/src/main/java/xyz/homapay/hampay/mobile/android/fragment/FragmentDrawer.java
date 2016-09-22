@@ -38,6 +38,7 @@ public class FragmentDrawer extends Fragment {
             R.drawable.ic_settings,
 
             R.drawable.ic_help,
+            R.drawable.ic_tour,
             R.drawable.ic_about,
             R.drawable.ic_contact_us,
             R.drawable.ic_tac,
@@ -68,8 +69,6 @@ public class FragmentDrawer extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // drawer labels
         titles = getActivity().getResources().getStringArray(R.array.nav_drawer_labels);
     }
 

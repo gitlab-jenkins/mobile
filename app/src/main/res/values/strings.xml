@@ -14,6 +14,7 @@
     <string name="nav_item_settings">تنظیمات</string>
     <string name="nav_item_contacts_us">تماس با ما</string>
     <string name="nav_item_help">راهنما</string>
+    <string name="nav_item_tour">تور هم‌پی</string>
     <string name="nav_item_exit">خروج</string>
     <string name="nav_item_hampay_about">درباره هم‌پی</string>
     <string name="nav_item_tac">قوانین و مقررات</string>
@@ -27,6 +28,7 @@
         <item>@string/nav_item_account_detail</item>
         <item>@string/nav_item_settings</item>
         <item>@string/nav_item_help</item>
+        <item>@string/nav_item_tour</item>
         <item>@string/nav_item_hampay_about</item>
         <item>@string/nav_item_contacts_us</item>
         <item>@string/nav_item_tac</item>

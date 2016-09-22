@@ -34,14 +34,6 @@
                     android:src="@drawable/help_gray"
                     android:onClick="userManual"/>
 
-                <ImageView
-                    android:id="@+id/walkThrough"
-                    android:layout_width="35dp"
-                    android:layout_height="42dp"
-                    android:src="@drawable/ic_walk_through_top"
-                    android:onClick="walkThrough"
-                    android:visibility="visible" />
-
             </LinearLayout>
 
 
