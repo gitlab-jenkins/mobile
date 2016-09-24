@@ -7,12 +7,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.support.annotation.NonNull;
 import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
@@ -24,16 +26,20 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
+import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
 import xyz.homapay.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
 import xyz.homapay.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationVerifyMobileResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
+import xyz.homapay.hampay.mobile.android.Manifest;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
@@ -43,9 +49,12 @@ import xyz.homapay.hampay.mobile.android.async.RequestVerifyMobile;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
+import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.ScaleConverter;
+import xyz.homapay.hampay.mobile.android.util.UserContacts;
 
 public class SMSVerificationActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -70,6 +79,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
     FacedTextView input_digit_3;
     FacedTextView input_digit_4;
     Context context;
+    private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
 
     RequestRegistrationSendSmsToken requestRegistrationSendSmsToken;
     RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest;
@@ -271,6 +281,55 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         registrationSendSmsTokenRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        for (PermissionListener permissionListener : permissionListeners)
+            if (permissionListener.onResult(requestCode, permissions, grantResults)) {
+                permissionListeners.remove(permissionListener);
+            }
+    }
+
+    private void requestAndLoadUserContact() {
+        String[] permissions = new String[]{Manifest.permission.READ_CONTACTS};
+
+        permissionListeners = new RequestPermissions().request(activity, Constants.READ_CONTACTS, permissions, new PermissionListener() {
+            @Override
+            public boolean onResult(int requestCode, String[] requestPermissions, int[] grantResults) {
+                if (requestCode == Constants.READ_CONTACTS) {
+                    // Check if the permission is correct and is granted
+                    if (requestPermissions[0].equals(Manifest.permission.READ_CONTACTS) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                        Intent intent = new Intent();
+                        intent.setClass(SMSVerificationActivity.this, PasswordEntryActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                        finish();
+                        startActivity(intent);
+                        hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                                .setCategory("Verify Mobile")
+                                .setAction("Verify")
+                                .setLabel("Success")
+                                .build());
+
+                    } else {
+                        Intent intent = new Intent();
+                        intent.setClass(SMSVerificationActivity.this, PasswordEntryActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                        finish();
+                        startActivity(intent);
+                        hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                                .setCategory("Verify Mobile")
+                                .setAction("Verify")
+                                .setLabel("Success")
+                                .build());
+                    }
+
+                    return true;
+                }
+
+                return false;
+            }
+        });
+    }
+
     public class RequestRegistrationVerifyMobileTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationVerifyMobileResponse>>
     {
         @Override
@@ -291,16 +350,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
 
                     if (registrationVerifyMobileResponseMessage.getService().getIsVerified()) {
 
-                        Intent intent = new Intent();
-                        intent.setClass(SMSVerificationActivity.this, PasswordEntryActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
-                        finish();
-                        startActivity(intent);
-                        hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                                .setCategory("Verify Mobile")
-                                .setAction("Verify")
-                                .setLabel("Success")
-                                .build());
+                        requestAndLoadUserContact();
 
                     } else {
                         new HamPayDialog(activity).showIncorrectSMSVerification();

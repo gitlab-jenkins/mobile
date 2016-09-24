@@ -59,7 +59,7 @@
     <string name="main_fragment_transactions">تراکنش‌ها</string>
     <string name="transaction_history_title">تراکنش‌ها</string>
     <string name="payment_request_title">درخواست پرداخت</string>
-    <string name="payment_request_null_message">برای انتخاب کاربر و ارسال درخواست، دکمه   را لمس کنید.</string>
+    <string name="payment_request_null_message">برای مشاهده لیست مخاطبین هم‌پی و انتخاب مخاطب مورد نظر جهت ارسال درخواست پرداخت دکمه    را لمس کنید</string>
     <string name="business_purchase_title">پرداخت به کسب و کار</string>
     <string name="pending_purchase_payment_title">پرداخت‌های در انتظار</string>
     <string name="detail_transaction">جزئیات تراکنش</string>
@@ -241,7 +241,7 @@
     <string name="purchase_payment_payer_name">نام پرداخت کننده: </string>
     <string name="purchase_payment_payer_cell">همراه پرداخت کننده: </string>
     <string name="user_pin2">رمز دوم کارت</string>
-    <string name="shaparak_privacy_message">مطابق الزامات شاپرک رمز دوم شما در سیستم هم پی ذخیره نمی شود.</string>
+    <string name="shaparak_privacy_message">مطابق    دوم  در سیستم هم پی ذخیره نمی شود.</string>
     <string name="msg_success_pending_payment">پرداخت شما با کد پیگیری %1$s با موفقیت انجام شد.</string>
     <string name="msg_business_payment_success">پرداخت شما با کد پیگیری %1$s با موفقیت انجام شد.</string>
     <string name="msg_payment_success">پرداخت شما با موفقیت انجام شد</string>
@@ -606,7 +606,7 @@
     </string>
 
     <string name="wt_note_1_2">
-در آیتـم راهنمـا می توانیـد دوبـاره این موارد را بررسی نمایید.
+ در آیتم "تور هم‌پی" در منو کشویی می‌توانید دوباره این موارد را بررسی نمایید.
     </string>
 
     <string name="wt_note_2">

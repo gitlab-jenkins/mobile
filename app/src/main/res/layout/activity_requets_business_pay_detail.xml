@@ -600,13 +600,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="visible">
+                        android:orientation="vertical">
 
 
                         <RelativeLayout
@@ -661,6 +660,14 @@
 
                     </LinearLayout>
 
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        geekui:customTypeface="fonts/vazir_regular.ttf"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/shaparak_notice"
+                        android:textSize="12dp"
+                        android:layout_margin="4dp"
+                        android:text="@string/shaparak_privacy_message" />
 
                     <RelativeLayout
                         android:layout_width="fill_parent"
@@ -698,14 +705,6 @@
                             android:layout_centerVertical="true"/>
                     </RelativeLayout>
 
-                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                        geekui:customTypeface="fonts/vazir_regular.ttf"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/app_origin"
-                        android:textSize="12dp"
-                        android:layout_margin="4dp"
-                        android:text="@string/shaparak_privacy_message" />
 
                 </LinearLayout>
 

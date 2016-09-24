@@ -46,25 +46,15 @@ public class MemorableWordEntryActivity extends AppCompatActivity {
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
     private FacedEditText memorable_value;
-
-    Context context;
-
-    Activity activity;
-
-    HamPayDialog hamPayDialog;
-
-    String Uuid = "";
-
-    Bundle bundle;
-
-    String userEntryPassword;
-
-    Tracker hamPayGaTracker;
-
-    RequestCredentialEntry requestCredentialEntry;
-    RegistrationCredentialsRequest registrationCredentialsRequest;
-
-
+    private Context context;
+    private Activity activity;
+    private HamPayDialog hamPayDialog;
+    private String Uuid = "";
+    private Bundle bundle;
+    private String userEntryPassword;
+    private Tracker hamPayGaTracker;
+    private RequestCredentialEntry requestCredentialEntry;
+    private RegistrationCredentialsRequest registrationCredentialsRequest;
     private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
 
     public void userManual(View view){
@@ -109,7 +99,6 @@ public class MemorableWordEntryActivity extends AppCompatActivity {
             @Override
             public boolean onResult(int requestCode, String[] requestPermissions, int[] grantResults) {
                 if (requestCode == Constants.READ_CONTACTS) {
-                    // Check if the permission is correct and is granted
                     if (requestPermissions[0].equals(Manifest.permission.READ_CONTACTS) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                         UserContacts userContacts = new UserContacts(context);
                         contacts = userContacts.read();

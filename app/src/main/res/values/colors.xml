@@ -51,4 +51,5 @@
     <color name="failure_modal_color">#F4768B</color>
     <color name="modal_text">#686a6b</color>
     <color name="sms_digit">@android:color/black</color>
+    <color name="shaparak_notice">#459210</color>
 </resources>
