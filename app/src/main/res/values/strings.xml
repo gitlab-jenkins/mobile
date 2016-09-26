@@ -94,7 +94,7 @@
     <string name="cancel_remove_password">خیر</string>
     <string name="fail_sms_verification">کد اعتبار سنجی وارد شده صحیح نمی‌باشد. لطفا از صحت کد اطمینان حاصل کرده و کد را دوباره وارد کنید.</string>
     <string name="retry_sms">تایید</string>
-    <string name="start_activity_title">پرداخت همراه هم‌پی</string>
+    <string name="start_activity_title">شبکه پرداخت همراه هم‌پی</string>
     <string name="start_activity_text_1">درخواست پرداخت از افراد</string>
     <string name="start_activity_text_2">پرداخت به کسب و کار</string>
     <string name="tc_privacy_text">با قوانین و مقررات استفاده از شبکه پرداخت همراه هم‌پی و نیز سیاست‌های حفظ حریم خصوصی و امنیت کاربر موافق هستم.</string>
