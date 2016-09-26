@@ -61,7 +61,6 @@ public class Constants {
     public static final String MIN_INDIVIDUAL_XFER_AMOUNT = "MinIndividualXferAmount";
     public static final String USER_ENTRY_PASSWORD = "userEntryPassword";
     public static final String LOCAL_ERROR_CODE = "۱۰۰۰";
-    public static final String NOTIFICATION = "notification";
     public static final String UUID = "uuid";
     public static final String IMAGE_PROFILE_SOURCE = "image_source";
     public static final String CAMERA_SELECT = "camera_select";
@@ -70,6 +69,7 @@ public class Constants {
     public static final String ASPECT_RATIO_X = "ASPECT_RATIO_X";
     public static final String ASPECT_RATIO_Y = "ASPECT_RATIO_Y";
     public static final String PENDING_PAYMENT_REQUEST_LIST = "pending_payment_request_list";
+    public static final String NOTIFICATION_STATUS = "notification_status";
     public static final String HAS_NOTIFICATION = "has_notification";
     public static final String NOTIFICATION_TYPE = "notification_type";
     public static final String NOTIFICATION_APP_UPDATE = "نسخه جدید هم‌پی";

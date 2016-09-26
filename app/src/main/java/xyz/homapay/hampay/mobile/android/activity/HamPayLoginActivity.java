@@ -160,7 +160,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     TACRequest tacRequest;
     RequestTAC requestTAC;
     Tracker hamPayGaTracker;
-    boolean fromNotification = false;
 
     String password = "";
     private LinearLayout pendingFundLayout;
@@ -378,7 +377,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                         intent.putExtra(Constants.PENDING_PURCHASE_COUNT, tacResponseMessage.getService().getTacDTO().getPendingPurchasesCount());
                         intent.putExtra(Constants.PENDING_PAYMENT_COUNT, tacResponseMessage.getService().getTacDTO().getPendingPaymentCount());
                         intent.putExtra(Constants.SHOW_CREATE_INVOICE, tacResponseMessage.getService().getTacDTO().isShowCreateInvoice());
-                        intent.putExtra(Constants.NOTIFICATION, fromNotification);
                         editor.putBoolean(Constants.FORCE_USER_PROFILE, false);
                         editor.commit();
                         finish();

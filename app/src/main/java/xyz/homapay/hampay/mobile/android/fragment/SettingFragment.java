@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -28,12 +30,14 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
  */
 public class SettingFragment extends Fragment {
 
-    ListView settingListView;
-    SettingAdapter settingAdapter;
-    List<HamPaySetting> hamPaySettings = new ArrayList<>();
-    String[] settingValueList;
-    String[] settingKeyList;
+    private ListView settingListView;
+    private SettingAdapter settingAdapter;
+    private List<HamPaySetting> hamPaySettings = new ArrayList<>();
+    private String[] settingValueList;
+    private String[] settingKeyList;
     private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
+    private SwitchCompat notificationSwitch;
 
     public SettingFragment() {
     }
@@ -43,6 +47,7 @@ public class SettingFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         prefs = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE);
+        editor = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE).edit();
 
         settingKeyList = getResources().getStringArray(R.array.setting_key_list);
         settingValueList = getResources().getStringArray(R.array.setting_value_list);
@@ -64,6 +69,14 @@ public class SettingFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_setting, container, false);
 
         settingListView = (ListView)rootView.findViewById(R.id.settingListView);
+        notificationSwitch = (SwitchCompat)rootView.findViewById(R.id.notificationSwitch);
+        notificationSwitch.setChecked(prefs.getBoolean(Constants.NOTIFICATION_STATUS, false));
+        notificationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                editor.putBoolean(Constants.NOTIFICATION_STATUS, isChecked).commit();
+            }
+        });
 
         settingAdapter = new SettingAdapter(getActivity(), hamPaySettings);
 
@@ -81,6 +94,7 @@ public class SettingFragment extends Fragment {
                 Intent intent;
 
                 switch (position){
+
                     case 0:
                         intent = new Intent();
                         intent.setClass(getActivity(), ChangePassCodeActivity.class);

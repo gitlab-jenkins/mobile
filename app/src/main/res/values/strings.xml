@@ -38,6 +38,7 @@
     <string name="title_main_fragment">صفحه اصلی</string>
     <string name="title_account_detail">جزئیات حساب</string>
     <string name="title_settings">تنظیمات</string>
+    <string name="notification_setting">اعلانات هم‌پی</string>
     <string name="title_hampay_about">درباره هم‌پی</string>
     <string name="title_guide">راهنما</string>
     <string name="message">پیام</string>

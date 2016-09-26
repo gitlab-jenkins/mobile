@@ -35,16 +35,14 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 public class GcmMessageHandler extends IntentService{
 
     private Handler handler;
-
-    String googleMessageType;
-
-    NotificationMessageType notificationMessageType;
-    String notificationMessage;
-    String notificationName;
-    Long notificationValue;
-    String notificationCallerCellNumber;
-    String purchaseCode;
-    SharedPreferences prefs;
+    private String googleMessageType;
+    private NotificationMessageType notificationMessageType;
+    private String notificationMessage;
+    private String notificationName;
+    private Long notificationValue;
+    private String notificationCallerCellNumber;
+    private String purchaseCode;
+    private SharedPreferences prefs;
 
 
 
@@ -63,7 +61,10 @@ public class GcmMessageHandler extends IntentService{
     protected void onHandleIntent(Intent intent) {
         Bundle extras = intent.getExtras();
 
-        if (!prefs.getBoolean(Constants.REGISTERED_USER, false)){
+        Intent intentNotification = new Intent("notification.intent.MAIN").putExtra("get_update", true);
+        sendBroadcast(intentNotification);
+
+        if (!prefs.getBoolean(Constants.NOTIFICATION_STATUS, false)){
             return;
         }
 
@@ -121,46 +122,35 @@ public class GcmMessageHandler extends IntentService{
         {
 
             AppState appState = AppState.Stoped;
-
             ActivityManager activityManager = (ActivityManager) getSystemService( ACTIVITY_SERVICE );
-
             List<ActivityManager.RunningTaskInfo> runningTaskInfos = activityManager.getRunningTasks(1024);
-
             for(int i = 0; i < runningTaskInfos.size(); i++)
             {
                 if(runningTaskInfos.get(i).baseActivity.getPackageName().equalsIgnoreCase(getApplicationContext().getPackageName()))
                 {
                     if (runningTaskInfos.get(i).baseActivity.getShortClassName().contains("HamPayLoginActivity")){
                         appState = AppState.Stoped;
-
                     }else {
                         appState = AppState.Resumed;
                     }
-
                     break;
                 }
             }
-
             Bundle bundle = new Bundle();
-
             switch (notificationMessageType){
 
                 case JOINT:
                     break;
 
                 case APP_UPDATE:
-
                     Intent appStoreIntent;
-
                     try {
                         appStoreIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getPackageName()));
                     } catch (android.content.ActivityNotFoundException anfe) {
                         appStoreIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName()));
                     }
-
                     PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0,
                             appStoreIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-
                     PugNotification.with(getApplicationContext())
                             .load()
                             .identifier(Constants.COMMON_NOTIFICATION_IDENTIFIER)
@@ -175,8 +165,6 @@ public class GcmMessageHandler extends IntentService{
                             .autoCancel(true)
                             .simple()
                             .build();
-
-
                     break;
 
                 case PAYMENT:
@@ -409,10 +397,6 @@ public class GcmMessageHandler extends IntentService{
 
             if (HamPayApplication.getAppState() == AppState.Stoped){
             }
-
-            Intent intent = new Intent("notification.intent.MAIN").putExtra("get_update", true);
-            sendBroadcast(intent);
-
         }
     };
 
