@@ -35,6 +35,7 @@ public class Constants {
     public static final String PENDING_PURCHASE_COUNT = "pendingPurchaseCount";
     public static final String PENDING_PAYMENT_COUNT = "pendingPaymentCount";
     public static final String PENDING_CODE = "pendingCode";
+    public static final String PENDING_COUNT = "pendingCount";
     public static final String USER_TRANSACTION_DTO = "UserTransaction";
     public static final String CONTACT_PHONE_NO = "contact_phone_no";
     public static final String CONTACT_NAME = "contactName";

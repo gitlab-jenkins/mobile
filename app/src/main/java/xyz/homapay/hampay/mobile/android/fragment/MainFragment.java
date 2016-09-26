@@ -51,7 +51,6 @@ public class MainFragment extends Fragment implements View.OnClickListener{
 
     private HamPayDialog hamPayDialog;
     private SlidingUpPanelLayout slidingUpPanelLayout;
-    private ImageView main_banner;
     private LinearLayout hampay_friend;
     LinearLayout user_transaction_history;
     LinearLayout user_payment_request;
@@ -207,7 +206,6 @@ public class MainFragment extends Fragment implements View.OnClickListener{
             }
         }
 
-        main_banner = (ImageView)rootView.findViewById(R.id.main_banner);
         hampay_friend = (LinearLayout)rootView.findViewById(R.id.hampay_friend);
         user_transaction_history = (LinearLayout)rootView.findViewById(R.id.user_transaction_history);
         user_transaction_history.setOnClickListener(this);
@@ -244,6 +242,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
             }
         });
 
+        pending_badge.setText(persianEnglishDigit.E2P(String.valueOf(prefs.getInt(Constants.PENDING_COUNT, 0))));
         PendingCountRequest pendingCountRequest = new PendingCountRequest();
         RequestPendingCount requestPendingCount = new RequestPendingCount(getActivity(), new RequestPendingCountTaskCompleteListener());
         requestPendingCount.execute(pendingCountRequest);
@@ -365,6 +364,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                     }else if (pendingCount > 0) {
                         pending_badge.setVisibility(View.VISIBLE);
                         pending_badge.setText(persianEnglishDigit.E2P(String.valueOf(pendingCount)));
+                        editor.putInt(Constants.PENDING_COUNT, pendingCount).commit();
                     }
                 }else if (pendingCountResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();
