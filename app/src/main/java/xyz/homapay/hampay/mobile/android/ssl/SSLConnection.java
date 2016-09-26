@@ -33,7 +33,7 @@ public class SSLConnection  {
     public HttpsURLConnection setUpHttpsURLConnection(){
         try
         {
-            SSLContext context = SSLContext.getInstance("TLS");
+            SSLContext context = SSLContext.getInstance("TLSv1.2");
             context.init(null, new TrustManager[] { new HamPayX509TrustManager(sslKeyStore.getAppKeyStore()) }, null);
 
             HttpsURLConnection urlConnection = (HttpsURLConnection)url.openConnection();

@@ -8,6 +8,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 
@@ -50,7 +51,7 @@ public class AllowHamPaySSL {
         }
 
         try {
-            sslContext = javax.net.ssl.SSLContext.getInstance("TLS");
+            sslContext = SSLContext.getInstance("TLSv1.2");
             sslContext.init(null, trustManagers, new SecureRandom());
         } catch (NoSuchAlgorithmException e) {
         } catch (KeyManagementException e) {
