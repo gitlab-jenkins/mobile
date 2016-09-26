@@ -241,7 +241,7 @@
     <string name="purchase_payment_payer_name">نام پرداخت کننده: </string>
     <string name="purchase_payment_payer_cell">همراه پرداخت کننده: </string>
     <string name="user_pin2">رمز دوم کارت</string>
-    <string name="shaparak_privacy_message">طبق الزامات شاپرک رمز دوم کارت در هم‌پی ذخیره نمی‌شود</string>
+    <string name="shaparak_privacy_message">(طبق الزامات شاپرک رمز دوم کارت در هم‌پی ذخیره نمی‌شود)</string>
     <string name="msg_success_pending_payment">پرداخت شما با کد پیگیری %1$s با موفقیت انجام شد.</string>
     <string name="msg_business_payment_success">پرداخت شما با کد پیگیری %1$s با موفقیت انجام شد.</string>
     <string name="msg_payment_success">پرداخت شما با موفقیت انجام شد</string>

@@ -429,21 +429,43 @@
 
                     </LinearLayout>
 
-                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                        geekui:customTypeface="fonts/vazir_regular.ttf"
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/shaparak_notice"
-                        android:textSize="12dp"
-                        android:layout_marginLeft="4dp"
-                        android:layout_marginRight="4dp"
-                        android:text="@string/shaparak_privacy_message" />
+                        android:layout_marginRight="8dp"
+                        android:layout_marginLeft="8dp">
+
+                        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                            android:id="@+id/pin2Text"
+                            geekui:customTypeface="fonts/vazir_regular.ttf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/account_details_text"
+                            android:textSize="15dp"
+                            android:text="@string/user_pin2"
+                            android:gravity="center_vertical"
+                            android:layout_gravity="center_vertical"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"/>
+
+                        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                            geekui:customTypeface="fonts/vazir_regular.ttf"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/app_origin"
+                            android:textSize="11dp"
+                            android:text="@string/shaparak_privacy_message"
+                            android:layout_toLeftOf="@id/pin2Text"
+                            android:layout_centerVertical="true"/>
+
+                    </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:layout_margin="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
                         android:focusable="true"
                         android:focusableInTouchMode="true">
 
@@ -462,17 +484,7 @@
                             android:layout_marginRight="120dp"
                             android:maxLength="12"/>
 
-                        <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                            geekui:customTypeface="fonts/vazir_regular.ttf"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/account_details_text"
-                            android:textSize="15dp"
-                            android:text="@string/user_pin2"
-                            android:gravity="center_vertical"
-                            android:layout_gravity="center_vertical"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"/>
+
                     </RelativeLayout>
 
                 </LinearLayout>
