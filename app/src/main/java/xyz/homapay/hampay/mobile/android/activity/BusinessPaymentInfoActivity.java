@@ -159,11 +159,11 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
         businessDTO = (BusinessDTO)intent.getSerializableExtra(Constants.BUSINESS_INFO);
 
         business_name = (FacedTextView)findViewById(R.id.business_name);
-        business_name.setText(persianEnglishDigit.E2P(businessDTO.getTitle() + " " + "(" + businessDTO.getCode() + ")"));
+        business_name.setText(persianEnglishDigit.E2P(businessDTO.getTitle()));
         business_image = (ImageView)findViewById(R.id.business_image);
 
         business_hampay_id = (FacedTextView)findViewById(R.id.business_hampay_id);
-        business_hampay_id.setText("شناسه: " + persianEnglishDigit.E2P(businessDTO.getCode()));
+        business_hampay_id.setText(getString(R.string.business_id) + persianEnglishDigit.E2P(businessDTO.getCode()));
 
         if (businessDTO.getBusinessImageId() != null) {
             editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());

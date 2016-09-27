@@ -62,6 +62,7 @@
     <string name="payment_request_title">درخواست پرداخت</string>
     <string name="payment_request_null_message">برای انتخاب کاربر و ارسال درخواست، دکمه   را لمس کنید.</string>
     <string name="business_purchase_title">پرداخت به کسب و کار</string>
+    <string name="business_id">شناسه: </string>
     <string name="pending_purchase_payment_title">پرداخت‌های در انتظار</string>
     <string name="detail_transaction">جزئیات تراکنش</string>
     <string name="mobile_no">شماره همراه</string>

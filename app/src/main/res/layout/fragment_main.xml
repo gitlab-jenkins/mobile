@@ -187,7 +187,7 @@
                             android:layout_alignParentRight="true"
                             android:background="@drawable/pending_count_badge_style"
                             android:padding="1dp"
-                            android:text="۱"/>
+                            android:visibility="gone"/>
 
                     </RelativeLayout>
 
