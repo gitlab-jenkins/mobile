@@ -321,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     @Override
     public void onDrawerItemSelected(View view, int position) {
-        if (currentFragment != position || position == 5|| position == 6 || position == 7|| position == 8) {
+        if (currentFragment != position || position == 4|| position == 6 || position == 7 || position == 8 || position == 9) {
             displayView(position);
         }
     }
@@ -387,8 +387,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 user_manual.setVisibility(View.GONE);
                 fragment = new AboutFragment();
                 fragmentTitle = getString(R.string.title_hampay_about);
-                wtFirstLayout.setVisibility(View.VISIBLE);
-                wtContainer.setVisibility(View.VISIBLE);
                 break;
 
             case 6:

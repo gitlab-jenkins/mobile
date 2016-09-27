@@ -112,7 +112,7 @@ public class PaymentRequestListActivity extends AppCompatActivity{
         nullPendingText = (FacedTextView)findViewById(R.id.nullPendingText);
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getString(R.string.payment_request_null_message));
         ImageSpan is = new ImageSpan(context, R.drawable.add_payment_note);
-        spannableStringBuilder.setSpan(is, 85, 87, 0);
+        spannableStringBuilder.setSpan(is, 85, 89, 0);
         nullPendingText.setText(spannableStringBuilder);
 
 
