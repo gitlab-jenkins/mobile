@@ -1675,10 +1675,7 @@ public class HamPayDialog {
         }
     }
 
-    public void showFailPurchaseInfoDialog(final RequestPurchaseInfo requestPurchaseInfo,
-                                              final PurchaseInfoRequest purchaseInfoRequest,
-                                              final String code,
-                                              final String message){
+    public void showFailPurchaseInfoDialog(final String code, final String message){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_contacts_enabled, null);
         FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
@@ -1692,7 +1689,6 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                requestPurchaseInfo.execute(purchaseInfoRequest);
             }
         });
         cancel_request.setOnClickListener(new View.OnClickListener() {

@@ -226,12 +226,13 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         cardNumberValue = (FacedTextView)findViewById(R.id.cardNumberValue);
         pin2Value = (FacedEditText)findViewById(R.id.pin2Value);
         paymentTotalValue = (FacedTextView)findViewById(R.id.paymentTotalValue);
+        pay_to_business_button = (ImageView)findViewById(R.id.pay_to_business_button);
 
         bundle = getIntent().getExtras();
 
         Intent intent = getIntent();
 
-        purchaseInfoDTO = (PurchaseInfoDTO)intent.getSerializableExtra(Constants.PENDING_PAYMENT_REQUEST_LIST);
+        purchaseInfoDTO = (PurchaseInfoDTO)intent.getSerializableExtra(Constants.PURCHASE_INFO);
         pspInfoDTO = (PspInfoDTO)intent.getSerializableExtra(Constants.PSP_INFO);
         purchaseCode = intent.getStringExtra(Constants.BUSINESS_PURCHASE_CODE);
         providerId = intent.getStringExtra(Constants.PROVIDER_ID);
@@ -260,8 +261,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
             requestLatestPurchase.execute(latestPurchaseRequest);
         }
 
-
-        pay_to_business_button = (ImageView)findViewById(R.id.pay_to_business_button);
         pay_to_business_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -642,7 +641,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 }
                 else {
                     requestPurchaseInfo = new RequestPurchaseInfo(context, new RequestPurchaseInfoTaskCompleteListener());
-                    new HamPayDialog(activity).showFailPurchaseInfoDialog(requestPurchaseInfo, purchaseInfoRequest,
+                    new HamPayDialog(activity).showFailPurchaseInfoDialog(
                             purchaseInfoResponseMessage.getService().getResultStatus().getCode(),
                             purchaseInfoResponseMessage.getService().getResultStatus().getDescription());
 
@@ -654,7 +653,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 }
             }else {
                 requestPurchaseInfo = new RequestPurchaseInfo(context, new RequestPurchaseInfoTaskCompleteListener());
-                new HamPayDialog(activity).showFailPurchaseInfoDialog(requestPurchaseInfo, purchaseInfoRequest,
+                new HamPayDialog(activity).showFailPurchaseInfoDialog(
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_fetch_latest_payment));
 

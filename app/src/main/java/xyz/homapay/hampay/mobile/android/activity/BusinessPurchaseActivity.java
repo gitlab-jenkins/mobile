@@ -14,13 +14,22 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import xyz.homapay.hampay.common.common.response.ResponseMessage;
+import xyz.homapay.hampay.common.common.response.ResultStatus;
+import xyz.homapay.hampay.common.core.model.request.PurchaseInfoRequest;
+import xyz.homapay.hampay.common.core.model.response.PurchaseInfoResponse;
+import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
+import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
+import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestHamPayBusiness;
+import xyz.homapay.hampay.mobile.android.async.RequestPurchaseInfo;
 import xyz.homapay.hampay.mobile.android.async.RequestSearchHamPayBusiness;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
@@ -29,6 +38,9 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class BusinessPurchaseActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private PurchaseInfoDTO purchaseInfoDTO = null;
+    private PspInfoDTO pspInfoDTO = null;
+    private SharedPreferences.Editor editor;
     private LinearLayout letter_layout;
     private LinearLayout digit_layout;
     private Context context;
@@ -49,6 +61,8 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
     RequestSearchHamPayBusiness requestSearchHamPayBusiness;
     RequestHamPayBusiness requestHamPayBusiness;
     Tracker hamPayGaTracker;
+    private RequestPurchaseInfo requestPurchaseInfo;
+    private PurchaseInfoRequest purchaseInfoRequest;
 
 
     public void backActionBar(View view){
@@ -137,6 +151,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
         businesses_list = (RelativeLayout)findViewById(R.id.businesses_list);
         businesses_list.setOnClickListener(this);
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+        editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
@@ -163,10 +178,10 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                 new Collapse(keyboard).animate();
 
                 if (inputPurchaseCode.length() == 6) {
-                    intent = new Intent();
-                    intent.putExtra(Constants.BUSINESS_PURCHASE_CODE, inputPurchaseCode);
-                    intent.setClass(context, RequestBusinessPayDetailActivity.class);
-                    startActivity(intent);
+                    requestPurchaseInfo = new RequestPurchaseInfo(activity, new RequestPurchaseInfoTaskCompleteListener());
+                    purchaseInfoRequest = new PurchaseInfoRequest();
+                    purchaseInfoRequest.setPurchaseCode(inputPurchaseCode);
+                    requestPurchaseInfo.execute(purchaseInfoRequest);
                     input_digit_1.setText("");
                     input_digit_2.setText("");
                     input_digit_3.setText("");
@@ -297,6 +312,87 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
         }
         else {
             inputDigit(view.getTag().toString());
+        }
+    }
+
+
+    public class RequestPurchaseInfoTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PurchaseInfoResponse>> {
+
+        @Override
+        public void onTaskComplete(ResponseMessage<PurchaseInfoResponse> purchaseInfoResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+
+            if (purchaseInfoResponseMessage != null){
+                if (purchaseInfoResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
+
+                    purchaseInfoDTO = purchaseInfoResponseMessage.getService().getPurchaseInfo();
+                    pspInfoDTO = purchaseInfoResponseMessage.getService().getPurchaseInfo().getPspInfo();
+
+                    if (purchaseInfoDTO != null) {
+                        Intent intent = new Intent();
+                        intent.putExtra(Constants.PURCHASE_INFO, purchaseInfoDTO);
+                        intent.putExtra(Constants.PSP_INFO, pspInfoDTO);
+                        intent.setClass(context, RequestBusinessPayDetailActivity.class);
+                        startActivity(intent);
+                    }
+                    else {
+                        Toast.makeText(context, getString(R.string.msg_not_found_pending_payment_code), Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Latest Pending Payment")
+                            .setAction("Fetch")
+                            .setLabel("Success")
+                            .build());
+
+                }else if (purchaseInfoResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
+                }
+                else {
+                    requestPurchaseInfo = new RequestPurchaseInfo(context, new RequestPurchaseInfoTaskCompleteListener());
+                    new HamPayDialog(activity).showFailPurchaseInfoDialog(
+                            purchaseInfoResponseMessage.getService().getResultStatus().getCode(),
+                            purchaseInfoResponseMessage.getService().getResultStatus().getDescription());
+
+                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Latest Pending Payment")
+                            .setAction("Fetch")
+                            .setLabel("Fail(Server)")
+                            .build());
+                }
+            }else {
+                requestPurchaseInfo = new RequestPurchaseInfo(context, new RequestPurchaseInfoTaskCompleteListener());
+                new HamPayDialog(activity).showFailPurchaseInfoDialog(
+                        Constants.LOCAL_ERROR_CODE,
+                        getString(R.string.msg_fail_fetch_latest_payment));
+
+                hamPayGaTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Latest Pending Payment")
+                        .setAction("Fetch")
+                        .setLabel("Fail(Mobile)")
+                        .build());
+            }
+
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
+    }
+
+
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(context, HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        if (activity != null) {
+            finish();
+            startActivity(intent);
         }
     }
 
