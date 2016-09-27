@@ -18,7 +18,6 @@ public class CurrencyFormatterTextWatcher implements TextWatcher{
     private DecimalFormat df;
     private DecimalFormat dfnd;
     private boolean hasFractionalPart;
-
     private EditText editText;
 
     public CurrencyFormatterTextWatcher(EditText editText)
@@ -55,18 +54,11 @@ public class CurrencyFormatterTextWatcher implements TextWatcher{
             if (sel > 0 && sel <= editText.getText().length()) {
                 editText.setSelection(sel);
             } else {
-                // place cursor at the end?
                 editText.setSelection(editText.getText().length() - 1);
             }
         } catch (NumberFormatException nfe) {
-            // do nothing?
         } catch (ParseException e) {
-            // do nothing?
         }
-
-//        editText.setText(new PersianEnglishDigit().E2P(editText.getText().toString()));
-//        editText.setSelection(s.toString().length());
-//
         editText.addTextChangedListener(this);
     }
 
@@ -78,12 +70,6 @@ public class CurrencyFormatterTextWatcher implements TextWatcher{
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count)
     {
-
-//        this.editText.removeTextChangedListener(this);
-//        this.editText.setText(new PersianEnglishDigit().E2P(s.toString()));
-//        this.editText.setSelection(s.toString().length());
-//        this.editText.addTextChangedListener(this);
-        
         if (s.toString().contains(String.valueOf(df.getDecimalFormatSymbols().getDecimalSeparator()))) {
             hasFractionalPart = true;
         } else {

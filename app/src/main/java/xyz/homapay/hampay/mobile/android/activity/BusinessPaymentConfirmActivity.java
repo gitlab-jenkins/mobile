@@ -34,6 +34,7 @@ import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.PspCode;
@@ -42,14 +43,14 @@ import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfs
 
 public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
-
     private DatabaseHelper dbHelper;
-    ImageView pay_to_business_button;
-    boolean intentContact = false;
-    Context context;
-    Activity activity;
-    SharedPreferences prefs;
-    SharedPreferences.Editor editor;
+    private ImageView pay_to_business_button;
+    private boolean intentContact = false;
+    private Context context;
+    private Activity activity;
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
+    private CurrencyFormatter formatter;
 
     public void backActionBar(View view){
         finish();
@@ -65,6 +66,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
     FacedTextView paymentPriceValue;
     FacedTextView paymentFeeValue;
+    FacedTextView paymentVAT;
     FacedTextView paymentTotalValue;
     FacedTextView cardNumberValue;
     FacedTextView bankName;
@@ -77,11 +79,9 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
     private DoWorkInfo doWorkInfo;
 
     PersianEnglishDigit persianEnglishDigit;
-
     RequestPSPResult requestPSPResult;
     PSPResultRequest pspResultRequest;
     private ImageManager imageManager;
-    private String authToken;
 
 
     @Override
@@ -133,10 +133,10 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
         dbHelper = new DatabaseHelper(context);
 
         persianEnglishDigit = new PersianEnglishDigit();
+        formatter = new CurrencyFormatter();
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
         imageManager = new ImageManager(activity, 200000, false);
 
         try {
@@ -153,6 +153,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
         business_image = (ImageView)findViewById(R.id.business_image);
         paymentPriceValue = (FacedTextView)findViewById(R.id.paymentPriceValue);
         paymentFeeValue = (FacedTextView)findViewById(R.id.paymentFeeValue);
+        paymentVAT = (FacedTextView)findViewById(R.id.paymentVAT);
         paymentTotalValue = (FacedTextView)findViewById(R.id.paymentTotalValue);
         cardNumberValue = (FacedTextView)findViewById(R.id.cardNumberValue);
         bankName = (FacedTextView)findViewById(R.id.bankName);
@@ -177,9 +178,10 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
             PersianEnglishDigit persianEnglishDigit = new PersianEnglishDigit();
 
             business_name.setText(paymentInfoDTO.getCallerName());
-            paymentPriceValue.setText(persianEnglishDigit.E2P(String.valueOf(paymentInfoDTO.getAmount())));
-            paymentFeeValue.setText(persianEnglishDigit.E2P(String.valueOf(paymentInfoDTO.getFeeCharge())));
-            paymentTotalValue.setText(persianEnglishDigit.E2P(String.valueOf(paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge())));
+            paymentPriceValue.setText(persianEnglishDigit.E2P(String.valueOf(formatter.format(paymentInfoDTO.getAmount()))));
+            paymentVAT.setText(persianEnglishDigit.E2P(String.valueOf(formatter.format(paymentInfoDTO.getVat()))));
+            paymentFeeValue.setText(persianEnglishDigit.E2P(String.valueOf(formatter.format(paymentInfoDTO.getFeeCharge()))));
+            paymentTotalValue.setText(persianEnglishDigit.E2P(String.valueOf(formatter.format(paymentInfoDTO.getAmount() + paymentInfoDTO.getVat() + paymentInfoDTO.getFeeCharge()))));
 
             if (paymentInfoDTO.getImageId() != null) {
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
