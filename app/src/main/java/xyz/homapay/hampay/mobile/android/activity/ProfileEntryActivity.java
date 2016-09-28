@@ -5,16 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
@@ -27,7 +25,6 @@ import java.util.ArrayList;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
-import xyz.homapay.hampay.common.core.model.request.CardProfileRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
 import xyz.homapay.hampay.common.core.model.response.CardProfileResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationEntryResponse;
@@ -42,61 +39,57 @@ import xyz.homapay.hampay.mobile.android.component.edittext.EmailTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.preloader.Preloader;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
-import xyz.homapay.hampay.mobile.android.location.BestLocationListener;
-import xyz.homapay.hampay.mobile.android.location.BestLocationProvider;
+import xyz.homapay.hampay.mobile.android.dialog.permission.ActionPermission;
+import xyz.homapay.hampay.mobile.android.dialog.permission.PermissionDeviceDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
-import xyz.homapay.hampay.mobile.android.security.KeyExchange;
 import xyz.homapay.hampay.mobile.android.util.CardNumberValidator;
 import xyz.homapay.hampay.mobile.android.util.Constants;
-import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.NationalCodeVerification;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
-public class ProfileEntryActivity extends AppCompatActivity {
+public class ProfileEntryActivity extends AppCompatActivity implements PermissionDeviceDialog.PermissionDeviceDialogListener {
 
-    Activity activity;
-    PersianEnglishDigit persianEnglishDigit;
-    FacedTextView keepOn_button;
-    FacedEditText cellNumberValue;
-    ImageView cellNumberIcon;
-    boolean cellNumberIsValid = false;
-    Preloader preloader;
-    FacedEditText nationalCodeValue;
-    ImageView nationalCodeIcon;
-    boolean nationalCodeIsValid = false;
-    FacedEditText cardNumberValue;
-    FacedTextView cardProfile;
-    boolean verifiedCardNumber = false;
-    ImageView cardNumberIcon;
-    ImageView userNameFamilyIcon;
-    FacedEditText userNameFamily;
-    boolean userNameFamilyIsValid = true;
-    EmailTextWatcher emailTextWatcher;
-    FacedEditText emailValue;
-    ImageView emailIcon;
-    Context context;
-    String rawCardNumberValue = "";
-    int rawCardNumberValueLength = 0;
-    int rawCardNumberValueLengthOffset = 0;
-    String procCardNumberValue = "";
-    String rawNationalCode = "";
-    int rawNationalCodeLength = 0;
-    int rawNationalCodeLengthOffset = 0;
-    String procNationalCode = "";
+    private Activity activity;
+    private PersianEnglishDigit persianEnglishDigit;
+    private FacedTextView keepOn_button;
+    private FacedEditText cellNumberValue;
+    private ImageView cellNumberIcon;
+    private boolean cellNumberIsValid = false;
+    private Preloader preloader;
+    private FacedEditText nationalCodeValue;
+    private ImageView nationalCodeIcon;
+    private boolean nationalCodeIsValid = false;
+    private FacedEditText cardNumberValue;
+    private FacedTextView cardProfile;
+    private boolean verifiedCardNumber = false;
+    private ImageView cardNumberIcon;
+    private ImageView userNameFamilyIcon;
+    private FacedEditText userNameFamily;
+    private boolean userNameFamilyIsValid = true;
+    private EmailTextWatcher emailTextWatcher;
+    private FacedEditText emailValue;
+    private ImageView emailIcon;
+    private Context context;
+    private String rawCardNumberValue = "";
+    private int rawCardNumberValueLength = 0;
+    private int rawCardNumberValueLengthOffset = 0;
+    private String procCardNumberValue = "";
+    private String rawNationalCode = "";
+    private int rawNationalCodeLength = 0;
+    private int rawNationalCodeLengthOffset = 0;
+    private String procNationalCode = "";
     private CardProfileResponse cardProfileResponse;
-    SharedPreferences prefs;
-    SharedPreferences.Editor editor;
-    RegistrationEntryRequest registrationEntryRequest;
-    RequestRegistrationEntry requestRegistrationEntry;
-    CardProfileRequest cardProfileRequest;
-    RequestCardProfile requestCardProfile;
-    HamPayDialog hamPayDialog;
-    Tracker hamPayGaTracker;
-    DeviceInfo deviceInfo;
+    private SharedPreferences.Editor editor;
+    private RegistrationEntryRequest registrationEntryRequest;
+    private RequestRegistrationEntry requestRegistrationEntry;
+    private RequestCardProfile requestCardProfile;
+    private HamPayDialog hamPayDialog;
+    private Tracker hamPayGaTracker;
     private CardNumberValidator cardNumberValidator;
     private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
+    private final Handler handler = new Handler();
 
     public void userManual(View view){
         Intent intent = new Intent();
@@ -139,8 +132,26 @@ public class ProfileEntryActivity extends AppCompatActivity {
             public boolean onResult(int requestCode, String[] requestPermissions, int[] grantResults) {
                 if (requestCode == Constants.READ_PHONE_STATE) {
                     if (requestPermissions[0].equals(Manifest.permission.READ_PHONE_STATE) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                        registrationEntryRequest = new RegistrationEntryRequest();
+                        registrationEntryRequest.setCellNumber(persianEnglishDigit.P2E(getString(R.string.iran_prefix_cell_number) + cellNumberValue.getText().toString()));
+                        registrationEntryRequest.setCardNumber(persianEnglishDigit.P2E(cardNumberValue.getText().toString()));
+                        registrationEntryRequest.setFullName(userNameFamily.getText().toString().trim());
+                        registrationEntryRequest.setEmail(emailValue.getText().toString().trim());
+                        registrationEntryRequest.setNationalCode(persianEnglishDigit.P2E(nationalCodeValue.getText().toString().replaceAll("-", "")));
+                        requestRegistrationEntry = new RequestRegistrationEntry(activity, new RequestRegistrationEntryTaskCompleteListener());
+                        requestRegistrationEntry.execute(registrationEntryRequest);
+
                     } else {
-                        finish();
+                        handler.post(new Runnable() {
+                            public void run() {
+                                FragmentManager fm = getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                                fragmentTransaction.commit();
+                                PermissionDeviceDialog permissionDeviceDialog = new PermissionDeviceDialog();
+                                permissionDeviceDialog.show(fm, "fragment_edit_name");
+                            }
+                        });
                     }
                     return true;
                 }
@@ -156,12 +167,10 @@ public class ProfileEntryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile_entry);
         context = this;
         activity = this;
-        deviceInfo = new DeviceInfo(activity);
         persianEnglishDigit = new PersianEnglishDigit();
         cardNumberValidator = new CardNumberValidator();
         hamPayGaTracker = ((HamPayApplication) getApplication())
                 .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
-        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ProfileEntryActivity.class.getName());
         editor.commit();
@@ -297,11 +306,6 @@ public class ProfileEntryActivity extends AppCompatActivity {
                         verifiedCardNumber = true;
                         cardNumberIcon.setImageResource(R.drawable.right_icon);
                         cardNumberIcon.setVisibility(View.VISIBLE);
-//                        preloader.setVisibility(View.VISIBLE);
-//                        cardProfileRequest = new CardProfileRequest();
-//                        cardProfileRequest.setCardNumber(cardNumber);
-//                        requestCardProfile = new RequestCardProfile(activity, new RequestCardProfileTaskCompleteListener());
-//                        requestCardProfile.execute(cardProfileRequest);
                     }else {
                         cardNumberIcon.setVisibility(View.VISIBLE);
                         cardNumberIcon.setImageResource(R.drawable.false_icon);
@@ -361,8 +365,6 @@ public class ProfileEntryActivity extends AppCompatActivity {
         emailTextWatcher = new EmailTextWatcher(emailValue, emailIcon);
 
         emailValue.addTextChangedListener(emailTextWatcher);
-//        emailValue.setText(new DeviceInfo(activity).getDeviceEmailAccount());
-
         keepOn_button = (FacedTextView) findViewById(R.id.keepOn_button);
         keepOn_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -379,8 +381,6 @@ public class ProfileEntryActivity extends AppCompatActivity {
                 userNameFamily.clearFocus();
                 nationalCodeValue.clearFocus();
                 cardNumberValue.clearFocus();
-
-
                 if (cellNumberIsValid && nationalCodeIsValid && verifiedCardNumber
                         && cellNumberValue.getText().toString().trim().length() > 0
                         && nationalCodeValue.getText().toString().trim().length() > 0
@@ -388,19 +388,8 @@ public class ProfileEntryActivity extends AppCompatActivity {
                         && userNameFamily.getText().toString().trim().length() >= 2
                         && emailTextWatcher.isValid()) {
 
-                    keepOn_button.setEnabled(false);
+                    requestAndLoadPhoneState();
 
-                    registrationEntryRequest = new RegistrationEntryRequest();
-
-                    registrationEntryRequest.setCellNumber(persianEnglishDigit.P2E(getString(R.string.iran_prefix_cell_number) + cellNumberValue.getText().toString()));
-                    registrationEntryRequest.setCardNumber(persianEnglishDigit.P2E(cardNumberValue.getText().toString()));
-                    registrationEntryRequest.setFullName(userNameFamily.getText().toString().trim());
-                    registrationEntryRequest.setEmail(emailValue.getText().toString().trim());
-                    registrationEntryRequest.setNationalCode(persianEnglishDigit.P2E(nationalCodeValue.getText().toString().replaceAll("-", "")));
-
-                    requestRegistrationEntry = new RequestRegistrationEntry(activity, new RequestRegistrationEntryTaskCompleteListener());
-
-                    requestRegistrationEntry.execute(registrationEntryRequest);
                 } else {
 
                     if (cellNumberValue.getText().toString().length() == 0 || !cellNumberIsValid){
@@ -434,88 +423,25 @@ public class ProfileEntryActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-        requestAndLoadPhoneState();
     }
 
-    public class RequestCardProfileTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<CardProfileResponse>>
-    {
-
-        public RequestCardProfileTaskCompleteListener(){
-
+    @Override
+    public void onFinishEditDialog(ActionPermission actionPermission) {
+        switch (actionPermission){
+            case GRANT:
+                requestAndLoadPhoneState();
+                break;
+            case DENY:
+                finish();
+                break;
         }
-
-
-        @Override
-        public void onTaskComplete(ResponseMessage<CardProfileResponse> cardProfileResponseMessage)
-        {
-
-            preloader.setVisibility(View.GONE);
-
-            if (cardProfileResponseMessage != null) {
-
-                cardProfileResponse = cardProfileResponseMessage.getService();
-
-                if (cardProfileResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-
-                    verifiedCardNumber = true;
-
-                    cardProfile.setText(cardProfileResponse.getBankName());
-                    userNameFamily.setText(cardProfileResponse.getFullName());
-                    userNameFamily.setEnabled(false);
-
-
-                    if (cardProfileResponse.getBankLogo() != null) {
-                        byte[] bytes;
-                        bytes = Base64.decode(cardProfileResponse.getBankLogo(), Base64.DEFAULT);
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                        cardNumberIcon.setVisibility(View.VISIBLE);
-                        cardNumberIcon.setImageBitmap(bitmap);
-                    }
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Bank List")
-                            .setAction("Fetch")
-                            .setLabel("Success")
-                            .build());
-                }else {
-                    requestCardProfile = new RequestCardProfile(context, new RequestCardProfileTaskCompleteListener());
-                    new HamPayDialog(activity).showFailCardProfileDialog(requestCardProfile, cardProfileRequest,
-                            cardProfileResponse.getResultStatus().getCode(),
-                            cardProfileResponse.getResultStatus().getDescription());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Bank List")
-                            .setAction("Fetch")
-                            .setLabel("Fail(Server)")
-                            .build());
-                }
-            }else {
-                requestCardProfile = new RequestCardProfile(context, new RequestCardProfileTaskCompleteListener());
-                new HamPayDialog(activity).showFailCardProfileDialog(requestCardProfile, cardProfileRequest,
-                        Constants.LOCAL_ERROR_CODE,
-                        getString(R.string.msg_fail_fetch_card_profile));
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Bank List")
-                        .setAction("Fetch")
-                        .setLabel("Fail(Mobile)")
-                        .build());
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {}
     }
-
 
     public class RequestRegistrationEntryTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationEntryResponse>> {
         @Override
         public void onTaskComplete(ResponseMessage<RegistrationEntryResponse> registrationEntryResponse)
         {
 
-            keepOn_button.setEnabled(true);
             hamPayDialog.dismisWaitingDialog();
             if (registrationEntryResponse != null) {
 
@@ -565,7 +491,6 @@ public class ProfileEntryActivity extends AppCompatActivity {
 
         @Override
         public void onTaskPreRun() {
-            keepOn_button.setEnabled(false);
             hamPayDialog.showWaitingDialog("");
         }
     }

@@ -6,7 +6,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
@@ -32,6 +36,8 @@ import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.edittext.MemorableTextWatcher;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.dialog.permission.ActionPermission;
+import xyz.homapay.hampay.mobile.android.dialog.permission.PermissionContactDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
@@ -39,7 +45,7 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.UserContacts;
 
-public class MemorableWordEntryActivity extends AppCompatActivity {
+public class MemorableWordEntryActivity extends AppCompatActivity implements PermissionContactDialog.PermissionContactDialogListener {
 
     private List<ContactDTO> contacts;
     private FacedTextView keepOn_button;
@@ -63,6 +69,7 @@ public class MemorableWordEntryActivity extends AppCompatActivity {
 
     RequestCredentialEntry requestCredentialEntry;
     RegistrationCredentialsRequest registrationCredentialsRequest;
+    private final Handler handler = new Handler();
 
 
     private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
@@ -114,9 +121,27 @@ public class MemorableWordEntryActivity extends AppCompatActivity {
                         UserContacts userContacts = new UserContacts(context);
                         contacts = userContacts.read();
                         registrationCredentialsRequest.setContacts(contacts);
+
+                        registrationCredentialsRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
+                        registrationCredentialsRequest.setDeviceId(new DeviceInfo(activity).getAndroidId());
+                        Uuid = UUID.randomUUID().toString();
+                        registrationCredentialsRequest.setInstallationToken(Uuid);
+                        registrationCredentialsRequest.setMemorableKey(memorable_value.getText().toString());
+                        registrationCredentialsRequest.setPassCode(userEntryPassword);
+                        requestCredentialEntry = new RequestCredentialEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
+                        requestCredentialEntry.execute(registrationCredentialsRequest);
+
                     } else {
-                        contacts = new ArrayList<ContactDTO>();
-                        registrationCredentialsRequest.setContacts(contacts);
+
+                        handler.post(new Runnable() {
+                            public void run() {
+                                FragmentManager fm = getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                                fragmentTransaction.commit();
+                                PermissionContactDialog permissionContactDialog = new PermissionContactDialog();
+                                permissionContactDialog.show(fm, "fragment_edit_name");
+                            }
+                        });
                     }
 
                     return true;
@@ -138,7 +163,6 @@ public class MemorableWordEntryActivity extends AppCompatActivity {
         bundle = getIntent().getExtras();
 
         registrationCredentialsRequest = new RegistrationCredentialsRequest();
-        requestAndLoadUserContact();
 
         userEntryPassword = bundle.getString(Constants.USER_ENTRY_PASSWORD);
 
@@ -161,14 +185,7 @@ public class MemorableWordEntryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (memorable_value.getText().toString().trim().length() > 1 ) {
-                    registrationCredentialsRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
-                    registrationCredentialsRequest.setDeviceId(new DeviceInfo(activity).getAndroidId());
-                    Uuid = UUID.randomUUID().toString();
-                    registrationCredentialsRequest.setInstallationToken(Uuid);
-                    registrationCredentialsRequest.setMemorableKey(memorable_value.getText().toString());
-                    registrationCredentialsRequest.setPassCode(userEntryPassword);
-                    requestCredentialEntry = new RequestCredentialEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
-                    requestCredentialEntry.execute(registrationCredentialsRequest);
+                    requestAndLoadUserContact();
                 }else {
                     Toast.makeText(context, getString(R.string.msg_memorable_incorrect), Toast.LENGTH_SHORT).show();
                 }
@@ -176,7 +193,26 @@ public class MemorableWordEntryActivity extends AppCompatActivity {
         });
     }
 
-
+    @Override
+    public void onFinishEditDialog(ActionPermission actionPermission) {
+        switch (actionPermission){
+            case GRANT:
+                requestAndLoadUserContact();
+                break;
+            case DENY:
+                contacts = new ArrayList<ContactDTO>();
+                registrationCredentialsRequest.setContacts(contacts);
+                registrationCredentialsRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
+                registrationCredentialsRequest.setDeviceId(new DeviceInfo(activity).getAndroidId());
+                Uuid = UUID.randomUUID().toString();
+                registrationCredentialsRequest.setInstallationToken(Uuid);
+                registrationCredentialsRequest.setMemorableKey(memorable_value.getText().toString());
+                registrationCredentialsRequest.setPassCode(userEntryPassword);
+                requestCredentialEntry = new RequestCredentialEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
+                requestCredentialEntry.execute(registrationCredentialsRequest);
+                break;
+        }
+    }
 
 
     public class RequestMemorableWordEntryResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationCredentialsResponse>>

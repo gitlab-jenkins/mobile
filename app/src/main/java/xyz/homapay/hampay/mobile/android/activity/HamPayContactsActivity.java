@@ -6,6 +6,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.IntentCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -35,13 +40,15 @@ import xyz.homapay.hampay.mobile.android.async.RequestContactHampayEnabled;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.dialog.permission.ActionPermission;
+import xyz.homapay.hampay.mobile.android.dialog.permission.PermissionContactDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.UserContacts;
 
-public class HamPayContactsActivity extends AppCompatActivity{
+public class HamPayContactsActivity extends AppCompatActivity implements PermissionContactDialog.PermissionContactDialogListener{
 
     private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
     private String authToken;
@@ -60,6 +67,7 @@ public class HamPayContactsActivity extends AppCompatActivity{
     private HamPayDialog hamPayDialog;
     private String searchPhrase = "";
     private FacedTextView nullHampayContactsText;
+    private final Handler handler = new Handler();
 
     public void backActionBar(View view){
         finish();
@@ -89,6 +97,30 @@ public class HamPayContactsActivity extends AppCompatActivity{
         }
     }
 
+    @Override
+    public void onFinishEditDialog(ActionPermission actionPermission) {
+        switch (actionPermission) {
+            case GRANT:
+                requestAndLoadUserContact();
+                break;
+            case DENY:
+                contacts = new ArrayList<ContactDTO>();
+                contactsHampayEnabledRequest.setContacts(contacts);
+                requestContactHampayEnabled = new RequestContactHampayEnabled(activity, new RequestContactHampayEnabledTaskCompleteListener());
+                requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
+                break;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        for (PermissionListener permissionListener : permissionListeners)
+            if (permissionListener.onResult(requestCode, permissions, grantResults)) {
+                permissionListeners.remove(permissionListener);
+            }
+    }
+
+
     private void requestAndLoadUserContact() {
         String[] permissions = new String[]{Manifest.permission.READ_CONTACTS};
 
@@ -104,8 +136,16 @@ public class HamPayContactsActivity extends AppCompatActivity{
                         requestContactHampayEnabled = new RequestContactHampayEnabled(activity, new RequestContactHampayEnabledTaskCompleteListener());
                         requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
                     } else {
-                        contacts = new ArrayList<ContactDTO>();
-                        contactsHampayEnabledRequest.setContacts(contacts);
+
+                        handler.post(new Runnable() {
+                            public void run() {
+                                FragmentManager fm = getSupportFragmentManager();
+                                FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                                fragmentTransaction.commit();
+                                PermissionContactDialog permissionContactDialog = new PermissionContactDialog();
+                                permissionContactDialog.show(fm, "fragment_edit_name");
+                            }
+                        });
                     }
 
                     return true;

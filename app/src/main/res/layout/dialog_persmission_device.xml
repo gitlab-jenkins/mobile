@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:geekui="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:background="@drawable/dialog_success_style"
+    android:orientation="vertical"
+    android:layout_margin="8dp">
+
+
+    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+        geekui:customTypeface="fonts/vazir_regular.ttf"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/modal_text"
+        android:textSize="15dp"
+        android:layout_margin="4dp"
+        android:gravity="center"
+        android:text="@string/permission_device"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center">
+
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+            android:id="@+id/permission_deny"
+            geekui:customTypeface="fonts/vazir_regular.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:textColor="@android:color/white"
+            android:textSize="16dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="@string/permission_exit"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:background="@drawable/modal_success_button_style"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="4dp"/>
+
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+            android:id="@+id/permission_grant"
+            geekui:customTypeface="fonts/vazir_regular.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:textColor="@android:color/white"
+            android:textSize="16dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="@string/permission_grant"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:background="@drawable/modal_success_button_style"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="4dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>
