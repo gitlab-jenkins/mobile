@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -89,6 +90,14 @@ public class HamPayContactsActivity extends AppCompatActivity{
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        for (PermissionListener permissionListener : permissionListeners)
+            if (permissionListener.onResult(requestCode, permissions, grantResults)) {
+                permissionListeners.remove(permissionListener);
+            }
+    }
+
     private void requestAndLoadUserContact() {
         String[] permissions = new String[]{Manifest.permission.READ_CONTACTS};
 
@@ -106,6 +115,8 @@ public class HamPayContactsActivity extends AppCompatActivity{
                     } else {
                         contacts = new ArrayList<ContactDTO>();
                         contactsHampayEnabledRequest.setContacts(contacts);
+                        hamPayDialog.dismisWaitingDialog();
+                        pullToRefresh.setRefreshing(false);
                     }
 
                     return true;
@@ -149,19 +160,21 @@ public class HamPayContactsActivity extends AppCompatActivity{
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 searchPhrase = search_text.getText().toString();
                 List<ContactDTO> searchContacts = new ArrayList<>();
-                for (ContactDTO contact: contacts){
-                    if (searchPhrase.length() == 0 || searchPhrase.length() == 1){
-                        if (contact.getDisplayName().startsWith(searchPhrase)){
-                            searchContacts.add(contact);
-                        }
-                    }else if (searchPhrase.length() > 1){
-                        if (contact.getDisplayName().contains(searchPhrase)){
-                            searchContacts.add(contact);
+                if (contacts != null) {
+                    for (ContactDTO contact : contacts) {
+                        if (searchPhrase.length() == 0 || searchPhrase.length() == 1) {
+                            if (contact.getDisplayName().startsWith(searchPhrase)) {
+                                searchContacts.add(contact);
+                            }
+                        } else if (searchPhrase.length() > 1) {
+                            if (contact.getDisplayName().contains(searchPhrase)) {
+                                searchContacts.add(contact);
+                            }
                         }
                     }
+                    hamPayContactsAdapter = new HamPayContactsAdapter(activity, searchContacts, authToken);
+                    paymentRequestList.setAdapter(hamPayContactsAdapter);
                 }
-                hamPayContactsAdapter = new HamPayContactsAdapter(activity, searchContacts, authToken);
-                paymentRequestList.setAdapter(hamPayContactsAdapter);
             }
 
             @Override
