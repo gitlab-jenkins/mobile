@@ -134,16 +134,16 @@ public class PaymentRequestListActivity extends AppCompatActivity{
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
                 List<PaymentInfoDTO> searchPaymentInfo = new ArrayList<>();
-
-                for (PaymentInfoDTO paymentInfo: paymentInfoList){
-                    if (paymentInfo.getCalleeName().contains(search_text.getText().toString())){
-                        searchPaymentInfo.add(paymentInfo);
+                if (paymentInfoList != null) {
+                    for (PaymentInfoDTO paymentInfo : paymentInfoList) {
+                        if (paymentInfo.getCalleeName().contains(search_text.getText().toString())) {
+                            searchPaymentInfo.add(paymentInfo);
+                        }
                     }
+                    pendingPOAdapter = new PendingPOAdapter(activity, searchPaymentInfo, authToken);
+                    paymentRequestList.setAdapter(pendingPOAdapter);
                 }
-                pendingPOAdapter = new PendingPOAdapter(activity, searchPaymentInfo, authToken);
-                paymentRequestList.setAdapter(pendingPOAdapter);
             }
 
             @Override
