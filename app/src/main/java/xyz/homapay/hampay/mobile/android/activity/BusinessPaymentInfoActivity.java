@@ -247,8 +247,11 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 amount_value.clearFocus();
+
                 if (amount_value.getText().toString().length() == 0){
+                    payment_button.setEnabled(false);
                     Toast.makeText(activity, getString(R.string.msg_null_amount), Toast.LENGTH_SHORT).show();
+                    payment_button.setEnabled(true);
                     return;
                 }
                 if (creditValueValidation) {

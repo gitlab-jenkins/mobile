@@ -210,8 +210,11 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
                     startActivityForResult(intent, 46);
                 } else {
 
+                    pay_to_business_button.setEnabled(false);
+
                     if (pin2Value.getText().toString().length() <= 4) {
                         Toast.makeText(context, getString(R.string.msg_pin2_incurrect), Toast.LENGTH_SHORT).show();
+                        pay_to_business_button.setEnabled(true);
                         return;
                     }
 
@@ -310,6 +313,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
         public void onTaskComplete(TWAArrayOfKeyValueOfstringstring purchaseResponseResponseMessage) {
 
             hamPayDialog.dismisWaitingDialog();
+            pay_to_business_button.setEnabled(true);
 
             String responseCode = null;
             String description = null;

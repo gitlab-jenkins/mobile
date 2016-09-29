@@ -274,8 +274,10 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                     intent.putExtra(Constants.PSP_INFO, pspInfoDTO);
                     startActivityForResult(intent, 45);
                 } else {
+                    pay_to_business_button.setEnabled(false);
                     if (pin2Value.getText().toString().length() <= 4) {
                         Toast.makeText(context, getString(R.string.msg_pin2_incurrect), Toast.LENGTH_LONG).show();
+                        pay_to_business_button.setEnabled(true);
                         return;
                     }
                     editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
@@ -369,6 +371,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         public void onTaskComplete(TWAArrayOfKeyValueOfstringstring purchaseResponseResponseMessage) {
 
             hamPayDialog.dismisWaitingDialog();
+            pay_to_business_button.setEnabled(true);
 
             String responseCode = null;
             String description = null;
