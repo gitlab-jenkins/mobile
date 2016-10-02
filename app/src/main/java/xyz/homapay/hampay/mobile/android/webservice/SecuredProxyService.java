@@ -46,9 +46,14 @@ public class SecuredProxyService {
     private boolean encryptionEnabled = false;
     private KeyExchange keyExchange;
 
-    public void setJsonBody(String jsonBody) throws EncryptionException {
+    public void setJsonBody(String jsonBody) throws EncryptionException, IOException {
         if (encryptionEnabled){
-            this.jsonBody = messageEncryptor.encryptRequest(jsonBody, keyExchange.getKey(), keyExchange.getIv(), keyExchange.getEncId());
+            if (keyExchange.getKey() == null || keyExchange.getIv() == null){
+                keyExchange.exchange();
+                this.jsonBody = messageEncryptor.encryptRequest(jsonBody, keyExchange.getKey(), keyExchange.getIv(), keyExchange.getEncId());
+            }else {
+                this.jsonBody = messageEncryptor.encryptRequest(jsonBody, keyExchange.getKey(), keyExchange.getIv(), keyExchange.getEncId());
+            }
         }else {
             this.jsonBody = jsonBody;
         }
