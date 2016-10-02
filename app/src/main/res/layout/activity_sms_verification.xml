@@ -243,7 +243,7 @@
                         android:background="@drawable/registration_button_style"
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="8dp"
-                        android:visibility="gone"/>
+                        android:visibility="visible"/>
 
                 </LinearLayout>
 

@@ -183,6 +183,7 @@
     <string name="unlink_dis_confirm">انصراف</string>
     <string name="change_email_confirm">تایید</string>
     <string name="change_email_cancel">انصراف</string>
+    <string name="msg_check_network_connectivity">لطفا اتصال اینترنت خود را بررسی نمایید</string>
     <string name="msg_found_illegal_app">کاربر گرامی به دلیل بهبود امنیت شما، قبل از استفاده از هم‌پی نیاز به حذف یا غیرفعالسازی اپلیکیشن فوق هستیم.</string>
     <string name="msg_fail_illegal_app_list">اطلاعاتی از سامانه هم‌پی دریافت نشد، لطفا دوباره تلاش کنید.</string>
     <string name="msg_fail_fetch_card_profile">اطلاعات کارت شما یافت نشد. دوباره تلاش کنید</string>

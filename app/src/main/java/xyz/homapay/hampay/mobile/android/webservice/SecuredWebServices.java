@@ -9,6 +9,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.net.InetAddress;
 import java.net.URL;
 import java.util.UUID;
 
@@ -209,7 +210,6 @@ public class SecuredWebServices{
         Gson gson = new Gson();
 
         responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<RegistrationEntryResponse>>() {}.getType());
-
 
         proxyService.closeConnection();
 

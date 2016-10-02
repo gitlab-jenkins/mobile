@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.os.AsyncTask;
 
 import java.io.IOException;
+import java.net.InetAddress;
 
 import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
+import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.DeviceDTO;
 import xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
 import xyz.homapay.hampay.common.core.model.response.RegistrationEntryResponse;
@@ -24,6 +26,11 @@ public class RequestRegistrationEntry extends AsyncTask<RegistrationEntryRequest
 
     private Activity context;
     private AsyncTaskCompleteListener<ResponseMessage<RegistrationEntryResponse>> listener;
+    private boolean networkConnectivity = false;
+
+    public boolean getNetworkConnectivity(){
+        return networkConnectivity;
+    }
 
     public RequestRegistrationEntry(Activity context, AsyncTaskCompleteListener<ResponseMessage<RegistrationEntryResponse>> listener)
     {
@@ -67,7 +74,18 @@ public class RequestRegistrationEntry extends AsyncTask<RegistrationEntryRequest
 
         SecuredWebServices webServices = new SecuredWebServices(context, Constants.CONNECTION_TYPE);
         try {
-            return webServices.registrationEntry(params[0]);
+
+            ResponseMessage<RegistrationEntryResponse> registrationEntryResponseMessage = webServices.registrationEntry(params[0]);
+
+            if (registrationEntryResponseMessage == null){
+                byte[] ipAddr = new byte[]{8, 8, 8, 8};
+                InetAddress addr = InetAddress.getByAddress(ipAddr);
+                if (addr.getHostName() != null){
+                    networkConnectivity = true;
+                }
+            }
+
+            return registrationEntryResponseMessage;
         } catch (IOException e) {
             e.printStackTrace();
         } catch (EncryptionException e) {

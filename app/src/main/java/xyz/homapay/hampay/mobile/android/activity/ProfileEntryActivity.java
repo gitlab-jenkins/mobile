@@ -21,6 +21,9 @@ import android.widget.Toast;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
@@ -167,6 +170,7 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
         setContentView(R.layout.activity_profile_entry);
         context = this;
         activity = this;
+
         persianEnglishDigit = new PersianEnglishDigit();
         cardNumberValidator = new CardNumberValidator();
         hamPayGaTracker = ((HamPayApplication) getApplication())
@@ -468,7 +472,6 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                     new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest,
                             registrationEntryResponse.getService().getResultStatus().getCode(),
                             registrationEntryResponse.getService().getResultStatus().getDescription());
-
                     hamPayGaTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Registration Entry")
                             .setAction("Entry")
@@ -476,10 +479,18 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                             .build());
                 }
             }else {
-                requestRegistrationEntry = new RequestRegistrationEntry(activity, new RequestRegistrationEntryTaskCompleteListener());
-                new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest,
-                        Constants.LOCAL_ERROR_CODE,
-                        getString(R.string.msg_fail_registration_entry));
+
+                if (!requestRegistrationEntry.getNetworkConnectivity()){
+                    requestRegistrationEntry = new RequestRegistrationEntry(activity, new RequestRegistrationEntryTaskCompleteListener());
+                    new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest,
+                            Constants.LOCAL_ERROR_CODE,
+                            getString(R.string.msg_check_network_connectivity));
+                }else {
+                    requestRegistrationEntry = new RequestRegistrationEntry(activity, new RequestRegistrationEntryTaskCompleteListener());
+                    new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest,
+                            Constants.LOCAL_ERROR_CODE,
+                            getString(R.string.msg_fail_registration_entry));
+                }
 
                 hamPayGaTracker.send(new HitBuilders.EventBuilder()
                         .setCategory("Registration Entry")
