@@ -127,7 +127,9 @@ public class DobListController {
 	public void setEmptyView(View emptyView) {
 		this.emptyView = emptyView;
 		listView.setEmptyView(this.emptyView);
-		this.emptyViewParent = (ViewGroup) emptyView.getParent();
+		if (emptyView.getParent() != null) {
+			this.emptyViewParent = (ViewGroup) emptyView.getParent();
+		}
 	}
 
 	public View getEmptyView() {
