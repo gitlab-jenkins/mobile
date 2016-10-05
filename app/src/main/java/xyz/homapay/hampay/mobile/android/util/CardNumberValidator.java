@@ -16,6 +16,11 @@ public class CardNumberValidator {
 
         cardNumber = cardNumber.replaceAll("-", "");
 
+        //Add tejarat bank card number exception
+        if (cardNumber.startsWith(Constants.TEJERAT_CARD_PREFIX_1) || cardNumber.startsWith(Constants.TEJERAT_CARD_PREFIX_2)){
+            return true;
+        }
+
         for (char ch : cardNumber.toCharArray()) {
             int digit;
 

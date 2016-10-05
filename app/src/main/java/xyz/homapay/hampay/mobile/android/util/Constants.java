@@ -113,6 +113,8 @@ public class Constants {
     public static final int HAMPAY_RED = 109;
     public static final int HAMPAY_GREEN = 7;
     public static final int HAMPAY_BLUE = 109;
+    public static final String TEJERAT_CARD_PREFIX_1 = "627353";
+    public static final String TEJERAT_CARD_PREFIX_2 = "585983";
 
     //Permissions and Group Permission
     public static final int READ_PHONE_STATE = 1;
