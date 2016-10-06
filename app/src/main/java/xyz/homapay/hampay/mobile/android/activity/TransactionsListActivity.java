@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -154,6 +155,9 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING){
+                    requestUserTransaction.cancel(true);
+                }
                 FINISHED_SCROLLING = false;
                 onLoadMore = false;
                 userTransactionAdapter.clear();
@@ -194,6 +198,9 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.full_transaction:
+                if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING){
+                    requestUserTransaction.cancel(true);
+                }
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
                 FINISHED_SCROLLING = false;
@@ -213,6 +220,9 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 break;
 
             case R.id.business_transaction:
+                if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING){
+                    requestUserTransaction.cancel(true);
+                }
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
                 FINISHED_SCROLLING = false;
@@ -232,6 +242,9 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 break;
 
             case R.id.invoice_transaction:
+                if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING){
+                    requestUserTransaction.cancel(true);
+                }
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
                 FINISHED_SCROLLING = false;
