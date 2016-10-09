@@ -4,16 +4,17 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.lang.ref.SoftReference;
 import java.lang.reflect.Type;
 import java.net.URL;
 import java.util.HashMap;
@@ -28,7 +29,7 @@ import xyz.homapay.hampay.mobile.android.webservice.SecuredProxyService;
 
 public class ImageManager {
 
-    private HashMap<String, SoftReference<Bitmap>> imageMap = new HashMap<String, SoftReference<Bitmap>>();
+    private HashMap<String, Bitmap> imageMap = new HashMap<String, Bitmap>();
 
     private SharedPreferences prefs;
     private String authToken = "";
@@ -66,7 +67,7 @@ public class ImageManager {
     public void displayImage(String imageId, ImageView imageView, int defaultDrawableId) {
 
         if(imageMap.containsKey(imageId)) {
-            imageView.setImageBitmap(imageMap.get(imageId).get());
+            imageView.setImageBitmap(imageMap.get(imageId));
 
         } else {
             queueImage(imageId, imageView, defaultDrawableId);
@@ -109,7 +110,13 @@ public class ImageManager {
                 writeFile(bitmap, bitmapFile);
             }
             else {
-                bitmap = decodeFile(bitmapFile, 100, 100);
+//                bitmap = decodeFile(bitmapFile, 100, 100);
+                if (bitmapFile.exists()){
+                    Log.e("FULL", "FULL");
+                    bitmap = Picasso.with(activity).load(bitmapFile).get();
+                }else {
+                    Log.e("EMPTY", "EMPTY");
+                }
                 if (bitmap != null) {
                 }else {
                     URL imageURL = new URL(Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + "retrieve");
@@ -237,7 +244,7 @@ public class ImageManager {
                         }
 
                         Bitmap bitmap = getBitmap(imageToLoad.imageId);
-                        imageMap.put(imageToLoad.imageId, new SoftReference<Bitmap>(bitmap));
+                        imageMap.put(imageToLoad.imageId, bitmap);
                         Object tag = imageToLoad.imageView.getTag();
 
                         // Make sure we have the right view - thread safety defender

@@ -174,10 +174,14 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
         transactionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent();
-                intent.setClass(activity, TransactionDetailActivity.class);
-                intent.putExtra(Constants.USER_TRANSACTION_DTO, transactionDTOs.get(position));
-                startActivity(intent);
+                if (transactionDTOs != null) {
+                    if (transactionDTOs.size() > 0) {
+                        Intent intent = new Intent();
+                        intent.setClass(activity, TransactionDetailActivity.class);
+                        intent.putExtra(Constants.USER_TRANSACTION_DTO, transactionDTOs.get(position));
+                        startActivity(intent);
+                    }
+                }
             }
         });
 
@@ -398,8 +402,8 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
 
             dobList.addDefaultLoadingFooterView();
 
-            View noItems = rootView.findViewById(R.id.noItems);
-            dobList.setEmptyView(noItems);
+//            View noItems = rootView.findViewById(R.id.noItems);
+//            dobList.setEmptyView(noItems);
 
             dobList.setOnLoadMoreListener(new OnLoadMoreListener() {
 
