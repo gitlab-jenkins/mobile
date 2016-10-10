@@ -85,8 +85,7 @@ public class DobListController {
 		this.footerLoadingView = footerLoadingView;
 
 		if (footerLoadingView == null) {
-			this.footerLoadingView = ResInflater.inflate(activity,
-                    R.layout.loading, null, false);
+//			this.footerLoadingView = ResInflater.inflate(activity, R.layout.loading, null, false);
 		}
 
 		listView.addFooterView(this.footerLoadingView);
@@ -118,10 +117,8 @@ public class DobListController {
 	}
 
 	public void addDefaultLoadingFooterView() {
-		footerLoadingView = ResInflater.inflate(activity, R.layout.loading,
-				null, false);
-
-		setFooterLoadingView(loadingView);
+//		footerLoadingView = ResInflater.inflate(activity, R.layout.loading, null, false);
+//		setFooterLoadingView(loadingView);
 	}
 
 	public void setEmptyView(View emptyView) {

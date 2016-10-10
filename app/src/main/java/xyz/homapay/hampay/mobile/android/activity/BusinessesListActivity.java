@@ -490,9 +490,6 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
 
                 dobList.addDefaultLoadingFooterView();
 
-                View noItems = rootView.findViewById(R.id.noItems);
-                dobList.setEmptyView(noItems);
-
                 dobList.setOnLoadMoreListener(new OnLoadMoreListener() {
 
                     @Override

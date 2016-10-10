@@ -22,9 +22,8 @@ public class EmptyViewManager {
 			View newView;
 
 			if (isLoading) {
-				View loadingView = ResInflater.inflate(context,
-						R.layout.loading, null, false);
-				newView = loadingView;
+//				View loadingView = ResInflater.inflate(context, R.layout.loading, null, false);
+//				newView = loadingView;
 
 				RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
 						ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -32,8 +31,8 @@ public class EmptyViewManager {
 
 				layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
 
-				loadingView.setLayoutParams(layoutParams);
-				emptyViewParent.addView(loadingView);
+//				loadingView.setLayoutParams(layoutParams);
+//				emptyViewParent.addView(loadingView);
 
 			} else {
 				newView = emptyView;
@@ -41,7 +40,7 @@ public class EmptyViewManager {
 				emptyViewParent.addView(emptyView);
 			}
 
-			listView.setEmptyView(newView);
+//			listView.setEmptyView(newView);
 		}
 	}
 }
