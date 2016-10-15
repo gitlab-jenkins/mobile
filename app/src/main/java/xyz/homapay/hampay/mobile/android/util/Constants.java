@@ -6,8 +6,9 @@ import xyz.homapay.hampay.mobile.android.webservice.ConnectionType;
 public class Constants {
 //    public static String SERVER = "176.58.104.158";//England Server
 //    public static String SERVER = "mobile.hampay.ir";//Prod Server
-    public static String SERVER = "uat.hampay.ir";//UAT Server
-//    public static String SERVER = "mobile.hampay.homapay.com";//LIVE Server
+//    public static String SERVER = "139.162.147.189";//DEV2 Server
+//    public static String SERVER = "uat.hampay.ir";//UAT Server
+    public static String SERVER = "mobile.hampay.homapay.com";//LIVE Server
     public static String URL_PREFIX = "/hampay";
     public static String HTTP_SERVER_IP = "http://" + SERVER + ":90" + URL_PREFIX;//England Server
     public static String IPG_URL = "https://" + SERVER + URL_PREFIX;//England Server

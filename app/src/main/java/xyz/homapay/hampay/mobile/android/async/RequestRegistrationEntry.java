@@ -78,9 +78,9 @@ public class RequestRegistrationEntry extends AsyncTask<RegistrationEntryRequest
             ResponseMessage<RegistrationEntryResponse> registrationEntryResponseMessage = webServices.registrationEntry(params[0]);
 
             if (registrationEntryResponseMessage == null){
-                byte[] ipAddr = new byte[]{8, 8, 8, 8};
-                InetAddress addr = InetAddress.getByAddress(ipAddr);
-                if (addr.getHostName() != null){
+                byte[] ipAddress = new byte[]{8, 8, 8, 8};
+                InetAddress inetAddress = InetAddress.getByAddress(ipAddress);
+                if (inetAddress.getHostName() != null){
                     networkConnectivity = true;
                 }
             }
