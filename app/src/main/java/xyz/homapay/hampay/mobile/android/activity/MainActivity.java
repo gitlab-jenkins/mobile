@@ -710,6 +710,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             if (userProfileResponseMessage != null) {
                 if (userProfileResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
                     userProfileDTO = userProfileResponseMessage.getService().getUserProfile();
+                    currentFragment = 0;
                     fragment = new MainFragment();
                     if (userProfileDTO != null) {
                         bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
