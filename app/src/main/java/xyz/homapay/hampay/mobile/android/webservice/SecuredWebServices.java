@@ -3,6 +3,7 @@ package xyz.homapay.hampay.mobile.android.webservice;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -459,11 +460,19 @@ public class SecuredWebServices{
 
         Type requestType = new TypeToken<RequestMessage<TransactionListRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
+
+        Log.e("Request", jsonRequest);
+        Log.e("----", "---------------------");
+
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<TransactionListResponse>>() {}.getType());
+        String res = proxyService.getResponse();
+        Log.e("Response", res);
+        Log.e("----", "---------------------");
+
+        responseMessage = gson.fromJson(res, new TypeToken<ResponseMessage<TransactionListResponse>>() {}.getType());
 
         proxyService.closeConnection();
 

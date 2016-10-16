@@ -251,17 +251,4 @@
 
     </RelativeLayout>
 
-    <xyz.homapay.hampay.mobile.android.component.FacedTextView
-        geekui:customTypeface="fonts/vazir_regular.ttf"
-        android:id="@+id/noItems"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:visibility="gone"
-        android:textSize="14dp"
-        android:textColor="#363636"/>
-
-
-
 </LinearLayout>

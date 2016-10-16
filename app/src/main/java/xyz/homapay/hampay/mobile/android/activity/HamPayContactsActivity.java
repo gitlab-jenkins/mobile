@@ -189,19 +189,21 @@ public class HamPayContactsActivity extends AppCompatActivity implements Permiss
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 searchPhrase = search_text.getText().toString();
                 List<ContactDTO> searchContacts = new ArrayList<>();
-                for (ContactDTO contact: contacts){
-                    if (searchPhrase.length() == 0 || searchPhrase.length() == 1){
-                        if (contact.getDisplayName().startsWith(searchPhrase)){
-                            searchContacts.add(contact);
-                        }
-                    }else if (searchPhrase.length() > 1){
-                        if (contact.getDisplayName().contains(searchPhrase)){
-                            searchContacts.add(contact);
+                if (contacts != null) {
+                    for (ContactDTO contact : contacts) {
+                        if (searchPhrase.length() == 0 || searchPhrase.length() == 1) {
+                            if (contact.getDisplayName().startsWith(searchPhrase)) {
+                                searchContacts.add(contact);
+                            }
+                        } else if (searchPhrase.length() > 1) {
+                            if (contact.getDisplayName().contains(searchPhrase)) {
+                                searchContacts.add(contact);
+                            }
                         }
                     }
+                    hamPayContactsAdapter = new HamPayContactsAdapter(activity, searchContacts, authToken);
+                    paymentRequestList.setAdapter(hamPayContactsAdapter);
                 }
-                hamPayContactsAdapter = new HamPayContactsAdapter(activity, searchContacts, authToken);
-                paymentRequestList.setAdapter(hamPayContactsAdapter);
             }
 
             @Override

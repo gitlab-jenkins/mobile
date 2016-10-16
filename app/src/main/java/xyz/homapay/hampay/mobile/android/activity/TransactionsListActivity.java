@@ -5,13 +5,16 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -57,6 +60,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
 
     RequestUserTransaction requestUserTransaction;
     TransactionListRequest transactionListRequest;
+    private ProgressBar loading;
     int requestPageNumber = 0;
     TnxSortFactor sortFactor = TnxSortFactor.DEFAULT;
 
@@ -130,6 +134,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
 
         hamPayDialog = new HamPayDialog(activity);
 
+        loading = (ProgressBar)findViewById(R.id.loading);
         full_transaction = (RelativeLayout)findViewById(R.id.full_transaction);
         full_transaction.setOnClickListener(this);
         business_transaction = (RelativeLayout)findViewById(R.id.business_transaction);
@@ -154,6 +159,9 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING){
+                    requestUserTransaction.cancel(true);
+                }
                 FINISHED_SCROLLING = false;
                 onLoadMore = false;
                 userTransactionAdapter.clear();
@@ -170,10 +178,14 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
         transactionListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent();
-                intent.setClass(activity, TransactionDetailActivity.class);
-                intent.putExtra(Constants.USER_TRANSACTION_DTO, transactionDTOs.get(position));
-                startActivity(intent);
+                if (transactionDTOs != null) {
+                    if (transactionDTOs.size() > 0) {
+                        Intent intent = new Intent();
+                        intent.setClass(activity, TransactionDetailActivity.class);
+                        intent.putExtra(Constants.USER_TRANSACTION_DTO, transactionDTOs.get(position));
+                        startActivity(intent);
+                    }
+                }
             }
         });
 
@@ -194,6 +206,9 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.full_transaction:
+                if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING){
+                    requestUserTransaction.cancel(true);
+                }
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
                 FINISHED_SCROLLING = false;
@@ -213,6 +228,9 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 break;
 
             case R.id.business_transaction:
+                if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING){
+                    requestUserTransaction.cancel(true);
+                }
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
                 FINISHED_SCROLLING = false;
@@ -232,6 +250,9 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 break;
 
             case R.id.invoice_transaction:
+                if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING){
+                    requestUserTransaction.cancel(true);
+                }
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
                 FINISHED_SCROLLING = false;
@@ -288,10 +309,9 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
 
         @Override
         public void onTaskComplete(ResponseMessage<TransactionListResponse> transactionListResponseMessage) {
-
             hamPayDialog.dismisWaitingDialog();
-
             pullToRefresh.setRefreshing(false);
+            loading.setVisibility(View.INVISIBLE);
 
             PugNotification.with(context).cancel(Constants.TRANSACTIONS_NOTIFICATION_IDENTIFIER);
 
@@ -300,6 +320,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 if (transactionListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
 
                     newTransactionDTOs = transactionListResponseMessage.getService().getTransactions();
+                    Log.e("Count",  String.valueOf(newTransactionDTOs.size()));
                     transactionDTOs.addAll(newTransactionDTOs);
 
                     if (transactionDTOs.size() == 0){
@@ -384,23 +405,18 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
             dobList.register(listView);
 
             dobList.addDefaultLoadingFooterView();
-
-            View noItems = rootView.findViewById(R.id.noItems);
-            dobList.setEmptyView(noItems);
-
             dobList.setOnLoadMoreListener(new OnLoadMoreListener() {
 
                 @Override
                 public void onLoadMore(final int totalItemCount) {
-
                     onLoadMore = true;
-
                     if (!FINISHED_SCROLLING) {
                         editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                         editor.commit();
                         transactionListRequest.setPageNumber(requestPageNumber);
                         requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
                         requestUserTransaction.execute(transactionListRequest);
+                        loading.setVisibility(View.VISIBLE);
 
                     } else
                         dobList.finishLoading();

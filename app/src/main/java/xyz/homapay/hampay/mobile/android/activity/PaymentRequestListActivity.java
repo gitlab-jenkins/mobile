@@ -111,10 +111,8 @@ public class PaymentRequestListActivity extends AppCompatActivity{
 
         nullPendingText = (FacedTextView)findViewById(R.id.nullPendingText);
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getString(R.string.payment_request_null_message));
-        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.rgb(109, 7, 109));
-
         ImageSpan is = new ImageSpan(context, R.drawable.add_payment_note);
-        spannableStringBuilder.setSpan(is, 40, 42, 0);
+        spannableStringBuilder.setSpan(is, 85, 89, 0);
         nullPendingText.setText(spannableStringBuilder);
 
 
@@ -136,16 +134,16 @@ public class PaymentRequestListActivity extends AppCompatActivity{
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
                 List<PaymentInfoDTO> searchPaymentInfo = new ArrayList<>();
-
-                for (PaymentInfoDTO paymentInfo: paymentInfoList){
-                    if (paymentInfo.getCalleeName().contains(search_text.getText().toString())){
-                        searchPaymentInfo.add(paymentInfo);
+                if (paymentInfoList != null) {
+                    for (PaymentInfoDTO paymentInfo : paymentInfoList) {
+                        if (paymentInfo.getCalleeName().contains(search_text.getText().toString())) {
+                            searchPaymentInfo.add(paymentInfo);
+                        }
                     }
+                    pendingPOAdapter = new PendingPOAdapter(activity, searchPaymentInfo, authToken);
+                    paymentRequestList.setAdapter(pendingPOAdapter);
                 }
-                pendingPOAdapter = new PendingPOAdapter(activity, searchPaymentInfo, authToken);
-                paymentRequestList.setAdapter(pendingPOAdapter);
             }
 
             @Override
@@ -195,6 +193,7 @@ public class PaymentRequestListActivity extends AppCompatActivity{
         @Override
         public void onTaskComplete(ResponseMessage<PendingPOListResponse> pendingPOListResponseResponseMessage) {
             hamPayDialog.dismisWaitingDialog();
+            paymentRequestList.setAdapter(null);
             pullToRefresh.setRefreshing(false);
             if (pendingPOListResponseResponseMessage != null){
                 if (pendingPOListResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
