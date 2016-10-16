@@ -254,7 +254,7 @@
     <string name="payment_success_trace">کد پیگیری: </string>
     <string name="payment_success_confirm">تایید</string>
     <string name="msg_ipg_fail">انجام عملیات پرداخت موفقیت آمیز نبود. لطفا دوباره تلاش کنید</string>
-    <string name="first_ipg_loading">به دلیل اینکه اولین باریست که شما از طریق این درگاه پرداخت می کنید نیازمندیم تا اطلاعات کامل کارت بانکی خود را وارد نمایید</string>
+    <string name="first_ipg_loading"> به دلیل بار اول استفاده شما و یا دلالیل امنیتی لازم است تا اطلاعات کامل کارت بانکی خود را وارد نمایید</string>
     <string name="first_ipg_loading_confirm">تایید</string>
     <string name="msg_pin2_incurrect">رمز دوم خود را به درستی وارد کنید.</string>
     <string name="msg_not_found_pending_payment_code">اطلاعات خرید شما با این کد یافت نشد </string>
