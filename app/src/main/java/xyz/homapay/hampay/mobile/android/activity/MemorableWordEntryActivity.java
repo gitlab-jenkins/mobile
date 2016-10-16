@@ -52,26 +52,7 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
     private FacedEditText memorable_value;
-
-    Context context;
-
-    Activity activity;
-
-    HamPayDialog hamPayDialog;
-
-    String Uuid = "";
-
-    Bundle bundle;
-
-    String userEntryPassword;
-
-    Tracker hamPayGaTracker;
-
-    RequestCredentialEntry requestCredentialEntry;
-    RegistrationCredentialsRequest registrationCredentialsRequest;
     private final Handler handler = new Handler();
-
-
     private Context context;
     private Activity activity;
     private HamPayDialog hamPayDialog;
