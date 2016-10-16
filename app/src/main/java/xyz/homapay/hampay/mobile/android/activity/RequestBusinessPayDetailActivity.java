@@ -709,14 +709,12 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
         PersianEnglishDigit persianEnglishDigit = new PersianEnglishDigit();
 
-        String persianPurchaseCode = persianEnglishDigit.E2P(purchaseInfo.getPurchaseCode());
-
-        input_digit_1.setText(persianPurchaseCode.charAt(0) + "");
-        input_digit_2.setText(persianPurchaseCode.charAt(1) + "");
-        input_digit_3.setText(persianPurchaseCode.charAt(2) + "");
-        input_digit_4.setText(persianPurchaseCode.charAt(3) + "");
-        input_digit_5.setText(persianPurchaseCode.charAt(4) + "");
-        input_digit_6.setText(persianPurchaseCode.charAt(5) + "");
+        input_digit_1.setText(String.valueOf(purchaseInfo.getPurchaseCode().charAt(0)));
+        input_digit_2.setText(String.valueOf(purchaseInfo.getPurchaseCode().charAt(1)));
+        input_digit_3.setText(String.valueOf(purchaseInfo.getPurchaseCode().charAt(2)));
+        input_digit_4.setText(String.valueOf(purchaseInfo.getPurchaseCode().charAt(3)));
+        input_digit_5.setText(String.valueOf(purchaseInfo.getPurchaseCode().charAt(4)));
+        input_digit_6.setText(String.valueOf(purchaseInfo.getPurchaseCode().charAt(5)));
 
         switch (purchaseInfo.getStatus()){
             case SUCCESSFUL:

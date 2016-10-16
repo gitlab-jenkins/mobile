@@ -81,7 +81,12 @@ public class PendingFundListAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.pending_fund_list_item, null);
             viewHolder.user_image = (ImageView)convertView.findViewById(R.id.user_image);
             viewHolder.contact_name = (FacedTextView)convertView.findViewById(R.id.contact_name);
-            viewHolder.code = (FacedTextView)convertView.findViewById(R.id.code);
+            viewHolder.code_digit_1 = (FacedTextView)convertView.findViewById(R.id.code_digit_1);
+            viewHolder.code_digit_2 = (FacedTextView)convertView.findViewById(R.id.code_digit_2);
+            viewHolder.code_digit_3 = (FacedTextView)convertView.findViewById(R.id.code_digit_3);
+            viewHolder.code_digit_4 = (FacedTextView)convertView.findViewById(R.id.code_digit_4);
+            viewHolder.code_digit_5 = (FacedTextView)convertView.findViewById(R.id.code_digit_5);
+            viewHolder.code_digit_6 = (FacedTextView)convertView.findViewById(R.id.code_digit_6);
             viewHolder.remaining_time = (FacedTextView)convertView.findViewById(R.id.remaining_time);
             viewHolder.amount_value = (FacedTextView)convertView.findViewById(R.id.amount_value);
             convertView.setTag(viewHolder);
@@ -101,7 +106,14 @@ public class PendingFundListAdapter extends BaseAdapter {
         }
 
         viewHolder.contact_name.setText(persianEnglishDigit.E2P(fund.getName()));
-        viewHolder.code.setText(activity.getString(R.string.payment_request_code) + persianEnglishDigit.E2P(fund.getCode()));
+        if (fund.getCode().length() == 6) {
+            viewHolder.code_digit_1.setText(String.valueOf(fund.getCode().charAt(0)));
+            viewHolder.code_digit_2.setText(String.valueOf(fund.getCode().charAt(1)));
+            viewHolder.code_digit_3.setText(String.valueOf(fund.getCode().charAt(2)));
+            viewHolder.code_digit_4.setText(String.valueOf(fund.getCode().charAt(3)));
+            viewHolder.code_digit_5.setText(String.valueOf(fund.getCode().charAt(4)));
+            viewHolder.code_digit_6.setText(String.valueOf(fund.getCode().charAt(5)));
+        }
         viewHolder.remaining_time.setText(dateUtil.remainingTime(fund.getExpirationDate(), currentDate));
         viewHolder.amount_value.setText(persianEnglishDigit.E2P(formatter.format(fund.getAmount())));
 
@@ -119,7 +131,12 @@ public class PendingFundListAdapter extends BaseAdapter {
     private class ViewHolder{
         ViewHolder(){ }
         FacedTextView contact_name;
-        FacedTextView code;
+        FacedTextView code_digit_1;
+        FacedTextView code_digit_2;
+        FacedTextView code_digit_3;
+        FacedTextView code_digit_4;
+        FacedTextView code_digit_5;
+        FacedTextView code_digit_6;
         FacedTextView remaining_time;
         ImageView user_image;
         FacedTextView amount_value;

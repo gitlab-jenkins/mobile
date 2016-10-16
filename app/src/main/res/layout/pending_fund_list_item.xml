@@ -34,15 +34,79 @@
                     android:textColor="@color/main_menu_title"
                     android:textSize="15dp" />
 
-                <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                    android:id="@+id/code"
-                    geekui:customTypeface="fonts/vazir_regular.ttf"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/main_menu_title"
-                    android:textSize="12dp"
-                    android:layout_gravity="right"
-                    android:gravity="right" />
+                    android:orientation="horizontal">
+
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/code_digit_1"
+                        geekui:customTypeface="fonts/vazir_regular.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/main_menu_title"
+                        android:textSize="12dp" />
+
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/code_digit_2"
+                        geekui:customTypeface="fonts/vazir_regular.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/main_menu_title"
+                        android:textSize="12dp" />
+
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/code_digit_3"
+                        geekui:customTypeface="fonts/vazir_regular.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/main_menu_title"
+                        android:textSize="12dp" />
+
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        geekui:customTypeface="fonts/vazir_regular.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/main_menu_title"
+                        android:textSize="12dp"
+                        android:layout_marginRight="4dp"/>
+
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/code_digit_4"
+                        geekui:customTypeface="fonts/vazir_regular.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/main_menu_title"
+                        android:textSize="12dp" />
+
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/code_digit_5"
+                        geekui:customTypeface="fonts/vazir_regular.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/main_menu_title"
+                        android:textSize="12dp" />
+
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/code_digit_6"
+                        geekui:customTypeface="fonts/vazir_regular.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/main_menu_title"
+                        android:textSize="12dp"
+                        android:layout_marginRight="4dp"/>
+
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        geekui:customTypeface="fonts/vazir_regular.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/main_menu_title"
+                        android:textSize="12dp"
+                        android:text="@string/payment_request_code"/>
+
+                </LinearLayout>
+
+
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/remaining_time"
