@@ -111,12 +111,6 @@ public class ImageManager {
             }
             else {
                 bitmap = decodeFile(bitmapFile, 100, 100);
-//                if (bitmapFile.exists()){
-//                    Log.e("FULL", "FULL");
-//                    bitmap = Picasso.with(activity).load(bitmapFile).get();
-//                }else {
-//                    Log.e("EMPTY", "EMPTY");
-//                }
                 if (bitmap != null) {
                 }else {
                     URL imageURL = new URL(Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + "retrieve");
