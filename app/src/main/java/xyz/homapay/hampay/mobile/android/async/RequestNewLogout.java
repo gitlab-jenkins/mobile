@@ -6,9 +6,9 @@ import android.os.AsyncTask;
 import java.io.IOException;
 
 import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
+import xyz.homapay.hampay.common.common.request.LogoutRequest;
+import xyz.homapay.hampay.common.common.response.LogoutResponse;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
-import xyz.homapay.hampay.common.core.model.request.LogoutRequest;
-import xyz.homapay.hampay.common.core.model.response.LogoutResponse;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.webservice.SecuredWebServices;
 

@@ -5,7 +5,9 @@ import android.os.AsyncTask;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
+import xyz.homapay.hampay.common.common.OSName;
 import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
@@ -15,22 +17,20 @@ import xyz.homapay.hampay.common.core.model.response.RegistrationEntryResponse;
 
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
+import xyz.homapay.hampay.mobile.android.util.net.InternetConnectionStatus;
+import xyz.homapay.hampay.mobile.android.util.net.InternetConnectivity;
 import xyz.homapay.hampay.mobile.android.webservice.SecuredWebServices;
 
 /**
  * Created by amir on 7/3/15.
  */
-public class RequestRegistrationEntry extends AsyncTask<RegistrationEntryRequest, Void, ResponseMessage<RegistrationEntryResponse>>  {
+public class RequestRegistrationEntry extends AsyncTask<RegistrationEntryRequest, Void, ResponseMessage<RegistrationEntryResponse>> {
 
     private static final String TAG = "RequestHttpRegistrationEntry";
-
     private Activity context;
     private AsyncTaskCompleteListener<ResponseMessage<RegistrationEntryResponse>> listener;
-    private boolean networkConnectivity = false;
-
-    public boolean getNetworkConnectivity(){
-        return networkConnectivity;
-    }
+    public InternetConnectionStatus internetConnectionStatus;
+    private ResponseMessage<RegistrationEntryResponse> registrationEntryResponseMessage;
 
     public RequestRegistrationEntry(Activity context, AsyncTaskCompleteListener<ResponseMessage<RegistrationEntryResponse>> listener)
     {
@@ -63,7 +63,7 @@ public class RequestRegistrationEntry extends AsyncTask<RegistrationEntryRequest
         deviceDTO.setCpu_abi(deviceInfo.getCpu_abi());
         deviceDTO.setDeviceAPI(deviceInfo.getDeviceAPI());
         deviceDTO.setOsVersion(deviceInfo.getOsVersion());
-        deviceDTO.setOsName(DeviceDTO.OSName.ANDROID);
+        deviceDTO.setOsName(OSName.ANDROID);
         deviceDTO.setDisplaySize(deviceInfo.getDisplaySize());
         deviceDTO.setDisplayMetrics(deviceInfo.getDisplaymetrics());
         deviceDTO.setSimState(deviceInfo.getSimState());
@@ -74,24 +74,22 @@ public class RequestRegistrationEntry extends AsyncTask<RegistrationEntryRequest
 
         SecuredWebServices webServices = new SecuredWebServices(context, Constants.CONNECTION_TYPE);
         try {
-
-            ResponseMessage<RegistrationEntryResponse> registrationEntryResponseMessage = webServices.registrationEntry(params[0]);
-
-            if (registrationEntryResponseMessage == null){
-                byte[] ipAddress = new byte[]{8, 8, 8, 8};
-                InetAddress inetAddress = InetAddress.getByAddress(ipAddress);
-                if (inetAddress.getHostName() != null){
-                    networkConnectivity = true;
-                }
-            }
-
-            return registrationEntryResponseMessage;
+            registrationEntryResponseMessage = webServices.registrationEntry(params[0]);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (EncryptionException e) {
             e.printStackTrace();
         }
-        return null;
+
+        if (registrationEntryResponseMessage == null){
+            try {
+                internetConnectionStatus = isConnected();
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return registrationEntryResponseMessage;
     }
 
 
@@ -102,4 +100,8 @@ public class RequestRegistrationEntry extends AsyncTask<RegistrationEntryRequest
         listener.onTaskComplete(registrationEntryResponseMessage);
     }
 
+    public InternetConnectionStatus isConnected() throws UnknownHostException {
+        InternetConnectivity internetConnectivity = new InternetConnectivity();
+        return internetConnectivity.getStatus();
+    }
 }

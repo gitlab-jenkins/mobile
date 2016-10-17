@@ -245,7 +245,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
                     s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "TerminalId";
-                    s2sMapEntry.Value = pspInfoDTO.getTerminalID();
+                    s2sMapEntry.Value = pspInfoDTO.getTerminalId();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
@@ -255,7 +255,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
                     s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "SenderTerminalId";
-                    s2sMapEntry.Value = pspInfoDTO.getTerminalID();
+                    s2sMapEntry.Value = pspInfoDTO.getTerminalId();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();

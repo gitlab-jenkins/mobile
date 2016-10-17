@@ -51,6 +51,7 @@ import xyz.homapay.hampay.mobile.android.util.CardNumberValidator;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.NationalCodeVerification;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
+import xyz.homapay.hampay.mobile.android.util.net.InternetConnectionStatus;
 
 public class ProfileEntryActivity extends AppCompatActivity implements PermissionDeviceDialog.PermissionDeviceDialogListener {
 
@@ -480,7 +481,7 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                 }
             }else {
 
-                if (!requestRegistrationEntry.getNetworkConnectivity()){
+                if (requestRegistrationEntry.internetConnectionStatus == InternetConnectionStatus.DISCONNECT){
                     requestRegistrationEntry = new RequestRegistrationEntry(activity, new RequestRegistrationEntryTaskCompleteListener());
                     new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest,
                             Constants.LOCAL_ERROR_CODE,
