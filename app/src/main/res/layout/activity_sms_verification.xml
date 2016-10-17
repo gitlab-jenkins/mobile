@@ -186,6 +186,61 @@
                     </RelativeLayout>
 
 
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/entry_field_bg"
+                        android:layout_marginTop="6dp">
+
+                        <RelativeLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_alignParentRight="true">
+
+                            <ImageView
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:src="@drawable/edit_cell_num"
+                                android:padding="12dp" />
+
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent"
+                                android:background="@color/app_origin"
+                                android:layout_marginTop="4dp"
+                                android:layout_marginBottom="4dp"/>
+
+                        </RelativeLayout>
+
+
+                        <xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText
+                            android:id="@+id/cellNumberValue"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:background="@android:color/transparent"
+                            android:layout_marginLeft="24dp"
+                            android:layout_marginRight="52dp"
+                            android:textSize="15dp"
+                            android:inputType="number"
+                            android:hint="@string/mobile_no_entry"
+                            android:maxLength="9"
+                            android:textColor="@color/start_page_text"
+                            android:gravity="center_vertical"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="8dp" />
+
+                        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                            geekui:customTypeface="fonts/vazir_regular.ttf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/start_page_text"
+                            android:textSize="15dp"
+                            android:text="@string/iran_prefix_cell_number"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="8dp"/>
+
+                    </RelativeLayout>
+
                     <LinearLayout
                         android:id="@+id/progress_layout"
                         android:layout_width="match_parent"
@@ -243,7 +298,7 @@
                         android:background="@drawable/registration_button_style"
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="8dp"
-                        android:visibility="visible"/>
+                        android:visibility="gone"/>
 
                 </LinearLayout>
 

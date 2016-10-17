@@ -11,7 +11,7 @@ public class Constants {
 //    public static String SERVER = "mobile.hampay.homapay.com";//LIVE Server
     public static String URL_PREFIX = "/hampay";
     public static String HTTP_SERVER_IP = "http://" + SERVER + ":90" + URL_PREFIX;//England Server
-    public static String IPG_URL = "https://" + SERVER + URL_PREFIX;//England Server
+    public static String IPG_URL = "http://" + SERVER + ":9091" + URL_PREFIX;//England Server
     public static String BANK_GATEWAY_URL = "https://sep.shaparak.ir/PgMobileAddData";
     public static ConnectionType CONNECTION_TYPE = ConnectionType.HTTPS;
     public static String HTTPS_SERVER_IP = "https://" + SERVER + URL_PREFIX;//England Server
