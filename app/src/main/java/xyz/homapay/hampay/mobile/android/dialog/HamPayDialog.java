@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.content.IntentCompat;
 import android.text.Spannable;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -96,6 +98,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestUserTransaction;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.EmailTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
+import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.EmailVerification;
@@ -526,6 +529,13 @@ public class HamPayDialog {
         public void onTaskComplete(ResponseMessage<LogoutResponse> logoutResponseResponseMessage)
         {
             if (logoutResponseResponseMessage != null) {
+                FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(activity);
+                AppEvent appEvent = AppEvent.LOGOUT;
+                Bundle bundle = new Bundle();
+                bundle.putInt(FirebaseAnalytics.Param.ITEM_ID, appEvent.ordinal());
+                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, appEvent.name());
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, AppEvent.class.getSimpleName());
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                 editor.remove(Constants.LOGIN_TOKEN_ID);
                 editor.commit();
             }

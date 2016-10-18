@@ -1,27 +1,25 @@
 package xyz.homapay.hampay.mobile.android.activity;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-
-import xyz.homapay.hampay.mobile.android.R;
-import xyz.homapay.hampay.mobile.android.adapter.WelcomeAdapter;
-import xyz.homapay.hampay.mobile.android.util.PreferencesManager;
-
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
-import android.support.v4.view.PagerAdapter;
+import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.firebase.analytics.FirebaseAnalytics;
+
+import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.adapter.WelcomeAdapter;
+import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
+import xyz.homapay.hampay.mobile.android.util.PreferencesManager;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -38,12 +36,21 @@ public class WelcomeActivity extends AppCompatActivity {
     };
     private Button btnSkip, btnNext;
     private PreferencesManager preferencesManager;
+    private FirebaseAnalytics firebaseAnalytics;
+    private Bundle bundle = new Bundle();
+    private AppEvent appEvent = AppEvent.LAUNCH;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Checking for first time launch - before calling setContentView()
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        bundle.putInt(FirebaseAnalytics.Param.ITEM_ID, appEvent.ordinal());
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, appEvent.name());
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, AppEvent.class.getSimpleName());
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
         preferencesManager = new PreferencesManager(this);
         if (preferencesManager.isRegistered()){
             launchLoginScreen();

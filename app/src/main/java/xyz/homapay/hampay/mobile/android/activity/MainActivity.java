@@ -27,6 +27,7 @@ import android.widget.RelativeLayout;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.IOException;
 import java.util.List;
@@ -52,6 +53,7 @@ import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.dialog.ImageProfile.ActionImage;
 import xyz.homapay.hampay.mobile.android.dialog.ImageProfile.EditImageDialog;
+import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
 import xyz.homapay.hampay.mobile.android.fragment.AboutFragment;
 import xyz.homapay.hampay.mobile.android.fragment.AccountDetailFragment;
 import xyz.homapay.hampay.mobile.android.fragment.FragmentDrawer;
@@ -96,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private int pendingPaymentCount = 0;
     private boolean showCreateInvoice = true;
     private Activity activity;
-    private Bundle bundle;
+    private Bundle bundle = new Bundle();
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
     private boolean hasNotification = false;
@@ -108,6 +110,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private ImageManager imageManager;
     private ImageView user_manual;
     private String fragmentTitle = "";
+    private FirebaseAnalytics firebaseAnalytics;
+    private AppEvent appEvent = AppEvent.LOGIN;
 
     public void userManual(View view){
         Intent intent = new Intent();
@@ -166,6 +170,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         context = this;
 
         imageManager = new ImageManager(activity, 200000, false);
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        bundle.putInt(FirebaseAnalytics.Param.ITEM_ID, appEvent.ordinal());
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, appEvent.name());
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, AppEvent.class.getSimpleName());
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
         bundle = getIntent().getExtras();
 

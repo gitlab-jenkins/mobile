@@ -12,10 +12,12 @@ import android.text.style.ForegroundColorSpan;
 import android.view.View;
 
 import com.google.android.gms.analytics.Tracker;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PreferencesManager;
@@ -33,6 +35,9 @@ public class CompleteRegistrationActivity extends AppCompatActivity {
     FacedTextView congrats_text;
 
     private PreferencesManager preferencesManager;
+    private FirebaseAnalytics firebaseAnalytics;
+    private Bundle bundle = new Bundle();
+    private AppEvent appEvent = AppEvent.REGISTER;
 
     public void userManual(View view){
         Intent intent = new Intent();
@@ -71,6 +76,12 @@ public class CompleteRegistrationActivity extends AppCompatActivity {
         editor.putBoolean(Constants.NOTIFICATION_STATUS, true);
         editor.putString(Constants.REGISTERED_ACTIVITY_DATA, "");
         editor.commit();
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        bundle.putInt(FirebaseAnalytics.Param.ITEM_ID, appEvent.ordinal());
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, appEvent.name());
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, AppEvent.class.getSimpleName());
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
 
         congrats_text = (FacedTextView)findViewById(R.id.congrats_text);

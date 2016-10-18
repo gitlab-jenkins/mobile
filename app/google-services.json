@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "591585743411",
+    "firebase_url": "https://hampay-mobile.firebaseio.com",
+    "project_id": "hampay-mobile",
+    "storage_bucket": "hampay-mobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:591585743411:android:3c33e5b9a3f8afeb",
+        "android_client_info": {
+          "package_name": "xyz.homapay.hampay.mobile.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "591585743411-heo8d6jl7ibi6ci7b9jpiqsc6t2s4c2j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlKVbjHMa1UpXM48bQc5x66XtrraaAa-I"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
