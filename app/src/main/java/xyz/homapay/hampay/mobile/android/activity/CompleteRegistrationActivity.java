@@ -18,6 +18,7 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.PreferencesManager;
 
 public class CompleteRegistrationActivity extends AppCompatActivity {
 
@@ -31,6 +32,7 @@ public class CompleteRegistrationActivity extends AppCompatActivity {
 
     FacedTextView congrats_text;
 
+    private PreferencesManager preferencesManager;
 
     public void userManual(View view){
         Intent intent = new Intent();
@@ -63,8 +65,9 @@ public class CompleteRegistrationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_complete_registration);
+        preferencesManager = new PreferencesManager(this);
+        preferencesManager.setRegistered(true);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-        editor.putBoolean(Constants.REGISTERED_USER, true);
         editor.putBoolean(Constants.NOTIFICATION_STATUS, true);
         editor.putString(Constants.REGISTERED_ACTIVITY_DATA, "");
         editor.commit();

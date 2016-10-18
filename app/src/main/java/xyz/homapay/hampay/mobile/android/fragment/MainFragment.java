@@ -148,8 +148,8 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         hampay_image_3 = (ImageView)rootView.findViewById(R.id.hampay_image_3);
         hampay_image_4 = (ImageView)rootView.findViewById(R.id.hampay_image_4);
         user_last_login = (FacedTextView)rootView.findViewById(R.id.user_last_login);
-        jalaliConvert = new JalaliConvert(userProfileDTO.getLastLoginDate());
         if (userProfileDTO.getLastLoginDate() != null) {
+            jalaliConvert = new JalaliConvert(userProfileDTO.getLastLoginDate());
             user_last_login.setText(getString(R.string.last_login) + " "
                     + persianEnglishDigit.E2P(jalaliConvert.homeDate() + " " + getString(R.string.time) + " " + jalaliConvert.getTimeDay()));
         }else {

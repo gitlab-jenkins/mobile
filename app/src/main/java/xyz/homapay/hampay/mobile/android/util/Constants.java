@@ -20,6 +20,7 @@ public class Constants {
     public static final String HTTP_OPENAM_LOGIN_URL = "http://" + SERVER + URL_PREFIX + "/auth";
     public static final String HTTP_OPENAM_LOGOUT_URL = "http://" + SERVER + URL_PREFIX + "/unauth";
     public static final String PSP_SOAP_SERVICE_URL = SERVER;
+    public static final String IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch";
     public static final String PROJECT_NUMBER = "936219454834";
     public static final String GA_PROPERTY_ID = "UA-67427017-1";
     public static final String REQUEST_VERSION = "2.0";

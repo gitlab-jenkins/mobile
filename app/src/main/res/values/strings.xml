@@ -636,4 +636,11 @@
     <string name="permission_deny">عدم تایید دسترسی</string>
     <string name="permission_exit">خروج</string>
 
+
+
+    <!--Slider string-->
+    <string name="title_activity_welcome">Home Screen</string>
+    <string name="next_slide">بعدی</string>
+    <string name="skip_slide">رد کردن</string>
+
 </resources>

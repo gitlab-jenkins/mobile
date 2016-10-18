@@ -52,4 +52,18 @@
     <color name="modal_text">#686a6b</color>
     <color name="sms_digit">@android:color/black</color>
     <color name="shaparak_notice">#459210</color>
+
+    <!--Slider colors-->
+
+    <array name="array_dot_active">
+        <item>@color/app_origin</item>
+    </array>
+
+    <array name="array_dot_inactive">
+        <item>#6D09BB</item>
+    </array>
+
+
+
+
 </resources>
