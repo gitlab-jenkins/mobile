@@ -75,8 +75,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
     HamPayDialog hamPayDialog;
 
-    Tracker hamPayGaTracker;
-
     FacedTextView business_name;
     ImageView business_image;
 
@@ -189,9 +187,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         }catch (Exception ex){
             Log.e("Error", ex.getStackTrace().toString());
         }
-
-        hamPayGaTracker = ((HamPayApplication) getApplication())
-                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -435,21 +430,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 returnIntent.putExtra(Constants.ACTIVITY_RESULT, resultStatus.ordinal());
                 setResult(Activity.RESULT_OK, returnIntent);
 
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Pending Payment Request")
-                        .setAction("Payment")
-                        .setLabel("Success")
-                        .build());
-
             } else {
-
                 new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Pending Payment Request")
-                        .setAction("Payment")
-                        .setLabel("Fail(Server)")
-                        .build());
             }
             pay_to_business_button.setEnabled(true);
         }
@@ -474,33 +456,14 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
             hamPayDialog.dismisWaitingDialog();
 
-            if (pspResultResponseMessage != null){
-                if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
+            if (pspResultResponseMessage != null) {
+                if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     if (SWTrace != null) {
                         dbHelper.syncPspResult(SWTrace);
                     }
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Pending Payment Request")
-                            .setAction("Payment")
-                            .setLabel("Success")
-                            .build());
-
-                }else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                } else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();
                 }
-                else {
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Pending Payment Request")
-                            .setAction("Payment")
-                            .setLabel("Fail(Server)")
-                            .build());
-                }
-            }else {
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Pending Payment Request")
-                        .setAction("Payment")
-                        .setLabel("Fail(Mobile)")
-                        .build());
             }
 
             pay_to_business_button.setEnabled(true);
@@ -546,12 +509,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                         finish();
                     }
 
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Latest Pending Payment")
-                            .setAction("Fetch")
-                            .setLabel("Success")
-                            .build());
-
                 } else if (latestPurchaseResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();
                 }
@@ -559,14 +516,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                     requestLatestPurchase = new RequestLatestPurchase(context, new RequestLatestPurchaseTaskCompleteListener());
 
                     new HamPayDialog(activity).showFailPendingPurchaseDialog(requestLatestPurchase, latestPurchaseRequest,
-                            latestPurchaseResponseMessage.getService().getResultStatus().getCode(),
-                            /*latestPurchaseResponseMessage.getService().getMessage()*/"");
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Latest Pending Payment")
-                            .setAction("Fetch")
-                            .setLabel("Fail(Server)")
-                            .build());
+                            latestPurchaseResponseMessage.getService().getResultStatus().getCode(), "");
                 }
             }else {
 
@@ -575,12 +525,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 new HamPayDialog(activity).showFailPendingPurchaseDialog(requestLatestPurchase, latestPurchaseRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_fetch_latest_payment));
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Latest Pending Payment")
-                        .setAction("Fetch")
-                        .setLabel("Fail(Mobile)")
-                        .build());
             }
 
             pay_to_business_button.setEnabled(true);
@@ -633,12 +577,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                         finish();
                     }
 
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Latest Pending Payment")
-                            .setAction("Fetch")
-                            .setLabel("Success")
-                            .build());
-
                 }else if (purchaseInfoResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();
                 }
@@ -647,24 +585,12 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                     new HamPayDialog(activity).showFailPurchaseInfoDialog(
                             purchaseInfoResponseMessage.getService().getResultStatus().getCode(),
                             purchaseInfoResponseMessage.getService().getResultStatus().getDescription());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Latest Pending Payment")
-                            .setAction("Fetch")
-                            .setLabel("Fail(Server)")
-                            .build());
                 }
             }else {
                 requestPurchaseInfo = new RequestPurchaseInfo(context, new RequestPurchaseInfoTaskCompleteListener());
                 new HamPayDialog(activity).showFailPurchaseInfoDialog(
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_fetch_latest_payment));
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Latest Pending Payment")
-                        .setAction("Fetch")
-                        .setLabel("Fail(Mobile)")
-                        .build());
             }
 
             pay_to_business_button.setEnabled(true);

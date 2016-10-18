@@ -159,7 +159,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     FacedTextView hampay_user;
     TACRequest tacRequest;
     RequestTAC requestTAC;
-    Tracker hamPayGaTracker;
 
     String password = "";
     private LinearLayout pendingFundLayout;
@@ -287,9 +286,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
         bundle = getIntent().getExtras();
 
-        hamPayGaTracker = ((HamPayApplication) getApplication())
-                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
-
         keyboard = (LinearLayout)findViewById(R.id.keyboard);
         password_holder = (LinearLayout)findViewById(R.id.password_holder);
         password_holder.setOnClickListener(this);
@@ -383,23 +379,12 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                         startActivity(intent);
                     }
 
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Request TAC")
-                            .setAction("Request")
-                            .setLabel("Success")
-                            .build());
 
                 }else {
                     requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
                     new HamPayDialog(activity).showFailTCRequestDialog(requestTAC, tacRequest,
                             tacResponseMessage.getService().getResultStatus().getCode(),
                             tacResponseMessage.getService().getResultStatus().getDescription());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Request TAC")
-                            .setAction("Request")
-                            .setLabel("Fail(Server)")
-                            .build());
                 }
             }
             else {
@@ -407,12 +392,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                 new HamPayDialog(activity).showFailTCRequestDialog(requestTAC, tacRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_tac_request));
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Request TAC")
-                        .setAction("Request")
-                        .setLabel("Fail(Mobile)")
-                        .build());
             }
 
         }
@@ -450,11 +429,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                         if (keyboard.getVisibility() == View.GONE)
                             new Expand(keyboard).animate();
                     }
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Request TAC")
-                            .setAction("Request")
-                            .setLabel("Success")
-                            .build());
 
                 }else {
                     if (keyboard.getVisibility() == View.GONE)

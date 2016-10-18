@@ -67,8 +67,6 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
-    Tracker hamPayGaTracker;
-
     private Context context;
     private Activity activity;
 
@@ -148,9 +146,6 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
 
         transactionDTOs = new ArrayList<>();
         userTransactionAdapter = new UserTransactionAdapter(activity);
-
-        hamPayGaTracker = ((HamPayApplication) getApplication())
-                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
         no_transaction = (FacedTextView)findViewById(R.id.no_transaction);
 
@@ -351,12 +346,6 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
 
                     }
 
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Transaction List")
-                            .setAction("Fetch")
-                            .setLabel("Success")
-                            .build());
-
                 } else if (transactionListResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();
                 }
@@ -366,12 +355,6 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                     new HamPayDialog(activity).showFailUserTransactionDialog(requestUserTransaction, transactionListRequest,
                             transactionListResponseMessage.getService().getResultStatus().getCode(),
                             transactionListResponseMessage.getService().getResultStatus().getDescription());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Transaction List")
-                            .setAction("Fetch")
-                            .setLabel("Fail(Server)")
-                            .build());
                 }
             } else {
                 transactionListRequest.setPageNumber(requestPageNumber);
@@ -379,12 +362,6 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 new HamPayDialog(activity).showFailUserTransactionDialog(requestUserTransaction, transactionListRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_user_transation));
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Transaction List")
-                        .setAction("Fetch")
-                        .setLabel("Fail(Mobile)")
-                        .build());
             }
         }
 

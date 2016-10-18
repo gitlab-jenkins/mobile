@@ -73,8 +73,6 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
 
-    Tracker hamPayGaTracker;
-
     DatabaseHelper databaseHelper;
 
     public void backActionBar(View view){
@@ -137,9 +135,6 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
 
         context = this;
         activity = UnlinkPassActivity.this;
-
-        hamPayGaTracker = ((HamPayApplication) getApplication())
-                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -337,12 +332,6 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
                     intent.setClass(getApplicationContext(), WelcomeActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Unlink User")
-                            .setAction("Unlink")
-                            .setLabel("Success")
-                            .build());
                 }else if (unlinkUserResponseResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();
                 }
@@ -351,24 +340,12 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
                     new HamPayDialog(activity).showFailUnlinkDialog(requestUnlinkUser, unlinkUserRequest,
                             unlinkUserResponseResponseMessage.getService().getResultStatus().getCode(),
                             unlinkUserResponseResponseMessage.getService().getResultStatus().getDescription());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Unlink User")
-                            .setAction("Unlink")
-                            .setLabel("Fail(Server)")
-                            .build());
                 }
             }else {
                 requestUnlinkUser = new RequestUnlinkUser(context, new RequestUnlinkUserTaskCompleteListener());
                 new HamPayDialog(activity).showFailUnlinkDialog(requestUnlinkUser, unlinkUserRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_unlink_user));
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Unlink User")
-                        .setAction("Unlink")
-                        .setLabel("Fail(Mobile)")
-                        .build());
             }
         }
 

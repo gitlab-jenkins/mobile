@@ -64,8 +64,6 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
 
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
-
-    Tracker hamPayGaTracker;
     private String userEmail = "";
 
     public void backActionBar(View view){
@@ -115,9 +113,6 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
 
         context = this;
         activity = ChangeEmailPassActivity.this;
-
-        hamPayGaTracker = ((HamPayApplication) getApplication())
-                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -344,11 +339,6 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
                     editor.putString(Constants.REGISTERED_USER_EMAIL, userEmail);
                     editor.commit();
                     new HamPayDialog(activity).showSuccessChangeSettingDialog(changeEmailResponseResponseMessage.getService().getResultStatus().getDescription());
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Change Email User")
-                            .setAction("Change")
-                            .setLabel("Success")
-                            .build());
                 }else if (changeEmailResponseResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();
                 }
@@ -357,24 +347,12 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
                     new HamPayDialog(activity).showFailChnageEmail(requestChangeEmail, changeEmailRequest,
                             changeEmailResponseResponseMessage.getService().getResultStatus().getCode(),
                             changeEmailResponseResponseMessage.getService().getResultStatus().getDescription());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Change Email User")
-                            .setAction("Change")
-                            .setLabel("Fail(Server)")
-                            .build());
                 }
             }else {
                 RequestChangeEmail requestChangeEmail = new RequestChangeEmail(activity, new RequestChangeEmailTaskCompleteListener(changeEmailRequest));
                 new HamPayDialog(activity).showFailChnageEmail(requestChangeEmail, changeEmailRequest,
                         Constants.LOCAL_ERROR_CODE,
                         activity.getString(R.string.msg_gail_change_email));
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Change Email User")
-                        .setAction("Change")
-                        .setLabel("Fail(Mobile)")
-                        .build());
             }
         }
 

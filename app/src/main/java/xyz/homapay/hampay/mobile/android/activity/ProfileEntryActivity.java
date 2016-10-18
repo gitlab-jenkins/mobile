@@ -90,7 +90,6 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
     private RequestRegistrationEntry requestRegistrationEntry;
     private RequestCardProfile requestCardProfile;
     private HamPayDialog hamPayDialog;
-    private Tracker hamPayGaTracker;
     private CardNumberValidator cardNumberValidator;
     private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
     private final Handler handler = new Handler();
@@ -174,8 +173,6 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
 
         persianEnglishDigit = new PersianEnglishDigit();
         cardNumberValidator = new CardNumberValidator();
-        hamPayGaTracker = ((HamPayApplication) getApplication())
-                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ProfileEntryActivity.class.getName());
         editor.commit();
@@ -455,17 +452,8 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                     editor.putString(Constants.REGISTERED_USER_ID_TOKEN, registrationEntryResponse.getService().getUserIdToken());
                     editor.putString(Constants.REGISTERED_USER_EMAIL, emailValue.getText().toString().trim());
                     editor.commit();
-
-
                     hamPayDialog.smsConfirmDialog(getString(R.string.iran_prefix_cell_number) + cellNumberValue.getText().toString(),
                             cardNumberValue.getText().toString());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Registration Entry")
-                            .setAction("Entry")
-                            .setLabel("Success")
-                            .build());
-
                 }
                 else {
                     requestRegistrationEntry = new RequestRegistrationEntry(activity,
@@ -473,11 +461,6 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                     new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest,
                             registrationEntryResponse.getService().getResultStatus().getCode(),
                             registrationEntryResponse.getService().getResultStatus().getDescription());
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Registration Entry")
-                            .setAction("Entry")
-                            .setLabel("Fail(Server)")
-                            .build());
                 }
             }else {
 
@@ -492,12 +475,6 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                             Constants.LOCAL_ERROR_CODE,
                             getString(R.string.msg_fail_registration_entry));
                 }
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Registration Entry")
-                        .setAction("Entry")
-                        .setLabel("Fail(Mobile)")
-                        .build());
             }
         }
 

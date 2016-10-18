@@ -104,7 +104,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
     private FacedTextView remain_timer;
     private boolean sendSmsPermission = false;
     private int sendSmsCounter = 0;
-    private Tracker hamPayGaTracker;
     private FacedEditText cellNumberValue;
     private String cellNumber;
 
@@ -199,12 +198,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sms_verification);
-
         context = this;
-
-        hamPayGaTracker = ((HamPayApplication) getApplication())
-                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
-
         persianEnglishDigit = new PersianEnglishDigit();
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
@@ -384,35 +378,17 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
 
                     } else {
                         new HamPayDialog(activity).showIncorrectSMSVerification();
-
-                        hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                                .setCategory("Verify Mobile")
-                                .setAction("Verify")
-                                .setLabel("Success(Is Not Verified)")
-                                .build());
                     }
                 }else {
                     requestVerifyMobile = new RequestVerifyMobile(context, new RequestRegistrationVerifyMobileTaskCompleteListener());
                     new HamPayDialog(activity).showFailRegistrationVerifyMobileDialog(registrationVerifyMobileResponseMessage.getService().getResultStatus().getCode(),
                             registrationVerifyMobileResponseMessage.getService().getResultStatus().getDescription());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Verify Mobile")
-                            .setAction("Verify")
-                            .setLabel("Fail(Server)")
-                            .build());
                 }
 
             }else {
                 requestVerifyMobile = new RequestVerifyMobile(context, new RequestRegistrationVerifyMobileTaskCompleteListener());
                 new HamPayDialog(activity).showFailRegistrationVerifyMobileDialog(Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_send_sms));
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Verify Mobile")
-                        .setAction("Verify")
-                        .setLabel("Fail(Mobile)")
-                        .build());
             }
         }
 
@@ -610,25 +586,12 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                     cellNumberValue.setInputType(InputType.TYPE_NULL);
                     progress_layout.setVisibility(View.VISIBLE);
                     startTimer();
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Send Sms Token")
-                            .setAction("Send")
-                            .setLabel("Success")
-                            .build());
-
                 }
                 else {
                     requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
                     new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
                             registrationSendSmsTokenResponse.getService().getResultStatus().getCode(),
                             registrationSendSmsTokenResponse.getService().getResultStatus().getDescription());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Send Sms Token")
-                            .setAction("Send")
-                            .setLabel("Fail(Server)")
-                            .build());
                 }
 
             }else {
@@ -636,12 +599,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                 new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.mgs_fail_registration_send_sms_token));
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Send Sms Token")
-                        .setAction("Send")
-                        .setLabel("Fail(Mobile)")
-                        .build());
             }
         }
 

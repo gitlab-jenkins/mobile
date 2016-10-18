@@ -70,9 +70,6 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
     Long MinXferAmount = 0L;
 
     HamPayDialog hamPayDialog;
-
-    Tracker hamPayGaTracker;
-
     private BusinessDTO businessDTO;
 
     private LinearLayout add_vat;
@@ -136,9 +133,6 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
         formatter = new CurrencyFormatter();
         context = this;
         activity = BusinessPaymentInfoActivity.this;
-
-        hamPayGaTracker = ((HamPayApplication) getApplication())
-                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -303,36 +297,17 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
                     intent.putExtra(Constants.PSP_INFO, pspInfo);
                     intent.setClass(activity, BusinessPaymentConfirmActivity.class);
                     startActivity(intent);
-
                     finish();
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Business Payment Confirm")
-                            .setAction("Payment Confirm")
-                            .setLabel("Success")
-                            .build());
                 }else if (businessPaymentConfirmResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();
                 }
                 else {
                     new HamPayDialog(activity).showFailPaymentDialog(businessPaymentConfirmResponseMessage.getService().getResultStatus().getCode(),
                             businessPaymentConfirmResponseMessage.getService().getResultStatus().getDescription());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Business Payment Confirm")
-                            .setAction("Payment Confirm")
-                            .setLabel("Fail(Server)")
-                            .build());
                 }
             }else {
                 new HamPayDialog(activity).showFailPaymentDialog(Constants.LOCAL_ERROR_CODE,
                         activity.getString(R.string.msg_fail_payment));
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Business Payment Confirm")
-                        .setAction("Payment Confirm")
-                        .setLabel("Fail(Mobile)")
-                        .build());
             }
 
         }

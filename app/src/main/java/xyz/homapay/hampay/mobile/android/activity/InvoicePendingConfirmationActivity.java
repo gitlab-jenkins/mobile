@@ -81,9 +81,6 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
     }
 
     HamPayDialog hamPayDialog;
-
-    Tracker hamPayGaTracker;
-
     PaymentInfoDTO paymentInfoDTO = null;
     PspInfoDTO pspInfoDTO = null;
     String providerId = null;
@@ -168,9 +165,6 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
         imageManager = new ImageManager(activity, 200000, false);
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
-
-        hamPayGaTracker = ((HamPayApplication) getApplication())
-                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -384,23 +378,8 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra(Constants.ACTIVITY_RESULT, resultStatus.ordinal());
                 setResult(Activity.RESULT_OK, returnIntent);
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Pending Payment Request")
-                        .setAction("Payment")
-                        .setLabel("Success")
-                        .build());
-
             } else {
-
                 new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
-
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Pending Payment Request")
-                        .setAction("Payment")
-                        .setLabel("Fail(Server)")
-                        .build());
             }
 
         }
@@ -429,30 +408,10 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                     if (SWTrace != null) {
                         dbHelper.syncPspResult(SWTrace);
                     }
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Pending Payment Request")
-                            .setAction("Payment")
-                            .setLabel("Success")
-                            .build());
-
                 } else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();
                 }
-                else {
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Pending Payment Request")
-                            .setAction("Payment")
-                            .setLabel("Fail(Server)")
-                            .build());
-                }
-            } else {
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Pending Payment Request")
-                        .setAction("Payment")
-                        .setLabel("Fail(Mobile)")
-                        .build());
             }
-
         }
 
         @Override
@@ -482,11 +441,6 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                     fillPayment(paymentInfoDTO, pspInfoDTO);
 
                     dbHelper.createViewedPaymentRequest(paymentInfoDTO.getProductCode());
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Latest Pending Payment")
-                            .setAction("Fetch")
-                            .setLabel("Success")
-                            .build());
 
                 }else if (latestPaymentResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();
@@ -497,12 +451,6 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                     new HamPayDialog(activity).showFailPendingPaymentDialog(requestLatestPayment, latestPaymentRequest,
                             latestPaymentResponseMessage.getService().getResultStatus().getCode(),
                             latestPaymentResponseMessage.getService().getResultStatus().getDescription());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Latest Pending Payment")
-                            .setAction("Fetch")
-                            .setLabel("Fail(Server)")
-                            .build());
                 }
             }
             else
@@ -512,12 +460,6 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                 new HamPayDialog(activity).showFailPendingPaymentDialog(requestLatestPayment, latestPaymentRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_fetch_latest_payment));
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Latest Pending Payment")
-                        .setAction("Fetch")
-                        .setLabel("Fail(Mobile)")
-                        .build());
             }
         }
         @Override

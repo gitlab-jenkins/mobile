@@ -29,9 +29,6 @@ public class CompleteRegistrationActivity extends AppCompatActivity {
     Activity activity;
 
     SharedPreferences.Editor editor;
-
-    Tracker hamPayGaTracker;
-
     FacedTextView congrats_text;
 
     private PreferencesManager preferencesManager;
@@ -91,9 +88,6 @@ public class CompleteRegistrationActivity extends AppCompatActivity {
         congrats_text.setText(spannableStringBuilder);
 
         activity = CompleteRegistrationActivity.this;
-
-        hamPayGaTracker = ((HamPayApplication) getApplication())
-                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
         hampay_login_button = (FacedTextView) findViewById(R.id.hampay_login_button);
         hampay_login_button.setOnClickListener(new View.OnClickListener() {

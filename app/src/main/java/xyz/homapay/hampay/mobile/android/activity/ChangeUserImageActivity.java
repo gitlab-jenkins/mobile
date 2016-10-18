@@ -62,7 +62,6 @@ public class ChangeUserImageActivity extends AppCompatActivity {
     HamPayDialog hamPayDialog;
     Context context;
     Activity activity;
-    Tracker hamPayGaTracker;
     SharedPreferences.Editor editor;
     SharedPreferences prefs;
 
@@ -133,8 +132,6 @@ public class ChangeUserImageActivity extends AppCompatActivity {
         context = this;
         activity = ChangeUserImageActivity.this;
         hamPayDialog = new HamPayDialog(activity);
-        hamPayGaTracker = ((HamPayApplication) getApplication())
-                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
@@ -383,14 +380,7 @@ public class ChangeUserImageActivity extends AppCompatActivity {
 
                 if (uploadImageResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     croppedImage.recycle();
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Request Upload Image")
-                            .setAction("Request")
-                            .setLabel("Success")
-                            .build());
-
                     cropImageView.setImageBitmap(null);
-
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra("result", 5000);
                     setResult(5000);
@@ -405,13 +395,6 @@ public class ChangeUserImageActivity extends AppCompatActivity {
                     new HamPayDialog(activity).showFailUploadImage(requestUploadImage, uploadImageRequest,
                             uploadImageResponseMessage.getService().getResultStatus().getCode(),
                             uploadImageResponseMessage.getService().getResultStatus().getDescription());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Request Upload Image")
-                            .setAction("Request")
-                            .setLabel("Fail(Server)")
-                            .build());
-
                     croppedImage.recycle();
                     finish();
                 }
@@ -422,12 +405,6 @@ public class ChangeUserImageActivity extends AppCompatActivity {
                 new HamPayDialog(activity).showFailUploadImage(requestUploadImage, uploadImageRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_upload_image));
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Request Upload Image")
-                        .setAction("Request")
-                        .setLabel("Fail(Mobile)")
-                        .build());
                 croppedImage.recycle();
 
                 finish();

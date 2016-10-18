@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v4.content.IntentCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -58,7 +57,6 @@ import xyz.homapay.hampay.common.core.model.response.IBANConfirmationResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
 import xyz.homapay.hampay.common.core.model.response.TACAcceptResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
-import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.AppSliderActivity;
 import xyz.homapay.hampay.mobile.android.activity.ChangeEmailPassActivity;
@@ -67,11 +65,9 @@ import xyz.homapay.hampay.mobile.android.activity.ChangeMemorableActivity;
 import xyz.homapay.hampay.mobile.android.activity.GuideDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.activity.MainActivity;
-import xyz.homapay.hampay.mobile.android.activity.PasswordEntryActivity;
 import xyz.homapay.hampay.mobile.android.activity.ProfileEntryActivity;
 import xyz.homapay.hampay.mobile.android.activity.SMSVerificationActivity;
 import xyz.homapay.hampay.mobile.android.activity.UnlinkPassActivity;
-import xyz.homapay.hampay.mobile.android.analytics.GaAnalyticsEvent;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestCardProfile;
 import xyz.homapay.hampay.mobile.android.async.RequestChangeEmail;
@@ -114,8 +110,6 @@ public class HamPayDialog {
     SharedPreferences.Editor editor;
     Activity activity;
     HamPayCustomDialog dialog;
-    Tracker hamPayGaTracker;
-    GaAnalyticsEvent gaAnalyticsEvent;
     String serverKey = "";
     Rect rect = new Rect();
     private CurrencyFormatter currencyFormatter;
@@ -126,9 +120,6 @@ public class HamPayDialog {
         this.windowDisplayFrame();
         prefs = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE);
         editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE).edit();
-        gaAnalyticsEvent = new GaAnalyticsEvent(activity);
-        hamPayGaTracker = ((HamPayApplication) this.activity.getApplicationContext())
-                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
         currencyFormatter = new CurrencyFormatter();
     }
 
@@ -143,14 +134,8 @@ public class HamPayDialog {
 
         this.activity = activity;
         this.serverKey = serverKey;
-
         prefs = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE);
         editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE).edit();
-
-        gaAnalyticsEvent = new GaAnalyticsEvent(activity);
-        hamPayGaTracker = ((HamPayApplication) this.activity.getApplicationContext())
-                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
-
     }
 
     public void exitRegistrationDialog(){
@@ -448,12 +433,6 @@ public class HamPayDialog {
                         dialog.dismiss();
                     }
 
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("TAC Accept")
-                            .setAction("Accept")
-                            .setLabel("Success")
-                            .build());
-
                 }else if (tacAcceptResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();
                 }
@@ -462,24 +441,12 @@ public class HamPayDialog {
                     showFailTACAcceeptRequestDialog(requestTACAccept, tacAcceptRequest,
                             tacAcceptResponseMessage.getService().getResultStatus().getCode(),
                             tacAcceptResponseMessage.getService().getResultStatus().getDescription());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("TAC Accept")
-                            .setAction("Accept")
-                            .setLabel("Fail(Server)")
-                            .build());
                 }
             }
             else {
                 showFailTACAcceeptRequestDialog(requestTACAccept, tacAcceptRequest,
                         Constants.LOCAL_ERROR_CODE,
                         activity.getString(R.string.msg_fail_tac_accept_request));
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("TAC Accept")
-                        .setAction("Accept")
-                        .setLabel("Fail(Mobile)")
-                        .build());
             }
 
         }
@@ -1513,25 +1480,12 @@ public class HamPayDialog {
                     intent.setClass(activity, SMSVerificationActivity.class);
                     intent.putExtra(Constants.REGISTERED_CELL_NUMBER, cellNumber);
                     activity.startActivity(intent);
-
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Send Sms Token")
-                            .setAction("Send")
-                            .setLabel("Success")
-                            .build());
                 }
                 else {
                     requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(activity, new RequestRegistrationSendSmsTokenTaskCompleteListener(cellNumber, cardNumber));
                     new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
                             registrationSendSmsTokenResponse.getService().getResultStatus().getCode(),
                             registrationSendSmsTokenResponse.getService().getResultStatus().getDescription());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Send Sms Token")
-                            .setAction("Send")
-                            .setLabel("Fail(Server)")
-                            .build());
                 }
 
             }else {
@@ -1539,12 +1493,6 @@ public class HamPayDialog {
                 new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
                         Constants.LOCAL_ERROR_CODE,
                         activity.getString(R.string.mgs_fail_registration_send_sms_token));
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Send Sms Token")
-                        .setAction("Send")
-                        .setLabel("Fail(Mobile)")
-                        .build());
             }
         }
 

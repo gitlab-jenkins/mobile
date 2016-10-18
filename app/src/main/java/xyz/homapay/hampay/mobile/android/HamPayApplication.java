@@ -22,16 +22,7 @@ import xyz.homapay.hampay.mobile.android.model.AppState;
 
 public class HamPayApplication extends MultiDexApplication {
 
-    public static int GENERAL_TRACKER = 0;
-
-    public enum TrackerName {
-        APP_TRACKER, // Tracker used only in this app.
-    }
-
-    HashMap<TrackerName, Tracker> mTrackers = new HashMap<TrackerName, Tracker>();
-
     public static final String TAG = HamPayApplication.class.getSimpleName();
-
 
     @Override
     public void onCreate()
@@ -43,29 +34,6 @@ public class HamPayApplication extends MultiDexApplication {
     @Override
     public void onTerminate() {
         super.onTerminate();
-    }
-
-
-    public synchronized Tracker getTracker(TrackerName trackerId) {
-        Log.d(TAG, "getTracker()");
-        if (!mTrackers.containsKey(trackerId)) {
-            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
-
-            // Global GA Settings
-            // <!-- Google Analytics SDK V4 BUG20141213 Using a GA global xml freezes the app! Do config by coding. -->
-            analytics.setDryRun(false);
-
-            analytics.getLogger().setLogLevel(Logger.LogLevel.ERROR);
-            //analytics.getLogger().setLogLevel(Logger.LogLevel.VERBOSE);
-
-            // Create a new tracker
-            Tracker t = (trackerId == TrackerName.APP_TRACKER) ? analytics.newTracker(R.xml.app_tracker) : null;
-            if (t != null) {
-                t.enableAdvertisingIdCollection(true);
-            }
-            mTrackers.put(trackerId, t);
-        }
-        return mTrackers.get(trackerId);
     }
 
     static AppState applicationState;

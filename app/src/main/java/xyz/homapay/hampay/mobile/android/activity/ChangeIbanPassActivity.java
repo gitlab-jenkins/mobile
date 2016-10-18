@@ -67,8 +67,6 @@ public class ChangeIbanPassActivity extends AppCompatActivity implements View.On
     private String iban = "";
     private HamPayDialog hamPayDialog;
 
-    Tracker hamPayGaTracker;
-
     public void backActionBar(View view){
         finish();
     }
@@ -131,9 +129,6 @@ public class ChangeIbanPassActivity extends AppCompatActivity implements View.On
         activity = ChangeIbanPassActivity.this;
 
         hamPayDialog = new HamPayDialog(activity);
-
-        hamPayGaTracker = ((HamPayApplication) getApplication())
-                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
         keyboard = (LinearLayout)findViewById(R.id.keyboard);
         password_holder = (LinearLayout)findViewById(R.id.password_holder);

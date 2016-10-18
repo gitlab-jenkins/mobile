@@ -75,8 +75,6 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
     Context context;
     Activity activity;
 
-    Tracker hamPayGaTracker;
-
     public void backActionBar(View view){
         finish();
     }
@@ -125,9 +123,6 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
 
         context = this;
         activity = ChangePassCodeActivity.this;
-
-        hamPayGaTracker = ((HamPayApplication) getApplication())
-                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -491,12 +486,6 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                     input_digit_5.setImageResource(R.drawable.pass_value_empty);
                     new HamPayDialog(activity).showSuccessChangeSettingDialog(changePassCodeResponseMessage.getService().getResultStatus().getDescription());
 
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Change PassCode")
-                            .setAction("Change")
-                            .setLabel("Success")
-                            .build());
-
                 }else if (changePassCodeResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();
                 }
@@ -506,12 +495,6 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                     new HamPayDialog(activity).showFailChangePassCodeDialog(requestChangePassCode, changePassCodeRequest,
                             changePassCodeResponseMessage.getService().getResultStatus().getCode(),
                             changePassCodeResponseMessage.getService().getResultStatus().getDescription());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Change PassCode")
-                            .setAction("Change")
-                            .setLabel("Fail(Server)")
-                            .build());
                 }
             }else {
                 resetLayout();
@@ -519,12 +502,6 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                 new HamPayDialog(activity).showFailChangePassCodeDialog(requestChangePassCode, changePassCodeRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_change_pass_code));
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Change PassCode")
-                        .setAction("Change")
-                        .setLabel("Fail(Mobile)")
-                        .build());
             }
         }
 

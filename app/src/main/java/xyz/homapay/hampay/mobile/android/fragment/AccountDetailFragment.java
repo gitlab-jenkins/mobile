@@ -59,7 +59,6 @@ public class AccountDetailFragment extends Fragment {
     private SharedPreferences.Editor editor;
     private RequestUserProfile requestUserProfile;
     private UserProfileRequest userProfileRequest;
-    private Tracker hamPayGaTracker;
     private Context context;
     private ImageManager imageManager;
 
@@ -88,10 +87,6 @@ public class AccountDetailFragment extends Fragment {
         editor = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE).edit();
 
         imageManager = new ImageManager(getActivity(), 200000, false);
-        hamPayGaTracker = ((HamPayApplication) getActivity().getApplicationContext())
-                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
-
-
         bundle = getArguments();
 
         if (bundle != null){
@@ -192,12 +187,6 @@ public class AccountDetailFragment extends Fragment {
 
                     hide_bg.setVisibility(View.GONE);
 
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("User Profile")
-                            .setAction("Fetch")
-                            .setLabel("Success")
-                            .build());
-
                 } else if (userProfileResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();
                 }
@@ -208,12 +197,6 @@ public class AccountDetailFragment extends Fragment {
                             userProfileResponseMessage.getService().getResultStatus().getDescription());
 
                     hide_bg.setVisibility(View.VISIBLE);
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("User Profile")
-                            .setAction("Fetch")
-                            .setLabel("Fail(Server)")
-                            .build());
                 }
             }
             else {
@@ -223,12 +206,6 @@ public class AccountDetailFragment extends Fragment {
                         getString(R.string.msg_fail_user_profile));
 
                 hide_bg.setVisibility(View.VISIBLE);
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("User Profile")
-                        .setAction("Fetch")
-                        .setLabel("Fail(Mobile)")
-                        .build());
             }
         }
 

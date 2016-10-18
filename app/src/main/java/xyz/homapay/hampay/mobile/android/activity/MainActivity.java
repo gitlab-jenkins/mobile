@@ -102,7 +102,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
     private boolean hasNotification = false;
-    private Tracker hamPayGaTracker;
     private Context context;
     private RequestMobileRegistrationIdEntry requestMobileRegistrationIdEntry;
     private MobileRegistrationIdEntryRequest mobileRegistrationIdEntryRequest;
@@ -200,10 +199,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         editor.putLong(Constants.MAX_INDIVIDUAL_XFER_AMOUNT, this.userProfileDTO.getMaxIndividualXferAmount());
         editor.putLong(Constants.MIN_INDIVIDUAL_XFER_AMOUNT, this.userProfileDTO.getMinIndividualXferAmount());
         editor.commit();
-
-        hamPayGaTracker = ((HamPayApplication) getApplication())
-                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
-
         if (bundle != null) {
             hasNotification = bundle.getBoolean(Constants.HAS_NOTIFICATION);
         }
@@ -643,29 +638,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
                     editor.putBoolean(Constants.SEND_MOBILE_REGISTER_ID, true);
                     editor.commit();
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Mobile Registration Id Entry")
-                            .setAction("Registration")
-                            .setLabel("Success")
-                            .build());
                 }else if (mobileRegistrationIdEntryResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();
                 }
-                else {
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Mobile Registration Id Entry")
-                            .setAction("Registration")
-                            .setLabel("Fail(Server)")
-                            .build());
-                }
-
-            }else {
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Mobile Registration Id Entry")
-                        .setAction("Registration")
-                        .setLabel("Fail(Mobile)")
-                        .build());
             }
         }
 
@@ -693,11 +668,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     if (SWTrace != null) {
                         dbHelper.syncPspResult(SWTrace);
                     }
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Pending Payment Request")
-                            .setAction("Payment")
-                            .setLabel("Success")
-                            .build());
                 }else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();
                 }

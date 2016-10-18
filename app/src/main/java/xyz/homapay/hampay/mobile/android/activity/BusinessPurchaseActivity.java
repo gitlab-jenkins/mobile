@@ -60,7 +60,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
     RelativeLayout businesses_list;
     RequestSearchHamPayBusiness requestSearchHamPayBusiness;
     RequestHamPayBusiness requestHamPayBusiness;
-    Tracker hamPayGaTracker;
     private RequestPurchaseInfo requestPurchaseInfo;
     private PurchaseInfoRequest purchaseInfoRequest;
 
@@ -152,9 +151,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
         businesses_list.setOnClickListener(this);
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-
-        hamPayGaTracker = ((HamPayApplication) getApplication())
-                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -341,12 +337,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                         finish();
                     }
 
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Latest Pending Payment")
-                            .setAction("Fetch")
-                            .setLabel("Success")
-                            .build());
-
                 }else if (purchaseInfoResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();
                 }
@@ -355,24 +345,12 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                     new HamPayDialog(activity).showFailPurchaseInfoDialog(
                             purchaseInfoResponseMessage.getService().getResultStatus().getCode(),
                             purchaseInfoResponseMessage.getService().getResultStatus().getDescription());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Latest Pending Payment")
-                            .setAction("Fetch")
-                            .setLabel("Fail(Server)")
-                            .build());
                 }
             }else {
                 requestPurchaseInfo = new RequestPurchaseInfo(context, new RequestPurchaseInfoTaskCompleteListener());
                 new HamPayDialog(activity).showFailPurchaseInfoDialog(
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_fetch_latest_payment));
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Latest Pending Payment")
-                        .setAction("Fetch")
-                        .setLabel("Fail(Mobile)")
-                        .build());
             }
 
         }

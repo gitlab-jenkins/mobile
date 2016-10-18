@@ -88,8 +88,6 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
 
     boolean searchEnabled = false;
 
-    Tracker hamPayGaTracker;
-
     private RelativeLayout full_business;
     private RelativeLayout popular_business;
     private RelativeLayout recent_business;
@@ -193,10 +191,6 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
         hamPayBusinessesAdapter = new HamPayBusinessesAdapter(activity, prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
-
-        hamPayGaTracker = ((HamPayApplication) getApplication())
-                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
-
 
         inputMethodManager = (InputMethodManager) getSystemService(
                 Context.INPUT_METHOD_SERVICE);
@@ -415,12 +409,6 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                         }
                     }
 
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Business List")
-                            .setAction("Fetch")
-                            .setLabel("Success")
-                            .build());
-
                 }else if (businessListResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();
                 }else {
@@ -442,12 +430,6 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                                 businessListResponseMessage.getService().getResultStatus().getDescription());
 //                        requestSearchHamPayBusiness.execute(businessSearchRequest);
                     }
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Business List")
-                            .setAction("Fetch")
-                            .setLabel("Fail(Server)")
-                            .build());
                 }
             }else {
                 if (!searchEnabled) {
@@ -468,12 +450,6 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                             getString(R.string.msg_fail_business_search_list));
 //                    requestSearchHamPayBusiness.execute(businessSearchRequest);
                 }
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Business List")
-                        .setAction("Fetch")
-                        .setLabel("Fail(Mobile)")
-                        .build());
             }
         }
 

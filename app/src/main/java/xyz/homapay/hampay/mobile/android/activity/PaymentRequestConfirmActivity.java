@@ -77,8 +77,6 @@ public class PaymentRequestConfirmActivity extends AppCompatActivity {
     private long MinXferAmount = 0;
 
     HamPayDialog hamPayDialog;
-
-    Tracker hamPayGaTracker;
     private String authToken;
     private ImageManager imageManager;
 
@@ -146,9 +144,6 @@ public class PaymentRequestConfirmActivity extends AppCompatActivity {
         } catch (Exception ex) {
             Log.e("Error", ex.getStackTrace().toString());
         }
-
-        hamPayGaTracker = ((HamPayApplication) getApplication())
-                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -273,35 +268,16 @@ public class PaymentRequestConfirmActivity extends AppCompatActivity {
             if (userPaymentResponseMessage != null) {
 
                 if (userPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-
                     new HamPayDialog(activity).successPaymentRequestDialog(userPaymentResponseMessage.getService().getProductCode());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Individual Payment Confirm")
-                            .setAction("Payment Confirm")
-                            .setLabel("Success")
-                            .build());
-
                 }else if (userPaymentResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();
                 }
                 else {
                     new HamPayDialog(activity).failurePaymentRequestDialog(userPaymentResponseMessage.getService().getResultStatus().getCode(),
                             userPaymentResponseMessage.getService().getResultStatus().getDescription());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Individual Payment Confirm")
-                            .setAction("Payment Confirm")
-                            .setLabel("Fail(Server)")
-                            .build());
                 }
             } else {
                 new HamPayDialog(activity).failurePaymentRequestDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_failure_payment_request));
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Individual Payment Confirm")
-                        .setAction("Payment Confirm")
-                        .setLabel("Fail(Mobile)")
-                        .build());
             }
 
             payment_request_button.setEnabled(true);
