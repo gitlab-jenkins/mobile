@@ -121,7 +121,7 @@
     <string name="sms_request">ارسال</string>
     <string name="sms_cancel">انصراف</string>
     <string name="mobile_no_verification">تایید شماره همراه</string>
-    <string name="deliver_verification">کد ۴ رقمی برای شما پیامک شد. در صورت عدم دریافت پیامک، دکمه ارسال مجدد را لمس کنید.</string>
+    <string name="deliver_verification">کد فعال‌سازی "هم‌پی" به شماره %1$s برای شما پیامک شد.</string>
     <string name="resend">ارسال مجدد</string>
     <string name="name_family">نام و نام خانوادگی</string>
     <string name="iter_code">کد ملی</string>

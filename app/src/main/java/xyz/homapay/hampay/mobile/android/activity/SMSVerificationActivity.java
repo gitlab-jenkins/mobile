@@ -104,8 +104,8 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
     private FacedTextView remain_timer;
     private boolean sendSmsPermission = false;
     private int sendSmsCounter = 0;
-    private FacedEditText cellNumberValue;
     private String cellNumber;
+    private FacedTextView sms_delivery_text;
 
 
     @Override
@@ -152,9 +152,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                             sendSmsPermission = true;
                             progress_layout.setVisibility(View.GONE);
                             resend_active_code.setVisibility(View.VISIBLE);
-                            cellNumberValue.setInputType(InputType.TYPE_CLASS_NUMBER);
-                            cellNumberValue.setTextColor(getResources().getColor(R.color.app_origin));
-                            cellNumberValue.setSelection(cellNumber.length() - 2);
                         }
                     }
                 });
@@ -255,25 +252,8 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         resend_active_code.setOnClickListener(this);
 
         cellNumber = bundle.getString(Constants.REGISTERED_CELL_NUMBER);
-        cellNumberValue = (FacedEditText)findViewById(R.id.cellNumberValue);
-        cellNumberValue.setText(persianEnglishDigit.E2P(cellNumber.substring(2)));
-        cellNumberValue.setInputType(InputType.TYPE_NULL);
-        cellNumberValue.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                cellNumberValue.removeTextChangedListener(this);
-                cellNumber = s.toString();
-                cellNumberValue.setText(persianEnglishDigit.E2P(s.toString()));
-                cellNumberValue.setSelection(s.toString().length());
-                cellNumberValue.addTextChangedListener(this);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
+        sms_delivery_text = (FacedTextView)findViewById(R.id.sms_delivery_text);
+        sms_delivery_text.setText(getString(R.string.deliver_verification, persianEnglishDigit.E2P(cellNumber)));
 
         progress_layout = (LinearLayout)findViewById(R.id.progress_layout);
 
@@ -461,10 +441,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                 break;
 
             case R.id.resend_active_code:
-                if (cellNumberValue.getText().toString().length() != 9){
-                    Toast.makeText(context, getString(R.string.msg_cellNumber_invalid), Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 sendSmsCounter++;
                 if (sendSmsCounter < 3) {
                     if (sendSmsPermission) {
@@ -581,9 +557,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
 
             if (registrationSendSmsTokenResponse != null) {
                 if (registrationSendSmsTokenResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
-
                     resend_active_code.setVisibility(View.GONE);
-                    cellNumberValue.setInputType(InputType.TYPE_NULL);
                     progress_layout.setVisibility(View.VISIBLE);
                     startTimer();
                 }
