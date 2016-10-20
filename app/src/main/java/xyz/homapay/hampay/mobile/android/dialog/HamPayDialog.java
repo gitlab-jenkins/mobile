@@ -2013,6 +2013,29 @@ public class HamPayDialog {
         }
     }
 
+    public void appUpdateDialog(final String storeUrl){
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_app_update, null);
+
+        FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
+
+        confirmation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(storeUrl));
+                activity.startActivity(intent);
+                dialog.dismiss();
+            }
+        });
+
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
+    }
+
     private void forceLogout() {
         editor.remove(Constants.LOGIN_TOKEN_ID);
         editor.commit();

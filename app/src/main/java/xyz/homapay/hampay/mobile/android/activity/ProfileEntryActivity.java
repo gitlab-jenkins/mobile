@@ -187,6 +187,7 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
 
         bundle.putInt(FirebaseAnalytics.Param.ITEM_ID, ServiceName.REGISTRATION_ENTRY.ordinal());
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, ServiceName.REGISTRATION_ENTRY.name());
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, ServiceEvent.class.getSimpleName());
 
         hamPayDialog = new HamPayDialog(activity);
 

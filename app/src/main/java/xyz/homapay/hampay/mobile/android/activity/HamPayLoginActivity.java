@@ -340,7 +340,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                 requestAndLoadPhoneState();
             }
         });
-
     }
 
 

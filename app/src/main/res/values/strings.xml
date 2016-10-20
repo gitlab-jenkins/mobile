@@ -333,6 +333,8 @@
     <string name="merchant_id">کد پذیرندگی</string>
     <string name="merchant_id_document">مدارک پذیرندگی</string>
     <string name="merchent_document_email">info@homapay.com</string>
+    <string name="app_update_text">کاربر گرامی، برای ادامه می‌بایستی آخرین نسخه اپلیکیشن <b>هم‌پی</b> را دریافت نمایید.</string>
+    <string name="app_update_confirm">تایید</string>
 
     <string-array name="psp_code">
 

@@ -7,6 +7,8 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -120,6 +122,14 @@ public class GcmMessageHandler extends IntentService{
         @Override
         public void handleMessage(Message message)
         {
+
+            try {
+                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                Ringtone ringtone = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                ringtone.play();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             AppState appState = AppState.Stoped;
             ActivityManager activityManager = (ActivityManager) getSystemService( ACTIVITY_SERVICE );
