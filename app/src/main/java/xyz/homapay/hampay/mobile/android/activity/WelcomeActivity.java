@@ -14,10 +14,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.firebase.analytics.FirebaseAnalytics;
-
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.WelcomeAdapter;
+import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
 import xyz.homapay.hampay.mobile.android.util.PreferencesManager;
 
@@ -36,20 +35,14 @@ public class WelcomeActivity extends AppCompatActivity {
     };
     private Button btnSkip, btnNext;
     private PreferencesManager preferencesManager;
-    private FirebaseAnalytics firebaseAnalytics;
-    private Bundle bundle = new Bundle();
     private AppEvent appEvent = AppEvent.LAUNCH;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
-        bundle.putInt(FirebaseAnalytics.Param.ITEM_ID, appEvent.ordinal());
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, appEvent.name());
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, AppEvent.class.getSimpleName());
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+        LogEvent logEvent = new LogEvent(this);
+        logEvent.log(appEvent);
 
         preferencesManager = new PreferencesManager(this);
         if (preferencesManager.isRegistered()){
