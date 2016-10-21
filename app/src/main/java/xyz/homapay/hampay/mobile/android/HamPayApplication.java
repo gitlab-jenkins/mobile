@@ -1,24 +1,15 @@
 package xyz.homapay.hampay.mobile.android;
 
 import android.support.multidex.MultiDexApplication;
-import android.util.Log;
 
-import com.google.android.gms.analytics.GoogleAnalytics;
-import com.google.android.gms.analytics.Logger;
-import com.google.android.gms.analytics.Tracker;
+import com.crashlytics.android.Crashlytics;
 
-import org.acra.ACRA;
-import org.acra.annotation.ReportsCrashes;
-
-import java.util.HashMap;
-
+import io.fabric.sdk.android.Fabric;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 
 /**
  * Created by amir on 7/10/15.
  */
-
-@ReportsCrashes(mailTo = "defects@homapay.com")
 
 public class HamPayApplication extends MultiDexApplication {
 
@@ -28,7 +19,7 @@ public class HamPayApplication extends MultiDexApplication {
     public void onCreate()
     {
         super.onCreate();
-        ACRA.init(this);
+        Fabric.with(this, new Crashlytics());
     }
 
     @Override
