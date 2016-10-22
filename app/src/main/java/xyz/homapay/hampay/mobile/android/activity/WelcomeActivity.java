@@ -27,6 +27,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private LinearLayout dotsLayout;
     private TextView[] dots;
     private int[] layouts = new int[]{
+            R.layout.welcome_slider0,
             R.layout.welcome_slider1,
             R.layout.welcome_slider2,
             R.layout.welcome_slider3,
@@ -63,9 +64,11 @@ public class WelcomeActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
         btnSkip = (Button) findViewById(R.id.btn_skip);
+        btnSkip.setVisibility(View.GONE);
         btnNext = (Button) findViewById(R.id.btn_next);
 
-        addBottomDots(0);
+
+//        addBottomDots(0);
 
         changeStatusBarColor();
 
@@ -95,22 +98,23 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void addBottomDots(int currentPage) {
-        dots = new TextView[layouts.length];
+        dots = new TextView[layouts.length - 1];
 
         int[] colorsActive = getResources().getIntArray(R.array.array_dot_active);
         int[] colorsInactive = getResources().getIntArray(R.array.array_dot_inactive);
 
         dotsLayout.removeAllViews();
-        for (int i = 0; i < dots.length; i++) {
-            dots[i] = new TextView(this);
-            dots[i].setText(Html.fromHtml("&#8226;"));
-            dots[i].setTextSize(35);
-            dots[i].setTextColor(colorsInactive[0]);
-            dotsLayout.addView(dots[i]);
+        if (currentPage > 0) {
+            for (int i = 0; i < dots.length; i++) {
+                dots[i] = new TextView(this);
+                dots[i].setText(Html.fromHtml("&#8226;"));
+                dots[i].setTextSize(35);
+                dots[i].setTextColor(colorsInactive[0]);
+                dotsLayout.addView(dots[i]);
+            }
+            if (dots.length > 0)
+                dots[currentPage - 1].setTextColor(colorsActive[0]);
         }
-
-        if (dots.length > 0)
-            dots[currentPage].setTextColor(colorsActive[0]);
     }
 
     private int getItem(int i) {
@@ -133,9 +137,11 @@ public class WelcomeActivity extends AppCompatActivity {
         @Override
         public void onPageSelected(int position) {
             addBottomDots(position);
-
+            if (position == 0){
+                btnSkip.setVisibility(View.GONE);
+            }
             // changing the next button text 'NEXT' / 'GOT IT'
-            if (position == layouts.length - 1) {
+            else if (position == layouts.length - 1) {
                 // last page. make button text to GOT IT
                 btnNext.setText(getString(R.string.start));
                 btnSkip.setVisibility(View.GONE);

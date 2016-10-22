@@ -26,7 +26,7 @@ public class LogEvent {
         bundle.putString(FirebaseAnalytics.Param.VALUE, appEvent.name());
         bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, appEvent.name());
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, appEvent.getClass().getSimpleName());
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LEVEL_UP, bundle);
     }
 
     public void log(ServiceEvent serviceEvent){

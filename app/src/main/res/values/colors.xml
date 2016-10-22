@@ -56,11 +56,11 @@
     <!--Slider colors-->
 
     <array name="array_dot_active">
-        <item>@color/app_origin</item>
+        <item>@android:color/white</item>
     </array>
 
     <array name="array_dot_inactive">
-        <item>#6D09BB</item>
+        <item>#8f8c8f</item>
     </array>
 
 

@@ -5,6 +5,7 @@ import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 
 import xyz.homapay.hampay.mobile.android.R;
 
@@ -20,6 +21,7 @@ public class WelcomeAdapter extends PagerAdapter {
     public WelcomeAdapter(Context context) {
         this.context = context;
         layouts = new int[]{
+                R.layout.welcome_slider0,
                 R.layout.welcome_slider1,
                 R.layout.welcome_slider2,
                 R.layout.welcome_slider3,
@@ -33,6 +35,14 @@ public class WelcomeAdapter extends PagerAdapter {
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View view = layoutInflater.inflate(layouts[position], container, false);
+
+
+        if (position == 0){
+            WebView webView = (WebView)view.findViewById(R.id.webview);
+            webView.getSettings().setJavaScriptEnabled(true);
+            webView.loadUrl("file:///android_asset/certification.html");
+        }
+
         container.addView(view);
 
         return view;

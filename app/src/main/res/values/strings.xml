@@ -641,8 +641,7 @@
 
 
     <!--Slider string-->
-    <string name="title_activity_welcome">Home Screen</string>
-    <string name="next_slide">بعدی</string>
-    <string name="skip_slide">رد کردن</string>
+    <string name="next_slide">ادامه</string>
+    <string name="skip_slide">ثبت‌نام</string>
 
 </resources>

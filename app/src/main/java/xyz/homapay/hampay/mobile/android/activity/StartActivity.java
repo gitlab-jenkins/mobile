@@ -2,12 +2,10 @@ package xyz.homapay.hampay.mobile.android.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -62,10 +60,6 @@ public class StartActivity extends AppCompatActivity {
             }
         });
 
-
-        WebView webView = (WebView)findViewById(R.id.webview);
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl("file:///android_asset/certification.html");
     }
 
 
