@@ -24,6 +24,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -63,6 +64,7 @@ public class PaymentRequestListActivity extends AppCompatActivity{
     private FacedEditText search_text;
     private SwipeRefreshLayout pullToRefresh;
     private FacedTextView nullPendingText;
+    private RelativeLayout search_bar;
 
     public void backActionBar(View view){
         finish();
@@ -114,6 +116,8 @@ public class PaymentRequestListActivity extends AppCompatActivity{
         ImageSpan is = new ImageSpan(context, R.drawable.add_payment_note);
         spannableStringBuilder.setSpan(is, 85, 89, 0);
         nullPendingText.setText(spannableStringBuilder);
+
+        search_bar = (RelativeLayout)findViewById(R.id.search_bar);
 
 
         pullToRefresh = (SwipeRefreshLayout)findViewById(R.id.pullToRefresh);
@@ -202,8 +206,10 @@ public class PaymentRequestListActivity extends AppCompatActivity{
                         pendingPOAdapter = new PendingPOAdapter(activity, paymentInfoList, authToken);
                         paymentRequestList.setAdapter(pendingPOAdapter);
                         nullPendingText.setVisibility(View.GONE);
+                        search_bar.setVisibility(View.VISIBLE);
                     }else {
                         nullPendingText.setVisibility(View.VISIBLE);
+                        search_bar.setVisibility(View.INVISIBLE);
                     }
                 }
                 else {
