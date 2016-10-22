@@ -265,7 +265,8 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
                     if (amountValue + calculatedVat >= MinXferAmount && amountValue + calculatedVat <= MaxXferAmount) {
                         hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                         businessPaymentConfirmRequest = new BusinessPaymentConfirmRequest();
-                        businessPaymentConfirmRequest.setAmount(calculatedVat + amountValue);
+                        businessPaymentConfirmRequest.setAmount(amountValue);
+                        businessPaymentConfirmRequest.setVat(calculatedVat);
                         businessPaymentConfirmRequest.setBusinessCode(businessDTO.getCode());
                         requestBusinessPaymentConfirm = new RequestBusinessPaymentConfirm(context, new RequestBusinessPaymentConfirmTaskCompleteListener());
                         requestBusinessPaymentConfirm.execute(businessPaymentConfirmRequest);
