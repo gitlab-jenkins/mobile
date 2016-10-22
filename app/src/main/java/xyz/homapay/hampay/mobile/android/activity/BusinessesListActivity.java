@@ -55,41 +55,24 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
     private Activity activity;
     private SwipeRefreshLayout pullToRefresh;
     private ListView businessListView;
-
-    SharedPreferences prefs;
-    SharedPreferences.Editor editor;
-
-    HamPayDialog hamPayDialog;
-
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
+    private HamPayDialog hamPayDialog;
     private boolean onLoadMore = false;
-    DobList dobList;
-
-
+    private DobList dobList;
     private List<BusinessDTO> businessDTOs;
-
     private HamPayBusinessesAdapter hamPayBusinessesAdapter;
-
     private boolean FINISHED_SCROLLING = false;
-
-
-    ImageView searchImage;
-    FacedEditText searchPhraseText;
-
-    InputMethodManager inputMethodManager;
-
-
-    BusinessListRequest businessListRequest;
-    BusinessSearchRequest businessSearchRequest;
-
-    RequestSearchHamPayBusiness requestSearchHamPayBusiness;
-    RequestHamPayBusiness requestHamPayBusiness;
-
-    int requestPageNumber = 0;
-
-    boolean searchEnabled = false;
-
-    Tracker hamPayGaTracker;
-
+    private ImageView searchImage;
+    private FacedEditText searchPhraseText;
+    private InputMethodManager inputMethodManager;
+    private BusinessListRequest businessListRequest;
+    private BusinessSearchRequest businessSearchRequest;
+    private RequestSearchHamPayBusiness requestSearchHamPayBusiness;
+    private RequestHamPayBusiness requestHamPayBusiness;
+    private int requestPageNumber = 0;
+    private boolean searchEnabled = false;
+    private Tracker hamPayGaTracker;
     private RelativeLayout full_business;
     private RelativeLayout popular_business;
     private RelativeLayout recent_business;
@@ -232,12 +215,9 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                     businessListRequest.setSortFactor(BizSortFactor.NAME);
                     requestHamPayBusiness = new RequestHamPayBusiness(context, new RequestBusinessListTaskCompleteListener(searchEnabled));
                     requestHamPayBusiness.execute(businessListRequest);
-
                     inputMethodManager.hideSoftInputFromWindow(searchPhraseText.getWindowToken(), 0);
-
                     hamPayBusinessesAdapter.clear();
                     businessDTOs.clear();
-
                     hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
 
                 }
@@ -296,6 +276,9 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
     private void changeTab(int index){
         switch (index){
             case 1:
+                hamPayBusinessesAdapter.clear();
+                businessDTOs.clear();
+                hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                 businessListRequest = new BusinessListRequest();
                 requestPageNumber = 0;
                 bizSortFactor = BizSortFactor.NAME;
@@ -312,6 +295,9 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                 recent_triangle.setVisibility(View.GONE);
                 break;
             case 2:
+                hamPayBusinessesAdapter.clear();
+                businessDTOs.clear();
+                hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                 businessListRequest = new BusinessListRequest();
                 requestPageNumber = 0;
                 bizSortFactor = BizSortFactor.DATE;
@@ -329,6 +315,9 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                 break;
 
             case 3:
+                hamPayBusinessesAdapter.clear();
+                businessDTOs.clear();
+                hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                 businessListRequest = new BusinessListRequest();
                 requestPageNumber = 0;
                 bizSortFactor = BizSortFactor.DATE;
