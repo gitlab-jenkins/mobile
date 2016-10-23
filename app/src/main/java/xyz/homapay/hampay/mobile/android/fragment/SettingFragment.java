@@ -19,6 +19,7 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.ChangeMemorableActivity;
 import xyz.homapay.hampay.mobile.android.activity.ChangePassCodeActivity;
 import xyz.homapay.hampay.mobile.android.activity.IntroIBANActivity;
+import xyz.homapay.hampay.mobile.android.activity.MerchantIdActivity;
 import xyz.homapay.hampay.mobile.android.adapter.SettingAdapter;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.setting.HamPaySetting;
@@ -118,6 +119,12 @@ public class SettingFragment extends Fragment {
                     case 4:
                         intent = new Intent();
                         intent.setClass(getActivity(), IntroIBANActivity.class);
+                        startActivity(intent);
+                        break;
+
+                    case 5:
+                        intent = new Intent();
+                        intent.setClass(getActivity(), MerchantIdActivity.class);
                         startActivity(intent);
                         break;
                 }
