@@ -35,7 +35,7 @@
         android:persistent="true"
         android:alwaysRetainTaskState="true">
         <activity
-            android:name=".activity.WelcomeActivity"
+            android:name=".activity.PasswordEntryActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -61,7 +61,7 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.PasswordEntryActivity"
+            android:name=".activity.WelcomeActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"/>
         <activity
