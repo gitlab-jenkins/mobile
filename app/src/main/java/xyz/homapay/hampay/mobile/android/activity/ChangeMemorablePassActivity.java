@@ -326,7 +326,7 @@ public class ChangeMemorablePassActivity extends AppCompatActivity implements Vi
                 if (changeMemorableWordResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     editor.putString(Constants.MEMORABLE_WORD, newMemorable);
                     editor.commit();
-                    new HamPayDialog(activity).showSuccessChangeSettingDialog(changeMemorableWordResponseMessage.getService().getResultStatus().getDescription());
+                    new HamPayDialog(activity).showSuccessChangeSettingDialog(changeMemorableWordResponseMessage.getService().getResultStatus().getDescription(), false);
                 } else if (changeMemorableWordResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();
                 }

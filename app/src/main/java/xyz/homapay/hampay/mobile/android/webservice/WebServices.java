@@ -172,7 +172,7 @@ public class WebServices  {
         IllegalAppListRequest illegalAppListRequest = new IllegalAppListRequest();
         illegalAppListRequest.setRequestUUID(UUID.randomUUID().toString());
 
-        RequestMessage<IllegalAppListRequest> message = new RequestMessage<>(illegalAppListRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<IllegalAppListRequest> message = new RequestMessage<>(illegalAppListRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<IllegalAppListRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -195,7 +195,7 @@ public class WebServices  {
 
         registrationEntryRequest.setRequestUUID(UUID.randomUUID().toString());
 
-        RequestMessage<RegistrationEntryRequest> message = new RequestMessage<>(registrationEntryRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<RegistrationEntryRequest> message = new RequestMessage<>(registrationEntryRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationEntryRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -218,7 +218,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         contactUsRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<ContactUsRequest> message = new RequestMessage<>(contactUsRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<ContactUsRequest> message = new RequestMessage<>(contactUsRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<ContactUsRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -241,7 +241,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         registrationSendSmsTokenRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<RegistrationSendSmsTokenRequest> message = new RequestMessage<>(registrationSendSmsTokenRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<RegistrationSendSmsTokenRequest> message = new RequestMessage<>(registrationSendSmsTokenRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationSendSmsTokenRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -264,7 +264,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         registrationVerifyMobileRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<RegistrationVerifyMobileRequest> message = new RequestMessage<>(registrationVerifyMobileRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<RegistrationVerifyMobileRequest> message = new RequestMessage<>(registrationVerifyMobileRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationVerifyMobileRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -290,7 +290,7 @@ public class WebServices  {
         UserContacts userContacts = new UserContacts(context);
         registrationCredentialsRequest.setContacts(userContacts.read());
         registrationCredentialsRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<RegistrationCredentialsRequest> message = new RequestMessage<>(registrationCredentialsRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<RegistrationCredentialsRequest> message = new RequestMessage<>(registrationCredentialsRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RegistrationCredentialsRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -313,7 +313,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         mobileRegistrationIdEntryRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<MobileRegistrationIdEntryRequest> message = new RequestMessage<>(mobileRegistrationIdEntryRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<MobileRegistrationIdEntryRequest> message = new RequestMessage<>(mobileRegistrationIdEntryRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<MobileRegistrationIdEntryRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -336,7 +336,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         tacRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<TACRequest> message = new RequestMessage<>(tacRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<TACRequest> message = new RequestMessage<>(tacRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<TACRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -358,7 +358,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         uploadImageRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<UploadImageRequest> message = new RequestMessage<>(uploadImageRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<UploadImageRequest> message = new RequestMessage<>(uploadImageRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<UploadImageRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -381,7 +381,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         getUserIdTokenRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<GetUserIdTokenRequest> message = new RequestMessage<>(getUserIdTokenRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<GetUserIdTokenRequest> message = new RequestMessage<>(getUserIdTokenRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<GetUserIdTokenRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -404,7 +404,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         tacAcceptRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<TACAcceptRequest> message = new RequestMessage<>(tacAcceptRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<TACAcceptRequest> message = new RequestMessage<>(tacAcceptRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<TACAcceptRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -427,7 +427,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         userProfileRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<UserProfileRequest> message = new RequestMessage<>(userProfileRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<UserProfileRequest> message = new RequestMessage<>(userProfileRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<UserProfileRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -452,7 +452,7 @@ public class WebServices  {
 
 
         transactionListRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<TransactionListRequest> message = new RequestMessage<>(transactionListRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<TransactionListRequest> message = new RequestMessage<>(transactionListRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<TransactionListRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -477,7 +477,7 @@ public class WebServices  {
         UserContacts userContacts = new UserContacts(context);
         contactsHampayEnabledRequest.setContacts(userContacts.read());
         contactsHampayEnabledRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<ContactsHampayEnabledRequest> message = new RequestMessage<>(contactsHampayEnabledRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<ContactsHampayEnabledRequest> message = new RequestMessage<>(contactsHampayEnabledRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<ContactsHampayEnabledRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -500,7 +500,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         individualPaymentRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<IndividualPaymentRequest> message = new RequestMessage<>(individualPaymentRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<IndividualPaymentRequest> message = new RequestMessage<>(individualPaymentRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<IndividualPaymentRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -522,7 +522,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         businessListRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<BusinessListRequest> message = new RequestMessage<>(businessListRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<BusinessListRequest> message = new RequestMessage<>(businessListRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<BusinessListRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -544,7 +544,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         businessPaymentConfirmRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<BusinessPaymentConfirmRequest> message = new RequestMessage<>(businessPaymentConfirmRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<BusinessPaymentConfirmRequest> message = new RequestMessage<>(businessPaymentConfirmRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<BusinessPaymentConfirmRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -566,7 +566,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         businessSearchRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<BusinessSearchRequest> message = new RequestMessage<>(businessSearchRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<BusinessSearchRequest> message = new RequestMessage<>(businessSearchRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<BusinessListRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -588,7 +588,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.PUT, url);
 
         changePassCodeRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<ChangePassCodeRequest> message = new RequestMessage<>(changePassCodeRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<ChangePassCodeRequest> message = new RequestMessage<>(changePassCodeRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<ChangePassCodeRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -609,7 +609,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.PUT, url);
 
         changeMemorableWordRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<ChangeMemorableWordRequest> message = new RequestMessage<>(changeMemorableWordRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<ChangeMemorableWordRequest> message = new RequestMessage<>(changeMemorableWordRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<ChangeMemorableWordRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -632,7 +632,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         unlinkUserRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<UnlinkUserRequest> message = new RequestMessage<>(unlinkUserRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<UnlinkUserRequest> message = new RequestMessage<>(unlinkUserRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<UnlinkUserRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -654,7 +654,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         changeEmailRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<ChangeEmailRequest> message = new RequestMessage<>(changeEmailRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<ChangeEmailRequest> message = new RequestMessage<>(changeEmailRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<ChangeEmailRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -728,7 +728,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         latestPurchaseRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<LatestPurchaseRequest> message = new RequestMessage<>(latestPurchaseRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<LatestPurchaseRequest> message = new RequestMessage<>(latestPurchaseRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<LatestPurchaseRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -749,7 +749,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         latestPaymentRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<LatestPaymentRequest> message = new RequestMessage<>(latestPaymentRequest, authToken, Constants.REQUEST_VERSION);
+        RequestMessage<LatestPaymentRequest> message = new RequestMessage<>(latestPaymentRequest, authToken, Constants.API_LEVEL);
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<LatestPaymentRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -774,7 +774,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         pspResultRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<PSPResultRequest> message = new RequestMessage<>(pspResultRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<PSPResultRequest> message = new RequestMessage<>(pspResultRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<PSPResultRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -796,7 +796,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         cancelPurchasePaymentRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<CancelPurchasePaymentRequest> message = new RequestMessage<>(cancelPurchasePaymentRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<CancelPurchasePaymentRequest> message = new RequestMessage<>(cancelPurchasePaymentRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<CancelPurchasePaymentRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -817,7 +817,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         cancelUserPaymentRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<CancelUserPaymentRequest> message = new RequestMessage<>(cancelUserPaymentRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<CancelUserPaymentRequest> message = new RequestMessage<>(cancelUserPaymentRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<CancelUserPaymentRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -838,7 +838,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         userPaymentRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<UserPaymentRequest> message = new RequestMessage<>(userPaymentRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<UserPaymentRequest> message = new RequestMessage<>(userPaymentRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<UserPaymentRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -860,7 +860,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         ibanConfirmationRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<IBANConfirmationRequest> message = new RequestMessage<>(ibanConfirmationRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<IBANConfirmationRequest> message = new RequestMessage<>(ibanConfirmationRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<IBANConfirmationRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -886,7 +886,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         ibanChangeRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<IBANChangeRequest> message = new RequestMessage<>(ibanChangeRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<IBANChangeRequest> message = new RequestMessage<>(ibanChangeRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<IBANChangeRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -907,7 +907,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         cardProfileRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<CardProfileRequest> message = new RequestMessage<CardProfileRequest>(cardProfileRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<CardProfileRequest> message = new RequestMessage<CardProfileRequest>(cardProfileRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<CardProfileRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -928,7 +928,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         purchaseInfoRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<PurchaseInfoRequest> message = new RequestMessage<>(purchaseInfoRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<PurchaseInfoRequest> message = new RequestMessage<>(purchaseInfoRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<PurchaseInfoRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -950,7 +950,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         latestInvoiceContactsRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<LatestInvoiceContactsRequest> message = new RequestMessage<>(latestInvoiceContactsRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<LatestInvoiceContactsRequest> message = new RequestMessage<>(latestInvoiceContactsRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<LatestInvoiceContactsRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -977,7 +977,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         getTokenFromPSPRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<GetTokenFromPSPRequest> message = new RequestMessage<>(getTokenFromPSPRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<GetTokenFromPSPRequest> message = new RequestMessage<>(getTokenFromPSPRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<GetTokenFromPSPRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -999,7 +999,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         paymentDetailRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<PaymentDetailRequest> message = new RequestMessage<>(paymentDetailRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<PaymentDetailRequest> message = new RequestMessage<>(paymentDetailRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<PaymentDetailRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -1021,7 +1021,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         purchaseDetailRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<PurchaseDetailRequest> message = new RequestMessage<>(purchaseDetailRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<PurchaseDetailRequest> message = new RequestMessage<>(purchaseDetailRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<PurchaseDetailRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -1043,7 +1043,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         removeUserImageRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<RemoveUserImageRequest> message = new RequestMessage<>(removeUserImageRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<RemoveUserImageRequest> message = new RequestMessage<>(removeUserImageRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RemoveUserImageRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -1065,7 +1065,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         pendingPOListRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<PendingPOListRequest> message = new RequestMessage<>(pendingPOListRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<PendingPOListRequest> message = new RequestMessage<>(pendingPOListRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<PendingPOListRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -1087,7 +1087,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         calculateVatRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<CalculateVatRequest> message = new RequestMessage<>(calculateVatRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<CalculateVatRequest> message = new RequestMessage<>(calculateVatRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<CalculateVatRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -1109,7 +1109,7 @@ public class WebServices  {
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
 
         recentPendingFundRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<RecentPendingFundRequest> message = new RequestMessage<>(recentPendingFundRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<RecentPendingFundRequest> message = new RequestMessage<>(recentPendingFundRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<RecentPendingFundRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
@@ -1128,7 +1128,7 @@ public class WebServices  {
         url = new URL(serviceURL + "/fund/pending-list");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
         pendingFundListRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<PendingFundListRequest> message = new RequestMessage<>(pendingFundListRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<PendingFundListRequest> message = new RequestMessage<>(pendingFundListRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<PendingFundListRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
@@ -1143,7 +1143,7 @@ public class WebServices  {
         url = new URL(serviceURL + "/transactions/detail");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
         transactionDetailRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<TransactionDetailRequest> message = new RequestMessage<>(transactionDetailRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<TransactionDetailRequest> message = new RequestMessage<>(transactionDetailRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<TransactionDetailRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
@@ -1158,7 +1158,7 @@ public class WebServices  {
         url = new URL(serviceURL + "/fund/count-pending");
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.POST, url);
         pendingCountRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<PendingCountRequest> message = new RequestMessage<>(pendingCountRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<PendingCountRequest> message = new RequestMessage<>(pendingCountRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
         Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<PendingCountRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);

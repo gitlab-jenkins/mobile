@@ -21,12 +21,14 @@ public class RequestNewLogin extends AsyncTask<LoginRequest, Void, ResponseMessa
 
     private Context context;
     private AsyncTaskCompleteListener<ResponseMessage<LoginResponse>> listener;
+    private String apiLevel;
 
 
-    public RequestNewLogin(Context context, AsyncTaskCompleteListener<ResponseMessage<LoginResponse>> listener)
+    public RequestNewLogin(Context context, AsyncTaskCompleteListener<ResponseMessage<LoginResponse>> listener, String apiLevel)
     {
         this.context = context;
         this.listener = listener;
+        this.apiLevel = apiLevel;
     }
 
 
@@ -42,7 +44,7 @@ public class RequestNewLogin extends AsyncTask<LoginRequest, Void, ResponseMessa
         SecuredWebServices webServices = new SecuredWebServices(context, Constants.CONNECTION_TYPE);
 
         try {
-            return webServices.newLogin(params[0]);
+            return webServices.newLogin(params[0], apiLevel);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (EncryptionException e) {

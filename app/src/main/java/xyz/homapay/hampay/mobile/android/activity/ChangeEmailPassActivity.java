@@ -338,7 +338,7 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
                 if (changeEmailResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     editor.putString(Constants.REGISTERED_USER_EMAIL, userEmail);
                     editor.commit();
-                    new HamPayDialog(activity).showSuccessChangeSettingDialog(changeEmailResponseResponseMessage.getService().getResultStatus().getDescription());
+                    new HamPayDialog(activity).showSuccessChangeSettingDialog(changeEmailResponseResponseMessage.getService().getResultStatus().getDescription(), false);
                 }else if (changeEmailResponseResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();
                 }

@@ -130,24 +130,12 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     String userIdToken = "";
     String memorableWord;
     String installationToken;
-    FacedTextView digit_1;
-    FacedTextView digit_2;
-    FacedTextView digit_3;
-    FacedTextView digit_4;
-    FacedTextView digit_5;
-    FacedTextView digit_6;
-    FacedTextView digit_7;
-    FacedTextView digit_8;
-    FacedTextView digit_9;
-    FacedTextView digit_0;
-    FacedTextView keyboard_dismiss;
-    RelativeLayout backspace;
     String inputPassValue = "";
-    ImageView input_digit_1;
-    ImageView input_digit_2;
-    ImageView input_digit_3;
-    ImageView input_digit_4;
-    ImageView input_digit_5;
+    private FacedTextView input_digit_1;
+    private FacedTextView input_digit_2;
+    private FacedTextView input_digit_3;
+    private FacedTextView input_digit_4;
+    private FacedTextView input_digit_5;
     LinearLayout keyboard;
     LinearLayout password_holder;
     Context context;
@@ -290,37 +278,11 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         password_holder = (LinearLayout)findViewById(R.id.password_holder);
         password_holder.setOnClickListener(this);
 
-
-        digit_1 = (FacedTextView)findViewById(R.id.digit_1);
-        digit_1.setOnClickListener(this);
-        digit_2 = (FacedTextView)findViewById(R.id.digit_2);
-        digit_2.setOnClickListener(this);
-        digit_3 = (FacedTextView)findViewById(R.id.digit_3);
-        digit_3.setOnClickListener(this);
-        digit_4 = (FacedTextView)findViewById(R.id.digit_4);
-        digit_4.setOnClickListener(this);
-        digit_5 = (FacedTextView)findViewById(R.id.digit_5);
-        digit_5.setOnClickListener(this);
-        digit_6 = (FacedTextView)findViewById(R.id.digit_6);
-        digit_6.setOnClickListener(this);
-        digit_7 = (FacedTextView)findViewById(R.id.digit_7);
-        digit_7.setOnClickListener(this);
-        digit_8 = (FacedTextView)findViewById(R.id.digit_8);
-        digit_8.setOnClickListener(this);
-        digit_9 = (FacedTextView)findViewById(R.id.digit_9);
-        digit_9.setOnClickListener(this);
-        digit_0 = (FacedTextView)findViewById(R.id.digit_0);
-        digit_0.setOnClickListener(this);
-        keyboard_dismiss = (FacedTextView)findViewById(R.id.keyboard_dismiss);
-        keyboard_dismiss.setOnClickListener(this);
-        backspace = (RelativeLayout) findViewById(R.id.backspace);
-        backspace.setOnClickListener(this);
-
-        input_digit_1 = (ImageView)findViewById(R.id.input_digit_1);
-        input_digit_2 = (ImageView)findViewById(R.id.input_digit_2);
-        input_digit_3 = (ImageView)findViewById(R.id.input_digit_3);
-        input_digit_4 = (ImageView)findViewById(R.id.input_digit_4);
-        input_digit_5 = (ImageView)findViewById(R.id.input_digit_5);
+        input_digit_1 = (FacedTextView)findViewById(R.id.input_digit_1);
+        input_digit_2 = (FacedTextView)findViewById(R.id.input_digit_2);
+        input_digit_3 = (FacedTextView)findViewById(R.id.input_digit_3);
+        input_digit_4 = (FacedTextView)findViewById(R.id.input_digit_4);
+        input_digit_5 = (FacedTextView)findViewById(R.id.input_digit_5);
 
 
         hampay_memorableword_text = (FacedTextView)findViewById(R.id.hampay_memorableword_text);
@@ -364,22 +326,31 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                                 intent = getIntent();
                             }
                         }
-                        intent.setClass(activity, MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.putExtra(Constants.USER_PROFILE_DTO, tacResponseMessage.getService().getTacDTO().getUserProfile());
-                        intent.putExtra(Constants.PENDING_PURCHASE_CODE, tacResponseMessage.getService().getTacDTO().getPurchaseProductCode());
-                        intent.putExtra(Constants.PENDING_PAYMENT_CODE, tacResponseMessage.getService().getTacDTO().getPaymentProductCode());
-                        intent.putExtra(Constants.PENDING_PURCHASE_COUNT, tacResponseMessage.getService().getTacDTO().getPendingPurchasesCount());
-                        intent.putExtra(Constants.PENDING_PAYMENT_COUNT, tacResponseMessage.getService().getTacDTO().getPendingPaymentCount());
-                        intent.putExtra(Constants.SHOW_CREATE_INVOICE, tacResponseMessage.getService().getTacDTO().isShowCreateInvoice());
-                        editor.putBoolean(Constants.FORCE_USER_PROFILE, false);
-                        editor.commit();
-                        finish();
-                        startActivity(intent);
+                        if (prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").length() == 0){
+                            intent.setClass(activity, ChangePassCodeActivity.class);
+                            intent.putExtra(Constants.REGISTERED_CELL_NUMBER, tacResponseMessage.getService().getTacDTO().getUserProfile().getCellNumber());
+                            startActivity(intent);
+                        }else {
+                            intent.setClass(activity, MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            intent.putExtra(Constants.USER_PROFILE_DTO, tacResponseMessage.getService().getTacDTO().getUserProfile());
+                            intent.putExtra(Constants.PENDING_PURCHASE_CODE, tacResponseMessage.getService().getTacDTO().getPurchaseProductCode());
+                            intent.putExtra(Constants.PENDING_PAYMENT_CODE, tacResponseMessage.getService().getTacDTO().getPaymentProductCode());
+                            intent.putExtra(Constants.PENDING_PURCHASE_COUNT, tacResponseMessage.getService().getTacDTO().getPendingPurchasesCount());
+                            intent.putExtra(Constants.PENDING_PAYMENT_COUNT, tacResponseMessage.getService().getTacDTO().getPendingPaymentCount());
+                            intent.putExtra(Constants.SHOW_CREATE_INVOICE, tacResponseMessage.getService().getTacDTO().isShowCreateInvoice());
+                            editor.putBoolean(Constants.FORCE_USER_PROFILE, false);
+                            editor.commit();
+                            finish();
+                            startActivity(intent);
+                        }
                     }
 
 
-                }else {
+                }else if (tacResponseMessage.getService().getResultStatus() == ResultStatus.OUT_OF_DATE_APP_VERSION){
+                    hamPayDialog.appUpdateDialog(Constants.APP_STORE_URL);
+                }
+                else {
                     requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
                     new HamPayDialog(activity).showFailTCRequestDialog(requestTAC, tacRequest,
                             tacResponseMessage.getService().getResultStatus().getCode(),
@@ -458,153 +429,109 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                 if (keyboard.getVisibility() == View.VISIBLE)
                     new Collapse(keyboard).animate();
                 break;
-
-            case R.id.digit_1:
-                inputDigit("1");
-                break;
-
-            case R.id.digit_2:
-                inputDigit("2");
-                break;
-
-            case R.id.digit_3:
-                inputDigit("3");
-                break;
-
-            case R.id.digit_4:
-                inputDigit("4");
-                break;
-
-            case R.id.digit_5:
-                inputDigit("5");
-                break;
-
-            case R.id.digit_6:
-                inputDigit("6");
-                break;
-
-            case R.id.digit_7:
-                inputDigit("7");
-                break;
-
-            case R.id.digit_8:
-                inputDigit("8");
-                break;
-
-            case R.id.digit_9:
-                inputDigit("9");
-                break;
-
-            case R.id.digit_0:
-                inputDigit("0");
-                break;
-
-            case R.id.backspace:
-                inputDigit("d");
-                break;
         }
     }
 
 
-    private void inputDigit(String digit){
-
-        if (digit.contains("d")){
-            if (inputPassValue.length() > 0) {
-                inputPassValue = inputPassValue.substring(0, inputPassValue.length() - 1);
-            }
-        }
-        else {
-            if (inputPassValue.length() <= 4) {
-                inputPassValue += digit;
-            }
-        }
-
-        if (inputPassValue.length() == 5){
-            try {
-
-                password = SecurityUtils.getInstance(this).
-                        generatePassword(inputPassValue,
-                                memorableWord,
-                                new DeviceInfo(activity).getAndroidId(),
-                                installationToken);
-
-            }catch (NoSuchAlgorithmException ex){}
-            catch (UnsupportedEncodingException ex){}
-
-            if (requestRecentPendingFund != null){
-                if (!requestRecentPendingFund.isCancelled()){
-                    requestRecentPendingFund.cancel(true);
-                }
-            }
-
-            keyboard.setEnabled(false);
-
-            if (!networkConnectivity.isOnline(context)){
-                hamPayDialog.showNoNetwork();
-            }else {
-                if (keyExchange.getKey() != null && keyExchange.getIv() != null) {
-                    LoginRequest loginRequest = new LoginRequest();
-                    loginRequest.setPassword(password);
-                    loginRequest.setUsername(userIdToken);
-                    RequestNewLogin requestNewLogin = new RequestNewLogin(activity, new RequestLoginTaskCompleteListener());
-                    requestNewLogin.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, loginRequest);
-                } else {
-                    resetLogin();
-                    Toast.makeText(activity, getString(R.string.system_connectivity), Toast.LENGTH_SHORT).show();
-                    new KeyExchangeTask().execute();
-                }
-            }
-        }
-
-
-        switch (inputPassValue.length()){
-
-            case 0:
-                input_digit_1.setImageResource(R.drawable.pass_login_value_empty);
-                input_digit_2.setImageResource(R.drawable.pass_login_value_empty);
-                input_digit_3.setImageResource(R.drawable.pass_login_value_empty);
-                input_digit_4.setImageResource(R.drawable.pass_login_value_empty);
-                input_digit_5.setImageResource(R.drawable.pass_login_value_empty);
-                break;
-
-            case 1:
-                input_digit_1.setImageResource(R.drawable.pass_login_value_placeholder);
-                input_digit_2.setImageResource(R.drawable.pass_login_value_empty);
-                input_digit_3.setImageResource(R.drawable.pass_login_value_empty);
-                input_digit_4.setImageResource(R.drawable.pass_login_value_empty);
-                input_digit_5.setImageResource(R.drawable.pass_login_value_empty);
-                break;
-            case 2:
-                input_digit_1.setImageResource(R.drawable.pass_login_value_placeholder);
-                input_digit_2.setImageResource(R.drawable.pass_login_value_placeholder);
-                input_digit_3.setImageResource(R.drawable.pass_login_value_empty);
-                input_digit_4.setImageResource(R.drawable.pass_login_value_empty);
-                input_digit_5.setImageResource(R.drawable.pass_login_value_empty);
-                break;
-            case 3:
-                input_digit_1.setImageResource(R.drawable.pass_login_value_placeholder);
-                input_digit_2.setImageResource(R.drawable.pass_login_value_placeholder);
-                input_digit_3.setImageResource(R.drawable.pass_login_value_placeholder);
-                input_digit_4.setImageResource(R.drawable.pass_login_value_empty);
-                input_digit_5.setImageResource(R.drawable.pass_login_value_empty);
-                break;
-            case 4:
-                input_digit_1.setImageResource(R.drawable.pass_login_value_placeholder);
-                input_digit_2.setImageResource(R.drawable.pass_login_value_placeholder);
-                input_digit_3.setImageResource(R.drawable.pass_login_value_placeholder);
-                input_digit_4.setImageResource(R.drawable.pass_login_value_placeholder);
-                input_digit_5.setImageResource(R.drawable.pass_login_value_empty);
-                break;
-            case 5:
-                input_digit_1.setImageResource(R.drawable.pass_login_value_placeholder);
-                input_digit_2.setImageResource(R.drawable.pass_login_value_placeholder);
-                input_digit_3.setImageResource(R.drawable.pass_login_value_placeholder);
-                input_digit_4.setImageResource(R.drawable.pass_login_value_placeholder);
-                input_digit_5.setImageResource(R.drawable.pass_login_value_placeholder);
-                break;
-        }
-
-    }
+//    private void inputDigit(String digit){
+//
+//        if (digit.contains("d")){
+//            if (inputPassValue.length() > 0) {
+//                inputPassValue = inputPassValue.substring(0, inputPassValue.length() - 1);
+//            }
+//        }
+//        else {
+//            if (inputPassValue.length() <= 4) {
+//                inputPassValue += digit;
+//            }
+//        }
+//
+//        if (inputPassValue.length() == 5){
+//            try {
+//
+//                password = SecurityUtils.getInstance(this).
+//                        generatePassword(inputPassValue,
+//                                memorableWord,
+//                                new DeviceInfo(activity).getAndroidId(),
+//                                installationToken);
+//
+//            }catch (NoSuchAlgorithmException ex){}
+//            catch (UnsupportedEncodingException ex){}
+//
+//            if (requestRecentPendingFund != null){
+//                if (!requestRecentPendingFund.isCancelled()){
+//                    requestRecentPendingFund.cancel(true);
+//                }
+//            }
+//
+//            keyboard.setEnabled(false);
+//
+//            if (!networkConnectivity.isOnline(context)){
+//                hamPayDialog.showNoNetwork();
+//            }else {
+//                if (keyExchange.getKey() != null && keyExchange.getIv() != null) {
+//                    LoginRequest loginRequest = new LoginRequest();
+//                    loginRequest.setPassword(password);
+//                    loginRequest.setUsername(userIdToken);
+//                    RequestNewLogin requestNewLogin = new RequestNewLogin(activity, new RequestLoginTaskCompleteListener());
+//                    requestNewLogin.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, loginRequest);
+//                } else {
+//                    resetLogin();
+//                    Toast.makeText(activity, getString(R.string.system_connectivity), Toast.LENGTH_SHORT).show();
+//                    new KeyExchangeTask().execute();
+//                }
+//            }
+//        }
+//
+//
+//        switch (inputPassValue.length()){
+//
+//            case 0:
+//                input_digit_1.setImageResource(R.drawable.pass_login_value_empty);
+//                input_digit_2.setImageResource(R.drawable.pass_login_value_empty);
+//                input_digit_3.setImageResource(R.drawable.pass_login_value_empty);
+//                input_digit_4.setImageResource(R.drawable.pass_login_value_empty);
+//                input_digit_5.setImageResource(R.drawable.pass_login_value_empty);
+//                break;
+//
+//            case 1:
+//                input_digit_1.setImageResource(R.drawable.pass_login_value_placeholder);
+//                input_digit_2.setImageResource(R.drawable.pass_login_value_empty);
+//                input_digit_3.setImageResource(R.drawable.pass_login_value_empty);
+//                input_digit_4.setImageResource(R.drawable.pass_login_value_empty);
+//                input_digit_5.setImageResource(R.drawable.pass_login_value_empty);
+//                break;
+//            case 2:
+//                input_digit_1.setImageResource(R.drawable.pass_login_value_placeholder);
+//                input_digit_2.setImageResource(R.drawable.pass_login_value_placeholder);
+//                input_digit_3.setImageResource(R.drawable.pass_login_value_empty);
+//                input_digit_4.setImageResource(R.drawable.pass_login_value_empty);
+//                input_digit_5.setImageResource(R.drawable.pass_login_value_empty);
+//                break;
+//            case 3:
+//                input_digit_1.setImageResource(R.drawable.pass_login_value_placeholder);
+//                input_digit_2.setImageResource(R.drawable.pass_login_value_placeholder);
+//                input_digit_3.setImageResource(R.drawable.pass_login_value_placeholder);
+//                input_digit_4.setImageResource(R.drawable.pass_login_value_empty);
+//                input_digit_5.setImageResource(R.drawable.pass_login_value_empty);
+//                break;
+//            case 4:
+//                input_digit_1.setImageResource(R.drawable.pass_login_value_placeholder);
+//                input_digit_2.setImageResource(R.drawable.pass_login_value_placeholder);
+//                input_digit_3.setImageResource(R.drawable.pass_login_value_placeholder);
+//                input_digit_4.setImageResource(R.drawable.pass_login_value_placeholder);
+//                input_digit_5.setImageResource(R.drawable.pass_login_value_empty);
+//                break;
+//            case 5:
+//                input_digit_1.setImageResource(R.drawable.pass_login_value_placeholder);
+//                input_digit_2.setImageResource(R.drawable.pass_login_value_placeholder);
+//                input_digit_3.setImageResource(R.drawable.pass_login_value_placeholder);
+//                input_digit_4.setImageResource(R.drawable.pass_login_value_placeholder);
+//                input_digit_5.setImageResource(R.drawable.pass_login_value_placeholder);
+//                break;
+//        }
+//
+//    }
 
 
     @Override
@@ -689,11 +616,125 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
     private void resetLogin(){
         inputPassValue = "";
-        input_digit_1.setImageResource(R.drawable.pass_login_value_empty);
-        input_digit_2.setImageResource(R.drawable.pass_login_value_empty);
-        input_digit_3.setImageResource(R.drawable.pass_login_value_empty);
-        input_digit_4.setImageResource(R.drawable.pass_login_value_empty);
-        input_digit_5.setImageResource(R.drawable.pass_login_value_empty);
+        input_digit_1.setBackgroundResource(R.drawable.pass_login_value_empty);
+        input_digit_2.setBackgroundResource(R.drawable.pass_login_value_empty);
+        input_digit_3.setBackgroundResource(R.drawable.pass_login_value_empty);
+        input_digit_4.setBackgroundResource(R.drawable.pass_login_value_empty);
+        input_digit_5.setBackgroundResource(R.drawable.pass_login_value_empty);
         hamPayDialog.dismisWaitingDialog();
+    }
+
+    public void pressKey(View view){
+        if (view.getTag().toString().equals("*")){
+            new Collapse(keyboard).animate();
+        }
+        else {
+            inputDigit(view.getTag().toString());
+        }
+    }
+
+    private void inputDigit(String digit){
+
+        if (digit.contains("d")){
+            if (inputPassValue.length() > 0) {
+                inputPassValue = inputPassValue.substring(0, inputPassValue.length() - 1);
+                if (inputPassValue.length() == 4){
+                    input_digit_5.setBackgroundResource(R.drawable.pass_login_value_empty);
+                    input_digit_5.setText("");
+                }
+                else if (inputPassValue.length() == 3){
+                    input_digit_4.setBackgroundResource(R.drawable.pass_login_value_empty);
+                    input_digit_4.setText("");
+                }
+                else if (inputPassValue.length() == 2){
+                    input_digit_3.setBackgroundResource(R.drawable.pass_login_value_empty);
+                    input_digit_3.setText("");
+                }
+                else if (inputPassValue.length() == 1){
+                    input_digit_2.setBackgroundResource(R.drawable.pass_login_value_empty);
+                    input_digit_2.setText("");
+                }
+                else if (inputPassValue.length() == 0){
+                    input_digit_1.setBackgroundResource(R.drawable.pass_login_value_empty);
+                    input_digit_1.setText("");
+                }
+            }
+            return;
+        }
+        else {
+            if (inputPassValue.length() <= 5) {
+                inputPassValue += digit;
+            }
+        }
+
+        if (inputPassValue.length() <= 5) {
+            switch (inputPassValue.length()) {
+                case 1:
+                    input_digit_1.setBackgroundResource(R.drawable.pass_login_value_placeholder);
+                    input_digit_2.setBackgroundResource(R.drawable.pass_login_value_empty);
+                    input_digit_3.setBackgroundResource(R.drawable.pass_login_value_empty);
+                    input_digit_4.setBackgroundResource(R.drawable.pass_login_value_empty);
+                    input_digit_5.setBackgroundResource(R.drawable.pass_login_value_empty);
+                    break;
+
+                case 2:
+                    input_digit_2.setBackgroundResource(R.drawable.pass_login_value_placeholder);
+                    input_digit_3.setBackgroundResource(R.drawable.pass_login_value_empty);
+                    input_digit_4.setBackgroundResource(R.drawable.pass_login_value_empty);
+                    input_digit_5.setBackgroundResource(R.drawable.pass_login_value_empty);
+                    break;
+                case 3:
+                    input_digit_3.setBackgroundResource(R.drawable.pass_login_value_placeholder);
+                    input_digit_4.setBackgroundResource(R.drawable.pass_login_value_empty);
+                    input_digit_5.setBackgroundResource(R.drawable.pass_login_value_empty);
+                    break;
+                case 4:
+                    input_digit_4.setBackgroundResource(R.drawable.pass_login_value_placeholder);
+                    input_digit_5.setBackgroundResource(R.drawable.pass_login_value_empty);
+                    break;
+                case 5:
+                    input_digit_5.setBackgroundResource(R.drawable.pass_login_value_placeholder);
+                    new Collapse(keyboard).animate();
+                    if (!networkConnectivity.isOnline(context)){
+                        hamPayDialog.showNoNetwork();
+                    }else {
+                        if (keyExchange.getKey() != null && keyExchange.getIv() != null) {
+                            String cellNumber = prefs.getString(Constants.REGISTERED_CELL_NUMBER, "");
+                            String apiLevel = "";
+                            if (cellNumber.length() == 0){
+                                apiLevel = "2.0";
+                                try {
+                                    password = SecurityUtils.getInstance(this).
+                                            generatePassword(inputPassValue,
+                                                    memorableWord,
+                                                    new DeviceInfo(activity).getAndroidId(),
+                                                    installationToken);
+                                }catch (NoSuchAlgorithmException ex){}
+                                catch (UnsupportedEncodingException ex){}
+                            }else {
+                                apiLevel = "3.0";
+//                                apiLevel = Constants.API_LEVEL;
+                                try {
+                                    password = SecurityUtils.getInstance(this).generateSHA_256_Password(cellNumber + inputPassValue);
+                                } catch (NoSuchAlgorithmException e) {
+                                    e.printStackTrace();
+                                } catch (UnsupportedEncodingException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            LoginRequest loginRequest = new LoginRequest();
+                            loginRequest.setPassword(password);
+                            loginRequest.setUsername(userIdToken);
+                            RequestNewLogin requestNewLogin = new RequestNewLogin(activity, new RequestLoginTaskCompleteListener(), apiLevel);
+                            requestNewLogin.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, loginRequest);
+                        } else {
+                            resetLogin();
+                            Toast.makeText(activity, getString(R.string.system_connectivity), Toast.LENGTH_SHORT).show();
+                            new KeyExchangeTask().execute();
+                        }
+                    }
+                    break;
+            }
+        }
     }
 }

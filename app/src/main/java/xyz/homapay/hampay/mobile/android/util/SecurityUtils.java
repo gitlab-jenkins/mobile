@@ -35,8 +35,8 @@ public class SecurityUtils {
     }
 
 
+    //Old Password Generation - Api Level 2.0 and pre
     public String generatePassword(String passCode, String memorableKey, String deviceId, String installationToken) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-//        return deviceId + toHexString(memorableKey) + String.valueOf(installationToken.length() * 3 + 11) + passCode + installationToken + String.valueOf(memorableKey.length()*17 + 23);
         String password = deviceId + toHexString(memorableKey) + String.valueOf(installationToken.length() * 3 + 11) + passCode + installationToken + String.valueOf(memorableKey.length()*17 + 23);
         return generateSHA_256_Password(password);
     }
@@ -48,8 +48,6 @@ public class SecurityUtils {
         messageDigest.update(password.getBytes("UTF-8"));
         byte[] digest = messageDigest.digest();
         return String.format("%0" + (digest.length * 2) + 'x', new BigInteger(1, digest));
-//        String convertDigest = new String(digest);
-//        return convertDigest;
     }
 
     public byte[] generateSHA_256(String macAddress, String IMEI, String androidId) throws NoSuchAlgorithmException, UnsupportedEncodingException {
@@ -57,7 +55,6 @@ public class SecurityUtils {
         String rawData = macAddress + IMEI + androidId;
         messageDigest.update(rawData.getBytes("UTF-8"));
         byte[] digest = messageDigest.digest();
-
         return digest;
 
     }

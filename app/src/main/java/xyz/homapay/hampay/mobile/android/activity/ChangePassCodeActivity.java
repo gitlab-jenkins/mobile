@@ -47,6 +47,8 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
     private int passCodeChangeStep = 0;
     private Context context;
     private Activity activity;
+    private String cellNumber;
+    private boolean forceChange = false;
 
     public void backActionBar(View view){
         finish();
@@ -94,6 +96,13 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_pass_code);
 
+        cellNumber = getIntent().getStringExtra(Constants.REGISTERED_CELL_NUMBER);
+        if (cellNumber.length() == 0){
+            forceChange = false;
+        }else {
+            forceChange = true;
+        }
+
         context = this;
         activity = ChangePassCodeActivity.this;
         hamPayDialog = new HamPayDialog(activity);
@@ -134,7 +143,7 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
 
             if (changePassCodeResponseMessage != null) {
                 if (changePassCodeResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-
+                    editor.putString(Constants.REGISTERED_CELL_NUMBER, cellNumber).commit();
                     passCodeChangeStep = 1;
                     pass_code_change_text.setText(getString(R.string.change_pass_code_text_1));
                     currentPassword = "";
@@ -145,7 +154,7 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                     input_digit_3.setBackgroundResource(R.drawable.pass_value_empty);
                     input_digit_4.setBackgroundResource(R.drawable.pass_value_empty);
                     input_digit_5.setBackgroundResource(R.drawable.pass_value_empty);
-                    new HamPayDialog(activity).showSuccessChangeSettingDialog(changePassCodeResponseMessage.getService().getResultStatus().getDescription());
+                    new HamPayDialog(activity).showSuccessChangeSettingDialog(changePassCodeResponseMessage.getService().getResultStatus().getDescription(), forceChange);
 
                 }else if (changePassCodeResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();
@@ -174,7 +183,7 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
 
 
     private void resetLayout(){
-        passCodeChangeStep = 1;
+        passCodeChangeStep = 0;
         pass_code_change_text.setText(getString(R.string.change_pass_code_text_1));
         currentPassword = "";
         inputPasswordValue = "";

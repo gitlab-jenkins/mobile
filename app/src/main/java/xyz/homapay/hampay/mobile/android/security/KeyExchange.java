@@ -55,7 +55,7 @@ public class KeyExchange {
         ResponseMessage<KeyAgreementResponse> keyAgreementResponseMessage = null;
         URL url = new URL(Constants.HTTPS_SERVER_IP + "/security/agree-key");
         SecuredProxyService proxyService = new SecuredProxyService(context, Constants.CONNECTION_TYPE, ConnectionMethod.POST, url);
-        RequestMessage<KeyAgreementRequest> message = new RequestMessage<>(keyAgreementRequest, "", Constants.REQUEST_VERSION, System.currentTimeMillis());
+        RequestMessage<KeyAgreementRequest> message = new RequestMessage<>(keyAgreementRequest, "", Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new TypeToken<RequestMessage<KeyAgreementRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);

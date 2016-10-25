@@ -5,9 +5,9 @@ import xyz.homapay.hampay.mobile.android.webservice.ConnectionType;
 
 public class Constants {
 //    public static String SERVER = "176.58.104.158";//England Server
-    public static String SERVER = "mobile.hampay.ir";//Prod Server
+//    public static String SERVER = "mobile.hampay.ir";//Prod Server
 //    public static String SERVER = "139.162.147.189";//DEV2 Server
-//    public static String SERVER = "uat.hampay.ir";//UAT Server
+    public static String SERVER = "uat.hampay.ir";//UAT Server
 //    public static String SERVER = "mobile.hampay.homapay.com";//LIVE Server
     public static String URL_PREFIX = "/hampay";
     public static String HTTP_SERVER_IP = "http://" + SERVER + ":90" + URL_PREFIX;//England Server
@@ -20,9 +20,10 @@ public class Constants {
     public static final String HTTP_OPENAM_LOGIN_URL = "http://" + SERVER + URL_PREFIX + "/auth";
     public static final String HTTP_OPENAM_LOGOUT_URL = "http://" + SERVER + URL_PREFIX + "/unauth";
     public static final String PSP_SOAP_SERVICE_URL = SERVER;
+    public static final String APP_STORE_URL = "https://play.google.com/store/apps/details?id=xyz.homapay.hampay.mobile.android";
     public static final String IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch";
     public static final String PROJECT_NUMBER = "936219454834";
-    public static final String REQUEST_VERSION = "2.0";
+    public static final String API_LEVEL = "2.0";
     public static final int SERVICE_CONNECTION_TIMEOUT = 30000;
     public static final int SERVICE_READ_TIMEOUT = 30000;
     public static final String SERVICE_CONTENT_TYPE = "application/json";

@@ -4,12 +4,10 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -100,7 +98,7 @@ public class ImageManager {
                 RetrieveImageRequest retrieveImageRequest = new RetrieveImageRequest();
                 retrieveImageRequest.setImageId(imageId);
                 retrieveImageRequest.setRequestUUID(UUID.randomUUID().toString());
-                RequestMessage<RetrieveImageRequest> message = new RequestMessage<>(retrieveImageRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+                RequestMessage<RetrieveImageRequest> message = new RequestMessage<>(retrieveImageRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
                 Type requestType = new TypeToken<RequestMessage<RetrieveImageRequest>>() {}.getType();
                 String jsonRequest = new Gson().toJson(message, requestType);
                 proxyService.setJsonBody(jsonRequest);
@@ -118,7 +116,7 @@ public class ImageManager {
                     RetrieveImageRequest retrieveImageRequest = new RetrieveImageRequest();
                     retrieveImageRequest.setImageId(imageId);
                     retrieveImageRequest.setRequestUUID(UUID.randomUUID().toString());
-                    RequestMessage<RetrieveImageRequest> message = new RequestMessage<>(retrieveImageRequest, authToken, Constants.REQUEST_VERSION, System.currentTimeMillis());
+                    RequestMessage<RetrieveImageRequest> message = new RequestMessage<>(retrieveImageRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
                     Type requestType = new TypeToken<RequestMessage<RetrieveImageRequest>>() {}.getType();
                     String jsonRequest = new Gson().toJson(message, requestType);
                     proxyService.setJsonBody(jsonRequest);

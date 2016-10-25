@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.content.IntentCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -65,6 +66,7 @@ import xyz.homapay.hampay.mobile.android.activity.ChangeMemorableActivity;
 import xyz.homapay.hampay.mobile.android.activity.GuideDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.activity.MainActivity;
+import xyz.homapay.hampay.mobile.android.activity.PasswordEntryActivity;
 import xyz.homapay.hampay.mobile.android.activity.ProfileEntryActivity;
 import xyz.homapay.hampay.mobile.android.activity.SMSVerificationActivity;
 import xyz.homapay.hampay.mobile.android.activity.UnlinkPassActivity;
@@ -941,7 +943,7 @@ public class HamPayDialog {
         }
     }
 
-    public void showSuccessChangeSettingDialog(final String message){
+    public void showSuccessChangeSettingDialog(final String message, final boolean forceChange){
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_success_change_setting, null);
         FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
         responseMessage.setText(message);
@@ -949,9 +951,16 @@ public class HamPayDialog {
         success_change_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
-                activity.finish();
-
+                if (forceChange){
+                    Intent intent = new Intent();
+                    intent.setClass(activity, HamPayLoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                    activity.finish();
+                    activity.startActivity(intent);
+                }else {
+                    dialog.dismiss();
+                    activity.finish();
+                }
             }
         });
         view.setMinimumWidth((int) (rect.width() * 0.85f));

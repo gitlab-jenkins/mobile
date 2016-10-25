@@ -337,7 +337,7 @@ public class ChangeIbanPassActivity extends AppCompatActivity implements View.On
                 if (ibanChangeResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     editor.putBoolean(Constants.SETTING_CHANGE_IBAN_STATUS, true);
                     editor.commit();
-                    new HamPayDialog(activity).showSuccessChangeSettingDialog(ibanChangeResponseMessage.getService().getResultStatus().getDescription());
+                    new HamPayDialog(activity).showSuccessChangeSettingDialog(ibanChangeResponseMessage.getService().getResultStatus().getDescription(), false);
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra(Constants.RETURN_IBAN_CONFIRMED, iban);
                     setResult(RESULT_OK, returnIntent);
