@@ -327,9 +327,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                             }
                         }
                         if (prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").length() == 0){
-                            intent.setClass(activity, ChangePassCodeActivity.class);
-                            intent.putExtra(Constants.REGISTERED_CELL_NUMBER, tacResponseMessage.getService().getTacDTO().getUserProfile().getCellNumber());
-                            startActivity(intent);
+                            hamPayDialog.forceChangePassDialog(tacResponseMessage.getService().getTacDTO().getUserProfile().getCellNumber());
                         }else {
                             intent.setClass(activity, MainActivity.class);
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -701,7 +699,8 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                         if (keyExchange.getKey() != null && keyExchange.getIv() != null) {
                             String cellNumber = prefs.getString(Constants.REGISTERED_CELL_NUMBER, "");
                             String apiLevel = "";
-                            if (cellNumber.length() == 0){
+//                            if (cellNumber.length() == 0){
+                            if (true){
                                 apiLevel = "2.0";
                                 try {
                                     password = SecurityUtils.getInstance(this).

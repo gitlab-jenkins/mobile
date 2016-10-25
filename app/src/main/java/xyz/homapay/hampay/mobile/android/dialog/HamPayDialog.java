@@ -63,6 +63,7 @@ import xyz.homapay.hampay.mobile.android.activity.AppSliderActivity;
 import xyz.homapay.hampay.mobile.android.activity.ChangeEmailPassActivity;
 import xyz.homapay.hampay.mobile.android.activity.ChangeIbanPassActivity;
 import xyz.homapay.hampay.mobile.android.activity.ChangeMemorableActivity;
+import xyz.homapay.hampay.mobile.android.activity.ChangePassCodeActivity;
 import xyz.homapay.hampay.mobile.android.activity.GuideDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.activity.MainActivity;
@@ -2035,6 +2036,29 @@ public class HamPayDialog {
                 intent.setData(Uri.parse(storeUrl));
                 activity.startActivity(intent);
                 dialog.dismiss();
+            }
+        });
+
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
+    }
+
+    public void forceChangePassDialog(final String cellNumber){
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_change_pass, null);
+
+        FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
+
+        confirmation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(activity, ChangePassCodeActivity.class);
+                intent.putExtra(Constants.REGISTERED_CELL_NUMBER, cellNumber);
+                activity.startActivity(intent);
+
             }
         });
 

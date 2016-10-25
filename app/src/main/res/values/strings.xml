@@ -342,6 +342,9 @@
     <string name="app_update_text">کاربر گرامی، برای ادامه می‌بایستی آخرین نسخه اپلیکیشن <b>هم‌پی</b> را دریافت نمایید.</string>
     <string name="app_update_confirm">تایید</string>
 
+    <string name="app_change_pass_text">کاربر گرامی، به دلیل تغییرات زیرساختی، لازم است تا رمز عبور خود را تغییر دهید.</string>
+    <string name="app_change_pass_confirm">تایید</string>
+
     <string-array name="psp_code">
 
         <item>-1</item>
