@@ -17,10 +17,7 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class MerchantIdActivity extends AppCompatActivity {
 
-    FacedTextView keepOn_button;
-    SharedPreferences prefs;
-    FacedEditText memorable_value;
-
+    private SharedPreferences prefs;
     private Context context;
 
     public void backActionBar(View view){
@@ -67,34 +64,9 @@ public class MerchantIdActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_change_memorable);
-
+        setContentView(R.layout.activity_merchant_id);
         context = this;
-
-        memorable_value = (FacedEditText)findViewById(R.id.memorable_value);
-
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
-
-        keepOn_button = (FacedTextView) findViewById(R.id.keepOn_button);
-        keepOn_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (memorable_value.getText().toString().length() > 1){
-                    Intent intent = new Intent();
-                    intent.setClass(MerchantIdActivity.this, ChangeMemorablePassActivity.class);
-                    intent.putExtra("currentMemorable", prefs.getString(Constants.MEMORABLE_WORD, ""));
-                    intent.putExtra("newMemorable", memorable_value.getText().toString());
-                    startActivity(intent);
-                    finish();
-                }else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.msg_memorable_incorrect), Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
-
-
-
     }
 
 
