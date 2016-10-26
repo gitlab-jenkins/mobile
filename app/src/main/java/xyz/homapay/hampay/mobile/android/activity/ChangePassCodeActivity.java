@@ -47,7 +47,7 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
     private int passCodeChangeStep = 0;
     private Context context;
     private Activity activity;
-    private String cellNumber;
+    private String cellNumber = "";
     private boolean forceChange = false;
 
     public void backActionBar(View view){
@@ -97,7 +97,7 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
         setContentView(R.layout.activity_change_pass_code);
 
         cellNumber = getIntent().getStringExtra(Constants.REGISTERED_CELL_NUMBER);
-        if (cellNumber.length() == 0){
+        if (cellNumber == null || cellNumber.length() == 0){
             forceChange = false;
         }else {
             forceChange = true;
