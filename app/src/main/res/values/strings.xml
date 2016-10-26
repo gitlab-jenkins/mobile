@@ -297,8 +297,11 @@
     <string name="memorable_word_change_title">تغییر کلمه یادآوری</string>
     <string name="merchant_id_request_title">درخواست کد پذیرندگی</string>
     <string name="merchant_id_cancel">انصراف</string>
+    <string name="merchant_id_close">بستن</string>
     <string name="merchant_id_request">درخواست</string>
     <string name="merchant_id_not_set">کد پذیرندگی برای حساب شما فعال نشده است. جهت ثبت درخواست کد پذیرندگی، دکمه درخواست را انتخاب کنید.</string>
+    <string name="merchant_id_status_pending">درخواست شما در حال بررسی است.</string>
+    <string name="merchant_info">کد پذیرندگی شما با شماره %1$s تا تاریخ %2$s فعال است.</string>
     <string name="change_memorable_word_text_1">لطفا یک کلمه کوتاه به عنوان کلمه یادآوری رمز عبور خود معرفی نمایید</string>
     <string name="change_activities_pass_code_text">لطفا رمز عبور خود را وارد نمایید</string>
     <string name="email_change_title">تغییر ایمیل</string>

@@ -65,12 +65,14 @@
 
 
         <LinearLayout
+            android:id="@+id/requestLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_alignParentBottom="true"
             android:padding="8dp"
-            android:background="@android:color/white">
+            android:background="@android:color/white"
+            android:visibility="gone">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/vazir_regular.ttf"
@@ -102,6 +104,7 @@
                     android:background="@drawable/modal_success_button_style" />
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                    android:id="@+id/requestMerchantId"
                     geekui:customTypeface="fonts/vazir_regular.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="32dp"
@@ -113,9 +116,90 @@
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
                     android:background="@drawable/modal_success_button_style"
-                    android:layout_alignParentRight="true"/>
+                    android:layout_alignParentRight="true"
+                    android:clickable="true"
+                    android:onClick="onClick"/>
 
             </RelativeLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/statusLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            android:padding="8dp"
+            android:background="@android:color/white"
+            android:visibility="gone">
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                geekui:customTypeface="fonts/vazir_regular.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/main_menu_title"
+                android:textSize="15dp"
+                android:text="@string/merchant_id_status_pending"
+                android:gravity="center"
+                android:layout_marginTop="4dp"/>
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/closeMerchantId"
+                geekui:customTypeface="fonts/vazir_regular.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:textColor="@android:color/white"
+                android:textSize="15dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="@string/merchant_id_close"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:background="@drawable/modal_success_button_style"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:onClick="onClick"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/resultLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            android:padding="8dp"
+            android:background="@android:color/white"
+            android:visibility="visible">
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/merchantInfo"
+                geekui:customTypeface="fonts/vazir_regular.ttf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/main_menu_title"
+                android:textSize="15dp"
+                android:text="@string/merchant_info"
+                android:gravity="center"
+                android:layout_marginTop="4dp"/>
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/closeViewMerchantId"
+                geekui:customTypeface="fonts/vazir_regular.ttf"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:textColor="@android:color/white"
+                android:textSize="15dp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="@string/merchant_id_close"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:background="@drawable/modal_success_button_style"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:onClick="onClick"/>
 
 
         </LinearLayout>
