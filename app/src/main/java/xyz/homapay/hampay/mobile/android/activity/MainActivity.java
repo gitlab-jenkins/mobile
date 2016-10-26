@@ -302,9 +302,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         }
         displayView(currentFragment);
 
-//        if (!prefs.getBoolean(Constants.SEND_MOBILE_REGISTER_ID, false)) {
+        if (!prefs.getBoolean(Constants.SEND_MOBILE_REGISTER_ID, false)) {
             getRegId();
-//        }
+        }
     }
 
 

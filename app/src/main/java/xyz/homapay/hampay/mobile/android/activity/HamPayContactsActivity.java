@@ -139,11 +139,10 @@ public class HamPayContactsActivity extends AppCompatActivity implements Permiss
 
                         handler.post(new Runnable() {
                             public void run() {
-                                FragmentManager fm = getSupportFragmentManager();
-                                FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                                fragmentTransaction.commit();
                                 PermissionContactDialog permissionContactDialog = new PermissionContactDialog();
-                                permissionContactDialog.show(fm, "fragment_edit_name");
+                                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                                fragmentTransaction.add(permissionContactDialog, null);
+                                fragmentTransaction.commitAllowingStateLoss();
                             }
                         });
                     }
