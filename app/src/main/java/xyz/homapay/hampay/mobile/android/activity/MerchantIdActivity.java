@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.request.UserRequestForBeingMerchantProgressRequest;
@@ -21,19 +24,25 @@ import xyz.homapay.hampay.mobile.android.async.task.UserRequestForBeingMerchantP
 import xyz.homapay.hampay.mobile.android.async.task.UserRequestForBeingMerchantTask;
 import xyz.homapay.hampay.mobile.android.async.task.impl.OnTaskCompleted;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
-import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompleted, View.OnClickListener{
 
     private Activity activity;
     private SharedPreferences prefs;
     private Context context;
+    private LinearLayout requestLayout;
+    private LinearLayout statusLayout;
+    private LinearLayout resultLayout;
     private FacedTextView requestMerchantIdBtn;
+    private FacedTextView closeRequestMerchantId;
     private FacedTextView closeMerchantIdBtn;
+    private FacedTextView closeViewMerchantId;
     private FacedTextView merchantInfo;
     private String authToken = "";
+    private PersianEnglishDigit persian;
 
     public void backActionBar(View view){
         finish();
@@ -84,15 +93,25 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
         context = this;
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
+        persian = new PersianEnglishDigit();
+
+        requestLayout = (LinearLayout)findViewById(R.id.requestLayout);
+        statusLayout = (LinearLayout)findViewById(R.id.statusLayout);
+        resultLayout = (LinearLayout)findViewById(R.id.resultLayout);
 
         requestMerchantIdBtn = (FacedTextView)findViewById(R.id.requestMerchantId);
         requestMerchantIdBtn.setOnClickListener(this);
 
+        closeRequestMerchantId = (FacedTextView)findViewById(R.id.closeRequestMerchantId);
+        closeRequestMerchantId.setOnClickListener(this);
+
         closeMerchantIdBtn = (FacedTextView)findViewById(R.id.closeMerchantId);
         closeMerchantIdBtn.setOnClickListener(this);
 
+        closeViewMerchantId = (FacedTextView)findViewById(R.id.closeViewMerchantId);
+        closeViewMerchantId.setOnClickListener(this);
+
         merchantInfo = (FacedTextView)findViewById(R.id.merchantInfo);
-        merchantInfo.setText(getString(R.string.merchant_info, "1", "2"));
     }
 
 
@@ -112,6 +131,13 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
                         ResponseMessage<UserRequestForBeingMerchantResponse> userRequestForBeingMerchant = (ResponseMessage) object;
                         switch (userRequestForBeingMerchant.getService().getResultStatus()){
                             case SUCCESS:
+                                if (userRequestForBeingMerchant.getService().getMerchantProgressForUserStatus().equalsIgnoreCase("PENDING")){
+                                    requestLayout.setVisibility(View.GONE);
+                                    statusLayout.setVisibility(View.VISIBLE);
+                                }else if (userRequestForBeingMerchant.getService().getMerchantProgressForUserStatus().equalsIgnoreCase("ACCEPT")){
+                                    UserRequestForBeingMerchantProgressRequest userRequestForBeingMerchantProgress = new UserRequestForBeingMerchantProgressRequest();
+                                    new UserRequestForBeingMerchantProgressTask(activity, MerchantIdActivity.this, userRequestForBeingMerchantProgress, authToken).execute();
+                                }
                                 break;
                             default:
                                 break;
@@ -122,7 +148,13 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
                         ResponseMessage<UserRequestForBeingMerchantProgressResponse> userRequestForBeingMerchantProgress = (ResponseMessage) object;
                         switch (userRequestForBeingMerchantProgress.getService().getResultStatus()){
                             case SUCCESS:
-
+                                String merchantId = userRequestForBeingMerchantProgress.getService().getMerchantId();
+                                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(persian.E2P(getString(R.string.merchant_info, merchantId)));
+                                ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.rgb(Constants.HAMPAY_RED, Constants.HAMPAY_GREEN, Constants.HAMPAY_BLUE));
+                                spannableStringBuilder.setSpan(foregroundColorSpan, 24, merchantId.length() + 26, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+                                merchantInfo.setText(spannableStringBuilder);
+                                requestLayout.setVisibility(View.GONE);
+                                resultLayout.setVisibility(View.VISIBLE);
                                 break;
                             default:
                                 break;
@@ -141,10 +173,16 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
                 finish();
                 break;
             case R.id.requestMerchantId:
-//                UserRequestForBeingMerchantRequest userRequestForBeingMerchantRequest = new UserRequestForBeingMerchantRequest();
-//                new UserRequestForBeingMerchantTask(activity, MerchantIdActivity.this, userRequestForBeingMerchantRequest, authToken).execute();
-                UserRequestForBeingMerchantProgressRequest userRequestForBeingMerchantProgress = new UserRequestForBeingMerchantProgressRequest();
-                new UserRequestForBeingMerchantProgressTask(activity, MerchantIdActivity.this, userRequestForBeingMerchantProgress, authToken).execute();
+                UserRequestForBeingMerchantRequest userRequestForBeingMerchantRequest = new UserRequestForBeingMerchantRequest();
+                new UserRequestForBeingMerchantTask(activity, MerchantIdActivity.this, userRequestForBeingMerchantRequest, authToken).execute();
+                break;
+
+            case R.id.closeRequestMerchantId:
+                finish();
+                break;
+
+            case R.id.closeViewMerchantId:
+                finish();
                 break;
         }
     }

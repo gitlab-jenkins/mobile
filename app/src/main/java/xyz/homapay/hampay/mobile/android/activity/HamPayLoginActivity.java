@@ -326,7 +326,8 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                                 intent = getIntent();
                             }
                         }
-                        if (prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").length() == 0){
+//                        if (prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").length() == 0){
+                        if (false){
                             hamPayDialog.forceChangePassDialog(tacResponseMessage.getService().getTacDTO().getUserProfile().getCellNumber());
                         }else {
                             intent.setClass(activity, MainActivity.class);
