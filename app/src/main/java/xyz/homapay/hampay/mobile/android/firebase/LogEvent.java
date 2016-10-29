@@ -21,16 +21,16 @@ public class LogEvent {
     }
 
     public void log(AppEvent appEvent){
-        bundle.putInt(FirebaseAnalytics.Param.ITEM_ID, appEvent.ordinal());
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, appEvent.name());
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, appEvent.name());
         bundle.putString(FirebaseAnalytics.Param.VALUE, appEvent.name());
         bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, appEvent.name());
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, appEvent.getClass().getSimpleName());
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LEVEL_UP, bundle);
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
     public void log(ServiceEvent serviceEvent){
-        bundle.putInt(FirebaseAnalytics.Param.ITEM_ID, serviceEvent.ordinal());
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, serviceEvent.name());
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, serviceEvent.name());
         bundle.putString(FirebaseAnalytics.Param.VALUE, serviceEvent.name());
         bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, serviceEvent.name());
