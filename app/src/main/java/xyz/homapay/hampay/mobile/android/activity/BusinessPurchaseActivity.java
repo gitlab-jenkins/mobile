@@ -33,6 +33,8 @@ import xyz.homapay.hampay.mobile.android.async.RequestPurchaseInfo;
 import xyz.homapay.hampay.mobile.android.async.RequestSearchHamPayBusiness;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
@@ -318,10 +320,12 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
         public void onTaskComplete(ResponseMessage<PurchaseInfoResponse> purchaseInfoResponseMessage) {
 
             hamPayDialog.dismisWaitingDialog();
+            ServiceName serviceName;
+            LogEvent logEvent = new LogEvent(context);
 
             if (purchaseInfoResponseMessage != null){
                 if (purchaseInfoResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-
+                    serviceName = ServiceName.PURCHASE_INFO_SUCCESS;
                     purchaseInfoDTO = purchaseInfoResponseMessage.getService().getPurchaseInfo();
                     pspInfoDTO = purchaseInfoResponseMessage.getService().getPurchaseInfo().getPspInfo();
 
@@ -338,20 +342,24 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                     }
 
                 }else if (purchaseInfoResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceName.PURCHASE_INFO_FAILURE;
                     forceLogout();
                 }
                 else {
+                    serviceName = ServiceName.PURCHASE_INFO_FAILURE;
                     requestPurchaseInfo = new RequestPurchaseInfo(context, new RequestPurchaseInfoTaskCompleteListener());
                     new HamPayDialog(activity).showFailPurchaseInfoDialog(
                             purchaseInfoResponseMessage.getService().getResultStatus().getCode(),
                             purchaseInfoResponseMessage.getService().getResultStatus().getDescription());
                 }
             }else {
+                serviceName = ServiceName.PURCHASE_INFO_FAILURE;
                 requestPurchaseInfo = new RequestPurchaseInfo(context, new RequestPurchaseInfoTaskCompleteListener());
                 new HamPayDialog(activity).showFailPurchaseInfoDialog(
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_fetch_latest_payment));
             }
+            logEvent.log(serviceName);
 
         }
 

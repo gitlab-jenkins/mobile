@@ -30,6 +30,8 @@ import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
@@ -308,6 +310,8 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
             hamPayDialog.dismisWaitingDialog();
             pay_to_business_button.setEnabled(true);
+            ServiceName serviceName;
+            LogEvent logEvent = new LogEvent(context);
 
             String responseCode = null;
             String description = null;
@@ -334,15 +338,21 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
                             intent.putExtra(Constants.SUCCESS_PAYMENT_CODE, paymentInfoDTO.getProductCode());
                             intent.putExtra(Constants.SUCCESS_PAYMENT_TRACE, pspInfoDTO.getProviderId());
                             startActivityForResult(intent, 46);
+                            serviceName = ServiceName.PSP_PAYMENT_SUCCESS;
+                            logEvent.log(serviceName);
                         }
                         resultStatus = ResultStatus.SUCCESS;
                     }else if (responseCode.equalsIgnoreCase("51")) {
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.msg_insufficient_credit));
                         resultStatus = ResultStatus.FAILURE;
+                        serviceName = ServiceName.PSP_PAYMENT_FAILURE;
+                        logEvent.log(serviceName);
                     }else {
                         PspCode pspCode = new PspCode(context);
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(responseCode));
                         resultStatus = ResultStatus.FAILURE;
+                        serviceName = ServiceName.PSP_PAYMENT_FAILURE;
+                        logEvent.log(serviceName);
                     }
 
                     SyncPspResult syncPspResult = new SyncPspResult();
@@ -359,6 +369,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
                     pspResultRequest.setTrackingCode(SWTraceNum);
                     requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(SWTraceNum), 1);
                     requestPSPResult.execute(pspResultRequest);
+
 
                 }else {
                     new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
@@ -388,6 +399,8 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
     public class RequestPSPResultTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> {
 
         private String SWTrace;
+        ServiceName serviceName;
+        LogEvent logEvent = new LogEvent(context);
 
         public RequestPSPResultTaskCompleteListener(String SWTrace){
             this.SWTrace = SWTrace;
@@ -400,14 +413,19 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
             if (pspResultResponseMessage != null){
                 if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
+                    serviceName = ServiceName.PSP_RESULT_SUCCESS;
                     if (SWTrace != null) {
                         dbHelper.syncPspResult(SWTrace);
                     }
 
                 }else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();
+                    serviceName = ServiceName.PSP_RESULT_FAILURE;
+                }else {
+                    serviceName = ServiceName.PSP_RESULT_FAILURE;
                 }
             }
+            logEvent.log(serviceName);
 
             pay_to_business_button.setEnabled(true);
         }

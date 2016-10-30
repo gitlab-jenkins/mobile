@@ -28,6 +28,8 @@ import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestUserProfile;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.HamPayUtils;
 import xyz.homapay.hampay.mobile.android.util.ImageManager;
@@ -169,6 +171,9 @@ public class AccountDetailFragment extends Fragment {
 
     public class RequestUserProfileTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<UserProfileResponse>>
     {
+        ServiceName serviceName;
+        LogEvent logEvent = new LogEvent(context);
+
         public RequestUserProfileTaskCompleteListener(){
         }
 
@@ -180,26 +185,25 @@ public class AccountDetailFragment extends Fragment {
 
 
                 if (userProfileResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-
+                    serviceName = ServiceName.USER_PROFILE_SUCCESS;
                     userProfileDTO = userProfileResponseMessage.getService().getUserProfile();
-
                     fillUserProfile(userProfileDTO);
-
                     hide_bg.setVisibility(View.GONE);
-
                 } else if (userProfileResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceName.USER_PROFILE_FAILURE;
                     forceLogout();
                 }
                 else{
+                    serviceName = ServiceName.USER_PROFILE_FAILURE;
                     requestUserProfile = new RequestUserProfile(getActivity(), new RequestUserProfileTaskCompleteListener());
                     new HamPayDialog(getActivity()).showFailUserProfileDialog(requestUserProfile, userProfileRequest,
                             userProfileResponseMessage.getService().getResultStatus().getCode(),
                             userProfileResponseMessage.getService().getResultStatus().getDescription());
-
                     hide_bg.setVisibility(View.VISIBLE);
                 }
             }
             else {
+                serviceName = ServiceName.USER_PROFILE_FAILURE;
                 requestUserProfile = new RequestUserProfile(getActivity(), new RequestUserProfileTaskCompleteListener());
                 new HamPayDialog(getActivity()).showFailUserProfileDialog(requestUserProfile, userProfileRequest,
                         Constants.LOCAL_ERROR_CODE,
@@ -207,6 +211,7 @@ public class AccountDetailFragment extends Fragment {
 
                 hide_bg.setVisibility(View.VISIBLE);
             }
+            logEvent.log(serviceName);
         }
 
         @Override

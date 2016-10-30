@@ -23,6 +23,8 @@ import xyz.homapay.hampay.mobile.android.activity.ChangeUserImageActivity;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestRemoveUserImage;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
 /**
@@ -119,18 +121,25 @@ public class EditImageDialog  extends DialogFragment implements TextView.OnEdito
 
     public class RequestRemovePhotoTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RemoveUserImageResponse>> {
 
+        ServiceName serviceName;
+        LogEvent logEvent = new LogEvent(getActivity());
+
         @Override
         public void onTaskComplete(ResponseMessage<RemoveUserImageResponse> removeUserImageResponseMessage)
         {
             if (removeUserImageResponseMessage != null) {
                 if (removeUserImageResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    serviceName = ServiceName.REMOVE_USER_IMAGE_SUCCESS;
                 }
                 else {
+                    serviceName = ServiceName.REMOVE_USER_IMAGE_FAILURE;
                     activity.onFinishEditDialog(ActionImage.REMOVE_FAIL);
                 }
             }else {
+                serviceName = ServiceName.REMOVE_USER_IMAGE_FAILURE;
                 activity.onFinishEditDialog(ActionImage.REMOVE_FAIL);
             }
+            logEvent.log(serviceName);
         }
 
         @Override

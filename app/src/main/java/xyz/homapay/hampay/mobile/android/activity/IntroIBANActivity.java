@@ -142,46 +142,6 @@ public class IntroIBANActivity extends AppCompatActivity {
         }
     }
 
-    public class RequestIBANConfirmationTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<IBANConfirmationResponse>> {
-        public RequestIBANConfirmationTaskCompleteListener() {
-        }
-
-
-        @Override
-        public void onTaskComplete(ResponseMessage<IBANConfirmationResponse> ibanConfirmationResponseMessage) {
-            hamPayDialog.dismisWaitingDialog();
-            if (ibanConfirmationResponseMessage != null) {
-
-                if (ibanConfirmationResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    hamPayDialog.showIBANConfirmationDialog(ibanNumberValue.getText().toString(), ibanConfirmationResponseMessage.getService());
-                } else if (ibanConfirmationResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    forceLogout();
-                }
-                else {
-                    hamPayDialog.dismisWaitingDialog();
-                    requestIBANConfirmation = new RequestIBANConfirmation(activity, new RequestIBANConfirmationTaskCompleteListener());
-
-                    new HamPayDialog(activity).showFailIBANConfirmationDialog(requestIBANConfirmation, ibanConfirmationRequest,
-                            ibanConfirmationResponseMessage.getService().getResultStatus().getCode(),
-                            ibanConfirmationResponseMessage.getService().getResultStatus().getDescription());
-                }
-            } else {
-                hamPayDialog.dismisWaitingDialog();
-                requestIBANConfirmation = new RequestIBANConfirmation(activity, new RequestIBANConfirmationTaskCompleteListener());
-                new HamPayDialog(activity).showFailIBANConfirmationDialog(requestIBANConfirmation, ibanConfirmationRequest,
-                        Constants.LOCAL_ERROR_CODE,
-                        getString(R.string.msg_fail_iban_confirm));
-
-
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
-    }
-
     private void forceLogout() {
         editor.remove(Constants.LOGIN_TOKEN_ID);
         editor.commit();

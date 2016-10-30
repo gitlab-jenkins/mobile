@@ -39,6 +39,8 @@ import xyz.homapay.hampay.mobile.android.async.RequestPendingCount;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.slidinguppanel.SlidingUpPanelLayout;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
@@ -353,11 +355,15 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     public class RequestPendingCountTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PendingCountResponse>>
     {
 
+        ServiceName serviceName;
+        LogEvent logEvent = new LogEvent(context);
+
         @Override
         public void onTaskComplete(ResponseMessage<PendingCountResponse> pendingCountResponseMessage)
         {
             if (pendingCountResponseMessage != null) {
                 if (pendingCountResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
+                    serviceName = ServiceName.PENDING_COUNT_SUCCESS;
                     int pendingCount = pendingCountResponseMessage.getService().getPendingCount();
                     if (pendingCount == 0){
                         pending_badge.setVisibility(View.GONE);
@@ -367,9 +373,13 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                         editor.putInt(Constants.PENDING_COUNT, pendingCount).commit();
                     }
                 }else if (pendingCountResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceName.PENDING_COUNT_FAILURE;
                     forceLogout();
+                }else {
+                    serviceName = ServiceName.PENDING_COUNT_FAILURE;
                 }
             }
+            logEvent.log(serviceName);
         }
 
         @Override

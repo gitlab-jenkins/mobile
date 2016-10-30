@@ -41,6 +41,8 @@ import xyz.homapay.hampay.mobile.android.component.doblist.events.OnLoadMoreList
 import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoEmptyViewException;
 import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoListviewException;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
@@ -301,6 +303,8 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
     public class RequestUserTransactionsTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<TransactionListResponse>> {
 
         List<TransactionDTO> newTransactionDTOs;
+        ServiceName serviceName;
+        LogEvent logEvent = new LogEvent(context);
 
         @Override
         public void onTaskComplete(ResponseMessage<TransactionListResponse> transactionListResponseMessage) {
@@ -313,7 +317,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
             if (transactionListResponseMessage != null) {
 
                 if (transactionListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-
+                    serviceName = ServiceName.TRANSACTION_LIST_SUCCESS;
                     newTransactionDTOs = transactionListResponseMessage.getService().getTransactions();
                     Log.e("Count",  String.valueOf(newTransactionDTOs.size()));
                     transactionDTOs.addAll(newTransactionDTOs);
@@ -347,9 +351,11 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                     }
 
                 } else if (transactionListResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceName.TRANSACTION_LIST_FAILURE;
                     forceLogout();
                 }
                 else {
+                    serviceName = ServiceName.TRANSACTION_LIST_FAILURE;
                     transactionListRequest.setPageNumber(requestPageNumber);
                     requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
                     new HamPayDialog(activity).showFailUserTransactionDialog(requestUserTransaction, transactionListRequest,
@@ -357,12 +363,14 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                             transactionListResponseMessage.getService().getResultStatus().getDescription());
                 }
             } else {
+                serviceName = ServiceName.TRANSACTION_LIST_FAILURE;
                 transactionListRequest.setPageNumber(requestPageNumber);
                 requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
                 new HamPayDialog(activity).showFailUserTransactionDialog(requestUserTransaction, transactionListRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_user_transation));
             }
+            logEvent.log(serviceName);
         }
 
 

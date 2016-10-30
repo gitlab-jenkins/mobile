@@ -28,6 +28,8 @@ import xyz.homapay.hampay.mobile.android.async.RequestChangeEmail;
 import xyz.homapay.hampay.mobile.android.async.RequestIBANChange;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
@@ -156,6 +158,8 @@ public class ChangeIbanPassActivity extends AppCompatActivity implements View.On
 
         IBANChangeRequest ibanChangeRequest;
         RequestIBANChange requestIBANChange;
+        ServiceName serviceName;
+        LogEvent logEvent = new LogEvent(context);
 
         public RequestIBANChangeTaskCompleteListener(IBANChangeRequest ibanChangeRequest) {
             this.ibanChangeRequest = ibanChangeRequest;
@@ -166,6 +170,7 @@ public class ChangeIbanPassActivity extends AppCompatActivity implements View.On
             hamPayDialog.dismisWaitingDialog();
             if (ibanChangeResponseMessage != null) {
                 if (ibanChangeResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    serviceName = ServiceName.IBAN_CHANGE_SUCCESS;
                     editor.putBoolean(Constants.SETTING_CHANGE_IBAN_STATUS, true);
                     editor.commit();
                     new HamPayDialog(activity).showSuccessChangeSettingDialog(ibanChangeResponseMessage.getService().getResultStatus().getDescription(), false);
@@ -174,20 +179,24 @@ public class ChangeIbanPassActivity extends AppCompatActivity implements View.On
                     setResult(RESULT_OK, returnIntent);
                     activity.finish();
                 }else if (ibanChangeResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceName.IBAN_CHANGE_FAILURE;
                     forceLogout();
                 }
                 else {
+                    serviceName = ServiceName.IBAN_CHANGE_FAILURE;
                     requestIBANChange = new RequestIBANChange(activity, new RequestIBANChangeTaskCompleteListener(ibanChangeRequest));
                     hamPayDialog.showFailIBANChangeDialog(requestIBANChange, ibanChangeRequest,
                             ibanChangeResponseMessage.getService().getResultStatus().getCode(),
                             ibanChangeResponseMessage.getService().getResultStatus().getDescription());
                 }
             } else {
+                serviceName = ServiceName.IBAN_CHANGE_FAILURE;
                 requestIBANChange = new RequestIBANChange(activity, new RequestIBANChangeTaskCompleteListener(ibanChangeRequest));
                 hamPayDialog.showFailIBANChangeDialog(requestIBANChange, ibanChangeRequest,
                         Constants.LOCAL_ERROR_CODE,
                         activity.getString(R.string.msg_fail_iban_change));
             }
+            logEvent.log(serviceName);
         }
 
         @Override

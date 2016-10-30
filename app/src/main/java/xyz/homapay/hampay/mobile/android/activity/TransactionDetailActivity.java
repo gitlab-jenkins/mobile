@@ -25,6 +25,8 @@ import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestTransactionDetail;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
@@ -190,8 +192,12 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
             hamPayDialog.dismisWaitingDialog();
 
+            ServiceName serviceName;
+            LogEvent logEvent = new LogEvent(context);
+
             if (transactionDetailResponseMessage != null) {
                 if (transactionDetailResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    serviceName = ServiceName.TRANSACTION_DETAIL_SUCCESS;
                     reference_code.setText(persianEnglishDigit.E2P(transactionDTO.getReference()));
                     tnxDetailDTO = transactionDetailResponseMessage.getService().getTransactionDetail();
                     if (transactionDTO.getPaymentType() == TransactionDTO.PaymentType.PAYMENT) {
@@ -253,8 +259,12 @@ public class TransactionDetailActivity extends AppCompatActivity {
                         fee_charge_text.setVisibility(View.VISIBLE);
                     }
                 }else if (transactionDetailResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceName.TRANSACTION_DETAIL_FAILURE;
                     forceLogout();
+                }else {
+                    serviceName = ServiceName.TRANSACTION_DETAIL_FAILURE;
                 }
+                logEvent.log(serviceName);
             }
         }
 

@@ -26,6 +26,8 @@ import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestUserPayment;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
@@ -260,25 +262,34 @@ public class PaymentRequestConfirmActivity extends AppCompatActivity {
 
     public class RequestUserPaymentTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<UserPaymentResponse>> {
 
+
+
         @Override
         public void onTaskComplete(ResponseMessage<UserPaymentResponse> userPaymentResponseMessage) {
 
             hamPayDialog.dismisWaitingDialog();
+            ServiceName serviceName;
+            LogEvent logEvent = new LogEvent(context);
 
             if (userPaymentResponseMessage != null) {
 
                 if (userPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    serviceName = ServiceName.USER_PAYMENT_SUCCESS;
                     new HamPayDialog(activity).successPaymentRequestDialog(userPaymentResponseMessage.getService().getProductCode());
                 }else if (userPaymentResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceName.USER_PAYMENT_FAILURE;
                     forceLogout();
                 }
                 else {
+                    serviceName = ServiceName.USER_PAYMENT_FAILURE;
                     new HamPayDialog(activity).failurePaymentRequestDialog(userPaymentResponseMessage.getService().getResultStatus().getCode(),
                             userPaymentResponseMessage.getService().getResultStatus().getDescription());
                 }
             } else {
+                serviceName = ServiceName.USER_PAYMENT_FAILURE;
                 new HamPayDialog(activity).failurePaymentRequestDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_failure_payment_request));
             }
+            logEvent.log(serviceName);
 
             payment_request_button.setEnabled(true);
         }

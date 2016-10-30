@@ -35,6 +35,8 @@ import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.CurrencyFormatterTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
@@ -286,9 +288,12 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
         public void onTaskComplete(ResponseMessage<BusinessPaymentConfirmResponse> businessPaymentConfirmResponseMessage) {
 
             hamPayDialog.dismisWaitingDialog();
+            ServiceName serviceName;
+            LogEvent logEvent = new LogEvent(context);
 
             if (businessPaymentConfirmResponseMessage != null){
                 if (businessPaymentConfirmResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
+                    serviceName = ServiceName.BUSINESS_PAYMENT_CONFIRM_SUCCESS;
                     PaymentInfoDTO paymentInfo = businessPaymentConfirmResponseMessage.getService().getPaymentInfo();
                     PspInfoDTO pspInfo = businessPaymentConfirmResponseMessage.getService().getPaymentInfo().getPspInfo();
 
@@ -299,16 +304,21 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 }else if (businessPaymentConfirmResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceName.BUSINESS_PAYMENT_CONFIRM_FAILURE;
                     forceLogout();
                 }
                 else {
+                    serviceName = ServiceName.BUSINESS_PAYMENT_CONFIRM_FAILURE;
                     new HamPayDialog(activity).showFailPaymentDialog(businessPaymentConfirmResponseMessage.getService().getResultStatus().getCode(),
                             businessPaymentConfirmResponseMessage.getService().getResultStatus().getDescription());
                 }
             }else {
+                serviceName = ServiceName.BUSINESS_PAYMENT_CONFIRM_FAILURE;
                 new HamPayDialog(activity).showFailPaymentDialog(Constants.LOCAL_ERROR_CODE,
                         activity.getString(R.string.msg_fail_payment));
             }
+
+            logEvent.log(serviceName);
 
         }
 
@@ -317,24 +327,30 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
     }
 
     public class RequestCalculateVatTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<CalculateVatResponse>> {
-        public RequestCalculateVatTaskCompleteListener() {
-        }
+        public RequestCalculateVatTaskCompleteListener() {}
 
         @Override
         public void onTaskComplete(ResponseMessage<CalculateVatResponse> calculateVatResponseMessage) {
 
+            ServiceName serviceName;
+            LogEvent logEvent = new LogEvent(context);
             hamPayDialog.dismisWaitingDialog();
             ResultStatus resultStatus;
             if (calculateVatResponseMessage != null) {
                 resultStatus = calculateVatResponseMessage.getService().getResultStatus();
                 if (resultStatus == ResultStatus.SUCCESS) {
+                    serviceName = ServiceName.CALCULATE_VAT_SUCCESS;
                     vat_value.setText(persianEnglishDigit.E2P(formatter.format(calculateVatResponseMessage.getService().getAmount())));
                     calculatedVat = calculateVatResponseMessage.getService().getAmount();
                     amount_total.setText(persianEnglishDigit.E2P(formatter.format(calculatedVat + amountValue)));
                     vat_icon.setImageResource(R.drawable.remove_vat);
                 }else if (calculateVatResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceName.CALCULATE_VAT_FAILURE;
                     forceLogout();
+                }else {
+                    serviceName = ServiceName.CALCULATE_VAT_FAILURE;
                 }
+                logEvent.log(serviceName);
             }
         }
 

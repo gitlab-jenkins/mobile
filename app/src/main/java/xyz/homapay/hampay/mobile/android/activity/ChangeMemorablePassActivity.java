@@ -34,6 +34,8 @@ import xyz.homapay.hampay.mobile.android.async.RequestChangeMemorableWord;
 import xyz.homapay.hampay.mobile.android.async.RequestNewLogin;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
@@ -153,27 +155,34 @@ public class ChangeMemorablePassActivity extends AppCompatActivity implements Vi
         {
 
             hamPayDialog.dismisWaitingDialog();
+            ServiceName serviceName;
+            LogEvent logEvent = new LogEvent(context);
 
             if (changeMemorableWordResponseMessage != null) {
                 if (changeMemorableWordResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    serviceName = ServiceName.CHANGE_MEMORABLE_WORD_SUCCESS;
                     editor.putString(Constants.MEMORABLE_WORD, newMemorable);
                     editor.commit();
                     new HamPayDialog(activity).showSuccessChangeSettingDialog(changeMemorableWordResponseMessage.getService().getResultStatus().getDescription(), false);
                 } else if (changeMemorableWordResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceName.CHANGE_MEMORABLE_WORD_FAILURE;
                     forceLogout();
                 }
                 else {
+                    serviceName = ServiceName.CHANGE_MEMORABLE_WORD_FAILURE;
                     requestChangeMemorableWord = new RequestChangeMemorableWord(context, new RequestChangeMemorableWordTaskCompleteListener());
                     new HamPayDialog(activity).showFailChangeMemorableWordDialog(requestChangeMemorableWord, changeMemorableWordRequest,
                             changeMemorableWordResponseMessage.getService().getResultStatus().getCode(),
                             changeMemorableWordResponseMessage.getService().getResultStatus().getDescription());
                 }
             }else {
+                serviceName = ServiceName.CHANGE_MEMORABLE_WORD_FAILURE;
                 requestChangeMemorableWord = new RequestChangeMemorableWord(context, new RequestChangeMemorableWordTaskCompleteListener());
                 new HamPayDialog(activity).showFailChangeMemorableWordDialog(requestChangeMemorableWord, changeMemorableWordRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_change_memorable_word));
             }
+            logEvent.log(serviceName);
         }
 
         @Override

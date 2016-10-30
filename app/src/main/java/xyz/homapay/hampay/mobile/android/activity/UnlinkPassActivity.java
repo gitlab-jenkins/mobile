@@ -31,6 +31,8 @@ import xyz.homapay.hampay.mobile.android.async.RequestChangeMemorableWord;
 import xyz.homapay.hampay.mobile.android.async.RequestUnlinkUser;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
@@ -147,9 +149,12 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
         {
 
             hamPayDialog.dismisWaitingDialog();
+            ServiceName serviceName;
+            LogEvent logEvent = new LogEvent(context);
 
             if (unlinkUserResponseResponseMessage != null) {
                 if (unlinkUserResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    serviceName = ServiceName.UNLINK_USER_SUCCESS;
                     editor.clear().commit();
                     editor.commit();
 
@@ -160,20 +165,24 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 }else if (unlinkUserResponseResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceName.UNLINK_USER_FAILURE;
                     forceLogout();
                 }
                 else {
+                    serviceName = ServiceName.UNLINK_USER_FAILURE;
                     requestUnlinkUser = new RequestUnlinkUser(context, new RequestUnlinkUserTaskCompleteListener());
                     new HamPayDialog(activity).showFailUnlinkDialog(requestUnlinkUser, unlinkUserRequest,
                             unlinkUserResponseResponseMessage.getService().getResultStatus().getCode(),
                             unlinkUserResponseResponseMessage.getService().getResultStatus().getDescription());
                 }
             }else {
+                serviceName = ServiceName.UNLINK_USER_FAILURE;
                 requestUnlinkUser = new RequestUnlinkUser(context, new RequestUnlinkUserTaskCompleteListener());
                 new HamPayDialog(activity).showFailUnlinkDialog(requestUnlinkUser, unlinkUserRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_unlink_user));
             }
+            logEvent.log(serviceName);
         }
 
         @Override

@@ -6,7 +6,7 @@ import android.os.Bundle;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
-import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
 
 /**
  * Created by amir on 10/21/16.
@@ -29,12 +29,12 @@ public class LogEvent {
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
-    public void log(ServiceEvent serviceEvent){
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, serviceEvent.name());
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, serviceEvent.name());
-        bundle.putString(FirebaseAnalytics.Param.VALUE, serviceEvent.name());
-        bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, serviceEvent.name());
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, serviceEvent.getClass().getSimpleName());
+    public void log(ServiceName serviceName){
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, serviceName.name());
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, serviceName.name());
+        bundle.putString(FirebaseAnalytics.Param.VALUE, serviceName.name());
+        bundle.putString(FirebaseAnalytics.Param.ITEM_CATEGORY, serviceName.name());
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, serviceName.getClass().getSimpleName());
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 

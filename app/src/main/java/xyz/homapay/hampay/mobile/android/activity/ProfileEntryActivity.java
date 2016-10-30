@@ -18,13 +18,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.google.firebase.analytics.FirebaseAnalytics;
-
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
@@ -45,7 +38,7 @@ import xyz.homapay.hampay.mobile.android.component.preloader.Preloader;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.dialog.permission.ActionPermission;
 import xyz.homapay.hampay.mobile.android.dialog.permission.PermissionDeviceDialog;
-import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
+import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
 import xyz.homapay.hampay.mobile.android.model.AppState;
@@ -97,8 +90,6 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
     private CardNumberValidator cardNumberValidator;
     private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
     private final Handler handler = new Handler();
-    private FirebaseAnalytics firebaseAnalytics;
-    private Bundle bundle = new Bundle();
 
     public void userManual(View view){
         Intent intent = new Intent();
@@ -182,12 +173,6 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ProfileEntryActivity.class.getName());
         editor.commit();
-
-        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
-        bundle.putInt(FirebaseAnalytics.Param.ITEM_ID, ServiceName.REGISTRATION_ENTRY.ordinal());
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, ServiceName.REGISTRATION_ENTRY.name());
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, ServiceEvent.class.getSimpleName());
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -455,6 +440,8 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
         @Override
         public void onTaskComplete(ResponseMessage<RegistrationEntryResponse> registrationEntryResponse)
         {
+            ServiceName serviceName;
+            LogEvent logEvent = new LogEvent(context);
 
             hamPayDialog.dismisWaitingDialog();
             if (registrationEntryResponse != null) {
@@ -464,12 +451,12 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                     editor.putString(Constants.REGISTERED_USER_ID_TOKEN, registrationEntryResponse.getService().getUserIdToken());
                     editor.putString(Constants.REGISTERED_USER_EMAIL, emailValue.getText().toString().trim());
                     editor.commit();
-                    bundle.putString(FirebaseAnalytics.Param.VALUE, ServiceEvent.SUCCESS.name());
                     hamPayDialog.smsConfirmDialog(getString(R.string.iran_prefix_cell_number) + cellNumberValue.getText().toString(),
                             cardNumberValue.getText().toString());
+                    serviceName = ServiceName.REGISTRATION_ENTRY_SUCCESS;
                 }
                 else {
-                    bundle.putString(FirebaseAnalytics.Param.VALUE, ServiceEvent.FAILURE.name());
+                    serviceName = ServiceName.REGISTRATION_ENTRY_FAILURE;
                     requestRegistrationEntry = new RequestRegistrationEntry(activity,
                             new RequestRegistrationEntryTaskCompleteListener());
                     new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest,
@@ -477,7 +464,7 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                             registrationEntryResponse.getService().getResultStatus().getDescription());
                 }
             }else {
-                bundle.putString(FirebaseAnalytics.Param.VALUE, ServiceEvent.FAILURE.name());
+                serviceName = ServiceName.REGISTRATION_ENTRY_FAILURE;
                 if (requestRegistrationEntry.internetConnectionStatus == InternetConnectionStatus.DISCONNECT){
                     requestRegistrationEntry = new RequestRegistrationEntry(activity, new RequestRegistrationEntryTaskCompleteListener());
                     new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest,
@@ -490,7 +477,7 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                             getString(R.string.msg_fail_registration_entry));
                 }
             }
-            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+            logEvent.log(serviceName);
         }
 
         @Override

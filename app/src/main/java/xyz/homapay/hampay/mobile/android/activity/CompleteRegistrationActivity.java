@@ -17,6 +17,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -24,17 +25,13 @@ import xyz.homapay.hampay.mobile.android.util.PreferencesManager;
 
 public class CompleteRegistrationActivity extends AppCompatActivity {
 
-    FacedTextView hampay_login_button;
-
-    Activity activity;
-
-    SharedPreferences.Editor editor;
-    FacedTextView congrats_text;
-
+    private FacedTextView hampay_login_button;
+    private Activity activity;
+    private SharedPreferences.Editor editor;
+    private FacedTextView congrats_text;
     private PreferencesManager preferencesManager;
-    private FirebaseAnalytics firebaseAnalytics;
-    private Bundle bundle = new Bundle();
     private AppEvent appEvent = AppEvent.REGISTER;
+
 
     public void userManual(View view){
         Intent intent = new Intent();
@@ -73,14 +70,8 @@ public class CompleteRegistrationActivity extends AppCompatActivity {
         editor.putBoolean(Constants.NOTIFICATION_STATUS, true);
         editor.putString(Constants.REGISTERED_ACTIVITY_DATA, "");
         editor.commit();
-
-        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        bundle.putInt(FirebaseAnalytics.Param.ITEM_ID, appEvent.ordinal());
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, appEvent.name());
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, AppEvent.class.getSimpleName());
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-
+        LogEvent logEvent = new LogEvent(this);
+        logEvent.log(appEvent);
         congrats_text = (FacedTextView)findViewById(R.id.congrats_text);
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getString(R.string.complete_registarion_text_1));
         ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.rgb(109, 7, 109));

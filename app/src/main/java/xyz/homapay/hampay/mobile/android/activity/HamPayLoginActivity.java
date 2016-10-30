@@ -2,8 +2,6 @@ package xyz.homapay.hampay.mobile.android.activity;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,23 +12,15 @@ import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
-
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -38,15 +28,11 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.crypto.SecretKey;
-
-import br.com.goncalves.pugnotification.notification.PugNotification;
 import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
 import xyz.homapay.hampay.common.common.request.LoginRequest;
 import xyz.homapay.hampay.common.common.response.LoginResponse;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
-import xyz.homapay.hampay.common.core.model.request.PendingFundListRequest;
 import xyz.homapay.hampay.common.core.model.request.RecentPendingFundRequest;
 import xyz.homapay.hampay.common.core.model.request.TACRequest;
 import xyz.homapay.hampay.common.core.model.response.RecentPendingFundResponse;
@@ -61,11 +47,12 @@ import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestLogin;
 import xyz.homapay.hampay.mobile.android.async.RequestNewLogin;
-import xyz.homapay.hampay.mobile.android.async.RequestPendingFundList;
 import xyz.homapay.hampay.mobile.android.async.RequestRecentPendingFund;
 import xyz.homapay.hampay.mobile.android.async.RequestTAC;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
 import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
@@ -314,8 +301,12 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         public void onTaskComplete(ResponseMessage<TACResponse> tacResponseMessage)
         {
             hamPayDialog.dismisWaitingDialog();
+            ServiceName serviceName;
+            LogEvent logEvent = new LogEvent(context);
+
             if (tacResponseMessage != null) {
                 if (tacResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    serviceName = ServiceName.TAC_SUCCESS;
                     if (tacResponseMessage.getService().isShouldAcceptTAC()) {
                     } else {
                         Intent intent = new Intent();
@@ -347,9 +338,11 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
 
                 }else if (tacResponseMessage.getService().getResultStatus() == ResultStatus.OUT_OF_DATE_APP_VERSION){
+                    serviceName = ServiceName.TAC_FAILURE;
                     hamPayDialog.appUpdateDialog(Constants.APP_STORE_URL);
                 }
                 else {
+                    serviceName = ServiceName.TAC_FAILURE;
                     requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
                     new HamPayDialog(activity).showFailTCRequestDialog(requestTAC, tacRequest,
                             tacResponseMessage.getService().getResultStatus().getCode(),
@@ -357,11 +350,13 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                 }
             }
             else {
+                serviceName = ServiceName.TAC_FAILURE;
                 requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
                 new HamPayDialog(activity).showFailTCRequestDialog(requestTAC, tacRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_tac_request));
             }
+            logEvent.log(serviceName);
 
         }
 
@@ -384,10 +379,12 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         {
             hamPayDialog.dismisWaitingDialog();
             pullToRefresh.setRefreshing(false);
+            ServiceName serviceName;
+            LogEvent logEvent = new LogEvent(context);
             if (recentPendingFundResponseMessage != null) {
 
                 if (recentPendingFundResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-
+                    serviceName = ServiceName.RECENT_PENDING_FUND_SUCCESS;
                     List<FundDTO> funds = recentPendingFundResponseMessage.getService().getFundDTOList();
 
                     if (funds.size() > 0) {
@@ -400,15 +397,17 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                     }
 
                 }else {
+                    serviceName = ServiceName.RECENT_PENDING_FUND_FAILURE;
                     if (keyboard.getVisibility() == View.GONE)
                         new Expand(keyboard).animate();
                 }
             }
             else {
+                serviceName = ServiceName.RECENT_PENDING_FUND_FAILURE;
                 if (keyboard.getVisibility() == View.GONE)
                     new Expand(keyboard).animate();
             }
-
+            logEvent.log(serviceName);
         }
 
         @Override
@@ -545,6 +544,10 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
     public class RequestLoginTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<LoginResponse>>
     {
+
+        ServiceName serviceName;
+        LogEvent logEvent = new LogEvent(context);
+
         public RequestLoginTaskCompleteListener(){
         }
 
@@ -553,6 +556,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         {
             if (loginResponseResponseMessage != null) {
                 if (loginResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    serviceName = ServiceName.LOGIN_SUCCESS;
                     editor.putString(Constants.LOGIN_TOKEN_ID, loginResponseResponseMessage.getService().getAuthToken());
                     editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                     editor.commit();
@@ -562,9 +566,11 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                     requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
                     requestTAC.execute(tacRequest);
                 }else if (loginResponseResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE){
+                    serviceName = ServiceName.LOGIN_FAILURE;
                     resetLogin();
                     hamPayDialog.showLoginFailDialog(loginResponseResponseMessage.getService().getRemainRetryCount());
                 }else if (loginResponseResponseMessage.getService().getResultStatus() == ResultStatus.BLOCKED_IDP_USER){
+                    serviceName = ServiceName.LOGIN_FAILURE;
                     resetLogin();
                     hamPayDialog.showLoginFailDialog(0);
                 }
@@ -573,6 +579,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                 Toast.makeText(activity, getString(R.string.system_connectivity), Toast.LENGTH_SHORT).show();
                 resetLogin();
             }
+            logEvent.log(serviceName);
         }
 
         @Override

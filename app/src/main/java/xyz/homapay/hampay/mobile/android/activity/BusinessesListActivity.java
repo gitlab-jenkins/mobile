@@ -45,6 +45,8 @@ import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoEmptyVie
 import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoListviewException;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
@@ -369,6 +371,8 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
 
         List<BusinessDTO> newBusinessDTOs;
         boolean searchEnabled;
+        ServiceName serviceName;
+        LogEvent logEvent = new LogEvent(context);
 
         public RequestBusinessListTaskCompleteListener(boolean searchEnabled){
             this.searchEnabled = searchEnabled;
@@ -408,10 +412,13 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                             }
                         }
                     }
+                    serviceName = ServiceName.BUSINESS_LIST_SUCCESS;
 
                 }else if (businessListResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceName.BUSINESS_LIST_FAILURE;
                     forceLogout();
                 }else {
+                    serviceName = ServiceName.BUSINESS_LIST_FAILURE;
                     if (!searchEnabled) {
                         businessListRequest.setPageNumber(requestPageNumber);
                         businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
@@ -428,7 +435,7 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                         new HamPayDialog(activity).showFailBusinessSearchListDialog(requestSearchHamPayBusiness, businessSearchRequest,
                                 businessListResponseMessage.getService().getResultStatus().getCode(),
                                 businessListResponseMessage.getService().getResultStatus().getDescription());
-//                        requestSearchHamPayBusiness.execute(businessSearchRequest);
+                        requestSearchHamPayBusiness.execute(businessSearchRequest);
                     }
                 }
             }else {
@@ -448,9 +455,10 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                     new HamPayDialog(activity).showFailBusinessSearchListDialog(requestSearchHamPayBusiness, businessSearchRequest,
                             Constants.LOCAL_ERROR_CODE,
                             getString(R.string.msg_fail_business_search_list));
-//                    requestSearchHamPayBusiness.execute(businessSearchRequest);
+                    requestSearchHamPayBusiness.execute(businessSearchRequest);
                 }
             }
+            logEvent.log(serviceName);
         }
 
         @Override

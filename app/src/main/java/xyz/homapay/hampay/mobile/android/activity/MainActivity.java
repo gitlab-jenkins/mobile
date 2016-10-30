@@ -53,7 +53,9 @@ import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.dialog.ImageProfile.ActionImage;
 import xyz.homapay.hampay.mobile.android.dialog.ImageProfile.EditImageDialog;
+import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
 import xyz.homapay.hampay.mobile.android.fragment.AboutFragment;
 import xyz.homapay.hampay.mobile.android.fragment.AccountDetailFragment;
 import xyz.homapay.hampay.mobile.android.fragment.FragmentDrawer;
@@ -109,7 +111,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private ImageManager imageManager;
     private ImageView user_manual;
     private String fragmentTitle = "";
-    private FirebaseAnalytics firebaseAnalytics;
     private AppEvent appEvent = AppEvent.LOGIN;
 
     public void userManual(View view){
@@ -169,12 +170,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         context = this;
 
         imageManager = new ImageManager(activity, 200000, false);
-
-        firebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        bundle.putInt(FirebaseAnalytics.Param.ITEM_ID, appEvent.ordinal());
-        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, appEvent.name());
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, AppEvent.class.getSimpleName());
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+        LogEvent logEvent = new LogEvent(this);
+        logEvent.log(appEvent);
 
         bundle = getIntent().getExtras();
 
@@ -633,14 +630,22 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         @Override
         public void onTaskComplete(ResponseMessage<MobileRegistrationIdEntryResponse> mobileRegistrationIdEntryResponseMessage)
         {
+            ServiceName serviceName;
+            LogEvent logEvent = new LogEvent(context);
+
             if (mobileRegistrationIdEntryResponseMessage != null) {
                 if (mobileRegistrationIdEntryResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-
+                    serviceName = ServiceName.APP_REGISTRATION_ID_ENTRY_SUCCESS;
                     editor.putBoolean(Constants.SEND_MOBILE_REGISTER_ID, true);
                     editor.commit();
                 }else if (mobileRegistrationIdEntryResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceName.APP_REGISTRATION_ID_ENTRY_FAILURE;
                     forceLogout();
                 }
+                else {
+                    serviceName = ServiceName.APP_REGISTRATION_ID_ENTRY_FAILURE;
+                }
+                logEvent.log(serviceName);
             }
         }
 
@@ -681,6 +686,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     public class RequestUserProfileTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<UserProfileResponse>>
     {
+        ServiceName serviceName;
+        LogEvent logEvent = new LogEvent(context);
+
         public RequestUserProfileTaskCompleteListener(){
         }
 
@@ -689,6 +697,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         {
             if (userProfileResponseMessage != null) {
                 if (userProfileResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
+                    serviceName = ServiceName.USER_PROFILE_SUCCESS;
                     userProfileDTO = userProfileResponseMessage.getService().getUserProfile();
                     currentFragment = 0;
                     fragment = new MainFragment();
@@ -709,13 +718,17 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                         }
                     }
                 }else if (userProfileResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceName.USER_PROFILE_FAILURE;
                     forceLogout();
                 }
                 else{
+                    serviceName = ServiceName.USER_PROFILE_FAILURE;
                 }
             }
             else {
+                serviceName = ServiceName.USER_PROFILE_FAILURE;
             }
+            logEvent.log(serviceName);
         }
 
         @Override
