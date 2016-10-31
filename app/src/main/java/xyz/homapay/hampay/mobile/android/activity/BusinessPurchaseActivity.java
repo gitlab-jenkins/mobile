@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -13,9 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
@@ -34,7 +30,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestSearchHamPayBusiness;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
-import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
@@ -320,12 +316,12 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
         public void onTaskComplete(ResponseMessage<PurchaseInfoResponse> purchaseInfoResponseMessage) {
 
             hamPayDialog.dismisWaitingDialog();
-            ServiceName serviceName;
+            ServiceEvent serviceName;
             LogEvent logEvent = new LogEvent(context);
 
             if (purchaseInfoResponseMessage != null){
                 if (purchaseInfoResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-                    serviceName = ServiceName.PURCHASE_INFO_SUCCESS;
+                    serviceName = ServiceEvent.PURCHASE_INFO_SUCCESS;
                     purchaseInfoDTO = purchaseInfoResponseMessage.getService().getPurchaseInfo();
                     pspInfoDTO = purchaseInfoResponseMessage.getService().getPurchaseInfo().getPspInfo();
 
@@ -342,18 +338,18 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                     }
 
                 }else if (purchaseInfoResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceName.PURCHASE_INFO_FAILURE;
+                    serviceName = ServiceEvent.PURCHASE_INFO_FAILURE;
                     forceLogout();
                 }
                 else {
-                    serviceName = ServiceName.PURCHASE_INFO_FAILURE;
+                    serviceName = ServiceEvent.PURCHASE_INFO_FAILURE;
                     requestPurchaseInfo = new RequestPurchaseInfo(context, new RequestPurchaseInfoTaskCompleteListener());
                     new HamPayDialog(activity).showFailPurchaseInfoDialog(
                             purchaseInfoResponseMessage.getService().getResultStatus().getCode(),
                             purchaseInfoResponseMessage.getService().getResultStatus().getDescription());
                 }
             }else {
-                serviceName = ServiceName.PURCHASE_INFO_FAILURE;
+                serviceName = ServiceEvent.PURCHASE_INFO_FAILURE;
                 requestPurchaseInfo = new RequestPurchaseInfo(context, new RequestPurchaseInfoTaskCompleteListener());
                 new HamPayDialog(activity).showFailPurchaseInfoDialog(
                         Constants.LOCAL_ERROR_CODE,

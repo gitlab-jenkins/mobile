@@ -40,7 +40,6 @@ import xyz.homapay.hampay.mobile.android.dialog.permission.ActionPermission;
 import xyz.homapay.hampay.mobile.android.dialog.permission.PermissionDeviceDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
-import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
@@ -440,7 +439,7 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
         @Override
         public void onTaskComplete(ResponseMessage<RegistrationEntryResponse> registrationEntryResponse)
         {
-            ServiceName serviceName;
+            ServiceEvent serviceName;
             LogEvent logEvent = new LogEvent(context);
 
             hamPayDialog.dismisWaitingDialog();
@@ -453,10 +452,10 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                     editor.commit();
                     hamPayDialog.smsConfirmDialog(getString(R.string.iran_prefix_cell_number) + cellNumberValue.getText().toString(),
                             cardNumberValue.getText().toString());
-                    serviceName = ServiceName.REGISTRATION_ENTRY_SUCCESS;
+                    serviceName = ServiceEvent.REGISTRATION_ENTRY_SUCCESS;
                 }
                 else {
-                    serviceName = ServiceName.REGISTRATION_ENTRY_FAILURE;
+                    serviceName = ServiceEvent.REGISTRATION_ENTRY_FAILURE;
                     requestRegistrationEntry = new RequestRegistrationEntry(activity,
                             new RequestRegistrationEntryTaskCompleteListener());
                     new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest,
@@ -464,7 +463,7 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                             registrationEntryResponse.getService().getResultStatus().getDescription());
                 }
             }else {
-                serviceName = ServiceName.REGISTRATION_ENTRY_FAILURE;
+                serviceName = ServiceEvent.REGISTRATION_ENTRY_FAILURE;
                 if (requestRegistrationEntry.internetConnectionStatus == InternetConnectionStatus.DISCONNECT){
                     requestRegistrationEntry = new RequestRegistrationEntry(activity, new RequestRegistrationEntryTaskCompleteListener());
                     new HamPayDialog(activity).showFailRegistrationEntryDialog(requestRegistrationEntry, registrationEntryRequest,

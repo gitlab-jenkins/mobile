@@ -10,13 +10,9 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
-
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +35,7 @@ import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.dialog.permission.ActionPermission;
 import xyz.homapay.hampay.mobile.android.dialog.permission.PermissionContactDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
-import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
@@ -206,7 +202,7 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
 
     public class RequestMemorableWordEntryResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationCredentialsResponse>>
     {
-        ServiceName serviceName;
+        ServiceEvent serviceName;
         LogEvent logEvent = new LogEvent(context);
 
         public RequestMemorableWordEntryResponseTaskCompleteListener(){
@@ -224,7 +220,7 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
                 resultStatus = registrationMemorableWordEntryResponseMessage.getService().getResultStatus();
 
                 if (resultStatus == ResultStatus.SUCCESS) {
-                    serviceName = ServiceName.REGISTRATION_CREDENTIALS_SUCCESS;
+                    serviceName = ServiceEvent.REGISTRATION_CREDENTIALS_SUCCESS;
                     editor.putString(Constants.MEMORABLE_WORD, memorable_value.getText().toString());
                     editor.putString(Constants.UUID, Uuid);
                     editor.commit();
@@ -235,14 +231,14 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
                     startActivity(intent);
                 }
                 else {
-                    serviceName = ServiceName.REGISTRATION_CREDENTIALS_FAILURE;
+                    serviceName = ServiceEvent.REGISTRATION_CREDENTIALS_FAILURE;
                     requestCredentialEntry = new RequestCredentialEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
                     new HamPayDialog(activity).showFailMemorableEntryDialog(requestCredentialEntry, registrationCredentialsRequest,
                             registrationMemorableWordEntryResponseMessage.getService().getResultStatus().getCode(),
                             registrationMemorableWordEntryResponseMessage.getService().getResultStatus().getDescription());
                 }
             }else {
-                serviceName = ServiceName.REGISTRATION_CREDENTIALS_FAILURE;
+                serviceName = ServiceEvent.REGISTRATION_CREDENTIALS_FAILURE;
                 requestCredentialEntry = new RequestCredentialEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
                 new HamPayDialog(activity).showFailMemorableEntryDialog(requestCredentialEntry, registrationCredentialsRequest,
                         Constants.LOCAL_ERROR_CODE,

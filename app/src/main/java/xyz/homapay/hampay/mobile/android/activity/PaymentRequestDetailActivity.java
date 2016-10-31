@@ -14,16 +14,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
 import xyz.homapay.hampay.common.core.model.request.CalcFeeChargeRequest;
 import xyz.homapay.hampay.common.core.model.request.CalculateVatRequest;
 import xyz.homapay.hampay.common.core.model.request.UserPaymentRequest;
-import xyz.homapay.hampay.common.core.model.response.CalcFeeChargeResponse;
 import xyz.homapay.hampay.common.core.model.response.CalculateVatResponse;
 import xyz.homapay.hampay.common.core.model.response.UserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
@@ -38,7 +34,7 @@ import xyz.homapay.hampay.mobile.android.component.edittext.CurrencyFormatterTex
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
-import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
@@ -344,7 +340,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
 
     public class RequestCalculateVatTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<CalculateVatResponse>> {
 
-        ServiceName serviceName;
+        ServiceEvent serviceName;
         LogEvent logEvent = new LogEvent(context);
 
         public RequestCalculateVatTaskCompleteListener() {
@@ -358,16 +354,16 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
             if (calculateVatResponseMessage != null) {
                 resultStatus = calculateVatResponseMessage.getService().getResultStatus();
                 if (resultStatus == ResultStatus.SUCCESS) {
-                    serviceName = ServiceName.CALCULATE_VAT_SUCCESS;
+                    serviceName = ServiceEvent.CALCULATE_VAT_SUCCESS;
                     vat_value.setText(persianEnglishDigit.E2P(formatter.format(calculateVatResponseMessage.getService().getAmount())));
                     calculatedVat = calculateVatResponseMessage.getService().getAmount();
                     amount_total.setText(persianEnglishDigit.E2P(formatter.format(calculatedVat + amountValue)));
                     vat_icon.setImageResource(R.drawable.remove_vat);
                 }else if (calculateVatResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceName.CALCULATE_VAT_FAILURE;
+                    serviceName = ServiceEvent.CALCULATE_VAT_FAILURE;
                     forceLogout();
                 }else {
-                    serviceName = ServiceName.CALCULATE_VAT_FAILURE;
+                    serviceName = ServiceEvent.CALCULATE_VAT_FAILURE;
                 }
                 logEvent.log(serviceName);
             }

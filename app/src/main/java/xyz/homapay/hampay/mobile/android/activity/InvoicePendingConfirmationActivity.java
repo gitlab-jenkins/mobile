@@ -11,9 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 import br.com.goncalves.pugnotification.notification.PugNotification;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
@@ -37,7 +34,7 @@ import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
-import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
@@ -324,7 +321,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
             String description = null;
             String SWTraceNum = null;
             ResultStatus resultStatus = ResultStatus.FAILURE;
-            ServiceName serviceName;
+            ServiceEvent serviceName;
             LogEvent logEvent = new LogEvent(context);
 
             if (purchaseResponseResponseMessage != null) {
@@ -341,7 +338,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
                 if (responseCode != null){
                     if (responseCode.equalsIgnoreCase("2000")) {
-                        serviceName = ServiceName.PSP_PAYMENT_SUCCESS;
+                        serviceName = ServiceEvent.PSP_PAYMENT_SUCCESS;
                         if (paymentInfoDTO != null) {
                             Intent intent = new Intent(context, PaymentCompletedActivity.class);
                             intent.putExtra(Constants.SUCCESS_PAYMENT_AMOUNT, paymentInfoDTO.getAmount() + paymentInfoDTO.getVat() + paymentInfoDTO.getFeeCharge());
@@ -351,11 +348,11 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                         }
                         resultStatus = ResultStatus.SUCCESS;
                     }else if (responseCode.equalsIgnoreCase("51")) {
-                        serviceName = ServiceName.PSP_PAYMENT_FAILURE;
+                        serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.msg_insufficient_credit));
                         resultStatus = ResultStatus.FAILURE;
                     }else {
-                        serviceName = ServiceName.PSP_PAYMENT_FAILURE;
+                        serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
                         PspCode pspCode = new PspCode(context);
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(responseCode));
                         resultStatus = ResultStatus.FAILURE;
@@ -401,7 +398,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
     public class RequestPSPResultTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> {
 
         private String SWTrace;
-        ServiceName serviceName;
+        ServiceEvent serviceName;
         LogEvent logEvent = new LogEvent(context);
 
         public RequestPSPResultTaskCompleteListener(String SWTrace){
@@ -415,15 +412,15 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
             if (pspResultResponseMessage != null) {
                 if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    serviceName = ServiceName.PSP_RESULT_SUCCESS;
+                    serviceName = ServiceEvent.PSP_RESULT_SUCCESS;
                     if (SWTrace != null) {
                         dbHelper.syncPspResult(SWTrace);
                     }
                 } else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceName.PSP_RESULT_FAILURE;
+                    serviceName = ServiceEvent.PSP_RESULT_FAILURE;
                     forceLogout();
                 }else {
-                    serviceName = ServiceName.PSP_RESULT_FAILURE;
+                    serviceName = ServiceEvent.PSP_RESULT_FAILURE;
                 }
                 logEvent.log(serviceName);
             }
@@ -440,13 +437,13 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
         @Override
         public void onTaskComplete(ResponseMessage<LatestPaymentResponse> latestPaymentResponseMessage) {
 
-            ServiceName serviceName;
+            ServiceEvent serviceName;
             LogEvent logEvent = new LogEvent(context);
             hamPayDialog.dismisWaitingDialog();
 
             if (latestPaymentResponseMessage != null) {
                 if (latestPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    serviceName = ServiceName.GET_LATEST_PAYMENT_SUCCESS;
+                    serviceName = ServiceEvent.GET_LATEST_PAYMENT_SUCCESS;
                     paymentInfoDTO = latestPaymentResponseMessage.getService().getPaymentInfoDTO();
                     pspInfoDTO = latestPaymentResponseMessage.getService().getPaymentInfoDTO().getPspInfo();
                     if (paymentInfoDTO == null){
@@ -461,11 +458,11 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
                     dbHelper.createViewedPaymentRequest(paymentInfoDTO.getProductCode());
 
                 }else if (latestPaymentResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceName.GET_LATEST_PAYMENT_FAILURE;
+                    serviceName = ServiceEvent.GET_LATEST_PAYMENT_FAILURE;
                     forceLogout();
                 }
                 else {
-                    serviceName = ServiceName.GET_LATEST_PAYMENT_FAILURE;
+                    serviceName = ServiceEvent.GET_LATEST_PAYMENT_FAILURE;
                     requestLatestPayment = new RequestLatestPayment(context, new RequestLatestPaymentTaskCompleteListener());
                     new HamPayDialog(activity).showFailPendingPaymentDialog(requestLatestPayment, latestPaymentRequest,
                             latestPaymentResponseMessage.getService().getResultStatus().getCode(),
@@ -474,7 +471,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
             }
             else
             {
-                serviceName = ServiceName.GET_LATEST_PAYMENT_FAILURE;
+                serviceName = ServiceEvent.GET_LATEST_PAYMENT_FAILURE;
                 requestLatestPayment = new RequestLatestPayment(context, new RequestLatestPaymentTaskCompleteListener());
                 new HamPayDialog(activity).showFailPendingPaymentDialog(requestLatestPayment, latestPaymentRequest,
                         Constants.LOCAL_ERROR_CODE,
@@ -491,7 +488,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
     public class RequestPaymentDetailTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PaymentDetailResponse>> {
 
-        ServiceName serviceName;
+        ServiceEvent serviceName;
         LogEvent logEvent = new LogEvent(context);
 
         @Override
@@ -501,16 +498,16 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
             if (paymentDetailResponseMessage != null) {
                 if (paymentDetailResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    serviceName = ServiceName.PAYMENT_DETAIL_SUCCESS;
+                    serviceName = ServiceEvent.PAYMENT_DETAIL_SUCCESS;
                     pay_button.setVisibility(View.VISIBLE);
                     paymentInfoDTO = paymentDetailResponseMessage.getService().getPaymentInfo();
                     pspInfoDTO = paymentDetailResponseMessage.getService().getPaymentInfo().getPspInfo();
                     fillPayment(paymentInfoDTO, pspInfoDTO);
                 }else if (paymentDetailResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceName.PAYMENT_DETAIL_FAILURE;
+                    serviceName = ServiceEvent.PAYMENT_DETAIL_FAILURE;
                     forceLogout();
                 }else {
-                    serviceName = ServiceName.PAYMENT_DETAIL_FAILURE;
+                    serviceName = ServiceEvent.PAYMENT_DETAIL_FAILURE;
                 }
                 logEvent.log(serviceName);
             }

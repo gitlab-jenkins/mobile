@@ -11,23 +11,18 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.IOException;
 import java.util.List;
@@ -55,7 +50,7 @@ import xyz.homapay.hampay.mobile.android.dialog.ImageProfile.ActionImage;
 import xyz.homapay.hampay.mobile.android.dialog.ImageProfile.EditImageDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
-import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.fragment.AboutFragment;
 import xyz.homapay.hampay.mobile.android.fragment.AccountDetailFragment;
 import xyz.homapay.hampay.mobile.android.fragment.FragmentDrawer;
@@ -630,20 +625,20 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         @Override
         public void onTaskComplete(ResponseMessage<MobileRegistrationIdEntryResponse> mobileRegistrationIdEntryResponseMessage)
         {
-            ServiceName serviceName;
+            ServiceEvent serviceName;
             LogEvent logEvent = new LogEvent(context);
 
             if (mobileRegistrationIdEntryResponseMessage != null) {
                 if (mobileRegistrationIdEntryResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    serviceName = ServiceName.APP_REGISTRATION_ID_ENTRY_SUCCESS;
+                    serviceName = ServiceEvent.APP_REGISTRATION_ID_ENTRY_SUCCESS;
                     editor.putBoolean(Constants.SEND_MOBILE_REGISTER_ID, true);
                     editor.commit();
                 }else if (mobileRegistrationIdEntryResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceName.APP_REGISTRATION_ID_ENTRY_FAILURE;
+                    serviceName = ServiceEvent.APP_REGISTRATION_ID_ENTRY_FAILURE;
                     forceLogout();
                 }
                 else {
-                    serviceName = ServiceName.APP_REGISTRATION_ID_ENTRY_FAILURE;
+                    serviceName = ServiceEvent.APP_REGISTRATION_ID_ENTRY_FAILURE;
                 }
                 logEvent.log(serviceName);
             }
@@ -686,7 +681,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     public class RequestUserProfileTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<UserProfileResponse>>
     {
-        ServiceName serviceName;
+        ServiceEvent serviceName;
         LogEvent logEvent = new LogEvent(context);
 
         public RequestUserProfileTaskCompleteListener(){
@@ -697,7 +692,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         {
             if (userProfileResponseMessage != null) {
                 if (userProfileResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-                    serviceName = ServiceName.USER_PROFILE_SUCCESS;
+                    serviceName = ServiceEvent.USER_PROFILE_SUCCESS;
                     userProfileDTO = userProfileResponseMessage.getService().getUserProfile();
                     currentFragment = 0;
                     fragment = new MainFragment();
@@ -718,15 +713,15 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                         }
                     }
                 }else if (userProfileResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceName.USER_PROFILE_FAILURE;
+                    serviceName = ServiceEvent.USER_PROFILE_FAILURE;
                     forceLogout();
                 }
                 else{
-                    serviceName = ServiceName.USER_PROFILE_FAILURE;
+                    serviceName = ServiceEvent.USER_PROFILE_FAILURE;
                 }
             }
             else {
-                serviceName = ServiceName.USER_PROFILE_FAILURE;
+                serviceName = ServiceEvent.USER_PROFILE_FAILURE;
             }
             logEvent.log(serviceName);
         }

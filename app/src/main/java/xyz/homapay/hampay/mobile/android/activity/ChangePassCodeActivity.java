@@ -23,7 +23,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestChangePassCode;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
-import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PasswordComplexity;
@@ -142,12 +142,12 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
         {
 
             hamPayDialog.dismisWaitingDialog();
-            ServiceName serviceName;
+            ServiceEvent serviceName;
             LogEvent logEvent = new LogEvent(context);
 
             if (changePassCodeResponseMessage != null) {
                 if (changePassCodeResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    serviceName = ServiceName.CHANGE_PASS_CODE_SUCCESS;
+                    serviceName = ServiceEvent.CHANGE_PASS_CODE_SUCCESS;
                     editor.putString(Constants.REGISTERED_CELL_NUMBER, cellNumber).commit();
                     passCodeChangeStep = 1;
                     pass_code_change_text.setText(getString(R.string.change_pass_code_text_1));
@@ -162,11 +162,11 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                     new HamPayDialog(activity).showSuccessChangeSettingDialog(changePassCodeResponseMessage.getService().getResultStatus().getDescription(), forceChange);
 
                 }else if (changePassCodeResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceName.CHANGE_PASS_CODE_FAILURE;
+                    serviceName = ServiceEvent.CHANGE_PASS_CODE_FAILURE;
                     forceLogout();
                 }
                 else {
-                    serviceName = ServiceName.CHANGE_PASS_CODE_FAILURE;
+                    serviceName = ServiceEvent.CHANGE_PASS_CODE_FAILURE;
                     resetLayout();
                     requestChangePassCode = new RequestChangePassCode(context, new RequestChangePassCodeTaskCompleteListener());
                     new HamPayDialog(activity).showFailChangePassCodeDialog(requestChangePassCode, changePassCodeRequest,
@@ -174,7 +174,7 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                             changePassCodeResponseMessage.getService().getResultStatus().getDescription());
                 }
             }else {
-                serviceName = ServiceName.CHANGE_PASS_CODE_FAILURE;
+                serviceName = ServiceEvent.CHANGE_PASS_CODE_FAILURE;
                 resetLayout();
                 requestChangePassCode = new RequestChangePassCode(context, new RequestChangePassCodeTaskCompleteListener());
                 new HamPayDialog(activity).showFailChangePassCodeDialog(requestChangePassCode, changePassCodeRequest,

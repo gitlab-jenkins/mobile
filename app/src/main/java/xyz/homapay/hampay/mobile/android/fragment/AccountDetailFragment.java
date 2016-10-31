@@ -12,15 +12,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
 import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
-import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.activity.IntroIBANActivity;
@@ -29,7 +25,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestUserProfile;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
-import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.HamPayUtils;
 import xyz.homapay.hampay.mobile.android.util.ImageManager;
@@ -171,7 +167,7 @@ public class AccountDetailFragment extends Fragment {
 
     public class RequestUserProfileTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<UserProfileResponse>>
     {
-        ServiceName serviceName;
+        ServiceEvent serviceName;
         LogEvent logEvent = new LogEvent(context);
 
         public RequestUserProfileTaskCompleteListener(){
@@ -185,16 +181,16 @@ public class AccountDetailFragment extends Fragment {
 
 
                 if (userProfileResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-                    serviceName = ServiceName.USER_PROFILE_SUCCESS;
+                    serviceName = ServiceEvent.USER_PROFILE_SUCCESS;
                     userProfileDTO = userProfileResponseMessage.getService().getUserProfile();
                     fillUserProfile(userProfileDTO);
                     hide_bg.setVisibility(View.GONE);
                 } else if (userProfileResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceName.USER_PROFILE_FAILURE;
+                    serviceName = ServiceEvent.USER_PROFILE_FAILURE;
                     forceLogout();
                 }
                 else{
-                    serviceName = ServiceName.USER_PROFILE_FAILURE;
+                    serviceName = ServiceEvent.USER_PROFILE_FAILURE;
                     requestUserProfile = new RequestUserProfile(getActivity(), new RequestUserProfileTaskCompleteListener());
                     new HamPayDialog(getActivity()).showFailUserProfileDialog(requestUserProfile, userProfileRequest,
                             userProfileResponseMessage.getService().getResultStatus().getCode(),
@@ -203,7 +199,7 @@ public class AccountDetailFragment extends Fragment {
                 }
             }
             else {
-                serviceName = ServiceName.USER_PROFILE_FAILURE;
+                serviceName = ServiceEvent.USER_PROFILE_FAILURE;
                 requestUserProfile = new RequestUserProfile(getActivity(), new RequestUserProfileTaskCompleteListener());
                 new HamPayDialog(getActivity()).showFailUserProfileDialog(requestUserProfile, userProfileRequest,
                         Constants.LOCAL_ERROR_CODE,

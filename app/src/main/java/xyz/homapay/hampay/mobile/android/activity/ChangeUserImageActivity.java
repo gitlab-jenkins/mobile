@@ -18,9 +18,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
@@ -38,7 +35,7 @@ import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.cropper.CropImageView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
-import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
@@ -355,12 +352,12 @@ public class ChangeUserImageActivity extends AppCompatActivity {
         public void onTaskComplete(ResponseMessage<UploadImageResponse> uploadImageResponseMessage)
         {
             hamPayDialog.dismisWaitingDialog();
-            ServiceName serviceName;
+            ServiceEvent serviceName;
             LogEvent logEvent = new LogEvent(context);
             if (uploadImageResponseMessage != null && uploadImageResponseMessage.getService().getResultStatus() != null) {
 
                 if (uploadImageResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    serviceName = ServiceName.UPLOAD_IMAGE_SUCCESS;
+                    serviceName = ServiceEvent.UPLOAD_IMAGE_SUCCESS;
                     croppedImage.recycle();
                     cropImageView.setImageBitmap(null);
                     Intent returnIntent = new Intent();
@@ -370,11 +367,11 @@ public class ChangeUserImageActivity extends AppCompatActivity {
                     finish();
 
                 } else if (uploadImageResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceName.UPLOAD_IMAGE_FAILURE;
+                    serviceName = ServiceEvent.UPLOAD_IMAGE_FAILURE;
                     forceLogout();
                 }
                 else {
-                    serviceName = ServiceName.UPLOAD_IMAGE_FAILURE;
+                    serviceName = ServiceEvent.UPLOAD_IMAGE_FAILURE;
                     requestUploadImage = new RequestUploadImage(getApplicationContext(), new RequestUploadImageTaskCompleteListener());
                     new HamPayDialog(activity).showFailUploadImage(requestUploadImage, uploadImageRequest,
                             uploadImageResponseMessage.getService().getResultStatus().getCode(),
@@ -384,7 +381,7 @@ public class ChangeUserImageActivity extends AppCompatActivity {
                 }
             }
             else {
-                serviceName = ServiceName.UPLOAD_IMAGE_FAILURE;
+                serviceName = ServiceEvent.UPLOAD_IMAGE_FAILURE;
                 Toast.makeText(context, "این سرویس هنوز فعال نمی باشد", Toast.LENGTH_LONG).show();
                 requestUploadImage = new RequestUploadImage(getApplicationContext(), new RequestUploadImageTaskCompleteListener());
                 new HamPayDialog(activity).showFailUploadImage(requestUploadImage, uploadImageRequest,

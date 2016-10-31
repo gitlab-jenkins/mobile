@@ -11,9 +11,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
@@ -27,7 +24,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestUserPayment;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
-import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
@@ -268,25 +265,25 @@ public class PaymentRequestConfirmActivity extends AppCompatActivity {
         public void onTaskComplete(ResponseMessage<UserPaymentResponse> userPaymentResponseMessage) {
 
             hamPayDialog.dismisWaitingDialog();
-            ServiceName serviceName;
+            ServiceEvent serviceName;
             LogEvent logEvent = new LogEvent(context);
 
             if (userPaymentResponseMessage != null) {
 
                 if (userPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    serviceName = ServiceName.USER_PAYMENT_SUCCESS;
+                    serviceName = ServiceEvent.USER_PAYMENT_SUCCESS;
                     new HamPayDialog(activity).successPaymentRequestDialog(userPaymentResponseMessage.getService().getProductCode());
                 }else if (userPaymentResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceName.USER_PAYMENT_FAILURE;
+                    serviceName = ServiceEvent.USER_PAYMENT_FAILURE;
                     forceLogout();
                 }
                 else {
-                    serviceName = ServiceName.USER_PAYMENT_FAILURE;
+                    serviceName = ServiceEvent.USER_PAYMENT_FAILURE;
                     new HamPayDialog(activity).failurePaymentRequestDialog(userPaymentResponseMessage.getService().getResultStatus().getCode(),
                             userPaymentResponseMessage.getService().getResultStatus().getDescription());
                 }
             } else {
-                serviceName = ServiceName.USER_PAYMENT_FAILURE;
+                serviceName = ServiceEvent.USER_PAYMENT_FAILURE;
                 new HamPayDialog(activity).failurePaymentRequestDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_failure_payment_request));
             }
             logEvent.log(serviceName);

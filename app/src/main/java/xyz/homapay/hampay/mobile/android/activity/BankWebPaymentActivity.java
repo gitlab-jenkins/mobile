@@ -30,7 +30,7 @@ import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
-import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
@@ -211,12 +211,12 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
                 urlText.setText(url);
                 ResultStatus resultStatus = ResultStatus.FAILURE;
-                ServiceName serviceName;
+                ServiceEvent serviceName;
                 LogEvent logEvent = new LogEvent(context);
                 if (url.toLowerCase().contains(pspInfoDTO.getRedirectURL().toLowerCase())) {
                     if (view.getTitle().toLowerCase().contains("ref:")) {
                         if (view.getTitle().split(":").length == 2){
-                            serviceName = ServiceName.IPG_PAYMENT_SUCCESS;
+                            serviceName = ServiceEvent.IPG_PAYMENT_SUCCESS;
                             logEvent.log(serviceName);
                             Intent intent = new Intent(context, PaymentCompletedActivity.class);
                             if (paymentInfoDTO != null) {
@@ -233,16 +233,16 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                         }else {
                             hamPayDialog.ipgFailDialog();
                             resultStatus = ResultStatus.FAILURE;
-                            serviceName = ServiceName.IPG_PAYMENT_FAILURE;
+                            serviceName = ServiceEvent.IPG_PAYMENT_FAILURE;
                             logEvent.log(serviceName);
                         }
                     } else {
-                        serviceName = ServiceName.IPG_PAYMENT_FAILURE;
+                        serviceName = ServiceEvent.IPG_PAYMENT_FAILURE;
                         logEvent.log(serviceName);
                         hamPayDialog.ipgFailDialog();
                     }
                 } else {
-                    serviceName = ServiceName.IPG_PAYMENT_FAILURE;
+                    serviceName = ServiceEvent.IPG_PAYMENT_FAILURE;
                     logEvent.log(serviceName);
                 }
             }

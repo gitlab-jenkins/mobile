@@ -7,7 +7,7 @@ public class Event {
 
     private int id;
     private String name;
-    private ServiceEvent value;
+//    private ServiceEvent value;
 
     public int getId() {
         return id;
@@ -23,14 +23,6 @@ public class Event {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public ServiceEvent getType() {
-        return value;
-    }
-
-    public void setType(ServiceEvent value) {
-        this.value = value;
     }
 
 }

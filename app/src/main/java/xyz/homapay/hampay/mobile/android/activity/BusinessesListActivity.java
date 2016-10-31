@@ -20,9 +20,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +43,7 @@ import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoListview
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
-import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
@@ -371,7 +368,7 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
 
         List<BusinessDTO> newBusinessDTOs;
         boolean searchEnabled;
-        ServiceName serviceName;
+        ServiceEvent serviceName;
         LogEvent logEvent = new LogEvent(context);
 
         public RequestBusinessListTaskCompleteListener(boolean searchEnabled){
@@ -412,13 +409,13 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                             }
                         }
                     }
-                    serviceName = ServiceName.BUSINESS_LIST_SUCCESS;
+                    serviceName = ServiceEvent.BUSINESS_LIST_SUCCESS;
 
                 }else if (businessListResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceName.BUSINESS_LIST_FAILURE;
+                    serviceName = ServiceEvent.BUSINESS_LIST_FAILURE;
                     forceLogout();
                 }else {
-                    serviceName = ServiceName.BUSINESS_LIST_FAILURE;
+                    serviceName = ServiceEvent.BUSINESS_LIST_FAILURE;
                     if (!searchEnabled) {
                         businessListRequest.setPageNumber(requestPageNumber);
                         businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);

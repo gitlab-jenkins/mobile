@@ -52,7 +52,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestTAC;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
-import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
 import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
@@ -301,12 +301,12 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         public void onTaskComplete(ResponseMessage<TACResponse> tacResponseMessage)
         {
             hamPayDialog.dismisWaitingDialog();
-            ServiceName serviceName;
+            ServiceEvent serviceName;
             LogEvent logEvent = new LogEvent(context);
 
             if (tacResponseMessage != null) {
                 if (tacResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    serviceName = ServiceName.TAC_SUCCESS;
+                    serviceName = ServiceEvent.TAC_SUCCESS;
                     if (tacResponseMessage.getService().isShouldAcceptTAC()) {
                     } else {
                         Intent intent = new Intent();
@@ -338,11 +338,11 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
 
                 }else if (tacResponseMessage.getService().getResultStatus() == ResultStatus.OUT_OF_DATE_APP_VERSION){
-                    serviceName = ServiceName.TAC_FAILURE;
+                    serviceName = ServiceEvent.TAC_FAILURE;
                     hamPayDialog.appUpdateDialog(Constants.APP_STORE_URL);
                 }
                 else {
-                    serviceName = ServiceName.TAC_FAILURE;
+                    serviceName = ServiceEvent.TAC_FAILURE;
                     requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
                     new HamPayDialog(activity).showFailTCRequestDialog(requestTAC, tacRequest,
                             tacResponseMessage.getService().getResultStatus().getCode(),
@@ -350,7 +350,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                 }
             }
             else {
-                serviceName = ServiceName.TAC_FAILURE;
+                serviceName = ServiceEvent.TAC_FAILURE;
                 requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
                 new HamPayDialog(activity).showFailTCRequestDialog(requestTAC, tacRequest,
                         Constants.LOCAL_ERROR_CODE,
@@ -379,12 +379,12 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         {
             hamPayDialog.dismisWaitingDialog();
             pullToRefresh.setRefreshing(false);
-            ServiceName serviceName;
+            ServiceEvent serviceName;
             LogEvent logEvent = new LogEvent(context);
             if (recentPendingFundResponseMessage != null) {
 
                 if (recentPendingFundResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    serviceName = ServiceName.RECENT_PENDING_FUND_SUCCESS;
+                    serviceName = ServiceEvent.RECENT_PENDING_FUND_SUCCESS;
                     List<FundDTO> funds = recentPendingFundResponseMessage.getService().getFundDTOList();
 
                     if (funds.size() > 0) {
@@ -397,13 +397,13 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                     }
 
                 }else {
-                    serviceName = ServiceName.RECENT_PENDING_FUND_FAILURE;
+                    serviceName = ServiceEvent.RECENT_PENDING_FUND_FAILURE;
                     if (keyboard.getVisibility() == View.GONE)
                         new Expand(keyboard).animate();
                 }
             }
             else {
-                serviceName = ServiceName.RECENT_PENDING_FUND_FAILURE;
+                serviceName = ServiceEvent.RECENT_PENDING_FUND_FAILURE;
                 if (keyboard.getVisibility() == View.GONE)
                     new Expand(keyboard).animate();
             }
@@ -545,7 +545,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     public class RequestLoginTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<LoginResponse>>
     {
 
-        ServiceName serviceName;
+        ServiceEvent serviceName;
         LogEvent logEvent = new LogEvent(context);
 
         public RequestLoginTaskCompleteListener(){
@@ -556,7 +556,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         {
             if (loginResponseResponseMessage != null) {
                 if (loginResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    serviceName = ServiceName.LOGIN_SUCCESS;
+                    serviceName = ServiceEvent.LOGIN_SUCCESS;
                     editor.putString(Constants.LOGIN_TOKEN_ID, loginResponseResponseMessage.getService().getAuthToken());
                     editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                     editor.commit();
@@ -566,11 +566,11 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                     requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
                     requestTAC.execute(tacRequest);
                 }else if (loginResponseResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE){
-                    serviceName = ServiceName.LOGIN_FAILURE;
+                    serviceName = ServiceEvent.LOGIN_FAILURE;
                     resetLogin();
                     hamPayDialog.showLoginFailDialog(loginResponseResponseMessage.getService().getRemainRetryCount());
                 }else if (loginResponseResponseMessage.getService().getResultStatus() == ResultStatus.BLOCKED_IDP_USER){
-                    serviceName = ServiceName.LOGIN_FAILURE;
+                    serviceName = ServiceEvent.LOGIN_FAILURE;
                     resetLogin();
                     hamPayDialog.showLoginFailDialog(0);
                 }

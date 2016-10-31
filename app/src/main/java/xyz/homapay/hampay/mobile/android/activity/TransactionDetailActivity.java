@@ -15,8 +15,6 @@ import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.TransactionDetailRequest;
 import xyz.homapay.hampay.common.core.model.response.TransactionDetailResponse;
-import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
-import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.TnxDetailDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
@@ -26,7 +24,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestTransactionDetail;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
-import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
@@ -192,12 +190,12 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
             hamPayDialog.dismisWaitingDialog();
 
-            ServiceName serviceName;
+            ServiceEvent serviceName;
             LogEvent logEvent = new LogEvent(context);
 
             if (transactionDetailResponseMessage != null) {
                 if (transactionDetailResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    serviceName = ServiceName.TRANSACTION_DETAIL_SUCCESS;
+                    serviceName = ServiceEvent.TRANSACTION_DETAIL_SUCCESS;
                     reference_code.setText(persianEnglishDigit.E2P(transactionDTO.getReference()));
                     tnxDetailDTO = transactionDetailResponseMessage.getService().getTransactionDetail();
                     if (transactionDTO.getPaymentType() == TransactionDTO.PaymentType.PAYMENT) {
@@ -259,10 +257,10 @@ public class TransactionDetailActivity extends AppCompatActivity {
                         fee_charge_text.setVisibility(View.VISIBLE);
                     }
                 }else if (transactionDetailResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceName.TRANSACTION_DETAIL_FAILURE;
+                    serviceName = ServiceEvent.TRANSACTION_DETAIL_FAILURE;
                     forceLogout();
                 }else {
-                    serviceName = ServiceName.TRANSACTION_DETAIL_FAILURE;
+                    serviceName = ServiceEvent.TRANSACTION_DETAIL_FAILURE;
                 }
                 logEvent.log(serviceName);
             }

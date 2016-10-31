@@ -5,10 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +38,7 @@ import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.slidinguppanel.SlidingUpPanelLayout;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
-import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
@@ -355,7 +353,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     public class RequestPendingCountTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PendingCountResponse>>
     {
 
-        ServiceName serviceName;
+        ServiceEvent serviceName;
         LogEvent logEvent = new LogEvent(context);
 
         @Override
@@ -363,7 +361,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         {
             if (pendingCountResponseMessage != null) {
                 if (pendingCountResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-                    serviceName = ServiceName.PENDING_COUNT_SUCCESS;
+                    serviceName = ServiceEvent.PENDING_COUNT_SUCCESS;
                     int pendingCount = pendingCountResponseMessage.getService().getPendingCount();
                     if (pendingCount == 0){
                         pending_badge.setVisibility(View.GONE);
@@ -373,10 +371,10 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                         editor.putInt(Constants.PENDING_COUNT, pendingCount).commit();
                     }
                 }else if (pendingCountResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceName.PENDING_COUNT_FAILURE;
+                    serviceName = ServiceEvent.PENDING_COUNT_FAILURE;
                     forceLogout();
                 }else {
-                    serviceName = ServiceName.PENDING_COUNT_FAILURE;
+                    serviceName = ServiceEvent.PENDING_COUNT_FAILURE;
                 }
             }
             logEvent.log(serviceName);

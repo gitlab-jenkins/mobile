@@ -12,9 +12,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
@@ -31,7 +28,7 @@ import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
-import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
@@ -310,7 +307,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
             hamPayDialog.dismisWaitingDialog();
             pay_to_business_button.setEnabled(true);
-            ServiceName serviceName;
+            ServiceEvent serviceName;
             LogEvent logEvent = new LogEvent(context);
 
             String responseCode = null;
@@ -338,20 +335,20 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
                             intent.putExtra(Constants.SUCCESS_PAYMENT_CODE, paymentInfoDTO.getProductCode());
                             intent.putExtra(Constants.SUCCESS_PAYMENT_TRACE, pspInfoDTO.getProviderId());
                             startActivityForResult(intent, 46);
-                            serviceName = ServiceName.PSP_PAYMENT_SUCCESS;
+                            serviceName = ServiceEvent.PSP_PAYMENT_SUCCESS;
                             logEvent.log(serviceName);
                         }
                         resultStatus = ResultStatus.SUCCESS;
                     }else if (responseCode.equalsIgnoreCase("51")) {
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.msg_insufficient_credit));
                         resultStatus = ResultStatus.FAILURE;
-                        serviceName = ServiceName.PSP_PAYMENT_FAILURE;
+                        serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
                         logEvent.log(serviceName);
                     }else {
                         PspCode pspCode = new PspCode(context);
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(responseCode));
                         resultStatus = ResultStatus.FAILURE;
-                        serviceName = ServiceName.PSP_PAYMENT_FAILURE;
+                        serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
                         logEvent.log(serviceName);
                     }
 
@@ -399,7 +396,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
     public class RequestPSPResultTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> {
 
         private String SWTrace;
-        ServiceName serviceName;
+        ServiceEvent serviceName;
         LogEvent logEvent = new LogEvent(context);
 
         public RequestPSPResultTaskCompleteListener(String SWTrace){
@@ -413,16 +410,16 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
             if (pspResultResponseMessage != null){
                 if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-                    serviceName = ServiceName.PSP_RESULT_SUCCESS;
+                    serviceName = ServiceEvent.PSP_RESULT_SUCCESS;
                     if (SWTrace != null) {
                         dbHelper.syncPspResult(SWTrace);
                     }
 
                 }else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();
-                    serviceName = ServiceName.PSP_RESULT_FAILURE;
+                    serviceName = ServiceEvent.PSP_RESULT_FAILURE;
                 }else {
-                    serviceName = ServiceName.PSP_RESULT_FAILURE;
+                    serviceName = ServiceEvent.PSP_RESULT_FAILURE;
                 }
             }
             logEvent.log(serviceName);

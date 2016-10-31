@@ -25,7 +25,7 @@ import xyz.homapay.hampay.mobile.android.async.task.UserRequestForBeingMerchantT
 import xyz.homapay.hampay.mobile.android.async.task.impl.OnTaskCompleted;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
-import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
@@ -126,7 +126,7 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
     public void OnTaskExecuted(Object object) {
 
         if (object != null) {
-            ServiceName serviceName;
+            ServiceEvent serviceName;
             LogEvent logEvent = new LogEvent(context);
             if (object.getClass().equals(ResponseMessage.class)) {
                 ResponseMessage responseMessage = (ResponseMessage) object;
@@ -135,7 +135,7 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
                         ResponseMessage<UserRequestForBeingMerchantResponse> userRequestForBeingMerchant = (ResponseMessage) object;
                         switch (userRequestForBeingMerchant.getService().getResultStatus()){
                             case SUCCESS:
-                                serviceName = ServiceName.USER_REQUEST_FOR_BEING_MERCHANT_SUCCESS;
+                                serviceName = ServiceEvent.USER_REQUEST_FOR_BEING_MERCHANT_SUCCESS;
                                 logEvent.log(serviceName);
                                 if (userRequestForBeingMerchant.getService().getMerchantProgressForUserStatus().equalsIgnoreCase("PENDING")){
                                     requestLayout.setVisibility(View.GONE);
@@ -146,7 +146,7 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
                                 }
                                 break;
                             default:
-                                serviceName = ServiceName.USER_REQUEST_FOR_BEING_MERCHANT_FAILURE;
+                                serviceName = ServiceEvent.USER_REQUEST_FOR_BEING_MERCHANT_FAILURE;
                                 logEvent.log(serviceName);
                                 break;
                         }
@@ -156,7 +156,7 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
                         ResponseMessage<UserRequestForBeingMerchantProgressResponse> userRequestForBeingMerchantProgress = (ResponseMessage) object;
                         switch (userRequestForBeingMerchantProgress.getService().getResultStatus()){
                             case SUCCESS:
-                                serviceName = ServiceName.USER_REQUEST_FOR_BEING_MERCHANT_RESULT_SUCCESS;
+                                serviceName = ServiceEvent.USER_REQUEST_FOR_BEING_MERCHANT_RESULT_SUCCESS;
                                 logEvent.log(serviceName);
                                 String merchantId = userRequestForBeingMerchantProgress.getService().getMerchantId();
                                 SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(persian.E2P(getString(R.string.merchant_info, merchantId)));
@@ -167,7 +167,7 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
                                 resultLayout.setVisibility(View.VISIBLE);
                                 break;
                             default:
-                                serviceName = ServiceName.USER_REQUEST_FOR_BEING_MERCHANT_RESULT_FAILURE;
+                                serviceName = ServiceEvent.USER_REQUEST_FOR_BEING_MERCHANT_RESULT_FAILURE;
                                 logEvent.log(serviceName);
                                 break;
                         }

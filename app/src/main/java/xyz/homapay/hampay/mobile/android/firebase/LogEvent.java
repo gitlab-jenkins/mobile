@@ -6,7 +6,7 @@ import android.os.Bundle;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
-import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 
 /**
  * Created by amir on 10/21/16.
@@ -29,7 +29,7 @@ public class LogEvent {
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
-    public void log(ServiceName serviceName){
+    public void log(ServiceEvent serviceName){
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, serviceName.name());
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, serviceName.name());
         bundle.putString(FirebaseAnalytics.Param.VALUE, serviceName.name());

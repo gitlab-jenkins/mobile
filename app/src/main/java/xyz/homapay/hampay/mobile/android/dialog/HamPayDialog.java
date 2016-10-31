@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.content.IntentCompat;
 import android.text.Spannable;
@@ -18,8 +17,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -96,7 +93,7 @@ import xyz.homapay.hampay.mobile.android.component.edittext.EmailTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
-import xyz.homapay.hampay.mobile.android.firebase.service.ServiceName;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.EmailVerification;
@@ -408,13 +405,13 @@ public class HamPayDialog {
         {
 
             dismisWaitingDialog();
-            ServiceName serviceName;
+            ServiceEvent serviceName;
             LogEvent logEvent = new LogEvent(activity);
 
             if (tacAcceptResponseMessage != null) {
 
                 if (tacAcceptResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    serviceName = ServiceName.TAC_ACCEPT_SUCCESS;
+                    serviceName = ServiceEvent.TAC_ACCEPT_SUCCESS;
                     editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                     editor.commit();
 
@@ -438,11 +435,11 @@ public class HamPayDialog {
                     }
 
                 }else if (tacAcceptResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceName.TAC_ACCEPT_FAILURE;
+                    serviceName = ServiceEvent.TAC_ACCEPT_FAILURE;
                     forceLogout();
                 }
                 else {
-                    serviceName = ServiceName.TAC_ACCEPT_FAILURE;
+                    serviceName = ServiceEvent.TAC_ACCEPT_FAILURE;
                     requestTACAccept = new RequestTACAccept(activity, new RequestTACAcceptResponseTaskCompleteListener());
                     showFailTACAcceeptRequestDialog(requestTACAccept, tacAcceptRequest,
                             tacAcceptResponseMessage.getService().getResultStatus().getCode(),
@@ -450,7 +447,7 @@ public class HamPayDialog {
                 }
             }
             else {
-                serviceName = ServiceName.TAC_ACCEPT_FAILURE;
+                serviceName = ServiceEvent.TAC_ACCEPT_FAILURE;
                 showFailTACAcceeptRequestDialog(requestTACAccept, tacAcceptRequest,
                         Constants.LOCAL_ERROR_CODE,
                         activity.getString(R.string.msg_fail_tac_accept_request));
