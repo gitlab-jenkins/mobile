@@ -7,5 +7,6 @@ public enum  AppEvent {
     LAUNCH,
     REGISTER,
     LOGIN,
-    LOGOUT
+    LOGOUT,
+    UNLINK
 }

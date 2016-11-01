@@ -24,6 +24,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestUnlinkUser;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
+import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -47,6 +48,7 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
     private DatabaseHelper databaseHelper;
+    private AppEvent appEvent = AppEvent.UNLINK;
 
     public void backActionBar(View view){
         finish();
@@ -147,6 +149,7 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
             if (unlinkUserResponseResponseMessage != null) {
                 if (unlinkUserResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     serviceName = ServiceEvent.UNLINK_USER_SUCCESS;
+                    logEvent.log(appEvent);
                     editor.clear().commit();
                     editor.commit();
 
