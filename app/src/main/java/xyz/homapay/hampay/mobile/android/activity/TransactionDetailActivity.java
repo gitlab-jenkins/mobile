@@ -158,6 +158,8 @@ public class TransactionDetailActivity extends AppCompatActivity {
             image.setImageResource(R.drawable.user_placeholder);
         }
 
+        callee_name.setText(transactionDTO.getPersonName());
+
         if (transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.SUCCESS) {
             if (transactionDTO.getTransactionType() == TransactionDTO.TransactionType.CREDIT) {
                 status_text.setText(context.getString(R.string.credit));
@@ -194,6 +196,12 @@ public class TransactionDetailActivity extends AppCompatActivity {
                 if (transactionDetailResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     reference_code.setText(persianEnglishDigit.E2P(transactionDTO.getReference()));
                     tnxDetailDTO = transactionDetailResponseMessage.getService().getTransactionDetail();
+                    if (tnxDetailDTO.getImageId() != null) {
+                        image.setTag(tnxDetailDTO.getImageId());
+                        imageManager.displayImage(tnxDetailDTO.getImageId(), image, R.drawable.user_placeholder);
+                    }else {
+                        image.setImageResource(R.drawable.user_placeholder);
+                    }
                     if (transactionDTO.getPaymentType() == TransactionDTO.PaymentType.PAYMENT) {
                         if (tnxDetailDTO.getUserStatus() == TnxDetailDTO.UserStatus.ACTIVE) {
                             pay_button.setVisibility(View.VISIBLE);
@@ -209,7 +217,9 @@ public class TransactionDetailActivity extends AppCompatActivity {
                                 }
                             });
                         }
-                        callee_name.setText(tnxDetailDTO.getName());
+                        if (tnxDetailDTO.getName() != null) {
+                            callee_name.setText(tnxDetailDTO.getName());
+                        }
                         payment_request_code.setText(persianEnglishDigit.E2P(tnxDetailDTO.getCode()));
                         date_time.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(tnxDetailDTO.getDate())));
                         if (transactionDTO.getPersonType() == TransactionDTO.PersonType.INDIVIDUAL) {
