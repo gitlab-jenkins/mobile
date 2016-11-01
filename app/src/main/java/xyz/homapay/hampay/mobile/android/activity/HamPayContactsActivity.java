@@ -104,10 +104,7 @@ public class HamPayContactsActivity extends AppCompatActivity implements Permiss
                 requestAndLoadUserContact();
                 break;
             case DENY:
-                contacts = new ArrayList<ContactDTO>();
-                contactsHampayEnabledRequest.setContacts(contacts);
-                requestContactHampayEnabled = new RequestContactHampayEnabled(activity, new RequestContactHampayEnabledTaskCompleteListener());
-                requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
+                finish();
                 break;
         }
     }
