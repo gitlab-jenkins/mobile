@@ -576,6 +576,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                 }
             }
             else {
+                serviceName = ServiceEvent.LOGIN_FAILURE;
                 Toast.makeText(activity, getString(R.string.system_connectivity), Toast.LENGTH_SHORT).show();
                 resetLogin();
             }

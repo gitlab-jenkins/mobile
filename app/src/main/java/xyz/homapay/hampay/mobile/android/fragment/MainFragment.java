@@ -376,6 +376,8 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                 }else {
                     serviceName = ServiceEvent.PENDING_COUNT_FAILURE;
                 }
+            }else {
+                serviceName = ServiceEvent.PENDING_COUNT_FAILURE;
             }
             logEvent.log(serviceName);
         }
