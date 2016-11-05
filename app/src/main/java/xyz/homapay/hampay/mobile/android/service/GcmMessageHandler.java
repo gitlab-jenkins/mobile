@@ -2,7 +2,6 @@ package xyz.homapay.hampay.mobile.android.service;
 
 import android.app.ActivityManager;
 import android.app.IntentService;
-import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,21 +12,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import java.io.File;
 import java.util.List;
 
 import br.com.goncalves.pugnotification.notification.PugNotification;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
-import xyz.homapay.hampay.mobile.android.activity.AppSliderActivity;
 import xyz.homapay.hampay.mobile.android.activity.InvoicePendingConfirmationActivity;
 import xyz.homapay.hampay.mobile.android.activity.PendingPurchasePaymentListActivity;
 import xyz.homapay.hampay.mobile.android.activity.RequestBusinessPayDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.TransactionsListActivity;
+import xyz.homapay.hampay.mobile.android.activity.WelcomeActivity;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
 import xyz.homapay.hampay.mobile.android.receiver.GcmBroadcastReceiver;
@@ -217,7 +214,7 @@ public class GcmMessageHandler extends IntentService{
                                     .message(notificationMessage)
                                     .bigTextStyle(notificationMessage)
                                     .smallIcon(R.mipmap.ic_notification)
-                                    .click(AppSliderActivity.class, bundle)
+                                    .click(WelcomeActivity.class, bundle)
                                     .color(R.color.colorPrimary)
                                     .lights(Color.rgb(Constants.HAMPAY_RED, Constants.HAMPAY_GREEN, Constants.HAMPAY_BLUE), 2000, 1000)
                                     .ticker(Constants.NOTIFICATION_PAYMENT)
@@ -269,7 +266,7 @@ public class GcmMessageHandler extends IntentService{
                                     .message(notificationMessage)
                                     .bigTextStyle(notificationMessage)
                                     .smallIcon(R.mipmap.ic_notification)
-                                    .click(AppSliderActivity.class, bundle)
+                                    .click(WelcomeActivity.class, bundle)
                                     .color(R.color.colorPrimary)
                                     .lights(Color.rgb(Constants.HAMPAY_RED, Constants.HAMPAY_GREEN, Constants.HAMPAY_BLUE), 2000, 1000)
                                     .ticker(Constants.NOTIFICATION_CREDIT_REQUEST)
@@ -318,7 +315,7 @@ public class GcmMessageHandler extends IntentService{
                                     .message(notificationMessage)
                                     .bigTextStyle(notificationMessage)
                                     .smallIcon(R.mipmap.ic_notification)
-                                    .click(AppSliderActivity.class, bundle)
+                                    .click(WelcomeActivity.class, bundle)
                                     .color(R.color.colorPrimary)
                                     .lights(Color.rgb(Constants.HAMPAY_RED, Constants.HAMPAY_GREEN, Constants.HAMPAY_BLUE), 2000, 1000)
                                     .ticker(Constants.NOTIFICATION_CREDIT_REQUEST)
@@ -360,7 +357,7 @@ public class GcmMessageHandler extends IntentService{
                                     .message(notificationMessage)
                                     .bigTextStyle(notificationMessage)
                                     .smallIcon(R.mipmap.ic_notification)
-                                    .click(AppSliderActivity.class, bundle)
+                                    .click(WelcomeActivity.class, bundle)
                                     .color(R.color.colorPrimary)
                                     .lights(Color.rgb(Constants.HAMPAY_RED, Constants.HAMPAY_GREEN, Constants.HAMPAY_BLUE), 2000, 1000)
                                     .ticker(Constants.NOTIFICATION_USER_PAYMENT_CONFIRM)
@@ -400,7 +397,7 @@ public class GcmMessageHandler extends IntentService{
                                     .message(notificationMessage)
                                     .bigTextStyle(notificationMessage)
                                     .smallIcon(R.mipmap.ic_notification)
-                                    .click(AppSliderActivity.class, bundle)
+                                    .click(WelcomeActivity.class, bundle)
                                     .color(R.color.colorPrimary)
                                     .lights(Color.rgb(Constants.HAMPAY_RED, Constants.HAMPAY_GREEN, Constants.HAMPAY_BLUE), 2000, 1000)
                                     .ticker(Constants.NOTIFICATION_USER_PAYMENT_CANCEL)

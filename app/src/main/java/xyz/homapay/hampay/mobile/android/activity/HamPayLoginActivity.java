@@ -710,7 +710,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                             String apiLevel = "";
 //                            if (cellNumber.length() == 0){
                             if (true){
-                                apiLevel = "2.0";
+                                apiLevel = "3.0";
                                 try {
                                     password = SecurityUtils.getInstance(this).
                                             generatePassword(inputPassValue,

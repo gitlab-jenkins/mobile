@@ -1,5 +1,6 @@
 package xyz.homapay.hampay.mobile.android.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -18,6 +19,8 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.WelcomeAdapter;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
+import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
+import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PreferencesManager;
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -26,6 +29,9 @@ public class WelcomeActivity extends AppCompatActivity {
     private WelcomeAdapter welcomeAdapter;
     private LinearLayout dotsLayout;
     private TextView[] dots;
+    private Bundle bundle;
+    private Intent intent;
+    private Activity activity;
     private int[] layouts = new int[]{
             R.layout.welcome_slider0,
             R.layout.welcome_slider1,
@@ -44,6 +50,57 @@ public class WelcomeActivity extends AppCompatActivity {
 
         LogEvent logEvent = new LogEvent(this);
         logEvent.log(appEvent);
+
+        activity = WelcomeActivity.this;
+
+        bundle = getIntent().getExtras();
+        if (bundle != null) {
+            if (bundle.getBoolean(Constants.HAS_NOTIFICATION)) {
+
+                if(HamPayLoginActivity.instance != null) {
+                    try {
+                        HamPayLoginActivity.instance.finish();
+                    } catch (Exception e) {}
+                }
+
+                NotificationMessageType notificationMessageType;
+                notificationMessageType = NotificationMessageType.valueOf(bundle.getString(Constants.NOTIFICATION_TYPE));
+
+                switch (notificationMessageType){
+                    case PAYMENT:
+                        intent = getIntent();
+                        intent.setClass(activity, HamPayLoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        finish();
+                        startActivity(intent);
+                        break;
+
+                    case CREDIT_REQUEST:
+                        intent = getIntent();
+                        intent.setClass(activity, HamPayLoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        finish();
+                        startActivity(intent);
+                        break;
+                    case PURCHASE:
+                        intent = getIntent();
+                        intent.setClass(activity, HamPayLoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        finish();
+                        startActivity(intent);
+                        break;
+
+                    case USER_PAYMENT_CONFIRM:
+                        intent = getIntent();
+                        intent.setClass(activity, HamPayLoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        finish();
+                        startActivity(intent);
+                        break;
+                }
+
+            }
+        }
 
         if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
             finish();
