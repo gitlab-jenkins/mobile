@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -409,7 +410,12 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
             if (pendingFundListResponseMessage != null) {
                 if (pendingFundListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    fundDTOList = pendingFundListResponseMessage.getService().getFundDTOList();
+                    fundDTOList = new ArrayList<>();
+                    for (FundDTO fund: pendingFundListResponseMessage.getService().getFundDTOList()) {
+                        if (fund.getExpirationDate().getTime() > System.currentTimeMillis()){
+                            fundDTOList.add(fund);
+                        }
+                    }
                     if (fundDTOList.size() == 0){
                         nullPendingText.setVisibility(View.VISIBLE);
                         pendingListView.setAdapter(null);

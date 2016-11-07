@@ -2,6 +2,7 @@ package xyz.homapay.hampay.mobile.android.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,14 +107,24 @@ public class PendingFundListAdapter extends BaseAdapter {
         }
 
         viewHolder.contact_name.setText(persianEnglishDigit.E2P(fund.getName()));
-        if (fund.getCode().length() == 6) {
-            viewHolder.code_digit_1.setText(String.valueOf(fund.getCode().charAt(0)));
-            viewHolder.code_digit_2.setText(String.valueOf(fund.getCode().charAt(1)));
-            viewHolder.code_digit_3.setText(String.valueOf(fund.getCode().charAt(2)));
-            viewHolder.code_digit_4.setText(String.valueOf(fund.getCode().charAt(3)));
-            viewHolder.code_digit_5.setText(String.valueOf(fund.getCode().charAt(4)));
-            viewHolder.code_digit_6.setText(String.valueOf(fund.getCode().charAt(5)));
+        if (fund.getPaymentType() == FundDTO.PaymentType.PURCHASE) {
+            if (fund.getCode().length() == 6) {
+                viewHolder.code_digit_1.setText(String.valueOf(fund.getCode().charAt(0)));
+                viewHolder.code_digit_2.setText(String.valueOf(fund.getCode().charAt(1)));
+                viewHolder.code_digit_3.setText(String.valueOf(fund.getCode().charAt(2)));
+                viewHolder.code_digit_4.setText(String.valueOf(fund.getCode().charAt(3)));
+                viewHolder.code_digit_5.setText(String.valueOf(fund.getCode().charAt(4)));
+                viewHolder.code_digit_6.setText(String.valueOf(fund.getCode().charAt(5)));
+            }
+        }else if (fund.getPaymentType() == FundDTO.PaymentType.PAYMENT){
+            viewHolder.code_digit_6.setText(fund.getProductCode());
         }
+
+        if (fund.getExpirationDate().getTime() < currentDate.getTime()){
+            Log.e("Expired", "Expired");
+            fundList.remove(position);
+        }
+
         viewHolder.remaining_time.setText(dateUtil.remainingTime(fund.getExpirationDate(), currentDate));
         viewHolder.amount_value.setText(persianEnglishDigit.E2P(formatter.format(fund.getAmount())));
 

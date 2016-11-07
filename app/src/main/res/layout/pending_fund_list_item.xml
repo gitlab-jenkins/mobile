@@ -97,6 +97,7 @@
                         android:layout_marginRight="4dp"/>
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/purchase_code"
                         geekui:customTypeface="fonts/vazir_regular.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
