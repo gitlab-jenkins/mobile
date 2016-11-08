@@ -48,10 +48,6 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".activity.StartActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".activity.ProfileEntryActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="stateHidden"

@@ -392,6 +392,34 @@
 
                     </RelativeLayout>
 
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="8dp">
+
+                        <CheckBox
+                            android:id="@+id/confirmTacPrivacy"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:button="@drawable/tac_privacy_checkbox"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"/>
+
+                        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                            android:id="@+id/tac_privacy_text"
+                            geekui:customTypeface="fonts/vazir_regular.ttf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/black"
+                            android:textSize="13dp"
+                            android:text="@string/start_tac_privacy"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="28dp"
+                            android:layout_alignParentRight="true"
+                            android:gravity="center_vertical"/>
+                    </RelativeLayout>
+
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/keepOn_button"
                         geekui:customTypeface="fonts/vazir_regular.ttf"
@@ -404,7 +432,7 @@
                         android:text="@string/keep_on"
                         android:paddingLeft="16dp"
                         android:paddingRight="16dp"
-                        android:background="@drawable/registration_button_style"
+                        android:background="@drawable/disable_button_style"
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp"/>
 

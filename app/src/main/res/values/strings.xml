@@ -131,6 +131,7 @@
     <string name="get_password_text_4">شماره شما تایید شد. لطفا رمز عبور ۵ رقمی خود را انتخاب نمایید (بیش از دو عدد تکراری قابل قبول نمی باشد)</string>
     <string name="get_password_text_5">لطفا رمز عبور مورد نظر خود را مجدد تکرار نمایید.</string>
     <string name="confirm">تایید</string>
+    <string name="start_tac_privacy">با شرایط استفاده از نرم‌افزار هم‌پی و قوانین حفظ حریم خصوصی کاربر موافقم</string>
     <string name="remember_phrase">یادآوری</string>
     <string name="remember_phrase_text">لطفا یک کلمه کوتاه به عنوان یادآوری رمز عبور خود معرفی نمایید</string>
     <string name="complete_registarion">تکمیل ثبت نام</string>

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -12,14 +13,23 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
@@ -43,6 +53,7 @@ import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
+import xyz.homapay.hampay.mobile.android.security.KeyExchange;
 import xyz.homapay.hampay.mobile.android.util.CardNumberValidator;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.NationalCodeVerification;
@@ -89,6 +100,9 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
     private CardNumberValidator cardNumberValidator;
     private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
     private final Handler handler = new Handler();
+    private FacedTextView tac_privacy_text;
+    private CheckBox confirmTacPrivacy;
+    private KeyExchange keyExchange;
 
     public void userManual(View view){
         Intent intent = new Intent();
@@ -172,6 +186,52 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ProfileEntryActivity.class.getName());
         editor.commit();
+
+        keyExchange = new KeyExchange(activity);
+        confirmTacPrivacy = (CheckBox)findViewById(R.id.confirmTacPrivacy);
+        confirmTacPrivacy.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    if (keyExchange.getKey() == null || keyExchange.getIv() == null) {
+                        confirmTacPrivacy.setChecked(false);
+                        new KeyExchangeTask().execute();
+                    }
+                }else {
+                    keepOn_button.setBackgroundResource(R.drawable.disable_button_style);
+                }
+            }
+        });
+
+        tac_privacy_text = (FacedTextView) findViewById(R.id.tac_privacy_text);
+        Spannable tcPrivacySpannable = new SpannableString(activity.getString(R.string.start_tac_privacy));
+        ClickableSpan tcClickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                Intent intent = new Intent();
+                intent.setClass(activity, GuideDetailActivity.class);
+                intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/users/tac-file");
+                intent.putExtra(Constants.TAC_PRIVACY_TITLE, activity.getString(R.string.tac_title_activity));
+                activity.startActivity(intent);
+            }
+        };
+        tcPrivacySpannable.setSpan(tcClickableSpan, 3, 35, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tac_privacy_text.setText(tcPrivacySpannable);
+        tac_privacy_text.setMovementMethod(LinkMovementMethod.getInstance());
+        ClickableSpan privacySpan = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                Intent intent = new Intent();
+                intent.setClass(activity, GuideDetailActivity.class);
+                intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/users/privacy-file");
+                intent.putExtra(Constants.TAC_PRIVACY_TITLE, activity.getString(R.string.privacy_title_activity));
+                activity.startActivity(intent);
+            }
+        };
+
+        tcPrivacySpannable.setSpan(privacySpan, 38, 65, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tac_privacy_text.setText(tcPrivacySpannable);
+        tac_privacy_text.setMovementMethod(LinkMovementMethod.getInstance());
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -367,6 +427,10 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
         keepOn_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (!confirmTacPrivacy.isChecked()){
+                    return;
+                }
                 keepOn_button.requestFocus();
                 View view = getCurrentFocus();
                 if (view != null) {
@@ -484,6 +548,40 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
             hamPayDialog.showWaitingDialog("");
         }
     }
+
+    private class KeyExchangeTask extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... params) {
+            try {
+                keyExchange.exchange();
+            } catch (EncryptionException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return "Executed";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            hamPayDialog.dismisWaitingDialog();
+            if (keyExchange.getKey() != null && keyExchange.getIv() != null) {
+                keepOn_button.setBackgroundResource(R.drawable.registration_button_style);
+                confirmTacPrivacy.setChecked(true);
+            }else {
+                keepOn_button.setBackgroundResource(R.drawable.disable_button_style);
+                Toast.makeText(activity, getString(R.string.system_connectivity), Toast.LENGTH_LONG).show();
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            hamPayDialog.showHamPayCommunication();
+        }
+
+    }
+
 
     @Override
     public void onBackPressed() {
