@@ -322,7 +322,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
             case R.id.invoice_pending:
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
-                fundType = FundType.PAYMENT;
+                fundType = FundType.INDIVIDUAL;
                 requestPendingFundList = new RequestPendingFundList(activity, new RequestPendingFundTaskCompleteListener());
                 pendingFundListRequest = new PendingFundListRequest();
                 pendingFundListRequest.setType(fundType);
@@ -333,7 +333,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
             case R.id.purchase_pending:
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
-                fundType = FundType.PURCHASE;
+                fundType = FundType.BUSINESS_AND_PURCHASE;
                 requestPendingFundList = new RequestPendingFundList(activity, new RequestPendingFundTaskCompleteListener());
                 pendingFundListRequest = new PendingFundListRequest();
                 pendingFundListRequest.setType(fundType);
