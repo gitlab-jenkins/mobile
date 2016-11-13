@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -42,6 +44,7 @@ import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.dialog.permission.ActionPermission;
 import xyz.homapay.hampay.mobile.android.dialog.permission.PermissionContactDialog;
+import xyz.homapay.hampay.mobile.android.dialog.permission.PermissionDeviceDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
@@ -136,20 +139,36 @@ public class HamPayContactsActivity extends AppCompatActivity implements Permiss
                         requestContactHampayEnabled = new RequestContactHampayEnabled(activity, new RequestContactHampayEnabledTaskCompleteListener());
                         requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
                     } else {
-
-                        handler.post(new Runnable() {
-                            public void run() {
-                                PermissionContactDialog permissionContactDialog = new PermissionContactDialog();
-                                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                                fragmentTransaction.add(permissionContactDialog, null);
-                                fragmentTransaction.commitAllowingStateLoss();
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                            boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS);
+                            if (showRationale){
+                                handler.post(new Runnable() {
+                                    public void run() {
+                                        PermissionContactDialog permissionContactDialog = new PermissionContactDialog();
+                                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                                        fragmentTransaction.add(permissionContactDialog, null);
+                                        fragmentTransaction.commitAllowingStateLoss();
+                                    }
+                                });
+                            }else {
+                                contacts = new ArrayList<ContactDTO>();
+                                contactsHampayEnabledRequest.setContacts(contacts);
+                                requestContactHampayEnabled = new RequestContactHampayEnabled(activity, new RequestContactHampayEnabledTaskCompleteListener());
+                                requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
                             }
-                        });
+                        }else {
+                            handler.post(new Runnable() {
+                                public void run() {
+                                    PermissionContactDialog permissionContactDialog = new PermissionContactDialog();
+                                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                                    fragmentTransaction.add(permissionContactDialog, null);
+                                    fragmentTransaction.commitAllowingStateLoss();
+                                }
+                            });
+                        }
                     }
-
                     return true;
                 }
-
                 return false;
             }
         });

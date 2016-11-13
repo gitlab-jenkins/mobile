@@ -11,11 +11,15 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -66,6 +70,8 @@ import xyz.homapay.hampay.mobile.android.async.RequestRecentPendingFund;
 import xyz.homapay.hampay.mobile.android.async.RequestTAC;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.dialog.permission.ActionPermission;
+import xyz.homapay.hampay.mobile.android.dialog.permission.PermissionDeviceDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
 import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
@@ -78,7 +84,7 @@ import xyz.homapay.hampay.mobile.android.util.NetworkConnectivity;
 import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
 
 
-public class HamPayLoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class HamPayLoginActivity extends AppCompatActivity implements View.OnClickListener, PermissionDeviceDialog.PermissionDeviceDialogListener {
 
     public static HamPayLoginActivity instance = null;
     private KeyExchange keyExchange;
@@ -161,6 +167,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     RequestTAC requestTAC;
     Tracker hamPayGaTracker;
 
+    private final Handler handler = new Handler();
     String password = "";
     private LinearLayout pendingFundLayout;
     private ListView recentPendingFundList;
@@ -231,14 +238,19 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
             public boolean onResult(int requestCode, String[] requestPermissions, int[] grantResults) {
                 if (requestCode == Constants.READ_PHONE_STATE) {
                     if (requestPermissions[0].equals(Manifest.permission.READ_PHONE_STATE) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        // Permission granted
                         requestRecentPendingFund = new RequestRecentPendingFund(activity, new RequestRecentFundTaskCompleteListener());
                         recentPendingFundRequest = new RecentPendingFundRequest();
                         recentPendingFundRequest.setImei(new DeviceInfo(activity).getIMEI());
                         recentPendingFundRequest.setNationalCode(userIdToken);
                         requestRecentPendingFund.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, recentPendingFundRequest);
                     } else {
-                        // Permission not granted
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                            boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE);
+                            if (showRationale){
+                            }else {
+                            }
+                        }else {
+                        }
                     }
                     return true;
                 }
@@ -345,6 +357,17 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
             }
         });
 
+    }
+
+    @Override
+    public void onFinishEditDialog(ActionPermission actionPermission) {
+        switch (actionPermission){
+            case GRANT:
+                requestAndLoadPhoneState();
+                break;
+            case DENY:
+                break;
+        }
     }
 
 
