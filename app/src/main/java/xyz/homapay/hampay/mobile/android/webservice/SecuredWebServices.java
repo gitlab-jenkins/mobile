@@ -613,7 +613,7 @@ public class SecuredWebServices{
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.PUT, url);
 
         changePassCodeRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<ChangePassCodeRequest> message = new RequestMessage<>(changePassCodeRequest, authToken, "2.0", System.currentTimeMillis());
+        RequestMessage<ChangePassCodeRequest> message = new RequestMessage<>(changePassCodeRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
         Type requestType = new TypeToken<RequestMessage<ChangePassCodeRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);

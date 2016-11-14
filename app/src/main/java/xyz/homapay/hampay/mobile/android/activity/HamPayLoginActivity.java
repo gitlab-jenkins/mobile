@@ -82,7 +82,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         mIntentReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (intent.getBooleanExtra("get_status", false)){
+                if (intent.getBooleanExtra("get_status", false)) {
                     new KeyExchangeTask().execute();
                 }
             }
@@ -94,7 +94,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         notificationIntentReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (intent.getBooleanExtra("get_update", false)){
+                if (intent.getBooleanExtra("get_update", false)) {
                     requestAndLoadPhoneState();
                 }
             }
@@ -142,7 +142,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     private RecentPendingFundRequest recentPendingFundRequest;
     private PendingFundAdapter pendingFundAdapter;
 
-    public void userManual(View view){
+    public void userManual(View view) {
         Intent intent = new Intent();
         intent.setClass(activity, UserManualActivity.class);
         intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_login);
@@ -155,19 +155,19 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         super.onStop();
         HamPayApplication.setAppSate(AppState.Stoped);
 
-        if (requestTAC != null){
+        if (requestTAC != null) {
             if (!requestTAC.isCancelled())
                 requestTAC.cancel(true);
         }
 
-        if (requestLogin != null){
-            if (!requestLogin.isCancelled()){
+        if (requestLogin != null) {
+            if (!requestLogin.isCancelled()) {
                 requestLogin.cancel(true);
             }
         }
 
-        if (requestRecentPendingFund != null){
-            if (!requestRecentPendingFund.isCancelled()){
+        if (requestRecentPendingFund != null) {
+            if (!requestRecentPendingFund.isCancelled()) {
                 requestRecentPendingFund.cancel(true);
             }
         }
@@ -235,9 +235,9 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         hamPayDialog = new HamPayDialog(activity);
         keyExchange = new KeyExchange(context);
         networkConnectivity = new NetworkConnectivity();
-        if (!networkConnectivity.isOnline(context)){
+        if (!networkConnectivity.isOnline(context)) {
             hamPayDialog.showNoNetwork();
-        }else {
+        } else {
             keyExchange = new KeyExchange(context);
             new KeyExchangeTask().execute();
         }
@@ -246,10 +246,10 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         userIdToken = prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, "");
 
-        hampay_user = (FacedTextView)findViewById(R.id.hampay_user);
+        hampay_user = (FacedTextView) findViewById(R.id.hampay_user);
         hampay_user.setText(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        pendingFundLayout = (LinearLayout)findViewById(R.id.pending_fund_layout);
-        recentPendingFundList = (ListView)findViewById(R.id.recent_pending_fund_list);
+        pendingFundLayout = (LinearLayout) findViewById(R.id.pending_fund_layout);
+        recentPendingFundList = (ListView) findViewById(R.id.recent_pending_fund_list);
         recentPendingFundList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -261,18 +261,18 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
         bundle = getIntent().getExtras();
 
-        keyboard = (LinearLayout)findViewById(R.id.keyboard);
-        password_holder = (LinearLayout)findViewById(R.id.password_holder);
+        keyboard = (LinearLayout) findViewById(R.id.keyboard);
+        password_holder = (LinearLayout) findViewById(R.id.password_holder);
         password_holder.setOnClickListener(this);
 
-        input_digit_1 = (FacedTextView)findViewById(R.id.input_digit_1);
-        input_digit_2 = (FacedTextView)findViewById(R.id.input_digit_2);
-        input_digit_3 = (FacedTextView)findViewById(R.id.input_digit_3);
-        input_digit_4 = (FacedTextView)findViewById(R.id.input_digit_4);
-        input_digit_5 = (FacedTextView)findViewById(R.id.input_digit_5);
+        input_digit_1 = (FacedTextView) findViewById(R.id.input_digit_1);
+        input_digit_2 = (FacedTextView) findViewById(R.id.input_digit_2);
+        input_digit_3 = (FacedTextView) findViewById(R.id.input_digit_3);
+        input_digit_4 = (FacedTextView) findViewById(R.id.input_digit_4);
+        input_digit_5 = (FacedTextView) findViewById(R.id.input_digit_5);
 
 
-        hampay_memorableword_text = (FacedTextView)findViewById(R.id.hampay_memorableword_text);
+        hampay_memorableword_text = (FacedTextView) findViewById(R.id.hampay_memorableword_text);
 
         memorableWord = prefs.getString(Constants.MEMORABLE_WORD, "");
 
@@ -282,7 +282,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
         installationToken = prefs.getString(Constants.UUID, "");
 
-        pullToRefresh = (SwipeRefreshLayout)findViewById(R.id.pullToRefresh);
+        pullToRefresh = (SwipeRefreshLayout) findViewById(R.id.pullToRefresh);
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -292,16 +292,14 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     }
 
 
-    public class RequestTACResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<TACResponse>>
-    {
-        public RequestTACResponseTaskCompleteListener(){
+    public class RequestTACResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<TACResponse>> {
+        public RequestTACResponseTaskCompleteListener() {
         }
 
         @Override
-        public void onTaskComplete(ResponseMessage<TACResponse> tacResponseMessage)
-        {
+        public void onTaskComplete(ResponseMessage<TACResponse> tacResponseMessage) {
             hamPayDialog.dismisWaitingDialog();
-            ServiceEvent serviceName;
+            ServiceEvent serviceName = ServiceEvent.TAC_FAILURE;
             LogEvent logEvent = new LogEvent(context);
 
             if (tacResponseMessage != null) {
@@ -317,29 +315,28 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                                 intent = getIntent();
                             }
                         }
-//                        if (prefs.getString(Constants.REGISTERED_CELL_NUMBER, "").length() == 0){
-                        if (false){
-                            hamPayDialog.forceChangePassDialog(tacResponseMessage.getService().getTacDTO().getUserProfile().getCellNumber());
-                        }else {
-                            intent.setClass(activity, MainActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            intent.putExtra(Constants.USER_PROFILE_DTO, tacResponseMessage.getService().getTacDTO().getUserProfile());
-                            intent.putExtra(Constants.PENDING_PURCHASE_CODE, tacResponseMessage.getService().getTacDTO().getPurchaseProductCode());
-                            intent.putExtra(Constants.PENDING_PAYMENT_CODE, tacResponseMessage.getService().getTacDTO().getPaymentProductCode());
-                            intent.putExtra(Constants.PENDING_PURCHASE_COUNT, tacResponseMessage.getService().getTacDTO().getPendingPurchasesCount());
-                            intent.putExtra(Constants.PENDING_PAYMENT_COUNT, tacResponseMessage.getService().getTacDTO().getPendingPaymentCount());
-                            intent.putExtra(Constants.SHOW_CREATE_INVOICE, tacResponseMessage.getService().getTacDTO().isShowCreateInvoice());
-                            editor.putBoolean(Constants.FORCE_USER_PROFILE, false);
-                            editor.commit();
-                            finish();
-                            startActivity(intent);
-                        }
+                        intent.setClass(activity, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.putExtra(Constants.USER_PROFILE_DTO, tacResponseMessage.getService().getTacDTO().getUserProfile());
+                        intent.putExtra(Constants.PENDING_PURCHASE_CODE, tacResponseMessage.getService().getTacDTO().getPurchaseProductCode());
+                        intent.putExtra(Constants.PENDING_PAYMENT_CODE, tacResponseMessage.getService().getTacDTO().getPaymentProductCode());
+                        intent.putExtra(Constants.PENDING_PURCHASE_COUNT, tacResponseMessage.getService().getTacDTO().getPendingPurchasesCount());
+                        intent.putExtra(Constants.PENDING_PAYMENT_COUNT, tacResponseMessage.getService().getTacDTO().getPendingPaymentCount());
+                        intent.putExtra(Constants.SHOW_CREATE_INVOICE, tacResponseMessage.getService().getTacDTO().isShowCreateInvoice());
+                        editor.putBoolean(Constants.FORCE_USER_PROFILE, false);
+                        editor.commit();
+                        finish();
+                        startActivity(intent);
                     }
 
 
-                }else if (tacResponseMessage.getService().getResultStatus() == ResultStatus.OUT_OF_DATE_APP_VERSION){
+                } else if (tacResponseMessage.getService().getResultStatus() == ResultStatus.OUT_OF_DATE_APP_VERSION) {
                     serviceName = ServiceEvent.TAC_FAILURE;
-                    hamPayDialog.appUpdateDialog(Constants.APP_STORE_URL);
+                    hamPayDialog.appUpdateDialog(tacResponseMessage.getService().getStoreURL());
+                }else if (tacResponseMessage.getService().getResultStatus() == ResultStatus.OUT_OF_DATE_PASSWORD){
+                    serviceName = ServiceEvent.TAC_FAILURE;
+                    Intent intent = new Intent(activity, ChangePassCodeActivity.class);
+                    startActivity(intent);
                 }
                 else {
                     serviceName = ServiceEvent.TAC_FAILURE;
@@ -348,8 +345,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                             tacResponseMessage.getService().getResultStatus().getCode(),
                             tacResponseMessage.getService().getResultStatus().getDescription());
                 }
-            }
-            else {
+            } else {
                 serviceName = ServiceEvent.TAC_FAILURE;
                 requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
                 new HamPayDialog(activity).showFailTCRequestDialog(requestTAC, tacRequest,
@@ -361,7 +357,8 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         }
 
         @Override
-        public void onTaskPreRun() {}
+        public void onTaskPreRun() {
+        }
     }
 
     @Override
@@ -369,14 +366,12 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         super.onUserInteraction();
     }
 
-    public class RequestRecentFundTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RecentPendingFundResponse>>
-    {
-        public RequestRecentFundTaskCompleteListener(){
+    public class RequestRecentFundTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RecentPendingFundResponse>> {
+        public RequestRecentFundTaskCompleteListener() {
         }
 
         @Override
-        public void onTaskComplete(ResponseMessage<RecentPendingFundResponse> recentPendingFundResponseMessage)
-        {
+        public void onTaskComplete(ResponseMessage<RecentPendingFundResponse> recentPendingFundResponseMessage) {
             hamPayDialog.dismisWaitingDialog();
             pullToRefresh.setRefreshing(false);
             ServiceEvent serviceName;
@@ -391,18 +386,17 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                         pendingFundLayout.setVisibility(View.VISIBLE);
                         pendingFundAdapter = new PendingFundAdapter(activity, funds);
                         recentPendingFundList.setAdapter(pendingFundAdapter);
-                    }else {
+                    } else {
                         if (keyboard.getVisibility() == View.GONE)
                             new Expand(keyboard).animate();
                     }
 
-                }else {
+                } else {
                     serviceName = ServiceEvent.RECENT_PENDING_FUND_FAILURE;
                     if (keyboard.getVisibility() == View.GONE)
                         new Expand(keyboard).animate();
                 }
-            }
-            else {
+            } else {
                 serviceName = ServiceEvent.RECENT_PENDING_FUND_FAILURE;
                 if (keyboard.getVisibility() == View.GONE)
                     new Expand(keyboard).animate();
@@ -411,12 +405,13 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         }
 
         @Override
-        public void onTaskPreRun() {}
+        public void onTaskPreRun() {
+        }
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
 
             case R.id.password_holder:
                 if (keyboard.getVisibility() == View.GONE)
@@ -431,129 +426,26 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     }
 
 
-//    private void inputDigit(String digit){
-//
-//        if (digit.contains("d")){
-//            if (inputPassValue.length() > 0) {
-//                inputPassValue = inputPassValue.substring(0, inputPassValue.length() - 1);
-//            }
-//        }
-//        else {
-//            if (inputPassValue.length() <= 4) {
-//                inputPassValue += digit;
-//            }
-//        }
-//
-//        if (inputPassValue.length() == 5){
-//            try {
-//
-//                password = SecurityUtils.getInstance(this).
-//                        generatePassword(inputPassValue,
-//                                memorableWord,
-//                                new DeviceInfo(activity).getAndroidId(),
-//                                installationToken);
-//
-//            }catch (NoSuchAlgorithmException ex){}
-//            catch (UnsupportedEncodingException ex){}
-//
-//            if (requestRecentPendingFund != null){
-//                if (!requestRecentPendingFund.isCancelled()){
-//                    requestRecentPendingFund.cancel(true);
-//                }
-//            }
-//
-//            keyboard.setEnabled(false);
-//
-//            if (!networkConnectivity.isOnline(context)){
-//                hamPayDialog.showNoNetwork();
-//            }else {
-//                if (keyExchange.getKey() != null && keyExchange.getIv() != null) {
-//                    LoginRequest loginRequest = new LoginRequest();
-//                    loginRequest.setPassword(password);
-//                    loginRequest.setUsername(userIdToken);
-//                    RequestNewLogin requestNewLogin = new RequestNewLogin(activity, new RequestLoginTaskCompleteListener());
-//                    requestNewLogin.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, loginRequest);
-//                } else {
-//                    resetLogin();
-//                    Toast.makeText(activity, getString(R.string.system_connectivity), Toast.LENGTH_SHORT).show();
-//                    new KeyExchangeTask().execute();
-//                }
-//            }
-//        }
-//
-//
-//        switch (inputPassValue.length()){
-//
-//            case 0:
-//                input_digit_1.setImageResource(R.drawable.pass_login_value_empty);
-//                input_digit_2.setImageResource(R.drawable.pass_login_value_empty);
-//                input_digit_3.setImageResource(R.drawable.pass_login_value_empty);
-//                input_digit_4.setImageResource(R.drawable.pass_login_value_empty);
-//                input_digit_5.setImageResource(R.drawable.pass_login_value_empty);
-//                break;
-//
-//            case 1:
-//                input_digit_1.setImageResource(R.drawable.pass_login_value_placeholder);
-//                input_digit_2.setImageResource(R.drawable.pass_login_value_empty);
-//                input_digit_3.setImageResource(R.drawable.pass_login_value_empty);
-//                input_digit_4.setImageResource(R.drawable.pass_login_value_empty);
-//                input_digit_5.setImageResource(R.drawable.pass_login_value_empty);
-//                break;
-//            case 2:
-//                input_digit_1.setImageResource(R.drawable.pass_login_value_placeholder);
-//                input_digit_2.setImageResource(R.drawable.pass_login_value_placeholder);
-//                input_digit_3.setImageResource(R.drawable.pass_login_value_empty);
-//                input_digit_4.setImageResource(R.drawable.pass_login_value_empty);
-//                input_digit_5.setImageResource(R.drawable.pass_login_value_empty);
-//                break;
-//            case 3:
-//                input_digit_1.setImageResource(R.drawable.pass_login_value_placeholder);
-//                input_digit_2.setImageResource(R.drawable.pass_login_value_placeholder);
-//                input_digit_3.setImageResource(R.drawable.pass_login_value_placeholder);
-//                input_digit_4.setImageResource(R.drawable.pass_login_value_empty);
-//                input_digit_5.setImageResource(R.drawable.pass_login_value_empty);
-//                break;
-//            case 4:
-//                input_digit_1.setImageResource(R.drawable.pass_login_value_placeholder);
-//                input_digit_2.setImageResource(R.drawable.pass_login_value_placeholder);
-//                input_digit_3.setImageResource(R.drawable.pass_login_value_placeholder);
-//                input_digit_4.setImageResource(R.drawable.pass_login_value_placeholder);
-//                input_digit_5.setImageResource(R.drawable.pass_login_value_empty);
-//                break;
-//            case 5:
-//                input_digit_1.setImageResource(R.drawable.pass_login_value_placeholder);
-//                input_digit_2.setImageResource(R.drawable.pass_login_value_placeholder);
-//                input_digit_3.setImageResource(R.drawable.pass_login_value_placeholder);
-//                input_digit_4.setImageResource(R.drawable.pass_login_value_placeholder);
-//                input_digit_5.setImageResource(R.drawable.pass_login_value_placeholder);
-//                break;
-//        }
-//
-//    }
-
-
     @Override
     public void onBackPressed() {
-        if (keyboard.getVisibility() == View.VISIBLE){
+        if (keyboard.getVisibility() == View.VISIBLE) {
             new Collapse(keyboard).animate();
-        }else {
+        } else {
             finish();
         }
     }
 
 
-    public class RequestLoginTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<LoginResponse>>
-    {
+    public class RequestLoginTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<LoginResponse>> {
 
         ServiceEvent serviceName;
         LogEvent logEvent = new LogEvent(context);
 
-        public RequestLoginTaskCompleteListener(){
+        public RequestLoginTaskCompleteListener() {
         }
 
         @Override
-        public void onTaskComplete(ResponseMessage<LoginResponse> loginResponseResponseMessage)
-        {
+        public void onTaskComplete(ResponseMessage<LoginResponse> loginResponseResponseMessage) {
             if (loginResponseResponseMessage != null) {
                 if (loginResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     serviceName = ServiceEvent.LOGIN_SUCCESS;
@@ -565,17 +457,16 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                     tacRequest.setAppVersion(new AppInfo().getVersionCode() + "");
                     requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
                     requestTAC.execute(tacRequest);
-                }else if (loginResponseResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE){
+                } else if (loginResponseResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     serviceName = ServiceEvent.LOGIN_FAILURE;
                     resetLogin();
                     hamPayDialog.showLoginFailDialog(loginResponseResponseMessage.getService().getRemainRetryCount());
-                }else if (loginResponseResponseMessage.getService().getResultStatus() == ResultStatus.BLOCKED_IDP_USER){
+                } else if (loginResponseResponseMessage.getService().getResultStatus() == ResultStatus.BLOCKED_IDP_USER) {
                     serviceName = ServiceEvent.LOGIN_FAILURE;
                     resetLogin();
                     hamPayDialog.showLoginFailDialog(0);
                 }
-            }
-            else {
+            } else {
                 serviceName = ServiceEvent.LOGIN_FAILURE;
                 Toast.makeText(activity, getString(R.string.system_connectivity), Toast.LENGTH_SHORT).show();
                 resetLogin();
@@ -606,9 +497,9 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         @Override
         protected void onPostExecute(String result) {
             hamPayDialog.dismisWaitingDialog();
-            if (keyExchange.getKey() != null && keyExchange.getIv() != null){
+            if (keyExchange.getKey() != null && keyExchange.getIv() != null) {
                 requestAndLoadPhoneState();
-            }else {
+            } else {
                 Toast.makeText(activity, getString(R.string.system_connectivity), Toast.LENGTH_SHORT).show();
             }
         }
@@ -621,7 +512,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-    private void resetLogin(){
+    private void resetLogin() {
         inputPassValue = "";
         input_digit_1.setBackgroundResource(R.drawable.pass_login_value_empty);
         input_digit_2.setBackgroundResource(R.drawable.pass_login_value_empty);
@@ -631,44 +522,38 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         hamPayDialog.dismisWaitingDialog();
     }
 
-    public void pressKey(View view){
-        if (view.getTag().toString().equals("*")){
+    public void pressKey(View view) {
+        if (view.getTag().toString().equals("*")) {
             new Collapse(keyboard).animate();
-        }
-        else {
+        } else {
             inputDigit(view.getTag().toString());
         }
     }
 
-    private void inputDigit(String digit){
+    private void inputDigit(String digit) {
 
-        if (digit.contains("d")){
+        if (digit.contains("d")) {
             if (inputPassValue.length() > 0) {
                 inputPassValue = inputPassValue.substring(0, inputPassValue.length() - 1);
-                if (inputPassValue.length() == 4){
+                if (inputPassValue.length() == 4) {
                     input_digit_5.setBackgroundResource(R.drawable.pass_login_value_empty);
                     input_digit_5.setText("");
-                }
-                else if (inputPassValue.length() == 3){
+                } else if (inputPassValue.length() == 3) {
                     input_digit_4.setBackgroundResource(R.drawable.pass_login_value_empty);
                     input_digit_4.setText("");
-                }
-                else if (inputPassValue.length() == 2){
+                } else if (inputPassValue.length() == 2) {
                     input_digit_3.setBackgroundResource(R.drawable.pass_login_value_empty);
                     input_digit_3.setText("");
-                }
-                else if (inputPassValue.length() == 1){
+                } else if (inputPassValue.length() == 1) {
                     input_digit_2.setBackgroundResource(R.drawable.pass_login_value_empty);
                     input_digit_2.setText("");
-                }
-                else if (inputPassValue.length() == 0){
+                } else if (inputPassValue.length() == 0) {
                     input_digit_1.setBackgroundResource(R.drawable.pass_login_value_empty);
                     input_digit_1.setText("");
                 }
             }
             return;
-        }
-        else {
+        } else {
             if (inputPassValue.length() <= 5) {
                 inputPassValue += digit;
             }
@@ -702,28 +587,26 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                 case 5:
                     input_digit_5.setBackgroundResource(R.drawable.pass_login_value_placeholder);
                     new Collapse(keyboard).animate();
-                    if (!networkConnectivity.isOnline(context)){
+                    if (!networkConnectivity.isOnline(context)) {
                         hamPayDialog.showNoNetwork();
-                    }else {
+                    } else {
                         if (keyExchange.getKey() != null && keyExchange.getIv() != null) {
-                            String cellNumber = prefs.getString(Constants.REGISTERED_CELL_NUMBER, "");
-                            String apiLevel = "";
-//                            if (cellNumber.length() == 0){
-                            if (true){
-                                apiLevel = "3.0";
+                            String loginApiLevel = prefs.getString(Constants.LOGIN_API_LEVEL, null);
+                            if (loginApiLevel == null) {
+                                loginApiLevel = "2.0";
                                 try {
                                     password = SecurityUtils.getInstance(this).
                                             generatePassword(inputPassValue,
                                                     memorableWord,
                                                     new DeviceInfo(activity).getAndroidId(),
                                                     installationToken);
-                                }catch (NoSuchAlgorithmException ex){}
-                                catch (UnsupportedEncodingException ex){}
-                            }else {
-                                apiLevel = "3.0";
-//                                apiLevel = Constants.API_LEVEL;
+                                } catch (NoSuchAlgorithmException ex) {
+                                } catch (UnsupportedEncodingException ex) {
+                                }
+                            } else {
+                                loginApiLevel = Constants.API_LEVEL;
                                 try {
-                                    password = SecurityUtils.getInstance(this).generateSHA_256_Password(cellNumber + inputPassValue);
+                                    password = SecurityUtils.getInstance(this).generateSHA_256_Password(inputPassValue);
                                 } catch (NoSuchAlgorithmException e) {
                                     e.printStackTrace();
                                 } catch (UnsupportedEncodingException e) {
@@ -733,7 +616,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                             LoginRequest loginRequest = new LoginRequest();
                             loginRequest.setPassword(password);
                             loginRequest.setUsername(userIdToken);
-                            RequestNewLogin requestNewLogin = new RequestNewLogin(activity, new RequestLoginTaskCompleteListener(), apiLevel);
+                            RequestNewLogin requestNewLogin = new RequestNewLogin(activity, new RequestLoginTaskCompleteListener(), loginApiLevel);
                             requestNewLogin.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, loginRequest);
                         } else {
                             resetLogin();
