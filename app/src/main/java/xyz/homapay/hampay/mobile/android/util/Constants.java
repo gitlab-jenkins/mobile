@@ -22,8 +22,9 @@ public class Constants {
     public static final String PSP_SOAP_SERVICE_URL = SERVER;
     public static final String APP_STORE_URL = "https://play.google.com/store/apps/details?id=xyz.homapay.hampay.mobile.android";
     public static final String IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch";
+    public static final String LOGIN_API_LEVEL = "loginApiLevel";
     public static final String PROJECT_NUMBER = "936219454834";
-    public static final String API_LEVEL = "2.0";
+    public static final String API_LEVEL = "3.0";
     public static final int SERVICE_CONNECTION_TIMEOUT = 30000;
     public static final int SERVICE_READ_TIMEOUT = 30000;
     public static final String SERVICE_CONTENT_TYPE = "application/json";
