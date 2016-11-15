@@ -197,6 +197,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
         });
         pendingListView = (ListView)findViewById(R.id.pendingListView);
 
+        hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         requestPendingFundList = new RequestPendingFundList(activity, new RequestPendingFundTaskCompleteListener());
         pendingFundListRequest = new PendingFundListRequest();
         pendingFundListRequest.setType(fundType);
@@ -345,6 +346,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
     }
 
     private void changeTab(int index){
+        hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         switch (index){
             case 1:
                 full_pending.setBackgroundColor(getResources().getColor(R.color.app_origin));
@@ -425,7 +427,6 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
         @Override
         public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog("");
         }
     }
 

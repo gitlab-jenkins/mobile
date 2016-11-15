@@ -328,6 +328,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                         transactionListView.setVisibility(View.GONE);
                     }else {
                         no_transaction.setVisibility(View.GONE);
+                        transactionListView.setVisibility(View.VISIBLE);
                     }
 
                     if (transactionDTOs != null) {

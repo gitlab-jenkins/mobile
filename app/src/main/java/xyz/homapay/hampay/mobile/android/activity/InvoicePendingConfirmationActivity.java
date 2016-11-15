@@ -265,7 +265,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
 
                     s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "SenderTerminalId";
-                    s2sMapEntry.Value = pspInfoDTO.getTerminalID();
+                    s2sMapEntry.Value = pspInfoDTO.getSenderTerminalId();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
