@@ -223,6 +223,7 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
                     serviceName = ServiceEvent.REGISTRATION_CREDENTIALS_SUCCESS;
                     editor.putString(Constants.MEMORABLE_WORD, memorable_value.getText().toString());
                     editor.putString(Constants.UUID, Uuid);
+                    editor.putString(Constants.LOGIN_API_LEVEL, Constants.API_LEVEL);
                     editor.commit();
                     Intent intent = new Intent();
                     intent.setClass(MemorableWordEntryActivity.this, CompleteRegistrationActivity.class);

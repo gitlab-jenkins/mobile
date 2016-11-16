@@ -84,6 +84,11 @@
     <string name="call_message">تماس با اپراتور</string>
     <string name="msg_invalid_password">بیش از دو عدد تکراری قابل قبول نمی‌باشد</string>
     <string name="msg_password_complexity">رمز عبور بهتری انتخاب کنید</string>
+    <string name="hp_msg_invalid_password">بیش از دو عدد تکراری قابل قبول نمی‌باشد</string>
+    <string name="hp_msg_password_complexity_1">رمز عبور می‌بایستی شامل حرف و عدد باشد</string>
+    <string name="hp_msg_password_complexity_2">رمز عبور می‌بایستی حداقل دارای ۳ حرف باشد</string>
+    <string name="hp_msg_password_complexity_3">رمز عبور می‌بایستی حداقل شامل ۱ عدد باشد</string>
+    <string name="hp_msg_password_complexity_4">رمز عبور نمی‌تواند شامل بیش از ۲ حرف تکراری باشد</string>
     <string name="dismatch_password">رمزعبور وارد شده تطابقی با هم ندارند.</string>
     <string name="retry_password">تلاش مجدد</string>
     <string name="dismatch_memorable">کلمه یادآوری وارد شده اشتباه می باشد.</string>
