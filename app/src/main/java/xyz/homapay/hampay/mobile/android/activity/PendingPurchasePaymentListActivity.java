@@ -463,7 +463,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
         @Override
         public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog("");
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 
@@ -499,7 +499,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
         @Override
         public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog("");
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 }

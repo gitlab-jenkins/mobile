@@ -354,7 +354,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
                     SyncPspResult syncPspResult = new SyncPspResult();
                     syncPspResult.setResponseCode(responseCode);
                     syncPspResult.setProductCode(paymentInfoDTO.getProductCode());
-                    syncPspResult.setType("PURCHASE");
+                    syncPspResult.setType("PAYMENT");
                     syncPspResult.setSwTrace(SWTraceNum);
                     syncPspResult.setTimestamp(System.currentTimeMillis());
                     syncPspResult.setStatus(0);
@@ -363,7 +363,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
                     pspResultRequest.setPspResponseCode(responseCode);
                     pspResultRequest.setProductCode(paymentInfoDTO.getProductCode());
                     pspResultRequest.setTrackingCode(SWTraceNum);
-                    requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(SWTraceNum), 1);
+                    requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(SWTraceNum), 2);
                     requestPSPResult.execute(pspResultRequest);
 
                 }else {

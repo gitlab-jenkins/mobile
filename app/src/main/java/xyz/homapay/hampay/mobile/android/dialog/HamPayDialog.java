@@ -181,6 +181,8 @@ public class HamPayDialog {
 
     public void showWaitingDialog(String hampayUser){
 
+        dismisWaitingDialog();
+
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_waiting, null);
         FacedTextView waiting_text = (FacedTextView)view.findViewById(R.id.waiting_text);
         FacedTextView userName = (FacedTextView)view.findViewById(R.id.userName);
