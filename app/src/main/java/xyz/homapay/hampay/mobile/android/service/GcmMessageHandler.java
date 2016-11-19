@@ -80,6 +80,8 @@ public class GcmMessageHandler extends IntentService{
             Intent intentNotification = new Intent("notification.intent.MAIN").putExtra("get_update", true);
             sendBroadcast(intentNotification);
             notificationMessageType = NotificationMessageType.JOINT;
+            notificationMessage = extras.getString("message");
+            notificationName = extras.getString("name");
             sendMessage();
             GcmBroadcastReceiver.completeWakefulIntent(intent);
         }else if (extras.getString("type").equalsIgnoreCase(NotificationMessageType.PAYMENT.getNotificationMessageType())){
@@ -172,6 +174,20 @@ public class GcmMessageHandler extends IntentService{
             switch (notificationMessageType){
 
                 case JOINT:
+                    PugNotification.with(getApplicationContext())
+                            .load()
+                            .identifier(Constants.PAYMENT_NOTIFICATION_IDENTIFIER)
+                            .title(notificationName)
+                            .message(notificationMessage)
+                            .message(notificationMessage)
+                            .bigTextStyle(notificationMessage)
+                            .smallIcon(R.mipmap.ic_notification)
+                            .color(R.color.colorPrimary)
+                            .lights(Color.rgb(Constants.HAMPAY_RED, Constants.HAMPAY_GREEN, Constants.HAMPAY_BLUE), 2000, 1000)
+                            .ticker(notificationName)
+                            .autoCancel(true)
+                            .simple()
+                            .build();
                     break;
 
                 case APP_UPDATE:
