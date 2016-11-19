@@ -71,7 +71,6 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
     private RequestHamPayBusiness requestHamPayBusiness;
     private int requestPageNumber = 0;
     private boolean searchEnabled = false;
-    private Tracker hamPayGaTracker;
     private RelativeLayout full_business;
     private RelativeLayout popular_business;
     private RelativeLayout recent_business;

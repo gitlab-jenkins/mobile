@@ -52,23 +52,6 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
     private FacedEditText memorable_value;
-
-    Context context;
-
-    Activity activity;
-
-    HamPayDialog hamPayDialog;
-
-    String Uuid = "";
-
-    Bundle bundle;
-
-    String userEntryPassword;
-
-    Tracker hamPayGaTracker;
-
-    RequestCredentialEntry requestCredentialEntry;
-    RegistrationCredentialsRequest registrationCredentialsRequest;
     private final Handler handler = new Handler();
 
 
@@ -78,7 +61,6 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
     private String Uuid = "";
     private Bundle bundle;
     private String userEntryPassword;
-    private Tracker hamPayGaTracker;
     private RequestCredentialEntry requestCredentialEntry;
     private RegistrationCredentialsRequest registrationCredentialsRequest;
     private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
@@ -177,10 +159,6 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
         hamPayDialog = new HamPayDialog(activity);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
-
-        hamPayGaTracker = ((HamPayApplication) getApplication())
-                .getTracker(HamPayApplication.TrackerName.APP_TRACKER);
-
         memorable_value = (FacedEditText)findViewById(R.id.memorable_value);
         memorable_value.addTextChangedListener(new MemorableTextWatcher(memorable_value));
 
@@ -241,6 +219,7 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
 
                 if (resultStatus == ResultStatus.SUCCESS) {
                     editor.putString(Constants.MEMORABLE_WORD, memorable_value.getText().toString());
+                    editor.putString(Constants.LOGIN_API_LEVEL, Constants.API_LEVEL);
                     editor.putString(Constants.UUID, Uuid);
                     editor.commit();
                     Intent intent = new Intent();
@@ -248,36 +227,18 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     finish();
                     startActivity(intent);
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Registration Memorable Word Entry")
-                            .setAction("Registration")
-                            .setLabel("Success")
-                            .build());
                 }
                 else {
                     requestCredentialEntry = new RequestCredentialEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
                     new HamPayDialog(activity).showFailMemorableEntryDialog(requestCredentialEntry, registrationCredentialsRequest,
                             registrationMemorableWordEntryResponseMessage.getService().getResultStatus().getCode(),
                             registrationMemorableWordEntryResponseMessage.getService().getResultStatus().getDescription());
-
-                    hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                            .setCategory("Registration Memorable Word Entry")
-                            .setAction("Registration")
-                            .setLabel("Fail(Server)")
-                            .build());
                 }
             }else {
                 requestCredentialEntry = new RequestCredentialEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
                 new HamPayDialog(activity).showFailMemorableEntryDialog(requestCredentialEntry, registrationCredentialsRequest,
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_memorable_entry));
-
-                hamPayGaTracker.send(new HitBuilders.EventBuilder()
-                        .setCategory("Registration Memorable Word Entry")
-                        .setAction("Registration")
-                        .setLabel("Fail(Mobile)")
-                        .build());
             }
 
         }
