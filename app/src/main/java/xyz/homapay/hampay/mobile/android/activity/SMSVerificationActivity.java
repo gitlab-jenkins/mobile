@@ -285,16 +285,29 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                         finish();
                         startActivity(intent);
                     } else {
-
-                        handler.post(new Runnable() {
-                            public void run() {
-                                FragmentManager fm = getSupportFragmentManager();
-                                FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                                fragmentTransaction.commit();
-                                PermissionContactDialog permissionContactDialog = new PermissionContactDialog();
-                                permissionContactDialog.show(fm, "fragment_edit_name");
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                            boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS);
+                            if (showRationale){
+                                handler.post(new Runnable() {
+                                    public void run() {
+                                        PermissionContactDialog permissionContactDialog = new PermissionContactDialog();
+                                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                                        fragmentTransaction.add(permissionContactDialog, null);
+                                        fragmentTransaction.commitAllowingStateLoss();
+                                    }
+                                });
+                            }else {
                             }
-                        });
+                        }else {
+                            handler.post(new Runnable() {
+                                public void run() {
+                                    PermissionContactDialog permissionContactDialog = new PermissionContactDialog();
+                                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                                    fragmentTransaction.add(permissionContactDialog, null);
+                                    fragmentTransaction.commitAllowingStateLoss();
+                                }
+                            });
+                        }
                     }
                     return true;
                 }

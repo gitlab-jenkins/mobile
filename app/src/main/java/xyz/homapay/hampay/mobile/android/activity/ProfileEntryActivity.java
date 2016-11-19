@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -47,6 +49,7 @@ import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.preloader.Preloader;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.dialog.permission.ActionPermission;
+import xyz.homapay.hampay.mobile.android.dialog.permission.PermissionContactDialog;
 import xyz.homapay.hampay.mobile.android.dialog.permission.PermissionDeviceDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
@@ -145,7 +148,6 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
             public boolean onResult(int requestCode, String[] requestPermissions, int[] grantResults) {
                 if (requestCode == Constants.READ_PHONE_STATE) {
                     if (requestPermissions[0].equals(Manifest.permission.READ_PHONE_STATE) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
                         registrationEntryRequest = new RegistrationEntryRequest();
                         registrationEntryRequest.setCellNumber(persianEnglishDigit.P2E(getString(R.string.iran_prefix_cell_number) + cellNumberValue.getText().toString()));
                         registrationEntryRequest.setCardNumber(persianEnglishDigit.P2E(cardNumberValue.getText().toString()));
@@ -154,17 +156,38 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                         registrationEntryRequest.setNationalCode(persianEnglishDigit.P2E(nationalCodeValue.getText().toString().replaceAll("-", "")));
                         requestRegistrationEntry = new RequestRegistrationEntry(activity, new RequestRegistrationEntryTaskCompleteListener());
                         requestRegistrationEntry.execute(registrationEntryRequest);
-
                     } else {
-                        handler.post(new Runnable() {
-                            public void run() {
-                                FragmentManager fm = getSupportFragmentManager();
-                                FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                                fragmentTransaction.commit();
-                                PermissionDeviceDialog permissionDeviceDialog = new PermissionDeviceDialog();
-                                permissionDeviceDialog.show(fm, "fragment_edit_name");
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                            boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE);
+                            if (showRationale){
+                                handler.post(new Runnable() {
+                                    public void run() {
+                                        PermissionDeviceDialog permissionDeviceDialog = new PermissionDeviceDialog();
+                                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                                        fragmentTransaction.add(permissionDeviceDialog, null);
+                                        fragmentTransaction.commitAllowingStateLoss();
+                                    }
+                                });
+                            }else {
+                                Intent intent = new Intent();
+                                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                intent.addCategory(Intent.CATEGORY_DEFAULT);
+                                intent.setData(Uri.parse("package:" + context.getPackageName()));
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+                                context.startActivity(intent);
                             }
-                        });
+                        }else {
+                            handler.post(new Runnable() {
+                                public void run() {
+                                    PermissionDeviceDialog permissionDeviceDialog = new PermissionDeviceDialog();
+                                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                                    fragmentTransaction.add(permissionDeviceDialog, null);
+                                    fragmentTransaction.commitAllowingStateLoss();
+                                }
+                            });
+                        }
                     }
                     return true;
                 }
