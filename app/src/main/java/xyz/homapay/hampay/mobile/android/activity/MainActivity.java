@@ -541,6 +541,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     @Override
     public void onBackPressed() {
 
+        if (wtContainer.getVisibility() == View.VISIBLE){
+            wtContainer.setVisibility(View.GONE);
+            return;
+        }
+
+
         if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
             drawerLayout.closeDrawer(Gravity.RIGHT);
         }else if (currentFragment != 0){

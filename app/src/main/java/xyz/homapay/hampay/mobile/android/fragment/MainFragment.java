@@ -264,7 +264,9 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onStop() {
         super.onStop();
-        getActivity().unregisterReceiver(mIntentReceiver);
+        if (mIntentReceiver != null) {
+            getActivity().unregisterReceiver(mIntentReceiver);
+        }
     }
 
     @Override
