@@ -339,7 +339,7 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    if (new NationalCodeVerification(nationalCodeValue.getText().toString().replaceAll("-", "")).isValidCode()) {
+                    if (new NationalCodeVerification(persianEnglishDigit.P2E(nationalCodeValue.getText().toString().replaceAll("-", ""))).isValidCode()) {
                         nationalCodeIcon.setImageResource(R.drawable.right_icon);
                         nationalCodeIsValid = true;
                     } else {

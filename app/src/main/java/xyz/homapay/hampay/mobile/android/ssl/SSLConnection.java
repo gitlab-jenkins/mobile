@@ -1,6 +1,7 @@
 package xyz.homapay.hampay.mobile.android.ssl;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 
 import java.io.IOException;
@@ -33,9 +34,13 @@ public class SSLConnection  {
     public HttpsURLConnection setUpHttpsURLConnection(){
         try
         {
-            SSLContext context = SSLContext.getInstance("TLSv1.2");
+            SSLContext context;
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                context = SSLContext.getInstance("TLSv1.2");
+            }else {
+                context = SSLContext.getInstance("TLS");
+            }
             context.init(null, new TrustManager[] { new HamPayX509TrustManager(sslKeyStore.getAppKeyStore()) }, null);
-
             HttpsURLConnection urlConnection = (HttpsURLConnection)url.openConnection();
             urlConnection.setSSLSocketFactory(context.getSocketFactory());
             urlConnection.setConnectTimeout(Constants.SERVICE_CONNECTION_TIMEOUT);

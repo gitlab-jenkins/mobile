@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -211,6 +212,10 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
                 urlText.setText(url);
                 ResultStatus resultStatus = ResultStatus.FAILURE;
+                if (url.contains("http://176.58.114.27")){
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(browserIntent);
+                }
                 ServiceEvent serviceName;
                 LogEvent logEvent = new LogEvent(context);
                 if (url.toLowerCase().contains(pspInfoDTO.getRedirectURL().toLowerCase())) {

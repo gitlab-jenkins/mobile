@@ -372,7 +372,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                         getString(R.string.msg_fail_tac_request));
             }
             logEvent.log(serviceName);
-
+            resetLogin();
         }
 
         @Override
@@ -386,8 +386,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     }
 
     public class RequestRecentFundTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RecentPendingFundResponse>> {
-        public RequestRecentFundTaskCompleteListener() {
-        }
+        public RequestRecentFundTaskCompleteListener() {}
 
         @Override
         public void onTaskComplete(ResponseMessage<RecentPendingFundResponse> recentPendingFundResponseMessage) {
