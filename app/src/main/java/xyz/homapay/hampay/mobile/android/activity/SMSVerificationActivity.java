@@ -297,6 +297,11 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                                     }
                                 });
                             }else {
+                                Intent intent = new Intent();
+                                intent.setClass(activity, PasswordEntryActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                                finish();
+                                startActivity(intent);
                             }
                         }else {
                             handler.post(new Runnable() {
@@ -456,12 +461,19 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                 if (sendSmsCounter < 3) {
                     if (sendSmsPermission) {
                         sendSmsPermission = false;
-                        FragmentManager fm = getSupportFragmentManager();
                         SMSActivationDialog smsActivationDialog = new SMSActivationDialog();
                         Bundle bundle = new Bundle();
                         bundle.putString(Constants.REGISTERED_CELL_NUMBER, cellNumber);
+                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         smsActivationDialog.setArguments(bundle);
-                        smsActivationDialog.show(fm, "fragment_edit_name");
+                        fragmentTransaction.add(smsActivationDialog, null);
+                        fragmentTransaction.commitAllowingStateLoss();
+//                        FragmentManager fm = getSupportFragmentManager();
+//                        SMSActivationDialog smsActivationDialog = new SMSActivationDialog();
+//                        Bundle bundle = new Bundle();
+//                        bundle.putString(Constants.REGISTERED_CELL_NUMBER, cellNumber);
+//                        smsActivationDialog.setArguments(bundle);
+//                        smsActivationDialog.show(fm, "fragment_edit_name");
                     }
                 }else {
                     Toast.makeText(context, getString(R.string.sms_upper_reach_sms), Toast.LENGTH_LONG).show();

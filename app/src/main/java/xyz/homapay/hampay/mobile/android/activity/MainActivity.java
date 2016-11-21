@@ -48,6 +48,7 @@ import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.dialog.ImageProfile.ActionImage;
 import xyz.homapay.hampay.mobile.android.dialog.ImageProfile.EditImageDialog;
+import xyz.homapay.hampay.mobile.android.dialog.permission.PermissionDeviceDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
@@ -276,9 +277,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         user_image_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fm = getSupportFragmentManager();
-                EditImageDialog userEditPhotoDialog = new EditImageDialog();
-                userEditPhotoDialog.show(fm, "fragment_edit_name");
+
+                EditImageDialog editImageDialog = new EditImageDialog();
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.add(editImageDialog, null);
+                fragmentTransaction.commitAllowingStateLoss();
+//                FragmentManager fm = getSupportFragmentManager();
+//                EditImageDialog userEditPhotoDialog = new EditImageDialog();
+//                userEditPhotoDialog.show(fm, "fragment_edit_name");
             }
         });
         nav_icon = (ImageView)findViewById(R.id.nav_icon);
