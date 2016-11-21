@@ -215,7 +215,7 @@
                             android:gravity="center_vertical"
                             android:paddingTop="8dp"
                             android:paddingBottom="8dp"
-                            android:contentDescription="phone"/>
+                            android:nextFocusDown="@+id/cardNumberValue"/>
 
                         <xyz.homapay.hampay.mobile.android.component.FacedTextView
                             geekui:customTypeface="fonts/vazir_regular.ttf"
@@ -253,7 +253,7 @@
                         android:layout_marginTop="6dp">
 
                         <xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText
-                            android:id="@+id/cardNumberValue"
+                            android:id="@id/cardNumberValue"
                             android:layout_width="fill_parent"
                             android:layout_height="fill_parent"
                             android:background="@android:color/transparent"
@@ -351,7 +351,9 @@
                             android:maxLength="30"
                             android:padding="8dp"
                             android:digits=" ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzاآبپتثجچحخدذرزژسشصضطظعغفقکگلمنوهی"
-                            android:contentDescription="account" />
+                            android:contentDescription="account"
+                            android:nextFocusDown="@+id/emailValue"
+                            android:singleLine="true"/>
 
                         <ImageView
                             android:id="@+id/userNameFamilyIcon"
@@ -369,7 +371,7 @@
                         android:layout_marginTop="6dp">
 
                         <xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText
-                            android:id="@+id/emailValue"
+                            android:id="@id/emailValue"
                             android:layout_width="fill_parent"
                             android:layout_height="fill_parent"
                             android:background="@android:color/transparent"
