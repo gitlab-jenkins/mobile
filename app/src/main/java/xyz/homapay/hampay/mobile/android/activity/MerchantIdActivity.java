@@ -24,6 +24,7 @@ import xyz.homapay.hampay.mobile.android.async.task.UserRequestForBeingMerchantP
 import xyz.homapay.hampay.mobile.android.async.task.UserRequestForBeingMerchantTask;
 import xyz.homapay.hampay.mobile.android.async.task.impl.OnTaskCompleted;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
@@ -45,6 +46,8 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
     private FacedTextView merchantInfo;
     private String authToken = "";
     private PersianEnglishDigit persian;
+    private FacedTextView merchantIdText;
+    private HamPayDialog hamPayDialog;
 
     public void backActionBar(View view){
         finish();
@@ -93,10 +96,12 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
         setContentView(R.layout.activity_merchant_id);
         activity = MerchantIdActivity.this;
         context = this;
+        hamPayDialog = new HamPayDialog(activity);
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
         persian = new PersianEnglishDigit();
 
+        merchantIdText = (FacedTextView)findViewById(R.id.merchant_id_text);
         requestLayout = (LinearLayout)findViewById(R.id.requestLayout);
         statusLayout = (LinearLayout)findViewById(R.id.statusLayout);
         resultLayout = (LinearLayout)findViewById(R.id.resultLayout);
@@ -119,12 +124,13 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
 
     @Override
     public void OnTaskPreExecute() {
-
+        hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
     }
 
     @Override
     public void OnTaskExecuted(Object object) {
 
+        hamPayDialog.dismisWaitingDialog();
         if (object != null) {
             ServiceEvent serviceName;
             LogEvent logEvent = new LogEvent(context);
@@ -140,6 +146,7 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
                                 if (userRequestForBeingMerchant.getService().getMerchantProgressForUserStatus().equalsIgnoreCase("PENDING")){
                                     requestLayout.setVisibility(View.GONE);
                                     statusLayout.setVisibility(View.VISIBLE);
+                                    merchantIdText.setText(getString(R.string.merchant_text_page_2));
                                 }else if (userRequestForBeingMerchant.getService().getMerchantProgressForUserStatus().equalsIgnoreCase("ACCEPT")){
                                     UserRequestForBeingMerchantProgressRequest userRequestForBeingMerchantProgress = new UserRequestForBeingMerchantProgressRequest();
                                     new UserRequestForBeingMerchantProgressTask(activity, MerchantIdActivity.this, userRequestForBeingMerchantProgress, authToken).execute();
@@ -165,6 +172,7 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
                                 merchantInfo.setText(spannableStringBuilder);
                                 requestLayout.setVisibility(View.GONE);
                                 resultLayout.setVisibility(View.VISIBLE);
+                                merchantIdText.setText(getString(R.string.merchant_text_page_3));
                                 break;
                             default:
                                 serviceName = ServiceEvent.USER_REQUEST_FOR_BEING_MERCHANT_RESULT_FAILURE;

@@ -166,7 +166,7 @@ public class ChangeIbanPassActivity extends AppCompatActivity implements View.On
                     serviceName = ServiceEvent.IBAN_CHANGE_SUCCESS;
                     editor.putBoolean(Constants.SETTING_CHANGE_IBAN_STATUS, true);
                     editor.commit();
-                    new HamPayDialog(activity).showSuccessChangeSettingDialog(ibanChangeResponseMessage.getService().getResultStatus().getDescription(), false);
+                    hamPayDialog.showSuccessChangeSettingDialog(ibanChangeResponseMessage.getService().getResultStatus().getDescription(), false);
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra(Constants.RETURN_IBAN_CONFIRMED, iban);
                     setResult(RESULT_OK, returnIntent);
@@ -178,18 +178,19 @@ public class ChangeIbanPassActivity extends AppCompatActivity implements View.On
                 else {
                     serviceName = ServiceEvent.IBAN_CHANGE_FAILURE;
                     requestIBANChange = new RequestIBANChange(activity, new RequestIBANChangeTaskCompleteListener(ibanChangeRequest));
-                    hamPayDialog.showFailIBANChangeDialog(requestIBANChange, ibanChangeRequest,
+                    hamPayDialog.showFailIBANChangeDialog(
                             ibanChangeResponseMessage.getService().getResultStatus().getCode(),
                             ibanChangeResponseMessage.getService().getResultStatus().getDescription());
                 }
             } else {
                 serviceName = ServiceEvent.IBAN_CHANGE_FAILURE;
                 requestIBANChange = new RequestIBANChange(activity, new RequestIBANChangeTaskCompleteListener(ibanChangeRequest));
-                hamPayDialog.showFailIBANChangeDialog(requestIBANChange, ibanChangeRequest,
+                hamPayDialog.showFailIBANChangeDialog(
                         Constants.LOCAL_ERROR_CODE,
                         activity.getString(R.string.msg_fail_iban_change));
             }
             logEvent.log(serviceName);
+            resetLogin();
         }
 
         @Override
@@ -292,6 +293,15 @@ public class ChangeIbanPassActivity extends AppCompatActivity implements View.On
                     break;
             }
         }
+    }
+
+    private void resetLogin() {
+        inputPasswordValue = "";
+        input_digit_1.setBackgroundResource(R.drawable.pass_value_empty);
+        input_digit_2.setBackgroundResource(R.drawable.pass_value_empty);
+        input_digit_3.setBackgroundResource(R.drawable.pass_value_empty);
+        input_digit_4.setBackgroundResource(R.drawable.pass_value_empty);
+        input_digit_5.setBackgroundResource(R.drawable.pass_value_empty);
     }
 
 }

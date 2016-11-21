@@ -1795,10 +1795,7 @@ public class HamPayDialog {
         }
     }
 
-    public void showFailIBANChangeDialog(final RequestIBANChange requestIBANChange,
-                                         final IBANChangeRequest ibanChangeRequest,
-                                         final String code,
-                                         final String message){
+    public void showFailIBANChangeDialog(final String code, final String message){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_request_iban_confirm, null);
         FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
