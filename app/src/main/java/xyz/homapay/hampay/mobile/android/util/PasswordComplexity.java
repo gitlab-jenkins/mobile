@@ -47,7 +47,7 @@ public class PasswordComplexity {
 //        Check password does not contain more than two the same characters
         Pattern pattern4 = Pattern.compile("(.)(.*\\1){2}");
         Matcher matcher4 = pattern4.matcher(password);
-        boolean result4 = matcher4.matches();
+        boolean result4 = matcher4.find();
         if (result4){
             return R.string.hp_msg_password_complexity_4;
         }
