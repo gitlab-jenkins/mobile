@@ -5,10 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -48,6 +53,8 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
     private PersianEnglishDigit persian;
     private FacedTextView merchantIdText;
     private HamPayDialog hamPayDialog;
+    private FacedTextView step1Text;
+    private FacedTextView step2Text;
 
     public void backActionBar(View view){
         finish();
@@ -119,6 +126,31 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
         closeViewMerchantId.setOnClickListener(this);
 
         merchantInfo = (FacedTextView)findViewById(R.id.merchantInfo);
+
+        step1Text = (FacedTextView)findViewById(R.id.step_1_text);
+        step2Text = (FacedTextView)findViewById(R.id.step_2_text);
+
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getString(R.string.merchant_id_not_set));
+        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.rgb(Constants.HAMPAY_RED, Constants.HAMPAY_GREEN, Constants.HAMPAY_BLUE));
+        spannableStringBuilder.setSpan(foregroundColorSpan, 75, 82, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        step1Text.setText(spannableStringBuilder);
+
+        Spannable merchantIdStatus = new SpannableString(activity.getString(R.string.merchant_id_status_pending));
+        ClickableSpan emailClickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", activity.getString(R.string.merchent_document_email), null));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, activity.getString(R.string.merchant_id));
+                emailIntent.putExtra(Intent.EXTRA_TEXT, activity.getString(R.string.merchant_id_document));
+                activity.startActivity(Intent.createChooser(emailIntent, activity.getString(R.string.hampay_contact)));
+            }
+        };
+        merchantIdStatus.setSpan(emailClickableSpan, 58, 75, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        step2Text.setText(merchantIdStatus);
+        step2Text.setMovementMethod(LinkMovementMethod.getInstance());
+
+        UserRequestForBeingMerchantRequest userRequestForBeingMerchantRequest = new UserRequestForBeingMerchantRequest();
+        new UserRequestForBeingMerchantTask(activity, MerchantIdActivity.this, userRequestForBeingMerchantRequest, authToken).execute();
     }
 
 
@@ -150,6 +182,10 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
                                 }else if (userRequestForBeingMerchant.getService().getMerchantProgressForUserStatus().equalsIgnoreCase("ACCEPT")){
                                     UserRequestForBeingMerchantProgressRequest userRequestForBeingMerchantProgress = new UserRequestForBeingMerchantProgressRequest();
                                     new UserRequestForBeingMerchantProgressTask(activity, MerchantIdActivity.this, userRequestForBeingMerchantProgress, authToken).execute();
+                                }else if (userRequestForBeingMerchant.getService().getMerchantProgressForUserStatus().equalsIgnoreCase("NONE")){
+
+                                }else if (userRequestForBeingMerchant.getService().getMerchantProgressForUserStatus().equalsIgnoreCase("REJECT")){
+                                    step1Text.setText(getString(R.string.merchant_id_reject));
                                 }
                                 break;
                             default:

@@ -46,7 +46,7 @@
             android:id="@+id/pass_code_change_text"
             geekui:customTypeface="fonts/vazir_regular.ttf"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="70dp"
             android:textColor="@color/main_menu_title"
             android:textSize="15sp"
             android:text="@string/change_pass_code_text_1"

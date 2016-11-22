@@ -156,18 +156,19 @@ public class ChangeMemorablePassActivity extends AppCompatActivity implements Vi
                 else {
                     serviceName = ServiceEvent.CHANGE_MEMORABLE_WORD_FAILURE;
                     requestChangeMemorableWord = new RequestChangeMemorableWord(context, new RequestChangeMemorableWordTaskCompleteListener());
-                    new HamPayDialog(activity).showFailChangeMemorableWordDialog(requestChangeMemorableWord, changeMemorableWordRequest,
+                    new HamPayDialog(activity).showFailChangeMemorableWordDialog(
                             changeMemorableWordResponseMessage.getService().getResultStatus().getCode(),
                             changeMemorableWordResponseMessage.getService().getResultStatus().getDescription());
                 }
             }else {
                 serviceName = ServiceEvent.CHANGE_MEMORABLE_WORD_FAILURE;
                 requestChangeMemorableWord = new RequestChangeMemorableWord(context, new RequestChangeMemorableWordTaskCompleteListener());
-                new HamPayDialog(activity).showFailChangeMemorableWordDialog(requestChangeMemorableWord, changeMemorableWordRequest,
+                new HamPayDialog(activity).showFailChangeMemorableWordDialog(
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_change_memorable_word));
             }
             logEvent.log(serviceName);
+            resetLayout();
         }
 
         @Override
@@ -285,6 +286,15 @@ public class ChangeMemorablePassActivity extends AppCompatActivity implements Vi
                     break;
             }
         }
+    }
+
+    private void resetLayout(){
+        inputPasswordValue = "";
+        input_digit_1.setBackgroundResource(R.drawable.pass_value_empty);
+        input_digit_2.setBackgroundResource(R.drawable.pass_value_empty);
+        input_digit_3.setBackgroundResource(R.drawable.pass_value_empty);
+        input_digit_4.setBackgroundResource(R.drawable.pass_value_empty);
+        input_digit_5.setBackgroundResource(R.drawable.pass_value_empty);
     }
 
 }

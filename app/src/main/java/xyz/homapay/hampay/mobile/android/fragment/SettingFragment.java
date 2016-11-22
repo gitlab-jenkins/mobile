@@ -98,18 +98,20 @@ public class SettingFragment extends Fragment {
 
                     case 0:
                         intent = new Intent();
-                        intent.setClass(getActivity(), ChangePassCodeActivity.class);
+                        intent.setClass(getActivity(), MerchantIdActivity.class);
                         startActivity(intent);
                         break;
 
                     case 1:
                         intent = new Intent();
-                        intent.setClass(getActivity(), ChangeMemorableActivity.class);
+                        intent.setClass(getActivity(), ChangePassCodeActivity.class);
                         startActivity(intent);
                         break;
 
                     case 2:
-                        new HamPayDialog(getActivity()).showUnlinkDialog();
+                        intent = new Intent();
+                        intent.setClass(getActivity(), ChangeMemorableActivity.class);
+                        startActivity(intent);
                         break;
 
                     case 3:
@@ -123,9 +125,7 @@ public class SettingFragment extends Fragment {
                         break;
 
                     case 5:
-                        intent = new Intent();
-                        intent.setClass(getActivity(), MerchantIdActivity.class);
-                        startActivity(intent);
+                        new HamPayDialog(getActivity()).showUnlinkDialog();
                         break;
                 }
             }

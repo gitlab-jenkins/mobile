@@ -135,6 +135,7 @@
     <string name="get_password_text_5">لطفا رمز عبور مورد نظر خود را مجدد تکرار نمایید.</string>
     <string name="confirm">تایید</string>
     <string name="start_tac_privacy">با شرایط استفاده از نرم‌افزار هم‌پی و قوانین حفظ حریم خصوصی کاربر موافقم</string>
+    <string name="force_tac">برای ادامه باید شرایط استفاده و حریم خصوصی را تایید کنید</string>
     <string name="remember_phrase">یادآوری</string>
     <string name="remember_phrase_text">لطفا یک کلمه کوتاه به عنوان یادآوری رمز عبور خود معرفی نمایید</string>
     <string name="complete_registarion">تکمیل ثبت نام</string>
@@ -143,20 +144,20 @@
     <string name="hampay_login_text">لطفا رمز عبور خود را وارد نمایید</string>
     <string name="hampay_contacts">مخاطبین هم‌پی</string>
     <string-array name="setting_key_list">
+        <item>setting_merchant_id</item>
         <item>setting_change_pass_code</item>
         <item>setting_change_memorable_word</item>
-        <item>setting_user_unlink</item>
         <item>setting_change_email</item>
         <item>setting_change_iban</item>
-        <item>setting_merchant_id</item>
+        <item>setting_user_unlink</item>
     </string-array>
     <string-array name="setting_value_list">
+        <item>درخواست کد پذیرندگی</item>
         <item>تغییر رمز عبور</item>
         <item>تغییر کلمه یادآوری</item>
-        <item>لغو عضویت</item>
         <item>تغییر ایمیل</item>
         <item>تغییر شماره شبا</item>
-        <item>درخواست کد پذیرندگی</item>
+        <item>لغو عضویت</item>
     </string-array>
     <string name="change_password">تغییر رمز عبور</string>
     <string-array name="guide_list">
@@ -341,9 +342,10 @@
     <string name="merchant_id_close">بستن</string>
     <string name="merchant_id_request">درخواست</string>
     <string name="merchant_id_not_set">کد پذیرندگی برای حساب شما فعال نشده است. جهت ثبت درخواست کد پذیرندگی، دکمه درخواست را انتخاب نمایید.</string>
+    <string name="merchant_id_reject">درخواست کد پذیرندگی شما تایید نشد</string>
     <string name="merchant_id_status_pending">درخواست شما ثبت گردید.
     \n
-        لطفا مدارک لازم را به آدرس ایمیل info@hampay.ir ارسال نمایید.
+        لطفا مدارک لازم را به آدرس ایمیل info@homapay.com ارسال نمایید.
     </string>
     <string name="merchant_info">کد پذیرندگی شما با شماره %1$s فعال است.</string>
     <string name="change_memorable_word_text_1">لطفا یک کلمه کوتاه به عنوان کلمه یادآوری رمز عبور خود معرفی نمایید</string>

@@ -81,6 +81,7 @@
             android:visibility="visible">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/step_1_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -142,6 +143,7 @@
             android:visibility="gone">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/step_2_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"

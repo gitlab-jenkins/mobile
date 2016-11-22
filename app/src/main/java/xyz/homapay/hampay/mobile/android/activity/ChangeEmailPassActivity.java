@@ -164,18 +164,18 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
                 else {
                     serviceName = ServiceEvent.CHANGE_EMAIL_FAILURE;
                     requestChangeEmail = new RequestChangeEmail(activity, new RequestChangeEmailTaskCompleteListener(changeEmailRequest));
-                    new HamPayDialog(activity).showFailChnageEmail(requestChangeEmail, changeEmailRequest,
+                    new HamPayDialog(activity).showFailChangeEmail(
                             changeEmailResponseResponseMessage.getService().getResultStatus().getCode(),
                             changeEmailResponseResponseMessage.getService().getResultStatus().getDescription());
                 }
             }else {
                 serviceName = ServiceEvent.CHANGE_EMAIL_FAILURE;
-                RequestChangeEmail requestChangeEmail = new RequestChangeEmail(activity, new RequestChangeEmailTaskCompleteListener(changeEmailRequest));
-                new HamPayDialog(activity).showFailChnageEmail(requestChangeEmail, changeEmailRequest,
+                new HamPayDialog(activity).showFailChangeEmail(
                         Constants.LOCAL_ERROR_CODE,
                         activity.getString(R.string.msg_gail_change_email));
             }
             logEvent.log(serviceName);
+            resetLayout();
         }
 
         @Override
@@ -277,6 +277,15 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
                     break;
             }
         }
+    }
+
+    private void resetLayout(){
+        inputPasswordValue = "";
+        input_digit_1.setBackgroundResource(R.drawable.pass_value_empty);
+        input_digit_2.setBackgroundResource(R.drawable.pass_value_empty);
+        input_digit_3.setBackgroundResource(R.drawable.pass_value_empty);
+        input_digit_4.setBackgroundResource(R.drawable.pass_value_empty);
+        input_digit_5.setBackgroundResource(R.drawable.pass_value_empty);
     }
 
 }

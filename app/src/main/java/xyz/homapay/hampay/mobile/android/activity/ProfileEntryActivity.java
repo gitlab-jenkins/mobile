@@ -452,6 +452,7 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
             public void onClick(View v) {
 
                 if (!confirmTacPrivacy.isChecked()){
+                    Toast.makeText(activity, getString(R.string.force_tac), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 keepOn_button.requestFocus();

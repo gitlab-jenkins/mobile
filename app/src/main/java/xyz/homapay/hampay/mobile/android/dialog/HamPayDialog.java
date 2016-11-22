@@ -1010,24 +1010,18 @@ public class HamPayDialog {
 
 
 
-    public void showFailChangeMemorableWordDialog(final RequestChangeMemorableWord requestChangeMemorableWord,
-                                                  final ChangeMemorableWordRequest changeMemorableWordRequest,
-                                                  final String code,
-                                                  final String message){
+    public void showFailChangeMemorableWordDialog(final String code, final String message){
+
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_change_memorable_word, null);
         FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
         responseMessage.setText(activity.getString(R.string.error_code, code) + "\n" + message);
         FacedTextView retry_change_memorable_word = (FacedTextView) view.findViewById(R.id.retry_change_memorable_word);
         FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
-        if ((code.compareTo("1005") == 0) || (code.compareTo("۱۰۰۵") == 0) ){
-            retry_change_memorable_word.setVisibility(View.INVISIBLE);
-        }
 
         retry_change_memorable_word.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-
                 Intent intent = new Intent();
                 intent.setClass(activity, ChangeMemorableActivity.class);
                 activity.startActivity(intent);
@@ -1298,9 +1292,7 @@ public class HamPayDialog {
         }
     }
 
-    public void showFailChnageEmail(final RequestChangeEmail requestChangeEmail,
-                                    final ChangeEmailRequest changeEmailRequest,
-                                    final String code,
+    public void showFailChangeEmail(final String code,
                                     final String message){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_unlink_user, null);
@@ -1310,18 +1302,10 @@ public class HamPayDialog {
         FacedTextView retry_unlink_user = (FacedTextView) view.findViewById(R.id.retry_unlink_user);
         FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
 
-//        if ((code.compareTo("1005") == 0) || (code.compareTo("۱۰۰۵") == 0) ){
-//            retry_unlink_user.setVisibility(View.INVISIBLE);
-//        }
-
         retry_unlink_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-
-                if (requestChangeEmail.getStatus() == AsyncTask.Status.FINISHED) {
-                    requestChangeEmail.execute(changeEmailRequest);
-                }
             }
         });
         cancel_request.setOnClickListener(new View.OnClickListener() {
