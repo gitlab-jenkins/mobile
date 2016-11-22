@@ -82,9 +82,7 @@
     <string name="contact_us">ارتباط با شبکه پرداخت همراه هم‌پی</string>
     <string name="send_message">ارسال پیام</string>
     <string name="call_message">تماس با اپراتور</string>
-    <string name="msg_invalid_password">بیش از دو عدد تکراری قابل قبول نمی‌باشد</string>
     <string name="msg_password_complexity">رمز عبور بهتری انتخاب کنید</string>
-    <string name="hp_msg_invalid_password">بیش از دو عدد تکراری قابل قبول نمی‌باشد</string>
     <string name="hp_msg_password_complexity_1">رمز عبور می‌بایستی شامل حرف و عدد باشد</string>
     <string name="hp_msg_password_complexity_2">رمز عبور بایستی شامل حداقل ۱ عدد و ۳ حرف باشد</string>
     <string name="hp_msg_password_complexity_3">رمز عبور بایستی شامل حداقل ۱ عدد و ۳ حرف باشد</string>
@@ -133,7 +131,7 @@
     <string name="email">ایمیل(اختیاری)</string>
     <string name="email_change_hint">ایمیل</string>
     <string name="get_password">دریافت رمز عبور</string>
-    <string name="get_password_text_4">شماره شما تایید شد. لطفا رمز عبور ۵ رقمی خود را انتخاب نمایید (بیش از دو عدد تکراری قابل قبول نمی باشد)</string>
+    <string name="get_password_text_4">شماره شما تایید شد. لطفا رمز عبور ۵ رقمی خود را انتخاب نمایید (رمز عبور شما باید شامل حداقل ۱ عدد و ۳ حرف باشد)</string>
     <string name="get_password_text_5">لطفا رمز عبور مورد نظر خود را مجدد تکرار نمایید.</string>
     <string name="confirm">تایید</string>
     <string name="start_tac_privacy">با شرایط استفاده از نرم‌افزار هم‌پی و قوانین حفظ حریم خصوصی کاربر موافقم</string>
@@ -297,7 +295,7 @@
     <string name="change_pass_code_text_1">لطفا رمز عبور فعلی خود را وارد کنید</string>
     <string name="change_pass_code_text_2">لطفا رمز عبور ۵ رقمی خود را وارد نمایید
     \n
-        (دقت کنید که بیش از دو عدد تکراری قابل نمی‌باشد)
+        (دقت کنید که رمز عبور شما باید شامل حداقل ۱ عدد و ۳ حرف باشد)
     </string>
     <string name="change_pass_code_text_3">لطفا رمز عبور مورد نظر را مجدد وارد کنید</string>
     <string name="memorable_word_change_title">تغییر کلمه یادآوری</string>
