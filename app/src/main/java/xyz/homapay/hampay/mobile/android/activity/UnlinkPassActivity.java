@@ -166,18 +166,19 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
                 else {
                     serviceName = ServiceEvent.UNLINK_USER_FAILURE;
                     requestUnlinkUser = new RequestUnlinkUser(context, new RequestUnlinkUserTaskCompleteListener());
-                    new HamPayDialog(activity).showFailUnlinkDialog(requestUnlinkUser, unlinkUserRequest,
+                    new HamPayDialog(activity).showFailUnlinkDialog(
                             unlinkUserResponseResponseMessage.getService().getResultStatus().getCode(),
                             unlinkUserResponseResponseMessage.getService().getResultStatus().getDescription());
                 }
             }else {
                 serviceName = ServiceEvent.UNLINK_USER_FAILURE;
                 requestUnlinkUser = new RequestUnlinkUser(context, new RequestUnlinkUserTaskCompleteListener());
-                new HamPayDialog(activity).showFailUnlinkDialog(requestUnlinkUser, unlinkUserRequest,
+                new HamPayDialog(activity).showFailUnlinkDialog(
                         Constants.LOCAL_ERROR_CODE,
                         getString(R.string.msg_fail_unlink_user));
             }
             logEvent.log(serviceName);
+            resetLayout();
         }
 
         @Override
@@ -290,6 +291,16 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
                     break;
             }
         }
+    }
+
+    private void resetLayout(){
+        inputPasswordValue = "";
+
+        input_digit_1.setBackgroundResource(R.drawable.pass_value_empty);
+        input_digit_2.setBackgroundResource(R.drawable.pass_value_empty);
+        input_digit_3.setBackgroundResource(R.drawable.pass_value_empty);
+        input_digit_4.setBackgroundResource(R.drawable.pass_value_empty);
+        input_digit_5.setBackgroundResource(R.drawable.pass_value_empty);
     }
 
 }

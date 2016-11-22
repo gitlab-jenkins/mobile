@@ -1267,10 +1267,7 @@ public class HamPayDialog {
         }
     }
 
-    public void showFailUnlinkDialog(final RequestUnlinkUser requestUnlinkUser,
-                                     final UnlinkUserRequest unlinkUserRequest,
-                                     final String code,
-                                     final String message){
+    public void showFailUnlinkDialog(final String code, final String message){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_unlink_user, null);
         FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
@@ -1279,18 +1276,11 @@ public class HamPayDialog {
         FacedTextView retry_unlink_user = (FacedTextView) view.findViewById(R.id.retry_unlink_user);
         FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
 
-        if ((code.compareTo("1005") == 0) || (code.compareTo("۱۰۰۵") == 0) ){
-            retry_unlink_user.setVisibility(View.INVISIBLE);
-        }
 
         retry_unlink_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-
-                if (requestUnlinkUser.getStatus() == AsyncTask.Status.FINISHED) {
-                    requestUnlinkUser.execute(unlinkUserRequest);
-                }
             }
         });
         cancel_request.setOnClickListener(new View.OnClickListener() {
