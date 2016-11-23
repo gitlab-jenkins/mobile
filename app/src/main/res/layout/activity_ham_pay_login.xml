@@ -89,12 +89,13 @@
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/hampay_memorableword_text"
                     geekui:customTypeface="fonts/vazir_regular_bold.ttf"
-                    android:layout_width="140dp"
-                    android:layout_height="32dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:textColor="@android:color/white"
                     android:textSize="18dp"
                     android:text="@string/hampay_user"
                     android:layout_marginTop="10dp"
+                    android:padding="6dp"
                     android:gravity="center"
                     android:layout_gravity="center_horizontal"
                     android:background="#66000000"/>

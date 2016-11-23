@@ -330,6 +330,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     }
 
     private void displayView(int position) {
+
+        if (wtContainer.getVisibility() == View.VISIBLE){
+            wtContainer.setVisibility(View.GONE);
+        }
+
         Intent intent = new Intent();
         switch (position) {
             case 0:

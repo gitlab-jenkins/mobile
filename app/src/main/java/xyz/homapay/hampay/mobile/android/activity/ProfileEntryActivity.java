@@ -106,6 +106,7 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
     private FacedTextView tac_privacy_text;
     private CheckBox confirmTacPrivacy;
     private KeyExchange keyExchange;
+    private String fullUserName = "";
 
     public void userManual(View view){
         Intent intent = new Intent();
@@ -151,7 +152,7 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                         registrationEntryRequest = new RegistrationEntryRequest();
                         registrationEntryRequest.setCellNumber(persianEnglishDigit.P2E(getString(R.string.iran_prefix_cell_number) + cellNumberValue.getText().toString()));
                         registrationEntryRequest.setCardNumber(persianEnglishDigit.P2E(cardNumberValue.getText().toString()));
-                        registrationEntryRequest.setFullName(userNameFamily.getText().toString().trim());
+                        registrationEntryRequest.setFullName(fullUserName);
                         registrationEntryRequest.setEmail(emailValue.getText().toString().trim());
                         registrationEntryRequest.setNationalCode(persianEnglishDigit.P2E(nationalCodeValue.getText().toString().replaceAll("-", "")));
                         requestRegistrationEntry = new RequestRegistrationEntry(activity, new RequestRegistrationEntryTaskCompleteListener());
@@ -219,6 +220,8 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                     if (keyExchange.getKey() == null || keyExchange.getIv() == null) {
                         confirmTacPrivacy.setChecked(false);
                         new KeyExchangeTask().execute();
+                    }else {
+                        keepOn_button.setBackgroundResource(R.drawable.registration_button_style);
                     }
                 }else {
                     keepOn_button.setBackgroundResource(R.drawable.disable_button_style);
@@ -357,7 +360,7 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
                     userNameFamilyIsValid = true;
-                    if (userNameFamily.getText().toString().trim().length() <= 1){
+                    if (fullUserName.length() <= 1){
                         userNameFamilyIsValid = false;
                         userNameFamilyIcon.setImageResource(R.drawable.false_icon);
                     }else {
@@ -451,6 +454,8 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
             @Override
             public void onClick(View v) {
 
+                fullUserName = userNameFamily.getText().toString().trim().replaceAll("^ +| +$|( )+", "$1");
+
                 if (!confirmTacPrivacy.isChecked()){
                     Toast.makeText(activity, getString(R.string.force_tac), Toast.LENGTH_SHORT).show();
                     return;
@@ -471,7 +476,7 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                         && cellNumberValue.getText().toString().trim().length() > 0
                         && nationalCodeValue.getText().toString().trim().length() > 0
                         && cardNumberValue.getText().toString().trim().length() > 0
-                        && userNameFamily.getText().toString().trim().length() >= 2
+                        && fullUserName.length() >= 2
                         && emailTextWatcher.isValid()) {
 
                     requestAndLoadPhoneState();
@@ -484,7 +489,7 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                         cellNumberValue.requestFocus();
                     }
 
-                    else if (userNameFamily.getText().toString().trim().length() <= 1 || !userNameFamilyIsValid){
+                    else if (fullUserName.length() <= 1 || !userNameFamilyIsValid){
                         Toast.makeText(context, getString(R.string.msg_username_invalid), Toast.LENGTH_SHORT).show();
                         userNameFamilyIcon.setImageResource(R.drawable.false_icon);
                         userNameFamily.requestFocus();
@@ -534,7 +539,7 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
             if (registrationEntryResponse != null) {
 
                 if (registrationEntryResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    editor.putString(Constants.REGISTERED_USER_NAME, userNameFamily.getText().toString().trim());
+                    editor.putString(Constants.REGISTERED_USER_NAME, fullUserName);
                     editor.putString(Constants.REGISTERED_USER_ID_TOKEN, registrationEntryResponse.getService().getUserIdToken());
                     editor.putString(Constants.REGISTERED_USER_EMAIL, emailValue.getText().toString().trim());
                     editor.commit();

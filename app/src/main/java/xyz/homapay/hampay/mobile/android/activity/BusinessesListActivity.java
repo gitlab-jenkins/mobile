@@ -219,7 +219,7 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                     businessListRequest.setSortFactor(BizSortFactor.NAME);
                     requestHamPayBusiness = new RequestHamPayBusiness(context, new RequestBusinessListTaskCompleteListener(searchEnabled));
                     requestHamPayBusiness.execute(businessListRequest);
-                    inputMethodManager.hideSoftInputFromWindow(searchPhraseText.getWindowToken(), 0);
+//                    inputMethodManager.hideSoftInputFromWindow(searchPhraseText.getWindowToken(), 0);
                     hamPayBusinessesAdapter.clear();
                     businessDTOs.clear();
                     hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
@@ -359,7 +359,7 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
         businessSearchRequest.setTerm(searchTerm);
         requestSearchHamPayBusiness = new RequestSearchHamPayBusiness(activity, new RequestBusinessListTaskCompleteListener(searchEnabled));
         requestSearchHamPayBusiness.execute(businessSearchRequest);
-        inputMethodManager.hideSoftInputFromWindow(searchPhraseText.getWindowToken(), 0);
+//        inputMethodManager.hideSoftInputFromWindow(searchPhraseText.getWindowToken(), 0);
 
         hamPayBusinessesAdapter.clear();
         businessDTOs.clear();
