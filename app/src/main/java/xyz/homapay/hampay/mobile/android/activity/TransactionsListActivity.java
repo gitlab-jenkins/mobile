@@ -315,7 +315,6 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 if (transactionListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     serviceName = ServiceEvent.TRANSACTION_LIST_SUCCESS;
                     newTransactionDTOs = transactionListResponseMessage.getService().getTransactions();
-                    Log.e("Count",  String.valueOf(newTransactionDTOs.size()));
                     transactionDTOs.addAll(newTransactionDTOs);
 
                     if (transactionDTOs.size() == 0){

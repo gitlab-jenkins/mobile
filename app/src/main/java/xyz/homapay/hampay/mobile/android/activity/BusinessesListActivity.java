@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -150,6 +152,14 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                if (requestHamPayBusiness.getStatus() == AsyncTask.Status.RUNNING){
+                    requestHamPayBusiness.cancel(true);
+                }
+                FINISHED_SCROLLING = false;
+                onLoadMore = false;
+                hamPayBusinessesAdapter.clear();
+                businessDTOs.clear();
+                requestPageNumber = 0;
                 searchEnabled = false;
                 businessListRequest = new BusinessListRequest();
                 businessListRequest.setPageNumber(requestPageNumber);
@@ -268,6 +278,11 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
     }
 
     private void changeTab(int index){
+        if (requestHamPayBusiness.getStatus() == AsyncTask.Status.RUNNING){
+            requestHamPayBusiness.cancel(true);
+        }
+        FINISHED_SCROLLING = false;
+        onLoadMore = false;
         switch (index){
             case 1:
                 hamPayBusinessesAdapter.clear();
