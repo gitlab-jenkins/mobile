@@ -135,11 +135,16 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
                                     }
                                 });
                             }else {
-                                Intent intent = new Intent();
-                                intent.setClass(MemorableWordEntryActivity.this, CompleteRegistrationActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                finish();
-                                startActivity(intent);
+                                contacts = new ArrayList<ContactDTO>();
+                                registrationCredentialsRequest.setContacts(contacts);
+                                registrationCredentialsRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
+                                registrationCredentialsRequest.setDeviceId(new DeviceInfo(activity).getAndroidId());
+                                Uuid = UUID.randomUUID().toString();
+                                registrationCredentialsRequest.setInstallationToken(Uuid);
+                                registrationCredentialsRequest.setMemorableKey(memorable_value.getText().toString());
+                                registrationCredentialsRequest.setPassCode(userEntryPassword);
+                                requestCredentialEntry = new RequestCredentialEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
+                                requestCredentialEntry.execute(registrationCredentialsRequest);
                             }
                         }else {
                             handler.post(new Runnable() {

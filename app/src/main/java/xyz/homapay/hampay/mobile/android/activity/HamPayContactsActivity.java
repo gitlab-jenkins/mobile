@@ -201,8 +201,11 @@ public class HamPayContactsActivity extends AppCompatActivity implements Permiss
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                searchPhrase = search_text.getText().toString();
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                searchPhrase = s.toString();
                 List<ContactDTO> searchContacts = new ArrayList<>();
                 if (contacts != null) {
                     for (ContactDTO contact : contacts) {
@@ -220,9 +223,6 @@ public class HamPayContactsActivity extends AppCompatActivity implements Permiss
                     paymentRequestList.setAdapter(hamPayContactsAdapter);
                 }
             }
-
-            @Override
-            public void afterTextChanged(Editable s) {}
         });
 
         search_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
