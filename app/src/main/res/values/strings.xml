@@ -343,6 +343,7 @@
     <string name="merchant_id_request">درخواست</string>
     <string name="merchant_id_not_set">کد پذیرندگی برای حساب شما فعال نشده است. جهت ثبت درخواست کد پذیرندگی، دکمه درخواست را انتخاب نمایید.</string>
     <string name="merchant_id_reject">درخواست کد پذیرندگی شما تایید نشد</string>
+    <string name="merchant_id_accept">کد پذیرندگی برای شما فعال است</string>
     <string name="merchant_id_status_pending">درخواست شما ثبت گردید.
     \n
         لطفا مدارک لازم را به آدرس ایمیل info@homapay.com ارسال نمایید.

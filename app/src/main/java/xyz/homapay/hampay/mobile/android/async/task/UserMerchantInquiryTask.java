@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import java.io.IOException;
 
 import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
-import xyz.homapay.hampay.common.core.model.request.UserRequestForBeingMerchantProgressRequest;
+import xyz.homapay.hampay.common.core.model.request.UserMerchantInquiryRequest;
 import xyz.homapay.hampay.mobile.android.async.task.impl.OnTaskCompleted;
 import xyz.homapay.hampay.mobile.android.webservice.ConnectionType;
 import xyz.homapay.hampay.mobile.android.webservice.SecuredWebServices;
@@ -14,17 +14,17 @@ import xyz.homapay.hampay.mobile.android.webservice.SecuredWebServices;
 /**
  * Created by amir on 10/26/16.
  */
-public class UserRequestForBeingMerchantProgressTask extends AsyncTask<Object, Object, Object> {
+public class UserMerchantInquiryTask extends AsyncTask<Object, Object, Object> {
 
     private Context context;
     private String authToken;
     private OnTaskCompleted listener;
-    private UserRequestForBeingMerchantProgressRequest userRequestForBeingMerchantProgressRequest;
+    private UserMerchantInquiryRequest userMerchantInquiryRequest;
 
-    public UserRequestForBeingMerchantProgressTask(Context context, OnTaskCompleted listener, UserRequestForBeingMerchantProgressRequest userRequestForBeingMerchantProgressRequest, String authToken){
+    public UserMerchantInquiryTask(Context context, OnTaskCompleted listener, UserMerchantInquiryRequest userMerchantInquiryRequest, String authToken){
         this.context = context;
         this.listener = listener;
-        this.userRequestForBeingMerchantProgressRequest = userRequestForBeingMerchantProgressRequest;
+        this.userMerchantInquiryRequest = userMerchantInquiryRequest;
         this.authToken = authToken;
     }
 
@@ -33,7 +33,7 @@ public class UserRequestForBeingMerchantProgressTask extends AsyncTask<Object, O
         SecuredWebServices webService = new SecuredWebServices(context, ConnectionType.HTTPS, authToken);
 
         try {
-            return webService.userRequestForBeingMerchantProgress(userRequestForBeingMerchantProgressRequest);
+            return webService.userMerchantInquiry(userMerchantInquiryRequest);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (EncryptionException e) {

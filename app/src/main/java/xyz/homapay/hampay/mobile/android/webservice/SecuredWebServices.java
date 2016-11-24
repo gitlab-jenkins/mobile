@@ -64,10 +64,10 @@ import xyz.homapay.hampay.common.core.model.request.TransactionDetailRequest;
 import xyz.homapay.hampay.common.core.model.request.TransactionListRequest;
 import xyz.homapay.hampay.common.core.model.request.UnlinkUserRequest;
 import xyz.homapay.hampay.common.core.model.request.UploadImageRequest;
+import xyz.homapay.hampay.common.core.model.request.UserMerchantInquiryRequest;
+import xyz.homapay.hampay.common.core.model.request.UserMerchantRequest;
 import xyz.homapay.hampay.common.core.model.request.UserPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
-import xyz.homapay.hampay.common.core.model.request.UserRequestForBeingMerchantProgressRequest;
-import xyz.homapay.hampay.common.core.model.request.UserRequestForBeingMerchantRequest;
 import xyz.homapay.hampay.common.core.model.response.BusinessListResponse;
 import xyz.homapay.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
 import xyz.homapay.hampay.common.core.model.response.CalcFeeChargeResponse;
@@ -109,10 +109,10 @@ import xyz.homapay.hampay.common.core.model.response.TransactionDetailResponse;
 import xyz.homapay.hampay.common.core.model.response.TransactionListResponse;
 import xyz.homapay.hampay.common.core.model.response.UnlinkUserResponse;
 import xyz.homapay.hampay.common.core.model.response.UploadImageResponse;
+import xyz.homapay.hampay.common.core.model.response.UserMerchantInquiryResponse;
+import xyz.homapay.hampay.common.core.model.response.UserMerchantResponse;
 import xyz.homapay.hampay.common.core.model.response.UserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
-import xyz.homapay.hampay.common.core.model.response.UserRequestForBeingMerchantProgressResponse;
-import xyz.homapay.hampay.common.core.model.response.UserRequestForBeingMerchantResponse;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfoTest;
 import xyz.homapay.hampay.mobile.android.ssl.AllowHamPaySSL;
@@ -1258,32 +1258,32 @@ public class SecuredWebServices{
         return responseMessage;
     }
 
-    public ResponseMessage<UserRequestForBeingMerchantResponse> userRequestForBeingMerchant(UserRequestForBeingMerchantRequest request) throws IOException, EncryptionException {
-        ResponseMessage<UserRequestForBeingMerchantResponse> responseMessage = null;
-        url = new URL(serviceURL + "/users/being-merchant-request");
+    public ResponseMessage<UserMerchantInquiryResponse> userMerchantInquiry(UserMerchantInquiryRequest request) throws IOException, EncryptionException {
+        ResponseMessage<UserMerchantInquiryResponse> responseMessage = null;
+        url = new URL(serviceURL + "/users/merchant/inquiry");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
         request.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<UserRequestForBeingMerchantRequest> message = new RequestMessage<>(request, authToken, Constants.API_LEVEL, System.currentTimeMillis());
-        Type requestType = new TypeToken<RequestMessage<UserRequestForBeingMerchantRequest>>() {}.getType();
+        RequestMessage<UserMerchantInquiryRequest> message = new RequestMessage<>(request, authToken, Constants.API_LEVEL, System.currentTimeMillis());
+        Type requestType = new TypeToken<RequestMessage<UserMerchantInquiryRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
         Gson gson = new Gson();
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UserRequestForBeingMerchantResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UserMerchantInquiryResponse>>() {}.getType());
         proxyService.closeConnection();
         return  responseMessage;
     }
 
-    public ResponseMessage<UserRequestForBeingMerchantProgressResponse> userRequestForBeingMerchantProgress(UserRequestForBeingMerchantProgressRequest request) throws IOException, EncryptionException {
-        ResponseMessage<UserRequestForBeingMerchantProgressResponse> responseMessage = null;
-        url = new URL(serviceURL + "/users/being-merchant-request-result");
+    public ResponseMessage<UserMerchantResponse> userMerchant(UserMerchantRequest request) throws IOException, EncryptionException {
+        ResponseMessage<UserMerchantResponse> responseMessage = null;
+        url = new URL(serviceURL + "/users/merchant/request");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
         request.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<UserRequestForBeingMerchantProgressRequest> message = new RequestMessage<>(request, authToken, Constants.API_LEVEL, System.currentTimeMillis());
-        Type requestType = new TypeToken<RequestMessage<UserRequestForBeingMerchantProgressRequest>>() {}.getType();
+        RequestMessage<UserMerchantRequest> message = new RequestMessage<>(request, authToken, Constants.API_LEVEL, System.currentTimeMillis());
+        Type requestType = new TypeToken<RequestMessage<UserMerchantRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
         Gson gson = new Gson();
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UserRequestForBeingMerchantProgressResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UserMerchantResponse>>() {}.getType());
         proxyService.closeConnection();
         return  responseMessage;
     }

@@ -17,16 +17,17 @@ import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
-import xyz.homapay.hampay.common.core.model.request.UserRequestForBeingMerchantProgressRequest;
-import xyz.homapay.hampay.common.core.model.request.UserRequestForBeingMerchantRequest;
-import xyz.homapay.hampay.common.core.model.response.UserRequestForBeingMerchantProgressResponse;
-import xyz.homapay.hampay.common.core.model.response.UserRequestForBeingMerchantResponse;
+import xyz.homapay.hampay.common.core.model.request.UserMerchantInquiryRequest;
+import xyz.homapay.hampay.common.core.model.request.UserMerchantRequest;
+import xyz.homapay.hampay.common.core.model.response.UserMerchantInquiryResponse;
+import xyz.homapay.hampay.common.core.model.response.UserMerchantResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
-import xyz.homapay.hampay.mobile.android.async.task.UserRequestForBeingMerchantProgressTask;
-import xyz.homapay.hampay.mobile.android.async.task.UserRequestForBeingMerchantTask;
+import xyz.homapay.hampay.mobile.android.async.task.UserMerchantInquiryTask;
+import xyz.homapay.hampay.mobile.android.async.task.UserMerchantTask;
 import xyz.homapay.hampay.mobile.android.async.task.impl.OnTaskCompleted;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
@@ -36,7 +37,7 @@ import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
-public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompleted, View.OnClickListener{
+public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompleted, View.OnClickListener {
 
     private Activity activity;
     private SharedPreferences prefs;
@@ -56,7 +57,7 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
     private FacedTextView step1Text;
     private FacedTextView step2Text;
 
-    public void backActionBar(View view){
+    public void backActionBar(View view) {
         finish();
     }
 
@@ -108,27 +109,27 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
         persian = new PersianEnglishDigit();
 
-        merchantIdText = (FacedTextView)findViewById(R.id.merchant_id_text);
-        requestLayout = (LinearLayout)findViewById(R.id.requestLayout);
-        statusLayout = (LinearLayout)findViewById(R.id.statusLayout);
-        resultLayout = (LinearLayout)findViewById(R.id.resultLayout);
+        merchantIdText = (FacedTextView) findViewById(R.id.merchant_id_text);
+        requestLayout = (LinearLayout) findViewById(R.id.requestLayout);
+        statusLayout = (LinearLayout) findViewById(R.id.statusLayout);
+        resultLayout = (LinearLayout) findViewById(R.id.resultLayout);
 
-        requestMerchantIdBtn = (FacedTextView)findViewById(R.id.requestMerchantId);
+        requestMerchantIdBtn = (FacedTextView) findViewById(R.id.requestMerchantId);
         requestMerchantIdBtn.setOnClickListener(this);
 
-        closeRequestMerchantId = (FacedTextView)findViewById(R.id.closeRequestMerchantId);
+        closeRequestMerchantId = (FacedTextView) findViewById(R.id.closeRequestMerchantId);
         closeRequestMerchantId.setOnClickListener(this);
 
-        closeMerchantIdBtn = (FacedTextView)findViewById(R.id.closeMerchantId);
+        closeMerchantIdBtn = (FacedTextView) findViewById(R.id.closeMerchantId);
         closeMerchantIdBtn.setOnClickListener(this);
 
-        closeViewMerchantId = (FacedTextView)findViewById(R.id.closeViewMerchantId);
+        closeViewMerchantId = (FacedTextView) findViewById(R.id.closeViewMerchantId);
         closeViewMerchantId.setOnClickListener(this);
 
-        merchantInfo = (FacedTextView)findViewById(R.id.merchantInfo);
+        merchantInfo = (FacedTextView) findViewById(R.id.merchantInfo);
 
-        step1Text = (FacedTextView)findViewById(R.id.step_1_text);
-        step2Text = (FacedTextView)findViewById(R.id.step_2_text);
+        step1Text = (FacedTextView) findViewById(R.id.step_1_text);
+        step2Text = (FacedTextView) findViewById(R.id.step_2_text);
 
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getString(R.string.merchant_id_not_set));
         ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.rgb(Constants.HAMPAY_RED, Constants.HAMPAY_GREEN, Constants.HAMPAY_BLUE));
@@ -149,8 +150,8 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
         step2Text.setText(merchantIdStatus);
         step2Text.setMovementMethod(LinkMovementMethod.getInstance());
 
-        UserRequestForBeingMerchantRequest userRequestForBeingMerchantRequest = new UserRequestForBeingMerchantRequest();
-        new UserRequestForBeingMerchantTask(activity, MerchantIdActivity.this, userRequestForBeingMerchantRequest, authToken).execute();
+        UserMerchantInquiryRequest userMerchantInquiryRequest = new UserMerchantInquiryRequest();
+        new UserMerchantInquiryTask(activity, MerchantIdActivity.this, userMerchantInquiryRequest, authToken).execute();
     }
 
 
@@ -168,54 +169,65 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
             LogEvent logEvent = new LogEvent(context);
             if (object.getClass().equals(ResponseMessage.class)) {
                 ResponseMessage responseMessage = (ResponseMessage) object;
-                switch (responseMessage.getService().getServiceDefinition()){
-                    case USER_REQUEST_FOR_BEING_MERCHANT:
-                        ResponseMessage<UserRequestForBeingMerchantResponse> userRequestForBeingMerchant = (ResponseMessage) object;
-                        switch (userRequestForBeingMerchant.getService().getResultStatus()){
+                switch (responseMessage.getService().getServiceDefinition()) {
+                    case USER_MERCHANT_INQUIRY:
+                        ResponseMessage<UserMerchantInquiryResponse> userMerchantInquiry = (ResponseMessage) object;
+                        switch (userMerchantInquiry.getService().getResultStatus()) {
                             case SUCCESS:
-                                serviceName = ServiceEvent.USER_REQUEST_FOR_BEING_MERCHANT_SUCCESS;
+                                serviceName = ServiceEvent.USER_MERCHANT_INQUIRY_SUCCESS;
                                 logEvent.log(serviceName);
-                                if (userRequestForBeingMerchant.getService().getMerchantProgressForUserStatus().equalsIgnoreCase("PENDING")){
-                                    requestLayout.setVisibility(View.GONE);
-                                    statusLayout.setVisibility(View.VISIBLE);
-                                    merchantIdText.setText(getString(R.string.merchant_text_page_2));
-                                }else if (userRequestForBeingMerchant.getService().getMerchantProgressForUserStatus().equalsIgnoreCase("ACCEPT")){
-                                    UserRequestForBeingMerchantProgressRequest userRequestForBeingMerchantProgress = new UserRequestForBeingMerchantProgressRequest();
-                                    new UserRequestForBeingMerchantProgressTask(activity, MerchantIdActivity.this, userRequestForBeingMerchantProgress, authToken).execute();
-                                }else if (userRequestForBeingMerchant.getService().getMerchantProgressForUserStatus().equalsIgnoreCase("NONE")){
 
-                                }else if (userRequestForBeingMerchant.getService().getMerchantProgressForUserStatus().equalsIgnoreCase("REJECT")){
-                                    step1Text.setText(getString(R.string.merchant_id_reject));
+                                switch (userMerchantInquiry.getService().getStatus()) {
+                                    case NONE:
+                                        requestLayout.setVisibility(View.VISIBLE);
+                                        break;
+
+                                    case REJECT:
+                                        requestLayout.setVisibility(View.VISIBLE);
+                                        break;
+
+                                    case PENDING:
+                                        requestLayout.setVisibility(View.GONE);
+                                        statusLayout.setVisibility(View.VISIBLE);
+                                        merchantIdText.setText(getString(R.string.merchant_text_page_2));
+                                        break;
+
+                                    case ACCEPT:
+                                        Toast.makeText(activity, getString(R.string.merchant_id_accept), Toast.LENGTH_LONG).show();
+                                        break;
                                 }
                                 break;
                             default:
-                                serviceName = ServiceEvent.USER_REQUEST_FOR_BEING_MERCHANT_FAILURE;
+                                serviceName = ServiceEvent.USER_MERCHANT_INQUIRY_FAILURE;
                                 logEvent.log(serviceName);
                                 break;
                         }
                         break;
 
-                    case USER_REQUEST_FOR_BEING_MERCHANT_RESULT:
-                        ResponseMessage<UserRequestForBeingMerchantProgressResponse> userRequestForBeingMerchantProgress = (ResponseMessage) object;
-                        switch (userRequestForBeingMerchantProgress.getService().getResultStatus()){
+                    case USER_MERCHANT_REQUEST:
+                        ResponseMessage<UserMerchantResponse> userMerchant = (ResponseMessage) object;
+                        switch (userMerchant.getService().getResultStatus()) {
                             case SUCCESS:
-                                serviceName = ServiceEvent.USER_REQUEST_FOR_BEING_MERCHANT_RESULT_SUCCESS;
-                                logEvent.log(serviceName);
-                                String merchantId = userRequestForBeingMerchantProgress.getService().getMerchantId();
-                                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(persian.E2P(getString(R.string.merchant_info, merchantId)));
-                                ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.rgb(Constants.HAMPAY_RED, Constants.HAMPAY_GREEN, Constants.HAMPAY_BLUE));
-                                spannableStringBuilder.setSpan(foregroundColorSpan, 24, merchantId.length() + 26, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                                merchantInfo.setText(spannableStringBuilder);
                                 requestLayout.setVisibility(View.GONE);
-                                resultLayout.setVisibility(View.VISIBLE);
-                                merchantIdText.setText(getString(R.string.merchant_text_page_3));
+                                statusLayout.setVisibility(View.VISIBLE);
+                                merchantIdText.setText(getString(R.string.merchant_text_page_2));
+                                serviceName = ServiceEvent.USER_MERCHANT_REQUEST_SUCCESS;
+//                                logEvent.log(serviceName);
+//                                String merchantId = "10000";
+//                                SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(persian.E2P(getString(R.string.merchant_info, merchantId)));
+//                                ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.rgb(Constants.HAMPAY_RED, Constants.HAMPAY_GREEN, Constants.HAMPAY_BLUE));
+//                                spannableStringBuilder.setSpan(foregroundColorSpan, 24, merchantId.length() + 26, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+//                                merchantInfo.setText(spannableStringBuilder);
+//                                requestLayout.setVisibility(View.GONE);
+//                                resultLayout.setVisibility(View.VISIBLE);
+//                                merchantIdText.setText(getString(R.string.merchant_text_page_3));
                                 break;
+
                             default:
-                                serviceName = ServiceEvent.USER_REQUEST_FOR_BEING_MERCHANT_RESULT_FAILURE;
-                                logEvent.log(serviceName);
+                                serviceName = ServiceEvent.USER_MERCHANT_REQUEST_FAILURE;
                                 break;
                         }
-                        break;
+                        logEvent.log(serviceName);
                 }
             }
         }
@@ -224,13 +236,13 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.closeMerchantId:
                 finish();
                 break;
             case R.id.requestMerchantId:
-                UserRequestForBeingMerchantRequest userRequestForBeingMerchantRequest = new UserRequestForBeingMerchantRequest();
-                new UserRequestForBeingMerchantTask(activity, MerchantIdActivity.this, userRequestForBeingMerchantRequest, authToken).execute();
+                UserMerchantRequest userMerchantRequest = new UserMerchantRequest();
+                new UserMerchantTask(activity, MerchantIdActivity.this, userMerchantRequest, authToken).execute();
                 break;
 
             case R.id.closeRequestMerchantId:

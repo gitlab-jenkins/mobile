@@ -78,7 +78,7 @@
             android:background="@android:color/white"
             android:orientation="vertical"
             android:padding="8dp"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/step_1_text"

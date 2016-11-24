@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import java.io.IOException;
 
 import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
-import xyz.homapay.hampay.common.core.model.request.UserRequestForBeingMerchantRequest;
+import xyz.homapay.hampay.common.core.model.request.UserMerchantRequest;
 import xyz.homapay.hampay.mobile.android.async.task.impl.OnTaskCompleted;
 import xyz.homapay.hampay.mobile.android.webservice.ConnectionType;
 import xyz.homapay.hampay.mobile.android.webservice.SecuredWebServices;
@@ -14,17 +14,17 @@ import xyz.homapay.hampay.mobile.android.webservice.SecuredWebServices;
 /**
  * Created by amir on 10/26/16.
  */
-public class UserRequestForBeingMerchantTask extends AsyncTask<Object, Object, Object> {
+public class UserMerchantTask extends AsyncTask<Object, Object, Object> {
 
     private Context context;
     private String authToken;
     private OnTaskCompleted listener;
-    private UserRequestForBeingMerchantRequest userRequestForBeingMerchantRequest;
+    private UserMerchantRequest userMerchantRequest;
 
-    public UserRequestForBeingMerchantTask(Context context, OnTaskCompleted listener, UserRequestForBeingMerchantRequest userRequestForBeingMerchantRequest, String authToken){
+    public UserMerchantTask(Context context, OnTaskCompleted listener, UserMerchantRequest userMerchantRequest, String authToken){
         this.context = context;
         this.listener = listener;
-        this.userRequestForBeingMerchantRequest = userRequestForBeingMerchantRequest;
+        this.userMerchantRequest = userMerchantRequest;
         this.authToken = authToken;
     }
 
@@ -33,7 +33,7 @@ public class UserRequestForBeingMerchantTask extends AsyncTask<Object, Object, O
         SecuredWebServices webService = new SecuredWebServices(context, ConnectionType.HTTPS, authToken);
 
         try {
-            return webService.userRequestForBeingMerchant(userRequestForBeingMerchantRequest);
+            return webService.userMerchant(userMerchantRequest);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (EncryptionException e) {
