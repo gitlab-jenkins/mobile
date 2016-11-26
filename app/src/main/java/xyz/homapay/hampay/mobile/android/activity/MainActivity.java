@@ -324,16 +324,15 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     @Override
     public void onDrawerItemSelected(View view, int position) {
+        if (wtContainer.getVisibility() == View.VISIBLE){
+            wtContainer.setVisibility(View.GONE);
+        }
         if (currentFragment != position || position == 4|| position == 6 || position == 7 || position == 8 || position == 9) {
             displayView(position);
         }
     }
 
     private void displayView(int position) {
-
-        if (wtContainer.getVisibility() == View.VISIBLE){
-            wtContainer.setVisibility(View.GONE);
-        }
 
         Intent intent = new Intent();
         switch (position) {

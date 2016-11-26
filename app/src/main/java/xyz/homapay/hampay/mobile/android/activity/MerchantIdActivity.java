@@ -176,7 +176,6 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
                             case SUCCESS:
                                 serviceName = ServiceEvent.USER_MERCHANT_INQUIRY_SUCCESS;
                                 logEvent.log(serviceName);
-
                                 switch (userMerchantInquiry.getService().getStatus()) {
                                     case NONE:
                                         requestLayout.setVisibility(View.VISIBLE);
@@ -199,9 +198,9 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
                                 break;
                             default:
                                 serviceName = ServiceEvent.USER_MERCHANT_INQUIRY_FAILURE;
-                                logEvent.log(serviceName);
                                 break;
                         }
+                        logEvent.log(serviceName);
                         break;
 
                     case USER_MERCHANT_REQUEST:
