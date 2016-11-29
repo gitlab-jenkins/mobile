@@ -17,11 +17,13 @@ import android.widget.TextView;
 
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.WelcomeAdapter;
+import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PreferencesManager;
+import xyz.homapay.hampay.mobile.android.util.RootUtil;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -43,6 +45,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private Button btnSkip, btnNext;
     private PreferencesManager preferencesManager;
     private AppEvent appEvent = AppEvent.LAUNCH;
+    private RootUtil rootUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,12 @@ public class WelcomeActivity extends AppCompatActivity {
         logEvent.log(appEvent);
 
         activity = WelcomeActivity.this;
+
+        rootUtil = new RootUtil(activity);
+        if (rootUtil.checkRootedDevice()){
+            new HamPayDialog(activity).showPreventRootDeviceDialog();
+            return;
+        }
 
         bundle = getIntent().getExtras();
         if (bundle != null) {

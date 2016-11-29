@@ -537,7 +537,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         input_digit_3.setBackgroundResource(R.drawable.pass_login_value_empty);
         input_digit_4.setBackgroundResource(R.drawable.pass_login_value_empty);
         input_digit_5.setBackgroundResource(R.drawable.pass_login_value_empty);
-        hamPayDialog.dismisWaitingDialog();
     }
 
     public void pressKey(View view) {

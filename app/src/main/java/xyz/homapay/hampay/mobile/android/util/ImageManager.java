@@ -51,7 +51,7 @@ public class ImageManager {
         String sdState = android.os.Environment.getExternalStorageState();
         if (sdState.equals(android.os.Environment.MEDIA_MOUNTED)) {
             File sdDir = android.os.Environment.getExternalStorageDirectory();
-            cacheDir = new File(sdDir, activity.getFilesDir().getPath());
+            cacheDir = new File(sdDir, activity.getFilesDir().getPath() + "/.images");
 
         } else {
             cacheDir = activity.getCacheDir();

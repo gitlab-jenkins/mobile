@@ -45,8 +45,10 @@ public class RootUtil {
                 "/system/sd/xbin/su",
                 "/system/bin/failsafe/su",
                 "/data/local/su",
-                "/system/bin/.ext/.su"
+                "/system/bin/.ext/.su",
+                "/su/bin/su"
         };
+
         for (String path : paths) {
             if (new File(path).exists()) return true;
         }
@@ -74,10 +76,10 @@ public class RootUtil {
         for (int i=0; i < file.length; i++)
         {
             if (file[i].getName().toLowerCase().contains("otacerts")) {
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     private boolean fifthApproach(){
