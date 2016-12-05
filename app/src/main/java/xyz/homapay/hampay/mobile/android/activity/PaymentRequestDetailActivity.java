@@ -391,38 +391,6 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
         }
     }
 
-    public class RequestUserPaymentTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<UserPaymentResponse>> {
-
-        @Override
-        public void onTaskComplete(ResponseMessage<UserPaymentResponse> userPaymentResponseMessage) {
-
-            hamPayDialog.dismisWaitingDialog();
-
-            if (userPaymentResponseMessage != null) {
-
-                if (userPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    new HamPayDialog(activity).successPaymentRequestDialog(userPaymentResponseMessage.getService().getProductCode());
-                }else if (userPaymentResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    forceLogout();
-                }
-                else {
-                    new HamPayDialog(activity).failurePaymentRequestDialog(userPaymentResponseMessage.getService().getResultStatus().getCode(),
-                            userPaymentResponseMessage.getService().getResultStatus().getDescription());
-                }
-            } else {
-                new HamPayDialog(activity).failurePaymentRequestDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_failure_payment_request));
-            }
-
-            payment_request_button.setEnabled(true);
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
-    }
-
-
     private void forceLogout() {
         editor.remove(Constants.LOGIN_TOKEN_ID);
         editor.commit();

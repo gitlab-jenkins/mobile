@@ -399,69 +399,6 @@ public class HamPayDialog {
 
     private UserProfileDTO userProfileDTO;
 
-    public class RequestTACAcceptResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<TACAcceptResponse>>
-    {
-
-        @Override
-        public void onTaskComplete(ResponseMessage<TACAcceptResponse> tacAcceptResponseMessage)
-        {
-
-            dismisWaitingDialog();
-            ServiceEvent serviceName;
-            LogEvent logEvent = new LogEvent(activity);
-
-            if (tacAcceptResponseMessage != null) {
-
-                if (tacAcceptResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    serviceName = ServiceEvent.TAC_ACCEPT_SUCCESS;
-                    editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-                    editor.commit();
-
-                    userProfileDTO = tacAcceptResponseMessage.getService().getTacDTO().getUserProfile();
-
-                    Intent intent = new Intent();
-                    intent.setClass(activity, MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.putExtra(Constants.PENDING_PURCHASE_CODE, tacAcceptResponseMessage.getService().getTacDTO().getPurchaseProductCode());
-                    intent.putExtra(Constants.PENDING_PAYMENT_CODE, tacAcceptResponseMessage.getService().getTacDTO().getPaymentProductCode());
-                    intent.putExtra(Constants.PENDING_PURCHASE_COUNT, tacAcceptResponseMessage.getService().getTacDTO().getPendingPurchasesCount());
-                    intent.putExtra(Constants.PENDING_PAYMENT_COUNT, tacAcceptResponseMessage.getService().getTacDTO().getPendingPaymentCount());
-                    intent.putExtra(Constants.USER_PROFILE_DTO, userProfileDTO);
-                    editor.putBoolean(Constants.FORCE_USER_PROFILE, false);
-                    editor.commit();
-                    activity.finish();
-                    activity.startActivity(intent);
-
-                    if (dialog != null && dialog.isShowing()) {
-                        dialog.dismiss();
-                    }
-
-                }else if (tacAcceptResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceEvent.TAC_ACCEPT_FAILURE;
-                    forceLogout();
-                }
-                else {
-                    serviceName = ServiceEvent.TAC_ACCEPT_FAILURE;
-                    requestTACAccept = new RequestTACAccept(activity, new RequestTACAcceptResponseTaskCompleteListener());
-                    showFailTACAcceeptRequestDialog(requestTACAccept, tacAcceptRequest,
-                            tacAcceptResponseMessage.getService().getResultStatus().getCode(),
-                            tacAcceptResponseMessage.getService().getResultStatus().getDescription());
-                }
-            }
-            else {
-                serviceName = ServiceEvent.TAC_ACCEPT_FAILURE;
-                showFailTACAcceeptRequestDialog(requestTACAccept, tacAcceptRequest,
-                        Constants.LOCAL_ERROR_CODE,
-                        activity.getString(R.string.msg_fail_tac_accept_request));
-            }
-            logEvent.log(serviceName);
-
-        }
-
-        @Override
-        public void onTaskPreRun() { }
-    }
-
     public void showLogoutDialog(){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_exit_app, null);
@@ -1682,13 +1619,13 @@ public class HamPayDialog {
     }
 
 
-    public void successPaymentRequestDialog(String requestCode){
+    public void successPaymentRequestDialog(String requestCode, String userName){
 
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_payment_request_success, null);
 
         FacedTextView request_payment_message = (FacedTextView) view.findViewById(R.id.request_payment_message);
-        request_payment_message.setText(activity.getString(R.string.msg_success_payment_request, new PersianEnglishDigit().E2P(requestCode)));
+        request_payment_message.setText(activity.getString(R.string.msg_success_payment_request, new PersianEnglishDigit().E2P(requestCode), userName));
         FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
 
         confirmation.setOnClickListener(new View.OnClickListener() {
@@ -2013,41 +1950,6 @@ public class HamPayDialog {
         if (!activity.isFinishing()) {
             dialog = new HamPayCustomDialog(view, activity, 0);
             dialog.show();
-        }
-    }
-
-    public void forceChangePassDialog(final String cellNumber){
-
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_change_pass, null);
-
-        FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
-
-        confirmation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(activity, ChangePassCodeActivity.class);
-                intent.putExtra(Constants.REGISTERED_CELL_NUMBER, cellNumber);
-                activity.startActivity(intent);
-
-            }
-        });
-
-        view.setMinimumWidth((int) (rect.width() * 0.85f));
-        if (!activity.isFinishing()) {
-            dialog = new HamPayCustomDialog(view, activity, 0);
-            dialog.show();
-        }
-    }
-
-    private void forceLogout() {
-        editor.remove(Constants.LOGIN_TOKEN_ID);
-        editor.commit();
-        Intent intent = new Intent();
-        intent.setClass(activity, HamPayLoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        if (activity != null) {
-            activity.finish();
-            activity.startActivity(intent);
         }
     }
 

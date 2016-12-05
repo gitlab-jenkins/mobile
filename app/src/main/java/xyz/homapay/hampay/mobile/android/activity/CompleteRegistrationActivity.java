@@ -65,7 +65,6 @@ public class CompleteRegistrationActivity extends AppCompatActivity {
         preferencesManager.setRegistered(true);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         editor.putBoolean(Constants.NOTIFICATION_STATUS, true);
-        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, "");
         editor.commit();
         LogEvent logEvent = new LogEvent(this);
         logEvent.log(appEvent);

@@ -206,8 +206,6 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
         persianEnglishDigit = new PersianEnglishDigit();
         cardNumberValidator = new CardNumberValidator();
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, ProfileEntryActivity.class.getName());
-        editor.commit();
 
         keyExchange = new KeyExchange(activity);
         confirmTacPrivacy = (CheckBox)findViewById(R.id.confirmTacPrivacy);

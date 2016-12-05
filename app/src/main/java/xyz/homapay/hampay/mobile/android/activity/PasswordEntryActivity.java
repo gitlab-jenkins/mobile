@@ -81,8 +81,6 @@ public class PasswordEntryActivity extends AppCompatActivity implements View.OnC
         password_notify_text_1 = (FacedTextView)findViewById(R.id.password_notify_text_1);
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, PasswordEntryActivity.class.getName());
-        editor.commit();
 
         password_1_rl = (RelativeLayout)findViewById(R.id.password_1_rl);
         password_2_rl = (RelativeLayout)findViewById(R.id.password_2_rl);

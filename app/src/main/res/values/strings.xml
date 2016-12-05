@@ -61,6 +61,7 @@
     <string name="transaction_history_title">تراکنش‌ها</string>
     <string name="payment_request_title">درخواست پرداخت</string>
     <string name="payment_request_null_message">برای انتخاب کاربر و ارسال درخواست دکمه ... را لمس کنید.</string>
+    <string name="payment_request_motivation_message">با دعوت دوستانتان به هم‌پی، درخواست پرداخت ارسال کنید و جایزه بگیرید.</string>
     <string name="business_purchase_title">پرداخت به کسب و کار</string>
     <string name="business_id">شناسه: </string>
     <string name="pending_purchase_payment_title">پرداخت‌های در انتظار</string>
@@ -276,7 +277,10 @@
 \n
         برای درخواست پرداخت حداقل یک نفر از دوستان شما باید عضو هم‌پی باشد
     </string>
-
+    <string name="hampay_contact_share">دعوت دوستان</string>
+    <string name="hampay_share_text">با اپلیکیشن هم‌پی به ۵ نفر درخواست پرداخت ارسال کن تا بعد از پرداخت آنها جایزه بگیری
+    \n
+    </string>
     <string name="time">ساعت</string>
     <string name="msg_cancel_pending">آیا مایل به حذف درخواست پرداخت شماره %1$s هستید؟</string>
     <string name="cancel_pending_confirm">بله</string>
@@ -356,7 +360,7 @@
     <string name="confirm_failure_payment">بستن</string>
     <string name="msg_success_payment_request">درخواست پرداخت شما با کد %1$s با موفقیت ارسال شد
     \n
-        (تسویه حساب‌ها در شبکه پرداخت همراه هم‌پی حداکثر تا ۱۲ ساعت پس از پرداخت وجه انجام خواهد شد)
+        (به محض پرداخت پول توسط %2$s، وجه به حساب شما واریز خواهد شد.)
     </string>
     <string name="msg_login_failure">رمز ورودی اشتباه می‌باشد، شما %1$s بار دیگر فرصت ورود رمز را دارید.</string>
     <string name="msg_failure_payment_request"> ارسال درخواست پرداخت موفقیت آمیز نبود. لطفا دوباره تلاش کنید</string>

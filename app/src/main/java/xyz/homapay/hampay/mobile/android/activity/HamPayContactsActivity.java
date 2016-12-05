@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -69,7 +70,8 @@ public class HamPayContactsActivity extends AppCompatActivity implements Permiss
     private FacedEditText search_text;
     private HamPayDialog hamPayDialog;
     private String searchPhrase = "";
-    private FacedTextView nullHampayContactsText;
+//    private FacedTextView nullHampayContactsText;
+    private LinearLayout hampayContactShare;
     private final Handler handler = new Handler();
 
     public void backActionBar(View view){
@@ -183,7 +185,18 @@ public class HamPayContactsActivity extends AppCompatActivity implements Permiss
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
-        nullHampayContactsText = (FacedTextView)findViewById(R.id.nullHampayContactsText);
+//        nullHampayContactsText = (FacedTextView)findViewById(R.id.nullHampayContactsText);
+        hampayContactShare = (LinearLayout) findViewById(R.id.hampayContactShare);
+        hampayContactShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.hampay_share_text) + "https://play.google.com/store/apps/details?id=" + getPackageName());
+                startActivity(Intent.createChooser(intent, getString(R.string.app_name)));
+            }
+        });
         pullToRefresh = (SwipeRefreshLayout)findViewById(R.id.pullToRefresh);
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -267,10 +280,12 @@ public class HamPayContactsActivity extends AppCompatActivity implements Permiss
                 if (contactsHampayEnabledResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
                     contacts = contactsHampayEnabledResponseMessage.getService().getContacts();
                     if (contacts.size() == 0){
-                        nullHampayContactsText.setVisibility(View.VISIBLE);
+//                        nullHampayContactsText.setVisibility(View.VISIBLE);
+//                        hampayContactShare.setVisibility(View.VISIBLE);
                         paymentRequestList.setVisibility(View.GONE);
                     }else {
-                        nullHampayContactsText.setVisibility(View.GONE);
+//                        nullHampayContactsText.setVisibility(View.GONE);
+//                        hampayContactShare.setVisibility(View.GONE);
                         hamPayContactsAdapter = new HamPayContactsAdapter(activity, contacts, authToken);
                         paymentRequestList.setAdapter(hamPayContactsAdapter);
                     }

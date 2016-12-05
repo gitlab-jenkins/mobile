@@ -272,7 +272,7 @@ public class PaymentRequestConfirmActivity extends AppCompatActivity {
 
                 if (userPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     serviceName = ServiceEvent.USER_PAYMENT_SUCCESS;
-                    new HamPayDialog(activity).successPaymentRequestDialog(userPaymentResponseMessage.getService().getProductCode());
+                    new HamPayDialog(activity).successPaymentRequestDialog(userPaymentResponseMessage.getService().getProductCode(), displayName);
                 }else if (userPaymentResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     serviceName = ServiceEvent.USER_PAYMENT_FAILURE;
                     forceLogout();

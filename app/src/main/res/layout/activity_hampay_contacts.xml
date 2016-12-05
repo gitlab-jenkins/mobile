@@ -66,18 +66,53 @@
     </RelativeLayout>
 
 
-    <xyz.homapay.hampay.mobile.android.component.FacedTextView
-        android:id="@+id/nullHampayContactsText"
-        geekui:customTypeface="fonts/vazir_regular.ttf"
+    <!--<xyz.homapay.hampay.mobile.android.component.FacedTextView-->
+        <!--android:id="@+id/nullHampayContactsText"-->
+        <!--geekui:customTypeface="fonts/vazir_regular.ttf"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textColor="@color/normal_text"-->
+        <!--android:textSize="15dp"-->
+        <!--android:text="@string/null_hampay_contacts"-->
+        <!--android:gravity="center"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_marginTop="24dp"-->
+        <!--android:visibility="gone"/>-->
+
+
+    <LinearLayout
+        android:id="@+id/hampayContactShare"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/normal_text"
-        android:textSize="15dp"
-        android:text="@string/null_hampay_contacts"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:layout_marginTop="24dp"
-        android:visibility="gone"/>
+        android:gravity="right"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="12dp">
+
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+            geekui:customTypeface="fonts/vazir_regular_bold.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/app_origin"
+            android:textSize="16dp"
+            android:text="@string/hampay_contact_share"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:visibility="visible"
+            android:padding="4dp"/>
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/hampay_share"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/menu_divider"
+        android:layout_marginTop="8dp"/>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/pullToRefresh"

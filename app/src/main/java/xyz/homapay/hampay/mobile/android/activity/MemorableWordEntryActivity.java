@@ -185,8 +185,6 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
         memorable_value.addTextChangedListener(new MemorableTextWatcher(memorable_value));
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-        editor.putString(Constants.REGISTERED_ACTIVITY_DATA, PasswordEntryActivity.class.getName());
-        editor.commit();
 
         keepOn_button = (FacedTextView) findViewById(R.id.keepOn_button);
         keepOn_button.setOnClickListener(new View.OnClickListener() {

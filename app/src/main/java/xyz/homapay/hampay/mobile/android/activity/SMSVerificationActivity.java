@@ -468,12 +468,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                         smsActivationDialog.setArguments(bundle);
                         fragmentTransaction.add(smsActivationDialog, null);
                         fragmentTransaction.commitAllowingStateLoss();
-//                        FragmentManager fm = getSupportFragmentManager();
-//                        SMSActivationDialog smsActivationDialog = new SMSActivationDialog();
-//                        Bundle bundle = new Bundle();
-//                        bundle.putString(Constants.REGISTERED_CELL_NUMBER, cellNumber);
-//                        smsActivationDialog.setArguments(bundle);
-//                        smsActivationDialog.show(fm, "fragment_edit_name");
                     }
                 }else {
                     Toast.makeText(context, getString(R.string.sms_upper_reach_sms), Toast.LENGTH_LONG).show();
