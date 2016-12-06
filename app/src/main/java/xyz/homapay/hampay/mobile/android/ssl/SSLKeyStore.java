@@ -22,7 +22,7 @@ public class SSLKeyStore {
     public SSLKeyStore(Context context){
         this.context = context;
     }
-
+//
     public KeyStore getAppKeyStore(){
         try{
             CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");

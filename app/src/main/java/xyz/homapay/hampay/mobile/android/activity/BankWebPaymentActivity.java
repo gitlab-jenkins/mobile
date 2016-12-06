@@ -212,10 +212,6 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
                 urlText.setText(url);
                 ResultStatus resultStatus = ResultStatus.FAILURE;
-                if (url.contains("http://176.58.114.27")){
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    startActivity(browserIntent);
-                }
                 ServiceEvent serviceName;
                 LogEvent logEvent = new LogEvent(context);
                 if (url.toLowerCase().contains(pspInfoDTO.getRedirectURL().toLowerCase())) {

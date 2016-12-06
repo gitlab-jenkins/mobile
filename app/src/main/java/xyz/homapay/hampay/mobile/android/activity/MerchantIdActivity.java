@@ -146,7 +146,7 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
                 activity.startActivity(Intent.createChooser(emailIntent, activity.getString(R.string.hampay_contact)));
             }
         };
-        merchantIdStatus.setSpan(emailClickableSpan, 58, 75, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        merchantIdStatus.setSpan(emailClickableSpan, 58, 79, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         step2Text.setText(merchantIdStatus);
         step2Text.setMovementMethod(LinkMovementMethod.getInstance());
 
@@ -192,6 +192,7 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
                                         break;
 
                                     case ACCEPT:
+                                        merchantIdText.setText(getString(R.string.merchant_text_page_2));
                                         Toast.makeText(activity, getString(R.string.merchant_id_accept), Toast.LENGTH_LONG).show();
                                         break;
                                 }

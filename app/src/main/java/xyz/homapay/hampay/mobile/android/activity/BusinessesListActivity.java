@@ -373,7 +373,7 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
 
         List<BusinessDTO> newBusinessDTOs;
         boolean searchEnabled;
-        ServiceEvent serviceName;
+        ServiceEvent serviceName = ServiceEvent.BUSINESS_LIST_FAILURE;
         LogEvent logEvent = new LogEvent(context);
 
         public RequestBusinessListTaskCompleteListener(boolean searchEnabled){

@@ -359,7 +359,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                 }
                 else {
                     serviceName = ServiceEvent.TAC_FAILURE;
-                    requestTAC = new RequestTAC(context, new RequestTACResponseTaskCompleteListener());
                     new HamPayDialog(activity).showFailTCRequestDialog(requestTAC, tacRequest,
                             tacResponseMessage.getService().getResultStatus().getCode(),
                             tacResponseMessage.getService().getResultStatus().getDescription());
@@ -459,11 +458,9 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         ServiceEvent serviceName;
         LogEvent logEvent = new LogEvent(context);
 
-        public RequestLoginTaskCompleteListener() {
-        }
-
         @Override
         public void onTaskComplete(ResponseMessage<LoginResponse> loginResponseResponseMessage) {
+            hamPayDialog.dismisWaitingDialog();
             if (loginResponseResponseMessage != null) {
                 if (loginResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     serviceName = ServiceEvent.LOGIN_SUCCESS;

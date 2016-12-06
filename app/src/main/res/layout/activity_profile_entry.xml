@@ -383,7 +383,8 @@
                             android:textColor="@android:color/black"
                             android:gravity="center_vertical"
                             android:padding="8dp"
-                            android:contentDescription="email" />
+                            android:contentDescription="email"
+                            android:maxLength="31"/>
 
                         <ImageView
                             android:id="@+id/emailIcon"

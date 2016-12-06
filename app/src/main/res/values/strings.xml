@@ -61,7 +61,14 @@
     <string name="transaction_history_title">تراکنش‌ها</string>
     <string name="payment_request_title">درخواست پرداخت</string>
     <string name="payment_request_null_message">برای انتخاب کاربر و ارسال درخواست دکمه ... را لمس کنید.</string>
-    <string name="payment_request_motivation_message">با دعوت دوستانتان به هم‌پی، درخواست پرداخت ارسال کنید و جایزه بگیرید.</string>
+    <string name="payment_request_motivation_message">با دعوت دوستانتان به هم‌پی ۵۰ هزار تومان جایزه بگیرید</string>
+    <string name="contact_list_footer_text">
+        هم پی را به خانواده، دوستان و آشنایان معرفی کنید.
+        \n\n
+        بعد از نصب هم‌پی توسط ایشان، به آنها "درخواست پرداخت" بزنید. اگر درخواست شما توسط آن کاربر پرداخت شد و پرداخت به شما، جزء دو پرداخت اول ایشان توسط هم‌پی باشد، شما ۵ هزار تومان جایزه می گیرید.
+        \n\n
+        این روش را برای افراد دیگر تکرار کنید، به ازای ۱۰ پرداخت جایزه می‌گیرید.
+    </string>
     <string name="business_purchase_title">پرداخت به کسب و کار</string>
     <string name="business_id">شناسه: </string>
     <string name="pending_purchase_payment_title">پرداخت‌های در انتظار</string>
@@ -278,7 +285,10 @@
         برای درخواست پرداخت حداقل یک نفر از دوستان شما باید عضو هم‌پی باشد
     </string>
     <string name="hampay_contact_share">دعوت دوستان</string>
-    <string name="hampay_share_text">با اپلیکیشن هم‌پی به ۵ نفر درخواست پرداخت ارسال کن تا بعد از پرداخت آنها جایزه بگیری
+    <string name="hampay_share_text">
+        اپلیکیشن هم‌پی رو نصب کن!
+        \n
+        هم تو ۵۰ هزار تومان جایزه می‌گیری هم من !
     \n
     </string>
     <string name="time">ساعت</string>
@@ -305,32 +315,29 @@
     <string name="change_pass_code_text_3">لطفا رمز عبور مورد نظر را مجدد وارد کنید</string>
     <string name="memorable_word_change_title">تغییر کلمه یادآوری</string>
     <string name="merchant_text_page_1">
-        بنا به الزامات شاپرک، کاربران هم‌پی جهت بهره‌مندی از ویژگی درخواست پرداخت و همچنین قراردادن دکمه هم‌پی به عنوان روش پرداخت موبایلی در وبسایت فروشگاه اینترنتی، نیاز به داشتن کد پذیرندگی فعال دارند.
+        به منظور ارسال درخواست پرداخت به بیش از ۱۰ نفر نیاز است تا درخواست کد پذیرندگی نموده و مدارک زیر را به آدرس ایمیل opsupport@homapay.com ارسال نمایید:
         \n\n
-        مزایا دریافت کد پذیرندگی:
-        \n
-        کاربران هم‌پی در صورت دریافت کد پذیرندگی، از ویژگی درخواست پرداخت در اپلیکیشن هم‌پی بهره‌مند شده و در صورت عرضه  کالا یا خدمات از هر نوعی در ویترین وبسایت و اپلیکیشن خود، می‌توانند از روش پرداخت موبایلی هم‌پی در وبسایت، و پرداخت درون برنامه‌ای هم‌پی در اپلیکیشن خود بهره‌مند گردند.
-    </string>
-    <string name="merchant_text_page_2">
-        مدارک لازم جهت دریافت کد پذیرندگی(ویژه اشخاص حقوقی):
+مدارک لازم جهت دریافت کد پذیرندگی(ویژه اشخاص حقوقی)
         \n
         ۱- تصویر صفحه اول دفترچه حساب بانکی به نام شرکت و یا موسسه نزد یکی از شعب بانک‌های کشور
     \n
-        ۲-  تصویر برابر اصل کارت ملی و شناسنامه مدیران و مسئولین صاحب امضا
+        ۲- تصویر برابر اصل کارت ملی و شناسنامه مدیران و مسئولین صاحب امضا
         \n
         ۳-  تصویر برابر اصل روزنامه رسمی، آگهی تأسیس و آخرین آگهی تغییرات
-        \n\n
-        مدارک مورد نیاز برای استفاده از خدمات درگاه پرداخت:(ویژه اشخاص حقیقی):
+\n\n
+        مدارک مورد نیاز برای استفاده از خدمات درگاه پرداخت:(ویژه اشخاص حقیقی)
         \n
-        ۱- تکمیل فرم تفضیلی پذیرندگان
+        ۱- تصویر صفحه اول دفترچه حساب بانکی به نام شخص نزد یکی از شعب بانک‌های کشور
         \n
-        ۲- تصویر فرم قرارداد پیوستی در دو نسخه
+        ۲- تصویر برابر اصل کارت ملی و شناسنامه
         \n
-        ۳- تصویر صفحه اول دفترچه حساب بانکی به نام شخص نزد یکی از شعب بانک‌های کشور
+        ۳- تصویر برابر اصل اجاره‌نامه یا سند مالکیت محل کار یا سکونت
+
+    </string>
+    <string name="merchant_text_page_2">
+    کاربران هم‌پی در صورت دریافت کد پذیرندگی، ضمن بهره‌مندی  بدون محدودیت از ویژگی درخواست پرداخت در اپلیکیشن هم‌پی، می‌توانند در صورت عرضه  کالا یا خدمات از هر نوعی در ویترین وبسایت و اپلیکیشن خود، از روش پرداخت موبایلی هم‌پی در وبسایت و پرداخت درون برنامه‌ای هم‌پی در اپلیکیشن خود بهره‌مند گردند.
         \n
-        ۴- تصویر برابر اصل کارت ملی و شناسنامه
-        \n
-        ۵- تصویر برابر اصل اجاره‌نامه یا سند مالکیت محل کار یا سکونت
+        جهت اطلاع بیشتر از خدمات هم‌پی به آدرس www.hampay.ir   مراجعه نمایید.
     </string>
     <string name="merchant_text_page_3">
         کاربران هم‌پی در صورت دریافت کد پذیرندگی، از ویژگی درخواست پرداخت در اپلیکیشن هم‌پی بهره‌مند شده و در صورت عرضه  کالا یا خدمات از هر نوعی در ویترین وبسایت و اپلیکیشن خود، می‌توانند از روش پرداخت موبایلی هم‌پی در وبسایت، و پرداخت درون برنامه‌ای هم‌پی در اپلیکیشن خود بهره‌مند گردند
@@ -350,18 +357,18 @@
     <string name="merchant_id_accept">کد پذیرندگی برای شما فعال است</string>
     <string name="merchant_id_status_pending">درخواست شما ثبت گردید.
     \n
-        لطفا مدارک لازم را به آدرس ایمیل info@homapay.com ارسال نمایید.
+لطفا مدارک لازم را به آدرس ایمیل opsupport@homapay.com ارسال نمایید
     </string>
     <string name="merchant_info">کد پذیرندگی شما با شماره %1$s فعال است.</string>
     <string name="change_memorable_word_text_1">لطفا یک کلمه کوتاه به عنوان کلمه یادآوری رمز عبور خود معرفی نمایید</string>
     <string name="change_activities_pass_code_text">لطفا رمز عبور خود را وارد نمایید</string>
     <string name="email_change_title">تغییر ایمیل</string>
+    <string name="payment_request_close">بستن</string>
+    <string name="payment_request_send_doc">ارسال مدارک</string>
     <string name="confirm_success_payment">تایید</string>
     <string name="confirm_failure_payment">بستن</string>
-    <string name="msg_success_payment_request">درخواست پرداخت شما با کد %1$s با موفقیت ارسال شد
-    \n
-        (به محض پرداخت پول توسط %2$s، وجه به حساب شما واریز خواهد شد.)
-    </string>
+    <string name="msg_success_payment_request">درخواست پرداخت شما با کد %1$s با موفقیت ارسال شد</string>
+    <string name="msg_success_payment_request_more"> لطفا جهت تکمیل مدارک اقدام نمایید، در غیر این صورت امکان ارسال درخواست پرداخت به بیش از ۱۰ نفر را نخواهید داشت.</string>
     <string name="msg_login_failure">رمز ورودی اشتباه می‌باشد، شما %1$s بار دیگر فرصت ورود رمز را دارید.</string>
     <string name="msg_failure_payment_request"> ارسال درخواست پرداخت موفقیت آمیز نبود. لطفا دوباره تلاش کنید</string>
     <string name="msg_unlink_user">تمامی اطلاعات شما پاک خواهد شد و برای استفاده مجدد از "هم‌پی" باید دوباره ثبت نام کنید</string>
@@ -391,11 +398,11 @@
     <string name="not_connectivity">اتصال اینترنت خود را بررسی نمایید</string>
     <string name="network_setting">تنظیمات</string>
     <string name="network_cancel">انصراف</string>
-    <string name="prevent_payment_request">کاربران هم‌پی با دریافت کد پذیرندگی، قادر به استفاده از این امکان خواهند بود. جهت ثبت‌نام، لطفا مدارک پذیرندگی را به ایمیل info@homapay.com ارسال فرمایید.</string>
+    <string name="prevent_payment_request">کاربران هم‌پی با دریافت کد پذیرندگی، قادر به استفاده از این امکان خواهند بود. جهت ثبت‌نام، لطفا مدارک پذیرندگی را به ایمیل opsupport@homapay.com ارسال فرمایید.</string>
     <string name="prevent_payment_request_cancel">تایید</string>
     <string name="merchant_id">کد پذیرندگی</string>
     <string name="merchant_id_document">مدارک پذیرندگی</string>
-    <string name="merchent_document_email">info@homapay.com</string>
+    <string name="merchent_document_email">opsupport@homapay.com</string>
     <string name="app_update_text">کاربر گرامی، برای ادامه می‌بایستی آخرین نسخه اپلیکیشن <b>هم‌پی</b> را دریافت نمایید.</string>
     <string name="app_update_confirm">تایید</string>
 
