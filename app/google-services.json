@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "591585743411",
-    "firebase_url": "https://hampay-mobile.firebaseio.com",
-    "project_id": "hampay-mobile",
-    "storage_bucket": "hampay-mobile.appspot.com"
+    "project_number": "744841287203",
+    "firebase_url": "https://hampay-mobile-live.firebaseio.com",
+    "project_id": "hampay-mobile-live",
+    "storage_bucket": "hampay-mobile-live.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:591585743411:android:3c33e5b9a3f8afeb",
+        "mobilesdk_app_id": "1:744841287203:android:3c33e5b9a3f8afeb",
         "android_client_info": {
           "package_name": "xyz.homapay.hampay.mobile.android"
         }
       },
       "oauth_client": [
         {
-          "client_id": "591585743411-heo8d6jl7ibi6ci7b9jpiqsc6t2s4c2j.apps.googleusercontent.com",
+          "client_id": "744841287203-fm84en2vhib2duj34m5s69hepbe86jk2.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBlKVbjHMa1UpXM48bQc5x66XtrraaAa-I"
+          "current_key": "AIzaSyDUzGwoYxCS55ORNVSTXr10-58WLeGafL8"
         }
       ],
       "services": {

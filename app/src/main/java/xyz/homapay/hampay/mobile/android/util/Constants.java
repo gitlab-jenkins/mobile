@@ -9,8 +9,8 @@ public class Constants {
 //    public static String SERVER = "sit.hampay.ir";//SIT/27 Server
 //    public static String SERVER = "139.162.147.189";//DEV2 Server
 //    public static String SERVER = "sit.hampay.ir";//SIT/27 Server
-    public static String SERVER = "uat.hampay.ir";//UAT Server
-//    public static String SERVER = "mobile.hampay.homapay.com";//LIVE Server
+//    public static String SERVER = "uat.hampay.ir";//UAT Server
+    public static String SERVER = "mobile.hampay.homapay.com";//LIVE Server
     public static String URL_PREFIX = "/hampay";
     public static String HTTP_SERVER_IP = "http://" + SERVER + ":90" + URL_PREFIX;//England Server
     public static String IPG_URL = "http://" + SERVER + ":9091" + URL_PREFIX;//England Server
