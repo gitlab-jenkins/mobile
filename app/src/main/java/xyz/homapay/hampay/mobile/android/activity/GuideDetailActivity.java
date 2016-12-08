@@ -3,12 +3,10 @@ package xyz.homapay.hampay.mobile.android.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -96,9 +94,6 @@ public class GuideDetailActivity extends AppCompatActivity {
 
             public void onPageFinished(WebView view, String url) {
                 hamPayDialog.dismisWaitingDialog();
-            }
-            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error){
-                handler.proceed();
             }
         });
 

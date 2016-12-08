@@ -135,7 +135,7 @@ public class PaymentRequestListActivity extends AppCompatActivity{
                 List<PaymentInfoDTO> searchPaymentInfo = new ArrayList<>();
                 if (paymentInfoList != null) {
                     for (PaymentInfoDTO paymentInfo : paymentInfoList) {
-                        if (paymentInfo.getCalleeName().contains(search_text.getText().toString())) {
+                        if (paymentInfo.getCalleeName().toLowerCase().contains(search_text.getText().toString().toLowerCase())) {
                             searchPaymentInfo.add(paymentInfo);
                         }
                     }

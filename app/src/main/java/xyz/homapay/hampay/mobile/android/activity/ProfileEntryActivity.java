@@ -237,7 +237,7 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                 activity.startActivity(intent);
             }
         };
-        tcPrivacySpannable.setSpan(tcClickableSpan, 3, 35, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tcPrivacySpannable.setSpan(tcClickableSpan, 17, 45, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         tac_privacy_text.setText(tcPrivacySpannable);
         tac_privacy_text.setMovementMethod(LinkMovementMethod.getInstance());
         ClickableSpan privacySpan = new ClickableSpan() {
@@ -251,7 +251,7 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
             }
         };
 
-        tcPrivacySpannable.setSpan(privacySpan, 38, 65, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tcPrivacySpannable.setSpan(privacySpan, 48, 75, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         tac_privacy_text.setText(tcPrivacySpannable);
         tac_privacy_text.setMovementMethod(LinkMovementMethod.getInstance());
 

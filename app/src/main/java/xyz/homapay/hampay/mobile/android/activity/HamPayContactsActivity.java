@@ -65,7 +65,6 @@ public class HamPayContactsActivity extends AppCompatActivity implements Permiss
     private FacedEditText search_text;
     private HamPayDialog hamPayDialog;
     private String searchPhrase = "";
-//    private FacedTextView nullHampayContactsText;
     private LinearLayout hampayContactShare;
     private final Handler handler = new Handler();
 
@@ -180,7 +179,6 @@ public class HamPayContactsActivity extends AppCompatActivity implements Permiss
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
-//        nullHampayContactsText = (FacedTextView)findViewById(R.id.nullHampayContactsText);
         hampayContactShare = (LinearLayout) findViewById(R.id.hampayContactShare);
         hampayContactShare.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -203,7 +201,7 @@ public class HamPayContactsActivity extends AppCompatActivity implements Permiss
         paymentRequestList = (ListView)findViewById(R.id.paymentRequestList);
         View footerView =  ((LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.hampay_contact_footer, null, false);
         paymentRequestList.removeFooterView(footerView);
-        paymentRequestList.addFooterView(footerView);
+        paymentRequestList.addFooterView(footerView, null, false);
         inputMethodManager = (InputMethodManager) getSystemService(
                 Context.INPUT_METHOD_SERVICE);
         search_text = (FacedEditText)findViewById(R.id.search_text);
@@ -221,11 +219,11 @@ public class HamPayContactsActivity extends AppCompatActivity implements Permiss
                 if (contacts != null) {
                     for (ContactDTO contact : contacts) {
                         if (searchPhrase.length() == 0 || searchPhrase.length() == 1) {
-                            if (contact.getDisplayName().startsWith(searchPhrase)) {
+                            if (contact.getDisplayName().toLowerCase().startsWith(searchPhrase.toLowerCase())) {
                                 searchContacts.add(contact);
                             }
                         } else if (searchPhrase.length() > 1) {
-                            if (contact.getDisplayName().contains(searchPhrase)) {
+                            if (contact.getDisplayName().toLowerCase().contains(searchPhrase.toLowerCase())) {
                                 searchContacts.add(contact);
                             }
                         }
@@ -276,14 +274,11 @@ public class HamPayContactsActivity extends AppCompatActivity implements Permiss
 
             if (contactsHampayEnabledResponseMessage != null){
                 if (contactsHampayEnabledResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
+
                     contacts = contactsHampayEnabledResponseMessage.getService().getContacts();
                     if (contacts.size() == 0){
-//                        nullHampayContactsText.setVisibility(View.VISIBLE);
-//                        hampayContactShare.setVisibility(View.VISIBLE);
                         paymentRequestList.setVisibility(View.GONE);
                     }else {
-//                        nullHampayContactsText.setVisibility(View.GONE);
-//                        hampayContactShare.setVisibility(View.GONE);
                         hamPayContactsAdapter = new HamPayContactsAdapter(activity, contacts, authToken);
                         paymentRequestList.setAdapter(hamPayContactsAdapter);
                     }
