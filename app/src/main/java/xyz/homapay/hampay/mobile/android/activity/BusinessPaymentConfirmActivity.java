@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
@@ -21,11 +22,12 @@ import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.animation.Collapse;
+import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestPSPResult;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
-import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
@@ -37,10 +39,10 @@ import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.PspCode;
-import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
-import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring;
+import xyz.homapay.hampay.mobile.android.webservice.psp.CBUArrayOfKeyValueOfstringstring;
+import xyz.homapay.hampay.mobile.android.webservice.psp.CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring;
 
-public class BusinessPaymentConfirmActivity extends AppCompatActivity {
+public class BusinessPaymentConfirmActivity extends AppCompatActivity implements View.OnClickListener{
 
     private DatabaseHelper dbHelper;
     private ImageView pay_to_business_button;
@@ -66,7 +68,6 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
     FacedTextView paymentTotalValue;
     FacedTextView cardNumberValue;
     FacedTextView bankName;
-    FacedEditText pin2Value;
 
     PaymentInfoDTO paymentInfoDTO = null;
     PspInfoDTO pspInfoDTO = null;
@@ -78,6 +79,16 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
     RequestPSPResult requestPSPResult;
     PSPResultRequest pspResultRequest;
     private ImageManager imageManager;
+    private LinearLayout keyboard;
+    private RelativeLayout pinLayout;
+    private FacedTextView pinText;
+    private RelativeLayout cvvLayout;
+    private FacedTextView cvvText;
+    private boolean pinCodeFocus = false;
+    private boolean cvvFocus = false;
+    private String userPinCode = "";
+    private String userCVV2 = "";
+    PersianEnglishDigit persian = new PersianEnglishDigit();
 
 
     @Override
@@ -150,7 +161,13 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
         paymentTotalValue = (FacedTextView)findViewById(R.id.paymentTotalValue);
         cardNumberValue = (FacedTextView)findViewById(R.id.cardNumberValue);
         bankName = (FacedTextView)findViewById(R.id.bankName);
-        pin2Value = (FacedEditText)findViewById(R.id.pin2Value);
+        keyboard = (LinearLayout)findViewById(R.id.keyboard);
+        pinLayout = (RelativeLayout)findViewById(R.id.pin_layout);
+        pinText = (FacedTextView)findViewById(R.id.pin_text) ;
+        pinText.setOnClickListener(this);
+        cvvLayout = (RelativeLayout)findViewById(R.id.cvv_layout);
+        cvvText = (FacedTextView)findViewById(R.id.cvv_text) ;
+        cvvText.setOnClickListener(this);
 
         Intent intent = getIntent();
 
@@ -161,7 +178,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
         if (pspInfoDTO.getCardDTO().getCardId() != null && (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + paymentInfoDTO.getVat() < Constants.SOAP_AMOUNT_MAX)) {
             LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
             creditInfo.setVisibility(View.VISIBLE);
-            cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
+            cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getLast4Digits()));
             bankName.setText(pspInfoDTO.getCardDTO().getBankName());
         } else {
         }
@@ -205,7 +222,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
                     pay_to_business_button.setEnabled(false);
 
-                    if (pin2Value.getText().toString().length() <= 4) {
+                    if (pinText.getText().toString().length() <= 4) {
                         Toast.makeText(context, getString(R.string.msg_pin2_incurrect), Toast.LENGTH_SHORT).show();
                         pay_to_business_button.setEnabled(true);
                         return;
@@ -219,41 +236,61 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
                     doWorkInfo.setCellNumber(pspInfoDTO.getCellNumber().substring(1, pspInfoDTO.getCellNumber().length()));
                     doWorkInfo.setLangAByte((byte) 0);
                     doWorkInfo.setLangABoolean(false);
-                    TWAArrayOfKeyValueOfstringstring vectorstring2stringMapEntry = new TWAArrayOfKeyValueOfstringstring();
-                    TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    CBUArrayOfKeyValueOfstringstring vectorstring2stringMapEntry = new CBUArrayOfKeyValueOfstringstring();
+                    CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
 
                     s2sMapEntry.Key = "Amount";
-                    s2sMapEntry.Value = (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + paymentInfoDTO.getVat()) + "";
+                    s2sMapEntry.Value = String.valueOf(paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + paymentInfoDTO.getVat());
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                    s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "Pin2";
-                    s2sMapEntry.Value = pin2Value.getText().toString();
+                    s2sMapEntry.Value = userPinCode;
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                    s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "ThirdParty";
                     s2sMapEntry.Value = paymentInfoDTO.getProductCode();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                    s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "TerminalId";
                     s2sMapEntry.Value = pspInfoDTO.getTerminalId();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                    s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "CardId";
                     s2sMapEntry.Value = pspInfoDTO.getCardDTO().getCardId();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                    s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "SenderTerminalId";
                     s2sMapEntry.Value = pspInfoDTO.getSenderTerminalId();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                    s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "IPAddress";
                     s2sMapEntry.Value = pspInfoDTO.getIpAddress();
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry.Key = "Email";
+                    s2sMapEntry.Value = "";
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry.Key = "CVV2";
+                    s2sMapEntry.Value = userCVV2;
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry.Key = "ExpDate";
+                    s2sMapEntry.Value = pspInfoDTO.getCardDTO().getExpireDate();
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry.Key = "ResNum";
+                    s2sMapEntry.Value = paymentInfoDTO.getProductCode();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     doWorkInfo.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
@@ -287,23 +324,41 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        if (intentContact){
-            Intent i = new Intent();
-            i.setClass(this, MainActivity.class);
-            startActivity(i);
+        if (keyboard.getVisibility() == View.VISIBLE){
+            new Collapse(keyboard).animate();
+            return;
         }
-
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra("result", 1024);
-        setResult(1024);
-
         finish();
     }
 
-    public class RequestPurchaseTaskCompleteListener implements AsyncTaskCompleteListener<TWAArrayOfKeyValueOfstringstring> {
+    @Override
+    public void onClick(View view) {
+        if (keyboard.getVisibility() == View.GONE) {
+            new Expand(keyboard).animate();
+        }
+        switch (view.getId()){
+            case R.id.pin_text:
+                pinText.setText("");
+                pinLayout.setBackgroundResource(R.drawable.card_info_entry_placeholder);
+                cvvLayout.setBackgroundResource(R.drawable.card_info_empty_placeholder);
+                pinCodeFocus = true;
+                cvvFocus = false;
+                break;
+
+            case R.id.cvv_text:
+                cvvText.setText("");
+                pinLayout.setBackgroundResource(R.drawable.card_info_empty_placeholder);
+                cvvLayout.setBackgroundResource(R.drawable.card_info_entry_placeholder);
+                pinCodeFocus = false;
+                cvvFocus = true;
+                break;
+        }
+    }
+
+    public class RequestPurchaseTaskCompleteListener implements AsyncTaskCompleteListener<CBUArrayOfKeyValueOfstringstring> {
 
         @Override
-        public void onTaskComplete(TWAArrayOfKeyValueOfstringstring purchaseResponseResponseMessage) {
+        public void onTaskComplete(CBUArrayOfKeyValueOfstringstring purchaseResponseResponseMessage) {
 
             hamPayDialog.dismisWaitingDialog();
             pay_to_business_button.setEnabled(true);
@@ -317,7 +372,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
 
             if (purchaseResponseResponseMessage != null) {
                 pspResultRequest = new PSPResultRequest();
-                for (TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry : purchaseResponseResponseMessage) {
+                for (CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry : purchaseResponseResponseMessage) {
                     if (s2sMapEntry.Key.equalsIgnoreCase("ResponseCode")) {
                         responseCode = s2sMapEntry.Value;
                     }else if (s2sMapEntry.Key.equalsIgnoreCase("Description")){
@@ -441,6 +496,41 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity {
         if (activity != null) {
             finish();
             startActivity(intent);
+        }
+    }
+
+    public void pressKey(View view) {
+        if (view.getTag().toString().equals("*")) {
+            new Collapse(keyboard).animate();
+        }else if (view.getTag().toString().equals("|")) {
+            new Expand(keyboard).animate();
+        }else {
+            inputDigit(view.getTag().toString());
+        }
+    }
+
+    private void inputDigit(String digit){
+        if (digit.endsWith("d")){
+        }
+        if (pinCodeFocus){
+            String pinCode = pinText.getText().toString();
+            if (digit.endsWith("d")){
+                if (pinCode.length() == 0) return;
+                pinText.setText(pinCode.substring(0, pinCode.length() - 1));
+                userPinCode = userPinCode.substring(0, userPinCode.length() - 1);
+            }else {
+                pinText.setText(persian.E2P(pinCode + "■"));
+                userPinCode += digit;
+            }
+        }else if (cvvFocus){
+            String cvvCode = cvvText.getText().toString();
+            if (digit.endsWith("d")){
+                if (cvvCode.length() == 0) return;
+                cvvText.setText(cvvCode.substring(0, cvvCode.length() - 1));
+            }else {
+                cvvText.setText(persian.E2P(cvvCode + "■"));
+                userCVV2 += digit;
+            }
         }
     }
 }

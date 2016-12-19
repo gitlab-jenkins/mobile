@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import br.com.goncalves.pugnotification.notification.PugNotification;
@@ -28,6 +29,8 @@ import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.animation.Collapse;
+import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestPSPResult;
@@ -47,10 +50,10 @@ import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.PspCode;
-import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
-import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring;
+import xyz.homapay.hampay.mobile.android.webservice.psp.CBUArrayOfKeyValueOfstringstring;
+import xyz.homapay.hampay.mobile.android.webservice.psp.CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring;
 
-public class RequestBusinessPayDetailActivity extends AppCompatActivity {
+public class RequestBusinessPayDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     private DatabaseHelper dbHelper;
@@ -96,7 +99,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
     FacedTextView paymentTotalValue;
     FacedTextView cardNumberValue;
     FacedTextView bankName;
-    FacedEditText pin2Value;
 
     RequestLatestPurchase requestLatestPurchase;
     LatestPurchaseRequest latestPurchaseRequest;
@@ -114,6 +116,16 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
     private PurchaseInfoRequest purchaseInfoRequest;
     private CurrencyFormatter currencyFormatter;
     private ImageManager imageManager;
+    private LinearLayout keyboard;
+    private RelativeLayout pinLayout;
+    private FacedTextView pinText;
+    private RelativeLayout cvvLayout;
+    private FacedTextView cvvText;
+    private boolean pinCodeFocus = false;
+    private boolean cvvFocus = false;
+    private String userPinCode = "";
+    private String userCVV2 = "";
+    PersianEnglishDigit persian = new PersianEnglishDigit();
 
     @Override
     protected void onPause() {
@@ -179,6 +191,13 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         }
 
         imageManager = new ImageManager(activity, 200000, false);
+        keyboard = (LinearLayout)findViewById(R.id.keyboard);
+        pinLayout = (RelativeLayout)findViewById(R.id.pin_layout);
+        pinText = (FacedTextView)findViewById(R.id.pin_text) ;
+        pinText.setOnClickListener(this);
+        cvvLayout = (RelativeLayout)findViewById(R.id.cvv_layout);
+        cvvText = (FacedTextView)findViewById(R.id.cvv_text) ;
+        cvvText.setOnClickListener(this);
 
         try {
             MaxXferAmount = prefs.getLong(Constants.MAX_BUSINESS_XFER_AMOUNT, 0);
@@ -218,7 +237,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         paymentFeeValue = (FacedTextView)findViewById(R.id.paymentFeeValue);
         bankName = (FacedTextView)findViewById(R.id.bankName);
         cardNumberValue = (FacedTextView)findViewById(R.id.cardNumberValue);
-        pin2Value = (FacedEditText)findViewById(R.id.pin2Value);
         paymentTotalValue = (FacedTextView)findViewById(R.id.paymentTotalValue);
         pay_to_business_button = (ImageView)findViewById(R.id.pay_to_business_button);
 
@@ -269,7 +287,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                     startActivityForResult(intent, 45);
                 } else {
                     pay_to_business_button.setEnabled(false);
-                    if (pin2Value.getText().toString().length() <= 4) {
+                    if (pinText.getText().toString().length() <= 4) {
                         Toast.makeText(context, getString(R.string.msg_pin2_incurrect), Toast.LENGTH_LONG).show();
                         pay_to_business_button.setEnabled(true);
                         return;
@@ -278,54 +296,67 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                     editor.commit();
                     requestPurchase = new RequestPurchase(activity, new RequestPurchaseTaskCompleteListener());
 
-                    doWorkInfo = new DoWorkInfo();
+                    DoWorkInfo doWorkInfo = new DoWorkInfo();
                     doWorkInfo.setUserName("appstore");
                     doWorkInfo.setPassword("sepapp");
                     doWorkInfo.setCellNumber(pspInfoDTO.getCellNumber().substring(1, pspInfoDTO.getCellNumber().length()));
                     doWorkInfo.setLangAByte((byte) 0);
                     doWorkInfo.setLangABoolean(false);
-                    TWAArrayOfKeyValueOfstringstring vectorstring2stringMapEntry = new TWAArrayOfKeyValueOfstringstring();
-                    TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-
-
+                    CBUArrayOfKeyValueOfstringstring vectorstring2stringMapEntry = new CBUArrayOfKeyValueOfstringstring();
+                    CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
 
                     s2sMapEntry.Key = "Amount";
                     s2sMapEntry.Value = String.valueOf(purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat());
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                    s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "Pin2";
-                    s2sMapEntry.Value = pin2Value.getText().toString();
+                    s2sMapEntry.Value = userPinCode;
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                    s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "ThirdParty";
                     s2sMapEntry.Value = purchaseInfoDTO.getProductCode();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                    s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "TerminalId";
                     s2sMapEntry.Value = pspInfoDTO.getTerminalId();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                    s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "CardId";
                     s2sMapEntry.Value = pspInfoDTO.getCardDTO().getCardId();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
-//                    s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-//                    s2sMapEntry.Key = "Merchant";
-//                    s2sMapEntry.Value = pspInfoDTO.getMerchant();
-//                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "SenderTerminalId";
                     s2sMapEntry.Value = pspInfoDTO.getSenderTerminalId();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                    s2sMapEntry = new TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "IPAddress";
                     s2sMapEntry.Value = pspInfoDTO.getIpAddress();
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry.Key = "Email";
+                    s2sMapEntry.Value = "";
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry.Key = "CVV2";
+                    s2sMapEntry.Value = userCVV2;
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry.Key = "ExpDate";
+                    s2sMapEntry.Value = pspInfoDTO.getCardDTO().getExpireDate();
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry.Key = "ResNum";
+                    s2sMapEntry.Value = purchaseInfoDTO.getProductCode();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     doWorkInfo.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
@@ -344,25 +375,42 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
-        if (intentContact){
-            Intent i = new Intent();
-            i.setClass(this, MainActivity.class);
-            startActivity(i);
+        if (keyboard.getVisibility() == View.VISIBLE){
+            new Collapse(keyboard).animate();
+            return;
         }
-
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra("result", 1024);
-        setResult(1024);
-
         finish();
     }
 
+    @Override
+    public void onClick(View view) {
+        if (keyboard.getVisibility() == View.GONE) {
+            new Expand(keyboard).animate();
+        }
+        switch (view.getId()){
+            case R.id.pin_text:
+                pinText.setText("");
+                pinLayout.setBackgroundResource(R.drawable.card_info_entry_placeholder);
+                cvvLayout.setBackgroundResource(R.drawable.card_info_empty_placeholder);
+                pinCodeFocus = true;
+                cvvFocus = false;
+                break;
 
-    public class RequestPurchaseTaskCompleteListener implements AsyncTaskCompleteListener<TWAArrayOfKeyValueOfstringstring> {
+            case R.id.cvv_text:
+                cvvText.setText("");
+                pinLayout.setBackgroundResource(R.drawable.card_info_empty_placeholder);
+                cvvLayout.setBackgroundResource(R.drawable.card_info_entry_placeholder);
+                pinCodeFocus = false;
+                cvvFocus = true;
+                break;
+        }
+    }
+
+
+    public class RequestPurchaseTaskCompleteListener implements AsyncTaskCompleteListener<CBUArrayOfKeyValueOfstringstring> {
 
         @Override
-        public void onTaskComplete(TWAArrayOfKeyValueOfstringstring purchaseResponseResponseMessage) {
+        public void onTaskComplete(CBUArrayOfKeyValueOfstringstring purchaseResponseResponseMessage) {
 
             hamPayDialog.dismisWaitingDialog();
             pay_to_business_button.setEnabled(true);
@@ -376,7 +424,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
             if (purchaseResponseResponseMessage != null) {
                 pspResultRequest = new PSPResultRequest();
-                for (TWAArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry : purchaseResponseResponseMessage) {
+                for (CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry : purchaseResponseResponseMessage) {
                     if (s2sMapEntry.Key.equalsIgnoreCase("ResponseCode")) {
                         responseCode = s2sMapEntry.Value;
                     }else if (s2sMapEntry.Key.equalsIgnoreCase("Description")){
@@ -662,8 +710,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
 
         pspInfoDTO = purchaseInfo.getPspInfo();
 
-        PersianEnglishDigit persianEnglishDigit = new PersianEnglishDigit();
-
         input_digit_1.setText(String.valueOf(purchaseInfo.getPurchaseCode().charAt(0)));
         input_digit_2.setText(String.valueOf(purchaseInfo.getPurchaseCode().charAt(1)));
         input_digit_3.setText(String.valueOf(purchaseInfo.getPurchaseCode().charAt(2)));
@@ -676,7 +722,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 purchase_status.setText(getString(R.string.purchase_status_succeed));
                 if (purchaseInfo.getPayerName() != null) {
                     purchase_payer_name.setText(purchaseInfo.getPayerName());
-                    purchase_payer_cell.setText(persianEnglishDigit.E2P(purchaseInfo.getPayerCellNumber()));
+                    purchase_payer_cell.setText(persian.E2P(purchaseInfo.getPayerCellNumber()));
                 }
                 purchase_status_layout.setVisibility(View.VISIBLE);
                 purchase_payer_name_layout.setVisibility(View.VISIBLE);
@@ -688,7 +734,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 purchase_status.setText(getString(R.string.purchase_status_failed));
                 if (purchaseInfo.getPayerName() != null) {
                     purchase_payer_name.setText(purchaseInfo.getPayerName());
-                    purchase_payer_cell.setText(persianEnglishDigit.E2P(purchaseInfo.getPayerCellNumber()));
+                    purchase_payer_cell.setText(persian.E2P(purchaseInfo.getPayerCellNumber()));
                 }
                 purchase_status_layout.setVisibility(View.VISIBLE);
                 purchase_payer_name_layout.setVisibility(View.GONE);
@@ -700,7 +746,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 purchase_status.setText(getString(R.string.purchase_status_processing));
                 if (purchaseInfo.getPayerName() != null) {
                     purchase_payer_name.setText(purchaseInfo.getPayerName());
-                    purchase_payer_cell.setText(persianEnglishDigit.E2P(purchaseInfo.getPayerCellNumber()));
+                    purchase_payer_cell.setText(persian.E2P(purchaseInfo.getPayerCellNumber()));
                 }
                 purchase_status_layout.setVisibility(View.VISIBLE);
                 purchase_payer_name_layout.setVisibility(View.GONE);
@@ -712,7 +758,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 purchase_status.setText(getString(R.string.purchase_status_pending));
                 if (purchaseInfo.getPayerName() != null) {
                     purchase_payer_name.setText(purchaseInfo.getPayerName());
-                    purchase_payer_cell.setText(persianEnglishDigit.E2P(purchaseInfo.getPayerCellNumber()));
+                    purchase_payer_cell.setText(persian.E2P(purchaseInfo.getPayerCellNumber()));
                 }
                 purchase_status_layout.setVisibility(View.GONE);
                 purchase_payer_name_layout.setVisibility(View.GONE);
@@ -720,17 +766,17 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 pay_to_business_button.setVisibility(View.VISIBLE);
                 if (pspInfoDTO.getCardDTO().getCardId() != null && (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() < Constants.SOAP_AMOUNT_MAX)) {
                     creditInfo.setVisibility(View.VISIBLE);
-                    cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
+                    cardNumberValue.setText(persian.E2P(pspInfoDTO.getCardDTO().getLast4Digits()));
                     bankName.setText(pspInfoDTO.getCardDTO().getBankName());
                 }
                 break;
         }
 
-        paymentPriceValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(purchaseInfo.getAmount())));
-        paymentVAT.setText(persianEnglishDigit.E2P(currencyFormatter.format(purchaseInfo.getVat())));
-        paymentFeeValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(purchaseInfo.getFeeCharge())));
-        paymentTotalValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(purchaseInfo.getAmount() + purchaseInfo.getFeeCharge() + purchaseInfo.getVat())));
-        business_name.setText(persianEnglishDigit.E2P(purchaseInfo.getMerchantName()));
+        paymentPriceValue.setText(persian.E2P(currencyFormatter.format(purchaseInfo.getAmount())));
+        paymentVAT.setText(persian.E2P(currencyFormatter.format(purchaseInfo.getVat())));
+        paymentFeeValue.setText(persian.E2P(currencyFormatter.format(purchaseInfo.getFeeCharge())));
+        paymentTotalValue.setText(persian.E2P(currencyFormatter.format(purchaseInfo.getAmount() + purchaseInfo.getFeeCharge() + purchaseInfo.getVat())));
+        business_name.setText(persian.E2P(purchaseInfo.getMerchantName()));
 
         if (purchaseInfo.getMerchantImageId() != null) {
             editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
@@ -751,6 +797,41 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
         if (activity != null) {
             finish();
             startActivity(intent);
+        }
+    }
+
+    public void pressKey(View view) {
+        if (view.getTag().toString().equals("*")) {
+            new Collapse(keyboard).animate();
+        }else if (view.getTag().toString().equals("|")) {
+            new Expand(keyboard).animate();
+        }else {
+            inputDigit(view.getTag().toString());
+        }
+    }
+
+    private void inputDigit(String digit){
+        if (digit.endsWith("d")){
+        }
+        if (pinCodeFocus){
+            String pinCode = pinText.getText().toString();
+            if (digit.endsWith("d")){
+                if (pinCode.length() == 0) return;
+                pinText.setText(pinCode.substring(0, pinCode.length() - 1));
+                userPinCode = userPinCode.substring(0, userPinCode.length() - 1);
+            }else {
+                pinText.setText(persian.E2P(pinCode + "■"));
+                userPinCode += digit;
+            }
+        }else if (cvvFocus){
+            String cvvCode = cvvText.getText().toString();
+            if (digit.endsWith("d")){
+                if (cvvCode.length() == 0) return;
+                cvvText.setText(cvvCode.substring(0, cvvCode.length() - 1));
+            }else {
+                cvvText.setText(persian.E2P(cvvCode + "■"));
+                userCVV2 += digit;
+            }
         }
     }
 

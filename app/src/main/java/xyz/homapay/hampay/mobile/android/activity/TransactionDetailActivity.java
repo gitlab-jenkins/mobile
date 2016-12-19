@@ -237,7 +237,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
                         }
                         if (tnxDetailDTO.getAppliedCard() != null) {
                             creditInfo.setVisibility(View.VISIBLE);
-                            card_number.setText(persianEnglishDigit.E2P(tnxDetailDTO.getAppliedCard().getMaskedCardNumber()));
+                            card_number.setText(persianEnglishDigit.E2P(tnxDetailDTO.getAppliedCard().getLast4Digits()));
                             bank_name.setText(tnxDetailDTO.getAppliedCard().getBankName());
                         }
                     } else if (transactionDTO.getPaymentType() == TransactionDTO.PaymentType.PURCHASE) {
@@ -246,7 +246,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
                         date_time.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(tnxDetailDTO.getDate())));
                         if (tnxDetailDTO.getAppliedCard() != null) {
                             creditInfo.setVisibility(View.VISIBLE);
-                            card_number.setText(persianEnglishDigit.E2P(tnxDetailDTO.getAppliedCard().getMaskedCardNumber()));
+                            card_number.setText(persianEnglishDigit.E2P(tnxDetailDTO.getAppliedCard().getLast4Digits()));
                             bank_name.setText(tnxDetailDTO.getAppliedCard().getBankName());
                         }
                     }

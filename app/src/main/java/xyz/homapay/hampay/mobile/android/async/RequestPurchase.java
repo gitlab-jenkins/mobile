@@ -5,20 +5,20 @@ import android.os.AsyncTask;
 
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.webservice.WebServices;
-import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
+import xyz.homapay.hampay.mobile.android.webservice.psp.CBUArrayOfKeyValueOfstringstring;
 
 /**
  * Created by amir on 7/3/15.
  */
-public class RequestPurchase extends AsyncTask<DoWorkInfo, Void, TWAArrayOfKeyValueOfstringstring> {
+public class RequestPurchase extends AsyncTask<DoWorkInfo, Void, CBUArrayOfKeyValueOfstringstring> {
 
     private static final String TAG = "RequestPurchase";
 
     private Context context;
-    private AsyncTaskCompleteListener<TWAArrayOfKeyValueOfstringstring> listener;
+    private AsyncTaskCompleteListener<CBUArrayOfKeyValueOfstringstring> listener;
 
 
-    public RequestPurchase(Context context, AsyncTaskCompleteListener<TWAArrayOfKeyValueOfstringstring> listener)
+    public RequestPurchase(Context context, AsyncTaskCompleteListener<CBUArrayOfKeyValueOfstringstring> listener)
     {
         this.context = context;
         this.listener = listener;
@@ -32,12 +32,12 @@ public class RequestPurchase extends AsyncTask<DoWorkInfo, Void, TWAArrayOfKeyVa
     }
 
     @Override
-    protected TWAArrayOfKeyValueOfstringstring doInBackground(DoWorkInfo... params) {
+    protected CBUArrayOfKeyValueOfstringstring doInBackground(DoWorkInfo... params) {
 
         WebServices webServices = new WebServices(context);
 
         try {
-            return webServices.newPurchaseResponse(params[0]);
+            return webServices.purchaseResponse(params[0]);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -46,14 +46,14 @@ public class RequestPurchase extends AsyncTask<DoWorkInfo, Void, TWAArrayOfKeyVa
 
 
     @Override
-    protected void onPostExecute(TWAArrayOfKeyValueOfstringstring purchaseResponseMessage)
+    protected void onPostExecute(CBUArrayOfKeyValueOfstringstring purchaseResponseMessage)
     {
         super.onPostExecute(purchaseResponseMessage);
         listener.onTaskComplete(purchaseResponseMessage);
     }
 
     @Override
-    protected void onCancelled(TWAArrayOfKeyValueOfstringstring purchaseResponseMessage) {
+    protected void onCancelled(CBUArrayOfKeyValueOfstringstring purchaseResponseMessage) {
         super.onCancelled(purchaseResponseMessage);
         cancel(true);
     }

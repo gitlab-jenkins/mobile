@@ -114,12 +114,10 @@ import xyz.homapay.hampay.common.core.model.response.UserMerchantResponse;
 import xyz.homapay.hampay.common.core.model.response.UserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
-import xyz.homapay.hampay.mobile.android.model.DoWorkInfoTest;
 import xyz.homapay.hampay.mobile.android.ssl.AllowHamPaySSL;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWABasicHttpBinding_ITokenPay;
-import xyz.homapay.hampay.mobile.android.webservice.psp.Vectorstring2stringMapEntry;
 
 /**
  * Created by amir on 6/6/15.
@@ -476,16 +474,11 @@ public class SecuredWebServices{
         Type requestType = new TypeToken<RequestMessage<TransactionListRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
 
-        Log.e("Request", jsonRequest);
-        Log.e("----", "---------------------");
-
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
         String res = proxyService.getResponse();
-        Log.e("Response", res);
-        Log.e("----", "---------------------");
 
         responseMessage = gson.fromJson(res, new TypeToken<ResponseMessage<TransactionListResponse>>() {}.getType());
 
@@ -701,48 +694,6 @@ public class SecuredWebServices{
         Bitmap bitmap = proxyService.imageInputStream();
         proxyService.closeConnection();
         return bitmap;
-    }
-
-
-    public TWAArrayOfKeyValueOfstringstring newPurchaseResponse(DoWorkInfo doWorkInfo) throws Exception {
-
-       AllowHamPaySSL allowHamPaySSL = new AllowHamPaySSL(context);
-        allowHamPaySSL.enableHamPaySSL();
-
-        TWABasicHttpBinding_ITokenPay twaBasicHttpBinding_iTokenPay = new TWABasicHttpBinding_ITokenPay(null,"https://" + Constants.SERVER + "/saman/psp/pay");
-        TWAArrayOfKeyValueOfstringstring responseMessage = twaBasicHttpBinding_iTokenPay.DoWork(doWorkInfo.getUserName(), doWorkInfo.getPassword(), doWorkInfo.getCellNumber(),null,doWorkInfo.getVectorstring2stringMapEntry());
-
-//        PayThPartyApp payThPartyApp = new PayThPartyApp(context);
-//        Vectorstring2stringMapEntry responseMessage = payThPartyApp.DoWork(
-//                doWorkInfo.getUserName(),
-//                doWorkInfo.getPassword(),
-//                doWorkInfo.getCellNumber(),
-//                null,
-//                doWorkInfo.isLangABoolean(),
-//                doWorkInfo.getVectorstring2stringMapEntry());
-
-        return responseMessage;
-    }
-
-
-    public Vectorstring2stringMapEntry newPurchaseResponse(DoWorkInfoTest doWorkInfo) throws Exception {
-
-        AllowHamPaySSL allowHamPaySSL = new AllowHamPaySSL(context);
-        allowHamPaySSL.enableHamPaySSL();
-
-//        TWABasicHttpBinding_ITokenPay twaBasicHttpBinding_iTokenPay = new TWABasicHttpBinding_ITokenPay(null,"https://" + Constants.SERVER_IP + "/saman/psp/pay");
-//        TWAArrayOfKeyValueOfstringstring responseMessage = twaBasicHttpBinding_iTokenPay.DoWork(doWorkInfo.getUserName(), doWorkInfo.getPassword(), doWorkInfo.getCellNumber(),null,doWorkInfo.getVectorstring2stringMapEntry());
-
-//        PayThPartyApp payThPartyApp = new PayThPartyApp(context);
-//        Vectorstring2stringMapEntry responseMessage = payThPartyApp.DoWork(
-//                doWorkInfo.getUserName(),
-//                doWorkInfo.getPassword(),
-//                doWorkInfo.getCellNumber(),
-//                null,
-//                doWorkInfo.isLangABoolean(),
-//                doWorkInfo.getVectorstring2stringMapEntry());
-
-        return null;
     }
 
 

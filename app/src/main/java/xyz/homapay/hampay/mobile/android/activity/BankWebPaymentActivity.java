@@ -171,7 +171,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                             "&RedirectURL=" + redirectedURL +
                             "&Amount=" + (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + paymentInfoDTO.getVat()) +
                             "&ResNum=" + paymentInfoDTO.getProductCode() +
-                            "&TerminalId=" + pspInfoDTO.getTerminalId();
+                            "&TerminalId=" + pspInfoDTO.getSenderTerminalId();
 
         }else if (purchaseInfoDTO != null){
 
@@ -181,7 +181,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                             "&RedirectURL=" + redirectedURL +
                             "&Amount=" + (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat()) +
                             "&ResNum=" + purchaseInfoDTO.getProductCode() +
-                            "&TerminalId=" + pspInfoDTO.getTerminalId();
+                            "&TerminalId=" + pspInfoDTO.getSenderTerminalId();
         }
 
         try {

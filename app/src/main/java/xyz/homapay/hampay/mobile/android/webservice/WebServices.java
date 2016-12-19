@@ -102,15 +102,13 @@ import xyz.homapay.hampay.common.core.model.response.UploadImageResponse;
 import xyz.homapay.hampay.common.core.model.response.UserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
-import xyz.homapay.hampay.mobile.android.model.DoWorkInfoTest;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
 import xyz.homapay.hampay.mobile.android.ssl.AllowHamPaySSL;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.UserContacts;
-import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
-import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWABasicHttpBinding_ITokenPay;
-import xyz.homapay.hampay.mobile.android.webservice.psp.Vectorstring2stringMapEntry;
+import xyz.homapay.hampay.mobile.android.webservice.psp.CBUArrayOfKeyValueOfstringstring;
+import xyz.homapay.hampay.mobile.android.webservice.psp.CBUBasicHttpBinding_IGeneralService;
 
 /**
  * Created by amir on 6/6/15.
@@ -679,46 +677,58 @@ public class WebServices  {
     }
 
 
-    public TWAArrayOfKeyValueOfstringstring newPurchaseResponse(DoWorkInfo doWorkInfo) throws Exception {
-
-       AllowHamPaySSL allowHamPaySSL = new AllowHamPaySSL(context);
-        allowHamPaySSL.enableHamPaySSL();
-
-        TWABasicHttpBinding_ITokenPay twaBasicHttpBinding_iTokenPay = new TWABasicHttpBinding_ITokenPay(null,"https://" + Constants.SERVER + "/saman/psp/pay");
-        TWAArrayOfKeyValueOfstringstring responseMessage = twaBasicHttpBinding_iTokenPay.DoWork(doWorkInfo.getUserName(), doWorkInfo.getPassword(), doWorkInfo.getCellNumber(),null,doWorkInfo.getVectorstring2stringMapEntry());
-
-//        PayThPartyApp payThPartyApp = new PayThPartyApp(context);
-//        Vectorstring2stringMapEntry responseMessage = payThPartyApp.DoWork(
-//                doWorkInfo.getUserName(),
-//                doWorkInfo.getPassword(),
-//                doWorkInfo.getCellNumber(),
-//                null,
-//                doWorkInfo.isLangABoolean(),
-//                doWorkInfo.getVectorstring2stringMapEntry());
-
-        return responseMessage;
-    }
-
-
-    public Vectorstring2stringMapEntry newPurchaseResponse(DoWorkInfoTest doWorkInfo) throws Exception {
+    public CBUArrayOfKeyValueOfstringstring purchaseResponse(DoWorkInfo doWorkInfo) throws Exception {
 
         AllowHamPaySSL allowHamPaySSL = new AllowHamPaySSL(context);
         allowHamPaySSL.enableHamPaySSL();
 
-//        TWABasicHttpBinding_ITokenPay twaBasicHttpBinding_iTokenPay = new TWABasicHttpBinding_ITokenPay(null,"https://" + Constants.SERVER_IP + "/saman/psp/pay");
-//        TWAArrayOfKeyValueOfstringstring responseMessage = twaBasicHttpBinding_iTokenPay.DoWork(doWorkInfo.getUserName(), doWorkInfo.getPassword(), doWorkInfo.getCellNumber(),null,doWorkInfo.getVectorstring2stringMapEntry());
+//        CBUBasicHttpBinding_IGeneralService basicHttpBinding_iTokenPay = new CBUBasicHttpBinding_IGeneralService(null,"https://" + HpConstants.SERVER + "/saman/psp/pay");
+        CBUBasicHttpBinding_IGeneralService basicHttpBinding_iTokenPay = new CBUBasicHttpBinding_IGeneralService(null,"https://" + "uat.hampay.ir" + "/saman/psp/netpay");
+        CBUArrayOfKeyValueOfstringstring responseMessage = basicHttpBinding_iTokenPay.DoWork(doWorkInfo.getUserName(), doWorkInfo.getPassword(), doWorkInfo.getCellNumber(),null,doWorkInfo.getVectorstring2stringMapEntry());
 
-//        PayThPartyApp payThPartyApp = new PayThPartyApp(context);
-//        Vectorstring2stringMapEntry responseMessage = payThPartyApp.DoWork(
-//                doWorkInfo.getUserName(),
-//                doWorkInfo.getPassword(),
-//                doWorkInfo.getCellNumber(),
-//                null,
-//                doWorkInfo.isLangABoolean(),
-//                doWorkInfo.getVectorstring2stringMapEntry());
-
-        return null;
+        return responseMessage;
     }
+
+//    public TWAArrayOfKeyValueOfstringstring newPurchaseResponse(DoWorkInfo doWorkInfo) throws Exception {
+//
+//       AllowHamPaySSL allowHamPaySSL = new AllowHamPaySSL(context);
+//        allowHamPaySSL.enableHamPaySSL();
+//
+//        TWABasicHttpBinding_ITokenPay twaBasicHttpBinding_iTokenPay = new TWABasicHttpBinding_ITokenPay(null,"https://" + Constants.SERVER + "/saman/psp/pay");
+//        TWAArrayOfKeyValueOfstringstring responseMessage = twaBasicHttpBinding_iTokenPay.DoWork(doWorkInfo.getUserName(), doWorkInfo.getPassword(), doWorkInfo.getCellNumber(),null,doWorkInfo.getVectorstring2stringMapEntry());
+//
+////        PayThPartyApp payThPartyApp = new PayThPartyApp(context);
+////        Vectorstring2stringMapEntry responseMessage = payThPartyApp.DoWork(
+////                doWorkInfo.getUserName(),
+////                doWorkInfo.getPassword(),
+////                doWorkInfo.getCellNumber(),
+////                null,
+////                doWorkInfo.isLangABoolean(),
+////                doWorkInfo.getVectorstring2stringMapEntry());
+//
+//        return responseMessage;
+//    }
+//
+//
+//    public Vectorstring2stringMapEntry newPurchaseResponse(DoWorkInfoTest doWorkInfo) throws Exception {
+//
+//        AllowHamPaySSL allowHamPaySSL = new AllowHamPaySSL(context);
+//        allowHamPaySSL.enableHamPaySSL();
+//
+////        TWABasicHttpBinding_ITokenPay twaBasicHttpBinding_iTokenPay = new TWABasicHttpBinding_ITokenPay(null,"https://" + Constants.SERVER_IP + "/saman/psp/pay");
+////        TWAArrayOfKeyValueOfstringstring responseMessage = twaBasicHttpBinding_iTokenPay.DoWork(doWorkInfo.getUserName(), doWorkInfo.getPassword(), doWorkInfo.getCellNumber(),null,doWorkInfo.getVectorstring2stringMapEntry());
+//
+////        PayThPartyApp payThPartyApp = new PayThPartyApp(context);
+////        Vectorstring2stringMapEntry responseMessage = payThPartyApp.DoWork(
+////                doWorkInfo.getUserName(),
+////                doWorkInfo.getPassword(),
+////                doWorkInfo.getCellNumber(),
+////                null,
+////                doWorkInfo.isLangABoolean(),
+////                doWorkInfo.getVectorstring2stringMapEntry());
+//
+//        return null;
+//    }
 
 
     public ResponseMessage<LatestPurchaseResponse> latestUserPurchase(LatestPurchaseRequest latestPurchaseRequest) throws IOException{

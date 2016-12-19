@@ -245,7 +245,7 @@ public class AccountDetailFragment extends Fragment {
             image_profile.setImageResource(R.drawable.user_placeholder);
         }
 
-        user_card_number.setText(persianEnglishDigit.E2P(userProfileDTO.getCardDTO().getMaskedCardNumber()));
+        user_card_number.setText(persianEnglishDigit.E2P(userProfileDTO.getCardDTO().getLast4Digits()));
         user_bank_name.setText(userProfileDTO.getCardDTO().getBankName());
         user_cell_number.setText(persianEnglishDigit.E2P(userProfileDTO.getCellNumber()));
         if (userProfileDTO.getIbanDTO() != null) {
