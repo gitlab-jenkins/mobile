@@ -163,7 +163,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
         context = this;
         activity = RequestBusinessPayDetailActivity.this;
         PugNotification.with(context).cancel(Constants.MERCHANT_NOTIFICATION_IDENTIFIER);
-        databaseHelper = new DatabaseHelper(activity);
         dbHelper = new DatabaseHelper(context);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
