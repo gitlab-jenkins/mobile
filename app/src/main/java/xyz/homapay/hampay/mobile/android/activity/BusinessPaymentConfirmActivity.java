@@ -49,38 +49,26 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
 
     private DatabaseHelper dbHelper;
     private ImageView pay_to_business_button;
-    private boolean intentContact = false;
     private Context context;
     private Activity activity;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
     private CurrencyFormatter formatter;
-
-    public void backActionBar(View view){
-        finish();
-    }
-
-
-    HamPayDialog hamPayDialog;
-    FacedTextView business_name;
-    ImageView business_image;
-
-    FacedTextView paymentPriceValue;
-    FacedTextView paymentFeeValue;
-    FacedTextView paymentVAT;
-    FacedTextView paymentTotalValue;
-    FacedTextView cardNumberValue;
-    FacedTextView bankName;
-
-    PaymentInfoDTO paymentInfoDTO = null;
-    PspInfoDTO pspInfoDTO = null;
-
+    private HamPayDialog hamPayDialog;
+    private FacedTextView business_name;
+    private ImageView business_image;
+    private FacedTextView paymentPriceValue;
+    private FacedTextView paymentFeeValue;
+    private FacedTextView paymentVAT;
+    private FacedTextView paymentTotalValue;
+    private FacedTextView cardNumberValue;
+    private FacedTextView bankName;
+    private PaymentInfoDTO paymentInfoDTO = null;
+    private PspInfoDTO pspInfoDTO = null;
     private RequestPurchase requestPurchase;
     private DoWorkInfo doWorkInfo;
-
-    PersianEnglishDigit persianEnglishDigit;
-    RequestPSPResult requestPSPResult;
-    PSPResultRequest pspResultRequest;
+    private RequestPSPResult requestPSPResult;
+    private PSPResultRequest pspResultRequest;
     private ImageManager imageManager;
     private LinearLayout keyboard;
     private RelativeLayout pinLayout;
@@ -92,8 +80,11 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
     private String userPinCode = "";
     private String userCVV2 = "";
     private ScrollView paymentScroll;
-    PersianEnglishDigit persian = new PersianEnglishDigit();
+    private PersianEnglishDigit persian = new PersianEnglishDigit();
 
+    public void backActionBar(View view){
+        finish();
+    }
 
     @Override
     protected void onPause() {
@@ -143,17 +134,11 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
 
         dbHelper = new DatabaseHelper(context);
 
-        persianEnglishDigit = new PersianEnglishDigit();
         formatter = new CurrencyFormatter();
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         imageManager = new ImageManager(activity, 200000, false);
-
-        try {
-        }catch (Exception ex){
-            Log.e("Error", ex.getStackTrace().toString());
-        }
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -183,7 +168,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
         if (pspInfoDTO.getCardDTO().getCardId() != null && (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + paymentInfoDTO.getVat() < Constants.SOAP_AMOUNT_MAX)) {
             LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
             creditInfo.setVisibility(View.VISIBLE);
-            cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getLast4Digits()));
+            cardNumberValue.setText(persian.E2P(pspInfoDTO.getCardDTO().getLast4Digits()));
             bankName.setText(pspInfoDTO.getCardDTO().getBankName());
         } else {
         }

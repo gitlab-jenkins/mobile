@@ -58,63 +58,43 @@ import xyz.homapay.hampay.mobile.android.webservice.psp.CBUArrayOfKeyValueOfstri
 
 public class RequestBusinessPayDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
-
     private DatabaseHelper dbHelper;
-    ImageView pay_to_business_button;
-    Bundle bundle;
-    FacedTextView contact_name;
-    FacedEditText contact_message;
-    FacedTextView amount_value;
-    boolean intentContact = false;
-    Context context;
-    Activity activity;
-    SharedPreferences prefs;
-    SharedPreferences.Editor editor;
-
-    public void backActionBar(View view){
-        finish();
-    }
-
-    Long MaxXferAmount = 0L;
-    Long MinXferAmount = 0L;
-
-    HamPayDialog hamPayDialog;
-
-    FacedTextView business_name;
-    ImageView business_image;
-
-    FacedTextView input_digit_1;
-    FacedTextView input_digit_2;
-    FacedTextView input_digit_3;
-    FacedTextView input_digit_4;
-    FacedTextView input_digit_5;
-    FacedTextView input_digit_6;
-
+    private ImageView pay_to_business_button;
+    private Context context;
+    private Activity activity;
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
+    private HamPayDialog hamPayDialog;
+    private FacedTextView business_name;
+    private ImageView business_image;
+    private FacedTextView input_digit_1;
+    private FacedTextView input_digit_2;
+    private FacedTextView input_digit_3;
+    private FacedTextView input_digit_4;
+    private FacedTextView input_digit_5;
+    private FacedTextView input_digit_6;
     private LinearLayout purchase_status_layout;
     private LinearLayout purchase_payer_name_layout;
     private LinearLayout purchase_payer_cell_layout;
     private FacedTextView purchase_status;
     private FacedTextView purchase_payer_name;
     private FacedTextView purchase_payer_cell;
-    FacedTextView paymentPriceValue;
-    FacedTextView paymentVAT;
-    FacedTextView paymentFeeValue;
-    FacedTextView paymentTotalValue;
-    FacedTextView cardNumberValue;
-    FacedTextView bankName;
-
-    RequestLatestPurchase requestLatestPurchase;
-    LatestPurchaseRequest latestPurchaseRequest;
-    DatabaseHelper databaseHelper;
-    PurchaseInfoDTO purchaseInfoDTO = null;
-    PspInfoDTO pspInfoDTO = null;
-    String purchaseCode = null;
-    String providerId = null;
-    LinearLayout creditInfo;
-    RequestPSPResult requestPSPResult;
-    PSPResultRequest pspResultRequest;
+    private FacedTextView paymentPriceValue;
+    private FacedTextView paymentVAT;
+    private FacedTextView paymentFeeValue;
+    private FacedTextView paymentTotalValue;
+    private FacedTextView cardNumberValue;
+    private FacedTextView bankName;
+    private RequestLatestPurchase requestLatestPurchase;
+    private LatestPurchaseRequest latestPurchaseRequest;
+    private PurchaseInfoDTO purchaseInfoDTO = null;
+    private PspInfoDTO pspInfoDTO = null;
+    private String purchaseCode = null;
+    private String providerId = null;
+    private LinearLayout creditInfo;
+    private RequestPSPResult requestPSPResult;
+    private PSPResultRequest pspResultRequest;
     private RequestPurchase requestPurchase;
-    private DoWorkInfo doWorkInfo;
     private RequestPurchaseInfo requestPurchaseInfo;
     private PurchaseInfoRequest purchaseInfoRequest;
     private CurrencyFormatter currencyFormatter;
@@ -129,7 +109,11 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
     private String userPinCode = "";
     private String userCVV2 = "";
     private ScrollView paymentScroll;
-    PersianEnglishDigit persian = new PersianEnglishDigit();
+    private PersianEnglishDigit persian = new PersianEnglishDigit();
+
+    public void backActionBar(View view){
+        finish();
+    }
 
     @Override
     protected void onPause() {
@@ -204,21 +188,9 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
         cvvText.setOnClickListener(this);
         paymentScroll = (ScrollView)findViewById(R.id.paymentScroll);
 
-        try {
-            MaxXferAmount = prefs.getLong(Constants.MAX_BUSINESS_XFER_AMOUNT, 0);
-            MinXferAmount = prefs.getLong(Constants.MIN_BUSINESS_XFER_AMOUNT, 0);
-        }catch (Exception ex){
-            Log.e("Error", ex.getStackTrace().toString());
-        }
-
         hamPayDialog = new HamPayDialog(activity);
 
         currencyFormatter = new CurrencyFormatter();
-
-        amount_value = (FacedTextView)findViewById(R.id.amount_value);
-
-        contact_message = (FacedEditText)findViewById(R.id.contact_message);
-        contact_name = (FacedTextView)findViewById(R.id.contact_name);
 
         creditInfo = (LinearLayout)findViewById(R.id.creditInfo);
 
@@ -244,8 +216,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
         cardNumberValue = (FacedTextView)findViewById(R.id.cardNumberValue);
         paymentTotalValue = (FacedTextView)findViewById(R.id.paymentTotalValue);
         pay_to_business_button = (ImageView)findViewById(R.id.pay_to_business_button);
-
-        bundle = getIntent().getExtras();
 
         Intent intent = getIntent();
 
