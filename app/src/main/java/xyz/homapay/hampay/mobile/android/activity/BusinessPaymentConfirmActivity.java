@@ -11,7 +11,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
+
+import com.nineoldandroids.animation.ObjectAnimator;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
@@ -88,6 +91,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
     private boolean cvvFocus = false;
     private String userPinCode = "";
     private String userCVV2 = "";
+    private ScrollView paymentScroll;
     PersianEnglishDigit persian = new PersianEnglishDigit();
 
 
@@ -168,6 +172,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
         cvvLayout = (RelativeLayout)findViewById(R.id.cvv_layout);
         cvvText = (FacedTextView)findViewById(R.id.cvv_text) ;
         cvvText.setOnClickListener(this);
+        paymentScroll = (ScrollView)findViewById(R.id.paymentScroll);
 
         Intent intent = getIntent();
 
@@ -323,9 +328,9 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
 
     @Override
     public void onBackPressed() {
-
         if (keyboard.getVisibility() == View.VISIBLE){
             new Collapse(keyboard).animate();
+            ObjectAnimator.ofInt(paymentScroll, "scrollY",  paymentScroll.getTop()).setDuration(400).start();
             return;
         }
         finish();
@@ -333,6 +338,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
 
     @Override
     public void onClick(View view) {
+        ObjectAnimator.ofInt(paymentScroll, "scrollY",  paymentScroll.getBottom()).setDuration(400).start();
         if (keyboard.getVisibility() == View.GONE) {
             new Expand(keyboard).animate();
         }
@@ -502,6 +508,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
     public void pressKey(View view) {
         if (view.getTag().toString().equals("*")) {
             new Collapse(keyboard).animate();
+            ObjectAnimator.ofInt(paymentScroll, "scrollY",  paymentScroll.getTop()).setDuration(400).start();
         }else if (view.getTag().toString().equals("|")) {
             new Expand(keyboard).animate();
         }else {
@@ -513,13 +520,16 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
         if (digit.endsWith("d")){
         }
         if (pinCodeFocus){
+            if (userPinCode.length() == 0){
+                pinText.setText("");
+            }
             String pinCode = pinText.getText().toString();
             if (digit.endsWith("d")){
                 if (pinCode.length() == 0) return;
                 pinText.setText(pinCode.substring(0, pinCode.length() - 1));
                 userPinCode = userPinCode.substring(0, userPinCode.length() - 1);
             }else {
-                pinText.setText(persian.E2P(pinCode + "■"));
+                pinText.setText(persian.E2P(pinCode + "●"));
                 userPinCode += digit;
             }
         }else if (cvvFocus){
@@ -528,7 +538,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
                 if (cvvCode.length() == 0) return;
                 cvvText.setText(cvvCode.substring(0, cvvCode.length() - 1));
             }else {
-                cvvText.setText(persian.E2P(cvvCode + "■"));
+                cvvText.setText(persian.E2P(cvvCode + "●"));
                 userCVV2 += digit;
             }
         }

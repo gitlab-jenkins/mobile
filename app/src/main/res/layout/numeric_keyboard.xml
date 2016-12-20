@@ -245,6 +245,7 @@
            android:layout_margin="2dp"
            android:tag="d"
            android:onClick="pressKey"
+           android:longClickable="true"
            android:clickable="true">
 
            <ImageView

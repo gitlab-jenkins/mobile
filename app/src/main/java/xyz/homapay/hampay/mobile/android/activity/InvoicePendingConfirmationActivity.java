@@ -10,7 +10,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
+
+import com.nineoldandroids.animation.ObjectAnimator;
 
 import br.com.goncalves.pugnotification.notification.PugNotification;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
@@ -53,24 +56,23 @@ import xyz.homapay.hampay.mobile.android.webservice.psp.CBUArrayOfKeyValueOfstri
 public class InvoicePendingConfirmationActivity extends AppCompatActivity implements View.OnClickListener {
 
     private DatabaseHelper dbHelper;
-    ImageView pay_button;
-    ImageView user_image;
-    FacedTextView callerName;
-    FacedTextView paymentCode;
-    FacedTextView received_message;
-    FacedTextView create_date;
-    FacedTextView paymentPriceValue;
-    FacedTextView paymentVAT;
-    FacedTextView paymentFeeValue;
-    FacedTextView paymentTotalValue;
-    FacedTextView bankName;
-    FacedTextView cardNumberValue;
-    CurrencyFormatter currencyFormatter;
-    boolean intentContact = false;
-    Context context;
-    Activity activity;
-    SharedPreferences prefs;
-    SharedPreferences.Editor editor;
+    private ImageView pay_button;
+    private ImageView user_image;
+    private FacedTextView callerName;
+    private FacedTextView paymentCode;
+    private FacedTextView received_message;
+    private FacedTextView create_date;
+    private FacedTextView paymentPriceValue;
+    private FacedTextView paymentVAT;
+    private FacedTextView paymentFeeValue;
+    private FacedTextView paymentTotalValue;
+    private FacedTextView bankName;
+    private FacedTextView cardNumberValue;
+    private CurrencyFormatter currencyFormatter;
+    private Context context;
+    private Activity activity;
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
     private LinearLayout keyboard;
     private RelativeLayout pinLayout;
     private FacedTextView pinText;
@@ -80,30 +82,24 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
     private boolean cvvFocus = false;
     private String userPinCode = "";
     private String userCVV2 = "";
-    PersianEnglishDigit persian = new PersianEnglishDigit();
+    private ScrollView paymentScroll;
+    private PersianEnglishDigit persian = new PersianEnglishDigit();
+    private HamPayDialog hamPayDialog;
+    private PaymentInfoDTO paymentInfoDTO = null;
+    private PspInfoDTO pspInfoDTO = null;
+    private String providerId = null;
+    private RequestPurchase requestPurchase;
+    private DoWorkInfo doWorkInfo;
+    private PersianEnglishDigit persianEnglishDigit;
+    private RequestPSPResult requestPSPResult;
+    private PSPResultRequest pspResultRequest;
+    private RequestLatestPayment requestLatestPayment;
+    private LatestPaymentRequest latestPaymentRequest;
+    private ImageManager imageManager;
 
     public void backActionBar(View view) {
         finish();
     }
-
-    HamPayDialog hamPayDialog;
-    PaymentInfoDTO paymentInfoDTO = null;
-    PspInfoDTO pspInfoDTO = null;
-    String providerId = null;
-
-    private RequestPurchase requestPurchase;
-    private DoWorkInfo doWorkInfo;
-
-    PersianEnglishDigit persianEnglishDigit;
-
-    RequestPSPResult requestPSPResult;
-    PSPResultRequest pspResultRequest;
-
-    RequestLatestPayment requestLatestPayment;
-    LatestPaymentRequest latestPaymentRequest;
-
-    private String authToken;
-    private ImageManager imageManager;
 
     @Override
     protected void onPause() {
@@ -170,7 +166,6 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
         }
 
         imageManager = new ImageManager(activity, 200000, false);
-        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
         keyboard = (LinearLayout)findViewById(R.id.keyboard);
         pinLayout = (RelativeLayout)findViewById(R.id.pin_layout);
         pinText = (FacedTextView)findViewById(R.id.pin_text) ;
@@ -178,7 +173,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
         cvvLayout = (RelativeLayout)findViewById(R.id.cvv_layout);
         cvvText = (FacedTextView)findViewById(R.id.cvv_text) ;
         cvvText.setOnClickListener(this);
-
+        paymentScroll = (ScrollView)findViewById(R.id.paymentScroll);
         hamPayDialog = new HamPayDialog(activity);
 
         persianEnglishDigit = new PersianEnglishDigit();
@@ -332,6 +327,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
     public void onBackPressed() {
         if (keyboard.getVisibility() == View.VISIBLE){
             new Collapse(keyboard).animate();
+            ObjectAnimator.ofInt(paymentScroll, "scrollY",  paymentScroll.getTop()).setDuration(400).start();
             return;
         }
         finish();
@@ -339,12 +335,12 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
 
     @Override
     public void onClick(View view) {
+        ObjectAnimator.ofInt(paymentScroll, "scrollY",  paymentScroll.getBottom()).setDuration(400).start();
         if (keyboard.getVisibility() == View.GONE) {
             new Expand(keyboard).animate();
         }
         switch (view.getId()){
             case R.id.pin_text:
-                pinText.setText("");
                 pinLayout.setBackgroundResource(R.drawable.card_info_entry_placeholder);
                 cvvLayout.setBackgroundResource(R.drawable.card_info_empty_placeholder);
                 pinCodeFocus = true;
@@ -352,7 +348,6 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
                 break;
 
             case R.id.cvv_text:
-                cvvText.setText("");
                 pinLayout.setBackgroundResource(R.drawable.card_info_empty_placeholder);
                 cvvLayout.setBackgroundResource(R.drawable.card_info_entry_placeholder);
                 pinCodeFocus = false;
@@ -617,6 +612,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
     public void pressKey(View view) {
         if (view.getTag().toString().equals("*")) {
             new Collapse(keyboard).animate();
+            ObjectAnimator.ofInt(paymentScroll, "scrollY",  paymentScroll.getTop()).setDuration(400).start();
         }else if (view.getTag().toString().equals("|")) {
             new Expand(keyboard).animate();
         }else {
@@ -628,13 +624,16 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
         if (digit.endsWith("d")){
         }
         if (pinCodeFocus){
+            if (userPinCode.length() == 0){
+                pinText.setText("");
+            }
             String pinCode = pinText.getText().toString();
             if (digit.endsWith("d")){
                 if (pinCode.length() == 0) return;
                 pinText.setText(pinCode.substring(0, pinCode.length() - 1));
                 userPinCode = userPinCode.substring(0, userPinCode.length() - 1);
             }else {
-                pinText.setText(persian.E2P(pinCode + "■"));
+                pinText.setText(persian.E2P(pinCode + "●"));
                 userPinCode += digit;
             }
         }else if (cvvFocus){
@@ -643,7 +642,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
                 if (cvvCode.length() == 0) return;
                 cvvText.setText(cvvCode.substring(0, cvvCode.length() - 1));
             }else {
-                cvvText.setText(persian.E2P(cvvCode + "■"));
+                cvvText.setText(persian.E2P(cvvCode + "●"));
                 userCVV2 += digit;
             }
         }

@@ -45,6 +45,7 @@
             android:layout_height="match_parent">
 
             <ScrollView
+                android:id="@+id/paymentScroll"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -462,14 +463,14 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:textSize="15dp"
-                                    android:textColor="@android:color/black"
+                                    android:textColor="@color/account_details_text"
                                     android:singleLine="true"
                                     android:maxLength="20"
                                     android:inputType="number"
                                     android:background="@color/transparency"
                                     android:gravity="center"
                                     android:layout_centerVertical="true"
-                                    android:text="@string/user_pin2"/>
+                                    android:hint="@string/user_pin2"/>
 
                             </RelativeLayout>
 
@@ -487,14 +488,14 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:textSize="15dp"
-                                    android:textColor="@android:color/black"
+                                    android:textColor="@color/account_details_text"
                                     android:singleLine="true"
                                     android:maxLength="4"
                                     android:inputType="number"
                                     android:background="@color/transparency"
                                     android:gravity="center"
                                     android:layout_centerVertical="true"
-                                    android:text="@string/user_cvv2"/>
+                                    android:hint="@string/user_cvv2"/>
 
                             </RelativeLayout>
 
@@ -512,7 +513,7 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="100dp"/>
+                        android:layout_height="160dp"/>
 
                 </LinearLayout>
 

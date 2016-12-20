@@ -11,7 +11,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
+
+import com.nineoldandroids.animation.ObjectAnimator;
 
 import br.com.goncalves.pugnotification.notification.PugNotification;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
@@ -125,6 +128,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
     private boolean cvvFocus = false;
     private String userPinCode = "";
     private String userCVV2 = "";
+    private ScrollView paymentScroll;
     PersianEnglishDigit persian = new PersianEnglishDigit();
 
     @Override
@@ -198,6 +202,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
         cvvLayout = (RelativeLayout)findViewById(R.id.cvv_layout);
         cvvText = (FacedTextView)findViewById(R.id.cvv_text) ;
         cvvText.setOnClickListener(this);
+        paymentScroll = (ScrollView)findViewById(R.id.paymentScroll);
 
         try {
             MaxXferAmount = prefs.getLong(Constants.MAX_BUSINESS_XFER_AMOUNT, 0);
@@ -377,6 +382,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
     public void onBackPressed() {
         if (keyboard.getVisibility() == View.VISIBLE){
             new Collapse(keyboard).animate();
+            ObjectAnimator.ofInt(paymentScroll, "scrollY",  paymentScroll.getTop()).setDuration(400).start();
             return;
         }
         finish();
@@ -384,12 +390,12 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
 
     @Override
     public void onClick(View view) {
+        ObjectAnimator.ofInt(paymentScroll, "scrollY",  paymentScroll.getBottom()).setDuration(400).start();
         if (keyboard.getVisibility() == View.GONE) {
             new Expand(keyboard).animate();
         }
         switch (view.getId()){
             case R.id.pin_text:
-                pinText.setText("");
                 pinLayout.setBackgroundResource(R.drawable.card_info_entry_placeholder);
                 cvvLayout.setBackgroundResource(R.drawable.card_info_empty_placeholder);
                 pinCodeFocus = true;
@@ -397,7 +403,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                 break;
 
             case R.id.cvv_text:
-                cvvText.setText("");
                 pinLayout.setBackgroundResource(R.drawable.card_info_empty_placeholder);
                 cvvLayout.setBackgroundResource(R.drawable.card_info_entry_placeholder);
                 pinCodeFocus = false;
@@ -803,6 +808,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
     public void pressKey(View view) {
         if (view.getTag().toString().equals("*")) {
             new Collapse(keyboard).animate();
+            ObjectAnimator.ofInt(paymentScroll, "scrollY",  paymentScroll.getTop()).setDuration(400).start();
         }else if (view.getTag().toString().equals("|")) {
             new Expand(keyboard).animate();
         }else {
@@ -814,13 +820,16 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
         if (digit.endsWith("d")){
         }
         if (pinCodeFocus){
+            if (userPinCode.length() == 0){
+                pinText.setText("");
+            }
             String pinCode = pinText.getText().toString();
             if (digit.endsWith("d")){
                 if (pinCode.length() == 0) return;
                 pinText.setText(pinCode.substring(0, pinCode.length() - 1));
                 userPinCode = userPinCode.substring(0, userPinCode.length() - 1);
             }else {
-                pinText.setText(persian.E2P(pinCode + "■"));
+                pinText.setText(persian.E2P(pinCode + "●"));
                 userPinCode += digit;
             }
         }else if (cvvFocus){
@@ -829,7 +838,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                 if (cvvCode.length() == 0) return;
                 cvvText.setText(cvvCode.substring(0, cvvCode.length() - 1));
             }else {
-                cvvText.setText(persian.E2P(cvvCode + "■"));
+                cvvText.setText(persian.E2P(cvvCode + "●"));
                 userCVV2 += digit;
             }
         }
