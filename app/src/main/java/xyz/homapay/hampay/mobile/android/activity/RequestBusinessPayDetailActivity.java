@@ -253,7 +253,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
 
                 if (pspInfoDTO == null) return;
 
-                if (pspInfoDTO.getCardDTO().getCardId() == null || (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() >= Constants.SOAP_AMOUNT_MAX)) {
+                if ((pspInfoDTO.getCardDTO() != null && pspInfoDTO.getCardDTO().getCardId() == null) || (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() >= Constants.SOAP_AMOUNT_MAX)) {
                     Intent intent = new Intent();
                     intent.setClass(activity, BankWebPaymentActivity.class);
                     intent.putExtra(Constants.PURCHASE_INFO, purchaseInfoDTO);
@@ -738,7 +738,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                 purchase_payer_name_layout.setVisibility(View.GONE);
                 purchase_payer_cell_layout.setVisibility(View.GONE);
                 pay_to_business_button.setVisibility(View.VISIBLE);
-                if (pspInfoDTO.getCardDTO().getCardId() != null && (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() < Constants.SOAP_AMOUNT_MAX)) {
+                if ((pspInfoDTO.getCardDTO() != null && pspInfoDTO.getCardDTO().getCardId() == null) && (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() < Constants.SOAP_AMOUNT_MAX)) {
                     creditInfo.setVisibility(View.VISIBLE);
                     cardNumberValue.setText(persian.E2P(pspInfoDTO.getCardDTO().getLast4Digits()));
                     bankName.setText(pspInfoDTO.getCardDTO().getBankName());

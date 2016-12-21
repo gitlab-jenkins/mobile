@@ -138,9 +138,6 @@ public class WelcomeActivity extends AppCompatActivity {
         btnSkip.setVisibility(View.GONE);
         btnNext = (Button) findViewById(R.id.btn_next);
 
-
-//        addBottomDots(0);
-
         changeStatusBarColor();
 
         welcomeAdapter = new WelcomeAdapter(this);
