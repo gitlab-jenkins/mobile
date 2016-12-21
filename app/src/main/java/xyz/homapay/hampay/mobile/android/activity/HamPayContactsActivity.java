@@ -124,8 +124,7 @@ public class HamPayContactsActivity extends AppCompatActivity implements Permiss
             @Override
             public boolean onResult(int requestCode, String[] requestPermissions, int[] grantResults) {
                 if (requestCode == Constants.READ_CONTACTS) {
-                    // Check if the permission is correct and is granted
-                    if (requestPermissions[0].equals(Manifest.permission.READ_CONTACTS) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (grantResults.length > 0 && requestPermissions[0].equals(Manifest.permission.READ_CONTACTS) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                         UserContacts userContacts = new UserContacts(context);
                         contacts = userContacts.read();
                         contactsHampayEnabledRequest.setContacts(contacts);

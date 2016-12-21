@@ -60,6 +60,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
     private ImageView user_image;
     private FacedTextView callerName;
     private FacedTextView paymentCode;
+    private LinearLayout received_message_holder;
     private FacedTextView received_message;
     private FacedTextView create_date;
     private FacedTextView paymentPriceValue;
@@ -183,6 +184,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
         paymentCode = (FacedTextView)findViewById(R.id.paymentCode);
         create_date = (FacedTextView)findViewById(R.id.create_date);
         received_message = (FacedTextView) findViewById(R.id.received_message);
+        received_message_holder = (LinearLayout)findViewById(R.id.received_message_holder);
         paymentPriceValue = (FacedTextView) findViewById(R.id.paymentPriceValue);
         paymentVAT = (FacedTextView)findViewById(R.id.paymentVAT);
         paymentFeeValue = (FacedTextView)findViewById(R.id.paymentFeeValue);
@@ -571,7 +573,8 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
         callerName.setText(paymentInfo.getCallerName());
         paymentCode.setText(persianEnglishDigit.E2P(getString(R.string.payment_request_code) + paymentInfo.getProductCode()));
         create_date.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(paymentInfo.getCreatedBy())));
-        if (paymentInfo.getMessage() != null) {
+        if (paymentInfo.getMessage() != null && paymentInfo.getMessage().length() > 0) {
+            new Expand(received_message_holder).animate();
             received_message.setText(paymentInfo.getMessage().trim());
         }
         paymentPriceValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfo.getAmount())));

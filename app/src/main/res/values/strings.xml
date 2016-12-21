@@ -253,7 +253,7 @@
     <string name="request_payment_rial">مبلغ: </string>
     <string name="request_payment_vat">مالیات بر ارزش افزوده: </string>
     <string name="request_payment_hampay_fee">کارمزد هم‌پی: </string>
-    <string name="request_payment_fee">کارمزد: </string>
+    <string name="request_payment_fee">کارمزد هم‌پی: </string>
     <string name="request_payment_total">مبلغ نهایی: </string>
     <string name="purchase_payment_status">وضعیت: </string>
     <string name="purchase_payment_payer_name">نام پرداخت کننده: </string>
