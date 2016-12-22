@@ -45,7 +45,7 @@ public class PaymentCompletedActivity extends AppCompatActivity {
         formatter = new CurrencyFormatter();
 
         amountValue.setText(persianEnglishDigit.E2P(formatter.format(bundle.getLong(Constants.SUCCESS_PAYMENT_AMOUNT))));
-        paymentCode.setText(persianEnglishDigit.E2P(bundle.getString(Constants.SUCCESS_PAYMENT_CODE)));
+        paymentCode.setText(bundle.getString(Constants.SUCCESS_PAYMENT_CODE));
         traceCode.setText(persianEnglishDigit.E2P(bundle.getString(Constants.SUCCESS_PAYMENT_TRACE)));
 
 
