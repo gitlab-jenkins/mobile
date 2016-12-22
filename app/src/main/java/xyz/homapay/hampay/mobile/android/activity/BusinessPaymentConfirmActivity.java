@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -211,7 +210,12 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
                     pay_to_business_button.setEnabled(false);
 
                     if (pinText.getText().toString().length() <= 4) {
-                        Toast.makeText(context, getString(R.string.msg_pin2_incurrect), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, getString(R.string.msg_pin2_incorrect), Toast.LENGTH_SHORT).show();
+                        pay_to_business_button.setEnabled(true);
+                        return;
+                    }
+                    if (cvvText.getText().toString().length() == 3 || cvvText.getText().toString().length() == 4){
+                        Toast.makeText(context, getString(R.string.msg_cvv2_incorrect), Toast.LENGTH_SHORT).show();
                         pay_to_business_button.setEnabled(true);
                         return;
                     }

@@ -99,6 +99,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
     private int sendSmsCounter = 0;
     private String cellNumber;
     private FacedTextView sms_delivery_text;
+    private boolean smsVerified = false;
 
 
     @Override
@@ -279,11 +280,13 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
             public boolean onResult(int requestCode, String[] requestPermissions, int[] grantResults) {
                 if (requestCode == Constants.READ_CONTACTS) {
                     if (grantResults.length > 0 && requestPermissions[0].equals(Manifest.permission.READ_CONTACTS) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        Intent intent = new Intent();
-                        intent.setClass(SMSVerificationActivity.this, PasswordEntryActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
-                        finish();
-                        startActivity(intent);
+                        if (smsVerified) {
+                            Intent intent = new Intent();
+                            intent.setClass(SMSVerificationActivity.this, PasswordEntryActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                            finish();
+                            startActivity(intent);
+                        }
                     } else {
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                             boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS);
@@ -297,11 +300,13 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                                     }
                                 });
                             }else {
-                                Intent intent = new Intent();
-                                intent.setClass(activity, PasswordEntryActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
-                                finish();
-                                startActivity(intent);
+                                if (smsVerified) {
+                                    Intent intent = new Intent();
+                                    intent.setClass(activity, PasswordEntryActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                                    finish();
+                                    startActivity(intent);
+                                }
                             }
                         }else {
                             handler.post(new Runnable() {
@@ -329,11 +334,13 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                 requestAndLoadUserContact();
                 break;
             case DENY:
-                Intent intent = new Intent();
-                intent.setClass(activity, PasswordEntryActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
-                finish();
-                startActivity(intent);
+                if (smsVerified) {
+                    Intent intent = new Intent();
+                    intent.setClass(activity, PasswordEntryActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                    finish();
+                    startActivity(intent);
+                }
                 break;
         }
     }
@@ -363,6 +370,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
             if (registrationVerifyMobileResponseMessage != null) {
 
                 if (registrationVerifyMobileResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    smsVerified = true;
                     serviceName = ServiceEvent.REGISTRATION_VERIFY_MOBILE_SUCCESS;
                     stopTimerTask();
                     if (registrationVerifyMobileResponseMessage.getService().getIsVerified()) {
@@ -553,9 +561,8 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         }
 
         if (receivedSmsValue.length() == 4) {
-
+            smsVerified = false;
             registrationVerifyMobileRequest = new RegistrationVerifyMobileRequest();
-
             registrationVerifyMobileRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
             registrationVerifyMobileRequest.setSmsToken(receivedSmsValue);
             receivedSmsValue = "";

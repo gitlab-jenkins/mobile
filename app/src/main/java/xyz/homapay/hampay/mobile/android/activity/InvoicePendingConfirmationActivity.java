@@ -37,7 +37,6 @@ import xyz.homapay.hampay.mobile.android.async.RequestPSPResult;
 import xyz.homapay.hampay.mobile.android.async.RequestPaymentDetail;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
-import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
@@ -225,7 +224,11 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
                     startActivityForResult(intent, 46);
                 } else {
                     if (pinText.getText().toString().length() <= 4) {
-                        Toast.makeText(context, getString(R.string.msg_pin2_incurrect), Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, getString(R.string.msg_pin2_incorrect), Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    if (cvvText.getText().toString().length() == 3 || cvvText.getText().toString().length() == 4){
+                        Toast.makeText(context, getString(R.string.msg_cvv2_incorrect), Toast.LENGTH_SHORT).show();
                         return;
                     }
                     editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());

@@ -41,7 +41,6 @@ import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchaseDetail;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchaseInfo;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
-import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
@@ -262,7 +261,12 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                 } else {
                     pay_to_business_button.setEnabled(false);
                     if (pinText.getText().toString().length() <= 4) {
-                        Toast.makeText(context, getString(R.string.msg_pin2_incurrect), Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, getString(R.string.msg_pin2_incorrect), Toast.LENGTH_LONG).show();
+                        pay_to_business_button.setEnabled(true);
+                        return;
+                    }
+                    if (cvvText.getText().toString().length() == 3 || cvvText.getText().toString().length() == 4){
+                        Toast.makeText(context, getString(R.string.msg_cvv2_incorrect), Toast.LENGTH_SHORT).show();
                         pay_to_business_button.setEnabled(true);
                         return;
                     }
