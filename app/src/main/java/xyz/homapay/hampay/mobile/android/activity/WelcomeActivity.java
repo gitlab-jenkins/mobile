@@ -57,10 +57,10 @@ public class WelcomeActivity extends AppCompatActivity {
         activity = WelcomeActivity.this;
 
         rootUtil = new RootUtil(activity);
-        if (rootUtil.checkRootedDevice()){
-            new HamPayDialog(activity).showPreventRootDeviceDialog();
-            return;
-        }
+//        if (rootUtil.checkRootedDevice()){
+//            new HamPayDialog(activity).showPreventRootDeviceDialog();
+//            return;
+//        }
 
         bundle = getIntent().getExtras();
         if (bundle != null) {
