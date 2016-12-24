@@ -183,9 +183,6 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
         cardNumberValue = (FacedTextView) findViewById(R.id.cardNumberValue);
 
         Intent intent = getIntent();
-
-        paymentInfoDTO = (PaymentInfoDTO) intent.getSerializableExtra(Constants.PAYMENT_INFO);
-        pspInfoDTO = (PspInfoDTO) intent.getSerializableExtra(Constants.PSP_INFO);
         providerId = intent.getStringExtra(Constants.PROVIDER_ID);
 
         if (paymentInfoDTO != null) {
@@ -207,7 +204,10 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity {
         pay_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (pspInfoDTO.getCardDTO().getCardId() == null || (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + paymentInfoDTO.getVat() >= Constants.SOAP_AMOUNT_MAX)) {
+
+                if (pspInfoDTO == null) return;
+
+                if ((pspInfoDTO.getCardDTO() != null && pspInfoDTO.getCardDTO().getCardId() == null)  || (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + paymentInfoDTO.getVat() >= Constants.SOAP_AMOUNT_MAX)) {
                     Intent intent = new Intent();
                     intent.setClass(activity, BankWebPaymentActivity.class);
                     intent.putExtra(Constants.PAYMENT_INFO, paymentInfoDTO);
