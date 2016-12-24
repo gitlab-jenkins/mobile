@@ -5,8 +5,8 @@ import xyz.homapay.hampay.mobile.android.webservice.ConnectionType;
 
 public class Constants {
 //    public static String SERVER = "176.58.104.158";//England Server
-    public static String SERVER = "mobile.hampay.ir";//Prod Server
-//    public static String SERVER = "sit.hampay.ir";//SIT/27 Server
+//    public static String SERVER = "mobile.hampay.ir";//Prod Server
+    public static String SERVER = "sit.hampay.ir";//SIT/27 Server
 //    public static String SERVER = "139.162.147.189";//DEV2 Server
 //    public static String SERVER = "sit.hampay.ir";//SIT/27 Server
 //    public static String SERVER = "uat.hampay.ir";//UAT Server
