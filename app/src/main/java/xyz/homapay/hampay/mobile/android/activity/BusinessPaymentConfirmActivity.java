@@ -214,7 +214,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
                         pay_to_business_button.setEnabled(true);
                         return;
                     }
-                    if (cvvText.getText().toString().length() == 3 || cvvText.getText().toString().length() == 4){
+                    if (!(cvvText.getText().toString().length() >= 3 && cvvText.getText().toString().length() <= 4)){
                         Toast.makeText(context, getString(R.string.msg_cvv2_incorrect), Toast.LENGTH_SHORT).show();
                         pay_to_business_button.setEnabled(true);
                         return;
@@ -355,7 +355,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
 
             hamPayDialog.dismisWaitingDialog();
             pay_to_business_button.setEnabled(true);
-            ServiceEvent serviceName;
+            ServiceEvent serviceName = null;
             LogEvent logEvent = new LogEvent(context);
 
             String responseCode = null;
@@ -392,13 +392,17 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
                         resultStatus = ResultStatus.FAILURE;
                         serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
                         logEvent.log(serviceName);
-                    }else {
+                    }else if (responseCode.equalsIgnoreCase("3000")){
+                        serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
+                        new HamPayDialog(activity).pspFailResultDialog(responseCode, description);
+                    }
+                    else {
                         PspCode pspCode = new PspCode(context);
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(responseCode));
                         resultStatus = ResultStatus.FAILURE;
                         serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
-                        logEvent.log(serviceName);
                     }
+                    logEvent.log(serviceName);
 
                     SyncPspResult syncPspResult = new SyncPspResult();
                     syncPspResult.setResponseCode(responseCode);

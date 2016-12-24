@@ -227,7 +227,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
                         Toast.makeText(context, getString(R.string.msg_pin2_incorrect), Toast.LENGTH_LONG).show();
                         return;
                     }
-                    if (cvvText.getText().toString().length() == 3 || cvvText.getText().toString().length() == 4){
+                    if (!(cvvText.getText().toString().length() >= 3 && cvvText.getText().toString().length() <= 4)){
                         Toast.makeText(context, getString(R.string.msg_cvv2_incorrect), Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -373,7 +373,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
             String description = null;
             String SWTraceNum = null;
             ResultStatus resultStatus = ResultStatus.FAILURE;
-            ServiceEvent serviceName;
+            ServiceEvent serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
             LogEvent logEvent = new LogEvent(context);
 
             if (purchaseResponseResponseMessage != null) {
@@ -403,7 +403,11 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
                         serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.msg_insufficient_credit));
                         resultStatus = ResultStatus.FAILURE;
-                    }else {
+                    }else if (responseCode.equalsIgnoreCase("3000")){
+                        serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
+                        new HamPayDialog(activity).pspFailResultDialog(responseCode, description);
+                    }
+                    else {
                         serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
                         PspCode pspCode = new PspCode(context);
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(responseCode));
