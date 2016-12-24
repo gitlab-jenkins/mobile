@@ -146,7 +146,7 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
             @Override
             public boolean onResult(int requestCode, String[] requestPermissions, int[] grantResults) {
                 if (requestCode == Constants.READ_PHONE_STATE) {
-                    if (requestPermissions[0].equals(Manifest.permission.READ_PHONE_STATE) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (grantResults.length > 0 && requestPermissions[0].equals(Manifest.permission.READ_PHONE_STATE) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                         registrationEntryRequest = new RegistrationEntryRequest();
                         registrationEntryRequest.setCellNumber(persianEnglishDigit.P2E(getString(R.string.iran_prefix_cell_number) + cellNumberValue.getText().toString()));
                         registrationEntryRequest.setCardNumber(persianEnglishDigit.P2E(cardNumberValue.getText().toString()));
