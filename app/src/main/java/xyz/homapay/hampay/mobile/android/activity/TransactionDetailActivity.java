@@ -169,15 +169,17 @@ public class TransactionDetailActivity extends AppCompatActivity {
                 status_text.setTextColor(ContextCompat.getColor(context, R.color.user_change_status));
             }
 
-        } else if (transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.PENDING) {
-            status_text.setText(context.getString(R.string.pending));
-            status_text.setTextColor(ContextCompat.getColor(context, R.color.pending_transaction));
-        } else {
+        }
+//        else if (transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.PENDING) {
+//            status_text.setText(context.getString(R.string.pending));
+//            status_text.setTextColor(ContextCompat.getColor(context, R.color.pending_transaction));
+//        }
+        else {
             status_text.setText(transactionDTO.getTransactionType().equals(TransactionDTO.TransactionType.CREDIT) ? R.string.fail_credit : R.string.fail_debit);
             status_text.setTextColor(ContextCompat.getColor(context, R.color.failed_transaction));
             //TODO Came from service
-            detail_text.setText("");
-            detail_text.setTextColor(ContextCompat.getColor(context , R.color.normal_text));
+            detail_text.setText(transactionDTO.getTransactionStatus().getDescription());
+            detail_text.setTextColor(ContextCompat.getColor(context, R.color.normal_text));
         }
 
         transactionDetailRequest = new TransactionDetailRequest();
