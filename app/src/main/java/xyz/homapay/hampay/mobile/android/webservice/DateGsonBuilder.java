@@ -9,6 +9,9 @@ import com.google.gson.JsonParseException;
 import java.lang.reflect.Type;
 import java.util.Date;
 
+import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO;
+import xyz.homapay.hampay.mobile.android.util.TransactionStatusEnumDeserilizer;
+
 /**
  * Created by amir on 3/7/16.
  */
@@ -26,6 +29,7 @@ public class DateGsonBuilder {
                 return new Date(json.getAsJsonPrimitive().getAsLong());
             }
         });
+        builder.registerTypeAdapter(TransactionDTO.TransactionStatus.class, new TransactionStatusEnumDeserilizer());
 
         return builder;
     }

@@ -6,11 +6,17 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.URL;
+import java.util.Date;
 import java.util.UUID;
 
 import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
@@ -113,10 +119,12 @@ import xyz.homapay.hampay.common.core.model.response.UserMerchantInquiryResponse
 import xyz.homapay.hampay.common.core.model.response.UserMerchantResponse;
 import xyz.homapay.hampay.common.core.model.response.UserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
+import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfoTest;
 import xyz.homapay.hampay.mobile.android.ssl.AllowHamPaySSL;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.TransactionStatusEnumDeserilizer;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWABasicHttpBinding_ITokenPay;
 import xyz.homapay.hampay.mobile.android.webservice.psp.Vectorstring2stringMapEntry;
