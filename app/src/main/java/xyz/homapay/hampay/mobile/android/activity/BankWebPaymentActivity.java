@@ -49,6 +49,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
     String redirectedURL;
 
     private Context context;
+    private Activity activity;
 
     String postData;
 
@@ -130,6 +131,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
         context = this;
+        activity = BankWebPaymentActivity.this;
 
         Intent intent = getIntent();
 
@@ -232,7 +234,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                             startActivityForResult(intent, 0);
                             resultStatus = ResultStatus.SUCCESS;
                         }else {
-                            hamPayDialog.ipgFailDialog();
+                            new HamPayDialog(activity).ipgFailDialog();
                             resultStatus = ResultStatus.FAILURE;
                             serviceName = ServiceEvent.IPG_PAYMENT_FAILURE;
                             logEvent.log(serviceName);
@@ -240,7 +242,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                     } else {
                         serviceName = ServiceEvent.IPG_PAYMENT_FAILURE;
                         logEvent.log(serviceName);
-                        hamPayDialog.ipgFailDialog();
+                        new HamPayDialog(activity).ipgFailDialog();
                     }
                 } else {
                     serviceName = ServiceEvent.IPG_PAYMENT_FAILURE;
