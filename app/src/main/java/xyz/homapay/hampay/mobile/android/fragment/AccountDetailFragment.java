@@ -39,9 +39,7 @@ public class AccountDetailFragment extends Fragment {
     private View hide_bg;
     private PersianEnglishDigit persianEnglishDigit;
     private FacedTextView user_name_text;
-    private FacedTextView user_card_number;
     private ImageView image_profile;
-    private FacedTextView user_bank_name;
     private LinearLayout iban_ll;
     private FacedTextView user_cell_number;
     private FacedTextView user_iban_value;
@@ -125,8 +123,6 @@ public class AccountDetailFragment extends Fragment {
 
         image_profile = (ImageView)rootView.findViewById(R.id.image_profile);
         user_name_text = (FacedTextView)rootView.findViewById(R.id.user_name_text);
-        user_card_number = (FacedTextView)rootView.findViewById(R.id.user_card_number);
-        user_bank_name = (FacedTextView)rootView.findViewById(R.id.user_bank_name);
         iban_ll = (LinearLayout)rootView.findViewById(R.id.iban_ll);
         user_cell_number = (FacedTextView)rootView.findViewById(R.id.user_cell_number);
         user_iban_value = (FacedTextView)rootView.findViewById(R.id.user_iban_value);
