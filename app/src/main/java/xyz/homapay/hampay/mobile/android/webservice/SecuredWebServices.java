@@ -58,6 +58,7 @@ import xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
 import xyz.homapay.hampay.common.core.model.request.RemoveUserImageRequest;
+import xyz.homapay.hampay.common.core.model.request.SignToPayRequest;
 import xyz.homapay.hampay.common.core.model.request.TACAcceptRequest;
 import xyz.homapay.hampay.common.core.model.request.TACRequest;
 import xyz.homapay.hampay.common.core.model.request.TransactionDetailRequest;
@@ -103,6 +104,7 @@ import xyz.homapay.hampay.common.core.model.response.RegistrationEntryResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationVerifyMobileResponse;
 import xyz.homapay.hampay.common.core.model.response.RemoveUserImageResponse;
+import xyz.homapay.hampay.common.core.model.response.SignToPayResponse;
 import xyz.homapay.hampay.common.core.model.response.TACAcceptResponse;
 import xyz.homapay.hampay.common.core.model.response.TACResponse;
 import xyz.homapay.hampay.common.core.model.response.TransactionDetailResponse;
@@ -1235,6 +1237,21 @@ public class SecuredWebServices{
         proxyService.setJsonBody(jsonRequest);
         Gson gson = new Gson();
         responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UserMerchantResponse>>() {}.getType());
+        proxyService.closeConnection();
+        return  responseMessage;
+    }
+
+    public ResponseMessage<SignToPayResponse> signToPay(SignToPayRequest request) throws IOException, EncryptionException {
+        ResponseMessage<SignToPayResponse> responseMessage = null;
+        url = new URL(serviceURL + "/purchase/sign");
+        SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
+        request.setRequestUUID(UUID.randomUUID().toString());
+        RequestMessage<SignToPayRequest> message = new RequestMessage<>(request, authToken, Constants.API_LEVEL, System.currentTimeMillis());
+        Type requestType = new TypeToken<RequestMessage<SignToPayRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
+        Gson gson = new Gson();
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<SignToPayResponse>>() {}.getType());
         proxyService.closeConnection();
         return  responseMessage;
     }

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:geekui="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="right"
+    android:background="@drawable/dialog_success_style"
+    android:orientation="vertical">
+
+    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+        geekui:customTypeface="fonts/vazir_regular.ttf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:textSize="13dp"
+        android:text="@string/select_card_number"
+        android:clickable="true"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:padding="8dp"
+        android:background="@color/app_origin"/>
+
+    <ListView
+        android:id="@+id/cardListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:dividerHeight="0.5dp"
+        android:divider="@android:color/darker_gray"
+        android:visibility="visible"/>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@android:color/darker_gray"/>
+
+    <LinearLayout
+        android:id="@+id/addNewCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="12dp">
+
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+            geekui:customTypeface="fonts/vazir_regular.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/app_origin"
+            android:textSize="12dp"
+            android:text="@string/add_new_card"
+            android:clickable="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="8dp"/>
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/add_card"/>
+
+    </LinearLayout>
+
+</LinearLayout>

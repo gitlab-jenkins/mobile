@@ -285,8 +285,6 @@ public class ChangeIbanPassActivity extends AppCompatActivity implements View.On
                     editor.commit();
                     ibanChangeRequest = new IBANChangeRequest();
                     ibanChangeRequest.setIban(new PersianEnglishDigit().P2E(iban));
-                    ibanChangeRequest.setMemorableWord(prefs.getString(Constants.MEMORABLE_WORD, ""));
-                    ibanChangeRequest.setPassCode(inputPasswordValue);
                     requestIBANChange = new RequestIBANChange(activity, new RequestIBANChangeTaskCompleteListener(ibanChangeRequest));
                     requestIBANChange.execute(ibanChangeRequest);
                     inputPasswordValue = "";

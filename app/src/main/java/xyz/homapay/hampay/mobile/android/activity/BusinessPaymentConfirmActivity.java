@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,9 +16,12 @@ import android.widget.Toast;
 
 import com.nineoldandroids.animation.ObjectAnimator;
 
+import java.io.Serializable;
+
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
+import xyz.homapay.hampay.common.core.model.request.SignToPayRequest;
 import xyz.homapay.hampay.common.core.model.response.PSPResultResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
@@ -29,8 +33,12 @@ import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestPSPResult;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
+import xyz.homapay.hampay.mobile.android.async.task.SignToPayTask;
+import xyz.homapay.hampay.mobile.android.async.task.impl.OnTaskCompleted;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.dialog.card.CardAction;
+import xyz.homapay.hampay.mobile.android.dialog.card.CardNumberDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
@@ -44,7 +52,7 @@ import xyz.homapay.hampay.mobile.android.util.PspCode;
 import xyz.homapay.hampay.mobile.android.webservice.psp.CBUArrayOfKeyValueOfstringstring;
 import xyz.homapay.hampay.mobile.android.webservice.psp.CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring;
 
-public class BusinessPaymentConfirmActivity extends AppCompatActivity implements View.OnClickListener{
+public class BusinessPaymentConfirmActivity extends AppCompatActivity implements View.OnClickListener, CardNumberDialog.SelectCardDialogListener, OnTaskCompleted {
 
     private DatabaseHelper dbHelper;
     private ImageView pay_to_business_button;
@@ -79,6 +87,11 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
     private String userPinCode = "";
     private String userCVV2 = "";
     private ScrollView paymentScroll;
+    private RelativeLayout cardPlaceHolder;
+    private String selectedCardId = "";
+    private int selectedCardIdIndex = -1;
+    private FacedTextView selectCardText;
+    private LinearLayout cardSelect;
     private PersianEnglishDigit persian = new PersianEnglishDigit();
 
     public void backActionBar(View view){
@@ -157,19 +170,29 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
         cvvText = (FacedTextView)findViewById(R.id.cvv_text) ;
         cvvText.setOnClickListener(this);
         paymentScroll = (ScrollView)findViewById(R.id.paymentScroll);
+        bankName = (FacedTextView)findViewById(R.id.bankName);
+        cardNumberValue = (FacedTextView) findViewById(R.id.cardNumberValue);
+        selectCardText = (FacedTextView) findViewById(R.id.selectCardText);
+        cardSelect = (LinearLayout) findViewById(R.id.cardSelect);
+
+        cardPlaceHolder = (RelativeLayout)findViewById(R.id.cardPlaceHolder);
+        cardPlaceHolder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CardNumberDialog cardNumberDialog = new CardNumberDialog();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(Constants.CARD_LIST, (Serializable) paymentInfoDTO.getCardList());
+                cardNumberDialog.setArguments(bundle);
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.add(cardNumberDialog, null);
+                fragmentTransaction.commitAllowingStateLoss();
+            }
+        });
 
         Intent intent = getIntent();
 
         paymentInfoDTO = (PaymentInfoDTO)intent.getSerializableExtra(Constants.PAYMENT_INFO);
         pspInfoDTO = (PspInfoDTO)intent.getSerializableExtra(Constants.PSP_INFO);
-
-        if (pspInfoDTO.getCardDTO().getCardId() != null && (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + paymentInfoDTO.getVat() < Constants.SOAP_AMOUNT_MAX)) {
-            LinearLayout creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
-            creditInfo.setVisibility(View.VISIBLE);
-            cardNumberValue.setText(persian.E2P(pspInfoDTO.getCardDTO().getLast4Digits()));
-            bankName.setText(pspInfoDTO.getCardDTO().getBankName());
-        } else {
-        }
 
 
         if (paymentInfoDTO != null) {
@@ -199,7 +222,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
 
                 if (pspInfoDTO == null) return;
 
-                if ((pspInfoDTO.getCardDTO() != null && pspInfoDTO.getCardDTO().getCardId() == null) || (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + paymentInfoDTO.getVat() >= Constants.SOAP_AMOUNT_MAX)) {
+                if ((paymentInfoDTO.getCardList().get(selectedCardIdIndex) != null && paymentInfoDTO.getCardList().get(selectedCardIdIndex).getCardId() == null) || (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + paymentInfoDTO.getVat() >= Constants.SOAP_AMOUNT_MAX)) {
                     Intent intent = new Intent();
                     intent.setClass(activity, BankWebPaymentActivity.class);
                     intent.putExtra(Constants.PAYMENT_INFO, paymentInfoDTO);
@@ -252,7 +275,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
 
                     s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "CardId";
-                    s2sMapEntry.Value = pspInfoDTO.getCardDTO().getCardId();
+                    s2sMapEntry.Value = paymentInfoDTO.getCardList().get(selectedCardIdIndex).getCardId();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
@@ -277,7 +300,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
 
                     s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "ExpDate";
-                    s2sMapEntry.Value = pspInfoDTO.getCardDTO().getExpireDate();
+                    s2sMapEntry.Value = paymentInfoDTO.getCardList().get(selectedCardIdIndex).getExpireDate();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
@@ -345,6 +368,49 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
                 pinCodeFocus = false;
                 cvvFocus = true;
                 break;
+        }
+    }
+
+    @Override
+    public void onFinishEditDialog(CardAction cardAction, int position) {
+        switch (cardAction){
+            case SELECT:
+                if (paymentInfoDTO != null) {
+                    selectedCardId = paymentInfoDTO.getCardList().get(position).getCardId();
+                    selectedCardIdIndex = position;
+                    cardNumberValue.setText(persian.E2P(paymentInfoDTO.getCardList().get(position).getLast4Digits()));
+                    bankName.setText(paymentInfoDTO.getCardList().get(position).getBankName());
+                    selectCardText.setVisibility(View.GONE);
+                    cardSelect.setVisibility(View.VISIBLE);
+                    SignToPayRequest signToPayRequest = new SignToPayRequest();
+                    signToPayRequest.setCardId(paymentInfoDTO.getCardList().get(position).getCardId());
+                    signToPayRequest.setProductCode(paymentInfoDTO.getProductCode());
+                    new SignToPayTask(activity, BusinessPaymentConfirmActivity.this, signToPayRequest, "").execute();
+                }
+                break;
+
+            case ADD:
+                Intent intent = new Intent(activity, BankWebPaymentActivity.class);
+                intent.putExtra(Constants.PAYMENT_INFO, paymentInfoDTO);
+                startActivity(intent);
+                break;
+        }
+    }
+
+    @Override
+    public void OnTaskPreExecute() {
+        hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+    }
+
+    @Override
+    public void OnTaskExecuted(Object object) {
+        hamPayDialog.dismisWaitingDialog();
+
+        if (object != null) {
+            if (object.getClass().equals(ResponseMessage.class)) {
+                final ResponseMessage responseMessage = (ResponseMessage) object;
+
+            }
         }
     }
 

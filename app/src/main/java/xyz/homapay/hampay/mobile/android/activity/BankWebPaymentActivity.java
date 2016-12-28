@@ -169,7 +169,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
             postData =
                     "ResNum4=" + pspInfoDTO.getCellNumber() +
-                            "&ResNum3=" + pspInfoDTO.getCardDTO().getSmsToken() +
+                            "&ResNum3=" + paymentInfoDTO.getPspInfo().getSmsToken() +
                             "&RedirectURL=" + redirectedURL +
                             "&Amount=" + (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + paymentInfoDTO.getVat()) +
                             "&ResNum=" + paymentInfoDTO.getProductCode() +
@@ -179,7 +179,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
             postData =
                     "ResNum4=" + pspInfoDTO.getCellNumber() +
-                            "&ResNum3=" + pspInfoDTO.getCardDTO().getSmsToken() +
+                            "&ResNum3=" + purchaseInfoDTO.getPspInfo().getSmsToken() +
                             "&RedirectURL=" + redirectedURL +
                             "&Amount=" + (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat()) +
                             "&ResNum=" + purchaseInfoDTO.getProductCode() +

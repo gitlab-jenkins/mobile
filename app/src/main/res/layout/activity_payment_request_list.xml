@@ -6,7 +6,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -35,100 +35,388 @@
 
         </RelativeLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/app_origin" />
-
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical">
+            android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/hampay_contacts"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:src="@drawable/add_payment_request"
-                android:background="@color/page_title"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_margin="8dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="visible">
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="44dp"
-                android:background="@color/app_origin"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="44dp"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/app_origin" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:id="@+id/hampay_contacts"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/add_payment_request"
+                        android:background="@color/page_title"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="8dp"/>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="44dp"
+                        android:background="@color/app_origin"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="44dp"/>
+
+                    <RelativeLayout
+                        android:id="@+id/search_bar"
+                        android:layout_width="fill_parent"
+                        android:layout_height="32dp"
+                        android:background="@drawable/stroke_bg"
+                        android:padding="4dp"
+                        android:layout_marginRight="50dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="8dp"
+                        android:visibility="invisible">
+
+                        <ImageView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@drawable/search_icon"
+                            android:layout_centerVertical="true"/>
+
+                        <xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText
+                            android:id="@+id/search_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="32dp"
+                            android:background="@android:color/transparent"
+                            android:layout_marginLeft="38dp"
+                            android:textSize="15sp"
+                            android:hint="@string/search_phrase"
+                            android:textColor="@android:color/black"
+                            android:singleLine = "true"
+                            android:imeOptions="actionSearch"/>
+
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/app_origin" />
+
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                    android:id="@+id/nullPendingText"
+                    geekui:customTypeface="fonts/vazir_regular.ttf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp"
+                    android:text="@string/payment_request_null_message"
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="center_vertical"
+                    android:padding="8dp"
+                    android:visibility="gone"/>
+
+                <android.support.v4.widget.SwipeRefreshLayout
+                    android:id="@+id/pullToRefresh"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ListView
+                        android:id="@+id/paymentRequestList"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                    </ListView>
+
+                </android.support.v4.widget.SwipeRefreshLayout>
+
+            </LinearLayout>
 
             <RelativeLayout
-                android:id="@+id/search_bar"
-                android:layout_width="fill_parent"
-                android:layout_height="32dp"
-                android:background="@drawable/stroke_bg"
-                android:padding="4dp"
-                android:layout_marginRight="50dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="8dp"
-                android:visibility="invisible">
+                android:id="@+id/intro_iban_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-                <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/search_icon"
-                    android:layout_centerVertical="true"/>
-
-                <xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText
-                    android:id="@+id/search_text"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="32dp"
-                    android:background="@android:color/transparent"
-                    android:layout_marginLeft="38dp"
-                    android:textSize="15sp"
-                    android:hint="@string/search_phrase"
-                    android:textColor="@android:color/black"
-                    android:singleLine = "true"
-                    android:imeOptions="actionSearch"/>
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:background="@android:color/white"
+                    android:visibility="visible">
+
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        geekui:customTypeface="fonts/vazir_regular.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/black"
+                        android:textSize="14sp"
+                        android:layout_gravity="right"
+                        android:text="@string/iban_notice"
+                        android:layout_margin="4dp"/>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="38dp"
+                            android:orientation="horizontal"
+                            android:layout_margin="4dp">
+
+                            <RelativeLayout
+                                android:id="@+id/iban_first_segment_l"
+                                android:layout_width="0dip"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.075"
+                                android:background="@drawable/iban_entry_placeholder"
+                                android:layout_margin="1dp">
+
+                                <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                                    geekui:customTypeface="fonts/vazir_regular.ttf"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:textColor="@android:color/white"
+                                    android:background="@color/app_origin"
+                                    android:textSize="14dp"
+                                    android:text="@string/sheba_text"
+                                    android:gravity="center"
+                                    android:padding="4dp"
+                                    android:layout_margin="1dp"/>
+
+                                <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                                    geekui:customTypeface="fonts/vazir_regular.ttf"
+                                    android:id="@+id/iban_first_segment"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:textSize="15dp"
+                                    android:textColor="@android:color/black"
+                                    android:singleLine="true"
+                                    android:maxLength="2"
+                                    android:inputType="number"
+                                    android:background="@color/transparency"
+                                    android:layout_centerVertical="true"
+                                    android:gravity="center"
+                                    android:layout_marginLeft="22dp"/>
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:id="@+id/iban_second_segment_l"
+                                android:layout_width="0dip"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.075"
+                                android:background="@drawable/iban_empty_placeholder"
+                                android:layout_margin="1dp">
+
+                                <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                                    geekui:customTypeface="fonts/vazir_regular.ttf"
+                                    android:id="@+id/iban_second_segment"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:textSize="15dp"
+                                    android:textColor="@android:color/black"
+                                    android:singleLine="true"
+                                    android:maxLength="4"
+                                    android:inputType="number"
+                                    android:background="@color/transparency"
+                                    android:gravity="center"
+                                    android:layout_centerVertical="true" />
+
+                            </RelativeLayout>
+
+
+                            <RelativeLayout
+                                android:id="@+id/iban_third_segment_l"
+                                android:layout_width="0dip"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.075"
+                                android:background="@drawable/iban_empty_placeholder"
+                                android:layout_margin="1dp">
+
+                                <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                                    geekui:customTypeface="fonts/vazir_regular.ttf"
+                                    android:id="@+id/iban_third_segment"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:textSize="15dp"
+                                    android:textColor="@android:color/black"
+                                    android:singleLine="true"
+                                    android:maxLength="4"
+                                    android:inputType="number"
+                                    android:background="@color/transparency"
+                                    android:gravity="center"
+                                    android:layout_centerVertical="true" />
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:id="@+id/iban_fourth_segment_l"
+                                android:layout_width="0dip"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.075"
+                                android:background="@drawable/iban_empty_placeholder"
+                                android:layout_margin="1dp">
+
+                                <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                                    geekui:customTypeface="fonts/vazir_regular.ttf"
+                                    android:id="@+id/iban_fourth_segment"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:textSize="15dp"
+                                    android:textColor="@android:color/black"
+                                    android:singleLine="true"
+                                    android:maxLength="4"
+                                    android:inputType="number"
+                                    android:background="@color/transparency"
+                                    android:gravity="center"
+                                    android:layout_centerVertical="true" />
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:id="@+id/iban_fifth_segment_l"
+                                android:layout_width="0dip"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.075"
+                                android:background="@drawable/iban_empty_placeholder"
+                                android:layout_margin="1dp">
+
+                                <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                                    geekui:customTypeface="fonts/vazir_regular.ttf"
+                                    android:id="@+id/iban_fifth_segment"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:textSize="15dp"
+                                    android:textColor="@android:color/black"
+                                    android:singleLine="true"
+                                    android:maxLength="4"
+                                    android:inputType="number"
+                                    android:background="@color/transparency"
+                                    android:gravity="center"
+                                    android:layout_centerVertical="true" />
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:id="@+id/iban_sixth_segment_l"
+                                android:layout_width="0dip"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.075"
+                                android:background="@drawable/iban_empty_placeholder"
+                                android:layout_margin="1dp">
+
+                                <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                                    geekui:customTypeface="fonts/vazir_regular.ttf"
+                                    android:id="@+id/iban_sixth_segment"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:textSize="15dp"
+                                    android:textColor="@android:color/black"
+                                    android:singleLine="true"
+                                    android:maxLength="4"
+                                    android:inputType="number"
+                                    android:background="@color/transparency"
+                                    android:gravity="center"
+                                    android:layout_centerVertical="true" />
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:id="@+id/iban_seventh_segment_l"
+                                android:layout_width="0dip"
+                                android:layout_height="match_parent"
+                                android:layout_weight="0.05"
+                                android:background="@drawable/iban_empty_placeholder"
+                                android:layout_margin="1dp">
+
+                                <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                                    geekui:customTypeface="fonts/vazir_regular.ttf"
+                                    android:id="@+id/iban_seventh_segment"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:textSize="15dp"
+                                    android:textColor="@android:color/black"
+                                    android:singleLine="true"
+                                    android:maxLength="2"
+                                    android:inputType="number"
+                                    android:background="@color/transparency"
+                                    android:gravity="center"
+                                    android:layout_centerVertical="true" />
+
+                            </RelativeLayout>
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:tag="|"
+                            android:onClick="pressKey"
+                            android:clickable="true"/>
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center"
+                        android:layout_marginTop="8dp">
+
+                        <ImageView
+                            android:id="@+id/bank_logo"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:src="@drawable/user_placeholder"
+                            android:background="@color/app_origin"
+                            android:visibility="gone"/>
+
+                        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                            android:id="@+id/bank_name"
+                            geekui:customTypeface="fonts/vazir_regular.ttf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/app_origin"
+                            android:textSize="18sp"
+                            android:layout_gravity="center_horizontal"
+                            android:text="@string/bank"
+                            android:layout_margin="4dp"
+                            android:visibility="gone"/>
+
+                    </LinearLayout>
+
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/iban_verify_button"
+                        geekui:customTypeface="fonts/vazir_regular.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:textColor="@android:color/white"
+                        android:textSize="20sp"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:text="@string/iban_verify"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:background="@drawable/registration_button_style"
+                        android:layout_marginTop="8dp"
+                        android:visibility="gone"/>
+
+                </LinearLayout>
 
             </RelativeLayout>
 
         </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/app_origin" />
-
-        <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            android:id="@+id/nullPendingText"
-            geekui:customTypeface="fonts/vazir_regular.ttf"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
-            android:textSize="13dp"
-            android:text="@string/payment_request_null_message"
-            android:gravity="center_horizontal"
-            android:layout_gravity="center_vertical"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:visibility="gone"/>
-
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/pullToRefresh"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="54dp">
-            <ListView
-                android:id="@+id/paymentRequestList"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:headerDividersEnabled="true"
-                android:footerDividersEnabled="true">
-            </ListView>
-        </android.support.v4.widget.SwipeRefreshLayout>
 
     </LinearLayout>
 
@@ -155,5 +443,18 @@
             android:visibility="visible"/>
 
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/keyboard"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone">
+
+        <include
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            layout="@layout/numeric_keyboard"/>
+    </LinearLayout>
 
 </RelativeLayout>

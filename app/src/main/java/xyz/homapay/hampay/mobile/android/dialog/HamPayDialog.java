@@ -1344,7 +1344,7 @@ public class HamPayDialog {
     RequestRegistrationSendSmsToken requestRegistrationSendSmsToken;
     RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest;
 
-    public void smsConfirmDialog(final String cellNumber, final String cardNumber){
+    public void smsConfirmDialog(final String cellNumber){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_sms_confirm, null);
         FacedTextView sms_user_notify = (FacedTextView) view.findViewById(R.id.sms_user_notify);
@@ -1358,7 +1358,7 @@ public class HamPayDialog {
                 dialog.dismiss();
                 registrationSendSmsTokenRequest = new RegistrationSendSmsTokenRequest();
                 registrationSendSmsTokenRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
-                requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(activity, new RequestRegistrationSendSmsTokenTaskCompleteListener(cellNumber, cardNumber));
+                requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(activity, new RequestRegistrationSendSmsTokenTaskCompleteListener(cellNumber));
                 requestRegistrationSendSmsToken.execute(registrationSendSmsTokenRequest);
             }
         });
@@ -1384,7 +1384,7 @@ public class HamPayDialog {
         private String cellNumber;
         private String cardNumber;
 
-        public RequestRegistrationSendSmsTokenTaskCompleteListener(String cellNumber, String cardNumber){
+        public RequestRegistrationSendSmsTokenTaskCompleteListener(String cellNumber){
             this.cellNumber = cellNumber;
             this.cardNumber = cardNumber;
         }
@@ -1404,14 +1404,14 @@ public class HamPayDialog {
                     activity.startActivity(intent);
                 }
                 else {
-                    requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(activity, new RequestRegistrationSendSmsTokenTaskCompleteListener(cellNumber, cardNumber));
+                    requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(activity, new RequestRegistrationSendSmsTokenTaskCompleteListener(cellNumber));
                     new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
                             registrationSendSmsTokenResponse.getService().getResultStatus().getCode(),
                             registrationSendSmsTokenResponse.getService().getResultStatus().getDescription());
                 }
 
             }else {
-                requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(activity, new RequestRegistrationSendSmsTokenTaskCompleteListener(cellNumber, cardNumber));
+                requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(activity, new RequestRegistrationSendSmsTokenTaskCompleteListener(cellNumber));
                 new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
                         Constants.LOCAL_ERROR_CODE,
                         activity.getString(R.string.mgs_fail_registration_send_sms_token));

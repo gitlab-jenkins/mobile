@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,8 @@ import android.widget.Toast;
 
 import com.nineoldandroids.animation.ObjectAnimator;
 
+import java.io.Serializable;
+
 import br.com.goncalves.pugnotification.notification.PugNotification;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
@@ -23,6 +26,7 @@ import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
 import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
 import xyz.homapay.hampay.common.core.model.request.PurchaseDetailRequest;
 import xyz.homapay.hampay.common.core.model.request.PurchaseInfoRequest;
+import xyz.homapay.hampay.common.core.model.request.SignToPayRequest;
 import xyz.homapay.hampay.common.core.model.response.LatestPurchaseResponse;
 import xyz.homapay.hampay.common.core.model.response.PSPResultResponse;
 import xyz.homapay.hampay.common.core.model.response.PurchaseDetailResponse;
@@ -40,8 +44,12 @@ import xyz.homapay.hampay.mobile.android.async.RequestPSPResult;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchaseDetail;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchaseInfo;
+import xyz.homapay.hampay.mobile.android.async.task.SignToPayTask;
+import xyz.homapay.hampay.mobile.android.async.task.impl.OnTaskCompleted;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.dialog.card.CardAction;
+import xyz.homapay.hampay.mobile.android.dialog.card.CardNumberDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
@@ -55,7 +63,7 @@ import xyz.homapay.hampay.mobile.android.util.PspCode;
 import xyz.homapay.hampay.mobile.android.webservice.psp.CBUArrayOfKeyValueOfstringstring;
 import xyz.homapay.hampay.mobile.android.webservice.psp.CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring;
 
-public class RequestBusinessPayDetailActivity extends AppCompatActivity implements View.OnClickListener {
+public class RequestBusinessPayDetailActivity extends AppCompatActivity implements View.OnClickListener, CardNumberDialog.SelectCardDialogListener, OnTaskCompleted {
 
     private DatabaseHelper dbHelper;
     private ImageView pay_to_business_button;
@@ -90,7 +98,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
     private PspInfoDTO pspInfoDTO = null;
     private String purchaseCode = null;
     private String providerId = null;
-    private LinearLayout creditInfo;
     private RequestPSPResult requestPSPResult;
     private PSPResultRequest pspResultRequest;
     private RequestPurchase requestPurchase;
@@ -108,6 +115,11 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
     private String userPinCode = "";
     private String userCVV2 = "";
     private ScrollView paymentScroll;
+    private RelativeLayout cardPlaceHolder;
+    private String selectedCardId = "";
+    private int selectedCardIdIndex = -1;
+    private FacedTextView selectCardText;
+    private LinearLayout cardSelect;
     private PersianEnglishDigit persian = new PersianEnglishDigit();
 
     public void backActionBar(View view){
@@ -190,8 +202,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
 
         currencyFormatter = new CurrencyFormatter();
 
-        creditInfo = (LinearLayout)findViewById(R.id.creditInfo);
-
         input_digit_1 = (FacedTextView)findViewById(R.id.input_digit_1);
         input_digit_2 = (FacedTextView)findViewById(R.id.input_digit_2);
         input_digit_3 = (FacedTextView)findViewById(R.id.input_digit_3);
@@ -214,6 +224,24 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
         cardNumberValue = (FacedTextView)findViewById(R.id.cardNumberValue);
         paymentTotalValue = (FacedTextView)findViewById(R.id.paymentTotalValue);
         pay_to_business_button = (ImageView)findViewById(R.id.pay_to_business_button);
+        bankName = (FacedTextView)findViewById(R.id.bankName);
+        cardNumberValue = (FacedTextView) findViewById(R.id.cardNumberValue);
+        selectCardText = (FacedTextView) findViewById(R.id.selectCardText);
+        cardSelect = (LinearLayout) findViewById(R.id.cardSelect);
+
+        cardPlaceHolder = (RelativeLayout)findViewById(R.id.cardPlaceHolder);
+        cardPlaceHolder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CardNumberDialog cardNumberDialog = new CardNumberDialog();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(Constants.CARD_LIST, (Serializable) purchaseInfoDTO.getCardList());
+                cardNumberDialog.setArguments(bundle);
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.add(cardNumberDialog, null);
+                fragmentTransaction.commitAllowingStateLoss();
+            }
+        });
 
         Intent intent = getIntent();
 
@@ -252,7 +280,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
 
                 if (pspInfoDTO == null) return;
 
-                if ((pspInfoDTO.getCardDTO() != null && pspInfoDTO.getCardDTO().getCardId() == null) || (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() >= Constants.SOAP_AMOUNT_MAX)) {
+                if ((purchaseInfoDTO.getCardList().get(selectedCardIdIndex) != null && purchaseInfoDTO.getCardList().get(selectedCardIdIndex).getCardId() == null) || (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() >= Constants.SOAP_AMOUNT_MAX)) {
                     Intent intent = new Intent();
                     intent.setClass(activity, BankWebPaymentActivity.class);
                     intent.putExtra(Constants.PURCHASE_INFO, purchaseInfoDTO);
@@ -304,7 +332,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
 
                     s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "CardId";
-                    s2sMapEntry.Value = pspInfoDTO.getCardDTO().getCardId();
+                    s2sMapEntry.Value = purchaseInfoDTO.getCardList().get(selectedCardIdIndex).getCardId();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
@@ -329,7 +357,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
 
                     s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "ExpDate";
-                    s2sMapEntry.Value = pspInfoDTO.getCardDTO().getExpireDate();
+                    s2sMapEntry.Value = purchaseInfoDTO.getCardList().get(selectedCardIdIndex).getExpireDate();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
@@ -384,6 +412,32 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
         }
     }
 
+
+    @Override
+    public void onFinishEditDialog(CardAction cardAction, int position) {
+        switch (cardAction){
+            case SELECT:
+                if (purchaseInfoDTO != null) {
+                    selectedCardId = purchaseInfoDTO.getCardList().get(position).getCardId();
+                    selectedCardIdIndex = position;
+                    cardNumberValue.setText(persian.E2P(purchaseInfoDTO.getCardList().get(position).getLast4Digits()));
+                    bankName.setText(purchaseInfoDTO.getCardList().get(position).getBankName());
+                    selectCardText.setVisibility(View.GONE);
+                    cardSelect.setVisibility(View.VISIBLE);
+                    SignToPayRequest signToPayRequest = new SignToPayRequest();
+                    signToPayRequest.setCardId(purchaseInfoDTO.getCardList().get(position).getCardId());
+                    signToPayRequest.setProductCode(purchaseInfoDTO.getProductCode());
+                    new SignToPayTask(activity, RequestBusinessPayDetailActivity.this, signToPayRequest, "").execute();
+                }
+                break;
+
+            case ADD:
+                Intent intent = new Intent(activity, BankWebPaymentActivity.class);
+                intent.putExtra(Constants.PURCHASE_INFO, purchaseInfoDTO);
+                startActivity(intent);
+                break;
+        }
+    }
 
     public class RequestPurchaseTaskCompleteListener implements AsyncTaskCompleteListener<CBUArrayOfKeyValueOfstringstring> {
 
@@ -686,6 +740,23 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
         }
     }
 
+    @Override
+    public void OnTaskPreExecute() {
+        hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+    }
+
+    @Override
+    public void OnTaskExecuted(Object object) {
+        hamPayDialog.dismisWaitingDialog();
+
+        if (object != null) {
+            if (object.getClass().equals(ResponseMessage.class)) {
+                final ResponseMessage responseMessage = (ResponseMessage) object;
+
+            }
+        }
+    }
+
 
     private void fillPurchase(PurchaseInfoDTO purchaseInfo){
 
@@ -708,7 +779,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                 purchase_status_layout.setVisibility(View.VISIBLE);
                 purchase_payer_name_layout.setVisibility(View.VISIBLE);
                 purchase_payer_cell_layout.setVisibility(View.VISIBLE);
-                creditInfo.setVisibility(View.GONE);
                 pay_to_business_button.setVisibility(View.GONE);
                 break;
             case FAILED:
@@ -720,7 +790,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                 purchase_status_layout.setVisibility(View.VISIBLE);
                 purchase_payer_name_layout.setVisibility(View.GONE);
                 purchase_payer_cell_layout.setVisibility(View.GONE);
-                creditInfo.setVisibility(View.GONE);
                 pay_to_business_button.setVisibility(View.GONE);
                 break;
             case  PROCESSING:
@@ -732,7 +801,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                 purchase_status_layout.setVisibility(View.VISIBLE);
                 purchase_payer_name_layout.setVisibility(View.GONE);
                 purchase_payer_cell_layout.setVisibility(View.GONE);
-                creditInfo.setVisibility(View.GONE);
                 pay_to_business_button.setVisibility(View.GONE);
                 break;
             case PENDING:
@@ -745,10 +813,9 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                 purchase_payer_name_layout.setVisibility(View.GONE);
                 purchase_payer_cell_layout.setVisibility(View.GONE);
                 pay_to_business_button.setVisibility(View.VISIBLE);
-                if (pspInfoDTO.getCardDTO().getCardId() != null && (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() < Constants.SOAP_AMOUNT_MAX)) {
-                    creditInfo.setVisibility(View.VISIBLE);
-                    cardNumberValue.setText(persian.E2P(pspInfoDTO.getCardDTO().getLast4Digits()));
-                    bankName.setText(pspInfoDTO.getCardDTO().getBankName());
+                if (purchaseInfo.getCardList().get(selectedCardIdIndex).getCardId() != null && (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() < Constants.SOAP_AMOUNT_MAX)) {
+                    cardNumberValue.setText(persian.E2P(purchaseInfo.getCardList().get(selectedCardIdIndex).getLast4Digits()));
+                    bankName.setText(purchaseInfo.getCardList().get(selectedCardIdIndex).getBankName());
                 }
                 break;
         }

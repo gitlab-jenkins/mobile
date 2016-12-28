@@ -34,18 +34,15 @@ import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
-import xyz.homapay.hampay.common.core.model.response.CardProfileResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationEntryResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Manifest;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import xyz.homapay.hampay.mobile.android.async.RequestCardProfile;
 import xyz.homapay.hampay.mobile.android.async.RequestRegistrationEntry;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.EmailTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
-import xyz.homapay.hampay.mobile.android.component.preloader.Preloader;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.dialog.permission.ActionPermission;
 import xyz.homapay.hampay.mobile.android.dialog.permission.PermissionDeviceDialog;
@@ -55,7 +52,6 @@ import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
 import xyz.homapay.hampay.mobile.android.security.KeyExchange;
-import xyz.homapay.hampay.mobile.android.util.CardNumberValidator;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.NationalCodeVerification;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
@@ -69,14 +65,9 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
     private FacedEditText cellNumberValue;
     private ImageView cellNumberIcon;
     private boolean cellNumberIsValid = false;
-    private Preloader preloader;
     private FacedEditText nationalCodeValue;
     private ImageView nationalCodeIcon;
     private boolean nationalCodeIsValid = false;
-    private FacedEditText cardNumberValue;
-    private FacedTextView cardProfile;
-    private boolean verifiedCardNumber = false;
-    private ImageView cardNumberIcon;
     private ImageView userNameFamilyIcon;
     private FacedEditText userNameFamily;
     private boolean userNameFamilyIsValid = true;
@@ -84,21 +75,14 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
     private FacedEditText emailValue;
     private ImageView emailIcon;
     private Context context;
-    private String rawCardNumberValue = "";
-    private int rawCardNumberValueLength = 0;
-    private int rawCardNumberValueLengthOffset = 0;
-    private String procCardNumberValue = "";
     private String rawNationalCode = "";
     private int rawNationalCodeLength = 0;
     private int rawNationalCodeLengthOffset = 0;
     private String procNationalCode = "";
-    private CardProfileResponse cardProfileResponse;
     private SharedPreferences.Editor editor;
     private RegistrationEntryRequest registrationEntryRequest;
     private RequestRegistrationEntry requestRegistrationEntry;
-    private RequestCardProfile requestCardProfile;
     private HamPayDialog hamPayDialog;
-    private CardNumberValidator cardNumberValidator;
     private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
     private final Handler handler = new Handler();
     private FacedTextView tac_privacy_text;
@@ -149,7 +133,6 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                     if (grantResults.length > 0 && requestPermissions[0].equals(Manifest.permission.READ_PHONE_STATE) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                         registrationEntryRequest = new RegistrationEntryRequest();
                         registrationEntryRequest.setCellNumber(persianEnglishDigit.P2E(getString(R.string.iran_prefix_cell_number) + cellNumberValue.getText().toString()));
-                        registrationEntryRequest.setCardNumber(persianEnglishDigit.P2E(cardNumberValue.getText().toString()));
                         registrationEntryRequest.setFullName(fullUserName);
                         registrationEntryRequest.setEmail(emailValue.getText().toString().trim());
                         registrationEntryRequest.setNationalCode(persianEnglishDigit.P2E(nationalCodeValue.getText().toString().replaceAll("-", "")));
@@ -204,7 +187,6 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
         activity = this;
 
         persianEnglishDigit = new PersianEnglishDigit();
-        cardNumberValidator = new CardNumberValidator();
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
         keyExchange = new KeyExchange(activity);
@@ -368,79 +350,6 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
             }
         });
 
-        preloader = (Preloader)findViewById(R.id.preloader);
-
-        cardNumberValue = (FacedEditText)findViewById(R.id.cardNumberValue);
-        cardProfile = (FacedTextView)findViewById(R.id.cardProfile);
-        cardNumberIcon = (ImageView)findViewById(R.id.cardNumberIcon);
-        cardNumberValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-
-                String cardNumber = persianEnglishDigit.P2E(cardNumberValue.getText().toString().replaceAll("-", ""));
-
-                cardNumberIcon.setVisibility(View.GONE);
-                preloader.setVisibility(View.GONE);
-
-                if (!hasFocus) {
-                    if (cardNumberValidator.validate(cardNumber)){
-                        verifiedCardNumber = true;
-                        cardNumberIcon.setImageResource(R.drawable.right_icon);
-                        cardNumberIcon.setVisibility(View.VISIBLE);
-                    }else {
-                        cardNumberIcon.setVisibility(View.VISIBLE);
-                        cardNumberIcon.setImageResource(R.drawable.false_icon);
-                    }
-                } else {
-                    View view = getCurrentFocus();
-                    if (view != null) {
-                        InputMethodManager imm = (InputMethodManager) getSystemService(
-                                Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                    }
-                }
-            }
-        });
-
-        cardNumberValue.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                cardNumberValue.removeTextChangedListener(this);
-                if (cardNumberValue.getText().toString().length() <= 19) {
-                    rawCardNumberValue = s.toString().replace("-", "");
-                    rawCardNumberValueLength = rawCardNumberValue.length();
-                    rawCardNumberValueLengthOffset = 0;
-                    procCardNumberValue = "";
-                    if (rawCardNumberValue.length() > 0) {
-                        for (int i = 0; i < rawCardNumberValueLength; i++) {
-                            if (Constants.CARD_NUMBER_FORMAT.charAt(i + rawCardNumberValueLengthOffset) == '-') {
-                                procCardNumberValue += "-" + rawCardNumberValue.charAt(i);
-                                rawCardNumberValueLengthOffset++;
-                            } else {
-                                procCardNumberValue += rawCardNumberValue.charAt(i);
-                            }
-                        }
-                        procCardNumberValue = persianEnglishDigit.E2P(procCardNumberValue);
-                        cardNumberValue.setText(procCardNumberValue);
-                        cardNumberValue.setSelection(cardNumberValue.getText().toString().length());
-                    }
-                }
-                cardNumberValue.addTextChangedListener(this);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (cardNumberValue.getText().length() < 19){
-                    cardProfile.setText("");
-                    userNameFamily.setEnabled(true);
-                }
-            }
-        });
-
-
         emailValue = (FacedEditText)findViewById(R.id.emailValue);
         emailIcon = (ImageView)findViewById(R.id.emailIcon);
         emailTextWatcher = new EmailTextWatcher(emailValue, emailIcon);
@@ -468,11 +377,9 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                 cellNumberValue.clearFocus();
                 userNameFamily.clearFocus();
                 nationalCodeValue.clearFocus();
-                cardNumberValue.clearFocus();
-                if (cellNumberIsValid && nationalCodeIsValid && verifiedCardNumber
+                if (cellNumberIsValid && nationalCodeIsValid
                         && cellNumberValue.getText().toString().trim().length() > 0
                         && nationalCodeValue.getText().toString().trim().length() > 0
-                        && cardNumberValue.getText().toString().trim().length() > 0
                         && fullUserName.length() >= 2
                         && emailTextWatcher.isValid()) {
 
@@ -490,13 +397,6 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                         Toast.makeText(context, getString(R.string.msg_username_invalid), Toast.LENGTH_SHORT).show();
                         userNameFamilyIcon.setImageResource(R.drawable.false_icon);
                         userNameFamily.requestFocus();
-                    }
-
-                    else if (cardNumberValue.getText().toString().length() == 0 || !verifiedCardNumber){
-                        Toast.makeText(context, getString(R.string.msg_CardNo_invalid), Toast.LENGTH_SHORT).show();
-                        cardNumberIcon.setVisibility(View.VISIBLE);
-                        cardNumberIcon.setImageResource(R.drawable.false_icon);
-                        cardNumberValue.requestFocus();
                     }
 
                     else if (nationalCodeValue.getText().toString().length() == 0 || !nationalCodeIsValid){
@@ -540,8 +440,7 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                     editor.putString(Constants.REGISTERED_USER_ID_TOKEN, registrationEntryResponse.getService().getUserIdToken());
                     editor.putString(Constants.REGISTERED_USER_EMAIL, emailValue.getText().toString().trim());
                     editor.commit();
-                    hamPayDialog.smsConfirmDialog(getString(R.string.iran_prefix_cell_number) + cellNumberValue.getText().toString(),
-                            cardNumberValue.getText().toString());
+                    hamPayDialog.smsConfirmDialog(getString(R.string.iran_prefix_cell_number) + cellNumberValue.getText().toString());
                     serviceName = ServiceEvent.REGISTRATION_ENTRY_SUCCESS;
                 }
                 else {
