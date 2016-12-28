@@ -36,16 +36,16 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
     Bundle bundle;
     TransactionDTO transactionDTO;
-    private TnxDetailDTO tnxDetailDTO = null;
-    private TransactionDetailRequest transactionDetailRequest;
-    private RequestTransactionDetail requestTransactionDetail;
-
-
     PersianEnglishDigit persianEnglishDigit;
     Context context;
     Activity activity;
-    private CurrencyFormatter formatter;
     HamPayDialog hamPayDialog;
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
+    private TnxDetailDTO tnxDetailDTO = null;
+    private TransactionDetailRequest transactionDetailRequest;
+    private RequestTransactionDetail requestTransactionDetail;
+    private CurrencyFormatter formatter;
     private FacedTextView status_text;
     private FacedTextView callee_name;
     private ImageView image;
@@ -61,9 +61,8 @@ public class TransactionDetailActivity extends AppCompatActivity {
     private FacedTextView cell_number;
     private FacedTextView bank_name;
     private FacedTextView message;
+    private FacedTextView detail_text;
     private LinearLayout pay_button;
-    SharedPreferences prefs;
-    SharedPreferences.Editor editor;
     private LinearLayout creditInfo;
     private String authToken = "";
     private ImageManager imageManager;
@@ -132,21 +131,22 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
         status_text = (FacedTextView) findViewById(R.id.status_text);
         callee_name = (FacedTextView) findViewById(R.id.callee_name);
-        image = (ImageView)findViewById(R.id.image);
+        image = (ImageView) findViewById(R.id.image);
         total_amount_value = (FacedTextView) findViewById(R.id.total_amount_value);
         amount_value = (FacedTextView) findViewById(R.id.amount_value);
         vat_value = (FacedTextView) findViewById(R.id.vat_value);
         fee_charge_value = (FacedTextView) findViewById(R.id.fee_charge_value);
         fee_charge_text = (FacedTextView) findViewById(R.id.fee_charge_text);
         payment_request_code = (FacedTextView) findViewById(R.id.payment_request_code);
-        reference_code = (FacedTextView)findViewById(R.id.reference_code);
+        reference_code = (FacedTextView) findViewById(R.id.reference_code);
         date_time = (FacedTextView) findViewById(R.id.date_time);
         card_number = (FacedTextView) findViewById(R.id.card_number);
         cell_number = (FacedTextView) findViewById(R.id.cell_number);
         bank_name = (FacedTextView) findViewById(R.id.bank_name);
         message = (FacedTextView) findViewById(R.id.message);
         pay_button = (LinearLayout) findViewById(R.id.pay_button);
-        creditInfo = (LinearLayout)findViewById(R.id.creditInfo);
+        creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
+        detail_text = (FacedTextView) findViewById(R.id.detail_text);
 
         bundle = getIntent().getExtras();
         Intent intent = getIntent();
@@ -154,7 +154,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
         if (transactionDTO.getImageId() != null) {
             image.setTag(transactionDTO.getImageId());
             imageManager.displayImage(transactionDTO.getImageId(), image, R.drawable.user_placeholder);
-        }else {
+        } else {
             image.setImageResource(R.drawable.user_placeholder);
         }
 
@@ -169,14 +169,18 @@ public class TransactionDetailActivity extends AppCompatActivity {
                 status_text.setTextColor(ContextCompat.getColor(context, R.color.user_change_status));
             }
 
-        } else if (transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.PENDING) {
-            status_text.setText(context.getString(R.string.pending));
-            status_text.setTextColor(ContextCompat.getColor(context, R.color.pending_transaction));
-        } else {
-            status_text.setText(context.getString(R.string.fail));
-            status_text.setTextColor(ContextCompat.getColor(context, R.color.failed_transaction));
         }
-
+//        else if (transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.PENDING) {
+//            status_text.setText(context.getString(R.string.pending));
+//            status_text.setTextColor(ContextCompat.getColor(context, R.color.pending_transaction));
+//        }
+        else {
+            status_text.setText(transactionDTO.getTransactionType().equals(TransactionDTO.TransactionType.CREDIT) ? R.string.fail_credit : R.string.fail_debit);
+            status_text.setTextColor(ContextCompat.getColor(context, R.color.failed_transaction));
+            //TODO Came from service
+            detail_text.setText(transactionDTO.getTransactionStatus().getDescription());
+            detail_text.setTextColor(ContextCompat.getColor(context, R.color.normal_text));
+        }
 
         transactionDetailRequest = new TransactionDetailRequest();
         transactionDetailRequest.setReference(transactionDTO.getReference());
@@ -203,7 +207,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
                     if (tnxDetailDTO.getImageId() != null) {
                         image.setTag(tnxDetailDTO.getImageId());
                         imageManager.displayImage(tnxDetailDTO.getImageId(), image, R.drawable.user_placeholder);
-                    }else {
+                    } else {
                         image.setImageResource(R.drawable.user_placeholder);
                     }
                     if (transactionDTO.getPaymentType() == TransactionDTO.PaymentType.PAYMENT) {
@@ -251,14 +255,14 @@ public class TransactionDetailActivity extends AppCompatActivity {
 //                        }
                     }
 
-                    if (transactionDTO.getTransactionType()== TransactionDTO.TransactionType.CREDIT){
+                    if (transactionDTO.getTransactionType() == TransactionDTO.TransactionType.CREDIT) {
                         total_amount_value.setText(persianEnglishDigit.E2P(formatter.format(tnxDetailDTO.getAmount() + tnxDetailDTO.getVat())));
                         amount_value.setText(persianEnglishDigit.E2P(formatter.format(tnxDetailDTO.getAmount())));
                         vat_value.setText(persianEnglishDigit.E2P(formatter.format(tnxDetailDTO.getVat())));
                         fee_charge_value.setVisibility(View.INVISIBLE);
                         fee_charge_text.setVisibility(View.INVISIBLE);
                         fee_charge_value.setText(persianEnglishDigit.E2P(formatter.format(tnxDetailDTO.getFeeCharge())));
-                    }else if (transactionDTO.getTransactionType()== TransactionDTO.TransactionType.DEBIT){
+                    } else if (transactionDTO.getTransactionType() == TransactionDTO.TransactionType.DEBIT) {
                         total_amount_value.setText(persianEnglishDigit.E2P(formatter.format(tnxDetailDTO.getAmount() + tnxDetailDTO.getFeeCharge() + tnxDetailDTO.getVat())));
                         amount_value.setText(persianEnglishDigit.E2P(formatter.format(tnxDetailDTO.getAmount())));
                         vat_value.setText(persianEnglishDigit.E2P(formatter.format(tnxDetailDTO.getVat())));
@@ -266,10 +270,10 @@ public class TransactionDetailActivity extends AppCompatActivity {
                         fee_charge_value.setVisibility(View.VISIBLE);
                         fee_charge_text.setVisibility(View.VISIBLE);
                     }
-                }else if (transactionDetailResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                } else if (transactionDetailResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     serviceName = ServiceEvent.TRANSACTION_DETAIL_FAILURE;
                     forceLogout();
-                }else {
+                } else {
                     serviceName = ServiceEvent.TRANSACTION_DETAIL_FAILURE;
                 }
                 logEvent.log(serviceName);

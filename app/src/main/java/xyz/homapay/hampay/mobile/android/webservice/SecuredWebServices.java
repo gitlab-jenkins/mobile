@@ -115,18 +115,18 @@ import xyz.homapay.hampay.common.core.model.response.UserMerchantInquiryResponse
 import xyz.homapay.hampay.common.core.model.response.UserMerchantResponse;
 import xyz.homapay.hampay.common.core.model.response.UserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
+import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.ssl.AllowHamPaySSL;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.TransactionStatusEnumDeserilizer;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
 import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWABasicHttpBinding_ITokenPay;
 
 /**
  * Created by amir on 6/6/15.
  */
-public class SecuredWebServices{
-
-    public SecuredWebServices(){}
+public class SecuredWebServices {
 
     private Context context;
     private SharedPreferences prefs;
@@ -136,13 +136,16 @@ public class SecuredWebServices{
     private String serviceURL = "";
     private String authToken = "";
 
+    public SecuredWebServices() {
+    }
+
     public SecuredWebServices(Context context, ConnectionType connectionType, String authToken) {
         this.context = context;
         builder = new DateGsonBuilder();
         this.connectionType = connectionType;
-        if (connectionType == ConnectionType.HTTPS){
+        if (connectionType == ConnectionType.HTTPS) {
             serviceURL = Constants.HTTPS_SERVER_IP;
-        }else {
+        } else {
             serviceURL = Constants.HTTP_SERVER_IP;
         }
         this.authToken = authToken;
@@ -150,20 +153,20 @@ public class SecuredWebServices{
 
     public SecuredWebServices(Context context, ConnectionType connectionType) {
         this.context = context;
-        prefs =  context.getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
+        prefs = context.getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
         builder = new DateGsonBuilder();
         this.connectionType = connectionType;
-        if (connectionType == ConnectionType.HTTPS){
+        if (connectionType == ConnectionType.HTTPS) {
             serviceURL = Constants.HTTPS_SERVER_IP;
-        }else {
+        } else {
             serviceURL = Constants.HTTP_SERVER_IP;
         }
         this.authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
     }
 
-    public SecuredWebServices(Context context){
+    public SecuredWebServices(Context context) {
         this.context = context;
-        prefs =  context.getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
+        prefs = context.getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
         builder = new DateGsonBuilder();
 
         this.authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
@@ -177,18 +180,20 @@ public class SecuredWebServices{
         SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
         RequestMessage<KeyAgreementRequest> message = new RequestMessage<>(keyAgreementRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<KeyAgreementRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<KeyAgreementRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
 
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = new Gson();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<KeyAgreementResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<KeyAgreementResponse>>() {
+        }.getType());
 
         proxyService.closeConnection();
 
-        return  responseMessage;
+        return responseMessage;
     }
 
     public ResponseMessage<IllegalAppListResponse> getIllegalAppList() throws IOException, EncryptionException {
@@ -199,13 +204,15 @@ public class SecuredWebServices{
         IllegalAppListRequest illegalAppListRequest = new IllegalAppListRequest();
         illegalAppListRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<IllegalAppListRequest> message = new RequestMessage<>(illegalAppListRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
-        Type requestType = new TypeToken<RequestMessage<IllegalAppListRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<IllegalAppListRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
         Gson gson = new Gson();
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<IllegalAppListResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<IllegalAppListResponse>>() {
+        }.getType());
         proxyService.closeConnection();
-        return  responseMessage;
+        return responseMessage;
     }
 
     public ResponseMessage<RegistrationEntryResponse> registrationEntry(RegistrationEntryRequest registrationEntryRequest) throws IOException, EncryptionException {
@@ -218,18 +225,20 @@ public class SecuredWebServices{
 
         RequestMessage<RegistrationEntryRequest> message = new RequestMessage<>(registrationEntryRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<RegistrationEntryRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<RegistrationEntryRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
 
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = new Gson();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<RegistrationEntryResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<RegistrationEntryResponse>>() {
+        }.getType());
 
         proxyService.closeConnection();
 
-        return  responseMessage;
+        return responseMessage;
     }
 
     public ResponseMessage<ContactUsResponse> contactUsResponse(ContactUsRequest contactUsRequest) throws IOException, EncryptionException {
@@ -242,17 +251,19 @@ public class SecuredWebServices{
         contactUsRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<ContactUsRequest> message = new RequestMessage<>(contactUsRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<ContactUsRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<ContactUsRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = new Gson();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<ContactUsResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<ContactUsResponse>>() {
+        }.getType());
 
         proxyService.closeConnection();
 
-        return  responseMessage;
+        return responseMessage;
 
     }
 
@@ -265,13 +276,15 @@ public class SecuredWebServices{
         registrationSendSmsTokenRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<RegistrationSendSmsTokenRequest> message = new RequestMessage<>(registrationSendSmsTokenRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<RegistrationSendSmsTokenRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<RegistrationSendSmsTokenRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = new Gson();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<RegistrationSendSmsTokenResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<RegistrationSendSmsTokenResponse>>() {
+        }.getType());
 
         proxyService.closeConnection();
 
@@ -288,13 +301,15 @@ public class SecuredWebServices{
         registrationVerifyMobileRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<RegistrationVerifyMobileRequest> message = new RequestMessage<>(registrationVerifyMobileRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<RegistrationVerifyMobileRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<RegistrationVerifyMobileRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = new Gson();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<RegistrationVerifyMobileResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<RegistrationVerifyMobileResponse>>() {
+        }.getType());
 
         proxyService.closeConnection();
 
@@ -310,13 +325,15 @@ public class SecuredWebServices{
         registrationCredentialsRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<RegistrationCredentialsRequest> message = new RequestMessage<>(registrationCredentialsRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<RegistrationCredentialsRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<RegistrationCredentialsRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = new Gson();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<RegistrationCredentialsResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<RegistrationCredentialsResponse>>() {
+        }.getType());
 
         proxyService.closeConnection();
 
@@ -333,13 +350,15 @@ public class SecuredWebServices{
         mobileRegistrationIdEntryRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<MobileRegistrationIdEntryRequest> message = new RequestMessage<>(mobileRegistrationIdEntryRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<MobileRegistrationIdEntryRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<MobileRegistrationIdEntryRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = new Gson();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<MobileRegistrationIdEntryResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<MobileRegistrationIdEntryResponse>>() {
+        }.getType());
 
         proxyService.closeConnection();
 
@@ -356,13 +375,15 @@ public class SecuredWebServices{
         tacRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<TACRequest> message = new RequestMessage<>(tacRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<TACRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<TACRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<TACResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<TACResponse>>() {
+        }.getType());
 
         proxyService.closeConnection();
 
@@ -379,13 +400,15 @@ public class SecuredWebServices{
         uploadImageRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<UploadImageRequest> message = new RequestMessage<>(uploadImageRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<UploadImageRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<UploadImageRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UploadImageResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UploadImageResponse>>() {
+        }.getType());
 
         proxyService.closeConnection();
 
@@ -402,13 +425,15 @@ public class SecuredWebServices{
         getUserIdTokenRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<GetUserIdTokenRequest> message = new RequestMessage<>(getUserIdTokenRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<GetUserIdTokenRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<GetUserIdTokenRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<GetUserIdTokenResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<GetUserIdTokenResponse>>() {
+        }.getType());
 
         proxyService.closeConnection();
 
@@ -425,13 +450,15 @@ public class SecuredWebServices{
         tacAcceptRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<TACAcceptRequest> message = new RequestMessage<>(tacAcceptRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<TACAcceptRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<TACAcceptRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<TACAcceptResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<TACAcceptResponse>>() {
+        }.getType());
 
         proxyService.closeConnection();
 
@@ -448,13 +475,15 @@ public class SecuredWebServices{
         userProfileRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<UserProfileRequest> message = new RequestMessage<>(userProfileRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<UserProfileRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<UserProfileRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UserProfileResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UserProfileResponse>>() {
+        }.getType());
 
         proxyService.closeConnection();
 
@@ -473,16 +502,23 @@ public class SecuredWebServices{
         transactionListRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<TransactionListRequest> message = new RequestMessage<>(transactionListRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<TransactionListRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<TransactionListRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
+
+        Log.e("Request", jsonRequest);
+        Log.e("----", "---------------------");
 
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
         String res = proxyService.getResponse();
+        Log.e("Response", res);
+        Log.e("----", "---------------------");
 
-        responseMessage = gson.fromJson(res, new TypeToken<ResponseMessage<TransactionListResponse>>() {}.getType());
+        responseMessage = gson.fromJson(res, new TypeToken<ResponseMessage<TransactionListResponse>>() {
+        }.getType());
 
         proxyService.closeConnection();
 
@@ -499,13 +535,15 @@ public class SecuredWebServices{
         contactsHampayEnabledRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<ContactsHampayEnabledRequest> message = new RequestMessage<>(contactsHampayEnabledRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<ContactsHampayEnabledRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<ContactsHampayEnabledRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<ContactsHampayEnabledResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<ContactsHampayEnabledResponse>>() {
+        }.getType());
 
         proxyService.closeConnection();
 
@@ -522,13 +560,15 @@ public class SecuredWebServices{
         individualPaymentRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<IndividualPaymentRequest> message = new RequestMessage<>(individualPaymentRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<IndividualPaymentRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<IndividualPaymentRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<IndividualPaymentResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<IndividualPaymentResponse>>() {
+        }.getType());
         proxyService.closeConnection();
 
         return responseMessage;
@@ -544,13 +584,15 @@ public class SecuredWebServices{
         businessListRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<BusinessListRequest> message = new RequestMessage<>(businessListRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<BusinessListRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<BusinessListRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<BusinessListResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<BusinessListResponse>>() {
+        }.getType());
         proxyService.closeConnection();
 
         return responseMessage;
@@ -566,13 +608,15 @@ public class SecuredWebServices{
         businessPaymentConfirmRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<BusinessPaymentConfirmRequest> message = new RequestMessage<>(businessPaymentConfirmRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<BusinessPaymentConfirmRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<BusinessPaymentConfirmRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<BusinessPaymentConfirmResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<BusinessPaymentConfirmResponse>>() {
+        }.getType());
         proxyService.closeConnection();
 
         return responseMessage;
@@ -588,13 +632,15 @@ public class SecuredWebServices{
         businessSearchRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<BusinessSearchRequest> message = new RequestMessage<>(businessSearchRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<BusinessListRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<BusinessListRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<BusinessListResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<BusinessListResponse>>() {
+        }.getType());
         proxyService.closeConnection();
 
         return responseMessage;
@@ -610,13 +656,15 @@ public class SecuredWebServices{
         changePassCodeRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<ChangePassCodeRequest> message = new RequestMessage<>(changePassCodeRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<ChangePassCodeRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<ChangePassCodeRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<ChangePassCodeResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<ChangePassCodeResponse>>() {
+        }.getType());
         proxyService.closeConnection();
 
         return responseMessage;
@@ -631,13 +679,15 @@ public class SecuredWebServices{
         changeMemorableWordRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<ChangeMemorableWordRequest> message = new RequestMessage<>(changeMemorableWordRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<ChangeMemorableWordRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<ChangeMemorableWordRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<ChangeMemorableWordResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<ChangeMemorableWordResponse>>() {
+        }.getType());
         proxyService.closeConnection();
 
         return responseMessage;
@@ -654,13 +704,15 @@ public class SecuredWebServices{
         unlinkUserRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<UnlinkUserRequest> message = new RequestMessage<>(unlinkUserRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<UnlinkUserRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<UnlinkUserRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UnlinkUserResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UnlinkUserResponse>>() {
+        }.getType());
         proxyService.closeConnection();
 
         return responseMessage;
@@ -676,20 +728,22 @@ public class SecuredWebServices{
         changeEmailRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<ChangeEmailRequest> message = new RequestMessage<>(changeEmailRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<ChangeEmailRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<ChangeEmailRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = new Gson();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<ChangeEmailResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<ChangeEmailResponse>>() {
+        }.getType());
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
 
-    public Bitmap imageDownloader(String imageId) throws IOException{
+    public Bitmap imageDownloader(String imageId) throws IOException {
 
         url = new URL(serviceURL + imageId);
         ProxyService proxyService = new ProxyService(context, connectionType, ConnectionMethod.GET, url);
@@ -708,13 +762,15 @@ public class SecuredWebServices{
         latestPurchaseRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<LatestPurchaseRequest> message = new RequestMessage<>(latestPurchaseRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<LatestPurchaseRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<LatestPurchaseRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<LatestPurchaseResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<LatestPurchaseResponse>>() {
+        }.getType());
         proxyService.closeConnection();
 
         return responseMessage;
@@ -729,13 +785,15 @@ public class SecuredWebServices{
         latestPaymentRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<LatestPaymentRequest> message = new RequestMessage<>(latestPaymentRequest, authToken, Constants.API_LEVEL);
 
-        Type requestType = new TypeToken<RequestMessage<LatestPaymentRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<LatestPaymentRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<LatestPaymentResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<LatestPaymentResponse>>() {
+        }.getType());
         proxyService.closeConnection();
 
         return responseMessage;
@@ -746,7 +804,7 @@ public class SecuredWebServices{
         ResponseMessage<PSPResultResponse> responseMessage = null;
         if (type == 1) {
             url = new URL(serviceURL + "/purchase/psp-result");
-        }else if (type == 2){
+        } else if (type == 2) {
             url = new URL(serviceURL + "/payment/psp-result");
         }
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
@@ -754,13 +812,15 @@ public class SecuredWebServices{
         pspResultRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<PSPResultRequest> message = new RequestMessage<>(pspResultRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<PSPResultRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<PSPResultRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PSPResultResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PSPResultResponse>>() {
+        }.getType());
         proxyService.closeConnection();
 
         return responseMessage;
@@ -769,19 +829,21 @@ public class SecuredWebServices{
     public ResponseMessage<CancelPurchasePaymentResponse> cancelPurchasePaymentResponse(CancelPurchasePaymentRequest cancelPurchasePaymentRequest) throws IOException, EncryptionException {
 
         ResponseMessage<CancelPurchasePaymentResponse> responseMessage = null;
-        url = new URL(serviceURL +  "/purchase/cancel");
+        url = new URL(serviceURL + "/purchase/cancel");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
         cancelPurchasePaymentRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<CancelPurchasePaymentRequest> message = new RequestMessage<>(cancelPurchasePaymentRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<CancelPurchasePaymentRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<CancelPurchasePaymentRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<CancelPurchasePaymentResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<CancelPurchasePaymentResponse>>() {
+        }.getType());
         proxyService.closeConnection();
 
         return responseMessage;
@@ -790,19 +852,21 @@ public class SecuredWebServices{
     public ResponseMessage<CancelUserPaymentResponse> cancelUserPaymentResponse(CancelUserPaymentRequest cancelUserPaymentRequest) throws IOException, EncryptionException {
 
         ResponseMessage<CancelUserPaymentResponse> responseMessage = null;
-        url = new URL(serviceURL +  "/payment/cancel");
+        url = new URL(serviceURL + "/payment/cancel");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
         cancelUserPaymentRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<CancelUserPaymentRequest> message = new RequestMessage<>(cancelUserPaymentRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<CancelUserPaymentRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<CancelUserPaymentRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<CancelUserPaymentResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<CancelUserPaymentResponse>>() {
+        }.getType());
         proxyService.closeConnection();
 
         return responseMessage;
@@ -811,19 +875,21 @@ public class SecuredWebServices{
     public ResponseMessage<UserPaymentResponse> userPaymentResponse(UserPaymentRequest userPaymentRequest) throws IOException, EncryptionException {
 
         ResponseMessage<UserPaymentResponse> responseMessage = null;
-        url = new URL(serviceURL +  "/users/payment-request");
+        url = new URL(serviceURL + "/users/payment-request");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
         userPaymentRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<UserPaymentRequest> message = new RequestMessage<>(userPaymentRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<UserPaymentRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<UserPaymentRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UserPaymentResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UserPaymentResponse>>() {
+        }.getType());
         proxyService.closeConnection();
 
         return responseMessage;
@@ -833,45 +899,47 @@ public class SecuredWebServices{
     public ResponseMessage<IBANConfirmationResponse> ibanConfirmation(IBANConfirmationRequest ibanConfirmationRequest) throws IOException, EncryptionException {
 
         ResponseMessage<IBANConfirmationResponse> responseMessage = null;
-        url = new URL(serviceURL +  "/iban/confirmation");
+        url = new URL(serviceURL + "/iban/confirmation");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
         ibanConfirmationRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<IBANConfirmationRequest> message = new RequestMessage<>(ibanConfirmationRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<IBANConfirmationRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<IBANConfirmationRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
-
 
 
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<IBANConfirmationResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<IBANConfirmationResponse>>() {
+        }.getType());
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
 
-
     public ResponseMessage<IBANChangeResponse> ibanChange(IBANChangeRequest ibanChangeRequest) throws IOException, EncryptionException {
 
         ResponseMessage<IBANChangeResponse> responseMessage = null;
-        url = new URL(serviceURL +  "/iban/change");
+        url = new URL(serviceURL + "/iban/change");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
         ibanChangeRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<IBANChangeRequest> message = new RequestMessage<>(ibanChangeRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<IBANChangeRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<IBANChangeRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<IBANChangeResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<IBANChangeResponse>>() {
+        }.getType());
         proxyService.closeConnection();
 
         return responseMessage;
@@ -886,16 +954,18 @@ public class SecuredWebServices{
         cardProfileRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<CardProfileRequest> message = new RequestMessage<CardProfileRequest>(cardProfileRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<CardProfileRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<CardProfileRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<CardProfileResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<CardProfileResponse>>() {
+        }.getType());
         proxyService.closeConnection();
 
-        return  responseMessage;
+        return responseMessage;
     }
 
     public ResponseMessage<PurchaseInfoResponse> purchaseInfo(PurchaseInfoRequest purchaseInfoRequest) throws IOException, EncryptionException {
@@ -907,13 +977,15 @@ public class SecuredWebServices{
         purchaseInfoRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<PurchaseInfoRequest> message = new RequestMessage<>(purchaseInfoRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<PurchaseInfoRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<PurchaseInfoRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PurchaseInfoResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PurchaseInfoResponse>>() {
+        }.getType());
 
         proxyService.closeConnection();
 
@@ -929,13 +1001,15 @@ public class SecuredWebServices{
         latestInvoiceContactsRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<LatestInvoiceContactsRequest> message = new RequestMessage<>(latestInvoiceContactsRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<LatestInvoiceContactsRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<LatestInvoiceContactsRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<LatestInvoiceContactsResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<LatestInvoiceContactsResponse>>() {
+        }.getType());
 
         proxyService.closeConnection();
 
@@ -948,7 +1022,7 @@ public class SecuredWebServices{
 
         if (transactionType == 0) {
             url = new URL(serviceURL + "/purchase/token");
-        }else if (transactionType == 1){
+        } else if (transactionType == 1) {
             url = new URL(serviceURL + "/payment/token");
         }
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
@@ -956,13 +1030,15 @@ public class SecuredWebServices{
         getTokenFromPSPRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<GetTokenFromPSPRequest> message = new RequestMessage<>(getTokenFromPSPRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<GetTokenFromPSPRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<GetTokenFromPSPRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<GetTokenFromPSPResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<GetTokenFromPSPResponse>>() {
+        }.getType());
 
         proxyService.closeConnection();
 
@@ -978,13 +1054,15 @@ public class SecuredWebServices{
         paymentDetailRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<PaymentDetailRequest> message = new RequestMessage<>(paymentDetailRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<PaymentDetailRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<PaymentDetailRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PaymentDetailResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PaymentDetailResponse>>() {
+        }.getType());
 
         proxyService.closeConnection();
 
@@ -1000,13 +1078,15 @@ public class SecuredWebServices{
         purchaseDetailRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<PurchaseDetailRequest> message = new RequestMessage<>(purchaseDetailRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<PurchaseDetailRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<PurchaseDetailRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PurchaseDetailResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PurchaseDetailResponse>>() {
+        }.getType());
 
         proxyService.closeConnection();
 
@@ -1022,13 +1102,15 @@ public class SecuredWebServices{
         removeUserImageRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<RemoveUserImageRequest> message = new RequestMessage<>(removeUserImageRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<RemoveUserImageRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<RemoveUserImageRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<RemoveUserImageResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<RemoveUserImageResponse>>() {
+        }.getType());
 
         proxyService.closeConnection();
 
@@ -1044,13 +1126,15 @@ public class SecuredWebServices{
         pendingPOListRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<PendingPOListRequest> message = new RequestMessage<>(pendingPOListRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<PendingPOListRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<PendingPOListRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PendingPOListResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PendingPOListResponse>>() {
+        }.getType());
 
         proxyService.closeConnection();
 
@@ -1066,13 +1150,15 @@ public class SecuredWebServices{
         calculateVatRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<CalculateVatRequest> message = new RequestMessage<>(calculateVatRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<CalculateVatRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<CalculateVatRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<CalculateVatResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<CalculateVatResponse>>() {
+        }.getType());
 
         proxyService.closeConnection();
 
@@ -1088,13 +1174,15 @@ public class SecuredWebServices{
         calcFeeChargeRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<CalcFeeChargeRequest> message = new RequestMessage<>(calcFeeChargeRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<CalcFeeChargeRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<CalcFeeChargeRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<CalcFeeChargeResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<CalcFeeChargeResponse>>() {
+        }.getType());
 
         proxyService.closeConnection();
 
@@ -1110,12 +1198,14 @@ public class SecuredWebServices{
         recentPendingFundRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<RecentPendingFundRequest> message = new RequestMessage<>(recentPendingFundRequest, "", Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<RecentPendingFundRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<RecentPendingFundRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<RecentPendingFundResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<RecentPendingFundResponse>>() {
+        }.getType());
 
         proxyService.closeConnection();
 
@@ -1128,11 +1218,13 @@ public class SecuredWebServices{
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
         pendingFundListRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<PendingFundListRequest> message = new RequestMessage<>(pendingFundListRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
-        Type requestType = new TypeToken<RequestMessage<PendingFundListRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<PendingFundListRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
         Gson gson = builder.getDatebuilder().create();
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PendingFundListResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PendingFundListResponse>>() {
+        }.getType());
         proxyService.closeConnection();
         return responseMessage;
     }
@@ -1143,11 +1235,13 @@ public class SecuredWebServices{
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
         transactionDetailRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<TransactionDetailRequest> message = new RequestMessage<>(transactionDetailRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
-        Type requestType = new TypeToken<RequestMessage<TransactionDetailRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<TransactionDetailRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
         Gson gson = builder.getDatebuilder().create();
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<TransactionDetailResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<TransactionDetailResponse>>() {
+        }.getType());
         proxyService.closeConnection();
         return responseMessage;
     }
@@ -1158,11 +1252,13 @@ public class SecuredWebServices{
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
         pendingCountRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<PendingCountRequest> message = new RequestMessage<>(pendingCountRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
-        Type requestType = new TypeToken<RequestMessage<PendingCountRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<PendingCountRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
         Gson gson = builder.getDatebuilder().create();
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PendingCountResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PendingCountResponse>>() {
+        }.getType());
         proxyService.closeConnection();
         return responseMessage;
     }
@@ -1176,13 +1272,15 @@ public class SecuredWebServices{
         loginRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<LoginRequest> message = new RequestMessage<>(loginRequest, authToken, apiLevel, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<LoginRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<LoginRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<LoginResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<LoginResponse>>() {
+        }.getType());
 
         proxyService.closeConnection();
 
@@ -1198,13 +1296,15 @@ public class SecuredWebServices{
         logoutRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<LogoutRequest> message = new RequestMessage<>(logoutRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<LogoutRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<LogoutRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<LogoutResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<LogoutResponse>>() {
+        }.getType());
 
         proxyService.closeConnection();
 
@@ -1217,13 +1317,15 @@ public class SecuredWebServices{
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
         request.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<UserMerchantInquiryRequest> message = new RequestMessage<>(request, authToken, Constants.API_LEVEL, System.currentTimeMillis());
-        Type requestType = new TypeToken<RequestMessage<UserMerchantInquiryRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<UserMerchantInquiryRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
         Gson gson = new Gson();
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UserMerchantInquiryResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UserMerchantInquiryResponse>>() {
+        }.getType());
         proxyService.closeConnection();
-        return  responseMessage;
+        return responseMessage;
     }
 
     public ResponseMessage<UserMerchantResponse> userMerchant(UserMerchantRequest request) throws IOException, EncryptionException {
@@ -1232,13 +1334,15 @@ public class SecuredWebServices{
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
         request.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<UserMerchantRequest> message = new RequestMessage<>(request, authToken, Constants.API_LEVEL, System.currentTimeMillis());
-        Type requestType = new TypeToken<RequestMessage<UserMerchantRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<UserMerchantRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
         Gson gson = new Gson();
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UserMerchantResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UserMerchantResponse>>() {
+        }.getType());
         proxyService.closeConnection();
-        return  responseMessage;
+        return responseMessage;
     }
 
     public ResponseMessage<SignToPayResponse> signToPay(SignToPayRequest request) throws IOException, EncryptionException {

@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -44,30 +43,24 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class TransactionsListActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private SwipeRefreshLayout pullToRefresh;
-    private ListView transactionListView;
     UserTransactionAdapter userTransactionAdapter;
-    private boolean FINISHED_SCROLLING = false;
-
     HamPayDialog hamPayDialog;
-
     FacedTextView no_transaction;
-    private boolean onLoadMore = false;
-
-    private List<TransactionDTO> transactionDTOs;
-
     RequestUserTransaction requestUserTransaction;
     TransactionListRequest transactionListRequest;
-    private ProgressBar loading;
     int requestPageNumber = 0;
     TnxSortFactor sortFactor = TnxSortFactor.DEFAULT;
-
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
-
+    DobList dobList;
+    private SwipeRefreshLayout pullToRefresh;
+    private ListView transactionListView;
+    private boolean FINISHED_SCROLLING = false;
+    private boolean onLoadMore = false;
+    private List<TransactionDTO> transactionDTOs;
+    private ProgressBar loading;
     private Context context;
     private Activity activity;
-
     private RelativeLayout full_transaction;
     private RelativeLayout business_transaction;
     private RelativeLayout invoice_transaction;
@@ -102,14 +95,14 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
         }
     }
 
-    public void backActionBar(View view){
+    public void backActionBar(View view) {
         finish();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (requestUserTransaction != null){
+        if (requestUserTransaction != null) {
             if (!requestUserTransaction.isCancelled())
                 requestUserTransaction.cancel(true);
         }
@@ -130,29 +123,29 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
 
         hamPayDialog = new HamPayDialog(activity);
 
-        loading = (ProgressBar)findViewById(R.id.loading);
-        full_transaction = (RelativeLayout)findViewById(R.id.full_transaction);
+        loading = (ProgressBar) findViewById(R.id.loading);
+        full_transaction = (RelativeLayout) findViewById(R.id.full_transaction);
         full_transaction.setOnClickListener(this);
-        business_transaction = (RelativeLayout)findViewById(R.id.business_transaction);
+        business_transaction = (RelativeLayout) findViewById(R.id.business_transaction);
         business_transaction.setOnClickListener(this);
-        invoice_transaction = (RelativeLayout)findViewById(R.id.invoice_transaction);
+        invoice_transaction = (RelativeLayout) findViewById(R.id.invoice_transaction);
         invoice_transaction.setOnClickListener(this);
-        full_triangle = (ImageView)findViewById(R.id.full_triangle);
-        business_triangle = (ImageView)findViewById(R.id.business_triangle);
-        invoice_triangle = (ImageView)findViewById(R.id.invoice_triangle);
+        full_triangle = (ImageView) findViewById(R.id.full_triangle);
+        business_triangle = (ImageView) findViewById(R.id.business_triangle);
+        invoice_triangle = (ImageView) findViewById(R.id.invoice_triangle);
 
 
         transactionDTOs = new ArrayList<>();
         userTransactionAdapter = new UserTransactionAdapter(activity);
 
-        no_transaction = (FacedTextView)findViewById(R.id.no_transaction);
+        no_transaction = (FacedTextView) findViewById(R.id.no_transaction);
 
-        transactionListView = (ListView)findViewById(R.id.transactionListView);
-        pullToRefresh = (SwipeRefreshLayout)findViewById(R.id.pullToRefresh);
+        transactionListView = (ListView) findViewById(R.id.transactionListView);
+        pullToRefresh = (SwipeRefreshLayout) findViewById(R.id.pullToRefresh);
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING){
+                if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING) {
                     requestUserTransaction.cancel(true);
                 }
                 FINISHED_SCROLLING = false;
@@ -191,15 +184,19 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
         transactionListRequest.setSortFactor(sortFactor);
         requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
         requestUserTransaction.execute(transactionListRequest);
-        hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        try {
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.full_transaction:
-                if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING){
+                if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING) {
                     requestUserTransaction.cancel(true);
                 }
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
@@ -221,7 +218,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 break;
 
             case R.id.business_transaction:
-                if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING){
+                if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING) {
                     requestUserTransaction.cancel(true);
                 }
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
@@ -243,7 +240,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 break;
 
             case R.id.invoice_transaction:
-                if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING){
+                if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING) {
                     requestUserTransaction.cancel(true);
                 }
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
@@ -266,8 +263,8 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
         }
     }
 
-    private void changeTab(int index){
-        switch (index){
+    private void changeTab(int index) {
+        switch (index) {
             case 1:
                 full_transaction.setBackgroundColor(getResources().getColor(R.color.app_origin));
                 business_transaction.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
@@ -295,88 +292,6 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 break;
         }
     }
-
-    public class RequestUserTransactionsTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<TransactionListResponse>> {
-
-        List<TransactionDTO> newTransactionDTOs;
-        ServiceEvent serviceName;
-        LogEvent logEvent = new LogEvent(context);
-
-        @Override
-        public void onTaskComplete(ResponseMessage<TransactionListResponse> transactionListResponseMessage) {
-            hamPayDialog.dismisWaitingDialog();
-            pullToRefresh.setRefreshing(false);
-            loading.setVisibility(View.INVISIBLE);
-
-            PugNotification.with(context).cancel(Constants.TRANSACTIONS_NOTIFICATION_IDENTIFIER);
-
-            if (transactionListResponseMessage != null) {
-
-                if (transactionListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    serviceName = ServiceEvent.TRANSACTION_LIST_SUCCESS;
-                    newTransactionDTOs = transactionListResponseMessage.getService().getTransactions();
-                    transactionDTOs.addAll(newTransactionDTOs);
-
-                    if (transactionDTOs.size() == 0){
-                        no_transaction.setVisibility(View.VISIBLE);
-                        transactionListView.setVisibility(View.GONE);
-                    }else {
-                        no_transaction.setVisibility(View.GONE);
-                        transactionListView.setVisibility(View.VISIBLE);
-                    }
-
-                    if (transactionDTOs != null) {
-
-                        if (newTransactionDTOs.size() == 0 || newTransactionDTOs.size() < Constants.DEFAULT_PAGE_SIZE){
-                            FINISHED_SCROLLING = true;
-                        }
-
-                        if (transactionDTOs.size() > 0) {
-
-                            requestPageNumber++;
-
-                            if (onLoadMore) {
-                                if (newTransactionDTOs != null)
-                                    addDummyData(newTransactionDTOs.size());
-                            } else {
-                                initDobList(getWindow().getDecorView().getRootView(), transactionListView);
-                                transactionListView.setAdapter(userTransactionAdapter);
-                            }
-                        }
-
-                    }
-
-                } else if (transactionListResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceEvent.TRANSACTION_LIST_FAILURE;
-                    forceLogout();
-                }
-                else {
-                    serviceName = ServiceEvent.TRANSACTION_LIST_FAILURE;
-                    transactionListRequest.setPageNumber(requestPageNumber);
-                    requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
-                    new HamPayDialog(activity).showFailUserTransactionDialog(requestUserTransaction, transactionListRequest,
-                            transactionListResponseMessage.getService().getResultStatus().getCode(),
-                            transactionListResponseMessage.getService().getResultStatus().getDescription());
-                }
-            } else {
-                serviceName = ServiceEvent.TRANSACTION_LIST_FAILURE;
-                transactionListRequest.setPageNumber(requestPageNumber);
-                requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
-                new HamPayDialog(activity).showFailUserTransactionDialog(requestUserTransaction, transactionListRequest,
-                        Constants.LOCAL_ERROR_CODE,
-                        getString(R.string.msg_fail_user_transation));
-            }
-            logEvent.log(serviceName);
-        }
-
-
-        @Override
-        public void onTaskPreRun() {
-        }
-    }
-
-
-    DobList dobList;
 
     private void initDobList(View rootView, ListView listView) {
 
@@ -444,6 +359,84 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
         if (activity != null) {
             finish();
             startActivity(intent);
+        }
+    }
+
+    public class RequestUserTransactionsTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<TransactionListResponse>> {
+
+        List<TransactionDTO> newTransactionDTOs;
+        ServiceEvent serviceName;
+        LogEvent logEvent = new LogEvent(context);
+
+        @Override
+        public void onTaskComplete(ResponseMessage<TransactionListResponse> transactionListResponseMessage) {
+            hamPayDialog.dismisWaitingDialog();
+            pullToRefresh.setRefreshing(false);
+            loading.setVisibility(View.INVISIBLE);
+
+            PugNotification.with(context).cancel(Constants.TRANSACTIONS_NOTIFICATION_IDENTIFIER);
+
+            if (transactionListResponseMessage != null) {
+
+                if (transactionListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    serviceName = ServiceEvent.TRANSACTION_LIST_SUCCESS;
+                    newTransactionDTOs = transactionListResponseMessage.getService().getTransactions();
+                    transactionDTOs.addAll(newTransactionDTOs);
+
+                    if (transactionDTOs.size() == 0) {
+                        no_transaction.setVisibility(View.VISIBLE);
+                        transactionListView.setVisibility(View.GONE);
+                    } else {
+                        no_transaction.setVisibility(View.GONE);
+                        transactionListView.setVisibility(View.VISIBLE);
+                    }
+
+                    if (transactionDTOs != null) {
+
+                        if (newTransactionDTOs.size() == 0 || newTransactionDTOs.size() < Constants.DEFAULT_PAGE_SIZE) {
+                            FINISHED_SCROLLING = true;
+                        }
+
+                        if (transactionDTOs.size() > 0) {
+
+                            requestPageNumber++;
+
+                            if (onLoadMore) {
+                                if (newTransactionDTOs != null)
+                                    addDummyData(newTransactionDTOs.size());
+                            } else {
+                                initDobList(getWindow().getDecorView().getRootView(), transactionListView);
+                                transactionListView.setAdapter(userTransactionAdapter);
+                            }
+                        }
+
+                    }
+
+                } else if (transactionListResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceEvent.TRANSACTION_LIST_FAILURE;
+                    forceLogout();
+                } else {
+                    serviceName = ServiceEvent.TRANSACTION_LIST_FAILURE;
+                    transactionListRequest.setPageNumber(requestPageNumber);
+                    requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
+                    new HamPayDialog(activity).showFailUserTransactionDialog(requestUserTransaction, transactionListRequest,
+                            transactionListResponseMessage.getService().getResultStatus().getCode(),
+                            transactionListResponseMessage.getService().getResultStatus().getDescription());
+                }
+            } else {
+                serviceName = ServiceEvent.TRANSACTION_LIST_FAILURE;
+                transactionListRequest.setPageNumber(requestPageNumber);
+                requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
+                new HamPayDialog(activity).showFailUserTransactionDialog(requestUserTransaction, transactionListRequest,
+                        Constants.LOCAL_ERROR_CODE,
+                        getString(R.string.msg_fail_user_transation));
+            }
+            logEvent.log(serviceName);
+        }
+
+
+        @Override
+        public void onTaskPreRun() {
         }
     }
 

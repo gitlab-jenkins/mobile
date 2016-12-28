@@ -14,10 +14,18 @@ import xyz.homapay.hampay.mobile.android.model.AppState;
 public class HamPayApplication extends MultiDexApplication {
 
     public static final String TAG = HamPayApplication.class.getSimpleName();
+    static AppState applicationState;
+
+    public static AppState getAppState() {
+        return applicationState;
+    }
+
+    public static void setAppSate(AppState appState) {
+        applicationState = appState;
+    }
 
     @Override
-    public void onCreate()
-    {
+    public void onCreate() {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
     }
@@ -26,18 +34,6 @@ public class HamPayApplication extends MultiDexApplication {
     public void onTerminate() {
         super.onTerminate();
     }
-
-    static AppState applicationState;
-
-
-    public static AppState getAppState(){
-        return applicationState;
-    }
-
-    public static void setAppSate(AppState appState){
-        applicationState = appState;
-    }
-
 
 
 }

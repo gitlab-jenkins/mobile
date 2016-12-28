@@ -187,6 +187,8 @@
     <string name="debit">پرداخت</string>
     <string name="credit">دریافت</string>
     <string name="fail">ناموفق</string>
+    <string name="fail_credit">دریافت ناموفق</string>
+    <string name="fail_debit">پرداخت ناموفق</string>
     <string name="pending">درحال بررسی</string>
     <string name="keyboard_dismiss">بستن</string>
     <string name="exit_app_text">آیا مایل به خروج از هم‌پی هستید؟</string>
@@ -714,7 +716,6 @@
     <string name="permission_grant">تایید دسترسی</string>
     <string name="permission_deny">عدم تایید دسترسی</string>
     <string name="permission_exit">خروج</string>
-
 
 
     <!--Slider string-->
