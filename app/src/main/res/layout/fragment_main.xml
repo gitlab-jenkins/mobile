@@ -148,6 +148,38 @@
                     android:background="@color/entry_field_color"/>
 
                 <LinearLayout
+                    android:id="@+id/bills_top_up"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="right"
+                    android:padding="8dp">
+
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        geekui:customTypeface="fonts/vazir_regular.ttf"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/main_menu_title"
+                        android:textSize="15dp"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:text="@string/main_fragment_bills_top_up" />
+
+                    <ImageView
+                        android:layout_width="52dp"
+                        android:layout_height="52dp"
+                        android:src="@drawable/bills_topup_icon"
+                        android:background="@color/page_title" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/entry_field_color"/>
+
+
+                <LinearLayout
                     android:id="@+id/pendingPurchasePayment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
