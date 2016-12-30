@@ -335,7 +335,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
             case R.id.purchase_pending:
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
-                fundType = FundType.BUSINESS_AND_PURCHASE;
+                fundType = FundType.COMMERCIAL;
                 requestPendingFundList = new RequestPendingFundList(activity, new RequestPendingFundTaskCompleteListener());
                 pendingFundListRequest = new PendingFundListRequest();
                 pendingFundListRequest.setType(fundType);

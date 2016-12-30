@@ -69,6 +69,7 @@ import xyz.homapay.hampay.common.core.model.request.UserMerchantInquiryRequest;
 import xyz.homapay.hampay.common.core.model.request.UserMerchantRequest;
 import xyz.homapay.hampay.common.core.model.request.UserPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
+import xyz.homapay.hampay.common.core.model.request.UtilityBillRequest;
 import xyz.homapay.hampay.common.core.model.response.BusinessListResponse;
 import xyz.homapay.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
 import xyz.homapay.hampay.common.core.model.response.CalcFeeChargeResponse;
@@ -115,6 +116,7 @@ import xyz.homapay.hampay.common.core.model.response.UserMerchantInquiryResponse
 import xyz.homapay.hampay.common.core.model.response.UserMerchantResponse;
 import xyz.homapay.hampay.common.core.model.response.UserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
+import xyz.homapay.hampay.common.core.model.response.UtilityBillResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.ssl.AllowHamPaySSL;
@@ -1356,6 +1358,21 @@ public class SecuredWebServices {
         proxyService.setJsonBody(jsonRequest);
         Gson gson = new Gson();
         responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<SignToPayResponse>>() {}.getType());
+        proxyService.closeConnection();
+        return  responseMessage;
+    }
+
+    public ResponseMessage<UtilityBillResponse> utilityBill(UtilityBillRequest request) throws IOException, EncryptionException {
+        ResponseMessage<UtilityBillResponse> responseMessage = null;
+        url = new URL(serviceURL + "/bill/request");
+        SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
+        request.setRequestUUID(UUID.randomUUID().toString());
+        RequestMessage<UtilityBillRequest> message = new RequestMessage<>(request, authToken, Constants.API_LEVEL, System.currentTimeMillis());
+        Type requestType = new TypeToken<RequestMessage<UtilityBillRequest>>() {}.getType();
+        String jsonRequest = new Gson().toJson(message, requestType);
+        proxyService.setJsonBody(jsonRequest);
+        Gson gson = new Gson();
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UtilityBillResponse>>() {}.getType());
         proxyService.closeConnection();
         return  responseMessage;
     }
