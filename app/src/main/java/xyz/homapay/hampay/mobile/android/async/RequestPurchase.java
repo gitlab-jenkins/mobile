@@ -16,12 +16,14 @@ public class RequestPurchase extends AsyncTask<DoWorkInfo, Void, CBUArrayOfKeyVa
 
     private Context context;
     private AsyncTaskCompleteListener<CBUArrayOfKeyValueOfstringstring> listener;
+    private String tokenPayUrl;
 
 
-    public RequestPurchase(Context context, AsyncTaskCompleteListener<CBUArrayOfKeyValueOfstringstring> listener)
+    public RequestPurchase(Context context, AsyncTaskCompleteListener<CBUArrayOfKeyValueOfstringstring> listener, String tokenPayUrl)
     {
         this.context = context;
         this.listener = listener;
+        this.tokenPayUrl = tokenPayUrl;
     }
 
 
@@ -37,7 +39,7 @@ public class RequestPurchase extends AsyncTask<DoWorkInfo, Void, CBUArrayOfKeyVa
         WebServices webServices = new WebServices(context);
 
         try {
-            return webServices.purchaseResponse(params[0]);
+            return webServices.purchaseResponse(params[0], tokenPayUrl);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -124,7 +124,7 @@
     <string name="sheba_text">IR</string>
     <string name="sheba_verify">بررسی</string>
     <string name="sheba_question_part1_text">آیا شماره: </string>
-    <string name="sheba_question_part2_text">متعلق به %1$s در بانک %2$s می‌باشد؟</string>
+    <string name="iban_question_part2_text">متعلق به %1$s در %2$s می‌باشد؟</string>
     <string name="sheba_question_part3_text">(دقت کنید که این حساب برای دریافت مبالغ واریزی به شما استفاده می‌شود)</string>
     <string name="sheba_confirm">بله</string>
     <string name="sheba_cancel">خیر</string>
@@ -285,6 +285,8 @@
     <string name="invoice_payment_confirm">تایید پرداخت</string>
     <string name="iban_notice">به منظور بهره‌مندی از ویژگی درخواست پرداخت، لازم است تا ابتدا شماره شبا حساب بانکی خود را معرفی نمائید تا مبلغ دریافتی به حساب شما واریز گردد.</string>
     <string name="iban_verify">تایید</string>
+    <string name="iban_user_name">نام</string>
+    <string name="iban_user_family">نام خانوادگی</string>
     <string name="null_pending_business">در حال حاضر پرداخت در انتظاری وجود ندارد</string>
     <string name="null_hampay_contacts">
         هم اکنون هیچ یک از مخاطبین شما عضو شبکه پرداخت همراه هم‌پی نیست

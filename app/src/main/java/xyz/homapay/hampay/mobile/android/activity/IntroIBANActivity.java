@@ -10,13 +10,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 
-import xyz.homapay.hampay.common.common.response.ResponseMessage;
-import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.IBANConfirmationRequest;
-import xyz.homapay.hampay.common.core.model.response.IBANConfirmationResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
-import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestIBANConfirmation;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
@@ -117,7 +113,7 @@ public class IntroIBANActivity extends AppCompatActivity {
                 }
 
                 Intent intent = new Intent(activity, ChangeIbanPassActivity.class);
-                intent.putExtra(Constants.USER_IBAN, iban);
+                intent.putExtra(Constants.IBAN_NUMBER, iban);
                 activity.startActivityForResult(intent, Constants.IBAN_CHANGE_RESULT_CODE);
 //                finish();
 //                ibanConfirmationRequest = new IBANConfirmationRequest();

@@ -33,7 +33,7 @@ public class Constants {
     public static final String MEMORABLE_WORD = "MemorableWord";
     public static final String FORCE_FETCH_ILLEGAL_APPS = "forceFetchIllegalApps";
     public static final String APP_PREFERENCE_NAME = "HamPay_Preferences";
-    public static final String USER_PROFILE_DTO = "UserProfile";
+    public static final String USER_PROFILE = "UserProfile";
     public static final String PENDING_PURCHASE_CODE = "pendingPurchaseCode";
     public static final String PENDING_PAYMENT_CODE = "pendingPaymentCode";
     public static final String PENDING_PURCHASE_COUNT = "pendingPurchaseCount";
@@ -93,7 +93,10 @@ public class Constants {
     public static final String IMAGE_PREFIX = "/image/";
     public static final String USER_MANUAL_TEXT = "userManualText";
     public static final String USER_MANUAL_TITLE = "userManualTitle";
-    public static final String USER_IBAN = "userIban";
+    public static final String IBAN_NUMBER = "iban_number";
+    public static final String IBAN_OWNER_NAME = "owner_name";
+    public static final String IBAN_OWNER_FAMILY = "owner_family";
+    public static final String IBAN_BANK_NAME = "bank_name";
     public static final String SETTING_CHANGE_IBAN_STATUS = "setting_change_iban";
     public static final int IBAN_CHANGE_RESULT_CODE = 2048;
     public static final String RETURN_IBAN_CONFIRMED = "return_iban";

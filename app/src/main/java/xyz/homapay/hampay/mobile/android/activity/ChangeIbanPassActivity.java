@@ -102,7 +102,7 @@ public class ChangeIbanPassActivity extends AppCompatActivity implements View.On
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
 
-        iban = getIntent().getExtras().getString(Constants.USER_IBAN);
+        iban = getIntent().getExtras().getString(Constants.IBAN_NUMBER);
 
         context = this;
         activity = ChangeIbanPassActivity.this;

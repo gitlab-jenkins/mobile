@@ -86,7 +86,7 @@ public class AccountDetailFragment extends Fragment {
         bundle = getArguments();
 
         if (bundle != null){
-            this.userProfileDTO = (UserProfileDTO) bundle.getSerializable(Constants.USER_PROFILE_DTO);
+            this.userProfileDTO = (UserProfileDTO) bundle.getSerializable(Constants.USER_PROFILE);
         }
 
         try {

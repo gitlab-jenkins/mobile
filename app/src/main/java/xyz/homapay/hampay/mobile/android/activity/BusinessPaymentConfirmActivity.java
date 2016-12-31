@@ -23,6 +23,7 @@ import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
 import xyz.homapay.hampay.common.core.model.request.SignToPayRequest;
 import xyz.homapay.hampay.common.core.model.response.PSPResultResponse;
+import xyz.homapay.hampay.common.core.model.response.SignToPayResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
@@ -93,6 +94,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
     private FacedTextView selectCardText;
     private LinearLayout cardSelect;
     private PersianEnglishDigit persian = new PersianEnglishDigit();
+    private String signature;
 
     public void backActionBar(View view){
         finish();
@@ -243,7 +245,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
                         return;
                     }
 
-                    requestPurchase = new RequestPurchase(activity, new RequestPurchaseTaskCompleteListener());
+                    requestPurchase = new RequestPurchase(activity, new RequestPurchaseTaskCompleteListener(), paymentInfoDTO.getPspInfo().getPayURL());
 
                     doWorkInfo = new DoWorkInfo();
                     doWorkInfo.setUserName("appstore");
@@ -306,6 +308,11 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
                     s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "ResNum";
                     s2sMapEntry.Value = paymentInfoDTO.getProductCode();
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry.Key = "Signature";
+                    s2sMapEntry.Value = signature;
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     doWorkInfo.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
@@ -382,17 +389,23 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
                     bankName.setText(paymentInfoDTO.getCardList().get(position).getBankName());
                     selectCardText.setVisibility(View.GONE);
                     cardSelect.setVisibility(View.VISIBLE);
-                    SignToPayRequest signToPayRequest = new SignToPayRequest();
-                    signToPayRequest.setCardId(paymentInfoDTO.getCardList().get(position).getCardId());
-                    signToPayRequest.setProductCode(paymentInfoDTO.getProductCode());
-                    new SignToPayTask(activity, BusinessPaymentConfirmActivity.this, signToPayRequest, "").execute();
+                    if (paymentInfoDTO.getCardList().get(position).getDigitalSignature() != null && paymentInfoDTO.getCardList().get(position).getDigitalSignature().length() > 0) {
+                        signature = paymentInfoDTO.getCardList().get(position).getDigitalSignature();
+                    }else  {
+                        SignToPayRequest signToPayRequest = new SignToPayRequest();
+                        signToPayRequest.setCardId(paymentInfoDTO.getCardList().get(position).getCardId());
+                        signToPayRequest.setProductCode(paymentInfoDTO.getProductCode());
+                        new SignToPayTask(activity, BusinessPaymentConfirmActivity.this, signToPayRequest, "").execute();
+                    }
                 }
                 break;
 
             case ADD:
-                Intent intent = new Intent(activity, BankWebPaymentActivity.class);
-                intent.putExtra(Constants.PAYMENT_INFO, paymentInfoDTO);
-                startActivity(intent);
+                Intent intent = new Intent();
+                intent.setClass(activity, BankWebPaymentActivity.class);
+                intent.putExtra(Constants.PURCHASE_INFO, paymentInfoDTO);
+                intent.putExtra(Constants.PSP_INFO, pspInfoDTO);
+                startActivityForResult(intent, 45);
                 break;
         }
     }
@@ -404,12 +417,24 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
 
     @Override
     public void OnTaskExecuted(Object object) {
+
         hamPayDialog.dismisWaitingDialog();
 
         if (object != null) {
             if (object.getClass().equals(ResponseMessage.class)) {
                 final ResponseMessage responseMessage = (ResponseMessage) object;
-
+                switch (responseMessage.getService().getServiceDefinition()) {
+                    case SIGN_DATA_TO_PAY:
+                        ResponseMessage<SignToPayResponse> signToPayResponse = (ResponseMessage) object;
+                        switch (responseMessage.getService().getResultStatus()) {
+                            case SUCCESS:
+                                signature = signToPayResponse.getService().getSignedData();
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                }
             }
         }
     }

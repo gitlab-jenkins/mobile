@@ -677,13 +677,14 @@ public class WebServices  {
     }
 
 
-    public CBUArrayOfKeyValueOfstringstring purchaseResponse(DoWorkInfo doWorkInfo) throws Exception {
+    public CBUArrayOfKeyValueOfstringstring purchaseResponse(DoWorkInfo doWorkInfo, String tokenPayUrl) throws Exception {
 
         AllowHamPaySSL allowHamPaySSL = new AllowHamPaySSL(context);
         allowHamPaySSL.enableHamPaySSL();
 
 //        CBUBasicHttpBinding_IGeneralService basicHttpBinding_iTokenPay = new CBUBasicHttpBinding_IGeneralService(null,"https://" + HpConstants.SERVER + "/saman/psp/pay");
-        CBUBasicHttpBinding_IGeneralService basicHttpBinding_iTokenPay = new CBUBasicHttpBinding_IGeneralService(null,"https://" + "uat.hampay.ir" + "/saman/psp/netpay");
+//        CBUBasicHttpBinding_IGeneralService basicHttpBinding_iTokenPay = new CBUBasicHttpBinding_IGeneralService(null, "https://" + "uat.hampay.ir" + "/saman/psp/netpay");
+        CBUBasicHttpBinding_IGeneralService basicHttpBinding_iTokenPay = new CBUBasicHttpBinding_IGeneralService(null, tokenPayUrl);
         CBUArrayOfKeyValueOfstringstring responseMessage = basicHttpBinding_iTokenPay.DoWork(doWorkInfo.getUserName(), doWorkInfo.getPassword(), doWorkInfo.getCellNumber(),null,doWorkInfo.getVectorstring2stringMapEntry());
 
         return responseMessage;

@@ -119,7 +119,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         bundle = getArguments();
 
         if (bundle != null){
-            userProfileDTO = (UserProfileDTO) bundle.getSerializable(Constants.USER_PROFILE_DTO);
+            userProfileDTO = (UserProfileDTO) bundle.getSerializable(Constants.USER_PROFILE);
         }
 
 
@@ -306,6 +306,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                     hamPayDialog.preventPaymentRequest();
                 }else {
                     intent.setClass(getActivity(), PaymentRequestListActivity.class);
+                    intent.putExtra(Constants.USER_PROFILE, userProfileDTO);
                     startActivity(intent);
                 }
                 break;

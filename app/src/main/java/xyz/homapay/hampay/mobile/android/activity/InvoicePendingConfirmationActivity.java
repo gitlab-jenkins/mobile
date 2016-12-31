@@ -28,6 +28,7 @@ import xyz.homapay.hampay.common.core.model.request.SignToPayRequest;
 import xyz.homapay.hampay.common.core.model.response.LatestPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.PSPResultResponse;
 import xyz.homapay.hampay.common.core.model.response.PaymentDetailResponse;
+import xyz.homapay.hampay.common.core.model.response.SignToPayResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
@@ -109,6 +110,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
     private int selectedCardIdIndex = -1;
     private FacedTextView selectCardText;
     private LinearLayout cardSelect;
+    private String signature;
 
     public void backActionBar(View view) {
         finish();
@@ -263,7 +265,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
                     editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                     editor.commit();
 
-                    requestPurchase = new RequestPurchase(activity, new RequestPurchaseTaskCompleteListener());
+                    requestPurchase = new RequestPurchase(activity, new RequestPurchaseTaskCompleteListener(), paymentInfoDTO.getPspInfo().getPayURL());
 
                     doWorkInfo = new DoWorkInfo();
                     doWorkInfo.setUserName("appstore");
@@ -327,6 +329,11 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
                     s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "ResNum";
                     s2sMapEntry.Value = paymentInfoDTO.getProductCode();
+                    vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    s2sMapEntry.Key = "Signature";
+                    s2sMapEntry.Value = signature;
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     doWorkInfo.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
@@ -401,17 +408,23 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
                     bankName.setText(paymentInfoDTO.getCardList().get(position).getBankName());
                     selectCardText.setVisibility(View.GONE);
                     cardSelect.setVisibility(View.VISIBLE);
-                    SignToPayRequest signToPayRequest = new SignToPayRequest();
-                    signToPayRequest.setCardId(paymentInfoDTO.getCardList().get(position).getCardId());
-                    signToPayRequest.setProductCode(paymentInfoDTO.getProductCode());
-                    new SignToPayTask(activity, InvoicePendingConfirmationActivity.this, signToPayRequest, "").execute();
+                    if (paymentInfoDTO.getCardList().get(position).getDigitalSignature() != null && paymentInfoDTO.getCardList().get(position).getDigitalSignature().length() > 0) {
+                        signature = paymentInfoDTO.getCardList().get(position).getDigitalSignature();
+                    }else  {
+                        SignToPayRequest signToPayRequest = new SignToPayRequest();
+                        signToPayRequest.setCardId(paymentInfoDTO.getCardList().get(position).getCardId());
+                        signToPayRequest.setProductCode(paymentInfoDTO.getProductCode());
+                        new SignToPayTask(activity, InvoicePendingConfirmationActivity.this, signToPayRequest, "").execute();
+                    }
                 }
                 break;
 
             case ADD:
-                Intent intent = new Intent(activity, BankWebPaymentActivity.class);
-                intent.putExtra(Constants.PAYMENT_INFO, paymentInfoDTO);
-                startActivity(intent);
+                Intent intent = new Intent();
+                intent.setClass(activity, BankWebPaymentActivity.class);
+                intent.putExtra(Constants.PURCHASE_INFO, paymentInfoDTO);
+                intent.putExtra(Constants.PSP_INFO, pspInfoDTO);
+                startActivityForResult(intent, 45);
                 break;
         }
     }
@@ -603,12 +616,24 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
 
     @Override
     public void OnTaskExecuted(Object object) {
+
         hamPayDialog.dismisWaitingDialog();
 
         if (object != null) {
             if (object.getClass().equals(ResponseMessage.class)) {
                 final ResponseMessage responseMessage = (ResponseMessage) object;
-
+                switch (responseMessage.getService().getServiceDefinition()) {
+                    case SIGN_DATA_TO_PAY:
+                        ResponseMessage<SignToPayResponse> signToPayResponse = (ResponseMessage) object;
+                        switch (responseMessage.getService().getResultStatus()) {
+                            case SUCCESS:
+                                signature = signToPayResponse.getService().getSignedData();
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                }
             }
         }
     }
@@ -658,6 +683,13 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
         paymentVAT.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfo.getVat())));
         paymentFeeValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfo.getFeeCharge())));
         paymentTotalValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfo.getAmount() + paymentInfo.getVat() + paymentInfo.getFeeCharge())));
+
+        if (paymentInfo.getCardList().size() > 0) {
+            if (paymentInfo.getCardList().get(0).getCardId() != null && (paymentInfo.getAmount() + paymentInfo.getFeeCharge() + paymentInfo.getVat() < Constants.SOAP_AMOUNT_MAX)) {
+                cardNumberValue.setText(persian.E2P(paymentInfo.getCardList().get(0).getLast4Digits()));
+                bankName.setText(paymentInfo.getCardList().get(0).getBankName());
+            }
+        }
 
         if (paymentInfo.getImageId() != null) {
             user_image.setTag(paymentInfo.getImageId());

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -28,10 +29,13 @@ import java.util.List;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.IBANChangeRequest;
+import xyz.homapay.hampay.common.core.model.request.IBANConfirmationRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingPOListRequest;
 import xyz.homapay.hampay.common.core.model.response.IBANChangeResponse;
+import xyz.homapay.hampay.common.core.model.response.IBANConfirmationResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingPOListResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
+import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.PendingPOAdapter;
@@ -40,9 +44,13 @@ import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestIBANChange;
 import xyz.homapay.hampay.mobile.android.async.RequestPendingPOList;
+import xyz.homapay.hampay.mobile.android.async.task.IBANConfirmationTask;
+import xyz.homapay.hampay.mobile.android.async.task.impl.OnTaskCompleted;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.dialog.iban.IbanAction;
+import xyz.homapay.hampay.mobile.android.dialog.iban.IbanChangeDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
@@ -50,7 +58,7 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
-public class PaymentRequestListActivity extends AppCompatActivity{
+public class PaymentRequestListActivity extends AppCompatActivity implements OnTaskCompleted, IbanChangeDialog.IbanChangeDialogListener{
 
     private Context context;
     private Activity activity;
@@ -74,6 +82,7 @@ public class PaymentRequestListActivity extends AppCompatActivity{
     private RelativeLayout introIbanLayout;
     private ImageView bankLogo;
     private FacedTextView bankName;
+    private IBANConfirmationTask ibanConfirmationTask;
     private IBANChangeRequest ibanChangeRequest;
     private RequestIBANChange requestIBANChange;
     private ImageManager imageManager;
@@ -85,7 +94,10 @@ public class PaymentRequestListActivity extends AppCompatActivity{
     private FacedTextView ibanSixthSegmentText;
     private FacedTextView ibanSeventhSegmentText;
     private RelativeLayout[] segmentRelativeLayouts = new RelativeLayout[7];
-
+    private FacedEditText ibanUserName;
+    private FacedEditText ibanUserFamily;
+    private Intent intent;
+    private UserProfileDTO userProfile;
     private LinearLayout keyboard;
     private PersianEnglishDigit persian = new PersianEnglishDigit();
 
@@ -127,6 +139,10 @@ public class PaymentRequestListActivity extends AppCompatActivity{
         activity = PaymentRequestListActivity.this;
         hamPayDialog = new HamPayDialog(activity);
 
+        intent = getIntent();
+        userProfile = (UserProfileDTO) intent.getSerializableExtra(Constants.USER_PROFILE);
+        imageManager = new ImageManager(activity, 200000, false);
+
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         authToken =  prefs.getString(Constants.LOGIN_TOKEN_ID, "");
@@ -160,26 +176,31 @@ public class PaymentRequestListActivity extends AppCompatActivity{
         segmentRelativeLayouts[5] = (RelativeLayout)findViewById(R.id.iban_sixth_segment_l);
         segmentRelativeLayouts[6] = (RelativeLayout)findViewById(R.id.iban_seventh_segment_l);
 
+        ibanUserName = (FacedEditText) findViewById(R.id.ibanUserName);
+        ibanUserFamily = (FacedEditText) findViewById(R.id.ibanUserFamily);
 
-        if (prefs.getBoolean(Constants.SETTING_CHANGE_IBAN_STATUS, false)){
+        if (userProfile.getIbanDTO() != null && userProfile.getIbanDTO().getIban() != null && userProfile.getIbanDTO().getIban().length() > 0){
             introIbanLayout.setVisibility(View.GONE);
-            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-            editor.commit();
             pendingPOListRequest = new PendingPOListRequest();
             requestPendingPOList = new RequestPendingPOList(activity, new RequestPendingPOListTaskCompleteListener());
             requestPendingPOList.execute(pendingPOListRequest);
-        }else {
-//            new Expand(keyboard).animate();
         }
 
         ibanVerifyButton = (FacedTextView)findViewById(R.id.iban_verify_button);
         ibanVerifyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                introIbanLayout.setVisibility(View.GONE);
-                pendingPOListRequest = new PendingPOListRequest();
-                requestPendingPOList = new RequestPendingPOList(activity, new RequestPendingPOListTaskCompleteListener());
-                requestPendingPOList.execute(pendingPOListRequest);
+
+                IbanChangeDialog cardNumberDialog = new IbanChangeDialog();
+                Bundle bundle = new Bundle();
+                bundle.putString(Constants.IBAN_NUMBER, ibanValue);
+                bundle.putString(Constants.IBAN_OWNER_NAME, ibanUserName.getText().toString());
+                bundle.putString(Constants.IBAN_OWNER_FAMILY, ibanUserFamily.getText().toString());
+                bundle.putString(Constants.IBAN_BANK_NAME, bankName.getText().toString());
+                cardNumberDialog.setArguments(bundle);
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.add(cardNumberDialog, null);
+                fragmentTransaction.commitAllowingStateLoss();
             }
         });
 
@@ -249,6 +270,68 @@ public class PaymentRequestListActivity extends AppCompatActivity{
         });
     }
 
+    @Override
+    public void OnTaskPreExecute() {
+        hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+    }
+
+    @Override
+    public void OnTaskExecuted(Object object) {
+
+        hamPayDialog.dismisWaitingDialog();
+
+        if (object != null) {
+            if (object.getClass().equals(ResponseMessage.class)) {
+                final ResponseMessage responseMessage = (ResponseMessage) object;
+                switch (responseMessage.getService().getServiceDefinition()) {
+                    case IBAN_CONFIRMATION:
+                        ResponseMessage<IBANConfirmationResponse> ibanConfirmation = (ResponseMessage) object;
+                        switch (responseMessage.getService().getResultStatus()) {
+                            case SUCCESS:
+                                ibanVerifyButton.setVisibility(View.VISIBLE);
+                                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                                editor.commit();
+                                bankName = (FacedTextView)findViewById(R.id.bank_name);
+                                bankLogo = (ImageView)findViewById(R.id.bank_logo);
+                                bankLogo.setVisibility(View.VISIBLE);
+                                bankName.setVisibility(View.VISIBLE);
+                                new Collapse(keyboard).animate();
+                                if (ibanConfirmation.getService().getImageId() != null) {
+                                    bankLogo.setTag(ibanConfirmation.getService().getImageId());
+                                    imageManager.displayImage(ibanConfirmation.getService().getImageId(), bankLogo, R.drawable.user_placeholder);
+                                }else {
+                                    bankLogo.setImageResource(R.drawable.user_placeholder);
+                                }
+                                bankName.setText(ibanConfirmation.getService().getBankName());
+
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onFinishEditDialog(IbanAction ibanAction) {
+        switch (ibanAction){
+            case ACCEPT:
+                ibanChangeRequest = new IBANChangeRequest();
+                ibanChangeRequest.setIban(ibanValue);
+                ibanChangeRequest.setOwnerFirstName(ibanUserName.getText().toString());
+                ibanChangeRequest.setOwnerSurname(ibanUserFamily.getText().toString());
+                requestIBANChange = new RequestIBANChange(activity, new RequestIBANChangeTaskCompleteListener(ibanChangeRequest));
+                requestIBANChange.execute(ibanChangeRequest);
+                break;
+
+            case REJECT:
+                finish();
+                break;
+        }
+    }
+
 
     public class RequestPendingPOListTaskCompleteListener implements
             AsyncTaskCompleteListener<ResponseMessage<PendingPOListResponse>> {
@@ -307,18 +390,11 @@ public class PaymentRequestListActivity extends AppCompatActivity{
                     editor.putBoolean(Constants.SETTING_CHANGE_IBAN_STATUS, true);
                     editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                     editor.commit();
-                    bankName = (FacedTextView)findViewById(R.id.bank_name);
-                    bankLogo = (ImageView)findViewById(R.id.bank_logo);
-                    bankLogo.setVisibility(View.VISIBLE);
-                    bankName.setVisibility(View.VISIBLE);
+                    introIbanLayout.setVisibility(View.GONE);
+                    pendingPOListRequest = new PendingPOListRequest();
+                    requestPendingPOList = new RequestPendingPOList(activity, new RequestPendingPOListTaskCompleteListener());
+                    requestPendingPOList.execute(pendingPOListRequest);
 
-                    if (ibanChangeResponseMessage.getService().getImageId() != null) {
-                        bankLogo.setTag(ibanChangeResponseMessage.getService().getImageId());
-                        imageManager.displayImage(ibanChangeResponseMessage.getService().getImageId(),bankLogo, R.drawable.user_placeholder);
-                    }else {
-                        bankLogo.setImageResource(R.drawable.user_placeholder);
-                    }
-                    bankName.setText(ibanChangeResponseMessage.getService().getBankName());
                 }else if (ibanChangeResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     serviceName = ServiceEvent.IBAN_CHANGE_FAILURE;
                     forceLogout();
@@ -474,10 +550,9 @@ public class PaymentRequestListActivity extends AppCompatActivity{
                 break;
         }
         if (ibanValue.length() == 24){
-            ibanChangeRequest = new IBANChangeRequest();
-            ibanChangeRequest.setIban(new PersianEnglishDigit().P2E(ibanValue));
-            requestIBANChange = new RequestIBANChange(activity, new RequestIBANChangeTaskCompleteListener(ibanChangeRequest));
-            requestIBANChange.execute(ibanChangeRequest);
+            IBANConfirmationRequest ibanConfirmationRequest = new IBANConfirmationRequest();
+            ibanConfirmationRequest.setIban(ibanValue);
+            new IBANConfirmationTask(activity, PaymentRequestListActivity.this, ibanConfirmationRequest, authToken).execute();
         }
     }
 

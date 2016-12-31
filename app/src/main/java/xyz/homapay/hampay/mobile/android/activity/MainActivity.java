@@ -48,7 +48,6 @@ import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.dialog.ImageProfile.ActionImage;
 import xyz.homapay.hampay.mobile.android.dialog.ImageProfile.EditImageDialog;
-import xyz.homapay.hampay.mobile.android.dialog.permission.PermissionDeviceDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
@@ -179,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         pendingPaymentCount = bundle.getInt(Constants.PENDING_PAYMENT_COUNT, 0);
         showCreateInvoice = bundle.getBoolean(Constants.SHOW_CREATE_INVOICE, true);
 
-        userProfileDTO = (UserProfileDTO) intent.getSerializableExtra(Constants.USER_PROFILE_DTO);
+        userProfileDTO = (UserProfileDTO) intent.getSerializableExtra(Constants.USER_PROFILE);
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE).edit();
         if (!prefs.contains(Constants.SETTING_CHANGE_IBAN_STATUS)){
@@ -343,7 +342,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 user_manual.setVisibility(View.VISIBLE);
                 fragment = new MainFragment();
                 if (userProfileDTO != null) {
-                    bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
+                    bundle.putSerializable(Constants.USER_PROFILE, userProfileDTO);
                     bundle.putInt(Constants.PENDING_PAYMENT_COUNT, pendingPaymentCount);
                     bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);
                     bundle.putBoolean(Constants.SHOW_CREATE_INVOICE, showCreateInvoice);
@@ -356,7 +355,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 user_manual.setVisibility(View.VISIBLE);
                 fragment = new AccountDetailFragment();
                 if (userProfileDTO != null) {
-                    bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
+                    bundle.putSerializable(Constants.USER_PROFILE, userProfileDTO);
                     fragment.setArguments(bundle);
                 }
                 fragmentTitle = getString(R.string.title_account_detail);
@@ -380,7 +379,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 user_manual.setVisibility(View.VISIBLE);
                 fragment = new MainFragment();
                 if (userProfileDTO != null) {
-                    bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
+                    bundle.putSerializable(Constants.USER_PROFILE, userProfileDTO);
                     bundle.putInt(Constants.PENDING_PAYMENT_COUNT, pendingPaymentCount);
                     bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);
                     bundle.putBoolean(Constants.SHOW_CREATE_INVOICE, showCreateInvoice);
@@ -567,7 +566,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 currentFragment = 0;
                 fragmentTitle = getString(R.string.title_main_fragment);
                 user_manual.setVisibility(View.VISIBLE);
-                bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
+                bundle.putSerializable(Constants.USER_PROFILE, userProfileDTO);
                 bundle.putInt(Constants.PENDING_PAYMENT_COUNT, pendingPaymentCount);
                 bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);
                 fragment.setArguments(bundle);
@@ -629,7 +628,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 user_manual.setVisibility(View.VISIBLE);
                 fragment = new MainFragment();
                 if (userProfileDTO != null) {
-                    bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
+                    bundle.putSerializable(Constants.USER_PROFILE, userProfileDTO);
                     bundle.putInt(Constants.PENDING_PAYMENT_COUNT, pendingPaymentCount);
                     bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);
                     bundle.putBoolean(Constants.SHOW_CREATE_INVOICE, showCreateInvoice);
@@ -729,7 +728,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     currentFragment = 0;
                     fragment = new MainFragment();
                     if (userProfileDTO != null) {
-                        bundle.putSerializable(Constants.USER_PROFILE_DTO, userProfileDTO);
+                        bundle.putSerializable(Constants.USER_PROFILE, userProfileDTO);
                         bundle.putInt(Constants.PENDING_PAYMENT_COUNT, pendingPaymentCount);
                         bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);
                         fragment.setArguments(bundle);

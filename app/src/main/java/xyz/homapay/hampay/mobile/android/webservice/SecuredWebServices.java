@@ -901,23 +901,16 @@ public class SecuredWebServices {
         ResponseMessage<IBANConfirmationResponse> responseMessage = null;
         url = new URL(serviceURL + "/iban/confirmation");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
-
         ibanConfirmationRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<IBANConfirmationRequest> message = new RequestMessage<>(ibanConfirmationRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
-
         Type requestType = new TypeToken<RequestMessage<IBANConfirmationRequest>>() {
         }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
-
-
         proxyService.setJsonBody(jsonRequest);
-
         Gson gson = builder.getDatebuilder().create();
-
         responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<IBANConfirmationResponse>>() {
         }.getType());
         proxyService.closeConnection();
-
         return responseMessage;
     }
 
