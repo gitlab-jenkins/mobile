@@ -17,80 +17,80 @@
             android:layout_weight="0.70"
             android:background="#f7f7f7">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#f7f7f7"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="12dp"
+                android:src="@drawable/wt_bills"
+                android:scaleType="centerInside"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#f7f7f7"
+                android:background="@drawable/wt_note_border"
+                android:layout_margin="12dp"
                 android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="160dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_margin="12dp"
-                    android:src="@drawable/wt_pending"
-                    android:scaleType="center"/>
-
-                <LinearLayout
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                    geekui:customTypeface="fonts/vazir_regular.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/wt_note_border"
-                    android:layout_margin="12dp"
-                    android:orientation="vertical">
-
-                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                        geekui:customTypeface="fonts/vazir_regular.ttf"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/page_title"
-                        android:textSize="14dp"
-                        android:text="@string/wt_note_5"
-                        android:padding="6dp" />
-
-                </LinearLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="12dp">
-
-                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                        android:id="@+id/next_wt"
-                        geekui:customTypeface="fonts/vazir_regular.ttf"
-                        android:layout_width="wrap_content"
-                        android:layout_height="32dp"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
-                        android:gravity="center"
-                        android:text="@string/next_wt"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        android:background="@drawable/registration_button_style"
-                        android:layout_gravity="right"
-                        android:layout_alignParentRight="true"
-                        android:clickable="true"
-                        android:onClick="wt_click"/>
-
-                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                        android:id="@+id/pre_wt"
-                        geekui:customTypeface="fonts/vazir_regular.ttf"
-                        android:layout_width="wrap_content"
-                        android:layout_height="32dp"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
-                        android:gravity="center"
-                        android:text="@string/pre_wt"
-                        android:paddingLeft="16dp"
-                        android:paddingRight="16dp"
-                        android:background="@drawable/pre_wt_button_style"
-                        android:layout_gravity="right"
-                        android:clickable="true"
-                        android:onClick="wt_click"/>
-
-                </RelativeLayout>
+                    android:textColor="@color/page_title"
+                    android:textSize="14dp"
+                    android:text="@string/show_case_bill_pay"
+                    android:padding="6dp" />
 
             </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp">
+
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                    android:id="@+id/next_wt"
+                    geekui:customTypeface="fonts/vazir_regular.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:text="@string/next_wt"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:background="@drawable/registration_button_style"
+                    android:layout_gravity="right"
+                    android:layout_alignParentRight="true"
+                    android:clickable="true"
+                    android:onClick="wt_click"/>
+
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                    android:id="@+id/pre_wt"
+                    geekui:customTypeface="fonts/vazir_regular.ttf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="18sp"
+                    android:gravity="center"
+                    android:text="@string/pre_wt"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:background="@drawable/pre_wt_button_style"
+                    android:layout_gravity="right"
+                    android:clickable="true"
+                    android:onClick="wt_click"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
 
         </ScrollView>
 
@@ -130,12 +130,9 @@
                     <ImageView
                         android:layout_width="52dp"
                         android:layout_height="52dp"
-                        android:src="@drawable/expectation_icon" />
+                        android:src="@drawable/billsandtopup" />
 
                 </RelativeLayout>
-
-
-
 
                 <ImageView
                     android:layout_width="12dp"

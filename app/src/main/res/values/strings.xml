@@ -58,6 +58,7 @@
     <string name="main_fragment_generate_factor">درخواست پرداخت</string>
     <string name="main_fragment_business_payment">پرداخت به کسب و کار</string>
     <string name="main_fragment_pending_payment">پرداخت‌های در انتظار</string>
+    <string name="main_fragment_bill_top_up">قبض و شارژ</string>
     <string name="main_fragment_transactions">تراکنش‌ها</string>
     <string name="transaction_history_title">تراکنش‌ها</string>
     <string name="payment_request_title">درخواست پرداخت</string>
@@ -726,5 +727,10 @@
 
     <string name="select_card_number">لطفا کارت مورد نظر خود را انتخاب کنید</string>
     <string name="add_new_card">کارت جدید(از طریق درگاه پرداخت اینترنتی)</string>
+
+    <string name="show_case_bill_pay">برای پرداخت قبوض خدماتی و موبایل، ابتدا باید شناسه قبض و شناسه پرداخت قبض مورد نظر را وارد نموده و پس از رویت اطلاعات با وارد نمودن رمز دوم کارت بانکی پرداخت خود را تکمیل نمایید
+در صورتی که بارکد قبض مورد نظر را در اختیار دارید می توانید بجای ورود دستی اطلاعات قبض، از گزینه “اسکن بارکد" استفاده نمایید</string>
+
+    <string name="show_case_buy_charge">جهت خرید شارژ برای خود یا دیگران در این بخش، بدون توجه به اپراتور و نوع سیم کارت، میتوانید شماره همراه مورد نظر را وارد نموده وپس از انتخاب نوع و مبلغ شارژ خرید خود را نهایی کنید</string>
 
 </resources>

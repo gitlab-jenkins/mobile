@@ -81,6 +81,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private RelativeLayout wtFourthLayout;
     private RelativeLayout wtFifthLayout;
     private RelativeLayout wtSixthLayout;
+    private RelativeLayout wtSevenLayout;
+    private RelativeLayout wtEightLayout;
     private FacedTextView transactionNote;
     private DrawerLayout drawerLayout;
     private ImageView nav_icon;
@@ -264,6 +266,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         wtFourthLayout = (RelativeLayout)findViewById(R.id.wt_fourth_layout);
         wtFifthLayout = (RelativeLayout)findViewById(R.id.wt_fifth_layout);
         wtSixthLayout = (RelativeLayout)findViewById(R.id.wt_sixth_layout);
+        wtSevenLayout = (RelativeLayout)findViewById(R.id.wt_seventh_layout);
+        wtEightLayout = (RelativeLayout)findViewById(R.id.wt_eight_layout);
         transactionNote = (FacedTextView)findViewById(R.id.transaction_note);
 
         if (prefs.getBoolean(Constants.SHOW_WALK_THROUGH, true)){
@@ -446,7 +450,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         switch (view.getId()){
 
             case R.id.next_wt:
-                walkThroughStep = (walkThroughStep + 1) % 7;
+                walkThroughStep = (walkThroughStep + 1) % 9;
                 switch (walkThroughStep){
                     case 1:
                         wtFirstLayout.setVisibility(View.GONE);
@@ -475,9 +479,17 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     case 5:
                         wtFifthLayout.setVisibility(View.GONE);
                         wtSixthLayout.setVisibility(View.VISIBLE);
-                        editor.putBoolean(Constants.SHOW_WALK_THROUGH, false).commit();
                         break;
                     case 6:
+                        wtSixthLayout.setVisibility(View.GONE);
+                        wtSevenLayout.setVisibility(View.VISIBLE);
+                        break;
+                    case 7:
+                        wtSevenLayout.setVisibility(View.GONE);
+                        wtEightLayout.setVisibility(View.VISIBLE);
+                        editor.putBoolean(Constants.SHOW_WALK_THROUGH, false).commit();
+                        break;
+                    case 8:
                         walkThroughStep = 0;
                         wtSixthLayout.setVisibility(View.GONE);
                         wtSecondLayout.setVisibility(View.GONE);
@@ -485,6 +497,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                         wtFourthLayout.setVisibility(View.GONE);
                         wtFifthLayout.setVisibility(View.GONE);
                         wtSixthLayout.setVisibility(View.GONE);
+                        wtSevenLayout.setVisibility(View.GONE);
+                        wtEightLayout.setVisibility(View.GONE);
                         wtContainer.setVisibility(View.GONE);
                         break;
                 }
@@ -519,6 +533,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                         break;
                     case 5:
                         wtSixthLayout.setVisibility(View.VISIBLE);
+                        wtSevenLayout.setVisibility(View.GONE);
+                        break;
+                    case 6:
+                        wtSevenLayout.setVisibility(View.VISIBLE);
+                        wtEightLayout.setVisibility(View.GONE);
+                        break;
+                    case 7:
+                        wtEightLayout.setVisibility(View.VISIBLE);
                         break;
                 }
                 break;
@@ -531,6 +553,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 wtFourthLayout.setVisibility(View.GONE);
                 wtFifthLayout.setVisibility(View.GONE);
                 wtSixthLayout.setVisibility(View.GONE);
+                wtSevenLayout.setVisibility(View.GONE);
+                wtEightLayout.setVisibility(View.GONE);
                 wtContainer.setVisibility(View.GONE);
                 editor.putBoolean(Constants.SHOW_WALK_THROUGH, false).commit();
                 break;

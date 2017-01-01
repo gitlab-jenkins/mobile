@@ -129,6 +129,22 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="invisible">
+            <include layout="@layout/wt_6_layout"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/wt_seventh_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible">
+            <include layout="@layout/wt_7_layout"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/wt_eight_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible">
             <include layout="@layout/wt_end_layout"/>
         </RelativeLayout>
 
