@@ -117,7 +117,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
     private String userCVV2 = "";
     private ScrollView paymentScroll;
     private RelativeLayout cardPlaceHolder;
-    private String selectedCardId = "";
     private int selectedCardIdIndex = -1;
     private FacedTextView selectCardText;
     private LinearLayout cardSelect;
@@ -425,7 +424,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
         switch (cardAction){
             case SELECT:
                 if (purchaseInfoDTO != null) {
-                    selectedCardId = purchaseInfoDTO.getCardList().get(position).getCardId();
                     selectedCardIdIndex = position;
                     cardNumberValue.setText(persian.E2P(purchaseInfoDTO.getCardList().get(position).getLast4Digits()));
                     bankName.setText(purchaseInfoDTO.getCardList().get(position).getBankName());
@@ -843,6 +841,12 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                     if (purchaseInfo.getCardList().get(0).getCardId() != null && (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() < Constants.SOAP_AMOUNT_MAX)) {
                         cardNumberValue.setText(persian.E2P(purchaseInfo.getCardList().get(0).getLast4Digits()));
                         bankName.setText(purchaseInfo.getCardList().get(0).getBankName());
+                        selectedCardIdIndex = 0;
+                        selectCardText.setVisibility(View.GONE);
+                        cardSelect.setVisibility(View.VISIBLE);
+                        if (purchaseInfoDTO.getCardList().get(0).getDigitalSignature() != null && purchaseInfoDTO.getCardList().get(0).getDigitalSignature().length() > 0) {
+                            signature = purchaseInfoDTO.getCardList().get(0).getDigitalSignature();
+                        }
                     }
                 }
                 break;

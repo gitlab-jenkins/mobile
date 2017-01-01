@@ -1707,7 +1707,6 @@ public class HamPayDialog {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-//                requestIBANChange.execute(ibanChangeRequest);
             }
         });
 

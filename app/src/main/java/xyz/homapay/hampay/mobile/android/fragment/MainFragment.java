@@ -26,6 +26,7 @@ import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.BusinessPurchaseActivity;
 import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
+import xyz.homapay.hampay.mobile.android.activity.IbanIntronActivity;
 import xyz.homapay.hampay.mobile.android.activity.PaymentRequestDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.PaymentRequestListActivity;
 import xyz.homapay.hampay.mobile.android.activity.PendingPurchasePaymentListActivity;
@@ -40,6 +41,7 @@ import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.HamPayUtils;
 import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
@@ -56,7 +58,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
     LinearLayout user_payment_request;
     LinearLayout businessPurchase;
     LinearLayout pendingPurchasePayment;
-    UserProfileDTO userProfileDTO;
+    UserProfileDTO userProfile;
     Bundle bundle;
     LinearLayout hampay_1_ll;
     LinearLayout hampay_2_ll;
@@ -119,7 +121,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         bundle = getArguments();
 
         if (bundle != null){
-            userProfileDTO = (UserProfileDTO) bundle.getSerializable(Constants.USER_PROFILE);
+            userProfile = (UserProfileDTO) bundle.getSerializable(Constants.USER_PROFILE);
         }
 
 
@@ -148,15 +150,15 @@ public class MainFragment extends Fragment implements View.OnClickListener{
         hampay_image_3 = (ImageView)rootView.findViewById(R.id.hampay_image_3);
         hampay_image_4 = (ImageView)rootView.findViewById(R.id.hampay_image_4);
         user_last_login = (FacedTextView)rootView.findViewById(R.id.user_last_login);
-        if (userProfileDTO.getLastLoginDate() != null) {
-            jalaliConvert = new JalaliConvert(userProfileDTO.getLastLoginDate());
+        if (userProfile.getLastLoginDate() != null) {
+            jalaliConvert = new JalaliConvert(userProfile.getLastLoginDate());
             user_last_login.setText(getString(R.string.last_login) + " "
                     + persianEnglishDigit.E2P(jalaliConvert.homeDate() + " " + getString(R.string.time) + " " + jalaliConvert.getTimeDay()));
         }else {
             user_last_login.setText("");
         }
 
-        List<ContactDTO> contacts = userProfileDTO.getSelectedContacts();
+        List<ContactDTO> contacts = userProfile.getSelectedContacts();
         if (contacts.size() == 0){
             bottom_panel.setVisibility(View.GONE);
         }
@@ -305,9 +307,15 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                 if (!bundle.getBoolean(Constants.SHOW_CREATE_INVOICE)){
                     hamPayDialog.preventPaymentRequest();
                 }else {
-                    intent.setClass(getActivity(), PaymentRequestListActivity.class);
-                    intent.putExtra(Constants.USER_PROFILE, userProfileDTO);
-                    startActivity(intent);
+                    if ((prefs.getBoolean(Constants.SETTING_CHANGE_IBAN_STATUS, false)) || userProfile.getIbanDTO() != null && userProfile.getIbanDTO().getIban() != null && userProfile.getIbanDTO().getIban().length() > 0) {
+                        intent.setClass(getActivity(), PaymentRequestListActivity.class);
+                        intent.putExtra(Constants.USER_PROFILE, userProfile);
+                        startActivity(intent);
+                    }else {
+                        intent.setClass(getActivity(), IbanIntronActivity.class);
+                        intent.putExtra(Constants.USER_PROFILE, userProfile);
+                        startActivityForResult(intent, Constants.IBAN_CHANGE_RESULT_CODE);
+                    }
                 }
                 break;
 
@@ -331,22 +339,22 @@ public class MainFragment extends Fragment implements View.OnClickListener{
 
             case R.id.hampay_1_ll:
                 intent = new Intent(getActivity(), PaymentRequestDetailActivity.class);
-                intent.putExtra(Constants.HAMPAY_CONTACT, userProfileDTO.getSelectedContacts().get(0));
+                intent.putExtra(Constants.HAMPAY_CONTACT, userProfile.getSelectedContacts().get(0));
                 startActivity(intent);
                 break;
             case R.id.hampay_2_ll:
                 intent = new Intent(getActivity(), PaymentRequestDetailActivity.class);
-                intent.putExtra(Constants.HAMPAY_CONTACT, userProfileDTO.getSelectedContacts().get(1));
+                intent.putExtra(Constants.HAMPAY_CONTACT, userProfile.getSelectedContacts().get(1));
                 startActivity(intent);
                 break;
             case R.id.hampay_3_ll:
                 intent = new Intent(getActivity(), PaymentRequestDetailActivity.class);
-                intent.putExtra(Constants.HAMPAY_CONTACT, userProfileDTO.getSelectedContacts().get(2));
+                intent.putExtra(Constants.HAMPAY_CONTACT, userProfile.getSelectedContacts().get(2));
                 startActivity(intent);
                 break;
             case R.id.hampay_4_ll:
                 intent = new Intent(getActivity(), PaymentRequestDetailActivity.class);
-                intent.putExtra(Constants.HAMPAY_CONTACT, userProfileDTO.getSelectedContacts().get(3));
+                intent.putExtra(Constants.HAMPAY_CONTACT, userProfile.getSelectedContacts().get(3));
                 startActivity(intent);
                 break;
         }
@@ -387,6 +395,19 @@ public class MainFragment extends Fragment implements View.OnClickListener{
 
         @Override
         public void onTaskPreRun() {
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.IBAN_CHANGE_RESULT_CODE) {
+            if(resultCode == getActivity().RESULT_OK){
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), PaymentRequestListActivity.class);
+                intent.putExtra(Constants.USER_PROFILE, userProfile);
+                startActivity(intent);
+            }
         }
     }
 

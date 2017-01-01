@@ -6,6 +6,9 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,11 +69,17 @@ public class IbanChangeDialog extends DialogFragment implements TextView.OnEdito
 
         View view = inflater.inflate(R.layout.dialog_request_iban_confirm, container);
 
+
         FacedTextView ibanText = (FacedTextView)view.findViewById(R.id.ibanNumber);
-        ibanText.setText(persian.E2P(ibanNumber));
+        ibanText.setText("IR " + persian.E2P(ibanNumber));
 
         FacedTextView ibanOwnInfo = (FacedTextView)view.findViewById(R.id.ibanOwnInfo);
-        ibanOwnInfo.setText(getActivity().getString(R.string.iban_question_part2_text, ibanOwnerName + " " + ibanOwnerFamily, ibanBankName));
+        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getString(R.string.iban_question_part2_text, ibanOwnerName + " " + ibanOwnerFamily, ibanBankName));
+        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.rgb(Constants.HAMPAY_RED, Constants.HAMPAY_GREEN, Constants.HAMPAY_BLUE));
+        spannableStringBuilder.setSpan(foregroundColorSpan, 9, (ibanOwnerName + " " + ibanOwnerFamily).length() + 9, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        foregroundColorSpan = new ForegroundColorSpan(Color.rgb(Constants.HAMPAY_RED, Constants.HAMPAY_GREEN, Constants.HAMPAY_BLUE));
+        spannableStringBuilder.setSpan(foregroundColorSpan, (ibanOwnerName + " " + ibanOwnerFamily).length() + 17, (ibanOwnerName + " " + ibanOwnerFamily + ibanBankName).length() + 17, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        ibanOwnInfo.setText(spannableStringBuilder);
 
         FacedTextView ibanRequestConfirm = (FacedTextView) view.findViewById(R.id.iban_request_confirm);
         ibanRequestConfirm.setOnClickListener(new View.OnClickListener() {

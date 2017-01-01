@@ -58,7 +58,7 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
-public class PaymentRequestListActivity extends AppCompatActivity implements OnTaskCompleted, IbanChangeDialog.IbanChangeDialogListener{
+public class PaymentRequestListActivity extends AppCompatActivity{
 
     private Context context;
     private Activity activity;
@@ -77,29 +77,6 @@ public class PaymentRequestListActivity extends AppCompatActivity implements OnT
     private SwipeRefreshLayout pullToRefresh;
     private FacedTextView nullPendingText;
     private RelativeLayout search_bar;
-    private FacedTextView ibanVerifyButton;
-    private String ibanValue = "";
-    private RelativeLayout introIbanLayout;
-    private ImageView bankLogo;
-    private FacedTextView bankName;
-    private IBANConfirmationTask ibanConfirmationTask;
-    private IBANChangeRequest ibanChangeRequest;
-    private RequestIBANChange requestIBANChange;
-    private ImageManager imageManager;
-    private FacedTextView ibanFirstSegmentText;
-    private FacedTextView ibanSecondSegmentText;
-    private FacedTextView ibanThirdSegmentText;
-    private FacedTextView ibanFourthSegmentText;
-    private FacedTextView ibanFifthSegmentText;
-    private FacedTextView ibanSixthSegmentText;
-    private FacedTextView ibanSeventhSegmentText;
-    private RelativeLayout[] segmentRelativeLayouts = new RelativeLayout[7];
-    private FacedEditText ibanUserName;
-    private FacedEditText ibanUserFamily;
-    private Intent intent;
-    private UserProfileDTO userProfile;
-    private LinearLayout keyboard;
-    private PersianEnglishDigit persian = new PersianEnglishDigit();
 
     public void backActionBar(View view){
         finish();
@@ -139,10 +116,6 @@ public class PaymentRequestListActivity extends AppCompatActivity implements OnT
         activity = PaymentRequestListActivity.this;
         hamPayDialog = new HamPayDialog(activity);
 
-        intent = getIntent();
-        userProfile = (UserProfileDTO) intent.getSerializableExtra(Constants.USER_PROFILE);
-        imageManager = new ImageManager(activity, 200000, false);
-
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         authToken =  prefs.getString(Constants.LOGIN_TOKEN_ID, "");
@@ -157,59 +130,16 @@ public class PaymentRequestListActivity extends AppCompatActivity implements OnT
         nullPendingText.setText(spannableStringBuilder);
 
         search_bar = (RelativeLayout)findViewById(R.id.search_bar);
-        keyboard = (LinearLayout)findViewById(R.id.keyboard);
 
-        introIbanLayout = (RelativeLayout) findViewById(R.id.intro_iban_layout) ;
-        ibanFirstSegmentText = (FacedTextView)findViewById(R.id.iban_first_segment);
-        ibanSecondSegmentText = (FacedTextView)findViewById(R.id.iban_second_segment);
-        ibanThirdSegmentText = (FacedTextView)findViewById(R.id.iban_third_segment);
-        ibanFourthSegmentText = (FacedTextView)findViewById(R.id.iban_fourth_segment);
-        ibanFifthSegmentText = (FacedTextView)findViewById(R.id.iban_fifth_segment);
-        ibanSixthSegmentText = (FacedTextView)findViewById(R.id.iban_sixth_segment);
-        ibanSeventhSegmentText = (FacedTextView)findViewById(R.id.iban_seventh_segment);
-
-        segmentRelativeLayouts[0] = (RelativeLayout)findViewById(R.id.iban_first_segment_l);
-        segmentRelativeLayouts[1] = (RelativeLayout)findViewById(R.id.iban_second_segment_l);
-        segmentRelativeLayouts[2] = (RelativeLayout)findViewById(R.id.iban_third_segment_l);
-        segmentRelativeLayouts[3] = (RelativeLayout)findViewById(R.id.iban_fourth_segment_l);
-        segmentRelativeLayouts[4] = (RelativeLayout)findViewById(R.id.iban_fifth_segment_l);
-        segmentRelativeLayouts[5] = (RelativeLayout)findViewById(R.id.iban_sixth_segment_l);
-        segmentRelativeLayouts[6] = (RelativeLayout)findViewById(R.id.iban_seventh_segment_l);
-
-        ibanUserName = (FacedEditText) findViewById(R.id.ibanUserName);
-        ibanUserFamily = (FacedEditText) findViewById(R.id.ibanUserFamily);
-
-        if (userProfile.getIbanDTO() != null && userProfile.getIbanDTO().getIban() != null && userProfile.getIbanDTO().getIban().length() > 0){
-            introIbanLayout.setVisibility(View.GONE);
-            pendingPOListRequest = new PendingPOListRequest();
-            requestPendingPOList = new RequestPendingPOList(activity, new RequestPendingPOListTaskCompleteListener());
-            requestPendingPOList.execute(pendingPOListRequest);
-        }
-
-        ibanVerifyButton = (FacedTextView)findViewById(R.id.iban_verify_button);
-        ibanVerifyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                IbanChangeDialog cardNumberDialog = new IbanChangeDialog();
-                Bundle bundle = new Bundle();
-                bundle.putString(Constants.IBAN_NUMBER, ibanValue);
-                bundle.putString(Constants.IBAN_OWNER_NAME, ibanUserName.getText().toString());
-                bundle.putString(Constants.IBAN_OWNER_FAMILY, ibanUserFamily.getText().toString());
-                bundle.putString(Constants.IBAN_BANK_NAME, bankName.getText().toString());
-                cardNumberDialog.setArguments(bundle);
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.add(cardNumberDialog, null);
-                fragmentTransaction.commitAllowingStateLoss();
-            }
-        });
+        pendingPOListRequest = new PendingPOListRequest();
+        requestPendingPOList = new RequestPendingPOList(activity, new RequestPendingPOListTaskCompleteListener());
+        requestPendingPOList.execute(pendingPOListRequest);
 
         pullToRefresh = (SwipeRefreshLayout)findViewById(R.id.pullToRefresh);
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 pendingPOListRequest = new PendingPOListRequest();
-                new Collapse(keyboard).animate();
                 requestPendingPOList = new RequestPendingPOList(activity, new RequestPendingPOListTaskCompleteListener());
                 requestPendingPOList.execute(pendingPOListRequest);
             }
@@ -270,68 +200,6 @@ public class PaymentRequestListActivity extends AppCompatActivity implements OnT
         });
     }
 
-    @Override
-    public void OnTaskPreExecute() {
-        hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-    }
-
-    @Override
-    public void OnTaskExecuted(Object object) {
-
-        hamPayDialog.dismisWaitingDialog();
-
-        if (object != null) {
-            if (object.getClass().equals(ResponseMessage.class)) {
-                final ResponseMessage responseMessage = (ResponseMessage) object;
-                switch (responseMessage.getService().getServiceDefinition()) {
-                    case IBAN_CONFIRMATION:
-                        ResponseMessage<IBANConfirmationResponse> ibanConfirmation = (ResponseMessage) object;
-                        switch (responseMessage.getService().getResultStatus()) {
-                            case SUCCESS:
-                                ibanVerifyButton.setVisibility(View.VISIBLE);
-                                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-                                editor.commit();
-                                bankName = (FacedTextView)findViewById(R.id.bank_name);
-                                bankLogo = (ImageView)findViewById(R.id.bank_logo);
-                                bankLogo.setVisibility(View.VISIBLE);
-                                bankName.setVisibility(View.VISIBLE);
-                                new Collapse(keyboard).animate();
-                                if (ibanConfirmation.getService().getImageId() != null) {
-                                    bankLogo.setTag(ibanConfirmation.getService().getImageId());
-                                    imageManager.displayImage(ibanConfirmation.getService().getImageId(), bankLogo, R.drawable.user_placeholder);
-                                }else {
-                                    bankLogo.setImageResource(R.drawable.user_placeholder);
-                                }
-                                bankName.setText(ibanConfirmation.getService().getBankName());
-
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onFinishEditDialog(IbanAction ibanAction) {
-        switch (ibanAction){
-            case ACCEPT:
-                ibanChangeRequest = new IBANChangeRequest();
-                ibanChangeRequest.setIban(ibanValue);
-                ibanChangeRequest.setOwnerFirstName(ibanUserName.getText().toString());
-                ibanChangeRequest.setOwnerSurname(ibanUserFamily.getText().toString());
-                requestIBANChange = new RequestIBANChange(activity, new RequestIBANChangeTaskCompleteListener(ibanChangeRequest));
-                requestIBANChange.execute(ibanChangeRequest);
-                break;
-
-            case REJECT:
-                finish();
-                break;
-        }
-    }
-
 
     public class RequestPendingPOListTaskCompleteListener implements
             AsyncTaskCompleteListener<ResponseMessage<PendingPOListResponse>> {
@@ -366,273 +234,6 @@ public class PaymentRequestListActivity extends AppCompatActivity implements OnT
         @Override
         public void onTaskPreRun() {
             hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
-    }
-
-    public class RequestIBANChangeTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<IBANChangeResponse>> {
-
-        IBANChangeRequest ibanChangeRequest;
-        RequestIBANChange requestIBANChange;
-        ServiceEvent serviceName;
-        LogEvent logEvent = new LogEvent(context);
-
-        public RequestIBANChangeTaskCompleteListener(IBANChangeRequest ibanChangeRequest) {
-            this.ibanChangeRequest = ibanChangeRequest;
-        }
-
-        @Override
-        public void onTaskComplete(ResponseMessage<IBANChangeResponse> ibanChangeResponseMessage) {
-            hamPayDialog.dismisWaitingDialog();
-            if (ibanChangeResponseMessage != null) {
-                if (ibanChangeResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    ibanVerifyButton.setVisibility(View.VISIBLE);
-                    serviceName = ServiceEvent.IBAN_CHANGE_SUCCESS;
-                    editor.putBoolean(Constants.SETTING_CHANGE_IBAN_STATUS, true);
-                    editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-                    editor.commit();
-                    introIbanLayout.setVisibility(View.GONE);
-                    pendingPOListRequest = new PendingPOListRequest();
-                    requestPendingPOList = new RequestPendingPOList(activity, new RequestPendingPOListTaskCompleteListener());
-                    requestPendingPOList.execute(pendingPOListRequest);
-
-                }else if (ibanChangeResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceEvent.IBAN_CHANGE_FAILURE;
-                    forceLogout();
-                }
-                else {
-                    serviceName = ServiceEvent.IBAN_CHANGE_FAILURE;
-                    requestIBANChange = new RequestIBANChange(activity, new RequestIBANChangeTaskCompleteListener(ibanChangeRequest));
-                    hamPayDialog.showFailIBANChangeDialog(
-                            ibanChangeResponseMessage.getService().getResultStatus().getCode(),
-                            ibanChangeResponseMessage.getService().getResultStatus().getDescription());
-                }
-            } else {
-                serviceName = ServiceEvent.IBAN_CHANGE_FAILURE;
-                requestIBANChange = new RequestIBANChange(activity, new RequestIBANChangeTaskCompleteListener(ibanChangeRequest));
-                hamPayDialog.showFailIBANChangeDialog(
-                        Constants.LOCAL_ERROR_CODE,
-                        activity.getString(R.string.msg_fail_iban_change));
-            }
-            logEvent.log(serviceName);
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
-    }
-
-
-    public void pressKey(View view) {
-        if (view.getTag().toString().equals("*")) {
-            new Collapse(keyboard).animate();
-        }else if (view.getTag().toString().equals("|")) {
-            new Expand(keyboard).animate();
-        }else {
-            inputDigit(view.getTag().toString());
-        }
-    }
-
-    private void inputDigit(String digit){
-        String ibanSegment = "";
-        if (digit.endsWith("d")){
-        }else {
-            if (ibanValue.length() > 23) return;
-            ibanValue += digit;
-        }
-        switch (ibanValue.length()){
-            case 0:
-            case 1:
-            case 2:
-                ibanSegment = ibanFirstSegmentText.getText().toString();
-                if (digit.endsWith("d")){
-                    if (ibanSegment.length() == 0) return;
-                    ibanFirstSegmentText.setText(ibanSegment.substring(0, ibanSegment.length() - 1));
-                    ibanValue = ibanValue.substring(0, ibanValue.length() - 1);
-                    setBorder(ibanValue.length());
-                }else {
-                    ibanFirstSegmentText.setText(persian.E2P(ibanSegment + digit));
-                    setBorder(ibanValue.length() + 1);
-                }
-                break;
-
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-                ibanSegment = ibanSecondSegmentText.getText().toString();
-                if (digit.endsWith("d")){
-                    if (ibanSegment.length() == 0) return;
-                    ibanSecondSegmentText.setText(ibanSegment.substring(0, ibanSegment.length() - 1));
-                    ibanValue = ibanValue.substring(0, ibanValue.length() - 1);
-                    setBorder(ibanValue.length());
-                }else {
-                    ibanSecondSegmentText.setText(persian.E2P(ibanSegment + digit));
-                    setBorder(ibanValue.length() + 1);
-                }
-                break;
-
-            case 7:
-            case 8:
-            case 9:
-            case 10:
-                ibanSegment = ibanThirdSegmentText.getText().toString();
-                if (digit.endsWith("d")){
-                    if (ibanSegment.length() == 0) return;
-                    ibanThirdSegmentText.setText(ibanSegment.substring(0, ibanSegment.length() - 1));
-                    ibanValue = ibanValue.substring(0, ibanValue.length() - 1);
-                    setBorder(ibanValue.length());
-                }else {
-                    ibanThirdSegmentText.setText(persian.E2P(ibanSegment + digit));
-                    setBorder(ibanValue.length() + 1);
-                }
-                break;
-
-            case 11:
-            case 12:
-            case 13:
-            case 14:
-                ibanSegment = ibanFourthSegmentText.getText().toString();
-                if (digit.endsWith("d")){
-                    if (ibanSegment.length() == 0) return;
-                    ibanFourthSegmentText.setText(ibanSegment.substring(0, ibanSegment.length() - 1));
-                    ibanValue = ibanValue.substring(0, ibanValue.length() - 1);
-                }else {
-                    ibanFourthSegmentText.setText(persian.E2P(ibanSegment + digit));
-                }
-                setBorder(ibanValue.length());
-                break;
-
-            case 15:
-            case 16:
-            case 17:
-            case 18:
-                ibanSegment = ibanFifthSegmentText.getText().toString();
-                if (digit.endsWith("d")){
-                    if (ibanSegment.length() == 0) return;
-                    ibanFifthSegmentText.setText(ibanSegment.substring(0, ibanSegment.length() - 1));
-                    ibanValue = ibanValue.substring(0, ibanValue.length() - 1);
-                    setBorder(ibanValue.length());
-                }else {
-                    ibanFifthSegmentText.setText(persian.E2P(ibanSegment + digit));
-                    setBorder(ibanValue.length() + 1);
-                }
-                break;
-
-            case 19:
-            case 20:
-            case 21:
-            case 22:
-                ibanSegment = ibanSixthSegmentText.getText().toString();
-                if (digit.endsWith("d")){
-                    if (ibanSegment.length() == 0) return;
-                    ibanSixthSegmentText.setText(ibanSegment.substring(0, ibanSegment.length() - 1));
-                    ibanValue = ibanValue.substring(0, ibanValue.length() - 1);
-                    setBorder(ibanValue.length());
-                }else {
-                    ibanSixthSegmentText.setText(persian.E2P(ibanSegment + digit));
-                    setBorder(ibanValue.length() + 1);
-                }
-                break;
-
-            case 23:
-            case 24:
-                ibanSegment = ibanSeventhSegmentText.getText().toString();
-                if (digit.endsWith("d")){
-                    if (ibanSegment.length() == 0) return;
-                    ibanSeventhSegmentText.setText(ibanSegment.substring(0, ibanSegment.length() - 1));
-                    ibanValue = ibanValue.substring(0, ibanValue.length() - 1);
-                    setBorder(ibanValue.length());
-                }else {
-                    ibanSeventhSegmentText.setText(persian.E2P(ibanSegment + digit));
-                    setBorder(ibanValue.length() + 1);
-                }
-                break;
-        }
-        if (ibanValue.length() == 24){
-            IBANConfirmationRequest ibanConfirmationRequest = new IBANConfirmationRequest();
-            ibanConfirmationRequest.setIban(ibanValue);
-            new IBANConfirmationTask(activity, PaymentRequestListActivity.this, ibanConfirmationRequest, authToken).execute();
-        }
-    }
-
-    private void setBorder(int length){
-        switch (length){
-            case 0:
-            case 1:
-            case 2:
-                for (RelativeLayout relativeLayout : segmentRelativeLayouts){
-                    relativeLayout.setBackgroundResource(R.drawable.iban_empty_placeholder);
-                }
-                segmentRelativeLayouts[0].setBackgroundResource(R.drawable.iban_entry_placeholder);
-                break;
-
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-                for (RelativeLayout relativeLayout : segmentRelativeLayouts){
-                    relativeLayout.setBackgroundResource(R.drawable.iban_empty_placeholder);
-                }
-                segmentRelativeLayouts[1].setBackgroundResource(R.drawable.iban_entry_placeholder);
-                break;
-
-            case 7:
-            case 8:
-            case 9:
-            case 10:
-                for (RelativeLayout relativeLayout : segmentRelativeLayouts){
-                    relativeLayout.setBackgroundResource(R.drawable.iban_empty_placeholder);
-                }
-                segmentRelativeLayouts[2].setBackgroundResource(R.drawable.iban_entry_placeholder);
-                break;
-
-            case 11:
-            case 12:
-            case 13:
-            case 14:
-                for (RelativeLayout relativeLayout : segmentRelativeLayouts){
-                    relativeLayout.setBackgroundResource(R.drawable.iban_empty_placeholder);
-                }
-                segmentRelativeLayouts[3].setBackgroundResource(R.drawable.iban_entry_placeholder);
-                break;
-
-            case 15:
-            case 16:
-            case 17:
-            case 18:
-                for (RelativeLayout relativeLayout : segmentRelativeLayouts){
-                    relativeLayout.setBackgroundResource(R.drawable.iban_empty_placeholder);
-                }
-                segmentRelativeLayouts[4].setBackgroundResource(R.drawable.iban_entry_placeholder);
-                break;
-
-            case 19:
-            case 20:
-            case 21:
-            case 22:
-                for (RelativeLayout relativeLayout : segmentRelativeLayouts){
-                    relativeLayout.setBackgroundResource(R.drawable.iban_empty_placeholder);
-                }
-                segmentRelativeLayouts[5].setBackgroundResource(R.drawable.iban_entry_placeholder);
-                break;
-
-            case 23:
-            case 24:
-                for (RelativeLayout relativeLayout : segmentRelativeLayouts){
-                    relativeLayout.setBackgroundResource(R.drawable.iban_empty_placeholder);
-                }
-                segmentRelativeLayouts[6].setBackgroundResource(R.drawable.iban_entry_placeholder);
-                break;
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (keyboard.getVisibility() == View.VISIBLE) {
-            new Collapse(keyboard).animate();
-        } else {
-            finish();
         }
     }
 

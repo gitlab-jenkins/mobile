@@ -19,7 +19,6 @@ import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
-import xyz.homapay.hampay.mobile.android.activity.IntroIBANActivity;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestUserProfile;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
@@ -48,7 +47,6 @@ public class AccountDetailFragment extends Fragment {
     private LinearLayout emailLayout;
     private FacedTextView user_email;
     private HamPayDialog hamPayDialog;
-    private FacedTextView intro_iban_button;
     private UserProfileDTO userProfileDTO;
     private Bundle bundle;
     private SharedPreferences prefs;
@@ -66,7 +64,6 @@ public class AccountDetailFragment extends Fragment {
             if(resultCode == getActivity().RESULT_OK){
                 iban_ll.setVisibility(View.VISIBLE);
                 user_iban_value.setText("IR" + persianEnglishDigit.E2P(new HamPayUtils().splitStringEvery(data.getStringExtra(Constants.RETURN_IBAN_CONFIRMED), 4)));
-                intro_iban_button.setVisibility(View.GONE);
             }
         }
     }
@@ -110,16 +107,6 @@ public class AccountDetailFragment extends Fragment {
         hide_bg = (View)rootView.findViewById(R.id.hide_bg);
 
         hamPayDialog = new HamPayDialog(getActivity());
-
-        intro_iban_button = (FacedTextView) rootView.findViewById(R.id.intro_iban_button);
-        intro_iban_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(context, IntroIBANActivity.class);
-                startActivityForResult(intent, Constants.IBAN_CHANGE_RESULT_CODE);
-            }
-        });
 
         image_profile = (ImageView)rootView.findViewById(R.id.image_profile);
         user_name_text = (FacedTextView)rootView.findViewById(R.id.user_name_text);
@@ -241,14 +228,11 @@ public class AccountDetailFragment extends Fragment {
             image_profile.setImageResource(R.drawable.user_placeholder);
         }
 
-//        user_card_number.setText(persianEnglishDigit.E2P(userProfileDTO.getCardDTO().getLast4Digits()));
-//        user_bank_name.setText(userProfileDTO.getCardDTO().getBankName());
         user_cell_number.setText(persianEnglishDigit.E2P(userProfileDTO.getCellNumber()));
         if (userProfileDTO.getIbanDTO() != null) {
             user_iban_value.setText("IR" + persianEnglishDigit.E2P(new HamPayUtils().splitStringEvery(userProfileDTO.getIbanDTO().getIban(), 4)));
             user_iban_bank.setText(userProfileDTO.getIbanDTO().getBankName());
             iban_ll.setVisibility(View.VISIBLE);
-            intro_iban_button.setVisibility(View.GONE);
             editor.putBoolean(Constants.SETTING_CHANGE_IBAN_STATUS, true);
             editor.commit();
         }

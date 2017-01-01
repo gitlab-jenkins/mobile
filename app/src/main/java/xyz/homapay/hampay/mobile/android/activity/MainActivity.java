@@ -278,14 +278,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         user_image_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 EditImageDialog editImageDialog = new EditImageDialog();
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.add(editImageDialog, null);
                 fragmentTransaction.commitAllowingStateLoss();
-//                FragmentManager fm = getSupportFragmentManager();
-//                EditImageDialog userEditPhotoDialog = new EditImageDialog();
-//                userEditPhotoDialog.show(fm, "fragment_edit_name");
             }
         });
         nav_icon = (ImageView)findViewById(R.id.nav_icon);
@@ -364,6 +360,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 currentFragment = 2;
                 user_manual.setVisibility(View.VISIBLE);
                 fragment = new SettingFragment();
+                if (userProfileDTO != null) {
+                    bundle.putSerializable(Constants.USER_PROFILE, userProfileDTO);
+                    fragment.setArguments(bundle);
+                }
                 fragmentTitle = getString(R.string.title_settings);
                 break;
 

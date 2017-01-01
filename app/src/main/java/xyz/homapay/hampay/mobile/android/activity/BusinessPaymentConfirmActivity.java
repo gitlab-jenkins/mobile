@@ -89,7 +89,6 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
     private String userCVV2 = "";
     private ScrollView paymentScroll;
     private RelativeLayout cardPlaceHolder;
-    private String selectedCardId = "";
     private int selectedCardIdIndex = -1;
     private FacedTextView selectCardText;
     private LinearLayout cardSelect;
@@ -214,6 +213,19 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
             }
             else {
                 business_image.setImageResource(R.drawable.user_placeholder);
+            }
+        }
+
+        if (paymentInfoDTO.getCardList().size() > 0) {
+            if (paymentInfoDTO.getCardList().get(0).getCardId() != null && (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + paymentInfoDTO.getVat() < Constants.SOAP_AMOUNT_MAX)) {
+                cardNumberValue.setText(persian.E2P(paymentInfoDTO.getCardList().get(0).getLast4Digits()));
+                bankName.setText(paymentInfoDTO.getCardList().get(0).getBankName());
+                selectedCardIdIndex = 0;
+                selectCardText.setVisibility(View.GONE);
+                cardSelect.setVisibility(View.VISIBLE);
+                if (paymentInfoDTO.getCardList().get(0).getDigitalSignature() != null && paymentInfoDTO.getCardList().get(0).getDigitalSignature().length() > 0) {
+                    signature = paymentInfoDTO.getCardList().get(0).getDigitalSignature();
+                }
             }
         }
 
@@ -383,7 +395,6 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
         switch (cardAction){
             case SELECT:
                 if (paymentInfoDTO != null) {
-                    selectedCardId = paymentInfoDTO.getCardList().get(position).getCardId();
                     selectedCardIdIndex = position;
                     cardNumberValue.setText(persian.E2P(paymentInfoDTO.getCardList().get(position).getLast4Digits()));
                     bankName.setText(paymentInfoDTO.getCardList().get(position).getBankName());

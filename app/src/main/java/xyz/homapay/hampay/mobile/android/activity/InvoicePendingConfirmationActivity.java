@@ -106,7 +106,6 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
     private LatestPaymentRequest latestPaymentRequest;
     private ImageManager imageManager;
     private RelativeLayout cardPlaceHolder;
-    private String selectedCardId = "";
     private int selectedCardIdIndex = -1;
     private FacedTextView selectCardText;
     private LinearLayout cardSelect;
@@ -402,7 +401,6 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
         switch (cardAction){
             case SELECT:
                 if (paymentInfoDTO != null) {
-                    selectedCardId = paymentInfoDTO.getCardList().get(position).getCardId();
                     selectedCardIdIndex = position;
                     cardNumberValue.setText(persian.E2P(paymentInfoDTO.getCardList().get(position).getLast4Digits()));
                     bankName.setText(paymentInfoDTO.getCardList().get(position).getBankName());
@@ -696,6 +694,19 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
             imageManager.displayImage(paymentInfo.getImageId(), user_image, R.drawable.user_placeholder);
         }else {
             user_image.setImageResource(R.drawable.user_placeholder);
+        }
+
+        if (paymentInfo.getCardList().size() > 0) {
+            if (paymentInfo.getCardList().get(0).getCardId() != null && (paymentInfo.getAmount() + paymentInfo.getFeeCharge() + paymentInfo.getVat() < Constants.SOAP_AMOUNT_MAX)) {
+                cardNumberValue.setText(persian.E2P(paymentInfo.getCardList().get(0).getLast4Digits()));
+                bankName.setText(paymentInfo.getCardList().get(0).getBankName());
+                selectedCardIdIndex = 0;
+                selectCardText.setVisibility(View.GONE);
+                cardSelect.setVisibility(View.VISIBLE);
+                if (paymentInfo.getCardList().get(0).getDigitalSignature() != null && paymentInfo.getCardList().get(0).getDigitalSignature().length() > 0) {
+                    signature = paymentInfo.getCardList().get(0).getDigitalSignature();
+                }
+            }
         }
     }
 
