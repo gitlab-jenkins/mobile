@@ -189,12 +189,6 @@
             android:theme="@style/MyMaterialTheme"/>
 
         <activity
-            android:name=".activity.WalkThroughActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme"/>
-
-        <activity
             android:name=".activity.GuideDetailActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"/>

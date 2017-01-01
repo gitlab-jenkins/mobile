@@ -6,8 +6,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-import xyz.homapay.hampay.mobile.android.R;
-
 
 public class EmptyViewManager {
 

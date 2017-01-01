@@ -1,7 +1,5 @@
 package xyz.homapay.hampay.mobile.android.util;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;

@@ -1,6 +1,5 @@
 package xyz.homapay.hampay.mobile.android.model;
 
-import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
 import xyz.homapay.hampay.mobile.android.webservice.psp.CBUArrayOfKeyValueOfstringstring;
 
 /**

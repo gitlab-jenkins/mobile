@@ -115,13 +115,7 @@ import xyz.homapay.hampay.common.core.model.response.UserMerchantInquiryResponse
 import xyz.homapay.hampay.common.core.model.response.UserMerchantResponse;
 import xyz.homapay.hampay.common.core.model.response.UserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
-import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO;
-import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
-import xyz.homapay.hampay.mobile.android.ssl.AllowHamPaySSL;
 import xyz.homapay.hampay.mobile.android.util.Constants;
-import xyz.homapay.hampay.mobile.android.util.TransactionStatusEnumDeserilizer;
-import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
-import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWABasicHttpBinding_ITokenPay;
 
 /**
  * Created by amir on 6/6/15.
