@@ -12,10 +12,8 @@
     <color name="navigation_banner_center">#6B246C</color>
     <color name="navigation_banner_end">#371F59</color>
 
-    <color name="splash_bg_color">@color/app_origin</color>
     <color name="register_btn_color">#36ac3f</color>
     <color name="user_change_status">#0095ff</color>
-    <color name="pending_transaction">#019585</color>
     <color name="failed_transaction">#FF3300</color>
 
     <color name="entry_field_color">#e6e7e8</color>
@@ -31,8 +29,6 @@
     <bool name="spb_default_progressiveStart_activated">false</bool>
     <color name="transparency">#00000000</color>
     <color name="slider_button_bg">#fafafa</color>
-    <color name="slider_button_text">#221f1f</color>
-    <color name="slider_unselected_indicator">#aaaaaa</color>
     <color name="page_title">@color/app_origin</color>
     <color name="start_page_text">#231f20</color>
     <color name="navigation_green">#8fc547</color>
@@ -52,7 +48,6 @@
     <color name="failure_modal_color">#F4768B</color>
     <color name="modal_text">#686a6b</color>
     <color name="sms_digit">@android:color/black</color>
-    <color name="shaparak_notice">#459210</color>
     <color name="card_info_stroke">#c7c7c7</color>
     <color name="card_info_solid">#f5f5f5</color>
     <color name="iban_stroke">#c7c7c7</color>
