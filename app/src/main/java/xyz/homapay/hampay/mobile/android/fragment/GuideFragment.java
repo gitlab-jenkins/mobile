@@ -38,7 +38,7 @@ public class GuideFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_guide, container, false);
 
-        guideListView = (ListView)rootView.findViewById(R.id.guideListView);
+        guideListView = (ListView) rootView.findViewById(R.id.guideListView);
 
         guideAdapter = new GuideAdapter(getActivity());
 
@@ -51,7 +51,7 @@ public class GuideFragment extends Fragment {
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), UserManualActivity.class);
 
-                switch (position){
+                switch (position) {
 
                     case 0:
                         intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_merchant_payment);
@@ -64,51 +64,61 @@ public class GuideFragment extends Fragment {
                         break;
 
                     case 2:
+                        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_title_bill);
+                        intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_text_bill);
+                        break;
+
+                    case 3:
+                        intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_title_charge);
+                        intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_text_charge);
+                        break;
+
+                    case 4:
                         intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_charity_payment);
                         intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_charity_payment);
                         break;
 
-                    case 3:
+                    case 5:
                         intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_payment_request);
                         intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_payment_request);
                         break;
 
-                    case 4:
+                    case 6:
                         intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_pending_payment);
                         intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_pending_payment);
                         break;
 
-                    case 5:
+                    case 7:
                         intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_iban_intro);
                         intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_iban_intro);
                         break;
 
-                    case 6:
+                    case 8:
                         intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_transaction);
                         intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_transaction);
                         break;
 
-                    case 7:
+                    case 9:
                         intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_change_password);
                         intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_change_password);
                         break;
 
-                    case 8:
+                    case 10:
                         intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_change_memorable_word);
                         intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_change_memorable_word);
                         break;
 
-                    case 9:
+                    case 11:
                         intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_iban_change);
                         intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_iban_change);
                         break;
 
-                    case 10:
+                    case 12:
                         intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_unlink);
                         intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_unlink);
                         break;
 
-                    case 11:
+                    case 13:
                         intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_contact_us);
                         intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_contact_us);
                         break;
