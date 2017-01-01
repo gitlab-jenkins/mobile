@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -132,7 +133,19 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
         segmentRelativeLayouts[6] = (RelativeLayout)findViewById(R.id.iban_seventh_segment_l);
 
         ibanUserName = (FacedEditText) findViewById(R.id.ibanUserName);
+        ibanUserName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ibanUserName.setCursorVisible(true);
+            }
+        });
         ibanUserFamily = (FacedEditText) findViewById(R.id.ibanUserFamily);
+        ibanUserFamily.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ibanUserFamily.setCursorVisible(true);
+            }
+        });
 
         ibanVerifyButton = (FacedTextView)findViewById(R.id.iban_verify_button);
         ibanVerifyButton.setOnClickListener(new View.OnClickListener() {
@@ -177,6 +190,8 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
     public void OnTaskExecuted(Object object) {
 
         hamPayDialog.dismisWaitingDialog();
+        ibanUserFamily.setCursorVisible(true);
+        ibanUserName.setCursorVisible(true);
 
         if (object != null) {
             if (object.getClass().equals(ResponseMessage.class)) {
@@ -217,6 +232,8 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
 
     @Override
     public void onFinishEditDialog(IbanAction ibanAction) {
+        ibanUserFamily.setCursorVisible(true);
+        ibanUserName.setCursorVisible(true);
         switch (ibanAction){
             case ACCEPT:
                 ibanChangeRequest = new IBANChangeRequest();
@@ -228,7 +245,6 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
                 break;
 
             case REJECT:
-                finish();
                 break;
         }
     }
@@ -247,6 +263,8 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
         @Override
         public void onTaskComplete(ResponseMessage<IBANChangeResponse> ibanChangeResponseMessage) {
             hamPayDialog.dismisWaitingDialog();
+            ibanUserFamily.setCursorVisible(true);
+            ibanUserName.setCursorVisible(true);
             if (ibanChangeResponseMessage != null) {
                 if (ibanChangeResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     ibanVerifyButton.setVisibility(View.VISIBLE);
@@ -309,6 +327,8 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
                 InputMethodManager im = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                 im.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
+            ibanUserFamily.setCursorVisible(false);
+            ibanUserName.setCursorVisible(false);
         }else {
             inputDigit(view.getTag().toString());
         }
@@ -431,6 +451,7 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
                 break;
         }
         if (ibanValue.length() == 24){
+            new Collapse(keyboard).animate();
             IBANConfirmationRequest ibanConfirmationRequest = new IBANConfirmationRequest();
             ibanConfirmationRequest.setIban(ibanValue);
             new IBANConfirmationTask(activity, IbanIntronActivity.this, ibanConfirmationRequest, authToken).execute();

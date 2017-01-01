@@ -214,23 +214,6 @@
 
             </LinearLayout>
 
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                android:id="@+id/intro_iban_button"
-                geekui:customTypeface="fonts/vazir_regular.ttf"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:textColor="@android:color/white"
-                android:textSize="14dp"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:text="@string/intro_account"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:background="@drawable/registration_button_style"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="12dp"/>
-
-
         </LinearLayout>
 
     </ScrollView>
