@@ -500,16 +500,11 @@ public class SecuredWebServices {
         }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
 
-        Log.e("Request", jsonRequest);
-        Log.e("----", "---------------------");
-
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
         String res = proxyService.getResponse();
-        Log.e("Response", res);
-        Log.e("----", "---------------------");
 
         responseMessage = gson.fromJson(res, new TypeToken<ResponseMessage<TransactionListResponse>>() {
         }.getType());
