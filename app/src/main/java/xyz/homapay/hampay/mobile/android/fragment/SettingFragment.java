@@ -125,6 +125,7 @@ public class SettingFragment extends Fragment {
                     case 4:
                         if ((prefs.getBoolean(Constants.SETTING_CHANGE_IBAN_STATUS, false)) || userProfile.getIbanDTO() != null && userProfile.getIbanDTO().getIban() != null && userProfile.getIbanDTO().getIban().length() > 0) {
                             intent = new Intent();
+                            intent.putExtra(Constants.IBAN_SOURCE_ACTION, Constants.IBAN_SOURCE_SETTING);
                             intent.setClass(getActivity(), IbanIntronActivity.class);
                             startActivity(intent);
                         }else {

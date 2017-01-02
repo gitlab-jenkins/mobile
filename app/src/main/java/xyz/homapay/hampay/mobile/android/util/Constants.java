@@ -100,6 +100,9 @@ public class Constants {
     public static final String SETTING_CHANGE_IBAN_STATUS = "setting_change_iban";
     public static final int IBAN_CHANGE_RESULT_CODE = 2048;
     public static final String RETURN_IBAN_CONFIRMED = "return_iban";
+    public static final String IBAN_SOURCE_ACTION = "iban_source_setting";
+    public static final int IBAN_SOURCE_PAYMENT = 1;
+    public static final int IBAN_SOURCE_SETTING = 2;
     public static final String TAC_PRIVACY_TITLE = "tac_privacy_title";
     public static final int COMMON_NOTIFICATION_IDENTIFIER = 999;
     public static final int INVOICE_NOTIFICATION_IDENTIFIER = 1000;

@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private ImageView image_profile;
     private LinearLayout user_image_layout;
     private int currentFragment = 0;
-    private UserProfileDTO userProfileDTO;
+    private UserProfileDTO userProfile;
     private String pendingPurchaseCode = null;
     private String pendingPaymentCode = null;
     private int pendingPurchaseCount = 0;
@@ -178,18 +178,18 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         pendingPaymentCount = bundle.getInt(Constants.PENDING_PAYMENT_COUNT, 0);
         showCreateInvoice = bundle.getBoolean(Constants.SHOW_CREATE_INVOICE, true);
 
-        userProfileDTO = (UserProfileDTO) intent.getSerializableExtra(Constants.USER_PROFILE);
+        userProfile = (UserProfileDTO) intent.getSerializableExtra(Constants.USER_PROFILE);
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE).edit();
-        if (!prefs.contains(Constants.SETTING_CHANGE_IBAN_STATUS)){
-            editor.putBoolean(Constants.SETTING_CHANGE_IBAN_STATUS, false);
-            editor.commit();
+
+        if (userProfile.getIbanDTO() == null || userProfile.getIbanDTO().getIban() == null || userProfile.getIbanDTO().getIban().length() == 0){
+            editor.remove(Constants.SETTING_CHANGE_IBAN_STATUS).apply();
         }
 
-        editor.putLong(Constants.MAX_BUSINESS_XFER_AMOUNT, this.userProfileDTO.getMaxBusinessXferAmount());
-        editor.putLong(Constants.MIN_BUSINESS_XFER_AMOUNT, this.userProfileDTO.getMinBusinessXferAmount());
-        editor.putLong(Constants.MAX_INDIVIDUAL_XFER_AMOUNT, this.userProfileDTO.getMaxIndividualXferAmount());
-        editor.putLong(Constants.MIN_INDIVIDUAL_XFER_AMOUNT, this.userProfileDTO.getMinIndividualXferAmount());
+        editor.putLong(Constants.MAX_BUSINESS_XFER_AMOUNT, this.userProfile.getMaxBusinessXferAmount());
+        editor.putLong(Constants.MIN_BUSINESS_XFER_AMOUNT, this.userProfile.getMinBusinessXferAmount());
+        editor.putLong(Constants.MAX_INDIVIDUAL_XFER_AMOUNT, this.userProfile.getMaxIndividualXferAmount());
+        editor.putLong(Constants.MIN_INDIVIDUAL_XFER_AMOUNT, this.userProfile.getMinIndividualXferAmount());
         editor.commit();
         if (bundle != null) {
             hasNotification = bundle.getBoolean(Constants.HAS_NOTIFICATION);
@@ -294,9 +294,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), null);
         drawerFragment.setDrawerListener(this);
 
-        if (userProfileDTO.getUserImageId() != null) {
-            image_profile.setTag(userProfileDTO.getUserImageId());
-            imageManager.displayImage(userProfileDTO.getUserImageId(), image_profile, R.drawable.user_placeholder);
+        if (userProfile.getUserImageId() != null) {
+            image_profile.setTag(userProfile.getUserImageId());
+            imageManager.displayImage(userProfile.getUserImageId(), image_profile, R.drawable.user_placeholder);
         }else {
             image_profile.setImageResource(R.drawable.user_placeholder);
         }
@@ -337,8 +337,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 currentFragment = 0;
                 user_manual.setVisibility(View.VISIBLE);
                 fragment = new MainFragment();
-                if (userProfileDTO != null) {
-                    bundle.putSerializable(Constants.USER_PROFILE, userProfileDTO);
+                if (userProfile != null) {
+                    bundle.putSerializable(Constants.USER_PROFILE, userProfile);
                     bundle.putInt(Constants.PENDING_PAYMENT_COUNT, pendingPaymentCount);
                     bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);
                     bundle.putBoolean(Constants.SHOW_CREATE_INVOICE, showCreateInvoice);
@@ -350,18 +350,18 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 currentFragment = 1;
                 user_manual.setVisibility(View.VISIBLE);
                 fragment = new AccountDetailFragment();
-                if (userProfileDTO != null) {
-                    bundle.putSerializable(Constants.USER_PROFILE, userProfileDTO);
-                    fragment.setArguments(bundle);
-                }
+//                if (userProfile != null) {
+//                    bundle.putSerializable(Constants.USER_PROFILE, userProfile);
+//                    fragment.setArguments(bundle);
+//                }
                 fragmentTitle = getString(R.string.title_account_detail);
                 break;
             case 2:
                 currentFragment = 2;
                 user_manual.setVisibility(View.VISIBLE);
                 fragment = new SettingFragment();
-                if (userProfileDTO != null) {
-                    bundle.putSerializable(Constants.USER_PROFILE, userProfileDTO);
+                if (userProfile != null) {
+                    bundle.putSerializable(Constants.USER_PROFILE, userProfile);
                     fragment.setArguments(bundle);
                 }
                 fragmentTitle = getString(R.string.title_settings);
@@ -378,8 +378,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 currentFragment = 0;
                 user_manual.setVisibility(View.VISIBLE);
                 fragment = new MainFragment();
-                if (userProfileDTO != null) {
-                    bundle.putSerializable(Constants.USER_PROFILE, userProfileDTO);
+                if (userProfile != null) {
+                    bundle.putSerializable(Constants.USER_PROFILE, userProfile);
                     bundle.putInt(Constants.PENDING_PAYMENT_COUNT, pendingPaymentCount);
                     bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);
                     bundle.putBoolean(Constants.SHOW_CREATE_INVOICE, showCreateInvoice);
@@ -562,11 +562,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             drawerLayout.closeDrawer(Gravity.RIGHT);
         }else if (currentFragment != 0){
             fragment = new MainFragment();
-            if (userProfileDTO != null) {
+            if (userProfile != null) {
                 currentFragment = 0;
                 fragmentTitle = getString(R.string.title_main_fragment);
                 user_manual.setVisibility(View.VISIBLE);
-                bundle.putSerializable(Constants.USER_PROFILE, userProfileDTO);
+                bundle.putSerializable(Constants.USER_PROFILE, userProfile);
                 bundle.putInt(Constants.PENDING_PAYMENT_COUNT, pendingPaymentCount);
                 bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);
                 fragment.setArguments(bundle);
@@ -627,8 +627,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 currentFragment = 0;
                 user_manual.setVisibility(View.VISIBLE);
                 fragment = new MainFragment();
-                if (userProfileDTO != null) {
-                    bundle.putSerializable(Constants.USER_PROFILE, userProfileDTO);
+                if (userProfile != null) {
+                    bundle.putSerializable(Constants.USER_PROFILE, userProfile);
                     bundle.putInt(Constants.PENDING_PAYMENT_COUNT, pendingPaymentCount);
                     bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);
                     bundle.putBoolean(Constants.SHOW_CREATE_INVOICE, showCreateInvoice);
@@ -642,9 +642,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
             case REMOVE_FAIL:
                 new HamPayDialog(activity).removeImageFailDialog();
-                if (userProfileDTO.getUserImageId() != null) {
-                    image_profile.setTag( userProfileDTO.getUserImageId());
-                    imageManager.displayImage( userProfileDTO.getUserImageId(), image_profile, R.drawable.user_placeholder);
+                if (userProfile.getUserImageId() != null) {
+                    image_profile.setTag( userProfile.getUserImageId());
+                    imageManager.displayImage( userProfile.getUserImageId(), image_profile, R.drawable.user_placeholder);
                 }else {
                     image_profile.setImageResource(R.drawable.user_placeholder);
                 }
@@ -724,18 +724,18 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             if (userProfileResponseMessage != null) {
                 if (userProfileResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
                     serviceName = ServiceEvent.USER_PROFILE_SUCCESS;
-                    userProfileDTO = userProfileResponseMessage.getService().getUserProfile();
+                    userProfile = userProfileResponseMessage.getService().getUserProfile();
                     currentFragment = 0;
                     fragment = new MainFragment();
-                    if (userProfileDTO != null) {
-                        bundle.putSerializable(Constants.USER_PROFILE, userProfileDTO);
+                    if (userProfile != null) {
+                        bundle.putSerializable(Constants.USER_PROFILE, userProfile);
                         bundle.putInt(Constants.PENDING_PAYMENT_COUNT, pendingPaymentCount);
                         bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);
                         fragment.setArguments(bundle);
-                        if (userProfileDTO.getUserImageId() != null) {
-                            image_profile.setTag(userProfileDTO.getUserImageId());
+                        if (userProfile.getUserImageId() != null) {
+                            image_profile.setTag(userProfile.getUserImageId());
                             imageManager = new ImageManager(activity, 200000, true);
-                            imageManager.displayImage(userProfileDTO.getUserImageId(), image_profile, R.drawable.user_placeholder);
+                            imageManager.displayImage(userProfile.getUserImageId(), image_profile, R.drawable.user_placeholder);
                         }else {
                             image_profile.setImageResource(R.drawable.user_placeholder);
                         }

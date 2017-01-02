@@ -236,7 +236,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
 
                 if (pspInfoDTO == null) return;
 
-                if ((paymentInfoDTO.getCardList().get(selectedCardIdIndex) != null && paymentInfoDTO.getCardList().get(selectedCardIdIndex).getCardId() == null) || (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + paymentInfoDTO.getVat() >= Constants.SOAP_AMOUNT_MAX)) {
+                if (selectedCardIdIndex == -1 || (paymentInfoDTO.getCardList().get(selectedCardIdIndex) != null && paymentInfoDTO.getCardList().get(selectedCardIdIndex).getCardId() == null) || (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + paymentInfoDTO.getVat() >= Constants.SOAP_AMOUNT_MAX)) {
                     Intent intent = new Intent();
                     intent.setClass(activity, BankWebPaymentActivity.class);
                     intent.putExtra(Constants.PAYMENT_INFO, paymentInfoDTO);
@@ -414,9 +414,9 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
             case ADD:
                 Intent intent = new Intent();
                 intent.setClass(activity, BankWebPaymentActivity.class);
-                intent.putExtra(Constants.PURCHASE_INFO, paymentInfoDTO);
+                intent.putExtra(Constants.PAYMENT_INFO, paymentInfoDTO);
                 intent.putExtra(Constants.PSP_INFO, pspInfoDTO);
-                startActivityForResult(intent, 45);
+                startActivityForResult(intent, 46);
                 break;
         }
     }

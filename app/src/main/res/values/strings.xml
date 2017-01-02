@@ -117,12 +117,13 @@
     <string name="please_entry_info">لطفا اطلاعات خود را وارد نمایید.</string>
     <string name="iran_prefix_cell_number">۰۹</string>
     <string name="bank_card_info">اطلاعات حساب بانکی</string>
-    <string name="intro_account">معرفی شماره شبا</string>
+    <string name="iban_intro_payment">معرفی شماره شبا</string>
+    <string name="iban_intro_setting">تغییر شماره شبا</string>
     <string name="intro_account_text">لطفا شماره شبای حساب خود را وارد نموده و سپس دکمه بررسی را لمس نمایید</string>
     <string name="sheba_text">IR</string>
     <string name="sheba_verify">بررسی</string>
     <string name="sheba_question_part1_text">شماره شبا</string>
-    <string name="iban_question_part2_text">متعلق به %1$s در نزد %2$s می‌باشد.</string>
+    <string name="iban_question_part2_text">متعلق به %1$s نزد %2$s می‌باشد.</string>
     <string name="sheba_question_part3_text">(دقت کنید که این حساب برای دریافت مبالغ واریزی به شما استفاده می‌شود)</string>
     <string name="iban_empty_name">لطفا نام خود را وارد کنید.</string>
     <string name="iban_empty_family">لطفا نام خانوادگی خود را وارد کنید.</string>
@@ -283,10 +284,11 @@
     <string name="business_payment_per_code">براساس کد</string>
     <string name="business_payment_info">اطلاعات پرداخت</string>
     <string name="invoice_payment_confirm">تایید پرداخت</string>
-    <string name="iban_notice">به منظور بهره‌مندی از ویژگی درخواست پرداخت، لازم است تا ابتدا شماره شبا حساب بانکی خود را معرفی نمائید تا مبلغ دریافتی به حساب شما واریز گردد.</string>
+    <string name="iban_notice_payment">لطفا اطلاعات حساب بانکی مورد نظر را جهت دریافت مبالغ واریزی وارد نمایید</string>
+    <string name="iban_notice_setting">لطفا اطلاعات حساب بانکی جدید را جهت دریافت مبالغ واریزی وارد نمایید</string>
     <string name="iban_verify">تایید</string>
-    <string name="iban_user_name">نام</string>
-    <string name="iban_user_family">نام خانوادگی</string>
+    <string name="iban_user_name">نام صاحب حساب</string>
+    <string name="iban_user_family">نام خانوادگی صاحب حساب</string>
     <string name="null_pending_business">در حال حاضر پرداخت در انتظاری وجود ندارد</string>
     <string name="null_hampay_contacts">
         هم اکنون هیچ یک از مخاطبین شما عضو شبکه پرداخت همراه هم‌پی نیست

@@ -78,7 +78,7 @@ public class IbanChangeDialog extends DialogFragment implements TextView.OnEdito
         ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.rgb(Constants.HAMPAY_RED, Constants.HAMPAY_GREEN, Constants.HAMPAY_BLUE));
         spannableStringBuilder.setSpan(foregroundColorSpan, 9, (ibanOwnerName + " " + ibanOwnerFamily).length() + 9, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         foregroundColorSpan = new ForegroundColorSpan(Color.rgb(Constants.HAMPAY_RED, Constants.HAMPAY_GREEN, Constants.HAMPAY_BLUE));
-        spannableStringBuilder.setSpan(foregroundColorSpan, (ibanOwnerName + " " + ibanOwnerFamily).length() + 17, (ibanOwnerName + " " + ibanOwnerFamily + ibanBankName).length() + 17, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        spannableStringBuilder.setSpan(foregroundColorSpan, (ibanOwnerName + " " + ibanOwnerFamily).length() + 14, (ibanOwnerName + " " + ibanOwnerFamily + ibanBankName).length() + 15, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         ibanOwnInfo.setText(spannableStringBuilder);
 
         FacedTextView ibanRequestConfirm = (FacedTextView) view.findViewById(R.id.iban_request_confirm);

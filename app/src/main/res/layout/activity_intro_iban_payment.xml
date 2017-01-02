@@ -31,7 +31,7 @@
                 android:textColor="@color/app_origin"
                 android:textSize="18sp"
                 android:layout_gravity="center_horizontal"
-                android:text="@string/intro_account"
+                android:text="@string/iban_intro_payment"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="8dp"
                 android:layout_centerVertical="true"/>
@@ -63,7 +63,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="13dp"
                     android:layout_gravity="right"
-                    android:text="@string/iban_notice"
+                    android:text="@string/iban_notice_payment"
                     android:layout_margin="4dp"/>
 
 
@@ -78,9 +78,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
-                        android:layout_marginLeft="48dp"
                         android:layout_marginRight="4dp"
-                        android:textSize="15dp"
+                        android:textSize="14dp"
                         android:hint="@string/iban_user_name"
                         android:textColor="@android:color/black"
                         android:gravity="center_vertical"
@@ -88,7 +87,8 @@
                         android:maxLines="1"
                         android:maxLength="30"
                         android:padding="8dp"
-                        android:singleLine="true"/>
+                        android:singleLine="true"
+                        android:imeOptions="actionNext"/>
 
                 </RelativeLayout>
 
@@ -104,9 +104,8 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
-                        android:layout_marginLeft="48dp"
                         android:layout_marginRight="4dp"
-                        android:textSize="15dp"
+                        android:textSize="14dp"
                         android:hint="@string/iban_user_family"
                         android:textColor="@android:color/black"
                         android:gravity="center_vertical"
@@ -114,7 +113,8 @@
                         android:maxLines="1"
                         android:maxLength="30"
                         android:padding="8dp"
-                        android:singleLine="true"/>
+                        android:singleLine="true"
+                        android:imeOptions="actionDone"/>
 
                 </RelativeLayout>
 

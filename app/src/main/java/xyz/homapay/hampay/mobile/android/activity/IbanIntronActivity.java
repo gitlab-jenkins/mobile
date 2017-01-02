@@ -47,7 +47,6 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
     private Context context;
-    private Intent intent;
     private ImageManager imageManager;
     private FacedTextView ibanFirstSegmentText;
     private FacedTextView ibanSecondSegmentText;
@@ -101,7 +100,18 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_intro_intro);
+
+        Intent intent = getIntent();
+
+        switch (intent.getExtras().getInt(Constants.IBAN_SOURCE_ACTION)){
+            case Constants.IBAN_SOURCE_PAYMENT:
+                setContentView(R.layout.activity_intro_iban_payment);
+                break;
+            case Constants.IBAN_SOURCE_SETTING:
+                setContentView(R.layout.activity_intro_iban_setting);
+                break;
+        }
+
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
@@ -109,7 +119,6 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
         context = this;
         hamPayDialog = new HamPayDialog(activity);
 
-        intent = getIntent();
         imageManager = new ImageManager(activity, 200000, false);
 
         keyboard = (LinearLayout)findViewById(R.id.keyboard);
@@ -151,9 +160,9 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
             @Override
             public void onClick(View v) {
 
-                String userBank = bankName.getText().toString();
-                String userName = ibanUserName.getText().toString();
-                String userFamily = ibanUserFamily.getText().toString();
+                String userBank = bankName.getText().toString().trim();
+                String userName = ibanUserName.getText().toString().trim();
+                String userFamily = ibanUserFamily.getText().toString().trim();
 
                 if (userName.length() == 0){
                     Toast.makeText(activity, getString(R.string.iban_empty_name), Toast.LENGTH_SHORT).show();
@@ -237,8 +246,8 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
             case ACCEPT:
                 ibanChangeRequest = new IBANChangeRequest();
                 ibanChangeRequest.setIban(ibanValue);
-                ibanChangeRequest.setOwnerFirstName(ibanUserName.getText().toString());
-                ibanChangeRequest.setOwnerSurname(ibanUserFamily.getText().toString());
+                ibanChangeRequest.setOwnerFirstName(ibanUserName.getText().toString().trim());
+                ibanChangeRequest.setOwnerSurname(ibanUserFamily.getText().toString().trim());
                 requestIBANChange = new RequestIBANChange(activity, new RequestIBANChangeTaskCompleteListener(ibanChangeRequest));
                 requestIBANChange.execute(ibanChangeRequest);
                 break;
@@ -462,8 +471,8 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
             case 0:
             case 1:
             case 2:
-                for (RelativeLayout relativeLayout : segmentRelativeLayouts){
-                    relativeLayout.setBackgroundResource(R.drawable.iban_empty_placeholder);
+                for (int i = 1; i < segmentRelativeLayouts.length; i++){
+                    segmentRelativeLayouts[i].setBackgroundResource(R.drawable.iban_empty_placeholder);
                 }
                 segmentRelativeLayouts[0].setBackgroundResource(R.drawable.iban_entry_placeholder);
                 break;
@@ -472,8 +481,8 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
             case 4:
             case 5:
             case 6:
-                for (RelativeLayout relativeLayout : segmentRelativeLayouts){
-                    relativeLayout.setBackgroundResource(R.drawable.iban_empty_placeholder);
+                for (int i = 2; i < segmentRelativeLayouts.length; i++){
+                    segmentRelativeLayouts[i].setBackgroundResource(R.drawable.iban_empty_placeholder);
                 }
                 segmentRelativeLayouts[1].setBackgroundResource(R.drawable.iban_entry_placeholder);
                 break;
@@ -482,8 +491,8 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
             case 8:
             case 9:
             case 10:
-                for (RelativeLayout relativeLayout : segmentRelativeLayouts){
-                    relativeLayout.setBackgroundResource(R.drawable.iban_empty_placeholder);
+                for (int i = 3; i < segmentRelativeLayouts.length; i++){
+                    segmentRelativeLayouts[i].setBackgroundResource(R.drawable.iban_empty_placeholder);
                 }
                 segmentRelativeLayouts[2].setBackgroundResource(R.drawable.iban_entry_placeholder);
                 break;
@@ -492,8 +501,8 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
             case 12:
             case 13:
             case 14:
-                for (RelativeLayout relativeLayout : segmentRelativeLayouts){
-                    relativeLayout.setBackgroundResource(R.drawable.iban_empty_placeholder);
+                for (int i = 4; i < segmentRelativeLayouts.length; i++){
+                    segmentRelativeLayouts[i].setBackgroundResource(R.drawable.iban_empty_placeholder);
                 }
                 segmentRelativeLayouts[3].setBackgroundResource(R.drawable.iban_entry_placeholder);
                 break;
@@ -502,8 +511,8 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
             case 16:
             case 17:
             case 18:
-                for (RelativeLayout relativeLayout : segmentRelativeLayouts){
-                    relativeLayout.setBackgroundResource(R.drawable.iban_empty_placeholder);
+                for (int i = 5; i < segmentRelativeLayouts.length; i++){
+                    segmentRelativeLayouts[i].setBackgroundResource(R.drawable.iban_empty_placeholder);
                 }
                 segmentRelativeLayouts[4].setBackgroundResource(R.drawable.iban_entry_placeholder);
                 break;
@@ -512,16 +521,16 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
             case 20:
             case 21:
             case 22:
-                for (RelativeLayout relativeLayout : segmentRelativeLayouts){
-                    relativeLayout.setBackgroundResource(R.drawable.iban_empty_placeholder);
+                for (int i = 6; i < segmentRelativeLayouts.length; i++){
+                    segmentRelativeLayouts[i].setBackgroundResource(R.drawable.iban_empty_placeholder);
                 }
                 segmentRelativeLayouts[5].setBackgroundResource(R.drawable.iban_entry_placeholder);
                 break;
 
             case 23:
             case 24:
-                for (RelativeLayout relativeLayout : segmentRelativeLayouts){
-                    relativeLayout.setBackgroundResource(R.drawable.iban_empty_placeholder);
+                for (int i = 7; i < segmentRelativeLayouts.length; i++){
+                    segmentRelativeLayouts[i].setBackgroundResource(R.drawable.iban_empty_placeholder);
                 }
                 segmentRelativeLayouts[6].setBackgroundResource(R.drawable.iban_entry_placeholder);
                 break;

@@ -281,7 +281,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
 
                 if (pspInfoDTO == null) return;
 
-                if ((purchaseInfoDTO.getCardList().get(selectedCardIdIndex) != null && purchaseInfoDTO.getCardList().get(selectedCardIdIndex).getCardId() == null) || (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() >= Constants.SOAP_AMOUNT_MAX)) {
+                if (selectedCardIdIndex == -1 || (purchaseInfoDTO.getCardList().get(selectedCardIdIndex) != null && purchaseInfoDTO.getCardList().get(selectedCardIdIndex).getCardId() == null) || (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() >= Constants.SOAP_AMOUNT_MAX)) {
                     Intent intent = new Intent();
                     intent.setClass(activity, BankWebPaymentActivity.class);
                     intent.putExtra(Constants.PURCHASE_INFO, purchaseInfoDTO);

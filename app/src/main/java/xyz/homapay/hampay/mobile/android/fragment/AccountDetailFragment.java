@@ -118,16 +118,17 @@ public class AccountDetailFragment extends Fragment {
         emailLayout = (LinearLayout)rootView.findViewById(R.id.email_layout);
         user_email = (FacedTextView) rootView.findViewById(R.id.user_email);
 
+        userProfileRequest = new UserProfileRequest();
+        requestUserProfile = new RequestUserProfile(getActivity(), new RequestUserProfileTaskCompleteListener());
+        requestUserProfile.execute(userProfileRequest);
 
-        if (prefs.getBoolean(Constants.FORCE_USER_PROFILE, false)){
-            userProfileRequest = new UserProfileRequest();
-            requestUserProfile = new RequestUserProfile(getActivity(), new RequestUserProfileTaskCompleteListener());
-            requestUserProfile.execute(userProfileRequest);
-        }else {
-            fillUserProfile(userProfileDTO);
-            editor.putBoolean(Constants.FORCE_USER_PROFILE, true);
-            editor.commit();
-        }
+//        if (prefs.getBoolean(Constants.FORCE_USER_PROFILE, false)){
+//
+//        }else {
+//            fillUserProfile(userProfileDTO);
+//            editor.putBoolean(Constants.FORCE_USER_PROFILE, true);
+//            editor.commit();
+//        }
 
         return rootView;
     }

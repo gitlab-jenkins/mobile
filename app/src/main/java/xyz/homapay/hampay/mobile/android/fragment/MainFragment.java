@@ -312,7 +312,7 @@ public class MainFragment extends Fragment implements View.OnClickListener{
                         startActivity(intent);
                     }else {
                         intent.setClass(getActivity(), IbanIntronActivity.class);
-                        intent.putExtra(Constants.USER_PROFILE, userProfile);
+                        intent.putExtra(Constants.IBAN_SOURCE_ACTION, Constants.IBAN_SOURCE_PAYMENT);
                         startActivityForResult(intent, Constants.IBAN_CHANGE_RESULT_CODE);
                     }
                 }
