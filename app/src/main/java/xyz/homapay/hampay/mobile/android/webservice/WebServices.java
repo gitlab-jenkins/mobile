@@ -681,10 +681,10 @@ public class WebServices  {
 
     public TWAArrayOfKeyValueOfstringstring newPurchaseResponse(DoWorkInfo doWorkInfo) throws Exception {
 
-       AllowHamPaySSL allowHamPaySSL = new AllowHamPaySSL(context);
+        AllowHamPaySSL allowHamPaySSL = new AllowHamPaySSL(context);
         allowHamPaySSL.enableHamPaySSL();
 
-        TWABasicHttpBinding_ITokenPay twaBasicHttpBinding_iTokenPay = new TWABasicHttpBinding_ITokenPay(null,"https://" + Constants.SERVER + "/saman/psp/pay");
+        TWABasicHttpBinding_ITokenPay twaBasicHttpBinding_iTokenPay = new TWABasicHttpBinding_ITokenPay(null, Constants.TOKEN_PAYMENT);
         TWAArrayOfKeyValueOfstringstring responseMessage = twaBasicHttpBinding_iTokenPay.DoWork(doWorkInfo.getUserName(), doWorkInfo.getPassword(), doWorkInfo.getCellNumber(),null,doWorkInfo.getVectorstring2stringMapEntry());
 
 //        PayThPartyApp payThPartyApp = new PayThPartyApp(context);

@@ -718,7 +718,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity {
                 purchase_payer_name_layout.setVisibility(View.GONE);
                 purchase_payer_cell_layout.setVisibility(View.GONE);
                 pay_to_business_button.setVisibility(View.VISIBLE);
-                if ((pspInfoDTO.getCardDTO() != null && pspInfoDTO.getCardDTO().getCardId() == null) && (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() < Constants.SOAP_AMOUNT_MAX)) {
+                if (pspInfoDTO.getCardDTO().getCardId() != null && (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() < Constants.SOAP_AMOUNT_MAX)) {
                     creditInfo.setVisibility(View.VISIBLE);
                     cardNumberValue.setText(persianEnglishDigit.E2P(pspInfoDTO.getCardDTO().getMaskedCardNumber()));
                     bankName.setText(pspInfoDTO.getCardDTO().getBankName());
