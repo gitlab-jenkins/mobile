@@ -23,8 +23,8 @@ android {
         applicationId "xyz.homapay.hampay.mobile.android"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 14
-        versionName "HamPay-V1.0.6.5"
+        versionCode 15
+        versionName "HamPay-V1.0.6.6"
         multiDexEnabled true
     }
     buildTypes {
