@@ -60,7 +60,7 @@
             android:layout_margin="2dp">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                android:id="@+id/billServiceId"
+                android:id="@+id/billId"
                 geekui:customTypeface="fonts/vazir_regular.ttf"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -84,7 +84,7 @@
             android:layout_margin="2dp">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                android:id="@+id/billServicePayment"
+                android:id="@+id/payId"
                 geekui:customTypeface="fonts/vazir_regular.ttf"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -102,7 +102,7 @@
         </RelativeLayout>
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            android:id="@+id/bills_mobile_button"
+            android:id="@+id/billsMobileButton"
             geekui:customTypeface="fonts/vazir_regular.ttf"
             android:layout_width="wrap_content"
             android:layout_height="32dp"

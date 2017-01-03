@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
@@ -27,6 +28,7 @@ public class MobileBillsActivity extends AppCompatActivity implements View.OnCli
     private FacedTextView cellNumberText;
     private String cellNumber = "";
     private PersianEnglishDigit persian;
+    private ImageView simNumber;
 
     public void backActionBar(View view){
         finish();

@@ -1,5 +1,6 @@
 package xyz.homapay.hampay.mobile.android.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,27 +10,38 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import xyz.homapay.hampay.common.common.response.ResponseMessage;
+import xyz.homapay.hampay.common.core.model.request.UtilityBillRequest;
+import xyz.homapay.hampay.common.core.model.response.UtilityBillResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
+import xyz.homapay.hampay.mobile.android.async.task.UtilityBillTask;
+import xyz.homapay.hampay.mobile.android.async.task.impl.OnTaskCompleted;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
-public class ServiceBillsActivity extends AppCompatActivity implements View.OnClickListener {
+public class ServiceBillsActivity extends AppCompatActivity implements View.OnClickListener, OnTaskCompleted {
 
     private SharedPreferences prefs;
     private Context context;
     private PersianEnglishDigit persian;
     private LinearLayout barCodeScanner;
     private LinearLayout keyboard;
-    private FacedTextView billServiceId;
-    private FacedTextView billServicePayment;
+    private FacedTextView billIdText;
+    private FacedTextView payIdText;
     private boolean billServiceIdFocus = false;
     private boolean billServicePaymentFocus = false;
     private FacedTextView billsMobileButton;
+    private Activity activity;
+    private HamPayDialog hamPayDialog;
+    private String authToken;
 
     public void backActionBar(View view){
         finish();
@@ -78,17 +90,21 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_service_bills);
 
         context = this;
+        activity = ServiceBillsActivity.this;
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
         persian = new PersianEnglishDigit();
+        hamPayDialog = new HamPayDialog(activity);
+
         barCodeScanner = (LinearLayout)findViewById(R.id.barCodeScanner);
         barCodeScanner.setOnClickListener(this);
 
         keyboard = (LinearLayout)findViewById(R.id.keyboard);
-        billServiceId = (FacedTextView)findViewById(R.id.billServiceId);
-        billServiceId.setOnClickListener(this);
-        billServicePayment = (FacedTextView)findViewById(R.id.billServicePayment);
-        billServicePayment.setOnClickListener(this);
-        billsMobileButton = (FacedTextView)findViewById(R.id.bills_mobile_button);
+        billIdText = (FacedTextView)findViewById(R.id.billId);
+        billIdText.setOnClickListener(this);
+        payIdText = (FacedTextView)findViewById(R.id.payId);
+        payIdText.setOnClickListener(this);
+        billsMobileButton = (FacedTextView)findViewById(R.id.billsMobileButton);
         billsMobileButton.setOnClickListener(this);
     }
 
@@ -116,7 +132,7 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
                 startActivityForResult(intent, Constants.BAR_CODE_RESULT);
                 break;
 
-            case R.id.billServiceId:
+            case R.id.billId:
                 if (keyboard.getVisibility() == View.GONE) {
                     new Expand(keyboard).animate();
                 }
@@ -124,7 +140,7 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
                 billServicePaymentFocus = false;
                 break;
 
-            case R.id.billServicePayment:
+            case R.id.payId:
                 if (keyboard.getVisibility() == View.GONE) {
                     new Expand(keyboard).animate();
                 }
@@ -132,9 +148,11 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
                 billServicePaymentFocus = true;
                 break;
 
-            case R.id.bills_mobile_button:
-                intent = new Intent(context, BillsPaymentActivity.class);
-                startActivity(intent);
+            case R.id.billsMobileButton:
+                UtilityBillRequest utilityBillRequest = new UtilityBillRequest();
+                utilityBillRequest.setBillId(payIdText.getText().toString());
+                utilityBillRequest.setPayId(payIdText.getText().toString());
+                new UtilityBillTask(activity, ServiceBillsActivity.this, utilityBillRequest, authToken).execute();
                 break;
         }
     }
@@ -163,23 +181,50 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
         if (digit.endsWith("d")){
         }
         if (billServiceIdFocus){
-            String code = billServiceId.getText().toString();
+            String code = billIdText.getText().toString();
             if (digit.endsWith("d")){
                 if (code.length() == 0) return;
-                billServiceId.setText(code.substring(0, code.length() - 1));
+                billIdText.setText(code.substring(0, code.length() - 1));
             }else {
-                billServiceId.setText(persian.E2P(code + digit));
+                billIdText.setText(persian.E2P(code + digit));
             }
         }else if (billServicePaymentFocus){
-            String code = billServicePayment.getText().toString();
+            String code = payIdText.getText().toString();
             if (digit.endsWith("d")){
                 if (code.length() == 0) return;
-                billServicePayment.setText(code.substring(0, code.length() - 1));
+                payIdText.setText(code.substring(0, code.length() - 1));
             }else {
-                billServicePayment.setText(persian.E2P(code + digit));
+                payIdText.setText(persian.E2P(code + digit));
             }
         }
 
+
+    }
+
+    @Override
+    public void OnTaskPreExecute() {
+        hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+    }
+
+    @Override
+    public void OnTaskExecuted(Object object) {
+        hamPayDialog.dismisWaitingDialog();
+
+        if (object != null) {
+            if (object.getClass().equals(ResponseMessage.class)) {
+                ResponseMessage responseMessage = (ResponseMessage) object;
+                switch (responseMessage.getService().getServiceDefinition()) {
+                    case UTILITY_BILL:
+                        ResponseMessage<UtilityBillResponse> utilityBill = (ResponseMessage) object;
+                        switch (utilityBill.getService().getResultStatus()) {
+                            case SUCCESS:
+
+                                break;
+                        }
+                        break;
+                }
+            }
+        }
 
     }
 }

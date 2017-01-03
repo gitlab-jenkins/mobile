@@ -67,11 +67,11 @@
                 android:layout_margin="2dp"/>
 
             <ImageView
+                android:id="@+id/simNumber"
                 android:layout_width="50dp"
                 android:layout_height="60dp"
-                android:src="@drawable/bills_contacts"
-                android:background="@color/app_origin"
-                android:layout_marginLeft="2dp" />
+                android:src="@drawable/bills_sim"
+                android:background="@color/app_origin" />
 
             <RelativeLayout
                 android:layout_width="fill_parent"
