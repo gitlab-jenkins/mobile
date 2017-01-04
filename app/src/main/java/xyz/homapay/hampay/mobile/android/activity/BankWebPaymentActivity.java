@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +23,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import xyz.homapay.hampay.common.common.response.ResultStatus;
+import xyz.homapay.hampay.common.core.model.response.dto.BillInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
@@ -36,26 +36,25 @@ import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class BankWebPaymentActivity extends AppCompatActivity {
-    WebView bankWebView;
-    ImageView reload;
-    TextView urlText;
-    HamPayDialog hamPayDialog;
-    SharedPreferences prefs;
-    SharedPreferences.Editor editor;
-    PaymentInfoDTO paymentInfoDTO = null;
-    PurchaseInfoDTO purchaseInfoDTO = null;
-    PspInfoDTO pspInfoDTO = null;
 
-    String redirectedURL;
-
+    private WebView bankWebView;
+    private ImageView reload;
+    private TextView urlText;
+    private HamPayDialog hamPayDialog;
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
+    private PaymentInfoDTO paymentInfoDTO = null;
+    private PurchaseInfoDTO purchaseInfoDTO = null;
+    private BillInfoDTO billInfoDTO;
+    private PspInfoDTO pspInfoDTO = null;
+    private String redirectedURL;
     private Context context;
     private Activity activity;
-
-    String postData;
-
-    Timer timer;
-    TimerTask timerTask;
-    final Handler handler = new Handler();
+    private String postData;
+    private Timer timer;
+    private TimerTask timerTask;
+    private String ipgUrl = "";
+    private final Handler handler = new Handler();
 
 
     public void startTimer() {
@@ -137,6 +136,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
         paymentInfoDTO = (PaymentInfoDTO)intent.getSerializableExtra(Constants.PAYMENT_INFO);
         purchaseInfoDTO = (PurchaseInfoDTO)intent.getSerializableExtra(Constants.PURCHASE_INFO);
+        billInfoDTO = (BillInfoDTO) intent.getSerializableExtra(Constants.BILL_INFO);
         pspInfoDTO = (PspInfoDTO)intent.getSerializableExtra(Constants.PSP_INFO);
 
         bankWebView = (WebView)findViewById(R.id.bankWebView);
@@ -162,11 +162,9 @@ public class BankWebPaymentActivity extends AppCompatActivity {
         settings.setJavaScriptEnabled(true);
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
 
-//        redirectedURL = Constants.IPG_URL + pspInfoDTO.getRedirectURL() + "?authToken=" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
-        redirectedURL = pspInfoDTO.getRedirectURL() + "?authToken=" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
-
         if (paymentInfoDTO != null) {
-
+            ipgUrl = Constants.BANK_GATEWAY_URL;
+            redirectedURL = pspInfoDTO.getRedirectURL() + "?authToken=" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
             postData =
                     "ResNum4=" + pspInfoDTO.getCellNumber() +
                             "&ResNum3=" + paymentInfoDTO.getPspInfo().getSmsToken() +
@@ -176,7 +174,8 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                             "&TerminalId=" + pspInfoDTO.getSenderTerminalId();
 
         }else if (purchaseInfoDTO != null){
-
+            ipgUrl = Constants.BANK_GATEWAY_URL;
+            redirectedURL = pspInfoDTO.getRedirectURL() + "?authToken=" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
             postData =
                     "ResNum4=" + pspInfoDTO.getCellNumber() +
                             "&ResNum3=" + purchaseInfoDTO.getPspInfo().getSmsToken() +
@@ -184,12 +183,25 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                             "&Amount=" + (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat()) +
                             "&ResNum=" + purchaseInfoDTO.getProductCode() +
                             "&TerminalId=" + pspInfoDTO.getSenderTerminalId();
+        }else if (billInfoDTO != null){
+            ipgUrl = Constants.BILLS_IPG_URL;
+            pspInfoDTO = billInfoDTO.getPspInfo();
+            redirectedURL = pspInfoDTO.getRedirectURL() + "?authToken=" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
+            postData =
+                    "ResNum4=" + pspInfoDTO.getCellNumber() +
+                            "&ResNum3=" + pspInfoDTO.getSmsToken() +
+                            "&RedirectURL=" + redirectedURL +
+                            "&Amount=" + (billInfoDTO.getAmount() + billInfoDTO.getFeeCharge()) +
+                            "&ResNum=" + billInfoDTO.getProductCode() +
+                            "&Bills[0].BillId=" + "4418074200140" +
+                            "&Bills[0].PayId=" + "7550440" +
+                            "&TerminalId=" + pspInfoDTO.getSenderTerminalId();
         }
 
         try {
             editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
             editor.commit();
-            bankWebView.postUrl(Constants.BANK_GATEWAY_URL, postData.getBytes("UTF-8"));
+            bankWebView.postUrl(ipgUrl, postData.getBytes("UTF-8"));
             hamPayDialog.showFirstIpg(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
             startTimer();
         } catch (UnsupportedEncodingException e) {

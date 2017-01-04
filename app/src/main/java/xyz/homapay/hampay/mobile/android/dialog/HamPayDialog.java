@@ -1678,7 +1678,7 @@ public class HamPayDialog {
         FacedTextView ibanOwnInfo = (FacedTextView)view.findViewById(R.id.ibanOwnInfo);
 
         ibanNumber.setText("IR" + new PersianEnglishDigit().E2P(iban));
-        ibanOwnInfo.setText(activity.getString(R.string.sheba_question_part2_text, ibanConfirmationResponse.getName(), ibanConfirmationResponse.getBankName()));
+        ibanOwnInfo.setText(activity.getString(R.string.sheba_question_part2_text, ibanConfirmationResponse.getBankName(), ibanConfirmationResponse.getBankName()));
 
         FacedTextView iban_request_confirm = (FacedTextView) view.findViewById(R.id.iban_request_confirm);
         FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);

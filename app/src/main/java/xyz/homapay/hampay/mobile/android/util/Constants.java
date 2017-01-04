@@ -15,6 +15,7 @@ public class Constants {
     public static String HTTP_SERVER_IP = "http://" + SERVER + ":90" + URL_PREFIX;//England Server
     public static String IPG_URL = "http://" + SERVER + ":9091" + URL_PREFIX;//England Server
     public static String BANK_GATEWAY_URL = "https://sep.shaparak.ir/PgMobileAddData";
+    public static String BILLS_IPG_URL = "https://sep.shaparak.ir/pgmobileadddata/batchbill";
     public static ConnectionType CONNECTION_TYPE = ConnectionType.HTTPS;
     public static String HTTPS_SERVER_IP = "https://" + SERVER + URL_PREFIX;//England Server
     public static final String HTTPS_OPENAM_LOGIN_URL = HTTPS_SERVER_IP + "/auth";
@@ -121,6 +122,8 @@ public class Constants {
     public static final int BAR_CODE_RESULT = 100;
     public static final String BAR_CODE_SCAN_RESULT = "barCodeScanResult";
     public static final String CARD_LIST = "card_list";
+    public static final String BILL_INFO = "billInfo";
+    public static final String BILL_ID = "billId";
 
     //Permissions and Group Permission
     public static final int READ_PHONE_STATE = 1;

@@ -1373,7 +1373,7 @@ public class SecuredWebServices {
         Type requestType = new TypeToken<RequestMessage<UtilityBillRequest>>() {}.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
-        Gson gson = new Gson();
+        Gson gson = builder.getDatebuilder().create();
         responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UtilityBillResponse>>() {}.getType());
         proxyService.closeConnection();
         return  responseMessage;

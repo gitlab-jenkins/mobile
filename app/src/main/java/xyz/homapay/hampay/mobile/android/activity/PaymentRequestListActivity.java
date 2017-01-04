@@ -312,13 +312,13 @@ public class PaymentRequestListActivity extends AppCompatActivity{
                     bankLogo.setVisibility(View.VISIBLE);
                     bankName.setVisibility(View.VISIBLE);
 
-                    if (ibanChangeResponseMessage.getService().getImageId() != null) {
-                        bankLogo.setTag(ibanChangeResponseMessage.getService().getImageId());
-                        imageManager.displayImage(ibanChangeResponseMessage.getService().getImageId(),bankLogo, R.drawable.user_placeholder);
-                    }else {
-                        bankLogo.setImageResource(R.drawable.user_placeholder);
-                    }
-                    bankName.setText(ibanChangeResponseMessage.getService().getBankName());
+//                    if (ibanChangeResponseMessage.getService().getImageId() != null) {
+//                        bankLogo.setTag(ibanChangeResponseMessage.getService().getImageId());
+//                        imageManager.displayImage(ibanChangeResponseMessage.getService().getImageId(),bankLogo, R.drawable.user_placeholder);
+//                    }else {
+//                        bankLogo.setImageResource(R.drawable.user_placeholder);
+//                    }
+//                    bankName.setText(ibanChangeResponseMessage.getService().getBankName());
                 }else if (ibanChangeResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     serviceName = ServiceEvent.IBAN_CHANGE_FAILURE;
                     forceLogout();

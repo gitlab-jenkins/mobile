@@ -228,6 +228,11 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                     intent.putExtra(Constants.PROVIDER_ID, fundDTOList.get(position).getProviderId());
                     itemPosition = position;
                     startActivityForResult(intent, 46);
+                }else if (fundDTOList.get(position).getPaymentType() == FundDTO.PaymentType.BILL_UTILITY) {
+                    intent.setClass(activity, ServiceBillsDetailActivity.class);
+                    intent.putExtra(Constants.PROVIDER_ID, fundDTOList.get(position).getProviderId());
+                    itemPosition = position;
+                    startActivityForResult(intent, 47);
                 }
             }
         });
@@ -335,7 +340,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
             case R.id.purchase_pending:
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
-                fundType = FundType.COMMERCIAL;
+                fundType = FundType.BUSINESS_AND_PURCHASE;
                 requestPendingFundList = new RequestPendingFundList(activity, new RequestPendingFundTaskCompleteListener());
                 pendingFundListRequest = new PendingFundListRequest();
                 pendingFundListRequest.setType(fundType);

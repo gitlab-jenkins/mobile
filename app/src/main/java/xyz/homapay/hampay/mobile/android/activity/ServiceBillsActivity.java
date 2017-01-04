@@ -150,7 +150,7 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
 
             case R.id.billsMobileButton:
                 UtilityBillRequest utilityBillRequest = new UtilityBillRequest();
-                utilityBillRequest.setBillId(payIdText.getText().toString());
+                utilityBillRequest.setBillId(billIdText.getText().toString());
                 utilityBillRequest.setPayId(payIdText.getText().toString());
                 new UtilityBillTask(activity, ServiceBillsActivity.this, utilityBillRequest, authToken).execute();
                 break;
@@ -211,14 +211,18 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
         hamPayDialog.dismisWaitingDialog();
 
         if (object != null) {
-            if (object.getClass().equals(ResponseMessage.class)) {
-                ResponseMessage responseMessage = (ResponseMessage) object;
+            if (object.getClass().equals(ResponseMessage.class)){
+                ResponseMessage responseMessage = (ResponseMessage)object;
                 switch (responseMessage.getService().getServiceDefinition()) {
                     case UTILITY_BILL:
                         ResponseMessage<UtilityBillResponse> utilityBill = (ResponseMessage) object;
                         switch (utilityBill.getService().getResultStatus()) {
                             case SUCCESS:
-
+                                Intent intent = new Intent();
+                                intent.setClass(activity, ServiceBillsDetailActivity.class);
+                                intent.putExtra(Constants.BILL_INFO, utilityBill.getService().getBillInfoDTO());
+                                intent.putExtra(Constants.BILL_ID, billIdText.getText().toString());
+                                startActivity(intent);
                                 break;
                         }
                         break;

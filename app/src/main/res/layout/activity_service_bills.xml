@@ -73,7 +73,8 @@
                 android:gravity="center_vertical"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:nextFocusDown="@+id/cardNumberValue"/>
+                android:nextFocusDown="@+id/cardNumberValue"
+                android:text="4418074200140"/>
 
         </RelativeLayout>
 
@@ -97,7 +98,8 @@
                 android:gravity="center_vertical"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:nextFocusDown="@+id/cardNumberValue"/>
+                android:nextFocusDown="@+id/cardNumberValue"
+                android:text="7550440"/>
 
         </RelativeLayout>
 
