@@ -124,6 +124,7 @@ public class Constants {
     public static final String CARD_LIST = "card_list";
     public static final String BILL_INFO = "billInfo";
     public static final String BILL_ID = "billId";
+    public static final String PAY_ID = "payId";
 
     //Permissions and Group Permission
     public static final int READ_PHONE_STATE = 1;

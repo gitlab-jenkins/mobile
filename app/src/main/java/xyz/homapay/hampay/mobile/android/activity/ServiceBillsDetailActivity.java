@@ -94,6 +94,7 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
     private PspInfoDTO pspInfoDTO = null;
     private BillInfoDTO billsInfo = null;
     private String billsIdValue;
+    private String payIdValue;
     private DoWorkInfo doWorkInfo;
     private ImageManager imageManager;
     private RelativeLayout cardPlaceHolder;
@@ -202,6 +203,7 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
         Intent intent = getIntent();
         billsInfo = (BillInfoDTO) intent.getSerializableExtra(Constants.BILL_INFO);
         billsIdValue = intent.getStringExtra(Constants.BILL_ID);
+        payIdValue = intent.getStringExtra(Constants.PAY_ID);
         providerId = intent.getStringExtra(Constants.PROVIDER_ID);
 
         if (billsId != null) {
@@ -233,12 +235,14 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
             @Override
             public void onClick(View v) {
 
-                if (pspInfoDTO == null) return;
+                if (billsInfo == null) return;
 
                 if (selectedCardIdIndex == -1 || (billsInfo.getCardList().get(selectedCardIdIndex) != null && billsInfo.getCardList().get(selectedCardIdIndex).getCardId() == null) || (billsInfo.getAmount() + billsInfo.getFeeCharge() >= Constants.SOAP_AMOUNT_MAX)) {
                     Intent intent = new Intent();
                     intent.setClass(activity, BankWebPaymentActivity.class);
                     intent.putExtra(Constants.BILL_INFO, billsInfo);
+                    intent.putExtra(Constants.BILL_ID, billsIdValue);
+                    intent.putExtra(Constants.PAY_ID, payIdValue);
                     startActivityForResult(intent, 46);
                 } else {
                     if (pinText.getText().toString().length() <= 4) {
@@ -518,7 +522,8 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                 Intent intent = new Intent();
                 intent.setClass(activity, BankWebPaymentActivity.class);
                 intent.putExtra(Constants.BILL_INFO, billsInfo);
-                intent.putExtra(Constants.PSP_INFO, pspInfoDTO);
+                intent.putExtra(Constants.BILL_ID, billsIdValue);
+                intent.putExtra(Constants.PAY_ID, payIdValue);
                 startActivityForResult(intent, 46);
                 break;
         }
