@@ -129,6 +129,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
+        activity = BankWebPaymentActivity.this;
         context = this;
         activity = BankWebPaymentActivity.this;
 

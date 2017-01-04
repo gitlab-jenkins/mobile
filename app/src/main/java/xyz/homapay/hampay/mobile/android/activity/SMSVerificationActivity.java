@@ -346,8 +346,8 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
 
     @Override
     public void onFinishEditDialog(ActionSMS actionSMS) {
-        requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
-        requestRegistrationSendSmsToken.execute(registrationSendSmsTokenRequest);
+//        requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
+//        requestRegistrationSendSmsToken.execute(registrationSendSmsTokenRequest);
     }
 
 
@@ -468,13 +468,16 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                 if (sendSmsCounter < 3) {
                     if (sendSmsPermission) {
                         sendSmsPermission = false;
-                        SMSActivationDialog smsActivationDialog = new SMSActivationDialog();
-                        Bundle bundle = new Bundle();
-                        bundle.putString(Constants.REGISTERED_CELL_NUMBER, cellNumber);
-                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        smsActivationDialog.setArguments(bundle);
-                        fragmentTransaction.add(smsActivationDialog, null);
-                        fragmentTransaction.commitAllowingStateLoss();
+                        requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
+                        requestRegistrationSendSmsToken.execute(registrationSendSmsTokenRequest);
+
+//                        SMSActivationDialog smsActivationDialog = new SMSActivationDialog();
+//                        Bundle bundle = new Bundle();
+//                        bundle.putString(Constants.REGISTERED_CELL_NUMBER, cellNumber);
+//                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//                        smsActivationDialog.setArguments(bundle);
+//                        fragmentTransaction.add(smsActivationDialog, null);
+//                        fragmentTransaction.commitAllowingStateLoss();
                     }
                 }else {
                     Toast.makeText(context, getString(R.string.sms_upper_reach_sms), Toast.LENGTH_LONG).show();

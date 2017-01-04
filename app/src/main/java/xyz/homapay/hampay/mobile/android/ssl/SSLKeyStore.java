@@ -19,10 +19,10 @@ public class SSLKeyStore {
 
     private Context context;
 
-    public SSLKeyStore(Context context){
+    public SSLKeyStore(Context context) {
         this.context = context;
     }
-//
+
     public KeyStore getAppKeyStore(){
         try{
             CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
@@ -30,7 +30,7 @@ public class SSLKeyStore {
 //            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/sit-http-v1.crt"));
 //            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/prod-http-v1.crt"));
 //            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/sit-http-v1.crt"));
-//            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/uat.crt"));
+            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/uat.crt"));
 //            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/nginx.crt"));
             Certificate certificate = certificateFactory.generateCertificate(caInput);
             String keyStoreType = KeyStore.getDefaultType();
@@ -38,6 +38,28 @@ public class SSLKeyStore {
             keyStore.load(null, null);
             keyStore.setCertificateEntry("ca", certificate);
 
+            return keyStore;
+        } catch (CertificateException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public KeyStore getTokenPayKeyStore() {
+        try {
+            CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
+            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/token_pay.cer"));
+            Certificate certificate = certificateFactory.generateCertificate(caInput);
+            String keyStoreType = KeyStore.getDefaultType();
+            KeyStore keyStore = KeyStore.getInstance(keyStoreType);
+            keyStore.load(null, null);
+            keyStore.setCertificateEntry("ca", certificate);
             return keyStore;
         } catch (CertificateException e) {
             e.printStackTrace();

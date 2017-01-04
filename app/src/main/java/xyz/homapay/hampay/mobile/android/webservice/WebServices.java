@@ -102,6 +102,7 @@ import xyz.homapay.hampay.common.core.model.response.UploadImageResponse;
 import xyz.homapay.hampay.common.core.model.response.UserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
+import xyz.homapay.hampay.mobile.android.model.DoWorkInfoTest;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
 import xyz.homapay.hampay.mobile.android.ssl.AllowHamPaySSL;
@@ -689,47 +690,6 @@ public class WebServices  {
 
         return responseMessage;
     }
-
-//    public TWAArrayOfKeyValueOfstringstring newPurchaseResponse(DoWorkInfo doWorkInfo) throws Exception {
-//
-//       AllowHamPaySSL allowHamPaySSL = new AllowHamPaySSL(context);
-//        allowHamPaySSL.enableHamPaySSL();
-//
-//        TWABasicHttpBinding_ITokenPay twaBasicHttpBinding_iTokenPay = new TWABasicHttpBinding_ITokenPay(null,"https://" + Constants.SERVER + "/saman/psp/pay");
-//        TWAArrayOfKeyValueOfstringstring responseMessage = twaBasicHttpBinding_iTokenPay.DoWork(doWorkInfo.getUserName(), doWorkInfo.getPassword(), doWorkInfo.getCellNumber(),null,doWorkInfo.getVectorstring2stringMapEntry());
-//
-////        PayThPartyApp payThPartyApp = new PayThPartyApp(context);
-////        Vectorstring2stringMapEntry responseMessage = payThPartyApp.DoWork(
-////                doWorkInfo.getUserName(),
-////                doWorkInfo.getPassword(),
-////                doWorkInfo.getCellNumber(),
-////                null,
-////                doWorkInfo.isLangABoolean(),
-////                doWorkInfo.getVectorstring2stringMapEntry());
-//
-//        return responseMessage;
-//    }
-//
-//
-//    public Vectorstring2stringMapEntry newPurchaseResponse(DoWorkInfoTest doWorkInfo) throws Exception {
-//
-//        AllowHamPaySSL allowHamPaySSL = new AllowHamPaySSL(context);
-//        allowHamPaySSL.enableHamPaySSL();
-//
-////        TWABasicHttpBinding_ITokenPay twaBasicHttpBinding_iTokenPay = new TWABasicHttpBinding_ITokenPay(null,"https://" + Constants.SERVER_IP + "/saman/psp/pay");
-////        TWAArrayOfKeyValueOfstringstring responseMessage = twaBasicHttpBinding_iTokenPay.DoWork(doWorkInfo.getUserName(), doWorkInfo.getPassword(), doWorkInfo.getCellNumber(),null,doWorkInfo.getVectorstring2stringMapEntry());
-//
-////        PayThPartyApp payThPartyApp = new PayThPartyApp(context);
-////        Vectorstring2stringMapEntry responseMessage = payThPartyApp.DoWork(
-////                doWorkInfo.getUserName(),
-////                doWorkInfo.getPassword(),
-////                doWorkInfo.getCellNumber(),
-////                null,
-////                doWorkInfo.isLangABoolean(),
-////                doWorkInfo.getVectorstring2stringMapEntry());
-//
-//        return null;
-//    }
 
 
     public ResponseMessage<LatestPurchaseResponse> latestUserPurchase(LatestPurchaseRequest latestPurchaseRequest) throws IOException{
