@@ -27,7 +27,7 @@ import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
-public class ServiceBillsActivity extends AppCompatActivity implements View.OnClickListener, OnTaskCompleted {
+public class ServiceBillsActivity extends AppCompatActivity implements View.OnClickListener, OnTaskCompleted, View.OnLongClickListener {
 
     private SharedPreferences prefs;
     private Context context;
@@ -102,6 +102,7 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
         keyboard = (LinearLayout)findViewById(R.id.keyboard);
         billIdText = (FacedTextView)findViewById(R.id.billId);
         billIdText.setOnClickListener(this);
+        billIdText.setOnLongClickListener(this);
         payIdText = (FacedTextView)findViewById(R.id.payId);
         payIdText.setOnClickListener(this);
         billsMobileButton = (FacedTextView)findViewById(R.id.billsMobileButton);
@@ -116,7 +117,9 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
             case Constants.BAR_CODE_RESULT:
                 if (resultCode == RESULT_OK) {
                     Bundle barCodeResult = data.getExtras();
-                    Log.e("Result", barCodeResult.getString(Constants.BAR_CODE_SCAN_RESULT));
+                    String scannedCode = barCodeResult.getString(Constants.BAR_CODE_SCAN_RESULT);
+                    billIdText.setText(persian.E2P(scannedCode.substring(0, 13)));
+                    payIdText.setText(persian.E2P(scannedCode.substring(13).replaceFirst(Constants.PAY_ID_REGEX, "")));
                 }
                 break;
         }
@@ -231,5 +234,14 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
             }
         }
 
+    }
+
+    @Override
+    public boolean onLongClick(View view) {
+        switch (view.getId()){
+            case R.id.billId:
+                billIdText.setText("");
+        }
+        return true;
     }
 }

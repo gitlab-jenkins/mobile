@@ -13,12 +13,8 @@ import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
 
-import xyz.homapay.hampay.common.common.response.ResponseMessage;
-import xyz.homapay.hampay.common.common.response.ResultStatus;
-import xyz.homapay.hampay.common.core.model.response.CancelUserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.mobile.android.R;
-import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
@@ -130,36 +126,6 @@ public class PendingPaymentAdapter extends BaseAdapter  {
         FacedTextView price_pay;
         FacedTextView expire_pay;
         FacedTextView paymentCode;
-    }
-
-    public class RequestCancelPaymentTaskCompleteListener implements
-            AsyncTaskCompleteListener<ResponseMessage<CancelUserPaymentResponse>> {
-
-        int position;
-
-        RequestCancelPaymentTaskCompleteListener(int position){
-            this.position = position;
-        }
-
-
-        @Override
-        public void onTaskComplete(ResponseMessage<CancelUserPaymentResponse> cancelUserPaymentResponseMessage) {
-
-            hamPayDialog.dismisWaitingDialog();
-
-            if (cancelUserPaymentResponseMessage != null) {
-                if (cancelUserPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS
-                        || cancelUserPaymentResponseMessage.getService().getResultStatus() == ResultStatus.PURCHASE_NOT_ELIGIBLE_TO_CANCEL) {
-                    paymentInfoDTOs.remove(position);
-                    notifyDataSetChanged();
-                }
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog("");
-        }
     }
 
 }

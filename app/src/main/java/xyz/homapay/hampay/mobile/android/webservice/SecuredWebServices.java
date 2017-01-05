@@ -27,8 +27,7 @@ import xyz.homapay.hampay.common.core.model.request.BusinessPaymentConfirmReques
 import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
 import xyz.homapay.hampay.common.core.model.request.CalcFeeChargeRequest;
 import xyz.homapay.hampay.common.core.model.request.CalculateVatRequest;
-import xyz.homapay.hampay.common.core.model.request.CancelPurchasePaymentRequest;
-import xyz.homapay.hampay.common.core.model.request.CancelUserPaymentRequest;
+import xyz.homapay.hampay.common.core.model.request.CancelFundRequest;
 import xyz.homapay.hampay.common.core.model.request.CardProfileRequest;
 import xyz.homapay.hampay.common.core.model.request.ChangeEmailRequest;
 import xyz.homapay.hampay.common.core.model.request.ChangeMemorableWordRequest;
@@ -75,8 +74,7 @@ import xyz.homapay.hampay.common.core.model.response.BusinessListResponse;
 import xyz.homapay.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
 import xyz.homapay.hampay.common.core.model.response.CalcFeeChargeResponse;
 import xyz.homapay.hampay.common.core.model.response.CalculateVatResponse;
-import xyz.homapay.hampay.common.core.model.response.CancelPurchasePaymentResponse;
-import xyz.homapay.hampay.common.core.model.response.CancelUserPaymentResponse;
+import xyz.homapay.hampay.common.core.model.response.CancelFundResponse;
 import xyz.homapay.hampay.common.core.model.response.CardProfileResponse;
 import xyz.homapay.hampay.common.core.model.response.ChangeEmailResponse;
 import xyz.homapay.hampay.common.core.model.response.ChangeMemorableWordResponse;
@@ -119,13 +117,7 @@ import xyz.homapay.hampay.common.core.model.response.UserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
 import xyz.homapay.hampay.common.core.model.response.UtilityBillDetailResponse;
 import xyz.homapay.hampay.common.core.model.response.UtilityBillResponse;
-import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO;
-import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
-import xyz.homapay.hampay.mobile.android.ssl.AllowHamPaySSL;
 import xyz.homapay.hampay.mobile.android.util.Constants;
-import xyz.homapay.hampay.mobile.android.util.TransactionStatusEnumDeserilizer;
-import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
-import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWABasicHttpBinding_ITokenPay;
 
 /**
  * Created by amir on 6/6/15.
@@ -830,51 +822,29 @@ public class SecuredWebServices {
         return responseMessage;
     }
 
-    public ResponseMessage<CancelPurchasePaymentResponse> cancelPurchasePaymentResponse(CancelPurchasePaymentRequest cancelPurchasePaymentRequest) throws IOException, EncryptionException {
+    public ResponseMessage<CancelFundResponse> cancelFund(CancelFundRequest cancelFundRequest) throws IOException, EncryptionException {
 
-        ResponseMessage<CancelPurchasePaymentResponse> responseMessage = null;
-        url = new URL(serviceURL + "/purchase/cancel");
+        ResponseMessage<CancelFundResponse> responseMessage = null;
+        url = new URL(serviceURL + "/fund/cancel");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
-        cancelPurchasePaymentRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<CancelPurchasePaymentRequest> message = new RequestMessage<>(cancelPurchasePaymentRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
+        cancelFundRequest.setRequestUUID(UUID.randomUUID().toString());
+        RequestMessage<CancelFundRequest> message = new RequestMessage<>(cancelFundRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<CancelPurchasePaymentRequest>>() {
+        Type requestType = new TypeToken<RequestMessage<CancelFundRequest>>() {
         }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<CancelPurchasePaymentResponse>>() {
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<CancelFundResponse>>() {
         }.getType());
         proxyService.closeConnection();
 
         return responseMessage;
     }
 
-    public ResponseMessage<CancelUserPaymentResponse> cancelUserPaymentResponse(CancelUserPaymentRequest cancelUserPaymentRequest) throws IOException, EncryptionException {
-
-        ResponseMessage<CancelUserPaymentResponse> responseMessage = null;
-        url = new URL(serviceURL + "/payment/cancel");
-        SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
-
-        cancelUserPaymentRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<CancelUserPaymentRequest> message = new RequestMessage<>(cancelUserPaymentRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
-
-        Type requestType = new TypeToken<RequestMessage<CancelUserPaymentRequest>>() {
-        }.getType();
-        String jsonRequest = new Gson().toJson(message, requestType);
-        proxyService.setJsonBody(jsonRequest);
-
-        Gson gson = builder.getDatebuilder().create();
-
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<CancelUserPaymentResponse>>() {
-        }.getType());
-        proxyService.closeConnection();
-
-        return responseMessage;
-    }
 
     public ResponseMessage<UserPaymentResponse> userPaymentResponse(UserPaymentRequest userPaymentRequest) throws IOException, EncryptionException {
 

@@ -125,6 +125,7 @@ public class Constants {
     public static final String BILL_INFO = "billInfo";
     public static final String BILL_ID = "billId";
     public static final String PAY_ID = "payId";
+    public static final String PAY_ID_REGEX = "^0+(?!$)";
 
     //Permissions and Group Permission
     public static final int READ_PHONE_STATE = 1;
