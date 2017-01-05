@@ -1,6 +1,5 @@
-package xyz.homapay.hampay.mobile.android.img;
+package xyz.homapay.hampay.mobile.android.m.common;
 
-import android.content.Context;
 import android.os.Build;
 
 import java.util.concurrent.TimeUnit;
@@ -15,9 +14,8 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import xyz.homapay.hampay.mobile.android.img.ImageCacheProvider;
 import xyz.homapay.hampay.mobile.android.ssl.HamPayX509TrustManager;
-import xyz.homapay.hampay.mobile.android.ssl.SSLKeyStore;
-import xyz.homapay.hampay.mobile.android.util.Connectivity;
 
 /**
  * Created by mohammad on 12/30/16.
@@ -55,10 +53,21 @@ public class TrustedOkHttpClient {
         };
     }
 
-    public static OkHttpClient getTrustedOkHttpClient(Context ctx) {
+    private static Interceptor provideHeaders() {
+        return chain -> {
+            Request request = chain.request();
+            request.newBuilder()
+                    .addHeader("Content-Encoding", "gzip")
+                    .addHeader("Accept-Encoding", "gzip")
+                    .build();
+            return chain.proceed(request);
+        };
+    }
+
+    public static OkHttpClient getTrustedOkHttpClient(ModelLayer modelLayer) {
         try {
             // Create a trust manager that does not validate certificate chains
-            final TrustManager[] trustedCerts = new X509TrustManager[]{new HamPayX509TrustManager(new SSLKeyStore(ctx).getAppKeyStore())};
+            final TrustManager[] trustedCerts = new X509TrustManager[]{new HamPayX509TrustManager(modelLayer.getSSLKeyStore().getAppKeyStore())};
 
             // Install the all-trusting trust manager
             final SSLContext sslContext;
@@ -73,20 +82,21 @@ public class TrustedOkHttpClient {
             final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 
             OkHttpClient okHttpClient;
-
-            if (Connectivity.isConnected(ctx)) {
+            if (modelLayer.isConnected()) {
                 okHttpClient = new OkHttpClient().newBuilder()
+                        .addInterceptor(provideHeaders())
                         .addNetworkInterceptor(provideCacheInterceptor())
                         .retryOnConnectionFailure(true)
                         .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustedCerts[0])
-                        .cache(ImageCacheProvider.getInstance(ctx).provideCache())
+                        .cache(ImageCacheProvider.getInstance(modelLayer).provideCache())
                         .build();
             } else {
                 okHttpClient = new OkHttpClient().newBuilder()
+                        .addInterceptor(provideHeaders())
                         .addInterceptor(provideOfflineCacheInterceptor())
                         .retryOnConnectionFailure(true)
                         .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustedCerts[0])
-                        .cache(ImageCacheProvider.getInstance(ctx).provideCache())
+                        .cache(ImageCacheProvider.getInstance(modelLayer).provideCache())
                         .build();
             }
             return okHttpClient;
@@ -96,10 +106,10 @@ public class TrustedOkHttpClient {
         }
     }
 
-    public static OkHttpClient getTrustedOkHttpClient(Context ctx, Interceptor interceptor) {
+    public static OkHttpClient getTrustedOkHttpClient(ModelLayer modelLayer, Interceptor interceptor) {
         try {
             // Create a trust manager that does not validate certificate chains
-            final TrustManager[] trustedCerts = new X509TrustManager[]{new HamPayX509TrustManager(new SSLKeyStore(ctx).getAppKeyStore())};
+            final TrustManager[] trustedCerts = new X509TrustManager[]{new HamPayX509TrustManager(modelLayer.getSSLKeyStore().getAppKeyStore())};
 
             // Install the all-trusting trust manager
             final SSLContext sslContext;
@@ -114,14 +124,13 @@ public class TrustedOkHttpClient {
             final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
 
             OkHttpClient okHttpClient;
-
-            if (Connectivity.isConnected(ctx)) {
+            if (modelLayer.isConnected()) {
                 okHttpClient = new OkHttpClient().newBuilder()
                         .addNetworkInterceptor(provideCacheInterceptor())
                         .addNetworkInterceptor(interceptor)
                         .retryOnConnectionFailure(true)
                         .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustedCerts[0])
-                        .cache(ImageCacheProvider.getInstance(ctx).provideCache())
+                        .cache(ImageCacheProvider.getInstance(modelLayer).provideCache())
                         .build();
             } else {
                 okHttpClient = new OkHttpClient().newBuilder()
@@ -129,7 +138,7 @@ public class TrustedOkHttpClient {
                         .addNetworkInterceptor(interceptor)
                         .retryOnConnectionFailure(true)
                         .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustedCerts[0])
-                        .cache(ImageCacheProvider.getInstance(ctx).provideCache())
+                        .cache(ImageCacheProvider.getInstance(modelLayer).provideCache())
                         .build();
             }
             return okHttpClient;

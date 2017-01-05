@@ -18,7 +18,9 @@ import java.io.File;
 import java.io.FileInputStream;
 
 import okhttp3.OkHttpClient;
+import xyz.homapay.hampay.mobile.android.m.common.TrustedOkHttpClient;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.ModelLayerImpl;
 
 /**
  * Created by mohammad on 12/30/16.
@@ -140,7 +142,7 @@ public class ImageHelper {
     }
 
     private void picassoMaker() {
-        client = TrustedOkHttpClient.getTrustedOkHttpClient(ctx, new PicassoInterceptor(ctx));
+        client = TrustedOkHttpClient.getTrustedOkHttpClient(new ModelLayerImpl(ctx), new PicassoInterceptor(ctx));
         Picasso picasso = new Picasso.Builder(ctx)
                 .downloader(new OkHttp3Downloader(client))
                 .build();

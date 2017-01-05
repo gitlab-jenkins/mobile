@@ -23,7 +23,6 @@ import android.text.style.ClickableSpan;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -59,6 +58,7 @@ import xyz.homapay.hampay.mobile.android.util.net.InternetConnectionStatus;
 
 public class ProfileEntryActivity extends AppCompatActivity implements PermissionDeviceDialog.PermissionDeviceDialogListener {
 
+    private final Handler handler = new Handler();
     private Activity activity;
     private PersianEnglishDigit persianEnglishDigit;
     private FacedTextView keepOn_button;
@@ -84,7 +84,6 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
     private RequestRegistrationEntry requestRegistrationEntry;
     private HamPayDialog hamPayDialog;
     private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
-    private final Handler handler = new Handler();
     private FacedTextView tac_privacy_text;
     private CheckBox confirmTacPrivacy;
     private KeyExchange keyExchange;
@@ -142,13 +141,11 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                             boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE);
                             if (showRationale){
-                                handler.post(new Runnable() {
-                                    public void run() {
-                                        PermissionDeviceDialog permissionDeviceDialog = new PermissionDeviceDialog();
-                                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                                        fragmentTransaction.add(permissionDeviceDialog, null);
-                                        fragmentTransaction.commitAllowingStateLoss();
-                                    }
+                                handler.post(() -> {
+                                    PermissionDeviceDialog permissionDeviceDialog = new PermissionDeviceDialog();
+                                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                                    fragmentTransaction.add(permissionDeviceDialog, null);
+                                    fragmentTransaction.commitAllowingStateLoss();
                                 });
                             }else {
                                 Intent intent = new Intent();
@@ -161,13 +158,11 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                                 context.startActivity(intent);
                             }
                         }else {
-                            handler.post(new Runnable() {
-                                public void run() {
-                                    PermissionDeviceDialog permissionDeviceDialog = new PermissionDeviceDialog();
-                                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                                    fragmentTransaction.add(permissionDeviceDialog, null);
-                                    fragmentTransaction.commitAllowingStateLoss();
-                                }
+                            handler.post(() -> {
+                                PermissionDeviceDialog permissionDeviceDialog = new PermissionDeviceDialog();
+                                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                                fragmentTransaction.add(permissionDeviceDialog, null);
+                                fragmentTransaction.commitAllowingStateLoss();
                             });
                         }
                     }
@@ -191,19 +186,16 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
 
         keyExchange = new KeyExchange(activity);
         confirmTacPrivacy = (CheckBox)findViewById(R.id.confirmTacPrivacy);
-        confirmTacPrivacy.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    if (keyExchange.getKey() == null || keyExchange.getIv() == null) {
-                        confirmTacPrivacy.setChecked(false);
-                        new KeyExchangeTask().execute();
-                    }else {
-                        keepOn_button.setBackgroundResource(R.drawable.registration_button_style);
-                    }
+        confirmTacPrivacy.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                if (keyExchange.getKey() == null || keyExchange.getIv() == null) {
+                    confirmTacPrivacy.setChecked(false);
+                    new KeyExchangeTask().execute();
                 }else {
-                    keepOn_button.setBackgroundResource(R.drawable.disable_button_style);
+                    keepOn_button.setBackgroundResource(R.drawable.registration_button_style);
                 }
+            } else {
+                keepOn_button.setBackgroundResource(R.drawable.disable_button_style);
             }
         });
 
@@ -260,18 +252,15 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
             }
         });
         cellNumberIcon = (ImageView)findViewById(R.id.cellNumberIcon);
-        cellNumberValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
+        cellNumberValue.setOnFocusChangeListener((v, hasFocus) -> {
 
-                if (!hasFocus) {
-                    if (cellNumberValue.getText().toString().length() == 9) {
-                        cellNumberIcon.setImageResource(R.drawable.right_icon);
-                        cellNumberIsValid = true;
-                    } else {
-                        cellNumberIcon.setImageResource(R.drawable.false_icon);
-                        cellNumberIsValid = false;
-                    }
+            if (!hasFocus) {
+                if (cellNumberValue.getText().toString().length() == 9) {
+                    cellNumberIcon.setImageResource(R.drawable.right_icon);
+                    cellNumberIsValid = true;
+                } else {
+                    cellNumberIcon.setImageResource(R.drawable.false_icon);
+                    cellNumberIsValid = false;
                 }
             }
         });
@@ -316,36 +305,30 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
             }
         });
 
-        nationalCodeValue.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    if (new NationalCodeVerification(persianEnglishDigit.P2E(nationalCodeValue.getText().toString().replaceAll("-", ""))).isValidCode()) {
-                        nationalCodeIcon.setImageResource(R.drawable.right_icon);
-                        nationalCodeIsValid = true;
-                    } else {
-                        nationalCodeIcon.setImageResource(R.drawable.false_icon);
-                        nationalCodeIsValid = false;
-                    }
+        nationalCodeValue.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                if (new NationalCodeVerification(persianEnglishDigit.P2E(nationalCodeValue.getText().toString().replaceAll("-", ""))).isValidCode()) {
+                    nationalCodeIcon.setImageResource(R.drawable.right_icon);
+                    nationalCodeIsValid = true;
+                } else {
+                    nationalCodeIcon.setImageResource(R.drawable.false_icon);
+                    nationalCodeIsValid = false;
                 }
             }
         });
 
         userNameFamily = (FacedEditText)findViewById(R.id.userNameFamily);
         userNameFamilyIcon = (ImageView)findViewById(R.id.userNameFamilyIcon);
-        userNameFamily.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                fullUserName = userNameFamily.getText().toString().trim().replaceAll("^ +| +$|( )+", "$1");
-                if (!hasFocus) {
+        userNameFamily.setOnFocusChangeListener((v, hasFocus) -> {
+            fullUserName = userNameFamily.getText().toString().trim().replaceAll("^ +| +$|( )+", "$1");
+            if (!hasFocus) {
+                userNameFamilyIsValid = true;
+                if (fullUserName.length() <= 1) {
+                    userNameFamilyIsValid = false;
+                    userNameFamilyIcon.setImageResource(R.drawable.false_icon);
+                } else {
                     userNameFamilyIsValid = true;
-                    if (fullUserName.length() <= 1){
-                        userNameFamilyIsValid = false;
-                        userNameFamilyIcon.setImageResource(R.drawable.false_icon);
-                    }else {
-                        userNameFamilyIsValid = true;
-                        userNameFamilyIcon.setImageResource(R.drawable.right_icon);
-                    }
+                    userNameFamilyIcon.setImageResource(R.drawable.right_icon);
                 }
             }
         });
@@ -356,58 +339,50 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
 
         emailValue.addTextChangedListener(emailTextWatcher);
         keepOn_button = (FacedTextView) findViewById(R.id.keepOn_button);
-        keepOn_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        keepOn_button.setOnClickListener(v -> {
 
-                fullUserName = userNameFamily.getText().toString().trim().replaceAll("^ +| +$|( )+", "$1");
+            fullUserName = userNameFamily.getText().toString().trim().replaceAll("^ +| +$|( )+", "$1");
 
-                if (!confirmTacPrivacy.isChecked()){
-                    Toast.makeText(activity, getString(R.string.force_tac), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                keepOn_button.requestFocus();
-                View view = getCurrentFocus();
-                if (view != null) {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(
-                            Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                }
+            if (!confirmTacPrivacy.isChecked()) {
+                Toast.makeText(activity, getString(R.string.force_tac), Toast.LENGTH_SHORT).show();
+                return;
+            }
+            keepOn_button.requestFocus();
+            View view = getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(
+                        Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
 
-                cellNumberValue.clearFocus();
-                userNameFamily.clearFocus();
-                nationalCodeValue.clearFocus();
-                if (cellNumberIsValid && nationalCodeIsValid
-                        && cellNumberValue.getText().toString().trim().length() > 0
-                        && nationalCodeValue.getText().toString().trim().length() > 0
-                        && fullUserName.length() >= 2
-                        && emailTextWatcher.isValid()) {
+            cellNumberValue.clearFocus();
+            userNameFamily.clearFocus();
+            nationalCodeValue.clearFocus();
+            if (cellNumberIsValid && nationalCodeIsValid
+                    && cellNumberValue.getText().toString().trim().length() > 0
+                    && nationalCodeValue.getText().toString().trim().length() > 0
+                    && fullUserName.length() >= 2
+                    && emailTextWatcher.isValid()) {
 
-                    requestAndLoadPhoneState();
+                requestAndLoadPhoneState();
 
-                } else {
+            } else {
 
-                    if (cellNumberValue.getText().toString().length() == 0 || !cellNumberIsValid){
-                        Toast.makeText(context, getString(R.string.msg_cellNumber_invalid), Toast.LENGTH_SHORT).show();
-                        cellNumberIcon.setImageResource(R.drawable.false_icon);
-                        cellNumberValue.requestFocus();
-                    }
-
-                    else if (fullUserName.length() <= 1 || !userNameFamilyIsValid){
-                        Toast.makeText(context, getString(R.string.msg_username_invalid), Toast.LENGTH_SHORT).show();
-                        userNameFamilyIcon.setImageResource(R.drawable.false_icon);
-                        userNameFamily.requestFocus();
-                    }
-
-                    else if (nationalCodeValue.getText().toString().length() == 0 || !nationalCodeIsValid){
-                        Toast.makeText(context, getString(R.string.msg_nationalCode_invalid), Toast.LENGTH_SHORT).show();
-                        nationalCodeIcon.setImageResource(R.drawable.false_icon);
-                        nationalCodeValue.requestFocus();
-                    }
-                    else if (!emailTextWatcher.isValid()){
-                        Toast.makeText(context, getString(R.string.msg_invalid_email), Toast.LENGTH_SHORT).show();
-                        emailValue.requestFocus();
-                    }
+                if (cellNumberValue.getText().toString().length() == 0 || !cellNumberIsValid) {
+                    Toast.makeText(context, getString(R.string.msg_cellNumber_invalid), Toast.LENGTH_SHORT).show();
+                    cellNumberIcon.setImageResource(R.drawable.false_icon);
+                    cellNumberValue.requestFocus();
+                } else if (fullUserName.length() <= 1 || !userNameFamilyIsValid) {
+                    Toast.makeText(context, getString(R.string.msg_username_invalid), Toast.LENGTH_SHORT).show();
+                    userNameFamilyIcon.setImageResource(R.drawable.false_icon);
+                    userNameFamily.requestFocus();
+                } else if (nationalCodeValue.getText().toString().length() == 0 || !nationalCodeIsValid) {
+                    Toast.makeText(context, getString(R.string.msg_nationalCode_invalid), Toast.LENGTH_SHORT).show();
+                    nationalCodeIcon.setImageResource(R.drawable.false_icon);
+                    nationalCodeValue.requestFocus();
+                } else if (!emailTextWatcher.isValid()) {
+                    Toast.makeText(context, getString(R.string.msg_invalid_email), Toast.LENGTH_SHORT).show();
+                    emailValue.requestFocus();
                 }
             }
         });
@@ -423,6 +398,11 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                 finish();
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        new HamPayDialog(activity).exitRegistrationDialog();
     }
 
     public class RequestRegistrationEntryTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationEntryResponse>> {
@@ -505,12 +485,6 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
             hamPayDialog.showHamPayCommunication();
         }
 
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        new HamPayDialog(activity).exitRegistrationDialog();
     }
 
 }
