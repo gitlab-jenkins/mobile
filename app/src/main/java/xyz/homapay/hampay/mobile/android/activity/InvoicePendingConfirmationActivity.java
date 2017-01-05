@@ -400,6 +400,10 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
     public void onFinishEditDialog(CardAction cardAction, int position) {
         switch (cardAction){
             case SELECT:
+                userCVV2 = "";
+                userPinCode = "";
+                pinText.setText("");
+                cvvText.setText("");
                 if (paymentInfoDTO != null) {
                     selectedCardIdIndex = position;
                     cardNumberValue.setText(persian.E2P(paymentInfoDTO.getCardList().get(position).getLast4Digits()));
