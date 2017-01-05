@@ -25,10 +25,10 @@ import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
+import xyz.homapay.hampay.mobile.android.img.ImageHelper;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
-import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
@@ -65,8 +65,6 @@ public class TransactionDetailActivity extends AppCompatActivity {
     private LinearLayout pay_button;
     private LinearLayout creditInfo;
     private String authToken = "";
-    private ImageManager imageManager;
-
 
     public void backActionBar(View view) {
         finish();
@@ -121,7 +119,6 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
         context = this;
         activity = TransactionDetailActivity.this;
-        imageManager = new ImageManager(activity, 200000, false);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
@@ -153,7 +150,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
         transactionDTO = (TransactionDTO) intent.getSerializableExtra(Constants.USER_TRANSACTION_DTO);
         if (transactionDTO.getImageId() != null) {
             image.setTag(transactionDTO.getImageId());
-            imageManager.displayImage(transactionDTO.getImageId(), image, R.drawable.user_placeholder);
+            ImageHelper.getInstance(context).imageLoader(transactionDTO.getImageId(), image, R.drawable.user_placeholder);
         } else {
             image.setImageResource(R.drawable.user_placeholder);
         }
@@ -206,7 +203,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
                     tnxDetailDTO = transactionDetailResponseMessage.getService().getTransactionDetail();
                     if (tnxDetailDTO.getImageId() != null) {
                         image.setTag(tnxDetailDTO.getImageId());
-                        imageManager.displayImage(tnxDetailDTO.getImageId(), image, R.drawable.user_placeholder);
+                        ImageHelper.getInstance(context).imageLoader(tnxDetailDTO.getImageId(), image, R.drawable.user_placeholder);
                     } else {
                         image.setImageResource(R.drawable.user_placeholder);
                     }

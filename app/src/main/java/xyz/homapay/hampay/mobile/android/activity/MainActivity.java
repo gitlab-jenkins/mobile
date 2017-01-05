@@ -57,13 +57,13 @@ import xyz.homapay.hampay.mobile.android.fragment.FragmentDrawer;
 import xyz.homapay.hampay.mobile.android.fragment.GuideFragment;
 import xyz.homapay.hampay.mobile.android.fragment.MainFragment;
 import xyz.homapay.hampay.mobile.android.fragment.SettingFragment;
+import xyz.homapay.hampay.mobile.android.img.ImageHelper;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
-import xyz.homapay.hampay.mobile.android.util.ImageManager;
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener, View.OnClickListener, EditImageDialog.EditImageDialogListener {
 
@@ -103,24 +103,22 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private RequestMobileRegistrationIdEntry requestMobileRegistrationIdEntry;
     private MobileRegistrationIdEntryRequest mobileRegistrationIdEntryRequest;
     private DatabaseHelper dbHelper;
-    private ImageManager imageManager;
     private ImageView user_manual;
     private String fragmentTitle = "";
     private AppEvent appEvent = AppEvent.LOGIN;
 
-    public void userManual(View view){
+    public void userManual(View view) {
         Intent intent = new Intent();
         intent.setClass(activity, UserManualActivity.class);
         if (currentFragment == 0) {
             intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_main);
             intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_main);
             startActivity(intent);
-        }else if (currentFragment == 1){
+        } else if (currentFragment == 1) {
             intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_account_details);
             intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_account_details);
             startActivity(intent);
-        }
-        else if (currentFragment == 2){
+        } else if (currentFragment == 2) {
             intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_setting);
             intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_setting);
             startActivity(intent);
@@ -143,13 +141,13 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     protected void onResume() {
         super.onResume();
         HamPayApplication.setAppSate(AppState.Resumed);
-        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)){
+        if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
             Intent intent = new Intent();
             intent.setClass(MainActivity.this, HamPayLoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             finish();
             startActivity(intent);
-        }else {
+        } else {
             editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
             editor.commit();
         }
@@ -164,7 +162,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         activity = MainActivity.this;
         context = this;
 
-        imageManager = new ImageManager(activity, 200000, false);
         LogEvent logEvent = new LogEvent(this);
         logEvent.log(appEvent);
 
@@ -180,9 +177,9 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         userProfile = (UserProfileDTO) intent.getSerializableExtra(Constants.USER_PROFILE);
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
-        editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE).edit();
+        editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
-        if (userProfile.getIbanDTO() == null || userProfile.getIbanDTO().getIban() == null || userProfile.getIbanDTO().getIban().length() == 0){
+        if (userProfile.getIbanDTO() == null || userProfile.getIbanDTO().getIban() == null || userProfile.getIbanDTO().getIban().length() == 0) {
             editor.remove(Constants.SETTING_CHANGE_IBAN_STATUS).apply();
         }
 
@@ -207,12 +204,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             if (syncPspResult.getType().equalsIgnoreCase("PURCHASE")) {
                 requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(syncPspResult.getSwTrace()), 1);
                 requestPSPResult.execute(pspResultRequest);
-            }else if (syncPspResult.getType().equalsIgnoreCase("PAYMENT")){
+            } else if (syncPspResult.getType().equalsIgnoreCase("PAYMENT")) {
                 requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(syncPspResult.getSwTrace()), 2);
                 requestPSPResult.execute(pspResultRequest);
             }
         }
-
 
 
         if (hasNotification) {
@@ -221,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
             Intent notificationIntent;
 
-            switch (notificationMessageType){
+            switch (notificationMessageType) {
                 case PAYMENT:
                     displayView(2);
                     break;
@@ -243,13 +239,13 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     startActivity(notificationIntent);
                     break;
             }
-        }else {
-            if (pendingPurchaseCode != null){
+        } else {
+            if (pendingPurchaseCode != null) {
                 if (!dbHelper.checkPurchaseRequest(pendingPurchaseCode)) {
                     intent.setClass(context, RequestBusinessPayDetailActivity.class);
                     startActivity(intent);
                 }
-            }else if (pendingPaymentCode != null){
+            } else if (pendingPaymentCode != null) {
                 if (!dbHelper.checkPaymentRequest(pendingPaymentCode)) {
                     intent.setClass(context, InvoicePendingConfirmationActivity.class);
                     startActivity(intent);
@@ -257,24 +253,24 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             }
         }
 
-        wtContainer = (RelativeLayout)findViewById(R.id.wt_container);
-        wtFirstLayout = (RelativeLayout)findViewById(R.id.wt_first_layout);
-        wtSecondLayout = (RelativeLayout)findViewById(R.id.wt_second_layout);
-        wtThirdLayout = (RelativeLayout)findViewById(R.id.wt_third_layout);
-        wtFourthLayout = (RelativeLayout)findViewById(R.id.wt_fourth_layout);
-        wtFifthLayout = (RelativeLayout)findViewById(R.id.wt_fifth_layout);
-        wtSixthLayout = (RelativeLayout)findViewById(R.id.wt_sixth_layout);
-        transactionNote = (FacedTextView)findViewById(R.id.transaction_note);
+        wtContainer = (RelativeLayout) findViewById(R.id.wt_container);
+        wtFirstLayout = (RelativeLayout) findViewById(R.id.wt_first_layout);
+        wtSecondLayout = (RelativeLayout) findViewById(R.id.wt_second_layout);
+        wtThirdLayout = (RelativeLayout) findViewById(R.id.wt_third_layout);
+        wtFourthLayout = (RelativeLayout) findViewById(R.id.wt_fourth_layout);
+        wtFifthLayout = (RelativeLayout) findViewById(R.id.wt_fifth_layout);
+        wtSixthLayout = (RelativeLayout) findViewById(R.id.wt_sixth_layout);
+        transactionNote = (FacedTextView) findViewById(R.id.transaction_note);
 
-        if (prefs.getBoolean(Constants.SHOW_WALK_THROUGH, true)){
+        if (prefs.getBoolean(Constants.SHOW_WALK_THROUGH, true)) {
             wtContainer.setVisibility(View.VISIBLE);
         }
 
-        user_manual = (ImageView)findViewById(R.id.user_manual);
-        fragment_title = (FacedTextView)findViewById(R.id.fragment_title);
-        image_profile = (ImageView)findViewById(R.id.image_profile);
+        user_manual = (ImageView) findViewById(R.id.user_manual);
+        fragment_title = (FacedTextView) findViewById(R.id.fragment_title);
+        image_profile = (ImageView) findViewById(R.id.image_profile);
 
-        user_image_layout = (LinearLayout)findViewById(R.id.user_image_layout);
+        user_image_layout = (LinearLayout) findViewById(R.id.user_image_layout);
         user_image_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -284,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 fragmentTransaction.commitAllowingStateLoss();
             }
         });
-        nav_icon = (ImageView)findViewById(R.id.nav_icon);
+        nav_icon = (ImageView) findViewById(R.id.nav_icon);
         nav_icon.setOnClickListener(this);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -296,8 +292,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         if (userProfile.getUserImageId() != null) {
             image_profile.setTag(userProfile.getUserImageId());
-            imageManager.displayImage(userProfile.getUserImageId(), image_profile, R.drawable.user_placeholder);
-        }else {
+            ImageHelper.getInstance(activity).imageLoader(userProfile.getUserImageId(), image_profile, R.drawable.user_placeholder);
+        } else {
             image_profile.setImageResource(R.drawable.user_placeholder);
         }
         displayView(currentFragment);
@@ -321,10 +317,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     @Override
     public void onDrawerItemSelected(View view, int position) {
-        if (wtContainer.getVisibility() == View.VISIBLE){
+        if (wtContainer.getVisibility() == View.VISIBLE) {
             wtContainer.setVisibility(View.GONE);
         }
-        if (currentFragment != position || position == 4|| position == 6 || position == 7 || position == 8 || position == 9) {
+        if (currentFragment != position || position == 4 || position == 6 || position == 7 || position == 8 || position == 9) {
             displayView(position);
         }
     }
@@ -429,12 +425,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.nav_icon:
                 if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
                     drawerLayout.closeDrawer(Gravity.RIGHT);
-                }
-                else {
+                } else {
                     drawerLayout.openDrawer(Gravity.RIGHT);
                 }
                 break;
@@ -442,12 +437,12 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     }
 
 
-    public void wt_click(View view){
-        switch (view.getId()){
+    public void wt_click(View view) {
+        switch (view.getId()) {
 
             case R.id.next_wt:
                 walkThroughStep = (walkThroughStep + 1) % 7;
-                switch (walkThroughStep){
+                switch (walkThroughStep) {
                     case 1:
                         wtFirstLayout.setVisibility(View.GONE);
                         wtSecondLayout.setVisibility(View.VISIBLE);
@@ -493,7 +488,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
             case R.id.pre_wt:
 
-                if (walkThroughStep > 0)    walkThroughStep--;
+                if (walkThroughStep > 0) walkThroughStep--;
 
                 switch (walkThroughStep) {
 
@@ -552,7 +547,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     @Override
     public void onBackPressed() {
 
-        if (wtContainer.getVisibility() == View.VISIBLE){
+        if (wtContainer.getVisibility() == View.VISIBLE) {
             wtContainer.setVisibility(View.GONE);
             return;
         }
@@ -560,7 +555,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
             drawerLayout.closeDrawer(Gravity.RIGHT);
-        }else if (currentFragment != 0){
+        } else if (currentFragment != 0) {
             fragment = new MainFragment();
             if (userProfile != null) {
                 currentFragment = 0;
@@ -572,17 +567,16 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 fragment.setArguments(bundle);
             }
             setFragment(fragment, getString(R.string.title_main_fragment));
-        }else if(false){
+        } else if (false) {
 
-        }
-        else{
+        } else {
             LogoutData logoutData = new LogoutData();
             logoutData.setIplanetDirectoryPro(prefs.getString(Constants.LOGIN_TOKEN_ID, ""));
             new HamPayDialog(activity).showLogoutDialog();
         }
     }
 
-    public void getRegId(){
+    public void getRegId() {
         new AsyncTask<Void, Void, String>() {
             @Override
             protected String doInBackground(Void... params) {
@@ -596,7 +590,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 } catch (IOException ex) {
                     msg = "Error :" + ex.getMessage();
 
-                }catch (NullPointerException ex){
+                } catch (NullPointerException ex) {
                     msg = "Error :" + ex.getMessage();
                 }
                 return registrationId;
@@ -618,7 +612,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     @Override
     public void onFinishEditDialog(ActionImage actionImage) {
-        switch (actionImage){
+        switch (actionImage) {
             case NOPE:
                 break;
 
@@ -643,126 +637,16 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             case REMOVE_FAIL:
                 new HamPayDialog(activity).removeImageFailDialog();
                 if (userProfile.getUserImageId() != null) {
-                    image_profile.setTag( userProfile.getUserImageId());
-                    imageManager.displayImage( userProfile.getUserImageId(), image_profile, R.drawable.user_placeholder);
-                }else {
+                    image_profile.setTag(userProfile.getUserImageId());
+                    ImageHelper.getInstance(activity).imageLoader(userProfile.getUserImageId(), image_profile, R.drawable.user_placeholder);
+                } else {
                     image_profile.setImageResource(R.drawable.user_placeholder);
                 }
                 break;
         }
     }
 
-    public class RequestMobileRegistrationIdEntryTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<MobileRegistrationIdEntryResponse>> {
-        @Override
-        public void onTaskComplete(ResponseMessage<MobileRegistrationIdEntryResponse> mobileRegistrationIdEntryResponseMessage)
-        {
-            ServiceEvent serviceName;
-            LogEvent logEvent = new LogEvent(context);
-
-            if (mobileRegistrationIdEntryResponseMessage != null) {
-                if (mobileRegistrationIdEntryResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    serviceName = ServiceEvent.APP_REGISTRATION_ID_ENTRY_SUCCESS;
-                    editor.putBoolean(Constants.SEND_MOBILE_REGISTER_ID, true);
-                    editor.commit();
-                }else if (mobileRegistrationIdEntryResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceEvent.APP_REGISTRATION_ID_ENTRY_FAILURE;
-                    forceLogout();
-                }
-                else {
-                    serviceName = ServiceEvent.APP_REGISTRATION_ID_ENTRY_FAILURE;
-                }
-                logEvent.log(serviceName);
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {   }
-    }
-
-
-    public class RequestPSPResultTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> {
-
-        private String SWTrace;
-
-        public RequestPSPResultTaskCompleteListener(String SWTrace){
-            this.SWTrace = SWTrace;
-        }
-
-        @Override
-        public void onTaskComplete(ResponseMessage<PSPResultResponse> pspResultResponseMessage) {
-
-            if (pspResultResponseMessage != null){
-
-                ResultStatus resultStatus = pspResultResponseMessage.getService().getResultStatus();
-
-                if (resultStatus == ResultStatus.SUCCESS || resultStatus == ResultStatus.PAYMENT_NOT_FOUND || resultStatus == ResultStatus.PURCHASE_NOT_FOUND || resultStatus == ResultStatus.INVALID_FUND_STATUS_EXCEPTION){
-                    if (SWTrace != null) {
-                        dbHelper.syncPspResult(SWTrace);
-                    }
-                }else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    forceLogout();
-                }
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {
-        }
-    }
-
-    public class RequestUserProfileTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<UserProfileResponse>>
-    {
-        ServiceEvent serviceName;
-        LogEvent logEvent = new LogEvent(context);
-
-        public RequestUserProfileTaskCompleteListener(){
-        }
-
-        @Override
-        public void onTaskComplete(ResponseMessage<UserProfileResponse> userProfileResponseMessage)
-        {
-            if (userProfileResponseMessage != null) {
-                if (userProfileResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-                    serviceName = ServiceEvent.USER_PROFILE_SUCCESS;
-                    userProfile = userProfileResponseMessage.getService().getUserProfile();
-                    currentFragment = 0;
-                    fragment = new MainFragment();
-                    if (userProfile != null) {
-                        bundle.putSerializable(Constants.USER_PROFILE, userProfile);
-                        bundle.putInt(Constants.PENDING_PAYMENT_COUNT, pendingPaymentCount);
-                        bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);
-                        fragment.setArguments(bundle);
-                        if (userProfile.getUserImageId() != null) {
-                            image_profile.setTag(userProfile.getUserImageId());
-                            imageManager = new ImageManager(activity, 200000, true);
-                            imageManager.displayImage(userProfile.getUserImageId(), image_profile, R.drawable.user_placeholder);
-                        }else {
-                            image_profile.setImageResource(R.drawable.user_placeholder);
-                        }
-                        if (fragment != null) {
-                            setFragment(fragment, getString(R.string.title_main_fragment));
-                        }
-                    }
-                }else if (userProfileResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceEvent.USER_PROFILE_FAILURE;
-                    forceLogout();
-                }
-                else{
-                    serviceName = ServiceEvent.USER_PROFILE_FAILURE;
-                }
-            }
-            else {
-                serviceName = ServiceEvent.USER_PROFILE_FAILURE;
-            }
-            logEvent.log(serviceName);
-        }
-
-        @Override
-        public void onTaskPreRun() {
-        }
-    }
-
-    private void setFragment(Fragment fragment, String title){
+    private void setFragment(Fragment fragment, String title) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -781,6 +665,109 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
         if (activity != null) {
             finish();
             startActivity(intent);
+        }
+    }
+
+    public class RequestMobileRegistrationIdEntryTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<MobileRegistrationIdEntryResponse>> {
+        @Override
+        public void onTaskComplete(ResponseMessage<MobileRegistrationIdEntryResponse> mobileRegistrationIdEntryResponseMessage) {
+            ServiceEvent serviceName;
+            LogEvent logEvent = new LogEvent(context);
+
+            if (mobileRegistrationIdEntryResponseMessage != null) {
+                if (mobileRegistrationIdEntryResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    serviceName = ServiceEvent.APP_REGISTRATION_ID_ENTRY_SUCCESS;
+                    editor.putBoolean(Constants.SEND_MOBILE_REGISTER_ID, true);
+                    editor.commit();
+                } else if (mobileRegistrationIdEntryResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceEvent.APP_REGISTRATION_ID_ENTRY_FAILURE;
+                    forceLogout();
+                } else {
+                    serviceName = ServiceEvent.APP_REGISTRATION_ID_ENTRY_FAILURE;
+                }
+                logEvent.log(serviceName);
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+        }
+    }
+
+    public class RequestPSPResultTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> {
+
+        private String SWTrace;
+
+        public RequestPSPResultTaskCompleteListener(String SWTrace) {
+            this.SWTrace = SWTrace;
+        }
+
+        @Override
+        public void onTaskComplete(ResponseMessage<PSPResultResponse> pspResultResponseMessage) {
+
+            if (pspResultResponseMessage != null) {
+
+                ResultStatus resultStatus = pspResultResponseMessage.getService().getResultStatus();
+
+                if (resultStatus == ResultStatus.SUCCESS || resultStatus == ResultStatus.PAYMENT_NOT_FOUND || resultStatus == ResultStatus.PURCHASE_NOT_FOUND || resultStatus == ResultStatus.INVALID_FUND_STATUS_EXCEPTION) {
+                    if (SWTrace != null) {
+                        dbHelper.syncPspResult(SWTrace);
+                    }
+                } else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
+                }
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+        }
+    }
+
+    public class RequestUserProfileTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<UserProfileResponse>> {
+        ServiceEvent serviceName;
+        LogEvent logEvent = new LogEvent(context);
+
+        public RequestUserProfileTaskCompleteListener() {
+        }
+
+        @Override
+        public void onTaskComplete(ResponseMessage<UserProfileResponse> userProfileResponseMessage) {
+            if (userProfileResponseMessage != null) {
+                if (userProfileResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    serviceName = ServiceEvent.USER_PROFILE_SUCCESS;
+                    userProfile = userProfileResponseMessage.getService().getUserProfile();
+                    currentFragment = 0;
+                    fragment = new MainFragment();
+                    if (userProfile != null) {
+                        bundle.putSerializable(Constants.USER_PROFILE, userProfile);
+                        bundle.putInt(Constants.PENDING_PAYMENT_COUNT, pendingPaymentCount);
+                        bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);
+                        fragment.setArguments(bundle);
+                        if (userProfile.getUserImageId() != null) {
+                            image_profile.setTag(userProfile.getUserImageId());
+                            ImageHelper.getInstance(activity).imageLoader(userProfile.getUserImageId(), image_profile, R.drawable.user_placeholder);
+                        } else {
+                            image_profile.setImageResource(R.drawable.user_placeholder);
+                        }
+                        if (fragment != null) {
+                            setFragment(fragment, getString(R.string.title_main_fragment));
+                        }
+                    }
+                } else if (userProfileResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceEvent.USER_PROFILE_FAILURE;
+                    forceLogout();
+                } else {
+                    serviceName = ServiceEvent.USER_PROFILE_FAILURE;
+                }
+            } else {
+                serviceName = ServiceEvent.USER_PROFILE_FAILURE;
+            }
+            logEvent.log(serviceName);
+        }
+
+        @Override
+        public void onTaskPreRun() {
         }
     }
 

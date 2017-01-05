@@ -13,7 +13,7 @@ import java.util.List;
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
-import xyz.homapay.hampay.mobile.android.util.ImageManager;
+import xyz.homapay.hampay.mobile.android.img.ImageHelper;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 /**
@@ -21,20 +21,18 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
  */
 public class HamPayContactsAdapter extends BaseAdapter {
 
-    private Activity activity;
     List<ContactDTO> contacts;
+    private Activity activity;
     private PersianEnglishDigit persianEnglishDigit;
     private String authToken;
-    private ImageManager imageManager;
+    private ViewHolder viewHolder;
 
-    public HamPayContactsAdapter(Activity activity, List<ContactDTO> contacts, String authToken)
-    {
+    public HamPayContactsAdapter(Activity activity, List<ContactDTO> contacts, String authToken) {
         // TODO Auto-generated method stub
         this.activity = activity;
         this.contacts = contacts;
         persianEnglishDigit = new PersianEnglishDigit();
         this.authToken = authToken;
-        imageManager = new ImageManager(activity, 200000, false);
     }
 
     public int getCount() {
@@ -52,10 +50,6 @@ public class HamPayContactsAdapter extends BaseAdapter {
         return position;
     }
 
-    private ViewHolder viewHolder;
-
-
-
     public View getView(final int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
 
@@ -66,24 +60,22 @@ public class HamPayContactsAdapter extends BaseAdapter {
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = inflater.inflate(R.layout.hampay_contact_item, null);
-            viewHolder.user_image = (ImageView)convertView.findViewById(R.id.user_image);
-            viewHolder.contact_name = (FacedTextView)convertView.findViewById(R.id.contact_name);
-            viewHolder.cell_number = (FacedTextView)convertView.findViewById(R.id.cell_number);
+            viewHolder.user_image = (ImageView) convertView.findViewById(R.id.user_image);
+            viewHolder.contact_name = (FacedTextView) convertView.findViewById(R.id.contact_name);
+            viewHolder.cell_number = (FacedTextView) convertView.findViewById(R.id.cell_number);
             convertView.setTag(viewHolder);
-        }
-        else{
-            viewHolder = (ViewHolder)convertView.getTag();
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
 
         ContactDTO contact = contacts.get(position);
 
 
-
         if (contact.getContactImageId() != null) {
             viewHolder.user_image.setTag(contact.getContactImageId());
-            imageManager.displayImage(contact.getContactImageId(), viewHolder.user_image, R.drawable.user_placeholder);
-        }else {
+            ImageHelper.getInstance(activity).imageLoader(contact.getContactImageId(), viewHolder.user_image, R.drawable.user_placeholder);
+        } else {
             viewHolder.user_image.setImageResource(R.drawable.user_placeholder);
         }
 
@@ -96,11 +88,13 @@ public class HamPayContactsAdapter extends BaseAdapter {
     }
 
 
-    private class ViewHolder{
-        ViewHolder(){ }
+    private class ViewHolder {
         FacedTextView contact_name;
         FacedTextView cell_number;
         ImageView user_image;
+
+        ViewHolder() {
+        }
     }
 
 

@@ -9,6 +9,7 @@ buildscript {
 }
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
+apply plugin: 'me.tatarka.retrolambda'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
@@ -18,6 +19,14 @@ repositories {
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
+
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            output.outputFile = new File(
+                    output.outputFile.parent,
+                    output.outputFile.name.replace("release.apk", "${variant.versionName}-${variant.versionCode}.apk"))
+        }
+    }
 
     defaultConfig {
         applicationId "xyz.homapay.hampay.mobile.android"
@@ -36,6 +45,11 @@ android {
 
     lintOptions {
         abortOnError false
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -60,5 +74,8 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
         transitive = true;
     }
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.1.0'
+    compile 'com.squareup.okhttp3:okhttp:3.5.0'
 }
 apply plugin: 'com.google.gms.google-services'

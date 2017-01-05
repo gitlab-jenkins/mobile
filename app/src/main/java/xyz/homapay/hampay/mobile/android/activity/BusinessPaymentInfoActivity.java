@@ -34,10 +34,10 @@ import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
+import xyz.homapay.hampay.mobile.android.img.ImageHelper;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
-import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class BusinessPaymentInfoActivity extends AppCompatActivity {
@@ -61,14 +61,11 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
 
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
-
-    private RequestBusinessPaymentConfirm requestBusinessPaymentConfirm;
-    private BusinessPaymentConfirmRequest businessPaymentConfirmRequest;
-
     Long MaxXferAmount = 0L;
     Long MinXferAmount = 0L;
-
     HamPayDialog hamPayDialog;
+    private RequestBusinessPaymentConfirm requestBusinessPaymentConfirm;
+    private BusinessPaymentConfirmRequest businessPaymentConfirmRequest;
     private BusinessDTO businessDTO;
 
     private LinearLayout add_vat;
@@ -78,10 +75,9 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
     private CurrencyFormatter formatter;
     private FacedTextView vat_value;
 
-    private ImageManager imageManager;
     private String authToken;
 
-    public void backActionBar(View view){
+    public void backActionBar(View view) {
         finish();
     }
 
@@ -138,37 +134,36 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
-        imageManager = new ImageManager(activity, 200000, false);
 
         try {
             MaxXferAmount = prefs.getLong(Constants.MAX_BUSINESS_XFER_AMOUNT, 0);
             MinXferAmount = prefs.getLong(Constants.MIN_BUSINESS_XFER_AMOUNT, 0);
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             Log.e("Error", ex.getStackTrace().toString());
         }
 
         Intent intent = getIntent();
-        businessDTO = (BusinessDTO)intent.getSerializableExtra(Constants.BUSINESS_INFO);
+        businessDTO = (BusinessDTO) intent.getSerializableExtra(Constants.BUSINESS_INFO);
 
-        business_name = (FacedTextView)findViewById(R.id.business_name);
+        business_name = (FacedTextView) findViewById(R.id.business_name);
         business_name.setText(persianEnglishDigit.E2P(businessDTO.getTitle()));
-        business_image = (ImageView)findViewById(R.id.business_image);
+        business_image = (ImageView) findViewById(R.id.business_image);
 
-        business_hampay_id = (FacedTextView)findViewById(R.id.business_hampay_id);
+        business_hampay_id = (FacedTextView) findViewById(R.id.business_hampay_id);
         business_hampay_id.setText(getString(R.string.business_id) + persianEnglishDigit.E2P(businessDTO.getCode()));
 
         if (businessDTO.getBusinessImageId() != null) {
             editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
             editor.commit();
             business_image.setTag(businessDTO.getBusinessImageId());
-            imageManager.displayImage(businessDTO.getBusinessImageId(), business_image, R.drawable.user_placeholder);
-        }else {
+            ImageHelper.getInstance(activity).imageLoader(businessDTO.getBusinessImageId(), business_image, R.drawable.user_placeholder);
+        } else {
             business_image.setImageResource(R.drawable.user_placeholder);
         }
 
 
-        amount_value = (FacedEditText)findViewById(R.id.amount_value);
+        amount_value = (FacedEditText) findViewById(R.id.amount_value);
         amount_value.addTextChangedListener(new CurrencyFormatterTextWatcher(amount_value));
         amount_value.addTextChangedListener(new TextWatcher() {
             @Override
@@ -192,22 +187,17 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
         amount_value.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus){
-                    if (amount_value.getText().toString().length() == 0){
-                        creditValueValidation = false;
-                    }
-                    else {
-                        creditValueValidation = true;
-                    }
-                }else {
+                if (!hasFocus) {
+                    creditValueValidation = amount_value.getText().toString().length() != 0;
+                } else {
                 }
 
             }
         });
 
-        vat_value = (FacedTextView)findViewById(R.id.vat_value);
-        vat_icon = (ImageView)findViewById(R.id.vat_icon);
-        amount_total = (FacedTextView)findViewById(R.id.amount_total);
+        vat_value = (FacedTextView) findViewById(R.id.vat_value);
+        vat_icon = (ImageView) findViewById(R.id.vat_icon);
+        amount_total = (FacedTextView) findViewById(R.id.amount_total);
         add_vat = (LinearLayout) findViewById(R.id.add_vat);
         add_vat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -215,17 +205,17 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
                 if (amount_value.getText().toString().length() > 0) {
-                    if (amount_value.getText().toString().indexOf("٬") != -1){
+                    if (amount_value.getText().toString().indexOf("٬") != -1) {
                         amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace("٬", "")));
-                    }else if (amount_value.getText().toString().indexOf(",") != -1){
+                    } else if (amount_value.getText().toString().indexOf(",") != -1) {
                         amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace(",", "")));
                     }
-                    if (calculatedVat == 0){
+                    if (calculatedVat == 0) {
                         CalculateVatRequest calculateVatRequest = new CalculateVatRequest();
                         calculateVatRequest.setAmount(amountValue);
                         RequestCalculateVat requestCalculateVat = new RequestCalculateVat(activity, new RequestCalculateVatTaskCompleteListener());
                         requestCalculateVat.execute(calculateVatRequest);
-                    }else {
+                    } else {
                         vat_icon.setImageResource(R.drawable.add_vat);
                         vat_value.setText("۰");
                         calculatedVat = 0L;
@@ -235,13 +225,13 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
             }
         });
 
-        payment_button = (ImageView)findViewById(R.id.payment_button);
+        payment_button = (ImageView) findViewById(R.id.payment_button);
         payment_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 amount_value.clearFocus();
 
-                if (amount_value.getText().toString().length() == 0){
+                if (amount_value.getText().toString().length() == 0) {
                     payment_button.setEnabled(false);
                     Toast.makeText(activity, getString(R.string.msg_null_amount), Toast.LENGTH_SHORT).show();
                     payment_button.setEnabled(true);
@@ -250,9 +240,9 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
                 if (creditValueValidation) {
                     editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                     editor.commit();
-                    if (amount_value.getText().toString().indexOf("٬") != -1){
+                    if (amount_value.getText().toString().indexOf("٬") != -1) {
                         amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace("٬", "")));
-                    }else if (amount_value.getText().toString().indexOf(",") != -1){
+                    } else if (amount_value.getText().toString().indexOf(",") != -1) {
                         amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace(",", "")));
                     }
                     if (amountValue + calculatedVat >= MinXferAmount && amountValue + calculatedVat <= MaxXferAmount) {
@@ -263,7 +253,7 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
                         businessPaymentConfirmRequest.setBusinessCode(businessDTO.getCode());
                         requestBusinessPaymentConfirm = new RequestBusinessPaymentConfirm(context, new RequestBusinessPaymentConfirmTaskCompleteListener());
                         requestBusinessPaymentConfirm.execute(businessPaymentConfirmRequest);
-                    }else {
+                    } else {
                         new HamPayDialog(activity).showIncorrectAmountDialog(MinXferAmount, MaxXferAmount);
 
                     }
@@ -278,6 +268,17 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
         super.onUserLeaveHint();
     }
 
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(context, HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        if (activity != null) {
+            finish();
+            startActivity(intent);
+        }
+    }
 
     public class RequestBusinessPaymentConfirmTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<BusinessPaymentConfirmResponse>> {
 
@@ -288,8 +289,8 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
             ServiceEvent serviceName;
             LogEvent logEvent = new LogEvent(context);
 
-            if (businessPaymentConfirmResponseMessage != null){
-                if (businessPaymentConfirmResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
+            if (businessPaymentConfirmResponseMessage != null) {
+                if (businessPaymentConfirmResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     serviceName = ServiceEvent.BUSINESS_PAYMENT_CONFIRM_SUCCESS;
                     PaymentInfoDTO paymentInfo = businessPaymentConfirmResponseMessage.getService().getPaymentInfo();
                     PspInfoDTO pspInfo = businessPaymentConfirmResponseMessage.getService().getPaymentInfo().getPspInfo();
@@ -300,16 +301,15 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
                     intent.setClass(activity, BusinessPaymentConfirmActivity.class);
                     startActivity(intent);
                     finish();
-                }else if (businessPaymentConfirmResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                } else if (businessPaymentConfirmResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     serviceName = ServiceEvent.BUSINESS_PAYMENT_CONFIRM_FAILURE;
                     forceLogout();
-                }
-                else {
+                } else {
                     serviceName = ServiceEvent.BUSINESS_PAYMENT_CONFIRM_FAILURE;
                     new HamPayDialog(activity).showFailPaymentDialog(businessPaymentConfirmResponseMessage.getService().getResultStatus().getCode(),
                             businessPaymentConfirmResponseMessage.getService().getResultStatus().getDescription());
                 }
-            }else {
+            } else {
                 serviceName = ServiceEvent.BUSINESS_PAYMENT_CONFIRM_FAILURE;
                 new HamPayDialog(activity).showFailPaymentDialog(Constants.LOCAL_ERROR_CODE,
                         activity.getString(R.string.msg_fail_payment));
@@ -320,11 +320,13 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onTaskPreRun() { }
+        public void onTaskPreRun() {
+        }
     }
 
     public class RequestCalculateVatTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<CalculateVatResponse>> {
-        public RequestCalculateVatTaskCompleteListener() {}
+        public RequestCalculateVatTaskCompleteListener() {
+        }
 
         @Override
         public void onTaskComplete(ResponseMessage<CalculateVatResponse> calculateVatResponseMessage) {
@@ -341,10 +343,10 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
                     calculatedVat = calculateVatResponseMessage.getService().getAmount();
                     amount_total.setText(persianEnglishDigit.E2P(formatter.format(calculatedVat + amountValue)));
                     vat_icon.setImageResource(R.drawable.remove_vat);
-                }else if (calculateVatResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                } else if (calculateVatResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     serviceName = ServiceEvent.CALCULATE_VAT_FAILURE;
                     forceLogout();
-                }else {
+                } else {
                     serviceName = ServiceEvent.CALCULATE_VAT_FAILURE;
                 }
                 logEvent.log(serviceName);
@@ -354,18 +356,6 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
         @Override
         public void onTaskPreRun() {
             hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
-    }
-
-    private void forceLogout() {
-        editor.remove(Constants.LOGIN_TOKEN_ID);
-        editor.commit();
-        Intent intent = new Intent();
-        intent.setClass(context, HamPayLoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        if (activity != null) {
-            finish();
-            startActivity(intent);
         }
     }
 

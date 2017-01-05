@@ -21,31 +21,30 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.img.ImageHelper;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.DateUtil;
-import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 
 /**
  * Created by amir on 6/10/15.
  */
-public class PendingPaymentAdapter extends BaseAdapter  {
+public class PendingPaymentAdapter extends BaseAdapter {
 
-    private Context context;
     List<PaymentInfoDTO> paymentInfoDTOs;
     HamPayDialog hamPayDialog;
     Activity activity;
+    NumberFormat timeFormat;
+    private Context context;
     private String authToken;
     private Date currentDate;
     private PersianEnglishDigit persianEnglishDigit;
-    NumberFormat timeFormat;
     private CurrencyFormatter currencyFormatter;
     private DateUtil dateUtil;
-    private ImageManager imageManager;
+    private ViewHolder viewHolder;
 
-    public PendingPaymentAdapter(Context context, List<PaymentInfoDTO> paymentInfoDTOs, String authToken)
-    {
+    public PendingPaymentAdapter(Context context, List<PaymentInfoDTO> paymentInfoDTOs, String authToken) {
         currentDate = new Date();
         this.context = context;
         this.paymentInfoDTOs = paymentInfoDTOs;
@@ -56,7 +55,6 @@ public class PendingPaymentAdapter extends BaseAdapter  {
         timeFormat = new DecimalFormat("00");
         currencyFormatter = new CurrencyFormatter();
         dateUtil = new DateUtil();
-        imageManager = new ImageManager(activity, 200000, false);
     }
 
     public int getCount() {
@@ -71,9 +69,6 @@ public class PendingPaymentAdapter extends BaseAdapter  {
         return position;
     }
 
-    private ViewHolder viewHolder;
-
-
     public View getView(final int position, View convertView, ViewGroup parent) {
 
         LayoutInflater inflater = (LayoutInflater) context
@@ -84,16 +79,15 @@ public class PendingPaymentAdapter extends BaseAdapter  {
             viewHolder = new ViewHolder();
             convertView = inflater.inflate(R.layout.pending_payment_row, null);
 
-            viewHolder.callerName = (FacedTextView)convertView.findViewById(R.id.callerName);
-            viewHolder.user_image = (ImageView)convertView.findViewById(R.id.user_image);
-            viewHolder.price_pay = (FacedTextView)convertView.findViewById(R.id.price_pay);
-            viewHolder.expire_pay = (FacedTextView)convertView.findViewById(R.id.expire_pay);
-            viewHolder.paymentCode = (FacedTextView)convertView.findViewById(R.id.paymentCode);
+            viewHolder.callerName = (FacedTextView) convertView.findViewById(R.id.callerName);
+            viewHolder.user_image = (ImageView) convertView.findViewById(R.id.user_image);
+            viewHolder.price_pay = (FacedTextView) convertView.findViewById(R.id.price_pay);
+            viewHolder.expire_pay = (FacedTextView) convertView.findViewById(R.id.expire_pay);
+            viewHolder.paymentCode = (FacedTextView) convertView.findViewById(R.id.paymentCode);
 
             convertView.setTag(viewHolder);
-        }
-        else{
-            viewHolder = (ViewHolder)convertView.getTag();
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
         final PaymentInfoDTO paymentInfoDTO = paymentInfoDTOs.get(position);
@@ -106,8 +100,8 @@ public class PendingPaymentAdapter extends BaseAdapter  {
         if (paymentInfoDTO.getImageId() != null) {
 //            String userImageUrl = Constants.HTTPS_SERVER_IP + Constants.IMAGE_PREFIX + authToken + "/" + paymentInfoDTO.getImageId();
             viewHolder.user_image.setTag(paymentInfoDTO.getImageId());
-            imageManager.displayImage(paymentInfoDTO.getImageId(), viewHolder.user_image, R.drawable.user_placeholder);
-        }else {
+            ImageHelper.getInstance(activity).imageLoader(paymentInfoDTO.getImageId(), viewHolder.user_image, R.drawable.user_placeholder);
+        } else {
             viewHolder.user_image.setImageResource(R.drawable.user_placeholder);
         }
         return convertView;
@@ -121,15 +115,16 @@ public class PendingPaymentAdapter extends BaseAdapter  {
     }
 
 
-    private class ViewHolder{
-
-        ViewHolder(){ }
+    private class ViewHolder {
 
         FacedTextView callerName;
         ImageView user_image;
         FacedTextView price_pay;
         FacedTextView expire_pay;
         FacedTextView paymentCode;
+
+        ViewHolder() {
+        }
     }
 
     public class RequestCancelPaymentTaskCompleteListener implements
@@ -137,7 +132,7 @@ public class PendingPaymentAdapter extends BaseAdapter  {
 
         int position;
 
-        RequestCancelPaymentTaskCompleteListener(int position){
+        RequestCancelPaymentTaskCompleteListener(int position) {
             this.position = position;
         }
 

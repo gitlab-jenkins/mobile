@@ -17,9 +17,9 @@ import java.util.List;
 import xyz.homapay.hampay.common.core.model.response.dto.FundDTO;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.img.ImageHelper;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.DateUtil;
-import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 /**
@@ -27,18 +27,17 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
  */
 public class PendingFundListAdapter extends BaseAdapter {
 
-    private Activity activity;
     List<FundDTO> fundList;
+    NumberFormat timeFormat;
+    private Activity activity;
     private PersianEnglishDigit persianEnglishDigit;
     private CurrencyFormatter formatter;
     private String authToken;
     private Date currentDate;
     private DateUtil dateUtil;
-    NumberFormat timeFormat;
-    private ImageManager imageManager;
+    private ViewHolder viewHolder;
 
-    public PendingFundListAdapter(Activity activity, List<FundDTO> fundList, String authToken)
-    {
+    public PendingFundListAdapter(Activity activity, List<FundDTO> fundList, String authToken) {
         currentDate = new Date();
         this.activity = activity;
         this.fundList = fundList;
@@ -47,7 +46,6 @@ public class PendingFundListAdapter extends BaseAdapter {
         dateUtil = new DateUtil();
         timeFormat = new DecimalFormat("00");
         this.authToken = authToken;
-        imageManager = new ImageManager(activity, 200000, false);
     }
 
     public int getCount() {
@@ -65,10 +63,6 @@ public class PendingFundListAdapter extends BaseAdapter {
         return position;
     }
 
-    private ViewHolder viewHolder;
-
-
-
     public View getView(final int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
 
@@ -80,20 +74,19 @@ public class PendingFundListAdapter extends BaseAdapter {
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = inflater.inflate(R.layout.pending_fund_list_item, null);
-            viewHolder.user_image = (ImageView)convertView.findViewById(R.id.user_image);
-            viewHolder.contact_name = (FacedTextView)convertView.findViewById(R.id.contact_name);
-            viewHolder.code_digit_1 = (FacedTextView)convertView.findViewById(R.id.code_digit_1);
-            viewHolder.code_digit_2 = (FacedTextView)convertView.findViewById(R.id.code_digit_2);
-            viewHolder.code_digit_3 = (FacedTextView)convertView.findViewById(R.id.code_digit_3);
-            viewHolder.code_digit_4 = (FacedTextView)convertView.findViewById(R.id.code_digit_4);
-            viewHolder.code_digit_5 = (FacedTextView)convertView.findViewById(R.id.code_digit_5);
-            viewHolder.code_digit_6 = (FacedTextView)convertView.findViewById(R.id.code_digit_6);
-            viewHolder.remaining_time = (FacedTextView)convertView.findViewById(R.id.remaining_time);
-            viewHolder.amount_value = (FacedTextView)convertView.findViewById(R.id.amount_value);
+            viewHolder.user_image = (ImageView) convertView.findViewById(R.id.user_image);
+            viewHolder.contact_name = (FacedTextView) convertView.findViewById(R.id.contact_name);
+            viewHolder.code_digit_1 = (FacedTextView) convertView.findViewById(R.id.code_digit_1);
+            viewHolder.code_digit_2 = (FacedTextView) convertView.findViewById(R.id.code_digit_2);
+            viewHolder.code_digit_3 = (FacedTextView) convertView.findViewById(R.id.code_digit_3);
+            viewHolder.code_digit_4 = (FacedTextView) convertView.findViewById(R.id.code_digit_4);
+            viewHolder.code_digit_5 = (FacedTextView) convertView.findViewById(R.id.code_digit_5);
+            viewHolder.code_digit_6 = (FacedTextView) convertView.findViewById(R.id.code_digit_6);
+            viewHolder.remaining_time = (FacedTextView) convertView.findViewById(R.id.remaining_time);
+            viewHolder.amount_value = (FacedTextView) convertView.findViewById(R.id.amount_value);
             convertView.setTag(viewHolder);
-        }
-        else{
-            viewHolder = (ViewHolder)convertView.getTag();
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
 
@@ -101,8 +94,8 @@ public class PendingFundListAdapter extends BaseAdapter {
 
         if (fund.getImageId() != null) {
             viewHolder.user_image.setTag(fund.getImageId());
-            imageManager.displayImage(fund.getImageId(), viewHolder.user_image, R.drawable.user_placeholder);
-        }else {
+            ImageHelper.getInstance(activity).imageLoader(fund.getImageId(), viewHolder.user_image, R.drawable.user_placeholder);
+        } else {
             viewHolder.user_image.setImageResource(R.drawable.user_placeholder);
         }
 
@@ -116,11 +109,11 @@ public class PendingFundListAdapter extends BaseAdapter {
                 viewHolder.code_digit_5.setText(String.valueOf(fund.getCode().charAt(4)));
                 viewHolder.code_digit_6.setText(String.valueOf(fund.getCode().charAt(5)));
             }
-        }else if (fund.getPaymentType() == FundDTO.PaymentType.PAYMENT){
+        } else if (fund.getPaymentType() == FundDTO.PaymentType.PAYMENT) {
             viewHolder.code_digit_6.setText(fund.getProductCode());
         }
 
-        if (fund.getExpirationDate().getTime() < currentDate.getTime()){
+        if (fund.getExpirationDate().getTime() < currentDate.getTime()) {
             Log.e("Expired", "Expired");
             fundList.remove(position);
         }
@@ -139,8 +132,7 @@ public class PendingFundListAdapter extends BaseAdapter {
     }
 
 
-    private class ViewHolder{
-        ViewHolder(){ }
+    private class ViewHolder {
         FacedTextView contact_name;
         FacedTextView code_digit_1;
         FacedTextView code_digit_2;
@@ -151,6 +143,9 @@ public class PendingFundListAdapter extends BaseAdapter {
         FacedTextView remaining_time;
         ImageView user_image;
         FacedTextView amount_value;
+
+        ViewHolder() {
+        }
     }
 
 

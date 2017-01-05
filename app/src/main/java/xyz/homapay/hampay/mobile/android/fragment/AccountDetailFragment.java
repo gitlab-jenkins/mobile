@@ -25,9 +25,9 @@ import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
+import xyz.homapay.hampay.mobile.android.img.ImageHelper;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.HamPayUtils;
-import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 /**
@@ -54,14 +54,12 @@ public class AccountDetailFragment extends Fragment {
     private RequestUserProfile requestUserProfile;
     private UserProfileRequest userProfileRequest;
     private Context context;
-    private ImageManager imageManager;
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constants.IBAN_CHANGE_RESULT_CODE) {
-            if(resultCode == getActivity().RESULT_OK){
+            if (resultCode == getActivity().RESULT_OK) {
                 iban_ll.setVisibility(View.VISIBLE);
                 user_iban_value.setText("IR" + persianEnglishDigit.E2P(new HamPayUtils().splitStringEvery(data.getStringExtra(Constants.RETURN_IBAN_CONFIRMED), 4)));
             }
@@ -79,10 +77,9 @@ public class AccountDetailFragment extends Fragment {
         prefs = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE);
         editor = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE).edit();
 
-        imageManager = new ImageManager(getActivity(), 200000, false);
         bundle = getArguments();
 
-        if (bundle != null){
+        if (bundle != null) {
             this.userProfileDTO = (UserProfileDTO) bundle.getSerializable(Constants.USER_PROFILE);
         }
 
@@ -92,8 +89,7 @@ public class AccountDetailFragment extends Fragment {
             editor.putLong(Constants.MAX_INDIVIDUAL_XFER_AMOUNT, this.userProfileDTO.getMaxIndividualXferAmount());
             editor.putLong(Constants.MIN_INDIVIDUAL_XFER_AMOUNT, this.userProfileDTO.getMinIndividualXferAmount());
             editor.commit();
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             Log.e("Error", ex.getStackTrace().toString());
         }
 
@@ -104,18 +100,18 @@ public class AccountDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_account_detail, container, false);
 
-        hide_bg = (View)rootView.findViewById(R.id.hide_bg);
+        hide_bg = rootView.findViewById(R.id.hide_bg);
 
         hamPayDialog = new HamPayDialog(getActivity());
 
-        image_profile = (ImageView)rootView.findViewById(R.id.image_profile);
-        user_name_text = (FacedTextView)rootView.findViewById(R.id.user_name_text);
-        iban_ll = (LinearLayout)rootView.findViewById(R.id.iban_ll);
-        user_cell_number = (FacedTextView)rootView.findViewById(R.id.user_cell_number);
-        user_iban_value = (FacedTextView)rootView.findViewById(R.id.user_iban_value);
-        user_iban_bank = (FacedTextView)rootView.findViewById(R.id.user_iban_bank);
-        user_national_code = (FacedTextView)rootView.findViewById(R.id.user_national_code);
-        emailLayout = (LinearLayout)rootView.findViewById(R.id.email_layout);
+        image_profile = (ImageView) rootView.findViewById(R.id.image_profile);
+        user_name_text = (FacedTextView) rootView.findViewById(R.id.user_name_text);
+        iban_ll = (LinearLayout) rootView.findViewById(R.id.iban_ll);
+        user_cell_number = (FacedTextView) rootView.findViewById(R.id.user_cell_number);
+        user_iban_value = (FacedTextView) rootView.findViewById(R.id.user_iban_value);
+        user_iban_bank = (FacedTextView) rootView.findViewById(R.id.user_iban_bank);
+        user_national_code = (FacedTextView) rootView.findViewById(R.id.user_national_code);
+        emailLayout = (LinearLayout) rootView.findViewById(R.id.email_layout);
         user_email = (FacedTextView) rootView.findViewById(R.id.user_email);
 
         userProfileRequest = new UserProfileRequest();
@@ -148,71 +144,18 @@ public class AccountDetailFragment extends Fragment {
         super.onDetach();
     }
 
-
-    public class RequestUserProfileTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<UserProfileResponse>>
-    {
-        ServiceEvent serviceName;
-        LogEvent logEvent = new LogEvent(context);
-
-        public RequestUserProfileTaskCompleteListener(){
-        }
-
-        @Override
-        public void onTaskComplete(ResponseMessage<UserProfileResponse> userProfileResponseMessage)
-        {
-            hamPayDialog.dismisWaitingDialog();
-            if (userProfileResponseMessage != null) {
-
-
-                if (userProfileResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-                    serviceName = ServiceEvent.USER_PROFILE_SUCCESS;
-                    userProfileDTO = userProfileResponseMessage.getService().getUserProfile();
-                    fillUserProfile(userProfileDTO);
-                    hide_bg.setVisibility(View.GONE);
-                } else if (userProfileResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceEvent.USER_PROFILE_FAILURE;
-                    forceLogout();
-                }
-                else{
-                    serviceName = ServiceEvent.USER_PROFILE_FAILURE;
-                    requestUserProfile = new RequestUserProfile(getActivity(), new RequestUserProfileTaskCompleteListener());
-                    new HamPayDialog(getActivity()).showFailUserProfileDialog(requestUserProfile, userProfileRequest,
-                            userProfileResponseMessage.getService().getResultStatus().getCode(),
-                            userProfileResponseMessage.getService().getResultStatus().getDescription());
-                    hide_bg.setVisibility(View.VISIBLE);
-                }
-            }
-            else {
-                serviceName = ServiceEvent.USER_PROFILE_FAILURE;
-                requestUserProfile = new RequestUserProfile(getActivity(), new RequestUserProfileTaskCompleteListener());
-                new HamPayDialog(getActivity()).showFailUserProfileDialog(requestUserProfile, userProfileRequest,
-                        Constants.LOCAL_ERROR_CODE,
-                        getString(R.string.msg_fail_user_profile));
-
-                hide_bg.setVisibility(View.VISIBLE);
-            }
-            logEvent.log(serviceName);
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-            hide_bg.setVisibility(View.VISIBLE);
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();
         if (prefs.getString(Constants.REGISTERED_USER_EMAIL, "").length() != 0) {
             user_email.setText(prefs.getString(Constants.REGISTERED_USER_EMAIL, ""));
             emailLayout.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             emailLayout.setVisibility(View.GONE);
         }
     }
 
-    private void fillUserProfile(UserProfileDTO userProfileDTO){
+    private void fillUserProfile(UserProfileDTO userProfileDTO) {
 
         editor.putLong(Constants.MAX_BUSINESS_XFER_AMOUNT, this.userProfileDTO.getMaxBusinessXferAmount());
         editor.putLong(Constants.MIN_BUSINESS_XFER_AMOUNT, this.userProfileDTO.getMinBusinessXferAmount());
@@ -224,8 +167,8 @@ public class AccountDetailFragment extends Fragment {
 
         if (userProfileDTO.getUserImageId() != null) {
             image_profile.setTag(userProfileDTO.getUserImageId());
-            imageManager.displayImage(userProfileDTO.getUserImageId(), image_profile, R.drawable.user_placeholder);
-        }else {
+            ImageHelper.getInstance(context).imageLoader(userProfileDTO.getUserImageId(), image_profile, R.drawable.user_placeholder);
+        } else {
             image_profile.setImageResource(R.drawable.user_placeholder);
         }
 
@@ -249,6 +192,54 @@ public class AccountDetailFragment extends Fragment {
         if (getActivity() != null) {
             getActivity().finish();
             getActivity().startActivity(intent);
+        }
+    }
+
+    public class RequestUserProfileTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<UserProfileResponse>> {
+        ServiceEvent serviceName;
+        LogEvent logEvent = new LogEvent(context);
+
+        public RequestUserProfileTaskCompleteListener() {
+        }
+
+        @Override
+        public void onTaskComplete(ResponseMessage<UserProfileResponse> userProfileResponseMessage) {
+            hamPayDialog.dismisWaitingDialog();
+            if (userProfileResponseMessage != null) {
+
+
+                if (userProfileResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    serviceName = ServiceEvent.USER_PROFILE_SUCCESS;
+                    userProfileDTO = userProfileResponseMessage.getService().getUserProfile();
+                    fillUserProfile(userProfileDTO);
+                    hide_bg.setVisibility(View.GONE);
+                } else if (userProfileResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceEvent.USER_PROFILE_FAILURE;
+                    forceLogout();
+                } else {
+                    serviceName = ServiceEvent.USER_PROFILE_FAILURE;
+                    requestUserProfile = new RequestUserProfile(getActivity(), new RequestUserProfileTaskCompleteListener());
+                    new HamPayDialog(getActivity()).showFailUserProfileDialog(requestUserProfile, userProfileRequest,
+                            userProfileResponseMessage.getService().getResultStatus().getCode(),
+                            userProfileResponseMessage.getService().getResultStatus().getDescription());
+                    hide_bg.setVisibility(View.VISIBLE);
+                }
+            } else {
+                serviceName = ServiceEvent.USER_PROFILE_FAILURE;
+                requestUserProfile = new RequestUserProfile(getActivity(), new RequestUserProfileTaskCompleteListener());
+                new HamPayDialog(getActivity()).showFailUserProfileDialog(requestUserProfile, userProfileRequest,
+                        Constants.LOCAL_ERROR_CODE,
+                        getString(R.string.msg_fail_user_profile));
+
+                hide_bg.setVisibility(View.VISIBLE);
+            }
+            logEvent.log(serviceName);
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+            hide_bg.setVisibility(View.VISIBLE);
         }
     }
 }

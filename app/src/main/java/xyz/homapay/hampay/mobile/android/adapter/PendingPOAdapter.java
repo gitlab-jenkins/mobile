@@ -13,8 +13,8 @@ import java.util.List;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.img.ImageHelper;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
-import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
@@ -23,23 +23,20 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
  */
 public class PendingPOAdapter extends BaseAdapter {
 
-    private Activity activity;
     List<PaymentInfoDTO> paymentInfoList;
+    private Activity activity;
     private PersianEnglishDigit persianEnglishDigit;
     private String authToken;
     private CurrencyFormatter formatter;
-    private ImageManager imageManager;
+    private ViewHolder viewHolder;
 
-
-    public PendingPOAdapter(Activity activity, List<PaymentInfoDTO> paymentInfoList, String authToken)
-    {
+    public PendingPOAdapter(Activity activity, List<PaymentInfoDTO> paymentInfoList, String authToken) {
         // TODO Auto-generated method stub
         this.activity = activity;
         this.paymentInfoList = paymentInfoList;
         persianEnglishDigit = new PersianEnglishDigit();
         this.authToken = authToken;
         formatter = new CurrencyFormatter();
-        imageManager = new ImageManager(activity, 200000, false);
     }
 
     public int getCount() {
@@ -57,10 +54,6 @@ public class PendingPOAdapter extends BaseAdapter {
         return position;
     }
 
-    private ViewHolder viewHolder;
-
-
-
     public View getView(final int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
 
@@ -72,22 +65,21 @@ public class PendingPOAdapter extends BaseAdapter {
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = inflater.inflate(R.layout.pending_po_item, null);
-            viewHolder.user_image = (ImageView)convertView.findViewById(R.id.user_image);
-            viewHolder.contact_name = (FacedTextView)convertView.findViewById(R.id.contact_name);
-            viewHolder.create_date = (FacedTextView)convertView.findViewById(R.id.create_date);
-            viewHolder.amount_value = (FacedTextView)convertView.findViewById(R.id.amount_value);
+            viewHolder.user_image = (ImageView) convertView.findViewById(R.id.user_image);
+            viewHolder.contact_name = (FacedTextView) convertView.findViewById(R.id.contact_name);
+            viewHolder.create_date = (FacedTextView) convertView.findViewById(R.id.create_date);
+            viewHolder.amount_value = (FacedTextView) convertView.findViewById(R.id.amount_value);
             convertView.setTag(viewHolder);
-        }
-        else{
-            viewHolder = (ViewHolder)convertView.getTag();
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
         PaymentInfoDTO paymentInfo = paymentInfoList.get(position);
 
         if (paymentInfo.getImageId() != null) {
             viewHolder.user_image.setTag(paymentInfo.getImageId());
-            imageManager.displayImage(paymentInfo.getImageId(), viewHolder.user_image, R.drawable.user_placeholder);
-        }else {
+            ImageHelper.getInstance(activity).imageLoader(paymentInfo.getImageId(), viewHolder.user_image, R.drawable.user_placeholder);
+        } else {
             viewHolder.user_image.setImageResource(R.drawable.user_placeholder);
         }
         viewHolder.contact_name.setText(persianEnglishDigit.E2P(paymentInfo.getCalleeName()));
@@ -99,12 +91,14 @@ public class PendingPOAdapter extends BaseAdapter {
     }
 
 
-    private class ViewHolder{
-        ViewHolder(){ }
+    private class ViewHolder {
         FacedTextView contact_name;
         FacedTextView create_date;
         ImageView user_image;
         FacedTextView amount_value;
+
+        ViewHolder() {
+        }
     }
 
 

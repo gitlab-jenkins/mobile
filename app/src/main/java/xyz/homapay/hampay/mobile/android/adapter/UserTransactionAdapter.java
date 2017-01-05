@@ -11,8 +11,8 @@ import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO.Transact
 import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO.TransactionType;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.img.ImageHelper;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
-import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
@@ -26,14 +26,12 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
     private TransactionDTO transactionDTO;
     private PersianEnglishDigit persianEnglishDigit;
     private CurrencyFormatter currencyFormatter;
-    private ImageManager imageManager;
 
     public UserTransactionAdapter(Activity activity) {
         super(activity);
         this.activity = activity;
         persianEnglishDigit = new PersianEnglishDigit();
         currencyFormatter = new CurrencyFormatter();
-        imageManager = new ImageManager(activity, 200000, false);
     }
 
 
@@ -85,7 +83,7 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
 
         if (transactionDTO.getImageId() != null) {
             viewHolder.image.setTag(transactionDTO.getImageId());
-            imageManager.displayImage(transactionDTO.getImageId(), viewHolder.image, R.drawable.user_placeholder);
+            ImageHelper.getInstance(activity).imageLoader(transactionDTO.getImageId(), viewHolder.image, R.drawable.user_placeholder);
         } else {
             viewHolder.image.setImageResource(R.drawable.user_placeholder);
         }
@@ -106,6 +104,7 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
         FacedTextView user_name;
         FacedTextView date_time;
         FacedTextView amountValue;
+
         ViewHolder() {
         }
     }
