@@ -88,6 +88,7 @@
                         android:maxLength="30"
                         android:padding="8dp"
                         android:singleLine="true"
+                        android:digits=" ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzاآبپتثجچحخدذرزژسشصضطظعغفقکگلمنوهی"
                         android:imeOptions="actionNext"/>
 
                 </RelativeLayout>
@@ -114,6 +115,7 @@
                         android:maxLength="30"
                         android:padding="8dp"
                         android:singleLine="true"
+                        android:digits=" ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzاآبپتثجچحخدذرزژسشصضطظعغفقکگلمنوهی"
                         android:imeOptions="actionDone"/>
 
                 </RelativeLayout>
