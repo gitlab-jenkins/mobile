@@ -1,4 +1,4 @@
-package xyz.homapay.hampay.mobile.android.m.worker;
+package xyz.homapay.hampay.mobile.android.m.worker.common;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -18,12 +18,12 @@ public class NetWorker<T> {
     protected ModelLayer modelLayer;
     protected Retrofit retrofit;
 
-    public NetWorker(final ModelLayer modelLayer, final Class<T> tClass) {
+    public NetWorker(final ModelLayer modelLayer, final Class<T> tClass, boolean decrypt, boolean gzip) {
         this.modelLayer = modelLayer;
         retrofit = new Retrofit.Builder()
                 .baseUrl(modelLayer.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(TrustedOkHttpClient.getTrustedOkHttpClient(modelLayer))
+                .client(TrustedOkHttpClient.getTrustedOkHttpClient(modelLayer, decrypt, gzip))
                 .build();
         service = retrofit.create(tClass);
     }

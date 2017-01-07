@@ -50,8 +50,13 @@ public class ModelLayerImpl implements ModelLayer {
     }
 
     @Override
+    public DeviceInfo getDeviceInfo() {
+        return new DeviceInfo(ctx);
+    }
+
+    @Override
     public void showNoNetworkDialog() {
-        // TODO
+        Dialoger.NETWORK.showErrorNetworkDialog(ctx);
     }
 
     @Override

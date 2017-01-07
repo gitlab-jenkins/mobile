@@ -27,16 +27,40 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class KeyExchangerImpl extends Presenter<KeyExchangeView> implements KeyExchanger, OnNetworkLoadListener<ResponseMessage<KeyAgreementResponse>> {
 
+    public static String encryptionId;
+    public static SecretKeyPair secretKeyPair;
+    private PublicKey peerEncPublicKey;
+    private PublicKey peerIvPublicKey;
     private DiffieHellmanKeyExchanger keyExchanger;
     private KeyAgreementRequest keyAgreementRequest;
     private RequestMessage message;
-    private String encryptionId;
-    private SecretKeyPair secretKeyPair;
-    private PublicKey peerEncPublicKey;
-    private PublicKey peerIvPublicKey;
 
     public KeyExchangerImpl(ModelLayer modelLayer, KeyExchangeView view) {
         super(modelLayer, view);
+    }
+
+    public static byte[] getKey() {
+        if (secretKeyPair != null) {
+            return secretKeyPair.getEncSecretKey().getEncoded();
+        } else {
+            return null;
+        }
+    }
+
+    public static byte[] getIv() {
+        if (secretKeyPair != null) {
+            return secretKeyPair.getIvSecretKey().getEncoded();
+        } else {
+            return null;
+        }
+    }
+
+    public static String getEncId() {
+        if (encryptionId != null) {
+            return encryptionId;
+        } else {
+            return "";
+        }
     }
 
     @Override
@@ -52,33 +76,6 @@ public class KeyExchangerImpl extends Presenter<KeyExchangeView> implements KeyE
             new KeyNetWorker(modelLayer).exchange(message, this);
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    @Override
-    public byte[] getKey() {
-        if (secretKeyPair != null) {
-            return secretKeyPair.getEncSecretKey().getEncoded();
-        } else {
-            return null;
-        }
-    }
-
-    @Override
-    public byte[] getIv() {
-        if (secretKeyPair != null) {
-            return secretKeyPair.getIvSecretKey().getEncoded();
-        } else {
-            return null;
-        }
-    }
-
-    @Override
-    public String getEncId() {
-        if (encryptionId != null) {
-            return encryptionId;
-        } else {
-            return "";
         }
     }
 

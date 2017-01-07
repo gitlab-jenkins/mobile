@@ -6,8 +6,6 @@ import com.crashlytics.android.Crashlytics;
 
 import io.fabric.sdk.android.Fabric;
 import xyz.homapay.hampay.mobile.android.model.AppState;
-import xyz.homapay.hampay.mobile.android.p.security.KeyExchangerImpl;
-import xyz.homapay.hampay.mobile.android.util.ModelLayerImpl;
 
 /**
  * Created by amir on 7/10/15.
@@ -30,7 +28,6 @@ public class HamPayApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
-        new KeyExchangerImpl(new ModelLayerImpl(this), (state, data, message) -> System.out.println(message)).exchange();
     }
 
     @Override

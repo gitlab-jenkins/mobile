@@ -14,7 +14,7 @@ import xyz.homapay.hampay.common.common.response.ResponseMessage;
 
 public interface KeyExchangeService {
 
-    @POST("/security/agree-key")
+    @POST("security/agree-key")
     Call<ResponseMessage<KeyAgreementResponse>> exchange(@Body RequestMessage<KeyAgreementRequest> body);
 
 }

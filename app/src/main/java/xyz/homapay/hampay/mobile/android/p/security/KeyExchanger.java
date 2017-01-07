@@ -8,10 +8,4 @@ public interface KeyExchanger {
 
     void exchange();
 
-    byte[] getKey();
-
-    byte[] getIv();
-
-    String getEncId();
-
 }
