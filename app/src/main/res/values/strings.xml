@@ -127,8 +127,8 @@
     <string name="sheba_question_part3_text">(دقت کنید که این حساب برای دریافت مبالغ واریزی به شما استفاده می‌شود)</string>
     <string name="iban_empty_name">لطفا نام خود را وارد کنید.</string>
     <string name="iban_empty_family">لطفا نام خانوادگی خود را وارد کنید.</string>
-    <string name="sheba_confirm">بله</string>
-    <string name="sheba_cancel">خیر</string>
+    <string name="sheba_confirm">تایید</string>
+    <string name="sheba_cancel">انصراف</string>
     <string name="currency_rials">ريال</string>
     <string name="sms_verification_text">کد فعال‌سازی "هم‌پی" به شماره %1$s ارسال خواهد شد</string>
     <string name="sms_request">ارسال</string>
