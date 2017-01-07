@@ -170,14 +170,9 @@ public class TransactionDetailActivity extends AppCompatActivity {
             }
 
         }
-//        else if (transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.PENDING) {
-//            status_text.setText(context.getString(R.string.pending));
-//            status_text.setTextColor(ContextCompat.getColor(context, R.color.pending_transaction));
-//        }
         else {
             status_text.setText(transactionDTO.getTransactionType().equals(TransactionDTO.TransactionType.CREDIT) ? R.string.fail_credit : R.string.fail_debit);
             status_text.setTextColor(ContextCompat.getColor(context, R.color.failed_transaction));
-            //TODO Came from service
             detail_text.setText(transactionDTO.getTransactionStatus().getDescription());
             detail_text.setTextColor(ContextCompat.getColor(context, R.color.normal_text));
         }
@@ -239,20 +234,12 @@ public class TransactionDetailActivity extends AppCompatActivity {
                             message.setText(tnxDetailDTO.getMessage());
                             message.setVisibility(View.VISIBLE);
                         }
-//                        if (tnxDetailDTO.getAppliedCard() != null) {
-//                            creditInfo.setVisibility(View.VISIBLE);
-//                            card_number.setText(persianEnglishDigit.E2P(tnxDetailDTO.getAppliedCard().getLast4Digits()));
-//                            bank_name.setText(tnxDetailDTO.getAppliedCard().getBankName());
-//                        }
                     } else if (transactionDTO.getPaymentType() == TransactionDTO.PaymentType.PURCHASE) {
                         callee_name.setText(tnxDetailDTO.getName());
                         payment_request_code.setText(tnxDetailDTO.getCode().substring(0, 3) + " " + tnxDetailDTO.getCode().substring(3, 6));
                         date_time.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(tnxDetailDTO.getDate())));
-//                        if (tnxDetailDTO.getAppliedCard() != null) {
-//                            creditInfo.setVisibility(View.VISIBLE);
-//                            card_number.setText(persianEnglishDigit.E2P(tnxDetailDTO.getAppliedCard().getLast4Digits()));
-//                            bank_name.setText(tnxDetailDTO.getAppliedCard().getBankName());
-//                        }
+                    }else if (transactionDTO.getPaymentType() == TransactionDTO.PaymentType.UTILITY_BILL){
+                        payment_request_code.setText(persianEnglishDigit.E2P(tnxDetailDTO.getCode()));
                     }
 
                     if (transactionDTO.getTransactionType() == TransactionDTO.TransactionType.CREDIT) {

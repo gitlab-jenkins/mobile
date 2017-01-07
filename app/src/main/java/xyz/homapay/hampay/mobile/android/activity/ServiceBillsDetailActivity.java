@@ -28,7 +28,6 @@ import xyz.homapay.hampay.common.core.model.response.PSPResultResponse;
 import xyz.homapay.hampay.common.core.model.response.SignToPayResponse;
 import xyz.homapay.hampay.common.core.model.response.UtilityBillDetailResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.BillInfoDTO;
-import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
@@ -91,7 +90,6 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
     private ScrollView paymentScroll;
     private PersianEnglishDigit persian = new PersianEnglishDigit();
     private HamPayDialog hamPayDialog;
-    private PspInfoDTO pspInfoDTO = null;
     private BillInfoDTO billsInfo = null;
     private String billsIdValue;
     private String payIdValue;
@@ -206,7 +204,7 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
         payIdValue = intent.getStringExtra(Constants.PAY_ID);
         providerId = intent.getStringExtra(Constants.PROVIDER_ID);
 
-        if (billsId != null) {
+        if (billsInfo != null) {
             fillUI(billsInfo);
         }else if (providerId != null){
             UtilityBillDetailRequest utilityBillDetailRequest = new UtilityBillDetailRequest();
@@ -260,7 +258,7 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                     doWorkInfo = new DoWorkInfo();
                     doWorkInfo.setUserName("appstore");
                     doWorkInfo.setPassword("sepapp");
-                    doWorkInfo.setCellNumber(pspInfoDTO.getCellNumber().substring(1, pspInfoDTO.getCellNumber().length()));
+                    doWorkInfo.setCellNumber(billsInfo.getPspInfo().getCellNumber().substring(1, billsInfo.getPspInfo().getCellNumber().length()));
                     doWorkInfo.setLangAByte((byte) 0);
                     doWorkInfo.setLangABoolean(false);
                     CBUArrayOfKeyValueOfstringstring vectorstring2stringMapEntry = new CBUArrayOfKeyValueOfstringstring();
@@ -283,7 +281,7 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
 
                     s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "TerminalId";
-                    s2sMapEntry.Value = pspInfoDTO.getTerminalId();
+                    s2sMapEntry.Value = billsInfo.getPspInfo().getTerminalId();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
@@ -293,12 +291,12 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
 
                     s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "SenderTerminalId";
-                    s2sMapEntry.Value = pspInfoDTO.getSenderTerminalId();
+                    s2sMapEntry.Value = billsInfo.getPspInfo().getSenderTerminalId();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "IPAddress";
-                    s2sMapEntry.Value = pspInfoDTO.getIpAddress();
+                    s2sMapEntry.Value = billsInfo.getPspInfo().getIpAddress();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
@@ -367,7 +365,7 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                             Intent intent = new Intent(context, PaymentCompletedActivity.class);
                             intent.putExtra(Constants.SUCCESS_PAYMENT_AMOUNT, billsInfo.getAmount() + billsInfo.getFeeCharge());
                             intent.putExtra(Constants.SUCCESS_PAYMENT_CODE, billsInfo.getProductCode());
-                            intent.putExtra(Constants.SUCCESS_PAYMENT_TRACE, pspInfoDTO.getProviderId());
+                            intent.putExtra(Constants.SUCCESS_PAYMENT_TRACE, billsInfo.getPspInfo().getProviderId());
                             startActivityForResult(intent, 46);
                         }
                         resultStatus = ResultStatus.SUCCESS;
@@ -513,7 +511,7 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                         SignToPayRequest signToPayRequest = new SignToPayRequest();
                         signToPayRequest.setCardId(billsInfo.getCardList().get(position).getCardId());
                         signToPayRequest.setProductCode(billsInfo.getProductCode());
-                        new SignToPayTask(activity, ServiceBillsDetailActivity.this, signToPayRequest, "").execute();
+                        new SignToPayTask(activity, ServiceBillsDetailActivity.this, signToPayRequest, authToken).execute();
                     }
                 }
                 break;
@@ -579,7 +577,7 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
             billsImage.setImageResource(R.drawable.user_placeholder);
         }
 
-        billsId.setText(persian.E2P(billsIdValue));
+//        billsId.setText(persian.E2P(billsIdValue));
         billsAmount.setText(persian.E2P(currencyFormatter.format(billInfo.getAmount())));
         hampayFee.setText(persian.E2P(currencyFormatter.format(billInfo.getFeeCharge())));
 

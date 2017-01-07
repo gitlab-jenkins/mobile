@@ -228,7 +228,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 userTransactionAdapter.clear();
                 transactionDTOs.clear();
                 requestPageNumber = 0;
-                sortFactor = TnxSortFactor.BUSINESS_AND_PURCHASE;
+                sortFactor = TnxSortFactor.COMMERCIAL;
                 transactionListRequest = new TransactionListRequest();
                 transactionListRequest.setPageNumber(requestPageNumber);
                 transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
