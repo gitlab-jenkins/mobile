@@ -125,8 +125,8 @@
     <string name="sheba_question_part1_text">شماره شبا</string>
     <string name="iban_question_part2_text">متعلق به %1$s نزد %2$s می‌باشد.</string>
     <string name="sheba_question_part3_text">(دقت کنید که این حساب برای دریافت مبالغ واریزی به شما استفاده می‌شود)</string>
-    <string name="iban_empty_name">لطفا نام خود را وارد کنید.</string>
-    <string name="iban_empty_family">لطفا نام خانوادگی خود را وارد کنید.</string>
+    <string name="iban_empty_name">برای نام می‌بایستی حداقل ۲ حرف را وارد کنید.</string>
+    <string name="iban_empty_family">برای نام‌خانوادگی می‌بایستی حداقل ۲ حرف را وارد کنید.</string>
     <string name="sheba_confirm">تایید</string>
     <string name="sheba_cancel">انصراف</string>
     <string name="currency_rials">ريال</string>

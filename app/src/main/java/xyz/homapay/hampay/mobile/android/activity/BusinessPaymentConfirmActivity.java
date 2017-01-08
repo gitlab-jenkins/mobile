@@ -93,6 +93,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
     private LinearLayout cardSelect;
     private PersianEnglishDigit persian = new PersianEnglishDigit();
     private String signature;
+    private String authToken = "";
 
     public void backActionBar(View view) {
         finish();
@@ -150,6 +151,8 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+
+        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -407,7 +410,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
                         SignToPayRequest signToPayRequest = new SignToPayRequest();
                         signToPayRequest.setCardId(paymentInfoDTO.getCardList().get(position).getCardId());
                         signToPayRequest.setProductCode(paymentInfoDTO.getProductCode());
-                        new SignToPayTask(activity, BusinessPaymentConfirmActivity.this, signToPayRequest, "").execute();
+                        new SignToPayTask(activity, BusinessPaymentConfirmActivity.this, signToPayRequest, authToken).execute();
                     }
                 }
                 break;

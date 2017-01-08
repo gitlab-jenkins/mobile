@@ -109,6 +109,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
     private FacedTextView selectCardText;
     private LinearLayout cardSelect;
     private String signature;
+    private String authToken = "";
 
     public void backActionBar(View view) {
         finish();
@@ -167,6 +168,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
         String LOGIN_TOKEN = prefs.getString(Constants.LOGIN_TOKEN_ID, null);
         if (LOGIN_TOKEN == null) {
@@ -414,7 +416,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
                         SignToPayRequest signToPayRequest = new SignToPayRequest();
                         signToPayRequest.setCardId(paymentInfoDTO.getCardList().get(position).getCardId());
                         signToPayRequest.setProductCode(paymentInfoDTO.getProductCode());
-                        new SignToPayTask(activity, InvoicePendingConfirmationActivity.this, signToPayRequest, "").execute();
+                        new SignToPayTask(activity, InvoicePendingConfirmationActivity.this, signToPayRequest, authToken).execute();
                     }
                 }
                 break;

@@ -7,12 +7,15 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
@@ -142,12 +145,14 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
         ibanUserName.setOnTouchListener((v, event) -> {
             ibanUserName.setCursorVisible(true);
             ibanUserFamily.setCursorVisible(false);
+            new Collapse(keyboard).animate();
             return false;
         });
         ibanUserFamily = (FacedEditText) findViewById(R.id.ibanUserFamily);
         ibanUserFamily.setOnTouchListener((v, event) -> {
             ibanUserName.setCursorVisible(false);
             ibanUserFamily.setCursorVisible(true);
+            new Collapse(keyboard).animate();
             return false;
         });
         ibanUserFamily.setOnFocusChangeListener((v, hasFocus) -> {
@@ -155,6 +160,16 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
                 ibanUserFamily.setCursorVisible(true);
             }else {
                 ibanUserFamily.setCursorVisible(false);
+            }
+        });
+        ibanUserFamily.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    ibanUserFamily.setCursorVisible(false);
+                    new Expand(keyboard).animate();
+                }
+                return false;
             }
         });
 
@@ -165,12 +180,12 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
             String userName = ibanUserName.getText().toString().trim();
             String userFamily = ibanUserFamily.getText().toString().trim();
 
-            if (userName.length() == 0) {
+            if (userName.length() <= 1) {
                 Toast.makeText(activity, getString(R.string.iban_empty_name), Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            if (userFamily.length() == 0) {
+            if (userFamily.length() <= 1) {
                 Toast.makeText(activity, getString(R.string.iban_empty_family), Toast.LENGTH_SHORT).show();
                 return;
             }

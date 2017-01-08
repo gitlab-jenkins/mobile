@@ -121,6 +121,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
     private LinearLayout cardSelect;
     private PersianEnglishDigit persian = new PersianEnglishDigit();
     private String signature;
+    private String authToken = "";
 
     public void backActionBar(View view) {
         finish();
@@ -178,6 +179,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
         String LOGIN_TOKEN = prefs.getString(Constants.LOGIN_TOKEN_ID, null);
         if (LOGIN_TOKEN == null) {
             Intent intent = new Intent();
@@ -438,7 +440,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                         signToPayRequest.setCardId(purchaseInfoDTO.getCardList().get(position).getCardId());
                         signToPayRequest.setProductCode(purchaseInfoDTO.getProductCode());
                         signToPayRequest.setProductCode(purchaseInfoDTO.getProductCode());
-                        new SignToPayTask(activity, RequestBusinessPayDetailActivity.this, signToPayRequest, "").execute();
+                        new SignToPayTask(activity, RequestBusinessPayDetailActivity.this, signToPayRequest, authToken).execute();
                     }
                 }
                 break;
