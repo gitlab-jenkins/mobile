@@ -50,6 +50,8 @@ import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
+import xyz.homapay.hampay.mobile.android.model.PaymentType;
+import xyz.homapay.hampay.mobile.android.model.SucceedPayment;
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
@@ -448,9 +450,12 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
                         serviceName = ServiceEvent.PSP_PAYMENT_SUCCESS;
                         if (paymentInfoDTO != null) {
                             Intent intent = new Intent(context, PaymentCompletedActivity.class);
-                            intent.putExtra(Constants.SUCCESS_PAYMENT_AMOUNT, paymentInfoDTO.getAmount() + paymentInfoDTO.getVat() + paymentInfoDTO.getFeeCharge());
-                            intent.putExtra(Constants.SUCCESS_PAYMENT_CODE, paymentInfoDTO.getProductCode());
-                            intent.putExtra(Constants.SUCCESS_PAYMENT_TRACE, pspInfoDTO.getProviderId());
+                            SucceedPayment succeedPayment = new SucceedPayment();
+                            succeedPayment.setAmount(paymentInfoDTO.getAmount() + paymentInfoDTO.getVat() + paymentInfoDTO.getFeeCharge());
+                            succeedPayment.setCode(paymentInfoDTO.getProductCode());
+                            succeedPayment.setTrace(pspInfoDTO.getProviderId());
+                            succeedPayment.setPaymentType(PaymentType.PAYMENT);
+                            intent.putExtra(Constants.SUCCEED_PAYMENT_INFO, succeedPayment);
                             startActivityForResult(intent, 46);
                         }
                         resultStatus = ResultStatus.SUCCESS;

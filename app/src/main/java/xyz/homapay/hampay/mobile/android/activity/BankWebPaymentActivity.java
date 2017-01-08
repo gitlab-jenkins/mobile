@@ -33,6 +33,8 @@ import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.model.PaymentType;
+import xyz.homapay.hampay.mobile.android.model.SucceedPayment;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class BankWebPaymentActivity extends AppCompatActivity {
@@ -45,7 +47,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor;
     private PaymentInfoDTO paymentInfoDTO = null;
     private PurchaseInfoDTO purchaseInfoDTO = null;
-    private BillInfoDTO billInfoDTO;
+    private BillInfoDTO billInfo;
     private PspInfoDTO pspInfoDTO = null;
     private String redirectedURL;
     private Context context;
@@ -136,7 +138,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
         paymentInfoDTO = (PaymentInfoDTO)intent.getSerializableExtra(Constants.PAYMENT_INFO);
         purchaseInfoDTO = (PurchaseInfoDTO)intent.getSerializableExtra(Constants.PURCHASE_INFO);
-        billInfoDTO = (BillInfoDTO) intent.getSerializableExtra(Constants.BILL_INFO);
+        billInfo = (BillInfoDTO) intent.getSerializableExtra(Constants.BILL_INFO);
         pspInfoDTO = (PspInfoDTO)intent.getSerializableExtra(Constants.PSP_INFO);
 
         bankWebView = (WebView)findViewById(R.id.bankWebView);
@@ -183,19 +185,18 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                             "&Amount=" + (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat()) +
                             "&ResNum=" + purchaseInfoDTO.getProductCode() +
                             "&TerminalId=" + pspInfoDTO.getSenderTerminalId();
-        }else if (billInfoDTO != null){
+        }else if (billInfo != null){
             ipgUrl = Constants.BILLS_IPG_URL;
-            pspInfoDTO = billInfoDTO.getPspInfo();
-            String billId = intent.getStringExtra(Constants.BILL_ID);
+            pspInfoDTO = billInfo.getPspInfo();
             String payId = intent.getStringExtra(Constants.PAY_ID);
             redirectedURL = pspInfoDTO.getRedirectURL() + "?authToken=" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
             postData =
                     "ResNum4=" + pspInfoDTO.getCellNumber() +
                             "&ResNum3=" + pspInfoDTO.getSmsToken() +
                             "&RedirectURL=" + redirectedURL +
-                            "&Amount=" + (billInfoDTO.getAmount() + billInfoDTO.getFeeCharge()) +
-                            "&ResNum=" + billInfoDTO.getProductCode() +
-                            "&Bills[0].BillId=" + billId +
+                            "&Amount=" + (billInfo.getAmount() + billInfo.getFeeCharge()) +
+                            "&ResNum=" + billInfo.getProductCode() +
+                            "&Bills[0].BillId=" + billInfo.getBillId() +
                             "&Bills[0].PayId=" + payId +
                             "&TerminalId=" + pspInfoDTO.getSenderTerminalId();
         }
@@ -236,15 +237,22 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                             serviceName = ServiceEvent.IPG_PAYMENT_SUCCESS;
                             logEvent.log(serviceName);
                             Intent intent = new Intent(context, PaymentCompletedActivity.class);
+                            SucceedPayment succeedPayment = new SucceedPayment();
                             if (paymentInfoDTO != null) {
-                                intent.putExtra(Constants.SUCCESS_PAYMENT_AMOUNT, paymentInfoDTO.getAmount() + paymentInfoDTO.getVat() + paymentInfoDTO.getFeeCharge());
-                                intent.putExtra(Constants.SUCCESS_PAYMENT_CODE, paymentInfoDTO.getProductCode());
-
+                                succeedPayment.setAmount(paymentInfoDTO.getAmount() + paymentInfoDTO.getVat() + paymentInfoDTO.getFeeCharge());
+                                succeedPayment.setCode(paymentInfoDTO.getProductCode());
+                                succeedPayment.setPaymentType(PaymentType.PAYMENT);
                             }else if (purchaseInfoDTO != null){
-                                intent.putExtra(Constants.SUCCESS_PAYMENT_AMOUNT, purchaseInfoDTO.getAmount());
-                                intent.putExtra(Constants.SUCCESS_PAYMENT_CODE, purchaseInfoDTO.getPurchaseCode());
+                                succeedPayment.setAmount(purchaseInfoDTO.getAmount());
+                                succeedPayment.setCode(purchaseInfoDTO.getPurchaseCode());
+                                succeedPayment.setPaymentType(PaymentType.PURCHASE);
+                            }else if (billInfo != null){
+                                succeedPayment.setAmount(billInfo.getAmount() + billInfo.getFeeCharge());
+                                succeedPayment.setCode(billInfo.getBillId());
+                                succeedPayment.setPaymentType(PaymentType.BILLS);
                             }
-                            intent.putExtra(Constants.SUCCESS_PAYMENT_TRACE, pspInfoDTO.getProviderId());
+                            succeedPayment.setTrace(pspInfoDTO.getProviderId());
+                            intent.putExtra(Constants.SUCCEED_PAYMENT_INFO, succeedPayment);
                             startActivityForResult(intent, 0);
                             resultStatus = ResultStatus.SUCCESS;
                         }else {

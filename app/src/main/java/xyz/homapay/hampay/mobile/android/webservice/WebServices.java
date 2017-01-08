@@ -99,6 +99,7 @@ import xyz.homapay.hampay.common.core.model.response.UnlinkUserResponse;
 import xyz.homapay.hampay.common.core.model.response.UploadImageResponse;
 import xyz.homapay.hampay.common.core.model.response.UserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
+import xyz.homapay.hampay.mobile.android.model.BillsTokenDoWork;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
@@ -107,6 +108,8 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.UserContacts;
 import xyz.homapay.hampay.mobile.android.webservice.psp.CBUArrayOfKeyValueOfstringstring;
 import xyz.homapay.hampay.mobile.android.webservice.psp.CBUBasicHttpBinding_IGeneralService;
+import xyz.homapay.hampay.mobile.android.webservice.psp.bills.MKAArrayOfKeyValueOfstringstring;
+import xyz.homapay.hampay.mobile.android.webservice.psp.bills.MKABasicHttpBinding_IGeneralService;
 
 /**
  * Created by amir on 6/6/15.
@@ -687,46 +690,16 @@ public class WebServices  {
         return responseMessage;
     }
 
-//    public TWAArrayOfKeyValueOfstringstring newPurchaseResponse(DoWorkInfo doWorkInfo) throws Exception {
-//
-//       AllowHamPaySSL allowHamPaySSL = new AllowHamPaySSL(context);
-//        allowHamPaySSL.enableHamPaySSL();
-//
-//        TWABasicHttpBinding_ITokenPay twaBasicHttpBinding_iTokenPay = new TWABasicHttpBinding_ITokenPay(null,"https://" + Constants.SERVER + "/saman/psp/pay");
-//        TWAArrayOfKeyValueOfstringstring responseMessage = twaBasicHttpBinding_iTokenPay.DoWork(doWorkInfo.getUserName(), doWorkInfo.getPassword(), doWorkInfo.getCellNumber(),null,doWorkInfo.getVectorstring2stringMapEntry());
-//
-////        PayThPartyApp payThPartyApp = new PayThPartyApp(context);
-////        Vectorstring2stringMapEntry responseMessage = payThPartyApp.DoWork(
-////                doWorkInfo.getUserName(),
-////                doWorkInfo.getPassword(),
-////                doWorkInfo.getCellNumber(),
-////                null,
-////                doWorkInfo.isLangABoolean(),
-////                doWorkInfo.getVectorstring2stringMapEntry());
-//
-//        return responseMessage;
-//    }
-//
-//
-//    public Vectorstring2stringMapEntry newPurchaseResponse(DoWorkInfoTest doWorkInfo) throws Exception {
-//
-//        AllowHamPaySSL allowHamPaySSL = new AllowHamPaySSL(context);
-//        allowHamPaySSL.enableHamPaySSL();
-//
-////        TWABasicHttpBinding_ITokenPay twaBasicHttpBinding_iTokenPay = new TWABasicHttpBinding_ITokenPay(null,"https://" + Constants.SERVER_IP + "/saman/psp/pay");
-////        TWAArrayOfKeyValueOfstringstring responseMessage = twaBasicHttpBinding_iTokenPay.DoWork(doWorkInfo.getUserName(), doWorkInfo.getPassword(), doWorkInfo.getCellNumber(),null,doWorkInfo.getVectorstring2stringMapEntry());
-//
-////        PayThPartyApp payThPartyApp = new PayThPartyApp(context);
-////        Vectorstring2stringMapEntry responseMessage = payThPartyApp.DoWork(
-////                doWorkInfo.getUserName(),
-////                doWorkInfo.getPassword(),
-////                doWorkInfo.getCellNumber(),
-////                null,
-////                doWorkInfo.isLangABoolean(),
-////                doWorkInfo.getVectorstring2stringMapEntry());
-//
-//        return null;
-//    }
+
+    public MKAArrayOfKeyValueOfstringstring tokenBills(BillsTokenDoWork doWorkInfo, String payUrl) throws Exception {
+
+        AllowHamPaySSL allowHamPaySSL = new AllowHamPaySSL(context);
+        allowHamPaySSL.enableHamPaySSL();
+        MKABasicHttpBinding_IGeneralService basicHttpBinding_iTokenPay = new MKABasicHttpBinding_IGeneralService(null, payUrl);
+        MKAArrayOfKeyValueOfstringstring responseMessage = basicHttpBinding_iTokenPay.DoWork(doWorkInfo.getUserName(), doWorkInfo.getPassword(), doWorkInfo.getCellNumber(),null, doWorkInfo.getVectorstring2stringMapEntry());
+
+        return responseMessage;
+    }
 
 
     public ResponseMessage<LatestPurchaseResponse> latestUserPurchase(LatestPurchaseRequest latestPurchaseRequest) throws IOException{

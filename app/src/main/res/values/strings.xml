@@ -250,6 +250,8 @@
     <string name="msg_incorrect_amount">مبلغ واریزی شما باید بین %1$s ریال و %2$s ریال باشد.</string>
     <string name="msg_null_amount">لطفا برای درخواست خود مبلغ را وارد کنید</string>
     <string name="msg_invalid_iban">شماره شبا وارد شده معتبر نمی‌باشد</string>
+    <string name="msg_invalid_bill_info">شناسه قبض یا شناسه پرداخت را اشتباه کردید. لطفا مجدد تلاش کنید.</string>
+    <string name="msg_failed_bill_info">اطلاعات قبض شما دریافت نشد. لطفا مجدد بررسی کنید.</string>
     <string name="msg_memorable_incorrect">کلمه یادآوری باید بیشتر از ۲ حرف باشد</string>
     <string name="msg_success_change_setting">خواسته شما با موفقیت انجام شد.</string>
     <string name="retry_registration_entry">تلاش مجدد</string>
@@ -285,6 +287,7 @@
     <string name="payment_info">اطلاعات پرداخت</string>
     <string name="payment_success_amount">مبلغ: </string>
     <string name="payment_success_code">کد درخواست پرداخت: </string>
+    <string name="bills_success_code">شناسه قبض: </string>
     <string name="payment_success_trace">کد پیگیری: </string>
     <string name="payment_success_confirm">تایید</string>
     <string name="msg_ipg_fail">انجام عملیات پرداخت موفقیت آمیز نبود. لطفا دوباره تلاش کنید</string>

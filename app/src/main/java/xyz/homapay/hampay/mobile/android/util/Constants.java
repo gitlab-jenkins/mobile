@@ -108,9 +108,7 @@ public class Constants {
     public static final String IMAGE_ID = "imageId";
     public static final int SOAP_AMOUNT_MAX = 2000001;
     public static final String ENTER_CHARACTERS_REGEX = "(\r?\n){1,}";
-    public static final String SUCCESS_PAYMENT_AMOUNT = "amount";
-    public static final String SUCCESS_PAYMENT_CODE = "code";
-    public static final String SUCCESS_PAYMENT_TRACE = "trace";
+    public static final String SUCCEED_PAYMENT_INFO = "succeed_payment";
     public static final String SHOW_CREATE_INVOICE = "showCreateInvoice";
     public static final String MERCHANT_DOCUMENT_URL = "http://hampay.ir/form/Merchantcode.pdf";
     public static final String SHOW_WALK_THROUGH = "show_wt";

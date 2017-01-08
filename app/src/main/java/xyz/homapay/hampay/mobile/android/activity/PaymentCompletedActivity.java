@@ -13,29 +13,39 @@ import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.model.PaymentType;
+import xyz.homapay.hampay.mobile.android.model.SucceedPayment;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class PaymentCompletedActivity extends AppCompatActivity {
 
-    private Bundle bundle;
     private FacedTextView amountValue;
     private FacedTextView paymentCode;
     private FacedTextView traceCode;
     private FacedTextView confirmButton;
     private PersianEnglishDigit persianEnglishDigit;
     private CurrencyFormatter formatter;
+    private SucceedPayment succeedPayment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_payment_completed);
+
+        Intent intent = getIntent();
+        succeedPayment = (SucceedPayment) intent.getSerializableExtra(Constants.SUCCEED_PAYMENT_INFO);
+
+        if (succeedPayment.getPaymentType() == PaymentType.PAYMENT || succeedPayment.getPaymentType() == PaymentType.PURCHASE) {
+            setContentView(R.layout.activity_payment_completed);
+        }else if (succeedPayment.getPaymentType() == PaymentType.BILLS){
+            setContentView(R.layout.activity_bills_completed);
+        }
 
         Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         vibrator.vibrate(100);
 
-        bundle = getIntent().getExtras();
+
 
         amountValue = (FacedTextView)findViewById(R.id.amount_value);
         paymentCode = (FacedTextView)findViewById(R.id.payment_code);
@@ -44,9 +54,9 @@ public class PaymentCompletedActivity extends AppCompatActivity {
         persianEnglishDigit = new PersianEnglishDigit();
         formatter = new CurrencyFormatter();
 
-        amountValue.setText(persianEnglishDigit.E2P(formatter.format(bundle.getLong(Constants.SUCCESS_PAYMENT_AMOUNT))));
-        paymentCode.setText(bundle.getString(Constants.SUCCESS_PAYMENT_CODE));
-        traceCode.setText(persianEnglishDigit.E2P(bundle.getString(Constants.SUCCESS_PAYMENT_TRACE)));
+        amountValue.setText(persianEnglishDigit.E2P(formatter.format(succeedPayment.getAmount())));
+        paymentCode.setText(succeedPayment.getCode());
+        traceCode.setText(persianEnglishDigit.E2P(succeedPayment.getTrace()));
 
 
         confirmButton.setOnClickListener(new View.OnClickListener() {

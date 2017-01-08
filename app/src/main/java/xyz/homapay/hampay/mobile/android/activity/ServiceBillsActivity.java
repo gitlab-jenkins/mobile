@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.request.UtilityBillRequest;
@@ -228,10 +229,15 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
                                 intent.putExtra(Constants.PAY_ID, persian.P2E(payIdText.getText().toString()));
                                 startActivity(intent);
                                 break;
+                            default:
+                                hamPayDialog.showFailBillInfoDialog(utilityBill.getService().getResultStatus().getCode(), utilityBill.getService().getResultStatus().getDescription());
+                                break;
                         }
                         break;
                 }
             }
+        }else {
+            Toast.makeText(activity, getString(R.string.msg_failed_bill_info), Toast.LENGTH_SHORT).show();
         }
 
     }

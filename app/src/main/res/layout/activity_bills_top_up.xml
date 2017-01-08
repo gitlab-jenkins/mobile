@@ -118,7 +118,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="12dp"
-                android:gravity="right">
+                android:gravity="right"
+                android:visibility="gone">
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     geekui:customTypeface="fonts/vazir_regular.ttf"
@@ -141,7 +142,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/entry_field_color"/>
+                android:background="@color/entry_field_color"
+                android:visibility="gone"/>
 
             <LinearLayout
                 android:id="@+id/serviceBills"
