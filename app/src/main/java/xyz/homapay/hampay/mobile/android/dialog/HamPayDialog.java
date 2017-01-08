@@ -255,7 +255,6 @@ public class HamPayDialog {
     }
 
     public void showDisMatchPasswordDialog() {
-
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_dismatch_password, null);
         FacedTextView retry_password = (FacedTextView) view.findViewById(R.id.retry_password);
         retry_password.setOnClickListener(v -> dialog.dismiss());

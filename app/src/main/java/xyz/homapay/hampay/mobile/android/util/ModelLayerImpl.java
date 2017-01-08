@@ -31,10 +31,10 @@ public class ModelLayerImpl implements ModelLayer {
     public synchronized void log(String log) {
 
         if (log.length() > 3200) {
-            Log.i("Ritmo-Network-Core", log.substring(0, 3200));
+            Log.i("Hampay-Network-Core", log.substring(0, 3200));
             log(log.substring(3200));
         } else {
-            Log.i("Ritmo-Network-Core", log);
+            Log.i("Hampay-Network-Core", log);
         }
     }
 

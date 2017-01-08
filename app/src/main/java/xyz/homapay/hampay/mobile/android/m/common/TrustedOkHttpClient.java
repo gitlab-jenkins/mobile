@@ -21,7 +21,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import xyz.homapay.hampay.common.common.encrypt.AESMessageEncryptor;
 import xyz.homapay.hampay.common.common.response.DecryptedResponseInfo;
-import xyz.homapay.hampay.mobile.android.img.ImageCacheProvider;
+import xyz.homapay.hampay.mobile.android.img.CacheProvider;
 import xyz.homapay.hampay.mobile.android.p.security.KeyExchangerImpl;
 import xyz.homapay.hampay.mobile.android.ssl.HamPayX509TrustManager;
 
@@ -65,13 +65,7 @@ public class TrustedOkHttpClient {
         return chain -> {
             try {
                 Response response = chain.proceed(chain.request());
-                String strDeCompress;
-                if (gzip) {
-                    strDeCompress = decompress(response.body().bytes());
-                } else {
-                    strDeCompress = response.body().string();
-                }
-                DecryptedResponseInfo decryptedResponseInfo = new AESMessageEncryptor().decryptResponse(strDeCompress, KeyExchangerImpl.getKey(), KeyExchangerImpl.getIv());
+                DecryptedResponseInfo decryptedResponseInfo = new AESMessageEncryptor().decryptResponse(deflateGzip(response, gzip), KeyExchangerImpl.getKey(), KeyExchangerImpl.getIv());
                 if (decryptedResponseInfo.getResponseCode() == 0) {
                     Response.Builder resBuilder = response.newBuilder();
                     resBuilder.body(ResponseBody.create(MediaType.parse("application/json"), decryptedResponseInfo.getPayload()));
@@ -84,6 +78,21 @@ public class TrustedOkHttpClient {
                 return null;
             }
         };
+    }
+
+    private static String deflateGzip(Response response, boolean gZip) {
+        String strDeCompress = "";
+        try {
+            if (gZip) {
+                strDeCompress = decompress(response.body().bytes());
+            } else {
+                strDeCompress = response.body().string();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            return strDeCompress;
+        }
     }
 
     private static String decompress(byte[] compressed) throws IOException {
@@ -101,7 +110,15 @@ public class TrustedOkHttpClient {
         return string.toString();
     }
 
-    public static OkHttpClient getTrustedOkHttpClient(ModelLayer modelLayer, boolean decryptEnabled, boolean gzipEnabled) {
+    private static Interceptor provideConnectivityInterceptor(ModelLayer modelLayer) {
+        return chain -> {
+            if (!modelLayer.isConnected())
+                modelLayer.showNoNetworkDialog();
+            return chain.proceed(chain.request());
+        };
+    }
+
+    public static OkHttpClient getTrustedOkHttpClient(ModelLayer modelLayer, boolean encryption, boolean gZip) {
         try {
             // Create a trust manager that does not validate certificate chains
             final TrustManager[] trustedCerts = new X509TrustManager[]{new HamPayX509TrustManager(modelLayer.getSSLKeyStore().getAppKeyStore())};
@@ -115,46 +132,25 @@ public class TrustedOkHttpClient {
             }
             sslContext.init(null, trustedCerts, new java.security.SecureRandom());
 
-            // Create an ssl socket factory with our all-trusting manager
             final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+            builder.connectTimeout(10, TimeUnit.SECONDS)
+                    .writeTimeout(60, TimeUnit.SECONDS)
+                    .readTimeout(60, TimeUnit.SECONDS)
+                    .retryOnConnectionFailure(true)
+                    .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustedCerts[0])
+                    .addInterceptor(provideConnectivityInterceptor(modelLayer))
+                    .cache(CacheProvider.getInstance(modelLayer).provideCache());
 
-            OkHttpClient okHttpClient;
-            if (modelLayer.isConnected()) {
-                if (decryptEnabled) {
-                    okHttpClient = new OkHttpClient().newBuilder()
-                            .addNetworkInterceptor(provideCacheInterceptor())
-                            .addInterceptor(provideDecryptor(gzipEnabled))
-                            .retryOnConnectionFailure(true)
-                            .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustedCerts[0])
-                            .cache(ImageCacheProvider.getInstance(modelLayer).provideCache())
-                            .build();
-                } else {
-                    okHttpClient = new OkHttpClient().newBuilder()
-                            .addNetworkInterceptor(provideCacheInterceptor())
-                            .retryOnConnectionFailure(true)
-                            .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustedCerts[0])
-                            .cache(ImageCacheProvider.getInstance(modelLayer).provideCache())
-                            .build();
-                }
-            } else {
-                if (decryptEnabled) {
-                    okHttpClient = new OkHttpClient().newBuilder()
-                            .addInterceptor(provideOfflineCacheInterceptor())
-                            .addInterceptor(provideDecryptor(gzipEnabled))
-                            .retryOnConnectionFailure(true)
-                            .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustedCerts[0])
-                            .cache(ImageCacheProvider.getInstance(modelLayer).provideCache())
-                            .build();
-                } else {
-                    okHttpClient = new OkHttpClient().newBuilder()
-                            .addInterceptor(provideOfflineCacheInterceptor())
-                            .retryOnConnectionFailure(true)
-                            .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustedCerts[0])
-                            .cache(ImageCacheProvider.getInstance(modelLayer).provideCache())
-                            .build();
-                }
-            }
-            return okHttpClient;
+            if (modelLayer.isConnected())
+                builder.addNetworkInterceptor(provideCacheInterceptor());
+            else
+                builder.addInterceptor(provideOfflineCacheInterceptor());
+
+            if (encryption)
+                builder.addInterceptor(provideDecryptor(gZip));
+
+            return builder.build();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -185,7 +181,7 @@ public class TrustedOkHttpClient {
                         .addNetworkInterceptor(interceptor)
                         .retryOnConnectionFailure(true)
                         .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustedCerts[0])
-                        .cache(ImageCacheProvider.getInstance(modelLayer).provideCache())
+                        .cache(CacheProvider.getInstance(modelLayer).provideCache())
                         .build();
             } else {
                 okHttpClient = new OkHttpClient().newBuilder()
@@ -193,7 +189,7 @@ public class TrustedOkHttpClient {
                         .addNetworkInterceptor(interceptor)
                         .retryOnConnectionFailure(true)
                         .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustedCerts[0])
-                        .cache(ImageCacheProvider.getInstance(modelLayer).provideCache())
+                        .cache(CacheProvider.getInstance(modelLayer).provideCache())
                         .build();
             }
             return okHttpClient;

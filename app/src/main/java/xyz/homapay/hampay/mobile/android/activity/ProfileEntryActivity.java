@@ -286,7 +286,6 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                     }
                 }
 
-
                 nationalCodeValue.addTextChangedListener(this);
             }
 
@@ -396,8 +395,8 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
     }
 
     @Override
-    public void onError(String message) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    public void onError() {
+        Toast.makeText(context, R.string.err_message_registration, Toast.LENGTH_SHORT).show();
     }
 
     @Override

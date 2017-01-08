@@ -9,7 +9,7 @@ import xyz.homapay.hampay.common.core.model.response.RegistrationEntryResponse;
 
 public interface RegisterEntryView {
 
-    void onError(String message);
+    void onError();
 
     void onRegisterResponse(boolean state, ResponseMessage<RegistrationEntryResponse> data, String message);
 

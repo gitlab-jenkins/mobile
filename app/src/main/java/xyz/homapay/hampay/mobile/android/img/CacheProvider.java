@@ -9,19 +9,19 @@ import xyz.homapay.hampay.mobile.android.m.common.ModelLayer;
  * Created by mohammad on 7/18/16.
  */
 
-public class ImageCacheProvider {
+public class CacheProvider {
 
-    private static ImageCacheProvider instance;
+    private static CacheProvider instance;
     private Cache cache;
     private ModelLayer modelLayer;
 
-    private ImageCacheProvider(final ModelLayer modelLayer) {
+    private CacheProvider(final ModelLayer modelLayer) {
         this.modelLayer = modelLayer;
     }
 
-    public static ImageCacheProvider getInstance(final ModelLayer modelLayer) {
+    public static CacheProvider getInstance(final ModelLayer modelLayer) {
         if (instance == null)
-            instance = new ImageCacheProvider(modelLayer);
+            instance = new CacheProvider(modelLayer);
         return instance;
     }
 

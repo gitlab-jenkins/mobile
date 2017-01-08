@@ -728,5 +728,6 @@
 
     <string name="select_card_number">لطفا کارت مورد نظر خود را انتخاب کنید</string>
     <string name="add_new_card">کارت جدید(از طریق درگاه پرداخت اینترنتی)</string>
+    <string name="err_message_registration">خطایی در مراحل ثبت نام رخ داده است</string>
 
 </resources>

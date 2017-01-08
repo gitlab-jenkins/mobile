@@ -14,9 +14,9 @@ import xyz.homapay.hampay.mobile.android.m.worker.common.NetWorker;
  * Created by mohammad on 1/7/17.
  */
 
-public class AuthNetWorker extends NetWorker<AuthService> {
+public class RegistrationEntryNetWorker extends NetWorker<AuthService> {
 
-    public AuthNetWorker(ModelLayer modelLayer) {
+    public RegistrationEntryNetWorker(ModelLayer modelLayer) {
         super(modelLayer, AuthService.class, true, true);
     }
 

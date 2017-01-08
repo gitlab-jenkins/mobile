@@ -15,7 +15,7 @@ import xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
 import xyz.homapay.hampay.common.core.model.response.RegistrationEntryResponse;
 import xyz.homapay.hampay.mobile.android.m.common.ModelLayer;
 import xyz.homapay.hampay.mobile.android.m.common.OnNetworkLoadListener;
-import xyz.homapay.hampay.mobile.android.m.worker.authorization.AuthNetWorker;
+import xyz.homapay.hampay.mobile.android.m.worker.authorization.RegistrationEntryNetWorker;
 import xyz.homapay.hampay.mobile.android.p.common.Presenter;
 import xyz.homapay.hampay.mobile.android.p.security.KeyExchangeView;
 import xyz.homapay.hampay.mobile.android.p.security.KeyExchanger;
@@ -29,7 +29,6 @@ import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 
 public class RegisterEntryImpl extends Presenter<RegisterEntryView> implements RegisterEntry, KeyExchangeView, OnNetworkLoadListener<ResponseMessage<RegistrationEntryResponse>> {
 
-    private static String errMessage = "خطایی در مراحل ثبت نام رخ داده است";
     private MessageEncryptor messageEncryptor;
     private KeyExchanger keyExchanger;
     private RegistrationEntryRequest registrationEntryRequest;
@@ -49,7 +48,7 @@ public class RegisterEntryImpl extends Presenter<RegisterEntryView> implements R
     private void onError() {
         try {
             view.dismissProgressDialog();
-            view.onError(errMessage);
+            view.onError();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -84,7 +83,7 @@ public class RegisterEntryImpl extends Presenter<RegisterEntryView> implements R
 
                 String strJson = messageEncryptor.encryptRequest(new Gson().toJson(reqMessage), KeyExchangerImpl.getKey(), KeyExchangerImpl.getIv(), KeyExchangerImpl.getEncId());
 
-                new AuthNetWorker(modelLayer).register(strJson, this);
+                new RegistrationEntryNetWorker(modelLayer).register(strJson, this);
             }
         } catch (Exception e) {
             view.keyExchangeProblem();
@@ -109,8 +108,8 @@ public class RegisterEntryImpl extends Presenter<RegisterEntryView> implements R
     @Override
     public void onNetworkLoad(boolean status, ResponseMessage<RegistrationEntryResponse> data, String message) {
         try {
-            view.onRegisterResponse(status, status ? data : null, status ? message : "Failed");
             view.dismissProgressDialog();
+            view.onRegisterResponse(status, status ? data : null, status ? message : "Failed");
         } catch (Exception e) {
             e.printStackTrace();
             onError();

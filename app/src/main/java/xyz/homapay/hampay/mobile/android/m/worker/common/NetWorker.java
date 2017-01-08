@@ -18,12 +18,12 @@ public class NetWorker<T> {
     protected ModelLayer modelLayer;
     protected Retrofit retrofit;
 
-    public NetWorker(final ModelLayer modelLayer, final Class<T> tClass, boolean decrypt, boolean gzip) {
+    public NetWorker(final ModelLayer modelLayer, final Class<T> tClass, boolean encryption, boolean gZip) {
         this.modelLayer = modelLayer;
         retrofit = new Retrofit.Builder()
                 .baseUrl(modelLayer.getBaseUrl())
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(TrustedOkHttpClient.getTrustedOkHttpClient(modelLayer, decrypt, gzip))
+                .client(TrustedOkHttpClient.getTrustedOkHttpClient(modelLayer, encryption, gZip))
                 .build();
         service = retrofit.create(tClass);
     }
