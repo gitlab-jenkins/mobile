@@ -43,26 +43,35 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 public class ChangeUserImageActivity extends AppCompatActivity {
 
 
-    private Bundle bundle;
-    private String user_selected_source;
-    private CropImageView cropImageView;
-    private FacedTextView user_profile_image_cancel;
-    private FacedTextView user_profile_image_select;
-
-    private int mAspectRatioX = Constants.DEFAULT_ASPECT_RATIO_VALUES;
-    private int mAspectRatioY = Constants.DEFAULT_ASPECT_RATIO_VALUES;
-
     Bitmap croppedImage;
     Bitmap resizedImage;
-
     UploadImageRequest uploadImageRequest;
     RequestUploadImage requestUploadImage;
-
     HamPayDialog hamPayDialog;
     Context context;
     Activity activity;
     SharedPreferences.Editor editor;
     SharedPreferences prefs;
+    private Bundle bundle;
+    private String user_selected_source;
+    private CropImageView cropImageView;
+    private FacedTextView user_profile_image_cancel;
+    private FacedTextView user_profile_image_select;
+    private int mAspectRatioX = Constants.DEFAULT_ASPECT_RATIO_VALUES;
+    private int mAspectRatioY = Constants.DEFAULT_ASPECT_RATIO_VALUES;
+
+    public static Bitmap scaleDown(Bitmap realImage, float maxImageSize,
+                                   boolean filter) {
+        float ratio = Math.min(
+                maxImageSize / realImage.getWidth(),
+                maxImageSize / realImage.getHeight());
+        int width = Math.round(ratio * realImage.getWidth());
+        int height = Math.round(ratio * realImage.getHeight());
+
+        Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
+                height, filter);
+        return newBitmap;
+    }
 
     @Override
     protected void onPause() {
@@ -75,7 +84,7 @@ public class ChangeUserImageActivity extends AppCompatActivity {
         super.onStop();
         HamPayApplication.setAppSate(AppState.Stoped);
 
-        if (requestUploadImage != null){
+        if (requestUploadImage != null) {
             if (!requestUploadImage.isCancelled())
                 requestUploadImage.cancel(true);
         }
@@ -106,14 +115,12 @@ public class ChangeUserImageActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     protected void onSaveInstanceState(@SuppressWarnings("NullableProblems") Bundle bundle) {
         super.onSaveInstanceState(bundle);
         bundle.putInt(Constants.ASPECT_RATIO_X, mAspectRatioX);
         bundle.putInt(Constants.ASPECT_RATIO_Y, mAspectRatioY);
     }
-
 
     @Override
     protected void onRestoreInstanceState(@SuppressWarnings("NullableProblems") Bundle bundle) {
@@ -136,10 +143,10 @@ public class ChangeUserImageActivity extends AppCompatActivity {
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
 
-        cropImageView = (CropImageView)findViewById(R.id.cropImageView);
+        cropImageView = (CropImageView) findViewById(R.id.cropImageView);
 
 
-        user_profile_image_cancel = (FacedTextView)findViewById(R.id.user_profile_image_cancel);
+        user_profile_image_cancel = (FacedTextView) findViewById(R.id.user_profile_image_cancel);
         user_profile_image_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,7 +154,7 @@ public class ChangeUserImageActivity extends AppCompatActivity {
             }
         });
 
-        user_profile_image_select = (FacedTextView)findViewById(R.id.user_profile_image_select);
+        user_profile_image_select = (FacedTextView) findViewById(R.id.user_profile_image_select);
         user_profile_image_select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -172,7 +179,7 @@ public class ChangeUserImageActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(context, getString(R.string.msg_violation_image_size), Toast.LENGTH_LONG).show();
                     }
-                }catch (Exception ex){
+                } catch (Exception ex) {
                     Log.e("Error", "Error");
                 }
 
@@ -180,31 +187,17 @@ public class ChangeUserImageActivity extends AppCompatActivity {
         });
 
 
-
         bundle = getIntent().getExtras();
 
         user_selected_source = bundle.getString(Constants.IMAGE_PROFILE_SOURCE);
 
 
-        if (user_selected_source.equalsIgnoreCase(Constants.CAMERA_SELECT)){
+        if (user_selected_source.equalsIgnoreCase(Constants.CAMERA_SELECT)) {
             startActivityForResult(getPickImageCameraChooserIntent(), 200);
-        }else if (user_selected_source.equalsIgnoreCase(Constants.CONTENT_SELECT)){
+        } else if (user_selected_source.equalsIgnoreCase(Constants.CONTENT_SELECT)) {
             startActivityForResult(getPickImageChooserIntent(), 200);
         }
 
-    }
-
-    public static Bitmap scaleDown(Bitmap realImage, float maxImageSize,
-                                   boolean filter) {
-        float ratio = Math.min(
-                (float) maxImageSize / realImage.getWidth(),
-                (float) maxImageSize / realImage.getHeight());
-        int width = Math.round((float) ratio * realImage.getWidth());
-        int height = Math.round((float) ratio * realImage.getHeight());
-
-        Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
-                height, filter);
-        return newBitmap;
     }
 
     @Override
@@ -215,7 +208,7 @@ public class ChangeUserImageActivity extends AppCompatActivity {
             cropImageView.setFixedAspectRatio(true);
             Uri imageUri = getPickImageResultUri(data);
             cropImageView.setImageUri(imageUri);
-        }else {
+        } else {
             finish();
         }
     }
@@ -338,19 +331,28 @@ public class ChangeUserImageActivity extends AppCompatActivity {
         return isCamera ? getCaptureImageOutputUri() : data.getData();
     }
 
-    public void backActionBar(View view){
+    public void backActionBar(View view) {
         finish();
     }
 
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(context, HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        if (activity != null) {
+            finish();
+            startActivity(intent);
+        }
+    }
 
-    public class RequestUploadImageTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<UploadImageResponse>>
-    {
-        public RequestUploadImageTaskCompleteListener(){
+    public class RequestUploadImageTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<UploadImageResponse>> {
+        public RequestUploadImageTaskCompleteListener() {
         }
 
         @Override
-        public void onTaskComplete(ResponseMessage<UploadImageResponse> uploadImageResponseMessage)
-        {
+        public void onTaskComplete(ResponseMessage<UploadImageResponse> uploadImageResponseMessage) {
             hamPayDialog.dismisWaitingDialog();
             ServiceEvent serviceName;
             LogEvent logEvent = new LogEvent(context);
@@ -363,14 +365,12 @@ public class ChangeUserImageActivity extends AppCompatActivity {
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra("result", 5000);
                     setResult(5000);
-
                     finish();
 
                 } else if (uploadImageResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     serviceName = ServiceEvent.UPLOAD_IMAGE_FAILURE;
                     forceLogout();
-                }
-                else {
+                } else {
                     serviceName = ServiceEvent.UPLOAD_IMAGE_FAILURE;
                     requestUploadImage = new RequestUploadImage(getApplicationContext(), new RequestUploadImageTaskCompleteListener());
                     new HamPayDialog(activity).showFailUploadImage(requestUploadImage, uploadImageRequest,
@@ -379,8 +379,7 @@ public class ChangeUserImageActivity extends AppCompatActivity {
                     croppedImage.recycle();
                     finish();
                 }
-            }
-            else {
+            } else {
                 serviceName = ServiceEvent.UPLOAD_IMAGE_FAILURE;
                 Toast.makeText(context, "این سرویس هنوز فعال نمی باشد", Toast.LENGTH_LONG).show();
                 requestUploadImage = new RequestUploadImage(getApplicationContext(), new RequestUploadImageTaskCompleteListener());
@@ -397,19 +396,6 @@ public class ChangeUserImageActivity extends AppCompatActivity {
         @Override
         public void onTaskPreRun() {
             hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
-    }
-
-
-    private void forceLogout() {
-        editor.remove(Constants.LOGIN_TOKEN_ID);
-        editor.commit();
-        Intent intent = new Intent();
-        intent.setClass(context, HamPayLoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        if (activity != null) {
-            finish();
-            startActivity(intent);
         }
     }
 }
