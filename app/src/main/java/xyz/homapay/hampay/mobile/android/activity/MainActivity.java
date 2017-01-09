@@ -769,6 +769,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                         bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);
                         fragment.setArguments(bundle);
                         if (userProfile.getUserImageId() != null) {
+                            ImageHelper.getInstance(context).invalidateImage(userProfile.getUserImageId());
                             image_profile.setTag(userProfile.getUserImageId());
                             ImageHelper.getInstance(activity).imageLoader(userProfile.getUserImageId(), image_profile, R.drawable.user_placeholder);
                         } else {
