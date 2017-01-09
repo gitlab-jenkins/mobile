@@ -71,6 +71,9 @@
     <string name="topup_type">نوع شارژ</string>
     <string name="bills_service_id">شناسه قبض</string>
     <string name="bills_service_payment">شناسه پرداخت</string>
+    <string name="msg_invalid_bills_id">شماره قبض خود را صحیح وارد نمایید.</string>
+    <string name="msg_invalid_pay_id">شناسه پرداخت خود را صحیح وارد نمایید.</string>
+    <string name="msg_invalid_bills_pay_id">شماره قبض یا شناسه پرداخت اشتباه می‌باشد. لطفا مجدد تلاش نمائید.</string>
     <string name="main_fragment_pending_payment">پرداخت‌های در انتظار</string>
     <string name="main_fragment_bill_top_up">قبوض خدماتی</string>
     <string name="main_fragment_transactions">تراکنش‌ها</string>
