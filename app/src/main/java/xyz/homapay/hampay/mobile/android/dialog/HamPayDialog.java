@@ -1,6 +1,7 @@
 package xyz.homapay.hampay.mobile.android.dialog;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
@@ -45,12 +46,10 @@ import xyz.homapay.hampay.common.core.model.request.TransactionListRequest;
 import xyz.homapay.hampay.common.core.model.request.UploadImageRequest;
 import xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
 import xyz.homapay.hampay.common.core.model.response.ContactUsResponse;
-import xyz.homapay.hampay.common.core.model.response.IBANConfirmationResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.ChangeEmailPassActivity;
-import xyz.homapay.hampay.mobile.android.activity.ChangeIbanPassActivity;
 import xyz.homapay.hampay.mobile.android.activity.ChangeMemorableActivity;
 import xyz.homapay.hampay.mobile.android.activity.GuideDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
@@ -99,30 +98,37 @@ public class HamPayDialog {
     HamPayCustomDialog dialog;
     String serverKey = "";
     Rect rect = new Rect();
+    String contactUsMail = "";
+    String contactUsPhone = "";
+    ResponseMessage<ContactUsResponse> contactUsResponseResponseMessage = null;
+    TACAcceptRequest tacAcceptRequest;
+    RequestTACAccept requestTACAccept;
+    RequestRegistrationSendSmsToken requestRegistrationSendSmsToken;
+    RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest;
     private CurrencyFormatter currencyFormatter;
+    private UserProfileDTO userProfileDTO;
 
     public HamPayDialog(Activity activity){
 
         this.activity = activity;
         this.windowDisplayFrame();
-        prefs = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE);
-        editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE).edit();
+        prefs = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, Context.MODE_PRIVATE).edit();
         currencyFormatter = new CurrencyFormatter();
     }
-
-    private void windowDisplayFrame(){
-        Activity parent = (Activity) activity;
-        Window window = parent.getWindow();
-        window.getDecorView().getWindowVisibleDisplayFrame(rect);
-    }
-
 
     public HamPayDialog(Activity activity, String serverKey){
 
         this.activity = activity;
         this.serverKey = serverKey;
-        prefs = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE);
-        editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, activity.MODE_PRIVATE).edit();
+        prefs = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, Context.MODE_PRIVATE);
+        editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, Context.MODE_PRIVATE).edit();
+    }
+
+    private void windowDisplayFrame() {
+        Activity parent = activity;
+        Window window = parent.getWindow();
+        window.getDecorView().getWindowVisibleDisplayFrame(rect);
     }
 
     public void exitRegistrationDialog(){
@@ -245,8 +251,6 @@ public class HamPayDialog {
         }
     }
 
-
-
     public void dismisWaitingDialog(){
         if (dialog != null && !activity.isFinishing()){
             if (dialog.isShowing())
@@ -338,55 +342,6 @@ public class HamPayDialog {
         }
     }
 
-    String contactUsMail = "";
-    String contactUsPhone = "";
-    ResponseMessage<ContactUsResponse> contactUsResponseResponseMessage = null;
-
-    public class HttpContactUs extends AsyncTask<ContactUsRequest, Void, String> {
-
-        @Override
-        protected String doInBackground(ContactUsRequest... params) {
-
-            SecuredWebServices webServices = new SecuredWebServices(activity, Constants.CONNECTION_TYPE);
-            try {
-                contactUsResponseResponseMessage = webServices.contactUsResponse(params[0]);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (EncryptionException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-
-            dismisWaitingDialog();
-            if (contactUsResponseResponseMessage != null){
-                contactUsMail = contactUsResponseResponseMessage.getService().getEmailAddress();
-                contactUsPhone = contactUsResponseResponseMessage.getService().getPhoneNumber();
-                showContactUsDialog();
-            }else {
-                Toast.makeText(activity, activity.getString(R.string.hampay_contact_failed), Toast.LENGTH_LONG).show();
-            }
-
-
-        }
-    }
-
-    TACAcceptRequest tacAcceptRequest;
-    RequestTACAccept requestTACAccept;
-
-    private UserProfileDTO userProfileDTO;
-
     public void showLogoutDialog(){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_exit_app, null);
@@ -417,27 +372,6 @@ public class HamPayDialog {
             dialog = new HamPayCustomDialog(view, activity, 0);
             dialog.show();
         }
-    }
-
-    public class RequestLoginTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<LogoutResponse>>
-    {
-        public RequestLoginTaskCompleteListener(){
-        }
-
-        @Override
-        public void onTaskComplete(ResponseMessage<LogoutResponse> logoutResponseResponseMessage)
-        {
-            if (logoutResponseResponseMessage != null) {
-                AppEvent appEvent = AppEvent.LOGOUT;
-                LogEvent logEvent = new LogEvent(activity);
-                logEvent.log(appEvent);
-                editor.remove(Constants.LOGIN_TOKEN_ID);
-                editor.commit();
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {}
     }
 
     public void showRemovePasswordDialog(){
@@ -1327,10 +1261,6 @@ public class HamPayDialog {
         }
     }
 
-
-    RequestRegistrationSendSmsToken requestRegistrationSendSmsToken;
-    RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest;
-
     public void smsConfirmDialog(final String cellNumber){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_sms_confirm, null);
@@ -1362,52 +1292,6 @@ public class HamPayDialog {
         if (!activity.isFinishing()) {
             dialog = new HamPayCustomDialog(view, activity, 0);
             dialog.show();
-        }
-    }
-
-    public class RequestRegistrationSendSmsTokenTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationSendSmsTokenResponse>> {
-
-
-        private String cellNumber;
-        private String cardNumber;
-
-        public RequestRegistrationSendSmsTokenTaskCompleteListener(String cellNumber){
-            this.cellNumber = cellNumber;
-            this.cardNumber = cardNumber;
-        }
-
-        @Override
-        public void onTaskComplete(ResponseMessage<RegistrationSendSmsTokenResponse> registrationSendSmsTokenResponse)
-        {
-
-            dismisWaitingDialog();
-
-            if (registrationSendSmsTokenResponse != null) {
-                if (registrationSendSmsTokenResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
-
-                    Intent intent = new Intent();
-                    intent.setClass(activity, SMSVerificationActivity.class);
-                    intent.putExtra(Constants.REGISTERED_CELL_NUMBER, cellNumber);
-                    activity.startActivity(intent);
-                }
-                else {
-                    requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(activity, new RequestRegistrationSendSmsTokenTaskCompleteListener(cellNumber));
-                    new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
-                            registrationSendSmsTokenResponse.getService().getResultStatus().getCode(),
-                            registrationSendSmsTokenResponse.getService().getResultStatus().getDescription());
-                }
-
-            }else {
-                requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(activity, new RequestRegistrationSendSmsTokenTaskCompleteListener(cellNumber));
-                new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
-                        Constants.LOCAL_ERROR_CODE,
-                        activity.getString(R.string.mgs_fail_registration_send_sms_token));
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            showWaitingDialog("");
         }
     }
 
@@ -1459,7 +1343,6 @@ public class HamPayDialog {
         }
     }
 
-
     public void ipgSuccessDialog(String purchaseCode){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_ipg_success, null);
@@ -1503,7 +1386,6 @@ public class HamPayDialog {
             dialog.show();
         }
     }
-
 
     public void showFailPendingPurchaseDialog(final RequestLatestPurchase requestLatestPurchase,
                                               final LatestPurchaseRequest latestPurchaseRequest,
@@ -1606,7 +1488,6 @@ public class HamPayDialog {
         }
     }
 
-
     public void successPaymentRequestDialog(String requestCode){
 
 
@@ -1643,43 +1524,6 @@ public class HamPayDialog {
         FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
 
         confirmation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                activity.finish();
-            }
-        });
-
-        view.setMinimumWidth((int) (rect.width() * 0.85f));
-        if (!activity.isFinishing()) {
-            dialog = new HamPayCustomDialog(view, activity, 0);
-            dialog.show();
-        }
-    }
-
-    public void showIBANConfirmationDialog(final String iban, final IBANConfirmationResponse ibanConfirmationResponse){
-
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_request_iban_confirm, null);
-
-        FacedTextView ibanNumber = (FacedTextView)view.findViewById(R.id.ibanNumber);
-        FacedTextView ibanOwnInfo = (FacedTextView)view.findViewById(R.id.ibanOwnInfo);
-
-        ibanNumber.setText("IR" + new PersianEnglishDigit().E2P(iban));
-        ibanOwnInfo.setText(activity.getString(R.string.sheba_question_part2_text, ibanConfirmationResponse.getBankName(), ibanConfirmationResponse.getBankName()));
-
-        FacedTextView iban_request_confirm = (FacedTextView) view.findViewById(R.id.iban_request_confirm);
-        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
-
-        iban_request_confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(activity, ChangeIbanPassActivity.class);
-                intent.putExtra(Constants.IBAN_NUMBER, iban);
-                activity.startActivity(intent);
-            }
-        });
-
-        cancel_request.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -1755,7 +1599,6 @@ public class HamPayDialog {
             dialog.show();
         }
     }
-
 
     public void showFailIBANConfirmationDialog(final RequestIBANConfirmation requestIBANConfirmation,
                                                final IBANConfirmationRequest ibanConfirmationRequest,
@@ -1969,6 +1812,110 @@ public class HamPayDialog {
         if (!activity.isFinishing()) {
             dialog = new HamPayCustomDialog(view, activity, 0);
             dialog.show();
+        }
+    }
+
+    public class HttpContactUs extends AsyncTask<ContactUsRequest, Void, String> {
+
+        @Override
+        protected String doInBackground(ContactUsRequest... params) {
+
+            SecuredWebServices webServices = new SecuredWebServices(activity, Constants.CONNECTION_TYPE);
+            try {
+                contactUsResponseResponseMessage = webServices.contactUsResponse(params[0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (EncryptionException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            dismisWaitingDialog();
+            if (contactUsResponseResponseMessage != null) {
+                contactUsMail = contactUsResponseResponseMessage.getService().getEmailAddress();
+                contactUsPhone = contactUsResponseResponseMessage.getService().getPhoneNumber();
+                showContactUsDialog();
+            } else {
+                Toast.makeText(activity, activity.getString(R.string.hampay_contact_failed), Toast.LENGTH_LONG).show();
+            }
+
+
+        }
+    }
+
+    public class RequestLoginTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<LogoutResponse>> {
+        public RequestLoginTaskCompleteListener() {
+        }
+
+        @Override
+        public void onTaskComplete(ResponseMessage<LogoutResponse> logoutResponseResponseMessage) {
+            if (logoutResponseResponseMessage != null) {
+                AppEvent appEvent = AppEvent.LOGOUT;
+                LogEvent logEvent = new LogEvent(activity);
+                logEvent.log(appEvent);
+                editor.remove(Constants.LOGIN_TOKEN_ID);
+                editor.commit();
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+        }
+    }
+
+    public class RequestRegistrationSendSmsTokenTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationSendSmsTokenResponse>> {
+
+
+        private String cellNumber;
+        private String cardNumber;
+
+        public RequestRegistrationSendSmsTokenTaskCompleteListener(String cellNumber) {
+            this.cellNumber = cellNumber;
+            this.cardNumber = cardNumber;
+        }
+
+        @Override
+        public void onTaskComplete(ResponseMessage<RegistrationSendSmsTokenResponse> registrationSendSmsTokenResponse) {
+
+            dismisWaitingDialog();
+
+            if (registrationSendSmsTokenResponse != null) {
+                if (registrationSendSmsTokenResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
+
+                    Intent intent = new Intent();
+                    intent.setClass(activity, SMSVerificationActivity.class);
+                    intent.putExtra(Constants.REGISTERED_CELL_NUMBER, cellNumber);
+                    activity.startActivity(intent);
+                } else {
+                    requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(activity, new RequestRegistrationSendSmsTokenTaskCompleteListener(cellNumber));
+                    new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
+                            registrationSendSmsTokenResponse.getService().getResultStatus().getCode(),
+                            registrationSendSmsTokenResponse.getService().getResultStatus().getDescription());
+                }
+
+            } else {
+                requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(activity, new RequestRegistrationSendSmsTokenTaskCompleteListener(cellNumber));
+                new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
+                        Constants.LOCAL_ERROR_CODE,
+                        activity.getString(R.string.mgs_fail_registration_send_sms_token));
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            showWaitingDialog("");
         }
     }
 

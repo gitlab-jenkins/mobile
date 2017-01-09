@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -22,8 +21,6 @@ import xyz.homapay.hampay.mobile.android.async.task.UtilityBillTask;
 import xyz.homapay.hampay.mobile.android.async.task.impl.OnTaskCompleted;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
-import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
-import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
@@ -44,7 +41,7 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
     private HamPayDialog hamPayDialog;
     private String authToken;
 
-    public void backActionBar(View view){
+    public void backActionBar(View view) {
         finish();
     }
 
@@ -97,16 +94,16 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
         persian = new PersianEnglishDigit();
         hamPayDialog = new HamPayDialog(activity);
 
-        barCodeScanner = (LinearLayout)findViewById(R.id.barCodeScanner);
+        barCodeScanner = (LinearLayout) findViewById(R.id.barCodeScanner);
         barCodeScanner.setOnClickListener(this);
 
-        keyboard = (LinearLayout)findViewById(R.id.keyboard);
-        billIdText = (FacedTextView)findViewById(R.id.billId);
+        keyboard = (LinearLayout) findViewById(R.id.keyboard);
+        billIdText = (FacedTextView) findViewById(R.id.billId);
         billIdText.setOnClickListener(this);
         billIdText.setOnLongClickListener(this);
-        payIdText = (FacedTextView)findViewById(R.id.payId);
+        payIdText = (FacedTextView) findViewById(R.id.payId);
         payIdText.setOnClickListener(this);
-        billsMobileButton = (FacedTextView)findViewById(R.id.billsMobileButton);
+        billsMobileButton = (FacedTextView) findViewById(R.id.billsMobileButton);
         billsMobileButton.setOnClickListener(this);
     }
 
@@ -114,7 +111,7 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch (requestCode){
+        switch (requestCode) {
             case Constants.BAR_CODE_RESULT:
                 if (resultCode == RESULT_OK) {
                     Bundle barCodeResult = data.getExtras();
@@ -130,7 +127,7 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         Intent intent;
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.barCodeScanner:
                 intent = new Intent(context, BarCodeScannerActivity.class);
                 startActivityForResult(intent, Constants.BAR_CODE_RESULT);
@@ -163,10 +160,9 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onBackPressed() {
-        if (keyboard.getVisibility() == View.VISIBLE){
+        if (keyboard.getVisibility() == View.VISIBLE) {
             new Collapse(keyboard).animate();
-        }
-        else {
+        } else {
             finish();
         }
     }
@@ -181,23 +177,23 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    private void inputDigit(String digit){
-        if (digit.endsWith("d")){
+    private void inputDigit(String digit) {
+        if (digit.endsWith("d")) {
         }
-        if (billServiceIdFocus){
+        if (billServiceIdFocus) {
             String code = billIdText.getText().toString();
-            if (digit.endsWith("d")){
+            if (digit.endsWith("d")) {
                 if (code.length() == 0) return;
                 billIdText.setText(code.substring(0, code.length() - 1));
-            }else {
+            } else {
                 billIdText.setText(persian.E2P(code + digit));
             }
-        }else if (billServicePaymentFocus){
+        } else if (billServicePaymentFocus) {
             String code = payIdText.getText().toString();
-            if (digit.endsWith("d")){
+            if (digit.endsWith("d")) {
                 if (code.length() == 0) return;
                 payIdText.setText(code.substring(0, code.length() - 1));
-            }else {
+            } else {
                 payIdText.setText(persian.E2P(code + digit));
             }
         }
@@ -215,8 +211,8 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
         hamPayDialog.dismisWaitingDialog();
 
         if (object != null) {
-            if (object.getClass().equals(ResponseMessage.class)){
-                ResponseMessage responseMessage = (ResponseMessage)object;
+            if (object.getClass().equals(ResponseMessage.class)) {
+                ResponseMessage responseMessage = (ResponseMessage) object;
                 switch (responseMessage.getService().getServiceDefinition()) {
                     case UTILITY_BILL:
                         ResponseMessage<UtilityBillResponse> utilityBill = (ResponseMessage) object;
@@ -236,7 +232,7 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
                         break;
                 }
             }
-        }else {
+        } else {
             Toast.makeText(activity, getString(R.string.msg_failed_bill_info), Toast.LENGTH_SHORT).show();
         }
 
@@ -244,7 +240,7 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public boolean onLongClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.billId:
                 billIdText.setText("");
         }

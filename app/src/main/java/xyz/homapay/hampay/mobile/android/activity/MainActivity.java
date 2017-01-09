@@ -255,16 +255,16 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             }
         }
 
-        wtContainer = (RelativeLayout)findViewById(R.id.wt_container);
-        wtFirstLayout = (RelativeLayout)findViewById(R.id.wt_first_layout);
-        wtSecondLayout = (RelativeLayout)findViewById(R.id.wt_second_layout);
-        wtThirdLayout = (RelativeLayout)findViewById(R.id.wt_third_layout);
-        wtFourthLayout = (RelativeLayout)findViewById(R.id.wt_fourth_layout);
-        wtFifthLayout = (RelativeLayout)findViewById(R.id.wt_fifth_layout);
-        wtSixthLayout = (RelativeLayout)findViewById(R.id.wt_sixth_layout);
-        wtSevenLayout = (RelativeLayout)findViewById(R.id.wt_seventh_layout);
-        wtEightLayout = (RelativeLayout)findViewById(R.id.wt_eight_layout);
-        transactionNote = (FacedTextView)findViewById(R.id.transaction_note);
+        wtContainer = (RelativeLayout) findViewById(R.id.wt_container);
+        wtFirstLayout = (RelativeLayout) findViewById(R.id.wt_first_layout);
+        wtSecondLayout = (RelativeLayout) findViewById(R.id.wt_second_layout);
+        wtThirdLayout = (RelativeLayout) findViewById(R.id.wt_third_layout);
+        wtFourthLayout = (RelativeLayout) findViewById(R.id.wt_fourth_layout);
+        wtFifthLayout = (RelativeLayout) findViewById(R.id.wt_fifth_layout);
+        wtSixthLayout = (RelativeLayout) findViewById(R.id.wt_sixth_layout);
+        wtSevenLayout = (RelativeLayout) findViewById(R.id.wt_seventh_layout);
+        wtEightLayout = (RelativeLayout) findViewById(R.id.wt_eight_layout);
+        transactionNote = (FacedTextView) findViewById(R.id.transaction_note);
 
         if (prefs.getBoolean(Constants.SHOW_WALK_THROUGH, true)) {
             wtContainer.setVisibility(View.VISIBLE);
@@ -446,7 +446,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
             case R.id.next_wt:
                 walkThroughStep = (walkThroughStep + 1) % 9;
-                switch (walkThroughStep){
+                switch (walkThroughStep) {
                     case 1:
                         wtFirstLayout.setVisibility(View.GONE);
                         wtSecondLayout.setVisibility(View.VISIBLE);
@@ -792,28 +792,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         @Override
         public void onTaskPreRun() {
-        }
-    }
-
-    private void setFragment(Fragment fragment, String title){
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        fragmentTransaction.replace(R.id.container_body, fragment).addToBackStack("tag").commit();
-//        fragmentTransaction.commit();
-        fragment_title.setText(title);
-    }
-
-    private void forceLogout() {
-        editor.remove(Constants.LOGIN_TOKEN_ID);
-        editor.commit();
-        Intent intent = new Intent();
-        intent.setClass(context, HamPayLoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        if (activity != null) {
-            finish();
-            startActivity(intent);
         }
     }
 

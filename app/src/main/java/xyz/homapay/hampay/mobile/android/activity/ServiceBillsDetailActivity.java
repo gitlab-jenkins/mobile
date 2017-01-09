@@ -45,6 +45,7 @@ import xyz.homapay.hampay.mobile.android.dialog.card.CardAction;
 import xyz.homapay.hampay.mobile.android.dialog.card.CardNumberDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
+import xyz.homapay.hampay.mobile.android.img.ImageHelper;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.BillsTokenDoWork;
 import xyz.homapay.hampay.mobile.android.model.PaymentType;
@@ -52,7 +53,6 @@ import xyz.homapay.hampay.mobile.android.model.SucceedPayment;
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
-import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.PspCode;
@@ -96,7 +96,6 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
     private String billsIdValue;
     private String payIdValue;
     private BillsTokenDoWork billsTokenDoWork;
-    private ImageManager imageManager;
     private RelativeLayout cardPlaceHolder;
     private int selectedCardIdIndex = -1;
     private FacedTextView selectCardText;
@@ -165,7 +164,7 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
         String LOGIN_TOKEN = prefs.getString(Constants.LOGIN_TOKEN_ID, null);
-        if (LOGIN_TOKEN == null){
+        if (LOGIN_TOKEN == null) {
             Intent intent = new Intent();
             intent.setClass(context, HamPayLoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -174,28 +173,27 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
             return;
         }
 
-        imageManager = new ImageManager(activity, 200000, false);
-        keyboard = (LinearLayout)findViewById(R.id.keyboard);
-        pinLayout = (RelativeLayout)findViewById(R.id.pin_layout);
-        pinText = (FacedTextView)findViewById(R.id.pin_text) ;
+        keyboard = (LinearLayout) findViewById(R.id.keyboard);
+        pinLayout = (RelativeLayout) findViewById(R.id.pin_layout);
+        pinText = (FacedTextView) findViewById(R.id.pin_text);
         pinText.setOnClickListener(this);
-        cvvLayout = (RelativeLayout)findViewById(R.id.cvv_layout);
-        cvvText = (FacedTextView)findViewById(R.id.cvv_text) ;
+        cvvLayout = (RelativeLayout) findViewById(R.id.cvv_layout);
+        cvvText = (FacedTextView) findViewById(R.id.cvv_text);
         cvvText.setOnClickListener(this);
-        paymentScroll = (ScrollView)findViewById(R.id.paymentScroll);
+        paymentScroll = (ScrollView) findViewById(R.id.paymentScroll);
         hamPayDialog = new HamPayDialog(activity);
 
         currencyFormatter = new CurrencyFormatter();
-        billsImage = (ImageView)findViewById(R.id.billsImage);
+        billsImage = (ImageView) findViewById(R.id.billsImage);
         billsName = (FacedTextView) findViewById(R.id.billsName);
-        billsDate = (FacedTextView)findViewById(R.id.billsDate);
-        billsId = (FacedTextView)findViewById(R.id.billsId);
+        billsDate = (FacedTextView) findViewById(R.id.billsDate);
+        billsId = (FacedTextView) findViewById(R.id.billsId);
         billsAmount = (FacedTextView) findViewById(R.id.billsAmount);
-        hampayFee = (FacedTextView)findViewById(R.id.hampayFee);
-        billsTotalAmount = (FacedTextView)findViewById(R.id.billsTotalAmount);
+        hampayFee = (FacedTextView) findViewById(R.id.hampayFee);
+        billsTotalAmount = (FacedTextView) findViewById(R.id.billsTotalAmount);
 
 
-        bankName = (FacedTextView)findViewById(R.id.bankName);
+        bankName = (FacedTextView) findViewById(R.id.bankName);
         cardNumberValue = (FacedTextView) findViewById(R.id.cardNumberValue);
         selectCardText = (FacedTextView) findViewById(R.id.selectCardText);
         cardSelect = (LinearLayout) findViewById(R.id.cardSelect);
@@ -208,13 +206,13 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
 
         if (billsInfo != null) {
             fillUI(billsInfo);
-        }else if (providerId != null){
+        } else if (providerId != null) {
             UtilityBillDetailRequest utilityBillDetailRequest = new UtilityBillDetailRequest();
             utilityBillDetailRequest.setProviderId(providerId);
             new UtilityBillDetailTask(activity, ServiceBillsDetailActivity.this, utilityBillDetailRequest, authToken).execute();
         }
 
-        cardPlaceHolder = (RelativeLayout)findViewById(R.id.cardPlaceHolder);
+        cardPlaceHolder = (RelativeLayout) findViewById(R.id.cardPlaceHolder);
         cardPlaceHolder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -228,7 +226,6 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                 fragmentTransaction.commitAllowingStateLoss();
             }
         });
-
 
 
         pay_button = (ImageView) findViewById(R.id.pay_button);
@@ -250,7 +247,7 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                         Toast.makeText(context, getString(R.string.msg_pin2_incorrect), Toast.LENGTH_LONG).show();
                         return;
                     }
-                    if (!(cvvText.getText().toString().length() >= 3 && cvvText.getText().toString().length() <= 4)){
+                    if (!(cvvText.getText().toString().length() >= 3 && cvvText.getText().toString().length() <= 4)) {
                         Toast.makeText(context, getString(R.string.msg_cvv2_incorrect), Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -337,7 +334,6 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
 
-
                     billsTokenDoWork.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
                     requestTokenBills.execute(billsTokenDoWork);
 
@@ -346,140 +342,11 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
         });
     }
 
-    public class RequestPurchaseTaskCompleteListener implements AsyncTaskCompleteListener<MKAArrayOfKeyValueOfstringstring> {
-
-        @Override
-        public void onTaskComplete(MKAArrayOfKeyValueOfstringstring purchaseResponseResponseMessage) {
-
-            hamPayDialog.dismisWaitingDialog();
-
-            String responseCode = null;
-            String description = null;
-            String SWTraceNum = null;
-            ResultStatus resultStatus = ResultStatus.FAILURE;
-            ServiceEvent serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
-            LogEvent logEvent = new LogEvent(context);
-
-            if (purchaseResponseResponseMessage != null) {
-                pspResultRequest = new PSPResultRequest();
-                for (MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry : purchaseResponseResponseMessage) {
-                    if (s2sMapEntry.Key.equalsIgnoreCase("ResponseCode")) {
-                        responseCode = s2sMapEntry.Value;
-                    }else if (s2sMapEntry.Key.equalsIgnoreCase("Description")){
-                        description = s2sMapEntry.Value;
-                    }else if (s2sMapEntry.Key.equalsIgnoreCase("SWTraceNum")){
-                        SWTraceNum = s2sMapEntry.Value;
-                    }
-                }
-
-                if (responseCode != null){
-                    if (responseCode.equalsIgnoreCase("2000")) {
-                        serviceName = ServiceEvent.PSP_PAYMENT_SUCCESS;
-                        if (billsInfo != null) {
-                            Intent intent = new Intent(context, PaymentCompletedActivity.class);
-                            SucceedPayment succeedPayment = new SucceedPayment();
-                            succeedPayment.setAmount( billsInfo.getAmount() + billsInfo.getFeeCharge());
-                            succeedPayment.setCode(billsInfo.getBillId());
-                            succeedPayment.setTrace(billsInfo.getPspInfo().getProviderId());
-                            succeedPayment.setPaymentType(PaymentType.BILLS);
-                            intent.putExtra(Constants.SUCCEED_PAYMENT_INFO, succeedPayment);
-                            startActivityForResult(intent, 46);
-                        }
-                        resultStatus = ResultStatus.SUCCESS;
-                    }else if (responseCode.equalsIgnoreCase("51")) {
-                        serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
-                        new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.msg_insufficient_credit));
-                        resultStatus = ResultStatus.FAILURE;
-                    }else if (responseCode.equalsIgnoreCase("3000")){
-                        serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
-                        new HamPayDialog(activity).pspFailResultDialog(responseCode, description);
-                    }
-                    else {
-                        serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
-                        PspCode pspCode = new PspCode(context);
-                        new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(responseCode));
-                        resultStatus = ResultStatus.FAILURE;
-                    }
-                    logEvent.log(serviceName);
-
-                    SyncPspResult syncPspResult = new SyncPspResult();
-                    syncPspResult.setResponseCode(responseCode);
-                    syncPspResult.setProductCode(billsInfo.getProductCode());
-                    syncPspResult.setType("PAYMENT");
-                    syncPspResult.setSwTrace(SWTraceNum);
-                    syncPspResult.setTimestamp(System.currentTimeMillis());
-                    syncPspResult.setStatus(0);
-                    dbHelper.createSyncPspResult(syncPspResult);
-
-                    pspResultRequest.setPspResponseCode(responseCode);
-                    pspResultRequest.setProductCode(billsInfo.getProductCode());
-                    pspResultRequest.setTrackingCode(SWTraceNum);
-                    requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(SWTraceNum), 2);
-                    requestPSPResult.execute(pspResultRequest);
-
-                }else {
-                    new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
-                }
-                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-                editor.commit();
-
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra(Constants.ACTIVITY_RESULT, resultStatus.ordinal());
-                setResult(Activity.RESULT_OK, returnIntent);
-            } else {
-                new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
-            }
-
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
-    }
-
-    public class RequestPSPResultTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> {
-
-        private String SWTrace;
-        ServiceEvent serviceName;
-        LogEvent logEvent = new LogEvent(context);
-
-        public RequestPSPResultTaskCompleteListener(String SWTrace){
-            this.SWTrace = SWTrace;
-        }
-
-        @Override
-        public void onTaskComplete(ResponseMessage<PSPResultResponse> pspResultResponseMessage) {
-
-            hamPayDialog.dismisWaitingDialog();
-
-            if (pspResultResponseMessage != null) {
-                if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    serviceName = ServiceEvent.PSP_RESULT_SUCCESS;
-                    if (SWTrace != null) {
-                        dbHelper.syncPspResult(SWTrace);
-                    }
-                } else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceEvent.PSP_RESULT_FAILURE;
-                    forceLogout();
-                }else {
-                    serviceName = ServiceEvent.PSP_RESULT_FAILURE;
-                }
-                logEvent.log(serviceName);
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
-    }
-
     @Override
     public void onBackPressed() {
-        if (keyboard.getVisibility() == View.VISIBLE){
+        if (keyboard.getVisibility() == View.VISIBLE) {
             new Collapse(keyboard).animate();
-            ObjectAnimator.ofInt(paymentScroll, "scrollY",  paymentScroll.getTop()).setDuration(400).start();
+            ObjectAnimator.ofInt(paymentScroll, "scrollY", paymentScroll.getTop()).setDuration(400).start();
             return;
         }
         finish();
@@ -487,11 +354,11 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
 
     @Override
     public void onClick(View view) {
-        ObjectAnimator.ofInt(paymentScroll, "scrollY",  paymentScroll.getBottom()).setDuration(400).start();
+        ObjectAnimator.ofInt(paymentScroll, "scrollY", paymentScroll.getBottom()).setDuration(400).start();
         if (keyboard.getVisibility() == View.GONE) {
             new Expand(keyboard).animate();
         }
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.pin_text:
                 pinLayout.setBackgroundResource(R.drawable.card_info_entry_placeholder);
                 cvvLayout.setBackgroundResource(R.drawable.card_info_empty_placeholder);
@@ -510,7 +377,7 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
 
     @Override
     public void onFinishEditDialog(CardAction cardAction, int position) {
-        switch (cardAction){
+        switch (cardAction) {
             case SELECT:
                 userCVV2 = "";
                 userPinCode = "";
@@ -524,7 +391,7 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                     cardSelect.setVisibility(View.VISIBLE);
                     if (billsInfo.getCardList().get(position).getDigitalSignature() != null && billsInfo.getCardList().get(position).getDigitalSignature().length() > 0) {
                         signature = billsInfo.getCardList().get(position).getDigitalSignature();
-                    }else  {
+                    } else {
                         SignToPayRequest signToPayRequest = new SignToPayRequest();
                         signToPayRequest.setCardId(billsInfo.getCardList().get(position).getCardId());
                         signToPayRequest.setProductCode(billsInfo.getProductCode());
@@ -584,13 +451,13 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
         }
     }
 
-    private void fillUI(BillInfoDTO billInfo){
+    private void fillUI(BillInfoDTO billInfo) {
         billsName.setText(billInfo.getUtilityName());
         billsDate.setText(persian.E2P(new JalaliConvert().GregorianToPersian(billInfo.getExpirationDate())));
         if (billInfo.getImageId() != null) {
             billsImage.setTag(billInfo.getImageId());
-            imageManager.displayImage(billInfo.getImageId(), billsImage, R.drawable.user_placeholder);
-        }else {
+            ImageHelper.getInstance(context).imageLoader(billInfo.getImageId(), billsImage, R.drawable.user_placeholder);
+        } else {
             billsImage.setImageResource(R.drawable.user_placeholder);
         }
 
@@ -606,7 +473,6 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                 bankName.setText(billInfo.getCardList().get(0).getBankName());
             }
         }
-
 
 
         if (billInfo.getCardList().size() > 0) {
@@ -638,39 +504,167 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
     public void pressKey(View view) {
         if (view.getTag().toString().equals("*")) {
             new Collapse(keyboard).animate();
-            ObjectAnimator.ofInt(paymentScroll, "scrollY",  paymentScroll.getTop()).setDuration(400).start();
-        }else if (view.getTag().toString().equals("|")) {
+            ObjectAnimator.ofInt(paymentScroll, "scrollY", paymentScroll.getTop()).setDuration(400).start();
+        } else if (view.getTag().toString().equals("|")) {
             new Expand(keyboard).animate();
-        }else {
+        } else {
             inputDigit(view.getTag().toString());
         }
     }
 
-    private void inputDigit(String digit){
-        if (digit.endsWith("d")){
+    private void inputDigit(String digit) {
+        if (digit.endsWith("d")) {
         }
-        if (pinCodeFocus){
-            if (userPinCode.length() == 0){
+        if (pinCodeFocus) {
+            if (userPinCode.length() == 0) {
                 pinText.setText("");
             }
             String pinCode = pinText.getText().toString();
-            if (digit.endsWith("d")){
+            if (digit.endsWith("d")) {
                 if (pinCode.length() == 0) return;
                 pinText.setText(pinCode.substring(0, pinCode.length() - 1));
                 userPinCode = userPinCode.substring(0, userPinCode.length() - 1);
-            }else {
+            } else {
                 pinText.setText(persian.E2P(pinCode + "●"));
                 userPinCode += digit;
             }
-        }else if (cvvFocus){
+        } else if (cvvFocus) {
             String cvvCode = cvvText.getText().toString();
-            if (digit.endsWith("d")){
+            if (digit.endsWith("d")) {
                 if (cvvCode.length() == 0) return;
                 cvvText.setText(cvvCode.substring(0, cvvCode.length() - 1));
-            }else {
+            } else {
                 cvvText.setText(persian.E2P(cvvCode + "●"));
                 userCVV2 += digit;
             }
+        }
+    }
+
+    public class RequestPurchaseTaskCompleteListener implements AsyncTaskCompleteListener<MKAArrayOfKeyValueOfstringstring> {
+
+        @Override
+        public void onTaskComplete(MKAArrayOfKeyValueOfstringstring purchaseResponseResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+
+            String responseCode = null;
+            String description = null;
+            String SWTraceNum = null;
+            ResultStatus resultStatus = ResultStatus.FAILURE;
+            ServiceEvent serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
+            LogEvent logEvent = new LogEvent(context);
+
+            if (purchaseResponseResponseMessage != null) {
+                pspResultRequest = new PSPResultRequest();
+                for (MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry : purchaseResponseResponseMessage) {
+                    if (s2sMapEntry.Key.equalsIgnoreCase("ResponseCode")) {
+                        responseCode = s2sMapEntry.Value;
+                    } else if (s2sMapEntry.Key.equalsIgnoreCase("Description")) {
+                        description = s2sMapEntry.Value;
+                    } else if (s2sMapEntry.Key.equalsIgnoreCase("SWTraceNum")) {
+                        SWTraceNum = s2sMapEntry.Value;
+                    }
+                }
+
+                if (responseCode != null) {
+                    if (responseCode.equalsIgnoreCase("2000")) {
+                        serviceName = ServiceEvent.PSP_PAYMENT_SUCCESS;
+                        if (billsInfo != null) {
+                            Intent intent = new Intent(context, PaymentCompletedActivity.class);
+                            SucceedPayment succeedPayment = new SucceedPayment();
+                            succeedPayment.setAmount(billsInfo.getAmount() + billsInfo.getFeeCharge());
+                            succeedPayment.setCode(billsInfo.getBillId());
+                            succeedPayment.setTrace(billsInfo.getPspInfo().getProviderId());
+                            succeedPayment.setPaymentType(PaymentType.BILLS);
+                            intent.putExtra(Constants.SUCCEED_PAYMENT_INFO, succeedPayment);
+                            startActivityForResult(intent, 46);
+                        }
+                        resultStatus = ResultStatus.SUCCESS;
+                    } else if (responseCode.equalsIgnoreCase("51")) {
+                        serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
+                        new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.msg_insufficient_credit));
+                        resultStatus = ResultStatus.FAILURE;
+                    } else if (responseCode.equalsIgnoreCase("3000")) {
+                        serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
+                        new HamPayDialog(activity).pspFailResultDialog(responseCode, description);
+                    } else {
+                        serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
+                        PspCode pspCode = new PspCode(context);
+                        new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(responseCode));
+                        resultStatus = ResultStatus.FAILURE;
+                    }
+                    logEvent.log(serviceName);
+
+                    SyncPspResult syncPspResult = new SyncPspResult();
+                    syncPspResult.setResponseCode(responseCode);
+                    syncPspResult.setProductCode(billsInfo.getProductCode());
+                    syncPspResult.setType("PAYMENT");
+                    syncPspResult.setSwTrace(SWTraceNum);
+                    syncPspResult.setTimestamp(System.currentTimeMillis());
+                    syncPspResult.setStatus(0);
+                    dbHelper.createSyncPspResult(syncPspResult);
+
+                    pspResultRequest.setPspResponseCode(responseCode);
+                    pspResultRequest.setProductCode(billsInfo.getProductCode());
+                    pspResultRequest.setTrackingCode(SWTraceNum);
+                    requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(SWTraceNum), 2);
+                    requestPSPResult.execute(pspResultRequest);
+
+                } else {
+                    new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
+                }
+                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                editor.commit();
+
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra(Constants.ACTIVITY_RESULT, resultStatus.ordinal());
+                setResult(Activity.RESULT_OK, returnIntent);
+            } else {
+                new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
+            }
+
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
+    }
+
+    public class RequestPSPResultTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> {
+
+        ServiceEvent serviceName;
+        LogEvent logEvent = new LogEvent(context);
+        private String SWTrace;
+
+        public RequestPSPResultTaskCompleteListener(String SWTrace) {
+            this.SWTrace = SWTrace;
+        }
+
+        @Override
+        public void onTaskComplete(ResponseMessage<PSPResultResponse> pspResultResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+
+            if (pspResultResponseMessage != null) {
+                if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    serviceName = ServiceEvent.PSP_RESULT_SUCCESS;
+                    if (SWTrace != null) {
+                        dbHelper.syncPspResult(SWTrace);
+                    }
+                } else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceEvent.PSP_RESULT_FAILURE;
+                    forceLogout();
+                } else {
+                    serviceName = ServiceEvent.PSP_RESULT_FAILURE;
+                }
+                logEvent.log(serviceName);
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 }

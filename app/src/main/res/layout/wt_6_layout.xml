@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:geekui="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -28,24 +27,24 @@
                     android:layout_height="160dp"
                     android:layout_centerHorizontal="true"
                     android:layout_margin="12dp"
-                    android:src="@drawable/wt_pending"
-                    android:scaleType="center"/>
+                    android:scaleType="center"
+                    android:src="@drawable/wt_pending" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/wt_note_border"
                     android:layout_margin="12dp"
+                    android:background="@drawable/wt_note_border"
                     android:orientation="vertical">
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                        geekui:customTypeface="fonts/vazir_regular.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:padding="6dp"
+                        android:text="@string/wt_note_5"
                         android:textColor="@color/page_title"
                         android:textSize="14dp"
-                        android:text="@string/wt_note_5"
-                        android:padding="6dp" />
+                        geekui:customTypeface="fonts/vazir_regular.ttf" />
 
                 </LinearLayout>
 
@@ -57,36 +56,36 @@
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/next_wt"
-                        geekui:customTypeface="fonts/vazir_regular.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="32dp"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="right"
+                        android:background="@drawable/registration_button_style"
+                        android:clickable="true"
                         android:gravity="center"
-                        android:text="@string/next_wt"
+                        android:onClick="wt_click"
                         android:paddingLeft="16dp"
                         android:paddingRight="16dp"
-                        android:background="@drawable/registration_button_style"
-                        android:layout_gravity="right"
-                        android:layout_alignParentRight="true"
-                        android:clickable="true"
-                        android:onClick="wt_click"/>
+                        android:text="@string/next_wt"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        geekui:customTypeface="fonts/vazir_regular.ttf" />
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/pre_wt"
-                        geekui:customTypeface="fonts/vazir_regular.ttf"
                         android:layout_width="wrap_content"
                         android:layout_height="32dp"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
+                        android:layout_gravity="right"
+                        android:background="@drawable/pre_wt_button_style"
+                        android:clickable="true"
                         android:gravity="center"
-                        android:text="@string/pre_wt"
+                        android:onClick="wt_click"
                         android:paddingLeft="16dp"
                         android:paddingRight="16dp"
-                        android:background="@drawable/pre_wt_button_style"
-                        android:layout_gravity="right"
-                        android:clickable="true"
-                        android:onClick="wt_click"/>
+                        android:text="@string/pre_wt"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp"
+                        geekui:customTypeface="fonts/vazir_regular.ttf" />
 
                 </RelativeLayout>
 
@@ -105,15 +104,15 @@
                 android:layout_height="32dp"
                 android:layout_alignParentRight="true"
                 android:layout_margin="8dp"
-                android:src="@drawable/wt_close"
                 android:clickable="true"
-                android:onClick="wt_click"/>
+                android:onClick="wt_click"
+                android:src="@drawable/wt_close" />
 
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:paddingRight="8dp"
-                android:layout_marginTop="375dp">
+                android:layout_marginTop="375dp"
+                android:paddingRight="8dp">
 
                 <RelativeLayout
                     android:layout_width="58dp"
@@ -125,7 +124,7 @@
                     <View
                         android:layout_width="52dp"
                         android:layout_height="52dp"
-                        android:background="@color/app_origin"/>
+                        android:background="@color/app_origin" />
 
                     <ImageView
                         android:layout_width="52dp"
@@ -135,13 +134,11 @@
                 </RelativeLayout>
 
 
-
-
                 <ImageView
                     android:layout_width="12dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/wt_triangle"
-                    android:layout_centerVertical="true"/>
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/wt_triangle" />
 
             </RelativeLayout>
 
