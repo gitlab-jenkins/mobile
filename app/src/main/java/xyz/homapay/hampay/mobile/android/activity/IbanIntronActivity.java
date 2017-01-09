@@ -213,8 +213,8 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
     public void OnTaskExecuted(Object object) {
 
         hamPayDialog.dismisWaitingDialog();
-        ibanUserFamily.setCursorVisible(true);
-        ibanUserName.setCursorVisible(true);
+        ibanUserFamily.setCursorVisible(false);
+        ibanUserName.setCursorVisible(false);
 
         if (object != null) {
             if (object.getClass().equals(ResponseMessage.class)) {
@@ -535,8 +535,8 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
         @Override
         public void onTaskComplete(ResponseMessage<IBANChangeResponse> ibanChangeResponseMessage) {
             hamPayDialog.dismisWaitingDialog();
-            ibanUserFamily.setCursorVisible(true);
-            ibanUserName.setCursorVisible(true);
+            ibanUserFamily.setCursorVisible(false);
+            ibanUserName.setCursorVisible(false);
             if (ibanChangeResponseMessage != null) {
                 if (ibanChangeResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     ibanVerifyButton.setVisibility(View.VISIBLE);

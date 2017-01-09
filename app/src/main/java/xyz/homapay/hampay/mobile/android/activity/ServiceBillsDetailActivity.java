@@ -93,8 +93,6 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
     private PersianEnglishDigit persian = new PersianEnglishDigit();
     private HamPayDialog hamPayDialog;
     private BillInfoDTO billsInfo = null;
-    private String billsIdValue;
-    private String payIdValue;
     private BillsTokenDoWork billsTokenDoWork;
     private RelativeLayout cardPlaceHolder;
     private int selectedCardIdIndex = -1;
@@ -176,6 +174,9 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
         keyboard = (LinearLayout) findViewById(R.id.keyboard);
         pinLayout = (RelativeLayout) findViewById(R.id.pin_layout);
         pinText = (FacedTextView) findViewById(R.id.pin_text);
+        keyboard = (LinearLayout)findViewById(R.id.keyboard);
+        pinLayout = (RelativeLayout)findViewById(R.id.pin_layout);
+        pinText = (FacedTextView)findViewById(R.id.pin_text) ;
         pinText.setOnClickListener(this);
         cvvLayout = (RelativeLayout) findViewById(R.id.cvv_layout);
         cvvText = (FacedTextView) findViewById(R.id.cvv_text);
@@ -200,8 +201,6 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
 
         Intent intent = getIntent();
         billsInfo = (BillInfoDTO) intent.getSerializableExtra(Constants.BILL_INFO);
-        billsIdValue = intent.getStringExtra(Constants.BILL_ID);
-        payIdValue = intent.getStringExtra(Constants.PAY_ID);
         providerId = intent.getStringExtra(Constants.PROVIDER_ID);
 
         if (billsInfo != null) {
@@ -239,9 +238,7 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                     Intent intent = new Intent();
                     intent.setClass(activity, BankWebPaymentActivity.class);
                     intent.putExtra(Constants.BILL_INFO, billsInfo);
-                    intent.putExtra(Constants.BILL_ID, billsIdValue);
-                    intent.putExtra(Constants.PAY_ID, payIdValue);
-                    startActivityForResult(intent, 46);
+                    startActivityForResult(intent, 47);
                 } else {
                     if (pinText.getText().toString().length() <= 4) {
                         Toast.makeText(context, getString(R.string.msg_pin2_incorrect), Toast.LENGTH_LONG).show();
@@ -342,6 +339,43 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
         });
     }
 
+    public class RequestPSPResultTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> {
+
+        private String SWTrace;
+        ServiceEvent serviceName;
+        LogEvent logEvent = new LogEvent(context);
+
+        public RequestPSPResultTaskCompleteListener(String SWTrace){
+            this.SWTrace = SWTrace;
+        }
+
+        @Override
+        public void onTaskComplete(ResponseMessage<PSPResultResponse> pspResultResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+
+            if (pspResultResponseMessage != null) {
+                if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    serviceName = ServiceEvent.PSP_RESULT_SUCCESS;
+                    if (SWTrace != null) {
+                        dbHelper.syncPspResult(SWTrace);
+                    }
+                } else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceEvent.PSP_RESULT_FAILURE;
+                    forceLogout();
+                }else {
+                    serviceName = ServiceEvent.PSP_RESULT_FAILURE;
+                }
+                logEvent.log(serviceName);
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
+    }
+
     @Override
     public void onBackPressed() {
         if (keyboard.getVisibility() == View.VISIBLE) {
@@ -404,8 +438,7 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                 Intent intent = new Intent();
                 intent.setClass(activity, BankWebPaymentActivity.class);
                 intent.putExtra(Constants.BILL_INFO, billsInfo);
-                intent.putExtra(Constants.PAY_ID, payIdValue);
-                startActivityForResult(intent, 46);
+                startActivityForResult(intent, 47);
                 break;
         }
     }
@@ -498,6 +531,25 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
         if (activity != null) {
             finish();
             startActivity(intent);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 47) {
+            if (resultCode == Activity.RESULT_OK) {
+                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, -1);
+                if (result == 0) {
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra(Constants.ACTIVITY_RESULT, ResultStatus.SUCCESS.ordinal());
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    finish();
+                }
+
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+            }
         }
     }
 
@@ -631,40 +683,4 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
         }
     }
 
-    public class RequestPSPResultTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> {
-
-        ServiceEvent serviceName;
-        LogEvent logEvent = new LogEvent(context);
-        private String SWTrace;
-
-        public RequestPSPResultTaskCompleteListener(String SWTrace) {
-            this.SWTrace = SWTrace;
-        }
-
-        @Override
-        public void onTaskComplete(ResponseMessage<PSPResultResponse> pspResultResponseMessage) {
-
-            hamPayDialog.dismisWaitingDialog();
-
-            if (pspResultResponseMessage != null) {
-                if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    serviceName = ServiceEvent.PSP_RESULT_SUCCESS;
-                    if (SWTrace != null) {
-                        dbHelper.syncPspResult(SWTrace);
-                    }
-                } else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceEvent.PSP_RESULT_FAILURE;
-                    forceLogout();
-                } else {
-                    serviceName = ServiceEvent.PSP_RESULT_FAILURE;
-                }
-                logEvent.log(serviceName);
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
-    }
 }

@@ -189,7 +189,6 @@ public class BankWebPaymentActivity extends AppCompatActivity {
         }else if (billInfo != null){
             ipgUrl = Constants.BILLS_IPG_URL;
             pspInfoDTO = billInfo.getPspInfo();
-            String payId = intent.getStringExtra(Constants.PAY_ID);
             redirectedURL = pspInfoDTO.getRedirectURL() + "?authToken=" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
             postData =
                     "ResNum4=" + pspInfoDTO.getCellNumber() +
@@ -198,7 +197,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                             "&Amount=" + (billInfo.getAmount() + billInfo.getFeeCharge()) +
                             "&ResNum=" + billInfo.getProductCode() +
                             "&Bills[0].BillId=" + billInfo.getBillId() +
-                            "&Bills[0].PayId=" + payId +
+                            "&Bills[0].PayId=" + billInfo.getPayId() +
                             "&TerminalId=" + pspInfoDTO.getSenderTerminalId();
         }
 

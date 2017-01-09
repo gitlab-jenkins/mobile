@@ -10,6 +10,7 @@ public class Constants {
 //    public static String SERVER = "139.162.147.189";//DEV2 Server
     public static String SERVER = "sit.hampay.ir";//SIT/27 Server
 //    public static String SERVER = "uat.hampay.ir";//UAT Server
+//    public static String SERVER = "uat.hampay.ir";//UAT Server
     public static final String PSP_SOAP_SERVICE_URL = SERVER;
     //    public static String SERVER = "mobile.hampay.homapay.com";//LIVE Server
     public static String URL_PREFIX = "/hampay";
@@ -128,8 +129,6 @@ public class Constants {
     public static final String BAR_CODE_SCAN_RESULT = "barCodeScanResult";
     public static final String CARD_LIST = "card_list";
     public static final String BILL_INFO = "billInfo";
-    public static final String BILL_ID = "billId";
-    public static final String PAY_ID = "payId";
     public static final String PAY_ID_REGEX = "^0+(?!$)";
 
     //Permissions and Group Permission

@@ -22,6 +22,7 @@ import xyz.homapay.hampay.mobile.android.async.task.impl.OnTaskCompleted;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.util.BillsValidator;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
@@ -150,6 +151,14 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
                 break;
 
             case R.id.billsMobileButton:
+                String billId = billIdText.getText().toString();
+                String payId = payIdText.getText().toString();
+
+                BillsValidator billsValidator = new BillsValidator();
+                if (billsValidator.validateBillId(billId)){
+
+                }
+
                 UtilityBillRequest utilityBillRequest = new UtilityBillRequest();
                 utilityBillRequest.setBillId(persian.P2E(billIdText.getText().toString()));
                 utilityBillRequest.setPayId(persian.P2E(payIdText.getText().toString()));
@@ -221,8 +230,6 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
                                 Intent intent = new Intent();
                                 intent.setClass(activity, ServiceBillsDetailActivity.class);
                                 intent.putExtra(Constants.BILL_INFO, utilityBill.getService().getBillInfoDTO());
-                                intent.putExtra(Constants.BILL_ID, persian.P2E(billIdText.getText().toString()));
-                                intent.putExtra(Constants.PAY_ID, persian.P2E(payIdText.getText().toString()));
                                 startActivity(intent);
                                 break;
                             default:
