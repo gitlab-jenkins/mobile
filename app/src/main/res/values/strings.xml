@@ -56,7 +56,7 @@
     <string name="start">شروع</string>
     <string name="main_fragment_generate_factor">درخواست پرداخت</string>
     <string name="main_fragment_business_payment">پرداخت به کسب و کار</string>
-    <string name="main_fragment_bills_top_up">قبوض خدماتی</string>
+    <string name="main_fragment_bills_top_up">پرداخت قبض</string>
     <string name="topup_purchase">خرید شارژ</string>
     <string name="bills_mobile">قبوض موبایل</string>
     <string name="bills_payment">پرداخت قبوض</string>
@@ -64,7 +64,7 @@
     <string name="bills_service_text">شناسه قبض و شناسه پرداخت قبض مورد نظر را وارد نموده و یا بارکد آن را اسکن نمائید.</string>
     <string name="topup_text">شماره تلفن همراه مورد نظر را وارد نموده و سپس مبلغ و نوع شارژ را انتخاب نمائید.</string>
     <string name="scan_barcode">اسکن بارکد</string>
-    <string name="bills_service">قبوض خدماتی</string>
+    <string name="bills_service">پرداخت قبض</string>
     <string name="bills_end_term">پایان دوره</string>
     <string name="bills_mid_term">میان دوره</string>
     <string name="topup_amount">مبلغ شارژ</string>
@@ -75,7 +75,7 @@
     <string name="msg_invalid_pay_id">شناسه پرداخت خود را صحیح وارد نمایید.</string>
     <string name="msg_invalid_bills_pay_id">شماره قبض یا شناسه پرداخت اشتباه می‌باشد. لطفا مجدد تلاش نمائید.</string>
     <string name="main_fragment_pending_payment">پرداخت‌های در انتظار</string>
-    <string name="main_fragment_bill_top_up">قبوض خدماتی</string>
+    <string name="main_fragment_bill_top_up">پرداخت قبض</string>
     <string name="main_fragment_transactions">تراکنش‌ها</string>
     <string name="transaction_history_title">تراکنش‌ها</string>
     <string name="payment_request_title">درخواست پرداخت</string>
