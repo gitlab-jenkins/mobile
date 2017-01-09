@@ -148,7 +148,7 @@
                     android:background="@color/entry_field_color"/>
 
                 <LinearLayout
-                    android:id="@+id/bills_top_up"
+                    android:id="@+id/billAndTopUp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
@@ -163,13 +163,35 @@
                         android:textSize="15dp"
                         android:gravity="center"
                         android:layout_gravity="center"
-                        android:text="@string/main_fragment_bills_top_up" />
+                        android:text="@string/main_fragment_bill_top_up" />
 
-                    <ImageView
-                        android:layout_width="52dp"
-                        android:layout_height="52dp"
-                        android:src="@drawable/bills_topup_icon"
-                        android:background="@color/page_title" />
+                    <RelativeLayout
+                        android:layout_width="64dp"
+                        android:layout_height="64dp">
+
+                        <ImageView
+                            android:layout_width="52dp"
+                            android:layout_height="52dp"
+                            android:src="@drawable/billsandtopup"
+                            android:background="@color/page_title"
+                            android:layout_alignParentRight="true"/>
+
+                        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                            android:id="@+id/bill_top_up_badge"
+                            geekui:customTypeface="fonts/vazir_regular_bold.ttf"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:textColor="@android:color/white"
+                            android:textSize="12dp"
+                            android:gravity="center"
+                            android:layout_alignParentRight="true"
+                            android:background="@drawable/pending_count_badge_style"
+                            android:padding="1dp"
+                            android:visibility="gone"/>
+
+                    </RelativeLayout>
+
+
 
                 </LinearLayout>
 
@@ -177,7 +199,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/entry_field_color"/>
-
 
                 <LinearLayout
                     android:id="@+id/pendingPurchasePayment"
