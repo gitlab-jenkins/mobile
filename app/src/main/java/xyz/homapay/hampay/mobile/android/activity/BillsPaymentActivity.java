@@ -21,9 +21,9 @@ import android.widget.TextView;
 import java.io.UnsupportedEncodingException;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
 
 import xyz.homapay.hampay.common.common.response.ResultStatus;
-import xyz.homapay.hampay.common.core.model.response.dto.BillInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
@@ -33,30 +33,28 @@ import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
-import xyz.homapay.hampay.mobile.android.model.PaymentType;
-import xyz.homapay.hampay.mobile.android.model.SucceedPayment;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
-public class BankWebPaymentActivity extends AppCompatActivity {
+public class BillsPaymentActivity extends AppCompatActivity {
+    WebView bankWebView;
+    ImageView reload;
+    TextView urlText;
+    HamPayDialog hamPayDialog;
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
+    PaymentInfoDTO paymentInfoDTO = null;
+    PurchaseInfoDTO purchaseInfoDTO = null;
+    PspInfoDTO pspInfoDTO = null;
 
-    private WebView bankWebView;
-    private ImageView reload;
-    private TextView urlText;
-    private HamPayDialog hamPayDialog;
-    private SharedPreferences prefs;
-    private SharedPreferences.Editor editor;
-    private PaymentInfoDTO paymentInfoDTO = null;
-    private PurchaseInfoDTO purchaseInfoDTO = null;
-    private BillInfoDTO billInfo;
-    private PspInfoDTO pspInfoDTO = null;
-    private String redirectedURL;
+    String redirectedURL;
+
     private Context context;
-    private Activity activity;
-    private String postData;
-    private Timer timer;
-    private TimerTask timerTask;
-    private String ipgUrl = "";
-    private final Handler handler = new Handler();
+
+    String postData;
+
+    Timer timer;
+    TimerTask timerTask;
+    final Handler handler = new Handler();
 
 
     public void startTimer() {
@@ -131,15 +129,12 @@ public class BankWebPaymentActivity extends AppCompatActivity {
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
-        activity = BankWebPaymentActivity.this;
         context = this;
-        activity = BankWebPaymentActivity.this;
 
         Intent intent = getIntent();
 
         paymentInfoDTO = (PaymentInfoDTO)intent.getSerializableExtra(Constants.PAYMENT_INFO);
         purchaseInfoDTO = (PurchaseInfoDTO)intent.getSerializableExtra(Constants.PURCHASE_INFO);
-        billInfo = (BillInfoDTO) intent.getSerializableExtra(Constants.BILL_INFO);
         pspInfoDTO = (PspInfoDTO)intent.getSerializableExtra(Constants.PSP_INFO);
 
         bankWebView = (WebView)findViewById(R.id.bankWebView);
@@ -165,47 +160,57 @@ public class BankWebPaymentActivity extends AppCompatActivity {
         settings.setJavaScriptEnabled(true);
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
 
+//        redirectedURL = Constants.IPG_URL + pspInfoDTO.getRedirectURL() + "?authToken=" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
+        //redirectedURL = pspInfoDTO.getRedirectURL() + "?authToken=" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
+
         if (paymentInfoDTO != null) {
-            ipgUrl = Constants.BANK_GATEWAY_URL;
-            redirectedURL = pspInfoDTO.getRedirectURL() + "?authToken=" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
+
             postData =
                     "ResNum4=" + pspInfoDTO.getCellNumber() +
-                            "&ResNum3=" + paymentInfoDTO.getPspInfo().getSmsToken() +
+//                            "&ResNum3=" + pspInfoDTO.getCardDTO().getSmsToken() +
                             "&RedirectURL=" + redirectedURL +
                             "&Amount=" + (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + paymentInfoDTO.getVat()) +
                             "&ResNum=" + paymentInfoDTO.getProductCode() +
-                            "&TerminalId=" + pspInfoDTO.getSenderTerminalId();
+                            "&TerminalId=" + pspInfoDTO.getTerminalId();
 
         }else if (purchaseInfoDTO != null){
-            ipgUrl = Constants.BANK_GATEWAY_URL;
-            redirectedURL = pspInfoDTO.getRedirectURL() + "?authToken=" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
+
             postData =
                     "ResNum4=" + pspInfoDTO.getCellNumber() +
-                            "&ResNum3=" + purchaseInfoDTO.getPspInfo().getSmsToken() +
+//                            "&ResNum3=" + pspInfoDTO.getCardDTO().getSmsToken() +
                             "&RedirectURL=" + redirectedURL +
                             "&Amount=" + (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat()) +
                             "&ResNum=" + purchaseInfoDTO.getProductCode() +
-                            "&TerminalId=" + pspInfoDTO.getSenderTerminalId();
-        }else if (billInfo != null){
-            ipgUrl = Constants.BILLS_IPG_URL;
-            pspInfoDTO = billInfo.getPspInfo();
-            String payId = intent.getStringExtra(Constants.PAY_ID);
-            redirectedURL = pspInfoDTO.getRedirectURL() + "?authToken=" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
-            postData =
-                    "ResNum4=" + pspInfoDTO.getCellNumber() +
-                            "&ResNum3=" + pspInfoDTO.getSmsToken() +
-                            "&RedirectURL=" + redirectedURL +
-                            "&Amount=" + (billInfo.getAmount() + billInfo.getFeeCharge()) +
-                            "&ResNum=" + billInfo.getProductCode() +
-                            "&Bills[0].BillId=" + billInfo.getBillId() +
-                            "&Bills[0].PayId=" + payId +
-                            "&TerminalId=" + pspInfoDTO.getSenderTerminalId();
+                            "&TerminalId=" + pspInfoDTO.getTerminalId();
         }
+
+//        postData =
+//                        "RedirectURL=" + "hampay.ir" +
+//                        "&Amount=" + "366000" +
+//                        "&ResNum=" + UUID.randomUUID().toString() +
+//                        "&TerminalId=" + "10516003" +
+//                        "&Technology=" + "0" +
+//                        "&ResNum4=" + "9126157905" +
+//                        "&ResNum3=" + "3063" +
+//                        "&Bills[0].BillId=" + "2615790509058" +
+//                        "&Bills[0].PayId=" + "36652834";
+
+        postData =
+                "RedirectURL=" + "hampay.ir" +
+                        "&ResNum=" + UUID.randomUUID().toString() +
+                        "&TerminalId=" + "10516003" +
+                        "&ProfileId=" + "64" +
+                        "&Amount=" + "10000" +
+                        "&Count=" + "2" +
+                        "&ChargeType=" + "2" +
+                        "&CellNumber=" + "09359558334" +
+                        "&ReceivedChargeType=" + "2";
 
         try {
             editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
             editor.commit();
-            bankWebView.postUrl(ipgUrl, postData.getBytes("UTF-8"));
+//            bankWebView.postUrl(Constants.BANK_GATEWAY_URL, postData.getBytes("UTF-8"));
+            bankWebView.postUrl("https://sep.shaparak.ir/ECharge", postData.getBytes("UTF-8"));
             hamPayDialog.showFirstIpg(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
             startTimer();
         } catch (UnsupportedEncodingException e) {
@@ -232,45 +237,38 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                 ResultStatus resultStatus = ResultStatus.FAILURE;
                 ServiceEvent serviceName;
                 LogEvent logEvent = new LogEvent(context);
-                if (url.toLowerCase().contains(pspInfoDTO.getRedirectURL().toLowerCase())) {
-                    if (view.getTitle().toLowerCase().contains("ref:")) {
-                        if (view.getTitle().split(":").length == 2){
-                            serviceName = ServiceEvent.IPG_PAYMENT_SUCCESS;
-                            logEvent.log(serviceName);
-                            Intent intent = new Intent(context, PaymentCompletedActivity.class);
-                            SucceedPayment succeedPayment = new SucceedPayment();
-                            if (paymentInfoDTO != null) {
-                                succeedPayment.setAmount(paymentInfoDTO.getAmount() + paymentInfoDTO.getVat() + paymentInfoDTO.getFeeCharge());
-                                succeedPayment.setCode(paymentInfoDTO.getProductCode());
-                                succeedPayment.setPaymentType(PaymentType.PAYMENT);
-                            }else if (purchaseInfoDTO != null){
-                                succeedPayment.setAmount(purchaseInfoDTO.getAmount());
-                                succeedPayment.setCode(purchaseInfoDTO.getPurchaseCode());
-                                succeedPayment.setPaymentType(PaymentType.PURCHASE);
-                            }else if (billInfo != null){
-                                succeedPayment.setAmount(billInfo.getAmount() + billInfo.getFeeCharge());
-                                succeedPayment.setCode(billInfo.getBillId());
-                                succeedPayment.setPaymentType(PaymentType.BILLS);
-                            }
-                            succeedPayment.setTrace(pspInfoDTO.getProviderId());
-                            intent.putExtra(Constants.SUCCEED_PAYMENT_INFO, succeedPayment);
-                            startActivityForResult(intent, 0);
-                            resultStatus = ResultStatus.SUCCESS;
-                        }else {
-                            new HamPayDialog(activity).ipgFailDialog();
-                            resultStatus = ResultStatus.FAILURE;
-                            serviceName = ServiceEvent.IPG_PAYMENT_FAILURE;
-                            logEvent.log(serviceName);
-                        }
-                    } else {
-                        serviceName = ServiceEvent.IPG_PAYMENT_FAILURE;
-                        logEvent.log(serviceName);
-                        new HamPayDialog(activity).ipgFailDialog();
-                    }
-                } else {
-                    serviceName = ServiceEvent.IPG_PAYMENT_FAILURE;
-                    logEvent.log(serviceName);
-                }
+//                if (url.toLowerCase().contains(pspInfoDTO.getRedirectURL().toLowerCase())) {
+//                    if (view.getTitle().toLowerCase().contains("ref:")) {
+//                        if (view.getTitle().split(":").length == 2){
+//                            serviceName = ServiceEvent.IPG_PAYMENT_SUCCESS;
+//                            logEvent.log(serviceName);
+//                            Intent intent = new Intent(context, PaymentCompletedActivity.class);
+//                            if (paymentInfoDTO != null) {
+//                                intent.putExtra(Constants.SUCCESS_PAYMENT_AMOUNT, paymentInfoDTO.getAmount() + paymentInfoDTO.getVat() + paymentInfoDTO.getFeeCharge());
+//                                intent.putExtra(Constants.SUCCESS_PAYMENT_CODE, paymentInfoDTO.getProductCode());
+//
+//                            }else if (purchaseInfoDTO != null){
+//                                intent.putExtra(Constants.SUCCESS_PAYMENT_AMOUNT, purchaseInfoDTO.getAmount());
+//                                intent.putExtra(Constants.SUCCESS_PAYMENT_CODE, purchaseInfoDTO.getPurchaseCode());
+//                            }
+//                            intent.putExtra(Constants.SUCCESS_PAYMENT_TRACE, pspInfoDTO.getProviderId());
+//                            startActivityForResult(intent, 0);
+//                            resultStatus = ResultStatus.SUCCESS;
+//                        }else {
+//                            hamPayDialog.ipgFailDialog();
+//                            resultStatus = ResultStatus.FAILURE;
+//                            serviceName = ServiceEvent.IPG_PAYMENT_FAILURE;
+//                            logEvent.log(serviceName);
+//                        }
+//                    } else {
+//                        serviceName = ServiceEvent.IPG_PAYMENT_FAILURE;
+//                        logEvent.log(serviceName);
+//                        hamPayDialog.ipgFailDialog();
+//                    }
+//                } else {
+//                    serviceName = ServiceEvent.IPG_PAYMENT_FAILURE;
+//                    logEvent.log(serviceName);
+//                }
             }
         });
 

@@ -7,23 +7,23 @@ import java.io.IOException;
 
 import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
-import xyz.homapay.hampay.common.core.model.request.CancelPurchasePaymentRequest;
-import xyz.homapay.hampay.common.core.model.response.CancelPurchasePaymentResponse;
+import xyz.homapay.hampay.common.core.model.request.CancelFundRequest;
+import xyz.homapay.hampay.common.core.model.response.CancelFundResponse;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.webservice.SecuredWebServices;
 
 /**
  * Created by amir on 7/3/15.
  */
-public class RequestCancelPurchase extends AsyncTask<CancelPurchasePaymentRequest, Void, ResponseMessage<CancelPurchasePaymentResponse>> {
+public class RequestCancelPurchase extends AsyncTask<CancelFundRequest, Void, ResponseMessage<CancelFundResponse>> {
 
     private static final String TAG = "RequestCancelPurchase";
 
     private Context context;
-    private AsyncTaskCompleteListener<ResponseMessage<CancelPurchasePaymentResponse>> listener;
+    private AsyncTaskCompleteListener<ResponseMessage<CancelFundResponse>> listener;
 
 
-    public RequestCancelPurchase(Context context, AsyncTaskCompleteListener<ResponseMessage<CancelPurchasePaymentResponse>> listener)
+    public RequestCancelPurchase(Context context, AsyncTaskCompleteListener<ResponseMessage<CancelFundResponse>> listener)
     {
         this.context = context;
         this.listener = listener;
@@ -37,12 +37,12 @@ public class RequestCancelPurchase extends AsyncTask<CancelPurchasePaymentReques
     }
 
     @Override
-    protected ResponseMessage<CancelPurchasePaymentResponse> doInBackground(CancelPurchasePaymentRequest... params) {
+    protected ResponseMessage<CancelFundResponse> doInBackground(CancelFundRequest... params) {
 
         SecuredWebServices webServices = new SecuredWebServices(context, Constants.CONNECTION_TYPE);
 
         try {
-            return webServices.cancelPurchasePaymentResponse(params[0]);
+            return webServices.cancelFund(params[0]);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (EncryptionException e) {
@@ -53,15 +53,15 @@ public class RequestCancelPurchase extends AsyncTask<CancelPurchasePaymentReques
 
 
     @Override
-    protected void onPostExecute(ResponseMessage<CancelPurchasePaymentResponse> cancelPurchasePaymentResponseMessage)
+    protected void onPostExecute(ResponseMessage<CancelFundResponse> cancelFundResponse)
     {
-        super.onPostExecute(cancelPurchasePaymentResponseMessage);
-        listener.onTaskComplete(cancelPurchasePaymentResponseMessage);
+        super.onPostExecute(cancelFundResponse);
+        listener.onTaskComplete(cancelFundResponse);
     }
 
     @Override
-    protected void onCancelled(ResponseMessage<CancelPurchasePaymentResponse> cancelPurchasePaymentResponseMessage) {
-        super.onCancelled(cancelPurchasePaymentResponseMessage);
+    protected void onCancelled(ResponseMessage<CancelFundResponse> cancelFundResponse) {
+        super.onCancelled(cancelFundResponse);
         cancel(true);
     }
 

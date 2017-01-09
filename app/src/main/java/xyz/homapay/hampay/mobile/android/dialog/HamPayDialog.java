@@ -1665,7 +1665,7 @@ public class HamPayDialog {
         FacedTextView ibanOwnInfo = (FacedTextView)view.findViewById(R.id.ibanOwnInfo);
 
         ibanNumber.setText("IR" + new PersianEnglishDigit().E2P(iban));
-//        ibanOwnInfo.setText(activity.getString(R.string.sheba_question_part2_text, ibanConfirmationResponse.getName(), ibanConfirmationResponse.getBankName()));
+        ibanOwnInfo.setText(activity.getString(R.string.sheba_question_part2_text, ibanConfirmationResponse.getBankName(), ibanConfirmationResponse.getBankName()));
 
         FacedTextView iban_request_confirm = (FacedTextView) view.findViewById(R.id.iban_request_confirm);
         FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
@@ -1724,6 +1724,38 @@ public class HamPayDialog {
             dialog.show();
         }
     }
+
+    public void showFailBillInfoDialog(final String code, final String message){
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_bill, null);
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+        responseMessage.setText(activity.getString(R.string.error_code, code) + "\n" + message);
+
+        FacedTextView retry = (FacedTextView) view.findViewById(R.id.retry);
+        FacedTextView cancel = (FacedTextView) view.findViewById(R.id.cancel);
+
+        retry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                activity.finish();
+            }
+        });
+
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
+    }
+
 
     public void showFailIBANConfirmationDialog(final RequestIBANConfirmation requestIBANConfirmation,
                                                final IBANConfirmationRequest ibanConfirmationRequest,

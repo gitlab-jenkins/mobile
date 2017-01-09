@@ -27,11 +27,10 @@ import br.com.goncalves.pugnotification.notification.PugNotification;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.enums.FundType;
-import xyz.homapay.hampay.common.core.model.request.CancelPurchasePaymentRequest;
-import xyz.homapay.hampay.common.core.model.request.CancelUserPaymentRequest;
+import xyz.homapay.hampay.common.core.model.request.CancelFundRequest;
+import xyz.homapay.hampay.common.core.model.response.CancelFundResponse;
+import xyz.homapay.hampay.common.core.model.request.PendingCountRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingFundListRequest;
-import xyz.homapay.hampay.common.core.model.response.CancelPurchasePaymentResponse;
-import xyz.homapay.hampay.common.core.model.response.CancelUserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingFundListResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.FundDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
@@ -70,9 +69,8 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
     private int itemPosition;
     private String authToken;
     RequestCancelPurchase requestCancelPurchase;
-    CancelPurchasePaymentRequest cancelPurchasePaymentRequest;
+    CancelFundRequest cancelFundRequest;
     RequestCancelPayment requestCancelPayment;
-    CancelUserPaymentRequest cancelUserPaymentRequest;
     RelativeLayout full_pending;
     RelativeLayout invoice_pending;
     RelativeLayout purchase_pending;
@@ -226,6 +224,11 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                     intent.putExtra(Constants.PROVIDER_ID, fundDTOList.get(position).getProviderId());
                     itemPosition = position;
                     startActivityForResult(intent, 46);
+                }else if (fundDTOList.get(position).getPaymentType() == FundDTO.PaymentType.UTILITY_BILL) {
+                    intent.setClass(activity, ServiceBillsDetailActivity.class);
+                    intent.putExtra(Constants.PROVIDER_ID, fundDTOList.get(position).getProviderId());
+                    itemPosition = position;
+                    startActivityForResult(intent, 47);
                 }
             }
         });
@@ -333,7 +336,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
             case R.id.purchase_pending:
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
-                fundType = FundType.BUSINESS_AND_PURCHASE;
+                fundType = FundType.COMMERCIAL;
                 requestPendingFundList = new RequestPendingFundList(activity, new RequestPendingFundTaskCompleteListener());
                 pendingFundListRequest = new PendingFundListRequest();
                 pendingFundListRequest.setType(fundType);
@@ -385,14 +388,22 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                 if (fundDTOList != null){
                     if (fundDTOList.get(pos).getPaymentType() == FundDTO.PaymentType.PURCHASE){
                         requestCancelPurchase = new RequestCancelPurchase(activity, new RequestCancelPurchasePaymentTaskCompleteListener(pos));
-                        cancelPurchasePaymentRequest = new CancelPurchasePaymentRequest();
-                        cancelPurchasePaymentRequest.setProductCode(fundDTOList.get(pos).getProductCode());
-                        requestCancelPurchase.execute(cancelPurchasePaymentRequest);
+                        cancelFundRequest = new CancelFundRequest();
+                        cancelFundRequest.setProviderId(fundDTOList.get(pos).getProviderId());
+                        cancelFundRequest.setFundType(FundType.PURCHASE);
+                        requestCancelPurchase.execute(cancelFundRequest);
                     }else if (fundDTOList.get(pos).getPaymentType() == FundDTO.PaymentType.PAYMENT){
                         requestCancelPayment = new RequestCancelPayment(activity, new RequestCancelPaymentTaskCompleteListener(pos));
-                        cancelUserPaymentRequest = new CancelUserPaymentRequest();
-                        cancelUserPaymentRequest.setProductCode(fundDTOList.get(pos).getCode());
-                        requestCancelPayment.execute(cancelUserPaymentRequest);
+                        cancelFundRequest = new CancelFundRequest();
+                        cancelFundRequest.setFundType(FundType.PAYMENT);
+                        cancelFundRequest.setProviderId(fundDTOList.get(pos).getProviderId());
+                        requestCancelPayment.execute(cancelFundRequest);
+                    } else if (fundDTOList.get(pos).getPaymentType() == FundDTO.PaymentType.UTILITY_BILL){
+                        requestCancelPayment = new RequestCancelPayment(activity, new RequestCancelPaymentTaskCompleteListener(pos));
+                        cancelFundRequest = new CancelFundRequest();
+                        cancelFundRequest.setFundType(FundType.UTILITY_BILL);
+                        cancelFundRequest.setProviderId(fundDTOList.get(pos).getProviderId());
+                        requestCancelPayment.execute(cancelFundRequest);
                     }
                 }
                 break;
@@ -435,7 +446,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
     }
 
     public class RequestCancelPurchasePaymentTaskCompleteListener implements
-            AsyncTaskCompleteListener<ResponseMessage<CancelPurchasePaymentResponse>> {
+            AsyncTaskCompleteListener<ResponseMessage<CancelFundResponse>> {
 
         int position;
 
@@ -445,13 +456,13 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
 
         @Override
-        public void onTaskComplete(ResponseMessage<CancelPurchasePaymentResponse> cancelPurchasePaymentResponseMessage) {
+        public void onTaskComplete(ResponseMessage<CancelFundResponse> cancelPurchasePaymentResponseMessage) {
 
             hamPayDialog.dismisWaitingDialog();
 
             if (cancelPurchasePaymentResponseMessage != null) {
                 if (cancelPurchasePaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS
-                        || cancelPurchasePaymentResponseMessage.getService().getResultStatus() == ResultStatus.PURCHASE_NOT_ELIGIBLE_TO_CANCEL) {
+                        || cancelPurchasePaymentResponseMessage.getService().getResultStatus() == ResultStatus.FUND_NOT_ELIGIBLE_TO_CANCEL) {
                     cancelPurchasePaymentResponseMessage.getService().getRequestUUID();
                     if (fundDTOList != null){
                         fundDTOList.remove(pos);
@@ -472,7 +483,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
     }
 
     public class RequestCancelPaymentTaskCompleteListener implements
-            AsyncTaskCompleteListener<ResponseMessage<CancelUserPaymentResponse>> {
+            AsyncTaskCompleteListener<ResponseMessage<CancelFundResponse>> {
 
         int position;
 
@@ -482,13 +493,13 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
 
         @Override
-        public void onTaskComplete(ResponseMessage<CancelUserPaymentResponse> cancelUserPaymentResponseMessage) {
+        public void onTaskComplete(ResponseMessage<CancelFundResponse> cancelUserPaymentResponseMessage) {
 
             hamPayDialog.dismisWaitingDialog();
 
             if (cancelUserPaymentResponseMessage != null) {
                 if (cancelUserPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS
-                        || cancelUserPaymentResponseMessage.getService().getResultStatus() == ResultStatus.PURCHASE_NOT_ELIGIBLE_TO_CANCEL) {
+                        || cancelUserPaymentResponseMessage.getService().getResultStatus() == ResultStatus.FUND_NOT_ELIGIBLE_TO_CANCEL) {
                     if (fundDTOList != null){
                         fundDTOList.remove(pos);
                         pendingFundListAdapter.notifyDataSetChanged();
