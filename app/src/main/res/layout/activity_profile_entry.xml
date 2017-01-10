@@ -290,7 +290,7 @@
                             android:maxLines="1"
                             android:maxLength="30"
                             android:padding="8dp"
-                            android:digits=" ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzاآبپتثجچحخدذرزژسشصضطظعغفقکگلمنوهی"
+                            android:digits="@string/user_name_restriction"
                             android:contentDescription="account"
                             android:nextFocusDown="@+id/emailValue"
                             android:singleLine="true"/>
