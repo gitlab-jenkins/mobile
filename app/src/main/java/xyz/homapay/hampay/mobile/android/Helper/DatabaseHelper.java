@@ -1,6 +1,5 @@
 package xyz.homapay.hampay.mobile.android.Helper;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -8,14 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.os.Build;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
-import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
-import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
 
 /**
  * Created by amir on 6/13/15.

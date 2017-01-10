@@ -35,7 +35,6 @@ import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
-import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompleted, View.OnClickListener {
 
