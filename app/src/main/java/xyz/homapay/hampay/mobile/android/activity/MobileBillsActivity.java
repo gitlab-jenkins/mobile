@@ -30,7 +30,7 @@ public class MobileBillsActivity extends AppCompatActivity implements View.OnCli
     private PersianEnglishDigit persian;
     private ImageView simNumber;
 
-    public void backActionBar(View view){
+    public void backActionBar(View view) {
         finish();
     }
 
@@ -75,7 +75,7 @@ public class MobileBillsActivity extends AppCompatActivity implements View.OnCli
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch (requestCode){
+        switch (requestCode) {
             case Constants.BAR_CODE_RESULT:
                 if (resultCode == RESULT_OK) {
                     Bundle barCodeResult = data.getExtras();
@@ -95,11 +95,11 @@ public class MobileBillsActivity extends AppCompatActivity implements View.OnCli
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         persian = new PersianEnglishDigit();
 
-        barCodeScanner = (LinearLayout)findViewById(R.id.barCodeScanner);
+        barCodeScanner = (LinearLayout) findViewById(R.id.barCodeScanner);
         barCodeScanner.setOnClickListener(this);
 
-        keyboard = (LinearLayout)findViewById(R.id.keyboard);
-        cellNumberText = (FacedTextView)findViewById(R.id.cellNumberText);
+        keyboard = (LinearLayout) findViewById(R.id.keyboard);
+        cellNumberText = (FacedTextView) findViewById(R.id.cellNumberText);
         cellNumberText.setOnClickListener(this);
 
 
@@ -108,7 +108,7 @@ public class MobileBillsActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         Intent intent;
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.barCodeScanner:
                 intent = new Intent(context, BarCodeScannerActivity.class);
                 startActivityForResult(intent, Constants.BAR_CODE_RESULT);
@@ -122,10 +122,9 @@ public class MobileBillsActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onBackPressed() {
-        if (keyboard.getVisibility() == View.VISIBLE){
+        if (keyboard.getVisibility() == View.VISIBLE) {
             new Collapse(keyboard).animate();
-        }
-        else {
+        } else {
             finish();
         }
     }
@@ -133,26 +132,26 @@ public class MobileBillsActivity extends AppCompatActivity implements View.OnCli
     public void pressKey(View view) {
         if (view.getTag().toString().equals("*")) {
             new Collapse(keyboard).animate();
-        }else if (view.getTag().toString().equals("|")) {
+        } else if (view.getTag().toString().equals("|")) {
             new Expand(keyboard).animate();
-        }else {
+        } else {
             inputDigit(view.getTag().toString());
         }
     }
 
-    private void inputDigit(String digit){
-        if (digit.endsWith("d")){
-        }else {
+    private void inputDigit(String digit) {
+        if (digit.endsWith("d")) {
+        } else {
             if (cellNumber.length() > 8) return;
             cellNumber += digit;
         }
 
-        if (digit.endsWith("d")){
+        if (digit.endsWith("d")) {
             if (cellNumber.length() == 0) return;
             cellNumber = cellNumber.substring(0, cellNumber.length() - 1);
             cellNumberText.setText(persian.E2P(cellNumber));
 
-        }else {
+        } else {
             cellNumberText.setText(persian.E2P(cellNumber));
         }
     }

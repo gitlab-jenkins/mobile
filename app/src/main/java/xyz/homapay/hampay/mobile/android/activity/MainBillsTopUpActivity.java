@@ -10,16 +10,28 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
+import xyz.homapay.hampay.common.common.Operator;
+import xyz.homapay.hampay.common.common.response.ResponseMessage;
+import xyz.homapay.hampay.common.core.model.response.TopUpInfoResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
-import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.common.messages.MessageSetOperator;
+import xyz.homapay.hampay.mobile.android.component.topup.TopUpCellNumber;
+import xyz.homapay.hampay.mobile.android.dialog.ProgressDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.p.topup.TopUpInfoImpl;
+import xyz.homapay.hampay.mobile.android.p.topup.TopUpInfoView;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.Dialoger;
+import xyz.homapay.hampay.mobile.android.util.ModelLayerImpl;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
-public class MainBillsTopUpActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainBillsTopUpActivity extends AppCompatActivity implements View.OnClickListener {
 
     private SharedPreferences prefs;
     private Context context;
@@ -33,10 +45,13 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     private ImageView topUpTriangle;
     private LinearLayout mobileBill;
     private LinearLayout serviceBills;
-    private FacedTextView cellNumberText;
+    private TopUpCellNumber cellNumberText;
+    private ImageView imgMCI;
+    private ImageView imgMTN;
+    private ImageView imgRIGHTEL;
     private String cellNumber = "";
 
-    public void backActionBar(View view){
+    public void backActionBar(View view) {
         finish();
     }
 
@@ -48,8 +63,15 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
 
     @Override
     protected void onStop() {
+        EventBus.getDefault().unregister(this);
         super.onStop();
         HamPayApplication.setAppSate(AppState.Stoped);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -86,28 +108,34 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         persian = new PersianEnglishDigit();
 
-        keyboard = (LinearLayout)findViewById(R.id.keyboard);
+        keyboard = (LinearLayout) findViewById(R.id.keyboard);
 
         billsTool = (RelativeLayout) findViewById(R.id.billsTool);
         billsTool.setOnClickListener(this);
         topUpTool = (RelativeLayout) findViewById(R.id.topUpTool);
         topUpTool.setOnClickListener(this);
-        billsLayout = (LinearLayout)findViewById(R.id.billsLayout);
-        topUpLayout = (LinearLayout)findViewById(R.id.topUpLayout);
-        billsTriangle = (ImageView)findViewById(R.id.billsTriangle);
-        topUpTriangle = (ImageView)findViewById(R.id.topUpTriangle);
-        mobileBill = (LinearLayout)findViewById(R.id.mobileBills);
+        billsLayout = (LinearLayout) findViewById(R.id.billsLayout);
+        topUpLayout = (LinearLayout) findViewById(R.id.topUpLayout);
+        billsTriangle = (ImageView) findViewById(R.id.billsTriangle);
+        topUpTriangle = (ImageView) findViewById(R.id.topUpTriangle);
+        mobileBill = (LinearLayout) findViewById(R.id.mobileBills);
         mobileBill.setOnClickListener(this);
-        serviceBills = (LinearLayout)findViewById(R.id.serviceBills);
+        serviceBills = (LinearLayout) findViewById(R.id.serviceBills);
         serviceBills.setOnClickListener(this);
-        cellNumberText = (FacedTextView)findViewById(R.id.cellNumberText);
+        cellNumberText = (TopUpCellNumber) findViewById(R.id.cellNumberText);
         cellNumberText.setOnClickListener(this);
+        imgMCI = (ImageView) findViewById(R.id.imgMCI);
+        imgMTN = (ImageView) findViewById(R.id.imgMTN);
+        imgRIGHTEL = (ImageView) findViewById(R.id.imgRIGHTEL);
+        imgMCI.setOnClickListener(this);
+        imgMTN.setOnClickListener(this);
+        imgRIGHTEL.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         Intent intent;
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.billsTool:
                 setLayout(1);
                 break;
@@ -125,11 +153,20 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
             case R.id.cellNumberText:
                 new Expand(keyboard).animate();
                 break;
+            case R.id.imgMCI:
+                selectOperatorView(Operator.MCI);
+                break;
+            case R.id.imgMTN:
+                selectOperatorView(Operator.MTN);
+                break;
+            case R.id.imgRIGHTEL:
+                selectOperatorView(Operator.RAYTEL);
+                break;
         }
     }
 
-    private void setLayout(int layout){
-        switch (layout){
+    private void setLayout(int layout) {
+        switch (layout) {
             case 1:
                 billsTool.setBackgroundResource(R.color.tool_bar_selected);
                 billsTriangle.setVisibility(View.VISIBLE);
@@ -153,10 +190,9 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onBackPressed() {
-        if (keyboard.getVisibility() == View.VISIBLE){
+        if (keyboard.getVisibility() == View.VISIBLE) {
             new Collapse(keyboard).animate();
-        }
-        else {
+        } else {
             finish();
         }
     }
@@ -164,27 +200,92 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     public void pressKey(View view) {
         if (view.getTag().toString().equals("*")) {
             new Collapse(keyboard).animate();
-        }else if (view.getTag().toString().equals("|")) {
+        } else if (view.getTag().toString().equals("|")) {
             new Expand(keyboard).animate();
-        }else {
+        } else {
             inputDigit(view.getTag().toString());
         }
     }
 
-    private void inputDigit(String digit){
-        if (digit.endsWith("d")){
-        }else {
+    private void inputDigit(String digit) {
+        if (digit.endsWith("d")) {
+        } else {
             if (cellNumber.length() > 8) return;
             cellNumber += digit;
         }
 
-        if (digit.endsWith("d")){
+        if (digit.endsWith("d")) {
             if (cellNumber.length() == 0) return;
             cellNumber = cellNumber.substring(0, cellNumber.length() - 1);
             cellNumberText.setText(persian.E2P(cellNumber));
 
-        }else {
+        } else {
             cellNumberText.setText(persian.E2P(cellNumber));
+        }
+    }
+
+    @Subscribe
+    public void onOperatorChanged(MessageSetOperator messageSetOperator) {
+        Operator operator;
+        switch (messageSetOperator.getOperator()) {
+            case MCI:
+                operator = Operator.MCI;
+                break;
+            case IRANCELL:
+                operator = Operator.MTN;
+                break;
+            case RIGHTEL:
+                operator = Operator.RAYTEL;
+                break;
+            default:
+                return;
+        }
+        new Collapse(keyboard).animate();
+        selectOperatorView(operator);
+        new TopUpInfoImpl(new ModelLayerImpl(context), new TopUpInfoView() {
+            @Override
+            public void showProgress() {
+                ProgressDialog.show(context);
+            }
+
+            @Override
+            public void dismissProgress() {
+                ProgressDialog.cancel();
+            }
+
+            @Override
+            public void onError() {
+                ProgressDialog.cancel();
+                Dialoger.GENERAL.show(context, getString(R.string.err_general), getString(R.string.err_failed_get_operator_data_charge));
+            }
+
+            @Override
+            public void onInfoLoaded(boolean state, ResponseMessage<TopUpInfoResponse> data, String message) {
+                if (state) {
+
+                } else
+                    onError();
+            }
+        }).getInfo(operator);
+    }
+
+    private void selectOperatorView(Operator operator) {
+        switch (operator) {
+            case MCI:
+                imgMCI.setImageResource(R.mipmap.hamrah_active);
+                imgMTN.setImageResource(R.mipmap.irancell_inactive);
+                imgRIGHTEL.setImageResource(R.mipmap.rightel_inactive);
+                break;
+            case MTN:
+                imgMCI.setImageResource(R.mipmap.hamrah_inactive);
+                imgMTN.setImageResource(R.mipmap.irancell_active);
+                imgRIGHTEL.setImageResource(R.mipmap.rightel_inactive);
+                break;
+            case RAYTEL:
+                imgMCI.setImageResource(R.mipmap.hamrah_inactive);
+                imgMTN.setImageResource(R.mipmap.irancell_inactive);
+                imgRIGHTEL.setImageResource(R.mipmap.rightel_active);
+                break;
         }
     }
 }

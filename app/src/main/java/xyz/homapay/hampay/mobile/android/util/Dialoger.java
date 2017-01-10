@@ -2,6 +2,7 @@ package xyz.homapay.hampay.mobile.android.util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
@@ -68,6 +69,43 @@ public class Dialoger {
             });
         }
 
+    }
+
+    public static final class GENERAL {
+        private static MaterialDialog dlg;
+        private static MaterialDialog dlgCustom;
+
+        public static void show(final Context ctx) {
+            dlg = new MaterialDialog.Builder(ctx)
+                    .typeface(FontFace.getInstance(ctx).getIRANSANS(), FontFace.getInstance(ctx).getIRANSANS())
+                    .title("هم پی")
+                    .titleColor(Color.GRAY)
+                    .theme(Theme.LIGHT)
+                    .content("درخواست شما با موفقیت به پایان رسید")
+                    .positiveText("تایید")
+                    .onPositive((dialog, which) -> {
+                        if (dlg != null)
+                            dlg.cancel();
+                    })
+                    .cancelable(false)
+                    .build();
+        }
+
+        public static void show(final Context ctx, final String title, final String text) {
+            dlgCustom = new MaterialDialog.Builder(ctx)
+                    .typeface(FontFace.getInstance(ctx).getIRANSANS(), FontFace.getInstance(ctx).getIRANSANS())
+                    .title(title)
+                    .titleColor(Color.GRAY)
+                    .theme(Theme.LIGHT)
+                    .content(text)
+                    .positiveText("تایید")
+                    .onPositive((dialog, which) -> {
+                        if (dlgCustom != null)
+                            dlgCustom.dismiss();
+                    })
+                    .cancelable(true)
+                    .show();
+        }
     }
 
 }

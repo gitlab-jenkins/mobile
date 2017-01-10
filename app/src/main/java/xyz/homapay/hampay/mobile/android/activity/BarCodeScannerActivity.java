@@ -27,7 +27,7 @@ import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
-public class BarCodeScannerActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler{
+public class BarCodeScannerActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
     private SharedPreferences prefs;
     private Context context;
@@ -35,7 +35,7 @@ public class BarCodeScannerActivity extends AppCompatActivity implements ZXingSc
     private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
     private Activity activity;
 
-    public void backActionBar(View view){
+    public void backActionBar(View view) {
         finish();
     }
 
@@ -131,9 +131,9 @@ public class BarCodeScannerActivity extends AppCompatActivity implements ZXingSc
                     } else {
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                             boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.CAMERA);
-                            if (showRationale){
+                            if (showRationale) {
                                 finish();
-                            }else {
+                            } else {
                                 Intent intent = new Intent();
                                 intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                                 intent.addCategory(Intent.CATEGORY_DEFAULT);
@@ -143,7 +143,7 @@ public class BarCodeScannerActivity extends AppCompatActivity implements ZXingSc
                                 intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
                                 context.startActivity(intent);
                             }
-                        }else {
+                        } else {
                             finish();
                         }
                     }

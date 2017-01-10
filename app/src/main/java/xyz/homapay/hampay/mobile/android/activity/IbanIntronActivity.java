@@ -157,7 +157,7 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
         ibanUserFamily.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 ibanUserFamily.setCursorVisible(true);
-            }else {
+            } else {
                 ibanUserFamily.setCursorVisible(false);
             }
         });

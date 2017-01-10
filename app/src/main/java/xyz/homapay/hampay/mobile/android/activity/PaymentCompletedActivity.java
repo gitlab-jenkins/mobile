@@ -38,7 +38,7 @@ public class PaymentCompletedActivity extends AppCompatActivity {
 
         if (succeedPayment.getPaymentType() == PaymentType.PAYMENT || succeedPayment.getPaymentType() == PaymentType.PURCHASE) {
             setContentView(R.layout.activity_payment_completed);
-        }else if (succeedPayment.getPaymentType() == PaymentType.BILLS){
+        } else if (succeedPayment.getPaymentType() == PaymentType.BILLS) {
             setContentView(R.layout.activity_bills_completed);
         }
 

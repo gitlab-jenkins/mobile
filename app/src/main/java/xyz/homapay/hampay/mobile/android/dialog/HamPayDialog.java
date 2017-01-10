@@ -1,6 +1,7 @@
 package xyz.homapay.hampay.mobile.android.dialog;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
@@ -28,9 +29,11 @@ import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
+import xyz.homapay.hampay.common.core.model.request.CardProfileRequest;
 import xyz.homapay.hampay.common.core.model.request.ChangePassCodeRequest;
 import xyz.homapay.hampay.common.core.model.request.ContactUsRequest;
 import xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
+import xyz.homapay.hampay.common.core.model.request.IllegalAppListRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationCredentialsRequest;
@@ -50,10 +53,12 @@ import xyz.homapay.hampay.mobile.android.activity.SMSVerificationActivity;
 import xyz.homapay.hampay.mobile.android.activity.UnlinkPassActivity;
 import xyz.homapay.hampay.mobile.android.activity.WelcomeActivity;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
+import xyz.homapay.hampay.mobile.android.async.RequestCardProfile;
 import xyz.homapay.hampay.mobile.android.async.RequestChangePassCode;
 import xyz.homapay.hampay.mobile.android.async.RequestContactHampayEnabled;
 import xyz.homapay.hampay.mobile.android.async.RequestCredentialEntry;
 import xyz.homapay.hampay.mobile.android.async.RequestHamPayBusiness;
+import xyz.homapay.hampay.mobile.android.async.RequestIllegalAppList;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestNewLogout;
@@ -68,6 +73,7 @@ import xyz.homapay.hampay.mobile.android.component.edittext.EmailTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
+import xyz.homapay.hampay.mobile.android.p.auth.RegisterEntry;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.EmailVerification;
@@ -106,7 +112,7 @@ public class HamPayDialog {
         window.getDecorView().getWindowVisibleDisplayFrame(rect);
     }
 
-    public void exitRegistrationDialog(){
+    public void exitRegistrationDialog() {
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_exit_registeration, null);
 
@@ -163,8 +169,8 @@ public class HamPayDialog {
         }
     }
 
-    public void dismisWaitingDialog(){
-        if (dialog != null && !activity.isFinishing()){
+    public void dismisWaitingDialog() {
+        if (dialog != null && !activity.isFinishing()) {
             if (dialog.isShowing())
                 dialog.dismiss();
         }
@@ -245,7 +251,7 @@ public class HamPayDialog {
         }
     }
 
-    public void showLogoutDialog(){
+    public void showLogoutDialog() {
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_exit_app, null);
 
@@ -277,7 +283,7 @@ public class HamPayDialog {
         }
     }
 
-    public void showRemovePasswordDialog(){
+    public void showRemovePasswordDialog() {
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_remove_password, null);
 
@@ -399,7 +405,6 @@ public class HamPayDialog {
         }
     }
 
-    public void showFailRegistrationEntryDialog(final RequestRegistrationEntry requestRegistrationEntry,
     public void showFailCardProfileDialog(final RequestCardProfile requestCardProfile,
                                           final CardProfileRequest cardProfileRequest,
                                           final String code,
@@ -666,7 +671,7 @@ public class HamPayDialog {
     }
 
 
-    public void showSuccessChangeSettingDialog(final String message, final boolean forceChange){
+    public void showSuccessChangeSettingDialog(final String message, final boolean forceChange) {
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_success_change_setting, null);
         FacedTextView responseMessage = (FacedTextView) view.findViewById(R.id.responseMessage);
         responseMessage.setText(message);
@@ -1123,7 +1128,7 @@ public class HamPayDialog {
         }
     }
 
-    public void smsConfirmDialog(final String cellNumber){
+    public void smsConfirmDialog(final String cellNumber) {
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_sms_confirm, null);
         FacedTextView sms_user_notify = (FacedTextView) view.findViewById(R.id.sms_user_notify);
@@ -1157,7 +1162,7 @@ public class HamPayDialog {
         }
     }
 
-    public void pspFailResultDialog(String responseCode, String description){
+    public void pspFailResultDialog(String responseCode, String description) {
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_ipg_failure, null);
 
@@ -1183,7 +1188,7 @@ public class HamPayDialog {
     }
 
 
-    public void ipgFailDialog(){
+    public void ipgFailDialog() {
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_ipg_failure, null);
 
@@ -1305,7 +1310,7 @@ public class HamPayDialog {
         }
     }
 
-    public void successPaymentRequestDialog(String requestCode){
+    public void successPaymentRequestDialog(String requestCode) {
 
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_payment_request_success, null);
@@ -1332,10 +1337,10 @@ public class HamPayDialog {
         }
     }
 
-    public void failurePaymentRequestDialog(final String code, final String message){
+    public void failurePaymentRequestDialog(final String code, final String message) {
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_payment_request_failure, null);
 
-        FacedTextView request_payment_message = (FacedTextView)view.findViewById(R.id.request_payment_message);
+        FacedTextView request_payment_message = (FacedTextView) view.findViewById(R.id.request_payment_message);
         request_payment_message.setText(code + "\n" + message);
 
         FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
@@ -1355,10 +1360,10 @@ public class HamPayDialog {
         }
     }
 
-    public void showFailIBANChangeDialog(final String code, final String message){
+    public void showFailIBANChangeDialog(final String code, final String message) {
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_request_iban_confirm, null);
-        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+        FacedTextView responseMessage = (FacedTextView) view.findViewById(R.id.responseMessage);
         responseMessage.setText(activity.getString(R.string.error_code, code) + "\n" + message);
 
         FacedTextView retry_iban_request = (FacedTextView) view.findViewById(R.id.retry_iban_request);
@@ -1386,10 +1391,10 @@ public class HamPayDialog {
         }
     }
 
-    public void showFailBillInfoDialog(final String code, final String message){
+    public void showFailBillInfoDialog(final String code, final String message) {
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_bill, null);
-        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
+        FacedTextView responseMessage = (FacedTextView) view.findViewById(R.id.responseMessage);
         responseMessage.setText(activity.getString(R.string.error_code, code) + "\n" + message);
 
         FacedTextView retry = (FacedTextView) view.findViewById(R.id.retry);

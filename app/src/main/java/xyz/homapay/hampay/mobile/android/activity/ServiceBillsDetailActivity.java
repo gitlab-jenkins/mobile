@@ -174,9 +174,9 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
         keyboard = (LinearLayout) findViewById(R.id.keyboard);
         pinLayout = (RelativeLayout) findViewById(R.id.pin_layout);
         pinText = (FacedTextView) findViewById(R.id.pin_text);
-        keyboard = (LinearLayout)findViewById(R.id.keyboard);
-        pinLayout = (RelativeLayout)findViewById(R.id.pin_layout);
-        pinText = (FacedTextView)findViewById(R.id.pin_text) ;
+        keyboard = (LinearLayout) findViewById(R.id.keyboard);
+        pinLayout = (RelativeLayout) findViewById(R.id.pin_layout);
+        pinText = (FacedTextView) findViewById(R.id.pin_text);
         pinText.setOnClickListener(this);
         cvvLayout = (RelativeLayout) findViewById(R.id.cvv_layout);
         cvvText = (FacedTextView) findViewById(R.id.cvv_text);
@@ -337,43 +337,6 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                 }
             }
         });
-    }
-
-    public class RequestPSPResultTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> {
-
-        private String SWTrace;
-        ServiceEvent serviceName;
-        LogEvent logEvent = new LogEvent(context);
-
-        public RequestPSPResultTaskCompleteListener(String SWTrace){
-            this.SWTrace = SWTrace;
-        }
-
-        @Override
-        public void onTaskComplete(ResponseMessage<PSPResultResponse> pspResultResponseMessage) {
-
-            hamPayDialog.dismisWaitingDialog();
-
-            if (pspResultResponseMessage != null) {
-                if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    serviceName = ServiceEvent.PSP_RESULT_SUCCESS;
-                    if (SWTrace != null) {
-                        dbHelper.syncPspResult(SWTrace);
-                    }
-                } else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceEvent.PSP_RESULT_FAILURE;
-                    forceLogout();
-                }else {
-                    serviceName = ServiceEvent.PSP_RESULT_FAILURE;
-                }
-                logEvent.log(serviceName);
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
     }
 
     @Override
@@ -589,6 +552,43 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                 cvvText.setText(persian.E2P(cvvCode + "●"));
                 userCVV2 += digit;
             }
+        }
+    }
+
+    public class RequestPSPResultTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> {
+
+        ServiceEvent serviceName;
+        LogEvent logEvent = new LogEvent(context);
+        private String SWTrace;
+
+        public RequestPSPResultTaskCompleteListener(String SWTrace) {
+            this.SWTrace = SWTrace;
+        }
+
+        @Override
+        public void onTaskComplete(ResponseMessage<PSPResultResponse> pspResultResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+
+            if (pspResultResponseMessage != null) {
+                if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    serviceName = ServiceEvent.PSP_RESULT_SUCCESS;
+                    if (SWTrace != null) {
+                        dbHelper.syncPspResult(SWTrace);
+                    }
+                } else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceEvent.PSP_RESULT_FAILURE;
+                    forceLogout();
+                } else {
+                    serviceName = ServiceEvent.PSP_RESULT_FAILURE;
+                }
+                logEvent.log(serviceName);
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 

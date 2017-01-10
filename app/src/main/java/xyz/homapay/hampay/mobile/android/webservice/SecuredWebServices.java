@@ -148,7 +148,7 @@ public class SecuredWebServices {
 
     public SecuredWebServices(Context context, ConnectionType connectionType) {
         this.context = context;
-        prefs = context.getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
+        prefs = context.getSharedPreferences(Constants.APP_PREFERENCE_NAME, Context.MODE_PRIVATE);
         builder = new DateGsonBuilder();
         this.connectionType = connectionType;
         if (connectionType == ConnectionType.HTTPS) {
@@ -161,7 +161,7 @@ public class SecuredWebServices {
 
     public SecuredWebServices(Context context) {
         this.context = context;
-        prefs = context.getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
+        prefs = context.getSharedPreferences(Constants.APP_PREFERENCE_NAME, Context.MODE_PRIVATE);
         builder = new DateGsonBuilder();
 
         this.authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
@@ -1318,7 +1318,7 @@ public class SecuredWebServices {
         Gson gson = new Gson();
         responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<SignToPayResponse>>() {}.getType());
         proxyService.closeConnection();
-        return  responseMessage;
+        return responseMessage;
     }
 
     public ResponseMessage<UtilityBillResponse> utilityBill(UtilityBillRequest request) throws IOException, EncryptionException {
@@ -1327,13 +1327,15 @@ public class SecuredWebServices {
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
         request.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<UtilityBillRequest> message = new RequestMessage<>(request, authToken, Constants.API_LEVEL, System.currentTimeMillis());
-        Type requestType = new TypeToken<RequestMessage<UtilityBillRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<UtilityBillRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
         Gson gson = builder.getDatebuilder().create();
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UtilityBillResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UtilityBillResponse>>() {
+        }.getType());
         proxyService.closeConnection();
-        return  responseMessage;
+        return responseMessage;
     }
 
     public ResponseMessage<UtilityBillDetailResponse> utilityBillDetail(UtilityBillDetailRequest request) throws IOException, EncryptionException {
@@ -1342,11 +1344,13 @@ public class SecuredWebServices {
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
         request.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<UtilityBillDetailRequest> message = new RequestMessage<>(request, authToken, Constants.API_LEVEL, System.currentTimeMillis());
-        Type requestType = new TypeToken<RequestMessage<UtilityBillDetailRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<UtilityBillDetailRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
         Gson gson = builder.getDatebuilder().create();
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UtilityBillDetailResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UtilityBillDetailResponse>>() {
+        }.getType());
         proxyService.closeConnection();
         return  responseMessage;
     }

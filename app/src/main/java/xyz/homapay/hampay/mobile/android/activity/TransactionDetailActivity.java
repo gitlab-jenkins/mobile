@@ -225,7 +225,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
                         callee_name.setText(tnxDetailDTO.getName());
                         payment_request_code.setText(tnxDetailDTO.getCode().substring(0, 3) + " " + tnxDetailDTO.getCode().substring(3, 6));
                         date_time.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(tnxDetailDTO.getDate())));
-                    }else if (transactionDTO.getPaymentType() == TransactionDTO.PaymentType.UTILITY_BILL){
+                    } else if (transactionDTO.getPaymentType() == TransactionDTO.PaymentType.UTILITY_BILL) {
                         payment_request_code.setText(persianEnglishDigit.E2P(tnxDetailDTO.getCode()));
                     }
 

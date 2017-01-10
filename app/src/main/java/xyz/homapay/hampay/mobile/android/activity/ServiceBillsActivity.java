@@ -155,13 +155,13 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
                 String payId = payIdText.getText().toString();
 
                 BillsValidator billsValidator = new BillsValidator();
-                if (!billsValidator.validateBillId(billId)){
+                if (!billsValidator.validateBillId(billId)) {
                     Toast.makeText(activity, getString(R.string.msg_invalid_bills_id), Toast.LENGTH_SHORT).show();
                     return;
-                }else if (!billsValidator.validatePayId(payId)){
+                } else if (!billsValidator.validatePayId(payId)) {
                     Toast.makeText(activity, getString(R.string.msg_invalid_pay_id), Toast.LENGTH_SHORT).show();
                     return;
-                }else if (!billsValidator.validatePayAndBillId(billId, payId)){
+                } else if (!billsValidator.validatePayAndBillId(billId, payId)) {
                     Toast.makeText(activity, getString(R.string.msg_invalid_bills_pay_id), Toast.LENGTH_SHORT).show();
                     return;
                 }
