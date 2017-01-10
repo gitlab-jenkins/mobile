@@ -114,7 +114,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         unregisterReceiver(notificationIntentReceiver);
     }
 
-    RequestLogin requestLogin;
     FacedTextView hampay_memorableword_text;
     String userIdToken = "";
     String memorableWord;
@@ -160,12 +159,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         if (requestTAC != null) {
             if (!requestTAC.isCancelled())
                 requestTAC.cancel(true);
-        }
-
-        if (requestLogin != null) {
-            if (!requestLogin.isCancelled()) {
-                requestLogin.cancel(true);
-            }
         }
 
         if (requestRecentPendingFund != null) {

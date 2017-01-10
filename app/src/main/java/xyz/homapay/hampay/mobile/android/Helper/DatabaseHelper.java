@@ -81,38 +81,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_VIEWED_PURCHASE_REQUEST_CODE + " TEXT"
             + ")";
 
-
-    byte[] mobileKey;
-    String serverKey;
-
-    DeviceInfo deviceInfo;
-
     Context context;
 
     public DatabaseHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
         this.context = context;
-    }
-
-    public DatabaseHelper(Activity context, String serverKey) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-
-        this.context = context;
-        deviceInfo = new DeviceInfo(context);
-
-        try {
-
-            mobileKey = SecurityUtils.getInstance(context).generateSHA_256(
-                    deviceInfo.getMacAddress(),
-                    deviceInfo.getIMEI(),
-                    deviceInfo.getAndroidId());
-
-            this.serverKey = serverKey;
-
-        }catch (Exception ex){
-            Log.e("Error", ex.getStackTrace().toString());
-        }
     }
 
 

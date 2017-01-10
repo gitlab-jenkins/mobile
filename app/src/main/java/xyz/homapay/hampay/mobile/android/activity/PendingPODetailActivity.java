@@ -23,7 +23,6 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class PendingPODetailActivity extends AppCompatActivity {
 
-    Bundle bundle;
     PaymentInfoDTO paymentInfo;
     PersianEnglishDigit persianEnglishDigit;
     Context context;
@@ -38,7 +37,6 @@ public class PendingPODetailActivity extends AppCompatActivity {
     private FacedTextView message_text;
     private LinearLayout re_payment_request;
     private ImageView user_image;
-    private String authToken;
 
 
     public void backActionBar(View view) {
@@ -89,13 +87,10 @@ public class PendingPODetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pending_po_detail);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
-
-        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
         persianEnglishDigit = new PersianEnglishDigit();
         formatter = new CurrencyFormatter();
         context = this;
         activity = PendingPODetailActivity.this;
-        bundle = getIntent().getExtras();
         Intent intent = getIntent();
         paymentInfo = (PaymentInfoDTO) intent.getSerializableExtra(Constants.PAYMENT_INFO);
 

@@ -2,7 +2,11 @@ package xyz.homapay.hampay.mobile.android.webservice.psp.bills;
 
 
 import org.ksoap2.SoapEnvelope;
-import org.ksoap2.serialization.*;
+import org.ksoap2.serialization.MarshalFloat;
+import org.ksoap2.serialization.PropertyInfo;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.kxml2.io.KXmlParser;
 import org.kxml2.kdom.Element;
 import org.xmlpull.v1.XmlPullParser;
@@ -10,13 +14,11 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Vector;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.lang.reflect.Constructor;
+import java.util.HashMap;
+import java.util.Vector;
 
 public class MKAExtendedSoapSerializationEnvelope extends SoapSerializationEnvelope {
     static HashMap< java.lang.String,java.lang.Class> classNames = new HashMap< java.lang.String, java.lang.Class>();

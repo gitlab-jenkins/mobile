@@ -248,11 +248,6 @@
             android:label="@string/app_name"
             android:theme="@style/MyMaterialTheme">
         </activity>
-        <activity
-            android:name=".activity.BillsPaymentActivity"
-            android:label="@string/app_name"
-            android:theme="@style/MyMaterialTheme">
-        </activity>
 
         <receiver android:name=".util.NetworkChangeReceiver">
             <intent-filter>

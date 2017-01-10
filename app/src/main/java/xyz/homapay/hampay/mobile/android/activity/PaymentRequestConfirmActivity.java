@@ -62,7 +62,6 @@ public class PaymentRequestConfirmActivity extends AppCompatActivity {
     private long calcFeeCharge = 0;
     private long MaxXferAmount = 0;
     private long MinXferAmount = 0;
-    private String authToken;
     private long calculatedVat = 0;
     private FacedTextView amount_total;
     private CurrencyFormatter formatter;
@@ -120,7 +119,6 @@ public class PaymentRequestConfirmActivity extends AppCompatActivity {
         formatter = new CurrencyFormatter();
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
         try {
             MaxXferAmount = prefs.getLong(Constants.MAX_INDIVIDUAL_XFER_AMOUNT, 0);

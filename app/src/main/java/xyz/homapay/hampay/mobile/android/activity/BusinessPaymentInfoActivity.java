@@ -75,8 +75,6 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
     private CurrencyFormatter formatter;
     private FacedTextView vat_value;
 
-    private String authToken;
-
     public void backActionBar(View view) {
         finish();
     }
@@ -133,7 +131,6 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
         try {
             MaxXferAmount = prefs.getLong(Constants.MAX_BUSINESS_XFER_AMOUNT, 0);

@@ -1,13 +1,12 @@
 package xyz.homapay.hampay.mobile.android.webservice.psp.bills;
 
 import org.ksoap2.HeaderProperty;
-import org.ksoap2.serialization.*;
-import org.ksoap2.transport.*;
-import org.kxml2.kdom.Element;
+import org.ksoap2.serialization.PropertyInfo;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapPrimitive;
+import org.ksoap2.transport.HttpTransportSE;
+import org.ksoap2.transport.HttpsTransportSE;
 
-import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 

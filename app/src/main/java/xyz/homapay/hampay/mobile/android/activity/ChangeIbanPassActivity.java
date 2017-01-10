@@ -150,7 +150,6 @@ public class ChangeIbanPassActivity extends AppCompatActivity implements View.On
     public class RequestIBANChangeTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<IBANChangeResponse>> {
 
         IBANChangeRequest ibanChangeRequest;
-        RequestIBANChange requestIBANChange;
         ServiceEvent serviceName;
         LogEvent logEvent = new LogEvent(context);
 

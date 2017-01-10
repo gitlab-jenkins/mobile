@@ -17,17 +17,13 @@ import android.widget.Toast;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
-import xyz.homapay.hampay.common.core.model.request.CalcFeeChargeRequest;
 import xyz.homapay.hampay.common.core.model.request.CalculateVatRequest;
-import xyz.homapay.hampay.common.core.model.request.UserPaymentRequest;
 import xyz.homapay.hampay.common.core.model.response.CalculateVatResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import xyz.homapay.hampay.mobile.android.async.RequestCalcFeeCharge;
 import xyz.homapay.hampay.mobile.android.async.RequestCalculateVat;
-import xyz.homapay.hampay.mobile.android.async.RequestUserPayment;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.CurrencyFormatterTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
@@ -52,16 +48,11 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
     FacedEditText amount_value;
     FacedTextView vat_value;
     boolean creditValueValidation = false;
-    String number = "";
     boolean intentContact = false;
     Context context;
     Activity activity;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
-    RequestCalcFeeCharge requestCalcFeeCharge;
-    CalcFeeChargeRequest calcFeeChargeRequest;
-    RequestUserPayment requestUserPayment;
-    UserPaymentRequest userPaymentRequest;
     HamPayDialog hamPayDialog;
     private ContactDTO hamPayContact;
     private PaymentInfoDTO paymentInfo;
@@ -70,10 +61,8 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
     private String imageId;
     private ImageView user_image;
     private long amountValue = 0;
-    private long calcFeeCharge = 0;
     private long MaxXferAmount = 0;
     private long MinXferAmount = 0;
-    private String authToken;
     private LinearLayout add_vat;
     private long calculatedVat = 0;
     private ImageView vat_icon;
@@ -133,7 +122,6 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
         formatter = new CurrencyFormatter();
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
         try {
             MaxXferAmount = prefs.getLong(Constants.MAX_INDIVIDUAL_XFER_AMOUNT, 0);

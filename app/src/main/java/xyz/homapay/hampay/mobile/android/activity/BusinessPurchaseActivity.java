@@ -56,8 +56,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
     SharedPreferences prefs;
     HamPayDialog hamPayDialog;
     RelativeLayout businesses_list;
-    RequestSearchHamPayBusiness requestSearchHamPayBusiness;
-    RequestHamPayBusiness requestHamPayBusiness;
     private RequestPurchaseInfo requestPurchaseInfo;
     private PurchaseInfoRequest purchaseInfoRequest;
 
@@ -108,15 +106,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
     protected void onStop() {
         super.onStop();
         HamPayApplication.setAppSate(AppState.Stoped);
-        if (requestHamPayBusiness != null){
-            if (!requestHamPayBusiness.isCancelled())
-                requestHamPayBusiness.cancel(true);
-        }
-
-        if (requestSearchHamPayBusiness != null){
-            if (!requestSearchHamPayBusiness.isCancelled())
-                requestSearchHamPayBusiness.cancel(true);
-        }
     }
 
 

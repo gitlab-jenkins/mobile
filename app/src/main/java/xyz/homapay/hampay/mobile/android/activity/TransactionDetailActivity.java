@@ -34,7 +34,6 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class TransactionDetailActivity extends AppCompatActivity {
 
-    Bundle bundle;
     TransactionDTO transactionDTO;
     PersianEnglishDigit persianEnglishDigit;
     Context context;
@@ -57,14 +56,10 @@ public class TransactionDetailActivity extends AppCompatActivity {
     private FacedTextView payment_request_code;
     private FacedTextView reference_code;
     private FacedTextView date_time;
-    private FacedTextView card_number;
     private FacedTextView cell_number;
-    private FacedTextView bank_name;
     private FacedTextView message;
     private FacedTextView detail_text;
     private LinearLayout pay_button;
-    private LinearLayout creditInfo;
-    private String authToken = "";
 
     public void backActionBar(View view) {
         finish();
@@ -122,7 +117,6 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -137,15 +131,11 @@ public class TransactionDetailActivity extends AppCompatActivity {
         payment_request_code = (FacedTextView) findViewById(R.id.payment_request_code);
         reference_code = (FacedTextView) findViewById(R.id.reference_code);
         date_time = (FacedTextView) findViewById(R.id.date_time);
-        card_number = (FacedTextView) findViewById(R.id.card_number);
         cell_number = (FacedTextView) findViewById(R.id.cell_number);
-        bank_name = (FacedTextView) findViewById(R.id.bank_name);
         message = (FacedTextView) findViewById(R.id.message);
         pay_button = (LinearLayout) findViewById(R.id.pay_button);
-        creditInfo = (LinearLayout) findViewById(R.id.creditInfo);
         detail_text = (FacedTextView) findViewById(R.id.detail_text);
 
-        bundle = getIntent().getExtras();
         Intent intent = getIntent();
         transactionDTO = (TransactionDTO) intent.getSerializableExtra(Constants.USER_TRANSACTION_DTO);
         if (transactionDTO.getImageId() != null) {

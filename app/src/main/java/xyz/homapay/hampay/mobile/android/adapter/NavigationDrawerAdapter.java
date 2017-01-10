@@ -53,9 +53,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
             holder.action_divider.setVisibility(View.GONE);
         }
         if (data.get(position).getSelected() == 1){
-//            holder.nav_draw_bg.setSelected(true);
         }else {
-//            holder.nav_draw_bg.setSelected(false);
         }
     }
 

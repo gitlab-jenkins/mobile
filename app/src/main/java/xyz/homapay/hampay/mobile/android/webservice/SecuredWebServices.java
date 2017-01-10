@@ -3,7 +3,6 @@ package xyz.homapay.hampay.mobile.android.webservice;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

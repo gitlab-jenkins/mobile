@@ -43,7 +43,6 @@ import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.dialog.permission.ActionPermission;
 import xyz.homapay.hampay.mobile.android.dialog.permission.PermissionContactDialog;
 import xyz.homapay.hampay.mobile.android.dialog.sms.ActionSMS;
-import xyz.homapay.hampay.mobile.android.dialog.sms.SMSActivationDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
@@ -53,7 +52,7 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.ScaleConverter;
 
-public class SMSVerificationActivity extends AppCompatActivity implements View.OnClickListener, PermissionContactDialog.PermissionContactDialogListener, SMSActivationDialog.SMSActivationDialogListener{
+public class SMSVerificationActivity extends AppCompatActivity implements View.OnClickListener, PermissionContactDialog.PermissionContactDialogListener{
 
     private Activity activity;
     private FacedTextView digit_1;
@@ -344,11 +343,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         }
     }
 
-    @Override
-    public void onFinishEditDialog(ActionSMS actionSMS) {
-//        requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
-//        requestRegistrationSendSmsToken.execute(registrationSendSmsTokenRequest);
-    }
 
 
     public class RequestRegistrationVerifyMobileTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationVerifyMobileResponse>>
@@ -470,14 +464,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                         sendSmsPermission = false;
                         requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
                         requestRegistrationSendSmsToken.execute(registrationSendSmsTokenRequest);
-
-//                        SMSActivationDialog smsActivationDialog = new SMSActivationDialog();
-//                        Bundle bundle = new Bundle();
-//                        bundle.putString(Constants.REGISTERED_CELL_NUMBER, cellNumber);
-//                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//                        smsActivationDialog.setArguments(bundle);
-//                        fragmentTransaction.add(smsActivationDialog, null);
-//                        fragmentTransaction.commitAllowingStateLoss();
                     }
                 }else {
                     Toast.makeText(context, getString(R.string.sms_upper_reach_sms), Toast.LENGTH_LONG).show();

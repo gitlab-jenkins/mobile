@@ -27,7 +27,6 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.BusinessPurchaseActivity;
 import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.activity.IbanIntronActivity;
-import xyz.homapay.hampay.mobile.android.activity.MainBillsTopUpActivity;
 import xyz.homapay.hampay.mobile.android.activity.PaymentRequestDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.PaymentRequestListActivity;
 import xyz.homapay.hampay.mobile.android.activity.PendingPurchasePaymentListActivity;
@@ -58,7 +57,6 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     LinearLayout pendingPurchasePayment;
     UserProfileDTO userProfile;
     LinearLayout billsTopUp;
-    UserProfileDTO userProfileDTO;
     Bundle bundle;
     LinearLayout hampay_1_ll;
     LinearLayout hampay_2_ll;

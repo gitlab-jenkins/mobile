@@ -24,7 +24,6 @@ public class HamPayContactsAdapter extends BaseAdapter {
     List<ContactDTO> contacts;
     private Activity activity;
     private PersianEnglishDigit persianEnglishDigit;
-    private String authToken;
     private ViewHolder viewHolder;
 
     public HamPayContactsAdapter(Activity activity, List<ContactDTO> contacts, String authToken) {
@@ -32,7 +31,6 @@ public class HamPayContactsAdapter extends BaseAdapter {
         this.activity = activity;
         this.contacts = contacts;
         persianEnglishDigit = new PersianEnglishDigit();
-        this.authToken = authToken;
     }
 
     public int getCount() {

@@ -26,7 +26,6 @@ public class PendingPOAdapter extends BaseAdapter {
     List<PaymentInfoDTO> paymentInfoList;
     private Activity activity;
     private PersianEnglishDigit persianEnglishDigit;
-    private String authToken;
     private CurrencyFormatter formatter;
     private ViewHolder viewHolder;
 
@@ -35,7 +34,6 @@ public class PendingPOAdapter extends BaseAdapter {
         this.activity = activity;
         this.paymentInfoList = paymentInfoList;
         persianEnglishDigit = new PersianEnglishDigit();
-        this.authToken = authToken;
         formatter = new CurrencyFormatter();
     }
 
