@@ -66,20 +66,6 @@
     </RelativeLayout>
 
 
-    <!--<xyz.homapay.hampay.mobile.android.component.FacedTextView-->
-        <!--android:id="@+id/nullHampayContactsText"-->
-        <!--geekui:customTypeface="fonts/vazir_regular.ttf"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textColor="@color/normal_text"-->
-        <!--android:textSize="15dp"-->
-        <!--android:text="@string/null_hampay_contacts"-->
-        <!--android:gravity="center"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:layout_marginTop="24dp"-->
-        <!--android:visibility="gone"/>-->
-
-
     <LinearLayout
         android:id="@+id/hampayContactShare"
         android:layout_width="match_parent"

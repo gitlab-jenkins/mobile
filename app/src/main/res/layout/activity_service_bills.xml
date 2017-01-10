@@ -9,8 +9,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -54,9 +52,10 @@
             android:layout_margin="8dp"/>
 
         <RelativeLayout
+            android:id="@+id/billIdLayout"
             android:layout_width="fill_parent"
             android:layout_height="48dp"
-            android:background="@drawable/entry_field_bg"
+            android:background="@drawable/iban_empty_placeholder"
             android:layout_margin="2dp">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
@@ -79,6 +78,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/payIdLayout"
             android:layout_width="fill_parent"
             android:layout_height="48dp"
             android:background="@drawable/entry_field_bg"

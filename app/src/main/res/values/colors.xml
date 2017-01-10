@@ -19,14 +19,6 @@
     <color name="entry_field_color">#e6e7e8</color>
     <color name="normal_text">#6e6f71</color>
     <color name="help_strok">#CECECE</color>
-    <color name="spb_default_color">#33b5e5</color>
-    <dimen name="spb_default_stroke_separator_length">4dp</dimen>
-    <dimen name="spb_default_stroke_width">4dp</dimen>
-    <integer name="spb_default_sections_count">4</integer>
-    <item name="spb_default_speed" format="float" type="string">1.0</item>
-    <bool name="spb_default_reversed">false</bool>
-    <bool name="spb_default_mirror_mode">false</bool>
-    <bool name="spb_default_progressiveStart_activated">false</bool>
     <color name="transparency">#00000000</color>
     <color name="slider_button_bg">#fafafa</color>
     <color name="page_title">@color/app_origin</color>

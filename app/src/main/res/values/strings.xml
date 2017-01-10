@@ -71,9 +71,7 @@
     <string name="topup_type">نوع شارژ</string>
     <string name="bills_service_id">شناسه قبض</string>
     <string name="bills_service_payment">شناسه پرداخت</string>
-    <string name="msg_invalid_bills_id">شماره قبض خود را صحیح وارد نمایید.</string>
-    <string name="msg_invalid_pay_id">شناسه پرداخت خود را صحیح وارد نمایید.</string>
-    <string name="msg_invalid_bills_pay_id">شماره قبض یا شناسه پرداخت اشتباه می‌باشد. لطفا مجدد تلاش نمائید.</string>
+    <string name="msg_invalid_bills_pay_id">شناسه قبض یا شناسه پرداخت نادرست است. لطفا مجددا تلاش نمائید.</string>
     <string name="main_fragment_pending_payment">پرداخت‌های در انتظار</string>
     <string name="main_fragment_bill_top_up">پرداخت قبض</string>
     <string name="main_fragment_transactions">تراکنش‌ها</string>
@@ -92,7 +90,6 @@
     <string name="business_id">شناسه: </string>
     <string name="pending_purchase_payment_title">پرداخت‌های در انتظار</string>
     <string name="detail_transaction">جزئیات تراکنش</string>
-    <string name="mobile_no">شماره همراه</string>
     <string name="cell_number">شماره همراه: </string>
     <string name="mobile_no_entry">شماره همراه </string>
     <string name="bank">بانک: </string>
@@ -108,7 +105,6 @@
     <string name="contact_us">ارتباط با شبکه پرداخت همراه هم‌پی</string>
     <string name="send_message">ارسال پیام</string>
     <string name="call_message">تماس با اپراتور</string>
-    <string name="msg_password_complexity">رمز عبور بهتری انتخاب کنید</string>
     <string name="hp_msg_password_complexity_1">رمز عبور می‌بایستی شامل حرف و عدد باشد</string>
     <string name="hp_msg_password_complexity_2">رمز عبور بایستی شامل حداقل ۱ عدد و ۳ حرف باشد</string>
     <string name="hp_msg_password_complexity_3">رمز عبور بایستی شامل حداقل ۱ عدد و ۳ حرف باشد</string>
@@ -125,25 +121,15 @@
     <string name="cancel_remove_password">خیر</string>
     <string name="fail_sms_verification">کد اعتبار سنجی وارد شده صحیح نمی‌باشد. لطفا از صحت کد اطمینان حاصل کرده و کد را دوباره وارد کنید.</string>
     <string name="retry_sms">تایید</string>
-    <string name="start_activity_title">شبکه پرداخت همراه هم‌پی</string>
-    <string name="start_activity_text_1">درخواست پرداخت از افراد</string>
-    <string name="start_activity_text_2">پرداخت به کسب و کار</string>
-    <string name="tc_privacy_text">با قوانین و مقررات استفاده از شبکه پرداخت همراه هم‌پی و نیز سیاست‌های حفظ حریم خصوصی و امنیت کاربر موافق هستم.</string>
-    <string name="tc_privacy_confirm">بله</string>
-    <string name="tc_privacy_disconfirm">خیر</string>
     <string name="keep_on">ادامه</string>
     <string name="profile_entry">مشخصات فردی</string>
     <string name="please_entry_info">لطفا اطلاعات خود را وارد نمایید.</string>
     <string name="iran_prefix_cell_number">۰۹</string>
-    <string name="bank_card_info">اطلاعات حساب بانکی</string>
     <string name="iban_intro_payment">معرفی شماره شبا</string>
     <string name="iban_intro_setting">تغییر شماره شبا</string>
-    <string name="intro_account_text">لطفا شماره شبای حساب خود را وارد نموده و سپس دکمه بررسی را لمس نمایید</string>
     <string name="sheba_text">IR</string>
-    <string name="sheba_verify">بررسی</string>
     <string name="sheba_question_part1_text">شماره شبا</string>
     <string name="iban_question_part2_text">متعلق به %1$s نزد %2$s می‌باشد.</string>
-    <string name="sheba_question_part3_text">(دقت کنید که این حساب برای دریافت مبالغ واریزی به شما استفاده می‌شود)</string>
     <string name="iban_empty_name">برای نام می‌بایستی حداقل ۲ حرف را وارد کنید.</string>
     <string name="iban_empty_family">برای نام‌خانوادگی می‌بایستی حداقل ۲ حرف را وارد کنید.</string>
     <string name="sheba_confirm">تایید</string>
@@ -208,10 +194,8 @@
     <string name="error_code">کد خطا:  %1$s</string>
     <string name="debit">پرداخت</string>
     <string name="credit">دریافت</string>
-    <string name="fail">ناموفق</string>
     <string name="fail_credit">دریافت ناموفق</string>
     <string name="fail_debit">پرداخت ناموفق</string>
-    <string name="pending">درحال بررسی</string>
     <string name="keyboard_dismiss">بستن</string>
     <string name="exit_app_text">آیا مایل به خروج از هم‌پی هستید؟</string>
     <string name="exit_app_yes">بله</string>
@@ -226,7 +210,6 @@
     <string name="msg_check_network_connectivity">لطفا اتصال اینترنت خود را بررسی نمایید</string>
     <string name="msg_found_illegal_app">کاربر گرامی به دلیل بهبود امنیت شما، قبل از استفاده از هم‌پی نیاز به حذف یا غیرفعالسازی اپلیکیشن فوق هستیم.</string>
     <string name="msg_fail_illegal_app_list">اطلاعاتی از سامانه هم‌پی دریافت نشد، لطفا دوباره تلاش کنید.</string>
-    <string name="msg_fail_fetch_card_profile">اطلاعات کارت شما یافت نشد. دوباره تلاش کنید</string>
     <string name="msg_fail_registration_entry">ثبت اطلاعات شما با مشکل مواجه شد، لطفا اتصال اینترنت خود را بررسی کنید</string>
     <string name="mgs_fail_registration_send_sms_token">درخواست پیامک فعالسازی با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
     <string name="msg_fail_registration_verify_mobile">ارسال کد فعالسازی با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
@@ -234,7 +217,6 @@
     <string name="msg_fail_memorable_entry">ثبت کلمه یادآوری با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
     <string name="msg_fail_upload_image">درخواست ارسال تصویر با مشکل مواجه شد، لطفا دوباره تلاش کنید.</string>
     <string name="msg_fail_tac_request">درخواست قوانین استفاده با اشکال مواجه شد. لطفا دوباره تلاش کنید.</string>
-    <string name="msg_fail_tac_accept_request">درخواست تایید قوانین استفاده با اشکال مواجه شد. لطفا دوباره تلاش کنید.</string>
     <string name="msg_fail_user_transation">بارگیری تراکنش‌ها با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
     <string name="msg_fail_contacts_enabled">دریافت مخاطبین هم‌پی شما با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
     <string name="msg_fail_business_list">دریافت فهرست کسب و کار با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
@@ -249,7 +231,6 @@
     <string name="msg_fail_change_memorable_word">تغییر کلمه یادآوری با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
     <string name="msg_fail_unlink_user">درخواست لغو اشتراک شما با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
     <string name="msg_gail_change_email">درخواست تغییر ایمیل شما با مشکل مواجه شد. لطفا دوباره تلاش کنید.</string>
-    <string name="msg_fail_iban_confirm">بررسی شماره شبا با مشکل مواجه شد، دوباره تلاش کنید</string>
     <string name="msg_fail_iban_change">تایید شماره شبا با مشکل مواجه شد، دوباره تلاش کنید</string>
     <string name="msg_pending_not_found">امکان پرداخت برای این درخواست میسر نمی‌باشد.</string>
     <string name="msg_fail_fetch_latest_payment">دریافت اطلاعات آخرین پرداخت شما با مشکل مواجه شد. دوباره تلاش کنید.</string>
@@ -288,8 +269,6 @@
     <string name="user_pin2">رمز دوم کارت</string>
     <string name="user_cvv2">CVV2</string>
     <string name="shaparak_privacy_message">(طبق الزامات شاپرک رمز دوم کارت در هم‌پی ذخیره نمی‌شود)</string>
-    <string name="msg_success_pending_payment">پرداخت شما با کد پیگیری %1$s با موفقیت انجام شد.</string>
-    <string name="msg_business_payment_success">پرداخت شما با کد پیگیری %1$s با موفقیت انجام شد.</string>
     <string name="msg_payment_success">پرداخت شما با موفقیت انجام شد</string>
     <string name="payment_info">اطلاعات پرداخت</string>
     <string name="payment_success_amount">مبلغ: </string>
@@ -315,11 +294,6 @@
     <string name="user_name_restriction"> ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzاآبپتثجچحخدذرزژسشصضطظعغفقکگلمنوهئی</string>
     <string name="iban_user_family">نام خانوادگی صاحب حساب</string>
     <string name="null_pending_business">در حال حاضر پرداخت در انتظاری وجود ندارد</string>
-    <string name="null_hampay_contacts">
-        هم اکنون هیچ یک از مخاطبین شما عضو شبکه پرداخت همراه هم‌پی نیست
-\n
-        برای درخواست پرداخت حداقل یک نفر از دوستان شما باید عضو هم‌پی باشد
-    </string>
     <string name="hampay_contact_share">دعوت دوستان</string>
     <string name="hampay_share_text">
         اپلیکیشن هم‌پی رو نصب کن!
@@ -375,21 +349,11 @@
         \n
         جهت اطلاع بیشتر از خدمات هم‌پی به آدرس www.hampay.ir   مراجعه نمایید.
     </string>
-    <string name="merchant_text_page_3">
-        کاربران هم‌پی در صورت دریافت کد پذیرندگی، از ویژگی درخواست پرداخت در اپلیکیشن هم‌پی بهره‌مند شده و در صورت عرضه  کالا یا خدمات از هر نوعی در ویترین وبسایت و اپلیکیشن خود، می‌توانند از روش پرداخت موبایلی هم‌پی در وبسایت، و پرداخت درون برنامه‌ای هم‌پی در اپلیکیشن خود بهره‌مند گردند
-        \n
-        جهت اطلاع بیشتر از خدمات هم‌پی به آدرس www.hampay.ir مراجعه نمایید.
-    </string>
-    <string name="merchant_id_text_1">بنا به الزامات شاپرک، کاربران هم‌پی جهت بهره‌مندی از ویژگی درخواست پرداخت و همچنین قرار دادن دکمه هم‌پی به عنوان روش پرداخت موبایلی در وبسایت فروشگاه اینترنتی، نیاز به داشتن کد پذیرندگی فعال دارند.</string>
-    <string name="merchant_id_text_2">مدارک لازم جهت دریافت کد پذیرندگی (ویژه اشخاص حقوقی): </string>
-    <string name="merchant_id_text_3">۱- تصویر برابر اصل روزنامه رسمی، آگهی تاسیس و آخرین آگهی تغییرات </string>
-    <string name="merchant_id_text_4">۲- تصویر برابر اصل کارت ملی و شناسنامه مدیران و مسئولین صاحب امضا </string>
     <string name="merchant_id_request_title">درخواست کد پذیرندگی</string>
     <string name="merchant_id_cancel">انصراف</string>
     <string name="merchant_id_close">بستن</string>
     <string name="merchant_id_request">درخواست</string>
     <string name="merchant_id_not_set">کد پذیرندگی برای حساب شما فعال نشده است. جهت ثبت درخواست کد پذیرندگی، دکمه درخواست را انتخاب نمایید.</string>
-    <string name="merchant_id_reject">درخواست کد پذیرندگی شما تایید نشد</string>
     <string name="merchant_id_accept">کد پذیرندگی برای شما فعال است</string>
     <string name="merchant_id_status_pending">درخواست شما ثبت گردید.
     \n
@@ -400,7 +364,6 @@
     <string name="change_activities_pass_code_text">لطفا رمز عبور خود را وارد نمایید</string>
     <string name="email_change_title">تغییر ایمیل</string>
     <string name="payment_request_close">بستن</string>
-    <string name="payment_request_send_doc">ارسال مدارک</string>
     <string name="confirm_success_payment">تایید</string>
     <string name="confirm_failure_payment">بستن</string>
     <string name="msg_success_payment_request">درخواست پرداخت شما با کد %1$s با موفقیت ارسال شد</string>
@@ -441,9 +404,6 @@
     <string name="merchent_document_email">opsupport@homapay.com</string>
     <string name="app_update_text">کاربر گرامی، برای ادامه می‌بایستی آخرین نسخه اپلیکیشن <b>هم‌پی</b> را دریافت نمایید.</string>
     <string name="app_update_confirm">تایید</string>
-
-    <string name="app_change_pass_text">کاربر گرامی، به دلیل تغییرات زیرساختی، لازم است تا رمز عبور خود را تغییر دهید.</string>
-    <string name="app_change_pass_confirm">تایید</string>
 
     <string-array name="psp_code">
 
@@ -712,7 +672,6 @@
 
     <string name="next_wt">بعدی</string>
     <string name="pre_wt">قبلی</string>
-    <string name="finish_wt">اتمام</string>
 
     <string name="wt_note_1_1">
 جهت تغییر رمز عبور، کلمه یادآوری و ایمیل معرفی شده به بخش تنظیمات در این منو مراجعه نمایید. همچنین در آیتم جزییات حساب می توانید شماره شبا حساب بانکی خود را جهت دریافت وجوه معرفی نمایید.

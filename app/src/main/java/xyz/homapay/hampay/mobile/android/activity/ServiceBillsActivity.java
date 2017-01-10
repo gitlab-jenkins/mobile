@@ -8,9 +8,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
+import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.UtilityBillRequest;
 import xyz.homapay.hampay.common.core.model.response.UtilityBillResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
@@ -26,7 +28,7 @@ import xyz.homapay.hampay.mobile.android.util.BillsValidator;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
-public class ServiceBillsActivity extends AppCompatActivity implements View.OnClickListener, OnTaskCompleted, View.OnLongClickListener {
+public class ServiceBillsActivity extends AppCompatActivity implements View.OnClickListener, OnTaskCompleted {
 
     private SharedPreferences prefs;
     private Context context;
@@ -34,7 +36,9 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
     private LinearLayout barCodeScanner;
     private LinearLayout keyboard;
     private FacedTextView billIdText;
+    private RelativeLayout billIdLayout;
     private FacedTextView payIdText;
+    private RelativeLayout payIdLayout;
     private boolean billServiceIdFocus = false;
     private boolean billServicePaymentFocus = false;
     private FacedTextView billsMobileButton;
@@ -99,9 +103,13 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
         barCodeScanner.setOnClickListener(this);
 
         keyboard = (LinearLayout) findViewById(R.id.keyboard);
+        billServiceIdFocus = true;
+        billServicePaymentFocus = false;
         billIdText = (FacedTextView) findViewById(R.id.billId);
         billIdText.setOnClickListener(this);
-        billIdText.setOnLongClickListener(this);
+        billIdLayout = (RelativeLayout) findViewById(R.id.billIdLayout);
+        payIdLayout = (RelativeLayout) findViewById(R.id.payIdLayout);
+        payIdLayout.setOnClickListener(this);
         payIdText = (FacedTextView) findViewById(R.id.payId);
         payIdText.setOnClickListener(this);
         billsMobileButton = (FacedTextView) findViewById(R.id.billsMobileButton);
@@ -119,6 +127,15 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
                     String scannedCode = barCodeResult.getString(Constants.BAR_CODE_SCAN_RESULT);
                     billIdText.setText(persian.E2P(scannedCode.substring(0, 13)));
                     payIdText.setText(persian.E2P(scannedCode.substring(13).replaceFirst(Constants.PAY_ID_REGEX, "")));
+                }
+                break;
+
+            case 47:
+                if (resultCode == Activity.RESULT_OK) {
+                    billIdText.setText("");
+                    payIdText.setText("");
+                }
+                if (resultCode == Activity.RESULT_CANCELED) {
                 }
                 break;
         }
@@ -140,6 +157,8 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
                 }
                 billServiceIdFocus = true;
                 billServicePaymentFocus = false;
+                billIdLayout.setBackgroundResource(R.drawable.iban_entry_placeholder);
+                payIdLayout.setBackgroundResource(R.drawable.iban_empty_placeholder);
                 break;
 
             case R.id.payId:
@@ -148,6 +167,8 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
                 }
                 billServiceIdFocus = false;
                 billServicePaymentFocus = true;
+                billIdLayout.setBackgroundResource(R.drawable.iban_empty_placeholder);
+                payIdLayout.setBackgroundResource(R.drawable.iban_entry_placeholder);
                 break;
 
             case R.id.billsMobileButton:
@@ -156,10 +177,10 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
 
                 BillsValidator billsValidator = new BillsValidator();
                 if (!billsValidator.validateBillId(billId)){
-                    Toast.makeText(activity, getString(R.string.msg_invalid_bills_id), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, getString(R.string.msg_invalid_bills_pay_id), Toast.LENGTH_SHORT).show();
                     return;
                 }else if (!billsValidator.validatePayId(payId)){
-                    Toast.makeText(activity, getString(R.string.msg_invalid_pay_id), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, getString(R.string.msg_invalid_bills_pay_id), Toast.LENGTH_SHORT).show();
                     return;
                 }else if (!billsValidator.validatePayAndBillId(billId, payId)){
                     Toast.makeText(activity, getString(R.string.msg_invalid_bills_pay_id), Toast.LENGTH_SHORT).show();
@@ -237,7 +258,7 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
                                 Intent intent = new Intent();
                                 intent.setClass(activity, ServiceBillsDetailActivity.class);
                                 intent.putExtra(Constants.BILL_INFO, utilityBill.getService().getBillInfoDTO());
-                                startActivity(intent);
+                                startActivityForResult(intent, 47);
                                 break;
                             default:
                                 hamPayDialog.showFailBillInfoDialog(utilityBill.getService().getResultStatus().getCode(), utilityBill.getService().getResultStatus().getDescription());
@@ -249,15 +270,5 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
         } else {
             Toast.makeText(activity, getString(R.string.msg_failed_bill_info), Toast.LENGTH_SHORT).show();
         }
-
-    }
-
-    @Override
-    public boolean onLongClick(View view) {
-        switch (view.getId()) {
-            case R.id.billId:
-                billIdText.setText("");
-        }
-        return true;
     }
 }

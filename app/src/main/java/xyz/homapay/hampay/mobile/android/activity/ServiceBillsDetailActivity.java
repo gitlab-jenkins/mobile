@@ -67,6 +67,7 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
     private FacedTextView billsName;
     private FacedTextView billsDate;
     private FacedTextView billsId;
+    private FacedTextView payId;
     private FacedTextView billsAmount;
     private FacedTextView hampayFee;
     private FacedTextView billsTotalAmount;
@@ -189,6 +190,7 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
         billsName = (FacedTextView) findViewById(R.id.billsName);
         billsDate = (FacedTextView) findViewById(R.id.billsDate);
         billsId = (FacedTextView) findViewById(R.id.billsId);
+        payId = (FacedTextView) findViewById(R.id.payId);
         billsAmount = (FacedTextView) findViewById(R.id.billsAmount);
         hampayFee = (FacedTextView) findViewById(R.id.hampayFee);
         billsTotalAmount = (FacedTextView) findViewById(R.id.billsTotalAmount);
@@ -494,7 +496,8 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
             billsImage.setImageResource(R.drawable.user_placeholder);
         }
 
-//        billsId.setText(persian.E2P(billsIdValue));
+        billsId.setText(persian.E2P(billInfo.getBillId()));
+        payId.setText(persian.E2P(billInfo.getPayId()));
         billsAmount.setText(persian.E2P(currencyFormatter.format(billInfo.getAmount())));
         hampayFee.setText(persian.E2P(currencyFormatter.format(billInfo.getFeeCharge())));
 
