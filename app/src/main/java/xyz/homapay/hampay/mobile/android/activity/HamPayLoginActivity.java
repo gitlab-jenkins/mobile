@@ -45,16 +45,15 @@ import xyz.homapay.hampay.mobile.android.adapter.PendingFundAdapter;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import xyz.homapay.hampay.mobile.android.async.RequestLogin;
 import xyz.homapay.hampay.mobile.android.async.RequestNewLogin;
 import xyz.homapay.hampay.mobile.android.async.RequestRecentPendingFund;
 import xyz.homapay.hampay.mobile.android.async.RequestTAC;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
-import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
-import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.dialog.permission.ActionPermission;
 import xyz.homapay.hampay.mobile.android.dialog.permission.PermissionDeviceDialog;
+import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
+import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
 import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
@@ -114,7 +113,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         unregisterReceiver(notificationIntentReceiver);
     }
 
-    RequestLogin requestLogin;
     FacedTextView hampay_memorableword_text;
     String userIdToken = "";
     String memorableWord;
@@ -160,12 +158,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         if (requestTAC != null) {
             if (!requestTAC.isCancelled())
                 requestTAC.cancel(true);
-        }
-
-        if (requestLogin != null) {
-            if (!requestLogin.isCancelled()) {
-                requestLogin.cancel(true);
-            }
         }
 
         if (requestRecentPendingFund != null) {
@@ -338,8 +330,6 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                         intent.putExtra(Constants.USER_PROFILE, tacResponseMessage.getService().getTacDTO().getUserProfile());
                         intent.putExtra(Constants.PENDING_PURCHASE_CODE, tacResponseMessage.getService().getTacDTO().getPurchaseProductCode());
                         intent.putExtra(Constants.PENDING_PAYMENT_CODE, tacResponseMessage.getService().getTacDTO().getPaymentProductCode());
-                        intent.putExtra(Constants.PENDING_PURCHASE_COUNT, tacResponseMessage.getService().getTacDTO().getPendingPurchasesCount());
-                        intent.putExtra(Constants.PENDING_PAYMENT_COUNT, tacResponseMessage.getService().getTacDTO().getPendingPaymentCount());
                         intent.putExtra(Constants.SHOW_CREATE_INVOICE, tacResponseMessage.getService().getTacDTO().isShowCreateInvoice());
                         editor.putBoolean(Constants.FORCE_USER_PROFILE, false);
                         editor.commit();

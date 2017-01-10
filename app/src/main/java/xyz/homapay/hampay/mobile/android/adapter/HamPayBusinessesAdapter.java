@@ -17,7 +17,6 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 public class HamPayBusinessesAdapter extends HamPayBusinessesGenericAdapter<BusinessDTO> {
     private BusinessDTO businessDTO;
     private PersianEnglishDigit persianEnglishDigit;
-    private String authToken;
     private Activity act;
     private ViewHolder viewHolder;
 
@@ -25,7 +24,6 @@ public class HamPayBusinessesAdapter extends HamPayBusinessesGenericAdapter<Busi
         super(act);
         this.act = act;
         persianEnglishDigit = new PersianEnglishDigit();
-        this.authToken = authToken;
     }
 
     public View getView(final int position, View convertView, ViewGroup parent) {

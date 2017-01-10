@@ -45,6 +45,8 @@ import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.img.ImageHelper;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
+import xyz.homapay.hampay.mobile.android.model.PaymentType;
+import xyz.homapay.hampay.mobile.android.model.SucceedPayment;
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
@@ -93,6 +95,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
     private LinearLayout cardSelect;
     private PersianEnglishDigit persian = new PersianEnglishDigit();
     private String signature;
+    private String authToken = "";
 
     public void backActionBar(View view) {
         finish();
@@ -150,6 +153,8 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+
+        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
         hamPayDialog = new HamPayDialog(activity);
 
@@ -407,7 +412,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
                         SignToPayRequest signToPayRequest = new SignToPayRequest();
                         signToPayRequest.setCardId(paymentInfoDTO.getCardList().get(position).getCardId());
                         signToPayRequest.setProductCode(paymentInfoDTO.getProductCode());
-                        new SignToPayTask(activity, BusinessPaymentConfirmActivity.this, signToPayRequest, "").execute();
+                        new SignToPayTask(activity, BusinessPaymentConfirmActivity.this, signToPayRequest, authToken).execute();
                     }
                 }
                 break;
@@ -533,9 +538,12 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
                     if (responseCode.equalsIgnoreCase("2000")) {
                         if (paymentInfoDTO != null) {
                             Intent intent = new Intent(context, PaymentCompletedActivity.class);
-                            intent.putExtra(Constants.SUCCESS_PAYMENT_AMOUNT, paymentInfoDTO.getAmount() + paymentInfoDTO.getVat() + paymentInfoDTO.getFeeCharge());
-                            intent.putExtra(Constants.SUCCESS_PAYMENT_CODE, paymentInfoDTO.getProductCode());
-                            intent.putExtra(Constants.SUCCESS_PAYMENT_TRACE, pspInfoDTO.getProviderId());
+                            SucceedPayment succeedPayment = new SucceedPayment();
+                            succeedPayment.setAmount(paymentInfoDTO.getAmount() + paymentInfoDTO.getVat() + paymentInfoDTO.getFeeCharge());
+                            succeedPayment.setCode(paymentInfoDTO.getProductCode());
+                            succeedPayment.setTrace(pspInfoDTO.getProviderId());
+                            succeedPayment.setPaymentType(PaymentType.PAYMENT);
+                            intent.putExtra(Constants.SUCCEED_PAYMENT_INFO, succeedPayment);
                             startActivityForResult(intent, 46);
                             serviceName = ServiceEvent.PSP_PAYMENT_SUCCESS;
                             logEvent.log(serviceName);

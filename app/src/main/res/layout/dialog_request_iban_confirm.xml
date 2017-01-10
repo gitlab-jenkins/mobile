@@ -5,8 +5,21 @@
     android:layout_height="wrap_content"
     android:gravity="right"
     android:background="@drawable/dialog_success_style"
-    android:orientation="vertical"
-    android:padding="8dp">
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dialog_success_title_style">
+
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_warning"
+            android:layout_centerInParent="true"
+            android:padding="4dp"/>
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -52,26 +65,12 @@
         android:layout_gravity="right"
         android:layout_marginRight="8dp"/>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:padding="8dp">
-
-        <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            android:id="@+id/iban_request_confirm"
-            geekui:customTypeface="fonts/vazir_regular.ttf"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:text="@string/sheba_confirm"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:background="@drawable/registration_button_style"
-            android:layout_alignParentRight="true"/>
+        android:padding="8dp"
+        android:gravity="center">
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
             android:id="@+id/cancel_request"
@@ -79,14 +78,31 @@
             android:layout_width="wrap_content"
             android:layout_height="32dp"
             android:textColor="@android:color/white"
-            android:textSize="20sp"
+            android:textSize="16dp"
             android:gravity="center"
             android:layout_gravity="center"
             android:text="@string/sheba_cancel"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:background="@drawable/registration_button_style" />
+            android:background="@drawable/registration_button_style"
+            android:layout_marginRight="8dp"/>
 
-    </RelativeLayout>
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+            android:id="@+id/iban_request_confirm"
+            geekui:customTypeface="fonts/vazir_regular.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:textColor="@android:color/white"
+            android:textSize="16dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="@string/sheba_confirm"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:background="@drawable/registration_button_style"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="8dp"/>
+
+    </LinearLayout>
 
 </LinearLayout>

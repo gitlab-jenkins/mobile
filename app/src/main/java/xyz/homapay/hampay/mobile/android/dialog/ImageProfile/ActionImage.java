@@ -5,8 +5,6 @@ package xyz.homapay.hampay.mobile.android.dialog.ImageProfile;
  */
 public enum ActionImage {
     NOPE,
-    UPLOAD,
-    GALLERY,
     REMOVE_SUCCESS,
     REMOVE_FAIL
 

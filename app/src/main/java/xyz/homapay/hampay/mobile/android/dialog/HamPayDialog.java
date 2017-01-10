@@ -1,7 +1,6 @@
 package xyz.homapay.hampay.mobile.android.dialog;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
@@ -29,51 +28,38 @@ import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
-import xyz.homapay.hampay.common.core.model.request.CardProfileRequest;
 import xyz.homapay.hampay.common.core.model.request.ChangePassCodeRequest;
 import xyz.homapay.hampay.common.core.model.request.ContactUsRequest;
 import xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
-import xyz.homapay.hampay.common.core.model.request.IBANConfirmationRequest;
-import xyz.homapay.hampay.common.core.model.request.IllegalAppListRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationCredentialsRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
-import xyz.homapay.hampay.common.core.model.request.TACAcceptRequest;
 import xyz.homapay.hampay.common.core.model.request.TACRequest;
 import xyz.homapay.hampay.common.core.model.request.TransactionListRequest;
 import xyz.homapay.hampay.common.core.model.request.UploadImageRequest;
 import xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
 import xyz.homapay.hampay.common.core.model.response.ContactUsResponse;
-import xyz.homapay.hampay.common.core.model.response.IBANConfirmationResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
-import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.ChangeEmailPassActivity;
-import xyz.homapay.hampay.mobile.android.activity.ChangeIbanPassActivity;
 import xyz.homapay.hampay.mobile.android.activity.ChangeMemorableActivity;
-import xyz.homapay.hampay.mobile.android.activity.GuideDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
-import xyz.homapay.hampay.mobile.android.activity.ProfileEntryActivity;
 import xyz.homapay.hampay.mobile.android.activity.SMSVerificationActivity;
 import xyz.homapay.hampay.mobile.android.activity.UnlinkPassActivity;
 import xyz.homapay.hampay.mobile.android.activity.WelcomeActivity;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import xyz.homapay.hampay.mobile.android.async.RequestCardProfile;
 import xyz.homapay.hampay.mobile.android.async.RequestChangePassCode;
 import xyz.homapay.hampay.mobile.android.async.RequestContactHampayEnabled;
 import xyz.homapay.hampay.mobile.android.async.RequestCredentialEntry;
 import xyz.homapay.hampay.mobile.android.async.RequestHamPayBusiness;
-import xyz.homapay.hampay.mobile.android.async.RequestIBANConfirmation;
-import xyz.homapay.hampay.mobile.android.async.RequestIllegalAppList;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestNewLogout;
 import xyz.homapay.hampay.mobile.android.async.RequestRegistrationSendSmsToken;
 import xyz.homapay.hampay.mobile.android.async.RequestSearchHamPayBusiness;
 import xyz.homapay.hampay.mobile.android.async.RequestTAC;
-import xyz.homapay.hampay.mobile.android.async.RequestTACAccept;
 import xyz.homapay.hampay.mobile.android.async.RequestUploadImage;
 import xyz.homapay.hampay.mobile.android.async.RequestUserProfile;
 import xyz.homapay.hampay.mobile.android.async.RequestUserTransaction;
@@ -82,7 +68,6 @@ import xyz.homapay.hampay.mobile.android.component.edittext.EmailTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
-import xyz.homapay.hampay.mobile.android.p.auth.RegisterEntry;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.EmailVerification;
@@ -98,17 +83,13 @@ public class HamPayDialog {
     SharedPreferences.Editor editor;
     Activity activity;
     HamPayCustomDialog dialog;
-    String serverKey = "";
     Rect rect = new Rect();
     String contactUsMail = "";
     String contactUsPhone = "";
     ResponseMessage<ContactUsResponse> contactUsResponseResponseMessage = null;
-    TACAcceptRequest tacAcceptRequest;
-    RequestTACAccept requestTACAccept;
     RequestRegistrationSendSmsToken requestRegistrationSendSmsToken;
     RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest;
     private CurrencyFormatter currencyFormatter;
-    private UserProfileDTO userProfileDTO;
 
     public HamPayDialog(Activity activity) {
 
@@ -119,21 +100,13 @@ public class HamPayDialog {
         currencyFormatter = new CurrencyFormatter();
     }
 
-    public HamPayDialog(Activity activity, String serverKey) {
-
-        this.activity = activity;
-        this.serverKey = serverKey;
-        prefs = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, Context.MODE_PRIVATE);
-        editor = activity.getSharedPreferences(Constants.APP_PREFERENCE_NAME, Context.MODE_PRIVATE).edit();
-    }
-
     private void windowDisplayFrame() {
         Activity parent = activity;
         Window window = parent.getWindow();
         window.getDecorView().getWindowVisibleDisplayFrame(rect);
     }
 
-    public void exitRegistrationDialog() {
+    public void exitRegistrationDialog(){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_exit_registeration, null);
 
@@ -190,65 +163,8 @@ public class HamPayDialog {
         }
     }
 
-    public void showTcPrivacyDialog() {
-
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_tc_privacy, null);
-        FacedTextView tc_privacy_text = (FacedTextView) view.findViewById(R.id.tc_privacy_text);
-        Spannable tcPrivacySpannable = new SpannableString(activity.getString(R.string.tc_privacy_text));
-        ClickableSpan tcClickableSpan = new ClickableSpan() {
-            @Override
-            public void onClick(View textView) {
-                Intent intent = new Intent();
-                intent.setClass(activity, GuideDetailActivity.class);
-                intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/users/tac-file");
-                intent.putExtra(Constants.TAC_PRIVACY_TITLE, activity.getString(R.string.tac_title_activity));
-                activity.startActivity(intent);
-            }
-        };
-        tcPrivacySpannable.setSpan(tcClickableSpan, 3, 18, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        tc_privacy_text.setText(tcPrivacySpannable);
-        tc_privacy_text.setMovementMethod(LinkMovementMethod.getInstance());
-        ClickableSpan privacySpan = new ClickableSpan() {
-            @Override
-            public void onClick(View textView) {
-                Intent intent = new Intent();
-                intent.setClass(activity, GuideDetailActivity.class);
-                intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/users/privacy-file");
-                intent.putExtra(Constants.TAC_PRIVACY_TITLE, activity.getString(R.string.privacy_title_activity));
-                activity.startActivity(intent);
-            }
-        };
-
-        tcPrivacySpannable.setSpan(privacySpan, 60, 92, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        tc_privacy_text.setText(tcPrivacySpannable);
-        tc_privacy_text.setMovementMethod(LinkMovementMethod.getInstance());
-
-
-        FacedTextView tc_privacy_confirm = (FacedTextView) view.findViewById(R.id.tc_privacy_confirm);
-        tc_privacy_confirm.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.setClass(activity, ProfileEntryActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            activity.finish();
-            activity.startActivity(intent);
-        });
-
-
-        FacedTextView tc_privacy_disconfirm = (FacedTextView) view.findViewById(R.id.tc_privacy_disconfirm);
-
-        tc_privacy_disconfirm.setOnClickListener(v -> {
-            dialog.dismiss();
-            activity.finish();
-        });
-        view.setMinimumWidth((int) (rect.width() * 0.85f));
-        if (!activity.isFinishing()) {
-            dialog = new HamPayCustomDialog(view, activity, 0);
-            dialog.show();
-        }
-    }
-
-    public void dismisWaitingDialog() {
-        if (dialog != null && !activity.isFinishing()) {
+    public void dismisWaitingDialog(){
+        if (dialog != null && !activity.isFinishing()){
             if (dialog.isShowing())
                 dialog.dismiss();
         }
@@ -329,7 +245,7 @@ public class HamPayDialog {
         }
     }
 
-    public void showLogoutDialog() {
+    public void showLogoutDialog(){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_exit_app, null);
 
@@ -361,7 +277,7 @@ public class HamPayDialog {
         }
     }
 
-    public void showRemovePasswordDialog() {
+    public void showRemovePasswordDialog(){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_remove_password, null);
 
@@ -483,6 +399,7 @@ public class HamPayDialog {
         }
     }
 
+    public void showFailRegistrationEntryDialog(final RequestRegistrationEntry requestRegistrationEntry,
     public void showFailCardProfileDialog(final RequestCardProfile requestCardProfile,
                                           final CardProfileRequest cardProfileRequest,
                                           final String code,
@@ -749,38 +666,7 @@ public class HamPayDialog {
     }
 
 
-    public void showFailTACAcceeptRequestDialog(final RequestTACAccept requestTACAccept,
-                                                final TACAcceptRequest tacAcceptRequest,
-                                                final String code,
-                                                final String message) {
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_tac_accept_request, null);
-        FacedTextView responseMessage = (FacedTextView) view.findViewById(R.id.responseMessage);
-        responseMessage.setText(activity.getString(R.string.error_code, code) + "\n" + message);
-        FacedTextView retry_tac_accept_request = (FacedTextView) view.findViewById(R.id.retry_tac_accept_request);
-        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
-        retry_tac_accept_request.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                requestTACAccept.execute(tacAcceptRequest);
-            }
-        });
-        cancel_request.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                activity.finish();
-            }
-        });
-
-        view.setMinimumWidth((int) (rect.width() * 0.85f));
-        if (!activity.isFinishing()) {
-            dialog = new HamPayCustomDialog(view, activity, 0);
-            dialog.show();
-        }
-    }
-
-    public void showSuccessChangeSettingDialog(final String message, final boolean forceChange) {
+    public void showSuccessChangeSettingDialog(final String message, final boolean forceChange){
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_success_change_setting, null);
         FacedTextView responseMessage = (FacedTextView) view.findViewById(R.id.responseMessage);
         responseMessage.setText(message);
@@ -1045,8 +931,8 @@ public class HamPayDialog {
 
         FacedTextView responseMessage = (FacedTextView) view.findViewById(R.id.responseMessage);
 
-        responseMessage.setText(activity.getString(R.string.msg_incorrect_amount, new PersianEnglishDigit(currencyFormatter.format(MaxXferAmount)).E2P() + ""
-                , new PersianEnglishDigit(currencyFormatter.format(MinXferAmount)).E2P()));
+        responseMessage.setText(activity.getString(R.string.msg_incorrect_amount, new PersianEnglishDigit().E2P(currencyFormatter.format(MaxXferAmount)) + ""
+                , new PersianEnglishDigit().E2P(currencyFormatter.format(MinXferAmount))));
 
         FacedTextView payment_permission = (FacedTextView) view.findViewById(R.id.payment_permission);
 
@@ -1237,7 +1123,7 @@ public class HamPayDialog {
         }
     }
 
-    public void smsConfirmDialog(final String cellNumber) {
+    public void smsConfirmDialog(final String cellNumber){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_sms_confirm, null);
         FacedTextView sms_user_notify = (FacedTextView) view.findViewById(R.id.sms_user_notify);
@@ -1271,30 +1157,7 @@ public class HamPayDialog {
         }
     }
 
-    public void pspSuccessResultDialog(String purchaseCode) {
-
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_psp_success, null);
-
-        FacedTextView request_payment_message = (FacedTextView) view.findViewById(R.id.request_payment_message);
-        request_payment_message.setText(activity.getString(R.string.msg_success_pending_payment, new PersianEnglishDigit().E2P(purchaseCode)));
-        FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
-
-        confirmation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                activity.finish();
-            }
-        });
-
-        view.setMinimumWidth((int) (rect.width() * 0.85f));
-        if (!activity.isFinishing()) {
-            dialog = new HamPayCustomDialog(view, activity, 0);
-            dialog.show();
-        }
-    }
-
-    public void pspFailResultDialog(String responseCode, String description) {
+    public void pspFailResultDialog(String responseCode, String description){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_ipg_failure, null);
 
@@ -1319,30 +1182,8 @@ public class HamPayDialog {
         }
     }
 
-    public void ipgSuccessDialog(String purchaseCode) {
 
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_ipg_success, null);
-
-        FacedTextView request_payment_message = (FacedTextView) view.findViewById(R.id.request_payment_message);
-        request_payment_message.setText(activity.getString(R.string.msg_business_payment_success, new PersianEnglishDigit().E2P(purchaseCode)));
-        FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
-
-        confirmation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                activity.finish();
-            }
-        });
-
-        view.setMinimumWidth((int) (rect.width() * 0.85f));
-        if (!activity.isFinishing()) {
-            dialog = new HamPayCustomDialog(view, activity, 0);
-            dialog.show();
-        }
-    }
-
-    public void ipgFailDialog() {
+    public void ipgFailDialog(){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_ipg_failure, null);
 
@@ -1464,7 +1305,7 @@ public class HamPayDialog {
         }
     }
 
-    public void successPaymentRequestDialog(String requestCode) {
+    public void successPaymentRequestDialog(String requestCode){
 
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_payment_request_success, null);
@@ -1491,10 +1332,10 @@ public class HamPayDialog {
         }
     }
 
-    public void failurePaymentRequestDialog(final String code, final String message) {
+    public void failurePaymentRequestDialog(final String code, final String message){
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_payment_request_failure, null);
 
-        FacedTextView request_payment_message = (FacedTextView) view.findViewById(R.id.request_payment_message);
+        FacedTextView request_payment_message = (FacedTextView)view.findViewById(R.id.request_payment_message);
         request_payment_message.setText(code + "\n" + message);
 
         FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
@@ -1514,47 +1355,10 @@ public class HamPayDialog {
         }
     }
 
-    public void showIBANConfirmationDialog(final String iban, final IBANConfirmationResponse ibanConfirmationResponse) {
-
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_request_iban_confirm, null);
-
-        FacedTextView ibanNumber = (FacedTextView) view.findViewById(R.id.ibanNumber);
-        FacedTextView ibanOwnInfo = (FacedTextView) view.findViewById(R.id.ibanOwnInfo);
-
-        ibanNumber.setText("IR" + new PersianEnglishDigit().E2P(iban));
-//        ibanOwnInfo.setText(activity.getString(R.string.sheba_question_part2_text, ibanConfirmationResponse.getName(), ibanConfirmationResponse.getBankName()));
-
-        FacedTextView iban_request_confirm = (FacedTextView) view.findViewById(R.id.iban_request_confirm);
-        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
-
-        iban_request_confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(activity, ChangeIbanPassActivity.class);
-                intent.putExtra(Constants.IBAN_NUMBER, iban);
-                activity.startActivity(intent);
-            }
-        });
-
-        cancel_request.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                activity.finish();
-            }
-        });
-
-        view.setMinimumWidth((int) (rect.width() * 0.85f));
-        if (!activity.isFinishing()) {
-            dialog = new HamPayCustomDialog(view, activity, 0);
-            dialog.show();
-        }
-    }
-
-    public void showFailIBANChangeDialog(final String code, final String message) {
+    public void showFailIBANChangeDialog(final String code, final String message){
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_request_iban_confirm, null);
-        FacedTextView responseMessage = (FacedTextView) view.findViewById(R.id.responseMessage);
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
         responseMessage.setText(activity.getString(R.string.error_code, code) + "\n" + message);
 
         FacedTextView retry_iban_request = (FacedTextView) view.findViewById(R.id.retry_iban_request);
@@ -1582,56 +1386,23 @@ public class HamPayDialog {
         }
     }
 
-    public void showFailIBANConfirmationDialog(final RequestIBANConfirmation requestIBANConfirmation,
-                                               final IBANConfirmationRequest ibanConfirmationRequest,
-                                               final String code,
-                                               final String message) {
+    public void showFailBillInfoDialog(final String code, final String message){
 
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_request_iban_confirm, null);
-        FacedTextView responseMessage = (FacedTextView) view.findViewById(R.id.responseMessage);
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_bill, null);
+        FacedTextView responseMessage = (FacedTextView)view.findViewById(R.id.responseMessage);
         responseMessage.setText(activity.getString(R.string.error_code, code) + "\n" + message);
 
-        FacedTextView retry_iban_request = (FacedTextView) view.findViewById(R.id.retry_iban_request);
-        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+        FacedTextView retry = (FacedTextView) view.findViewById(R.id.retry);
+        FacedTextView cancel = (FacedTextView) view.findViewById(R.id.cancel);
 
-        retry_iban_request.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                requestIBANConfirmation.execute(ibanConfirmationRequest);
-            }
-        });
-
-        cancel_request.setOnClickListener(new View.OnClickListener() {
+        retry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
             }
         });
 
-        view.setMinimumWidth((int) (rect.width() * 0.85f));
-        if (!activity.isFinishing()) {
-            dialog = new HamPayCustomDialog(view, activity, 0);
-            dialog.show();
-        }
-    }
-
-    public void showFailIBANConfirmationDialog() {
-
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_request_iban_confirm, null);
-        FacedTextView responseMessage = (FacedTextView) view.findViewById(R.id.responseMessage);
-
-        FacedTextView retry_iban_request = (FacedTextView) view.findViewById(R.id.retry_iban_request);
-        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
-
-        retry_iban_request.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        cancel_request.setOnClickListener(new View.OnClickListener() {
+        cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();

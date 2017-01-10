@@ -135,7 +135,6 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
 
     public class RequestChangeEmailTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<ChangeEmailResponse>> {
 
-        private RequestChangeEmail requestChangeEmail = null;
         private ChangeEmailRequest changeEmailRequest;
 
         public RequestChangeEmailTaskCompleteListener(ChangeEmailRequest changeEmailRequest){
@@ -163,7 +162,6 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
                 }
                 else {
                     serviceName = ServiceEvent.CHANGE_EMAIL_FAILURE;
-                    requestChangeEmail = new RequestChangeEmail(activity, new RequestChangeEmailTaskCompleteListener(changeEmailRequest));
                     new HamPayDialog(activity).showFailChangeEmail(
                             changeEmailResponseResponseMessage.getService().getResultStatus().getCode(),
                             changeEmailResponseResponseMessage.getService().getResultStatus().getDescription());

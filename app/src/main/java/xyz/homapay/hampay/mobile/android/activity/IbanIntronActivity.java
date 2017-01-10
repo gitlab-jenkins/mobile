@@ -7,11 +7,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
@@ -138,50 +141,64 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
         segmentRelativeLayouts[6] = (RelativeLayout) findViewById(R.id.iban_seventh_segment_l);
 
         ibanUserName = (FacedEditText) findViewById(R.id.ibanUserName);
-        ibanUserName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ibanUserName.setCursorVisible(true);
-            }
+        ibanUserName.setOnTouchListener((v, event) -> {
+            ibanUserName.setCursorVisible(true);
+            ibanUserFamily.setCursorVisible(false);
+            new Collapse(keyboard).animate();
+            return false;
         });
         ibanUserFamily = (FacedEditText) findViewById(R.id.ibanUserFamily);
-        ibanUserFamily.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        ibanUserFamily.setOnTouchListener((v, event) -> {
+            ibanUserName.setCursorVisible(false);
+            ibanUserFamily.setCursorVisible(true);
+            new Collapse(keyboard).animate();
+            return false;
+        });
+        ibanUserFamily.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
                 ibanUserFamily.setCursorVisible(true);
+            }else {
+                ibanUserFamily.setCursorVisible(false);
+            }
+        });
+        ibanUserFamily.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    ibanUserFamily.setCursorVisible(false);
+                    new Expand(keyboard).animate();
+                }
+                return false;
             }
         });
 
         ibanVerifyButton = (FacedTextView) findViewById(R.id.iban_verify_button);
-        ibanVerifyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        ibanVerifyButton.setOnClickListener(v -> {
 
-                String userBank = bankName.getText().toString().trim();
-                String userName = ibanUserName.getText().toString().trim();
-                String userFamily = ibanUserFamily.getText().toString().trim();
+            String userBank = bankName.getText().toString().trim();
+            String userName = ibanUserName.getText().toString().trim();
+            String userFamily = ibanUserFamily.getText().toString().trim();
 
-                if (userName.length() == 0) {
-                    Toast.makeText(activity, getString(R.string.iban_empty_name), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (userFamily.length() == 0) {
-                    Toast.makeText(activity, getString(R.string.iban_empty_family), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                IbanChangeDialog cardNumberDialog = new IbanChangeDialog();
-                Bundle bundle = new Bundle();
-                bundle.putString(Constants.IBAN_NUMBER, ibanValue);
-                bundle.putString(Constants.IBAN_OWNER_NAME, userName);
-                bundle.putString(Constants.IBAN_OWNER_FAMILY, userFamily);
-                bundle.putString(Constants.IBAN_BANK_NAME, userBank);
-                cardNumberDialog.setArguments(bundle);
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.add(cardNumberDialog, null);
-                fragmentTransaction.commitAllowingStateLoss();
+            if (userName.length() <= 1) {
+                Toast.makeText(activity, getString(R.string.iban_empty_name), Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            if (userFamily.length() <= 1) {
+                Toast.makeText(activity, getString(R.string.iban_empty_family), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            IbanChangeDialog cardNumberDialog = new IbanChangeDialog();
+            Bundle bundle = new Bundle();
+            bundle.putString(Constants.IBAN_NUMBER, ibanValue);
+            bundle.putString(Constants.IBAN_OWNER_NAME, userName);
+            bundle.putString(Constants.IBAN_OWNER_FAMILY, userFamily);
+            bundle.putString(Constants.IBAN_BANK_NAME, userBank);
+            cardNumberDialog.setArguments(bundle);
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.add(cardNumberDialog, null);
+            fragmentTransaction.commitAllowingStateLoss();
         });
     }
 
@@ -195,8 +212,8 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
     public void OnTaskExecuted(Object object) {
 
         hamPayDialog.dismisWaitingDialog();
-        ibanUserFamily.setCursorVisible(true);
-        ibanUserName.setCursorVisible(true);
+        ibanUserFamily.setCursorVisible(false);
+        ibanUserName.setCursorVisible(false);
 
         if (object != null) {
             if (object.getClass().equals(ResponseMessage.class)) {
@@ -270,14 +287,18 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
         if (view.getTag().toString().equals("*")) {
             new Collapse(keyboard).animate();
         } else if (view.getTag().toString().equals("|")) {
+
             new Expand(keyboard).animate();
             View v = this.getCurrentFocus();
             if (v != null) {
                 InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 im.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
-            ibanUserFamily.setCursorVisible(false);
+
+            ibanUserName.clearFocus();
+            ibanUserFamily.clearFocus();
             ibanUserName.setCursorVisible(false);
+            ibanUserFamily.setCursorVisible(false);
         } else {
             inputDigit(view.getTag().toString());
         }
@@ -400,6 +421,7 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
                 break;
         }
         if (ibanValue.length() == 24) {
+            segmentRelativeLayouts[6].setBackgroundResource(R.drawable.iban_entry_placeholder);
             new Collapse(keyboard).animate();
             IBANConfirmationRequest ibanConfirmationRequest = new IBANConfirmationRequest();
             ibanConfirmationRequest.setIban(ibanValue);
@@ -412,68 +434,67 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
             case 0:
             case 1:
             case 2:
-                for (int i = 1; i < segmentRelativeLayouts.length; i++) {
+                for (int i = 0; i < segmentRelativeLayouts.length; i++) {
                     segmentRelativeLayouts[i].setBackgroundResource(R.drawable.iban_empty_placeholder);
                 }
-                segmentRelativeLayouts[0].setBackgroundResource(R.drawable.iban_entry_placeholder);
                 break;
 
             case 3:
             case 4:
             case 5:
             case 6:
-                for (int i = 2; i < segmentRelativeLayouts.length; i++) {
+                for (int i = 1; i < segmentRelativeLayouts.length; i++) {
                     segmentRelativeLayouts[i].setBackgroundResource(R.drawable.iban_empty_placeholder);
                 }
-                segmentRelativeLayouts[1].setBackgroundResource(R.drawable.iban_entry_placeholder);
+                segmentRelativeLayouts[0].setBackgroundResource(R.drawable.iban_entry_placeholder);
                 break;
 
             case 7:
             case 8:
             case 9:
             case 10:
-                for (int i = 3; i < segmentRelativeLayouts.length; i++) {
+                for (int i = 2; i < segmentRelativeLayouts.length; i++) {
                     segmentRelativeLayouts[i].setBackgroundResource(R.drawable.iban_empty_placeholder);
                 }
-                segmentRelativeLayouts[2].setBackgroundResource(R.drawable.iban_entry_placeholder);
+                segmentRelativeLayouts[1].setBackgroundResource(R.drawable.iban_entry_placeholder);
                 break;
 
             case 11:
             case 12:
             case 13:
             case 14:
-                for (int i = 4; i < segmentRelativeLayouts.length; i++) {
+                for (int i = 3; i < segmentRelativeLayouts.length; i++) {
                     segmentRelativeLayouts[i].setBackgroundResource(R.drawable.iban_empty_placeholder);
                 }
-                segmentRelativeLayouts[3].setBackgroundResource(R.drawable.iban_entry_placeholder);
+                segmentRelativeLayouts[2].setBackgroundResource(R.drawable.iban_entry_placeholder);
                 break;
 
             case 15:
             case 16:
             case 17:
             case 18:
-                for (int i = 5; i < segmentRelativeLayouts.length; i++) {
+                for (int i = 4; i < segmentRelativeLayouts.length; i++) {
                     segmentRelativeLayouts[i].setBackgroundResource(R.drawable.iban_empty_placeholder);
                 }
-                segmentRelativeLayouts[4].setBackgroundResource(R.drawable.iban_entry_placeholder);
+                segmentRelativeLayouts[3].setBackgroundResource(R.drawable.iban_entry_placeholder);
                 break;
 
             case 19:
             case 20:
             case 21:
             case 22:
-                for (int i = 6; i < segmentRelativeLayouts.length; i++) {
+                for (int i = 5; i < segmentRelativeLayouts.length; i++) {
                     segmentRelativeLayouts[i].setBackgroundResource(R.drawable.iban_empty_placeholder);
                 }
-                segmentRelativeLayouts[5].setBackgroundResource(R.drawable.iban_entry_placeholder);
+                segmentRelativeLayouts[4].setBackgroundResource(R.drawable.iban_entry_placeholder);
                 break;
 
             case 23:
             case 24:
-                for (int i = 7; i < segmentRelativeLayouts.length; i++) {
+                for (int i = 6; i < segmentRelativeLayouts.length; i++) {
                     segmentRelativeLayouts[i].setBackgroundResource(R.drawable.iban_empty_placeholder);
                 }
-                segmentRelativeLayouts[6].setBackgroundResource(R.drawable.iban_entry_placeholder);
+                segmentRelativeLayouts[5].setBackgroundResource(R.drawable.iban_entry_placeholder);
                 break;
         }
     }
@@ -513,8 +534,8 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
         @Override
         public void onTaskComplete(ResponseMessage<IBANChangeResponse> ibanChangeResponseMessage) {
             hamPayDialog.dismisWaitingDialog();
-            ibanUserFamily.setCursorVisible(true);
-            ibanUserName.setCursorVisible(true);
+            ibanUserFamily.setCursorVisible(false);
+            ibanUserName.setCursorVisible(false);
             if (ibanChangeResponseMessage != null) {
                 if (ibanChangeResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     ibanVerifyButton.setVisibility(View.VISIBLE);

@@ -24,9 +24,7 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import xyz.homapay.hampay.mobile.android.async.RequestHamPayBusiness;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchaseInfo;
-import xyz.homapay.hampay.mobile.android.async.RequestSearchHamPayBusiness;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
@@ -56,8 +54,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
     SharedPreferences prefs;
     HamPayDialog hamPayDialog;
     RelativeLayout businesses_list;
-    RequestSearchHamPayBusiness requestSearchHamPayBusiness;
-    RequestHamPayBusiness requestHamPayBusiness;
     private RequestPurchaseInfo requestPurchaseInfo;
     private PurchaseInfoRequest purchaseInfoRequest;
 
@@ -108,15 +104,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
     protected void onStop() {
         super.onStop();
         HamPayApplication.setAppSate(AppState.Stoped);
-        if (requestHamPayBusiness != null){
-            if (!requestHamPayBusiness.isCancelled())
-                requestHamPayBusiness.cancel(true);
-        }
-
-        if (requestSearchHamPayBusiness != null){
-            if (!requestSearchHamPayBusiness.isCancelled())
-                requestSearchHamPayBusiness.cancel(true);
-        }
     }
 
 

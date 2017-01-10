@@ -56,6 +56,8 @@ import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.img.ImageHelper;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
+import xyz.homapay.hampay.mobile.android.model.PaymentType;
+import xyz.homapay.hampay.mobile.android.model.SucceedPayment;
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
@@ -121,6 +123,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
     private LinearLayout cardSelect;
     private PersianEnglishDigit persian = new PersianEnglishDigit();
     private String signature;
+    private String authToken = "";
 
     public void backActionBar(View view) {
         finish();
@@ -178,6 +181,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
+        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
         String LOGIN_TOKEN = prefs.getString(Constants.LOGIN_TOKEN_ID, null);
         if (LOGIN_TOKEN == null) {
             Intent intent = new Intent();
@@ -438,7 +442,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                         signToPayRequest.setCardId(purchaseInfoDTO.getCardList().get(position).getCardId());
                         signToPayRequest.setProductCode(purchaseInfoDTO.getProductCode());
                         signToPayRequest.setProductCode(purchaseInfoDTO.getProductCode());
-                        new SignToPayTask(activity, RequestBusinessPayDetailActivity.this, signToPayRequest, "").execute();
+                        new SignToPayTask(activity, RequestBusinessPayDetailActivity.this, signToPayRequest, authToken).execute();
                     }
                 }
                 break;
@@ -670,9 +674,12 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                         logEvent.log(serviceName);
                         if (purchaseInfoDTO != null) {
                             Intent intent = new Intent(context, PaymentCompletedActivity.class);
-                            intent.putExtra(Constants.SUCCESS_PAYMENT_AMOUNT, purchaseInfoDTO.getAmount() + purchaseInfoDTO.getVat() + purchaseInfoDTO.getFeeCharge());
-                            intent.putExtra(Constants.SUCCESS_PAYMENT_CODE, purchaseInfoDTO.getPurchaseCode());
-                            intent.putExtra(Constants.SUCCESS_PAYMENT_TRACE, pspInfoDTO.getProviderId());
+                            SucceedPayment succeedPayment = new SucceedPayment();
+                            succeedPayment.setAmount(purchaseInfoDTO.getAmount() + purchaseInfoDTO.getVat() + purchaseInfoDTO.getFeeCharge());
+                            succeedPayment.setCode(purchaseInfoDTO.getPurchaseCode());
+                            succeedPayment.setTrace(pspInfoDTO.getProviderId());
+                            succeedPayment.setPaymentType(PaymentType.PURCHASE);
+                            intent.putExtra(Constants.SUCCEED_PAYMENT_INFO, succeedPayment);
                             startActivityForResult(intent, 45);
                         }
                         resultStatus = ResultStatus.SUCCESS;

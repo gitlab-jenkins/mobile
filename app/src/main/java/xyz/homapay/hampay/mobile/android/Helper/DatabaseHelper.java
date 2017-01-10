@@ -1,6 +1,5 @@
 package xyz.homapay.hampay.mobile.android.Helper;
 
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -8,14 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 import android.os.Build;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
-import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
-import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
 
 /**
  * Created by amir on 6/13/15.
@@ -81,38 +77,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_VIEWED_PURCHASE_REQUEST_CODE + " TEXT"
             + ")";
 
-
-    byte[] mobileKey;
-    String serverKey;
-
-    DeviceInfo deviceInfo;
-
     Context context;
 
     public DatabaseHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
         this.context = context;
-    }
-
-    public DatabaseHelper(Activity context, String serverKey) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-
-        this.context = context;
-        deviceInfo = new DeviceInfo(context);
-
-        try {
-
-            mobileKey = SecurityUtils.getInstance(context).generateSHA_256(
-                    deviceInfo.getMacAddress(),
-                    deviceInfo.getIMEI(),
-                    deviceInfo.getAndroidId());
-
-            this.serverKey = serverKey;
-
-        }catch (Exception ex){
-            Log.e("Error", ex.getStackTrace().toString());
-        }
     }
 
 

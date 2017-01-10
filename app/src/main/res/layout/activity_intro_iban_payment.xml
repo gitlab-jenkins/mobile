@@ -88,6 +88,7 @@
                         android:maxLength="30"
                         android:padding="8dp"
                         android:singleLine="true"
+                        android:digits="@string/user_name_restriction"
                         android:imeOptions="actionNext"/>
 
                 </RelativeLayout>
@@ -114,6 +115,7 @@
                         android:maxLength="30"
                         android:padding="8dp"
                         android:singleLine="true"
+                        android:digits="@string/user_name_restriction"
                         android:imeOptions="actionDone"/>
 
                 </RelativeLayout>
@@ -134,7 +136,7 @@
                             android:layout_width="0dip"
                             android:layout_height="match_parent"
                             android:layout_weight="0.075"
-                            android:background="@drawable/iban_entry_placeholder"
+                            android:background="@drawable/iban_empty_placeholder"
                             android:layout_margin="1dp">
 
                             <xyz.homapay.hampay.mobile.android.component.FacedTextView

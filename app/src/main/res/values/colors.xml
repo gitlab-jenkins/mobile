@@ -52,6 +52,10 @@
     <color name="card_info_solid">#f5f5f5</color>
     <color name="iban_stroke">#c7c7c7</color>
     <color name="iban_solid">#f5f5f5</color>
+    <color name="topup_stroke">#c7c7c7</color>
+    <color name="topup_solid">#f5f5f5</color>
+    <color name="tool_bar_selected">#6D096D</color>
+    <color name="tool_bar_unselected">#bcbec0</color>
 
     <!--Slider colors-->
 
