@@ -55,6 +55,11 @@ public class ModelLayerImpl implements ModelLayer {
     }
 
     @Override
+    public String getAuthToken() {
+        return AppManager.getAuthToken(ctx);
+    }
+
+    @Override
     public void showNoNetworkDialog() {
         Dialoger.NETWORK.showErrorNetworkDialog(ctx);
     }

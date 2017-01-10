@@ -36,13 +36,6 @@ public class RegisterEntryImpl extends Presenter<RegisterEntryView> implements R
 
     public RegisterEntryImpl(ModelLayer modelLayer, RegisterEntryView view) {
         super(modelLayer, view);
-        try {
-            messageEncryptor = new AESMessageEncryptor();
-            keyExchanger = new KeyExchangerImpl(modelLayer, this);
-        } catch (Exception e) {
-            e.printStackTrace();
-            onError();
-        }
     }
 
     private void onError() {
@@ -96,6 +89,8 @@ public class RegisterEntryImpl extends Presenter<RegisterEntryView> implements R
     public void register(RegistrationEntryRequest registrationEntryRequest, String authToken) {
         try {
             view.showProgressDialog();
+            messageEncryptor = new AESMessageEncryptor();
+            keyExchanger = new KeyExchangerImpl(modelLayer, this);
             this.registrationEntryRequest = registrationEntryRequest;
             this.authToken = authToken;
             keyExchanger.exchange();

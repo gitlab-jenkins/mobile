@@ -25,4 +25,6 @@ public interface ModelLayer {
 
     DeviceInfo getDeviceInfo();
 
+    String getAuthToken();
+
 }
