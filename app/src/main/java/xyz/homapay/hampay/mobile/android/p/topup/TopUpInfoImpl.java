@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import xyz.homapay.hampay.common.common.Operator;
 import xyz.homapay.hampay.common.common.encrypt.AESMessageEncryptor;
-import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
 import xyz.homapay.hampay.common.common.request.RequestMessage;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.request.TopUpInfoRequest;
@@ -75,7 +74,7 @@ public class TopUpInfoImpl extends Presenter<TopUpInfoView> implements TopUpInfo
                 }
             } else
                 view.onError();
-        } catch (EncryptionException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

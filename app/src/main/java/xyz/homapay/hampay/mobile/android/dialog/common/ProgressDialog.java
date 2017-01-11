@@ -1,4 +1,4 @@
-package xyz.homapay.hampay.mobile.android.dialog;
+package xyz.homapay.hampay.mobile.android.dialog.common;
 
 import android.content.Context;
 import android.os.Handler;
