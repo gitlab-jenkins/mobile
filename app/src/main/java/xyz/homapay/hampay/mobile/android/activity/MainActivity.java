@@ -646,6 +646,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 user_manual.setVisibility(View.VISIBLE);
                 fragment = new MainFragment();
                 if (userProfile != null) {
+                    ImageHelper.getInstance(context).invalidateImage(userProfile.getUserImageId());
                     bundle.putSerializable(Constants.USER_PROFILE, userProfile);
                     bundle.putInt(Constants.PENDING_PAYMENT_COUNT, pendingPaymentCount);
                     bundle.putInt(Constants.PENDING_PURCHASE_COUNT, pendingPurchaseCount);
