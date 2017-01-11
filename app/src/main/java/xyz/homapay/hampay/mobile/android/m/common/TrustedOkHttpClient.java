@@ -22,7 +22,6 @@ import okhttp3.ResponseBody;
 import xyz.homapay.hampay.common.common.encrypt.AESMessageEncryptor;
 import xyz.homapay.hampay.common.common.response.DecryptedResponseInfo;
 import xyz.homapay.hampay.mobile.android.img.CacheProvider;
-import xyz.homapay.hampay.mobile.android.p.security.KeyExchangerImpl;
 import xyz.homapay.hampay.mobile.android.ssl.HamPayX509TrustManager;
 
 /**
@@ -61,11 +60,11 @@ public class TrustedOkHttpClient {
         };
     }
 
-    private static Interceptor provideDecryptor(boolean gzip) {
+    private static Interceptor provideDecryptor(KeyAgreementModel keyAgreementModel, boolean gzip) {
         return chain -> {
             try {
                 Response response = chain.proceed(chain.request());
-                DecryptedResponseInfo decryptedResponseInfo = new AESMessageEncryptor().decryptResponse(deflateGzip(response, gzip), KeyExchangerImpl.getKey(), KeyExchangerImpl.getIv());
+                DecryptedResponseInfo decryptedResponseInfo = new AESMessageEncryptor().decryptResponse(deflateGzip(response, gzip), keyAgreementModel.getKey(), keyAgreementModel.getIv());
                 if (decryptedResponseInfo.getResponseCode() == 0) {
                     Response.Builder resBuilder = response.newBuilder();
                     resBuilder.body(ResponseBody.create(MediaType.parse("application/json"), decryptedResponseInfo.getPayload()));
@@ -118,7 +117,7 @@ public class TrustedOkHttpClient {
         };
     }
 
-    public static OkHttpClient getTrustedOkHttpClient(ModelLayer modelLayer, boolean encryption, boolean gZip) {
+    public static OkHttpClient getTrustedOkHttpClient(ModelLayer modelLayer, KeyAgreementModel keyAgreementModel, boolean encryption, boolean gZip) {
         try {
             // Create a trust manager that does not validate certificate chains
             final TrustManager[] trustedCerts = new X509TrustManager[]{new HamPayX509TrustManager(modelLayer.getSSLKeyStore().getAppKeyStore())};
@@ -148,7 +147,7 @@ public class TrustedOkHttpClient {
                 builder.addInterceptor(provideOfflineCacheInterceptor());
 
             if (encryption)
-                builder.addInterceptor(provideDecryptor(gZip));
+                builder.addInterceptor(provideDecryptor(keyAgreementModel, gZip));
 
             return builder.build();
         } catch (Exception e) {

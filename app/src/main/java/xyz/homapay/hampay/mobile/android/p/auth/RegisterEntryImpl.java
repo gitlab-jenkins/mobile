@@ -8,11 +8,11 @@ import xyz.homapay.hampay.common.common.OSName;
 import xyz.homapay.hampay.common.common.encrypt.AESMessageEncryptor;
 import xyz.homapay.hampay.common.common.encrypt.MessageEncryptor;
 import xyz.homapay.hampay.common.common.request.RequestMessage;
-import xyz.homapay.hampay.common.common.response.KeyAgreementResponse;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.dto.DeviceDTO;
 import xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
 import xyz.homapay.hampay.common.core.model.response.RegistrationEntryResponse;
+import xyz.homapay.hampay.mobile.android.m.common.KeyAgreementModel;
 import xyz.homapay.hampay.mobile.android.m.common.ModelLayer;
 import xyz.homapay.hampay.mobile.android.m.common.OnNetworkLoadListener;
 import xyz.homapay.hampay.mobile.android.m.worker.authorization.RegistrationEntryNetWorker;
@@ -48,7 +48,7 @@ public class RegisterEntryImpl extends Presenter<RegisterEntryView> implements R
     }
 
     @Override
-    public void onExchangeDone(boolean state, ResponseMessage<KeyAgreementResponse> data, String message) {
+    public void onExchangeDone(boolean state, KeyAgreementModel data, String message) {
         try {
             if (state) {
                 DeviceInfo deviceInfo = modelLayer.getDeviceInfo();
@@ -74,9 +74,9 @@ public class RegisterEntryImpl extends Presenter<RegisterEntryView> implements R
                 registrationEntryRequest.setRequestUUID(UUID.randomUUID().toString());
                 RequestMessage<RegistrationEntryRequest> reqMessage = new RequestMessage<>(registrationEntryRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-                String strJson = messageEncryptor.encryptRequest(new Gson().toJson(reqMessage), KeyExchangerImpl.getKey(), KeyExchangerImpl.getIv(), KeyExchangerImpl.getEncId());
+                String strJson = messageEncryptor.encryptRequest(new Gson().toJson(reqMessage), data.getKey(), data.getIv(), data.getEncId());
 
-                new RegistrationEntryNetWorker(modelLayer).register(strJson, this);
+                new RegistrationEntryNetWorker(modelLayer, data).register(strJson, this);
             }
         } catch (Exception e) {
             view.keyExchangeProblem();

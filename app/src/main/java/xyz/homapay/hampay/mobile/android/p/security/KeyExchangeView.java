@@ -1,7 +1,6 @@
 package xyz.homapay.hampay.mobile.android.p.security;
 
-import xyz.homapay.hampay.common.common.response.KeyAgreementResponse;
-import xyz.homapay.hampay.common.common.response.ResponseMessage;
+import xyz.homapay.hampay.mobile.android.m.common.KeyAgreementModel;
 
 /**
  * Created by mohammad on 1/5/17.
@@ -9,6 +8,6 @@ import xyz.homapay.hampay.common.common.response.ResponseMessage;
 
 public interface KeyExchangeView {
 
-    void onExchangeDone(boolean state, ResponseMessage<KeyAgreementResponse> data, String message);
+    void onExchangeDone(boolean state, KeyAgreementModel data, String message);
 
 }

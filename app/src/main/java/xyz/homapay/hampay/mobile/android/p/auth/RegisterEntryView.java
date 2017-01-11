@@ -19,6 +19,4 @@ public interface RegisterEntryView {
 
     void keyExchangeProblem();
 
-    void keyExchangeDone();
-
 }

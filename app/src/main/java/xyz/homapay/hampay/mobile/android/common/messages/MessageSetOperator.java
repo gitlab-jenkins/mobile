@@ -1,19 +1,19 @@
 package xyz.homapay.hampay.mobile.android.common.messages;
 
-import xyz.homapay.hampay.mobile.android.util.TelephonyUtils;
+import xyz.homapay.hampay.common.common.Operator;
 
 /**
  * Created by mohammad on 1/10/17.
  */
 
 public class MessageSetOperator {
-    private TelephonyUtils.IranMobileOperators operator;
+    private Operator operator;
 
-    public MessageSetOperator(TelephonyUtils.IranMobileOperators operator) {
+    public MessageSetOperator(Operator operator) {
         this.operator = operator;
     }
 
-    public TelephonyUtils.IranMobileOperators getOperator() {
+    public Operator getOperator() {
         return operator;
     }
 }

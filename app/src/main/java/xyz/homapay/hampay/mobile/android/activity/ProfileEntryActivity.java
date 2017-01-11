@@ -438,11 +438,11 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
         Toast.makeText(activity, getString(R.string.system_connectivity), Toast.LENGTH_LONG).show();
     }
 
-    @Override
-    public void keyExchangeDone() {
-        keepOn_button.setBackgroundResource(R.drawable.registration_button_style);
-        confirmTacPrivacy.setChecked(true);
-    }
+//    @Override
+//    public void keyExchangeDone() {
+//        keepOn_button.setBackgroundResource(R.drawable.registration_button_style);
+//        confirmTacPrivacy.setChecked(true);
+//    }
 
 }
 

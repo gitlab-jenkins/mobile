@@ -17,7 +17,7 @@ import xyz.homapay.hampay.mobile.android.m.worker.common.NetWorker;
 public class KeyNetWorker extends NetWorker<KeyExchangeService> {
 
     public KeyNetWorker(ModelLayer modelLayer) {
-        super(modelLayer, KeyExchangeService.class, false, false);
+        super(modelLayer, KeyExchangeService.class, null, false, false);
     }
 
     public void exchange(RequestMessage<KeyAgreementRequest> requestBody, OnNetworkLoadListener<ResponseMessage<KeyAgreementResponse>> listener) {

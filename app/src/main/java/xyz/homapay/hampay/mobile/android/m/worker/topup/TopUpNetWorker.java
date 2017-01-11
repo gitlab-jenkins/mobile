@@ -4,6 +4,7 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.response.TopUpInfoResponse;
+import xyz.homapay.hampay.mobile.android.m.common.KeyAgreementModel;
 import xyz.homapay.hampay.mobile.android.m.common.ModelLayer;
 import xyz.homapay.hampay.mobile.android.m.common.OnNetworkLoadListener;
 import xyz.homapay.hampay.mobile.android.m.service.TopUpService;
@@ -15,8 +16,8 @@ import xyz.homapay.hampay.mobile.android.m.worker.common.NetWorker;
 
 public class TopUpNetWorker extends NetWorker<TopUpService> {
 
-    public TopUpNetWorker(ModelLayer modelLayer, boolean encryption, boolean gZip) {
-        super(modelLayer, TopUpService.class, encryption, gZip);
+    public TopUpNetWorker(ModelLayer modelLayer, KeyAgreementModel keyAgreementModel, boolean encryption, boolean gZip) {
+        super(modelLayer, TopUpService.class, keyAgreementModel, encryption, gZip);
     }
 
     public void topUpInfo(String body, OnNetworkLoadListener<ResponseMessage<TopUpInfoResponse>> listener) {

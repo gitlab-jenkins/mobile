@@ -226,22 +226,10 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
 
     @Subscribe
     public void onOperatorChanged(MessageSetOperator messageSetOperator) {
-        Operator operator;
-        switch (messageSetOperator.getOperator()) {
-            case MCI:
-                operator = Operator.MCI;
-                break;
-            case IRANCELL:
-                operator = Operator.MTN;
-                break;
-            case RIGHTEL:
-                operator = Operator.RAYTEL;
-                break;
-            default:
-                return;
-        }
         new Collapse(keyboard).animate();
-        selectOperatorView(operator);
+        selectOperatorView(messageSetOperator.getOperator());
+        if (messageSetOperator.getOperator() == null)
+            return;
         new TopUpInfoImpl(new ModelLayerImpl(context), new TopUpInfoView() {
             @Override
             public void showProgress() {
@@ -266,7 +254,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
                 } else
                     onError();
             }
-        }).getInfo(operator);
+        }).getInfo(messageSetOperator.getOperator());
     }
 
     private void selectOperatorView(Operator operator) {
@@ -285,6 +273,11 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
                 imgMCI.setImageResource(R.mipmap.hamrah_inactive);
                 imgMTN.setImageResource(R.mipmap.irancell_inactive);
                 imgRIGHTEL.setImageResource(R.mipmap.rightel_active);
+                break;
+            default:
+                imgMCI.setImageResource(R.mipmap.hamrah_inactive);
+                imgMTN.setImageResource(R.mipmap.irancell_inactive);
+                imgRIGHTEL.setImageResource(R.mipmap.rightel_inactive);
                 break;
         }
     }

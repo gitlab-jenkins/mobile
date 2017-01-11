@@ -10,6 +10,8 @@ import com.google.i18n.phonenumbers.Phonenumber;
 import java.util.ArrayList;
 import java.util.List;
 
+import xyz.homapay.hampay.common.common.Operator;
+
 public class TelephonyUtils {
 
     public static String MCI_OPERATOR = "43211";
@@ -201,17 +203,17 @@ public class TelephonyUtils {
         return fixedNumber.replace(" ", "");
     }
 
-    public IranMobileOperators getNumberOperator(String cellPhone) {
+    public Operator getNumberOperator(String cellPhone) {
         PersianEnglishDigit p2e = new PersianEnglishDigit();
         cellPhone = p2e.P2E(cellPhone).substring(2, 4);
         if (lstMCI.contains(cellPhone))
-            return IranMobileOperators.MCI;
+            return Operator.MCI;
         else if (lstMTN.contains(cellPhone))
-            return IranMobileOperators.IRANCELL;
+            return Operator.MTN;
         else if (lstRIGHTEL.contains(RIGHTEL_OPERATOR))
-            return IranMobileOperators.RIGHTEL;
+            return Operator.RAYTEL;
         else
-            return IranMobileOperators.UNKNOWN;
+            return null;
     }
 
     public enum IranMobileOperators {
