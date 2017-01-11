@@ -134,14 +134,7 @@ public class BarCodeScannerActivity extends AppCompatActivity implements ZXingSc
                             if (showRationale){
                                 finish();
                             }else {
-                                Intent intent = new Intent();
-                                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                intent.addCategory(Intent.CATEGORY_DEFAULT);
-                                intent.setData(Uri.parse("package:" + context.getPackageName()));
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
-                                context.startActivity(intent);
+                                finish();
                             }
                         }else {
                             finish();

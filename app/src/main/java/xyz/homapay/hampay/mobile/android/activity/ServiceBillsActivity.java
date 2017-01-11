@@ -12,7 +12,6 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
-import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.UtilityBillRequest;
 import xyz.homapay.hampay.common.core.model.response.UtilityBillResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
@@ -134,6 +133,9 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
                 if (resultCode == Activity.RESULT_OK) {
                     billIdText.setText("");
                     payIdText.setText("");
+                    billIdLayout.setBackgroundResource(R.drawable.iban_empty_placeholder);
+                    payIdLayout.setBackgroundResource(R.drawable.iban_empty_placeholder);
+                    new Collapse(keyboard).animate();
                 }
                 if (resultCode == Activity.RESULT_CANCELED) {
                 }

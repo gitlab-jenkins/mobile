@@ -669,7 +669,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                 }
 
                 if (responseCode != null) {
-                    if (responseCode.equalsIgnoreCase("2000")) {
+                    if (responseCode.equalsIgnoreCase("1")) {
                         serviceName = ServiceEvent.PSP_PAYMENT_SUCCESS;
                         logEvent.log(serviceName);
                         if (purchaseInfoDTO != null) {
@@ -683,18 +683,18 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                             startActivityForResult(intent, 45);
                         }
                         resultStatus = ResultStatus.SUCCESS;
-                    } else if (responseCode.equalsIgnoreCase("51")) {
-                        serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
-                        logEvent.log(serviceName);
-                        new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.msg_insufficient_credit));
-                        resultStatus = ResultStatus.FAILURE;
-                    } else if (responseCode.equalsIgnoreCase("3000")) {
-                        new HamPayDialog(activity).pspFailResultDialog(responseCode, description);
+//                    } else if (responseCode.equalsIgnoreCase("51")) {
+//                        serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
+//                        logEvent.log(serviceName);
+//                        new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.msg_insufficient_credit));
+//                        resultStatus = ResultStatus.FAILURE;
+//                    } else if (responseCode.equalsIgnoreCase("3000")) {
+//                        new HamPayDialog(activity).pspFailResultDialog(responseCode, description);
                     } else {
                         serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
                         logEvent.log(serviceName);
                         PspCode pspCode = new PspCode(context);
-                        new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(responseCode));
+                        new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(SWTraceNum));
                         resultStatus = ResultStatus.FAILURE;
                     }
 

@@ -64,8 +64,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:background="@android:color/transparent"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
                 android:textSize="15dp"
                 android:hint="@string/bills_service_id"
                 android:textColor="@android:color/black"
@@ -73,7 +71,9 @@
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:nextFocusDown="@+id/cardNumberValue"
-                android:maxLength="13"/>
+                android:maxLength="13"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
 
         </RelativeLayout>
 
@@ -81,7 +81,7 @@
             android:id="@+id/payIdLayout"
             android:layout_width="fill_parent"
             android:layout_height="48dp"
-            android:background="@drawable/entry_field_bg"
+            android:background="@drawable/iban_empty_placeholder"
             android:layout_margin="2dp">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView

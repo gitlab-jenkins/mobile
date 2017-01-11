@@ -622,7 +622,7 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                 }
 
                 if (responseCode != null) {
-                    if (responseCode.equalsIgnoreCase("2000")) {
+                    if (responseCode.equalsIgnoreCase("1")) {
                         serviceName = ServiceEvent.PSP_PAYMENT_SUCCESS;
                         if (billsInfo != null) {
                             Intent intent = new Intent(context, PaymentCompletedActivity.class);
@@ -635,17 +635,17 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                             startActivityForResult(intent, 46);
                         }
                         resultStatus = ResultStatus.SUCCESS;
-                    } else if (responseCode.equalsIgnoreCase("51")) {
-                        serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
-                        new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.msg_insufficient_credit));
-                        resultStatus = ResultStatus.FAILURE;
-                    } else if (responseCode.equalsIgnoreCase("3000")) {
-                        serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
-                        new HamPayDialog(activity).pspFailResultDialog(responseCode, description);
+//                    } else if (responseCode.equalsIgnoreCase("51")) {
+//                        serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
+//                        new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.msg_insufficient_credit));
+//                        resultStatus = ResultStatus.FAILURE;
+//                    } else if (responseCode.equalsIgnoreCase("3000")) {
+//                        serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
+//                        new HamPayDialog(activity).pspFailResultDialog(responseCode, description);
                     } else {
                         serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
                         PspCode pspCode = new PspCode(context);
-                        new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(responseCode));
+                        new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(SWTraceNum));
                         resultStatus = ResultStatus.FAILURE;
                     }
                     logEvent.log(serviceName);
@@ -653,7 +653,7 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                     SyncPspResult syncPspResult = new SyncPspResult();
                     syncPspResult.setResponseCode(responseCode);
                     syncPspResult.setProductCode(billsInfo.getProductCode());
-                    syncPspResult.setType("PAYMENT");
+                    syncPspResult.setType("UTILITY_BILL");
                     syncPspResult.setSwTrace(SWTraceNum);
                     syncPspResult.setTimestamp(System.currentTimeMillis());
                     syncPspResult.setStatus(0);
