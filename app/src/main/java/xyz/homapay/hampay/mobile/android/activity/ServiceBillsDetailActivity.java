@@ -635,13 +635,6 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                             startActivityForResult(intent, 46);
                         }
                         resultStatus = ResultStatus.SUCCESS;
-//                    } else if (responseCode.equalsIgnoreCase("51")) {
-//                        serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
-//                        new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.msg_insufficient_credit));
-//                        resultStatus = ResultStatus.FAILURE;
-//                    } else if (responseCode.equalsIgnoreCase("3000")) {
-//                        serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
-//                        new HamPayDialog(activity).pspFailResultDialog(responseCode, description);
                     } else {
                         serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
                         PspCode pspCode = new PspCode(context);
