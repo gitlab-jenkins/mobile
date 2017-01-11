@@ -14,7 +14,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import xyz.homapay.hampay.common.common.ChargePackage;
@@ -153,6 +152,9 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
         tvChargeType = (FacedTextView) findViewById(R.id.tvChargeType);
         tvChargeAmount = (FacedTextView) findViewById(R.id.tvChargeAmount);
 
+        tvChargeAmount.setTag(0);
+        tvChargeType.setTag(0);
+
         imgMCI.setOnClickListener(this);
         imgMTN.setOnClickListener(this);
         imgRIGHTEL.setOnClickListener(this);
@@ -180,31 +182,31 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
                 new Expand(keyboard).animate();
                 break;
             case R.id.imgMCI:
-                selectOperatorView(Operator.MCI);
+                selectOperatorView(Operator.MCI, true);
                 break;
             case R.id.imgMTN:
-                selectOperatorView(Operator.MTN);
+                selectOperatorView(Operator.MTN, true);
                 break;
             case R.id.imgRIGHTEL:
-                selectOperatorView(Operator.RAYTEL);
+                selectOperatorView(Operator.RAYTEL, true);
                 break;
             case R.id.rlChargeType:
                 if (infos != null) {
-                    Collection<String> items = new ArrayList<>();
+                    List<String> items = new ArrayList<>();
                     for (xyz.homapay.hampay.common.common.TopUpInfo item : infos) {
                         items.add(item.getChargeType());
                     }
-                    ChargeTypeChooserDialog.show(context, items);
+                    ChargeTypeChooserDialog.show(context, items, ((int) tvChargeType.getTag()));
                 }
                 break;
             case R.id.rlChargeAmount:
                 if (infos != null && !tvChargeType.getText().toString().equals("")) {
                     int index = (int) tvChargeType.getTag();
-                    Collection<String> items = new ArrayList<>();
+                    List<String> items = new ArrayList<>();
                     for (ChargePackage item : infos.get(index).getChargePackages()) {
                         items.add(item.getAmount() + "");
                     }
-                    ChargeAmountChooserDialog.show(context, items);
+                    ChargeAmountChooserDialog.show(context, items, ((int) tvChargeAmount.getTag()));
                 }
                 break;
         }
@@ -272,13 +274,15 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     @Subscribe
     public void onOperatorChanged(MessageSetOperator messageSetOperator) {
         new Collapse(keyboard).animate();
-        selectOperatorView(messageSetOperator.getOperator());
+        selectOperatorView(messageSetOperator.getOperator(), false);
         if (messageSetOperator.getOperator() == null)
             return;
         topUpInfo.getInfo(messageSetOperator.getOperator());
     }
 
-    private void selectOperatorView(Operator operator) {
+    private void selectOperatorView(Operator operator, boolean manual) {
+        if (manual)
+            topUpInfo.getInfo(operator);
         switch (operator) {
             case MCI:
                 imgMCI.setImageResource(R.mipmap.hamrah_active);
