@@ -20,6 +20,7 @@ import xyz.homapay.hampay.common.common.ChargePackage;
 import xyz.homapay.hampay.common.common.Operator;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.response.TopUpInfoResponse;
+import xyz.homapay.hampay.common.core.model.response.TopUpResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
@@ -33,6 +34,9 @@ import xyz.homapay.hampay.mobile.android.dialog.common.ChargeAmountChooserDialog
 import xyz.homapay.hampay.mobile.android.dialog.common.ChargeTypeChooserDialog;
 import xyz.homapay.hampay.mobile.android.dialog.common.ProgressDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.p.topup.TopUpCreate;
+import xyz.homapay.hampay.mobile.android.p.topup.TopUpCreateImplMock;
+import xyz.homapay.hampay.mobile.android.p.topup.TopUpCreateView;
 import xyz.homapay.hampay.mobile.android.p.topup.TopUpInfo;
 import xyz.homapay.hampay.mobile.android.p.topup.TopUpInfoImplMock;
 import xyz.homapay.hampay.mobile.android.p.topup.TopUpInfoView;
@@ -41,7 +45,7 @@ import xyz.homapay.hampay.mobile.android.util.Dialoger;
 import xyz.homapay.hampay.mobile.android.util.ModelLayerImpl;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
-public class MainBillsTopUpActivity extends AppCompatActivity implements View.OnClickListener, TopUpInfoView {
+public class MainBillsTopUpActivity extends AppCompatActivity implements View.OnClickListener, TopUpInfoView, TopUpCreateView {
 
     private SharedPreferences prefs;
     private Context context;
@@ -60,13 +64,17 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     private TopUpCellNumber cellNumberText;
     private FacedTextView tvChargeType;
     private FacedTextView tvChargeAmount;
+    private FacedTextView btnTopUpPay;
     private ImageView imgMCI;
     private ImageView imgMTN;
     private ImageView imgRIGHTEL;
     private String cellNumber = "";
     private TopUpInfo topUpInfo;
+    private TopUpCreate topUpCreate;
+    private Operator operator;
     private List<xyz.homapay.hampay.common.common.TopUpInfo> infos;
     private long amount;
+    private String chargeType;
 
     public void backActionBar(View view) {
         finish();
@@ -122,6 +130,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
         setContentView(R.layout.activity_bills_top_up);
 
         topUpInfo = new TopUpInfoImplMock(new ModelLayerImpl(context), this);
+        topUpCreate = new TopUpCreateImplMock(new ModelLayerImpl(context), this);
 
         context = this;
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
@@ -146,6 +155,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
         imgMCI = (ImageView) findViewById(R.id.imgMCI);
         imgMTN = (ImageView) findViewById(R.id.imgMTN);
         imgRIGHTEL = (ImageView) findViewById(R.id.imgRIGHTEL);
+        btnTopUpPay = (FacedTextView) findViewById(R.id.btnTopUpPay);
 
         rlChargeType = (RelativeLayout) findViewById(R.id.rlChargeType);
         rlChargeAmount = (RelativeLayout) findViewById(R.id.rlChargeAmount);
@@ -158,6 +168,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
         imgMCI.setOnClickListener(this);
         imgMTN.setOnClickListener(this);
         imgRIGHTEL.setOnClickListener(this);
+        btnTopUpPay.setOnClickListener(this);
     }
 
     @Override
@@ -182,13 +193,13 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
                 new Expand(keyboard).animate();
                 break;
             case R.id.imgMCI:
-                selectOperatorView(Operator.MCI, true);
+                selectOperatorView(true);
                 break;
             case R.id.imgMTN:
-                selectOperatorView(Operator.MTN, true);
+                selectOperatorView(true);
                 break;
             case R.id.imgRIGHTEL:
-                selectOperatorView(Operator.RAYTEL, true);
+                selectOperatorView(true);
                 break;
             case R.id.rlChargeType:
                 if (infos != null) {
@@ -209,6 +220,25 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
                     ChargeAmountChooserDialog.show(context, items, ((int) tvChargeAmount.getTag()));
                 }
                 break;
+            case R.id.btnTopUpPay:
+                createPayment();
+                break;
+        }
+    }
+
+    private void createPayment() {
+        if (chargeType != null && amount != 0) {
+            ChargePackage chargePackage = null;
+            for (xyz.homapay.hampay.common.common.TopUpInfo item : infos) {
+                if (item.getChargeType().equals(chargeType)) {
+                    for (ChargePackage item2 : item.getChargePackages()) {
+                        if (item2.getAmount() == amount)
+                            chargePackage = item2;
+                    }
+                }
+            }
+            if (chargePackage != null)
+                topUpCreate.create(operator, cellNumberText.getText().toString(), chargePackage, chargeType);
         }
     }
 
@@ -273,14 +303,15 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
 
     @Subscribe
     public void onOperatorChanged(MessageSetOperator messageSetOperator) {
-        new Collapse(keyboard).animate();
-        selectOperatorView(messageSetOperator.getOperator(), false);
         if (messageSetOperator.getOperator() == null)
             return;
+        this.operator = messageSetOperator.getOperator();
+        new Collapse(keyboard).animate();
+        selectOperatorView(false);
         topUpInfo.getInfo(messageSetOperator.getOperator());
     }
 
-    private void selectOperatorView(Operator operator, boolean manual) {
+    private void selectOperatorView(boolean manual) {
         if (manual)
             topUpInfo.getInfo(operator);
         switch (operator) {
@@ -313,6 +344,11 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     }
 
     @Override
+    public void cancelProgress() {
+        ProgressDialog.cancel();
+    }
+
+    @Override
     public void dismissProgress() {
         ProgressDialog.cancel();
     }
@@ -321,6 +357,17 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     public void onError() {
         ProgressDialog.cancel();
         Dialoger.GENERAL.show(context, getString(R.string.err_general), getString(R.string.err_failed_get_operator_data_charge));
+    }
+
+    @Override
+    public void onCreated(boolean state, ResponseMessage<TopUpResponse> data, String message) {
+        if (state) {
+            Intent intent = new Intent(context, ServiceTopUpDetailActivity.class);
+            intent.putExtra(Constants.TOP_UP_INFO, data.getService().getTopUpInfoDTO());
+            startActivity(intent);
+        } else {
+            onError();
+        }
     }
 
     @Override
@@ -333,6 +380,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
 
     @Subscribe
     public void onTypeSelect(MessageSelectChargeType type) {
+        this.chargeType = type.getSelectedType();
         tvChargeType.setText(type.getSelectedType());
         tvChargeType.setTag(type.getIndex());
     }
