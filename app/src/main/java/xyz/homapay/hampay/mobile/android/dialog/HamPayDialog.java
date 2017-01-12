@@ -29,11 +29,9 @@ import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
-import xyz.homapay.hampay.common.core.model.request.CardProfileRequest;
 import xyz.homapay.hampay.common.core.model.request.ChangePassCodeRequest;
 import xyz.homapay.hampay.common.core.model.request.ContactUsRequest;
 import xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
-import xyz.homapay.hampay.common.core.model.request.IllegalAppListRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationCredentialsRequest;
@@ -53,12 +51,10 @@ import xyz.homapay.hampay.mobile.android.activity.SMSVerificationActivity;
 import xyz.homapay.hampay.mobile.android.activity.UnlinkPassActivity;
 import xyz.homapay.hampay.mobile.android.activity.WelcomeActivity;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import xyz.homapay.hampay.mobile.android.async.RequestCardProfile;
 import xyz.homapay.hampay.mobile.android.async.RequestChangePassCode;
 import xyz.homapay.hampay.mobile.android.async.RequestContactHampayEnabled;
 import xyz.homapay.hampay.mobile.android.async.RequestCredentialEntry;
 import xyz.homapay.hampay.mobile.android.async.RequestHamPayBusiness;
-import xyz.homapay.hampay.mobile.android.async.RequestIllegalAppList;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestNewLogout;
@@ -391,71 +387,6 @@ public class HamPayDialog {
         FacedTextView prevent_rooted_device = (FacedTextView) view.findViewById(R.id.prevent_rooted_device);
 
         prevent_rooted_device.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                activity.finish();
-            }
-        });
-
-        view.setMinimumWidth((int) (rect.width() * 0.85f));
-        if (!activity.isFinishing()) {
-            dialog = new HamPayCustomDialog(view, activity, 0);
-            dialog.show();
-        }
-    }
-
-    public void showFailCardProfileDialog(final RequestCardProfile requestCardProfile,
-                                          final CardProfileRequest cardProfileRequest,
-                                          final String code,
-                                          final String message) {
-
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_card_info, null);
-
-        FacedTextView responseMessage = (FacedTextView) view.findViewById(R.id.responseMessage);
-
-        responseMessage.setText((activity.getString(R.string.error_code, code) + "\n" + message));
-
-        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
-
-        cancel_request.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        view.setMinimumWidth((int) (rect.width() * 0.85f));
-        if (!activity.isFinishing()) {
-            dialog = new HamPayCustomDialog(view, activity, 0);
-            dialog.show();
-        }
-    }
-
-
-    public void showFailIllegalAppListDialog(final RequestIllegalAppList requestIllegalAppList,
-                                             final IllegalAppListRequest illegalAppListRequest,
-                                             final String code,
-                                             final String message) {
-
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_illegal_app_list, null);
-
-        FacedTextView responseMessage = (FacedTextView) view.findViewById(R.id.responseMessage);
-
-        responseMessage.setText(activity.getString(R.string.error_code, code) + "\n" + message);
-
-        FacedTextView retry_fetch_illegal_app_list = (FacedTextView) view.findViewById(R.id.retry_fetch_illegal_app_list);
-        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
-
-        retry_fetch_illegal_app_list.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                requestIllegalAppList.execute(illegalAppListRequest);
-            }
-        });
-
-        cancel_request.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
