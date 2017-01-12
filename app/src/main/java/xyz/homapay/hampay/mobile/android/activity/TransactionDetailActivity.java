@@ -218,6 +218,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
                         if (tnxDetail.getName() != null) {
                             callee_name.setText(tnxDetail.getName());
                         }
+                        moreAmount.setVisibility(View.VISIBLE);
                         payment_request_code.setText(persian.E2P(tnxDetail.getCode()));
                         date_time.setText(persian.E2P(new JalaliConvert().GregorianToPersian(tnxDetail.getDate())));
                         if (transaction.getPersonType() == TransactionDTO.PersonType.INDIVIDUAL) {
@@ -233,6 +234,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
                         callee_name.setText(tnxDetail.getName());
                         payment_request_code.setText(tnxDetail.getCode().substring(0, 3) + " " + tnxDetail.getCode().substring(3, 6));
                         date_time.setText(persian.E2P(new JalaliConvert().GregorianToPersian(tnxDetail.getDate())));
+                        moreAmount.setVisibility(View.VISIBLE);
                     }else if (transaction.getPaymentType() == TransactionDTO.PaymentType.UTILITY_BILL){
                         payment_request_code.setText(persian.E2P(tnxDetail.getCode()));
                         billsInfo.setVisibility(View.VISIBLE);
@@ -244,7 +246,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
                     if (transaction.getTransactionType() == TransactionDTO.TransactionType.CREDIT) {
                         total_amount_value.setText(persian.E2P(formatter.format(tnxDetail.getAmount() + tnxDetail.getVat())));
                         amount_value.setText(persian.E2P(formatter.format(tnxDetail.getAmount())));
-                        moreAmount.setVisibility(View.VISIBLE);
+
                         vat_value.setText(persian.E2P(formatter.format(tnxDetail.getVat())));
                         fee_charge_value.setVisibility(View.INVISIBLE);
                         fee_charge_text.setVisibility(View.INVISIBLE);
@@ -252,7 +254,6 @@ public class TransactionDetailActivity extends AppCompatActivity {
                     } else if (transaction.getTransactionType() == TransactionDTO.TransactionType.DEBIT) {
                         total_amount_value.setText(persian.E2P(formatter.format(tnxDetail.getAmount() + tnxDetail.getFeeCharge() + tnxDetail.getVat())));
                         amount_value.setText(persian.E2P(formatter.format(tnxDetail.getAmount())));
-                        moreAmount.setVisibility(View.VISIBLE);
                         vat_value.setText(persian.E2P(formatter.format(tnxDetail.getVat())));
                         fee_charge_value.setText(persian.E2P(formatter.format(tnxDetail.getFeeCharge())));
                         fee_charge_value.setVisibility(View.VISIBLE);
