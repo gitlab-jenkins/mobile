@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.WelcomeAdapter;
-import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
@@ -43,6 +42,36 @@ public class WelcomeActivity extends AppCompatActivity {
             R.layout.welcome_slider5
     };
     private Button btnSkip, btnNext;
+    ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
+
+        @Override
+        public void onPageSelected(int position) {
+            addBottomDots(position);
+            if (position == 0) {
+                btnSkip.setVisibility(View.GONE);
+            }
+            // changing the next button text 'NEXT' / 'GOT IT'
+            else if (position == layouts.length - 1) {
+                // last page. make button text to GOT IT
+                btnNext.setText(getString(R.string.register));
+                btnSkip.setVisibility(View.GONE);
+            } else {
+                // still pages are left
+                btnNext.setText(getString(R.string.next_slide));
+                btnSkip.setVisibility(View.VISIBLE);
+            }
+        }
+
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int arg0) {
+
+        }
+    };
     private PreferencesManager preferencesManager;
     private AppEvent appEvent = AppEvent.LAUNCH;
     private RootUtil rootUtil;
@@ -57,10 +86,10 @@ public class WelcomeActivity extends AppCompatActivity {
         activity = WelcomeActivity.this;
 
         rootUtil = new RootUtil(activity);
-        if (rootUtil.checkRootedDevice()){
-            new HamPayDialog(activity).showPreventRootDeviceDialog();
-            return;
-        }
+//        if (rootUtil.checkRootedDevice()){
+//            new HamPayDialog(activity).showPreventRootDeviceDialog();
+//            return;
+//        }
 
         bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -199,37 +228,6 @@ public class WelcomeActivity extends AppCompatActivity {
         startActivity(new Intent(WelcomeActivity.this, HamPayLoginActivity.class));
         finish();
     }
-
-    ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
-
-        @Override
-        public void onPageSelected(int position) {
-            addBottomDots(position);
-            if (position == 0){
-                btnSkip.setVisibility(View.GONE);
-            }
-            // changing the next button text 'NEXT' / 'GOT IT'
-            else if (position == layouts.length - 1) {
-                // last page. make button text to GOT IT
-                btnNext.setText(getString(R.string.register));
-                btnSkip.setVisibility(View.GONE);
-            } else {
-                // still pages are left
-                btnNext.setText(getString(R.string.next_slide));
-                btnSkip.setVisibility(View.VISIBLE);
-            }
-        }
-
-        @Override
-        public void onPageScrolled(int arg0, float arg1, int arg2) {
-
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int arg0) {
-
-        }
-    };
 
     private void changeStatusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

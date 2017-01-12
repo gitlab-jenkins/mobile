@@ -1,4 +1,4 @@
-package xyz.homapay.hampay.mobile.android.img;
+package xyz.homapay.hampay.mobile.android.m.common;
 
 import java.io.EOFException;
 import java.io.IOException;

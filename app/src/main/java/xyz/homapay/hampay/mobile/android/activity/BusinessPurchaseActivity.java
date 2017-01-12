@@ -34,13 +34,6 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class BusinessPurchaseActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private PurchaseInfoDTO purchaseInfoDTO = null;
-    private PspInfoDTO pspInfoDTO = null;
-    private SharedPreferences.Editor editor;
-    private LinearLayout letter_layout;
-    private LinearLayout digit_layout;
-    private Context context;
-    private Activity activity;
     ImageView payment_button;
     LinearLayout displayKeyboard;
     LinearLayout keyboard;
@@ -54,6 +47,13 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
     SharedPreferences prefs;
     HamPayDialog hamPayDialog;
     RelativeLayout businesses_list;
+    private PurchaseInfoDTO purchaseInfoDTO = null;
+    private PspInfoDTO pspInfoDTO = null;
+    private SharedPreferences.Editor editor;
+    private LinearLayout letter_layout;
+    private LinearLayout digit_layout;
+    private Context context;
+    private Activity activity;
     private RequestPurchaseInfo requestPurchaseInfo;
     private PurchaseInfoRequest purchaseInfoRequest;
 
@@ -296,6 +296,17 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
         }
     }
 
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(context, HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        if (activity != null) {
+            finish();
+            startActivity(intent);
+        }
+    }
 
     public class RequestPurchaseInfoTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PurchaseInfoResponse>> {
 
@@ -349,19 +360,6 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
         @Override
         public void onTaskPreRun() {
             hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
-    }
-
-
-    private void forceLogout() {
-        editor.remove(Constants.LOGIN_TOKEN_ID);
-        editor.commit();
-        Intent intent = new Intent();
-        intent.setClass(context, HamPayLoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        if (activity != null) {
-            finish();
-            startActivity(intent);
         }
     }
 

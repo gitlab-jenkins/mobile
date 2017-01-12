@@ -132,55 +132,6 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
         }
     }
 
-
-    public class RequestChangeEmailTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<ChangeEmailResponse>> {
-
-        private ChangeEmailRequest changeEmailRequest;
-
-        public RequestChangeEmailTaskCompleteListener(ChangeEmailRequest changeEmailRequest){
-            this.changeEmailRequest = changeEmailRequest;
-
-        }
-
-        @Override
-        public void onTaskComplete(ResponseMessage<ChangeEmailResponse> changeEmailResponseResponseMessage)
-        {
-
-            hamPayDialog.dismisWaitingDialog();
-            ServiceEvent serviceName;
-            LogEvent logEvent = new LogEvent(context);
-
-            if (changeEmailResponseResponseMessage != null) {
-                if (changeEmailResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    serviceName = ServiceEvent.CHANGE_EMAIL_SUCCESS;
-                    editor.putString(Constants.REGISTERED_USER_EMAIL, userEmail);
-                    editor.commit();
-                    new HamPayDialog(activity).showSuccessChangeSettingDialog(changeEmailResponseResponseMessage.getService().getResultStatus().getDescription(), false);
-                }else if (changeEmailResponseResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceEvent.CHANGE_EMAIL_FAILURE;
-                    forceLogout();
-                }
-                else {
-                    serviceName = ServiceEvent.CHANGE_EMAIL_FAILURE;
-                    new HamPayDialog(activity).showFailChangeEmail(
-                            changeEmailResponseResponseMessage.getService().getResultStatus().getCode(),
-                            changeEmailResponseResponseMessage.getService().getResultStatus().getDescription());
-                }
-            }else {
-                serviceName = ServiceEvent.CHANGE_EMAIL_FAILURE;
-                new HamPayDialog(activity).showFailChangeEmail(
-                        Constants.LOCAL_ERROR_CODE,
-                        activity.getString(R.string.msg_gail_change_email));
-            }
-            logEvent.log(serviceName);
-            resetLayout();
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
-    }
     private void forceLogout() {
         editor.remove(Constants.LOGIN_TOKEN_ID);
         editor.commit();
@@ -284,6 +235,53 @@ public class ChangeEmailPassActivity extends AppCompatActivity implements View.O
         input_digit_3.setBackgroundResource(R.drawable.pass_value_empty);
         input_digit_4.setBackgroundResource(R.drawable.pass_value_empty);
         input_digit_5.setBackgroundResource(R.drawable.pass_value_empty);
+    }
+
+    public class RequestChangeEmailTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<ChangeEmailResponse>> {
+
+        private ChangeEmailRequest changeEmailRequest;
+
+        public RequestChangeEmailTaskCompleteListener(ChangeEmailRequest changeEmailRequest) {
+            this.changeEmailRequest = changeEmailRequest;
+
+        }
+
+        @Override
+        public void onTaskComplete(ResponseMessage<ChangeEmailResponse> changeEmailResponseResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+            ServiceEvent serviceName;
+            LogEvent logEvent = new LogEvent(context);
+
+            if (changeEmailResponseResponseMessage != null) {
+                if (changeEmailResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    serviceName = ServiceEvent.CHANGE_EMAIL_SUCCESS;
+                    editor.putString(Constants.REGISTERED_USER_EMAIL, userEmail);
+                    editor.commit();
+                    new HamPayDialog(activity).showSuccessChangeSettingDialog(changeEmailResponseResponseMessage.getService().getResultStatus().getDescription(), false);
+                } else if (changeEmailResponseResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceEvent.CHANGE_EMAIL_FAILURE;
+                    forceLogout();
+                } else {
+                    serviceName = ServiceEvent.CHANGE_EMAIL_FAILURE;
+                    new HamPayDialog(activity).showFailChangeEmail(
+                            changeEmailResponseResponseMessage.getService().getResultStatus().getCode(),
+                            changeEmailResponseResponseMessage.getService().getResultStatus().getDescription());
+                }
+            } else {
+                serviceName = ServiceEvent.CHANGE_EMAIL_FAILURE;
+                new HamPayDialog(activity).showFailChangeEmail(
+                        Constants.LOCAL_ERROR_CODE,
+                        activity.getString(R.string.msg_gail_change_email));
+            }
+            logEvent.log(serviceName);
+            resetLayout();
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
     }
 
 }

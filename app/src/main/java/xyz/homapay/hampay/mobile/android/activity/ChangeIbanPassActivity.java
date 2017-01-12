@@ -147,57 +147,6 @@ public class ChangeIbanPassActivity extends AppCompatActivity implements View.On
         }
     }
 
-    public class RequestIBANChangeTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<IBANChangeResponse>> {
-
-        IBANChangeRequest ibanChangeRequest;
-        ServiceEvent serviceName;
-        LogEvent logEvent = new LogEvent(context);
-
-        public RequestIBANChangeTaskCompleteListener(IBANChangeRequest ibanChangeRequest) {
-            this.ibanChangeRequest = ibanChangeRequest;
-        }
-
-        @Override
-        public void onTaskComplete(ResponseMessage<IBANChangeResponse> ibanChangeResponseMessage) {
-            hamPayDialog.dismisWaitingDialog();
-            if (ibanChangeResponseMessage != null) {
-                if (ibanChangeResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    serviceName = ServiceEvent.IBAN_CHANGE_SUCCESS;
-                    editor.putBoolean(Constants.SETTING_CHANGE_IBAN_STATUS, true);
-                    editor.commit();
-                    hamPayDialog.showSuccessChangeSettingDialog(ibanChangeResponseMessage.getService().getResultStatus().getDescription(), false);
-                    Intent returnIntent = new Intent();
-                    returnIntent.putExtra(Constants.RETURN_IBAN_CONFIRMED, iban);
-                    setResult(RESULT_OK, returnIntent);
-                    activity.finish();
-                }else if (ibanChangeResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceEvent.IBAN_CHANGE_FAILURE;
-                    forceLogout();
-                }
-                else {
-                    serviceName = ServiceEvent.IBAN_CHANGE_FAILURE;
-                    requestIBANChange = new RequestIBANChange(activity, new RequestIBANChangeTaskCompleteListener(ibanChangeRequest));
-                    hamPayDialog.showFailIBANChangeDialog(
-                            ibanChangeResponseMessage.getService().getResultStatus().getCode(),
-                            ibanChangeResponseMessage.getService().getResultStatus().getDescription());
-                }
-            } else {
-                serviceName = ServiceEvent.IBAN_CHANGE_FAILURE;
-                requestIBANChange = new RequestIBANChange(activity, new RequestIBANChangeTaskCompleteListener(ibanChangeRequest));
-                hamPayDialog.showFailIBANChangeDialog(
-                        Constants.LOCAL_ERROR_CODE,
-                        activity.getString(R.string.msg_fail_iban_change));
-            }
-            logEvent.log(serviceName);
-            resetLogin();
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
-    }
-
     private void forceLogout() {
         editor.remove(Constants.LOGIN_TOKEN_ID);
         editor.commit();
@@ -299,6 +248,56 @@ public class ChangeIbanPassActivity extends AppCompatActivity implements View.On
         input_digit_3.setBackgroundResource(R.drawable.pass_value_empty);
         input_digit_4.setBackgroundResource(R.drawable.pass_value_empty);
         input_digit_5.setBackgroundResource(R.drawable.pass_value_empty);
+    }
+
+    public class RequestIBANChangeTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<IBANChangeResponse>> {
+
+        IBANChangeRequest ibanChangeRequest;
+        ServiceEvent serviceName;
+        LogEvent logEvent = new LogEvent(context);
+
+        public RequestIBANChangeTaskCompleteListener(IBANChangeRequest ibanChangeRequest) {
+            this.ibanChangeRequest = ibanChangeRequest;
+        }
+
+        @Override
+        public void onTaskComplete(ResponseMessage<IBANChangeResponse> ibanChangeResponseMessage) {
+            hamPayDialog.dismisWaitingDialog();
+            if (ibanChangeResponseMessage != null) {
+                if (ibanChangeResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    serviceName = ServiceEvent.IBAN_CHANGE_SUCCESS;
+                    editor.putBoolean(Constants.SETTING_CHANGE_IBAN_STATUS, true);
+                    editor.commit();
+                    hamPayDialog.showSuccessChangeSettingDialog(ibanChangeResponseMessage.getService().getResultStatus().getDescription(), false);
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra(Constants.RETURN_IBAN_CONFIRMED, iban);
+                    setResult(RESULT_OK, returnIntent);
+                    activity.finish();
+                } else if (ibanChangeResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceEvent.IBAN_CHANGE_FAILURE;
+                    forceLogout();
+                } else {
+                    serviceName = ServiceEvent.IBAN_CHANGE_FAILURE;
+                    requestIBANChange = new RequestIBANChange(activity, new RequestIBANChangeTaskCompleteListener(ibanChangeRequest));
+                    hamPayDialog.showFailIBANChangeDialog(
+                            ibanChangeResponseMessage.getService().getResultStatus().getCode(),
+                            ibanChangeResponseMessage.getService().getResultStatus().getDescription());
+                }
+            } else {
+                serviceName = ServiceEvent.IBAN_CHANGE_FAILURE;
+                requestIBANChange = new RequestIBANChange(activity, new RequestIBANChangeTaskCompleteListener(ibanChangeRequest));
+                hamPayDialog.showFailIBANChangeDialog(
+                        Constants.LOCAL_ERROR_CODE,
+                        activity.getString(R.string.msg_fail_iban_change));
+            }
+            logEvent.log(serviceName);
+            resetLogin();
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
     }
 
 }

@@ -11,7 +11,8 @@ public class PersianEnglishDigit {
         this.digit = digit;
     }
 
-    public PersianEnglishDigit(){}
+    public PersianEnglishDigit() {
+    }
 
     public String E2P(String digit){
 

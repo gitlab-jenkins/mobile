@@ -39,6 +39,7 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class BankWebPaymentActivity extends AppCompatActivity {
 
+    private final Handler handler = new Handler();
     private WebView bankWebView;
     private ImageView reload;
     private TextView urlText;
@@ -56,8 +57,6 @@ public class BankWebPaymentActivity extends AppCompatActivity {
     private Timer timer;
     private TimerTask timerTask;
     private String ipgUrl = "";
-    private final Handler handler = new Handler();
-
 
     public void startTimer() {
         timer = new Timer();
@@ -186,7 +185,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                             "&Amount=" + (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat()) +
                             "&ResNum=" + purchaseInfoDTO.getProductCode() +
                             "&TerminalId=" + pspInfoDTO.getSenderTerminalId();
-        }else if (billInfo != null){
+        } else if (billInfo != null) {
             ipgUrl = Constants.BILLS_IPG_URL;
             pspInfoDTO = billInfo.getPspInfo();
             redirectedURL = pspInfoDTO.getRedirectURL() + "?authToken=" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
@@ -246,7 +245,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                                 succeedPayment.setAmount(purchaseInfoDTO.getAmount());
                                 succeedPayment.setCode(purchaseInfoDTO.getPurchaseCode());
                                 succeedPayment.setPaymentType(PaymentType.PURCHASE);
-                            }else if (billInfo != null){
+                            } else if (billInfo != null) {
                                 succeedPayment.setAmount(billInfo.getAmount() + billInfo.getFeeCharge());
                                 succeedPayment.setCode(billInfo.getBillId());
                                 succeedPayment.setPaymentType(PaymentType.BILLS);

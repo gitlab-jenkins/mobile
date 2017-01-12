@@ -21,7 +21,7 @@ public class UtilityBillDetailTask extends AsyncTask<Object, Object, Object> {
     private OnTaskCompleted listener;
     private UtilityBillDetailRequest utilityBillDetailRequest;
 
-    public UtilityBillDetailTask(Context context, OnTaskCompleted listener, UtilityBillDetailRequest utilityBillDetailRequest, String authToken){
+    public UtilityBillDetailTask(Context context, OnTaskCompleted listener, UtilityBillDetailRequest utilityBillDetailRequest, String authToken) {
         this.context = context;
         this.listener = listener;
         this.utilityBillDetailRequest = utilityBillDetailRequest;
@@ -50,7 +50,7 @@ public class UtilityBillDetailTask extends AsyncTask<Object, Object, Object> {
     }
 
     @Override
-    protected void onPostExecute(Object object){
+    protected void onPostExecute(Object object) {
         listener.OnTaskExecuted(object);
     }
 }

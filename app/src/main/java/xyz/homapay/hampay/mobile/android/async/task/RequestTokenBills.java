@@ -20,16 +20,14 @@ public class RequestTokenBills extends AsyncTask<BillsTokenDoWork, Void, MKAArra
     private String payUrl;
 
 
-    public RequestTokenBills(Context context, AsyncTaskCompleteListener<MKAArrayOfKeyValueOfstringstring> listener, String payUrl)
-    {
+    public RequestTokenBills(Context context, AsyncTaskCompleteListener<MKAArrayOfKeyValueOfstringstring> listener, String payUrl) {
         this.context = context;
         this.listener = listener;
         this.payUrl = payUrl;
     }
 
 
-    protected void onPreExecute()
-    {
+    protected void onPreExecute() {
         super.onPreExecute();
         listener.onTaskPreRun();
     }
@@ -49,8 +47,7 @@ public class RequestTokenBills extends AsyncTask<BillsTokenDoWork, Void, MKAArra
 
 
     @Override
-    protected void onPostExecute(MKAArrayOfKeyValueOfstringstring purchaseResponseMessage)
-    {
+    protected void onPostExecute(MKAArrayOfKeyValueOfstringstring purchaseResponseMessage) {
         super.onPostExecute(purchaseResponseMessage);
         listener.onTaskComplete(purchaseResponseMessage);
     }

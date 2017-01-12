@@ -116,7 +116,6 @@ import xyz.homapay.hampay.mobile.android.webservice.psp.bills.MKABasicHttpBindin
  */
 public class WebServices  {
 
-    public WebServices(){}
     private Context context;
     private SharedPreferences prefs;
     private DateGsonBuilder builder;
@@ -125,9 +124,12 @@ public class WebServices  {
     private String serviceURL = "";
     private String authToken = "";
 
+    public WebServices() {
+    }
+
     public WebServices(Context context, ConnectionType connectionType){
         this.context = context;
-        prefs =  context.getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
+        prefs = context.getSharedPreferences(Constants.APP_PREFERENCE_NAME, Context.MODE_PRIVATE);
         builder = new DateGsonBuilder();
         this.connectionType = connectionType;
         if (connectionType == ConnectionType.HTTPS){
@@ -141,7 +143,7 @@ public class WebServices  {
 
     public WebServices(Context context){
         this.context = context;
-        prefs =  context.getSharedPreferences(Constants.APP_PREFERENCE_NAME, context.MODE_PRIVATE);
+        prefs = context.getSharedPreferences(Constants.APP_PREFERENCE_NAME, Context.MODE_PRIVATE);
         builder = new DateGsonBuilder();
     }
 
@@ -697,7 +699,7 @@ public class WebServices  {
         AllowHamPaySSL allowHamPaySSL = new AllowHamPaySSL(context);
         allowHamPaySSL.enableHamPaySSL();
         MKABasicHttpBinding_IGeneralService basicHttpBinding_iTokenPay = new MKABasicHttpBinding_IGeneralService(null, payUrl);
-        MKAArrayOfKeyValueOfstringstring responseMessage = basicHttpBinding_iTokenPay.DoWork(doWorkInfo.getUserName(), doWorkInfo.getPassword(), doWorkInfo.getCellNumber(),null, doWorkInfo.getVectorstring2stringMapEntry());
+        MKAArrayOfKeyValueOfstringstring responseMessage = basicHttpBinding_iTokenPay.DoWork(doWorkInfo.getUserName(), doWorkInfo.getPassword(), doWorkInfo.getCellNumber(), null, doWorkInfo.getVectorstring2stringMapEntry());
 
         return responseMessage;
     }
@@ -771,7 +773,7 @@ public class WebServices  {
     }
 
 
-    public ResponseMessage<CancelFundResponse> cancelFund(CancelFundRequest cancelFundRequest) throws IOException{
+    public ResponseMessage<CancelFundResponse> cancelFund(CancelFundRequest cancelFundRequest) throws IOException {
 
         ResponseMessage<CancelFundResponse> responseMessage = null;
         url = new URL(serviceURL +  "/purchase/cancel");
@@ -780,13 +782,15 @@ public class WebServices  {
         cancelFundRequest.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<CancelFundRequest> message = new RequestMessage<>(cancelFundRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<CancelFundRequest>>() {}.getType();
+        Type requestType = new com.google.gson.reflect.TypeToken<RequestMessage<CancelFundRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = builder.getDatebuilder().create();
 
-        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<CancelFundResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getInputStreamReader(), new TypeToken<ResponseMessage<CancelFundResponse>>() {
+        }.getType());
         proxyService.closeConnection();
 
         return responseMessage;

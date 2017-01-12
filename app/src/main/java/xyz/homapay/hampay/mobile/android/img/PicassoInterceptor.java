@@ -17,7 +17,9 @@ import okio.BufferedSink;
 import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
 import xyz.homapay.hampay.common.common.request.RequestMessage;
 import xyz.homapay.hampay.common.core.model.request.RetrieveImageRequest;
+import xyz.homapay.hampay.mobile.android.m.common.HttpLoggerLayer;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.JsonEncryptor;
 
 /**
  * Created by mohammad on 12/30/16.

@@ -27,7 +27,7 @@ import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
-public class BarCodeScannerActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler{
+public class BarCodeScannerActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
     private SharedPreferences prefs;
     private Context context;
@@ -35,7 +35,7 @@ public class BarCodeScannerActivity extends AppCompatActivity implements ZXingSc
     private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
     private Activity activity;
 
-    public void backActionBar(View view){
+    public void backActionBar(View view) {
         finish();
     }
 

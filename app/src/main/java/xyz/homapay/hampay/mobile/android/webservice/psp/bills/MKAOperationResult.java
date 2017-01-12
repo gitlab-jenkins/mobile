@@ -10,9 +10,7 @@ package xyz.homapay.hampay.mobile.android.webservice.psp.bills;
 //---------------------------------------------------
 
 
-
-public class MKAOperationResult< T>
-{
+public class MKAOperationResult<T> {
     public java.lang.Exception Exception;
     public T Result;
     public java.lang.Object Tag;

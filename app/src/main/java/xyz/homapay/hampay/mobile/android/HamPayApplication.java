@@ -35,5 +35,4 @@ public class HamPayApplication extends MultiDexApplication {
         super.onTerminate();
     }
 
-
 }

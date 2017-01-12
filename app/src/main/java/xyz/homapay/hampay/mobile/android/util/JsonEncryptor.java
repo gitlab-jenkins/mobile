@@ -1,4 +1,4 @@
-package xyz.homapay.hampay.mobile.android.img;
+package xyz.homapay.hampay.mobile.android.util;
 
 import android.content.Context;
 

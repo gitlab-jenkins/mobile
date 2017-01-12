@@ -120,10 +120,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selectQuery = "SELECT  * FROM " + TABLE_VIEWED_PAYMENT_REQUEST + " WHERE "
                 + KEY_VIEWED_PAYMENT_REQUEST_CODE + " = '" + paymentCode + "'";
         Cursor cursor = db.rawQuery(selectQuery, null);
-        if (cursor.getCount() > 0)
-            return true;
-        else
-            return false;
+        return cursor.getCount() > 0;
     }
 
     public long createViewedPurchaseRequest(String purchaseCode) {
@@ -139,10 +136,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selectQuery = "SELECT  * FROM " + TABLE_VIEWED_PURCHASE_REQUEST + " WHERE "
                 + KEY_VIEWED_PURCHASE_REQUEST_CODE + " = '" + purchaseCode + "'";
         Cursor cursor = db.rawQuery(selectQuery, null);
-        if (cursor.getCount() > 0)
-            return true;
-        else
-            return false;
+        return cursor.getCount() > 0;
     }
 
     public long createSyncPspResult(SyncPspResult syncPspResult) {

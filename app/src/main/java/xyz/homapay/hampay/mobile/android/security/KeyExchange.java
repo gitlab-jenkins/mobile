@@ -34,13 +34,13 @@ import xyz.homapay.hampay.mobile.android.webservice.SecuredProxyService;
  */
 public class KeyExchange {
 
+    private static SecretKeyPair secretKeyPair;
+    private static String encryptionId;
     private Context context;
     private KeyExchanger keyExchanger;
     private KeyAgreementRequest keyAgreementRequest;
-    private static SecretKeyPair secretKeyPair;
-    private static String encryptionId;
 
-    public KeyExchange(Context context){
+    public KeyExchange(Context context) {
         this.context = context;
     }
 
@@ -57,14 +57,16 @@ public class KeyExchange {
         SecuredProxyService proxyService = new SecuredProxyService(context, Constants.CONNECTION_TYPE, ConnectionMethod.POST, url);
         RequestMessage<KeyAgreementRequest> message = new RequestMessage<>(keyAgreementRequest, "", Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<KeyAgreementRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<KeyAgreementRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
 
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = new Gson();
 
-        keyAgreementResponseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<KeyAgreementResponse>>() {}.getType());
+        keyAgreementResponseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<KeyAgreementResponse>>() {
+        }.getType());
 
         encryptionId = keyAgreementResponseMessage.getService().getId();
 
@@ -87,36 +89,35 @@ public class KeyExchange {
                 } catch (InvalidKeySpecException e) {
                     e.printStackTrace();
                 }
-            }else {
+            } else {
             }
-        }
-        else {
+        } else {
         }
 
         proxyService.closeConnection();
 
     }
 
-    public byte[] getKey(){
+    public byte[] getKey() {
         if (secretKeyPair != null) {
             return secretKeyPair.getEncSecretKey().getEncoded();
-        }else {
+        } else {
             return null;
         }
     }
 
-    public byte[] getIv(){
+    public byte[] getIv() {
         if (secretKeyPair != null) {
             return secretKeyPair.getIvSecretKey().getEncoded();
-        }else {
+        } else {
             return null;
         }
     }
 
-    public String getEncId(){
+    public String getEncId() {
         if (encryptionId != null) {
             return encryptionId;
-        }else {
+        } else {
             return "";
         }
     }

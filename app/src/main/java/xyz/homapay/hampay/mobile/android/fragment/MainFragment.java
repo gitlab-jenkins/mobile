@@ -27,10 +27,10 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.BusinessPurchaseActivity;
 import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.activity.IbanIntronActivity;
+import xyz.homapay.hampay.mobile.android.activity.MainBillsTopUpActivity;
 import xyz.homapay.hampay.mobile.android.activity.PaymentRequestDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.PaymentRequestListActivity;
 import xyz.homapay.hampay.mobile.android.activity.PendingPurchasePaymentListActivity;
-import xyz.homapay.hampay.mobile.android.activity.ServiceBillsActivity;
 import xyz.homapay.hampay.mobile.android.activity.TransactionsListActivity;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
@@ -338,7 +338,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.billAndTopUp:
-                intent.setClass(getActivity(), ServiceBillsActivity.class);
+                intent.setClass(getActivity(), MainBillsTopUpActivity.class);
                 startActivity(intent);
                 break;
 
