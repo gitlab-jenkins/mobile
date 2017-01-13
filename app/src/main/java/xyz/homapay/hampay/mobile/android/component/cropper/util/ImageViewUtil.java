@@ -91,6 +91,7 @@ public class ImageViewUtil {
         InputStream stream = null;
         try {
             ContentResolver resolver = context.getContentResolver();
+            File pdf = new File(uri.getPath());
             stream = resolver.openInputStream(uri);
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
