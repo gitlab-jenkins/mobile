@@ -30,6 +30,16 @@ public class KeyExchangerImpl extends Presenter<KeyExchangeView> implements KeyE
     }
 
     @Override
+    public void onKeyExchangeDone(boolean state, KeyAgreementModel data, String message) {
+
+    }
+
+    @Override
+    public void onKeyExchangeError() {
+
+    }
+
+    @Override
     public void exchange() {
         try {
             keyExchanger = new DiffieHellmanKeyExchanger();

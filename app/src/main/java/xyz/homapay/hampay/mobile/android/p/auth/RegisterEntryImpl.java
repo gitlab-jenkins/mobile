@@ -18,8 +18,6 @@ import xyz.homapay.hampay.mobile.android.m.common.OnNetworkLoadListener;
 import xyz.homapay.hampay.mobile.android.m.worker.authorization.RegistrationEntryNetWorker;
 import xyz.homapay.hampay.mobile.android.p.common.Presenter;
 import xyz.homapay.hampay.mobile.android.p.security.KeyExchangeView;
-import xyz.homapay.hampay.mobile.android.p.security.KeyExchanger;
-import xyz.homapay.hampay.mobile.android.p.security.KeyExchangerImpl;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 
@@ -30,7 +28,6 @@ import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 public class RegisterEntryImpl extends Presenter<RegisterEntryView> implements RegisterEntry, KeyExchangeView, OnNetworkLoadListener<ResponseMessage<RegistrationEntryResponse>> {
 
     private MessageEncryptor messageEncryptor;
-    private KeyExchanger keyExchanger;
     private RegistrationEntryRequest registrationEntryRequest;
     private String authToken;
 
@@ -48,7 +45,7 @@ public class RegisterEntryImpl extends Presenter<RegisterEntryView> implements R
     }
 
     @Override
-    public void onExchangeDone(boolean state, KeyAgreementModel data, String message) {
+    public void onKeyExchangeDone(boolean state, KeyAgreementModel data, String message) {
         try {
             if (state) {
                 DeviceInfo deviceInfo = modelLayer.getDeviceInfo();
@@ -86,14 +83,18 @@ public class RegisterEntryImpl extends Presenter<RegisterEntryView> implements R
     }
 
     @Override
+    public void onKeyExchangeError() {
+        onError();
+    }
+
+    @Override
     public void register(RegistrationEntryRequest registrationEntryRequest, String authToken) {
         try {
             view.showProgressDialog();
             messageEncryptor = new AESMessageEncryptor();
-            keyExchanger = new KeyExchangerImpl(modelLayer, this);
             this.registrationEntryRequest = registrationEntryRequest;
             this.authToken = authToken;
-            keyExchanger.exchange();
+            keyExchange();
         } catch (Exception e) {
             e.printStackTrace();
             onError();

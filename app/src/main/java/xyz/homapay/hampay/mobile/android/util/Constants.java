@@ -37,7 +37,7 @@ public class Constants {
     public static final String SEND_MOBILE_REGISTER_ID = "send_mobile_register_id";
     public static final int DEFAULT_PAGE_SIZE = 15;
     public static final String REGISTERED_USER = "registeredUser";
-    public static final String  MOBILE_TIME_OUT = "mobile_time_out";
+    public static final String MOBILE_TIME_OUT = "mobile_time_out";
     public static final long MOBILE_TIME_OUT_INTERVAL = 420000;
     public static final String FORCE_USER_PROFILE = "force_user_profile";
     public static final String RECEIVED_SMS_ACTIVATION = "received_sms_activation";
@@ -108,6 +108,7 @@ public class Constants {
     public static final String BAR_CODE_SCAN_RESULT = "barCodeScanResult";
     public static final String CARD_LIST = "card_list";
     public static final String BILL_INFO = "billInfo";
+    public static final String TOP_UP_INFO = "topUpInfo";
     public static final String PAY_ID_REGEX = "^0+(?!$)";
     //Permissions and Group Permission
     public static final int READ_PHONE_STATE = 1;

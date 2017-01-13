@@ -358,7 +358,7 @@
             </RelativeLayout>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                android:id="@+id/bills_mobile_button"
+                android:id="@+id/btnTopUpPay"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
                 android:layout_gravity="center"

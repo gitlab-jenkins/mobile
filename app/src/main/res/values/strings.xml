@@ -727,5 +727,8 @@
     <string name="err_cell_phone_invalid">لطفا یک شماره تلفن صحیح وارد نمایید</string>
     <string name="err_general">خطا</string>
     <string name="err_failed_get_operator_data_charge">خطا در دریافت اطلاعات اپراتور مورد نظر</string>
+    <string name="top_up_service_id">شماره همراه</string>
+    <string name="top_up_amount">مبلغ :</string>
+    <string name="top_up_tax">مالیات بر ارزش افزوده :</string>
 
 </resources>
