@@ -1380,20 +1380,14 @@ public class HamPayDialog {
         FacedTextView networkSetting = (FacedTextView) view.findViewById(R.id.network_setting);
         FacedTextView networkCancel = (FacedTextView) view.findViewById(R.id.network_cancel);
 
-        networkSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                activity.startActivity(new Intent(Settings.ACTION_SETTINGS));
-            }
+        networkSetting.setOnClickListener(v -> {
+            dialog.dismiss();
+            activity.startActivity(new Intent(Settings.ACTION_SETTINGS));
         });
 
-        networkCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-                activity.finish();
-            }
+        networkCancel.setOnClickListener(v -> {
+            dialog.dismiss();
+            activity.finish();
         });
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
