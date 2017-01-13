@@ -730,5 +730,6 @@
     <string name="top_up_service_id">شماره همراه</string>
     <string name="top_up_amount">مبلغ :</string>
     <string name="top_up_tax">مالیات بر ارزش افزوده :</string>
+    <string name="charge_code">رمز شارژ</string>
 
 </resources>

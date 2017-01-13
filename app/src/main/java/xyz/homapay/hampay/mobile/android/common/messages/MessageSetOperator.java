@@ -8,12 +8,25 @@ import xyz.homapay.hampay.common.common.Operator;
 
 public class MessageSetOperator {
     private Operator operator;
+    private String operatorName;
 
     public MessageSetOperator(Operator operator) {
         this.operator = operator;
+        if (operator.equals(Operator.MCI))
+            this.operatorName = "MCI";
+        else if (operator.equals(Operator.MTN))
+            this.operatorName = "MTN";
+        else if (operator.equals(Operator.RAYTEL))
+            this.operatorName = "RAYTEL";
+        else
+            this.operatorName = "UNKNOWN";
     }
 
     public Operator getOperator() {
         return operator;
+    }
+
+    public String getOperatorName() {
+        return operatorName;
     }
 }

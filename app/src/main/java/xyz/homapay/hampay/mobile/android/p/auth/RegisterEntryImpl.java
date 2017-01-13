@@ -12,7 +12,6 @@ import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.dto.DeviceDTO;
 import xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
 import xyz.homapay.hampay.common.core.model.response.RegistrationEntryResponse;
-import xyz.homapay.hampay.mobile.android.m.common.KeyAgreementModel;
 import xyz.homapay.hampay.mobile.android.m.common.ModelLayer;
 import xyz.homapay.hampay.mobile.android.m.common.OnNetworkLoadListener;
 import xyz.homapay.hampay.mobile.android.m.worker.authorization.RegistrationEntryNetWorker;
@@ -45,36 +44,34 @@ public class RegisterEntryImpl extends Presenter<RegisterEntryView> implements R
     }
 
     @Override
-    public void onKeyExchangeDone(boolean state, KeyAgreementModel data, String message) {
+    public void onKeyExchangeDone() {
         try {
-            if (state) {
-                DeviceInfo deviceInfo = modelLayer.getDeviceInfo();
-                DeviceDTO deviceDTO = new DeviceDTO();
-                deviceDTO.setImei(deviceInfo.getIMEI());
-                deviceDTO.setImsi(deviceInfo.getIMSI());
-                deviceDTO.setAndroidId(deviceInfo.getAndroidId());
-                deviceDTO.setSimcardSerial(deviceInfo.getSimcardSerial());
-                deviceDTO.setNetworkOperatorName(deviceInfo.getNetworkOperator());
-                deviceDTO.setDeviceModel(deviceInfo.getDeviceModel());
-                deviceDTO.setManufacture(deviceInfo.getManufacture());
-                deviceDTO.setBrand(deviceInfo.getBrand());
-                deviceDTO.setCpu_abi(deviceInfo.getCpu_abi());
-                deviceDTO.setDeviceAPI(deviceInfo.getDeviceAPI());
-                deviceDTO.setOsVersion(deviceInfo.getOsVersion());
-                deviceDTO.setOsName(OSName.ANDROID);
-                deviceDTO.setDisplaySize(deviceInfo.getDisplaySize());
-                deviceDTO.setDisplayMetrics(deviceInfo.getDisplaymetrics());
-                deviceDTO.setSimState(deviceInfo.getSimState());
-                deviceDTO.setLocale(deviceInfo.getLocale());
-                deviceDTO.setMacAddress(deviceInfo.getMacAddress());
-                registrationEntryRequest.setDeviceDTO(deviceDTO);
-                registrationEntryRequest.setRequestUUID(UUID.randomUUID().toString());
-                RequestMessage<RegistrationEntryRequest> reqMessage = new RequestMessage<>(registrationEntryRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
+            DeviceInfo deviceInfo = modelLayer.getDeviceInfo();
+            DeviceDTO deviceDTO = new DeviceDTO();
+            deviceDTO.setImei(deviceInfo.getIMEI());
+            deviceDTO.setImsi(deviceInfo.getIMSI());
+            deviceDTO.setAndroidId(deviceInfo.getAndroidId());
+            deviceDTO.setSimcardSerial(deviceInfo.getSimcardSerial());
+            deviceDTO.setNetworkOperatorName(deviceInfo.getNetworkOperator());
+            deviceDTO.setDeviceModel(deviceInfo.getDeviceModel());
+            deviceDTO.setManufacture(deviceInfo.getManufacture());
+            deviceDTO.setBrand(deviceInfo.getBrand());
+            deviceDTO.setCpu_abi(deviceInfo.getCpu_abi());
+            deviceDTO.setDeviceAPI(deviceInfo.getDeviceAPI());
+            deviceDTO.setOsVersion(deviceInfo.getOsVersion());
+            deviceDTO.setOsName(OSName.ANDROID);
+            deviceDTO.setDisplaySize(deviceInfo.getDisplaySize());
+            deviceDTO.setDisplayMetrics(deviceInfo.getDisplaymetrics());
+            deviceDTO.setSimState(deviceInfo.getSimState());
+            deviceDTO.setLocale(deviceInfo.getLocale());
+            deviceDTO.setMacAddress(deviceInfo.getMacAddress());
+            registrationEntryRequest.setDeviceDTO(deviceDTO);
+            registrationEntryRequest.setRequestUUID(UUID.randomUUID().toString());
+            RequestMessage<RegistrationEntryRequest> reqMessage = new RequestMessage<>(registrationEntryRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
 
-                String strJson = messageEncryptor.encryptRequest(new Gson().toJson(reqMessage), data.getKey(), data.getIv(), data.getEncId());
+            String strJson = messageEncryptor.encryptRequest(new Gson().toJson(reqMessage), getKey(), getIv(), getEncId());
 
-                new RegistrationEntryNetWorker(modelLayer, data).register(strJson, this);
-            }
+            new RegistrationEntryNetWorker(modelLayer, getKeyAgreementModel()).register(strJson, this);
         } catch (Exception e) {
             view.keyExchangeProblem();
             e.printStackTrace();

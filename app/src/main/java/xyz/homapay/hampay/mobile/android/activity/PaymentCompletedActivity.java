@@ -11,6 +11,8 @@ import android.view.View;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.common.charge.ChargeSucceedPayment;
+import xyz.homapay.hampay.mobile.android.common.charge.ChargeType;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.PaymentType;
@@ -25,9 +27,14 @@ public class PaymentCompletedActivity extends AppCompatActivity {
     private FacedTextView paymentCode;
     private FacedTextView traceCode;
     private FacedTextView confirmButton;
+
+    private FacedTextView tvCellPhoneOrChargeCodeTitle;
+    private FacedTextView tvCellPhoneOrChargeCode;
+
     private PersianEnglishDigit persianEnglishDigit;
     private CurrencyFormatter formatter;
     private SucceedPayment succeedPayment;
+    private ChargeSucceedPayment succeedPaymentCharge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,19 +45,26 @@ public class PaymentCompletedActivity extends AppCompatActivity {
 
         if (succeedPayment.getPaymentType() == PaymentType.PAYMENT || succeedPayment.getPaymentType() == PaymentType.PURCHASE) {
             setContentView(R.layout.activity_payment_completed);
+            initRegular();
         } else if (succeedPayment.getPaymentType() == PaymentType.BILLS) {
             setContentView(R.layout.activity_bills_completed);
+            initRegular();
+        } else if (succeedPayment.getPaymentType() == PaymentType.TOP_UP) {
+            setContentView(R.layout.activity_top_up_completed);
+            succeedPaymentCharge = (ChargeSucceedPayment) succeedPayment;
+            initCharge();
         }
+    }
 
+    private void initRegular() {
         Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         vibrator.vibrate(100);
 
+        amountValue = (FacedTextView) findViewById(R.id.amount_value);
+        paymentCode = (FacedTextView) findViewById(R.id.payment_code);
+        traceCode = (FacedTextView) findViewById(R.id.trace_code);
 
-
-        amountValue = (FacedTextView)findViewById(R.id.amount_value);
-        paymentCode = (FacedTextView)findViewById(R.id.payment_code);
-        traceCode = (FacedTextView)findViewById(R.id.trace_code);
-        confirmButton = (FacedTextView)findViewById(R.id.confirm_button);
+        confirmButton = (FacedTextView) findViewById(R.id.confirm_button);
         persianEnglishDigit = new PersianEnglishDigit();
         formatter = new CurrencyFormatter();
 
@@ -59,14 +73,39 @@ public class PaymentCompletedActivity extends AppCompatActivity {
         traceCode.setText(persianEnglishDigit.E2P(succeedPayment.getTrace()));
 
 
-        confirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra(Constants.ACTIVITY_RESULT, ResultStatus.SUCCESS.ordinal());
-                setResult(Activity.RESULT_OK, returnIntent);
-                finish();
-            }
+        confirmButton.setOnClickListener(v -> {
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra(Constants.ACTIVITY_RESULT, ResultStatus.SUCCESS.ordinal());
+            setResult(Activity.RESULT_OK, returnIntent);
+            finish();
+        });
+    }
+
+    private void initCharge() {
+        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator.vibrate(100);
+
+        tvCellPhoneOrChargeCode = (FacedTextView) findViewById(R.id.tvCellPhoneOrChargeCode);
+        tvCellPhoneOrChargeCodeTitle = (FacedTextView) findViewById(R.id.tvCellPhoneOrChargeCodeTitle);
+
+        amountValue = (FacedTextView) findViewById(R.id.amount_value);
+        traceCode = (FacedTextView) findViewById(R.id.trace_code);
+
+        confirmButton = (FacedTextView) findViewById(R.id.confirm_button);
+        persianEnglishDigit = new PersianEnglishDigit();
+        formatter = new CurrencyFormatter();
+
+        amountValue.setText(persianEnglishDigit.E2P(formatter.format(succeedPayment.getAmount())));
+        traceCode.setText(persianEnglishDigit.E2P(succeedPayment.getTrace()));
+
+        tvCellPhoneOrChargeCodeTitle.setText(succeedPaymentCharge.getChargeType().equals(ChargeType.DIRECT) ? getString(R.string.cell_number) : getString(R.string.charge_code));
+        tvCellPhoneOrChargeCode.setText(succeedPaymentCharge.getCode());
+
+        confirmButton.setOnClickListener(v -> {
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra(Constants.ACTIVITY_RESULT, ResultStatus.SUCCESS.ordinal());
+            setResult(Activity.RESULT_OK, returnIntent);
+            finish();
         });
     }
 

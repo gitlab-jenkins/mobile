@@ -13,7 +13,6 @@ import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.request.TopUpRequest;
 import xyz.homapay.hampay.common.core.model.response.TopUpResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.TopUpInfoDTO;
-import xyz.homapay.hampay.mobile.android.m.common.KeyAgreementModel;
 import xyz.homapay.hampay.mobile.android.m.common.ModelLayer;
 import xyz.homapay.hampay.mobile.android.m.common.OnNetworkLoadListener;
 import xyz.homapay.hampay.mobile.android.m.worker.topup.CreateChargeNetWorker;
@@ -37,25 +36,18 @@ public class TopUpCreateImplMock extends Presenter<TopUpCreateView> implements T
     }
 
     @Override
-    public void onKeyExchangeDone(boolean state, KeyAgreementModel data, String message) {
+    public void onKeyExchangeDone() {
         try {
-            if (state) {
-                if (data.getKey() != null && data.getIv() != null && data.getEncId() != null) {
-                    topUpRequest = new TopUpRequest();
-                    topUpRequest.setRequestUUID(UUID.randomUUID().toString());
-                    topUpRequest.setOperator(operator);
-                    topUpRequest.setCellNumber(cellPhoneNumber);
-                    topUpRequest.setChargePackage(chargePackage);
-                    topUpRequest.setChargeType(chargeType);
+            topUpRequest = new TopUpRequest();
+            topUpRequest.setRequestUUID(UUID.randomUUID().toString());
+            topUpRequest.setOperator(operator);
+            topUpRequest.setCellNumber(cellPhoneNumber);
+            topUpRequest.setChargePackage(chargePackage);
+            topUpRequest.setChargeType(chargeType);
 
-                    RequestMessage<TopUpRequest> request = new RequestMessage<>(topUpRequest, modelLayer.getAuthToken(), Constants.API_LEVEL, System.currentTimeMillis());
-                    String strJson = new AESMessageEncryptor().encryptRequest(new Gson().toJson(request), data.getKey(), data.getIv(), data.getEncId());
-                    new CreateChargeNetWorker(modelLayer, data, true, false).createTopUp(strJson, this);
-                } else {
-                    view.onError();
-                }
-            } else
-                view.onError();
+            RequestMessage<TopUpRequest> request = new RequestMessage<>(topUpRequest, modelLayer.getAuthToken(), Constants.API_LEVEL, System.currentTimeMillis());
+            String strJson = new AESMessageEncryptor().encryptRequest(new Gson().toJson(request), getKey(), getIv(), getEncId());
+            new CreateChargeNetWorker(modelLayer, getKeyAgreementModel(), true, false).createTopUp(strJson, this);
         } catch (Exception e) {
             e.printStackTrace();
         }

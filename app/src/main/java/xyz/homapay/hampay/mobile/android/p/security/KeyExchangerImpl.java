@@ -30,7 +30,7 @@ public class KeyExchangerImpl extends Presenter<KeyExchangeView> implements KeyE
     }
 
     @Override
-    public void onKeyExchangeDone(boolean state, KeyAgreementModel data, String message) {
+    public void onKeyExchangeDone() {
 
     }
 

@@ -8,6 +8,7 @@ public enum PaymentType {
 
     PAYMENT,
     PURCHASE,
-    BILLS
+    BILLS ,
+    TOP_UP
 
 }

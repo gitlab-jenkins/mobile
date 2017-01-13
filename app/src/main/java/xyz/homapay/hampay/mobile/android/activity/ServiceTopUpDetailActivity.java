@@ -39,17 +39,17 @@ import xyz.homapay.hampay.mobile.android.async.task.RequestTokenBills;
 import xyz.homapay.hampay.mobile.android.async.task.SignToPayTask;
 import xyz.homapay.hampay.mobile.android.async.task.UtilityBillDetailTask;
 import xyz.homapay.hampay.mobile.android.async.task.impl.OnTaskCompleted;
+import xyz.homapay.hampay.mobile.android.common.charge.ChargeSucceedPayment;
+import xyz.homapay.hampay.mobile.android.common.charge.ChargeType;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.dialog.card.CardAction;
 import xyz.homapay.hampay.mobile.android.dialog.card.CardNumberDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
-import xyz.homapay.hampay.mobile.android.img.ImageHelper;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.BillsTokenDoWork;
 import xyz.homapay.hampay.mobile.android.model.PaymentType;
-import xyz.homapay.hampay.mobile.android.model.SucceedPayment;
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
@@ -102,6 +102,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
     private String signature;
     private String providerId = null;
     private String authToken = "";
+    private ChargeType chargeType;
 
     public void backActionBar(View view) {
         finish();
@@ -203,6 +204,8 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
 
         Intent intent = getIntent();
         topUpInfo = (TopUpInfoDTO) intent.getSerializableExtra(Constants.TOP_UP_INFO);
+
+        chargeType = intent.getIntExtra(Constants.CHARGE_TYPE, 0) == 0 ? ChargeType.DIRECT : ChargeType.WITH_CODE;
         providerId = intent.getStringExtra(Constants.PROVIDER_ID);
 
         if (topUpInfo != null) {
@@ -214,129 +217,123 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
         }
 
         cardPlaceHolder = (RelativeLayout) findViewById(R.id.cardPlaceHolder);
-        cardPlaceHolder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CardNumberDialog cardNumberDialog = new CardNumberDialog();
-                if (topUpInfo == null) return;
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(Constants.CARD_LIST, (Serializable) topUpInfo.getCardList());
-                cardNumberDialog.setArguments(bundle);
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.add(cardNumberDialog, null);
-                fragmentTransaction.commitAllowingStateLoss();
-            }
+        cardPlaceHolder.setOnClickListener(v -> {
+            CardNumberDialog cardNumberDialog = new CardNumberDialog();
+            if (topUpInfo == null) return;
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(Constants.CARD_LIST, (Serializable) topUpInfo.getCardList());
+            cardNumberDialog.setArguments(bundle);
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.add(cardNumberDialog, null);
+            fragmentTransaction.commitAllowingStateLoss();
         });
 
 
         pay_button = (ImageView) findViewById(R.id.pay_button);
-        pay_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        pay_button.setOnClickListener(v -> {
 
-                if (topUpInfo == null) return;
+            if (topUpInfo == null) return;
 
-                if (selectedCardIdIndex == -1 || (topUpInfo.getCardList().get(selectedCardIdIndex) != null && topUpInfo.getCardList().get(selectedCardIdIndex).getCardId() == null) || (topUpInfo.getAmount() + topUpInfo.getFeeCharge() >= Constants.SOAP_AMOUNT_MAX)) {
-                    Intent intent = new Intent();
-                    intent.setClass(activity, BankWebPaymentActivity.class);
-                    intent.putExtra(Constants.BILL_INFO, topUpInfo);
-                    startActivityForResult(intent, 47);
-                } else {
-                    if (pinText.getText().toString().length() <= 4) {
-                        Toast.makeText(context, getString(R.string.msg_pin2_incorrect), Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    if (!(cvvText.getText().toString().length() >= 3 && cvvText.getText().toString().length() <= 4)) {
-                        Toast.makeText(context, getString(R.string.msg_cvv2_incorrect), Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-                    editor.commit();
-                    requestTokenBills = new RequestTokenBills(activity, new RequestPurchaseTaskCompleteListener(), topUpInfo.getPspInfo().getPayURL());
-
-                    billsTokenDoWork = new BillsTokenDoWork();
-                    billsTokenDoWork.setUserName("appstore");
-                    billsTokenDoWork.setPassword("sepapp");
-                    billsTokenDoWork.setCellNumber(topUpInfo.getPspInfo().getCellNumber().substring(1, topUpInfo.getPspInfo().getCellNumber().length()));
-                    billsTokenDoWork.setLangAByte((byte) 0);
-                    billsTokenDoWork.setLangABoolean(false);
-                    MKAArrayOfKeyValueOfstringstring vectorstring2stringMapEntry = new MKAArrayOfKeyValueOfstringstring();
-                    MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-
-                    s2sMapEntry.Key = "Amount";
-                    s2sMapEntry.Value = String.valueOf(topUpInfo.getAmount() + topUpInfo.getFeeCharge());
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "Pin2";
-                    s2sMapEntry.Value = userPinCode;
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "ThirdParty";
-                    s2sMapEntry.Value = topUpInfo.getProductCode();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "TerminalId";
-                    s2sMapEntry.Value = topUpInfo.getPspInfo().getTerminalId();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "SenderTerminalId";
-                    s2sMapEntry.Value = topUpInfo.getPspInfo().getSenderTerminalId();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "Email";
-                    s2sMapEntry.Value = "";
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "IPAddress";
-                    s2sMapEntry.Value = topUpInfo.getPspInfo().getIpAddress();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "CVV2";
-                    s2sMapEntry.Value = userCVV2;
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "ExpDate";
-                    s2sMapEntry.Value = topUpInfo.getCardList().get(selectedCardIdIndex).getExpireDate();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "CardId";
-                    s2sMapEntry.Value = topUpInfo.getCardList().get(selectedCardIdIndex).getCardId();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "ResNum";
-                    s2sMapEntry.Value = topUpInfo.getProductCode();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "BillId";
-//                    s2sMapEntry.Value = topUpInfo.getBillId();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "PayId";
-//                    s2sMapEntry.Value = topUpInfo.getPayId();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "Signature";
-                    s2sMapEntry.Value = signature;
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-
-                    billsTokenDoWork.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
-                    requestTokenBills.execute(billsTokenDoWork);
-
+            if (selectedCardIdIndex == -1 || (topUpInfo.getCardList().get(selectedCardIdIndex) != null && topUpInfo.getCardList().get(selectedCardIdIndex).getCardId() == null) || (topUpInfo.getAmount() + topUpInfo.getFeeCharge() >= Constants.SOAP_AMOUNT_MAX)) {
+                Intent intent1 = new Intent();
+                intent1.setClass(activity, BankWebPaymentActivity.class);
+                intent1.putExtra(Constants.BILL_INFO, topUpInfo);
+                startActivityForResult(intent1, 47);
+            } else {
+                if (pinText.getText().toString().length() <= 4) {
+                    Toast.makeText(context, getString(R.string.msg_pin2_incorrect), Toast.LENGTH_LONG).show();
+                    return;
                 }
+                if (!(cvvText.getText().toString().length() >= 3 && cvvText.getText().toString().length() <= 4)) {
+                    Toast.makeText(context, getString(R.string.msg_cvv2_incorrect), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                editor.commit();
+                requestTokenBills = new RequestTokenBills(activity, new RequestPurchaseTaskCompleteListener(), topUpInfo.getPspInfo().getPayURL());
+
+                billsTokenDoWork = new BillsTokenDoWork();
+                billsTokenDoWork.setUserName("appstore");
+                billsTokenDoWork.setPassword("sepapp");
+                billsTokenDoWork.setCellNumber(topUpInfo.getPspInfo().getCellNumber().substring(1, topUpInfo.getPspInfo().getCellNumber().length()));
+                billsTokenDoWork.setLangAByte((byte) 0);
+                billsTokenDoWork.setLangABoolean(false);
+                MKAArrayOfKeyValueOfstringstring vectorstring2stringMapEntry = new MKAArrayOfKeyValueOfstringstring();
+                MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+
+                s2sMapEntry.Key = "Amount";
+                s2sMapEntry.Value = String.valueOf(topUpInfo.getAmount() + topUpInfo.getFeeCharge());
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "Pin2";
+                s2sMapEntry.Value = userPinCode;
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "ThirdParty";
+                s2sMapEntry.Value = topUpInfo.getProductCode();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "TerminalId";
+                s2sMapEntry.Value = topUpInfo.getPspInfo().getTerminalId();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "SenderTerminalId";
+                s2sMapEntry.Value = topUpInfo.getPspInfo().getSenderTerminalId();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "Email";
+                s2sMapEntry.Value = "";
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "IPAddress";
+                s2sMapEntry.Value = topUpInfo.getPspInfo().getIpAddress();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "CVV2";
+                s2sMapEntry.Value = userCVV2;
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "ExpDate";
+                s2sMapEntry.Value = topUpInfo.getCardList().get(selectedCardIdIndex).getExpireDate();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "CardId";
+                s2sMapEntry.Value = topUpInfo.getCardList().get(selectedCardIdIndex).getCardId();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "ResNum";
+                s2sMapEntry.Value = topUpInfo.getProductCode();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "BillId";
+//                    s2sMapEntry.Value = topUpInfo.getBillId();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "PayId";
+//                    s2sMapEntry.Value = topUpInfo.getPayId();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "Signature";
+                s2sMapEntry.Value = signature;
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+
+                billsTokenDoWork.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
+                requestTokenBills.execute(billsTokenDoWork);
+
             }
         });
     }
@@ -454,7 +451,13 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
         topUpDate.setText(persian.E2P(new JalaliConvert().GregorianToPersian(topUInfo.getExpirationDate())));
         if (topUInfo.getImageId() != null) {
             imgOperator.setTag(topUInfo.getImageId());
-            ImageHelper.getInstance(context).imageLoader(topUInfo.getImageId(), imgOperator, R.drawable.user_placeholder);
+            if (topUInfo.getImageId().equals("MCI")) {
+                imgOperator.setImageResource(R.mipmap.hamrah_active);
+            } else if (topUInfo.getImageId().equals("MTN")) {
+                imgOperator.setImageResource(R.mipmap.irancell_active);
+            } else if (topUInfo.getImageId().equals("RAYTEL")) {
+                imgOperator.setImageResource(R.mipmap.rightel_active);
+            }
         } else {
             imgOperator.setImageResource(R.drawable.user_placeholder);
         }
@@ -626,12 +629,13 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
                         serviceName = ServiceEvent.PSP_PAYMENT_SUCCESS;
                         if (topUpInfo != null) {
                             Intent intent = new Intent(context, PaymentCompletedActivity.class);
-                            SucceedPayment succeedPayment = new SucceedPayment();
+                            ChargeSucceedPayment succeedPayment = new ChargeSucceedPayment(chargeType);
                             succeedPayment.setAmount(topUpInfo.getAmount() + topUpInfo.getFeeCharge());
                             //TODO
-                            succeedPayment.setCode(topUpInfo.getCellNumber());
+                            succeedPayment.setCode(chargeType == ChargeType.DIRECT ? topUpInfo.getCellNumber() : topUpInfo.getProductCode());
                             succeedPayment.setTrace(topUpInfo.getPspInfo().getProviderId());
                             succeedPayment.setPaymentType(PaymentType.BILLS);
+                            succeedPayment.setChargeType(chargeType);
                             intent.putExtra(Constants.SUCCEED_PAYMENT_INFO, succeedPayment);
                             startActivityForResult(intent, 46);
                         }

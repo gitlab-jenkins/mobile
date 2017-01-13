@@ -114,6 +114,7 @@ public class Constants {
     public static final int READ_PHONE_STATE = 1;
     public static final int READ_CONTACTS = 2;
     public static final int CAMERA = 3;
+    public static final String CHARGE_TYPE = "charge_type";
     //    public static String SERVER = "176.58.104.158";//England Server
 //    public static String SERVER = "mobile.hampay.ir";//Prod Server
 //    public static String SERVER = "sit.hampay.ir";//SIT/27 Server

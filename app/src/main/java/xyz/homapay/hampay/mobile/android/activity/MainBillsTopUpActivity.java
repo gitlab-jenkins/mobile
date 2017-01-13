@@ -25,6 +25,7 @@ import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
+import xyz.homapay.hampay.mobile.android.common.charge.ChargeType;
 import xyz.homapay.hampay.mobile.android.common.messages.MessageSelectChargeAmount;
 import xyz.homapay.hampay.mobile.android.common.messages.MessageSelectChargeType;
 import xyz.homapay.hampay.mobile.android.common.messages.MessageSetOperator;
@@ -75,6 +76,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     private List<xyz.homapay.hampay.common.common.TopUpInfo> infos;
     private long amount;
     private String chargeType;
+    private String operatorName;
 
     public void backActionBar(View view) {
         finish();
@@ -193,12 +195,18 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
                 new Expand(keyboard).animate();
                 break;
             case R.id.imgMCI:
+                operator = new MessageSetOperator(Operator.MCI).getOperator();
+                operatorName = new MessageSetOperator(Operator.MCI).getOperatorName();
                 selectOperatorView(true);
                 break;
             case R.id.imgMTN:
+                operator = new MessageSetOperator(Operator.MTN).getOperator();
+                operatorName = new MessageSetOperator(Operator.MTN).getOperatorName();
                 selectOperatorView(true);
                 break;
             case R.id.imgRIGHTEL:
+                operator = new MessageSetOperator(Operator.RAYTEL).getOperator();
+                operatorName = new MessageSetOperator(Operator.RAYTEL).getOperatorName();
                 selectOperatorView(true);
                 break;
             case R.id.rlChargeType:
@@ -306,6 +314,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
         if (messageSetOperator.getOperator() == null)
             return;
         this.operator = messageSetOperator.getOperator();
+        this.operatorName = messageSetOperator.getOperatorName();
         new Collapse(keyboard).animate();
         selectOperatorView(false);
         topUpInfo.getInfo(messageSetOperator.getOperator());
@@ -363,7 +372,9 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     public void onCreated(boolean state, ResponseMessage<TopUpResponse> data, String message) {
         if (state) {
             Intent intent = new Intent(context, ServiceTopUpDetailActivity.class);
+            data.getService().getTopUpInfoDTO().setImageId(operatorName);
             intent.putExtra(Constants.TOP_UP_INFO, data.getService().getTopUpInfoDTO());
+            intent.putExtra(Constants.CHARGE_TYPE, ChargeType.DIRECT.ordinal());
             startActivity(intent);
         } else {
             onError();

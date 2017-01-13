@@ -13,6 +13,10 @@ public abstract class Presenter<T> implements KeyExchangeView {
 
     protected T view;
     protected ModelLayer modelLayer;
+    protected byte[] key;
+    protected byte[] iv;
+    protected String encId;
+    protected KeyAgreementModel keyAgreementModel;
     private KeyExchangerImpl keyExchanger;
 
     public Presenter(ModelLayer modelLayer, T view) {
@@ -28,14 +32,38 @@ public abstract class Presenter<T> implements KeyExchangeView {
     @Override
     public void onExchangeDone(boolean state, KeyAgreementModel data, String message) {
         try {
-            onKeyExchangeDone(state, data, message);
+            if (state) {
+                this.key = data.getKey();
+                this.iv = data.getIv();
+                this.encId = data.getEncId();
+                this.keyAgreementModel = data;
+                onKeyExchangeDone();
+            } else {
+                onKeyExchangeError();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             onKeyExchangeError();
         }
     }
 
-    public abstract void onKeyExchangeDone(boolean state, KeyAgreementModel data, String message);
+    public abstract void onKeyExchangeDone();
 
     public abstract void onKeyExchangeError();
+
+    public byte[] getKey() {
+        return key;
+    }
+
+    public byte[] getIv() {
+        return iv;
+    }
+
+    public String getEncId() {
+        return encId;
+    }
+
+    public KeyAgreementModel getKeyAgreementModel() {
+        return keyAgreementModel;
+    }
 }

@@ -10,7 +10,6 @@ import xyz.homapay.hampay.common.common.ChargePackage;
 import xyz.homapay.hampay.common.common.Operator;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.response.TopUpInfoResponse;
-import xyz.homapay.hampay.mobile.android.m.common.KeyAgreementModel;
 import xyz.homapay.hampay.mobile.android.m.common.ModelLayer;
 import xyz.homapay.hampay.mobile.android.p.common.Presenter;
 
@@ -25,7 +24,7 @@ public class TopUpInfoImplMock extends Presenter<TopUpInfoView> implements TopUp
     }
 
     @Override
-    public void onKeyExchangeDone(boolean state, KeyAgreementModel data, String message) {
+    public void onKeyExchangeDone() {
 
     }
 
