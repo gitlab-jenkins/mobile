@@ -1132,8 +1132,12 @@ public class HamPayDialog {
         FacedTextView networkCancel = (FacedTextView) view.findViewById(R.id.network_cancel);
 
         networkSetting.setOnClickListener(v -> {
-            dialog.dismiss();
-            activity.startActivity(new Intent(Settings.ACTION_SETTINGS));
+            try {
+                dialog.dismiss();
+                activity.startActivity(new Intent(Settings.ACTION_SETTINGS));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
 
         networkCancel.setOnClickListener(v -> {
