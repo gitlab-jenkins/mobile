@@ -28,6 +28,10 @@
         android:name="android.permission.CAMERA"
         android:protectionLevel="signature" />
 
+    <permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:protectionLevel="signature" />
+
     <uses-permission android:name="xyz.homapay.hampay.mobile.android.permission.C2D_MESSAGE" />
 
     <application

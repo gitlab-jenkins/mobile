@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
@@ -20,6 +22,7 @@ import java.util.List;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Manifest;
+import xyz.homapay.hampay.mobile.android.dialog.permission.camera.PermissionCameraDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
@@ -32,6 +35,7 @@ public class BarCodeScannerActivity extends AppCompatActivity implements ZXingSc
     private ZXingScannerView mScannerView;
     private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
     private Activity activity;
+    private final Handler handler = new Handler();
 
     public void backActionBar(View view) {
         finish();
@@ -128,14 +132,24 @@ public class BarCodeScannerActivity extends AppCompatActivity implements ZXingSc
 
                     } else {
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                            boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.CAMERA);
-                            if (showRationale){
-                                finish();
-                            }else {
+                            boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE);
+                            if (showRationale) {
+                                handler.post(() -> {
+                                    PermissionCameraDialog permissionCameraDialog = new PermissionCameraDialog();
+                                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                                    fragmentTransaction.add(permissionCameraDialog, null);
+                                    fragmentTransaction.commitAllowingStateLoss();
+                                });
+                            } else {
                                 finish();
                             }
-                        }else {
-                            finish();
+                        } else {
+                            handler.post(() -> {
+                                PermissionCameraDialog permissionCameraDialog = new PermissionCameraDialog();
+                                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                                fragmentTransaction.add(permissionCameraDialog, null);
+                                fragmentTransaction.commitAllowingStateLoss();
+                            });
                         }
                     }
                     return true;

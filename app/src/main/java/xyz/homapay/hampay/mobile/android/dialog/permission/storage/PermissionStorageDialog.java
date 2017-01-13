@@ -1,4 +1,4 @@
-package xyz.homapay.hampay.mobile.android.dialog.permission;
+package xyz.homapay.hampay.mobile.android.dialog.permission.storage;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -15,21 +15,22 @@ import android.widget.TextView;
 
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.dialog.permission.ActionPermission;
 
 /**
  * Created by amir on 5/17/16.
  */
-public class PermissionContactDialog extends DialogFragment implements TextView.OnEditorActionListener, View.OnClickListener {
+public class PermissionStorageDialog extends DialogFragment implements TextView.OnEditorActionListener, View.OnClickListener {
 
-    public interface PermissionContactDialogListener {
+    public interface PermissionStorageDialogListener {
         void onFinishEditDialog(ActionPermission actionPermission);
     }
-    PermissionContactDialogListener activity;
+    PermissionStorageDialogListener activity;
     private Rect rect = new Rect();
 
     @Override
     public void onClick(View v) {
-        PermissionContactDialogListener activity = (PermissionContactDialogListener) getActivity();
+        PermissionStorageDialogListener activity = (PermissionStorageDialogListener) getActivity();
         activity.onFinishEditDialog(ActionPermission.DENY);
         this.dismiss();
     }
@@ -40,7 +41,7 @@ public class PermissionContactDialog extends DialogFragment implements TextView.
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.dialog_persmission, container);
-        activity = (PermissionContactDialogListener) getActivity();
+        activity = (PermissionStorageDialogListener) getActivity();
 
         Activity parent = (Activity) activity;
         Window window = parent.getWindow();
@@ -66,7 +67,7 @@ public class PermissionContactDialog extends DialogFragment implements TextView.
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        PermissionContactDialogListener activity = (PermissionContactDialogListener) getActivity();
+        PermissionStorageDialogListener activity = (PermissionStorageDialogListener) getActivity();
         activity.onFinishEditDialog(ActionPermission.DENY);
         this.dismiss();
         return true;
