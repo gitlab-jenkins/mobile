@@ -31,6 +31,7 @@ import xyz.homapay.hampay.mobile.android.common.messages.MessageSelectChargeType
 import xyz.homapay.hampay.mobile.android.common.messages.MessageSetOperator;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.topup.TopUpCellNumber;
+import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.dialog.common.ChargeAmountChooserDialog;
 import xyz.homapay.hampay.mobile.android.dialog.common.ChargeTypeChooserDialog;
 import xyz.homapay.hampay.mobile.android.dialog.common.ProgressDialog;
@@ -77,6 +78,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     private long amount;
     private String chargeType;
     private String operatorName;
+    private HamPayDialog dlg;
 
     public void backActionBar(View view) {
         finish();
@@ -133,6 +135,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
 
         topUpInfo = new TopUpInfoImplMock(new ModelLayerImpl(context), this);
         topUpCreate = new TopUpCreateImplMock(new ModelLayerImpl(context), this);
+        dlg = new HamPayDialog(this);
 
         context = this;
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
@@ -349,17 +352,20 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
 
     @Override
     public void showProgress() {
-        ProgressDialog.show(context);
+        dlg.showWaitingDialog("");
+//        ProgressDialog.show(context);
     }
 
     @Override
     public void cancelProgress() {
-        ProgressDialog.cancel();
+        dlg.dismisWaitingDialog();
+//        ProgressDialog.cancel();
     }
 
     @Override
     public void dismissProgress() {
-        ProgressDialog.cancel();
+        dlg.dismisWaitingDialog();
+//        ProgressDialog.cancel();
     }
 
     @Override
