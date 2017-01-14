@@ -35,7 +35,7 @@ import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestPSPResult;
-import xyz.homapay.hampay.mobile.android.async.task.RequestTokenBills;
+import xyz.homapay.hampay.mobile.android.async.RequestTopUpBills;
 import xyz.homapay.hampay.mobile.android.async.task.SignToPayTask;
 import xyz.homapay.hampay.mobile.android.async.task.UtilityBillDetailTask;
 import xyz.homapay.hampay.mobile.android.async.task.impl.OnTaskCompleted;
@@ -48,16 +48,16 @@ import xyz.homapay.hampay.mobile.android.dialog.card.CardNumberDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
-import xyz.homapay.hampay.mobile.android.model.BillsTokenDoWork;
 import xyz.homapay.hampay.mobile.android.model.PaymentType;
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
+import xyz.homapay.hampay.mobile.android.model.TopUpTokenDoWork;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.PspCode;
-import xyz.homapay.hampay.mobile.android.webservice.psp.bills.MKAArrayOfKeyValueOfstringstring;
-import xyz.homapay.hampay.mobile.android.webservice.psp.bills.MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring;
+import xyz.homapay.hampay.mobile.android.webservice.psp.topup.HHBArrayOfKeyValueOfstringstring;
+import xyz.homapay.hampay.mobile.android.webservice.psp.topup.HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring;
 
 public class ServiceTopUpDetailActivity extends AppCompatActivity implements View.OnClickListener, CardNumberDialog.SelectCardDialogListener, OnTaskCompleted {
 
@@ -73,7 +73,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
     private FacedTextView tvTopUpTotalAmount;
     private PSPResultRequest pspResultRequest;
     private RequestPSPResult requestPSPResult;
-    private RequestTokenBills requestTokenBills;
+    private RequestTopUpBills requestTokenBills;
     private FacedTextView bankName;
     private FacedTextView cardNumberValue;
     private CurrencyFormatter currencyFormatter;
@@ -94,7 +94,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
     private PersianEnglishDigit persian = new PersianEnglishDigit();
     private HamPayDialog hamPayDialog;
     private TopUpInfoDTO topUpInfo = null;
-    private BillsTokenDoWork billsTokenDoWork;
+    private TopUpTokenDoWork topUpTokenDoWork;
     private RelativeLayout cardPlaceHolder;
     private int selectedCardIdIndex = -1;
     private FacedTextView selectCardText;
@@ -250,89 +250,89 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
                 }
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
-                requestTokenBills = new RequestTokenBills(activity, new RequestPurchaseTaskCompleteListener(), topUpInfo.getPspInfo().getPayURL());
+                requestTokenBills = new RequestTopUpBills(activity, new RequestPurchaseTaskCompleteListener(), topUpInfo.getPspInfo().getPayURL());
 
-                billsTokenDoWork = new BillsTokenDoWork();
-                billsTokenDoWork.setUserName("appstore");
-                billsTokenDoWork.setPassword("sepapp");
-                billsTokenDoWork.setCellNumber(topUpInfo.getPspInfo().getCellNumber().substring(1, topUpInfo.getPspInfo().getCellNumber().length()));
-                billsTokenDoWork.setLangAByte((byte) 0);
-                billsTokenDoWork.setLangABoolean(false);
-                MKAArrayOfKeyValueOfstringstring vectorstring2stringMapEntry = new MKAArrayOfKeyValueOfstringstring();
-                MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                topUpTokenDoWork = new TopUpTokenDoWork();
+                topUpTokenDoWork.setUserName("appstore");
+                topUpTokenDoWork.setPassword("sepapp");
+                topUpTokenDoWork.setCellNumber(topUpInfo.getPspInfo().getCellNumber().substring(1, topUpInfo.getPspInfo().getCellNumber().length()));
+                topUpTokenDoWork.setLangAByte((byte) 0);
+                topUpTokenDoWork.setLangABoolean(false);
+                HHBArrayOfKeyValueOfstringstring vectorstring2stringMapEntry = new HHBArrayOfKeyValueOfstringstring();
+                HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
 
                 s2sMapEntry.Key = "Amount";
                 s2sMapEntry.Value = String.valueOf(topUpInfo.getAmount() + topUpInfo.getFeeCharge());
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                 s2sMapEntry.Key = "Pin2";
                 s2sMapEntry.Value = userPinCode;
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                 s2sMapEntry.Key = "ThirdParty";
                 s2sMapEntry.Value = topUpInfo.getProductCode();
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                 s2sMapEntry.Key = "TerminalId";
                 s2sMapEntry.Value = topUpInfo.getPspInfo().getTerminalId();
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                 s2sMapEntry.Key = "SenderTerminalId";
                 s2sMapEntry.Value = topUpInfo.getPspInfo().getSenderTerminalId();
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                 s2sMapEntry.Key = "Email";
                 s2sMapEntry.Value = "";
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                 s2sMapEntry.Key = "IPAddress";
                 s2sMapEntry.Value = topUpInfo.getPspInfo().getIpAddress();
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                 s2sMapEntry.Key = "CVV2";
                 s2sMapEntry.Value = userCVV2;
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                 s2sMapEntry.Key = "ExpDate";
                 s2sMapEntry.Value = topUpInfo.getCardList().get(selectedCardIdIndex).getExpireDate();
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                 s2sMapEntry.Key = "CardId";
                 s2sMapEntry.Value = topUpInfo.getCardList().get(selectedCardIdIndex).getCardId();
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                 s2sMapEntry.Key = "ResNum";
                 s2sMapEntry.Value = topUpInfo.getProductCode();
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                 s2sMapEntry.Key = "BillId";
 //                    s2sMapEntry.Value = topUpInfo.getBillId();
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                 s2sMapEntry.Key = "PayId";
 //                    s2sMapEntry.Value = topUpInfo.getPayId();
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                 s2sMapEntry.Key = "Signature";
                 s2sMapEntry.Value = signature;
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
 
-                billsTokenDoWork.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
-                requestTokenBills.execute(billsTokenDoWork);
+                topUpTokenDoWork.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
+                requestTokenBills.execute(topUpTokenDoWork);
 
             }
         });
@@ -598,10 +598,10 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
         }
     }
 
-    public class RequestPurchaseTaskCompleteListener implements AsyncTaskCompleteListener<MKAArrayOfKeyValueOfstringstring> {
+    public class RequestPurchaseTaskCompleteListener implements AsyncTaskCompleteListener<HHBArrayOfKeyValueOfstringstring> {
 
         @Override
-        public void onTaskComplete(MKAArrayOfKeyValueOfstringstring purchaseResponseResponseMessage) {
+        public void onTaskComplete(HHBArrayOfKeyValueOfstringstring purchaseResponseResponseMessage) {
 
             hamPayDialog.dismisWaitingDialog();
 
@@ -614,7 +614,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
 
             if (purchaseResponseResponseMessage != null) {
                 pspResultRequest = new PSPResultRequest();
-                for (MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry : purchaseResponseResponseMessage) {
+                for (HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry : purchaseResponseResponseMessage) {
                     if (s2sMapEntry.Key.equalsIgnoreCase("ResponseCode")) {
                         responseCode = s2sMapEntry.Value;
                     } else if (s2sMapEntry.Key.equalsIgnoreCase("Description")) {
@@ -651,7 +651,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
                     SyncPspResult syncPspResult = new SyncPspResult();
                     syncPspResult.setResponseCode(responseCode);
                     syncPspResult.setProductCode(topUpInfo.getProductCode());
-                    syncPspResult.setType("UTILITY_BILL");
+                    syncPspResult.setType("UTILITY_TOP_UP");
                     syncPspResult.setSwTrace(SWTraceNum);
                     syncPspResult.setTimestamp(System.currentTimeMillis());
                     syncPspResult.setStatus(0);

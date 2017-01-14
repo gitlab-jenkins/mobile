@@ -1,4 +1,4 @@
-package xyz.homapay.hampay.mobile.android.async.task;
+package xyz.homapay.hampay.mobile.android.async;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -13,7 +13,7 @@ import xyz.homapay.hampay.mobile.android.webservice.psp.bills.MKAArrayOfKeyValue
  */
 public class RequestTokenBills extends AsyncTask<BillsTokenDoWork, Void, MKAArrayOfKeyValueOfstringstring> {
 
-    private static final String TAG = "RequestPurchase";
+    private static final String TAG = "RequestTokenBills";
 
     private Context context;
     private AsyncTaskCompleteListener<MKAArrayOfKeyValueOfstringstring> listener;
