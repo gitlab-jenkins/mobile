@@ -45,7 +45,6 @@ public class TrustedOkHttpClient {
                     .cacheControl(cacheControl)
                     .build();
             Response response = chain.proceed(request);
-            Log.i("XXXX-INTERCEPTOR", response == null ? "NULL" : response.code() + "");
             return response;
         };
     }
@@ -57,7 +56,6 @@ public class TrustedOkHttpClient {
             cacheControl = new CacheControl.Builder()
                     .maxAge(2, TimeUnit.MINUTES)
                     .build();
-            Log.i("XXXX-ONLINE_CACHE", response == null ? "NULL" : response.code() + "");
             return response.newBuilder()
                     .header(CACHE_CONTROL, cacheControl.toString())
                     .build();
@@ -183,6 +181,7 @@ public class TrustedOkHttpClient {
                         .addNetworkInterceptor(provideCacheInterceptor())
                         .addNetworkInterceptor(interceptor)
                         .retryOnConnectionFailure(true)
+                        .addInterceptor(provideConnectionHeader())
                         .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustedCerts[0])
                         .cache(CacheProvider.getInstance(modelLayer).provideCache())
                         .build();
@@ -191,6 +190,7 @@ public class TrustedOkHttpClient {
                         .addInterceptor(provideOfflineCacheInterceptor())
                         .addNetworkInterceptor(interceptor)
                         .retryOnConnectionFailure(true)
+                        .addInterceptor(provideConnectionHeader())
                         .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustedCerts[0])
                         .cache(CacheProvider.getInstance(modelLayer).provideCache())
                         .build();
@@ -200,6 +200,17 @@ public class TrustedOkHttpClient {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private static Interceptor provideConnectionHeader() {
+        return chain -> {
+            Request request = chain.request();
+            Request newReq = request.newBuilder().addHeader("Connection", "close")
+                    .build();
+            Response response = chain.proceed(newReq);
+            Log.i("XXXX-HEADER", "Header added.");
+            return response;
+        };
     }
 
 }
