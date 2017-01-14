@@ -35,7 +35,7 @@ import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestPSPResult;
-import xyz.homapay.hampay.mobile.android.async.RequestTopUpBills;
+import xyz.homapay.hampay.mobile.android.async.RequestTokenTopUp;
 import xyz.homapay.hampay.mobile.android.async.task.SignToPayTask;
 import xyz.homapay.hampay.mobile.android.async.task.UtilityBillDetailTask;
 import xyz.homapay.hampay.mobile.android.async.task.impl.OnTaskCompleted;
@@ -73,7 +73,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
     private FacedTextView tvTopUpTotalAmount;
     private PSPResultRequest pspResultRequest;
     private RequestPSPResult requestPSPResult;
-    private RequestTopUpBills requestTokenBills;
+    private RequestTokenTopUp requestTokenBills;
     private FacedTextView bankName;
     private FacedTextView cardNumberValue;
     private CurrencyFormatter currencyFormatter;
@@ -238,7 +238,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
                 Intent intent1 = new Intent();
                 intent1.setClass(activity, BankWebPaymentActivity.class);
                 intent1.putExtra(Constants.TOP_UP_INFO, topUpInfo);
-                startActivityForResult(intent1, 47);
+                startActivityForResult(intent1, 48);
             } else {
                 if (pinText.getText().toString().length() <= 4) {
                     Toast.makeText(context, getString(R.string.msg_pin2_incorrect), Toast.LENGTH_LONG).show();
@@ -250,7 +250,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
                 }
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
-                requestTokenBills = new RequestTopUpBills(activity, new RequestPurchaseTaskCompleteListener(), topUpInfo.getPspInfo().getPayURL());
+                requestTokenBills = new RequestTokenTopUp(activity, new RequestPurchaseTaskCompleteListener(), topUpInfo.getPspInfo().getPayURL());
 
                 topUpTokenDoWork = new TopUpTokenDoWork();
                 topUpTokenDoWork.setUserName("appstore");
@@ -402,7 +402,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
                 Intent intent = new Intent();
                 intent.setClass(activity, BankWebPaymentActivity.class);
                 intent.putExtra(Constants.TOP_UP_INFO, topUpInfo);
-                startActivityForResult(intent, 47);
+                startActivityForResult(intent, 48);
                 break;
         }
     }
@@ -507,7 +507,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == 47) {
+        if (requestCode == 48) {
             if (resultCode == Activity.RESULT_OK) {
                 int result = data.getIntExtra(Constants.ACTIVITY_RESULT, -1);
                 if (result == 0) {

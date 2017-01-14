@@ -430,6 +430,12 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                         cancelFundRequest.setFundType(FundType.UTILITY_BILL);
                         cancelFundRequest.setProviderId(fundDTOList.get(pos).getProviderId());
                         requestCancelPayment.execute(cancelFundRequest);
+                    }else if (fundDTOList.get(pos).getPaymentType() == FundDTO.PaymentType.TOP_UP){
+                        requestCancelPayment = new RequestCancelPayment(activity, new RequestCancelPaymentTaskCompleteListener(pos));
+                        cancelFundRequest = new CancelFundRequest();
+                        cancelFundRequest.setFundType(FundType.TOP_UP);
+                        cancelFundRequest.setProviderId(fundDTOList.get(pos).getProviderId());
+                        requestCancelPayment.execute(cancelFundRequest);
                     }
                 }
                 break;
