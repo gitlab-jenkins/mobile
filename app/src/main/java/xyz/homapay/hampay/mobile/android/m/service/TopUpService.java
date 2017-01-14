@@ -17,6 +17,6 @@ public interface TopUpService {
     @POST("/hampay/topup/info")
     Call<ResponseMessage<TopUpInfoResponse>> topUpInfo(@Body RequestBody body);
 
-    @POST("/hampay/topup/info")
+    @POST("/hampay/topup/request")
     Call<ResponseMessage<TopUpResponse>> topUpCreate(@Body RequestBody body);
 }

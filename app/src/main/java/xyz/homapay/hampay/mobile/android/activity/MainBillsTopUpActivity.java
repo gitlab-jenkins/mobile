@@ -37,10 +37,10 @@ import xyz.homapay.hampay.mobile.android.dialog.common.ChargeTypeChooserDialog;
 import xyz.homapay.hampay.mobile.android.dialog.common.ProgressDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.p.topup.TopUpCreate;
-import xyz.homapay.hampay.mobile.android.p.topup.TopUpCreateImplMock;
+import xyz.homapay.hampay.mobile.android.p.topup.TopUpCreateImpl;
 import xyz.homapay.hampay.mobile.android.p.topup.TopUpCreateView;
 import xyz.homapay.hampay.mobile.android.p.topup.TopUpInfo;
-import xyz.homapay.hampay.mobile.android.p.topup.TopUpInfoImplMock;
+import xyz.homapay.hampay.mobile.android.p.topup.TopUpInfoImpl;
 import xyz.homapay.hampay.mobile.android.p.topup.TopUpInfoView;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.Dialoger;
@@ -133,8 +133,8 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bills_top_up);
 
-        topUpInfo = new TopUpInfoImplMock(new ModelLayerImpl(context), this);
-        topUpCreate = new TopUpCreateImplMock(new ModelLayerImpl(context), this);
+        topUpInfo = new TopUpInfoImpl(new ModelLayerImpl(context), this);
+        topUpCreate = new TopUpCreateImpl(new ModelLayerImpl(context), this);
         dlg = new HamPayDialog(this);
 
         context = this;
@@ -162,8 +162,6 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
         imgRIGHTEL = (ImageView) findViewById(R.id.imgRIGHTEL);
         btnTopUpPay = (FacedTextView) findViewById(R.id.btnTopUpPay);
 
-//        rlChargeType = (RelativeLayout) findViewById(R.id.rlChargeType);
-//        rlChargeAmount = (RelativeLayout) findViewById(R.id.rlChargeAmount);
         tvChargeType = (FacedTextView) findViewById(R.id.tvChargeType);
         tvChargeAmount = (FacedTextView) findViewById(R.id.tvChargeAmount);
 
