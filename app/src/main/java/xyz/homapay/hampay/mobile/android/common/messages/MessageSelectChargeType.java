@@ -7,9 +7,11 @@ package xyz.homapay.hampay.mobile.android.common.messages;
 public class MessageSelectChargeType {
     private int index;
     private String selectedType;
+    private String selectedDescrption;
 
-    public MessageSelectChargeType(int index, String selectedType) {
+    public MessageSelectChargeType(int index, String selectedType, String selectedDescrption) {
         this.index = index;
+        this.selectedDescrption = selectedDescrption;
         this.selectedType = selectedType;
     }
 
@@ -19,5 +21,9 @@ public class MessageSelectChargeType {
 
     public int getIndex() {
         return index;
+    }
+
+    public String getSelectedDescrption() {
+        return selectedDescrption;
     }
 }

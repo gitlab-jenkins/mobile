@@ -35,7 +35,7 @@ public class ChargeAdapter extends RecyclerView.Adapter<ChargeAdapter.Holder> {
 
     @Override
     public void onBindViewHolder(Holder holder, int position) {
-        holder.tvText.setText(items.get(position).getText());
+        holder.tvText.setText(items.get(position).getDesc());
         holder.tvText.setTag(items.get(position).getIndex());
         if (!items.get(position).isSelected()) {
             holder.tvText.setBackgroundColor(ctx.getResources().getColor(R.color.white));

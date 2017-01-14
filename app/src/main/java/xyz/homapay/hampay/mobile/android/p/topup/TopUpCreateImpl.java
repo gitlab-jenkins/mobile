@@ -62,6 +62,7 @@ public class TopUpCreateImpl extends Presenter<TopUpCreateView> implements TopUp
 
     @Override
     public void create(Operator operator, String cellPhoneNumber, ChargePackage chargePackage, String chargeType) {
+        view.showProgress();
         this.operator = operator;
         this.cellPhoneNumber = cellPhoneNumber;
         this.chargePackage = chargePackage;

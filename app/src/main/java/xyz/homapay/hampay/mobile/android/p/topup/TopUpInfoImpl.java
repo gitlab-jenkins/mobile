@@ -35,6 +35,7 @@ public class TopUpInfoImpl extends Presenter<TopUpInfoView> implements TopUpInfo
         try {
             this.operator = operator;
             view.showProgress();
+            keyExchange();
         } catch (Exception e) {
             e.printStackTrace();
             view.onError();

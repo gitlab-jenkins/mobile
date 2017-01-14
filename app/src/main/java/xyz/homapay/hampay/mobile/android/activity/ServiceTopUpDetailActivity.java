@@ -471,26 +471,25 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
 
         tvTopUpTotalAmount.setText(persian.E2P(currencyFormatter.format(topUInfo.getAmount() + topUInfo.getFeeCharge())));
 
-//        if (topUInfo.getCardList().size() > 0) {
-//            if (topUInfo.getCardList().get(0).getCardId() != null && (topUInfo.getAmount() + topUInfo.getFeeCharge() < Constants.SOAP_AMOUNT_MAX)) {
-//                cardNumberValue.setText(persian.E2P(topUInfo.getCardList().get(0).getLast4Digits()));
-//                bankName.setText(topUInfo.getCardList().get(0).getBankName());
-//            }
-//        }
-//
-//
-//        if (topUInfo.getCardList().size() > 0) {
-//            if (topUInfo.getCardList().get(0).getCardId() != null && (topUInfo.getAmount() + topUInfo.getFeeCharge() < Constants.SOAP_AMOUNT_MAX)) {
-//                cardNumberValue.setText(persian.E2P(topUInfo.getCardList().get(0).getLast4Digits()));
-//                bankName.setText(topUInfo.getCardList().get(0).getBankName());
-//                selectedCardIdIndex = 0;
-//                selectCardText.setVisibility(View.GONE);
-//                cardSelect.setVisibility(View.VISIBLE);
-//                if (topUInfo.getCardList().get(0).getDigitalSignature() != null && topUInfo.getCardList().get(0).getDigitalSignature().length() > 0) {
-//                    signature = topUInfo.getCardList().get(0).getDigitalSignature();
-//                }
-//            }
-//        }
+        if (topUInfo.getCardList().size() > 0) {
+            if (topUInfo.getCardList().get(0).getCardId() != null && (topUInfo.getAmount() + topUInfo.getFeeCharge() < Constants.SOAP_AMOUNT_MAX)) {
+                cardNumberValue.setText(persian.E2P(topUInfo.getCardList().get(0).getLast4Digits()));
+                bankName.setText(topUInfo.getCardList().get(0).getBankName());
+            }
+        }
+
+        if (topUInfo.getCardList().size() > 0) {
+            if (topUInfo.getCardList().get(0).getCardId() != null && (topUInfo.getAmount() + topUInfo.getFeeCharge() < Constants.SOAP_AMOUNT_MAX)) {
+                cardNumberValue.setText(persian.E2P(topUInfo.getCardList().get(0).getLast4Digits()));
+                bankName.setText(topUInfo.getCardList().get(0).getBankName());
+                selectedCardIdIndex = 0;
+                selectCardText.setVisibility(View.GONE);
+                cardSelect.setVisibility(View.VISIBLE);
+                if (topUInfo.getCardList().get(0).getDigitalSignature() != null && topUInfo.getCardList().get(0).getDigitalSignature().length() > 0) {
+                    signature = topUInfo.getCardList().get(0).getDigitalSignature();
+                }
+            }
+        }
     }
 
     private void forceLogout() {

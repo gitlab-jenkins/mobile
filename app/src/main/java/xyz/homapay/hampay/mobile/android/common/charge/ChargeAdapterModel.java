@@ -7,12 +7,14 @@ package xyz.homapay.hampay.mobile.android.common.charge;
 public class ChargeAdapterModel {
 
     private int index;
-    private String text;
+    private String type;
+    private String desc;
     private boolean selected;
 
-    public ChargeAdapterModel(int index, String text, boolean selected) {
+    public ChargeAdapterModel(int index, String type, String desc, boolean selected) {
         this.index = index;
-        this.text = text;
+        this.type = type;
+        this.desc = desc;
         this.selected = selected;
     }
 
@@ -24,19 +26,27 @@ public class ChargeAdapterModel {
         this.index = index;
     }
 
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
     public boolean isSelected() {
         return selected;
     }
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 }

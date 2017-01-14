@@ -8,6 +8,7 @@ import xyz.homapay.hampay.mobile.android.m.common.ModelLayer;
 import xyz.homapay.hampay.mobile.android.m.common.MyCallBack;
 import xyz.homapay.hampay.mobile.android.m.common.OnNetworkLoadListener;
 import xyz.homapay.hampay.mobile.android.m.common.TrustedOkHttpClient;
+import xyz.homapay.hampay.mobile.android.webservice.DateGsonBuilder;
 
 /**
  * Created by mohammad on 1/5/17.
@@ -23,7 +24,7 @@ public class NetWorker<T> {
         this.modelLayer = modelLayer;
         retrofit = new Retrofit.Builder()
                 .baseUrl(modelLayer.getBaseUrl())
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(new DateGsonBuilder().getDatebuilder().create()))
                 .client(TrustedOkHttpClient.getTrustedOkHttpClient(modelLayer, keyAgreementModel, encryption, gZip))
                 .build();
         service = retrofit.create(tClass);

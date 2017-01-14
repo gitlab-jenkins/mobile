@@ -13,14 +13,12 @@ import com.afollestad.materialdialogs.Theme;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.charge.ChargeAdapter;
 import xyz.homapay.hampay.mobile.android.common.charge.ChargeAdapterModel;
 import xyz.homapay.hampay.mobile.android.common.charge.RecyclerItemClickListener;
 import xyz.homapay.hampay.mobile.android.common.messages.MessageSelectChargeType;
-import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.util.font.FontFace;
 
 /**
@@ -31,15 +29,11 @@ public class ChargeTypeChooserDialog {
 
     protected static MaterialDialog dlg;
 
-    public static void show(Context ctx, List<String> items, int selectedIndex) {
+    public static void show(Context ctx, ArrayList<ChargeAdapterModel> itemsAdapter) {
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(() -> {
             try {
-                ArrayList<ChargeAdapterModel> itemsAdapter = new ArrayList<>();
-                for (int i = 0; i < items.size(); i++) {
-                    ChargeAdapterModel model = new ChargeAdapterModel(i, items.get(i), i == selectedIndex);
-                    itemsAdapter.add(model);
-                }
+
                 LinearLayoutManager manager = new LinearLayoutManager(ctx, LinearLayoutManager.VERTICAL, false);
                 ChargeAdapter adapter = new ChargeAdapter(ctx, itemsAdapter);
                 dlg = new MaterialDialog.Builder(ctx)
@@ -56,7 +50,7 @@ public class ChargeTypeChooserDialog {
                     public void onItemClick(View view, int position) {
                         adapter.setSelected(position);
                         cancel();
-                        EventBus.getDefault().post(new MessageSelectChargeType(position, ((FacedTextView) view).getText().toString()));
+                        EventBus.getDefault().post(new MessageSelectChargeType(position, itemsAdapter.get(position).getType(), itemsAdapter.get(position).getDesc()));
                     }
 
                     @Override

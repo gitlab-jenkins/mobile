@@ -24,11 +24,7 @@ public class DateGsonBuilder {
     public GsonBuilder getDatebuilder() {
 
         GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
-            public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                return new Date(json.getAsJsonPrimitive().getAsLong());
-            }
-        });
+        builder.registerTypeAdapter(Date.class, (JsonDeserializer<Date>) (json, typeOfT, context) -> new Date(json.getAsJsonPrimitive().getAsLong()));
         builder.registerTypeAdapter(TransactionDTO.TransactionStatus.class, new TransactionStatusEnumDeserilizer());
 
         return builder;

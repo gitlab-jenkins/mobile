@@ -37,7 +37,7 @@ public class ChargeAmountChooserDialog {
             try {
                 ArrayList<ChargeAdapterModel> itemsAdapter = new ArrayList<>();
                 for (int i = 0; i < items.size(); i++) {
-                    ChargeAdapterModel model = new ChargeAdapterModel(i, items.get(i), i == selectedIndex);
+                    ChargeAdapterModel model = new ChargeAdapterModel(i, "", items.get(i), i == selectedIndex);
                     itemsAdapter.add(model);
                 }
                 ChargeAdapter adapter = new ChargeAdapter(ctx, itemsAdapter);
