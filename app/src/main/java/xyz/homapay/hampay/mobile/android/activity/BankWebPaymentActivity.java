@@ -27,6 +27,7 @@ import xyz.homapay.hampay.common.core.model.response.dto.BillInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
+import xyz.homapay.hampay.common.core.model.response.dto.TopUpInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
@@ -35,6 +36,7 @@ import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.PaymentType;
 import xyz.homapay.hampay.mobile.android.model.SucceedPayment;
+import xyz.homapay.hampay.mobile.android.p.topup.TopUpInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class BankWebPaymentActivity extends AppCompatActivity {
@@ -49,6 +51,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
     private PaymentInfoDTO paymentInfoDTO = null;
     private PurchaseInfoDTO purchaseInfoDTO = null;
     private BillInfoDTO billInfo;
+    private TopUpInfoDTO topUpInfo;
     private PspInfoDTO pspInfoDTO = null;
     private String redirectedURL;
     private Context context;
@@ -139,6 +142,8 @@ public class BankWebPaymentActivity extends AppCompatActivity {
         paymentInfoDTO = (PaymentInfoDTO)intent.getSerializableExtra(Constants.PAYMENT_INFO);
         purchaseInfoDTO = (PurchaseInfoDTO)intent.getSerializableExtra(Constants.PURCHASE_INFO);
         billInfo = (BillInfoDTO) intent.getSerializableExtra(Constants.BILL_INFO);
+        topUpInfo = (TopUpInfoDTO) intent.getSerializableExtra(Constants.TOP_UP_INFO);
+
         pspInfoDTO = (PspInfoDTO)intent.getSerializableExtra(Constants.PSP_INFO);
 
         bankWebView = (WebView)findViewById(R.id.bankWebView);
@@ -197,6 +202,22 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                             "&ResNum=" + billInfo.getProductCode() +
                             "&Bills[0].BillId=" + billInfo.getBillId() +
                             "&Bills[0].PayId=" + billInfo.getPayId() +
+                            "&TerminalId=" + pspInfoDTO.getSenderTerminalId();
+        }else if (topUpInfo != null){
+            ipgUrl = Constants.TOP_UP_IPG_URL;
+            pspInfoDTO = topUpInfo.getPspInfo();
+            redirectedURL = pspInfoDTO.getRedirectURL() + "?authToken=" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
+            postData =
+                    "ResNum4=" + pspInfoDTO.getCellNumber() +
+                            "&ResNum3=" + pspInfoDTO.getSmsToken() +
+                            "&RedirectURL=" + redirectedURL +
+                            "&Amount=" + (topUpInfo.getChargePackage().getAmount() + topUpInfo.getFeeCharge() + topUpInfo.getVat()) +
+                            "&ResNum=" + topUpInfo.getProductCode() +
+                            "&ReceivedChargeType=" + "0" +
+                            "&CellNumber=" + topUpInfo.getCellNumber() +
+                            "&Count=" + "1" +
+                            "&ProfileId=" + topUpInfo.getChargePackage().getProfileId() +
+                            "&ChargeType=" + topUpInfo.getChargeType()+
                             "&TerminalId=" + pspInfoDTO.getSenderTerminalId();
         }
 

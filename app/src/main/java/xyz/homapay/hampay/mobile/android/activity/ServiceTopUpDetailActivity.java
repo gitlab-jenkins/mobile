@@ -234,10 +234,10 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
 
             if (topUpInfo == null) return;
 
-            if (selectedCardIdIndex == -1 || (topUpInfo.getCardList().get(selectedCardIdIndex) != null && topUpInfo.getCardList().get(selectedCardIdIndex).getCardId() == null) || (topUpInfo.getAmount() + topUpInfo.getFeeCharge() >= Constants.SOAP_AMOUNT_MAX)) {
+            if (selectedCardIdIndex == -1 || (topUpInfo.getCardList().get(selectedCardIdIndex) != null && topUpInfo.getCardList().get(selectedCardIdIndex).getCardId() == null) || (topUpInfo.getChargePackage().getAmount() + topUpInfo.getFeeCharge() >= Constants.SOAP_AMOUNT_MAX)) {
                 Intent intent1 = new Intent();
                 intent1.setClass(activity, BankWebPaymentActivity.class);
-                intent1.putExtra(Constants.BILL_INFO, topUpInfo);
+                intent1.putExtra(Constants.TOP_UP_INFO, topUpInfo);
                 startActivityForResult(intent1, 47);
             } else {
                 if (pinText.getText().toString().length() <= 4) {
@@ -268,7 +268,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
 
                 s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                 s2sMapEntry.Key = "Amount";
-                s2sMapEntry.Value = String.valueOf(topUpInfo.getAmount() + topUpInfo.getFeeCharge());
+                s2sMapEntry.Value = String.valueOf(topUpInfo.getChargePackage().getAmount() + topUpInfo.getFeeCharge());
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
                 s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
@@ -401,7 +401,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
             case ADD:
                 Intent intent = new Intent();
                 intent.setClass(activity, BankWebPaymentActivity.class);
-                intent.putExtra(Constants.BILL_INFO, topUpInfo);
+                intent.putExtra(Constants.TOP_UP_INFO, topUpInfo);
                 startActivityForResult(intent, 47);
                 break;
         }
@@ -465,21 +465,21 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
         }
 
         tvCellNumber.setText(persian.E2P(topUInfo.getCellNumber()));
-        tvAmount.setText(persian.E2P(persian.E2P(currencyFormatter.format(topUInfo.getAmount()))));
+        tvAmount.setText(persian.E2P(persian.E2P(currencyFormatter.format(topUInfo.getChargePackage().getAmount()))));
         tvTopUpTax.setText(persian.E2P(currencyFormatter.format(topUInfo.getVat())));
         hampayFee.setText(persian.E2P(currencyFormatter.format(topUInfo.getFeeCharge())));
 
-        tvTopUpTotalAmount.setText(persian.E2P(currencyFormatter.format(topUInfo.getAmount() + topUInfo.getFeeCharge())));
+        tvTopUpTotalAmount.setText(persian.E2P(currencyFormatter.format(topUInfo.getChargePackage().getAmount() + topUInfo.getFeeCharge())));
 
         if (topUInfo.getCardList().size() > 0) {
-            if (topUInfo.getCardList().get(0).getCardId() != null && (topUInfo.getAmount() + topUInfo.getFeeCharge() < Constants.SOAP_AMOUNT_MAX)) {
+            if (topUInfo.getCardList().get(0).getCardId() != null && (topUInfo.getChargePackage().getAmount() + topUInfo.getFeeCharge() < Constants.SOAP_AMOUNT_MAX)) {
                 cardNumberValue.setText(persian.E2P(topUInfo.getCardList().get(0).getLast4Digits()));
                 bankName.setText(topUInfo.getCardList().get(0).getBankName());
             }
         }
 
         if (topUInfo.getCardList().size() > 0) {
-            if (topUInfo.getCardList().get(0).getCardId() != null && (topUInfo.getAmount() + topUInfo.getFeeCharge() < Constants.SOAP_AMOUNT_MAX)) {
+            if (topUInfo.getCardList().get(0).getCardId() != null && (topUInfo.getChargePackage().getAmount() + topUInfo.getFeeCharge() < Constants.SOAP_AMOUNT_MAX)) {
                 cardNumberValue.setText(persian.E2P(topUInfo.getCardList().get(0).getLast4Digits()));
                 bankName.setText(topUInfo.getCardList().get(0).getBankName());
                 selectedCardIdIndex = 0;
@@ -631,8 +631,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
                         if (topUpInfo != null) {
                             Intent intent = new Intent(context, PaymentCompletedActivity.class);
                             ChargeSucceedPayment succeedPayment = new ChargeSucceedPayment(chargeType);
-                            succeedPayment.setAmount(topUpInfo.getAmount() + topUpInfo.getFeeCharge());
-                            //TODO
+                            succeedPayment.setAmount(topUpInfo.getChargePackage().getAmount() + topUpInfo.getFeeCharge());
                             succeedPayment.setCode(chargeType == ChargeType.DIRECT ? topUpInfo.getCellNumber() : topUpInfo.getProductCode());
                             succeedPayment.setTrace(topUpInfo.getPspInfo().getProviderId());
                             succeedPayment.setPaymentType(PaymentType.BILLS);
