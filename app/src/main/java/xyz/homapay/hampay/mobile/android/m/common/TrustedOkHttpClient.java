@@ -1,6 +1,7 @@
 package xyz.homapay.hampay.mobile.android.m.common;
 
 import android.os.Build;
+import android.util.Log;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -43,7 +44,9 @@ public class TrustedOkHttpClient {
             request = request.newBuilder()
                     .cacheControl(cacheControl)
                     .build();
-            return chain.proceed(request);
+            Response response = chain.proceed(request);
+            Log.i("XXXX-INTERCEPTOR", response == null ? "NULL" : response.code() + "");
+            return response;
         };
     }
 
@@ -54,6 +57,7 @@ public class TrustedOkHttpClient {
             cacheControl = new CacheControl.Builder()
                     .maxAge(2, TimeUnit.MINUTES)
                     .build();
+            Log.i("XXXX-ONLINE_CACHE", response == null ? "NULL" : response.code() + "");
             return response.newBuilder()
                     .header(CACHE_CONTROL, cacheControl.toString())
                     .build();

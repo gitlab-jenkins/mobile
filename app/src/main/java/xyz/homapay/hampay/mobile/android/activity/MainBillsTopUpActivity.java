@@ -378,7 +378,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     @Override
     public void onError() {
         ProgressDialog.cancel();
-        Dialoger.GENERAL.show(context, getString(R.string.err_general), getString(R.string.err_failed_get_operator_data_charge));
+        Dialoger.GENERAL.show(context, getString(R.string.err_general), getString(R.string.err_general_text));
     }
 
     @Override

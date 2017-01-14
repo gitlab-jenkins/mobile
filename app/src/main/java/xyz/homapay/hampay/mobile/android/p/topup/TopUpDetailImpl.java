@@ -32,6 +32,7 @@ public class TopUpDetailImpl extends Presenter<TopUpDetailView> implements TopUp
         try {
             view.showProgress();
             this.providerId = providerId;
+            keyExchange();
         } catch (Exception e) {
             e.printStackTrace();
             view.onError();

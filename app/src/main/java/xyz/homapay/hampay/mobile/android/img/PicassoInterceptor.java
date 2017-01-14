@@ -2,6 +2,7 @@ package xyz.homapay.hampay.mobile.android.img;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -66,6 +67,7 @@ public class PicassoInterceptor implements Interceptor {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Log.i("XXXX-INTERCEPTOR", response == null ? "NULL" : response.code() + "");
         return response;
     }
 
