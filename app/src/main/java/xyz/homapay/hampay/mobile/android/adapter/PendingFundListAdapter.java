@@ -111,7 +111,7 @@ public class PendingFundListAdapter extends BaseAdapter {
             }
         } else if (fund.getPaymentType() == FundDTO.PaymentType.PAYMENT) {
             viewHolder.code_digit_6.setText(fund.getProductCode());
-        }else if (fund.getPaymentType() == FundDTO.PaymentType.UTILITY_BILL){
+        } else if (fund.getPaymentType() == FundDTO.PaymentType.UTILITY_BILL) {
             viewHolder.code_digit_6.setText(fund.getProductCode());
         }
 
@@ -132,7 +132,6 @@ public class PendingFundListAdapter extends BaseAdapter {
         currentDate = new Date();
         super.notifyDataSetChanged();
     }
-
 
     private class ViewHolder {
         FacedTextView contact_name;

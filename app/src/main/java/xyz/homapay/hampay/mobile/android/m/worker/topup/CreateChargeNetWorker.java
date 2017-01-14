@@ -24,4 +24,9 @@ public class CreateChargeNetWorker extends NetWorker<TopUpService> {
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/plain; charset=utf-8"), body);
         execute(service.topUpCreate(requestBody), listener);
     }
+
+    public void topUpGetDetail(String body, OnNetworkLoadListener<ResponseMessage<TopUpResponse>> listener) {
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/plain; charset=utf-8"), body);
+        execute(service.topUpGetDetail(requestBody), listener);
+    }
 }

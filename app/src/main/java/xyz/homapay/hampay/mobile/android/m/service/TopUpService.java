@@ -19,4 +19,7 @@ public interface TopUpService {
 
     @POST("/hampay/topup/request")
     Call<ResponseMessage<TopUpResponse>> topUpCreate(@Body RequestBody body);
+
+    @POST("/hampay/topup/detail")
+    Call<ResponseMessage<TopUpResponse>> topUpGetDetail(@Body RequestBody body);
 }
