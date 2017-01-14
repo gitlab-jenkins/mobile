@@ -162,8 +162,8 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
         imgRIGHTEL = (ImageView) findViewById(R.id.imgRIGHTEL);
         btnTopUpPay = (FacedTextView) findViewById(R.id.btnTopUpPay);
 
-        rlChargeType = (RelativeLayout) findViewById(R.id.rlChargeType);
-        rlChargeAmount = (RelativeLayout) findViewById(R.id.rlChargeAmount);
+//        rlChargeType = (RelativeLayout) findViewById(R.id.rlChargeType);
+//        rlChargeAmount = (RelativeLayout) findViewById(R.id.rlChargeAmount);
         tvChargeType = (FacedTextView) findViewById(R.id.tvChargeType);
         tvChargeAmount = (FacedTextView) findViewById(R.id.tvChargeAmount);
 
@@ -353,19 +353,16 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     @Override
     public void showProgress() {
         dlg.showWaitingDialog("");
-//        ProgressDialog.show(context);
     }
 
     @Override
     public void cancelProgress() {
         dlg.dismisWaitingDialog();
-//        ProgressDialog.cancel();
     }
 
     @Override
     public void dismissProgress() {
         dlg.dismisWaitingDialog();
-//        ProgressDialog.cancel();
     }
 
     @Override
