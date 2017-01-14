@@ -261,24 +261,32 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
                 HHBArrayOfKeyValueOfstringstring vectorstring2stringMapEntry = new HHBArrayOfKeyValueOfstringstring();
                 HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
 
-                s2sMapEntry.Key = "Amount";
-                s2sMapEntry.Value = String.valueOf(topUpInfo.getAmount() + topUpInfo.getFeeCharge());
-                vectorstring2stringMapEntry.add(s2sMapEntry);
-
                 s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                 s2sMapEntry.Key = "Pin2";
                 s2sMapEntry.Value = userPinCode;
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
                 s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "Amount";
+                s2sMapEntry.Value = String.valueOf(topUpInfo.getAmount() + topUpInfo.getFeeCharge());
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "OtherCellNumber";
+                s2sMapEntry.Value = "";
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "ChargeType";
+                s2sMapEntry.Value = "";
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+
+                s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                 s2sMapEntry.Key = "ThirdParty";
                 s2sMapEntry.Value = topUpInfo.getProductCode();
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                s2sMapEntry.Key = "TerminalId";
-                s2sMapEntry.Value = topUpInfo.getPspInfo().getTerminalId();
-                vectorstring2stringMapEntry.add(s2sMapEntry);
 
                 s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                 s2sMapEntry.Key = "SenderTerminalId";
@@ -316,20 +324,14 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
                 s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                s2sMapEntry.Key = "BillId";
-//                    s2sMapEntry.Value = topUpInfo.getBillId();
-                vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                s2sMapEntry.Key = "PayId";
-//                    s2sMapEntry.Value = topUpInfo.getPayId();
+                s2sMapEntry.Key = "MNPOperatorId";
+                s2sMapEntry.Value = "";
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
                 s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                 s2sMapEntry.Key = "Signature";
                 s2sMapEntry.Value = signature;
                 vectorstring2stringMapEntry.add(s2sMapEntry);
-
 
                 topUpTokenDoWork.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
                 requestTokenBills.execute(topUpTokenDoWork);
