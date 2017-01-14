@@ -198,7 +198,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                         requestRecentPendingFund = new RequestRecentPendingFund(activity, new RequestRecentFundTaskCompleteListener());
                         recentPendingFundRequest = new RecentPendingFundRequest();
                         recentPendingFundRequest.setImei(new DeviceInfo(activity).getIMEI());
-                        recentPendingFundRequest.setNationalCode(userIdToken);
+                        recentPendingFundRequest.setUsername(userIdToken);
                         requestRecentPendingFund.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, recentPendingFundRequest);
                     } else {
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {

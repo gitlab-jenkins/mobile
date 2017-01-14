@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -133,7 +134,6 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
         full_triangle = (ImageView) findViewById(R.id.full_triangle);
         business_triangle = (ImageView) findViewById(R.id.business_triangle);
         invoice_triangle = (ImageView) findViewById(R.id.invoice_triangle);
-
 
         transactionDTOs = new ArrayList<>();
         userTransactionAdapter = new UserTransactionAdapter(activity);

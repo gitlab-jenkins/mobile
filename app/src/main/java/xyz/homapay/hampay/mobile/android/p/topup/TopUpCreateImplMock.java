@@ -69,15 +69,15 @@ public class TopUpCreateImplMock extends Presenter<TopUpCreateView> implements T
         this.chargePackage = chargePackage;
         this.chargeType = chargeType;
         TopUpResponse response = new TopUpResponse();
-        TopUpInfoDTO dto = new TopUpInfoDTO();
-        dto.setAmount(2000);
-        dto.setCellNumber("09194237096");
-        dto.setExpirationDate(new Date());
-        dto.setFeeCharge(200);
-        dto.setImageId("MTN");
-        dto.setTopUpName("شارژ سیم کارت");
-        dto.setVat(250);
-        response.setTopUpInfoDTO(dto);
+        TopUpInfoDTO topUpInfo = new TopUpInfoDTO();
+//        topUpInfo.(2000);
+        topUpInfo.setCellNumber("09194237096");
+        topUpInfo.setExpirationDate(new Date());
+        topUpInfo.setFeeCharge(200);
+        topUpInfo.setImageId("MTN");
+        topUpInfo.setTopUpName("شارژ سیم کارت");
+        topUpInfo.setVat(250);
+        response.setTopUpInfoDTO(topUpInfo);
 
         ResponseMessage<TopUpResponse> responseResponseMessage = new ResponseMessage<TopUpResponse>(response);
         view.onCreated(true, responseResponseMessage, "ok");
