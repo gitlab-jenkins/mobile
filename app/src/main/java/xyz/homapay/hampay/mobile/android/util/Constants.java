@@ -132,6 +132,7 @@ public class Constants {
     public static String IPG_URL = "http://" + SERVER + ":9091" + URL_PREFIX;//England Server
     public static String BANK_GATEWAY_URL = "https://sep.shaparak.ir/PgMobileAddData";
     public static String BILLS_IPG_URL = "https://sep.shaparak.ir/pgmobileadddata/batchbill";
+    public static String TOP_UP_IPG_URL = "https://sep.shaparak.ir/PgMobileAddData/Charge";
     public static String TOKEN_PAYMENT = "https://mobile.hampay.com/saman/psp/pay";
     public static ConnectionType CONNECTION_TYPE = ConnectionType.HTTPS;
     public static String HTTPS_SERVER_IP = "https://" + SERVER + URL_PREFIX;//England Server
