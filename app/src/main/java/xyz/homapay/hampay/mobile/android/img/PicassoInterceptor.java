@@ -67,6 +67,15 @@ public class PicassoInterceptor implements Interceptor {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        if (response == null){
+            try {
+                response = new HttpLoggerLayer(HttpLoggerLayer.Level.BODY).proceedAndLog(chain, request);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         Log.i("XXXX-INTERCEPTOR", response == null ? "NULL" : response.code() + "");
         return response;
     }
