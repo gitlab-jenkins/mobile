@@ -789,14 +789,10 @@ public class SecuredWebServices {
         return responseMessage;
     }
 
-    public ResponseMessage<PSPResultResponse> pspResult(PSPResultRequest pspResultRequest, int type) throws IOException, EncryptionException {
+    public ResponseMessage<PSPResultResponse> pspResult(PSPResultRequest pspResultRequest) throws IOException, EncryptionException {
 
         ResponseMessage<PSPResultResponse> responseMessage = null;
-        if (type == 1) {
-            url = new URL(serviceURL + "/purchase/psp-result");
-        } else if (type == 2) {
-            url = new URL(serviceURL + "/payment/psp-result");
-        }
+        url = new URL(serviceURL + "/fund/psp-result");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
 
         pspResultRequest.setRequestUUID(UUID.randomUUID().toString());
@@ -1308,7 +1304,7 @@ public class SecuredWebServices {
 
     public ResponseMessage<SignToPayResponse> signToPay(SignToPayRequest request) throws IOException, EncryptionException {
         ResponseMessage<SignToPayResponse> responseMessage = null;
-        url = new URL(serviceURL + "/purchase/sign");
+        url = new URL(serviceURL + "/fund/sign");
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
         request.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<SignToPayRequest> message = new RequestMessage<>(request, authToken, Constants.API_LEVEL, System.currentTimeMillis());

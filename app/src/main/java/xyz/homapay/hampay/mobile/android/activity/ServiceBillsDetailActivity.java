@@ -21,6 +21,7 @@ import java.io.Serializable;
 import br.com.goncalves.pugnotification.notification.PugNotification;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
+import xyz.homapay.hampay.common.core.model.enums.FundType;
 import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
 import xyz.homapay.hampay.common.core.model.request.SignToPayRequest;
 import xyz.homapay.hampay.common.core.model.request.UtilityBillDetailRequest;
@@ -394,6 +395,7 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                         SignToPayRequest signToPayRequest = new SignToPayRequest();
                         signToPayRequest.setCardId(billsInfo.getCardList().get(position).getCardId());
                         signToPayRequest.setProductCode(billsInfo.getProductCode());
+                        signToPayRequest.setFundType(FundType.UTILITY_BILL);
                         new SignToPayTask(activity, ServiceBillsDetailActivity.this, signToPayRequest, authToken).execute();
                     }
                 }
@@ -655,7 +657,8 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                     pspResultRequest.setPspResponseCode(responseCode);
                     pspResultRequest.setProductCode(billsInfo.getProductCode());
                     pspResultRequest.setTrackingCode(SWTraceNum);
-                    requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(SWTraceNum), 2);
+                    pspResultRequest.setResultType(PSPResultRequest.ResultType.UTILITY_BILL);
+                    requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(SWTraceNum));
                     requestPSPResult.execute(pspResultRequest);
 
                 } else {

@@ -20,6 +20,7 @@ import java.io.Serializable;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
+import xyz.homapay.hampay.common.core.model.enums.FundType;
 import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
 import xyz.homapay.hampay.common.core.model.request.SignToPayRequest;
 import xyz.homapay.hampay.common.core.model.response.PSPResultResponse;
@@ -412,6 +413,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
                         SignToPayRequest signToPayRequest = new SignToPayRequest();
                         signToPayRequest.setCardId(paymentInfoDTO.getCardList().get(position).getCardId());
                         signToPayRequest.setProductCode(paymentInfoDTO.getProductCode());
+                        signToPayRequest.setFundType(FundType.PAYMENT);
                         new SignToPayTask(activity, BusinessPaymentConfirmActivity.this, signToPayRequest, authToken).execute();
                     }
                 }
@@ -535,7 +537,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
                 }
 
                 if (responseCode != null) {
-                    if (responseCode.equalsIgnoreCase("1")) {
+                    if (responseCode.equalsIgnoreCase("2000")) {
                         if (paymentInfoDTO != null) {
                             Intent intent = new Intent(context, PaymentCompletedActivity.class);
                             SucceedPayment succeedPayment = new SucceedPayment();
@@ -569,7 +571,8 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
                     pspResultRequest.setPspResponseCode(responseCode);
                     pspResultRequest.setProductCode(paymentInfoDTO.getProductCode());
                     pspResultRequest.setTrackingCode(SWTraceNum);
-                    requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(SWTraceNum), 2);
+                    pspResultRequest.setResultType(PSPResultRequest.ResultType.PAYMENT);
+                    requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(SWTraceNum));
                     requestPSPResult.execute(pspResultRequest);
 
                 } else {

@@ -204,10 +204,20 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             pspResultRequest.setProductCode(syncPspResult.getProductCode());
             pspResultRequest.setTrackingCode(syncPspResult.getSwTrace());
             if (syncPspResult.getType().equalsIgnoreCase("PURCHASE")) {
-                requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(syncPspResult.getSwTrace()), 1);
+                pspResultRequest.setResultType(PSPResultRequest.ResultType.PURCHASE);
+                requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(syncPspResult.getSwTrace()));
                 requestPSPResult.execute(pspResultRequest);
             } else if (syncPspResult.getType().equalsIgnoreCase("PAYMENT")) {
-                requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(syncPspResult.getSwTrace()), 2);
+                pspResultRequest.setResultType(PSPResultRequest.ResultType.PAYMENT);
+                requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(syncPspResult.getSwTrace()));
+                requestPSPResult.execute(pspResultRequest);
+            }else if (syncPspResult.getType().equalsIgnoreCase("UTILITY_BILL")) {
+                pspResultRequest.setResultType(PSPResultRequest.ResultType.UTILITY_BILL);
+                requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(syncPspResult.getSwTrace()));
+                requestPSPResult.execute(pspResultRequest);
+            }else if (syncPspResult.getType().equalsIgnoreCase("TOP_UP")) {
+                pspResultRequest.setResultType(PSPResultRequest.ResultType.TOP_UP);
+                requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(syncPspResult.getSwTrace()));
                 requestPSPResult.execute(pspResultRequest);
             }
         }

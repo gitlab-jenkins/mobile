@@ -21,6 +21,7 @@ import java.io.Serializable;
 import br.com.goncalves.pugnotification.notification.PugNotification;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
+import xyz.homapay.hampay.common.core.model.enums.FundType;
 import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
 import xyz.homapay.hampay.common.core.model.request.SignToPayRequest;
 import xyz.homapay.hampay.common.core.model.request.UtilityBillDetailRequest;
@@ -397,6 +398,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
                         SignToPayRequest signToPayRequest = new SignToPayRequest();
                         signToPayRequest.setCardId(topUpInfo.getCardList().get(position).getCardId());
                         signToPayRequest.setProductCode(topUpInfo.getProductCode());
+                        signToPayRequest.setFundType(FundType.TOP_UP);
                         new SignToPayTask(activity, ServiceTopUpDetailActivity.this, signToPayRequest, authToken).execute();
                     }
                 }
@@ -638,7 +640,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
                             succeedPayment.setAmount(topUpInfo.getChargePackage().getAmount() + topUpInfo.getFeeCharge());
                             succeedPayment.setCode(chargeType == ChargeType.DIRECT ? topUpInfo.getCellNumber() : topUpInfo.getProductCode());
                             succeedPayment.setTrace(topUpInfo.getPspInfo().getProviderId());
-                            succeedPayment.setPaymentType(PaymentType.BILLS);
+                            succeedPayment.setPaymentType(PaymentType.TOP_UP);
                             succeedPayment.setChargeType(chargeType);
                             intent.putExtra(Constants.SUCCEED_PAYMENT_INFO, succeedPayment);
                             startActivityForResult(intent, 46);
@@ -655,7 +657,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
                     SyncPspResult syncPspResult = new SyncPspResult();
                     syncPspResult.setResponseCode(responseCode);
                     syncPspResult.setProductCode(topUpInfo.getProductCode());
-                    syncPspResult.setType("UTILITY_TOP_UP");
+                    syncPspResult.setType("TOP_UP");
                     syncPspResult.setSwTrace(SWTraceNum);
                     syncPspResult.setTimestamp(System.currentTimeMillis());
                     syncPspResult.setStatus(0);
@@ -664,7 +666,8 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
                     pspResultRequest.setPspResponseCode(responseCode);
                     pspResultRequest.setProductCode(topUpInfo.getProductCode());
                     pspResultRequest.setTrackingCode(SWTraceNum);
-                    requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(SWTraceNum), 2);
+                    pspResultRequest.setResultType(PSPResultRequest.ResultType.TOP_UP);
+                    requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(SWTraceNum));
                     requestPSPResult.execute(pspResultRequest);
 
                 } else {
