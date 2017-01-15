@@ -18,6 +18,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 
 import java.io.Serializable;
 
+import xyz.homapay.hampay.common.common.PSPName;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.enums.FundType;
@@ -566,13 +567,17 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
                     syncPspResult.setSwTrace(SWTraceNum);
                     syncPspResult.setTimestamp(System.currentTimeMillis());
                     syncPspResult.setStatus(0);
+                    syncPspResult.setPspName(PSPName.SAMAN.getCode());
+                    syncPspResult.setCardId(paymentInfoDTO.getCardList().get(selectedCardIdIndex).getCardId());
                     dbHelper.createSyncPspResult(syncPspResult);
 
                     pspResultRequest.setPspResponseCode(responseCode);
                     pspResultRequest.setProductCode(paymentInfoDTO.getProductCode());
                     pspResultRequest.setTrackingCode(SWTraceNum);
                     pspResultRequest.setResultType(PSPResultRequest.ResultType.PAYMENT);
-                    requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(SWTraceNum));
+                    pspResultRequest.setCardDTO(paymentInfoDTO.getCardList().get(selectedCardIdIndex));
+                    pspResultRequest.setPspName(PSPName.SAMAN);
+                    requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(paymentInfoDTO.getProductCode()));
                     requestPSPResult.execute(pspResultRequest);
 
                 } else {
@@ -603,10 +608,10 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
 
         ServiceEvent serviceName;
         LogEvent logEvent = new LogEvent(context);
-        private String SWTrace;
+        private String productCode;
 
-        public RequestPSPResultTaskCompleteListener(String SWTrace) {
-            this.SWTrace = SWTrace;
+        public RequestPSPResultTaskCompleteListener(String productCode) {
+            this.productCode = productCode;
         }
 
         @Override
@@ -617,8 +622,8 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
             if (pspResultResponseMessage != null) {
                 if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     serviceName = ServiceEvent.PSP_RESULT_SUCCESS;
-                    if (SWTrace != null) {
-                        dbHelper.syncPspResult(SWTrace);
+                    if (productCode != null) {
+                        dbHelper.syncPspResult(productCode);
                     }
 
                 } else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {

@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import xyz.homapay.hampay.common.common.PSPName;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryRequest;
@@ -36,6 +37,7 @@ import xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
 import xyz.homapay.hampay.common.core.model.response.MobileRegistrationIdEntryResponse;
 import xyz.homapay.hampay.common.core.model.response.PSPResultResponse;
 import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
+import xyz.homapay.hampay.common.core.model.response.dto.CardDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
@@ -203,17 +205,21 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             pspResultRequest.setPspResponseCode(syncPspResult.getResponseCode());
             pspResultRequest.setProductCode(syncPspResult.getProductCode());
             pspResultRequest.setTrackingCode(syncPspResult.getSwTrace());
+            pspResultRequest.setPspName(PSPName.getPSPNameByCode(syncPspResult.getPspName()));
+            CardDTO card = new CardDTO();
+            card.setCardId(syncPspResult.getCardId());
+            pspResultRequest.setCardDTO(card);
             if (syncPspResult.getType().equalsIgnoreCase("PURCHASE")) {
                 pspResultRequest.setResultType(PSPResultRequest.ResultType.PURCHASE);
-                requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(syncPspResult.getSwTrace()));
+                requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(syncPspResult.getProductCode()));
                 requestPSPResult.execute(pspResultRequest);
             } else if (syncPspResult.getType().equalsIgnoreCase("PAYMENT")) {
                 pspResultRequest.setResultType(PSPResultRequest.ResultType.PAYMENT);
-                requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(syncPspResult.getSwTrace()));
+                requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(syncPspResult.getProductCode()));
                 requestPSPResult.execute(pspResultRequest);
             }else if (syncPspResult.getType().equalsIgnoreCase("UTILITY_BILL")) {
                 pspResultRequest.setResultType(PSPResultRequest.ResultType.UTILITY_BILL);
-                requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(syncPspResult.getSwTrace()));
+                requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(syncPspResult.getProductCode()));
                 requestPSPResult.execute(pspResultRequest);
             }
         }
@@ -727,10 +733,10 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
     public class RequestPSPResultTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> {
 
-        private String SWTrace;
+        private String productCode;
 
-        public RequestPSPResultTaskCompleteListener(String SWTrace) {
-            this.SWTrace = SWTrace;
+        public RequestPSPResultTaskCompleteListener(String productCode) {
+            this.productCode = productCode;
         }
 
         @Override
@@ -741,8 +747,8 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 ResultStatus resultStatus = pspResultResponseMessage.getService().getResultStatus();
 
                 if (resultStatus == ResultStatus.SUCCESS || resultStatus == ResultStatus.PAYMENT_NOT_FOUND || resultStatus == ResultStatus.PURCHASE_NOT_FOUND || resultStatus == ResultStatus.INVALID_FUND_STATUS_EXCEPTION) {
-                    if (SWTrace != null) {
-                        dbHelper.syncPspResult(SWTrace);
+                    if (productCode != null) {
+                        dbHelper.syncPspResult(productCode);
                     }
                 } else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     forceLogout();

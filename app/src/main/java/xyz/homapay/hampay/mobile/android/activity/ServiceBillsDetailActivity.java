@@ -19,6 +19,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import java.io.Serializable;
 
 import br.com.goncalves.pugnotification.notification.PugNotification;
+import xyz.homapay.hampay.common.common.PSPName;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.enums.FundType;
@@ -344,12 +345,12 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
 
     public class RequestPSPResultTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> {
 
-        private String SWTrace;
+        private String productCode;
         ServiceEvent serviceName;
         LogEvent logEvent = new LogEvent(context);
 
-        public RequestPSPResultTaskCompleteListener(String SWTrace){
-            this.SWTrace = SWTrace;
+        public RequestPSPResultTaskCompleteListener(String productCode){
+            this.productCode = productCode;
         }
 
         @Override
@@ -360,8 +361,8 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
             if (pspResultResponseMessage != null) {
                 if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     serviceName = ServiceEvent.PSP_RESULT_SUCCESS;
-                    if (SWTrace != null) {
-                        dbHelper.syncPspResult(SWTrace);
+                    if (productCode != null) {
+                        dbHelper.syncPspResult(productCode);
                     }
                 } else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     serviceName = ServiceEvent.PSP_RESULT_FAILURE;
@@ -658,7 +659,11 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                     pspResultRequest.setProductCode(billsInfo.getProductCode());
                     pspResultRequest.setTrackingCode(SWTraceNum);
                     pspResultRequest.setResultType(PSPResultRequest.ResultType.UTILITY_BILL);
-                    requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(SWTraceNum));
+                    pspResultRequest.setCardDTO(billsInfo.getCardList().get(selectedCardIdIndex));
+                    pspResultRequest.setPspName(PSPName.SAMAN);
+                    syncPspResult.setPspName(PSPName.SAMAN.getCode());
+                    syncPspResult.setCardId(billsInfo.getCardList().get(selectedCardIdIndex).getCardId());
+                    requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(billsInfo.getProductCode()));
                     requestPSPResult.execute(pspResultRequest);
 
                 } else {
