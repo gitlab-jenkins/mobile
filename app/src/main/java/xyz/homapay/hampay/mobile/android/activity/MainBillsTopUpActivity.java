@@ -3,7 +3,10 @@ package xyz.homapay.hampay.mobile.android.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -246,10 +249,64 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
                 break;
             case R.id.imgUserSimNumber:
                 if (userProfile != null) {
-                    String phone = userProfile.getCellNumber().substring(2);
-                    cellNumberText.setText(phone);
+                    showNumber();
                 }
                 break;
+            case R.id.imgContacts:
+                startActivityForGetContactsNumbers();
+                break;
+        }
+    }
+
+    private void showNumber() {
+        String phone = userProfile.getCellNumber().substring(2);
+        cellNumberText.setText(new PersianEnglishDigit().E2P(phone));
+    }
+
+    private void showNumber(String cellNumber) {
+        String phone = cellNumber.substring(2);
+        cellNumberText.setText(new PersianEnglishDigit().E2P(phone));
+    }
+
+    private void startActivityForGetContactsNumbers() {
+        try {
+            // user BoD suggests using Intent.ACTION_PICK instead of .ACTION_GET_CONTENT to avoid the chooser
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            // BoD con't: CONTENT_TYPE instead of CONTENT_ITEM_TYPE
+            intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
+            startActivityForResult(intent, 1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (data != null) {
+                Uri uri = data.getData();
+
+                if (uri != null) {
+                    Cursor c = null;
+                    try {
+                        c = getContentResolver().query(uri, new String[]{
+                                        ContactsContract.CommonDataKinds.Phone.NUMBER,
+                                        ContactsContract.CommonDataKinds.Phone.TYPE},
+                                null, null, null);
+
+                        if (c != null && c.moveToFirst()) {
+                            String number = c.getString(0);
+                            int type = c.getInt(1);
+                            showNumber(number);
+                        }
+                    } finally {
+                        if (c != null) {
+                            c.close();
+                        }
+                    }
+                }
+            }
         }
     }
 
