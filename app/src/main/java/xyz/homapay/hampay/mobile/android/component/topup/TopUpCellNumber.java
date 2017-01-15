@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 
 import org.greenrobot.eventbus.EventBus;
 
+import xyz.homapay.hampay.common.common.Operator;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.common.messages.MessageSetOperator;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
@@ -50,7 +51,9 @@ public class TopUpCellNumber extends FacedTextView {
                     String phoneNumber = "09" + editable.toString();
                     if (phoneNumber.length() == 11) {
                         if (TelephonyUtils.isIranValidNumber(phoneNumber)) {
-                            EventBus.getDefault().post(new MessageSetOperator(new TelephonyUtils().getNumberOperator(phoneNumber)));
+                            Operator operator = new TelephonyUtils().getNumberOperator(phoneNumber);
+                            MessageSetOperator messageSetOperator = new MessageSetOperator(operator);
+                            EventBus.getDefault().post(messageSetOperator);
                         } else {
                             setError(getContext().getString(R.string.err_cell_phone_invalid));
                         }

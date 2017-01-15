@@ -98,7 +98,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
 
     @Override
     protected void onStop() {
-        EventBus.getDefault().unregister(this);
+//        EventBus.getDefault().unregister(this);
         super.onStop();
         HamPayApplication.setAppSate(AppState.Stoped);
     }
@@ -106,12 +106,13 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     @Override
     protected void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        if (!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
         HamPayApplication.setAppSate(AppState.Resumed);
         if ((System.currentTimeMillis() - prefs.getLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis()) > Constants.MOBILE_TIME_OUT_INTERVAL)) {
             Intent intent = new Intent();
@@ -260,11 +261,13 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
 
     private void showNumber() {
         String phone = userProfile.getCellNumber().substring(2);
+        cellNumber = phone;
         cellNumberText.setText(new PersianEnglishDigit().E2P(phone));
     }
 
     private void showNumber(String cellNumber) {
         String phone = cellNumber.substring(2);
+        this.cellNumber = phone;
         cellNumberText.setText(new PersianEnglishDigit().E2P(phone));
     }
 
