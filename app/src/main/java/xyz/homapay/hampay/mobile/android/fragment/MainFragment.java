@@ -339,6 +339,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
             case R.id.billAndTopUp:
                 intent.setClass(getActivity(), MainBillsTopUpActivity.class);
+                intent.putExtra(Constants.USER_PROFILE, userProfile);
                 startActivity(intent);
                 break;
 

@@ -183,7 +183,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 android:layout_width="match_parent"
@@ -211,8 +211,10 @@
                     android:src="@drawable/bills_contacts" />
 
                 <ImageView
+                    android:id="@+id/imgUserSimNumber"
                     android:layout_width="50dp"
                     android:layout_height="60dp"
+                    android:onClick="onClick"
                     android:layout_marginLeft="2dp"
                     android:background="@color/app_origin"
                     android:src="@drawable/bills_sim" />

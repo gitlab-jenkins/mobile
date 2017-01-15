@@ -213,7 +213,7 @@ public class TelephonyUtils {
         else if (lstRIGHTEL.contains(RIGHTEL_OPERATOR))
             return Operator.RAYTEL;
         else
-            return null;
+            return Operator.MCI;
     }
 
     public enum IranMobileOperators {

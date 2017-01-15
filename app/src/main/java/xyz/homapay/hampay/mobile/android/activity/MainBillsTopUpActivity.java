@@ -21,6 +21,7 @@ import xyz.homapay.hampay.common.common.Operator;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.response.TopUpInfoResponse;
 import xyz.homapay.hampay.common.core.model.response.TopUpResponse;
+import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
@@ -80,6 +81,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     private String chargeType;
     private String operatorName;
     private HamPayDialog dlg;
+    private UserProfileDTO userProfile;
 
     public void backActionBar(View view) {
         finish();
@@ -141,6 +143,8 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
         topUpCreate = new TopUpCreateImpl(new ModelLayerImpl(context), this);
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         persian = new PersianEnglishDigit();
+
+        userProfile = (UserProfileDTO) getIntent().getSerializableExtra(Constants.USER_PROFILE);
 
         keyboard = (LinearLayout) findViewById(R.id.keyboard);
 
@@ -239,6 +243,12 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
                 break;
             case R.id.btnTopUpPay:
                 createPayment();
+                break;
+            case R.id.imgUserSimNumber:
+                if (userProfile != null) {
+                    String phone = userProfile.getCellNumber().substring(2);
+                    cellNumberText.setText(phone);
+                }
                 break;
         }
     }

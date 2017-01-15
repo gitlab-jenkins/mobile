@@ -12,4 +12,8 @@ public class AppManager {
         return AppSettings.getString(ctx, Constants.LOGIN_TOKEN_ID, "");
     }
 
+    public static void setAuthToken(final Context ctx, String authToken) {
+        AppSettings.setValue(ctx, Constants.LOGIN_TOKEN_ID, authToken);
+    }
+
 }

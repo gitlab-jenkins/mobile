@@ -60,6 +60,7 @@ import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
 import xyz.homapay.hampay.mobile.android.security.KeyExchange;
 import xyz.homapay.hampay.mobile.android.util.AppInfo;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.NetworkConnectivity;
@@ -203,10 +204,10 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                     } else {
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                             boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE);
-                            if (showRationale){
-                            }else {
+                            if (showRationale) {
+                            } else {
                             }
-                        }else {
+                        } else {
                         }
                     }
                     return true;
@@ -288,7 +289,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onFinishEditDialog(ActionPermission actionPermission) {
-        switch (actionPermission){
+        switch (actionPermission) {
             case GRANT:
                 requestAndLoadPhoneState();
                 break;
@@ -482,12 +483,11 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                 } else if (tacResponseMessage.getService().getResultStatus() == ResultStatus.OUT_OF_DATE_APP_VERSION) {
                     serviceName = ServiceEvent.TAC_FAILURE;
                     hamPayDialog.appUpdateDialog(tacResponseMessage.getService().getStoreURL());
-                }else if (tacResponseMessage.getService().getResultStatus() == ResultStatus.OUT_OF_DATE_PASSWORD){
+                } else if (tacResponseMessage.getService().getResultStatus() == ResultStatus.OUT_OF_DATE_PASSWORD) {
                     serviceName = ServiceEvent.TAC_FAILURE;
                     Intent intent = new Intent(activity, ChangePassCodeActivity.class);
                     startActivity(intent);
-                }
-                else {
+                } else {
                     serviceName = ServiceEvent.TAC_FAILURE;
                     new HamPayDialog(activity).showFailTCRequestDialog(requestTAC, tacRequest,
                             tacResponseMessage.getService().getResultStatus().getCode(),
@@ -510,7 +510,8 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     }
 
     public class RequestRecentFundTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RecentPendingFundResponse>> {
-        public RequestRecentFundTaskCompleteListener() {}
+        public RequestRecentFundTaskCompleteListener() {
+        }
 
         @Override
         public void onTaskComplete(ResponseMessage<RecentPendingFundResponse> recentPendingFundResponseMessage) {
@@ -564,6 +565,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                     serviceName = ServiceEvent.LOGIN_SUCCESS;
                     editor.putString(Constants.LOGIN_TOKEN_ID, loginResponseResponseMessage.getService().getAuthToken());
                     editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                    AppManager.setAuthToken(context, loginResponseResponseMessage.getService().getAuthToken());
                     editor.commit();
                     tacRequest = new TACRequest();
                     tacRequest.setDeviceId(new DeviceInfo(activity).getAndroidId());
