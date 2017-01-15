@@ -273,12 +273,12 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
 
                 s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                 s2sMapEntry.Key = "OtherCellNumber";
-                s2sMapEntry.Value = "";
+                s2sMapEntry.Value = topUpInfo.getCellNumber().substring(1, topUpInfo.getCellNumber().length());
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
                 s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                 s2sMapEntry.Key = "ChargeType";
-                s2sMapEntry.Value = "";
+                s2sMapEntry.Value = topUpInfo.getChargeType();
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
 
@@ -290,7 +290,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
 
                 s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                 s2sMapEntry.Key = "SenderTerminalId";
-                s2sMapEntry.Value = topUpInfo.getPspInfo().getSenderTerminalId();
+                s2sMapEntry.Value = topUpInfo.getPspInfo().getTerminalId();
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
                 s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
@@ -325,7 +325,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
 
                 s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                 s2sMapEntry.Key = "MNPOperatorId";
-                s2sMapEntry.Value = "";
+                s2sMapEntry.Value = topUpInfo.getOperator().getId();
                 vectorstring2stringMapEntry.add(s2sMapEntry);
 
                 s2sMapEntry = new HHBArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
@@ -362,6 +362,8 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
                 cvvLayout.setBackgroundResource(R.drawable.card_info_empty_placeholder);
                 pinCodeFocus = true;
                 cvvFocus = false;
+                pinText.setText("");
+                userPinCode = "";
                 break;
 
             case R.id.cvv_text:
@@ -369,6 +371,8 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
                 cvvLayout.setBackgroundResource(R.drawable.card_info_entry_placeholder);
                 pinCodeFocus = false;
                 cvvFocus = true;
+                cvvText.setText("");
+                userCVV2 = "";
                 break;
         }
     }
@@ -626,7 +630,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
                 }
 
                 if (responseCode != null) {
-                    if (responseCode.equalsIgnoreCase("1")) {
+                    if (responseCode.equalsIgnoreCase("2000")) {
                         serviceName = ServiceEvent.PSP_PAYMENT_SUCCESS;
                         if (topUpInfo != null) {
                             Intent intent = new Intent(context, PaymentCompletedActivity.class);
