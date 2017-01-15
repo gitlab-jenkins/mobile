@@ -710,7 +710,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                     pspResultRequest.setResultType(PSPResultRequest.ResultType.PURCHASE);
                     pspResultRequest.setCardDTO(purchaseInfo.getCardList().get(selectedCardIdIndex));
                     pspResultRequest.setPspName(PSPName.SAMAN);
-                    requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(SWTraceNum));
+                    requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(purchaseInfo.getProductCode()));
                     requestPSPResult.execute(pspResultRequest);
 
                 } else {
@@ -738,10 +738,10 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
 
     public class RequestPSPResultTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> {
 
-        private String SWTrace;
+        private String productCode;
 
-        public RequestPSPResultTaskCompleteListener(String SWTrace) {
-            this.SWTrace = SWTrace;
+        public RequestPSPResultTaskCompleteListener(String productCode) {
+            this.productCode = productCode;
         }
 
 
@@ -755,8 +755,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
             if (pspResultResponseMessage != null) {
                 if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     serviceName = ServiceEvent.PSP_RESULT_SUCCESS;
-                    if (SWTrace != null) {
-                        dbHelper.syncPspResult(SWTrace);
+                    if (productCode != null) {
+                        dbHelper.syncPspResult(productCode);
                     }
                 } else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     serviceName = ServiceEvent.PSP_RESULT_FAILURE;

@@ -4,6 +4,28 @@ package xyz.homapay.hampay.mobile.android.util;
 import xyz.homapay.hampay.mobile.android.webservice.ConnectionType;
 
 public class Constants {
+    //    public static String SERVER = "176.58.104.158";//England Server
+//    public static String SERVER = "mobile.hampay.ir";//Prod Server
+//        public static String SERVER = "sit.hampay.ir";//SIT/27 Server
+//    public static String SERVER = "139.162.147.189";//DEV2 Server
+//    public static String SERVER = "sit.hampay.ir";//SIT/27 Server
+        public static String SERVER = "uat.hampay.ir";//UAT Server
+//    public static String SERVER = "uat.hampay.ir";//UAT Server
+    public static final String PSP_SOAP_SERVICE_URL = SERVER;
+    //    public static String SERVER = "mobile.hampay.homapay.com";//LIVE Server
+    public static String URL_PREFIX = "/hampay";
+    public static final String HTTP_OPENAM_LOGIN_URL = "http://" + SERVER + URL_PREFIX + "/auth";
+    public static final String HTTP_OPENAM_LOGOUT_URL = "http://" + SERVER + URL_PREFIX + "/unauth";
+    public static String HTTP_SERVER_IP = "http://" + SERVER + ":90" + URL_PREFIX;//England Server
+    public static String IPG_URL = "http://" + SERVER + ":9091" + URL_PREFIX;//England Server
+    public static String BANK_GATEWAY_URL = "https://sep.shaparak.ir/PgMobileAddData";
+    public static String BILLS_IPG_URL = "https://sep.shaparak.ir/pgmobileadddata/batchbill";
+    public static String TOP_UP_IPG_URL = "https://sep.shaparak.ir/PgMobileAddData/Charge";
+    public static String TOKEN_PAYMENT = "https://mobile.hampay.com/saman/psp/pay";
+    public static ConnectionType CONNECTION_TYPE = ConnectionType.HTTPS;
+    public static String HTTPS_SERVER_IP = "https://" + SERVER + URL_PREFIX;//England Server
+    public static final String HTTPS_OPENAM_LOGIN_URL = HTTPS_SERVER_IP + "/auth";
+    public static final String HTTPS_OPENAM_LOGOUT_URL = HTTPS_SERVER_IP + "/unauth";
     public static final String IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch";
     public static final String LOGIN_API_LEVEL = "loginApiLevel";
     public static final String PROJECT_NUMBER = "936219454834";
@@ -116,28 +138,6 @@ public class Constants {
     public static final int CAMERA = 3;
     public static final String CHARGE_TYPE = "charge_type";
     public static final int READ_EXTERNAL_STORAGE = 4;
-    //    public static String SERVER = "176.58.104.158";//England Server
-    public static String SERVER = "mobile.hampay.ir";//Prod Server
-//    public static String SERVER = "sit.hampay.ir";//SIT/27 Server
-//    public static String SERVER = "139.162.147.189";//DEV2 Server
-//    public static String SERVER = "sit.hampay.ir";//SIT/27 Server
-    //    public static String SERVER = "uat.hampay.ir";//UAT Server
-//    public static String SERVER = "uat.hampay.ir";//UAT Server
-    public static final String PSP_SOAP_SERVICE_URL = SERVER;
-    //    public static String SERVER = "mobile.hampay.homapay.com";//LIVE Server
-    public static String URL_PREFIX = "/hampay";
-    public static final String HTTP_OPENAM_LOGIN_URL = "http://" + SERVER + URL_PREFIX + "/auth";
-    public static final String HTTP_OPENAM_LOGOUT_URL = "http://" + SERVER + URL_PREFIX + "/unauth";
-    public static String HTTP_SERVER_IP = "http://" + SERVER + ":90" + URL_PREFIX;//England Server
-    public static String IPG_URL = "http://" + SERVER + ":9091" + URL_PREFIX;//England Server
-    public static String BANK_GATEWAY_URL = "https://sep.shaparak.ir/PgMobileAddData";
-    public static String BILLS_IPG_URL = "https://sep.shaparak.ir/pgmobileadddata/batchbill";
-    public static String TOP_UP_IPG_URL = "https://sep.shaparak.ir/PgMobileAddData/Charge";
-    public static String TOKEN_PAYMENT = "https://mobile.hampay.com/saman/psp/pay";
-    public static ConnectionType CONNECTION_TYPE = ConnectionType.HTTPS;
-    public static String HTTPS_SERVER_IP = "https://" + SERVER + URL_PREFIX;//England Server
-    public static final String HTTPS_OPENAM_LOGIN_URL = HTTPS_SERVER_IP + "/auth";
-    public static final String HTTPS_OPENAM_LOGOUT_URL = HTTPS_SERVER_IP + "/unauth";
 
     public static final class NETWORK {
         public final static String PING_TEST_URL = "www.google.com";

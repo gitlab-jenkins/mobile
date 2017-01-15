@@ -565,10 +565,10 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
 
         ServiceEvent serviceName;
         LogEvent logEvent = new LogEvent(context);
-        private String SWTrace;
+        private String productCode;
 
-        public RequestPSPResultTaskCompleteListener(String SWTrace) {
-            this.SWTrace = SWTrace;
+        public RequestPSPResultTaskCompleteListener(String productCode) {
+            this.productCode = productCode;
         }
 
         @Override
@@ -579,8 +579,8 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
             if (pspResultResponseMessage != null) {
                 if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     serviceName = ServiceEvent.PSP_RESULT_SUCCESS;
-                    if (SWTrace != null) {
-                        dbHelper.syncPspResult(SWTrace);
+                    if (productCode != null) {
+                        dbHelper.syncPspResult(productCode);
                     }
                 } else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     serviceName = ServiceEvent.PSP_RESULT_FAILURE;
@@ -663,7 +663,7 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                     pspResultRequest.setResultType(PSPResultRequest.ResultType.UTILITY_BILL);
                     pspResultRequest.setCardDTO(billsInfo.getCardList().get(selectedCardIdIndex));
                     pspResultRequest.setPspName(PSPName.SAMAN);
-                    requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(SWTraceNum));
+                    requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(billsInfo.getProductCode()));
                     requestPSPResult.execute(pspResultRequest);
 
                 } else {
