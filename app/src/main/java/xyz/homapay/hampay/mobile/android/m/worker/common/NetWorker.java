@@ -23,7 +23,7 @@ public class NetWorker<T> {
     public NetWorker(final ModelLayer modelLayer, final Class<T> tClass, KeyAgreementModel keyAgreementModel, boolean encryption, boolean gZip) {
         this.modelLayer = modelLayer;
         retrofit = new Retrofit.Builder()
-                .baseUrl(modelLayer.getBaseUrl())
+                .baseUrl(modelLayer.getBaseUrl() + "/")
                 .addConverterFactory(GsonConverterFactory.create(new DateGsonBuilder().getDatebuilder().create()))
                 .client(TrustedOkHttpClient.getTrustedOkHttpClient(modelLayer, keyAgreementModel, encryption, gZip))
                 .build();

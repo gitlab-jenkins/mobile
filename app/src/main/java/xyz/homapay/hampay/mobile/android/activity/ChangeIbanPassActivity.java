@@ -93,7 +93,6 @@ public class ChangeIbanPassActivity extends AppCompatActivity implements View.On
         }
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

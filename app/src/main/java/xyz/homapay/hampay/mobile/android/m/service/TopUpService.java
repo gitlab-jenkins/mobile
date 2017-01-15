@@ -14,12 +14,12 @@ import xyz.homapay.hampay.common.core.model.response.TopUpResponse;
 
 public interface TopUpService {
 
-    @POST("/hampay/topup/info")
+    @POST("topup/info")
     Call<ResponseMessage<TopUpInfoResponse>> topUpInfo(@Body RequestBody body);
 
-    @POST("/hampay/topup/request")
+    @POST("topup/request")
     Call<ResponseMessage<TopUpResponse>> topUpCreate(@Body RequestBody body);
 
-    @POST("/hampay/topup/detail")
+    @POST("topup/detail")
     Call<ResponseMessage<TopUpResponse>> topUpGetDetail(@Body RequestBody body);
 }

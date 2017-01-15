@@ -6,7 +6,6 @@ import android.util.Log;
 
 import java.io.File;
 
-import xyz.homapay.hampay.mobile.android.m.common.Const;
 import xyz.homapay.hampay.mobile.android.m.common.ModelLayer;
 import xyz.homapay.hampay.mobile.android.ssl.SSLKeyStore;
 
@@ -41,7 +40,7 @@ public class ModelLayerImpl implements ModelLayer {
     @Nullable
     @Override
     public String getBaseUrl() {
-        return Const.BASE_URL;
+        return Constants.HTTPS_SERVER_IP;
     }
 
     @Override

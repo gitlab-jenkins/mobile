@@ -13,7 +13,7 @@ import xyz.homapay.hampay.common.core.model.response.RegistrationEntryResponse;
 
 public interface AuthService {
 
-    @POST("/hampay/users/reg-entry")
+    @POST("users/reg-entry")
     Call<ResponseMessage<RegistrationEntryResponse>> register(@Body RequestBody body);
 
 }

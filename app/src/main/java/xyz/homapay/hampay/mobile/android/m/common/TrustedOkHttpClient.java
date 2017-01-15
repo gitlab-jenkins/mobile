@@ -119,6 +119,10 @@ public class TrustedOkHttpClient {
         };
     }
 
+    private static Interceptor provideLogInterceptor() {
+        return chain -> new HttpLoggerLayer(HttpLoggerLayer.Level.BODY).proceedAndLog(chain, chain.request());
+    }
+
     public static OkHttpClient getTrustedOkHttpClient(ModelLayer modelLayer, KeyAgreementModel keyAgreementModel, boolean encryption, boolean gZip) {
         try {
             // Create a trust manager that does not validate certificate chains
@@ -140,6 +144,7 @@ public class TrustedOkHttpClient {
                     .readTimeout(60, TimeUnit.SECONDS)
                     .retryOnConnectionFailure(true)
                     .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustedCerts[0])
+                    .addNetworkInterceptor(provideLogInterceptor())
                     .addInterceptor(provideConnectivityInterceptor(modelLayer))
                     .cache(CacheProvider.getInstance(modelLayer).provideCache());
 
