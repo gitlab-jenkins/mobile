@@ -12,6 +12,8 @@ public class SyncPspResult {
     private String type;
     private long timestamp;
     private int status;
+    private String cardId;
+    private String pspName;
 
     public int getId() {
         return id;
@@ -67,5 +69,21 @@ public class SyncPspResult {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getCardId() {
+        return cardId;
+    }
+
+    public void setCardId(String cardId) {
+        this.cardId = cardId;
+    }
+
+    public String getPspName() {
+        return pspName;
+    }
+
+    public void setPspName(String pspName) {
+        this.pspName = pspName;
     }
 }

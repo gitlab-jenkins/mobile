@@ -560,6 +560,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         @Override
         public void onTaskComplete(ResponseMessage<LoginResponse> loginResponseResponseMessage) {
             hamPayDialog.dismisWaitingDialog();
+            serviceName = ServiceEvent.LOGIN_FAILURE;
             if (loginResponseResponseMessage != null) {
                 if (loginResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     serviceName = ServiceEvent.LOGIN_SUCCESS;

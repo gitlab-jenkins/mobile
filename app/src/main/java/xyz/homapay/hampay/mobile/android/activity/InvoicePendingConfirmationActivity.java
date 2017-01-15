@@ -19,6 +19,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import java.io.Serializable;
 
 import br.com.goncalves.pugnotification.notification.PugNotification;
+import xyz.homapay.hampay.common.common.PSPName;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.enums.FundType;
@@ -611,12 +612,16 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
                     syncPspResult.setSwTrace(SWTraceNum);
                     syncPspResult.setTimestamp(System.currentTimeMillis());
                     syncPspResult.setStatus(0);
+                    syncPspResult.setPspName(PSPName.SAMAN.getCode());
+                    syncPspResult.setCardId(paymentInfoDTO.getCardList().get(selectedCardIdIndex).getCardId());
                     dbHelper.createSyncPspResult(syncPspResult);
 
                     pspResultRequest.setPspResponseCode(responseCode);
                     pspResultRequest.setProductCode(paymentInfoDTO.getProductCode());
                     pspResultRequest.setTrackingCode(SWTraceNum);
                     pspResultRequest.setResultType(PSPResultRequest.ResultType.PAYMENT);
+                    pspResultRequest.setCardDTO(paymentInfoDTO.getCardList().get(selectedCardIdIndex));
+                    pspResultRequest.setPspName(PSPName.SAMAN);
                     requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(SWTraceNum));
                     requestPSPResult.execute(pspResultRequest);
 

@@ -20,6 +20,7 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import java.io.Serializable;
 
 import br.com.goncalves.pugnotification.notification.PugNotification;
+import xyz.homapay.hampay.common.common.PSPName;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.enums.FundType;
@@ -98,7 +99,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
     private FacedTextView bankName;
     private RequestLatestPurchase requestLatestPurchase;
     private LatestPurchaseRequest latestPurchaseRequest;
-    private PurchaseInfoDTO purchaseInfoDTO = null;
+    private PurchaseInfoDTO purchaseInfo = null;
     private PspInfoDTO pspInfoDTO = null;
     private String purchaseCode = null;
     private String providerId = null;
@@ -239,7 +240,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
             public void onClick(View v) {
                 CardNumberDialog cardNumberDialog = new CardNumberDialog();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(Constants.CARD_LIST, (Serializable) purchaseInfoDTO.getCardList());
+                bundle.putSerializable(Constants.CARD_LIST, (Serializable) purchaseInfo.getCardList());
                 cardNumberDialog.setArguments(bundle);
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.add(cardNumberDialog, null);
@@ -249,14 +250,14 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
 
         Intent intent = getIntent();
 
-        purchaseInfoDTO = (PurchaseInfoDTO) intent.getSerializableExtra(Constants.PURCHASE_INFO);
+        purchaseInfo = (PurchaseInfoDTO) intent.getSerializableExtra(Constants.PURCHASE_INFO);
         pspInfoDTO = (PspInfoDTO) intent.getSerializableExtra(Constants.PSP_INFO);
         purchaseCode = intent.getStringExtra(Constants.BUSINESS_PURCHASE_CODE);
         providerId = intent.getStringExtra(Constants.PROVIDER_ID);
 
 
-        if (purchaseInfoDTO != null) {
-            fillPurchase(purchaseInfoDTO);
+        if (purchaseInfo != null) {
+            fillPurchase(purchaseInfo);
         } else if (purchaseCode != null) {
             editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
             editor.commit();
@@ -284,10 +285,10 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
 
                 if (pspInfoDTO == null) return;
 
-                if (selectedCardIdIndex == -1 || (purchaseInfoDTO.getCardList().get(selectedCardIdIndex) != null && purchaseInfoDTO.getCardList().get(selectedCardIdIndex).getCardId() == null) || (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() >= Constants.SOAP_AMOUNT_MAX)) {
+                if (selectedCardIdIndex == -1 || (purchaseInfo.getCardList().get(selectedCardIdIndex) != null && purchaseInfo.getCardList().get(selectedCardIdIndex).getCardId() == null) || (purchaseInfo.getAmount() + purchaseInfo.getFeeCharge() + purchaseInfo.getVat() >= Constants.SOAP_AMOUNT_MAX)) {
                     Intent intent = new Intent();
                     intent.setClass(activity, BankWebPaymentActivity.class);
-                    intent.putExtra(Constants.PURCHASE_INFO, purchaseInfoDTO);
+                    intent.putExtra(Constants.PURCHASE_INFO, purchaseInfo);
                     intent.putExtra(Constants.PSP_INFO, pspInfoDTO);
                     startActivityForResult(intent, 45);
                 } else {
@@ -304,7 +305,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                     }
                     editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                     editor.commit();
-                    requestPurchase = new RequestPurchase(activity, new RequestPurchaseTaskCompleteListener(), purchaseInfoDTO.getPspInfo().getPayURL());
+                    requestPurchase = new RequestPurchase(activity, new RequestPurchaseTaskCompleteListener(), purchaseInfo.getPspInfo().getPayURL());
 
                     DoWorkInfo doWorkInfo = new DoWorkInfo();
                     doWorkInfo.setUserName("appstore");
@@ -316,7 +317,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                     CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
 
                     s2sMapEntry.Key = "Amount";
-                    s2sMapEntry.Value = String.valueOf(purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat());
+                    s2sMapEntry.Value = String.valueOf(purchaseInfo.getAmount() + purchaseInfo.getFeeCharge() + purchaseInfo.getVat());
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
@@ -326,7 +327,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
 
                     s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "ThirdParty";
-                    s2sMapEntry.Value = purchaseInfoDTO.getProductCode();
+                    s2sMapEntry.Value = purchaseInfo.getProductCode();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
@@ -336,7 +337,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
 
                     s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "CardId";
-                    s2sMapEntry.Value = purchaseInfoDTO.getCardList().get(selectedCardIdIndex).getCardId();
+                    s2sMapEntry.Value = purchaseInfo.getCardList().get(selectedCardIdIndex).getCardId();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
@@ -361,12 +362,12 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
 
                     s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "ExpDate";
-                    s2sMapEntry.Value = purchaseInfoDTO.getCardList().get(selectedCardIdIndex).getExpireDate();
+                    s2sMapEntry.Value = purchaseInfo.getCardList().get(selectedCardIdIndex).getExpireDate();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
                     s2sMapEntry.Key = "ResNum";
-                    s2sMapEntry.Value = purchaseInfoDTO.getProductCode();
+                    s2sMapEntry.Value = purchaseInfo.getProductCode();
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
@@ -430,18 +431,18 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                 userPinCode = "";
                 pinText.setText("");
                 cvvText.setText("");
-                if (purchaseInfoDTO != null) {
+                if (purchaseInfo != null) {
                     selectedCardIdIndex = position;
-                    cardNumberValue.setText(persian.E2P(purchaseInfoDTO.getCardList().get(position).getLast4Digits()));
-                    bankName.setText(purchaseInfoDTO.getCardList().get(position).getBankName());
+                    cardNumberValue.setText(persian.E2P(purchaseInfo.getCardList().get(position).getLast4Digits()));
+                    bankName.setText(purchaseInfo.getCardList().get(position).getBankName());
                     selectCardText.setVisibility(View.GONE);
                     cardSelect.setVisibility(View.VISIBLE);
-                    if (purchaseInfoDTO.getCardList().get(position).getDigitalSignature() != null && purchaseInfoDTO.getCardList().get(position).getDigitalSignature().length() > 0) {
-                        signature = purchaseInfoDTO.getCardList().get(position).getDigitalSignature();
+                    if (purchaseInfo.getCardList().get(position).getDigitalSignature() != null && purchaseInfo.getCardList().get(position).getDigitalSignature().length() > 0) {
+                        signature = purchaseInfo.getCardList().get(position).getDigitalSignature();
                     } else {
                         SignToPayRequest signToPayRequest = new SignToPayRequest();
-                        signToPayRequest.setCardId(purchaseInfoDTO.getCardList().get(position).getCardId());
-                        signToPayRequest.setProductCode(purchaseInfoDTO.getProductCode());
+                        signToPayRequest.setCardId(purchaseInfo.getCardList().get(position).getCardId());
+                        signToPayRequest.setProductCode(purchaseInfo.getProductCode());
                         signToPayRequest.setFundType(FundType.PURCHASE);
                         new SignToPayTask(activity, RequestBusinessPayDetailActivity.this, signToPayRequest, authToken).execute();
                     }
@@ -451,7 +452,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
             case ADD:
                 Intent intent = new Intent();
                 intent.setClass(activity, BankWebPaymentActivity.class);
-                intent.putExtra(Constants.PURCHASE_INFO, purchaseInfoDTO);
+                intent.putExtra(Constants.PURCHASE_INFO, purchaseInfo);
                 intent.putExtra(Constants.PSP_INFO, pspInfoDTO);
                 startActivityForResult(intent, 45);
                 break;
@@ -561,14 +562,14 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                 purchase_payer_cell_layout.setVisibility(View.GONE);
                 pay_to_business_button.setVisibility(View.VISIBLE);
                 if (purchaseInfo.getCardList().size() > 0) {
-                    if (purchaseInfo.getCardList().get(0).getCardId() != null && (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat() < Constants.SOAP_AMOUNT_MAX)) {
+                    if (purchaseInfo.getCardList().get(0).getCardId() != null && (this.purchaseInfo.getAmount() + this.purchaseInfo.getFeeCharge() + this.purchaseInfo.getVat() < Constants.SOAP_AMOUNT_MAX)) {
                         cardNumberValue.setText(persian.E2P(purchaseInfo.getCardList().get(0).getLast4Digits()));
                         bankName.setText(purchaseInfo.getCardList().get(0).getBankName());
                         selectedCardIdIndex = 0;
                         selectCardText.setVisibility(View.GONE);
                         cardSelect.setVisibility(View.VISIBLE);
-                        if (purchaseInfoDTO.getCardList().get(0).getDigitalSignature() != null && purchaseInfoDTO.getCardList().get(0).getDigitalSignature().length() > 0) {
-                            signature = purchaseInfoDTO.getCardList().get(0).getDigitalSignature();
+                        if (this.purchaseInfo.getCardList().get(0).getDigitalSignature() != null && this.purchaseInfo.getCardList().get(0).getDigitalSignature().length() > 0) {
+                            signature = this.purchaseInfo.getCardList().get(0).getDigitalSignature();
                         }
                     }
                 }
@@ -673,11 +674,11 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                     if (responseCode.equalsIgnoreCase("2000")) {
                         serviceName = ServiceEvent.PSP_PAYMENT_SUCCESS;
                         logEvent.log(serviceName);
-                        if (purchaseInfoDTO != null) {
+                        if (purchaseInfo != null) {
                             Intent intent = new Intent(context, PaymentCompletedActivity.class);
                             SucceedPayment succeedPayment = new SucceedPayment();
-                            succeedPayment.setAmount(purchaseInfoDTO.getAmount() + purchaseInfoDTO.getVat() + purchaseInfoDTO.getFeeCharge());
-                            succeedPayment.setCode(purchaseInfoDTO.getPurchaseCode());
+                            succeedPayment.setAmount(purchaseInfo.getAmount() + purchaseInfo.getVat() + purchaseInfo.getFeeCharge());
+                            succeedPayment.setCode(purchaseInfo.getPurchaseCode());
                             succeedPayment.setTrace(pspInfoDTO.getProviderId());
                             succeedPayment.setPaymentType(PaymentType.PURCHASE);
                             intent.putExtra(Constants.SUCCEED_PAYMENT_INFO, succeedPayment);
@@ -694,17 +695,21 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
 
                     SyncPspResult syncPspResult = new SyncPspResult();
                     syncPspResult.setResponseCode(responseCode);
-                    syncPspResult.setProductCode(purchaseInfoDTO.getProductCode());
+                    syncPspResult.setProductCode(purchaseInfo.getProductCode());
                     syncPspResult.setType("PURCHASE");
                     syncPspResult.setSwTrace(SWTraceNum);
                     syncPspResult.setTimestamp(System.currentTimeMillis());
                     syncPspResult.setStatus(0);
+                    syncPspResult.setPspName(PSPName.SAMAN.getCode());
+                    syncPspResult.setCardId(purchaseInfo.getCardList().get(selectedCardIdIndex).getCardId());
                     dbHelper.createSyncPspResult(syncPspResult);
 
                     pspResultRequest.setPspResponseCode(responseCode);
-                    pspResultRequest.setProductCode(purchaseInfoDTO.getProductCode());
+                    pspResultRequest.setProductCode(purchaseInfo.getProductCode());
                     pspResultRequest.setTrackingCode(SWTraceNum);
                     pspResultRequest.setResultType(PSPResultRequest.ResultType.PURCHASE);
+                    pspResultRequest.setCardDTO(purchaseInfo.getCardList().get(selectedCardIdIndex));
+                    pspResultRequest.setPspName(PSPName.SAMAN);
                     requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(SWTraceNum));
                     requestPSPResult.execute(pspResultRequest);
 
@@ -783,11 +788,11 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
             if (latestPurchaseResponseMessage != null) {
                 if (latestPurchaseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     serviceName = ServiceEvent.GET_LATEST_PURCHASE_SUCCESS;
-                    purchaseInfoDTO = latestPurchaseResponseMessage.getService().getPurchaseInfo();
+                    purchaseInfo = latestPurchaseResponseMessage.getService().getPurchaseInfo();
 
-                    dbHelper.createViewedPurchaseRequest(purchaseInfoDTO.getProductCode());
+                    dbHelper.createViewedPurchaseRequest(purchaseInfo.getProductCode());
 
-                    if (purchaseInfoDTO == null) {
+                    if (purchaseInfo == null) {
                         new HamPayDialog(activity).showFailPendingPurchaseDialog(requestLatestPurchase, latestPurchaseRequest,
                                 Constants.LOCAL_ERROR_CODE,
                                 getString(R.string.msg_pending_not_found));
@@ -796,9 +801,9 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
 
                     pspInfoDTO = latestPurchaseResponseMessage.getService().getPurchaseInfo().getPspInfo();
 
-                    if (purchaseInfoDTO != null) {
+                    if (purchaseInfo != null) {
 
-                        fillPurchase(purchaseInfoDTO);
+                        fillPurchase(purchaseInfo);
 
                     } else {
                         Toast.makeText(context, getString(R.string.msg_not_found_pending_payment_code), Toast.LENGTH_LONG).show();
@@ -844,11 +849,11 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
             if (purchaseInfoResponseMessage != null) {
                 if (purchaseInfoResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     serviceName = ServiceEvent.PURCHASE_INFO_SUCCESS;
-                    purchaseInfoDTO = purchaseInfoResponseMessage.getService().getPurchaseInfo();
+                    purchaseInfo = purchaseInfoResponseMessage.getService().getPurchaseInfo();
                     pspInfoDTO = purchaseInfoResponseMessage.getService().getPurchaseInfo().getPspInfo();
 
-                    if (purchaseInfoDTO != null) {
-                        fillPurchase(purchaseInfoDTO);
+                    if (purchaseInfo != null) {
+                        fillPurchase(purchaseInfo);
                     } else {
                         Toast.makeText(context, getString(R.string.msg_not_found_pending_payment_code), Toast.LENGTH_LONG).show();
                         finish();
@@ -896,8 +901,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
 
                 if (purchaseDetailResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     serviceName = ServiceEvent.PURCHASE_DETAIL_SUCCESS;
-                    purchaseInfoDTO = purchaseDetailResponseMessage.getService().getpurchaseInfo();
-                    fillPurchase(purchaseInfoDTO);
+                    purchaseInfo = purchaseDetailResponseMessage.getService().getpurchaseInfo();
+                    fillPurchase(purchaseInfo);
                 } else if (purchaseDetailResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     serviceName = ServiceEvent.PURCHASE_DETAIL_FAILURE;
                     forceLogout();
