@@ -171,7 +171,8 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
                 return false;
             }
         });
-
+        bankName = (FacedTextView) findViewById(R.id.bank_name);
+        bankLogo = (ImageView) findViewById(R.id.bank_logo);
         ibanVerifyButton = (FacedTextView) findViewById(R.id.iban_verify_button);
         ibanVerifyButton.setOnClickListener(v -> {
 
@@ -186,6 +187,11 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
 
             if (userFamily.length() <= 1) {
                 Toast.makeText(activity, getString(R.string.iban_empty_family), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (ibanValue.length() != 24){
+                Toast.makeText(activity, getString(R.string.iban_value_empty), Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -226,8 +232,6 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
                                 ibanVerifyButton.setVisibility(View.VISIBLE);
                                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                                 editor.commit();
-                                bankName = (FacedTextView) findViewById(R.id.bank_name);
-                                bankLogo = (ImageView) findViewById(R.id.bank_logo);
                                 bankLogo.setVisibility(View.VISIBLE);
                                 bankName.setVisibility(View.VISIBLE);
                                 new Collapse(keyboard).animate();
@@ -284,6 +288,9 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
     }
 
     public void pressKey(View view) {
+        ibanVerifyButton.setVisibility(View.GONE);
+        bankLogo.setVisibility(View.GONE);
+        bankName.setVisibility(View.GONE);
         if (view.getTag().toString().equals("*")) {
             new Collapse(keyboard).animate();
         } else if (view.getTag().toString().equals("|")) {
@@ -421,6 +428,9 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
                 break;
         }
         if (ibanValue.length() == 24) {
+            ibanVerifyButton.setVisibility(View.GONE);
+            bankLogo.setVisibility(View.GONE);
+            bankName.setVisibility(View.GONE);
             segmentRelativeLayouts[6].setBackgroundResource(R.drawable.iban_entry_placeholder);
             new Collapse(keyboard).animate();
             IBANConfirmationRequest ibanConfirmationRequest = new IBANConfirmationRequest();

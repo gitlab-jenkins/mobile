@@ -22,6 +22,7 @@ import java.io.Serializable;
 import br.com.goncalves.pugnotification.notification.PugNotification;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
+import xyz.homapay.hampay.common.core.model.enums.FundType;
 import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
 import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
 import xyz.homapay.hampay.common.core.model.request.PurchaseDetailRequest;
@@ -442,6 +443,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                         signToPayRequest.setCardId(purchaseInfoDTO.getCardList().get(position).getCardId());
                         signToPayRequest.setProductCode(purchaseInfoDTO.getProductCode());
                         signToPayRequest.setProductCode(purchaseInfoDTO.getProductCode());
+                        signToPayRequest.setFundType(FundType.PURCHASE);
                         new SignToPayTask(activity, RequestBusinessPayDetailActivity.this, signToPayRequest, authToken).execute();
                     }
                 }
@@ -703,7 +705,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                     pspResultRequest.setPspResponseCode(responseCode);
                     pspResultRequest.setProductCode(purchaseInfoDTO.getProductCode());
                     pspResultRequest.setTrackingCode(SWTraceNum);
-                    requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(SWTraceNum), 1);
+                    pspResultRequest.setResultType(PSPResultRequest.ResultType.PURCHASE);
+                    requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(SWTraceNum));
                     requestPSPResult.execute(pspResultRequest);
 
                 } else {

@@ -134,6 +134,7 @@
     <string name="iban_question_part2_text">متعلق به %1$s نزد %2$s می‌باشد.</string>
     <string name="iban_empty_name">برای نام می‌بایستی حداقل ۲ حرف را وارد کنید.</string>
     <string name="iban_empty_family">برای نام‌خانوادگی می‌بایستی حداقل ۲ حرف را وارد کنید.</string>
+    <string name="iban_value_empty">شماره شبای خود را کامل وارد نمائید.</string>
     <string name="sheba_confirm">تایید</string>
     <string name="sheba_cancel">انصراف</string>
     <string name="currency_rials">ريال</string>

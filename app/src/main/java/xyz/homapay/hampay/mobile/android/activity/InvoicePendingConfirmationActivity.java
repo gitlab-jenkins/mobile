@@ -21,6 +21,7 @@ import java.io.Serializable;
 import br.com.goncalves.pugnotification.notification.PugNotification;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
+import xyz.homapay.hampay.common.core.model.enums.FundType;
 import xyz.homapay.hampay.common.core.model.request.LatestPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
 import xyz.homapay.hampay.common.core.model.request.PaymentDetailRequest;
@@ -418,6 +419,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
                         SignToPayRequest signToPayRequest = new SignToPayRequest();
                         signToPayRequest.setCardId(paymentInfoDTO.getCardList().get(position).getCardId());
                         signToPayRequest.setProductCode(paymentInfoDTO.getProductCode());
+                        signToPayRequest.setFundType(FundType.PAYMENT);
                         new SignToPayTask(activity, InvoicePendingConfirmationActivity.this, signToPayRequest, authToken).execute();
                     }
                 }
@@ -614,7 +616,8 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
                     pspResultRequest.setPspResponseCode(responseCode);
                     pspResultRequest.setProductCode(paymentInfoDTO.getProductCode());
                     pspResultRequest.setTrackingCode(SWTraceNum);
-                    requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(SWTraceNum), 2);
+                    pspResultRequest.setResultType(PSPResultRequest.ResultType.PAYMENT);
+                    requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(SWTraceNum));
                     requestPSPResult.execute(pspResultRequest);
 
                 } else {
