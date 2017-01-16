@@ -584,7 +584,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
                 }
 
                 if (responseCode != null) {
-                    if (responseCode.equalsIgnoreCase("1")) {
+                    if (responseCode.equalsIgnoreCase("2000")) {
                         serviceName = ServiceEvent.PSP_PAYMENT_SUCCESS;
                         if (paymentInfoDTO != null) {
                             Intent intent = new Intent(context, PaymentCompletedActivity.class);
@@ -600,7 +600,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
                     } else {
                         serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
                         PspCode pspCode = new PspCode(context);
-                        new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(SWTraceNum));
+                        new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(responseCode));
                         resultStatus = ResultStatus.FAILURE;
                     }
                     logEvent.log(serviceName);

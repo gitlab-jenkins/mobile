@@ -625,7 +625,7 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                 }
 
                 if (responseCode != null) {
-                    if (responseCode.equalsIgnoreCase("1")) {
+                    if (responseCode.equalsIgnoreCase("1") && SWTraceNum != null) {
                         serviceName = ServiceEvent.PSP_PAYMENT_SUCCESS;
                         if (billsInfo != null) {
                             Intent intent = new Intent(context, PaymentCompletedActivity.class);
@@ -635,13 +635,13 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                             succeedPayment.setTrace(billsInfo.getPspInfo().getProviderId());
                             succeedPayment.setPaymentType(PaymentType.BILLS);
                             intent.putExtra(Constants.SUCCEED_PAYMENT_INFO, succeedPayment);
-                            startActivityForResult(intent, 46);
+                            startActivityForResult(intent, 47);
                         }
                         resultStatus = ResultStatus.SUCCESS;
                     } else {
                         serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
                         PspCode pspCode = new PspCode(context);
-                        new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(SWTraceNum));
+                        new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(responseCode));
                         resultStatus = ResultStatus.FAILURE;
                     }
                     logEvent.log(serviceName);

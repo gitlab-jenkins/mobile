@@ -76,7 +76,7 @@
                     <xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText
                         android:id="@+id/ibanUserName"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:background="@android:color/transparent"
                         android:layout_marginRight="4dp"
                         android:textSize="14dp"
@@ -86,7 +86,7 @@
                         android:lines="1"
                         android:maxLines="1"
                         android:maxLength="30"
-                        android:padding="8dp"
+                        android:padding="6dp"
                         android:singleLine="true"
                         android:digits="@string/user_name_restriction"
                         android:imeOptions="actionNext"/>
@@ -103,7 +103,7 @@
                     <xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText
                         android:id="@+id/ibanUserFamily"
                         android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:background="@android:color/transparent"
                         android:layout_marginRight="4dp"
                         android:textSize="14dp"
@@ -113,7 +113,7 @@
                         android:lines="1"
                         android:maxLines="1"
                         android:maxLength="30"
-                        android:padding="8dp"
+                        android:padding="6dp"
                         android:singleLine="true"
                         android:digits=" ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzاآبپتثجچحخدذرزژسشصضطظعغفقکگلمنوهئی"
                         android:imeOptions="actionDone"/>

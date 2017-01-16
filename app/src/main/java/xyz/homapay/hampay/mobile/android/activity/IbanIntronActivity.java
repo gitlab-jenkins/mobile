@@ -288,9 +288,6 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
     }
 
     public void pressKey(View view) {
-        ibanVerifyButton.setVisibility(View.GONE);
-        bankLogo.setVisibility(View.GONE);
-        bankName.setVisibility(View.GONE);
         if (view.getTag().toString().equals("*")) {
             new Collapse(keyboard).animate();
         } else if (view.getTag().toString().equals("|")) {
@@ -307,6 +304,9 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
             ibanUserName.setCursorVisible(false);
             ibanUserFamily.setCursorVisible(false);
         } else {
+            ibanVerifyButton.setVisibility(View.GONE);
+            bankLogo.setVisibility(View.GONE);
+            bankName.setVisibility(View.GONE);
             inputDigit(view.getTag().toString());
         }
     }

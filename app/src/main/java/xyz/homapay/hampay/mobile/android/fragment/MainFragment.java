@@ -338,6 +338,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.billAndTopUp:
+                if (slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                    slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                    return;
+                }
                 intent.setClass(getActivity(), ServiceBillsActivity.class);
                 startActivity(intent);
                 break;

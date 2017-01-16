@@ -672,7 +672,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                 }
 
                 if (responseCode != null) {
-                    if (responseCode.equalsIgnoreCase("1")) {
+                    if (responseCode.equalsIgnoreCase("2000")) {
                         serviceName = ServiceEvent.PSP_PAYMENT_SUCCESS;
                         logEvent.log(serviceName);
                         if (purchaseInfoDTO != null) {
@@ -690,7 +690,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                         serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
                         logEvent.log(serviceName);
                         PspCode pspCode = new PspCode(context);
-                        new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(SWTraceNum));
+                        new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(responseCode));
                         resultStatus = ResultStatus.FAILURE;
                     }
 
