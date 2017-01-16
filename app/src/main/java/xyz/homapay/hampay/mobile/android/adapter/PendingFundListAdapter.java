@@ -110,8 +110,18 @@ public class PendingFundListAdapter extends BaseAdapter {
                 viewHolder.code_digit_6.setText(String.valueOf(fund.getCode().charAt(5)));
             }
         } else if (fund.getPaymentType() == FundDTO.PaymentType.PAYMENT) {
+            viewHolder.code_digit_1.setText("");
+            viewHolder.code_digit_2.setText("");
+            viewHolder.code_digit_3.setText("");
+            viewHolder.code_digit_4.setText("");
+            viewHolder.code_digit_5.setText("");
             viewHolder.code_digit_6.setText(fund.getProductCode());
         }else if (fund.getPaymentType() == FundDTO.PaymentType.UTILITY_BILL){
+            viewHolder.code_digit_1.setText("");
+            viewHolder.code_digit_2.setText("");
+            viewHolder.code_digit_3.setText("");
+            viewHolder.code_digit_4.setText("");
+            viewHolder.code_digit_5.setText("");
             viewHolder.code_digit_6.setText(fund.getProductCode());
         }
 

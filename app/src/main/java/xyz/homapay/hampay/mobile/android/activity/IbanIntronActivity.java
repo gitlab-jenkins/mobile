@@ -304,9 +304,6 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
             ibanUserName.setCursorVisible(false);
             ibanUserFamily.setCursorVisible(false);
         } else {
-            ibanVerifyButton.setVisibility(View.GONE);
-            bankLogo.setVisibility(View.GONE);
-            bankName.setVisibility(View.GONE);
             inputDigit(view.getTag().toString());
         }
     }
@@ -314,6 +311,9 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
     private void inputDigit(String digit) {
         String ibanSegment = "";
         if (digit.endsWith("d")) {
+            ibanVerifyButton.setVisibility(View.GONE);
+            bankLogo.setVisibility(View.GONE);
+            bankName.setVisibility(View.GONE);
         } else {
             if (ibanValue.length() > 23) return;
             ibanValue += digit;
