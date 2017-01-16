@@ -129,7 +129,7 @@
                     <ImageView
                         android:layout_width="52dp"
                         android:layout_height="52dp"
-                        android:src="@drawable/expectation_icon" />
+                        android:src="@drawable/transaction_icon" />
 
                 </RelativeLayout>
 
