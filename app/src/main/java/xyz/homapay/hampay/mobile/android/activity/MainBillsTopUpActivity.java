@@ -51,6 +51,7 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.Dialoger;
 import xyz.homapay.hampay.mobile.android.util.ModelLayerImpl;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
+import xyz.homapay.hampay.mobile.android.util.TelephonyUtils;
 
 public class MainBillsTopUpActivity extends AppCompatActivity implements View.OnClickListener, TopUpInfoView, TopUpCreateView {
 
@@ -260,15 +261,13 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     }
 
     private void showNumber() {
-        String phone = userProfile.getCellNumber().substring(2);
-        cellNumber = phone;
-        cellNumberText.setText(new PersianEnglishDigit().E2P(phone));
+        this.cellNumber = TelephonyUtils.fixPhoneNumber(context, userProfile.getCellNumber());
+        cellNumberText.setText(new PersianEnglishDigit().E2P(this.cellNumber.substring(2)));
     }
 
     private void showNumber(String cellNumber) {
-        String phone = cellNumber.substring(2);
-        this.cellNumber = phone;
-        cellNumberText.setText(new PersianEnglishDigit().E2P(phone));
+        this.cellNumber = TelephonyUtils.fixPhoneNumber(context, cellNumber);
+        cellNumberText.setText(new PersianEnglishDigit().E2P(this.cellNumber.substring(2)));
     }
 
     private void startActivityForGetContactsNumbers() {

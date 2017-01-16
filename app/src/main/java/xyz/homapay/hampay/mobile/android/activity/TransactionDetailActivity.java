@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -65,6 +64,14 @@ public class TransactionDetailActivity extends AppCompatActivity {
     private LinearLayout billsInfo;
     private FacedTextView billsId;
     private FacedTextView payId;
+
+    private FacedTextView tvCellNumber;
+    private FacedTextView tvChargeType;
+
+    private LinearLayout llCellNumber;
+    private LinearLayout llChrageType;
+    private View indicatorChargeType;
+    private View indicatorCellNumber;
 
     public void backActionBar(View view) {
         finish();
@@ -143,7 +150,17 @@ public class TransactionDetailActivity extends AppCompatActivity {
         billsId = (FacedTextView) findViewById(R.id.billsId);
         payId = (FacedTextView) findViewById(R.id.payId);
         pay_button = (LinearLayout) findViewById(R.id.pay_button);
+
+        llCellNumber = (LinearLayout) findViewById(R.id.llCellNumber);
+        llChrageType = (LinearLayout) findViewById(R.id.llChargeType);
+
+        indicatorCellNumber = findViewById(R.id.indicatorCellNumber);
+        indicatorChargeType = findViewById(R.id.indicatorChargeType);
+
         detail_text = (FacedTextView) findViewById(R.id.detail_text);
+
+        tvCellNumber = (FacedTextView) findViewById(R.id.tvCellNumber);
+        tvChargeType = (FacedTextView) findViewById(R.id.tvChargeType);
 
         Intent intent = getIntent();
         transaction = (TransactionDTO) intent.getSerializableExtra(Constants.USER_TRANSACTION_DTO);
@@ -165,8 +182,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
                 status_text.setTextColor(ContextCompat.getColor(context, R.color.user_change_status));
             }
 
-        }
-        else {
+        } else {
             status_text.setText(transaction.getTransactionType().equals(TransactionDTO.TransactionType.CREDIT) ? R.string.fail_credit : R.string.fail_debit);
             status_text.setTextColor(ContextCompat.getColor(context, R.color.failed_transaction));
             detail_text.setText(transaction.getTransactionStatus().getDescription());
@@ -204,16 +220,13 @@ public class TransactionDetailActivity extends AppCompatActivity {
                     if (transaction.getPaymentType() == TransactionDTO.PaymentType.PAYMENT) {
                         if (tnxDetail.getUserStatus() == TnxDetailDTO.UserStatus.ACTIVE) {
                             pay_button.setVisibility(View.VISIBLE);
-                            pay_button.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Intent intent = new Intent();
-                                    intent.setClass(activity, PaymentRequestDetailActivity.class);
-                                    intent.putExtra(Constants.CONTACT_NAME, transaction.getPersonName());
-                                    intent.putExtra(Constants.CONTACT_PHONE_NO, tnxDetail.getCellNumber());
-                                    intent.putExtra(Constants.IMAGE_ID, transaction.getImageId());
-                                    startActivity(intent);
-                                }
+                            pay_button.setOnClickListener(v -> {
+                                Intent intent = new Intent();
+                                intent.setClass(activity, PaymentRequestDetailActivity.class);
+                                intent.putExtra(Constants.CONTACT_NAME, transaction.getPersonName());
+                                intent.putExtra(Constants.CONTACT_PHONE_NO, tnxDetail.getCellNumber());
+                                intent.putExtra(Constants.IMAGE_ID, transaction.getImageId());
+                                startActivity(intent);
                             });
                         }
                         if (tnxDetail.getName() != null) {
@@ -236,12 +249,30 @@ public class TransactionDetailActivity extends AppCompatActivity {
                         payment_request_code.setText(tnxDetail.getCode().substring(0, 3) + " " + tnxDetail.getCode().substring(3, 6));
                         date_time.setText(persian.E2P(new JalaliConvert().GregorianToPersian(tnxDetail.getDate())));
                         moreAmount.setVisibility(View.VISIBLE);
-                    }else if (transaction.getPaymentType() == TransactionDTO.PaymentType.UTILITY_BILL){
+                    } else if (transaction.getPaymentType() == TransactionDTO.PaymentType.UTILITY_BILL) {
                         payment_request_code.setText(persian.E2P(tnxDetail.getCode()));
                         billsInfo.setVisibility(View.VISIBLE);
                         billsId.setText(persian.E2P(tnxDetail.getBillId()));
                         payId.setText(persian.E2P(tnxDetail.getPayId()));
                         date_time.setText(persian.E2P(new JalaliConvert().GregorianToPersian(tnxDetail.getDate())));
+                    } else if (transaction.getPaymentType() == TransactionDTO.PaymentType.TOP_UP) {
+                        String name = transactionDetailResponseMessage.getService().getTransactionDetail().getName();
+                        callee_name.setText(name);
+                        payment_request_code.setText(persian.E2P(tnxDetail.getCode()));
+                        date_time.setText(persian.E2P(new JalaliConvert().GregorianToPersian(tnxDetail.getDate())));
+                        llCellNumber.setVisibility(View.VISIBLE);
+                        llChrageType.setVisibility(View.VISIBLE);
+                        indicatorCellNumber.setVisibility(View.VISIBLE);
+                        indicatorChargeType.setVisibility(View.VISIBLE);
+                        tvCellNumber.setText(persian.E2P(tnxDetail.getCellNumber()));
+                        tvChargeType.setText(transactionDetailResponseMessage.getService().getTransactionDetail().getDescription());
+                    }
+
+                    if (transaction.getPaymentType() != TransactionDTO.PaymentType.TOP_UP){
+                        llCellNumber.setVisibility(View.GONE);
+                        llChrageType.setVisibility(View.GONE);
+                        indicatorCellNumber.setVisibility(View.GONE);
+                        indicatorChargeType.setVisibility(View.GONE);
                     }
 
                     if (transaction.getTransactionType() == TransactionDTO.TransactionType.CREDIT) {

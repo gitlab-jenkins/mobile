@@ -2,18 +2,40 @@ package xyz.homapay.hampay.mobile.android.util;
 
 import android.content.Context;
 
+import xyz.homapay.hampay.common.common.Operator;
+import xyz.homapay.hampay.mobile.android.R;
+
 /**
  * Created by mohammad on 1/7/17.
  */
 
 public class AppManager {
 
-    public static String getAuthToken(final Context ctx) {
+    public static final String getAuthToken(final Context ctx) {
         return AppSettings.getString(ctx, Constants.LOGIN_TOKEN_ID, "");
     }
 
-    public static void setAuthToken(final Context ctx, String authToken) {
+    public static final void setAuthToken(final Context ctx, String authToken) {
         AppSettings.setValue(ctx, Constants.LOGIN_TOKEN_ID, authToken);
+    }
+
+    public static final int getOperatorImageResource(Operator operator) {
+        int resId;
+        switch (operator) {
+            case MCI:
+                resId = R.mipmap.hamrah_active;
+                break;
+            case MTN:
+                resId = R.mipmap.irancell_active;
+                break;
+            case RAYTEL:
+                resId = R.mipmap.rightel_active;
+                break;
+            default:
+                resId = R.mipmap.hamrah_active;
+                break;
+        }
+        return resId;
     }
 
 }
