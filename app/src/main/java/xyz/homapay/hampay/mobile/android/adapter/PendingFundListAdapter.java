@@ -113,6 +113,8 @@ public class PendingFundListAdapter extends BaseAdapter {
             viewHolder.code_digit_6.setText(fund.getProductCode());
         } else if (fund.getPaymentType() == FundDTO.PaymentType.UTILITY_BILL) {
             viewHolder.code_digit_6.setText(fund.getProductCode());
+        }else if (fund.getPaymentType() == FundDTO.PaymentType.TOP_UP){
+            viewHolder.code_digit_6.setText(fund.getProductCode());
         }
 
         if (fund.getExpirationDate().getTime() < currentDate.getTime()) {

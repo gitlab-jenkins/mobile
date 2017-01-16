@@ -253,7 +253,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                             data.getService().getTopUpInfoDTO().setImageId(messageSetOperator.getOperatorName());
                             intent.putExtra(Constants.TOP_UP_INFO, data.getService().getTopUpInfoDTO());
                             intent.putExtra(Constants.CHARGE_TYPE, ChargeType.DIRECT.ordinal());
-                            startActivityForResult(intent1, 48);
+                            startActivityForResult(intent, 48);
                         } else {
                             Dialoger.GENERAL.show(context, getString(R.string.err_general), getString(R.string.err_general_text));
                         }
