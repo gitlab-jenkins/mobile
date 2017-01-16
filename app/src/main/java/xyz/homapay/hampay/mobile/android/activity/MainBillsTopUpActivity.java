@@ -23,6 +23,7 @@ import java.util.List;
 import xyz.homapay.hampay.common.common.ChargePackage;
 import xyz.homapay.hampay.common.common.Operator;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
+import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
 import xyz.homapay.hampay.common.core.model.response.TopUpInfoResponse;
 import xyz.homapay.hampay.common.core.model.response.TopUpResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
@@ -276,11 +277,14 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
 
     private void startActivityForGetContactsNumbers() {
         try {
-            // user BoD suggests using Intent.ACTION_PICK instead of .ACTION_GET_CONTENT to avoid the chooser
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            // BoD con't: CONTENT_TYPE instead of CONTENT_ITEM_TYPE
-            intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
+            Intent intent = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
             startActivityForResult(intent, 1);
+//            Intent intent= new Intent(Intent.ACTION_PICK,  ContactsContract.Contacts.CONTENT_URI);
+//            // user BoD suggests using Intent.ACTION_PICK instead of .ACTION_GET_CONTENT to avoid the chooser
+//            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//            // BoD con't: CONTENT_TYPE instead of CONTENT_ITEM_TYPE
+//            intent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE);
+//            startActivityForResult(intent, 1);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -289,30 +293,33 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (data != null) {
-                Uri uri = data.getData();
+        switch (requestCode) {
+            case (1) :
+                if (resultCode == Activity.RESULT_OK) {
+                    Cursor cursor =  managedQuery(data.getData(), null, null, null, null);
+                    while (cursor.moveToNext())
+                    {
+                        String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                        String hasPhone = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
+                        if ( hasPhone.equalsIgnoreCase("1"))
+                            hasPhone = "true";
+                        else
+                            hasPhone = "false" ;
 
-                if (uri != null) {
-                    Cursor c = null;
-                    try {
-                        c = getContentResolver().query(uri, new String[]{
-                                        ContactsContract.CommonDataKinds.Phone.NUMBER,
-                                        ContactsContract.CommonDataKinds.Phone.TYPE},
-                                null, null, null);
+                        if (Boolean.parseBoolean(hasPhone))
+                        {
+                            Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = "+ contactId,null, null);
+                            while (phones.moveToNext())
+                            {
+                                cellNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                                showNumber(cellNumber);
 
-                        if (c != null && c.moveToFirst()) {
-                            String number = c.getString(0);
-                            int type = c.getInt(1);
-                            showNumber(number);
-                        }
-                    } finally {
-                        if (c != null) {
-                            c.close();
+                            }
                         }
                     }
+
                 }
-            }
+                break;
         }
 
         switch (requestCode) {

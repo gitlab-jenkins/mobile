@@ -57,7 +57,7 @@ public class ChargeAdapter extends RecyclerView.Adapter<ChargeAdapter.Holder> {
         if (amount == 0)
             holder.tvText.setText(items.get(position).getDesc());
         else
-            holder.tvText.setText(AppManager.amountFixer(amount));
+            holder.tvText.setText( AppManager.amountFixer(amount));
         holder.tvText.setTag(items.get(position).getIndex());
 
     }

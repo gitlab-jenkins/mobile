@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xyz.homapay.hampay.mobile.android.component.FacedTextView xmlns:android="http://schemas.android.com/apk/res/android"
+<xyz.homapay.hampay.mobile.android.component.FacedTextView
+    xmlns:geekui="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    geekui:customTypeface="fonts/vazir_regular.ttf"
     android:id="@+id/text"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
