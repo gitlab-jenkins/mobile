@@ -68,8 +68,6 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     private ImageView topUpTriangle;
     private LinearLayout mobileBill;
     private LinearLayout serviceBills;
-    private RelativeLayout rlChargeType;
-    private RelativeLayout rlChargeAmount;
     private TopUpCellNumber cellNumberText;
     private FacedTextView tvChargeType;
     private FacedTextView tvChargeAmount;
@@ -88,6 +86,9 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     private HamPayDialog dlg;
     private UserProfileDTO userProfile;
     private ImageView cellNumberIcon;
+    private List<xyz.homapay.hampay.common.common.TopUpInfo> MCI_INFO;
+    private List<xyz.homapay.hampay.common.common.TopUpInfo> MTN_INFO;
+    private List<xyz.homapay.hampay.common.common.TopUpInfo> RIGHTEL_INFO;
 
     public void backActionBar(View view) {
         finish();
@@ -410,12 +411,23 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
         this.operatorName = messageSetOperator.getOperatorName();
         new Collapse(keyboard).animate();
         selectOperatorView(false);
-        topUpInfo.getInfo(messageSetOperator.getOperator());
+        changeInfoFromNetwork();
+    }
+
+    private void changeInfoFromNetwork() {
+        if (operator.equals(Operator.MCI) && MCI_INFO != null) {
+            onInfoLoaded(MCI_INFO);
+        } else if (operator.equals(Operator.MTN) && MTN_INFO != null) {
+            onInfoLoaded(MTN_INFO);
+        } else if (operator.equals(Operator.RAYTEL) && RIGHTEL_INFO != null) {
+            onInfoLoaded(RIGHTEL_INFO);
+        } else
+            topUpInfo.getInfo(operator);
     }
 
     private void selectOperatorView(boolean manual) {
         if (manual)
-            topUpInfo.getInfo(operator);
+            changeInfoFromNetwork();
         switch (operator) {
             case MCI:
                 imgMCI.setImageResource(R.mipmap.hamrah_active);
@@ -478,7 +490,16 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     public void onInfoLoaded(boolean state, ResponseMessage<TopUpInfoResponse> data, String message) {
         if (state) {
             try {
+                if (operator.equals(Operator.MCI))
+                    MCI_INFO = data.getService().getTopUpInfoList();
+                else if (operator.equals(Operator.MTN))
+                    MTN_INFO = data.getService().getTopUpInfoList();
+                else if (operator.equals(Operator.RAYTEL))
+                    RIGHTEL_INFO = data.getService().getTopUpInfoList();
+
                 infos = data.getService().getTopUpInfoList();
+                this.chargeType = infos.get(0).getChargeType();
+                this.amount = infos.get(0).getChargePackages().get(0).getAmount();
                 tvChargeAmount.setTag(0);
                 tvChargeType.setTag(0);
                 tvChargeAmount.setText(AppManager.amountFixer(infos.get(0).getChargePackages().get(0).getAmount()) + " ریال");
@@ -488,6 +509,20 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
             }
         } else
             onError();
+    }
+
+    public void onInfoLoaded(List<xyz.homapay.hampay.common.common.TopUpInfo> data) {
+        try {
+            infos = data;
+            this.chargeType = infos.get(0).getChargeType();
+            this.amount = infos.get(0).getChargePackages().get(0).getAmount();
+            tvChargeAmount.setTag(0);
+            tvChargeType.setTag(0);
+            tvChargeAmount.setText(AppManager.amountFixer(infos.get(0).getChargePackages().get(0).getAmount()) + " ریال");
+            tvChargeType.setText(infos.get(0).getDescription());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Subscribe
