@@ -329,6 +329,20 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
                 if (resultCode == Activity.RESULT_OK) {
                     cellNumberText.setText("");
                     cellNumber = "";
+                    try {
+                        MCI_INFO = null;
+                        MTN_INFO = null;
+                        RIGHTEL_INFO = null;
+                        infos = null;
+                        this.chargeType = "";
+                        this.amount = 0;
+                        tvChargeAmount.setTag(0);
+                        tvChargeType.setTag(0);
+                        tvChargeAmount.setText("ریال");
+                        tvChargeType.setText("");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
                 if (resultCode == Activity.RESULT_CANCELED) {
                 }
