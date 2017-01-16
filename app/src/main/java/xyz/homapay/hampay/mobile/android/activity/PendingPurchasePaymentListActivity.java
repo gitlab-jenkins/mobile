@@ -49,7 +49,6 @@ import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.p.topup.TopUpDetailImpl;
 import xyz.homapay.hampay.mobile.android.p.topup.TopUpDetailView;
 import xyz.homapay.hampay.mobile.android.util.Constants;
-import xyz.homapay.hampay.mobile.android.util.Dialoger;
 import xyz.homapay.hampay.mobile.android.util.ModelLayerImpl;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.TelephonyUtils;
@@ -242,7 +241,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
                     @Override
                     public void onError() {
-                        Dialoger.GENERAL.show(context, getString(R.string.err_general), getString(R.string.err_general_text));
+                        hamPayDialog.showFailPendingPaymentDialog(getString(R.string.err_general), getString(R.string.err_general_text));
                     }
 
                     @Override

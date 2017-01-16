@@ -1,11 +1,13 @@
 package xyz.homapay.hampay.mobile.android.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.File;
 
+import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.m.common.ModelLayer;
 import xyz.homapay.hampay.mobile.android.ssl.SSLKeyStore;
 
@@ -60,7 +62,11 @@ public class ModelLayerImpl implements ModelLayer {
 
     @Override
     public void showNoNetworkDialog() {
-        Dialoger.NETWORK.showErrorNetworkDialog(ctx);
+        try {
+            new HamPayDialog((Activity) ctx).showNoNetwork();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

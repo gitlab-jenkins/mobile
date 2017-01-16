@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.Settings;
 import android.support.v4.content.IntentCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -19,7 +21,11 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
@@ -50,6 +56,7 @@ import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.activity.SMSVerificationActivity;
 import xyz.homapay.hampay.mobile.android.activity.UnlinkPassActivity;
 import xyz.homapay.hampay.mobile.android.activity.WelcomeActivity;
+import xyz.homapay.hampay.mobile.android.adapter.charge.ChargeAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestChangePassCode;
 import xyz.homapay.hampay.mobile.android.async.RequestContactHampayEnabled;
@@ -64,6 +71,10 @@ import xyz.homapay.hampay.mobile.android.async.RequestTAC;
 import xyz.homapay.hampay.mobile.android.async.RequestUploadImage;
 import xyz.homapay.hampay.mobile.android.async.RequestUserProfile;
 import xyz.homapay.hampay.mobile.android.async.RequestUserTransaction;
+import xyz.homapay.hampay.mobile.android.common.charge.ChargeAdapterModel;
+import xyz.homapay.hampay.mobile.android.common.charge.RecyclerItemClickListener;
+import xyz.homapay.hampay.mobile.android.common.messages.MessageSelectChargeAmount;
+import xyz.homapay.hampay.mobile.android.common.messages.MessageSelectChargeType;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.EmailTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
@@ -74,6 +85,7 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.EmailVerification;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
+import xyz.homapay.hampay.mobile.android.util.font.FontFace;
 import xyz.homapay.hampay.mobile.android.webservice.SecuredWebServices;
 
 /**
@@ -1260,6 +1272,63 @@ public class HamPayDialog {
             dialog = new HamPayCustomDialog(view, activity, 0);
             dialog.show();
         }
+    }
+
+    public void showChargeTypeChooser(Context ctx, ArrayList<ChargeAdapterModel> itemsAdapter) {
+        LinearLayoutManager manager = new LinearLayoutManager(ctx, LinearLayoutManager.VERTICAL, false);
+        ChargeAdapter adapter = new ChargeAdapter(ctx, itemsAdapter);
+        View view = activity.getLayoutInflater().inflate(R.layout.dlg_charge_chooser, null);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
+        RecyclerView recyclerView = (RecyclerView) dialog.findViewById(R.id.main_view);
+        FacedTextView title = (FacedTextView) dialog.findViewById(R.id.tvTitle);
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setAdapter(adapter);
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(ctx, recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                dialog.cancel();
+                EventBus.getDefault().post(new MessageSelectChargeType(position, itemsAdapter.get(position).getType(), itemsAdapter.get(position).getDesc()));
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+
+            }
+        }));
+        title.setText(activity.getString(R.string.type_charge));
+        dialog.show();
+    }
+
+    public void showChargeAmountChooser(Context ctx, List<String> items) {
+        LinearLayoutManager manager = new LinearLayoutManager(ctx, LinearLayoutManager.VERTICAL, false);
+        ArrayList<ChargeAdapterModel> itemsAdapter = new ArrayList<>();
+        for (int i = 0; i < items.size(); i++) {
+            ChargeAdapterModel model = new ChargeAdapterModel(i, "", items.get(i));
+            itemsAdapter.add(model);
+        }
+        ChargeAdapter adapter = new ChargeAdapter(ctx, itemsAdapter, FontFace.getInstance(ctx).getVAZIR());
+        View view = activity.getLayoutInflater().inflate(R.layout.dlg_charge_chooser, null);
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        dialog = new HamPayCustomDialog(view, activity, 0);
+        RecyclerView recyclerView = (RecyclerView) dialog.findViewById(R.id.main_view);
+        FacedTextView title = (FacedTextView) dialog.findViewById(R.id.tvTitle);
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setAdapter(adapter);
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(ctx, recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                dialog.cancel();
+                EventBus.getDefault().post(new MessageSelectChargeAmount(adapter.getAmount(position) + "", position));
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+
+            }
+        }));
+        title.setText(activity.getString(R.string.amount_charge));
+        dialog.show();
     }
 
     public class HttpContactUs extends AsyncTask<ContactUsRequest, Void, String> {

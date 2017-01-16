@@ -38,9 +38,6 @@ import xyz.homapay.hampay.mobile.android.common.messages.MessageSetOperator;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.topup.TopUpCellNumber;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
-import xyz.homapay.hampay.mobile.android.dialog.common.ChargeAmountChooserDialog;
-import xyz.homapay.hampay.mobile.android.dialog.common.ChargeTypeChooserDialog;
-import xyz.homapay.hampay.mobile.android.dialog.common.ProgressDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.p.topup.TopUpCreate;
 import xyz.homapay.hampay.mobile.android.p.topup.TopUpCreateImpl;
@@ -50,13 +47,13 @@ import xyz.homapay.hampay.mobile.android.p.topup.TopUpInfoImpl;
 import xyz.homapay.hampay.mobile.android.p.topup.TopUpInfoView;
 import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
-import xyz.homapay.hampay.mobile.android.util.Dialoger;
 import xyz.homapay.hampay.mobile.android.util.ModelLayerImpl;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.TelephonyUtils;
 
 public class MainBillsTopUpActivity extends AppCompatActivity implements View.OnClickListener, TopUpInfoView, TopUpCreateView {
 
+    private static int selectedType = 0;
     private SharedPreferences prefs;
     private Context context;
     private PersianEnglishDigit persian;
@@ -229,17 +226,12 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
             case R.id.rlChargeType:
                 try {
                     if (infos != null) {
-                        List<String> items = new ArrayList<>();
-                        for (xyz.homapay.hampay.common.common.TopUpInfo item : infos) {
-                            items.add(item.getDescription());
-                        }
-
                         ArrayList<ChargeAdapterModel> itemsAdapter = new ArrayList<>();
                         for (int i = 0; i < infos.size(); i++) {
-                            ChargeAdapterModel model = new ChargeAdapterModel(i, infos.get(i).getChargeType(), infos.get(i).getDescription(), i == ((int) tvChargeType.getTag()));
+                            ChargeAdapterModel model = new ChargeAdapterModel(i + 1, infos.get(i).getChargeType(), infos.get(i).getDescription());
                             itemsAdapter.add(model);
                         }
-                        ChargeTypeChooserDialog.show(context, itemsAdapter);
+                        dlg.showChargeTypeChooser(this, itemsAdapter);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -248,12 +240,11 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
             case R.id.rlChargeAmount:
                 try {
                     if (infos != null) {
-                        int index = (int) tvChargeType.getTag();
                         List<String> items = new ArrayList<>();
-                        for (ChargePackage item : infos.get(index).getChargePackages()) {
+                        for (ChargePackage item : infos.get(selectedType).getChargePackages()) {
                             items.add(item.getAmount() + "");
                         }
-                        ChargeAmountChooserDialog.show(context, items, ((int) tvChargeAmount.getTag()));
+                        dlg.showChargeAmountChooser(context, items);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -351,6 +342,8 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     }
 
     private void createPayment() {
+        if (!isNumberOk())
+            return;
         if (chargeType != null && amount != 0) {
             ChargePackage chargePackage = null;
             for (xyz.homapay.hampay.common.common.TopUpInfo item : infos) {
@@ -367,6 +360,20 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
                 str = "09" + str;
                 topUpCreate.create(operator, str, chargePackage, chargeType);
             }
+        }
+    }
+
+    private boolean isNumberOk() {
+        String phoneNumber = "09" + cellNumberText.getText().toString().trim().replace(" ", "");
+        phoneNumber = new PersianEnglishDigit().P2E(phoneNumber);
+        if (phoneNumber.length() == 11) {
+            if (TelephonyUtils.isIranValidNumber(phoneNumber) && new TelephonyUtils().isPrePaid(phoneNumber)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
         }
     }
 
@@ -495,8 +502,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onError() {
-        ProgressDialog.cancel();
-        Dialoger.GENERAL.show(context, getString(R.string.err_general), getString(R.string.err_general_text));
+        dlg.showFailPendingPaymentDialog(getString(R.string.err_general), getString(R.string.err_general_text));
     }
 
     @Override
@@ -526,8 +532,6 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
                 infos = data.getService().getTopUpInfoList();
                 this.chargeType = infos.get(0).getChargeType();
                 this.amount = infos.get(0).getChargePackages().get(0).getAmount();
-                tvChargeAmount.setTag(0);
-                tvChargeType.setTag(0);
                 tvChargeAmount.setText(AppManager.amountFixer(infos.get(0).getChargePackages().get(0).getAmount()) + " ریال");
                 tvChargeType.setText(infos.get(0).getDescription());
             } catch (Exception e) {
@@ -542,8 +546,6 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
             infos = data;
             this.chargeType = infos.get(0).getChargeType();
             this.amount = infos.get(0).getChargePackages().get(0).getAmount();
-            tvChargeAmount.setTag(0);
-            tvChargeType.setTag(0);
             tvChargeAmount.setText(AppManager.amountFixer(infos.get(0).getChargePackages().get(0).getAmount()) + " ریال");
             tvChargeType.setText(infos.get(0).getDescription());
         } catch (Exception e) {
@@ -555,13 +557,12 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     public void onTypeSelect(MessageSelectChargeType type) {
         this.chargeType = type.getSelectedType();
         tvChargeType.setText(type.getSelectedDescrption());
-        tvChargeType.setTag(type.getIndex());
+        selectedType = type.getIndex();
     }
 
     @Subscribe
     public void onAmountSelect(MessageSelectChargeAmount amount) {
         this.amount = Long.parseLong(amount.getAmount());
         tvChargeAmount.setText(AppManager.amountFixer(this.amount) + " ریال");
-        tvChargeAmount.setTag(amount.getIndex());
     }
 }

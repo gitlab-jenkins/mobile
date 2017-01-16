@@ -2,7 +2,6 @@ package xyz.homapay.hampay.mobile.android.adapter.charge;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,26 +40,26 @@ public class ChargeAdapter extends RecyclerView.Adapter<ChargeAdapter.Holder> {
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int position) {
-        return new Holder(li.inflate(R.layout.list_item_charge_select, parent, false));
+        View view = li.inflate(R.layout.list_item_charge_select, parent, false);
+        RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        view.setLayoutParams(lp);
+        return new Holder(view);
     }
 
     @Override
     public void onBindViewHolder(Holder holder, int position) {
-        long amount = -1;
+        long amount = 0;
         try {
             amount = Long.parseLong(items.get(position).getDesc());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (amount == -1)
+        if (amount == 0)
             holder.tvText.setText(items.get(position).getDesc());
         else
             holder.tvText.setText(AppManager.amountFixer(amount));
         holder.tvText.setTag(items.get(position).getIndex());
-        if (!items.get(position).isSelected()) {
-            holder.tvText.setBackgroundColor(ContextCompat.getColor(ctx, R.color.white));
-            holder.tvText.setTextColor(ContextCompat.getColor(ctx, R.color.colorAccent));
-        }
+
     }
 
     @Override
@@ -73,19 +72,8 @@ public class ChargeAdapter extends RecyclerView.Adapter<ChargeAdapter.Holder> {
         return items.size();
     }
 
-    public void setSelected(int index) {
-        for (ChargeAdapterModel item : items) {
-            if (item.getIndex() == index) {
-                item.setSelected(true);
-            } else {
-                item.setSelected(false);
-            }
-        }
-        notifyDataSetChanged();
-    }
-
     public long getAmount(int position) {
-        long amount = -1;
+        long amount = 0;
         try {
             amount = Long.parseLong(items.get(position).getDesc());
         } catch (Exception e) {

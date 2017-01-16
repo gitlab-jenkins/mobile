@@ -222,7 +222,7 @@ public class TelephonyUtils {
             return Operator.MCI;
         else if (lstMTN.contains(cellPhone))
             return Operator.MTN;
-        else if (lstRIGHTEL.contains(RIGHTEL_OPERATOR))
+        else if (lstRIGHTEL.contains(cellPhone))
             return Operator.RAYTEL;
         else
             return Operator.MCI;

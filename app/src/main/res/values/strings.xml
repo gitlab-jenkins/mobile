@@ -733,5 +733,7 @@
     <string name="charge_code">رمز شارژ</string>
     <string name="charge_type">نوع شارژ :</string>
     <string name="iban_settelment">تسویه حساب در هم پی حداکثر در سیکل پایا انجام خواهد شد.</string>
+    <string name="amount_charge">مبلغ شارژ</string>
+    <string name="type_charge">نوع شارژ</string>
 
 </resources>

@@ -9,13 +9,11 @@ public class ChargeAdapterModel {
     private int index;
     private String type;
     private String desc;
-    private boolean selected;
 
-    public ChargeAdapterModel(int index, String type, String desc, boolean selected) {
+    public ChargeAdapterModel(int index, String type, String desc) {
         this.index = index;
         this.type = type;
         this.desc = desc;
-        this.selected = selected;
     }
 
     public int getIndex() {
@@ -24,14 +22,6 @@ public class ChargeAdapterModel {
 
     public void setIndex(int index) {
         this.index = index;
-    }
-
-    public boolean isSelected() {
-        return selected;
-    }
-
-    public void setSelected(boolean selected) {
-        this.selected = selected;
     }
 
     public String getType() {
