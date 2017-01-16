@@ -6,13 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
-import xyz.homapay.hampay.mobile.android.common.charge.ChargeSucceedPayment;
-import xyz.homapay.hampay.mobile.android.common.charge.ChargeType;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.PaymentType;
@@ -34,7 +31,6 @@ public class PaymentCompletedActivity extends AppCompatActivity {
     private PersianEnglishDigit persianEnglishDigit;
     private CurrencyFormatter formatter;
     private SucceedPayment succeedPayment;
-    private ChargeSucceedPayment succeedPaymentCharge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +47,6 @@ public class PaymentCompletedActivity extends AppCompatActivity {
             initRegular();
         } else if (succeedPayment.getPaymentType() == PaymentType.TOP_UP) {
             setContentView(R.layout.activity_top_up_completed);
-            succeedPaymentCharge = (ChargeSucceedPayment) succeedPayment;
             initCharge();
         }
     }
@@ -98,8 +93,8 @@ public class PaymentCompletedActivity extends AppCompatActivity {
         amountValue.setText(persianEnglishDigit.E2P(formatter.format(succeedPayment.getAmount())));
         traceCode.setText(persianEnglishDigit.E2P(succeedPayment.getTrace()));
 
-        tvCellPhoneOrChargeCodeTitle.setText(succeedPaymentCharge.getChargeType().equals(ChargeType.DIRECT) ? getString(R.string.cell_number) : getString(R.string.charge_code));
-        tvCellPhoneOrChargeCode.setText(succeedPaymentCharge.getCode());
+        tvCellPhoneOrChargeCodeTitle.setText(getString(R.string.cell_number));
+        tvCellPhoneOrChargeCode.setText(succeedPayment.getCode());
 
         confirmButton.setOnClickListener(v -> {
             Intent returnIntent = new Intent();

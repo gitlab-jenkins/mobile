@@ -36,7 +36,6 @@ import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.PaymentType;
 import xyz.homapay.hampay.mobile.android.model.SucceedPayment;
-import xyz.homapay.hampay.mobile.android.p.topup.TopUpInfo;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class BankWebPaymentActivity extends AppCompatActivity {
@@ -70,11 +69,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
     public void initializeTimerTask() {
         timerTask = new TimerTask() {
             public void run() {
-                handler.post(new Runnable() {
-                    public void run() {
-                        hamPayDialog.dismisWaitingDialog();
-                    }
-                });
+                handler.post(() -> hamPayDialog.dismisWaitingDialog());
             }
         };
     }
@@ -139,24 +134,19 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        paymentInfoDTO = (PaymentInfoDTO)intent.getSerializableExtra(Constants.PAYMENT_INFO);
-        purchaseInfoDTO = (PurchaseInfoDTO)intent.getSerializableExtra(Constants.PURCHASE_INFO);
+        paymentInfoDTO = (PaymentInfoDTO) intent.getSerializableExtra(Constants.PAYMENT_INFO);
+        purchaseInfoDTO = (PurchaseInfoDTO) intent.getSerializableExtra(Constants.PURCHASE_INFO);
         billInfo = (BillInfoDTO) intent.getSerializableExtra(Constants.BILL_INFO);
         topUpInfo = (TopUpInfoDTO) intent.getSerializableExtra(Constants.TOP_UP_INFO);
 
-        pspInfoDTO = (PspInfoDTO)intent.getSerializableExtra(Constants.PSP_INFO);
+        pspInfoDTO = (PspInfoDTO) intent.getSerializableExtra(Constants.PSP_INFO);
 
-        bankWebView = (WebView)findViewById(R.id.bankWebView);
+        bankWebView = (WebView) findViewById(R.id.bankWebView);
 
-        reload = (ImageView)findViewById(R.id.reload);
-        reload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bankWebView.reload();
-            }
-        });
+        reload = (ImageView) findViewById(R.id.reload);
+        reload.setOnClickListener(v -> bankWebView.reload());
 
-        urlText = (TextView)findViewById(R.id.urlText);
+        urlText = (TextView) findViewById(R.id.urlText);
         urlText.setHorizontallyScrolling(true);
         urlText.setScrollbarFadingEnabled(true);
         urlText.setHorizontallyScrolling(true);
@@ -180,7 +170,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                             "&ResNum=" + paymentInfoDTO.getProductCode() +
                             "&TerminalId=" + pspInfoDTO.getSenderTerminalId();
 
-        }else if (purchaseInfoDTO != null){
+        } else if (purchaseInfoDTO != null) {
             ipgUrl = Constants.BANK_GATEWAY_URL;
             redirectedURL = pspInfoDTO.getRedirectURL() + "?authToken=" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
             postData =
@@ -203,7 +193,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                             "&Bills[0].BillId=" + billInfo.getBillId() +
                             "&Bills[0].PayId=" + billInfo.getPayId() +
                             "&TerminalId=" + pspInfoDTO.getSenderTerminalId();
-        }else if (topUpInfo != null){
+        } else if (topUpInfo != null) {
             ipgUrl = Constants.TOP_UP_IPG_URL;
             pspInfoDTO = topUpInfo.getPspInfo();
             redirectedURL = pspInfoDTO.getRedirectURL() + "?authToken=" + prefs.getString(Constants.LOGIN_TOKEN_ID, "");
@@ -217,7 +207,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                             "&CellNumber=" + topUpInfo.getCellNumber() +
                             "&Count=" + "1" +
                             "&ProfileId=" + topUpInfo.getChargePackage().getProfileId() +
-                            "&ChargeType=" + topUpInfo.getChargeType()+
+                            "&ChargeType=" + topUpInfo.getChargeType() +
                             "&TerminalId=" + pspInfoDTO.getSenderTerminalId();
         }
 
@@ -240,7 +230,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
             }
 
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url){
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);
                 return false;
             }
@@ -253,7 +243,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                 LogEvent logEvent = new LogEvent(context);
                 if (url.toLowerCase().contains(pspInfoDTO.getRedirectURL().toLowerCase())) {
                     if (view.getTitle().toLowerCase().contains("ref:")) {
-                        if (view.getTitle().split(":").length == 2){
+                        if (view.getTitle().split(":").length == 2) {
                             serviceName = ServiceEvent.IPG_PAYMENT_SUCCESS;
                             logEvent.log(serviceName);
                             Intent intent = new Intent(context, PaymentCompletedActivity.class);
@@ -262,7 +252,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                                 succeedPayment.setAmount(paymentInfoDTO.getAmount() + paymentInfoDTO.getVat() + paymentInfoDTO.getFeeCharge());
                                 succeedPayment.setCode(paymentInfoDTO.getProductCode());
                                 succeedPayment.setPaymentType(PaymentType.PAYMENT);
-                            }else if (purchaseInfoDTO != null){
+                            } else if (purchaseInfoDTO != null) {
                                 succeedPayment.setAmount(purchaseInfoDTO.getAmount());
                                 succeedPayment.setCode(purchaseInfoDTO.getPurchaseCode());
                                 succeedPayment.setPaymentType(PaymentType.PURCHASE);
@@ -270,12 +260,20 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                                 succeedPayment.setAmount(billInfo.getAmount() + billInfo.getFeeCharge());
                                 succeedPayment.setCode(billInfo.getBillId());
                                 succeedPayment.setPaymentType(PaymentType.BILLS);
+                            } else if (topUpInfo != null) {
+                                try {
+                                    succeedPayment.setAmount(topUpInfo.getChargePackage().getAmount() + topUpInfo.getFeeCharge());
+                                    succeedPayment.setCode(topUpInfo.getCellNumber());
+                                    succeedPayment.setPaymentType(PaymentType.TOP_UP);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
                             succeedPayment.setTrace(pspInfoDTO.getProviderId());
                             intent.putExtra(Constants.SUCCEED_PAYMENT_INFO, succeedPayment);
                             startActivityForResult(intent, 0);
                             resultStatus = ResultStatus.SUCCESS;
-                        }else {
+                        } else {
                             new HamPayDialog(activity).ipgFailDialog();
                             resultStatus = ResultStatus.FAILURE;
                             serviceName = ServiceEvent.IPG_PAYMENT_FAILURE;
@@ -298,9 +296,9 @@ public class BankWebPaymentActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 0) {
-            if(resultCode == Activity.RESULT_OK){
+            if (resultCode == Activity.RESULT_OK) {
                 int result = data.getIntExtra(Constants.ACTIVITY_RESULT, -1);
-                if (result == 0){
+                if (result == 0) {
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra(Constants.ACTIVITY_RESULT, ResultStatus.SUCCESS.ordinal());
                     setResult(Activity.RESULT_OK, returnIntent);
