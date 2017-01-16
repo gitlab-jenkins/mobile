@@ -732,5 +732,6 @@
     <string name="top_up_tax">مالیات بر ارزش افزوده :</string>
     <string name="charge_code">رمز شارژ</string>
     <string name="charge_type">نوع شارژ :</string>
+    <string name="iban_settelment">تسویه حساب در هم پی حداکثر در سیکل پایا انجام خواهد شد.</string>
 
 </resources>
