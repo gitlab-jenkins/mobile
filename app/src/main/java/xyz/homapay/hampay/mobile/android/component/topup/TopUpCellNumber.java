@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.widget.ImageView;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -11,6 +12,7 @@ import xyz.homapay.hampay.common.common.Operator;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.common.messages.MessageSetOperator;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.TelephonyUtils;
 
 /**
@@ -18,6 +20,9 @@ import xyz.homapay.hampay.mobile.android.util.TelephonyUtils;
  */
 
 public class TopUpCellNumber extends FacedTextView {
+
+    private ImageView cellNumberIcon;
+
     public TopUpCellNumber(Context context) {
         super(context);
         init();
@@ -49,17 +54,26 @@ public class TopUpCellNumber extends FacedTextView {
                 @Override
                 public void afterTextChanged(Editable editable) {
                     String phoneNumber = "09" + editable.toString();
+                    phoneNumber = new PersianEnglishDigit().P2E(phoneNumber);
                     if (phoneNumber.length() == 11) {
-                        if (TelephonyUtils.isIranValidNumber(phoneNumber)) {
+                        cellNumberIcon.setVisibility(VISIBLE);
+                        if (TelephonyUtils.isIranValidNumber(phoneNumber) && new TelephonyUtils().isPrePaid(phoneNumber)) {
+                            cellNumberIcon.setImageResource(R.drawable.right_icon);
                             Operator operator = new TelephonyUtils().getNumberOperator(phoneNumber);
                             MessageSetOperator messageSetOperator = new MessageSetOperator(operator);
                             EventBus.getDefault().post(messageSetOperator);
                         } else {
-                            setError(getContext().getString(R.string.err_cell_phone_invalid));
+                            cellNumberIcon.setImageResource(R.drawable.false_icon);
                         }
+                    } else {
+                        cellNumberIcon.setVisibility(INVISIBLE);
                     }
                 }
             });
         }
+    }
+
+    public void setCellNumberIcon(ImageView cellNumberIcon) {
+        this.cellNumberIcon = cellNumberIcon;
     }
 }

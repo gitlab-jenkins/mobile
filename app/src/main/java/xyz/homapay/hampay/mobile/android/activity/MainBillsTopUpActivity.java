@@ -86,6 +86,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     private String operatorName;
     private HamPayDialog dlg;
     private UserProfileDTO userProfile;
+    private ImageView cellNumberIcon;
 
     public void backActionBar(View view) {
         finish();
@@ -170,6 +171,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
         imgMCI = (ImageView) findViewById(R.id.imgMCI);
         imgMTN = (ImageView) findViewById(R.id.imgMTN);
         imgRIGHTEL = (ImageView) findViewById(R.id.imgRIGHTEL);
+        cellNumberIcon = (ImageView) findViewById(R.id.cellNumberIcon);
         btnTopUpPay = (FacedTextView) findViewById(R.id.btnTopUpPay);
 
         tvChargeType = (FacedTextView) findViewById(R.id.tvChargeType);
@@ -182,6 +184,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
         imgMTN.setOnClickListener(this);
         imgRIGHTEL.setOnClickListener(this);
         btnTopUpPay.setOnClickListener(this);
+        cellNumberText.setCellNumberIcon(cellNumberIcon);
     }
 
     @Override
@@ -261,13 +264,13 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     }
 
     private void showNumber() {
-        this.cellNumber = TelephonyUtils.fixPhoneNumber(context, userProfile.getCellNumber());
-        cellNumberText.setText(new PersianEnglishDigit().E2P(this.cellNumber.substring(2)));
+        this.cellNumber = TelephonyUtils.fixPhoneNumber(context, userProfile.getCellNumber()).substring(2);
+        cellNumberText.setText(new PersianEnglishDigit().E2P(this.cellNumber));
     }
 
     private void showNumber(String cellNumber) {
-        this.cellNumber = TelephonyUtils.fixPhoneNumber(context, cellNumber);
-        cellNumberText.setText(new PersianEnglishDigit().E2P(this.cellNumber.substring(2)));
+        this.cellNumber = TelephonyUtils.fixPhoneNumber(context, cellNumber).substring(2);
+        cellNumberText.setText(new PersianEnglishDigit().E2P(this.cellNumber));
     }
 
     private void startActivityForGetContactsNumbers() {

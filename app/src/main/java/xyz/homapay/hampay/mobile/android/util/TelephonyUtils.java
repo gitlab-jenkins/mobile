@@ -37,7 +37,6 @@ public class TelephonyUtils {
         lstRIGHTEL = new ArrayList<>();
         lstMCI.add("10");
         lstMCI.add("11");
-        lstMCI.add("12");
         lstMCI.add("13");
         lstMCI.add("14");
         lstMCI.add("15");
@@ -58,7 +57,6 @@ public class TelephonyUtils {
         lstMTN.add("39");
 
         lstRIGHTEL.add("21");
-        lstRIGHTEL.add("20");
     }
 
     /**
@@ -205,9 +203,21 @@ public class TelephonyUtils {
         return fixedNumber.replace(" ", "");
     }
 
+    public boolean isPrePaid(String number) {
+
+        boolean isOK = false;
+        number = number.substring(2, 4);
+        try {
+            isOK = lstMCI.contains(number) || lstMTN.contains(number) || lstRIGHTEL.contains(number);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            return isOK;
+        }
+    }
+
     public Operator getNumberOperator(String cellPhone) {
-        PersianEnglishDigit p2e = new PersianEnglishDigit();
-        cellPhone = p2e.P2E(cellPhone).substring(2, 4);
+        cellPhone = cellPhone.substring(2, 4);
         if (lstMCI.contains(cellPhone))
             return Operator.MCI;
         else if (lstMTN.contains(cellPhone))
