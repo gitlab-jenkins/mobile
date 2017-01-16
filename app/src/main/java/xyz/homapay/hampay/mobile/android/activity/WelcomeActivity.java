@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.WelcomeAdapter;
+import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
@@ -86,25 +87,26 @@ public class WelcomeActivity extends AppCompatActivity {
         activity = WelcomeActivity.this;
 
         rootUtil = new RootUtil(activity);
-//        if (rootUtil.checkRootedDevice()){
-//            new HamPayDialog(activity).showPreventRootDeviceDialog();
-//            return;
-//        }
+        if (rootUtil.checkRootedDevice()) {
+            new HamPayDialog(activity).showPreventRootDeviceDialog();
+            return;
+        }
 
         bundle = getIntent().getExtras();
         if (bundle != null) {
             if (bundle.getBoolean(Constants.HAS_NOTIFICATION)) {
 
-                if(HamPayLoginActivity.instance != null) {
+                if (HamPayLoginActivity.instance != null) {
                     try {
                         HamPayLoginActivity.instance.finish();
-                    } catch (Exception e) {}
+                    } catch (Exception e) {
+                    }
                 }
 
                 NotificationMessageType notificationMessageType;
                 notificationMessageType = NotificationMessageType.valueOf(bundle.getString(Constants.NOTIFICATION_TYPE));
 
-                switch (notificationMessageType){
+                switch (notificationMessageType) {
                     case PAYMENT:
                         intent = getIntent();
                         intent.setClass(activity, HamPayLoginActivity.class);
@@ -146,10 +148,9 @@ public class WelcomeActivity extends AppCompatActivity {
         }
 
         preferencesManager = new PreferencesManager(this);
-        if (preferencesManager.isRegistered()){
+        if (preferencesManager.isRegistered()) {
             launchLoginScreen();
-        }
-        else if (!preferencesManager.isFirstTimeLaunch()) {
+        } else if (!preferencesManager.isFirstTimeLaunch()) {
             launchRegisterScreen();
             finish();
         }
@@ -224,7 +225,7 @@ public class WelcomeActivity extends AppCompatActivity {
         finish();
     }
 
-    private void launchLoginScreen(){
+    private void launchLoginScreen() {
         startActivity(new Intent(WelcomeActivity.this, HamPayLoginActivity.class));
         finish();
     }

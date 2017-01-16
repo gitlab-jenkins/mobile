@@ -421,7 +421,7 @@
                     android:orientation="horizontal">
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                        android:id="@+id/payId"
+                        android:id="@+id/payId2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="2dp"

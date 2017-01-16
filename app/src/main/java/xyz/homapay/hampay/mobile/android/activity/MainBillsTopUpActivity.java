@@ -246,7 +246,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
             case R.id.rlChargeAmount:
                 try {
                     if (infos != null) {
-                        int index = (int) tvChargeAmount.getTag();
+                        int index = (int) tvChargeType.getTag();
                         List<String> items = new ArrayList<>();
                         for (ChargePackage item : infos.get(index).getChargePackages()) {
                             items.add(item.getAmount() + "");
@@ -481,7 +481,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
                 infos = data.getService().getTopUpInfoList();
                 tvChargeAmount.setTag(0);
                 tvChargeType.setTag(0);
-                tvChargeAmount.setText(AppManager.amountFixer(infos.get(0).getChargePackages().get(0).getAmount()));
+                tvChargeAmount.setText(AppManager.amountFixer(infos.get(0).getChargePackages().get(0).getAmount()) + " ریال");
                 tvChargeType.setText(infos.get(0).getDescription());
             } catch (Exception e) {
                 e.printStackTrace();
@@ -500,7 +500,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     @Subscribe
     public void onAmountSelect(MessageSelectChargeAmount amount) {
         this.amount = Long.parseLong(amount.getAmount());
-        tvChargeAmount.setText(AppManager.amountFixer(this.amount));
+        tvChargeAmount.setText(AppManager.amountFixer(this.amount) + " ریال");
         tvChargeAmount.setTag(amount.getIndex());
     }
 }
