@@ -39,7 +39,7 @@ public class ChargeAmountChooserDialog {
                     ChargeAdapterModel model = new ChargeAdapterModel(i, "", items.get(i), i == selectedIndex);
                     itemsAdapter.add(model);
                 }
-                ChargeAdapter adapter = new ChargeAdapter(ctx, itemsAdapter);
+                ChargeAdapter adapter = new ChargeAdapter(ctx, itemsAdapter, FontFace.getInstance(ctx).getVAZIR());
                 LinearLayoutManager manager = new LinearLayoutManager(ctx, LinearLayoutManager.VERTICAL, false);
 
                 dlg = new MaterialDialog.Builder(ctx)

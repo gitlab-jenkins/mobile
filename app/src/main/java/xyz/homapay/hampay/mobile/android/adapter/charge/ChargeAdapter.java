@@ -1,6 +1,7 @@
 package xyz.homapay.hampay.mobile.android.adapter.charge;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,10 +24,18 @@ public class ChargeAdapter extends RecyclerView.Adapter<ChargeAdapter.Holder> {
     private LayoutInflater li;
     private List<ChargeAdapterModel> items;
     private Context ctx;
+    private Typeface tf = null;
 
     public ChargeAdapter(Context ctx, List<ChargeAdapterModel> items) {
         this.items = items;
         this.ctx = ctx;
+        li = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    public ChargeAdapter(Context ctx, List<ChargeAdapterModel> items, Typeface tf) {
+        this.items = items;
+        this.ctx = ctx;
+        this.tf = tf;
         li = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -92,6 +101,8 @@ public class ChargeAdapter extends RecyclerView.Adapter<ChargeAdapter.Holder> {
         public Holder(View itemView) {
             super(itemView);
             tvText = (FacedTextView) itemView.findViewById(R.id.text);
+            if (tf != null)
+                tvText.setTypeface(tf);
         }
     }
 }

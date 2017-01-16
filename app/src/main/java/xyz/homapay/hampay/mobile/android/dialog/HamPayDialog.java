@@ -32,6 +32,7 @@ import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
 import xyz.homapay.hampay.common.core.model.request.ChangePassCodeRequest;
 import xyz.homapay.hampay.common.core.model.request.ContactUsRequest;
 import xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
+import xyz.homapay.hampay.common.core.model.request.LatestPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationCredentialsRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
@@ -54,6 +55,7 @@ import xyz.homapay.hampay.mobile.android.async.RequestChangePassCode;
 import xyz.homapay.hampay.mobile.android.async.RequestContactHampayEnabled;
 import xyz.homapay.hampay.mobile.android.async.RequestCredentialEntry;
 import xyz.homapay.hampay.mobile.android.async.RequestHamPayBusiness;
+import xyz.homapay.hampay.mobile.android.async.RequestLatestPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestNewLogout;
 import xyz.homapay.hampay.mobile.android.async.RequestRegistrationSendSmsToken;
@@ -976,6 +978,35 @@ public class HamPayDialog {
 
 
         retry_contacts_enabled.setOnClickListener(v -> dialog.dismiss());
+        cancel_request.setOnClickListener(v -> {
+            dialog.dismiss();
+            activity.finish();
+        });
+
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
+    }
+
+    public void showFailPendingPaymentDialog(final RequestLatestPayment requestLatestPayment,
+                                             final LatestPaymentRequest latestPaymentRequest,
+                                             final String code,
+                                             final String message) {
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_contacts_enabled, null);
+        FacedTextView responseMessage = (FacedTextView) view.findViewById(R.id.responseMessage);
+        responseMessage.setText(activity.getString(R.string.error_code, code) + "\n" + message);
+
+        FacedTextView retry_contacts_enabled = (FacedTextView) view.findViewById(R.id.retry_contacts_enabled);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
+
+        retry_contacts_enabled.setOnClickListener(v -> {
+            dialog.dismiss();
+//                requestLatestPayment.execute(latestPaymentRequest);
+        });
         cancel_request.setOnClickListener(v -> {
             dialog.dismiss();
             activity.finish();

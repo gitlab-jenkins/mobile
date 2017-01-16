@@ -255,7 +255,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                             intent.putExtra(Constants.CHARGE_TYPE, ChargeType.DIRECT.ordinal());
                             startActivityForResult(intent, 48);
                         } else {
-                            Dialoger.GENERAL.show(context, getString(R.string.err_general), getString(R.string.err_general_text));
+                            hamPayDialog.showFailPendingPaymentDialog(data.getService().getResultStatus().getCode(), data.getService().getResultStatus().getDescription());
                         }
                     }
                 }).getDetail(fundDTOList.get(position).getProviderId());
@@ -460,7 +460,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                         cancelFundRequest.setFundType(FundType.UTILITY_BILL);
                         cancelFundRequest.setProviderId(fundDTOList.get(pos).getProviderId());
                         requestCancelPayment.execute(cancelFundRequest);
-                    }else if (fundDTOList.get(pos).getPaymentType() == FundDTO.PaymentType.TOP_UP){
+                    } else if (fundDTOList.get(pos).getPaymentType() == FundDTO.PaymentType.TOP_UP) {
                         requestCancelPayment = new RequestCancelPayment(activity, new RequestCancelPaymentTaskCompleteListener(pos));
                         cancelFundRequest = new CancelFundRequest();
                         cancelFundRequest.setFundType(FundType.TOP_UP);

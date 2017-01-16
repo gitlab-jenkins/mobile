@@ -20,6 +20,9 @@ public class FontFace {
     @Nullable
     private Typeface IRANSANS = null;
 
+    @Nullable
+    private Typeface VAZIR = null;
+
     /**
      * Private Constructor of this class
      *
@@ -43,6 +46,13 @@ public class FontFace {
         try {
             IRANSANS = Typeface.createFromAsset(ctx.getResources().getAssets(),
                     "fonts/iranSans.ttf");
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        try {
+            IRANSANS = Typeface.createFromAsset(ctx.getResources().getAssets(),
+                    "fonts/vazir_regular.ttf");
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -88,4 +98,8 @@ public class FontFace {
         return OPENSANS;
     }
 
+    @Nullable
+    public Typeface getVAZIR() {
+        return VAZIR;
+    }
 }
