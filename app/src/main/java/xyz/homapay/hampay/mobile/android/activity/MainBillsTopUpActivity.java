@@ -327,7 +327,8 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
         switch (requestCode) {
             case 48:
                 if (resultCode == Activity.RESULT_OK) {
-
+                    cellNumberText.setText("");
+                    cellNumber = "";
                 }
                 if (resultCode == Activity.RESULT_CANCELED) {
                 }
