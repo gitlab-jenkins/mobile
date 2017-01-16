@@ -41,7 +41,6 @@ import xyz.homapay.hampay.mobile.android.async.RequestTokenTopUp;
 import xyz.homapay.hampay.mobile.android.async.task.SignToPayTask;
 import xyz.homapay.hampay.mobile.android.async.task.UtilityBillDetailTask;
 import xyz.homapay.hampay.mobile.android.async.task.impl.OnTaskCompleted;
-import xyz.homapay.hampay.mobile.android.common.charge.ChargeSucceedPayment;
 import xyz.homapay.hampay.mobile.android.common.charge.ChargeType;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
@@ -51,6 +50,7 @@ import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.PaymentType;
+import xyz.homapay.hampay.mobile.android.model.SucceedPayment;
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
 import xyz.homapay.hampay.mobile.android.model.TopUpTokenDoWork;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -523,9 +523,16 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
                     setResult(Activity.RESULT_OK, returnIntent);
                     finish();
                 }
-
             }
             if (resultCode == Activity.RESULT_CANCELED) {
+            }
+        }
+        if (46 == requestCode) {
+            if (Activity.RESULT_OK == resultCode) {
+                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, -1);
+                if (0 == result) {
+                    finish();
+                }
             }
         }
     }
@@ -637,12 +644,11 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
                         serviceName = ServiceEvent.PSP_PAYMENT_SUCCESS;
                         if (topUpInfo != null) {
                             Intent intent = new Intent(context, PaymentCompletedActivity.class);
-                            ChargeSucceedPayment succeedPayment = new ChargeSucceedPayment(chargeType);
+                            SucceedPayment succeedPayment = new SucceedPayment();
                             succeedPayment.setAmount(topUpInfo.getChargePackage().getAmount() + topUpInfo.getFeeCharge());
-                            succeedPayment.setCode(chargeType == ChargeType.DIRECT ? topUpInfo.getCellNumber() : topUpInfo.getProductCode());
+                            succeedPayment.setCode(topUpInfo.getCellNumber());
                             succeedPayment.setTrace(topUpInfo.getPspInfo().getProviderId());
                             succeedPayment.setPaymentType(PaymentType.TOP_UP);
-                            succeedPayment.setChargeType(chargeType);
                             intent.putExtra(Constants.SUCCEED_PAYMENT_INFO, succeedPayment);
                             startActivityForResult(intent, 46);
                         }
