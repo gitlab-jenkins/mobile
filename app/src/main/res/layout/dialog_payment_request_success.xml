@@ -37,6 +37,17 @@
         android:text="@string/msg_success_payment_request"/>
 
     <xyz.homapay.hampay.mobile.android.component.FacedTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_margin="6dp"
+        android:gravity="center"
+        android:text="@string/iban_settelment"
+        android:textColor="@color/app_origin"
+        android:textSize="14dp"
+        geekui:customTypeface="fonts/vazir_regular.ttf" />
+
+    <xyz.homapay.hampay.mobile.android.component.FacedTextView
         geekui:customTypeface="fonts/vazir_regular.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
