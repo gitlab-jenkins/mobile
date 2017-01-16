@@ -253,7 +253,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                             data.getService().getTopUpInfoDTO().setImageId(messageSetOperator.getOperatorName());
                             intent.putExtra(Constants.TOP_UP_INFO, data.getService().getTopUpInfoDTO());
                             intent.putExtra(Constants.CHARGE_TYPE, ChargeType.DIRECT.ordinal());
-                            startActivity(intent);
+                            startActivityForResult(intent1, 48);
                         } else {
                             Dialoger.GENERAL.show(context, getString(R.string.err_general), getString(R.string.err_general_text));
                         }
@@ -318,6 +318,36 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
         }
 
         if (requestCode == 45) {
+            if (resultCode == Activity.RESULT_OK) {
+                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, -1);
+                if (result == 0) {
+                    fundDTOList.remove(itemPosition);
+                    pendingFundListAdapter.notifyDataSetChanged();
+                    if (fundDTOList.size() == 0) {
+                        nullPendingText.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+            }
+        }
+
+        if (requestCode == 47) {
+            if (resultCode == Activity.RESULT_OK) {
+                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, -1);
+                if (result == 0) {
+                    fundDTOList.remove(itemPosition);
+                    pendingFundListAdapter.notifyDataSetChanged();
+                    if (fundDTOList.size() == 0) {
+                        nullPendingText.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+            }
+        }
+
+        if (requestCode == 48) {
             if (resultCode == Activity.RESULT_OK) {
                 int result = data.getIntExtra(Constants.ACTIVITY_RESULT, -1);
                 if (result == 0) {

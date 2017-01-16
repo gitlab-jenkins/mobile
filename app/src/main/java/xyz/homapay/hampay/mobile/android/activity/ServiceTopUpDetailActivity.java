@@ -527,14 +527,6 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
             if (resultCode == Activity.RESULT_CANCELED) {
             }
         }
-        if (46 == requestCode) {
-            if (Activity.RESULT_OK == resultCode) {
-                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, -1);
-                if (0 == result) {
-                    finish();
-                }
-            }
-        }
     }
 
     public void pressKey(View view) {
@@ -650,7 +642,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
                             succeedPayment.setTrace(topUpInfo.getPspInfo().getProviderId());
                             succeedPayment.setPaymentType(PaymentType.TOP_UP);
                             intent.putExtra(Constants.SUCCEED_PAYMENT_INFO, succeedPayment);
-                            startActivityForResult(intent, 46);
+                            startActivityForResult(intent, 48);
                         }
                         resultStatus = ResultStatus.SUCCESS;
                     } else {

@@ -515,7 +515,6 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                     setResult(Activity.RESULT_OK, returnIntent);
                     finish();
                 }
-
             }
             if (resultCode == Activity.RESULT_CANCELED) {
             }
@@ -635,7 +634,7 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                             succeedPayment.setTrace(billsInfo.getPspInfo().getProviderId());
                             succeedPayment.setPaymentType(PaymentType.BILLS);
                             intent.putExtra(Constants.SUCCEED_PAYMENT_INFO, succeedPayment);
-                            startActivityForResult(intent, 46);
+                            startActivityForResult(intent, 47);
                         }
                         resultStatus = ResultStatus.SUCCESS;
                     } else {

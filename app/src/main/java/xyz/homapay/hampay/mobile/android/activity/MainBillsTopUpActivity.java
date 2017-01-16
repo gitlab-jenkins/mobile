@@ -1,5 +1,6 @@
 package xyz.homapay.hampay.mobile.android.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -322,6 +323,16 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
                 }
             }
         }
+
+        switch (requestCode) {
+            case 48:
+                if (resultCode == Activity.RESULT_OK) {
+
+                }
+                if (resultCode == Activity.RESULT_CANCELED) {
+                }
+                break;
+        }
     }
 
     private void createPayment() {
@@ -480,7 +491,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
             data.getService().getTopUpInfoDTO().setImageId(operatorName);
             intent.putExtra(Constants.TOP_UP_INFO, data.getService().getTopUpInfoDTO());
             intent.putExtra(Constants.CHARGE_TYPE, ChargeType.DIRECT.ordinal());
-            startActivity(intent);
+            startActivityForResult(intent, 48);
         } else {
             onError();
         }
