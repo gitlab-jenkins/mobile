@@ -388,7 +388,7 @@
                     android:orientation="horizontal">
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                        android:id="@+id/billsId"
+                        android:id="@+id/billsId2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="2dp"
@@ -446,18 +446,18 @@
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
                 android:layout_margin="8dp"
-                android:visibility="gone"
-                android:background="@color/main_menu_title" />
+                android:background="@color/main_menu_title"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/llCellNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:visibility="gone"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/tvCellNumber"
@@ -480,12 +480,12 @@
             </LinearLayout>
 
             <View
+                android:id="@+id/indicatorChargeType"
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
-                android:id="@+id/indicatorChargeType"
-                android:visibility="gone"
                 android:layout_margin="8dp"
-                android:background="@color/main_menu_title" />
+                android:background="@color/main_menu_title"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/llChargeType"
@@ -494,8 +494,8 @@
                 android:layout_gravity="right"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:visibility="gone"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/tvChargeType"

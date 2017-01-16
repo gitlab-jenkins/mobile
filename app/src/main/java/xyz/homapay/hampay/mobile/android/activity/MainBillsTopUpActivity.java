@@ -47,6 +47,7 @@ import xyz.homapay.hampay.mobile.android.p.topup.TopUpCreateView;
 import xyz.homapay.hampay.mobile.android.p.topup.TopUpInfo;
 import xyz.homapay.hampay.mobile.android.p.topup.TopUpInfoImpl;
 import xyz.homapay.hampay.mobile.android.p.topup.TopUpInfoView;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.Dialoger;
 import xyz.homapay.hampay.mobile.android.util.ModelLayerImpl;
@@ -224,29 +225,36 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
                 selectOperatorView(true);
                 break;
             case R.id.rlChargeType:
-                if (infos != null) {
-                    List<String> items = new ArrayList<>();
-                    for (xyz.homapay.hampay.common.common.TopUpInfo item : infos) {
-                        items.add(item.getDescription());
-                    }
+                try {
+                    if (infos != null) {
+                        List<String> items = new ArrayList<>();
+                        for (xyz.homapay.hampay.common.common.TopUpInfo item : infos) {
+                            items.add(item.getDescription());
+                        }
 
-                    ArrayList<ChargeAdapterModel> itemsAdapter = new ArrayList<>();
-                    for (int i = 0; i < infos.size(); i++) {
-                        ChargeAdapterModel model = new ChargeAdapterModel(i, infos.get(i).getChargeType(), infos.get(i).getDescription(), i == ((int) tvChargeType.getTag()));
-                        itemsAdapter.add(model);
+                        ArrayList<ChargeAdapterModel> itemsAdapter = new ArrayList<>();
+                        for (int i = 0; i < infos.size(); i++) {
+                            ChargeAdapterModel model = new ChargeAdapterModel(i, infos.get(i).getChargeType(), infos.get(i).getDescription(), i == ((int) tvChargeType.getTag()));
+                            itemsAdapter.add(model);
+                        }
+                        ChargeTypeChooserDialog.show(context, itemsAdapter);
                     }
-                    ChargeTypeChooserDialog.show(context, itemsAdapter);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 break;
             case R.id.rlChargeAmount:
-                if (infos != null) {
-                    int index = (int) tvChargeType.getTag();
-                    List<String> items = new ArrayList<>();
-                    for (ChargePackage item : infos.get(index).getChargePackages()) {
-                        items.add(item.getAmount() + "");
+                try {
+                    if (infos != null) {
+                        int index = (int) tvChargeAmount.getTag();
+                        List<String> items = new ArrayList<>();
+                        for (ChargePackage item : infos.get(index).getChargePackages()) {
+                            items.add(item.getAmount() + "");
+                        }
+                        ChargeAmountChooserDialog.show(context, items, ((int) tvChargeAmount.getTag()));
                     }
-
-                    ChargeAmountChooserDialog.show(context, items, ((int) tvChargeAmount.getTag()));
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 break;
             case R.id.btnTopUpPay:
@@ -469,7 +477,15 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     @Override
     public void onInfoLoaded(boolean state, ResponseMessage<TopUpInfoResponse> data, String message) {
         if (state) {
-            infos = data.getService().getTopUpInfoList();
+            try {
+                infos = data.getService().getTopUpInfoList();
+                tvChargeAmount.setTag(0);
+                tvChargeType.setTag(0);
+                tvChargeAmount.setText(AppManager.amountFixer(infos.get(0).getChargePackages().get(0).getAmount()));
+                tvChargeType.setText(infos.get(0).getDescription());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else
             onError();
     }
@@ -484,7 +500,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     @Subscribe
     public void onAmountSelect(MessageSelectChargeAmount amount) {
         this.amount = Long.parseLong(amount.getAmount());
-        tvChargeAmount.setText(amount.getAmount() + " " + getString(R.string.currency_rials));
+        tvChargeAmount.setText(AppManager.amountFixer(this.amount));
         tvChargeAmount.setTag(amount.getIndex());
     }
 }

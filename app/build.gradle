@@ -33,7 +33,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 25
         versionCode 16
-        versionName "HamPay-Develop-V1.2-MiladTest"
+        versionName "HamPay-Develop-V1.2"
         multiDexEnabled true
     }
     buildTypes {

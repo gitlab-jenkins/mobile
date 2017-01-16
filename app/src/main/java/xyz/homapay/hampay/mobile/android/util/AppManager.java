@@ -38,4 +38,10 @@ public class AppManager {
         return resId;
     }
 
+    public static final String amountFixer(long amount) {
+        CurrencyFormatter currencyFormatter = new CurrencyFormatter();
+        PersianEnglishDigit persianEnglishDigit = new PersianEnglishDigit();
+        return persianEnglishDigit.E2P(currencyFormatter.format(amount));
+    }
+
 }

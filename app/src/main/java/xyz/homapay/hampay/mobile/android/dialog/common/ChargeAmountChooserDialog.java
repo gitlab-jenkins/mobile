@@ -20,7 +20,6 @@ import xyz.homapay.hampay.mobile.android.adapter.charge.ChargeAdapter;
 import xyz.homapay.hampay.mobile.android.common.charge.ChargeAdapterModel;
 import xyz.homapay.hampay.mobile.android.common.charge.RecyclerItemClickListener;
 import xyz.homapay.hampay.mobile.android.common.messages.MessageSelectChargeAmount;
-import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.util.font.FontFace;
 
 /**
@@ -57,7 +56,7 @@ public class ChargeAmountChooserDialog {
                     public void onItemClick(View view, int position) {
                         adapter.setSelected(position);
                         cancel();
-                        EventBus.getDefault().post(new MessageSelectChargeAmount(((FacedTextView) view).getText().toString(), position));
+                        EventBus.getDefault().post(new MessageSelectChargeAmount(adapter.getAmount(position) + "", position));
                     }
 
                     @Override
