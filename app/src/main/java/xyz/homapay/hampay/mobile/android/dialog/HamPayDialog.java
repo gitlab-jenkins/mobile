@@ -32,7 +32,6 @@ import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
 import xyz.homapay.hampay.common.core.model.request.ChangePassCodeRequest;
 import xyz.homapay.hampay.common.core.model.request.ContactUsRequest;
 import xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
-import xyz.homapay.hampay.common.core.model.request.LatestPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.LatestPurchaseRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationCredentialsRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
@@ -55,7 +54,6 @@ import xyz.homapay.hampay.mobile.android.async.RequestChangePassCode;
 import xyz.homapay.hampay.mobile.android.async.RequestContactHampayEnabled;
 import xyz.homapay.hampay.mobile.android.async.RequestCredentialEntry;
 import xyz.homapay.hampay.mobile.android.async.RequestHamPayBusiness;
-import xyz.homapay.hampay.mobile.android.async.RequestLatestPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestNewLogout;
 import xyz.homapay.hampay.mobile.android.async.RequestRegistrationSendSmsToken;
@@ -990,9 +988,7 @@ public class HamPayDialog {
         }
     }
 
-    public void showFailPendingPaymentDialog(final RequestLatestPayment requestLatestPayment,
-                                             final LatestPaymentRequest latestPaymentRequest,
-                                             final String code,
+    public void showFailPendingPaymentDialog(final String code,
                                              final String message) {
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_contacts_enabled, null);

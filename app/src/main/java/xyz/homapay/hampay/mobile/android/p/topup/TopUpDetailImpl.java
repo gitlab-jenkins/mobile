@@ -64,7 +64,7 @@ public class TopUpDetailImpl extends Presenter<TopUpDetailView> implements TopUp
     public void onNetworkLoad(boolean status, ResponseMessage<TopUpResponse> data, String message) {
         try {
             view.dissmisProgress();
-            view.onDetailLoaded(status, status ? data : null, status ? message : "Failed");
+            view.onDetailLoaded(status, data, status ? message : "Failed");
         } catch (Exception e) {
             e.printStackTrace();
             view.onError();
