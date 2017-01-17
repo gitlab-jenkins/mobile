@@ -21,7 +21,6 @@ public class RequestPSPResult extends AsyncTask<PSPResultRequest, Void, Response
 
     private Context context;
     private AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> listener;
-    private int type = 0;
 
 
     public RequestPSPResult(Context context, AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> listener)

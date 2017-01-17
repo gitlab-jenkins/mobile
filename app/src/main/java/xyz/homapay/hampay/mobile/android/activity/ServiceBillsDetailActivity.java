@@ -343,6 +343,43 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
         });
     }
 
+    public class RequestPSPResultTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> {
+
+        private String productCode;
+        ServiceEvent serviceName;
+        LogEvent logEvent = new LogEvent(context);
+
+        public RequestPSPResultTaskCompleteListener(String productCode){
+            this.productCode = productCode;
+        }
+
+        @Override
+        public void onTaskComplete(ResponseMessage<PSPResultResponse> pspResultResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+
+            if (pspResultResponseMessage != null) {
+                if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    serviceName = ServiceEvent.PSP_RESULT_SUCCESS;
+                    if (productCode != null) {
+                        dbHelper.syncPspResult(productCode);
+                    }
+                } else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceEvent.PSP_RESULT_FAILURE;
+                    forceLogout();
+                }else {
+                    serviceName = ServiceEvent.PSP_RESULT_FAILURE;
+                }
+                logEvent.log(serviceName);
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
+    }
+
     @Override
     public void onBackPressed() {
         if (keyboard.getVisibility() == View.VISIBLE) {
@@ -624,7 +661,7 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                 }
 
                 if (responseCode != null) {
-                    if (responseCode.equalsIgnoreCase("1")) {
+                    if (responseCode.equalsIgnoreCase("1") && SWTraceNum != null) {
                         serviceName = ServiceEvent.PSP_PAYMENT_SUCCESS;
                         if (billsInfo != null) {
                             Intent intent = new Intent(context, PaymentCompletedActivity.class);
@@ -662,6 +699,8 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                     pspResultRequest.setResultType(PSPResultRequest.ResultType.UTILITY_BILL);
                     pspResultRequest.setCardDTO(billsInfo.getCardList().get(selectedCardIdIndex));
                     pspResultRequest.setPspName(PSPName.SAMAN);
+                    syncPspResult.setPspName(PSPName.SAMAN.getCode());
+                    syncPspResult.setCardId(billsInfo.getCardList().get(selectedCardIdIndex).getCardId());
                     requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(billsInfo.getProductCode()));
                     requestPSPResult.execute(pspResultRequest);
 

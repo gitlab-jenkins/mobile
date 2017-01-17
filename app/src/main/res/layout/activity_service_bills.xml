@@ -73,7 +73,8 @@
                 android:nextFocusDown="@+id/cardNumberValue"
                 android:maxLength="13"
                 android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true" />
+                android:layout_centerHorizontal="true"
+                android:padding="6dp"/>
 
         </RelativeLayout>
 
@@ -99,7 +100,8 @@
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:nextFocusDown="@+id/cardNumberValue"
-                android:maxLength="13"/>
+                android:maxLength="13"
+                android:padding="6dp"/>
 
         </RelativeLayout>
 

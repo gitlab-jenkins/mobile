@@ -29,8 +29,8 @@ public class SSLKeyStore {
 //            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/live.cer"));
 //            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/sit-http-v1.crt"));
 //            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/prod-http-v1.crt"));
-//            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/sit-http-v1.crt"));
-            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/uat.crt"));
+            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/sit-http-v1.crt"));
+//            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/uat.crt"));
 //            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/nginx.crt"));
             Certificate certificate = certificateFactory.generateCertificate(caInput);
             String keyStoreType = KeyStore.getDefaultType();
