@@ -597,43 +597,6 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
         }
     }
 
-    public class RequestPSPResultTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> {
-
-        ServiceEvent serviceName;
-        LogEvent logEvent = new LogEvent(context);
-        private String productCode;
-
-        public RequestPSPResultTaskCompleteListener(String productCode) {
-            this.productCode = productCode;
-        }
-
-        @Override
-        public void onTaskComplete(ResponseMessage<PSPResultResponse> pspResultResponseMessage) {
-
-            hamPayDialog.dismisWaitingDialog();
-
-            if (pspResultResponseMessage != null) {
-                if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    serviceName = ServiceEvent.PSP_RESULT_SUCCESS;
-                    if (productCode != null) {
-                        dbHelper.syncPspResult(productCode);
-                    }
-                } else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceEvent.PSP_RESULT_FAILURE;
-                    forceLogout();
-                } else {
-                    serviceName = ServiceEvent.PSP_RESULT_FAILURE;
-                }
-                logEvent.log(serviceName);
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
-    }
-
     public class RequestPurchaseTaskCompleteListener implements AsyncTaskCompleteListener<MKAArrayOfKeyValueOfstringstring> {
 
         @Override
