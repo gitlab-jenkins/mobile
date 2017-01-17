@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
@@ -23,7 +22,6 @@ import java.util.List;
 import xyz.homapay.hampay.common.common.ChargePackage;
 import xyz.homapay.hampay.common.common.Operator;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
-import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
 import xyz.homapay.hampay.common.core.model.response.TopUpInfoResponse;
 import xyz.homapay.hampay.common.core.model.response.TopUpResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
@@ -210,16 +208,22 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
                 new Expand(keyboard).animate();
                 break;
             case R.id.imgMCI:
+                if (operator == Operator.MCI)
+                    return;
                 operator = new MessageSetOperator(Operator.MCI).getOperator();
                 operatorName = new MessageSetOperator(Operator.MCI).getOperatorName();
                 selectOperatorView(true);
                 break;
             case R.id.imgMTN:
+                if (operator == Operator.MTN)
+                    return;
                 operator = new MessageSetOperator(Operator.MTN).getOperator();
                 operatorName = new MessageSetOperator(Operator.MTN).getOperatorName();
                 selectOperatorView(true);
                 break;
             case R.id.imgRIGHTEL:
+                if (operator == Operator.RAYTEL)
+                    return;
                 operator = new MessageSetOperator(Operator.RAYTEL).getOperator();
                 operatorName = new MessageSetOperator(Operator.RAYTEL).getOperatorName();
                 selectOperatorView(true);
@@ -294,23 +298,20 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case (1) :
+            case (1):
                 if (resultCode == Activity.RESULT_OK) {
-                    Cursor cursor =  managedQuery(data.getData(), null, null, null, null);
-                    while (cursor.moveToNext())
-                    {
+                    Cursor cursor = managedQuery(data.getData(), null, null, null, null);
+                    while (cursor.moveToNext()) {
                         String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
                         String hasPhone = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER));
-                        if ( hasPhone.equalsIgnoreCase("1"))
+                        if (hasPhone.equalsIgnoreCase("1"))
                             hasPhone = "true";
                         else
-                            hasPhone = "false" ;
+                            hasPhone = "false";
 
-                        if (Boolean.parseBoolean(hasPhone))
-                        {
-                            Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = "+ contactId,null, null);
-                            while (phones.moveToNext())
-                            {
+                        if (Boolean.parseBoolean(hasPhone)) {
+                            Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + contactId, null, null);
+                            while (phones.moveToNext()) {
                                 cellNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                                 showNumber(cellNumber);
 
@@ -374,11 +375,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
         String phoneNumber = "09" + cellNumberText.getText().toString().trim().replace(" ", "");
         phoneNumber = new PersianEnglishDigit().P2E(phoneNumber);
         if (phoneNumber.length() == 11) {
-            if (TelephonyUtils.isIranValidNumber(phoneNumber) && new TelephonyUtils().isPrePaid(phoneNumber)) {
-                return true;
-            } else {
-                return false;
-            }
+            return TelephonyUtils.isIranValidNumber(phoneNumber) && new TelephonyUtils().isPrePaid(phoneNumber);
         } else {
             return false;
         }
