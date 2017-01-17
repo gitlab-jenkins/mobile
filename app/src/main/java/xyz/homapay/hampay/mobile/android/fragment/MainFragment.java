@@ -249,7 +249,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         pending_badge.setText(persianEnglishDigit.E2P(String.valueOf(prefs.getInt(Constants.PENDING_COUNT, 0))));
         PendingCountRequest pendingCountRequest = new PendingCountRequest();
         RequestPendingCount requestPendingCount = new RequestPendingCount(getActivity(), new RequestPendingCountTaskCompleteListener());
-        requestPendingCount.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, pendingCountRequest);
+        requestPendingCount.execute(pendingCountRequest);
 
         intentFilter = new IntentFilter("notification.intent.MAIN");
         mIntentReceiver = new BroadcastReceiver() {
@@ -258,7 +258,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 if (intent.getBooleanExtra("get_update", false)) {
                     PendingCountRequest pendingCountRequest = new PendingCountRequest();
                     RequestPendingCount requestPendingCount = new RequestPendingCount(getActivity(), new RequestPendingCountTaskCompleteListener());
-                    requestPendingCount.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, pendingCountRequest);
+                    requestPendingCount.execute(pendingCountRequest);
                 }
             }
         };
