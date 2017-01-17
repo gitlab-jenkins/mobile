@@ -298,7 +298,9 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case (1):
+            case (1) :
+                cellNumber = "";
+                cellNumberText.setText("");
                 if (resultCode == Activity.RESULT_OK) {
                     Cursor cursor = managedQuery(data.getData(), null, null, null, null);
                     while (cursor.moveToNext()) {
@@ -314,7 +316,6 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
                             while (phones.moveToNext()) {
                                 cellNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                                 showNumber(cellNumber);
-
                             }
                         }
                     }

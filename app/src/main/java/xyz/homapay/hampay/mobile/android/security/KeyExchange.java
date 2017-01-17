@@ -1,6 +1,7 @@
 package xyz.homapay.hampay.mobile.android.security;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -39,6 +40,7 @@ public class KeyExchange {
     private Context context;
     private KeyExchanger keyExchanger;
     private KeyAgreementRequest keyAgreementRequest;
+    private static ResponseMessage<KeyAgreementResponse> keyAgreementResponseMessage = null;
 
     public KeyExchange(Context context) {
         this.context = context;
@@ -52,7 +54,6 @@ public class KeyExchange {
         keyAgreementRequest.setKeyData(publicKeyPair.getEncPublicKey().getEncoded());
         keyAgreementRequest.setIvData(publicKeyPair.getIvPublicKey().getEncoded());
 
-        ResponseMessage<KeyAgreementResponse> keyAgreementResponseMessage = null;
         URL url = new URL(Constants.HTTPS_SERVER_IP + "/security/agree-key");
         SecuredProxyService proxyService = new SecuredProxyService(context, Constants.CONNECTION_TYPE, ConnectionMethod.POST, url);
         RequestMessage<KeyAgreementRequest> message = new RequestMessage<>(keyAgreementRequest, "", Constants.API_LEVEL, System.currentTimeMillis());
@@ -68,7 +69,7 @@ public class KeyExchange {
         keyAgreementResponseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<KeyAgreementResponse>>() {
         }.getType());
 
-        encryptionId = keyAgreementResponseMessage.getService().getId();
+        Log.e("ID", keyAgreementResponseMessage.getService().getId());
 
         if (keyAgreementResponseMessage != null) {
             if (keyAgreementResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
@@ -115,6 +116,7 @@ public class KeyExchange {
     }
 
     public String getEncId() {
+        encryptionId = keyAgreementResponseMessage.getService().getId();
         if (encryptionId != null) {
             return encryptionId;
         } else {

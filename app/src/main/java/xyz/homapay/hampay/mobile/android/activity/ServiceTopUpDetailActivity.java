@@ -456,7 +456,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
 
     private void fillUI(TopUpInfoDTO topUInfo) {
         tvTopUpName.setText(topUInfo.getTopUpName());
-        topUpDate.setText(persian.E2P(new JalaliConvert().GregorianToPersian(topUInfo.getExpirationDate())));
+        topUpDate.setText(persian.E2P(new JalaliConvert().GregorianToPersian(topUInfo.getCreatedBy())));
         if (fundDTO == null) {
             if (topUInfo.getImageId() != null) {
                 imgOperator.setTag(topUInfo.getImageId());

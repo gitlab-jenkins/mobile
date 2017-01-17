@@ -2,6 +2,7 @@ package xyz.homapay.hampay.mobile.android.dialog;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
@@ -948,6 +949,11 @@ public class HamPayDialog {
             dialog = new HamPayCustomDialog(view, activity, 0);
             dialog.show();
         }
+
+        dialog.setOnDismissListener(dialog1 -> {
+            activity.finish();
+        });
+
     }
 
     public void showFailPendingPurchaseDialog(final RequestLatestPurchase requestLatestPurchase,
@@ -961,7 +967,6 @@ public class HamPayDialog {
 
         FacedTextView retry_contacts_enabled = (FacedTextView) view.findViewById(R.id.retry_contacts_enabled);
         FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
-
 
         retry_contacts_enabled.setOnClickListener(v -> {
             dialog.dismiss();

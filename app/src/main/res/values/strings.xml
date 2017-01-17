@@ -56,6 +56,7 @@
     <string name="start">شروع</string>
     <string name="main_fragment_generate_factor">درخواست پرداخت</string>
     <string name="main_fragment_business_payment">پرداخت به کسب و کار</string>
+    <string name="bill_already_paid">قبض قبلا پرداخت شده است.</string>
     <string name="main_fragment_bills_top_up">قبض و شارژ</string>
     <string name="topup_purchase">خرید شارژ</string>
     <string name="bills_mobile">قبوض موبایل</string>
@@ -281,7 +282,7 @@
     <string name="payment_success_trace">کد پیگیری: </string>
     <string name="payment_success_confirm">تایید</string>
     <string name="msg_ipg_fail">انجام عملیات پرداخت موفقیت آمیز نبود. لطفا دوباره تلاش کنید</string>
-    <string name="first_ipg_loading"> به دلیل بار اول استفاده شما و یا دلایل امنیتی لازم است تا اطلاعات کامل کارت بانکی خود را وارد نمایید</string>
+    <string name="first_ipg_loading">جهت اضافه نمودن كارت جديد، لازم است تا عملیات پرداخت خود را از درگاه پرداخت اينترنتي انجام دهید.</string>
     <string name="first_ipg_loading_confirm">تایید</string>
     <string name="msg_pin2_incorrect">رمز دوم خود را به درستی وارد کنید.</string>
     <string name="msg_cvv2_incorrect">لطفا CVV2 خود را به درستی وارد کنید.</string>

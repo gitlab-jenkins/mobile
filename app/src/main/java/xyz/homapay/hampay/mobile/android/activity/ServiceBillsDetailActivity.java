@@ -491,7 +491,7 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
 
     private void fillUI(BillInfoDTO billInfo) {
         billsName.setText(billInfo.getUtilityName());
-        billsDate.setText(persian.E2P(new JalaliConvert().GregorianToPersian(billInfo.getExpirationDate())));
+        billsDate.setText(persian.E2P(new JalaliConvert().GregorianToPersian(billInfo.getCreatedBy())));
         if (billInfo.getImageId() != null) {
             billsImage.setTag(billInfo.getImageId());
             ImageHelper.getInstance(context).imageLoader(billInfo.getImageId(), billsImage, R.drawable.user_placeholder);

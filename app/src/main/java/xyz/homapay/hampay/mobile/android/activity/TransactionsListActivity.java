@@ -154,7 +154,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
             transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
             transactionListRequest.setSortFactor(sortFactor);
             requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
-            requestUserTransaction.execute(transactionListRequest);
+            requestUserTransaction.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, transactionListRequest);
         });
         transactionListView.setOnItemClickListener((parent, view, position, id) -> {
             if (transactionDTOs != null) {
@@ -175,7 +175,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
         transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
         transactionListRequest.setSortFactor(sortFactor);
         requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
-        requestUserTransaction.execute(transactionListRequest);
+        requestUserTransaction.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, transactionListRequest);
         try {
             hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         } catch (Exception e) {
@@ -204,7 +204,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
                 transactionListRequest.setSortFactor(sortFactor);
                 requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
-                requestUserTransaction.execute(transactionListRequest);
+                requestUserTransaction.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, transactionListRequest);
                 hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                 changeTab(1);
                 break;
@@ -226,7 +226,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
                 transactionListRequest.setSortFactor(sortFactor);
                 requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
-                requestUserTransaction.execute(transactionListRequest);
+                requestUserTransaction.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, transactionListRequest);
                 hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                 changeTab(2);
                 break;
@@ -248,7 +248,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                 transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
                 transactionListRequest.setSortFactor(sortFactor);
                 requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
-                requestUserTransaction.execute(transactionListRequest);
+                requestUserTransaction.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, transactionListRequest);
                 hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                 changeTab(3);
                 break;
@@ -300,7 +300,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                     editor.commit();
                     transactionListRequest.setPageNumber(requestPageNumber);
                     requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
-                    requestUserTransaction.execute(transactionListRequest);
+                    requestUserTransaction.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, transactionListRequest);
                     loading.setVisibility(View.VISIBLE);
 
                 } else
