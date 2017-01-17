@@ -53,9 +53,9 @@ public class PendingFundListAdapter extends BaseAdapter {
         return fundList.size();
     }
 
-    public Object getItem(int position) {
+    public FundDTO getItem(int position) {
         // TODO Auto-generated method stub
-        return position;
+        return fundList.get(position);
     }
 
     public long getItemId(int position) {
@@ -117,14 +117,14 @@ public class PendingFundListAdapter extends BaseAdapter {
             viewHolder.code_digit_5.setText("");
             viewHolder.code_digit_6.setText(fund.getProductCode());
         } else if (fund.getPaymentType() == FundDTO.PaymentType.UTILITY_BILL) {
-        }else if (fund.getPaymentType() == FundDTO.PaymentType.UTILITY_BILL){
+        } else if (fund.getPaymentType() == FundDTO.PaymentType.UTILITY_BILL) {
             viewHolder.code_digit_1.setText("");
             viewHolder.code_digit_2.setText("");
             viewHolder.code_digit_3.setText("");
             viewHolder.code_digit_4.setText("");
             viewHolder.code_digit_5.setText("");
             viewHolder.code_digit_6.setText(fund.getProductCode());
-        }else if (fund.getPaymentType() == FundDTO.PaymentType.TOP_UP){
+        } else if (fund.getPaymentType() == FundDTO.PaymentType.TOP_UP) {
             viewHolder.code_digit_6.setText(fund.getProductCode());
         }
 

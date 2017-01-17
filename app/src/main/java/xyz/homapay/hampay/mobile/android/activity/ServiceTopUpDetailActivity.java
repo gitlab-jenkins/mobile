@@ -29,6 +29,7 @@ import xyz.homapay.hampay.common.core.model.request.UtilityBillDetailRequest;
 import xyz.homapay.hampay.common.core.model.response.PSPResultResponse;
 import xyz.homapay.hampay.common.core.model.response.SignToPayResponse;
 import xyz.homapay.hampay.common.core.model.response.TopUpDetailResponse;
+import xyz.homapay.hampay.common.core.model.response.dto.FundDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.TopUpInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
@@ -41,13 +42,13 @@ import xyz.homapay.hampay.mobile.android.async.RequestTokenTopUp;
 import xyz.homapay.hampay.mobile.android.async.task.SignToPayTask;
 import xyz.homapay.hampay.mobile.android.async.task.UtilityBillDetailTask;
 import xyz.homapay.hampay.mobile.android.async.task.impl.OnTaskCompleted;
-import xyz.homapay.hampay.mobile.android.common.charge.ChargeType;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.dialog.card.CardAction;
 import xyz.homapay.hampay.mobile.android.dialog.card.CardNumberDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
+import xyz.homapay.hampay.mobile.android.img.ImageHelper;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.PaymentType;
 import xyz.homapay.hampay.mobile.android.model.SucceedPayment;
@@ -104,7 +105,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
     private String signature;
     private String providerId = null;
     private String authToken = "";
-    private ChargeType chargeType;
+    private FundDTO fundDTO;
 
     public void backActionBar(View view) {
         finish();
@@ -198,7 +199,6 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
         hampayFee = (FacedTextView) findViewById(R.id.hampayFee);
         tvTopUpTotalAmount = (FacedTextView) findViewById(R.id.tvTopUpTotalAmount);
 
-
         bankName = (FacedTextView) findViewById(R.id.bankName);
         cardNumberValue = (FacedTextView) findViewById(R.id.cardNumberValue);
         selectCardText = (FacedTextView) findViewById(R.id.selectCardText);
@@ -206,8 +206,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
 
         Intent intent = getIntent();
         topUpInfo = (TopUpInfoDTO) intent.getSerializableExtra(Constants.TOP_UP_INFO);
-
-        chargeType = intent.getIntExtra(Constants.CHARGE_TYPE, 0) == 0 ? ChargeType.DIRECT : ChargeType.WITH_CODE;
+        fundDTO = (FundDTO) intent.getSerializableExtra(Constants.FUND_DTO);
         providerId = intent.getStringExtra(Constants.PROVIDER_ID);
 
         if (topUpInfo != null) {
@@ -458,18 +457,21 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
     private void fillUI(TopUpInfoDTO topUInfo) {
         tvTopUpName.setText(topUInfo.getTopUpName());
         topUpDate.setText(persian.E2P(new JalaliConvert().GregorianToPersian(topUInfo.getExpirationDate())));
-        if (topUInfo.getImageId() != null) {
-            imgOperator.setTag(topUInfo.getImageId());
-            if (topUInfo.getImageId().equals("MCI")) {
-                imgOperator.setImageResource(R.mipmap.hamrah_active);
-            } else if (topUInfo.getImageId().equals("MTN")) {
-                imgOperator.setImageResource(R.mipmap.irancell_active);
-            } else if (topUInfo.getImageId().equals("RAYTEL")) {
-                imgOperator.setImageResource(R.mipmap.rightel_active);
+        if (fundDTO == null) {
+            if (topUInfo.getImageId() != null) {
+                imgOperator.setTag(topUInfo.getImageId());
+                if (topUInfo.getImageId().equals("MCI")) {
+                    imgOperator.setImageResource(R.mipmap.hamrah_active);
+                } else if (topUInfo.getImageId().equals("MTN")) {
+                    imgOperator.setImageResource(R.mipmap.irancell_active);
+                } else if (topUInfo.getImageId().equals("RAYTEL")) {
+                    imgOperator.setImageResource(R.mipmap.rightel_active);
+                }
+            } else {
+                imgOperator.setImageResource(R.drawable.user_placeholder);
             }
-        } else {
-            imgOperator.setImageResource(R.drawable.user_placeholder);
-        }
+        } else
+            ImageHelper.getInstance(activity).imageLoader(fundDTO.getImageId(), imgOperator, R.drawable.user_placeholder);
 
         tvCellNumber.setText(persian.E2P(topUInfo.getCellNumber()));
         tvAmount.setText(persian.E2P(persian.E2P(currencyFormatter.format(topUInfo.getChargePackage().getAmount()))));
@@ -645,7 +647,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
                             startActivityForResult(intent, 48);
                         }
                         resultStatus = ResultStatus.SUCCESS;
-                    } else if (responseCode.equalsIgnoreCase("17") || responseCode.equalsIgnoreCase("25") || responseCode.equalsIgnoreCase("27") || responseCode.equalsIgnoreCase("56")){
+                    } else if (responseCode.equalsIgnoreCase("17") || responseCode.equalsIgnoreCase("25") || responseCode.equalsIgnoreCase("27") || responseCode.equalsIgnoreCase("56")) {
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.token_special_issue));
                         resultStatus = ResultStatus.FAILURE;
                     } else {

@@ -252,6 +252,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                             data.getService().getTopUpInfoDTO().setImageId(messageSetOperator.getOperatorName());
                             intent.putExtra(Constants.TOP_UP_INFO, data.getService().getTopUpInfoDTO());
                             intent.putExtra(Constants.CHARGE_TYPE, ChargeType.DIRECT.ordinal());
+                            intent.putExtra(Constants.FUND_DTO, pendingFundListAdapter.getItem(position));
                             startActivityForResult(intent, 48);
                         } else {
                             hamPayDialog.showFailPendingPaymentDialog(data.getService().getResultStatus().getCode(), data.getService().getResultStatus().getDescription());
