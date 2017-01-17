@@ -336,6 +336,8 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
                         infos = null;
                         this.chargeType = "";
                         this.amount = 0;
+                        this.operator = null;
+                        this.operatorName = "";
                         tvChargeAmount.setTag(0);
                         tvChargeType.setTag(0);
                         tvChargeAmount.setText("ریال");
