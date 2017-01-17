@@ -35,18 +35,31 @@ import xyz.homapay.hampay.mobile.android.webservice.SecuredProxyService;
  */
 public class KeyExchange {
 
-    private static SecretKeyPair secretKeyPair;
-    private static String encryptionId;
+    private SecretKeyPair secretKeyPair;
+    private String encryptionId;
     private Context context;
     private KeyExchanger keyExchanger;
     private KeyAgreementRequest keyAgreementRequest;
-    private static ResponseMessage<KeyAgreementResponse> keyAgreementResponseMessage = null;
+    private ResponseMessage<KeyAgreementResponse> keyAgreementResponseMessage = null;
 
-    public KeyExchange(Context context) {
+    private static volatile KeyExchange instance;
+    public static KeyExchange getInstance(Context context){
+        if (instance == null){
+            synchronized (KeyExchange.class){
+                if (instance == null)
+                    instance = new KeyExchange(context);
+            }
+
+        }
+
+        return instance;
+    }
+
+    private KeyExchange(Context context) {
         this.context = context;
     }
 
-    public void exchange() throws EncryptionException, IOException {
+    public synchronized void exchange() throws EncryptionException, IOException {
         keyExchanger = new DiffieHellmanKeyExchanger();
         PublicKeyPair publicKeyPair = keyExchanger.getPublicKey();
         keyAgreementRequest = new KeyAgreementRequest();

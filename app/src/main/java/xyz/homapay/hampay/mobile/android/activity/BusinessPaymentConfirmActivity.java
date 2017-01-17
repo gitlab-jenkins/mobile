@@ -556,10 +556,14 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.token_special_issue));
                         resultStatus = ResultStatus.FAILURE;
                     } else {
-                        PspCode pspCode = new PspCode(context);
-                        new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(responseCode));
-                        resultStatus = ResultStatus.FAILURE;
                         serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
+                        PspCode pspCode = new PspCode(context);
+                        if (pspCode.getDescription(responseCode) == null){
+                            new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.token_special_issue));
+                        }else {
+                            new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(responseCode));
+                        }
+                        resultStatus = ResultStatus.FAILURE;
                     }
                     logEvent.log(serviceName);
 

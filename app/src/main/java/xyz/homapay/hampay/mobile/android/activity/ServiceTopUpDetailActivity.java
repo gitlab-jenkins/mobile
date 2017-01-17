@@ -653,7 +653,11 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
                     } else {
                         serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
                         PspCode pspCode = new PspCode(context);
-                        new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(responseCode));
+                        if (pspCode.getDescription(responseCode) == null){
+                            new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.token_special_issue));
+                        }else {
+                            new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(responseCode));
+                        }
                         resultStatus = ResultStatus.FAILURE;
                     }
                     logEvent.log(serviceName);

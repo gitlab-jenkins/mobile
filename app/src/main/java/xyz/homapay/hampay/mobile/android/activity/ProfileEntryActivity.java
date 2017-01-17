@@ -179,7 +179,7 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
         persianEnglishDigit = new PersianEnglishDigit();
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
-        keyExchange = new KeyExchange(activity);
+        keyExchange = KeyExchange.getInstance(context);
         confirmTacPrivacy = (CheckBox) findViewById(R.id.confirmTacPrivacy);
         confirmTacPrivacy.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {

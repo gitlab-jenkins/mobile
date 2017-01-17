@@ -650,7 +650,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
 
             hamPayDialog.dismisWaitingDialog();
             pay_to_business_button.setEnabled(true);
-            ServiceEvent serviceName;
+            ServiceEvent serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
             LogEvent logEvent = new LogEvent(context);
 
             String responseCode = null;
@@ -690,11 +690,15 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                         resultStatus = ResultStatus.FAILURE;
                     } else {
                         serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
-                        logEvent.log(serviceName);
                         PspCode pspCode = new PspCode(context);
-                        new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(responseCode));
+                        if (pspCode.getDescription(responseCode) == null){
+                            new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.token_special_issue));
+                        }else {
+                            new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(responseCode));
+                        }
                         resultStatus = ResultStatus.FAILURE;
                     }
+                    logEvent.log(serviceName);
 
                     SyncPspResult syncPspResult = new SyncPspResult();
                     syncPspResult.setResponseCode(responseCode);

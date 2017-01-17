@@ -16,7 +16,7 @@ import xyz.homapay.hampay.mobile.android.security.KeyExchange;
 public class JsonEncryptor {
 
     public String encrypt(Context ctx, String jsonBody) throws EncryptionException, IOException {
-        KeyExchange keyExchange = new KeyExchange(ctx);
+        KeyExchange keyExchange = KeyExchange.getInstance(ctx);
         AESMessageEncryptor messageEncryptor = new AESMessageEncryptor();
         if (keyExchange.getKey() == null || keyExchange.getIv() == null) {
             keyExchange.exchange();
@@ -28,7 +28,7 @@ public class JsonEncryptor {
 
     public String decrypt(Context ctx, String response) throws Exception {
         AESMessageEncryptor messageEncryptor = new AESMessageEncryptor();
-        KeyExchange keyExchange = new KeyExchange(ctx);
+        KeyExchange keyExchange = KeyExchange.getInstance(ctx);
         DecryptedResponseInfo decryptedResponseInfo = messageEncryptor.decryptResponse(response, keyExchange.getKey(), keyExchange.getIv());
         if (decryptedResponseInfo.getResponseCode() == 0) {
             return decryptedResponseInfo.getPayload();

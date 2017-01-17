@@ -229,12 +229,12 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         context = this;
         activity = HamPayLoginActivity.this;
         hamPayDialog = new HamPayDialog(activity);
-        keyExchange = new KeyExchange(context);
+        keyExchange = KeyExchange.getInstance(context);
         networkConnectivity = new NetworkConnectivity();
         if (!networkConnectivity.isOnline(context)) {
             hamPayDialog.showNoNetwork();
         } else {
-            keyExchange = new KeyExchange(context);
+            keyExchange = KeyExchange.getInstance(context);
             new KeyExchangeTask().execute();
         }
 
