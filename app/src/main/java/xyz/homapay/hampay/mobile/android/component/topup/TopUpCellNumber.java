@@ -53,20 +53,20 @@ public class TopUpCellNumber extends FacedTextView {
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-                    String phoneNumber = "09" + editable.toString();
+                    String phoneNumber = "09" + editable.toString().trim();
                     phoneNumber = new PersianEnglishDigit().P2E(phoneNumber);
                     if (phoneNumber.length() == 11) {
                         cellNumberIcon.setVisibility(VISIBLE);
                         if (TelephonyUtils.isIranValidNumber(phoneNumber) && new TelephonyUtils().isPrePaid(phoneNumber)) {
-                            cellNumberIcon.setImageResource(R.drawable.right_icon);
                             Operator operator = new TelephonyUtils().getNumberOperator(phoneNumber);
                             MessageSetOperator messageSetOperator = new MessageSetOperator(operator);
                             EventBus.getDefault().post(messageSetOperator);
-                        } else {
-                            cellNumberIcon.setImageResource(R.drawable.false_icon);
                         }
+                    }
+                    if (TelephonyUtils.isIranValidNumber(phoneNumber) && new TelephonyUtils().isPrePaid(phoneNumber)) {
+                        cellNumberIcon.setImageResource(R.drawable.right_icon);
                     } else {
-                        cellNumberIcon.setVisibility(INVISIBLE);
+                        cellNumberIcon.setImageResource(R.drawable.false_icon);
                     }
                 }
             });

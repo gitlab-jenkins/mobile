@@ -444,6 +444,8 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     public void onOperatorChanged(MessageSetOperator messageSetOperator) {
         if (messageSetOperator.getOperator() == null)
             return;
+        if (messageSetOperator.getOperator() == operator)
+            return;
         this.operator = messageSetOperator.getOperator();
         this.operatorName = messageSetOperator.getOperatorName();
         new Collapse(keyboard).animate();
