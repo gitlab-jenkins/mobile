@@ -564,6 +564,19 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
         this.chargeType = type.getSelectedType();
         tvChargeType.setText(type.getSelectedDescrption());
         selectedType = type.getIndex();
+        changeAmountData();
+    }
+
+    private void changeAmountData() {
+        try {
+            if (infos != null) {
+                this.amount = infos.get(selectedType).getChargePackages().get(0).getAmount();
+                String amountText = AppManager.amountFixer(this.amount) + " ریال";
+                tvChargeAmount.setText(amountText);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Subscribe
