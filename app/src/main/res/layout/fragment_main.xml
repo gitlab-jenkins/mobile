@@ -165,32 +165,12 @@
                         android:textSize="15dp"
                         geekui:customTypeface="fonts/vazir_regular.ttf" />
 
-                    <RelativeLayout
-                        android:layout_width="64dp"
-                        android:layout_height="64dp">
-
-                        <ImageView
-                            android:layout_width="52dp"
-                            android:layout_height="52dp"
-                            android:layout_alignParentRight="true"
-                            android:background="@color/page_title"
-                            android:src="@drawable/billsandtopup" />
-
-                        <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                            android:id="@+id/bill_top_up_badge"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_alignParentRight="true"
-                            android:background="@drawable/pending_count_badge_style"
-                            android:gravity="center"
-                            android:padding="1dp"
-                            android:textColor="@android:color/white"
-                            android:textSize="12dp"
-                            android:visibility="gone"
-                            geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
-
-                    </RelativeLayout>
-
+                    <ImageView
+                        android:layout_width="52dp"
+                        android:layout_height="52dp"
+                        android:layout_alignParentRight="true"
+                        android:background="@color/page_title"
+                        android:src="@drawable/billsandtopup" />
 
                 </LinearLayout>
 
@@ -218,8 +198,8 @@
                         geekui:customTypeface="fonts/vazir_regular.ttf" />
 
                     <RelativeLayout
-                        android:layout_width="64dp"
-                        android:layout_height="64dp">
+                        android:layout_width="52dp"
+                        android:layout_height="52dp">
 
                         <ImageView
                             android:layout_width="52dp"

@@ -685,6 +685,9 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                             startActivityForResult(intent, 45);
                         }
                         resultStatus = ResultStatus.SUCCESS;
+                    } else if (responseCode.equalsIgnoreCase("17") || responseCode.equalsIgnoreCase("25") || responseCode.equalsIgnoreCase("27") || responseCode.equalsIgnoreCase("56")){
+                        new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.token_special_issue));
+                        resultStatus = ResultStatus.FAILURE;
                     } else {
                         serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
                         logEvent.log(serviceName);
