@@ -328,6 +328,10 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
             case 48:
                 if (resultCode == Activity.RESULT_OK) {
                     cellNumberText.setText("");
+                    cellNumberIcon.setImageDrawable(null);
+                    imgMCI.setImageResource(R.mipmap.irancell_inactive);
+                    imgMTN.setImageResource(R.mipmap.hamrah_inactive);
+                    imgRIGHTEL.setImageResource(R.mipmap.rightel_inactive);
                     cellNumber = "";
                     try {
                         MCI_INFO = null;
