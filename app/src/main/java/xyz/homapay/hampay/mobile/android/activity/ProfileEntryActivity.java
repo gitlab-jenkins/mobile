@@ -352,7 +352,7 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                     && nationalCodeValue.getText().toString().trim().length() > 0
                     && fullUserName.length() >= 2
                     && emailTextWatcher.isValid()) {
-
+                keepOn_button.setEnabled(false);
                 requestAndLoadPhoneState();
 
             } else {
@@ -396,11 +396,13 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
 
     @Override
     public void onError() {
+        keepOn_button.setEnabled(true);
         Toast.makeText(context, R.string.err_message_registration, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onRegisterResponse(boolean state, ResponseMessage<RegistrationEntryResponse> data, String message) {
+        keepOn_button.setEnabled(true);
         ServiceEvent serviceName;
         if (state && data != null) {
             if (data.getService().getResultStatus() == ResultStatus.SUCCESS) {
@@ -434,6 +436,7 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
 
     @Override
     public void keyExchangeProblem() {
+        keepOn_button.setEnabled(true);
         keepOn_button.setBackgroundResource(R.drawable.disable_button_style);
         Toast.makeText(activity, getString(R.string.system_connectivity), Toast.LENGTH_LONG).show();
     }

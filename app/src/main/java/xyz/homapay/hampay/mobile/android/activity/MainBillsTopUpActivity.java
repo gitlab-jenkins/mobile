@@ -366,6 +366,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
                 PersianEnglishDigit ped = new PersianEnglishDigit();
                 String str = ped.P2E(cellNumberText.getText().toString());
                 str = "09" + str;
+                btnTopUpPay.setEnabled(false);
                 topUpCreate.create(operator, str, chargePackage, chargeType);
             }
         }
@@ -508,11 +509,13 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onError() {
+        btnTopUpPay.setEnabled(true);
         dlg.showFailPendingPaymentDialog(getString(R.string.err_general), getString(R.string.err_general_text));
     }
 
     @Override
     public void onCreated(boolean state, ResponseMessage<TopUpResponse> data, String message) {
+        btnTopUpPay.setEnabled(true);
         if (state) {
             Intent intent = new Intent(context, ServiceTopUpDetailActivity.class);
             data.getService().getTopUpInfoDTO().setImageId(operatorName);
