@@ -138,6 +138,7 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                         boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE);
                         if (showRationale) {
                             handler.post(() -> {
+                                keepOn_button.setEnabled(true);
                                 PermissionDeviceDialog permissionDeviceDialog = new PermissionDeviceDialog();
                                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                                 fragmentTransaction.add(permissionDeviceDialog, null);
