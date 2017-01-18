@@ -32,10 +32,10 @@ hs_err_pid*
 /server/.mule
 .mule/
 
-local.properties
-
 /build
 /gradle
 /.gradle
 /app/app.iml
-gradlew
+
+local.properties
+/gradlew

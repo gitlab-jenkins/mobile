@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:geekui="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="@drawable/dialog_failure_style"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dialog_failure_title_style">
+
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_centerInParent="true"
+            android:padding="4dp"
+            android:src="@drawable/ic_warning" />
+
+    </RelativeLayout>
+
+    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+        android:id="@+id/responseMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="12dp"
+        android:gravity="right"
+        android:text="@string/msg_invalid_bill_info"
+        android:textColor="@color/modal_text"
+        android:textSize="15dp"
+        geekui:customTypeface="fonts/vazir_regular.ttf" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="4dp"
+            android:background="@drawable/modal_failure_button_style"
+            android:gravity="center"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="@string/cancel_registration_entry"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            geekui:customTypeface="fonts/vazir_regular.ttf" />
+
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+            android:id="@+id/retry"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="4dp"
+            android:background="@drawable/modal_failure_button_style"
+            android:gravity="center"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="@string/retry_registration_entry"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            geekui:customTypeface="fonts/vazir_regular.ttf" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -13,7 +13,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -27,13 +26,11 @@ import br.com.goncalves.pugnotification.notification.PugNotification;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.enums.FundType;
-import xyz.homapay.hampay.common.core.model.request.CancelPurchasePaymentRequest;
-import xyz.homapay.hampay.common.core.model.request.CancelUserPaymentRequest;
-import xyz.homapay.hampay.common.core.model.request.PendingCountRequest;
+import xyz.homapay.hampay.common.core.model.request.CancelFundRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingFundListRequest;
-import xyz.homapay.hampay.common.core.model.response.CancelPurchasePaymentResponse;
-import xyz.homapay.hampay.common.core.model.response.CancelUserPaymentResponse;
+import xyz.homapay.hampay.common.core.model.response.CancelFundResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingFundListResponse;
+import xyz.homapay.hampay.common.core.model.response.TopUpResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.FundDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
@@ -41,40 +38,33 @@ import xyz.homapay.hampay.mobile.android.adapter.PendingFundListAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestCancelPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestCancelPurchase;
-import xyz.homapay.hampay.mobile.android.async.RequestPendingCount;
 import xyz.homapay.hampay.mobile.android.async.RequestPendingFundList;
+import xyz.homapay.hampay.mobile.android.common.charge.ChargeType;
+import xyz.homapay.hampay.mobile.android.common.messages.MessageSetOperator;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.dialog.cancelPending.ActionPending;
 import xyz.homapay.hampay.mobile.android.dialog.cancelPending.CancelPendingDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.p.topup.TopUpDetailImpl;
+import xyz.homapay.hampay.mobile.android.p.topup.TopUpDetailView;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.ModelLayerImpl;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
+import xyz.homapay.hampay.mobile.android.util.TelephonyUtils;
 
 public class PendingPurchasePaymentListActivity extends AppCompatActivity implements View.OnClickListener, CancelPendingDialog.CancelPendingDialogListener {
 
-    private Activity activity;
-
-    private FacedTextView nullPendingText;
-
+    final Handler handler = new Handler();
     RequestPendingFundList requestPendingFundList;
     PendingFundListRequest pendingFundListRequest;
-
     PendingFundListAdapter pendingFundListAdapter;
-    private SwipeRefreshLayout pullToRefresh;
-    private ListView pendingListView;
     HamPayDialog hamPayDialog;
-    private List<FundDTO> fundDTOList;
-    private int pos = -1;
-    private FundType fundType = FundType.ALL;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
-    private int itemPosition;
-    private String authToken;
     RequestCancelPurchase requestCancelPurchase;
-    CancelPurchasePaymentRequest cancelPurchasePaymentRequest;
+    CancelFundRequest cancelFundRequest;
     RequestCancelPayment requestCancelPayment;
-    CancelUserPaymentRequest cancelUserPaymentRequest;
     RelativeLayout full_pending;
     RelativeLayout invoice_pending;
     RelativeLayout purchase_pending;
@@ -83,7 +73,15 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
     ImageView invoice_triangle;
     Timer timer;
     TimerTask timerTask;
-    final Handler handler = new Handler();
+    private Activity activity;
+    private FacedTextView nullPendingText;
+    private SwipeRefreshLayout pullToRefresh;
+    private ListView pendingListView;
+    private List<FundDTO> fundDTOList;
+    private int pos = -1;
+    private FundType fundType = FundType.ALL;
+    private int itemPosition;
+    private String authToken;
     private PersianEnglishDigit persianEnglishDigit;
     private Context context;
     private IntentFilter intentFilter;
@@ -100,11 +98,9 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
         timerTask = new TimerTask() {
 
             public void run() {
-                handler.post(new Runnable() {
-                    public void run() {
-                        if (fundDTOList != null && pendingFundListAdapter != null) {
-                            pendingFundListAdapter.notifyDataSetChanged();
-                        }
+                handler.post(() -> {
+                    if (fundDTOList != null && pendingFundListAdapter != null) {
+                        pendingFundListAdapter.notifyDataSetChanged();
                     }
                 });
             }
@@ -136,7 +132,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
         mIntentReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if (intent.getBooleanExtra("get_update", false)){
+                if (intent.getBooleanExtra("get_update", false)) {
                     requestPendingFundList = new RequestPendingFundList(activity, new RequestPendingFundTaskCompleteListener());
                     pendingFundListRequest = new PendingFundListRequest();
                     pendingFundListRequest.setType(fundType);
@@ -145,6 +141,8 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
             }
         };
         registerReceiver(mIntentReceiver, intentFilter);
+        if (pendingListView != null)
+            pendingListView.setEnabled(true);
     }
 
     @Override
@@ -161,7 +159,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
     }
 
 
-    public void backActionBar(View view){
+    public void backActionBar(View view) {
         finish();
     }
 
@@ -182,11 +180,11 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
         persianEnglishDigit = new PersianEnglishDigit();
 
-        nullPendingText = (FacedTextView)findViewById(R.id.nullPendingText);
+        nullPendingText = (FacedTextView) findViewById(R.id.nullPendingText);
 
         hamPayDialog = new HamPayDialog(activity);
 
-        pullToRefresh = (SwipeRefreshLayout)findViewById(R.id.pullToRefresh);
+        pullToRefresh = (SwipeRefreshLayout) findViewById(R.id.pullToRefresh);
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -196,7 +194,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                 requestPendingFundList.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, pendingFundListRequest);
             }
         });
-        pendingListView = (ListView)findViewById(R.id.pendingListView);
+        pendingListView = (ListView) findViewById(R.id.pendingListView);
 
         hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         requestPendingFundList = new RequestPendingFundList(activity, new RequestPendingFundTaskCompleteListener());
@@ -204,52 +202,87 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
         pendingFundListRequest.setType(fundType);
         requestPendingFundList.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, pendingFundListRequest);
 
-        full_pending = (RelativeLayout)findViewById(R.id.full_pending);
+        full_pending = (RelativeLayout) findViewById(R.id.full_pending);
         full_pending.setOnClickListener(this);
-        invoice_pending = (RelativeLayout)findViewById(R.id.invoice_pending);
+        invoice_pending = (RelativeLayout) findViewById(R.id.invoice_pending);
         invoice_pending.setOnClickListener(this);
-        purchase_pending = (RelativeLayout)findViewById(R.id.purchase_pending);
+        purchase_pending = (RelativeLayout) findViewById(R.id.purchase_pending);
         purchase_pending.setOnClickListener(this);
-        full_triangle = (ImageView)findViewById(R.id.full_triangle);
-        business_triangle = (ImageView)findViewById(R.id.business_triangle);
-        invoice_triangle = (ImageView)findViewById(R.id.invoice_triangle);
+        full_triangle = (ImageView) findViewById(R.id.full_triangle);
+        business_triangle = (ImageView) findViewById(R.id.business_triangle);
+        invoice_triangle = (ImageView) findViewById(R.id.invoice_triangle);
 
-        pendingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent();
-                if (fundDTOList.get(position).getPaymentType() == FundDTO.PaymentType.PURCHASE) {
-                    intent.setClass(activity, RequestBusinessPayDetailActivity.class);
-                    intent.putExtra(Constants.PROVIDER_ID, fundDTOList.get(position).getProviderId());
-                    itemPosition = position;
-                    startActivityForResult(intent, 45);
-                } else if (fundDTOList.get(position).getPaymentType() == FundDTO.PaymentType.PAYMENT) {
-                    intent.setClass(activity, InvoicePendingConfirmationActivity.class);
-                    intent.putExtra(Constants.PROVIDER_ID, fundDTOList.get(position).getProviderId());
-                    itemPosition = position;
-                    startActivityForResult(intent, 46);
-                }
+        pendingListView.setOnItemClickListener((parent, view, position, id) -> {
+            Intent intent1 = new Intent();
+            pendingListView.setEnabled(false);
+            if (fundDTOList.get(position).getPaymentType() == FundDTO.PaymentType.PURCHASE) {
+                intent1.setClass(activity, RequestBusinessPayDetailActivity.class);
+                intent1.putExtra(Constants.PROVIDER_ID, fundDTOList.get(position).getProviderId());
+                itemPosition = position;
+                startActivityForResult(intent1, 45);
+                pendingListView.setEnabled(true);
+            } else if (fundDTOList.get(position).getPaymentType() == FundDTO.PaymentType.PAYMENT) {
+                intent1.setClass(activity, InvoicePendingConfirmationActivity.class);
+                intent1.putExtra(Constants.PROVIDER_ID, fundDTOList.get(position).getProviderId());
+                itemPosition = position;
+                startActivityForResult(intent1, 46);
+                pendingListView.setEnabled(true);
+            } else if (fundDTOList.get(position).getPaymentType() == FundDTO.PaymentType.UTILITY_BILL) {
+                intent1.setClass(activity, ServiceBillsDetailActivity.class);
+                intent1.putExtra(Constants.PROVIDER_ID, fundDTOList.get(position).getProviderId());
+                itemPosition = position;
+                startActivityForResult(intent1, 47);
+                pendingListView.setEnabled(true);
+            } else {
+                new TopUpDetailImpl(new ModelLayerImpl(context), new TopUpDetailView() {
+                    @Override
+                    public void showProgress() {
+                        hamPayDialog.showWaitingDialog("");
+                    }
+
+                    @Override
+                    public void dissmisProgress() {
+                        hamPayDialog.dismisWaitingDialog();
+                    }
+
+                    @Override
+                    public void onError() {
+                        hamPayDialog.showFailPendingPaymentDialog(getString(R.string.err_general), getString(R.string.err_general_text));
+                    }
+
+                    @Override
+                    public void onDetailLoaded(boolean status, ResponseMessage<TopUpResponse> data, String message) {
+                        if (status) {
+                            Intent intent = new Intent(context, ServiceTopUpDetailActivity.class);
+                            MessageSetOperator messageSetOperator = new MessageSetOperator(new TelephonyUtils().getNumberOperator(data.getService().getTopUpInfoDTO().getCellNumber()));
+                            data.getService().getTopUpInfoDTO().setImageId(messageSetOperator.getOperatorName());
+                            intent.putExtra(Constants.TOP_UP_INFO, data.getService().getTopUpInfoDTO());
+                            intent.putExtra(Constants.CHARGE_TYPE, ChargeType.DIRECT.ordinal());
+                            intent.putExtra(Constants.FUND_DTO, pendingFundListAdapter.getItem(position));
+                            startActivityForResult(intent, 48);
+                        } else {
+                            hamPayDialog.showFailPendingPaymentDialog(data.getService().getResultStatus().getCode(), data.getService().getResultStatus().getDescription());
+                        }
+                    }
+                }).getDetail(fundDTOList.get(position).getProviderId());
             }
         });
 
-        pendingListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+        pendingListView.setOnItemLongClickListener((parent, view, position, id) -> {
 
-                pos = position;
-                String productCode = "";
-                if (fundDTOList != null){
-                    productCode = fundDTOList.get(position).getCode();
-                }
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                CancelPendingDialog cancelPendingDialog = new CancelPendingDialog();
-                Bundle bundle = new Bundle();
-                bundle.putString(Constants.PENDING_CODE, persianEnglishDigit.E2P(productCode));
-                cancelPendingDialog.setArguments(bundle);
-                cancelPendingDialog.show(fragmentManager, "fragment_edit_name");
-
-                return true;
+            pos = position;
+            String productCode = "";
+            if (fundDTOList != null) {
+                productCode = fundDTOList.get(position).getCode();
             }
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            CancelPendingDialog cancelPendingDialog = new CancelPendingDialog();
+            Bundle bundle = new Bundle();
+            bundle.putString(Constants.PENDING_CODE, persianEnglishDigit.E2P(productCode));
+            cancelPendingDialog.setArguments(bundle);
+            cancelPendingDialog.show(fragmentManager, "fragment_edit_name");
+
+            return true;
         });
 
     }
@@ -276,9 +309,9 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == 46) {
-            if(resultCode == Activity.RESULT_OK){
+            if (resultCode == Activity.RESULT_OK) {
                 int result = data.getIntExtra(Constants.ACTIVITY_RESULT, -1);
-                if (result == 0){
+                if (result == 0) {
                     fundDTOList.remove(itemPosition);
                     pendingFundListAdapter.notifyDataSetChanged();
                     if (fundDTOList.size() == 0) {
@@ -291,12 +324,42 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
         }
 
         if (requestCode == 45) {
-            if(resultCode == Activity.RESULT_OK){
+            if (resultCode == Activity.RESULT_OK) {
                 int result = data.getIntExtra(Constants.ACTIVITY_RESULT, -1);
-                if (result == 0){
+                if (result == 0) {
                     fundDTOList.remove(itemPosition);
                     pendingFundListAdapter.notifyDataSetChanged();
-                    if (fundDTOList.size() == 0){
+                    if (fundDTOList.size() == 0) {
+                        nullPendingText.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+            }
+        }
+
+        if (requestCode == 47) {
+            if (resultCode == Activity.RESULT_OK) {
+                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, -1);
+                if (result == 0) {
+                    fundDTOList.remove(itemPosition);
+                    pendingFundListAdapter.notifyDataSetChanged();
+                    if (fundDTOList.size() == 0) {
+                        nullPendingText.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+            }
+        }
+
+        if (requestCode == 48) {
+            if (resultCode == Activity.RESULT_OK) {
+                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, -1);
+                if (result == 0) {
+                    fundDTOList.remove(itemPosition);
+                    pendingFundListAdapter.notifyDataSetChanged();
+                    if (fundDTOList.size() == 0) {
                         nullPendingText.setVisibility(View.VISIBLE);
                     }
                 }
@@ -309,7 +372,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
     @Override
     public void onClick(View v) {
 
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.full_pending:
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
@@ -335,7 +398,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
             case R.id.purchase_pending:
                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                 editor.commit();
-                fundType = FundType.BUSINESS_AND_PURCHASE;
+                fundType = FundType.COMMERCIAL;
                 requestPendingFundList = new RequestPendingFundList(activity, new RequestPendingFundTaskCompleteListener());
                 pendingFundListRequest = new PendingFundListRequest();
                 pendingFundListRequest.setType(fundType);
@@ -346,9 +409,9 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
     }
 
-    private void changeTab(int index){
+    private void changeTab(int index) {
         hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        switch (index){
+        switch (index) {
             case 1:
                 full_pending.setBackgroundColor(getResources().getColor(R.color.app_origin));
                 purchase_pending.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
@@ -380,21 +443,35 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
     @Override
     public void onFinishEditDialog(ActionPending actionPending) {
-        switch (actionPending){
+        switch (actionPending) {
             case CANCEL:
                 break;
             case REMOVE:
-                if (fundDTOList != null){
-                    if (fundDTOList.get(pos).getPaymentType() == FundDTO.PaymentType.PURCHASE){
+                if (fundDTOList != null) {
+                    if (fundDTOList.get(pos).getPaymentType() == FundDTO.PaymentType.PURCHASE) {
                         requestCancelPurchase = new RequestCancelPurchase(activity, new RequestCancelPurchasePaymentTaskCompleteListener(pos));
-                        cancelPurchasePaymentRequest = new CancelPurchasePaymentRequest();
-                        cancelPurchasePaymentRequest.setProductCode(fundDTOList.get(pos).getProductCode());
-                        requestCancelPurchase.execute(cancelPurchasePaymentRequest);
-                    }else if (fundDTOList.get(pos).getPaymentType() == FundDTO.PaymentType.PAYMENT){
+                        cancelFundRequest = new CancelFundRequest();
+                        cancelFundRequest.setProviderId(fundDTOList.get(pos).getProviderId());
+                        cancelFundRequest.setFundType(FundType.PURCHASE);
+                        requestCancelPurchase.execute(cancelFundRequest);
+                    } else if (fundDTOList.get(pos).getPaymentType() == FundDTO.PaymentType.PAYMENT) {
                         requestCancelPayment = new RequestCancelPayment(activity, new RequestCancelPaymentTaskCompleteListener(pos));
-                        cancelUserPaymentRequest = new CancelUserPaymentRequest();
-                        cancelUserPaymentRequest.setProductCode(fundDTOList.get(pos).getCode());
-                        requestCancelPayment.execute(cancelUserPaymentRequest);
+                        cancelFundRequest = new CancelFundRequest();
+                        cancelFundRequest.setFundType(FundType.PAYMENT);
+                        cancelFundRequest.setProviderId(fundDTOList.get(pos).getProviderId());
+                        requestCancelPayment.execute(cancelFundRequest);
+                    } else if (fundDTOList.get(pos).getPaymentType() == FundDTO.PaymentType.UTILITY_BILL) {
+                        requestCancelPayment = new RequestCancelPayment(activity, new RequestCancelPaymentTaskCompleteListener(pos));
+                        cancelFundRequest = new CancelFundRequest();
+                        cancelFundRequest.setFundType(FundType.UTILITY_BILL);
+                        cancelFundRequest.setProviderId(fundDTOList.get(pos).getProviderId());
+                        requestCancelPayment.execute(cancelFundRequest);
+                    } else if (fundDTOList.get(pos).getPaymentType() == FundDTO.PaymentType.TOP_UP) {
+                        requestCancelPayment = new RequestCancelPayment(activity, new RequestCancelPaymentTaskCompleteListener(pos));
+                        cancelFundRequest = new CancelFundRequest();
+                        cancelFundRequest.setFundType(FundType.TOP_UP);
+                        cancelFundRequest.setProviderId(fundDTOList.get(pos).getProviderId());
+                        requestCancelPayment.execute(cancelFundRequest);
                     }
                 }
                 break;
@@ -413,15 +490,15 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
             if (pendingFundListResponseMessage != null) {
                 if (pendingFundListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     fundDTOList = new ArrayList<>();
-                    for (FundDTO fund: pendingFundListResponseMessage.getService().getFundDTOList()) {
-                        if (fund.getExpirationDate().getTime() > System.currentTimeMillis()){
+                    for (FundDTO fund : pendingFundListResponseMessage.getService().getFundDTOList()) {
+                        if (fund.getExpirationDate().getTime() > System.currentTimeMillis()) {
                             fundDTOList.add(fund);
                         }
                     }
-                    if (fundDTOList.size() == 0){
+                    if (fundDTOList.size() == 0) {
                         nullPendingText.setVisibility(View.VISIBLE);
                         pendingListView.setAdapter(null);
-                    }else {
+                    } else {
                         pendingFundListAdapter = new PendingFundListAdapter(activity, fundDTOList, authToken);
                         pendingListView.setAdapter(pendingFundListAdapter);
                         nullPendingText.setVisibility(View.GONE);
@@ -437,29 +514,29 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
     }
 
     public class RequestCancelPurchasePaymentTaskCompleteListener implements
-            AsyncTaskCompleteListener<ResponseMessage<CancelPurchasePaymentResponse>> {
+            AsyncTaskCompleteListener<ResponseMessage<CancelFundResponse>> {
 
         int position;
 
-        RequestCancelPurchasePaymentTaskCompleteListener(int position){
+        RequestCancelPurchasePaymentTaskCompleteListener(int position) {
             this.position = position;
         }
 
 
         @Override
-        public void onTaskComplete(ResponseMessage<CancelPurchasePaymentResponse> cancelPurchasePaymentResponseMessage) {
+        public void onTaskComplete(ResponseMessage<CancelFundResponse> cancelPurchasePaymentResponseMessage) {
 
             hamPayDialog.dismisWaitingDialog();
 
             if (cancelPurchasePaymentResponseMessage != null) {
                 if (cancelPurchasePaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS
-                        || cancelPurchasePaymentResponseMessage.getService().getResultStatus() == ResultStatus.PURCHASE_NOT_ELIGIBLE_TO_CANCEL) {
+                        || cancelPurchasePaymentResponseMessage.getService().getResultStatus() == ResultStatus.FUND_NOT_ELIGIBLE_TO_CANCEL) {
                     cancelPurchasePaymentResponseMessage.getService().getRequestUUID();
-                    if (fundDTOList != null){
+                    if (fundDTOList != null) {
                         fundDTOList.remove(pos);
                         pendingFundListAdapter.notifyDataSetChanged();
                         PugNotification.with(context).cancel(Constants.INVOICE_NOTIFICATION_IDENTIFIER);
-                        if (fundDTOList.size() == 0){
+                        if (fundDTOList.size() == 0) {
                             nullPendingText.setVisibility(View.VISIBLE);
                         }
                     }
@@ -474,28 +551,28 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
     }
 
     public class RequestCancelPaymentTaskCompleteListener implements
-            AsyncTaskCompleteListener<ResponseMessage<CancelUserPaymentResponse>> {
+            AsyncTaskCompleteListener<ResponseMessage<CancelFundResponse>> {
 
         int position;
 
-        RequestCancelPaymentTaskCompleteListener(int position){
+        RequestCancelPaymentTaskCompleteListener(int position) {
             this.position = position;
         }
 
 
         @Override
-        public void onTaskComplete(ResponseMessage<CancelUserPaymentResponse> cancelUserPaymentResponseMessage) {
+        public void onTaskComplete(ResponseMessage<CancelFundResponse> cancelUserPaymentResponseMessage) {
 
             hamPayDialog.dismisWaitingDialog();
 
             if (cancelUserPaymentResponseMessage != null) {
                 if (cancelUserPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS
-                        || cancelUserPaymentResponseMessage.getService().getResultStatus() == ResultStatus.PURCHASE_NOT_ELIGIBLE_TO_CANCEL) {
-                    if (fundDTOList != null){
+                        || cancelUserPaymentResponseMessage.getService().getResultStatus() == ResultStatus.FUND_NOT_ELIGIBLE_TO_CANCEL) {
+                    if (fundDTOList != null) {
                         fundDTOList.remove(pos);
                         pendingFundListAdapter.notifyDataSetChanged();
                         PugNotification.with(context).cancel(Constants.INVOICE_NOTIFICATION_IDENTIFIER);
-                        if (fundDTOList.size() == 0){
+                        if (fundDTOList.size() == 0) {
                             nullPendingText.setVisibility(View.VISIBLE);
                         }
                     }

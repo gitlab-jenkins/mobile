@@ -35,7 +35,6 @@ import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
-import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompleted, View.OnClickListener {
 
@@ -44,14 +43,11 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
     private Context context;
     private LinearLayout requestLayout;
     private LinearLayout statusLayout;
-    private LinearLayout resultLayout;
     private FacedTextView requestMerchantIdBtn;
     private FacedTextView closeRequestMerchantId;
     private FacedTextView closeMerchantIdBtn;
     private FacedTextView closeViewMerchantId;
-    private FacedTextView merchantInfo;
     private String authToken = "";
-    private PersianEnglishDigit persian;
     private FacedTextView merchantIdText;
     private HamPayDialog hamPayDialog;
     private FacedTextView step1Text;
@@ -107,12 +103,10 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
         hamPayDialog = new HamPayDialog(activity);
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
-        persian = new PersianEnglishDigit();
 
         merchantIdText = (FacedTextView) findViewById(R.id.merchant_id_text);
         requestLayout = (LinearLayout) findViewById(R.id.requestLayout);
         statusLayout = (LinearLayout) findViewById(R.id.statusLayout);
-        resultLayout = (LinearLayout) findViewById(R.id.resultLayout);
 
         requestMerchantIdBtn = (FacedTextView) findViewById(R.id.requestMerchantId);
         requestMerchantIdBtn.setOnClickListener(this);
@@ -125,8 +119,6 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
 
         closeViewMerchantId = (FacedTextView) findViewById(R.id.closeViewMerchantId);
         closeViewMerchantId.setOnClickListener(this);
-
-        merchantInfo = (FacedTextView) findViewById(R.id.merchantInfo);
 
         step1Text = (FacedTextView) findViewById(R.id.step_1_text);
         step2Text = (FacedTextView) findViewById(R.id.step_2_text);

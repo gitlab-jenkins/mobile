@@ -53,9 +53,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
             holder.action_divider.setVisibility(View.GONE);
         }
         if (data.get(position).getSelected() == 1){
-//            holder.nav_draw_bg.setSelected(true);
         }else {
-//            holder.nav_draw_bg.setSelected(false);
         }
     }
 
@@ -75,7 +73,7 @@ public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDraw
             title = (FacedTextView) itemView.findViewById(R.id.title);
             icon = (ImageView)itemView.findViewById(R.id.icon);
             nav_draw_bg = (LinearLayout)itemView.findViewById(R.id.nav_draw_bg);
-            action_divider = (View)itemView.findViewById(R.id.action_divider);
+            action_divider = itemView.findViewById(R.id.action_divider);
         }
     }
 }

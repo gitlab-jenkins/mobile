@@ -113,6 +113,9 @@ public class PaymentRequestListActivity extends AppCompatActivity{
 
         search_bar = (RelativeLayout)findViewById(R.id.search_bar);
 
+        pendingPOListRequest = new PendingPOListRequest();
+        requestPendingPOList = new RequestPendingPOList(activity, new RequestPendingPOListTaskCompleteListener());
+        requestPendingPOList.execute(pendingPOListRequest);
 
         pullToRefresh = (SwipeRefreshLayout)findViewById(R.id.pullToRefresh);
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -159,12 +162,6 @@ public class PaymentRequestListActivity extends AppCompatActivity{
             }
         });
 
-        editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-        editor.commit();
-        pendingPOListRequest = new PendingPOListRequest();
-        requestPendingPOList = new RequestPendingPOList(activity, new RequestPendingPOListTaskCompleteListener());
-        requestPendingPOList.execute(pendingPOListRequest);
-
         paymentRequestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -205,6 +202,8 @@ public class PaymentRequestListActivity extends AppCompatActivity{
                         nullPendingText.setVisibility(View.VISIBLE);
                         search_bar.setVisibility(View.INVISIBLE);
                     }
+                }else if (pendingPOListResponseResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
                 }
                 else {
                     nullPendingText.setVisibility(View.VISIBLE);
@@ -217,6 +216,18 @@ public class PaymentRequestListActivity extends AppCompatActivity{
         @Override
         public void onTaskPreRun() {
             hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
+    }
+
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(context, HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        if (activity != null) {
+            finish();
+            startActivity(intent);
         }
     }
 }

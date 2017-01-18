@@ -40,7 +40,7 @@
                 android:textColor="@android:color/white"
                 android:textSize="28dp"
                 android:gravity="center"
-                android:text="@string/app_name"/>
+                android:text="@string/app_name_slider"/>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 geekui:customTypeface="fonts/vazir_regular_bold.ttf"

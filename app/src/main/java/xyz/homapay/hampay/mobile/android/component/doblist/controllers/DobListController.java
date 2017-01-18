@@ -6,8 +6,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
 
-
-import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.component.doblist.events.OnLoadMoreListener;
 import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoEmptyViewException;
 import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoListviewException;

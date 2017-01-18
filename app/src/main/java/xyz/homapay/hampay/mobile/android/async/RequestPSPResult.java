@@ -21,14 +21,12 @@ public class RequestPSPResult extends AsyncTask<PSPResultRequest, Void, Response
 
     private Context context;
     private AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> listener;
-    private int type = 0;
 
 
-    public RequestPSPResult(Context context, AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> listener, int type)
+    public RequestPSPResult(Context context, AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> listener)
     {
         this.context = context;
         this.listener = listener;
-        this.type = type;
     }
 
 
@@ -44,7 +42,7 @@ public class RequestPSPResult extends AsyncTask<PSPResultRequest, Void, Response
         SecuredWebServices webServices = new SecuredWebServices(context, Constants.CONNECTION_TYPE);
 
         try {
-            return webServices.pspResult(params[0], type);
+            return webServices.pspResult(params[0]);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (EncryptionException e) {

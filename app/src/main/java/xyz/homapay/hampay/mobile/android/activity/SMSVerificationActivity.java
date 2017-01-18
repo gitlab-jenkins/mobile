@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -43,8 +42,6 @@ import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.dialog.permission.ActionPermission;
 import xyz.homapay.hampay.mobile.android.dialog.permission.PermissionContactDialog;
-import xyz.homapay.hampay.mobile.android.dialog.sms.ActionSMS;
-import xyz.homapay.hampay.mobile.android.dialog.sms.SMSActivationDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
@@ -54,8 +51,10 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.ScaleConverter;
 
-public class SMSVerificationActivity extends AppCompatActivity implements View.OnClickListener, PermissionContactDialog.PermissionContactDialogListener, SMSActivationDialog.SMSActivationDialogListener{
+public class SMSVerificationActivity extends AppCompatActivity implements View.OnClickListener, PermissionContactDialog.PermissionContactDialogListener {
 
+    private final Handler handler = new Handler();
+    Bundle bundle;
     private Activity activity;
     private FacedTextView digit_1;
     private FacedTextView digit_2;
@@ -93,14 +92,15 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
     private float screenWidthPercentage = 0;
     private Timer timer;
     private TimerTask timerTask;
-    private final Handler handler = new Handler();
     private FacedTextView remain_timer;
     private boolean sendSmsPermission = false;
     private int sendSmsCounter = 0;
     private String cellNumber;
     private FacedTextView sms_delivery_text;
     private boolean smsVerified = false;
-
+    private int minutes = 0;
+    private int seconds = 0;
+    private PersianEnglishDigit persianEnglishDigit;
 
     @Override
     protected void onPause() {
@@ -137,8 +137,8 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                         timeCounter += 1;
                         params.width = (int)(screenWidthPercentage * timeCounter);
                         reached_progress.setLayoutParams(params);
-                        minutes =  (int)((180 - timeCounter) / (60));
-                        seconds = (int)(180 - timeCounter) % 60;
+                        minutes = (180 - timeCounter) / (60);
+                        seconds = (180 - timeCounter) % 60;
                         remain_timer.setText(persianEnglishDigit.E2P(String.format("%02d:%02d", minutes, seconds)));
 
                         if (timeCounter >= 180){
@@ -178,12 +178,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         HamPayApplication.setAppSate(AppState.Resumed);
     }
 
-    Bundle bundle;
-
-    private int minutes = 0;
-    private int seconds = 0;
-    private PersianEnglishDigit persianEnglishDigit;
-
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,7 +195,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         display.getSize(size);
         screenWidthPercentage = (size.x - ScaleConverter.dpToPx(16)) / 180f;
 
-        reached_progress = (View)findViewById(R.id.reached_progress);
+        reached_progress = findViewById(R.id.reached_progress);
 
         params= (RelativeLayout.LayoutParams) reached_progress.getLayoutParams();
 
@@ -346,63 +340,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
     }
 
     @Override
-    public void onFinishEditDialog(ActionSMS actionSMS) {
-//        requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
-//        requestRegistrationSendSmsToken.execute(registrationSendSmsTokenRequest);
-    }
-
-
-    public class RequestRegistrationVerifyMobileTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationVerifyMobileResponse>>
-    {
-        ServiceEvent serviceName;
-        LogEvent logEvent = new LogEvent(context);
-
-        @Override
-        public void onTaskComplete(ResponseMessage<RegistrationVerifyMobileResponse> registrationVerifyMobileResponseMessage)
-        {
-
-            input_digit_1.setText("");
-            input_digit_2.setText("");
-            input_digit_3.setText("");
-            input_digit_4.setText("");
-
-            hamPayDialog.dismisWaitingDialog();
-            if (registrationVerifyMobileResponseMessage != null) {
-
-                if (registrationVerifyMobileResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    smsVerified = true;
-                    serviceName = ServiceEvent.REGISTRATION_VERIFY_MOBILE_SUCCESS;
-                    stopTimerTask();
-                    if (registrationVerifyMobileResponseMessage.getService().getIsVerified()) {
-
-                        requestAndLoadUserContact();
-
-                    } else {
-                        new HamPayDialog(activity).showIncorrectSMSVerification();
-                    }
-                }else {
-                    serviceName = ServiceEvent.REGISTRATION_VERIFY_MOBILE_FAILURE;
-                    requestVerifyMobile = new RequestVerifyMobile(context, new RequestRegistrationVerifyMobileTaskCompleteListener());
-                    new HamPayDialog(activity).showFailRegistrationVerifyMobileDialog(registrationVerifyMobileResponseMessage.getService().getResultStatus().getCode(),
-                            registrationVerifyMobileResponseMessage.getService().getResultStatus().getDescription());
-                }
-
-            }else {
-                serviceName = ServiceEvent.REGISTRATION_VERIFY_MOBILE_FAILURE;
-                requestVerifyMobile = new RequestVerifyMobile(context, new RequestRegistrationVerifyMobileTaskCompleteListener());
-                new HamPayDialog(activity).showFailRegistrationVerifyMobileDialog(Constants.LOCAL_ERROR_CODE,
-                        getString(R.string.msg_fail_send_sms));
-            }
-            logEvent.log(serviceName);
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog("");
-        }
-    }
-
-    @Override
     public void onClick(View v) {
         switch (v.getId()){
 
@@ -471,14 +408,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                         sendSmsPermission = false;
                         requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
                         requestRegistrationSendSmsToken.execute(registrationSendSmsTokenRequest);
-
-//                        SMSActivationDialog smsActivationDialog = new SMSActivationDialog();
-//                        Bundle bundle = new Bundle();
-//                        bundle.putString(Constants.REGISTERED_CELL_NUMBER, cellNumber);
-//                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//                        smsActivationDialog.setArguments(bundle);
-//                        fragmentTransaction.add(smsActivationDialog, null);
-//                        fragmentTransaction.commitAllowingStateLoss();
                     }
                 }else {
                     Toast.makeText(context, getString(R.string.sms_upper_reach_sms), Toast.LENGTH_LONG).show();
@@ -575,6 +504,63 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (keyboard.getVisibility() == View.VISIBLE) {
+            new Collapse(keyboard).animate();
+        } else {
+            finish();
+        }
+    }
+
+    public class RequestRegistrationVerifyMobileTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationVerifyMobileResponse>> {
+        ServiceEvent serviceName;
+        LogEvent logEvent = new LogEvent(context);
+
+        @Override
+        public void onTaskComplete(ResponseMessage<RegistrationVerifyMobileResponse> registrationVerifyMobileResponseMessage) {
+
+            input_digit_1.setText("");
+            input_digit_2.setText("");
+            input_digit_3.setText("");
+            input_digit_4.setText("");
+
+            hamPayDialog.dismisWaitingDialog();
+            if (registrationVerifyMobileResponseMessage != null) {
+
+                if (registrationVerifyMobileResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    smsVerified = true;
+                    serviceName = ServiceEvent.REGISTRATION_VERIFY_MOBILE_SUCCESS;
+                    stopTimerTask();
+                    if (registrationVerifyMobileResponseMessage.getService().getIsVerified()) {
+
+                        requestAndLoadUserContact();
+
+                    } else {
+                        new HamPayDialog(activity).showIncorrectSMSVerification();
+                    }
+                } else {
+                    serviceName = ServiceEvent.REGISTRATION_VERIFY_MOBILE_FAILURE;
+                    requestVerifyMobile = new RequestVerifyMobile(context, new RequestRegistrationVerifyMobileTaskCompleteListener());
+                    new HamPayDialog(activity).showFailRegistrationVerifyMobileDialog(registrationVerifyMobileResponseMessage.getService().getResultStatus().getCode(),
+                            registrationVerifyMobileResponseMessage.getService().getResultStatus().getDescription());
+                }
+
+            } else {
+                serviceName = ServiceEvent.REGISTRATION_VERIFY_MOBILE_FAILURE;
+                requestVerifyMobile = new RequestVerifyMobile(context, new RequestRegistrationVerifyMobileTaskCompleteListener());
+                new HamPayDialog(activity).showFailRegistrationVerifyMobileDialog(Constants.LOCAL_ERROR_CODE,
+                        getString(R.string.msg_fail_send_sms));
+            }
+            logEvent.log(serviceName);
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingDialog("");
+        }
+    }
+
     public class RequestRegistrationSendSmsTokenTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationSendSmsTokenResponse>> {
         @Override
         public void onTaskComplete(ResponseMessage<RegistrationSendSmsTokenResponse> registrationSendSmsTokenResponse)
@@ -612,14 +598,5 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
 
         @Override
         public void onTaskPreRun() {   }
-    }
-    @Override
-    public void onBackPressed() {
-        if (keyboard.getVisibility() == View.VISIBLE){
-            new Collapse(keyboard).animate();
-        }
-        else {
-            finish();
-        }
     }
 }

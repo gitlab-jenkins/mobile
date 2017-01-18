@@ -11,8 +11,8 @@ import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO.Transact
 import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO.TransactionType;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
+import xyz.homapay.hampay.mobile.android.img.ImageHelper;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
-import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
@@ -26,16 +26,13 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
     private TransactionDTO transactionDTO;
     private PersianEnglishDigit persianEnglishDigit;
     private CurrencyFormatter currencyFormatter;
-    private ImageManager imageManager;
 
     public UserTransactionAdapter(Activity activity) {
         super(activity);
         this.activity = activity;
         persianEnglishDigit = new PersianEnglishDigit();
         currencyFormatter = new CurrencyFormatter();
-        imageManager = new ImageManager(activity, 200000, false);
     }
-
 
 
     public View getView(final int position, View convertView, ViewGroup parent) {
@@ -44,51 +41,45 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
             viewHolder = new ViewHolder();
             convertView = layoutInflater.inflate(R.layout.transaction_item, null);
 
-            viewHolder.status_icon = (ImageView)convertView.findViewById(R.id.status_icon);
-            viewHolder.status_text = (FacedTextView)convertView.findViewById(R.id.status_text);
+            viewHolder.status_icon = (ImageView) convertView.findViewById(R.id.status_icon);
+            viewHolder.status_text = (FacedTextView) convertView.findViewById(R.id.status_text);
             viewHolder.image = (ImageView) convertView.findViewById(R.id.image);
-            viewHolder.user_name = (FacedTextView)convertView.findViewById(R.id.user_name);
-            viewHolder.date_time = (FacedTextView)convertView.findViewById(R.id.date_time);
-            viewHolder.amountValue = (FacedTextView)convertView.findViewById(R.id.amountValue);
+            viewHolder.user_name = (FacedTextView) convertView.findViewById(R.id.user_name);
+            viewHolder.date_time = (FacedTextView) convertView.findViewById(R.id.date_time);
+            viewHolder.amountValue = (FacedTextView) convertView.findViewById(R.id.amountValue);
 
             convertView.setTag(viewHolder);
-        }
-        else{
-            viewHolder = (ViewHolder)convertView.getTag();
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
         transactionDTO = getItem(position);
 
 
-        if (transactionDTO.getTransactionStatus() == TransactionStatus.SUCCESS){
+        if (transactionDTO.getTransactionStatus() == TransactionStatus.SUCCESS) {
 
 
-            if (transactionDTO.getTransactionType() == TransactionType.CREDIT){
+            if (transactionDTO.getTransactionType() == TransactionType.CREDIT) {
                 viewHolder.status_text.setText(activity.getString(R.string.credit));
                 viewHolder.status_text.setTextColor(ContextCompat.getColor(activity, R.color.register_btn_color));
                 viewHolder.status_icon.setImageResource(R.drawable.arrow_r);
-            }
-            else if (transactionDTO.getTransactionType() == TransactionType.DEBIT){
+            } else if (transactionDTO.getTransactionType() == TransactionType.DEBIT) {
                 viewHolder.status_text.setText(activity.getString(R.string.debit));
                 viewHolder.status_text.setTextColor(ContextCompat.getColor(activity, R.color.user_change_status));
                 viewHolder.status_icon.setImageResource(R.drawable.arrow_p);
             }
 
-        }else if (transactionDTO.getTransactionStatus() == TransactionStatus.PENDING) {
-            viewHolder.status_text.setText(activity.getString(R.string.pending));
-            viewHolder.status_text.setTextColor(ContextCompat.getColor(activity, R.color.pending_transaction));
-            viewHolder.status_icon.setImageResource(R.drawable.pending);
         }
         else {
-            viewHolder.status_text.setText(activity.getString(R.string.fail));
+            viewHolder.status_text.setText(getItem(position).getTransactionType().equals(TransactionType.CREDIT) ? R.string.fail_credit : R.string.fail_debit);
             viewHolder.status_text.setTextColor(ContextCompat.getColor(activity, R.color.failed_transaction));
             viewHolder.status_icon.setImageResource(R.drawable.arrow_f);
         }
 
         if (transactionDTO.getImageId() != null) {
             viewHolder.image.setTag(transactionDTO.getImageId());
-            imageManager.displayImage(transactionDTO.getImageId(), viewHolder.image, R.drawable.user_placeholder);
-        }else {
+            ImageHelper.getInstance(activity).imageLoader(transactionDTO.getImageId(), viewHolder.image, R.drawable.user_placeholder);
+        } else {
             viewHolder.image.setImageResource(R.drawable.user_placeholder);
         }
 
@@ -100,9 +91,7 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
     }
 
 
-    private class ViewHolder{
-
-        ViewHolder(){ }
+    private class ViewHolder {
 
         ImageView status_icon;
         ImageView image;
@@ -110,6 +99,9 @@ public class UserTransactionAdapter extends UserTransactionGenericAdapter<Transa
         FacedTextView user_name;
         FacedTextView date_time;
         FacedTextView amountValue;
+
+        ViewHolder() {
+        }
     }
 
 }

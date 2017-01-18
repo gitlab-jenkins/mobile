@@ -1,17 +1,13 @@
 package xyz.homapay.hampay.mobile.android.webservice;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.zip.GZIPInputStream;
@@ -22,7 +18,6 @@ import xyz.homapay.hampay.common.common.encrypt.AESMessageEncryptor;
 import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
 import xyz.homapay.hampay.common.common.encrypt.MessageEncryptor;
 import xyz.homapay.hampay.common.common.response.DecryptedResponseInfo;
-import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.security.KeyExchange;
 import xyz.homapay.hampay.mobile.android.ssl.SSLConnection;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -73,7 +68,7 @@ public class SecuredProxyService {
         this.connectionType = connectionType;
         this.connectionMethod = connectionMethod;
         this.url = url;
-        keyExchange = new KeyExchange(context);
+        keyExchange = KeyExchange.getInstance(context);
         messageEncryptor = new AESMessageEncryptor();
     }
 
@@ -82,7 +77,7 @@ public class SecuredProxyService {
         this.connectionType = connectionType;
         this.connectionMethod = connectionMethod;
         this.url = url;
-        keyExchange = new KeyExchange(context);
+        keyExchange = KeyExchange.getInstance(context);
         messageEncryptor = new AESMessageEncryptor();
     }
 
@@ -93,7 +88,7 @@ public class SecuredProxyService {
         this.connectionMethod = connectionMethod;
         this.url = url;
         this.enableGZip = enableGZip;
-        keyExchange = new KeyExchange(context);
+        keyExchange = KeyExchange.getInstance(context);
         messageEncryptor = new AESMessageEncryptor();
     }
 
@@ -103,7 +98,7 @@ public class SecuredProxyService {
         this.connectionMethod = connectionMethod;
         this.url = url;
         this.enableGZip = enableGZip;
-        keyExchange = new KeyExchange(context);
+        keyExchange = KeyExchange.getInstance(context);
         messageEncryptor = new AESMessageEncryptor();
     }
 

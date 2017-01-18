@@ -1,6 +1,6 @@
 package xyz.homapay.hampay.mobile.android.model;
 
-import xyz.homapay.hampay.mobile.android.webservice.newpsp.TWAArrayOfKeyValueOfstringstring;
+import xyz.homapay.hampay.mobile.android.webservice.psp.CBUArrayOfKeyValueOfstringstring;
 
 /**
  * Created by amir on 2/8/16.
@@ -12,7 +12,7 @@ public class DoWorkInfo {
     private String cellNumber;
     private byte langAByte;
     private boolean langABoolean;
-    private TWAArrayOfKeyValueOfstringstring vectorstring2stringMapEntry;
+    private CBUArrayOfKeyValueOfstringstring vectorstring2stringMapEntry;
 
     public String getUserName() {
         return userName;
@@ -54,11 +54,11 @@ public class DoWorkInfo {
         this.langABoolean = langABoolean;
     }
 
-    public TWAArrayOfKeyValueOfstringstring getVectorstring2stringMapEntry() {
+    public CBUArrayOfKeyValueOfstringstring getVectorstring2stringMapEntry() {
         return vectorstring2stringMapEntry;
     }
 
-    public void setVectorstring2stringMapEntry(TWAArrayOfKeyValueOfstringstring vectorstring2stringMapEntry) {
+    public void setVectorstring2stringMapEntry(CBUArrayOfKeyValueOfstringstring vectorstring2stringMapEntry) {
         this.vectorstring2stringMapEntry = vectorstring2stringMapEntry;
     }
 

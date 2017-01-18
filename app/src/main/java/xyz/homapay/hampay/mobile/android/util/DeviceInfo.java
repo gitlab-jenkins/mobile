@@ -1,7 +1,5 @@
 package xyz.homapay.hampay.mobile.android.util;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -22,22 +20,21 @@ import java.util.Locale;
  */
 public class DeviceInfo {
 
-    Activity context;
+    Context context;
 
     TelephonyManager telephonyManager;
 
-    public DeviceInfo(Activity context){
+    public DeviceInfo(Context context) {
 
         this.context = context;
-        telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+        telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 
     }
 
-    public String getIMEI(){
+    public String getIMEI() {
         if (telephonyManager.getDeviceId() != null) {
             return telephonyManager.getDeviceId();
-        }
-        else {
+        } else {
             return "";
         }
     }
@@ -53,7 +50,7 @@ public class DeviceInfo {
     public String getSimcardSerial() {
         if (telephonyManager.getSimSerialNumber() != null) {
             return telephonyManager.getSimSerialNumber();
-        }else {
+        } else {
             return "";
         }
     }
@@ -62,10 +59,10 @@ public class DeviceInfo {
         if (telephonyManager.getSubscriberId() != null) {
             if (telephonyManager.getSubscriberId().length() > 0) {
                 return telephonyManager.getSubscriberId().substring(0, 5);
-            }else {
+            } else {
                 return "";
             }
-        }else {
+        } else {
             return "";
         }
     }
@@ -74,44 +71,43 @@ public class DeviceInfo {
         return android.os.Build.MODEL;
     }
 
-    public String getManufacture(){
+    public String getManufacture() {
         return Build.MANUFACTURER;
     }
 
-    public String getBrand(){
+    public String getBrand() {
         return Build.BRAND;
     }
 
 
-
-    public String getCpu_abi(){
+    public String getCpu_abi() {
 //        return Build.CPU_ABI;
         return "";
     }
 
-    public String getDeviceAPI(){
+    public String getDeviceAPI() {
         return Build.VERSION.SDK_INT + "";
     }
 
-    public String getOsVersion(){
+    public String getOsVersion() {
         return android.os.Build.VERSION.RELEASE + "";
     }
 
-    public String getDisplaySize(){
+    public String getDisplaySize() {
 
         DisplayMetrics displaymetrics = new DisplayMetrics();
-        context.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         int screenWidth = displaymetrics.widthPixels;
         int screenHeight = displaymetrics.heightPixels;
         return screenWidth + "," + screenHeight;
     }
 
-    public String getDisplaymetrics(){
+    public String getDisplaymetrics() {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        return  displayMetrics.densityDpi + "";
+        return displayMetrics.densityDpi + "";
     }
 
-    public String getSimState(){
+    public String getSimState() {
 
         String SIM_State = "";
 
@@ -145,11 +141,11 @@ public class DeviceInfo {
         return SIM_State;
     }
 
-    public String getAppNames(){
+    public String getAppNames() {
         String allAppsName = "";
 
         List<PackageInfo> packs = context.getPackageManager().getInstalledPackages(0);
-        for(int i=0;i<packs.size();i++) {
+        for (int i = 0; i < packs.size(); i++) {
             PackageInfo p = packs.get(i);
 
             allAppsName += p.applicationInfo.loadLabel(context.getPackageManager()).toString() + ",";
@@ -159,13 +155,13 @@ public class DeviceInfo {
 
     }
 
-    public String getDownloadedAppNames(){
+    public String getDownloadedAppNames() {
         String downloadedAppsName = "";
 
         PackageManager pm = context.getPackageManager();
         List<PackageInfo> list = pm.getInstalledPackages(0);
 
-        for(PackageInfo pi : list) {
+        for (PackageInfo pi : list) {
             ApplicationInfo ai = null;
             try {
                 ai = pm.getApplicationInfo(pi.packageName, 0);
@@ -183,50 +179,26 @@ public class DeviceInfo {
     }
 
 
-    private String userDeviceEmail = "";
-
-    public String getDeviceEmailAccount(){
-        AccountManager accountManager = AccountManager.get(context);
-        Account accounts[] = accountManager.getAccounts();
-        int accCount = accounts.length;
-        for(int i = 0; i < accCount; i++){
-            if (accounts[i].type.equalsIgnoreCase("google") || accounts[i].type.contains("mail")){
-                userDeviceEmail = accounts[i].name;
-            }
-        }
-
-        if (userDeviceEmail.length() == 0){
-            for(int i = 0; i < accCount; i++){
-                if (accounts[i].name.contains("@")){
-                    userDeviceEmail = accounts[i].name;
-                    break;
-                }
-            }
-        }
-
-        return userDeviceEmail;
-    }
-
-    public String getNetworkOperatorName(){
+    public String getNetworkOperatorName() {
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         return telephonyManager.getNetworkOperatorName();
     }
 
-    public String getLocale(){
+    public String getLocale() {
         Locale locale = context.getResources().getConfiguration().locale;
         return locale.getLanguage();
 
     }
 
-    public String getAndroidId(){
+    public String getAndroidId() {
         return Settings.Secure.getString(context.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
     }
 
-    public String getMacAddress(){
+    public String getMacAddress() {
         WifiManager manager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         WifiInfo info = manager.getConnectionInfo();
-       return info.getMacAddress();
+        return info.getMacAddress();
     }
 
 }

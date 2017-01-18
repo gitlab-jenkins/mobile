@@ -1,6 +1,7 @@
 package xyz.homapay.hampay.mobile.android.security;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -34,17 +35,31 @@ import xyz.homapay.hampay.mobile.android.webservice.SecuredProxyService;
  */
 public class KeyExchange {
 
+    private SecretKeyPair secretKeyPair;
+    private String encryptionId;
     private Context context;
     private KeyExchanger keyExchanger;
     private KeyAgreementRequest keyAgreementRequest;
-    private static SecretKeyPair secretKeyPair;
-    private static String encryptionId;
+    private ResponseMessage<KeyAgreementResponse> keyAgreementResponseMessage = null;
 
-    public KeyExchange(Context context){
+    private static volatile KeyExchange instance;
+    public static KeyExchange getInstance(Context context){
+        if (instance == null){
+            synchronized (KeyExchange.class){
+                if (instance == null)
+                    instance = new KeyExchange(context);
+            }
+
+        }
+
+        return instance;
+    }
+
+    private KeyExchange(Context context) {
         this.context = context;
     }
 
-    public void exchange() throws EncryptionException, IOException {
+    public synchronized void exchange() throws EncryptionException, IOException {
         keyExchanger = new DiffieHellmanKeyExchanger();
         PublicKeyPair publicKeyPair = keyExchanger.getPublicKey();
         keyAgreementRequest = new KeyAgreementRequest();
@@ -52,21 +67,22 @@ public class KeyExchange {
         keyAgreementRequest.setKeyData(publicKeyPair.getEncPublicKey().getEncoded());
         keyAgreementRequest.setIvData(publicKeyPair.getIvPublicKey().getEncoded());
 
-        ResponseMessage<KeyAgreementResponse> keyAgreementResponseMessage = null;
         URL url = new URL(Constants.HTTPS_SERVER_IP + "/security/agree-key");
         SecuredProxyService proxyService = new SecuredProxyService(context, Constants.CONNECTION_TYPE, ConnectionMethod.POST, url);
         RequestMessage<KeyAgreementRequest> message = new RequestMessage<>(keyAgreementRequest, "", Constants.API_LEVEL, System.currentTimeMillis());
 
-        Type requestType = new TypeToken<RequestMessage<KeyAgreementRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<KeyAgreementRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
 
         proxyService.setJsonBody(jsonRequest);
 
         Gson gson = new Gson();
 
-        keyAgreementResponseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<KeyAgreementResponse>>() {}.getType());
+        keyAgreementResponseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<KeyAgreementResponse>>() {
+        }.getType());
 
-        encryptionId = keyAgreementResponseMessage.getService().getId();
+        Log.e("ID", keyAgreementResponseMessage.getService().getId());
 
         if (keyAgreementResponseMessage != null) {
             if (keyAgreementResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
@@ -87,36 +103,36 @@ public class KeyExchange {
                 } catch (InvalidKeySpecException e) {
                     e.printStackTrace();
                 }
-            }else {
+            } else {
             }
-        }
-        else {
+        } else {
         }
 
         proxyService.closeConnection();
 
     }
 
-    public byte[] getKey(){
+    public byte[] getKey() {
         if (secretKeyPair != null) {
             return secretKeyPair.getEncSecretKey().getEncoded();
-        }else {
+        } else {
             return null;
         }
     }
 
-    public byte[] getIv(){
+    public byte[] getIv() {
         if (secretKeyPair != null) {
             return secretKeyPair.getIvSecretKey().getEncoded();
-        }else {
+        } else {
             return null;
         }
     }
 
-    public String getEncId(){
+    public String getEncId() {
+        encryptionId = keyAgreementResponseMessage.getService().getId();
         if (encryptionId != null) {
             return encryptionId;
-        }else {
+        } else {
             return "";
         }
     }

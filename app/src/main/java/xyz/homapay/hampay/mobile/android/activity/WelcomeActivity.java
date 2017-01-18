@@ -43,6 +43,36 @@ public class WelcomeActivity extends AppCompatActivity {
             R.layout.welcome_slider5
     };
     private Button btnSkip, btnNext;
+    ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
+
+        @Override
+        public void onPageSelected(int position) {
+            addBottomDots(position);
+            if (position == 0) {
+                btnSkip.setVisibility(View.GONE);
+            }
+            // changing the next button text 'NEXT' / 'GOT IT'
+            else if (position == layouts.length - 1) {
+                // last page. make button text to GOT IT
+                btnNext.setText(getString(R.string.register));
+                btnSkip.setVisibility(View.GONE);
+            } else {
+                // still pages are left
+                btnNext.setText(getString(R.string.next_slide));
+                btnSkip.setVisibility(View.VISIBLE);
+            }
+        }
+
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int arg0) {
+
+        }
+    };
     private PreferencesManager preferencesManager;
     private AppEvent appEvent = AppEvent.LAUNCH;
     private RootUtil rootUtil;
@@ -57,7 +87,7 @@ public class WelcomeActivity extends AppCompatActivity {
         activity = WelcomeActivity.this;
 
         rootUtil = new RootUtil(activity);
-        if (rootUtil.checkRootedDevice()){
+        if (rootUtil.checkRootedDevice()) {
             new HamPayDialog(activity).showPreventRootDeviceDialog();
             return;
         }
@@ -66,16 +96,17 @@ public class WelcomeActivity extends AppCompatActivity {
         if (bundle != null) {
             if (bundle.getBoolean(Constants.HAS_NOTIFICATION)) {
 
-                if(HamPayLoginActivity.instance != null) {
+                if (HamPayLoginActivity.instance != null) {
                     try {
                         HamPayLoginActivity.instance.finish();
-                    } catch (Exception e) {}
+                    } catch (Exception e) {
+                    }
                 }
 
                 NotificationMessageType notificationMessageType;
                 notificationMessageType = NotificationMessageType.valueOf(bundle.getString(Constants.NOTIFICATION_TYPE));
 
-                switch (notificationMessageType){
+                switch (notificationMessageType) {
                     case PAYMENT:
                         intent = getIntent();
                         intent.setClass(activity, HamPayLoginActivity.class);
@@ -117,10 +148,9 @@ public class WelcomeActivity extends AppCompatActivity {
         }
 
         preferencesManager = new PreferencesManager(this);
-        if (preferencesManager.isRegistered()){
+        if (preferencesManager.isRegistered()) {
             launchLoginScreen();
-        }
-        else if (!preferencesManager.isFirstTimeLaunch()) {
+        } else if (!preferencesManager.isFirstTimeLaunch()) {
             launchRegisterScreen();
             finish();
         }
@@ -137,9 +167,6 @@ public class WelcomeActivity extends AppCompatActivity {
         btnSkip = (Button) findViewById(R.id.btn_skip);
         btnSkip.setVisibility(View.GONE);
         btnNext = (Button) findViewById(R.id.btn_next);
-
-
-//        addBottomDots(0);
 
         changeStatusBarColor();
 
@@ -198,41 +225,10 @@ public class WelcomeActivity extends AppCompatActivity {
         finish();
     }
 
-    private void launchLoginScreen(){
+    private void launchLoginScreen() {
         startActivity(new Intent(WelcomeActivity.this, HamPayLoginActivity.class));
         finish();
     }
-
-    ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
-
-        @Override
-        public void onPageSelected(int position) {
-            addBottomDots(position);
-            if (position == 0){
-                btnSkip.setVisibility(View.GONE);
-            }
-            // changing the next button text 'NEXT' / 'GOT IT'
-            else if (position == layouts.length - 1) {
-                // last page. make button text to GOT IT
-                btnNext.setText(getString(R.string.register));
-                btnSkip.setVisibility(View.GONE);
-            } else {
-                // still pages are left
-                btnNext.setText(getString(R.string.next_slide));
-                btnSkip.setVisibility(View.VISIBLE);
-            }
-        }
-
-        @Override
-        public void onPageScrolled(int arg0, float arg1, int arg2) {
-
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int arg0) {
-
-        }
-    };
 
     private void changeStatusBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

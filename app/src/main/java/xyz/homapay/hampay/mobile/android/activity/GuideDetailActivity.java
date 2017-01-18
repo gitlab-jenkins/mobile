@@ -75,12 +75,7 @@ public class GuideDetailActivity extends AppCompatActivity {
         title = (FacedTextView)findViewById(R.id.title);
         title.setText(bundle.getString(Constants.TAC_PRIVACY_TITLE));
         close_tc_privacy = (FacedTextView)findViewById(R.id.close_tc_privacy);
-        close_tc_privacy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        close_tc_privacy.setOnClickListener(v -> finish());
         guide_webview = (WebView)findViewById(R.id.guide_webview);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             guide_webview.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);

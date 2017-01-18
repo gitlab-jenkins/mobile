@@ -2,8 +2,6 @@ package xyz.homapay.hampay.mobile.android.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -32,12 +30,10 @@ public class PasswordEntryActivity extends AppCompatActivity implements View.OnC
     private FacedTextView input_digit_3;
     private FacedTextView input_digit_4;
     private FacedTextView input_digit_5;
-    private SharedPreferences.Editor editor;
     private RelativeLayout password_1_rl;
     private RelativeLayout password_2_rl;
     private LinearLayout keyboard;
     private LinearLayout password_holder;
-    private FacedTextView password_notify_text_1;
 
 
     public void userManual(View view){
@@ -77,10 +73,6 @@ public class PasswordEntryActivity extends AppCompatActivity implements View.OnC
         keyboard = (LinearLayout)findViewById(R.id.keyboard);
         password_holder = (LinearLayout)findViewById(R.id.password_holder);
         password_holder.setOnClickListener(this);
-
-        password_notify_text_1 = (FacedTextView)findViewById(R.id.password_notify_text_1);
-
-        editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
         password_1_rl = (RelativeLayout)findViewById(R.id.password_1_rl);
         password_2_rl = (RelativeLayout)findViewById(R.id.password_2_rl);

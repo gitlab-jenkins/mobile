@@ -39,7 +39,7 @@ public class PermissionContactDialog extends DialogFragment implements TextView.
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.dialog_persmission_contact, container);
+        View view = inflater.inflate(R.layout.dialog_persmission, container);
         activity = (PermissionContactDialogListener) getActivity();
 
         Activity parent = (Activity) activity;

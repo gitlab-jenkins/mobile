@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -17,6 +18,8 @@ import xyz.homapay.hampay.common.core.model.request.TransactionDetailRequest;
 import xyz.homapay.hampay.common.core.model.response.TransactionDetailResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.TnxDetailDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO;
+import xyz.homapay.hampay.common.core.model.response.dto.UserInfoDTO;
+import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
@@ -25,49 +28,54 @@ import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
+import xyz.homapay.hampay.mobile.android.img.ImageHelper;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
-import xyz.homapay.hampay.mobile.android.util.ImageManager;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class TransactionDetailActivity extends AppCompatActivity {
 
-    Bundle bundle;
-    TransactionDTO transactionDTO;
-    private TnxDetailDTO tnxDetailDTO = null;
+    private TransactionDTO transaction;
+    private PersianEnglishDigit persian;
+    private Context context;
+    private Activity activity;
+    private HamPayDialog hamPayDialog;
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
+    private TnxDetailDTO tnxDetail = null;
     private TransactionDetailRequest transactionDetailRequest;
     private RequestTransactionDetail requestTransactionDetail;
-
-
-    PersianEnglishDigit persianEnglishDigit;
-    Context context;
-    Activity activity;
     private CurrencyFormatter formatter;
-    HamPayDialog hamPayDialog;
     private FacedTextView status_text;
     private FacedTextView callee_name;
     private ImageView image;
     private FacedTextView total_amount_value;
     private FacedTextView amount_value;
+    private LinearLayout moreAmount;
     private FacedTextView vat_value;
     private FacedTextView fee_charge_value;
     private FacedTextView fee_charge_text;
     private FacedTextView payment_request_code;
     private FacedTextView reference_code;
     private FacedTextView date_time;
-    private FacedTextView card_number;
     private FacedTextView cell_number;
-    private FacedTextView bank_name;
     private FacedTextView message;
+    private FacedTextView detail_text;
     private LinearLayout pay_button;
-    SharedPreferences prefs;
-    SharedPreferences.Editor editor;
-    private LinearLayout creditInfo;
-    private String authToken = "";
-    private ImageManager imageManager;
+    private LinearLayout billsInfo;
+    private FacedTextView billsId;
+    private FacedTextView payId;
 
+    private FacedTextView tvCellNumber;
+    private FacedTextView tvChargeType;
+
+    private LinearLayout llCellNumber;
+    private LinearLayout llChrageType;
+    private View indicatorChargeType;
+    private View indicatorCellNumber;
+    private UserProfileDTO userProfile;
 
     public void backActionBar(View view) {
         finish();
@@ -116,74 +124,97 @@ public class TransactionDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction_detail);
 
-        persianEnglishDigit = new PersianEnglishDigit();
+        persian = new PersianEnglishDigit();
         formatter = new CurrencyFormatter();
-
+        userProfile = (UserProfileDTO) getIntent().getSerializableExtra(Constants.USER_PROFILE);
 
         context = this;
         activity = TransactionDetailActivity.this;
-        imageManager = new ImageManager(activity, 200000, false);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
         hamPayDialog = new HamPayDialog(activity);
 
         status_text = (FacedTextView) findViewById(R.id.status_text);
         callee_name = (FacedTextView) findViewById(R.id.callee_name);
-        image = (ImageView)findViewById(R.id.image);
+        image = (ImageView) findViewById(R.id.image);
         total_amount_value = (FacedTextView) findViewById(R.id.total_amount_value);
         amount_value = (FacedTextView) findViewById(R.id.amount_value);
+        moreAmount = (LinearLayout) findViewById(R.id.more_amount);
         vat_value = (FacedTextView) findViewById(R.id.vat_value);
         fee_charge_value = (FacedTextView) findViewById(R.id.fee_charge_value);
         fee_charge_text = (FacedTextView) findViewById(R.id.fee_charge_text);
         payment_request_code = (FacedTextView) findViewById(R.id.payment_request_code);
-        reference_code = (FacedTextView)findViewById(R.id.reference_code);
+        reference_code = (FacedTextView) findViewById(R.id.reference_code);
         date_time = (FacedTextView) findViewById(R.id.date_time);
-        card_number = (FacedTextView) findViewById(R.id.card_number);
         cell_number = (FacedTextView) findViewById(R.id.cell_number);
-        bank_name = (FacedTextView) findViewById(R.id.bank_name);
         message = (FacedTextView) findViewById(R.id.message);
+        billsInfo = (LinearLayout) findViewById(R.id.bills_info);
+        billsId = (FacedTextView) findViewById(R.id.billsId);
+        payId = (FacedTextView) findViewById(R.id.payId);
         pay_button = (LinearLayout) findViewById(R.id.pay_button);
-        creditInfo = (LinearLayout)findViewById(R.id.creditInfo);
 
-        bundle = getIntent().getExtras();
+        llCellNumber = (LinearLayout) findViewById(R.id.llCellNumber);
+        llChrageType = (LinearLayout) findViewById(R.id.llChargeType);
+
+        indicatorCellNumber = findViewById(R.id.indicatorCellNumber);
+        indicatorChargeType = findViewById(R.id.indicatorChargeType);
+
+        detail_text = (FacedTextView) findViewById(R.id.detail_text);
+
+        tvCellNumber = (FacedTextView) findViewById(R.id.tvCellNumber);
+        tvChargeType = (FacedTextView) findViewById(R.id.tvChargeType);
+
         Intent intent = getIntent();
-        transactionDTO = (TransactionDTO) intent.getSerializableExtra(Constants.USER_TRANSACTION_DTO);
-        if (transactionDTO.getImageId() != null) {
-            image.setTag(transactionDTO.getImageId());
-            imageManager.displayImage(transactionDTO.getImageId(), image, R.drawable.user_placeholder);
-        }else {
+        transaction = (TransactionDTO) intent.getSerializableExtra(Constants.USER_TRANSACTION_DTO);
+        if (transaction.getImageId() != null) {
+            image.setTag(transaction.getImageId());
+            ImageHelper.getInstance(context).imageLoader(transaction.getImageId(), image, R.drawable.user_placeholder);
+        } else {
             image.setImageResource(R.drawable.user_placeholder);
         }
 
-        callee_name.setText(transactionDTO.getPersonName());
+        callee_name.setText(transaction.getPersonName());
 
-        if (transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.SUCCESS) {
-            if (transactionDTO.getTransactionType() == TransactionDTO.TransactionType.CREDIT) {
+        if (transaction.getTransactionStatus() == TransactionDTO.TransactionStatus.SUCCESS) {
+            if (transaction.getTransactionType() == TransactionDTO.TransactionType.CREDIT) {
                 status_text.setText(context.getString(R.string.credit));
                 status_text.setTextColor(ContextCompat.getColor(context, R.color.register_btn_color));
-            } else if (transactionDTO.getTransactionType() == TransactionDTO.TransactionType.DEBIT) {
+            } else if (transaction.getTransactionType() == TransactionDTO.TransactionType.DEBIT) {
                 status_text.setText(context.getString(R.string.debit));
                 status_text.setTextColor(ContextCompat.getColor(context, R.color.user_change_status));
             }
 
-        } else if (transactionDTO.getTransactionStatus() == TransactionDTO.TransactionStatus.PENDING) {
-            status_text.setText(context.getString(R.string.pending));
-            status_text.setTextColor(ContextCompat.getColor(context, R.color.pending_transaction));
         } else {
-            status_text.setText(context.getString(R.string.fail));
+            status_text.setText(transaction.getTransactionType().equals(TransactionDTO.TransactionType.CREDIT) ? R.string.fail_credit : R.string.fail_debit);
             status_text.setTextColor(ContextCompat.getColor(context, R.color.failed_transaction));
+            detail_text.setText(transaction.getTransactionStatus().getDescription());
+            detail_text.setTextColor(ContextCompat.getColor(context, R.color.normal_text));
         }
 
-
         transactionDetailRequest = new TransactionDetailRequest();
-        transactionDetailRequest.setReference(transactionDTO.getReference());
+        transactionDetailRequest.setReference(transaction.getReference());
         requestTransactionDetail = new RequestTransactionDetail(activity, new RequestTransactionDetailTaskCompleteListener());
         requestTransactionDetail.execute(transactionDetailRequest);
 
     }
+
+            @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            if (requestCode == Constants.IBAN_PAYMENT_REQUEST_CODE){
+                if (resultCode == RESULT_OK) {
+                    Intent intent = new Intent();
+                    intent.setClass(activity, PaymentRequestDetailActivity.class);
+                    intent.putExtra(Constants.CONTACT_NAME, transaction.getPersonName());
+                    intent.putExtra(Constants.CONTACT_PHONE_NO, tnxDetail.getCellNumber());
+                    intent.putExtra(Constants.IMAGE_ID, transaction.getImageId());
+                    startActivity(intent);
+                }
+
+            }
+        }
 
     public class RequestTransactionDetailTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<TransactionDetailResponse>> {
 
@@ -198,78 +229,100 @@ public class TransactionDetailActivity extends AppCompatActivity {
             if (transactionDetailResponseMessage != null) {
                 if (transactionDetailResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     serviceName = ServiceEvent.TRANSACTION_DETAIL_SUCCESS;
-                    reference_code.setText(persianEnglishDigit.E2P(transactionDTO.getReference()));
-                    tnxDetailDTO = transactionDetailResponseMessage.getService().getTransactionDetail();
-                    if (tnxDetailDTO.getImageId() != null) {
-                        image.setTag(tnxDetailDTO.getImageId());
-                        imageManager.displayImage(tnxDetailDTO.getImageId(), image, R.drawable.user_placeholder);
-                    }else {
+                    reference_code.setText(persian.E2P(transaction.getReference()));
+                    tnxDetail = transactionDetailResponseMessage.getService().getTransactionDetail();
+                    if (tnxDetail.getImageId() != null) {
+                        image.setTag(tnxDetail.getImageId());
+                        ImageHelper.getInstance(context).imageLoader(tnxDetail.getImageId(), image, R.drawable.user_placeholder);
+                    } else {
                         image.setImageResource(R.drawable.user_placeholder);
                     }
-                    if (transactionDTO.getPaymentType() == TransactionDTO.PaymentType.PAYMENT) {
-                        if (tnxDetailDTO.getUserStatus() == TnxDetailDTO.UserStatus.ACTIVE) {
+                    if (transaction.getPaymentType() == TransactionDTO.PaymentType.PAYMENT) {
+                        if (tnxDetail.getUserStatus() == TnxDetailDTO.UserStatus.ACTIVE) {
                             pay_button.setVisibility(View.VISIBLE);
-                            pay_button.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
+                            pay_button.setOnClickListener(v -> {
+
+                                if ((prefs.getBoolean(Constants.SETTING_CHANGE_IBAN_STATUS, false)) || userProfile.getIbanDTO() != null && userProfile.getIbanDTO().getIban() != null && userProfile.getIbanDTO().getIban().length() > 0) {
                                     Intent intent = new Intent();
                                     intent.setClass(activity, PaymentRequestDetailActivity.class);
-                                    intent.putExtra(Constants.CONTACT_NAME, transactionDTO.getPersonName());
-                                    intent.putExtra(Constants.CONTACT_PHONE_NO, tnxDetailDTO.getCellNumber());
-                                    intent.putExtra(Constants.IMAGE_ID, transactionDTO.getImageId());
+                                    intent.putExtra(Constants.CONTACT_NAME, transaction.getPersonName());
+                                    intent.putExtra(Constants.CONTACT_PHONE_NO, tnxDetail.getCellNumber());
+                                    intent.putExtra(Constants.IMAGE_ID, transaction.getImageId());
                                     startActivity(intent);
+                                } else {
+                                    Intent intent = new Intent();
+                                    intent.setClass(activity, IbanIntronActivity.class);
+                                    intent.putExtra(Constants.IBAN_SOURCE_ACTION, Constants.IBAN_SOURCE_PAYMENT);
+                                    startActivityForResult(intent, Constants.IBAN_PAYMENT_REQUEST_CODE);
                                 }
                             });
                         }
-                        if (tnxDetailDTO.getName() != null) {
-                            callee_name.setText(tnxDetailDTO.getName());
+                        if (tnxDetail.getName() != null) {
+                            callee_name.setText(tnxDetail.getName());
                         }
-                        payment_request_code.setText(persianEnglishDigit.E2P(tnxDetailDTO.getCode()));
-                        date_time.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(tnxDetailDTO.getDate())));
-                        if (transactionDTO.getPersonType() == TransactionDTO.PersonType.INDIVIDUAL) {
-                            if (tnxDetailDTO.getCellNumber() != null) {
-                                cell_number.setText(persianEnglishDigit.E2P(tnxDetailDTO.getCellNumber()));
+                        moreAmount.setVisibility(View.VISIBLE);
+                        payment_request_code.setText(persian.E2P(tnxDetail.getCode()));
+                        date_time.setText(persian.E2P(new JalaliConvert().GregorianToPersian(tnxDetail.getDate())));
+                        if (transaction.getPersonType() == TransactionDTO.PersonType.INDIVIDUAL) {
+                            if (tnxDetail.getCellNumber() != null) {
+                                cell_number.setText(persian.E2P(tnxDetail.getCellNumber()));
                             }
                         }
-                        if (tnxDetailDTO.getMessage() != null) {
-                            message.setText(tnxDetailDTO.getMessage());
+                        if (tnxDetail.getMessage() != null) {
+                            message.setText(tnxDetail.getMessage());
                             message.setVisibility(View.VISIBLE);
                         }
-                        if (tnxDetailDTO.getAppliedCard() != null) {
-                            creditInfo.setVisibility(View.VISIBLE);
-                            card_number.setText(persianEnglishDigit.E2P(tnxDetailDTO.getAppliedCard().getMaskedCardNumber()));
-                            bank_name.setText(tnxDetailDTO.getAppliedCard().getBankName());
-                        }
-                    } else if (transactionDTO.getPaymentType() == TransactionDTO.PaymentType.PURCHASE) {
-                        callee_name.setText(tnxDetailDTO.getName());
-                        payment_request_code.setText(tnxDetailDTO.getCode().substring(0, 3) + " " + tnxDetailDTO.getCode().substring(3, 6));
-                        date_time.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(tnxDetailDTO.getDate())));
-                        if (tnxDetailDTO.getAppliedCard() != null) {
-                            creditInfo.setVisibility(View.VISIBLE);
-                            card_number.setText(persianEnglishDigit.E2P(tnxDetailDTO.getAppliedCard().getMaskedCardNumber()));
-                            bank_name.setText(tnxDetailDTO.getAppliedCard().getBankName());
-                        }
+                    } else if (transaction.getPaymentType() == TransactionDTO.PaymentType.PURCHASE) {
+                        callee_name.setText(tnxDetail.getName());
+                        payment_request_code.setText(tnxDetail.getCode().substring(0, 3) + " " + tnxDetail.getCode().substring(3, 6));
+                        date_time.setText(persian.E2P(new JalaliConvert().GregorianToPersian(tnxDetail.getDate())));
+                        moreAmount.setVisibility(View.VISIBLE);
+                    } else if (transaction.getPaymentType() == TransactionDTO.PaymentType.UTILITY_BILL) {
+                        payment_request_code.setText(persian.E2P(tnxDetail.getCode()));
+                        billsInfo.setVisibility(View.VISIBLE);
+                        billsId.setText(persian.E2P(tnxDetail.getBillId()));
+                        payId.setText(persian.E2P(tnxDetail.getPayId()));
+                        date_time.setText(persian.E2P(new JalaliConvert().GregorianToPersian(tnxDetail.getDate())));
+                    } else if (transaction.getPaymentType() == TransactionDTO.PaymentType.TOP_UP) {
+                        String name = transactionDetailResponseMessage.getService().getTransactionDetail().getName();
+                        callee_name.setText(name);
+                        payment_request_code.setText(persian.E2P(tnxDetail.getCode()));
+                        date_time.setText(persian.E2P(new JalaliConvert().GregorianToPersian(tnxDetail.getDate())));
+                        llCellNumber.setVisibility(View.VISIBLE);
+                        llChrageType.setVisibility(View.VISIBLE);
+                        indicatorCellNumber.setVisibility(View.VISIBLE);
+                        indicatorChargeType.setVisibility(View.VISIBLE);
+                        tvCellNumber.setText(persian.E2P(tnxDetail.getCellNumber()));
+                        tvChargeType.setText(transactionDetailResponseMessage.getService().getTransactionDetail().getDescription());
                     }
 
-                    if (transactionDTO.getTransactionType()== TransactionDTO.TransactionType.CREDIT){
-                        total_amount_value.setText(persianEnglishDigit.E2P(formatter.format(tnxDetailDTO.getAmount() + tnxDetailDTO.getVat())));
-                        amount_value.setText(persianEnglishDigit.E2P(formatter.format(tnxDetailDTO.getAmount())));
-                        vat_value.setText(persianEnglishDigit.E2P(formatter.format(tnxDetailDTO.getVat())));
+                    if (transaction.getPaymentType() != TransactionDTO.PaymentType.TOP_UP){
+                        llCellNumber.setVisibility(View.GONE);
+                        llChrageType.setVisibility(View.GONE);
+                        indicatorCellNumber.setVisibility(View.GONE);
+                        indicatorChargeType.setVisibility(View.GONE);
+                    }
+
+                    if (transaction.getTransactionType() == TransactionDTO.TransactionType.CREDIT) {
+                        total_amount_value.setText(persian.E2P(formatter.format(tnxDetail.getAmount() + tnxDetail.getVat())));
+                        amount_value.setText(persian.E2P(formatter.format(tnxDetail.getAmount())));
+
+                        vat_value.setText(persian.E2P(formatter.format(tnxDetail.getVat())));
                         fee_charge_value.setVisibility(View.INVISIBLE);
                         fee_charge_text.setVisibility(View.INVISIBLE);
-                        fee_charge_value.setText(persianEnglishDigit.E2P(formatter.format(tnxDetailDTO.getFeeCharge())));
-                    }else if (transactionDTO.getTransactionType()== TransactionDTO.TransactionType.DEBIT){
-                        total_amount_value.setText(persianEnglishDigit.E2P(formatter.format(tnxDetailDTO.getAmount() + tnxDetailDTO.getFeeCharge() + tnxDetailDTO.getVat())));
-                        amount_value.setText(persianEnglishDigit.E2P(formatter.format(tnxDetailDTO.getAmount())));
-                        vat_value.setText(persianEnglishDigit.E2P(formatter.format(tnxDetailDTO.getVat())));
-                        fee_charge_value.setText(persianEnglishDigit.E2P(formatter.format(tnxDetailDTO.getFeeCharge())));
+                        fee_charge_value.setText(persian.E2P(formatter.format(tnxDetail.getFeeCharge())));
+                    } else if (transaction.getTransactionType() == TransactionDTO.TransactionType.DEBIT) {
+                        total_amount_value.setText(persian.E2P(formatter.format(tnxDetail.getAmount() + tnxDetail.getFeeCharge() + tnxDetail.getVat())));
+                        amount_value.setText(persian.E2P(formatter.format(tnxDetail.getAmount())));
+                        vat_value.setText(persian.E2P(formatter.format(tnxDetail.getVat())));
+                        fee_charge_value.setText(persian.E2P(formatter.format(tnxDetail.getFeeCharge())));
                         fee_charge_value.setVisibility(View.VISIBLE);
                         fee_charge_text.setVisibility(View.VISIBLE);
                     }
-                }else if (transactionDetailResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                } else if (transactionDetailResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     serviceName = ServiceEvent.TRANSACTION_DETAIL_FAILURE;
                     forceLogout();
-                }else {
+                } else {
                     serviceName = ServiceEvent.TRANSACTION_DETAIL_FAILURE;
                 }
                 logEvent.log(serviceName);

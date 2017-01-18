@@ -4,25 +4,7 @@ package xyz.homapay.hampay.mobile.android.util;
 import xyz.homapay.hampay.mobile.android.webservice.ConnectionType;
 
 public class Constants {
-//    public static String SERVER = "176.58.104.158";//England Server
-//    public static String SERVER = "mobile.hampay.ir";//Prod Server
-//    public static String SERVER = "sit.hampay.ir";//SIT/27 Server
-//    public static String SERVER = "139.162.147.189";//DEV2 Server
-//    public static String SERVER = "sit.hampay.ir";//SIT/27 Server
-    public static String SERVER = "uat.hampay.ir";//UAT Server
-//    public static String SERVER = "mobile.hampay.homapay.com";//LIVE Server
-    public static String URL_PREFIX = "/hampay";
-    public static String HTTP_SERVER_IP = "http://" + SERVER + ":90" + URL_PREFIX;//England Server
-    public static String IPG_URL = "http://" + SERVER + ":9091" + URL_PREFIX;//England Server
-    public static String BANK_GATEWAY_URL = "https://sep.shaparak.ir/PgMobileAddData";
-    public static String TOKEN_PAYMENT = "https://mobile.hampay.com/saman/psp/pay";
-    public static ConnectionType CONNECTION_TYPE = ConnectionType.HTTPS;
-    public static String HTTPS_SERVER_IP = "https://" + SERVER + URL_PREFIX;//England Server
-    public static final String HTTPS_OPENAM_LOGIN_URL = HTTPS_SERVER_IP + "/auth";
-    public static final String HTTPS_OPENAM_LOGOUT_URL = HTTPS_SERVER_IP + "/unauth";
-    public static final String HTTP_OPENAM_LOGIN_URL = "http://" + SERVER + URL_PREFIX + "/auth";
-    public static final String HTTP_OPENAM_LOGOUT_URL = "http://" + SERVER + URL_PREFIX + "/unauth";
-    public static final String PSP_SOAP_SERVICE_URL = SERVER;
+    public static final String FUND_DTO = "fund_dto_obj";
     public static final String IS_FIRST_TIME_LAUNCH = "IsFirstTimeLaunch";
     public static final String LOGIN_API_LEVEL = "loginApiLevel";
     public static final String PROJECT_NUMBER = "936219454834";
@@ -34,7 +16,7 @@ public class Constants {
     public static final String MEMORABLE_WORD = "MemorableWord";
     public static final String FORCE_FETCH_ILLEGAL_APPS = "forceFetchIllegalApps";
     public static final String APP_PREFERENCE_NAME = "HamPay_Preferences";
-    public static final String USER_PROFILE_DTO = "UserProfile";
+    public static final String USER_PROFILE = "UserProfile";
     public static final String PENDING_PURCHASE_CODE = "pendingPurchaseCode";
     public static final String PENDING_PAYMENT_CODE = "pendingPaymentCode";
     public static final String PENDING_PURCHASE_COUNT = "pendingPurchaseCount";
@@ -56,7 +38,7 @@ public class Constants {
     public static final String SEND_MOBILE_REGISTER_ID = "send_mobile_register_id";
     public static final int DEFAULT_PAGE_SIZE = 15;
     public static final String REGISTERED_USER = "registeredUser";
-    public static final String  MOBILE_TIME_OUT = "mobile_time_out";
+    public static final String MOBILE_TIME_OUT = "mobile_time_out";
     public static final long MOBILE_TIME_OUT_INTERVAL = 420000;
     public static final String FORCE_USER_PROFILE = "force_user_profile";
     public static final String RECEIVED_SMS_ACTIVATION = "received_sms_activation";
@@ -94,10 +76,17 @@ public class Constants {
     public static final String IMAGE_PREFIX = "/image/";
     public static final String USER_MANUAL_TEXT = "userManualText";
     public static final String USER_MANUAL_TITLE = "userManualTitle";
-    public static final String USER_IBAN = "userIban";
+    public static final String IBAN_NUMBER = "iban_number";
+    public static final String IBAN_OWNER_NAME = "owner_name";
+    public static final String IBAN_OWNER_FAMILY = "owner_family";
+    public static final String IBAN_BANK_NAME = "bank_name";
     public static final String SETTING_CHANGE_IBAN_STATUS = "setting_change_iban";
     public static final int IBAN_CHANGE_RESULT_CODE = 2048;
+    public static final int IBAN_PAYMENT_REQUEST_CODE = 2049;
     public static final String RETURN_IBAN_CONFIRMED = "return_iban";
+    public static final String IBAN_SOURCE_ACTION = "iban_source_setting";
+    public static final int IBAN_SOURCE_PAYMENT = 1;
+    public static final int IBAN_SOURCE_SETTING = 2;
     public static final String TAC_PRIVACY_TITLE = "tac_privacy_title";
     public static final int COMMON_NOTIFICATION_IDENTIFIER = 999;
     public static final int INVOICE_NOTIFICATION_IDENTIFIER = 1000;
@@ -108,9 +97,7 @@ public class Constants {
     public static final String IMAGE_ID = "imageId";
     public static final int SOAP_AMOUNT_MAX = 2000001;
     public static final String ENTER_CHARACTERS_REGEX = "(\r?\n){1,}";
-    public static final String SUCCESS_PAYMENT_AMOUNT = "amount";
-    public static final String SUCCESS_PAYMENT_CODE = "code";
-    public static final String SUCCESS_PAYMENT_TRACE = "trace";
+    public static final String SUCCEED_PAYMENT_INFO = "succeed_payment";
     public static final String SHOW_CREATE_INVOICE = "showCreateInvoice";
     public static final String MERCHANT_DOCUMENT_URL = "http://hampay.ir/form/Merchantcode.pdf";
     public static final String SHOW_WALK_THROUGH = "show_wt";
@@ -119,8 +106,42 @@ public class Constants {
     public static final int HAMPAY_BLUE = 109;
     public static final String TEJERAT_CARD_PREFIX_1 = "627353";
     public static final String TEJERAT_CARD_PREFIX_2 = "585983";
-
+    public static final int BAR_CODE_RESULT = 100;
+    public static final String BAR_CODE_SCAN_RESULT = "barCodeScanResult";
+    public static final String CARD_LIST = "card_list";
+    public static final String BILL_INFO = "billInfo";
+    public static final String TOP_UP_INFO = "topUpInfo";
+    public static final String PAY_ID_REGEX = "^0+(?!$)";
     //Permissions and Group Permission
     public static final int READ_PHONE_STATE = 1;
     public static final int READ_CONTACTS = 2;
+    public static final int CAMERA = 3;
+    public static final String CHARGE_TYPE = "charge_type";
+    public static final int READ_EXTERNAL_STORAGE = 4;
+    //    public static String SERVER = "176.58.104.158";//England Server
+//    public static String SERVER = "mobile.hampay.ir";//Prod Server
+//        public static String SERVER = "sit.hampay.ir";//SIT/27 Server
+//    public static String SERVER = "139.162.147.189";//DEV2 Server
+//    public static String SERVER = "sit.hampay.ir";//SIT/27 Server
+    //        public static String SERVER = "uat.hampay.ir";//UAT Server
+    public static String SERVER = "uat.hampay.ir";//UAT Server
+    public static final String PSP_SOAP_SERVICE_URL = SERVER;
+    //    public static String SERVER = "mobile.hampay.homapay.com";//LIVE Server
+    public static String URL_PREFIX = "/hampay";
+    public static final String HTTP_OPENAM_LOGIN_URL = "http://" + SERVER + URL_PREFIX + "/auth";
+    public static final String HTTP_OPENAM_LOGOUT_URL = "http://" + SERVER + URL_PREFIX + "/unauth";
+    public static String HTTP_SERVER_IP = "http://" + SERVER + ":90" + URL_PREFIX;//England Server
+    public static String IPG_URL = "http://" + SERVER + ":9091" + URL_PREFIX;//England Server
+    public static String BANK_GATEWAY_URL = "https://sep.shaparak.ir/PgMobileAddData";
+    public static String BILLS_IPG_URL = "https://sep.shaparak.ir/pgmobileadddata/batchbill";
+    public static String TOP_UP_IPG_URL = "https://sep.shaparak.ir/PgMobileAddData/Charge";
+    public static String TOKEN_PAYMENT = "https://mobile.hampay.com/saman/psp/pay";
+    public static ConnectionType CONNECTION_TYPE = ConnectionType.HTTPS;
+    public static String HTTPS_SERVER_IP = "https://" + SERVER + URL_PREFIX;//England Server
+    public static final String HTTPS_OPENAM_LOGIN_URL = HTTPS_SERVER_IP + "/auth";
+    public static final String HTTPS_OPENAM_LOGOUT_URL = HTTPS_SERVER_IP + "/unauth";
+
+    public static final class NETWORK {
+        public final static String PING_TEST_URL = "www.google.com";
+    }
 }

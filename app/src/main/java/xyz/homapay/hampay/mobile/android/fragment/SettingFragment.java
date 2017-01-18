@@ -15,10 +15,11 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.ChangeMemorableActivity;
 import xyz.homapay.hampay.mobile.android.activity.ChangePassCodeActivity;
-import xyz.homapay.hampay.mobile.android.activity.IntroIBANActivity;
+import xyz.homapay.hampay.mobile.android.activity.IbanIntronActivity;
 import xyz.homapay.hampay.mobile.android.activity.MerchantIdActivity;
 import xyz.homapay.hampay.mobile.android.adapter.SettingAdapter;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
@@ -39,6 +40,8 @@ public class SettingFragment extends Fragment {
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
     private SwitchCompat notificationSwitch;
+    private Bundle bundle;
+    private UserProfileDTO userProfile;
 
     public SettingFragment() {
     }
@@ -49,6 +52,12 @@ public class SettingFragment extends Fragment {
 
         prefs = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE);
         editor = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, getActivity().MODE_PRIVATE).edit();
+
+        bundle = getArguments();
+
+        if (bundle != null){
+            this.userProfile = (UserProfileDTO) bundle.getSerializable(Constants.USER_PROFILE);
+        }
 
         settingKeyList = getResources().getStringArray(R.array.setting_key_list);
         settingValueList = getResources().getStringArray(R.array.setting_value_list);
@@ -87,11 +96,6 @@ public class SettingFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                if (hamPaySettings.get(position).getSettingStatus() == SettingStatus.Inactive){
-                    new HamPayDialog(getActivity()).showUnknownIban();
-                    return;
-                }
-
                 Intent intent;
 
                 switch (position){
@@ -119,9 +123,14 @@ public class SettingFragment extends Fragment {
                         break;
 
                     case 4:
-                        intent = new Intent();
-                        intent.setClass(getActivity(), IntroIBANActivity.class);
-                        startActivity(intent);
+                        if ((prefs.getBoolean(Constants.SETTING_CHANGE_IBAN_STATUS, false)) || userProfile.getIbanDTO() != null && userProfile.getIbanDTO().getIban() != null && userProfile.getIbanDTO().getIban().length() > 0) {
+                            intent = new Intent();
+                            intent.putExtra(Constants.IBAN_SOURCE_ACTION, Constants.IBAN_SOURCE_SETTING);
+                            intent.setClass(getActivity(), IbanIntronActivity.class);
+                            startActivity(intent);
+                        }else {
+                            new HamPayDialog(getActivity()).showUnknownIban();
+                        }
                         break;
 
                     case 5:
