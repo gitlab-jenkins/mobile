@@ -262,6 +262,13 @@ public class HamPayContactsActivity extends AppCompatActivity implements Permiss
         requestAndLoadUserContact();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(search_text.getWindowToken(), 0);
+    }
+
 
     public class RequestContactHampayEnabledTaskCompleteListener implements
             AsyncTaskCompleteListener<ResponseMessage<ContactsHampayEnabledResponse>> {

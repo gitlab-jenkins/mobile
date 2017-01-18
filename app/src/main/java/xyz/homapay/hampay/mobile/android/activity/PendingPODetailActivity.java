@@ -23,11 +23,11 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class PendingPODetailActivity extends AppCompatActivity {
 
-    PaymentInfoDTO paymentInfo;
-    PersianEnglishDigit persianEnglishDigit;
-    Context context;
-    Activity activity;
-    SharedPreferences prefs;
+    private PaymentInfoDTO paymentInfo;
+    private PersianEnglishDigit persianEnglishDigit;
+    private Context context;
+    private Activity activity;
+    private SharedPreferences prefs;
     private CurrencyFormatter formatter;
     private FacedTextView caller_name;
     private FacedTextView caller_phone_number;
@@ -37,7 +37,6 @@ public class PendingPODetailActivity extends AppCompatActivity {
     private FacedTextView message_text;
     private LinearLayout re_payment_request;
     private ImageView user_image;
-
 
     public void backActionBar(View view) {
         finish();

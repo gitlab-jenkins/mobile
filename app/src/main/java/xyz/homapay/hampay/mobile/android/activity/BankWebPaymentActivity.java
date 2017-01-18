@@ -309,9 +309,4 @@ public class BankWebPaymentActivity extends AppCompatActivity {
             }
         }
     }
-
-    @Override
-    public void onBackPressed() {
-
-    }
 }
