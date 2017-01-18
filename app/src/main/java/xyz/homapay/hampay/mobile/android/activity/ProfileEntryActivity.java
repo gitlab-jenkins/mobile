@@ -145,6 +145,7 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
                                 fragmentTransaction.commitAllowingStateLoss();
                             });
                         } else {
+                            keepOn_button.setEnabled(true);
                             Intent intent = new Intent();
                             intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                             intent.addCategory(Intent.CATEGORY_DEFAULT);
