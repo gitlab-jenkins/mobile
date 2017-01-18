@@ -141,6 +141,8 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
             }
         };
         registerReceiver(mIntentReceiver, intentFilter);
+        if (pendingListView != null)
+            pendingListView.setEnabled(true);
     }
 
     @Override
@@ -212,21 +214,25 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
         pendingListView.setOnItemClickListener((parent, view, position, id) -> {
             Intent intent1 = new Intent();
+            pendingListView.setEnabled(false);
             if (fundDTOList.get(position).getPaymentType() == FundDTO.PaymentType.PURCHASE) {
                 intent1.setClass(activity, RequestBusinessPayDetailActivity.class);
                 intent1.putExtra(Constants.PROVIDER_ID, fundDTOList.get(position).getProviderId());
                 itemPosition = position;
                 startActivityForResult(intent1, 45);
+                pendingListView.setEnabled(true);
             } else if (fundDTOList.get(position).getPaymentType() == FundDTO.PaymentType.PAYMENT) {
                 intent1.setClass(activity, InvoicePendingConfirmationActivity.class);
                 intent1.putExtra(Constants.PROVIDER_ID, fundDTOList.get(position).getProviderId());
                 itemPosition = position;
                 startActivityForResult(intent1, 46);
+                pendingListView.setEnabled(true);
             } else if (fundDTOList.get(position).getPaymentType() == FundDTO.PaymentType.UTILITY_BILL) {
                 intent1.setClass(activity, ServiceBillsDetailActivity.class);
                 intent1.putExtra(Constants.PROVIDER_ID, fundDTOList.get(position).getProviderId());
                 itemPosition = position;
                 startActivityForResult(intent1, 47);
+                pendingListView.setEnabled(true);
             } else {
                 new TopUpDetailImpl(new ModelLayerImpl(context), new TopUpDetailView() {
                     @Override
