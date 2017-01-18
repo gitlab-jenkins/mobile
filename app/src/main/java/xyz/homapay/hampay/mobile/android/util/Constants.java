@@ -82,6 +82,7 @@ public class Constants {
     public static final String IBAN_BANK_NAME = "bank_name";
     public static final String SETTING_CHANGE_IBAN_STATUS = "setting_change_iban";
     public static final int IBAN_CHANGE_RESULT_CODE = 2048;
+    public static final int IBAN_PAYMENT_REQUEST_CODE = 2049;
     public static final String RETURN_IBAN_CONFIRMED = "return_iban";
     public static final String IBAN_SOURCE_ACTION = "iban_source_setting";
     public static final int IBAN_SOURCE_PAYMENT = 1;
@@ -121,9 +122,9 @@ public class Constants {
 //    public static String SERVER = "mobile.hampay.ir";//Prod Server
 //        public static String SERVER = "sit.hampay.ir";//SIT/27 Server
 //    public static String SERVER = "139.162.147.189";//DEV2 Server
-    public static String SERVER = "sit.hampay.ir";//SIT/27 Server
+//    public static String SERVER = "sit.hampay.ir";//SIT/27 Server
     //        public static String SERVER = "uat.hampay.ir";//UAT Server
-//    public static String SERVER = "uat.hampay.ir";//UAT Server
+    public static String SERVER = "uat.hampay.ir";//UAT Server
     public static final String PSP_SOAP_SERVICE_URL = SERVER;
     //    public static String SERVER = "mobile.hampay.homapay.com";//LIVE Server
     public static String URL_PREFIX = "/hampay";

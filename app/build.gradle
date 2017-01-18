@@ -28,12 +28,16 @@ android {
         }
     }
 
+    dexOptions {
+        javaMaxHeapSize "4g" //specify the heap size for the dex process
+    }
+
     defaultConfig {
         applicationId "xyz.homapay.hampay.mobile.android"
         minSdkVersion 14
         targetSdkVersion 25
         versionCode 16
-        versionName "HamPay-Develop-V1.2"
+        versionName "HamPay-Develop-V1.3"
         multiDexEnabled true
     }
     buildTypes {

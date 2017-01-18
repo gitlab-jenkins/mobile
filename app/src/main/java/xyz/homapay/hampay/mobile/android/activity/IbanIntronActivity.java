@@ -220,7 +220,8 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
         hamPayDialog.dismisWaitingDialog();
         ibanUserFamily.setCursorVisible(false);
         ibanUserName.setCursorVisible(false);
-
+        ServiceEvent serviceName = ServiceEvent.IBAN_CONFIRMATION_FAILURE;
+        LogEvent logEvent = new LogEvent(context);
         if (object != null) {
             if (object.getClass().equals(ResponseMessage.class)) {
                 final ResponseMessage responseMessage = (ResponseMessage) object;
@@ -229,6 +230,7 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
                         ResponseMessage<IBANConfirmationResponse> ibanConfirmation = (ResponseMessage) object;
                         switch (responseMessage.getService().getResultStatus()) {
                             case SUCCESS:
+                                serviceName = ServiceEvent.IBAN_CONFIRMATION_SUCCESS;
                                 ibanVerifyButton.setVisibility(View.VISIBLE);
                                 editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
                                 editor.commit();
@@ -253,6 +255,7 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
                         break;
                 }
             }
+            logEvent.log(serviceName);
         }
     }
 

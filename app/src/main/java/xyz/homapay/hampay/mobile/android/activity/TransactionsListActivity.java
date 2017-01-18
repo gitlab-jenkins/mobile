@@ -25,6 +25,7 @@ import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.TransactionListRequest;
 import xyz.homapay.hampay.common.core.model.response.TransactionListResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO;
+import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.UserTransactionAdapter;
@@ -37,6 +38,7 @@ import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoListview
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
+import xyz.homapay.hampay.mobile.android.m.common.Const;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
@@ -66,6 +68,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
     private ImageView full_triangle;
     private ImageView business_triangle;
     private ImageView invoice_triangle;
+    private UserProfileDTO userProfile;
 
     @Override
     protected void onResume() {
@@ -120,6 +123,8 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
+        userProfile = (UserProfileDTO) getIntent().getSerializableExtra(Constants.USER_PROFILE);
+
         hamPayDialog = new HamPayDialog(activity);
 
         loading = (ProgressBar) findViewById(R.id.loading);
@@ -162,6 +167,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
                     Intent intent = new Intent();
                     intent.setClass(activity, TransactionDetailActivity.class);
                     intent.putExtra(Constants.USER_TRANSACTION_DTO, transactionDTOs.get(position));
+                    intent.putExtra(Constants.USER_PROFILE, userProfile);
                     startActivity(intent);
                 }
             }

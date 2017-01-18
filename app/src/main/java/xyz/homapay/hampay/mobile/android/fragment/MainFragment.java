@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.KeyEvent;
@@ -32,7 +31,6 @@ import xyz.homapay.hampay.mobile.android.activity.MainBillsTopUpActivity;
 import xyz.homapay.hampay.mobile.android.activity.PaymentRequestDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.PaymentRequestListActivity;
 import xyz.homapay.hampay.mobile.android.activity.PendingPurchasePaymentListActivity;
-import xyz.homapay.hampay.mobile.android.activity.ServiceBillsActivity;
 import xyz.homapay.hampay.mobile.android.activity.TransactionsListActivity;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
@@ -44,6 +42,7 @@ import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.img.ImageHelper;
+import xyz.homapay.hampay.mobile.android.m.common.Const;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
@@ -86,6 +85,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     private PersianEnglishDigit persianEnglishDigit;
     private IntentFilter intentFilter;
     private BroadcastReceiver mIntentReceiver;
+    private int selectContact = -1;
 
     public MainFragment() {
     }
@@ -298,6 +298,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     return;
                 }
                 intent.setClass(getActivity(), TransactionsListActivity.class);
+                intent.putExtra(Constants.USER_PROFILE, userProfile);
                 startActivity(intent);
                 break;
 
@@ -350,24 +351,52 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.hampay_1_ll:
-                intent = new Intent(getActivity(), PaymentRequestDetailActivity.class);
-                intent.putExtra(Constants.HAMPAY_CONTACT, userProfile.getSelectedContacts().get(0));
-                startActivity(intent);
+                selectContact = 0;
+                if ((prefs.getBoolean(Constants.SETTING_CHANGE_IBAN_STATUS, false)) || userProfile.getIbanDTO() != null && userProfile.getIbanDTO().getIban() != null && userProfile.getIbanDTO().getIban().length() > 0) {
+                    intent = new Intent(getActivity(), PaymentRequestDetailActivity.class);
+                    intent.putExtra(Constants.HAMPAY_CONTACT, userProfile.getSelectedContacts().get(selectContact));
+                    startActivity(intent);
+                } else {
+                    intent.setClass(getActivity(), IbanIntronActivity.class);
+                    intent.putExtra(Constants.IBAN_SOURCE_ACTION, Constants.IBAN_SOURCE_PAYMENT);
+                    startActivityForResult(intent, Constants.IBAN_PAYMENT_REQUEST_CODE);
+                }
                 break;
             case R.id.hampay_2_ll:
-                intent = new Intent(getActivity(), PaymentRequestDetailActivity.class);
-                intent.putExtra(Constants.HAMPAY_CONTACT, userProfile.getSelectedContacts().get(1));
-                startActivity(intent);
+                selectContact = 1;
+                if ((prefs.getBoolean(Constants.SETTING_CHANGE_IBAN_STATUS, false)) || userProfile.getIbanDTO() != null && userProfile.getIbanDTO().getIban() != null && userProfile.getIbanDTO().getIban().length() > 0) {
+                    intent = new Intent(getActivity(), PaymentRequestDetailActivity.class);
+                    intent.putExtra(Constants.HAMPAY_CONTACT, userProfile.getSelectedContacts().get(selectContact));
+                    startActivity(intent);
+                } else {
+                    intent.setClass(getActivity(), IbanIntronActivity.class);
+                    intent.putExtra(Constants.IBAN_SOURCE_ACTION, Constants.IBAN_SOURCE_PAYMENT);
+                    startActivityForResult(intent, Constants.IBAN_PAYMENT_REQUEST_CODE);
+                }
                 break;
             case R.id.hampay_3_ll:
-                intent = new Intent(getActivity(), PaymentRequestDetailActivity.class);
-                intent.putExtra(Constants.HAMPAY_CONTACT, userProfile.getSelectedContacts().get(2));
-                startActivity(intent);
+                selectContact = 2;
+                if ((prefs.getBoolean(Constants.SETTING_CHANGE_IBAN_STATUS, false)) || userProfile.getIbanDTO() != null && userProfile.getIbanDTO().getIban() != null && userProfile.getIbanDTO().getIban().length() > 0) {
+                    intent = new Intent(getActivity(), PaymentRequestDetailActivity.class);
+                    intent.putExtra(Constants.HAMPAY_CONTACT, userProfile.getSelectedContacts().get(selectContact));
+                    startActivity(intent);
+                } else {
+                    intent.setClass(getActivity(), IbanIntronActivity.class);
+                    intent.putExtra(Constants.IBAN_SOURCE_ACTION, Constants.IBAN_SOURCE_PAYMENT);
+                    startActivityForResult(intent, Constants.IBAN_PAYMENT_REQUEST_CODE);
+                }
                 break;
             case R.id.hampay_4_ll:
-                intent = new Intent(getActivity(), PaymentRequestDetailActivity.class);
-                intent.putExtra(Constants.HAMPAY_CONTACT, userProfile.getSelectedContacts().get(3));
-                startActivity(intent);
+                selectContact = 3;
+                if ((prefs.getBoolean(Constants.SETTING_CHANGE_IBAN_STATUS, false)) || userProfile.getIbanDTO() != null && userProfile.getIbanDTO().getIban() != null && userProfile.getIbanDTO().getIban().length() > 0) {
+                    intent = new Intent(getActivity(), PaymentRequestDetailActivity.class);
+                    intent.putExtra(Constants.HAMPAY_CONTACT, userProfile.getSelectedContacts().get(selectContact));
+                    startActivity(intent);
+                } else {
+                    intent.setClass(getActivity(), IbanIntronActivity.class);
+                    intent.putExtra(Constants.IBAN_SOURCE_ACTION, Constants.IBAN_SOURCE_PAYMENT);
+                    startActivityForResult(intent, Constants.IBAN_PAYMENT_REQUEST_CODE);
+                }
                 break;
         }
 
@@ -381,6 +410,12 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), PaymentRequestListActivity.class);
                 intent.putExtra(Constants.USER_PROFILE, userProfile);
+                startActivity(intent);
+            }
+        }else if (requestCode == Constants.IBAN_PAYMENT_REQUEST_CODE){
+            if (resultCode == getActivity().RESULT_OK) {
+                Intent intent = new Intent(getActivity(), PaymentRequestDetailActivity.class);
+                intent.putExtra(Constants.HAMPAY_CONTACT, userProfile.getSelectedContacts().get(selectContact));
                 startActivity(intent);
             }
         }

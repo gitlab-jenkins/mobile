@@ -18,6 +18,8 @@ import xyz.homapay.hampay.common.core.model.request.TransactionDetailRequest;
 import xyz.homapay.hampay.common.core.model.response.TransactionDetailResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.TnxDetailDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO;
+import xyz.homapay.hampay.common.core.model.response.dto.UserInfoDTO;
+import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
@@ -73,6 +75,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
     private LinearLayout llChrageType;
     private View indicatorChargeType;
     private View indicatorCellNumber;
+    private UserProfileDTO userProfile;
 
     public void backActionBar(View view) {
         finish();
@@ -123,7 +126,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
         persian = new PersianEnglishDigit();
         formatter = new CurrencyFormatter();
-
+        userProfile = (UserProfileDTO) getIntent().getSerializableExtra(Constants.USER_PROFILE);
 
         context = this;
         activity = TransactionDetailActivity.this;
@@ -197,6 +200,22 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
     }
 
+            @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            if (requestCode == Constants.IBAN_PAYMENT_REQUEST_CODE){
+                if (resultCode == RESULT_OK) {
+                    Intent intent = new Intent();
+                    intent.setClass(activity, PaymentRequestDetailActivity.class);
+                    intent.putExtra(Constants.CONTACT_NAME, transaction.getPersonName());
+                    intent.putExtra(Constants.CONTACT_PHONE_NO, tnxDetail.getCellNumber());
+                    intent.putExtra(Constants.IMAGE_ID, transaction.getImageId());
+                    startActivity(intent);
+                }
+
+            }
+        }
+
     public class RequestTransactionDetailTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<TransactionDetailResponse>> {
 
         @Override
@@ -222,12 +241,20 @@ public class TransactionDetailActivity extends AppCompatActivity {
                         if (tnxDetail.getUserStatus() == TnxDetailDTO.UserStatus.ACTIVE) {
                             pay_button.setVisibility(View.VISIBLE);
                             pay_button.setOnClickListener(v -> {
-                                Intent intent = new Intent();
-                                intent.setClass(activity, PaymentRequestDetailActivity.class);
-                                intent.putExtra(Constants.CONTACT_NAME, transaction.getPersonName());
-                                intent.putExtra(Constants.CONTACT_PHONE_NO, tnxDetail.getCellNumber());
-                                intent.putExtra(Constants.IMAGE_ID, transaction.getImageId());
-                                startActivity(intent);
+
+                                if ((prefs.getBoolean(Constants.SETTING_CHANGE_IBAN_STATUS, false)) || userProfile.getIbanDTO() != null && userProfile.getIbanDTO().getIban() != null && userProfile.getIbanDTO().getIban().length() > 0) {
+                                    Intent intent = new Intent();
+                                    intent.setClass(activity, PaymentRequestDetailActivity.class);
+                                    intent.putExtra(Constants.CONTACT_NAME, transaction.getPersonName());
+                                    intent.putExtra(Constants.CONTACT_PHONE_NO, tnxDetail.getCellNumber());
+                                    intent.putExtra(Constants.IMAGE_ID, transaction.getImageId());
+                                    startActivity(intent);
+                                } else {
+                                    Intent intent = new Intent();
+                                    intent.setClass(activity, IbanIntronActivity.class);
+                                    intent.putExtra(Constants.IBAN_SOURCE_ACTION, Constants.IBAN_SOURCE_PAYMENT);
+                                    startActivityForResult(intent, Constants.IBAN_PAYMENT_REQUEST_CODE);
+                                }
                             });
                         }
                         if (tnxDetail.getName() != null) {
