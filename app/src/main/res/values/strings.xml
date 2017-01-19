@@ -296,7 +296,7 @@
     <string name="iban_notice_setting">لطفا اطلاعات حساب بانکی جدید را جهت دریافت مبالغ واریزی وارد نمایید</string>
     <string name="iban_verify">تایید</string>
     <string name="iban_user_name">نام صاحب حساب</string>
-    <string name="user_name_restriction"> ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzاآبپتثجچحخدذرزژسشصضطظعغفقکگلمنوهئی</string>
+    <string name="user_name_restriction"> A BCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzاآبپتثجچحخدذرزژسشصضطظعغفقکگلمنوهئی</string>
     <string name="iban_user_family">نام خانوادگی صاحب حساب</string>
     <string name="null_pending_business">در حال حاضر پرداخت در انتظاری وجود ندارد</string>
     <string name="hampay_contact_share">دعوت دوستان</string>
