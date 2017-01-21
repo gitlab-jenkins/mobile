@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
-import android.view.View;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -22,6 +21,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.response.dto.BillInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
@@ -41,9 +42,16 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 public class BankWebPaymentActivity extends AppCompatActivity {
 
     private final Handler handler = new Handler();
-    private WebView bankWebView;
-    private ImageView reload;
-    private TextView urlText;
+
+    @BindView(R.id.wvBank)
+    WebView wvBank;
+
+    @BindView(R.id.imgReload)
+    ImageView imgReload;
+
+    @BindView(R.id.tvUrlText)
+    TextView tvUrlText;
+
     private HamPayDialog hamPayDialog;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
@@ -124,6 +132,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bank_web_payment);
+        ButterKnife.bind(this);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
@@ -141,20 +150,12 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
         pspInfoDTO = (PspInfoDTO) intent.getSerializableExtra(Constants.PSP_INFO);
 
-        bankWebView = (WebView) findViewById(R.id.bankWebView);
-
-        reload = (ImageView) findViewById(R.id.reload);
-        reload.setOnClickListener(v -> bankWebView.reload());
-
-        urlText = (TextView) findViewById(R.id.urlText);
-        urlText.setHorizontallyScrolling(true);
-        urlText.setScrollbarFadingEnabled(true);
-        urlText.setHorizontallyScrolling(true);
-        urlText.setMovementMethod(new ScrollingMovementMethod());
+        imgReload.setOnClickListener(v -> wvBank.reload());
+        tvUrlText.setMovementMethod(new ScrollingMovementMethod());
 
         hamPayDialog = new HamPayDialog(this);
 
-        WebSettings settings = bankWebView.getSettings();
+        WebSettings settings = wvBank.getSettings();
 
         settings.setJavaScriptEnabled(true);
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
@@ -214,14 +215,14 @@ public class BankWebPaymentActivity extends AppCompatActivity {
         try {
             editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
             editor.commit();
-            bankWebView.postUrl(ipgUrl, postData.getBytes("UTF-8"));
+            wvBank.postUrl(ipgUrl, postData.getBytes("UTF-8"));
             hamPayDialog.showFirstIpg(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
             startTimer();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
 
-        bankWebView.setWebViewClient(new WebViewClient() {
+        wvBank.setWebViewClient(new WebViewClient() {
 
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
@@ -237,7 +238,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
 
             public void onPageFinished(WebView view, String url) {
 
-                urlText.setText(url);
+                tvUrlText.setText(url);
                 ResultStatus resultStatus = ResultStatus.FAILURE;
                 ServiceEvent serviceName;
                 LogEvent logEvent = new LogEvent(context);

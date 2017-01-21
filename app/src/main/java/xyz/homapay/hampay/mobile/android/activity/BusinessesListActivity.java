@@ -10,20 +10,19 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.enums.BizSortFactor;
@@ -38,7 +37,6 @@ import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestHamPayBusiness;
 import xyz.homapay.hampay.mobile.android.async.RequestSearchHamPayBusiness;
 import xyz.homapay.hampay.mobile.android.component.doblist.DobList;
-import xyz.homapay.hampay.mobile.android.component.doblist.events.OnLoadMoreListener;
 import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoEmptyViewException;
 import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoListviewException;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
@@ -50,11 +48,30 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class BusinessesListActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private RelativeLayout searchLayout;
+    @BindView(R.id.rlRecentBusiness)
+    RelativeLayout rlRecentBusiness;
+    @BindView(R.id.rlFullBusiness)
+    RelativeLayout rlFullBusiness;
+    @BindView(R.id.rlPopularBusiness)
+    RelativeLayout rlPopularBusiness;
+    @BindView(R.id.full_triangle)
+    ImageView full_triangle;
+    @BindView(R.id.popular_triangle)
+    ImageView popular_triangle;
+    @BindView(R.id.recent_triangle)
+    ImageView recent_triangle;
+
+    @BindView(R.id.rlSearchLayout)
+    RelativeLayout rlSearchLayout;
+
+    @BindView(R.id.etSearchPhraseText)
+    FacedEditText etSearchPhraseText;
+    @BindView(R.id.pullToRefresh)
+    SwipeRefreshLayout pullToRefresh;
+    @BindView(R.id.businessListView)
+    ListView businessListView;
     private Context context;
     private Activity activity;
-    private SwipeRefreshLayout pullToRefresh;
-    private ListView businessListView;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
     private HamPayDialog hamPayDialog;
@@ -63,8 +80,6 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
     private List<BusinessDTO> businessDTOs;
     private HamPayBusinessesAdapter hamPayBusinessesAdapter;
     private boolean FINISHED_SCROLLING = false;
-    private ImageView searchImage;
-    private FacedEditText searchPhraseText;
     private InputMethodManager inputMethodManager;
     private BusinessListRequest businessListRequest;
     private BusinessSearchRequest businessSearchRequest;
@@ -72,15 +87,9 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
     private RequestHamPayBusiness requestHamPayBusiness;
     private int requestPageNumber = 0;
     private boolean searchEnabled = false;
-    private RelativeLayout full_business;
-    private RelativeLayout popular_business;
-    private RelativeLayout recent_business;
-    private ImageView full_triangle;
-    private ImageView popular_triangle;
-    private ImageView recent_triangle;
     private BizSortFactor bizSortFactor = BizSortFactor.NAME;
 
-    public void backActionBar(View view){
+    public void backActionBar(View view) {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
         finish();
@@ -90,12 +99,12 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
     protected void onStop() {
         super.onStop();
         HamPayApplication.setAppSate(AppState.Stoped);
-        if (requestHamPayBusiness != null){
+        if (requestHamPayBusiness != null) {
             if (!requestHamPayBusiness.isCancelled())
                 requestHamPayBusiness.cancel(true);
         }
 
-        if (requestSearchHamPayBusiness != null){
+        if (requestSearchHamPayBusiness != null) {
             if (!requestSearchHamPayBusiness.isCancelled())
                 requestSearchHamPayBusiness.cancel(true);
         }
@@ -128,55 +137,38 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_businesses_list);
+        ButterKnife.bind(this);
 
         context = this;
         activity = BusinessesListActivity.this;
 
-        searchLayout = (RelativeLayout)findViewById(R.id.search_layout);
-        full_business = (RelativeLayout)findViewById(R.id.full_business);
-        full_business.setOnClickListener(this);
-        popular_business = (RelativeLayout)findViewById(R.id.popular_business);
-        popular_business.setOnClickListener(this);
-        recent_business = (RelativeLayout)findViewById(R.id.recent_business);
-        recent_business.setOnClickListener(this);
-        full_triangle = (ImageView)findViewById(R.id.full_triangle);
-        popular_triangle = (ImageView)findViewById(R.id.popular_triangle);
-        recent_triangle = (ImageView)findViewById(R.id.recent_triangle);
-        pullToRefresh = (SwipeRefreshLayout)findViewById(R.id.pullToRefresh);
-        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (requestHamPayBusiness.getStatus() == AsyncTask.Status.RUNNING){
-                    requestHamPayBusiness.cancel(true);
-                }
-                FINISHED_SCROLLING = false;
-                onLoadMore = false;
-                hamPayBusinessesAdapter.clear();
-                businessDTOs.clear();
-                requestPageNumber = 0;
-                searchEnabled = false;
-                businessListRequest = new BusinessListRequest();
-                businessListRequest.setPageNumber(requestPageNumber);
-                businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-                businessListRequest.setSortFactor(bizSortFactor);
-                requestHamPayBusiness = new RequestHamPayBusiness(context, new RequestBusinessListTaskCompleteListener(searchEnabled));
-                requestHamPayBusiness.execute(businessListRequest);
+        pullToRefresh.setOnRefreshListener(() -> {
+            if (requestHamPayBusiness.getStatus() == AsyncTask.Status.RUNNING) {
+                requestHamPayBusiness.cancel(true);
             }
+            FINISHED_SCROLLING = false;
+            onLoadMore = false;
+            hamPayBusinessesAdapter.clear();
+            businessDTOs.clear();
+            requestPageNumber = 0;
+            searchEnabled = false;
+            businessListRequest = new BusinessListRequest();
+            businessListRequest.setPageNumber(requestPageNumber);
+            businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+            businessListRequest.setSortFactor(bizSortFactor);
+            requestHamPayBusiness = new RequestHamPayBusiness(context, new RequestBusinessListTaskCompleteListener(searchEnabled));
+            requestHamPayBusiness.execute(businessListRequest);
         });
-        businessListView = (ListView)findViewById(R.id.businessListView);
-        businessListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent();
-                intent.setClass(context, BusinessPaymentInfoActivity.class);
-                intent.putExtra(Constants.BUSINESS_INFO, businessDTOs.get(position));
-                context.startActivity(intent);
-            }
+
+        businessListView.setOnItemClickListener((parent, view, position, id) -> {
+            Intent intent = new Intent();
+            intent.setClass(context, BusinessPaymentInfoActivity.class);
+            intent.putExtra(Constants.BUSINESS_INFO, businessDTOs.get(position));
+            context.startActivity(intent);
         });
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
@@ -187,19 +179,7 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
         inputMethodManager = (InputMethodManager) getSystemService(
                 Context.INPUT_METHOD_SERVICE);
 
-        searchImage = (ImageView) findViewById(R.id.searchImage);
-        searchImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (searchPhraseText.getText().toString().length() > 0) {
-                    performBusinessSearch(searchPhraseText.getText().toString());
-                }
-            }
-        });
-
-        searchPhraseText = (FacedEditText) findViewById(R.id.searchPhraseText);
-
-        searchPhraseText.addTextChangedListener(new TextWatcher() {
+        etSearchPhraseText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -218,7 +198,7 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                     businessListRequest.setSortFactor(BizSortFactor.NAME);
                     requestHamPayBusiness = new RequestHamPayBusiness(context, new RequestBusinessListTaskCompleteListener(searchEnabled));
                     requestHamPayBusiness.execute(businessListRequest);
-                    inputMethodManager.hideSoftInputFromWindow(searchPhraseText.getWindowToken(), 0);
+                    inputMethodManager.hideSoftInputFromWindow(etSearchPhraseText.getWindowToken(), 0);
                     hamPayBusinessesAdapter.clear();
                     businessDTOs.clear();
                     hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
@@ -232,18 +212,15 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
             }
         });
 
-        searchPhraseText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    performBusinessSearch(searchPhraseText.getText().toString());
-                    return true;
-                }
-                return false;
+        etSearchPhraseText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                performBusinessSearch(etSearchPhraseText.getText().toString());
+                return true;
             }
+            return false;
         });
 
-        businessDTOs = new ArrayList<BusinessDTO>();
+        businessDTOs = new ArrayList<>();
 
         hamPayDialog = new HamPayDialog(activity);
         hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
@@ -260,29 +237,35 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
     @Override
     public void onClick(View v) {
 
-        switch (v.getId()){
-            case R.id.full_business:
+        switch (v.getId()) {
+            case R.id.rlFullBusiness:
                 changeTab(1);
                 break;
 
-            case R.id.popular_business:
+            case R.id.rlPopularBusiness:
                 changeTab(2);
                 break;
 
-            case R.id.recent_business:
+            case R.id.rlRecentBusiness:
                 changeTab(3);
+                break;
+
+            case R.id.imgSearchImage:
+                if (etSearchPhraseText.getText().toString().trim().length() > 0) {
+                    performBusinessSearch(etSearchPhraseText.getText().toString());
+                }
                 break;
         }
 
     }
 
-    private void changeTab(int index){
-        if (requestHamPayBusiness.getStatus() == AsyncTask.Status.RUNNING){
+    private void changeTab(int index) {
+        if (requestHamPayBusiness.getStatus() == AsyncTask.Status.RUNNING) {
             requestHamPayBusiness.cancel(true);
         }
         FINISHED_SCROLLING = false;
         onLoadMore = false;
-        switch (index){
+        switch (index) {
             case 1:
                 hamPayBusinessesAdapter.clear();
                 businessDTOs.clear();
@@ -295,9 +278,9 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                 businessListRequest.setSortFactor(bizSortFactor);
                 requestHamPayBusiness = new RequestHamPayBusiness(this, new RequestBusinessListTaskCompleteListener(searchEnabled));
                 requestHamPayBusiness.execute(businessListRequest);
-                full_business.setBackgroundColor(getResources().getColor(R.color.app_origin));
-                popular_business.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
-                recent_business.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
+                rlFullBusiness.setBackgroundColor(getResources().getColor(R.color.app_origin));
+                rlPopularBusiness.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
+                rlRecentBusiness.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
                 full_triangle.setVisibility(View.VISIBLE);
                 popular_triangle.setVisibility(View.GONE);
                 recent_triangle.setVisibility(View.GONE);
@@ -314,9 +297,9 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                 businessListRequest.setSortFactor(bizSortFactor);
                 requestHamPayBusiness = new RequestHamPayBusiness(this, new RequestBusinessListTaskCompleteListener(searchEnabled));
                 requestHamPayBusiness.execute(businessListRequest);
-                full_business.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
-                popular_business.setBackgroundColor(getResources().getColor(R.color.app_origin));
-                recent_business.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
+                rlFullBusiness.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
+                rlPopularBusiness.setBackgroundColor(getResources().getColor(R.color.app_origin));
+                rlRecentBusiness.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
                 full_triangle.setVisibility(View.GONE);
                 popular_triangle.setVisibility(View.VISIBLE);
                 recent_triangle.setVisibility(View.GONE);
@@ -334,9 +317,9 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                 businessListRequest.setSortFactor(bizSortFactor);
                 requestHamPayBusiness = new RequestHamPayBusiness(this, new RequestBusinessListTaskCompleteListener(searchEnabled));
                 requestHamPayBusiness.execute(businessListRequest);
-                full_business.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
-                popular_business.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
-                recent_business.setBackgroundColor(getResources().getColor(R.color.app_origin));
+                rlFullBusiness.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
+                rlPopularBusiness.setBackgroundColor(getResources().getColor(R.color.transaction_unselected_tab));
+                rlRecentBusiness.setBackgroundColor(getResources().getColor(R.color.app_origin));
                 full_triangle.setVisibility(View.GONE);
                 popular_triangle.setVisibility(View.GONE);
                 recent_triangle.setVisibility(View.VISIBLE);
@@ -358,7 +341,7 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
         businessSearchRequest.setTerm(searchTerm);
         requestSearchHamPayBusiness = new RequestSearchHamPayBusiness(activity, new RequestBusinessListTaskCompleteListener(searchEnabled));
         requestSearchHamPayBusiness.execute(businessSearchRequest);
-        inputMethodManager.hideSoftInputFromWindow(searchPhraseText.getWindowToken(), 0);
+        inputMethodManager.hideSoftInputFromWindow(etSearchPhraseText.getWindowToken(), 0);
 
         hamPayBusinessesAdapter.clear();
         businessDTOs.clear();
@@ -367,6 +350,17 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
 
     }
 
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(context, HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        if (activity != null) {
+            finish();
+            startActivity(intent);
+        }
+    }
 
     public class RequestBusinessListTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<BusinessListResponse>> {
 
@@ -375,7 +369,7 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
         ServiceEvent serviceName = ServiceEvent.BUSINESS_LIST_FAILURE;
         LogEvent logEvent = new LogEvent(context);
 
-        public RequestBusinessListTaskCompleteListener(boolean searchEnabled){
+        public RequestBusinessListTaskCompleteListener(boolean searchEnabled) {
             this.searchEnabled = searchEnabled;
         }
 
@@ -388,13 +382,13 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                 if (businessListResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     newBusinessDTOs = businessListResponseMessage.getService().getBusinesses();
                     businessDTOs.addAll(newBusinessDTOs);
-                    if (!searchEnabled && businessDTOs.size() > 0){
-                        searchLayout.setVisibility(View.VISIBLE);
-                    }else if (!searchEnabled){
-                        searchLayout.setVisibility(View.GONE);
+                    if (!searchEnabled && businessDTOs.size() > 0) {
+                        rlSearchLayout.setVisibility(View.VISIBLE);
+                    } else if (!searchEnabled) {
+                        rlSearchLayout.setVisibility(View.GONE);
                     }
 
-                    if (searchEnabled && businessDTOs.size() == 0){
+                    if (searchEnabled && businessDTOs.size() == 0) {
                         Toast.makeText(activity, getString(R.string.no_search_result), Toast.LENGTH_SHORT).show();
                     }
 
@@ -415,10 +409,10 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                     }
                     serviceName = ServiceEvent.BUSINESS_LIST_SUCCESS;
 
-                }else if (businessListResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                } else if (businessListResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     serviceName = ServiceEvent.BUSINESS_LIST_FAILURE;
                     forceLogout();
-                }else {
+                } else {
                     serviceName = ServiceEvent.BUSINESS_LIST_FAILURE;
                     if (!searchEnabled) {
                         businessListRequest.setPageNumber(requestPageNumber);
@@ -428,7 +422,7 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                         new HamPayDialog(activity).showFailBusinessListDialog(requestHamPayBusiness, businessListRequest,
                                 businessListResponseMessage.getService().getResultStatus().getCode(),
                                 businessListResponseMessage.getService().getResultStatus().getDescription());
-                    }else {
+                    } else {
                         businessSearchRequest.setPageNumber(requestPageNumber);
                         businessSearchRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
                         businessListRequest.setSortFactor(BizSortFactor.NAME);
@@ -439,7 +433,7 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                         requestSearchHamPayBusiness.execute(businessSearchRequest);
                     }
                 }
-            }else {
+            } else {
                 if (!searchEnabled) {
                     businessListRequest.setPageNumber(requestPageNumber);
                     businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
@@ -448,7 +442,7 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
                     new HamPayDialog(activity).showFailBusinessListDialog(requestHamPayBusiness, businessListRequest,
                             Constants.LOCAL_ERROR_CODE,
                             getString(R.string.msg_fail_business_list));
-                }else {
+                } else {
                     businessSearchRequest.setPageNumber(requestPageNumber);
                     businessSearchRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
                     businessListRequest.setSortFactor(BizSortFactor.NAME);
@@ -475,31 +469,27 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
 
                 dobList.addDefaultLoadingFooterView();
 
-                dobList.setOnLoadMoreListener(new OnLoadMoreListener() {
+                dobList.setOnLoadMoreListener(totalItemCount -> {
 
-                    @Override
-                    public void onLoadMore(final int totalItemCount) {
+                    onLoadMore = true;
 
-                        onLoadMore = true;
+                    if (!FINISHED_SCROLLING) {
+                        if (!searchEnabled) {
+                            businessListRequest.setPageNumber(requestPageNumber);
+                            businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+                            businessListRequest.setSortFactor(BizSortFactor.NAME);
+                            requestHamPayBusiness = new RequestHamPayBusiness(activity, new RequestBusinessListTaskCompleteListener(false));
+                            requestHamPayBusiness.execute(businessListRequest);
+                        } else {
+                            businessSearchRequest.setPageNumber(requestPageNumber);
+                            businessSearchRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+                            businessListRequest.setSortFactor(BizSortFactor.NAME);
+                            requestSearchHamPayBusiness = new RequestSearchHamPayBusiness(activity, new RequestBusinessListTaskCompleteListener(searchEnabled));
+                            requestSearchHamPayBusiness.execute(businessSearchRequest);
+                        }
+                    } else
+                        dobList.finishLoading();
 
-                        if (!FINISHED_SCROLLING) {
-                            if (!searchEnabled) {
-                                businessListRequest.setPageNumber(requestPageNumber);
-                                businessListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-                                businessListRequest.setSortFactor(BizSortFactor.NAME);
-                                requestHamPayBusiness = new RequestHamPayBusiness(activity, new RequestBusinessListTaskCompleteListener(false));
-                                requestHamPayBusiness.execute(businessListRequest);
-                            } else {
-                                businessSearchRequest.setPageNumber(requestPageNumber);
-                                businessSearchRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-                                businessListRequest.setSortFactor(BizSortFactor.NAME);
-                                requestSearchHamPayBusiness = new RequestSearchHamPayBusiness(activity, new RequestBusinessListTaskCompleteListener(searchEnabled));
-                                requestSearchHamPayBusiness.execute(businessSearchRequest);
-                            }
-                        } else
-                            dobList.finishLoading();
-
-                    }
                 });
 
             } catch (NoListviewException e) {
@@ -526,18 +516,6 @@ public class BusinessesListActivity extends AppCompatActivity implements View.On
             for (int i = from; i < to; i++) {
                 hamPayBusinessesAdapter.addItem(businessDTOs.get(i));
             }
-        }
-    }
-
-    private void forceLogout() {
-        editor.remove(Constants.LOGIN_TOKEN_ID);
-        editor.commit();
-        Intent intent = new Intent();
-        intent.setClass(context, HamPayLoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        if (activity != null) {
-            finish();
-            startActivity(intent);
         }
     }
 

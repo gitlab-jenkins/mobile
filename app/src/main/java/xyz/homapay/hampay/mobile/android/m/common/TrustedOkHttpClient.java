@@ -36,29 +36,39 @@ public class TrustedOkHttpClient {
     private static Interceptor provideOfflineCacheInterceptor() {
         return chain -> {
             Request request = chain.request();
-            CacheControl cacheControl;
-            cacheControl = new CacheControl.Builder()
-                    .maxStale(7, TimeUnit.DAYS)
-                    .onlyIfCached()
-                    .build();
-            request = request.newBuilder()
-                    .cacheControl(cacheControl)
-                    .build();
-            Response response = chain.proceed(request);
+            Response response = null;
+            try {
+                CacheControl cacheControl;
+                cacheControl = new CacheControl.Builder()
+                        .maxStale(7, TimeUnit.DAYS)
+                        .onlyIfCached()
+                        .build();
+                request = request.newBuilder()
+                        .cacheControl(cacheControl)
+                        .build();
+                response = chain.proceed(request);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return response;
         };
     }
 
     private static Interceptor provideCacheInterceptor() {
         return chain -> {
-            Response response = chain.proceed(chain.request());
-            CacheControl cacheControl;
-            cacheControl = new CacheControl.Builder()
-                    .maxAge(2, TimeUnit.MINUTES)
-                    .build();
-            return response.newBuilder()
-                    .header(CACHE_CONTROL, cacheControl.toString())
-                    .build();
+            try {
+                Response response = chain.proceed(chain.request());
+                CacheControl cacheControl;
+                cacheControl = new CacheControl.Builder()
+                        .maxAge(2, TimeUnit.MINUTES)
+                        .build();
+                return response.newBuilder()
+                        .header(CACHE_CONTROL, cacheControl.toString())
+                        .build();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
         };
     }
 
@@ -96,7 +106,7 @@ public class TrustedOkHttpClient {
         }
     }
 
-    private static String decompress(byte[] compressed) throws IOException {
+    private static String decompress(byte[] compressed) throws Exception {
         final int BUFFER_SIZE = 32;
         ByteArrayInputStream is = new ByteArrayInputStream(compressed);
         GZIPInputStream gis = new GZIPInputStream(is, BUFFER_SIZE);
@@ -113,9 +123,14 @@ public class TrustedOkHttpClient {
 
     private static Interceptor provideConnectivityInterceptor(ModelLayer modelLayer) {
         return chain -> {
-            if (!modelLayer.isConnected())
-                modelLayer.showNoNetworkDialog();
-            return chain.proceed(chain.request());
+            try {
+                if (!modelLayer.isConnected())
+                    modelLayer.showNoNetworkDialog();
+                return chain.proceed(chain.request());
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
         };
     }
 
