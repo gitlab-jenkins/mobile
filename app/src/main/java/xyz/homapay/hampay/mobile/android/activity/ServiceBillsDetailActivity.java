@@ -19,6 +19,8 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import java.io.Serializable;
 
 import br.com.goncalves.pugnotification.notification.PugNotification;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.PSPName;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
@@ -63,44 +65,64 @@ import xyz.homapay.hampay.mobile.android.webservice.psp.bills.MKAArrayOfKeyValue
 
 public class ServiceBillsDetailActivity extends AppCompatActivity implements View.OnClickListener, CardNumberDialog.SelectCardDialogListener, OnTaskCompleted {
 
+    @BindView(R.id.pay_button)
+    ImageView pay_button;
+    @BindView(R.id.billsImage)
+    ImageView billsImage;
+    @BindView(R.id.billsName)
+    FacedTextView billsName;
+    @BindView(R.id.billsDate)
+    FacedTextView billsDate;
+    @BindView(R.id.billsId)
+    FacedTextView billsId;
+    @BindView(R.id.payId)
+    FacedTextView payId;
+    @BindView(R.id.billsAmount)
+    FacedTextView billsAmount;
+    @BindView(R.id.hampayFee)
+    FacedTextView hampayFee;
+    @BindView(R.id.billsTotalAmount)
+    FacedTextView billsTotalAmount;
+    @BindView(R.id.bankName)
+    FacedTextView bankName;
+    @BindView(R.id.cardNumberValue)
+    FacedTextView cardNumberValue;
+    @BindView(R.id.keyboard)
+    LinearLayout keyboard;
+    @BindView(R.id.pin_layout)
+    RelativeLayout pinLayout;
+    @BindView(R.id.pin_text)
+    FacedTextView pinText;
+    @BindView(R.id.cvv_layout)
+    RelativeLayout cvvLayout;
+    @BindView(R.id.cvv_text)
+    FacedTextView cvvText;
+    @BindView(R.id.paymentScroll)
+    ScrollView paymentScroll;
+    @BindView(R.id.cardPlaceHolder)
+    RelativeLayout cardPlaceHolder;
+    @BindView(R.id.selectCardText)
+    FacedTextView selectCardText;
+    @BindView(R.id.cardSelect)
+    LinearLayout cardSelect;
     private DatabaseHelper dbHelper;
-    private ImageView pay_button;
-    private ImageView billsImage;
-    private FacedTextView billsName;
-    private FacedTextView billsDate;
-    private FacedTextView billsId;
-    private FacedTextView payId;
-    private FacedTextView billsAmount;
-    private FacedTextView hampayFee;
-    private FacedTextView billsTotalAmount;
     private PSPResultRequest pspResultRequest;
     private RequestPSPResult requestPSPResult;
     private RequestTokenBills requestTokenBills;
-    private FacedTextView bankName;
-    private FacedTextView cardNumberValue;
     private CurrencyFormatter currencyFormatter;
     private Context context;
     private Activity activity;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
-    private LinearLayout keyboard;
-    private RelativeLayout pinLayout;
-    private FacedTextView pinText;
-    private RelativeLayout cvvLayout;
-    private FacedTextView cvvText;
     private boolean pinCodeFocus = false;
     private boolean cvvFocus = false;
     private String userPinCode = "";
     private String userCVV2 = "";
-    private ScrollView paymentScroll;
     private PersianEnglishDigit persian = new PersianEnglishDigit();
     private HamPayDialog hamPayDialog;
     private BillInfoDTO billsInfo = null;
     private BillsTokenDoWork billsTokenDoWork;
-    private RelativeLayout cardPlaceHolder;
     private int selectedCardIdIndex = -1;
-    private FacedTextView selectCardText;
-    private LinearLayout cardSelect;
     private String signature;
     private String providerId = null;
     private String authToken = "";
@@ -152,14 +174,12 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_bills_detail);
-
+        ButterKnife.bind(this);
         context = this;
         activity = ServiceBillsDetailActivity.this;
         dbHelper = new DatabaseHelper(context);
 
-
         PugNotification.with(context).cancel(Constants.INVOICE_NOTIFICATION_IDENTIFIER);
-
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
@@ -174,34 +194,9 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
             return;
         }
 
-        keyboard = (LinearLayout) findViewById(R.id.keyboard);
-        pinLayout = (RelativeLayout) findViewById(R.id.pin_layout);
-        pinText = (FacedTextView) findViewById(R.id.pin_text);
-        keyboard = (LinearLayout) findViewById(R.id.keyboard);
-        pinLayout = (RelativeLayout) findViewById(R.id.pin_layout);
-        pinText = (FacedTextView) findViewById(R.id.pin_text);
-        pinText.setOnClickListener(this);
-        cvvLayout = (RelativeLayout) findViewById(R.id.cvv_layout);
-        cvvText = (FacedTextView) findViewById(R.id.cvv_text);
-        cvvText.setOnClickListener(this);
-        paymentScroll = (ScrollView) findViewById(R.id.paymentScroll);
         hamPayDialog = new HamPayDialog(activity);
 
         currencyFormatter = new CurrencyFormatter();
-        billsImage = (ImageView) findViewById(R.id.billsImage);
-        billsName = (FacedTextView) findViewById(R.id.billsName);
-        billsDate = (FacedTextView) findViewById(R.id.billsDate);
-        billsId = (FacedTextView) findViewById(R.id.billsId);
-        payId = (FacedTextView) findViewById(R.id.payId);
-        billsAmount = (FacedTextView) findViewById(R.id.billsAmount);
-        hampayFee = (FacedTextView) findViewById(R.id.hampayFee);
-        billsTotalAmount = (FacedTextView) findViewById(R.id.billsTotalAmount);
-
-
-        bankName = (FacedTextView) findViewById(R.id.bankName);
-        cardNumberValue = (FacedTextView) findViewById(R.id.cardNumberValue);
-        selectCardText = (FacedTextView) findViewById(R.id.selectCardText);
-        cardSelect = (LinearLayout) findViewById(R.id.cardSelect);
 
         Intent intent = getIntent();
         billsInfo = (BillInfoDTO) intent.getSerializableExtra(Constants.BILL_INFO);
@@ -215,169 +210,123 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
             new UtilityBillDetailTask(activity, ServiceBillsDetailActivity.this, utilityBillDetailRequest, authToken).execute();
         }
 
-        cardPlaceHolder = (RelativeLayout) findViewById(R.id.cardPlaceHolder);
-        cardPlaceHolder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CardNumberDialog cardNumberDialog = new CardNumberDialog();
-                if (billsInfo == null) return;
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(Constants.CARD_LIST, (Serializable) billsInfo.getCardList());
-                cardNumberDialog.setArguments(bundle);
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.add(cardNumberDialog, null);
-                fragmentTransaction.commitAllowingStateLoss();
-            }
+        cardPlaceHolder.setOnClickListener(v -> {
+            CardNumberDialog cardNumberDialog = new CardNumberDialog();
+            if (billsInfo == null) return;
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(Constants.CARD_LIST, (Serializable) billsInfo.getCardList());
+            cardNumberDialog.setArguments(bundle);
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.add(cardNumberDialog, null);
+            fragmentTransaction.commitAllowingStateLoss();
         });
 
+        pay_button.setOnClickListener(v -> {
 
-        pay_button = (ImageView) findViewById(R.id.pay_button);
-        pay_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            if (billsInfo == null) return;
 
-                if (billsInfo == null) return;
-
-                if (selectedCardIdIndex == -1 || (billsInfo.getCardList().get(selectedCardIdIndex) != null && billsInfo.getCardList().get(selectedCardIdIndex).getCardId() == null) || (billsInfo.getAmount() + billsInfo.getFeeCharge() >= Constants.SOAP_AMOUNT_MAX)) {
-                    Intent intent = new Intent();
-                    intent.setClass(activity, BankWebPaymentActivity.class);
-                    intent.putExtra(Constants.BILL_INFO, billsInfo);
-                    startActivityForResult(intent, 47);
-                } else {
-                    if (pinText.getText().toString().length() <= 4) {
-                        Toast.makeText(context, getString(R.string.msg_pin2_incorrect), Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    if (!(cvvText.getText().toString().length() >= 3 && cvvText.getText().toString().length() <= 4)) {
-                        Toast.makeText(context, getString(R.string.msg_cvv2_incorrect), Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-                    editor.commit();
-                    requestTokenBills = new RequestTokenBills(activity, new RequestPurchaseTaskCompleteListener(), billsInfo.getPspInfo().getPayURL());
-
-                    billsTokenDoWork = new BillsTokenDoWork();
-                    billsTokenDoWork.setUserName("appstore");
-                    billsTokenDoWork.setPassword("sepapp");
-                    billsTokenDoWork.setCellNumber(billsInfo.getPspInfo().getCellNumber().substring(1, billsInfo.getPspInfo().getCellNumber().length()));
-                    billsTokenDoWork.setLangAByte((byte) 0);
-                    billsTokenDoWork.setLangABoolean(false);
-                    MKAArrayOfKeyValueOfstringstring vectorstring2stringMapEntry = new MKAArrayOfKeyValueOfstringstring();
-                    MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-
-                    s2sMapEntry.Key = "Amount";
-                    s2sMapEntry.Value = String.valueOf(billsInfo.getAmount() + billsInfo.getFeeCharge());
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "Pin2";
-                    s2sMapEntry.Value = userPinCode;
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "ThirdParty";
-                    s2sMapEntry.Value = billsInfo.getProductCode();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "TerminalId";
-                    s2sMapEntry.Value = billsInfo.getPspInfo().getTerminalId();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "SenderTerminalId";
-                    s2sMapEntry.Value = billsInfo.getPspInfo().getSenderTerminalId();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "Email";
-                    s2sMapEntry.Value = "";
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "IPAddress";
-                    s2sMapEntry.Value = billsInfo.getPspInfo().getIpAddress();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "CVV2";
-                    s2sMapEntry.Value = userCVV2;
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "ExpDate";
-                    s2sMapEntry.Value = billsInfo.getCardList().get(selectedCardIdIndex).getExpireDate();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "CardId";
-                    s2sMapEntry.Value = billsInfo.getCardList().get(selectedCardIdIndex).getCardId();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "ResNum";
-                    s2sMapEntry.Value = billsInfo.getProductCode();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "BillId";
-                    s2sMapEntry.Value = billsInfo.getBillId();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "PayId";
-                    s2sMapEntry.Value = billsInfo.getPayId();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "Signature";
-                    s2sMapEntry.Value = signature;
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-
-                    billsTokenDoWork.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
-                    requestTokenBills.execute(billsTokenDoWork);
-
+            if (selectedCardIdIndex == -1 || (billsInfo.getCardList().get(selectedCardIdIndex) != null && billsInfo.getCardList().get(selectedCardIdIndex).getCardId() == null) || (billsInfo.getAmount() + billsInfo.getFeeCharge() >= Constants.SOAP_AMOUNT_MAX)) {
+                Intent intent1 = new Intent();
+                intent1.setClass(activity, BankWebPaymentActivity.class);
+                intent1.putExtra(Constants.BILL_INFO, billsInfo);
+                startActivityForResult(intent1, 47);
+            } else {
+                if (pinText.getText().toString().length() <= 4) {
+                    Toast.makeText(context, getString(R.string.msg_pin2_incorrect), Toast.LENGTH_LONG).show();
+                    return;
                 }
+                if (!(cvvText.getText().toString().length() >= 3 && cvvText.getText().toString().length() <= 4)) {
+                    Toast.makeText(context, getString(R.string.msg_cvv2_incorrect), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                editor.commit();
+                requestTokenBills = new RequestTokenBills(activity, new RequestPurchaseTaskCompleteListener(), billsInfo.getPspInfo().getPayURL());
+
+                billsTokenDoWork = new BillsTokenDoWork();
+                billsTokenDoWork.setUserName("appstore");
+                billsTokenDoWork.setPassword("sepapp");
+                billsTokenDoWork.setCellNumber(billsInfo.getPspInfo().getCellNumber().substring(1, billsInfo.getPspInfo().getCellNumber().length()));
+                billsTokenDoWork.setLangAByte((byte) 0);
+                billsTokenDoWork.setLangABoolean(false);
+                MKAArrayOfKeyValueOfstringstring vectorstring2stringMapEntry = new MKAArrayOfKeyValueOfstringstring();
+                MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+
+                s2sMapEntry.Key = "Amount";
+                s2sMapEntry.Value = String.valueOf(billsInfo.getAmount() + billsInfo.getFeeCharge());
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "Pin2";
+                s2sMapEntry.Value = userPinCode;
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "ThirdParty";
+                s2sMapEntry.Value = billsInfo.getProductCode();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "TerminalId";
+                s2sMapEntry.Value = billsInfo.getPspInfo().getTerminalId();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "SenderTerminalId";
+                s2sMapEntry.Value = billsInfo.getPspInfo().getSenderTerminalId();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "Email";
+                s2sMapEntry.Value = "";
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "IPAddress";
+                s2sMapEntry.Value = billsInfo.getPspInfo().getIpAddress();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "CVV2";
+                s2sMapEntry.Value = userCVV2;
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "ExpDate";
+                s2sMapEntry.Value = billsInfo.getCardList().get(selectedCardIdIndex).getExpireDate();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "CardId";
+                s2sMapEntry.Value = billsInfo.getCardList().get(selectedCardIdIndex).getCardId();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "ResNum";
+                s2sMapEntry.Value = billsInfo.getProductCode();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "BillId";
+                s2sMapEntry.Value = billsInfo.getBillId();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "PayId";
+                s2sMapEntry.Value = billsInfo.getPayId();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "Signature";
+                s2sMapEntry.Value = signature;
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+
+                billsTokenDoWork.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
+                requestTokenBills.execute(billsTokenDoWork);
+
             }
         });
-    }
-
-    public class RequestPSPResultTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> {
-
-        private String productCode;
-        ServiceEvent serviceName;
-        LogEvent logEvent = new LogEvent(context);
-
-        public RequestPSPResultTaskCompleteListener(String productCode){
-            this.productCode = productCode;
-        }
-
-        @Override
-        public void onTaskComplete(ResponseMessage<PSPResultResponse> pspResultResponseMessage) {
-
-            hamPayDialog.dismisWaitingDialog();
-
-            if (pspResultResponseMessage != null) {
-                if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    serviceName = ServiceEvent.PSP_RESULT_SUCCESS;
-                    if (productCode != null) {
-                        dbHelper.syncPspResult(productCode);
-                    }
-                } else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceEvent.PSP_RESULT_FAILURE;
-                    forceLogout();
-                }else {
-                    serviceName = ServiceEvent.PSP_RESULT_FAILURE;
-                }
-                logEvent.log(serviceName);
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
     }
 
     @Override
@@ -597,6 +546,43 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
         }
     }
 
+    public class RequestPSPResultTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> {
+
+        ServiceEvent serviceName;
+        LogEvent logEvent = new LogEvent(context);
+        private String productCode;
+
+        public RequestPSPResultTaskCompleteListener(String productCode) {
+            this.productCode = productCode;
+        }
+
+        @Override
+        public void onTaskComplete(ResponseMessage<PSPResultResponse> pspResultResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+
+            if (pspResultResponseMessage != null) {
+                if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    serviceName = ServiceEvent.PSP_RESULT_SUCCESS;
+                    if (productCode != null) {
+                        dbHelper.syncPspResult(productCode);
+                    }
+                } else if (pspResultResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceEvent.PSP_RESULT_FAILURE;
+                    forceLogout();
+                } else {
+                    serviceName = ServiceEvent.PSP_RESULT_FAILURE;
+                }
+                logEvent.log(serviceName);
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
+    }
+
     public class RequestPurchaseTaskCompleteListener implements AsyncTaskCompleteListener<MKAArrayOfKeyValueOfstringstring> {
 
         @Override
@@ -637,19 +623,18 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                             startActivityForResult(intent, 47);
                         }
                         resultStatus = ResultStatus.SUCCESS;
-                    } else if (responseCode.equalsIgnoreCase("27")){
+                    } else if (responseCode.equalsIgnoreCase("27")) {
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.bill_already_paid));
                         resultStatus = ResultStatus.FAILURE;
-                    }
-                    else if (responseCode.equalsIgnoreCase("17") || responseCode.equalsIgnoreCase("25") || responseCode.equalsIgnoreCase("56")){
+                    } else if (responseCode.equalsIgnoreCase("17") || responseCode.equalsIgnoreCase("25") || responseCode.equalsIgnoreCase("56")) {
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.token_special_issue));
                         resultStatus = ResultStatus.FAILURE;
                     } else {
                         serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
                         PspCode pspCode = new PspCode(context);
-                        if (pspCode.getDescription(responseCode) == null){
+                        if (pspCode.getDescription(responseCode) == null) {
                             new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.token_special_issue));
-                        }else {
+                        } else {
                             new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(responseCode));
                         }
                         resultStatus = ResultStatus.FAILURE;

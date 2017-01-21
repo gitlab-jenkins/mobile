@@ -27,6 +27,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
@@ -58,21 +60,34 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 public class ProfileEntryActivity extends AppCompatActivity implements PermissionDeviceDialog.PermissionDeviceDialogListener, RegisterEntryView {
 
     private final Handler handler = new Handler();
+    @BindView(R.id.keepOn_button)
+    FacedTextView keepOn_button;
+    @BindView(R.id.cellNumberValue)
+    FacedEditText cellNumberValue;
+    @BindView(R.id.cellNumberIcon)
+    ImageView cellNumberIcon;
+    @BindView(R.id.nationalCodeValue)
+    FacedEditText nationalCodeValue;
+    @BindView(R.id.nationalCodeIcon)
+    ImageView nationalCodeIcon;
+    @BindView(R.id.userNameFamilyIcon)
+    ImageView userNameFamilyIcon;
+    @BindView(R.id.userNameFamily)
+    FacedEditText userNameFamily;
+    @BindView(R.id.emailValue)
+    FacedEditText emailValue;
+    @BindView(R.id.emailIcon)
+    ImageView emailIcon;
+    @BindView(R.id.tac_privacy_text)
+    FacedTextView tac_privacy_text;
+    @BindView(R.id.confirmTacPrivacy)
+    CheckBox confirmTacPrivacy;
     private Activity activity;
     private PersianEnglishDigit persianEnglishDigit;
-    private FacedTextView keepOn_button;
-    private FacedEditText cellNumberValue;
-    private ImageView cellNumberIcon;
     private boolean cellNumberIsValid = false;
-    private FacedEditText nationalCodeValue;
-    private ImageView nationalCodeIcon;
     private boolean nationalCodeIsValid = false;
-    private ImageView userNameFamilyIcon;
-    private FacedEditText userNameFamily;
     private boolean userNameFamilyIsValid = true;
     private EmailTextWatcher emailTextWatcher;
-    private FacedEditText emailValue;
-    private ImageView emailIcon;
     private Context context;
     private String rawNationalCode = "";
     private int rawNationalCodeLength = 0;
@@ -82,8 +97,6 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
     private RegistrationEntryRequest registrationEntryRequest;
     private HamPayDialog hamPayDialog;
     private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
-    private FacedTextView tac_privacy_text;
-    private CheckBox confirmTacPrivacy;
     private KeyExchange keyExchange;
     private String fullUserName = "";
     private RegisterEntry registerer;
@@ -175,6 +188,8 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_entry);
+        ButterKnife.bind(this);
+
         context = this;
         activity = this;
         registerer = new RegisterEntryImpl(new ModelLayerImpl(activity), this);
@@ -191,7 +206,6 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
             }
         });
 
-        tac_privacy_text = (FacedTextView) findViewById(R.id.tac_privacy_text);
         Spannable tcPrivacySpannable = new SpannableString(activity.getString(R.string.start_tac_privacy));
         ClickableSpan tcClickableSpan = new ClickableSpan() {
             @Override
@@ -223,7 +237,6 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
 
         hamPayDialog = new HamPayDialog(activity);
 
-        cellNumberValue = (FacedEditText) findViewById(R.id.cellNumberValue);
         cellNumberValue.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -243,7 +256,6 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
 
             }
         });
-        cellNumberIcon = (ImageView) findViewById(R.id.cellNumberIcon);
         cellNumberValue.setOnFocusChangeListener((v, hasFocus) -> {
 
             if (!hasFocus) {
@@ -257,9 +269,6 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
             }
         });
 
-
-        nationalCodeValue = (FacedEditText) findViewById(R.id.nationalCodeValue);
-        nationalCodeIcon = (ImageView) findViewById(R.id.nationalCodeIcon);
         nationalCodeValue.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -308,8 +317,6 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
             }
         });
 
-        userNameFamily = (FacedEditText) findViewById(R.id.userNameFamily);
-        userNameFamilyIcon = (ImageView) findViewById(R.id.userNameFamilyIcon);
         userNameFamily.setOnFocusChangeListener((v, hasFocus) -> {
             fullUserName = userNameFamily.getText().toString().trim().replaceAll("^ +| +$|( )+", "$1");
             if (!hasFocus) {
@@ -324,12 +331,9 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
             }
         });
 
-        emailValue = (FacedEditText) findViewById(R.id.emailValue);
-        emailIcon = (ImageView) findViewById(R.id.emailIcon);
         emailTextWatcher = new EmailTextWatcher(emailValue, emailIcon);
 
         emailValue.addTextChangedListener(emailTextWatcher);
-        keepOn_button = (FacedTextView) findViewById(R.id.keepOn_button);
         keepOn_button.setOnClickListener(v -> {
 
             fullUserName = userNameFamily.getText().toString().trim().replaceAll("^ +| +$|( )+", "$1");
@@ -442,12 +446,6 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
         keepOn_button.setBackgroundResource(R.drawable.disable_button_style);
         Toast.makeText(activity, getString(R.string.system_connectivity), Toast.LENGTH_LONG).show();
     }
-
-//    @Override
-//    public void keyExchangeDone() {
-//        keepOn_button.setBackgroundResource(R.drawable.registration_button_style);
-//        confirmTacPrivacy.setChecked(true);
-//    }
 
 }
 

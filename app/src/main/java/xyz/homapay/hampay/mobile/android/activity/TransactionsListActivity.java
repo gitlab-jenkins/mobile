@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.goncalves.pugnotification.notification.PugNotification;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.TnxSortFactor;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
@@ -38,36 +40,45 @@ import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoListview
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
-import xyz.homapay.hampay.mobile.android.m.common.Const;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class TransactionsListActivity extends AppCompatActivity implements View.OnClickListener {
 
-    UserTransactionAdapter userTransactionAdapter;
-    HamPayDialog hamPayDialog;
+    @BindView(R.id.no_transaction)
     FacedTextView no_transaction;
-    RequestUserTransaction requestUserTransaction;
-    TransactionListRequest transactionListRequest;
-    int requestPageNumber = 0;
-    TnxSortFactor sortFactor = TnxSortFactor.DEFAULT;
-    SharedPreferences prefs;
-    SharedPreferences.Editor editor;
-    DobList dobList;
-    private SwipeRefreshLayout pullToRefresh;
-    private ListView transactionListView;
+    @BindView(R.id.pullToRefresh)
+    SwipeRefreshLayout pullToRefresh;
+    @BindView(R.id.transactionListView)
+    ListView transactionListView;
+    @BindView(R.id.loading)
+    ProgressBar loading;
+    @BindView(R.id.full_transaction)
+    RelativeLayout full_transaction;
+    @BindView(R.id.business_transaction)
+    RelativeLayout business_transaction;
+    @BindView(R.id.invoice_transaction)
+    RelativeLayout invoice_transaction;
+    @BindView(R.id.full_triangle)
+    ImageView full_triangle;
+    @BindView(R.id.business_triangle)
+    ImageView business_triangle;
+    @BindView(R.id.invoice_triangle)
+    ImageView invoice_triangle;
+    private TnxSortFactor sortFactor = TnxSortFactor.DEFAULT;
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
+    private DobList dobList;
+    private UserTransactionAdapter userTransactionAdapter;
+    private HamPayDialog hamPayDialog;
+    private RequestUserTransaction requestUserTransaction;
+    private TransactionListRequest transactionListRequest;
+    private int requestPageNumber = 0;
     private boolean FINISHED_SCROLLING = false;
     private boolean onLoadMore = false;
     private List<TransactionDTO> transactionDTOs;
-    private ProgressBar loading;
     private Context context;
     private Activity activity;
-    private RelativeLayout full_transaction;
-    private RelativeLayout business_transaction;
-    private RelativeLayout invoice_transaction;
-    private ImageView full_triangle;
-    private ImageView business_triangle;
-    private ImageView invoice_triangle;
     private UserProfileDTO userProfile;
 
     @Override
@@ -114,37 +125,23 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transactions_list);
+        ButterKnife.bind(this);
 
         context = this;
         activity = TransactionsListActivity.this;
-
         PugNotification.with(context).cancel(Constants.TRANSACTIONS_NOTIFICATION_IDENTIFIER);
-
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-
         userProfile = (UserProfileDTO) getIntent().getSerializableExtra(Constants.USER_PROFILE);
-
         hamPayDialog = new HamPayDialog(activity);
 
-        loading = (ProgressBar) findViewById(R.id.loading);
-        full_transaction = (RelativeLayout) findViewById(R.id.full_transaction);
         full_transaction.setOnClickListener(this);
-        business_transaction = (RelativeLayout) findViewById(R.id.business_transaction);
+
         business_transaction.setOnClickListener(this);
-        invoice_transaction = (RelativeLayout) findViewById(R.id.invoice_transaction);
         invoice_transaction.setOnClickListener(this);
-        full_triangle = (ImageView) findViewById(R.id.full_triangle);
-        business_triangle = (ImageView) findViewById(R.id.business_triangle);
-        invoice_triangle = (ImageView) findViewById(R.id.invoice_triangle);
 
         transactionDTOs = new ArrayList<>();
         userTransactionAdapter = new UserTransactionAdapter(activity);
-
-        no_transaction = (FacedTextView) findViewById(R.id.no_transaction);
-
-        transactionListView = (ListView) findViewById(R.id.transactionListView);
-        pullToRefresh = (SwipeRefreshLayout) findViewById(R.id.pullToRefresh);
         pullToRefresh.setOnRefreshListener(() -> {
             if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING) {
                 requestUserTransaction.cancel(true);
@@ -427,7 +424,6 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
             }
             logEvent.log(serviceName);
         }
-
 
         @Override
         public void onTaskPreRun() {

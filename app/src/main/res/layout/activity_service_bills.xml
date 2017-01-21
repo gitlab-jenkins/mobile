@@ -17,21 +17,21 @@
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/back"
                 android:onClick="backActionBar"
-                android:padding="12dp"/>
+                android:padding="12dp"
+                android:src="@drawable/back" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginRight="8dp"
+                android:text="@string/bills_service"
                 android:textColor="@color/app_origin"
                 android:textSize="18sp"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/bills_service"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="8dp"
-                android:layout_centerVertical="true"/>
+                geekui:customTypeface="fonts/vazir_regular.ttf" />
 
         </RelativeLayout>
 
@@ -41,40 +41,41 @@
             android:background="@color/app_origin" />
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            geekui:customTypeface="fonts/vazir_regular.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="8dp"
+            android:text="@string/bills_service_text"
             android:textColor="@color/main_menu_title"
             android:textSize="16sp"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/bills_service_text"
-            android:layout_centerInParent="true"
-            android:layout_margin="8dp"/>
+            geekui:customTypeface="fonts/vazir_regular.ttf" />
 
         <RelativeLayout
             android:id="@+id/billIdLayout"
             android:layout_width="fill_parent"
             android:layout_height="48dp"
-            android:background="@drawable/iban_empty_placeholder"
-            android:layout_margin="2dp">
+            android:layout_margin="2dp"
+            android:background="@drawable/iban_empty_placeholder">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/billId"
-                geekui:customTypeface="fonts/vazir_regular.ttf"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@android:color/transparent"
-                android:textSize="15dp"
-                android:hint="@string/bills_service_id"
-                android:textColor="@android:color/black"
-                android:gravity="center_vertical"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:nextFocusDown="@+id/cardNumberValue"
-                android:maxLength="13"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:padding="6dp"/>
+                android:background="@android:color/transparent"
+                android:gravity="center_vertical"
+                android:hint="@string/bills_service_id"
+                android:maxLength="13"
+                android:nextFocusDown="@+id/cardNumberValue"
+                android:onClick="onClick"
+                android:padding="6dp"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:textColor="@android:color/black"
+                android:textSize="15dp"
+                geekui:customTypeface="fonts/vazir_regular.ttf" />
 
         </RelativeLayout>
 
@@ -82,44 +83,47 @@
             android:id="@+id/payIdLayout"
             android:layout_width="fill_parent"
             android:layout_height="48dp"
+            android:layout_margin="2dp"
             android:background="@drawable/iban_empty_placeholder"
-            android:layout_margin="2dp">
+            android:onClick="onClick">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/payId"
-                geekui:customTypeface="fonts/vazir_regular.ttf"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:background="@android:color/transparent"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
-                android:textSize="15dp"
-                android:hint="@string/bills_service_payment"
-                android:textColor="@android:color/black"
+                android:background="@android:color/transparent"
                 android:gravity="center_vertical"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:nextFocusDown="@+id/cardNumberValue"
+                android:hint="@string/bills_service_payment"
                 android:maxLength="13"
-                android:padding="6dp"/>
+                android:nextFocusDown="@+id/cardNumberValue"
+                android:onClick="onClick"
+                android:padding="6dp"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp"
+                android:textColor="@android:color/black"
+                android:textSize="15dp"
+                geekui:customTypeface="fonts/vazir_regular.ttf" />
 
         </RelativeLayout>
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
             android:id="@+id/billsMobileButton"
-            geekui:customTypeface="fonts/vazir_regular.ttf"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:gravity="center"
             android:layout_gravity="center"
-            android:text="@string/payment_request_button_confirm"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/registration_button_style"
+            android:gravity="center"
+            android:onClick="onClick"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:background="@drawable/registration_button_style"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="8dp"/>
+            android:text="@string/payment_request_button_confirm"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            geekui:customTypeface="fonts/vazir_regular.ttf" />
 
     </LinearLayout>
 
@@ -127,27 +131,28 @@
         android:id="@+id/barCodeScanner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@drawable/registration_button_style"
         android:layout_alignParentBottom="true"
-        android:gravity="center"
         android:layout_centerHorizontal="true"
-        android:padding="8dp"
-        android:layout_marginBottom="18dp">
+        android:layout_marginBottom="18dp"
+        android:background="@drawable/registration_button_style"
+        android:gravity="center"
+        android:onClick="onClick"
+        android:orientation="horizontal"
+        android:padding="8dp">
 
         <ImageView
             android:layout_width="64dp"
             android:layout_height="32dp"
-            android:src="@drawable/ic_barcode"/>
+            android:src="@drawable/ic_barcode" />
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            geekui:customTypeface="fonts/vazir_regular.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:text="@string/scan_barcode"
             android:textColor="@android:color/white"
             android:textSize="16dp"
-            android:text="@string/scan_barcode"
-            android:layout_marginLeft="4dp"/>
+            geekui:customTypeface="fonts/vazir_regular.ttf" />
 
     </LinearLayout>
 
@@ -159,9 +164,9 @@
         android:visibility="gone">
 
         <include
+            layout="@layout/numeric_keyboard"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/numeric_keyboard"/>
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </RelativeLayout>

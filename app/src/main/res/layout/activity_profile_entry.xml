@@ -61,7 +61,7 @@
                 android:layout_width="16dp"
                 android:layout_height="32dp"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/box_forward_wt"/>
+                android:src="@drawable/box_forward_wt" />
 
 
         </RelativeLayout>
@@ -81,13 +81,13 @@
             <ImageView
                 android:layout_width="16dp"
                 android:layout_height="32dp"
-                android:src="@drawable/box_forward_tw"/>
+                android:src="@drawable/box_forward_tw" />
 
             <ImageView
                 android:layout_width="16dp"
                 android:layout_height="32dp"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/box_forward_wt"/>
+                android:src="@drawable/box_forward_wt" />
 
 
         </RelativeLayout>
@@ -109,7 +109,7 @@
                 android:layout_width="16dp"
                 android:layout_height="32dp"
                 android:background="@android:color/white"
-                android:src="@drawable/box_forward_green"/>
+                android:src="@drawable/box_forward_green" />
 
 
         </RelativeLayout>
@@ -178,7 +178,6 @@
                                 geekui:customTypeface="fonts/vazir_regular.ttf" />
 
                         </RelativeLayout>
-
 
 
                     </LinearLayout>
@@ -264,7 +263,7 @@
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_centerVertical="true"
-                            android:layout_marginLeft="12dp"/>
+                            android:layout_marginLeft="12dp" />
 
                     </RelativeLayout>
 
@@ -299,7 +298,7 @@
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_centerVertical="true"
-                            android:layout_marginLeft="12dp"/>
+                            android:layout_marginLeft="12dp" />
 
                     </RelativeLayout>
 
@@ -330,7 +329,7 @@
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_centerVertical="true"
-                            android:layout_marginLeft="12dp"/>
+                            android:layout_marginLeft="12dp" />
 
                     </RelativeLayout>
 

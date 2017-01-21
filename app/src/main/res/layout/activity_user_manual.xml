@@ -2,8 +2,8 @@
     xmlns:geekui="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,31 +17,31 @@
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/close_user_manual"
-                geekui:customTypeface="fonts/vazir_regular.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="8dp"
+                android:text="@string/user_manual_close"
                 android:textColor="@color/app_origin"
                 android:textSize="15sp"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/user_manual_close"
-                android:layout_marginLeft="8dp"/>
+                geekui:customTypeface="fonts/vazir_regular.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/user_manual_title"
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/app_origin"
-                android:textSize="15sp"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/user_manual_title_activity"
                 android:layout_alignParentRight="true"
-                android:layout_toRightOf="@id/close_user_manual"
-                android:layout_marginRight="8dp"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_toRightOf="@id/close_user_manual"
                 android:lines="1"
                 android:maxLines="1"
-                android:singleLine="true"/>
+                android:singleLine="true"
+                android:text="@string/user_manual_title_activity"
+                android:textColor="@color/app_origin"
+                android:textSize="15sp"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
         </RelativeLayout>
 
@@ -55,15 +55,15 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp">
 
-        <xyz.homapay.hampay.mobile.android.component.FacedTextView
-            android:id="@+id/user_manual_text"
-            geekui:customTypeface="fonts/vazir_regular.ttf"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/main_menu_title"
-            android:textSize="15sp"
-            android:layout_gravity="center_horizontal"
-            android:lineSpacingExtra="6dp"/>
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/user_manual_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:lineSpacingExtra="6dp"
+                android:textColor="@color/main_menu_title"
+                android:textSize="15sp"
+                geekui:customTypeface="fonts/vazir_regular.ttf" />
 
 
         </ScrollView>
