@@ -456,7 +456,6 @@
                                     android:inputType="number"
                                     android:maxLength="4"
                                     android:onClick="onClick"
-                                    android:onClick="onClick"
                                     android:singleLine="true"
                                     android:textColor="@color/account_details_text"
                                     android:textSize="15dp"
