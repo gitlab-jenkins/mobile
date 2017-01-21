@@ -23,6 +23,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import br.com.goncalves.pugnotification.notification.PugNotification;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.enums.FundType;
@@ -65,18 +67,27 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
     RequestCancelPurchase requestCancelPurchase;
     CancelFundRequest cancelFundRequest;
     RequestCancelPayment requestCancelPayment;
+    @BindView(R.id.full_pending)
     RelativeLayout full_pending;
+    @BindView(R.id.invoice_pending)
     RelativeLayout invoice_pending;
+    @BindView(R.id.purchase_pending)
     RelativeLayout purchase_pending;
+    @BindView(R.id.full_triangle)
     ImageView full_triangle;
+    @BindView(R.id.business_triangle)
     ImageView business_triangle;
+    @BindView(R.id.invoice_triangle)
     ImageView invoice_triangle;
     Timer timer;
     TimerTask timerTask;
+    @BindView(R.id.nullPendingText)
+    FacedTextView nullPendingText;
+    @BindView(R.id.pullToRefresh)
+    SwipeRefreshLayout pullToRefresh;
+    @BindView(R.id.pendingListView)
+    ListView pendingListView;
     private Activity activity;
-    private FacedTextView nullPendingText;
-    private SwipeRefreshLayout pullToRefresh;
-    private ListView pendingListView;
     private List<FundDTO> fundDTOList;
     private int pos = -1;
     private FundType fundType = FundType.ALL;
@@ -168,6 +179,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pending_purchase_payment_list);
+        ButterKnife.bind(this);
 
         activity = PendingPurchasePaymentListActivity.this;
         context = this;
@@ -180,37 +192,20 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
         persianEnglishDigit = new PersianEnglishDigit();
 
-        nullPendingText = (FacedTextView) findViewById(R.id.nullPendingText);
-
         hamPayDialog = new HamPayDialog(activity);
 
-        pullToRefresh = (SwipeRefreshLayout) findViewById(R.id.pullToRefresh);
-        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                requestPendingFundList = new RequestPendingFundList(activity, new RequestPendingFundTaskCompleteListener());
-                pendingFundListRequest = new PendingFundListRequest();
-                pendingFundListRequest.setType(fundType);
-                requestPendingFundList.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, pendingFundListRequest);
-            }
+        pullToRefresh.setOnRefreshListener(() -> {
+            requestPendingFundList = new RequestPendingFundList(activity, new RequestPendingFundTaskCompleteListener());
+            pendingFundListRequest = new PendingFundListRequest();
+            pendingFundListRequest.setType(fundType);
+            requestPendingFundList.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, pendingFundListRequest);
         });
-        pendingListView = (ListView) findViewById(R.id.pendingListView);
 
         hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         requestPendingFundList = new RequestPendingFundList(activity, new RequestPendingFundTaskCompleteListener());
         pendingFundListRequest = new PendingFundListRequest();
         pendingFundListRequest.setType(fundType);
         requestPendingFundList.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, pendingFundListRequest);
-
-        full_pending = (RelativeLayout) findViewById(R.id.full_pending);
-        full_pending.setOnClickListener(this);
-        invoice_pending = (RelativeLayout) findViewById(R.id.invoice_pending);
-        invoice_pending.setOnClickListener(this);
-        purchase_pending = (RelativeLayout) findViewById(R.id.purchase_pending);
-        purchase_pending.setOnClickListener(this);
-        full_triangle = (ImageView) findViewById(R.id.full_triangle);
-        business_triangle = (ImageView) findViewById(R.id.business_triangle);
-        invoice_triangle = (ImageView) findViewById(R.id.invoice_triangle);
 
         pendingListView.setOnItemClickListener((parent, view, position, id) -> {
             Intent intent1 = new Intent();

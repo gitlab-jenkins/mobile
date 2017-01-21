@@ -11,19 +11,18 @@ import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.PendingPOListRequest;
@@ -40,11 +39,22 @@ import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
-public class PaymentRequestListActivity extends AppCompatActivity{
+public class PaymentRequestListActivity extends AppCompatActivity {
 
+    @BindView(R.id.paymentRequestList)
+    ListView paymentRequestList;
+    @BindView(R.id.hampay_contacts)
+    ImageView hampay_contacts;
+    @BindView(R.id.search_text)
+    FacedEditText search_text;
+    @BindView(R.id.pullToRefresh)
+    SwipeRefreshLayout pullToRefresh;
+    @BindView(R.id.nullPendingText)
+    FacedTextView nullPendingText;
+    @BindView(R.id.search_bar)
+    RelativeLayout search_bar;
     private Context context;
     private Activity activity;
-    private ListView paymentRequestList;
     private List<PaymentInfoDTO> paymentInfoList;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
@@ -54,13 +64,8 @@ public class PaymentRequestListActivity extends AppCompatActivity{
     private PendingPOListRequest pendingPOListRequest;
     private HamPayDialog hamPayDialog;
     private InputMethodManager inputMethodManager;
-    private ImageView hampay_contacts;
-    private FacedEditText search_text;
-    private SwipeRefreshLayout pullToRefresh;
-    private FacedTextView nullPendingText;
-    private RelativeLayout search_bar;
 
-    public void backActionBar(View view){
+    public void backActionBar(View view) {
         finish();
     }
 
@@ -93,6 +98,7 @@ public class PaymentRequestListActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_request_list);
+        ButterKnife.bind(this);
 
         context = this;
         activity = PaymentRequestListActivity.this;
@@ -100,38 +106,29 @@ public class PaymentRequestListActivity extends AppCompatActivity{
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-        authToken =  prefs.getString(Constants.LOGIN_TOKEN_ID, "");
+        authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
         inputMethodManager = (InputMethodManager) getSystemService(
                 Context.INPUT_METHOD_SERVICE);
 
-        nullPendingText = (FacedTextView)findViewById(R.id.nullPendingText);
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getString(R.string.payment_request_null_message));
         ImageSpan is = new ImageSpan(context, R.drawable.add_payment_note);
         spannableStringBuilder.setSpan(is, 39, 42, 0);
         nullPendingText.setText(spannableStringBuilder);
 
-        search_bar = (RelativeLayout)findViewById(R.id.search_bar);
-
         pendingPOListRequest = new PendingPOListRequest();
         requestPendingPOList = new RequestPendingPOList(activity, new RequestPendingPOListTaskCompleteListener());
         requestPendingPOList.execute(pendingPOListRequest);
 
-        pullToRefresh = (SwipeRefreshLayout)findViewById(R.id.pullToRefresh);
-        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                pendingPOListRequest = new PendingPOListRequest();
-                requestPendingPOList = new RequestPendingPOList(activity, new RequestPendingPOListTaskCompleteListener());
-                requestPendingPOList.execute(pendingPOListRequest);
-            }
+        pullToRefresh.setOnRefreshListener(() -> {
+            pendingPOListRequest = new PendingPOListRequest();
+            requestPendingPOList = new RequestPendingPOList(activity, new RequestPendingPOListTaskCompleteListener());
+            requestPendingPOList.execute(pendingPOListRequest);
         });
-        paymentRequestList = (ListView)findViewById(R.id.paymentRequestList);
-        hampay_contacts = (ImageView)findViewById(R.id.hampay_contacts);
-        search_text = (FacedEditText)findViewById(R.id.search_text);
         search_text.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -148,75 +145,30 @@ public class PaymentRequestListActivity extends AppCompatActivity{
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
-        });
-
-        search_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    inputMethodManager.hideSoftInputFromWindow(search_text.getWindowToken(), 0);
-                    return true;
-                }
-                return false;
+            public void afterTextChanged(Editable s) {
             }
         });
 
-        paymentRequestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent();
-                intent.setClass(activity, PendingPODetailActivity.class);
-                intent.putExtra(Constants.PAYMENT_INFO, paymentInfoList.get(position));
-                startActivityForResult(intent, 1024);
+        search_text.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                inputMethodManager.hideSoftInputFromWindow(search_text.getWindowToken(), 0);
+                return true;
             }
+            return false;
         });
 
-        hampay_contacts.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(activity, HamPayContactsActivity.class);
-                startActivity(intent);
-            }
+        paymentRequestList.setOnItemClickListener((parent, view, position, id) -> {
+            Intent intent = new Intent();
+            intent.setClass(activity, PendingPODetailActivity.class);
+            intent.putExtra(Constants.PAYMENT_INFO, paymentInfoList.get(position));
+            startActivityForResult(intent, 1024);
         });
-    }
 
-
-    public class RequestPendingPOListTaskCompleteListener implements
-            AsyncTaskCompleteListener<ResponseMessage<PendingPOListResponse>> {
-        @Override
-        public void onTaskComplete(ResponseMessage<PendingPOListResponse> pendingPOListResponseResponseMessage) {
-            hamPayDialog.dismisWaitingDialog();
-            paymentRequestList.setAdapter(null);
-            pullToRefresh.setRefreshing(false);
-            if (pendingPOListResponseResponseMessage != null){
-                if (pendingPOListResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-                    paymentInfoList = pendingPOListResponseResponseMessage.getService().getPendingList();
-                    if (paymentInfoList.size() > 0) {
-                        pendingPOAdapter = new PendingPOAdapter(activity, paymentInfoList, authToken);
-                        paymentRequestList.setAdapter(pendingPOAdapter);
-                        nullPendingText.setVisibility(View.GONE);
-                        search_bar.setVisibility(View.VISIBLE);
-                    }else {
-                        nullPendingText.setVisibility(View.VISIBLE);
-                        search_bar.setVisibility(View.INVISIBLE);
-                    }
-                }else if (pendingPOListResponseResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    forceLogout();
-                }
-                else {
-                    nullPendingText.setVisibility(View.VISIBLE);
-                }
-            }else {
-                nullPendingText.setVisibility(View.VISIBLE);
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
+        hampay_contacts.setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.setClass(activity, HamPayContactsActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void forceLogout() {
@@ -228,6 +180,41 @@ public class PaymentRequestListActivity extends AppCompatActivity{
         if (activity != null) {
             finish();
             startActivity(intent);
+        }
+    }
+
+    public class RequestPendingPOListTaskCompleteListener implements
+            AsyncTaskCompleteListener<ResponseMessage<PendingPOListResponse>> {
+        @Override
+        public void onTaskComplete(ResponseMessage<PendingPOListResponse> pendingPOListResponseResponseMessage) {
+            hamPayDialog.dismisWaitingDialog();
+            paymentRequestList.setAdapter(null);
+            pullToRefresh.setRefreshing(false);
+            if (pendingPOListResponseResponseMessage != null) {
+                if (pendingPOListResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    paymentInfoList = pendingPOListResponseResponseMessage.getService().getPendingList();
+                    if (paymentInfoList.size() > 0) {
+                        pendingPOAdapter = new PendingPOAdapter(activity, paymentInfoList, authToken);
+                        paymentRequestList.setAdapter(pendingPOAdapter);
+                        nullPendingText.setVisibility(View.GONE);
+                        search_bar.setVisibility(View.VISIBLE);
+                    } else {
+                        nullPendingText.setVisibility(View.VISIBLE);
+                        search_bar.setVisibility(View.INVISIBLE);
+                    }
+                } else if (pendingPOListResponseResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
+                } else {
+                    nullPendingText.setVisibility(View.VISIBLE);
+                }
+            } else {
+                nullPendingText.setVisibility(View.VISIBLE);
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 }
