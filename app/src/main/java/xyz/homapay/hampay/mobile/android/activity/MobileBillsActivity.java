@@ -7,9 +7,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
@@ -21,14 +22,14 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class MobileBillsActivity extends AppCompatActivity implements View.OnClickListener {
 
+    @BindView(R.id.keyboard)
+    LinearLayout keyboard;
+    @BindView(R.id.cellNumberText)
+    FacedTextView cellNumberText;
     private SharedPreferences prefs;
     private Context context;
-    private LinearLayout barCodeScanner;
-    private LinearLayout keyboard;
-    private FacedTextView cellNumberText;
     private String cellNumber = "";
     private PersianEnglishDigit persian;
-    private ImageView simNumber;
 
     public void backActionBar(View view) {
         finish();
@@ -83,26 +84,17 @@ public class MobileBillsActivity extends AppCompatActivity implements View.OnCli
                 }
                 break;
         }
-
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mobile_bills);
+        ButterKnife.bind(this);
 
         context = this;
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         persian = new PersianEnglishDigit();
-
-        barCodeScanner = (LinearLayout) findViewById(R.id.barCodeScanner);
-        barCodeScanner.setOnClickListener(this);
-
-        keyboard = (LinearLayout) findViewById(R.id.keyboard);
-        cellNumberText = (FacedTextView) findViewById(R.id.cellNumberText);
-        cellNumberText.setOnClickListener(this);
-
-
     }
 
     @Override

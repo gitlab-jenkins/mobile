@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.WelcomeAdapter;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
@@ -27,9 +29,11 @@ import xyz.homapay.hampay.mobile.android.util.RootUtil;
 
 public class WelcomeActivity extends AppCompatActivity {
 
-    private ViewPager viewPager;
+    @BindView(R.id.view_pager)
+    ViewPager viewPager;
+    @BindView(R.id.layoutDots)
+    LinearLayout dotsLayout;
     private WelcomeAdapter welcomeAdapter;
-    private LinearLayout dotsLayout;
     private TextView[] dots;
     private Bundle bundle;
     private Intent intent;
@@ -161,9 +165,7 @@ public class WelcomeActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_welcome);
-
-        viewPager = (ViewPager) findViewById(R.id.view_pager);
-        dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
+        ButterKnife.bind(this);
         btnSkip = (Button) findViewById(R.id.btn_skip);
         btnSkip.setVisibility(View.GONE);
         btnNext = (Button) findViewById(R.id.btn_next);
@@ -174,22 +176,14 @@ public class WelcomeActivity extends AppCompatActivity {
         viewPager.setAdapter(welcomeAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
 
-        btnSkip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchRegisterScreen();
-            }
-        });
+        btnSkip.setOnClickListener(v -> launchRegisterScreen());
 
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int current = getItem(+1);
-                if (current < layouts.length) {
-                    viewPager.setCurrentItem(current);
-                } else {
-                    launchRegisterScreen();
-                }
+        btnNext.setOnClickListener(v -> {
+            int current = getItem(+1);
+            if (current < layouts.length) {
+                viewPager.setCurrentItem(current);
+            } else {
+                launchRegisterScreen();
             }
         });
 

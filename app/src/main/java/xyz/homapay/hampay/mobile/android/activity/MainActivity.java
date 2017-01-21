@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.PSPName;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
@@ -69,28 +71,45 @@ import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 
 public class MainActivity extends AppCompatActivity implements FragmentDrawer.FragmentDrawerListener, View.OnClickListener, EditImageDialog.EditImageDialogListener {
 
+    @BindView(R.id.wt_container)
+    RelativeLayout wtContainer;
+    @BindView(R.id.wt_first_layout)
+    RelativeLayout wtFirstLayout;
+    @BindView(R.id.wt_second_layout)
+    RelativeLayout wtSecondLayout;
+    @BindView(R.id.wt_third_layout)
+    RelativeLayout wtThirdLayout;
+    @BindView(R.id.wt_fourth_layout)
+    RelativeLayout wtFourthLayout;
+    @BindView(R.id.wt_fifth_layout)
+    RelativeLayout wtFifthLayout;
+    @BindView(R.id.wt_sixth_layout)
+    RelativeLayout wtSixthLayout;
+    @BindView(R.id.wt_seventh_layout)
+    RelativeLayout wtSevenLayout;
+    @BindView(R.id.wt_eight_layout)
+    RelativeLayout wtEightLayout;
+    @BindView(R.id.transaction_note)
+    FacedTextView transactionNote;
+    @BindView(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
+    @BindView(R.id.nav_icon)
+    ImageView nav_icon;
+    @BindView(R.id.fragment_title)
+    FacedTextView fragment_title;
+    @BindView(R.id.image_profile)
+    ImageView image_profile;
+    @BindView(R.id.user_image_layout)
+    LinearLayout user_image_layout;
+    @BindView(R.id.user_manual)
+    ImageView user_manual;
     private GoogleCloudMessaging googleCloudMessaging;
     private String registrationId;
     private FragmentDrawer drawerFragment;
     private Fragment fragment = null;
     private RequestPSPResult requestPSPResult;
     private PSPResultRequest pspResultRequest;
-    private RelativeLayout wtContainer;
     private int walkThroughStep = 0;
-    private RelativeLayout wtFirstLayout;
-    private RelativeLayout wtSecondLayout;
-    private RelativeLayout wtThirdLayout;
-    private RelativeLayout wtFourthLayout;
-    private RelativeLayout wtFifthLayout;
-    private RelativeLayout wtSixthLayout;
-    private RelativeLayout wtSevenLayout;
-    private RelativeLayout wtEightLayout;
-    private FacedTextView transactionNote;
-    private DrawerLayout drawerLayout;
-    private ImageView nav_icon;
-    private FacedTextView fragment_title;
-    private ImageView image_profile;
-    private LinearLayout user_image_layout;
     private int currentFragment = 0;
     private UserProfileDTO userProfile;
     private String pendingPurchaseCode = null;
@@ -107,7 +126,6 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     private RequestMobileRegistrationIdEntry requestMobileRegistrationIdEntry;
     private MobileRegistrationIdEntryRequest mobileRegistrationIdEntryRequest;
     private DatabaseHelper dbHelper;
-    private ImageView user_manual;
     private String fragmentTitle = "";
     private AppEvent appEvent = AppEvent.LOGIN;
 
@@ -162,6 +180,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
         activity = MainActivity.this;
         context = this;
@@ -217,11 +236,11 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 pspResultRequest.setResultType(PSPResultRequest.ResultType.PAYMENT);
                 requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(syncPspResult.getProductCode()));
                 requestPSPResult.execute(pspResultRequest);
-            }else if (syncPspResult.getType().equalsIgnoreCase("UTILITY_BILL")) {
+            } else if (syncPspResult.getType().equalsIgnoreCase("UTILITY_BILL")) {
                 pspResultRequest.setResultType(PSPResultRequest.ResultType.UTILITY_BILL);
                 requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(syncPspResult.getProductCode()));
                 requestPSPResult.execute(pspResultRequest);
-            }else if (syncPspResult.getType().equalsIgnoreCase("TOP_UP")) {
+            } else if (syncPspResult.getType().equalsIgnoreCase("TOP_UP")) {
                 pspResultRequest.setResultType(PSPResultRequest.ResultType.TOP_UP);
                 requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(syncPspResult.getProductCode()));
                 requestPSPResult.execute(pspResultRequest);
@@ -271,42 +290,19 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             }
         }
 
-        wtContainer = (RelativeLayout) findViewById(R.id.wt_container);
-        wtFirstLayout = (RelativeLayout) findViewById(R.id.wt_first_layout);
-        wtSecondLayout = (RelativeLayout) findViewById(R.id.wt_second_layout);
-        wtThirdLayout = (RelativeLayout) findViewById(R.id.wt_third_layout);
-        wtFourthLayout = (RelativeLayout) findViewById(R.id.wt_fourth_layout);
-        wtFifthLayout = (RelativeLayout) findViewById(R.id.wt_fifth_layout);
-        wtSixthLayout = (RelativeLayout) findViewById(R.id.wt_sixth_layout);
-        wtSevenLayout = (RelativeLayout) findViewById(R.id.wt_seventh_layout);
-        wtEightLayout = (RelativeLayout) findViewById(R.id.wt_eight_layout);
-        transactionNote = (FacedTextView) findViewById(R.id.transaction_note);
-
         if (prefs.getBoolean(Constants.SHOW_WALK_THROUGH, true)) {
             wtContainer.setVisibility(View.VISIBLE);
         }
 
-        user_manual = (ImageView) findViewById(R.id.user_manual);
-        fragment_title = (FacedTextView) findViewById(R.id.fragment_title);
-        image_profile = (ImageView) findViewById(R.id.image_profile);
-
-        user_image_layout = (LinearLayout) findViewById(R.id.user_image_layout);
-        user_image_layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditImageDialog editImageDialog = new EditImageDialog();
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.add(editImageDialog, null);
-                fragmentTransaction.commitAllowingStateLoss();
-            }
+        user_image_layout.setOnClickListener(v -> {
+            EditImageDialog editImageDialog = new EditImageDialog();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.add(editImageDialog, null);
+            fragmentTransaction.commitAllowingStateLoss();
         });
-        nav_icon = (ImageView) findViewById(R.id.nav_icon);
         nav_icon.setOnClickListener(this);
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        drawerFragment = (FragmentDrawer)
-                getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
+        drawerFragment = (FragmentDrawer) getSupportFragmentManager().findFragmentById(R.id.fragment_navigation_drawer);
         drawerFragment.setUp(R.id.fragment_navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout), null);
         drawerFragment.setDrawerListener(this);
 

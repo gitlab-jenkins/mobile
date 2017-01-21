@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
@@ -27,7 +29,6 @@ import xyz.homapay.hampay.mobile.android.Manifest;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestCredentialEntry;
-import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.edittext.MemorableTextWatcher;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
@@ -43,16 +44,14 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.UserContacts;
 
-public class MemorableWordEntryActivity extends AppCompatActivity implements PermissionContactDialog.PermissionContactDialogListener {
+public class MemorableWordEntryActivity extends AppCompatActivity implements PermissionContactDialog.PermissionContactDialogListener, View.OnClickListener {
 
+    private final Handler handler = new Handler();
+    @BindView(R.id.memorable_value)
+    FacedEditText memorable_value;
     private List<ContactDTO> contacts;
-    private FacedTextView keepOn_button;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
-    private FacedEditText memorable_value;
-    private final Handler handler = new Handler();
-
-
     private Context context;
     private Activity activity;
     private HamPayDialog hamPayDialog;
@@ -63,7 +62,7 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
     private RegistrationCredentialsRequest registrationCredentialsRequest;
     private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
 
-    public void userManual(View view){
+    public void userManual(View view) {
         Intent intent = new Intent();
         intent.setClass(activity, UserManualActivity.class);
         intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_memorable_word_entry);
@@ -122,7 +121,7 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
                     } else {
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                             boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS);
-                            if (showRationale){
+                            if (showRationale) {
                                 handler.post(new Runnable() {
                                     public void run() {
                                         PermissionContactDialog permissionContactDialog = new PermissionContactDialog();
@@ -131,7 +130,7 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
                                         fragmentTransaction.commitAllowingStateLoss();
                                     }
                                 });
-                            }else {
+                            } else {
                                 contacts = new ArrayList<ContactDTO>();
                                 registrationCredentialsRequest.setContacts(contacts);
                                 registrationCredentialsRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
@@ -143,7 +142,7 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
                                 requestCredentialEntry = new RequestCredentialEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
                                 requestCredentialEntry.execute(registrationCredentialsRequest);
                             }
-                        }else {
+                        } else {
                             handler.post(new Runnable() {
                                 public void run() {
                                     PermissionDeviceDialog permissionDeviceDialog = new PermissionDeviceDialog();
@@ -165,6 +164,7 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memorable_word_entry);
+        ButterKnife.bind(this);
 
         activity = MemorableWordEntryActivity.this;
         context = this;
@@ -178,27 +178,14 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
         hamPayDialog = new HamPayDialog(activity);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
-        memorable_value = (FacedEditText)findViewById(R.id.memorable_value);
         memorable_value.addTextChangedListener(new MemorableTextWatcher(memorable_value));
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-
-        keepOn_button = (FacedTextView) findViewById(R.id.keepOn_button);
-        keepOn_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (memorable_value.getText().toString().trim().length() > 1 ) {
-                    requestAndLoadUserContact();
-                }else {
-                    Toast.makeText(context, getString(R.string.msg_memorable_incorrect), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
     }
 
     @Override
     public void onFinishEditDialog(ActionPermission actionPermission) {
-        switch (actionPermission){
+        switch (actionPermission) {
             case GRANT:
                 requestAndLoadUserContact();
                 break;
@@ -217,10 +204,26 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
         }
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.keepOn_button:
+                if (memorable_value.getText().toString().trim().length() > 1) {
+                    requestAndLoadUserContact();
+                } else {
+                    Toast.makeText(context, getString(R.string.msg_memorable_incorrect), Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+    }
 
-    public class RequestMemorableWordEntryResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationCredentialsResponse>>
-    {
-        public RequestMemorableWordEntryResponseTaskCompleteListener(){
+    @Override
+    public void onBackPressed() {
+        new HamPayDialog(activity).exitRegistrationDialog();
+    }
+
+    public class RequestMemorableWordEntryResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationCredentialsResponse>> {
+        public RequestMemorableWordEntryResponseTaskCompleteListener() {
         }
 
         @Override
@@ -243,15 +246,14 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     finish();
                     startActivity(intent);
-                }
-                else {
+                } else {
                     serviceName = ServiceEvent.REGISTRATION_CREDENTIALS_FAILURE;
                     requestCredentialEntry = new RequestCredentialEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
                     new HamPayDialog(activity).showFailMemorableEntryDialog(requestCredentialEntry, registrationCredentialsRequest,
                             registrationMemorableWordEntryResponseMessage.getService().getResultStatus().getCode(),
                             registrationMemorableWordEntryResponseMessage.getService().getResultStatus().getDescription());
                 }
-            }else {
+            } else {
                 serviceName = ServiceEvent.REGISTRATION_CREDENTIALS_FAILURE;
                 requestCredentialEntry = new RequestCredentialEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
                 new HamPayDialog(activity).showFailMemorableEntryDialog(requestCredentialEntry, registrationCredentialsRequest,
@@ -265,10 +267,5 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
         public void onTaskPreRun() {
             hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        new HamPayDialog(activity).exitRegistrationDialog();
     }
 }

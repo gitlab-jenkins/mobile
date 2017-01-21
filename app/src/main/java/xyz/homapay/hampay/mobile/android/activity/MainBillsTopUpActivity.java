@@ -22,12 +22,12 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.ChargePackage;
 import xyz.homapay.hampay.common.common.Operator;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
-import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
 import xyz.homapay.hampay.common.core.model.response.TopUpInfoResponse;
 import xyz.homapay.hampay.common.core.model.response.TopUpResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
@@ -36,7 +36,6 @@ import xyz.homapay.hampay.mobile.android.Manifest;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
-import xyz.homapay.hampay.mobile.android.async.RequestCredentialEntry;
 import xyz.homapay.hampay.mobile.android.common.charge.ChargeAdapterModel;
 import xyz.homapay.hampay.mobile.android.common.charge.ChargeType;
 import xyz.homapay.hampay.mobile.android.common.messages.MessageSelectChargeAmount;
@@ -59,34 +58,47 @@ import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
 import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
-import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.ModelLayerImpl;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.TelephonyUtils;
-import xyz.homapay.hampay.mobile.android.util.UserContacts;
 
-public class MainBillsTopUpActivity extends AppCompatActivity implements View.OnClickListener, TopUpInfoView, TopUpCreateView, PermissionContactDialog.PermissionContactDialogListener{
+public class MainBillsTopUpActivity extends AppCompatActivity implements View.OnClickListener, TopUpInfoView, TopUpCreateView, PermissionContactDialog.PermissionContactDialogListener {
 
     private static int selectedType = 0;
+    private final Handler handler = new Handler();
+    @BindView(R.id.keyboard)
+    LinearLayout keyboard;
+    @BindView(R.id.billsTool)
+    RelativeLayout billsTool;
+    @BindView(R.id.topUpTool)
+    RelativeLayout topUpTool;
+    @BindView(R.id.billsLayout)
+    LinearLayout billsLayout;
+    @BindView(R.id.topUpLayout)
+    LinearLayout topUpLayout;
+    @BindView(R.id.billsTriangle)
+    ImageView billsTriangle;
+    @BindView(R.id.topUpTriangle)
+    ImageView topUpTriangle;
+    @BindView(R.id.cellNumberText)
+    TopUpCellNumber cellNumberText;
+    @BindView(R.id.tvChargeType)
+    FacedTextView tvChargeType;
+    @BindView(R.id.tvChargeAmount)
+    FacedTextView tvChargeAmount;
+    @BindView(R.id.btnTopUpPay)
+    FacedTextView btnTopUpPay;
+    @BindView(R.id.imgMCI)
+    ImageView imgMCI;
+    @BindView(R.id.imgMTN)
+    ImageView imgMTN;
+    @BindView(R.id.imgRIGHTEL)
+    ImageView imgRIGHTEL;
+    @BindView(R.id.cellNumberIcon)
+    ImageView cellNumberIcon;
     private SharedPreferences prefs;
     private Context context;
     private PersianEnglishDigit persian;
-    private LinearLayout keyboard;
-    private RelativeLayout billsTool;
-    private RelativeLayout topUpTool;
-    private LinearLayout billsLayout;
-    private LinearLayout topUpLayout;
-    private ImageView billsTriangle;
-    private ImageView topUpTriangle;
-    private LinearLayout mobileBill;
-    private LinearLayout serviceBills;
-    private TopUpCellNumber cellNumberText;
-    private FacedTextView tvChargeType;
-    private FacedTextView tvChargeAmount;
-    private FacedTextView btnTopUpPay;
-    private ImageView imgMCI;
-    private ImageView imgMTN;
-    private ImageView imgRIGHTEL;
     private String cellNumber = "";
     private TopUpInfo topUpInfo;
     private TopUpCreate topUpCreate;
@@ -97,12 +109,10 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     private String operatorName;
     private HamPayDialog dlg;
     private UserProfileDTO userProfile;
-    private ImageView cellNumberIcon;
     private List<xyz.homapay.hampay.common.common.TopUpInfo> MCI_INFO;
     private List<xyz.homapay.hampay.common.common.TopUpInfo> MTN_INFO;
     private List<xyz.homapay.hampay.common.common.TopUpInfo> RIGHTEL_INFO;
     private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
-    private final Handler handler = new Handler();
     private Activity activity;
 
     public void backActionBar(View view) {
@@ -173,17 +183,17 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
                 } else {
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                         boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS);
-                        if (showRationale){
+                        if (showRationale) {
                             handler.post(() -> {
                                 PermissionContactDialog permissionContactDialog = new PermissionContactDialog();
                                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                                 fragmentTransaction.add(permissionContactDialog, null);
                                 fragmentTransaction.commitAllowingStateLoss();
                             });
-                        }else {
+                        } else {
 
                         }
-                    }else {
+                    } else {
                         handler.post(() -> {
                             PermissionDeviceDialog permissionDeviceDialog = new PermissionDeviceDialog();
                             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -202,6 +212,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bills_top_up);
+        ButterKnife.bind(this);
 
         dlg = new HamPayDialog(this);
         activity = MainBillsTopUpActivity.this;
@@ -213,38 +224,9 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
 
         userProfile = (UserProfileDTO) getIntent().getSerializableExtra(Constants.USER_PROFILE);
 
-        keyboard = (LinearLayout) findViewById(R.id.keyboard);
-
-        billsTool = (RelativeLayout) findViewById(R.id.billsTool);
-        billsTool.setOnClickListener(this);
-        topUpTool = (RelativeLayout) findViewById(R.id.topUpTool);
-        topUpTool.setOnClickListener(this);
-        billsLayout = (LinearLayout) findViewById(R.id.billsLayout);
-        topUpLayout = (LinearLayout) findViewById(R.id.topUpLayout);
-        billsTriangle = (ImageView) findViewById(R.id.billsTriangle);
-        topUpTriangle = (ImageView) findViewById(R.id.topUpTriangle);
-        mobileBill = (LinearLayout) findViewById(R.id.mobileBills);
-        mobileBill.setOnClickListener(this);
-        serviceBills = (LinearLayout) findViewById(R.id.serviceBills);
-        serviceBills.setOnClickListener(this);
-        cellNumberText = (TopUpCellNumber) findViewById(R.id.cellNumberText);
-        cellNumberText.setOnClickListener(this);
-        imgMCI = (ImageView) findViewById(R.id.imgMCI);
-        imgMTN = (ImageView) findViewById(R.id.imgMTN);
-        imgRIGHTEL = (ImageView) findViewById(R.id.imgRIGHTEL);
-        cellNumberIcon = (ImageView) findViewById(R.id.cellNumberIcon);
-        btnTopUpPay = (FacedTextView) findViewById(R.id.btnTopUpPay);
-
-        tvChargeType = (FacedTextView) findViewById(R.id.tvChargeType);
-        tvChargeAmount = (FacedTextView) findViewById(R.id.tvChargeAmount);
-
         tvChargeAmount.setTag(0);
         tvChargeType.setTag(0);
 
-        imgMCI.setOnClickListener(this);
-        imgMTN.setOnClickListener(this);
-        imgRIGHTEL.setOnClickListener(this);
-        btnTopUpPay.setOnClickListener(this);
         cellNumberText.setCellNumberIcon(cellNumberIcon);
     }
 
@@ -359,7 +341,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case (1) :
+            case (1):
                 cellNumber = "";
                 cellNumberText.setText("");
                 if (resultCode == Activity.RESULT_OK) {
@@ -658,7 +640,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
 
     @Override
     public void onFinishEditDialog(ActionPermission actionPermission) {
-        switch (actionPermission){
+        switch (actionPermission) {
             case GRANT:
                 requestAndLoadUserContact();
                 break;

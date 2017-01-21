@@ -88,6 +88,7 @@
                     android:gravity="center_vertical"
                     android:hint="@string/mobile_no_entry"
                     android:maxLength="9"
+                    android:onClick="onClick"
                     android:paddingBottom="8dp"
                     android:paddingTop="8dp"
                     android:textColor="@android:color/black"
@@ -234,6 +235,7 @@
         android:layout_marginBottom="18dp"
         android:background="@drawable/registration_button_style"
         android:gravity="center"
+        android:onClick="onClick"
         android:orientation="horizontal"
         android:padding="8dp">
 

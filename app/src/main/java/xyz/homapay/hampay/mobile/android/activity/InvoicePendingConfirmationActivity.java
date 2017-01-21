@@ -19,6 +19,8 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import java.io.Serializable;
 
 import br.com.goncalves.pugnotification.notification.PugNotification;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.PSPName;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
@@ -67,35 +69,58 @@ import xyz.homapay.hampay.mobile.android.webservice.psp.CBUArrayOfKeyValueOfstri
 
 public class InvoicePendingConfirmationActivity extends AppCompatActivity implements View.OnClickListener, CardNumberDialog.SelectCardDialogListener, OnTaskCompleted {
 
+    @BindView(R.id.pay_button)
+    ImageView pay_button;
+    @BindView(R.id.user_image)
+    ImageView user_image;
+    @BindView(R.id.callerName)
+    FacedTextView callerName;
+    @BindView(R.id.paymentCode)
+    FacedTextView paymentCode;
+    @BindView(R.id.received_message_holder)
+    LinearLayout received_message_holder;
+    @BindView(R.id.received_message)
+    FacedTextView received_message;
+    @BindView(R.id.create_date)
+    FacedTextView create_date;
+    @BindView(R.id.paymentPriceValue)
+    FacedTextView paymentPriceValue;
+    @BindView(R.id.paymentVAT)
+    FacedTextView paymentVAT;
+    @BindView(R.id.paymentFeeValue)
+    FacedTextView paymentFeeValue;
+    @BindView(R.id.paymentTotalValue)
+    FacedTextView paymentTotalValue;
+    @BindView(R.id.bankName)
+    FacedTextView bankName;
+    @BindView(R.id.cardNumberValue)
+    FacedTextView cardNumberValue;
+    @BindView(R.id.keyboard)
+    LinearLayout keyboard;
+    @BindView(R.id.pin_layout)
+    RelativeLayout pinLayout;
+    @BindView(R.id.pin_text)
+    FacedTextView pinText;
+    @BindView(R.id.cvv_layout)
+    RelativeLayout cvvLayout;
+    @BindView(R.id.cvv_text)
+    FacedTextView cvvText;
+    @BindView(R.id.paymentScroll)
+    ScrollView paymentScroll;
+    @BindView(R.id.selectCardText)
+    FacedTextView selectCardText;
+    @BindView(R.id.cardSelect)
+    LinearLayout cardSelect;
     private DatabaseHelper dbHelper;
-    private ImageView pay_button;
-    private ImageView user_image;
-    private FacedTextView callerName;
-    private FacedTextView paymentCode;
-    private LinearLayout received_message_holder;
-    private FacedTextView received_message;
-    private FacedTextView create_date;
-    private FacedTextView paymentPriceValue;
-    private FacedTextView paymentVAT;
-    private FacedTextView paymentFeeValue;
-    private FacedTextView paymentTotalValue;
-    private FacedTextView bankName;
-    private FacedTextView cardNumberValue;
     private CurrencyFormatter currencyFormatter;
     private Context context;
     private Activity activity;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
-    private LinearLayout keyboard;
-    private RelativeLayout pinLayout;
-    private FacedTextView pinText;
-    private RelativeLayout cvvLayout;
-    private FacedTextView cvvText;
     private boolean pinCodeFocus = false;
     private boolean cvvFocus = false;
     private String userPinCode = "";
     private String userCVV2 = "";
-    private ScrollView paymentScroll;
     private PersianEnglishDigit persian = new PersianEnglishDigit();
     private HamPayDialog hamPayDialog;
     private PaymentInfoDTO paymentInfoDTO = null;
@@ -108,10 +133,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
     private PSPResultRequest pspResultRequest;
     private RequestLatestPayment requestLatestPayment;
     private LatestPaymentRequest latestPaymentRequest;
-    private RelativeLayout cardPlaceHolder;
     private int selectedCardIdIndex = -1;
-    private FacedTextView selectCardText;
-    private LinearLayout cardSelect;
     private String signature;
     private String authToken = "";
 
@@ -162,14 +184,12 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invoice_payment_pending);
+        ButterKnife.bind(this);
 
         context = this;
         activity = InvoicePendingConfirmationActivity.this;
-
         PugNotification.with(context).cancel(Constants.INVOICE_NOTIFICATION_IDENTIFIER);
-
         dbHelper = new DatabaseHelper(context);
-
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
@@ -184,46 +204,10 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
             return;
         }
 
-        keyboard = (LinearLayout) findViewById(R.id.keyboard);
-        pinLayout = (RelativeLayout) findViewById(R.id.pin_layout);
-        pinText = (FacedTextView) findViewById(R.id.pin_text);
-        pinText.setOnClickListener(this);
-        cvvLayout = (RelativeLayout) findViewById(R.id.cvv_layout);
-        cvvText = (FacedTextView) findViewById(R.id.cvv_text);
-        cvvText.setOnClickListener(this);
-        paymentScroll = (ScrollView) findViewById(R.id.paymentScroll);
         hamPayDialog = new HamPayDialog(activity);
 
         persianEnglishDigit = new PersianEnglishDigit();
         currencyFormatter = new CurrencyFormatter();
-        user_image = (ImageView) findViewById(R.id.user_image);
-        callerName = (FacedTextView) findViewById(R.id.callerName);
-        paymentCode = (FacedTextView) findViewById(R.id.paymentCode);
-        create_date = (FacedTextView) findViewById(R.id.create_date);
-        received_message = (FacedTextView) findViewById(R.id.received_message);
-        received_message_holder = (LinearLayout) findViewById(R.id.received_message_holder);
-        paymentPriceValue = (FacedTextView) findViewById(R.id.paymentPriceValue);
-        paymentVAT = (FacedTextView) findViewById(R.id.paymentVAT);
-        paymentFeeValue = (FacedTextView) findViewById(R.id.paymentFeeValue);
-        paymentTotalValue = (FacedTextView) findViewById(R.id.paymentTotalValue);
-        bankName = (FacedTextView) findViewById(R.id.bankName);
-        cardNumberValue = (FacedTextView) findViewById(R.id.cardNumberValue);
-        selectCardText = (FacedTextView) findViewById(R.id.selectCardText);
-        cardSelect = (LinearLayout) findViewById(R.id.cardSelect);
-
-        cardPlaceHolder = (RelativeLayout) findViewById(R.id.cardPlaceHolder);
-        cardPlaceHolder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CardNumberDialog cardNumberDialog = new CardNumberDialog();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(Constants.CARD_LIST, (Serializable) paymentInfoDTO.getCardList());
-                cardNumberDialog.setArguments(bundle);
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.add(cardNumberDialog, null);
-                fragmentTransaction.commitAllowingStateLoss();
-            }
-        });
 
         Intent intent = getIntent();
         providerId = intent.getStringExtra(Constants.PROVIDER_ID);
@@ -242,20 +226,76 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
             latestPaymentRequest = new LatestPaymentRequest();
             requestLatestPayment.execute(latestPaymentRequest);
         }
+    }
 
-        pay_button = (ImageView) findViewById(R.id.pay_button);
-        pay_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        if (requestCode == 46) {
+            if (resultCode == Activity.RESULT_OK) {
+                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, -1);
+                if (result == 0) {
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra(Constants.ACTIVITY_RESULT, ResultStatus.SUCCESS.ordinal());
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    finish();
+                }
+
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+            }
+        }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if (keyboard.getVisibility() == View.VISIBLE) {
+            new Collapse(keyboard).animate();
+            ObjectAnimator.ofInt(paymentScroll, "scrollY", paymentScroll.getTop()).setDuration(400).start();
+            return;
+        }
+        finish();
+    }
+
+    @Override
+    public void onClick(View view) {
+        ObjectAnimator.ofInt(paymentScroll, "scrollY", paymentScroll.getBottom()).setDuration(400).start();
+        if (keyboard.getVisibility() == View.GONE) {
+            new Expand(keyboard).animate();
+        }
+        switch (view.getId()) {
+            case R.id.pin_text:
+                pinLayout.setBackgroundResource(R.drawable.card_info_entry_placeholder);
+                cvvLayout.setBackgroundResource(R.drawable.card_info_empty_placeholder);
+                pinCodeFocus = true;
+                cvvFocus = false;
+                break;
+
+            case R.id.cvv_text:
+                pinLayout.setBackgroundResource(R.drawable.card_info_empty_placeholder);
+                cvvLayout.setBackgroundResource(R.drawable.card_info_entry_placeholder);
+                pinCodeFocus = false;
+                cvvFocus = true;
+                break;
+            case R.id.cardPlaceHolder:
+                CardNumberDialog cardNumberDialog = new CardNumberDialog();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(Constants.CARD_LIST, (Serializable) paymentInfoDTO.getCardList());
+                cardNumberDialog.setArguments(bundle);
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.add(cardNumberDialog, null);
+                fragmentTransaction.commitAllowingStateLoss();
+                break;
+            case R.id.pay_button:
                 if (pspInfoDTO == null) return;
 
                 if (selectedCardIdIndex == -1 || (paymentInfoDTO.getCardList().get(selectedCardIdIndex) != null && paymentInfoDTO.getCardList().get(selectedCardIdIndex).getCardId() == null) || (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + paymentInfoDTO.getVat() >= Constants.SOAP_AMOUNT_MAX)) {
-                    Intent intent = new Intent();
-                    intent.setClass(activity, BankWebPaymentActivity.class);
-                    intent.putExtra(Constants.PAYMENT_INFO, paymentInfoDTO);
-                    intent.putExtra(Constants.PSP_INFO, pspInfoDTO);
-                    startActivityForResult(intent, 46);
+                    Intent intent1 = new Intent();
+                    intent1.setClass(activity, BankWebPaymentActivity.class);
+                    intent1.putExtra(Constants.PAYMENT_INFO, paymentInfoDTO);
+                    intent1.putExtra(Constants.PSP_INFO, pspInfoDTO);
+                    startActivityForResult(intent1, 46);
                 } else {
                     if (pinText.getText().toString().length() <= 4) {
                         Toast.makeText(context, getString(R.string.msg_pin2_incorrect), Toast.LENGTH_LONG).show();
@@ -343,59 +383,6 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
                     requestPurchase.execute(doWorkInfo);
 
                 }
-            }
-        });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (requestCode == 46) {
-            if (resultCode == Activity.RESULT_OK) {
-                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, -1);
-                if (result == 0) {
-                    Intent returnIntent = new Intent();
-                    returnIntent.putExtra(Constants.ACTIVITY_RESULT, ResultStatus.SUCCESS.ordinal());
-                    setResult(Activity.RESULT_OK, returnIntent);
-                    finish();
-                }
-
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
-            }
-        }
-    }
-
-
-    @Override
-    public void onBackPressed() {
-        if (keyboard.getVisibility() == View.VISIBLE) {
-            new Collapse(keyboard).animate();
-            ObjectAnimator.ofInt(paymentScroll, "scrollY", paymentScroll.getTop()).setDuration(400).start();
-            return;
-        }
-        finish();
-    }
-
-    @Override
-    public void onClick(View view) {
-        ObjectAnimator.ofInt(paymentScroll, "scrollY", paymentScroll.getBottom()).setDuration(400).start();
-        if (keyboard.getVisibility() == View.GONE) {
-            new Expand(keyboard).animate();
-        }
-        switch (view.getId()) {
-            case R.id.pin_text:
-                pinLayout.setBackgroundResource(R.drawable.card_info_entry_placeholder);
-                cvvLayout.setBackgroundResource(R.drawable.card_info_empty_placeholder);
-                pinCodeFocus = true;
-                cvvFocus = false;
-                break;
-
-            case R.id.cvv_text:
-                pinLayout.setBackgroundResource(R.drawable.card_info_empty_placeholder);
-                cvvLayout.setBackgroundResource(R.drawable.card_info_entry_placeholder);
-                pinCodeFocus = false;
-                cvvFocus = true;
                 break;
         }
     }
@@ -597,15 +584,15 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
                             startActivityForResult(intent, 46);
                         }
                         resultStatus = ResultStatus.SUCCESS;
-                    } else if (responseCode.equalsIgnoreCase("17") || responseCode.equalsIgnoreCase("25") || responseCode.equalsIgnoreCase("27") || responseCode.equalsIgnoreCase("56")){
+                    } else if (responseCode.equalsIgnoreCase("17") || responseCode.equalsIgnoreCase("25") || responseCode.equalsIgnoreCase("27") || responseCode.equalsIgnoreCase("56")) {
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.token_special_issue));
                         resultStatus = ResultStatus.FAILURE;
-                    }else {
+                    } else {
                         serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
                         PspCode pspCode = new PspCode(context);
-                        if (pspCode.getDescription(responseCode) == null){
+                        if (pspCode.getDescription(responseCode) == null) {
                             new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.token_special_issue));
-                        }else {
+                        } else {
                             new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(responseCode));
                         }
                         resultStatus = ResultStatus.FAILURE;

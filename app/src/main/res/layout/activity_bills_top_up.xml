@@ -9,7 +9,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -36,12 +35,10 @@
 
         </RelativeLayout>
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="42dp"
             android:orientation="horizontal">
-
 
             <RelativeLayout
                 android:id="@+id/topUpTool"
@@ -50,7 +47,8 @@
                 android:layout_marginLeft="0.5dp"
                 android:layout_marginRight="0.5dp"
                 android:layout_weight="0.5"
-                android:background="@color/transaction_unselected_tab">
+                android:background="@color/transaction_unselected_tab"
+                android:onClick="onClick">
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:layout_width="wrap_content"
@@ -79,7 +77,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="1dp"
                 android:layout_weight="0.5"
-                android:background="@color/page_title">
+                android:background="@color/page_title"
+                android:onClick="onClick">
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:layout_width="wrap_content"
@@ -116,6 +115,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="right"
+                android:onClick="onClick"
                 android:orientation="horizontal"
                 android:padding="12dp"
                 android:visibility="gone">
@@ -149,6 +149,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="right"
+                android:onClick="onClick"
                 android:orientation="horizontal"
                 android:padding="12dp">
 
@@ -176,7 +177,6 @@
                 android:background="@color/entry_field_color" />
 
         </LinearLayout>
-
 
         <ScrollView
             android:layout_width="match_parent"
@@ -253,6 +253,7 @@
                             android:hint="@string/mobile_no_entry"
                             android:maxLength="9"
                             android:nextFocusDown="@+id/cardNumberValue"
+                            android:onClick="onClick"
                             android:paddingBottom="8dp"
                             android:paddingTop="8dp"
                             android:textColor="@android:color/black"
@@ -289,6 +290,7 @@
                         android:layout_width="0dp"
                         android:layout_height="60dp"
                         android:layout_weight="1"
+                        android:onClick="onClick"
                         android:scaleType="centerInside"
                         android:src="@mipmap/irancell_inactive" />
 
@@ -297,6 +299,7 @@
                         android:layout_width="0dp"
                         android:layout_height="60dp"
                         android:layout_weight="1"
+                        android:onClick="onClick"
                         android:scaleType="centerInside"
                         android:src="@mipmap/hamrah_inactive" />
 
@@ -305,6 +308,7 @@
                         android:layout_width="0dp"
                         android:layout_height="60dp"
                         android:layout_weight="1"
+                        android:onClick="onClick"
                         android:scaleType="centerInside"
                         android:src="@mipmap/rightel_inactive" />
 
@@ -387,6 +391,7 @@
                     android:layout_marginTop="24dp"
                     android:background="@drawable/registration_button_style"
                     android:gravity="center"
+                    android:onClick="onClick"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
                     android:text="@string/payment_request_button_confirm"
