@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import br.com.goncalves.pugnotification.notification.PugNotification;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.UnlinkUserRequest;
@@ -152,6 +153,11 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
                     logEvent.log(appEvent);
                     editor.clear().commit();
                     editor.commit();
+                    PugNotification.with(context).cancel(Constants.COMMON_NOTIFICATION_IDENTIFIER);
+                    PugNotification.with(context).cancel(Constants.INVOICE_NOTIFICATION_IDENTIFIER);
+                    PugNotification.with(context).cancel(Constants.MERCHANT_NOTIFICATION_IDENTIFIER);
+                    PugNotification.with(context).cancel(Constants.TRANSACTIONS_NOTIFICATION_IDENTIFIER);
+                    PugNotification.with(context).cancel(Constants.PAYMENT_NOTIFICATION_IDENTIFIER);
 
                     databaseHelper.deleteAllDataBase();
 
