@@ -17,6 +17,8 @@ import android.widget.LinearLayout;
 import java.util.Date;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
@@ -42,7 +44,6 @@ import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.img.ImageHelper;
-import xyz.homapay.hampay.mobile.android.m.common.Const;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
@@ -52,36 +53,59 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
  */
 public class MainFragment extends Fragment implements View.OnClickListener {
 
+    @BindView(R.id.user_transaction_history)
     LinearLayout user_transaction_history;
+    @BindView(R.id.user_payment_request)
     LinearLayout user_payment_request;
+    @BindView(R.id.businessPurchase)
     LinearLayout businessPurchase;
+    @BindView(R.id.pendingPurchasePayment)
     LinearLayout pendingPurchasePayment;
-    UserProfileDTO userProfile;
+    @BindView(R.id.billAndTopUp)
     LinearLayout billsTopUp;
-    Bundle bundle;
+    @BindView(R.id.hampay_1_ll)
     LinearLayout hampay_1_ll;
+    @BindView(R.id.hampay_2_ll)
     LinearLayout hampay_2_ll;
+    @BindView(R.id.hampay_3_ll)
     LinearLayout hampay_3_ll;
+    @BindView(R.id.hampay_4_ll)
     LinearLayout hampay_4_ll;
+    @BindView(R.id.hampay_image_1)
     ImageView hampay_image_1;
+    @BindView(R.id.hampay_image_2)
     ImageView hampay_image_2;
+    @BindView(R.id.hampay_image_3)
     ImageView hampay_image_3;
+    @BindView(R.id.hampay_image_4)
     ImageView hampay_image_4;
+    @BindView(R.id.hampay_1)
     FacedTextView hampay_1;
+    @BindView(R.id.hampay_2)
     FacedTextView hampay_2;
+    @BindView(R.id.hampay_3)
     FacedTextView hampay_3;
+    @BindView(R.id.hampay_4)
     FacedTextView hampay_4;
+    @BindView(R.id.user_last_login)
     FacedTextView user_last_login;
-    SharedPreferences prefs;
-    SharedPreferences.Editor editor;
+    @BindView(R.id.hampay_friend)
+    LinearLayout hampay_friend;
+    @BindView(R.id.bottom_panel)
+    LinearLayout bottom_panel;
+    @BindView(R.id.message_text)
+    FacedTextView message_text;
+    @BindView(R.id.date_text)
+    FacedTextView date_text;
+    @BindView(R.id.pending_badge)
+    FacedTextView pending_badge;
+    private UserProfileDTO userProfile;
+    private Bundle bundle;
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
     private HamPayDialog hamPayDialog;
     private SlidingUpPanelLayout slidingUpPanelLayout;
-    private LinearLayout hampay_friend;
-    private LinearLayout bottom_panel;
     private Context context;
-    private FacedTextView message_text;
-    private FacedTextView date_text;
-    private FacedTextView pending_badge;
     private PersianEnglishDigit persianEnglishDigit;
     private IntentFilter intentFilter;
     private BroadcastReceiver mIntentReceiver;
@@ -99,6 +123,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        ButterKnife.bind(this, rootView);
         context = getActivity();
         persianEnglishDigit = new PersianEnglishDigit();
 
@@ -107,13 +132,9 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         hamPayDialog = new HamPayDialog(getActivity());
         slidingUpPanelLayout = (SlidingUpPanelLayout) rootView.findViewById(R.id.sliding_layout);
 
-        message_text = (FacedTextView) rootView.findViewById(R.id.message_text);
-        date_text = (FacedTextView) rootView.findViewById(R.id.date_text);
-
         JalaliConvert jalaliConvert = new JalaliConvert(currentDate);
         message_text.setText(jalaliConvert.homeMessage());
         date_text.setText(persianEnglishDigit.E2P(jalaliConvert.homeDate()));
-        bottom_panel = (LinearLayout) rootView.findViewById(R.id.bottom_panel);
 
         prefs = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, Context.MODE_PRIVATE);
         editor = getActivity().getSharedPreferences(Constants.APP_PREFERENCE_NAME, Context.MODE_PRIVATE).edit();
@@ -124,32 +145,16 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             userProfile = (UserProfileDTO) bundle.getSerializable(Constants.USER_PROFILE);
         }
 
-
-        pending_badge = (FacedTextView) rootView.findViewById(R.id.pending_badge);
         int totalPendingCount = bundle.getInt(Constants.PENDING_PURCHASE_COUNT) + bundle.getInt(Constants.PENDING_PAYMENT_COUNT);
         if (totalPendingCount == 0) {
             pending_badge.setVisibility(View.GONE);
         } else {
             pending_badge.setText(persianEnglishDigit.E2P(String.valueOf(totalPendingCount)));
         }
-
-        hampay_1_ll = (LinearLayout) rootView.findViewById(R.id.hampay_1_ll);
-        hampay_2_ll = (LinearLayout) rootView.findViewById(R.id.hampay_2_ll);
-        hampay_3_ll = (LinearLayout) rootView.findViewById(R.id.hampay_3_ll);
-        hampay_4_ll = (LinearLayout) rootView.findViewById(R.id.hampay_4_ll);
         hampay_1_ll.setOnClickListener(this);
         hampay_2_ll.setOnClickListener(this);
         hampay_3_ll.setOnClickListener(this);
         hampay_4_ll.setOnClickListener(this);
-        hampay_1 = (FacedTextView) rootView.findViewById(R.id.hampay_1);
-        hampay_2 = (FacedTextView) rootView.findViewById(R.id.hampay_2);
-        hampay_3 = (FacedTextView) rootView.findViewById(R.id.hampay_3);
-        hampay_4 = (FacedTextView) rootView.findViewById(R.id.hampay_4);
-        hampay_image_1 = (ImageView) rootView.findViewById(R.id.hampay_image_1);
-        hampay_image_2 = (ImageView) rootView.findViewById(R.id.hampay_image_2);
-        hampay_image_3 = (ImageView) rootView.findViewById(R.id.hampay_image_3);
-        hampay_image_4 = (ImageView) rootView.findViewById(R.id.hampay_image_4);
-        user_last_login = (FacedTextView) rootView.findViewById(R.id.user_last_login);
         if (userProfile.getLastLoginDate() != null) {
             jalaliConvert = new JalaliConvert(userProfile.getLastLoginDate());
             user_last_login.setText(getString(R.string.last_login) + " "
@@ -208,20 +213,10 @@ public class MainFragment extends Fragment implements View.OnClickListener {
             }
         }
 
-        hampay_friend = (LinearLayout) rootView.findViewById(R.id.hampay_friend);
-        user_transaction_history = (LinearLayout) rootView.findViewById(R.id.user_transaction_history);
         user_transaction_history.setOnClickListener(this);
-
-        user_payment_request = (LinearLayout) rootView.findViewById(R.id.user_payment_request);
         user_payment_request.setOnClickListener(this);
-
-        businessPurchase = (LinearLayout) rootView.findViewById(R.id.businessPurchase);
         businessPurchase.setOnClickListener(this);
-
-        pendingPurchasePayment = (LinearLayout) rootView.findViewById(R.id.pendingPurchasePayment);
         pendingPurchasePayment.setOnClickListener(this);
-
-        billsTopUp = (LinearLayout) rootView.findViewById(R.id.billAndTopUp);
         billsTopUp.setOnClickListener(this);
 
         return rootView;
@@ -233,17 +228,14 @@ public class MainFragment extends Fragment implements View.OnClickListener {
 
         getView().setFocusableInTouchMode(true);
         getView().requestFocus();
-        getView().setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    if (slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
-                        slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-                        return true;
-                    }
+        getView().setOnKeyListener((v, keyCode, event) -> {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                if (slidingUpPanelLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED) {
+                    slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+                    return true;
                 }
-                return false;
             }
+            return false;
         });
 
         pending_badge.setText(persianEnglishDigit.E2P(String.valueOf(prefs.getInt(Constants.PENDING_COUNT, 0))));
@@ -412,7 +404,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                 intent.putExtra(Constants.USER_PROFILE, userProfile);
                 startActivity(intent);
             }
-        }else if (requestCode == Constants.IBAN_PAYMENT_REQUEST_CODE){
+        } else if (requestCode == Constants.IBAN_PAYMENT_REQUEST_CODE) {
             if (resultCode == getActivity().RESULT_OK) {
                 Intent intent = new Intent(getActivity(), PaymentRequestDetailActivity.class);
                 intent.putExtra(Constants.HAMPAY_CONTACT, userProfile.getSelectedContacts().get(selectContact));

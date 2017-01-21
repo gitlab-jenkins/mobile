@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
@@ -35,17 +37,27 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
  */
 public class AccountDetailFragment extends Fragment {
 
-    private View hide_bg;
+    @BindView(R.id.hide_bg)
+    View hide_bg;
+    @BindView(R.id.user_name_text)
+    FacedTextView user_name_text;
+    @BindView(R.id.image_profile)
+    ImageView image_profile;
+    @BindView(R.id.iban_ll)
+    LinearLayout iban_ll;
+    @BindView(R.id.user_cell_number)
+    FacedTextView user_cell_number;
+    @BindView(R.id.user_iban_value)
+    FacedTextView user_iban_value;
+    @BindView(R.id.user_iban_bank)
+    FacedTextView user_iban_bank;
+    @BindView(R.id.user_national_code)
+    FacedTextView user_national_code;
+    @BindView(R.id.email_layout)
+    LinearLayout emailLayout;
+    @BindView(R.id.user_email)
+    FacedTextView user_email;
     private PersianEnglishDigit persianEnglishDigit;
-    private FacedTextView user_name_text;
-    private ImageView image_profile;
-    private LinearLayout iban_ll;
-    private FacedTextView user_cell_number;
-    private FacedTextView user_iban_value;
-    private FacedTextView user_iban_bank;
-    private FacedTextView user_national_code;
-    private LinearLayout emailLayout;
-    private FacedTextView user_email;
     private HamPayDialog hamPayDialog;
     private UserProfileDTO userProfileDTO;
     private Bundle bundle;
@@ -99,32 +111,13 @@ public class AccountDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_account_detail, container, false);
-
-        hide_bg = rootView.findViewById(R.id.hide_bg);
+        ButterKnife.bind(this, rootView);
 
         hamPayDialog = new HamPayDialog(getActivity());
-
-        image_profile = (ImageView) rootView.findViewById(R.id.image_profile);
-        user_name_text = (FacedTextView) rootView.findViewById(R.id.user_name_text);
-        iban_ll = (LinearLayout) rootView.findViewById(R.id.iban_ll);
-        user_cell_number = (FacedTextView) rootView.findViewById(R.id.user_cell_number);
-        user_iban_value = (FacedTextView) rootView.findViewById(R.id.user_iban_value);
-        user_iban_bank = (FacedTextView) rootView.findViewById(R.id.user_iban_bank);
-        user_national_code = (FacedTextView) rootView.findViewById(R.id.user_national_code);
-        emailLayout = (LinearLayout) rootView.findViewById(R.id.email_layout);
-        user_email = (FacedTextView) rootView.findViewById(R.id.user_email);
 
         userProfileRequest = new UserProfileRequest();
         requestUserProfile = new RequestUserProfile(getActivity(), new RequestUserProfileTaskCompleteListener());
         requestUserProfile.execute(userProfileRequest);
-
-//        if (prefs.getBoolean(Constants.FORCE_USER_PROFILE, false)){
-//
-//        }else {
-//            fillUserProfile(userProfileDTO);
-//            editor.putBoolean(Constants.FORCE_USER_PROFILE, true);
-//            editor.commit();
-//        }
 
         return rootView;
     }

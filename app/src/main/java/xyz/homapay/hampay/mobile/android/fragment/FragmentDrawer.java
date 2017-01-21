@@ -3,6 +3,7 @@ package xyz.homapay.hampay.mobile.android.fragment;
 /**
  * Created by amir on 6/5/15.
  */
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,19 +18,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.NavigationDrawerAdapter;
 import xyz.homapay.hampay.mobile.android.model.NavDrawerItem;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class FragmentDrawer extends Fragment {
-    private RecyclerView recyclerView;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private DrawerLayout mDrawerLayout;
-    private NavigationDrawerAdapter adapter;
-    private View containerView;
     private static String[] titles;
     private static int icons[] = {
             R.drawable.ic_home,
@@ -45,14 +43,16 @@ public class FragmentDrawer extends Fragment {
             R.drawable.ic_privacy,
             R.drawable.ic_exit,
     };
+    @BindView(R.id.drawerList)
+    RecyclerView recyclerView;
+    DrawerLayout mDrawerLayout;
+    View containerView;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private NavigationDrawerAdapter adapter;
     private FragmentDrawerListener drawerListener;
 
     public FragmentDrawer() {
 
-    }
-
-    public void setDrawerListener(FragmentDrawerListener listener) {
-        this.drawerListener = listener;
     }
 
     public static List<NavDrawerItem> getData() {
@@ -66,6 +66,10 @@ public class FragmentDrawer extends Fragment {
         return data;
     }
 
+    public void setDrawerListener(FragmentDrawerListener listener) {
+        this.drawerListener = listener;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,8 +81,7 @@ public class FragmentDrawer extends Fragment {
                              Bundle savedInstanceState) {
         // Inflating view layout
         View layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
-        recyclerView = (RecyclerView) layout.findViewById(R.id.drawerList);
-
+        ButterKnife.bind(this, layout);
 
         List<NavDrawerItem> navDrawerItems = getData();
         navDrawerItems.get(0).setSelected(1);
@@ -149,6 +152,10 @@ public class FragmentDrawer extends Fragment {
         void onLongClick(View view, int position);
     }
 
+    public interface FragmentDrawerListener {
+        void onDrawerItemSelected(View view, int position);
+    }
+
     static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
 
         private GestureDetector gestureDetector;
@@ -190,9 +197,5 @@ public class FragmentDrawer extends Fragment {
         public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
         }
-    }
-
-    public interface FragmentDrawerListener {
-        public void onDrawerItemSelected(View view, int position);
     }
 }
