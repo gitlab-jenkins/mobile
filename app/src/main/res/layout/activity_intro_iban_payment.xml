@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -87,7 +86,6 @@
                         android:maxLength="30"
                         android:maxLines="1"
                         android:padding="8dp"
-                        android:singleLine="true"
                         android:textColor="@android:color/black"
                         android:textSize="14dp" />
 
@@ -114,7 +112,6 @@
                         android:maxLength="30"
                         android:maxLines="1"
                         android:padding="8dp"
-                        android:singleLine="true"
                         android:textColor="@android:color/black"
                         android:textSize="14dp" />
 
@@ -160,8 +157,8 @@
                                 android:background="@color/transparency"
                                 android:gravity="center"
                                 android:inputType="number"
+                                android:lines="1"
                                 android:maxLength="2"
-                                android:singleLine="true"
                                 android:textColor="@android:color/black"
                                 android:textSize="15dp"
                                 geekui:customTypeface="fonts/vazir_regular.ttf" />
@@ -184,8 +181,8 @@
                                 android:background="@color/transparency"
                                 android:gravity="center"
                                 android:inputType="number"
+                                android:lines="1"
                                 android:maxLength="4"
-                                android:singleLine="true"
                                 android:textColor="@android:color/black"
                                 android:textSize="15dp"
                                 geekui:customTypeface="fonts/vazir_regular.ttf" />
@@ -209,8 +206,8 @@
                                 android:background="@color/transparency"
                                 android:gravity="center"
                                 android:inputType="number"
+                                android:lines="1"
                                 android:maxLength="4"
-                                android:singleLine="true"
                                 android:textColor="@android:color/black"
                                 android:textSize="15dp"
                                 geekui:customTypeface="fonts/vazir_regular.ttf" />
@@ -233,8 +230,8 @@
                                 android:background="@color/transparency"
                                 android:gravity="center"
                                 android:inputType="number"
+                                android:lines="1"
                                 android:maxLength="4"
-                                android:singleLine="true"
                                 android:textColor="@android:color/black"
                                 android:textSize="15dp"
                                 geekui:customTypeface="fonts/vazir_regular.ttf" />
@@ -257,8 +254,8 @@
                                 android:background="@color/transparency"
                                 android:gravity="center"
                                 android:inputType="number"
+                                android:lines="1"
                                 android:maxLength="4"
-                                android:singleLine="true"
                                 android:textColor="@android:color/black"
                                 android:textSize="15dp"
                                 geekui:customTypeface="fonts/vazir_regular.ttf" />
@@ -281,8 +278,8 @@
                                 android:background="@color/transparency"
                                 android:gravity="center"
                                 android:inputType="number"
+                                android:lines="1"
                                 android:maxLength="4"
-                                android:singleLine="true"
                                 android:textColor="@android:color/black"
                                 android:textSize="15dp"
                                 geekui:customTypeface="fonts/vazir_regular.ttf" />
@@ -305,8 +302,8 @@
                                 android:background="@color/transparency"
                                 android:gravity="center"
                                 android:inputType="number"
+                                android:lines="1"
                                 android:maxLength="2"
-                                android:singleLine="true"
                                 android:textColor="@android:color/black"
                                 android:textSize="15dp"
                                 geekui:customTypeface="fonts/vazir_regular.ttf" />

@@ -7,16 +7,16 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.IBANChangeRequest;
@@ -45,28 +45,63 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompleted, IbanChangeDialog.IbanChangeDialogListener {
 
+    @BindView(R.id.iban_first_segment)
+    FacedTextView ibanFirstSegmentText;
+    @BindView(R.id.iban_second_segment)
+    FacedTextView ibanSecondSegmentText;
+    @BindView(R.id.iban_third_segment)
+    FacedTextView ibanThirdSegmentText;
+    @BindView(R.id.iban_fourth_segment)
+    FacedTextView ibanFourthSegmentText;
+    @BindView(R.id.iban_fifth_segment)
+    FacedTextView ibanFifthSegmentText;
+    @BindView(R.id.iban_sixth_segment)
+    FacedTextView ibanSixthSegmentText;
+    @BindView(R.id.iban_seventh_segment)
+    FacedTextView ibanSeventhSegmentText;
+
+    @BindView(R.id.iban_first_segment_l)
+    RelativeLayout iban_first_segment_l;
+
+    @BindView(R.id.iban_second_segment_l)
+    RelativeLayout iban_second_segment_l;
+
+    @BindView(R.id.iban_third_segment_l)
+    RelativeLayout iban_third_segment_l;
+
+    @BindView(R.id.iban_fourth_segment_l)
+    RelativeLayout iban_fourth_segment_l;
+
+    @BindView(R.id.iban_fifth_segment_l)
+    RelativeLayout iban_fifth_segment_l;
+
+    @BindView(R.id.iban_sixth_segment_l)
+    RelativeLayout iban_sixth_segment_l;
+
+    @BindView(R.id.iban_seventh_segment_l)
+    RelativeLayout iban_seventh_segment_l;
+    @BindView(R.id.ibanUserName)
+    FacedEditText ibanUserName;
+    @BindView(R.id.ibanUserFamily)
+    FacedEditText ibanUserFamily;
+    @BindView(R.id.iban_verify_button)
+    FacedTextView ibanVerifyButton;
+    @BindView(R.id.bank_name)
+    FacedTextView bankName;
+    @BindView(R.id.bank_logo)
+    ImageView bankLogo;
+    @BindView(R.id.keyboard)
+    LinearLayout keyboard;
+
     private HamPayDialog hamPayDialog;
     private Activity activity;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
     private Context context;
-    private FacedTextView ibanFirstSegmentText;
-    private FacedTextView ibanSecondSegmentText;
-    private FacedTextView ibanThirdSegmentText;
-    private FacedTextView ibanFourthSegmentText;
-    private FacedTextView ibanFifthSegmentText;
-    private FacedTextView ibanSixthSegmentText;
-    private FacedTextView ibanSeventhSegmentText;
     private RelativeLayout[] segmentRelativeLayouts = new RelativeLayout[7];
-    private FacedEditText ibanUserName;
-    private FacedEditText ibanUserFamily;
-    private FacedTextView ibanVerifyButton;
     private String ibanValue = "";
     private IBANChangeRequest ibanChangeRequest;
     private RequestIBANChange requestIBANChange;
-    private FacedTextView bankName;
-    private ImageView bankLogo;
-    private LinearLayout keyboard;
     private PersianEnglishDigit persian = new PersianEnglishDigit();
     private String authToken = "";
 
@@ -113,7 +148,7 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
                 setContentView(R.layout.activity_intro_iban_setting);
                 break;
         }
-
+        ButterKnife.bind(this);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
@@ -121,33 +156,22 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
         context = this;
         hamPayDialog = new HamPayDialog(activity);
 
-        keyboard = (LinearLayout) findViewById(R.id.keyboard);
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
 
-        ibanFirstSegmentText = (FacedTextView) findViewById(R.id.iban_first_segment);
-        ibanSecondSegmentText = (FacedTextView) findViewById(R.id.iban_second_segment);
-        ibanThirdSegmentText = (FacedTextView) findViewById(R.id.iban_third_segment);
-        ibanFourthSegmentText = (FacedTextView) findViewById(R.id.iban_fourth_segment);
-        ibanFifthSegmentText = (FacedTextView) findViewById(R.id.iban_fifth_segment);
-        ibanSixthSegmentText = (FacedTextView) findViewById(R.id.iban_sixth_segment);
-        ibanSeventhSegmentText = (FacedTextView) findViewById(R.id.iban_seventh_segment);
+        segmentRelativeLayouts[0] = iban_first_segment_l;
+        segmentRelativeLayouts[1] = iban_second_segment_l;
+        segmentRelativeLayouts[2] = iban_third_segment_l;
+        segmentRelativeLayouts[3] = iban_fourth_segment_l;
+        segmentRelativeLayouts[4] = iban_fifth_segment_l;
+        segmentRelativeLayouts[5] = iban_sixth_segment_l;
+        segmentRelativeLayouts[6] = iban_seventh_segment_l;
 
-        segmentRelativeLayouts[0] = (RelativeLayout) findViewById(R.id.iban_first_segment_l);
-        segmentRelativeLayouts[1] = (RelativeLayout) findViewById(R.id.iban_second_segment_l);
-        segmentRelativeLayouts[2] = (RelativeLayout) findViewById(R.id.iban_third_segment_l);
-        segmentRelativeLayouts[3] = (RelativeLayout) findViewById(R.id.iban_fourth_segment_l);
-        segmentRelativeLayouts[4] = (RelativeLayout) findViewById(R.id.iban_fifth_segment_l);
-        segmentRelativeLayouts[5] = (RelativeLayout) findViewById(R.id.iban_sixth_segment_l);
-        segmentRelativeLayouts[6] = (RelativeLayout) findViewById(R.id.iban_seventh_segment_l);
-
-        ibanUserName = (FacedEditText) findViewById(R.id.ibanUserName);
         ibanUserName.setOnTouchListener((v, event) -> {
             ibanUserName.setCursorVisible(true);
             ibanUserFamily.setCursorVisible(false);
             new Collapse(keyboard).animate();
             return false;
         });
-        ibanUserFamily = (FacedEditText) findViewById(R.id.ibanUserFamily);
         ibanUserFamily.setOnTouchListener((v, event) -> {
             ibanUserName.setCursorVisible(false);
             ibanUserFamily.setCursorVisible(true);
@@ -161,19 +185,14 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
                 ibanUserFamily.setCursorVisible(false);
             }
         });
-        ibanUserFamily.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    ibanUserFamily.setCursorVisible(false);
-                    new Expand(keyboard).animate();
-                }
-                return false;
+        ibanUserFamily.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                ibanUserFamily.setCursorVisible(false);
+                new Expand(keyboard).animate();
             }
+            return false;
         });
-        bankName = (FacedTextView) findViewById(R.id.bank_name);
-        bankLogo = (ImageView) findViewById(R.id.bank_logo);
-        ibanVerifyButton = (FacedTextView) findViewById(R.id.iban_verify_button);
+
         ibanVerifyButton.setOnClickListener(v -> {
 
             String userBank = bankName.getText().toString().trim();
@@ -190,7 +209,7 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
                 return;
             }
 
-            if (ibanValue.length() != 24){
+            if (ibanValue.length() != 24) {
                 Toast.makeText(activity, getString(R.string.iban_value_empty), Toast.LENGTH_SHORT).show();
                 return;
             }

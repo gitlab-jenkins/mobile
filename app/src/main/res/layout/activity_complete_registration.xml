@@ -2,8 +2,8 @@
     xmlns:geekui="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+    android:orientation="vertical">
 
 
     <LinearLayout
@@ -25,21 +25,21 @@
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    android:src="@drawable/help_transparent"
                     android:layout_marginLeft="8dp"
                     android:background="@color/app_origin"
-                    android:onClick="userManual"/>
+                    android:onClick="userManual"
+                    android:src="@drawable/help_transparent" />
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                    geekui:customTypeface="fonts/vazir_regular.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/complete_registarion"
                     android:textColor="@color/app_origin"
                     android:textSize="18sp"
-                    android:layout_gravity="center_horizontal"
-                    android:text="@string/complete_registarion"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="8dp"/>
+                    geekui:customTypeface="fonts/vazir_regular.ttf" />
 
             </RelativeLayout>
 
@@ -51,12 +51,11 @@
         </LinearLayout>
 
 
-
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="32dp"
-            android:orientation="horizontal"
-            android:layout_margin="8dp">
+            android:layout_margin="8dp"
+            android:orientation="horizontal">
 
 
             <RelativeLayout
@@ -68,19 +67,16 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/lock_info"
                     android:layout_centerInParent="true"
-                    />
-
+                    android:src="@drawable/lock_info" />
 
 
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="32dp"
                     android:layout_alignParentRight="true"
-                    android:src="@drawable/box_forward_wt"
                     android:layout_centerVertical="true"
-                    />
+                    android:src="@drawable/box_forward_wt" />
 
 
             </RelativeLayout>
@@ -94,22 +90,21 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/mobile_info"
-                    android:layout_centerInParent="true"/>
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/mobile_info" />
 
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="32dp"
                     android:background="@android:color/white"
-                    android:src="@drawable/box_forward_tg"/>
+                    android:src="@drawable/box_forward_tg" />
 
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="32dp"
                     android:layout_alignParentRight="true"
-                    android:src="@drawable/box_forward_wt"
                     android:layout_centerVertical="true"
-                    />
+                    android:src="@drawable/box_forward_wt" />
 
 
             </RelativeLayout>
@@ -124,14 +119,14 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/personal_info"
-                    android:layout_centerInParent="true"/>
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/personal_info" />
 
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="32dp"
                     android:background="@android:color/white"
-                    android:src="@drawable/box_forward_tg"/>
+                    android:src="@drawable/box_forward_tg" />
 
 
             </RelativeLayout>
@@ -145,8 +140,8 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerInParent="true">
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
 
 
         <RelativeLayout
@@ -157,20 +152,20 @@
             <ImageView
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:src="@drawable/start_cycle"
-                android:background="@color/app_origin"/>
+                android:background="@color/app_origin"
+                android:src="@drawable/start_cycle" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_centerInParent="true"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/hm_logo"/>
+                    android:src="@drawable/hm_logo" />
 
             </LinearLayout>
 
@@ -180,23 +175,23 @@
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
-            android:layout_gravity="center"
             android:gravity="center">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/congrats_text"
-                geekui:customTypeface="fonts/vazir_regular.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="right"
+                android:layout_marginRight="24dp"
+                android:gravity="center"
+                android:text="@string/complete_registarion_text_1"
                 android:textColor="@android:color/black"
                 android:textSize="15dp"
-                android:gravity="center"
-                android:layout_gravity="right"
-                android:text="@string/complete_registarion_text_1"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="24dp"/>
+                geekui:customTypeface="fonts/vazir_regular.ttf" />
 
 
         </RelativeLayout>
@@ -206,20 +201,21 @@
 
     <xyz.homapay.hampay.mobile.android.component.FacedTextView
         android:id="@+id/hampay_login_button"
-        geekui:customTypeface="fonts/vazir_regular.ttf"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
-        android:gravity="center"
-        android:text="@string/enter"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:background="@drawable/registration_button_style"
-        android:layout_marginTop="16dp"
-        android:layout_gravity="center_horizontal"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"/>
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/registration_button_style"
+        android:gravity="center"
+        android:onClick="onClick"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:text="@string/enter"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        geekui:customTypeface="fonts/vazir_regular.ttf" />
 
 </RelativeLayout>

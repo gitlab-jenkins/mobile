@@ -17,7 +17,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Display;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -28,6 +27,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
 import xyz.homapay.hampay.common.common.request.LoginRequest;
 import xyz.homapay.hampay.common.common.response.LoginResponse;
@@ -70,36 +71,46 @@ import xyz.homapay.hampay.mobile.android.util.SecurityUtils;
 public class HamPayLoginActivity extends AppCompatActivity implements View.OnClickListener, PermissionDeviceDialog.PermissionDeviceDialogListener {
 
     public static HamPayLoginActivity instance = null;
+    @BindView(R.id.hampay_memorableword_text)
     FacedTextView hampay_memorableword_text;
     String userIdToken = "";
     String memorableWord;
     String installationToken;
     String inputPassValue = "";
+    @BindView(R.id.keyboard)
     LinearLayout keyboard;
-    LinearLayout password_holder;
     Context context;
     Activity activity;
     SharedPreferences.Editor editor;
     SharedPreferences prefs;
     HamPayDialog hamPayDialog;
+    @BindView(R.id.hampay_user)
     FacedTextView hampay_user;
     TACRequest tacRequest;
     RequestTAC requestTAC;
     String password = "";
+    @BindView(R.id.input_digit_1)
+    FacedTextView input_digit_1;
+    @BindView(R.id.input_digit_2)
+    FacedTextView input_digit_2;
+    @BindView(R.id.input_digit_3)
+    FacedTextView input_digit_3;
+    @BindView(R.id.input_digit_4)
+    FacedTextView input_digit_4;
+    @BindView(R.id.input_digit_5)
+    FacedTextView input_digit_5;
+    @BindView(R.id.pullToRefresh)
+    SwipeRefreshLayout pullToRefresh;
+    @BindView(R.id.pending_fund_layout)
+    LinearLayout pendingFundLayout;
+    @BindView(R.id.recent_pending_fund_list)
+    ListView recentPendingFundList;
     private KeyExchange keyExchange;
     private BroadcastReceiver mIntentReceiver;
     private NetworkConnectivity networkConnectivity;
     private IntentFilter notificationIntentFilter;
     private BroadcastReceiver notificationIntentReceiver;
-    private SwipeRefreshLayout pullToRefresh;
-    private FacedTextView input_digit_1;
-    private FacedTextView input_digit_2;
-    private FacedTextView input_digit_3;
-    private FacedTextView input_digit_4;
-    private FacedTextView input_digit_5;
     private IntentFilter intentFilter;
-    private LinearLayout pendingFundLayout;
-    private ListView recentPendingFundList;
     private RequestRecentPendingFund requestRecentPendingFund;
     private RecentPendingFundRequest recentPendingFundRequest;
     private PendingFundAdapter pendingFundAdapter;
@@ -222,6 +233,8 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ham_pay_login);
+        ButterKnife.bind(this);
+
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -242,33 +255,15 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         userIdToken = prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, "");
 
-        hampay_user = (FacedTextView) findViewById(R.id.hampay_user);
         hampay_user.setText(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         pendingFundLayout = (LinearLayout) findViewById(R.id.pending_fund_layout);
-        recentPendingFundList = (ListView) findViewById(R.id.recent_pending_fund_list);
-        recentPendingFundList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (keyboard.getVisibility() == View.GONE)
-                    new Expand(keyboard).animate();
-            }
+        recentPendingFundList.setOnItemClickListener((parent, view, position, id) -> {
+            if (keyboard.getVisibility() == View.GONE)
+                new Expand(keyboard).animate();
         });
 
 
         bundle = getIntent().getExtras();
-
-        keyboard = (LinearLayout) findViewById(R.id.keyboard);
-        password_holder = (LinearLayout) findViewById(R.id.password_holder);
-        password_holder.setOnClickListener(this);
-
-        input_digit_1 = (FacedTextView) findViewById(R.id.input_digit_1);
-        input_digit_2 = (FacedTextView) findViewById(R.id.input_digit_2);
-        input_digit_3 = (FacedTextView) findViewById(R.id.input_digit_3);
-        input_digit_4 = (FacedTextView) findViewById(R.id.input_digit_4);
-        input_digit_5 = (FacedTextView) findViewById(R.id.input_digit_5);
-
-
-        hampay_memorableword_text = (FacedTextView) findViewById(R.id.hampay_memorableword_text);
 
         memorableWord = prefs.getString(Constants.MEMORABLE_WORD, "");
 
@@ -278,13 +273,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
 
         installationToken = prefs.getString(Constants.UUID, "");
 
-        pullToRefresh = (SwipeRefreshLayout) findViewById(R.id.pullToRefresh);
-        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                requestAndLoadPhoneState();
-            }
-        });
+        pullToRefresh.setOnRefreshListener(() -> requestAndLoadPhoneState());
     }
 
     @Override
