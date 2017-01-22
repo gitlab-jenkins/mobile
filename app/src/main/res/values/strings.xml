@@ -3,8 +3,17 @@
     <string name="app_name_slider">هم‌پی</string>
     <string name="hampay_network">شبکه پرداخت همراه هم‌پی</string>
     <string name="hampay_user">کاربر هم‌پی</string>
-    <string name="intro_1">پرداخت مدرن، ساده و مطمئن</string>
-    <string name="intro_2">پرداخت به کسب و کارهای گوناگون</string>
+    <string name="intro_0_text">پرداخت مدرن، ساده و مطمئن</string>
+    <string name="intro_1_title">پرداخت به کسب و کار</string>
+    <string name="intro_1_text">پرداخت به کسب و کارهای اینترنتی و فروشگاه‌ها</string>
+    <string name="intro_2_title">درخواست پرداخت</string>
+    <string name="intro_2_text">ارسال درخواست پرداخت فردی و گروهی</string>
+    <string name="intro_3_title">پرداخت قبض و خرید شارژ</string>
+    <string name="intro_3_text">پرداخت قبوض خدماتی و خرید شارژ تلفن همراه</string>
+    <string name="intro_4_title">با هم‌پی</string>
+    <string name="intro_4_text">صمیمیت، راحتی و امنیت را در کنار دوستانتان تجربه کنید</string>
+
+
     <string name="intro_3">درخواست پرداخت</string>
     <string name="intro_4">فهرست پرداخت‌های در انتظار</string>
     <string name="intro_5">نمایش پرداخت‌ها و دریافت‌های گذشته</string>
@@ -743,5 +752,8 @@
     <string name="pending_title_personal">شخصی</string>
     <string name="pending_requests">پرداخت</string>
     <string name="pending_recieved">دریافت</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

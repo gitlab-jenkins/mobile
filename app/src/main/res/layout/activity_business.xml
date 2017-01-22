@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:geekui="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rlToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/imgBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:onClick="onClick"
+            android:padding="12dp"
+            android:src="@drawable/back" />
+
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="8dp"
+            android:text="@string/business_purchase_title"
+            android:textColor="@color/app_origin"
+            android:textSize="18sp"
+            geekui:customTypeface="fonts/vazir_regular.ttf" />
+
+    </RelativeLayout>
+
+    <xyz.homapay.hampay.mobile.android.component.CustomTab
+        android:id="@+id/tab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rlToolbar" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/tab" />
+
+</RelativeLayout>

@@ -2,7 +2,7 @@
 <resources>
 
     <color name="app_origin">#6D096D</color>
-
+    <color name="app_intro_bg">#f0f0f0</color>
     <color name="colorPrimary">@color/app_origin</color>
     <color name="colorPrimaryDark">@color/app_origin</color>
     <color name="textColorPrimary">#FFFFFF</color>
@@ -53,13 +53,13 @@
     <color name="black">#000000</color>
 
     <!--Slider colors-->
-
+    <color name="intro_text">#4f4f4f</color>
     <array name="array_dot_active">
-        <item>@android:color/white</item>
+        <item>@color/app_origin</item>
     </array>
 
     <array name="array_dot_inactive">
-        <item>#8f8c8f</item>
+        <item>#cccccc</item>
     </array>
 
 

@@ -3,22 +3,26 @@ package xyz.homapay.hampay.mobile.android.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.WelcomeAdapter;
+import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
@@ -29,11 +33,9 @@ import xyz.homapay.hampay.mobile.android.util.RootUtil;
 
 public class WelcomeActivity extends AppCompatActivity {
 
-    @BindView(R.id.view_pager)
-    ViewPager viewPager;
-    @BindView(R.id.layoutDots)
-    LinearLayout dotsLayout;
+    private ViewPager viewPager;
     private WelcomeAdapter welcomeAdapter;
+    private LinearLayout dotsLayout;
     private TextView[] dots;
     private Bundle bundle;
     private Intent intent;
@@ -43,10 +45,10 @@ public class WelcomeActivity extends AppCompatActivity {
             R.layout.welcome_slider1,
             R.layout.welcome_slider2,
             R.layout.welcome_slider3,
-            R.layout.welcome_slider4,
-            R.layout.welcome_slider5
+            R.layout.welcome_slider4
     };
-    private Button btnSkip, btnNext;
+    private ImageView cloud;
+    private FacedTextView btnSkip, btnNext;
     ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
 
         @Override
@@ -165,38 +167,117 @@ public class WelcomeActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_welcome);
-        ButterKnife.bind(this);
-        btnSkip = (Button) findViewById(R.id.btn_skip);
+
+        cloud = (ImageView) findViewById(R.id.cloud);
+
+        viewPager = (ViewPager) findViewById(R.id.view_pager);
+        dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
+        btnSkip = (FacedTextView) findViewById(R.id.btn_skip);
         btnSkip.setVisibility(View.GONE);
-        btnNext = (Button) findViewById(R.id.btn_next);
+        btnNext = (FacedTextView) findViewById(R.id.btn_next);
 
         changeStatusBarColor();
 
         welcomeAdapter = new WelcomeAdapter(this);
         viewPager.setAdapter(welcomeAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
+        viewPager.setOffscreenPageLimit(5);
 
-        btnSkip.setOnClickListener(v -> launchRegisterScreen());
-
-        btnNext.setOnClickListener(v -> {
-            int current = getItem(+1);
-            if (current < layouts.length) {
-                viewPager.setCurrentItem(current);
-            } else {
+        btnSkip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 launchRegisterScreen();
+            }
+        });
+
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int current = getItem(+1);
+                if (current < layouts.length) {
+                    viewPager.setCurrentItem(current);
+                } else {
+                    launchRegisterScreen();
+                }
+            }
+        });
+
+//        final LayerDrawable background = (LayerDrawable) viewPager.getBackground();
+//
+//        background.getDrawable(0).setAlpha(255);
+//        background.getDrawable(1).setAlpha(0);
+//        background.getDrawable(2).setAlpha(0);
+//        background.getDrawable(3).setAlpha(0);
+//        background.getDrawable(4).setAlpha(0);
+
+        addBottomDots(0);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Log.e("position", position + "");
+                switch (position){
+                    case 0:
+                        cloud.setImageResource(R.drawable.intro_clouds_1);
+                        break;
+                    case 1:
+                        cloud.setImageResource(R.drawable.intro_clouds_2);
+                        break;
+                    case 2:
+                        cloud.setImageResource(R.drawable.intro_clouds_3);
+                        break;
+                    case 3:
+                        cloud.setImageResource(R.drawable.intro_clouds_4);
+                        break;
+                    case 4:
+                        cloud.setImageResource(R.drawable.intro_clouds_5);
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        viewPager.setPageTransformer(true, new ViewPager.PageTransformer() {
+            @Override
+            public void transformPage(View view, float position) {
+
+//                int index = (Integer) view.getTag();
+//                Log.e("index", index + "");
+//                Drawable currentDrawableInLayerDrawable;
+//                currentDrawableInLayerDrawable = background.getDrawable(index);
+//
+//                Log.e("Pos", position + "");
+//
+//                if (position <= -1 || position >= 1) {
+//                    currentDrawableInLayerDrawable.setAlpha(0);
+//                } else if (position == 0) {
+//                    currentDrawableInLayerDrawable.setAlpha(255);
+//                } else {
+//                    currentDrawableInLayerDrawable.setAlpha((int) (255 - Math.abs(position * 255)));
+//                }
+
             }
         });
 
     }
 
     private void addBottomDots(int currentPage) {
-        dots = new TextView[layouts.length - 1];
+        dots = new TextView[layouts.length];
 
         int[] colorsActive = getResources().getIntArray(R.array.array_dot_active);
         int[] colorsInactive = getResources().getIntArray(R.array.array_dot_inactive);
 
         dotsLayout.removeAllViews();
-        if (currentPage > 0) {
+        if (currentPage >= 0) {
             for (int i = 0; i < dots.length; i++) {
                 dots[i] = new TextView(this);
                 dots[i].setText(Html.fromHtml("&#8226;"));
@@ -204,8 +285,8 @@ public class WelcomeActivity extends AppCompatActivity {
                 dots[i].setTextColor(colorsInactive[0]);
                 dotsLayout.addView(dots[i]);
             }
-            if (dots.length > 0)
-                dots[currentPage - 1].setTextColor(colorsActive[0]);
+            if (dots.length >= 0)
+                dots[currentPage].setTextColor(colorsActive[0]);
         }
     }
 

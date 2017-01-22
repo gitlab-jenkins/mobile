@@ -26,6 +26,7 @@ import xyz.homapay.hampay.common.core.model.request.PendingCountRequest;
 import xyz.homapay.hampay.common.core.model.response.PendingCountResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.activity.ActivityBusiness;
 import xyz.homapay.hampay.mobile.android.activity.ActivityPendingRequestList;
 import xyz.homapay.hampay.mobile.android.activity.BusinessPurchaseActivity;
 import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
@@ -319,7 +320,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
                     return;
                 }
-                intent.setClass(getActivity(), BusinessPurchaseActivity.class);
+                intent.setClass(getActivity(), ActivityBusiness.class);
                 startActivity(intent);
                 break;
 

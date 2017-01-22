@@ -25,8 +25,7 @@ public class WelcomeAdapter extends PagerAdapter {
                 R.layout.welcome_slider1,
                 R.layout.welcome_slider2,
                 R.layout.welcome_slider3,
-                R.layout.welcome_slider4,
-                R.layout.welcome_slider5
+                R.layout.welcome_slider4
         };
     }
 
@@ -36,12 +35,7 @@ public class WelcomeAdapter extends PagerAdapter {
 
         View view = layoutInflater.inflate(layouts[position], container, false);
 
-
-        if (position == 0){
-            WebView webView = (WebView)view.findViewById(R.id.webview);
-            webView.getSettings().setJavaScriptEnabled(true);
-            webView.loadUrl("file:///android_asset/certification.html");
-        }
+        view.setTag(position);
 
         container.addView(view);
 

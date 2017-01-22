@@ -23,6 +23,7 @@
 
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_q"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -40,6 +41,7 @@
 
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_w"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -56,6 +58,7 @@
                 geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_e"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -72,6 +75,7 @@
                 geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_r"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -88,6 +92,7 @@
                 geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_t"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -104,6 +109,7 @@
                 geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_y"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -120,6 +126,7 @@
                 geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_u"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -136,6 +143,7 @@
                 geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_i"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -152,6 +160,7 @@
                 geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_o"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -168,6 +177,7 @@
                 geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_p"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -204,6 +214,7 @@
 
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_a"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -220,6 +231,7 @@
                 geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_s"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -236,6 +248,7 @@
                 geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_d"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -252,6 +265,7 @@
                 geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_f"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -268,6 +282,7 @@
                 geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_g"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -284,6 +299,7 @@
                 geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_h"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -300,6 +316,7 @@
                 geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_j"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -316,6 +333,7 @@
                 geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_k"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -332,6 +350,7 @@
                 geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_l"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -368,6 +387,7 @@
 
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/switch_digit"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -384,6 +404,7 @@
                 geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_z"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -400,6 +421,7 @@
                 geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_x"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -416,6 +438,7 @@
                 geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_c"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -432,6 +455,7 @@
                 geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_v"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -448,6 +472,7 @@
                 geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_b"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -464,6 +489,7 @@
                 geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_n"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -480,6 +506,7 @@
                 geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_m"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -718,6 +745,7 @@
 
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/switch_letter"
                 android:layout_width="0dip"
                 android:layout_height="42dp"
                 android:layout_gravity="center"
