@@ -236,7 +236,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                     }
 
                     @Override
-                    public void dissmisProgress() {
+                    public void cancelProgress() {
                         hamPayDialog.dismisWaitingDialog();
                     }
 

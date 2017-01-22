@@ -553,11 +553,6 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     }
 
     @Override
-    public void dismissProgress() {
-        dlg.dismisWaitingDialog();
-    }
-
-    @Override
     public void onError() {
         btnTopUpPay.setEnabled(true);
         dlg.showFailPendingPaymentDialog(getString(R.string.err_general), getString(R.string.err_general_text));

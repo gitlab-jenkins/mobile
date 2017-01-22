@@ -6,9 +6,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import xyz.homapay.hampay.mobile.android.R;
-import xyz.homapay.hampay.mobile.android.fragment.pending.FrgPendingAll;
-import xyz.homapay.hampay.mobile.android.fragment.pending.FrgPendingCommercial;
-import xyz.homapay.hampay.mobile.android.fragment.pending.FrgPendingPersonal;
+import xyz.homapay.hampay.mobile.android.fragment.pending.FrgPendingRecieved;
+import xyz.homapay.hampay.mobile.android.fragment.pending.FrgPendingRequests;
 
 /**
  * Created by mohammad on 1/22/17.
@@ -28,13 +27,10 @@ public class AdapterPendingList extends FragmentStatePagerAdapter {
         Fragment frg = null;
         switch (position) {
             case 2:
-                frg = FrgPendingAll.newInstance();
+                frg = FrgPendingRequests.newInstance();
                 break;
             case 1:
-                frg = FrgPendingCommercial.newInstance();
-                break;
-            case 0:
-                frg = FrgPendingPersonal.newInstance();
+                frg = FrgPendingRecieved.newInstance();
                 break;
         }
         return frg;

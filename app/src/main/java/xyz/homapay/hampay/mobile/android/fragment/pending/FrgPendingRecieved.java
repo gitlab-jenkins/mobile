@@ -13,12 +13,12 @@ import xyz.homapay.hampay.mobile.android.R;
  * Created by mohammad on 1/22/17.
  */
 
-public class FrgPendingCommercial extends Fragment {
+public class FrgPendingRecieved extends Fragment {
 
     private View rootView;
 
-    public static FrgPendingCommercial newInstance() {
-        FrgPendingCommercial fragment = new FrgPendingCommercial();
+    public static FrgPendingRecieved newInstance() {
+        FrgPendingRecieved fragment = new FrgPendingRecieved();
         return fragment;
     }
 

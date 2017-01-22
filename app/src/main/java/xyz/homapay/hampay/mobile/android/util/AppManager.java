@@ -3,6 +3,8 @@ package xyz.homapay.hampay.mobile.android.util;
 import android.content.Context;
 
 import xyz.homapay.hampay.common.common.Operator;
+import xyz.homapay.hampay.common.core.model.enums.FundType;
+import xyz.homapay.hampay.common.core.model.response.dto.FundDTO;
 import xyz.homapay.hampay.mobile.android.R;
 
 /**
@@ -42,6 +44,25 @@ public class AppManager {
         CurrencyFormatter currencyFormatter = new CurrencyFormatter();
         PersianEnglishDigit persianEnglishDigit = new PersianEnglishDigit();
         return persianEnglishDigit.E2P(currencyFormatter.format(amount));
+    }
+
+    public static final FundType extractFundTypeFromPaymentType(FundDTO.PaymentType paymentType) {
+        FundType fundType = null;
+        switch (paymentType) {
+            case PAYMENT:
+                fundType = FundType.PAYMENT;
+                break;
+            case PURCHASE:
+                fundType = FundType.PURCHASE;
+                break;
+            case UTILITY_BILL:
+                fundType = FundType.UTILITY_BILL;
+                break;
+            case TOP_UP:
+                fundType = FundType.TOP_UP;
+                break;
+        }
+        return fundType;
     }
 
 }

@@ -5,6 +5,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
+import xyz.homapay.hampay.common.core.model.response.CancelFundResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingFundListResponse;
 
 /**
@@ -16,4 +17,6 @@ public interface PendingPaymentsService {
     @POST("fund/pending-list")
     Call<ResponseMessage<PendingFundListResponse>> pendingList(@Body RequestBody body);
 
+    @POST("fund/cancel")
+    Call<ResponseMessage<CancelFundResponse>> cancel(@Body RequestBody body);
 }

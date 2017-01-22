@@ -146,6 +146,11 @@ public class PendingFundListAdapter extends BaseAdapter {
         super.notifyDataSetChanged();
     }
 
+    public void clear() {
+        fundList.clear();
+        notifyDataSetChanged();
+    }
+
     private class ViewHolder {
         FacedTextView contact_name;
         FacedTextView code_digit_1;
@@ -161,6 +166,5 @@ public class PendingFundListAdapter extends BaseAdapter {
         ViewHolder() {
         }
     }
-
 
 }

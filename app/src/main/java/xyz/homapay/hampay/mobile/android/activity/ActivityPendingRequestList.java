@@ -8,10 +8,13 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.pending.AdapterPendingList;
+import xyz.homapay.hampay.mobile.android.common.messages.MessageOnBackPressedOnPendingAct;
 import xyz.homapay.hampay.mobile.android.component.CustomTab;
 
 /**
@@ -52,5 +55,11 @@ public class ActivityPendingRequestList extends AppCompatActivity implements Vie
                 onBackPressed();
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        EventBus.getDefault().post(new MessageOnBackPressedOnPendingAct());
     }
 }
