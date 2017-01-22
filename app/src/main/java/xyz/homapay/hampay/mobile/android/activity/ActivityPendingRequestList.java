@@ -9,12 +9,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.pending.AdapterPendingList;
 import xyz.homapay.hampay.mobile.android.common.messages.MessageOnBackPressedOnPendingAct;
+import xyz.homapay.hampay.mobile.android.common.messages.MessageSheetStateChanged;
 import xyz.homapay.hampay.mobile.android.component.CustomTab;
 
 /**
@@ -29,6 +31,8 @@ public class ActivityPendingRequestList extends AppCompatActivity implements Vie
     @BindView(R.id.pager)
     ViewPager pager;
 
+    private boolean isSheetOpen;
+
     private Context ctx = this;
     private AdapterPendingList adapterPendingList;
 
@@ -42,7 +46,7 @@ public class ActivityPendingRequestList extends AppCompatActivity implements Vie
             pager.setAdapter(adapterPendingList);
             tab.setTabGravity(TabLayout.GRAVITY_FILL);
             tab.init(pager);
-            tab.setSelectedTab(2);
+            tab.setSelectedTab(1);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -58,8 +62,27 @@ public class ActivityPendingRequestList extends AppCompatActivity implements Vie
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onSheetStateChanged(MessageSheetStateChanged changed) {
+        isSheetOpen = changed.isOpen();
+    }
+
+    @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        EventBus.getDefault().post(new MessageOnBackPressedOnPendingAct());
+        if (isSheetOpen)
+            EventBus.getDefault().post(new MessageOnBackPressedOnPendingAct());
+        else
+            super.onBackPressed();
     }
 }

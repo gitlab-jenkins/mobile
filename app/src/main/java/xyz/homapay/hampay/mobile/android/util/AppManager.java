@@ -6,6 +6,7 @@ import xyz.homapay.hampay.common.common.Operator;
 import xyz.homapay.hampay.common.core.model.enums.FundType;
 import xyz.homapay.hampay.common.core.model.response.dto.FundDTO;
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.fragment.pending.FrgPendingRequests;
 
 /**
  * Created by mohammad on 1/7/17.
@@ -63,6 +64,22 @@ public class AppManager {
                 break;
         }
         return fundType;
+    }
+
+    public static final FundType getFundType(FrgPendingRequests.FilterState state) {
+        FundType type = null;
+        switch (state) {
+            case ALL:
+                type = FundType.ALL;
+                break;
+            case COMMERCIAL:
+                type = FundType.COMMERCIAL;
+                break;
+            case PERSONAL:
+                type = FundType.INDIVIDUAL;
+                break;
+        }
+        return type;
     }
 
 }

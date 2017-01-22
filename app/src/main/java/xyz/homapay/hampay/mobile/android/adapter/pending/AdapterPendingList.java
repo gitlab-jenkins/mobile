@@ -26,10 +26,10 @@ public class AdapterPendingList extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         Fragment frg = null;
         switch (position) {
-            case 2:
+            case 1:
                 frg = FrgPendingRequests.newInstance();
                 break;
-            case 1:
+            case 0:
                 frg = FrgPendingRecieved.newInstance();
                 break;
         }
@@ -38,21 +38,18 @@ public class AdapterPendingList extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 2;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
         CharSequence title = "";
         switch (position) {
-            case 2:
-                title = ctx.getString(R.string.pending_title_all);
-                break;
             case 1:
-                title = ctx.getString(R.string.pending_title_commercial);
+                title = ctx.getString(R.string.pending_requests);
                 break;
             case 0:
-                title = ctx.getString(R.string.pending_title_personal);
+                title = ctx.getString(R.string.pending_recieved);
                 break;
         }
         return title;

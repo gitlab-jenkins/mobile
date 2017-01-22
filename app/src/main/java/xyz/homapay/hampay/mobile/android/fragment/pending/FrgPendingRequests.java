@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.gordonwong.materialsheetfab.MaterialSheetFab;
+import com.gordonwong.materialsheetfab.MaterialSheetFabEventListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -22,7 +23,6 @@ import org.greenrobot.eventbus.Subscribe;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
-import xyz.homapay.hampay.common.core.model.enums.FundType;
 import xyz.homapay.hampay.common.core.model.response.CancelFundResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingFundListResponse;
 import xyz.homapay.hampay.common.core.model.response.TopUpResponse;
@@ -36,6 +36,7 @@ import xyz.homapay.hampay.mobile.android.adapter.PendingFundListAdapter;
 import xyz.homapay.hampay.mobile.android.common.charge.ChargeType;
 import xyz.homapay.hampay.mobile.android.common.messages.MessageOnBackPressedOnPendingAct;
 import xyz.homapay.hampay.mobile.android.common.messages.MessageSetOperator;
+import xyz.homapay.hampay.mobile.android.common.messages.MessageSheetStateChanged;
 import xyz.homapay.hampay.mobile.android.component.CustomTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.dialog.cancelPending.ActionPending;
@@ -55,6 +56,7 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.ModelLayerImpl;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.TelephonyUtils;
+import xyz.homapay.hampay.mobile.android.util.font.FontFace;
 
 /**
  * Created by mohammad on 1/22/17.
@@ -80,7 +82,16 @@ public class FrgPendingRequests extends Fragment implements PendingPaymentView, 
     @BindView(R.id.overlay)
     View overlay;
 
+    @BindView(R.id.fab_sheet_item_all)
+    CustomTextView fabAll;
 
+    @BindView(R.id.fab_sheet_item_commercial)
+    CustomTextView fabCommercial;
+
+    @BindView(R.id.fab_sheet_item_personal)
+    CustomTextView fabPersonal;
+
+    private FilterState filterState = FilterState.ALL;
 
     private View rootView;
     private PendingPayment pendingPayment;
@@ -118,6 +129,64 @@ public class FrgPendingRequests extends Fragment implements PendingPaymentView, 
         int sheetColor = ContextCompat.getColor(getActivity(), R.color.app_origin);
         int fabColor = ContextCompat.getColor(getActivity(), R.color.white);
         materialSheetFab = new MaterialSheetFab(fab, fab_sheet, overlay, sheetColor, fabColor);
+        materialSheetFab.setEventListener(new MaterialSheetFabEventListener() {
+            @Override
+            public void onShowSheet() {
+                super.onShowSheet();
+                EventBus.getDefault().post(new MessageSheetStateChanged(true));
+                switch (filterState) {
+                    case ALL:
+                        fabAll.setTypeface(FontFace.getInstance(getActivity()).getVAZIR_BOLD());
+                        fabCommercial.setTypeface(FontFace.getInstance(getActivity()).getVAZIR());
+                        fabPersonal.setTypeface(FontFace.getInstance(getActivity()).getVAZIR());
+                        //
+                        fabAll.setTextColor(ContextCompat.getColor(getActivity(), R.color.app_origin));
+                        fabCommercial.setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
+                        fabPersonal.setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
+                        break;
+                    case COMMERCIAL:
+                        fabAll.setTypeface(FontFace.getInstance(getActivity()).getVAZIR());
+                        fabCommercial.setTypeface(FontFace.getInstance(getActivity()).getVAZIR_BOLD());
+                        fabPersonal.setTypeface(FontFace.getInstance(getActivity()).getVAZIR());
+                        //
+                        fabAll.setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
+                        fabCommercial.setTextColor(ContextCompat.getColor(getActivity(), R.color.app_origin));
+                        fabPersonal.setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
+                        break;
+                    case PERSONAL:
+                        fabAll.setTypeface(FontFace.getInstance(getActivity()).getVAZIR());
+                        fabCommercial.setTypeface(FontFace.getInstance(getActivity()).getVAZIR());
+                        fabPersonal.setTypeface(FontFace.getInstance(getActivity()).getVAZIR_BOLD());
+                        //
+                        fabAll.setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
+                        fabCommercial.setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
+                        fabPersonal.setTextColor(ContextCompat.getColor(getActivity(), R.color.app_origin));
+                        break;
+                }
+            }
+
+            @Override
+            public void onHideSheet() {
+                super.onHideSheet();
+                EventBus.getDefault().post(new MessageSheetStateChanged(false));
+            }
+        });
+
+        fabAll.setOnClickListener(view -> {
+            filterState = FilterState.ALL;
+            materialSheetFab.hideSheet();
+            pendingPayment.getList(AppManager.getFundType(filterState));
+        });
+        fabCommercial.setOnClickListener(view -> {
+            filterState = FilterState.COMMERCIAL;
+            materialSheetFab.hideSheet();
+            pendingPayment.getList(AppManager.getFundType(filterState));
+        });
+        fabPersonal.setOnClickListener(view -> {
+            filterState = FilterState.PERSONAL;
+            materialSheetFab.hideSheet();
+            pendingPayment.getList(AppManager.getFundType(filterState));
+        });
 
         lst.setOnItemClickListener((adapterView, view, position, l) -> {
             Intent intent1 = new Intent();
@@ -156,8 +225,8 @@ public class FrgPendingRequests extends Fragment implements PendingPaymentView, 
             cancelPendingDialog.show(fragmentManager, "fragment_edit_name");
             return true;
         });
-        pendingPayment.getList(FundType.ALL);
-        pullToRefresh.setOnRefreshListener(() -> pendingPayment.getList(FundType.ALL));
+        pendingPayment.getList(AppManager.getFundType(filterState));
+        pullToRefresh.setOnRefreshListener(() -> pendingPayment.getList(AppManager.getFundType(filterState)));
         return rootView;
     }
 
@@ -217,7 +286,7 @@ public class FrgPendingRequests extends Fragment implements PendingPaymentView, 
     @Override
     public void onCancelDone(boolean state, ResponseMessage<CancelFundResponse> data, String message) {
         if (state && data != null && data.getService() != null) {
-            pendingPayment.getList(FundType.ALL);
+            pendingPayment.getList(AppManager.getFundType(filterState));
         }
     }
 
@@ -234,5 +303,9 @@ public class FrgPendingRequests extends Fragment implements PendingPaymentView, 
         } else {
             dlg.showFailPendingPaymentDialog(data.getService().getResultStatus().getCode(), data.getService().getResultStatus().getDescription());
         }
+    }
+
+    public enum FilterState {
+        ALL, COMMERCIAL, PERSONAL
     }
 }

@@ -741,5 +741,7 @@
     <string name="pending_title_all">همه</string>
     <string name="pending_title_commercial">تجاری</string>
     <string name="pending_title_personal">شخصی</string>
+    <string name="pending_requests">پرداخت</string>
+    <string name="pending_recieved">دریافت</string>
 
 </resources>

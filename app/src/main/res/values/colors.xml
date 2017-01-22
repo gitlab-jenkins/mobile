@@ -26,6 +26,7 @@
     <color name="navigation_green">#8fc547</color>
     <color name="navigation_gray">#d1d3d4</color>
     <color name="disable_button">#d1d3d4</color>
+    <color name="disable_tab_header">#D6B3D4</color>
     <color name="register_border">#eeefef</color>
     <color name="register_badge_bg">#757575</color>
     <color name="keyboard_border_text">#737375</color>
@@ -49,6 +50,7 @@
     <color name="tool_bar_selected">#6D096D</color>
     <color name="tool_bar_unselected">#bcbec0</color>
     <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
 
     <!--Slider colors-->
 

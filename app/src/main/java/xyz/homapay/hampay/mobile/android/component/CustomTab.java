@@ -38,19 +38,19 @@ public class CustomTab extends TabLayout {
             getTabAt(i).setCustomView(R.layout.tab_item_header);
             CustomTextView tvHeader = ((CustomTextView) getTabAt(i).getCustomView().findViewById(R.id.header));
             tvHeader.setText(pager.getAdapter().getPageTitle(i));
-            tvHeader.setTextColor(Color.GRAY);
+            tvHeader.setTextColor(ContextCompat.getColor(getContext(), R.color.disable_tab_header));
         }
         addOnTabSelectedListener(new OnTabSelectedListener() {
             @Override
             public void onTabSelected(Tab tab) {
                 CustomTextView tvHeader = (CustomTextView) tab.getCustomView().findViewById(R.id.header);
-                tvHeader.setTextColor(Color.WHITE);
+                tvHeader.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
             }
 
             @Override
             public void onTabUnselected(Tab tab) {
                 CustomTextView tvHeader = (CustomTextView) tab.getCustomView().findViewById(R.id.header);
-                tvHeader.setTextColor(Color.GRAY);
+                tvHeader.setTextColor(ContextCompat.getColor(getContext(), R.color.disable_tab_header));
             }
 
             @Override
