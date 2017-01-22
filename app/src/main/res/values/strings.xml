@@ -738,5 +738,8 @@
     <string name="iban_settelment">تسویه حساب در هم پی حداکثر در سیکل پایا انجام خواهد شد.</string>
     <string name="amount_charge">مبلغ شارژ</string>
     <string name="type_charge">نوع شارژ</string>
+    <string name="pending_title_all">همه</string>
+    <string name="pending_title_commercial">تجاری</string>
+    <string name="pending_title_personal">شخصی</string>
 
 </resources>

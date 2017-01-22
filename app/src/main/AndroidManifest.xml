@@ -197,18 +197,26 @@
             android:name=".activity.GuideDetailActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ActivityPendingRequestList"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.ChangeIbanPassActivity"
             android:label="@string/app_name"
-            android:theme="@style/MyMaterialTheme"></activity>
+            android:theme="@style/MyMaterialTheme" />
+
         <activity
             android:name=".activity.MerchantIdActivity"
             android:label="@string/app_name"
-            android:theme="@style/MyMaterialTheme"></activity>
+            android:theme="@style/MyMaterialTheme" />
+
         <activity
             android:name=".activity.IbanIntronActivity"
             android:label="@string/app_name"
-            android:theme="@style/MyMaterialTheme"></activity>
+            android:theme="@style/MyMaterialTheme" />
 
         <receiver
             android:name=".receiver.GcmBroadcastReceiver"
