@@ -69,6 +69,7 @@ public class PendingPaymentImpl extends Presenter<PendingPaymentView> implements
     @Override
     public void onNetworkLoad(boolean status, ResponseMessage<PendingFundListResponse> data, String message) {
         try {
+            view.cancelProgress();
             view.onListLoaded(status, data, message);
         } catch (Exception e) {
             e.printStackTrace();
