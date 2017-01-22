@@ -6,11 +6,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+
+import com.gordonwong.materialsheetfab.MaterialSheetFab;
+import com.gordonwong.materialsheetfab.MaterialSheetFabEventListener;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +37,8 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.UserTransactionAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestUserTransaction;
+import xyz.homapay.hampay.mobile.android.common.messages.MessageSheetStateChanged;
+import xyz.homapay.hampay.mobile.android.component.CustomTextView;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.doblist.DobList;
 import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoEmptyViewException;
@@ -37,10 +46,13 @@ import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoListview
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
+import xyz.homapay.hampay.mobile.android.fragment.pending.FrgPendingRequests;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.font.FontFace;
 
-public class TransactionsListActivity extends AppCompatActivity implements View.OnClickListener {
+public class TransactionsListActivity extends AppCompatActivity {
 
     @BindView(R.id.no_transaction)
     FacedTextView no_transaction;
@@ -65,6 +77,26 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
     private Context context;
     private Activity activity;
     private UserProfileDTO userProfile;
+
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+
+    @BindView(R.id.fab_sheet)
+    View fab_sheet;
+
+    @BindView(R.id.overlay)
+    View overlay;
+
+    @BindView(R.id.fab_sheet_item_all)
+    CustomTextView fabAll;
+
+    @BindView(R.id.fab_sheet_item_business)
+    CustomTextView fabBusiness;
+
+    @BindView(R.id.fab_sheet_item_individual)
+    CustomTextView fabIndividual;
+
+    private MaterialSheetFab materialSheetFab;
 
     @Override
     protected void onResume() {
@@ -114,6 +146,119 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
 
         context = this;
         activity = TransactionsListActivity.this;
+
+        int sheetColor = ContextCompat.getColor(activity, R.color.app_origin);
+        int fabColor = ContextCompat.getColor(activity, R.color.white);
+        materialSheetFab = new MaterialSheetFab(fab, fab_sheet, overlay, sheetColor, fabColor);
+        materialSheetFab.setEventListener(new MaterialSheetFabEventListener() {
+            @Override
+            public void onShowSheet() {
+                super.onShowSheet();
+                EventBus.getDefault().post(new MessageSheetStateChanged(true));
+                switch (sortFactor) {
+                    case DEFAULT:
+                        fabAll.setTypeface(FontFace.getInstance(activity).getVAZIR_BOLD());
+                        fabBusiness.setTypeface(FontFace.getInstance(activity).getVAZIR());
+                        fabIndividual.setTypeface(FontFace.getInstance(activity).getVAZIR());
+                        //
+                        fabAll.setTextColor(ContextCompat.getColor(activity, R.color.app_origin));
+                        fabBusiness.setTextColor(ContextCompat.getColor(activity, R.color.black));
+                        fabIndividual.setTextColor(ContextCompat.getColor(activity, R.color.black));
+                        break;
+                    case COMMERCIAL:
+                        fabAll.setTypeface(FontFace.getInstance(activity).getVAZIR());
+                        fabBusiness.setTypeface(FontFace.getInstance(activity).getVAZIR_BOLD());
+                        fabIndividual.setTypeface(FontFace.getInstance(activity).getVAZIR());
+                        //
+                        fabAll.setTextColor(ContextCompat.getColor(activity, R.color.black));
+                        fabBusiness.setTextColor(ContextCompat.getColor(activity, R.color.app_origin));
+                        fabIndividual.setTextColor(ContextCompat.getColor(activity, R.color.black));
+                        break;
+                    case INDIVIDUAL:
+                        fabAll.setTypeface(FontFace.getInstance(activity).getVAZIR());
+                        fabBusiness.setTypeface(FontFace.getInstance(activity).getVAZIR());
+                        fabIndividual.setTypeface(FontFace.getInstance(activity).getVAZIR_BOLD());
+                        //
+                        fabAll.setTextColor(ContextCompat.getColor(activity, R.color.black));
+                        fabBusiness.setTextColor(ContextCompat.getColor(activity, R.color.black));
+                        fabIndividual.setTextColor(ContextCompat.getColor(activity, R.color.app_origin));
+                        break;
+                }
+            }
+
+            @Override
+            public void onHideSheet() {
+                super.onHideSheet();
+                EventBus.getDefault().post(new MessageSheetStateChanged(false));
+            }
+        });
+
+
+
+        fabAll.setOnClickListener(view -> {
+            materialSheetFab.hideSheet();
+            if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING) {
+                requestUserTransaction.cancel(true);
+            }
+            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            editor.commit();
+            FINISHED_SCROLLING = false;
+            onLoadMore = false;
+            userTransactionAdapter.clear();
+            transactionDTOs.clear();
+            requestPageNumber = 0;
+            sortFactor = TnxSortFactor.DEFAULT;
+            transactionListRequest = new TransactionListRequest();
+            transactionListRequest.setPageNumber(requestPageNumber);
+            transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+            transactionListRequest.setSortFactor(sortFactor);
+            requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
+            requestUserTransaction.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, transactionListRequest);
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        });
+        fabBusiness.setOnClickListener(view -> {
+            materialSheetFab.hideSheet();
+            if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING) {
+                requestUserTransaction.cancel(true);
+            }
+            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            editor.commit();
+            FINISHED_SCROLLING = false;
+            onLoadMore = false;
+            userTransactionAdapter.clear();
+            transactionDTOs.clear();
+            requestPageNumber = 0;
+            sortFactor = TnxSortFactor.COMMERCIAL;
+            transactionListRequest = new TransactionListRequest();
+            transactionListRequest.setPageNumber(requestPageNumber);
+            transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+            transactionListRequest.setSortFactor(sortFactor);
+            requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
+            requestUserTransaction.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, transactionListRequest);
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        });
+        fabIndividual.setOnClickListener(view -> {
+            materialSheetFab.hideSheet();
+            if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING) {
+                requestUserTransaction.cancel(true);
+            }
+            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            editor.commit();
+            FINISHED_SCROLLING = false;
+            onLoadMore = false;
+            userTransactionAdapter.clear();
+            transactionDTOs.clear();
+            requestPageNumber = 0;
+            sortFactor = TnxSortFactor.INDIVIDUAL;
+            transactionListRequest = new TransactionListRequest();
+            transactionListRequest.setPageNumber(requestPageNumber);
+            transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+            transactionListRequest.setSortFactor(sortFactor);
+            requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
+            requestUserTransaction.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, transactionListRequest);
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        });
+
         PugNotification.with(context).cancel(Constants.TRANSACTIONS_NOTIFICATION_IDENTIFIER);
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
@@ -165,107 +310,6 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
             e.printStackTrace();
         }
 
-    }
-
-    @Override
-    public void onClick(View v) {
-//        switch (v.getId()) {
-//            case R.id.full_transaction:
-//                if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING) {
-//                    requestUserTransaction.cancel(true);
-//                }
-//                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-//                editor.commit();
-//                FINISHED_SCROLLING = false;
-//                onLoadMore = false;
-//                userTransactionAdapter.clear();
-//                transactionDTOs.clear();
-//                requestPageNumber = 0;
-//                sortFactor = TnxSortFactor.DEFAULT;
-//                transactionListRequest = new TransactionListRequest();
-//                transactionListRequest.setPageNumber(requestPageNumber);
-//                transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-//                transactionListRequest.setSortFactor(sortFactor);
-//                requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
-//                requestUserTransaction.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, transactionListRequest);
-//                hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-//                changeTab(1);
-//                break;
-//
-//            case R.id.business_transaction:
-//                if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING) {
-//                    requestUserTransaction.cancel(true);
-//                }
-//                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-//                editor.commit();
-//                FINISHED_SCROLLING = false;
-//                onLoadMore = false;
-//                userTransactionAdapter.clear();
-//                transactionDTOs.clear();
-//                requestPageNumber = 0;
-//                sortFactor = TnxSortFactor.COMMERCIAL;
-//                transactionListRequest = new TransactionListRequest();
-//                transactionListRequest.setPageNumber(requestPageNumber);
-//                transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-//                transactionListRequest.setSortFactor(sortFactor);
-//                requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
-//                requestUserTransaction.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, transactionListRequest);
-//                hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-//                changeTab(2);
-//                break;
-//
-//            case R.id.invoice_transaction:
-//                if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING) {
-//                    requestUserTransaction.cancel(true);
-//                }
-//                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-//                editor.commit();
-//                FINISHED_SCROLLING = false;
-//                onLoadMore = false;
-//                userTransactionAdapter.clear();
-//                transactionDTOs.clear();
-//                requestPageNumber = 0;
-//                sortFactor = TnxSortFactor.INDIVIDUAL;
-//                transactionListRequest = new TransactionListRequest();
-//                transactionListRequest.setPageNumber(requestPageNumber);
-//                transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-//                transactionListRequest.setSortFactor(sortFactor);
-//                requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
-//                requestUserTransaction.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, transactionListRequest);
-//                hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-//                changeTab(3);
-//                break;
-//        }
-    }
-
-    private void changeTab(int index) {
-//        switch (index) {
-//            case 1:
-//                full_transaction.setBackgroundColor(ContextCompat.getColor(context, R.color.app_origin));
-//                business_transaction.setBackgroundColor(ContextCompat.getColor(context, R.color.transaction_unselected_tab));
-//                invoice_transaction.setBackgroundColor(ContextCompat.getColor(context, R.color.transaction_unselected_tab));
-//                full_triangle.setVisibility(View.VISIBLE);
-//                business_triangle.setVisibility(View.GONE);
-//                invoice_triangle.setVisibility(View.GONE);
-//                break;
-//            case 2:
-//                full_transaction.setBackgroundColor(ContextCompat.getColor(context, R.color.transaction_unselected_tab));
-//                business_transaction.setBackgroundColor(ContextCompat.getColor(context, R.color.app_origin));
-//                invoice_transaction.setBackgroundColor(ContextCompat.getColor(context, R.color.transaction_unselected_tab));
-//                full_triangle.setVisibility(View.GONE);
-//                business_triangle.setVisibility(View.VISIBLE);
-//                invoice_triangle.setVisibility(View.GONE);
-//                break;
-//
-//            case 3:
-//                full_transaction.setBackgroundColor(ContextCompat.getColor(context, R.color.transaction_unselected_tab));
-//                business_transaction.setBackgroundColor(ContextCompat.getColor(context, R.color.transaction_unselected_tab));
-//                invoice_transaction.setBackgroundColor(ContextCompat.getColor(context, R.color.app_origin));
-//                full_triangle.setVisibility(View.GONE);
-//                business_triangle.setVisibility(View.GONE);
-//                invoice_triangle.setVisibility(View.VISIBLE);
-//                break;
-//        }
     }
 
     private void initDobList(ListView listView) {
