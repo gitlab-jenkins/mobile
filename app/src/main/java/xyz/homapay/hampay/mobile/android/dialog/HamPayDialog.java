@@ -2,7 +2,6 @@ package xyz.homapay.hampay.mobile.android.dialog;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
@@ -10,6 +9,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.Settings;
 import android.support.v4.content.IntentCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
@@ -17,6 +17,7 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
@@ -1280,10 +1281,12 @@ public class HamPayDialog {
     }
 
     public void showChargeTypeChooser(Context ctx, ArrayList<ChargeAdapterModel> itemsAdapter) {
+        DisplayMetrics metrics = new DisplayMetrics();
+        ((AppCompatActivity) ctx).getWindowManager().getDefaultDisplay().getMetrics(metrics);
         LinearLayoutManager manager = new LinearLayoutManager(ctx, LinearLayoutManager.VERTICAL, false);
         ChargeAdapter adapter = new ChargeAdapter(ctx, itemsAdapter);
         View view = activity.getLayoutInflater().inflate(R.layout.dlg_charge_chooser, null);
-        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        view.setMinimumWidth((int) (metrics.widthPixels * 0.85f));
         dialog = new HamPayCustomDialog(view, activity, 0);
         RecyclerView recyclerView = (RecyclerView) dialog.findViewById(R.id.main_view);
         FacedTextView title = (FacedTextView) dialog.findViewById(R.id.tvTitle);
@@ -1306,6 +1309,8 @@ public class HamPayDialog {
     }
 
     public void showChargeAmountChooser(Context ctx, List<String> items) {
+        DisplayMetrics metrics = new DisplayMetrics();
+        ((AppCompatActivity) ctx).getWindowManager().getDefaultDisplay().getMetrics(metrics);
         LinearLayoutManager manager = new LinearLayoutManager(ctx, LinearLayoutManager.VERTICAL, false);
         ArrayList<ChargeAdapterModel> itemsAdapter = new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
@@ -1314,7 +1319,7 @@ public class HamPayDialog {
         }
         ChargeAdapter adapter = new ChargeAdapter(ctx, itemsAdapter, FontFace.getInstance(ctx).getVAZIR());
         View view = activity.getLayoutInflater().inflate(R.layout.dlg_charge_chooser, null);
-        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        view.setMinimumWidth((int) (metrics.widthPixels * 0.85f));
         dialog = new HamPayCustomDialog(view, activity, 0);
         RecyclerView recyclerView = (RecyclerView) dialog.findViewById(R.id.main_view);
         FacedTextView title = (FacedTextView) dialog.findViewById(R.id.tvTitle);

@@ -150,8 +150,13 @@ public class FrgTopUp extends Fragment implements View.OnClickListener, TopUpInf
         btnTopUpPay.setOnClickListener(this);
         imgUserSimNumber.setOnClickListener(this);
         imgContacts.setOnClickListener(this);
-        dlg = new HamPayDialog(getActivity());
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        dlg = new HamPayDialog(getActivity());
     }
 
     @Override
