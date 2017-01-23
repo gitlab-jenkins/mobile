@@ -31,6 +31,7 @@ public class CustomTab extends TabLayout {
     }
 
     public void init(ViewPager pager) {
+        setTabGravity(GRAVITY_FILL);
         pager.setOffscreenPageLimit(pager.getAdapter().getCount());
         setupWithViewPager(pager);
         setBackgroundColor(ContextCompat.getColor(getContext(), R.color.app_origin));
@@ -59,5 +60,6 @@ public class CustomTab extends TabLayout {
             }
         });
         setSelectedTabIndicatorColor(Color.WHITE);
+        setSelectedTab(pager.getAdapter().getCount() - 1);
     }
 }

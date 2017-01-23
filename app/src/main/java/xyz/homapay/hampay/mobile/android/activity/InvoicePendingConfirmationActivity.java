@@ -59,6 +59,7 @@ import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.model.PaymentType;
 import xyz.homapay.hampay.mobile.android.model.SucceedPayment;
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
@@ -220,7 +221,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
             RequestPaymentDetail requestPaymentDetail = new RequestPaymentDetail(activity, new RequestPaymentDetailTaskCompleteListener());
             requestPaymentDetail.execute(paymentDetailRequest);
         } else {
-            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            AppManager.setMobileTimeout(context);
             editor.commit();
             requestLatestPayment = new RequestLatestPayment(activity, new RequestLatestPaymentTaskCompleteListener());
             latestPaymentRequest = new LatestPaymentRequest();
@@ -305,7 +306,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
                         Toast.makeText(context, getString(R.string.msg_cvv2_incorrect), Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                    AppManager.setMobileTimeout(context);
                     editor.commit();
 
                     requestPurchase = new RequestPurchase(activity, new RequestPurchaseTaskCompleteListener(), paymentInfoDTO.getPspInfo().getPayURL());
@@ -622,7 +623,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
                 } else {
                     new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
                 }
-                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                AppManager.setMobileTimeout(context);
                 editor.commit();
 
                 Intent returnIntent = new Intent();

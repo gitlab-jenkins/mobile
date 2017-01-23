@@ -554,7 +554,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
                 if (loginResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     serviceName = ServiceEvent.LOGIN_SUCCESS;
                     editor.putString(Constants.LOGIN_TOKEN_ID, loginResponseResponseMessage.getService().getAuthToken());
-                    editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                    AppManager.setMobileTimeout(context);
                     AppManager.setAuthToken(context, loginResponseResponseMessage.getService().getAuthToken());
                     editor.commit();
                     tacRequest = new TACRequest();

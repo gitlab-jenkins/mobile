@@ -47,6 +47,7 @@ import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
 
@@ -373,7 +374,7 @@ public class ChangeUserImageActivity extends AppCompatActivity implements View.O
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.user_profile_image_select:
-                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                AppManager.setMobileTimeout(context);
                 editor.commit();
                 try {
                     croppedImage = cropImageView.getCroppedImage();

@@ -13,10 +13,10 @@ import java.util.ArrayList;
 public class RequestPermissions {
 
 
-    public RequestPermissions(){
+    public RequestPermissions() {
     }
 
-    public ArrayList<PermissionListener> request(Activity activity, int requestCode, String[] requestPermissions, PermissionListener permissionListener){
+    public ArrayList<PermissionListener> request(Activity activity, int requestCode, String[] requestPermissions, PermissionListener permissionListener) {
         int[] grantResults = new int[requestPermissions.length];
         ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
 

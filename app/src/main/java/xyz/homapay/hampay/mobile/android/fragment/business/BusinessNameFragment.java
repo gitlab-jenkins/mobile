@@ -33,7 +33,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import xyz.homapay.hampay.common.common.TnxSortFactor;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.enums.BizSortFactor;
@@ -42,13 +41,12 @@ import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
 import xyz.homapay.hampay.common.core.model.response.BusinessListResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.BusinessDTO;
 import xyz.homapay.hampay.mobile.android.R;
-import xyz.homapay.hampay.mobile.android.activity.BusinessesListActivity;
 import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.adapter.HamPayBusinessesAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestHamPayBusiness;
 import xyz.homapay.hampay.mobile.android.async.RequestSearchHamPayBusiness;
-import xyz.homapay.hampay.mobile.android.common.messages.MessageOnBackPressedOnPendingAct;
+import xyz.homapay.hampay.mobile.android.common.messages.MessageOnBackPressed;
 import xyz.homapay.hampay.mobile.android.common.messages.MessageSheetStateChanged;
 import xyz.homapay.hampay.mobile.android.component.CustomTextView;
 import xyz.homapay.hampay.mobile.android.component.doblist.DobList;
@@ -58,7 +56,6 @@ import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
-import xyz.homapay.hampay.mobile.android.fragment.pending.FrgPendingRequests;
 import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.font.FontFace;
@@ -69,6 +66,18 @@ import xyz.homapay.hampay.mobile.android.util.font.FontFace;
 
 public class BusinessNameFragment extends Fragment {
 
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    @BindView(R.id.fab_sheet)
+    View fab_sheet;
+    @BindView(R.id.overlay)
+    View overlay;
+    @BindView(R.id.fab_sheet_item_all)
+    CustomTextView fabAll;
+    @BindView(R.id.fab_sheet_item_popular)
+    CustomTextView fabPoular;
+    @BindView(R.id.fab_sheet_item_recent)
+    CustomTextView fabRecent;
     private View rootView;
     private ListView businessListView;
     private SwipeRefreshLayout pullToRefresh;
@@ -91,25 +100,6 @@ public class BusinessNameFragment extends Fragment {
     private FacedEditText etSearchPhraseText;
     private InputMethodManager inputMethodManager;
     private ImageView imgSearchImage;
-
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
-
-    @BindView(R.id.fab_sheet)
-    View fab_sheet;
-
-    @BindView(R.id.overlay)
-    View overlay;
-
-    @BindView(R.id.fab_sheet_item_all)
-    CustomTextView fabAll;
-
-    @BindView(R.id.fab_sheet_item_popular)
-    CustomTextView fabPoular;
-
-    @BindView(R.id.fab_sheet_item_recent)
-    CustomTextView fabRecent;
-
     private MaterialSheetFab materialSheetFab;
 
     public static BusinessNameFragment newInstance() {
@@ -251,7 +241,7 @@ public class BusinessNameFragment extends Fragment {
 
         hamPayDialog = new HamPayDialog(getActivity());
         hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+        AppManager.setMobileTimeout(getActivity());
         editor.commit();
         businessListRequest = new BusinessListRequest();
         businessListRequest.setPageNumber(requestPageNumber);
@@ -323,6 +313,48 @@ public class BusinessNameFragment extends Fragment {
 
 
         return rootView;
+    }
+
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        if (getActivity() != null) {
+            getActivity().finish();
+            startActivity(intent);
+        }
+    }
+
+    private void performBusinessSearch(String searchTerm) {
+        requestPageNumber = 0;
+        searchEnabled = true;
+        FINISHED_SCROLLING = false;
+        onLoadMore = false;
+        AppManager.setMobileTimeout(getActivity());
+        editor.commit();
+        businessSearchRequest = new BusinessSearchRequest();
+        businessSearchRequest.setPageNumber(requestPageNumber);
+        businessSearchRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+        businessListRequest.setSortFactor(BizSortFactor.NAME);
+        businessSearchRequest.setTerm(searchTerm);
+        requestSearchHamPayBusiness = new RequestSearchHamPayBusiness(getActivity(), new RequestBusinessListTaskCompleteListener(searchEnabled));
+        requestSearchHamPayBusiness.execute(businessSearchRequest);
+        inputMethodManager.hideSoftInputFromWindow(etSearchPhraseText.getWindowToken(), 0);
+
+        hamPayBusinessesAdapter.clear();
+        businessDTOs.clear();
+
+        hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+
+    }
+
+    @Subscribe
+    public void onBackPressed(MessageOnBackPressed onBackPressedOnPendingAct) {
+        if (materialSheetFab.isSheetVisible()) {
+            materialSheetFab.hideSheet();
+        }
     }
 
     public class RequestBusinessListTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<BusinessListResponse>> {
@@ -479,48 +511,6 @@ public class BusinessNameFragment extends Fragment {
             for (int i = from; i < to; i++) {
                 hamPayBusinessesAdapter.addItem(businessDTOs.get(i));
             }
-        }
-    }
-
-    private void forceLogout() {
-        editor.remove(Constants.LOGIN_TOKEN_ID);
-        editor.commit();
-        Intent intent = new Intent();
-        intent.setClass(getActivity(), HamPayLoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        if (getActivity() != null) {
-            getActivity().finish();
-            startActivity(intent);
-        }
-    }
-
-    private void performBusinessSearch(String searchTerm) {
-        requestPageNumber = 0;
-        searchEnabled = true;
-        FINISHED_SCROLLING = false;
-        onLoadMore = false;
-        editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-        editor.commit();
-        businessSearchRequest = new BusinessSearchRequest();
-        businessSearchRequest.setPageNumber(requestPageNumber);
-        businessSearchRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-        businessListRequest.setSortFactor(BizSortFactor.NAME);
-        businessSearchRequest.setTerm(searchTerm);
-        requestSearchHamPayBusiness = new RequestSearchHamPayBusiness(getActivity(), new RequestBusinessListTaskCompleteListener(searchEnabled));
-        requestSearchHamPayBusiness.execute(businessSearchRequest);
-        inputMethodManager.hideSoftInputFromWindow(etSearchPhraseText.getWindowToken(), 0);
-
-        hamPayBusinessesAdapter.clear();
-        businessDTOs.clear();
-
-        hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-
-    }
-
-    @Subscribe
-    public void onBackPressed(MessageOnBackPressedOnPendingAct onBackPressedOnPendingAct) {
-        if (materialSheetFab.isSheetVisible()) {
-            materialSheetFab.hideSheet();
         }
     }
 

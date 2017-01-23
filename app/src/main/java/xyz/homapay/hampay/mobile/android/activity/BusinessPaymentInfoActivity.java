@@ -38,6 +38,7 @@ import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.img.ImageHelper;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
@@ -150,7 +151,7 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity implements Vi
         business_name.setText(persianEnglishDigit.E2P(businessDTO.getTitle()));
         business_hampay_id.setText(getString(R.string.business_id) + persianEnglishDigit.E2P(businessDTO.getCode()));
         if (businessDTO.getBusinessImageId() != null) {
-            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            AppManager.setMobileTimeout(context);
             editor.commit();
             business_image.setTag(businessDTO.getBusinessImageId());
             ImageHelper.getInstance(activity).imageLoader(businessDTO.getBusinessImageId(), business_image, R.drawable.user_placeholder);
@@ -207,7 +208,7 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity implements Vi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.add_vat:
-                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                AppManager.setMobileTimeout(context);
                 editor.commit();
                 if (amount_value.getText().toString().length() > 0) {
                     if (amount_value.getText().toString().indexOf("٬") != -1) {
@@ -237,7 +238,7 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity implements Vi
                     return;
                 }
                 if (creditValueValidation) {
-                    editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                    AppManager.setMobileTimeout(context);
                     editor.commit();
                     if (amount_value.getText().toString().indexOf("٬") != -1) {
                         amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace("٬", "")));

@@ -100,4 +100,12 @@ public class AppManager {
             e.printStackTrace();
         }
     }
+
+    public static final long getMobileTimeout(Context ctx) {
+        return AppSettings.getLong(ctx, Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+    }
+
+    public static final void setMobileTimeout(Context ctx) {
+        AppSettings.setValue(ctx, Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+    }
 }

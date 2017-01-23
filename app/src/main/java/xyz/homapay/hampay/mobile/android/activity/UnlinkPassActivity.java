@@ -30,6 +30,7 @@ import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class UnlinkPassActivity extends AppCompatActivity implements View.OnClickListener {
@@ -221,7 +222,7 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
                     break;
                 case 5:
                     input_digit_5.setBackgroundResource(R.drawable.pass_value_placeholder);
-                    editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                    AppManager.setMobileTimeout(context);
                     editor.commit();
                     unlinkUserRequest = new UnlinkUserRequest();
                     unlinkUserRequest.setPassCode(inputPasswordValue);

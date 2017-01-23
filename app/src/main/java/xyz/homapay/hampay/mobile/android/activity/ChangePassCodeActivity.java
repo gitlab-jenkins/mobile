@@ -27,6 +27,7 @@ import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PasswordComplexity;
 
@@ -374,7 +375,7 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                                 new Collapse(keyboard).animate();
 
                             if (inputPasswordValue.equalsIgnoreCase(inputRePasswordValue)) {
-                                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                                AppManager.setMobileTimeout(context);
                                 editor.commit();
                                 changePassCodeRequest = new ChangePassCodeRequest();
                                 changePassCodeRequest.setCurrentPassCode(currentPassword);

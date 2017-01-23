@@ -26,12 +26,11 @@ import xyz.homapay.hampay.common.core.model.request.PendingCountRequest;
 import xyz.homapay.hampay.common.core.model.response.PendingCountResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.activity.ActivityBillsTopUp;
 import xyz.homapay.hampay.mobile.android.activity.ActivityBusiness;
 import xyz.homapay.hampay.mobile.android.activity.ActivityPendingRequestList;
-import xyz.homapay.hampay.mobile.android.activity.BusinessPurchaseActivity;
 import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.activity.IbanIntronActivity;
-import xyz.homapay.hampay.mobile.android.activity.MainBillsTopUpActivity;
 import xyz.homapay.hampay.mobile.android.activity.PaymentRequestDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.PaymentRequestListActivity;
 import xyz.homapay.hampay.mobile.android.activity.TransactionsListActivity;
@@ -340,7 +339,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     slidingUpPanelLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
                     return;
                 }
-                intent.setClass(getActivity(), MainBillsTopUpActivity.class);
+                intent.setClass(getActivity(), ActivityBillsTopUp.class);
                 startActivity(intent);
                 break;
 

@@ -52,6 +52,7 @@ import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.model.PaymentType;
 import xyz.homapay.hampay.mobile.android.model.SucceedPayment;
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
@@ -192,7 +193,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
             paymentTotalValue.setText(persianEnglishDigit.E2P(String.valueOf(formatter.format(paymentInfo.getAmount() + paymentInfo.getVat() + paymentInfo.getFeeCharge()))));
 
             if (paymentInfo.getImageId() != null) {
-                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                AppManager.setMobileTimeout(context);
                 editor.commit();
                 business_image.setTag(paymentInfo.getImageId());
                 ImageHelper.getInstance(activity).imageLoader(paymentInfo.getImageId(), business_image, R.drawable.user_placeholder);
@@ -575,7 +576,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
                     new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
                 }
 
-                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                AppManager.setMobileTimeout(context);
                 editor.commit();
 
 

@@ -26,6 +26,7 @@ import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
@@ -214,7 +215,7 @@ public class ChangeIbanPassActivity extends AppCompatActivity implements View.On
                     break;
                 case 5:
                     input_digit_5.setBackgroundResource(R.drawable.pass_value_placeholder);
-                    editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                    AppManager.setMobileTimeout(context);
                     editor.commit();
                     ibanChangeRequest = new IBANChangeRequest();
                     ibanChangeRequest.setIban(new PersianEnglishDigit().P2E(iban));

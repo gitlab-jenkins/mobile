@@ -46,7 +46,6 @@ import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoListview
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
-import xyz.homapay.hampay.mobile.android.fragment.pending.FrgPendingRequests;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -62,6 +61,18 @@ public class TransactionsListActivity extends AppCompatActivity {
     ListView transactionListView;
     @BindView(R.id.loading)
     ProgressBar loading;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    @BindView(R.id.fab_sheet)
+    View fab_sheet;
+    @BindView(R.id.overlay)
+    View overlay;
+    @BindView(R.id.fab_sheet_item_all)
+    CustomTextView fabAll;
+    @BindView(R.id.fab_sheet_item_business)
+    CustomTextView fabBusiness;
+    @BindView(R.id.fab_sheet_item_individual)
+    CustomTextView fabIndividual;
     private TnxSortFactor sortFactor = TnxSortFactor.DEFAULT;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
@@ -77,25 +88,6 @@ public class TransactionsListActivity extends AppCompatActivity {
     private Context context;
     private Activity activity;
     private UserProfileDTO userProfile;
-
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
-
-    @BindView(R.id.fab_sheet)
-    View fab_sheet;
-
-    @BindView(R.id.overlay)
-    View overlay;
-
-    @BindView(R.id.fab_sheet_item_all)
-    CustomTextView fabAll;
-
-    @BindView(R.id.fab_sheet_item_business)
-    CustomTextView fabBusiness;
-
-    @BindView(R.id.fab_sheet_item_individual)
-    CustomTextView fabIndividual;
-
     private MaterialSheetFab materialSheetFab;
 
     @Override
@@ -200,7 +192,7 @@ public class TransactionsListActivity extends AppCompatActivity {
             if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING) {
                 requestUserTransaction.cancel(true);
             }
-            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            AppManager.setMobileTimeout(context);
             editor.commit();
             FINISHED_SCROLLING = false;
             onLoadMore = false;
@@ -221,7 +213,7 @@ public class TransactionsListActivity extends AppCompatActivity {
             if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING) {
                 requestUserTransaction.cancel(true);
             }
-            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            AppManager.setMobileTimeout(context);
             editor.commit();
             FINISHED_SCROLLING = false;
             onLoadMore = false;
@@ -242,7 +234,7 @@ public class TransactionsListActivity extends AppCompatActivity {
             if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING) {
                 requestUserTransaction.cancel(true);
             }
-            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            AppManager.setMobileTimeout(context);
             editor.commit();
             FINISHED_SCROLLING = false;
             onLoadMore = false;
@@ -295,7 +287,7 @@ public class TransactionsListActivity extends AppCompatActivity {
             }
         });
 
-        editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+        AppManager.setMobileTimeout(context);
         editor.commit();
         requestPageNumber = 0;
         transactionListRequest = new TransactionListRequest();
@@ -323,7 +315,7 @@ public class TransactionsListActivity extends AppCompatActivity {
             dobList.setOnLoadMoreListener(totalItemCount -> {
                 onLoadMore = true;
                 if (!FINISHED_SCROLLING) {
-                    editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                    AppManager.setMobileTimeout(context);
                     editor.commit();
                     transactionListRequest.setPageNumber(requestPageNumber);
                     requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());

@@ -1,5 +1,6 @@
 package xyz.homapay.hampay.mobile.android.fragment.pending;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,7 +37,7 @@ import xyz.homapay.hampay.mobile.android.activity.ServiceBillsDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.ServiceTopUpDetailActivity;
 import xyz.homapay.hampay.mobile.android.adapter.PendingFundListAdapter;
 import xyz.homapay.hampay.mobile.android.common.charge.ChargeType;
-import xyz.homapay.hampay.mobile.android.common.messages.MessageOnBackPressedOnPendingAct;
+import xyz.homapay.hampay.mobile.android.common.messages.MessageOnBackPressed;
 import xyz.homapay.hampay.mobile.android.common.messages.MessageSetOperator;
 import xyz.homapay.hampay.mobile.android.common.messages.MessageSheetStateChanged;
 import xyz.homapay.hampay.mobile.android.component.CustomTextView;
@@ -248,7 +249,7 @@ public class FrgPendingRequests extends Fragment implements PendingPaymentView, 
     }
 
     @Subscribe
-    public void onBackPressed(MessageOnBackPressedOnPendingAct onBackPressedOnPendingAct) {
+    public void onBackPressed(MessageOnBackPressed onBackPressedOnPendingAct) {
         if (materialSheetFab.isSheetVisible()) {
             materialSheetFab.hideSheet();
         }
@@ -319,6 +320,19 @@ public class FrgPendingRequests extends Fragment implements PendingPaymentView, 
             startActivityForResult(intent, 48);
         } else {
             dlg.showFailPendingPaymentDialog(data.getService().getResultStatus().getCode(), data.getService().getResultStatus().getDescription());
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 45 || requestCode == 46 || requestCode == 47 || requestCode == 48) {
+            if (resultCode == Activity.RESULT_OK) {
+                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, -1);
+                if (result == 0) {
+                    pendingPayment.getList(AppManager.getFundType(filterState));
+                }
+            }
         }
     }
 

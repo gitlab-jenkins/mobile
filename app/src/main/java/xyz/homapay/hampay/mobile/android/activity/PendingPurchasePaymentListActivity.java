@@ -50,6 +50,7 @@ import xyz.homapay.hampay.mobile.android.dialog.cancelPending.CancelPendingDialo
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.p.topup.TopUpDetailImpl;
 import xyz.homapay.hampay.mobile.android.p.topup.TopUpDetailView;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.ModelLayerImpl;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
@@ -369,7 +370,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
 
         switch (v.getId()) {
             case R.id.full_pending:
-                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                AppManager.setMobileTimeout(context);
                 editor.commit();
                 fundType = FundType.ALL;
                 requestPendingFundList = new RequestPendingFundList(activity, new RequestPendingFundTaskCompleteListener());
@@ -380,7 +381,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                 break;
 
             case R.id.invoice_pending:
-                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                AppManager.setMobileTimeout(context);
                 editor.commit();
                 fundType = FundType.INDIVIDUAL;
                 requestPendingFundList = new RequestPendingFundList(activity, new RequestPendingFundTaskCompleteListener());
@@ -391,7 +392,7 @@ public class PendingPurchasePaymentListActivity extends AppCompatActivity implem
                 break;
 
             case R.id.purchase_pending:
-                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                AppManager.setMobileTimeout(context);
                 editor.commit();
                 fundType = FundType.COMMERCIAL;
                 requestPendingFundList = new RequestPendingFundList(activity, new RequestPendingFundTaskCompleteListener());

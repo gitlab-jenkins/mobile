@@ -63,6 +63,7 @@ import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.model.PaymentType;
 import xyz.homapay.hampay.mobile.android.model.SucceedPayment;
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
@@ -254,7 +255,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
         if (purchaseInfo != null) {
             fillPurchase(purchaseInfo);
         } else if (purchaseCode != null) {
-            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            AppManager.setMobileTimeout(context);
             editor.commit();
             requestPurchaseInfo = new RequestPurchaseInfo(activity, new RequestPurchaseInfoTaskCompleteListener());
             purchaseInfoRequest = new PurchaseInfoRequest();
@@ -267,7 +268,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
             requestPurchaseDetail.execute(purchaseDetailRequest);
 
         } else {
-            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            AppManager.setMobileTimeout(context);
             editor.commit();
             requestLatestPurchase = new RequestLatestPurchase(activity, new RequestLatestPurchaseTaskCompleteListener());
             latestPurchaseRequest = new LatestPurchaseRequest();
@@ -296,7 +297,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                     pay_to_business_button.setEnabled(true);
                     return;
                 }
-                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                AppManager.setMobileTimeout(context);
                 editor.commit();
                 requestPurchase = new RequestPurchase(activity, new RequestPurchaseTaskCompleteListener(), purchaseInfo.getPspInfo().getPayURL());
 
@@ -575,7 +576,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
         business_name.setText(persian.E2P(purchaseInfo.getMerchantName()));
 
         if (purchaseInfo.getMerchantImageId() != null) {
-            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            AppManager.setMobileTimeout(context);
             editor.commit();
             business_image.setTag(purchaseInfo.getMerchantImageId());
             ImageHelper.getInstance(context).imageLoader(purchaseInfo.getMerchantImageId(), business_image, R.drawable.user_placeholder);
@@ -716,7 +717,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                     new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
                 }
 
-                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                AppManager.setMobileTimeout(context);
                 editor.commit();
 
                 Intent returnIntent = new Intent();

@@ -37,6 +37,7 @@ import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.PaymentType;
 import xyz.homapay.hampay.mobile.android.model.SucceedPayment;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class BankWebPaymentActivity extends AppCompatActivity {
@@ -213,7 +214,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
         }
 
         try {
-            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            AppManager.setMobileTimeout(context);
             editor.commit();
             wvBank.postUrl(ipgUrl, postData.getBytes("UTF-8"));
             hamPayDialog.showFirstIpg(prefs.getString(Constants.REGISTERED_USER_NAME, ""));

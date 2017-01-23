@@ -66,6 +66,7 @@ import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 
@@ -170,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
             finish();
             startActivity(intent);
         } else {
-            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            AppManager.setMobileTimeout(context);
             editor.commit();
         }
     }

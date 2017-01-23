@@ -40,6 +40,7 @@ import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.img.ImageHelper;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
@@ -251,7 +252,7 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
                             case SUCCESS:
                                 serviceName = ServiceEvent.IBAN_CONFIRMATION_SUCCESS;
                                 ibanVerifyButton.setVisibility(View.VISIBLE);
-                                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                                AppManager.setMobileTimeout(context);
                                 editor.commit();
                                 bankLogo.setVisibility(View.VISIBLE);
                                 bankName.setVisibility(View.VISIBLE);
@@ -573,7 +574,7 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
                     ibanVerifyButton.setVisibility(View.VISIBLE);
                     serviceName = ServiceEvent.IBAN_CHANGE_SUCCESS;
                     editor.putBoolean(Constants.SETTING_CHANGE_IBAN_STATUS, true);
-                    editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                    AppManager.setMobileTimeout(context);
                     editor.commit();
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra(Constants.RETURN_IBAN_CONFIRMED, true);

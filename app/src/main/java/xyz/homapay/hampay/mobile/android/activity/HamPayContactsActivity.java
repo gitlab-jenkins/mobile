@@ -43,6 +43,7 @@ import xyz.homapay.hampay.mobile.android.dialog.permission.PermissionContactDial
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.UserContacts;
 
@@ -230,7 +231,7 @@ public class HamPayContactsActivity extends AppCompatActivity implements Permiss
             return false;
         });
 
-        editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+        AppManager.setMobileTimeout(context);
         editor.commit();
 
 

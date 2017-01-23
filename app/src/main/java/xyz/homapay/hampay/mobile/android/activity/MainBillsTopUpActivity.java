@@ -211,7 +211,7 @@ public class MainBillsTopUpActivity extends AppCompatActivity implements View.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bills_top_up);
+        setContentView(R.layout.activity_bills_top_up_old);
         ButterKnife.bind(this);
 
         dlg = new HamPayDialog(this);

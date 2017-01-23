@@ -34,6 +34,7 @@ import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.img.ImageHelper;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
@@ -231,7 +232,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
             }
 
             if (imageId != null) {
-                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                AppManager.setMobileTimeout(context);
                 editor.commit();
                 user_image.setTag(imageId);
                 ImageHelper.getInstance(activity).imageLoader(imageId, user_image, R.drawable.user_placeholder);
@@ -252,7 +253,7 @@ public class PaymentRequestDetailActivity extends AppCompatActivity {
             if (creditValueValidation) {
                 contactMssage = contact_message.getText().toString();
                 contactMssage = contactMssage.replaceAll(Constants.ENTER_CHARACTERS_REGEX, " ");
-                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                AppManager.setMobileTimeout(context);
                 editor.commit();
                 if (amount_value.getText().toString().indexOf("٬") != -1) {
                     amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace("٬", "")));

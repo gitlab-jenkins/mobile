@@ -3,19 +3,15 @@ package xyz.homapay.hampay.mobile.android.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,7 +19,6 @@ import android.widget.TextView;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.WelcomeAdapter;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
-import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
@@ -93,10 +88,10 @@ public class WelcomeActivity extends AppCompatActivity {
         activity = WelcomeActivity.this;
 
         rootUtil = new RootUtil(activity);
-        if (rootUtil.checkRootedDevice()) {
-            new HamPayDialog(activity).showPreventRootDeviceDialog();
-            return;
-        }
+//        if (rootUtil.checkRootedDevice()) {
+//            new HamPayDialog(activity).showPreventRootDeviceDialog();
+//            return;
+//        }
 
         bundle = getIntent().getExtras();
         if (bundle != null) {

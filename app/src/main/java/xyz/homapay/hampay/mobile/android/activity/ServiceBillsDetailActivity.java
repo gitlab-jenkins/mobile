@@ -55,6 +55,7 @@ import xyz.homapay.hampay.mobile.android.model.BillsTokenDoWork;
 import xyz.homapay.hampay.mobile.android.model.PaymentType;
 import xyz.homapay.hampay.mobile.android.model.SucceedPayment;
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
@@ -239,7 +240,7 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                     Toast.makeText(context, getString(R.string.msg_cvv2_incorrect), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                AppManager.setMobileTimeout(context);
                 editor.commit();
                 requestTokenBills = new RequestTokenBills(activity, new RequestPurchaseTaskCompleteListener(), billsInfo.getPspInfo().getPayURL());
 
@@ -666,7 +667,7 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                 } else {
                     new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
                 }
-                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                AppManager.setMobileTimeout(context);
                 editor.commit();
 
                 Intent returnIntent = new Intent();

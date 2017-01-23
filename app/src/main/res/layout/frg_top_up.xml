@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:geekui="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/topUpLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="8dp"
+                android:text="@string/topup_text"
+                android:textColor="@color/main_menu_title"
+                android:textSize="15dp"
+                geekui:customTypeface="fonts/vazir_regular.ttf" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imgContacts"
+                    android:layout_width="50dp"
+                    android:layout_height="60dp"
+                    android:layout_margin="2dp"
+                    android:background="@color/app_origin"
+                    android:onClick="onClick"
+                    android:src="@drawable/bills_contacts" />
+
+                <ImageView
+                    android:id="@+id/imgUserSimNumber"
+                    android:layout_width="50dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="2dp"
+                    android:background="@color/app_origin"
+                    android:onClick="onClick"
+                    android:src="@drawable/bills_sim" />
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="48dp"
+                    android:layout_margin="2dp"
+                    android:background="@drawable/entry_field_bg">
+
+                    <ImageView
+                        android:id="@+id/cellNumberIcon"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="4dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/false_icon"
+                        android:visibility="invisible" />
+
+                    <xyz.homapay.hampay.mobile.android.component.topup.TopUpCellNumber
+                        android:id="@+id/cellNumberText"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_marginRight="2dp"
+                        android:layout_toRightOf="@+id/tvPreCode"
+                        android:background="@android:color/transparent"
+                        android:gravity="center_vertical"
+                        android:hint="@string/mobile_no_entry"
+                        android:maxLength="9"
+                        android:nextFocusDown="@+id/cardNumberValue"
+                        android:onClick="onClick"
+                        android:paddingBottom="8dp"
+                        android:paddingTop="8dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="15dp"
+                        geekui:customTypeface="fonts/vazir_regular.ttf" />
+
+                    <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                        android:id="@+id/tvPreCode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="4dp"
+                        android:layout_toRightOf="@+id/cellNumberIcon"
+                        android:text="@string/iran_prefix_cell_number"
+                        android:textColor="@color/start_page_text"
+                        android:textSize="15dp"
+                        geekui:customTypeface="fonts/vazir_regular.ttf" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:weightSum="3">
+
+                <ImageView
+                    android:id="@+id/imgMTN"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:scaleType="centerInside"
+                    android:src="@mipmap/irancell_inactive" />
+
+                <ImageView
+                    android:id="@+id/imgMCI"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:scaleType="centerInside"
+                    android:src="@mipmap/hamrah_inactive" />
+
+                <ImageView
+                    android:id="@+id/imgRIGHTEL"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="1"
+                    android:onClick="onClick"
+                    android:scaleType="centerInside"
+                    android:src="@mipmap/rightel_inactive" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlChargeType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/topup_placeholder"
+                android:onClick="onClick"
+                android:padding="8dp">
+
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                    android:id="@+id/tvChargeType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="4dp"
+                    android:textColor="@color/start_page_text"
+                    android:textSize="15dp"
+                    geekui:customTypeface="fonts/vazir_regular.ttf" />
+
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/topup_type"
+                    android:textColor="@color/app_origin"
+                    android:textSize="15dp"
+                    geekui:customTypeface="fonts/vazir_regular.ttf" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlChargeAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/topup_placeholder"
+                android:onClick="onClick"
+                android:padding="8dp">
+
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                    android:id="@+id/tvChargeAmount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="4dp"
+                    android:text="@string/currency_rials"
+                    android:textColor="@color/start_page_text"
+                    android:textSize="15sp"
+                    geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
+
+                <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginRight="8dp"
+                    android:text="@string/topup_amount"
+                    android:textColor="@color/app_origin"
+                    android:textSize="15dp"
+                    geekui:customTypeface="fonts/vazir_regular.ttf" />
+
+            </RelativeLayout>
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/btnTopUpPay"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/registration_button_style"
+                android:gravity="center"
+                android:onClick="onClick"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="@string/payment_request_button_confirm"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                geekui:customTypeface="fonts/vazir_regular.ttf" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/keyboard"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone">
+
+        <include
+            layout="@layout/numeric_keyboard"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+</RelativeLayout>
