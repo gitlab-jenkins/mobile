@@ -408,7 +408,7 @@
                                     android:hint="@string/user_pin2"
                                     android:inputType="number"
                                     android:lines="1"
-                                    android:maxLength="20"
+                                    android:maxLength="12"
                                     android:onClick="onClick"
                                     android:textColor="@color/account_details_text"
                                     android:textSize="15dp"

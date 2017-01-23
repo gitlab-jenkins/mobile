@@ -280,6 +280,9 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
             case R.id.pay_to_business_button:
                 if (pspInfoDTO == null) return;
 
+                if (cvvText.getText().toString().trim().length() < 3 || pinText.getText().toString().trim().length() < 5)
+                    return;
+
                 if (selectedCardIdIndex == -1 || (paymentInfo.getCardList().get(selectedCardIdIndex) != null && paymentInfo.getCardList().get(selectedCardIdIndex).getCardId() == null) || (paymentInfo.getAmount() + paymentInfo.getFeeCharge() + paymentInfo.getVat() >= Constants.SOAP_AMOUNT_MAX)) {
                     Intent intent = new Intent();
                     intent.setClass(activity, BankWebPaymentActivity.class);

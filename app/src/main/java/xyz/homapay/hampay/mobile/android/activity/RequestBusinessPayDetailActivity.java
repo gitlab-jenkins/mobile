@@ -279,6 +279,9 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
 
             if (pspInfoDTO == null) return;
 
+            if (cvvText.getText().toString().trim().length() < 3 || pinText.getText().toString().trim().length() < 5)
+                return;
+
             if (selectedCardIdIndex == -1 || (purchaseInfo.getCardList().get(selectedCardIdIndex) != null && purchaseInfo.getCardList().get(selectedCardIdIndex).getCardId() == null) || (purchaseInfo.getAmount() + purchaseInfo.getFeeCharge() + purchaseInfo.getVat() >= Constants.SOAP_AMOUNT_MAX)) {
                 Intent intent1 = new Intent();
                 intent1.setClass(activity, BankWebPaymentActivity.class);

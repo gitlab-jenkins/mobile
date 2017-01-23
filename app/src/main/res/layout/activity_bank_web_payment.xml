@@ -31,10 +31,7 @@
             android:layout_margin="4dp"
             android:src="@drawable/slider_hm" />
 
-
     </RelativeLayout>
-
-
 
     <WebView
         android:id="@+id/wvBank"

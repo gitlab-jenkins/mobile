@@ -450,9 +450,9 @@
                                     android:gravity="center"
                                     android:hint="@string/user_pin2"
                                     android:inputType="number"
-                                    android:maxLength="20"
+                                    android:lines="1"
+                                    android:maxLength="12"
                                     android:onClick="onClick"
-                                    android:singleLine="true"
                                     android:textColor="@color/account_details_text"
                                     android:textSize="15dp"
                                     geekui:customTypeface="fonts/vazir_regular.ttf" />

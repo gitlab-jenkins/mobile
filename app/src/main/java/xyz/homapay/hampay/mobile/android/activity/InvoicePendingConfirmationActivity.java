@@ -291,6 +291,9 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
             case R.id.pay_button:
                 if (pspInfoDTO == null) return;
 
+                if (cvvText.getText().toString().trim().length() < 3 || pinText.getText().toString().trim().length() < 5)
+                    return;
+
                 if (selectedCardIdIndex == -1 || (paymentInfoDTO.getCardList().get(selectedCardIdIndex) != null && paymentInfoDTO.getCardList().get(selectedCardIdIndex).getCardId() == null) || (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + paymentInfoDTO.getVat() >= Constants.SOAP_AMOUNT_MAX)) {
                     Intent intent1 = new Intent();
                     intent1.setClass(activity, BankWebPaymentActivity.class);
