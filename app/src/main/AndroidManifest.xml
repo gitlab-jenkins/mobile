@@ -16,26 +16,22 @@
     <permission
         android:name="xyz.homapay.hampay.mobile.android.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-
     <permission
         android:name="android.permission.READ_PHONE_STATE"
         android:protectionLevel="signature" />
     <permission
         android:name="android.permission.READ_CONTACTS"
         android:protectionLevel="signature" />
-
     <permission
         android:name="android.permission.CAMERA"
         android:protectionLevel="signature" />
-
     <permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:protectionLevel="signature" />
 
     <uses-permission android:name="xyz.homapay.hampay.mobile.android.permission.C2D_MESSAGE" />
 
-    <!--android:allowBackup="false"-->
-
+    <!-- android:allowBackup="false" -->
     <application
         android:name=".HamPayApplication"
         android:alwaysRetainTaskState="true"
@@ -44,13 +40,15 @@
         android:largeHeap="true"
         android:persistent="true"
         android:theme="@style/MyMaterialTheme">
-        <!--<meta-data android:name="firebase_analytics_collection_enabled" android:value="false" />-->
+
+        <!-- <meta-data android:name="firebase_analytics_collection_enabled" android:value="false" /> -->
         <activity
             android:name=".activity.WelcomeActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -193,27 +191,22 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
-
         <activity
             android:name=".activity.GuideDetailActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.ActivityPendingRequestList"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.ChangeIbanPassActivity"
             android:label="@string/app_name"
             android:theme="@style/MyMaterialTheme" />
-
         <activity
             android:name=".activity.MerchantIdActivity"
             android:label="@string/app_name"
             android:theme="@style/MyMaterialTheme" />
-
         <activity
             android:name=".activity.IbanIntronActivity"
             android:label="@string/app_name"
@@ -224,14 +217,15 @@
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="com.hmkcode.android.gcm" />
 
+                <category android:name="com.hmkcode.android.gcm" />
             </intent-filter>
         </receiver>
 
         <service
             android:name=".service.GcmMessageHandler"
             android:enabled="true" />
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -244,7 +238,6 @@
             android:name=".activity.ActivityBillsTopUp"
             android:label="@string/app_name"
             android:theme="@style/MyMaterialTheme" />
-
         <activity
             android:name=".activity.MobileBillsActivity"
             android:label="@string/app_name"
@@ -257,7 +250,6 @@
             android:name=".activity.ServiceBillsDetailActivity"
             android:label="@string/app_name"
             android:theme="@style/MyMaterialTheme" />
-
         <activity
             android:name=".activity.ServiceTopUpDetailActivity"
             android:label="@string/app_name"
@@ -269,9 +261,15 @@
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
             </intent-filter>
         </receiver>
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="740c23f8bf7259e4b587923e1a5a646fb94c3163" />
+
+        <activity
+            android:name=".activity.CredentialEntryActivity"
+            android:label="@string/title_activity_credentioal_entry"
+            android:theme="@style/MyMaterialTheme"/>
     </application>
 
 </manifest>

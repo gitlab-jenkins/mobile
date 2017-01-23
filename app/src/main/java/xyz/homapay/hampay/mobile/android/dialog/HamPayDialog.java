@@ -82,6 +82,7 @@ import xyz.homapay.hampay.mobile.android.component.edittext.EmailTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
+import xyz.homapay.hampay.mobile.android.p.Credential.CredentialEntry;
 import xyz.homapay.hampay.mobile.android.p.auth.RegisterEntry;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
@@ -473,10 +474,12 @@ public class HamPayDialog {
     }
 
 
-    public void showFailMemorableEntryDialog(final RequestCredentialEntry requestMemorableWordEntry,
+    public void showFailMemorableEntryDialog(final CredentialEntry credentialEntry,
                                              final RegistrationCredentialsRequest registrationMemorableWordEntryRequest,
+                                             final String authToken,
                                              final String code,
-                                             final String message) {
+                                             final String message,
+                                             final boolean permission) {
 
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_memorable_entry, null);
 
@@ -488,7 +491,7 @@ public class HamPayDialog {
 
         retry_memorable_entry.setOnClickListener(v -> {
             dialog.dismiss();
-            requestMemorableWordEntry.execute(registrationMemorableWordEntryRequest);
+            credentialEntry.credential(registrationMemorableWordEntryRequest, authToken, permission);
         });
 
         cancel_request.setOnClickListener(v -> dialog.dismiss());

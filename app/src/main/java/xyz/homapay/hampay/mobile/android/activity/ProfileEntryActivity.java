@@ -50,7 +50,6 @@ import xyz.homapay.hampay.mobile.android.p.auth.RegisterEntryImpl;
 import xyz.homapay.hampay.mobile.android.p.auth.RegisterEntryView;
 import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
-import xyz.homapay.hampay.mobile.android.security.KeyExchange;
 import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.ModelLayerImpl;
@@ -97,7 +96,6 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
     private RegistrationEntryRequest registrationEntryRequest;
     private HamPayDialog hamPayDialog;
     private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
-    private KeyExchange keyExchange;
     private String fullUserName = "";
     private RegisterEntry registerer;
 
@@ -195,8 +193,6 @@ public class ProfileEntryActivity extends AppCompatActivity implements Permissio
         registerer = new RegisterEntryImpl(new ModelLayerImpl(activity), this);
         persianEnglishDigit = new PersianEnglishDigit();
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-
-        keyExchange = KeyExchange.getInstance(context);
         confirmTacPrivacy = (CheckBox) findViewById(R.id.confirmTacPrivacy);
         confirmTacPrivacy.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {

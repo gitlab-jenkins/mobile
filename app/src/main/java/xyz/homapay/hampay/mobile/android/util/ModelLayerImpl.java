@@ -6,7 +6,9 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.File;
+import java.util.List;
 
+import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.m.common.ModelLayer;
 import xyz.homapay.hampay.mobile.android.ssl.SSLKeyStore;
@@ -55,9 +57,18 @@ public class ModelLayerImpl implements ModelLayer {
         return new DeviceInfo(ctx);
     }
 
+
+
     @Override
     public String getAuthToken() {
         return AppManager.getAuthToken(ctx);
+    }
+
+    @Override
+    public List<ContactDTO> getUserContacts() {
+        UserContacts userContacts = new UserContacts(ctx);
+        List<ContactDTO> contacts = userContacts.read();
+        return contacts;
     }
 
     @Override

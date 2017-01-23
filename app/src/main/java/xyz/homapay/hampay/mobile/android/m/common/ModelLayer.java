@@ -1,7 +1,9 @@
 package xyz.homapay.hampay.mobile.android.m.common;
 
 import java.io.File;
+import java.util.List;
 
+import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
 import xyz.homapay.hampay.mobile.android.ssl.SSLKeyStore;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 
@@ -26,5 +28,7 @@ public interface ModelLayer {
     DeviceInfo getDeviceInfo();
 
     String getAuthToken();
+
+    List<ContactDTO> getUserContacts();
 
 }

@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -27,7 +26,6 @@ import xyz.homapay.hampay.common.core.model.response.RegistrationCredentialsResp
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Manifest;
 import xyz.homapay.hampay.mobile.android.R;
-import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestCredentialEntry;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.edittext.MemorableTextWatcher;
@@ -38,18 +36,21 @@ import xyz.homapay.hampay.mobile.android.dialog.permission.PermissionDeviceDialo
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.p.Credential.CredentialEntry;
+import xyz.homapay.hampay.mobile.android.p.Credential.CredentialEntryImpl;
+import xyz.homapay.hampay.mobile.android.p.Credential.CredentialEntryView;
 import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
-import xyz.homapay.hampay.mobile.android.util.UserContacts;
+import xyz.homapay.hampay.mobile.android.util.ModelLayerImpl;
 
-public class MemorableWordEntryActivity extends AppCompatActivity implements PermissionContactDialog.PermissionContactDialogListener, View.OnClickListener {
+public class CredentialEntryActivity extends AppCompatActivity implements CredentialEntryView, PermissionContactDialog.PermissionContactDialogListener {
 
     private final Handler handler = new Handler();
     @BindView(R.id.memorable_value)
     FacedEditText memorable_value;
-    private List<ContactDTO> contacts;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
     private Context context;
@@ -58,9 +59,10 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
     private String Uuid = "";
     private Bundle bundle;
     private String userEntryPassword;
-    private RequestCredentialEntry requestCredentialEntry;
     private RegistrationCredentialsRequest registrationCredentialsRequest;
     private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
+    private CredentialEntry credentialEntry;
+    private boolean contactPermission = false;
 
     public void userManual(View view) {
         Intent intent = new Intent();
@@ -105,19 +107,14 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
             public boolean onResult(int requestCode, String[] requestPermissions, int[] grantResults) {
                 if (requestCode == Constants.READ_CONTACTS) {
                     if (grantResults.length > 0 && requestPermissions[0].equals(Manifest.permission.READ_CONTACTS) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        UserContacts userContacts = new UserContacts(context);
-                        contacts = userContacts.read();
-                        registrationCredentialsRequest.setContacts(contacts);
-
                         registrationCredentialsRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
                         registrationCredentialsRequest.setDeviceId(new DeviceInfo(activity).getAndroidId());
                         Uuid = UUID.randomUUID().toString();
                         registrationCredentialsRequest.setInstallationToken(Uuid);
                         registrationCredentialsRequest.setMemorableKey(memorable_value.getText().toString());
                         registrationCredentialsRequest.setPassCode(userEntryPassword);
-                        requestCredentialEntry = new RequestCredentialEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
-                        requestCredentialEntry.execute(registrationCredentialsRequest);
-
+                        contactPermission = true;
+                        credentialEntry.credential(registrationCredentialsRequest, AppManager.getAuthToken(context), contactPermission);
                     } else {
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                             boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS);
@@ -131,16 +128,14 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
                                     }
                                 });
                             } else {
-                                contacts = new ArrayList<ContactDTO>();
-                                registrationCredentialsRequest.setContacts(contacts);
                                 registrationCredentialsRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
                                 registrationCredentialsRequest.setDeviceId(new DeviceInfo(activity).getAndroidId());
                                 Uuid = UUID.randomUUID().toString();
                                 registrationCredentialsRequest.setInstallationToken(Uuid);
                                 registrationCredentialsRequest.setMemorableKey(memorable_value.getText().toString());
                                 registrationCredentialsRequest.setPassCode(userEntryPassword);
-                                requestCredentialEntry = new RequestCredentialEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
-                                requestCredentialEntry.execute(registrationCredentialsRequest);
+                                registrationCredentialsRequest.setPassCode(userEntryPassword);
+                                credentialEntry.credential(registrationCredentialsRequest, AppManager.getAuthToken(context), contactPermission);
                             }
                         } else {
                             handler.post(new Runnable() {
@@ -160,14 +155,18 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
         });
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_memorable_word_entry);
+        setContentView(R.layout.activity_credentioal_entry);
+
         ButterKnife.bind(this);
 
-        activity = MemorableWordEntryActivity.this;
+        activity = CredentialEntryActivity.this;
         context = this;
+
+        credentialEntry = new CredentialEntryImpl(new ModelLayerImpl(activity), this);
 
         bundle = getIntent().getExtras();
 
@@ -183,28 +182,6 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
     }
 
-    @Override
-    public void onFinishEditDialog(ActionPermission actionPermission) {
-        switch (actionPermission) {
-            case GRANT:
-                requestAndLoadUserContact();
-                break;
-            case DENY:
-                contacts = new ArrayList<ContactDTO>();
-                registrationCredentialsRequest.setContacts(contacts);
-                registrationCredentialsRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
-                registrationCredentialsRequest.setDeviceId(new DeviceInfo(activity).getAndroidId());
-                Uuid = UUID.randomUUID().toString();
-                registrationCredentialsRequest.setInstallationToken(Uuid);
-                registrationCredentialsRequest.setMemorableKey(memorable_value.getText().toString());
-                registrationCredentialsRequest.setPassCode(userEntryPassword);
-                requestCredentialEntry = new RequestCredentialEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
-                requestCredentialEntry.execute(registrationCredentialsRequest);
-                break;
-        }
-    }
-
-    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.keepOn_button:
@@ -222,50 +199,79 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
         new HamPayDialog(activity).exitRegistrationDialog();
     }
 
-    public class RequestMemorableWordEntryResponseTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationCredentialsResponse>> {
-        public RequestMemorableWordEntryResponseTaskCompleteListener() {
-        }
+    @Override
+    public void onError() {
+        Toast.makeText(context, R.string.err_message_registration, Toast.LENGTH_SHORT).show();
+    }
 
-        @Override
-        public void onTaskComplete(ResponseMessage<RegistrationCredentialsResponse> registrationMemorableWordEntryResponseMessage) {
-
-            hamPayDialog.dismisWaitingDialog();
-            ServiceEvent serviceName;
-            LogEvent logEvent = new LogEvent(context);
-            ResultStatus resultStatus;
-            if (registrationMemorableWordEntryResponseMessage != null) {
-                resultStatus = registrationMemorableWordEntryResponseMessage.getService().getResultStatus();
-                if (resultStatus == ResultStatus.SUCCESS) {
-                    editor.putString(Constants.MEMORABLE_WORD, memorable_value.getText().toString());
-                    editor.putString(Constants.LOGIN_API_LEVEL, Constants.API_LEVEL);
-                    editor.putString(Constants.UUID, Uuid);
-                    editor.commit();
-                    serviceName = ServiceEvent.REGISTRATION_CREDENTIALS_SUCCESS;
-                    Intent intent = new Intent();
-                    intent.setClass(MemorableWordEntryActivity.this, CompleteRegistrationActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    finish();
-                    startActivity(intent);
-                } else {
-                    serviceName = ServiceEvent.REGISTRATION_CREDENTIALS_FAILURE;
-//                    requestCredentialEntry = new RequestCredentialEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
-//                    new HamPayDialog(activity).showFailMemorableEntryDialog(requestCredentialEntry, registrationCredentialsRequest,
-//                            registrationMemorableWordEntryResponseMessage.getService().getResultStatus().getCode(),
-//                            registrationMemorableWordEntryResponseMessage.getService().getResultStatus().getDescription());
-                }
+    @Override
+    public void onRegisterResponse(boolean state, ResponseMessage<RegistrationCredentialsResponse> data, String message) {
+        hamPayDialog.dismisWaitingDialog();
+        ServiceEvent serviceName;
+        LogEvent logEvent = new LogEvent(context);
+        ResultStatus resultStatus;
+        if (state && data != null) {
+            resultStatus = data.getService().getResultStatus();
+            if (resultStatus == ResultStatus.SUCCESS) {
+                editor.putString(Constants.MEMORABLE_WORD, memorable_value.getText().toString());
+                editor.putString(Constants.LOGIN_API_LEVEL, Constants.API_LEVEL);
+                editor.putString(Constants.UUID, Uuid);
+                editor.commit();
+                serviceName = ServiceEvent.REGISTRATION_CREDENTIALS_SUCCESS;
+                Intent intent = new Intent();
+                intent.setClass(CredentialEntryActivity.this, CompleteRegistrationActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                finish();
+                startActivity(intent);
             } else {
                 serviceName = ServiceEvent.REGISTRATION_CREDENTIALS_FAILURE;
-                requestCredentialEntry = new RequestCredentialEntry(context, new RequestMemorableWordEntryResponseTaskCompleteListener());
-//                new HamPayDialog(activity).showFailMemorableEntryDialog(requestCredentialEntry, registrationCredentialsRequest,
-//                        Constants.LOCAL_ERROR_CODE,
-//                        getString(R.string.msg_fail_memorable_entry));
+                new HamPayDialog(activity).showFailMemorableEntryDialog(credentialEntry, registrationCredentialsRequest,
+                        AppManager.getAuthToken(context),
+                        data.getService().getResultStatus().getCode(),
+                        data.getService().getResultStatus().getDescription(), contactPermission);
             }
-            logEvent.log(serviceName);
+        } else {
+            serviceName = ServiceEvent.REGISTRATION_CREDENTIALS_FAILURE;
+            new HamPayDialog(activity).showFailMemorableEntryDialog(credentialEntry, registrationCredentialsRequest,
+                    AppManager.getAuthToken(context),
+                    Constants.LOCAL_ERROR_CODE,
+                    getString(R.string.msg_fail_memorable_entry), contactPermission);
         }
+        logEvent.log(serviceName);
+    }
 
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+    @Override
+    public void showProgressDialog() {
+        hamPayDialog.showWaitingDialog("");
+    }
+
+    @Override
+    public void dismissProgressDialog() {
+        hamPayDialog.dismisWaitingDialog();
+    }
+
+    @Override
+    public void keyExchangeProblem() {
+        Toast.makeText(activity, getString(R.string.system_connectivity), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onFinishEditDialog(ActionPermission actionPermission) {
+        switch (actionPermission) {
+            case GRANT:
+                requestAndLoadUserContact();
+                break;
+            case DENY:
+                registrationCredentialsRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
+                registrationCredentialsRequest.setDeviceId(new DeviceInfo(activity).getAndroidId());
+                Uuid = UUID.randomUUID().toString();
+                registrationCredentialsRequest.setInstallationToken(Uuid);
+                registrationCredentialsRequest.setMemorableKey(memorable_value.getText().toString());
+                registrationCredentialsRequest.setPassCode(userEntryPassword);
+                registrationCredentialsRequest.setPassCode(userEntryPassword);
+                credentialEntry.credential(registrationCredentialsRequest, AppManager.getAuthToken(context), contactPermission);
+
+                break;
         }
     }
 }

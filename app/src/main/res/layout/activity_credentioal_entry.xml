@@ -1,0 +1,296 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:geekui="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginLeft="8dp"
+                android:background="@color/app_origin"
+                android:onClick="userManual"
+                android:src="@drawable/help_transparent" />
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginRight="8dp"
+                android:text="@string/remember_phrase"
+                android:textColor="@color/app_origin"
+                android:textSize="18sp"
+                geekui:customTypeface="fonts/vazir_regular.ttf" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/app_origin" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="32dp"
+                android:layout_margin="8dp"
+                android:orientation="horizontal">
+
+
+                <RelativeLayout
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.33"
+                    android:background="@drawable/third_navigation_unfill">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/lock_info_green" />
+
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="32dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/box_forward_tt" />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.33"
+                    android:background="@drawable/second_navigation_fill">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/mobile_info" />
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="32dp"
+                        android:background="@android:color/white"
+                        android:src="@drawable/box_forward_tg" />
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="32dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/box_forward_wt" />
+
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.33"
+                    android:background="@drawable/first_navigation_fill">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/personal_info" />
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="32dp"
+                        android:background="@android:color/white"
+                        android:src="@drawable/box_forward_tg" />
+
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+
+                        <RelativeLayout
+                            android:id="@+id/password_1_rl"
+                            android:layout_width="fill_parent"
+                            android:layout_height="84dp"
+                            android:layout_margin="8dp"
+                            android:background="@drawable/stroke_bg"
+                            android:gravity="right|center_vertical">
+
+                            <RelativeLayout
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginRight="12dp">
+
+
+                                <ImageView
+                                    android:layout_width="36dp"
+                                    android:layout_height="36dp"
+                                    android:layout_centerInParent="true"
+                                    android:background="@color/page_title"
+                                    android:src="@drawable/icon_lock" />
+
+                                <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:layout_alignParentRight="true"
+                                    android:background="@drawable/badge_text"
+                                    android:gravity="center"
+                                    android:text="۳"
+                                    android:textColor="@android:color/white"
+                                    android:textSize="12sp"
+                                    geekui:customTypeface="fonts/vazir_regular.ttf" />
+
+                            </RelativeLayout>
+
+                            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                                android:id="@+id/password_notify_text_1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginRight="64dp"
+                                android:gravity="right"
+                                android:paddingBottom="10dp"
+                                android:paddingLeft="10dp"
+                                android:paddingTop="10dp"
+                                android:text="@string/remember_phrase_text"
+                                android:textColor="@color/page_title"
+                                android:textSize="14dp"
+                                geekui:customTypeface="fonts/vazir_regular.ttf" />
+
+
+                        </RelativeLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/password_holder"
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_margin="8dp"
+                            android:background="@drawable/register_border"
+                            android:contentDescription="activation_holder"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+                                android:layout_width="240dp"
+                                android:layout_height="50dp"
+                                android:paddingLeft="16dp"
+                                android:paddingRight="16dp">
+
+                                <View
+                                    android:layout_width="230dp"
+                                    android:layout_height="2dp"
+                                    android:layout_alignParentBottom="true"
+                                    android:background="@color/page_title" />
+
+                                <View
+                                    android:layout_width="2dp"
+                                    android:layout_height="16dp"
+                                    android:layout_alignParentBottom="true"
+                                    android:background="@color/page_title" />
+
+                                <View
+                                    android:layout_width="2dp"
+                                    android:layout_height="16dp"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_alignParentRight="true"
+                                    android:background="@color/page_title" />
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="32dp"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_centerHorizontal="true"
+                                    android:layout_margin="4dp"
+                                    android:orientation="horizontal">
+
+                                    <xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText
+                                        android:id="@+id/memorable_value"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center_horizontal"
+                                        android:background="@color/transparency"
+                                        android:contentDescription="memorable"
+                                        android:digits="@string/user_name_restriction"
+                                        android:gravity="center"
+                                        android:maxLength="15"
+                                        android:singleLine="true"
+                                        android:textColor="@android:color/black"
+                                        android:textSize="16sp" />
+
+
+                                </LinearLayout>
+
+
+                            </RelativeLayout>
+
+
+                        </LinearLayout>
+
+                        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                            android:id="@+id/keepOn_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="16dp"
+                            android:background="@drawable/registration_button_style"
+                            android:gravity="center"
+                            android:onClick="onClick"
+                            android:paddingLeft="16dp"
+                            android:paddingRight="16dp"
+                            android:text="@string/confirm"
+                            android:textColor="@android:color/white"
+                            android:textSize="20sp"
+                            geekui:customTypeface="fonts/vazir_regular.ttf" />
+
+                    </LinearLayout>
+
+                </ScrollView>
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

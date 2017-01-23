@@ -248,7 +248,7 @@ public class PasswordEntryActivity extends AppCompatActivity implements View.OnC
                             new Collapse(keyboard).animate();
                             if (inputPasswordValue.equalsIgnoreCase(inputRePasswordValue)) {
                                 Intent intent = new Intent();
-                                intent.setClass(PasswordEntryActivity.this, MemorableWordEntryActivity.class);
+                                intent.setClass(PasswordEntryActivity.this, CredentialEntryActivity.class);
                                 intent.putExtra(Constants.USER_ENTRY_PASSWORD, inputPasswordValue);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 finish();
