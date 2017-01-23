@@ -1,11 +1,14 @@
 package xyz.homapay.hampay.mobile.android.util;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 
 import xyz.homapay.hampay.common.common.Operator;
 import xyz.homapay.hampay.common.core.model.enums.FundType;
 import xyz.homapay.hampay.common.core.model.response.dto.FundDTO;
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.fragment.pending.FrgPendingRequests;
 
 /**
@@ -82,4 +85,19 @@ public class AppManager {
         return type;
     }
 
+    public static final void logOut(Context ctx) {
+        try {
+            setAuthToken(ctx, "");
+            Intent intent = new Intent();
+            intent.setClass(ctx, HamPayLoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            if (ctx instanceof Activity) {
+                Activity activity = (Activity) ctx;
+                activity.finish();
+                activity.startActivity(intent);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -7,6 +7,7 @@ import retrofit2.http.POST;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.response.CancelFundResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingFundListResponse;
+import xyz.homapay.hampay.common.core.model.response.PendingPOListResponse;
 
 /**
  * Created by mohammad on 1/22/17.
@@ -19,4 +20,7 @@ public interface PendingPaymentsService {
 
     @POST("fund/cancel")
     Call<ResponseMessage<CancelFundResponse>> cancel(@Body RequestBody body);
+
+    @POST("payment/pending-po-list")
+    Call<ResponseMessage<PendingPOListResponse>> getPendingPOList(@Body RequestBody body);
 }

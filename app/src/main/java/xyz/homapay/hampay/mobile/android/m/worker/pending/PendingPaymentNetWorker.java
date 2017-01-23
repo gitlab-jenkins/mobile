@@ -5,6 +5,7 @@ import okhttp3.RequestBody;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.response.CancelFundResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingFundListResponse;
+import xyz.homapay.hampay.common.core.model.response.PendingPOListResponse;
 import xyz.homapay.hampay.mobile.android.m.common.KeyAgreementModel;
 import xyz.homapay.hampay.mobile.android.m.common.ModelLayer;
 import xyz.homapay.hampay.mobile.android.m.common.OnNetworkLoadListener;
@@ -29,5 +30,10 @@ public class PendingPaymentNetWorker extends NetWorker<PendingPaymentsService> {
     public void cancel(String body, OnNetworkLoadListener<ResponseMessage<CancelFundResponse>> listener) {
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/plain; charset=utf-8"), body);
         execute(service.cancel(requestBody), listener);
+    }
+
+    public void getPendingPOList(String body, OnNetworkLoadListener<ResponseMessage<PendingPOListResponse>> listener) {
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/plain; charset=utf-8"), body);
+        execute(service.getPendingPOList(requestBody), listener);
     }
 }

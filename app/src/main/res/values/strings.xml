@@ -308,6 +308,7 @@
     <string name="user_name_restriction"> A BCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzاآبپتثجچحخدذرزژسشصضطظعغفقکگلمنوهئی</string>
     <string name="iban_user_family">نام خانوادگی صاحب حساب</string>
     <string name="null_pending_business">در حال حاضر پرداخت در انتظاری وجود ندارد</string>
+    <string name="null_pending_business_recieved">در حال حاضر دریافت در انتظاری وجود ندارد</string>
     <string name="hampay_contact_share">دعوت دوستان</string>
     <string name="hampay_share_text">
         اپلیکیشن هم‌پی رو نصب کن!
