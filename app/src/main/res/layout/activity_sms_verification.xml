@@ -10,14 +10,16 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp">
+            android:layout_height="48dp"
+            android:background="@color/app_origin">
 
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:onClick="backActionBar"
                 android:padding="12dp"
-                android:src="@drawable/back" />
+                android:src="@drawable/back"
+                android:tint="@color/white" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 android:layout_width="wrap_content"
@@ -27,7 +29,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginRight="8dp"
                 android:text="@string/mobile_no_verification"
-                android:textColor="@color/app_origin"
+                android:textColor="@color/white"
                 android:textSize="18sp"
                 geekui:customTypeface="fonts/vazir_regular.ttf" />
 

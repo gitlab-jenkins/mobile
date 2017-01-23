@@ -13,44 +13,45 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:gravity="center_vertical"
-            android:background="@color/app_origin">
+            android:background="@color/app_origin"
+            android:gravity="center_vertical">
 
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/back"
                 android:onClick="backActionBar"
-                android:padding="12dp"/>
+                android:padding="12dp"
+                android:src="@drawable/back"
+                android:tint="@color/white" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginRight="8dp"
+                android:text="@string/transaction_history_title"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/transaction_history_title"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="8dp"
-                android:layout_centerVertical="true"/>
+                geekui:customTypeface="fonts/vazir_regular.ttf" />
 
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/stroke_bg"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
+            android:background="@drawable/stroke_bg"
             android:padding="4dp"
             android:visibility="gone">
 
             <ImageView
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@drawable/search_icon"/>
+                android:src="@drawable/search_icon" />
 
         </RelativeLayout>
 
@@ -71,29 +72,29 @@
                     android:divider="@color/normal_text"
                     android:dividerHeight="0.5dp"
                     android:footerDividersEnabled="false"
-                    android:visibility="visible"/>
+                    android:visibility="visible" />
 
             </android.support.v4.widget.SwipeRefreshLayout>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular.ttf"
                 android:id="@+id/no_transaction"
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
                 android:gravity="center"
-                android:textSize="14dp"
-                android:textColor="@color/normal_text"
                 android:padding="8dp"
                 android:text="@string/no_transaction"
-                android:layout_marginTop="24dp"/>
+                android:textColor="@color/normal_text"
+                android:textSize="14dp"
+                android:visibility="gone"
+                geekui:customTypeface="fonts/vazir_regular.ttf" />
 
             <ProgressBar
                 android:id="@+id/loading"
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:visibility="invisible"/>
+                android:visibility="invisible" />
 
         </RelativeLayout>
 

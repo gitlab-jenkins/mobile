@@ -13,6 +13,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:background="@color/app_origin"
             android:gravity="center_vertical">
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
@@ -22,7 +23,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="8dp"
                 android:text="@string/user_manual_close"
-                android:textColor="@color/app_origin"
+                android:textColor="@color/white"
                 android:textSize="15sp"
                 geekui:customTypeface="fonts/vazir_regular.ttf" />
 
@@ -37,9 +38,8 @@
                 android:layout_toRightOf="@id/close_user_manual"
                 android:lines="1"
                 android:maxLines="1"
-                android:singleLine="true"
                 android:text="@string/user_manual_title_activity"
-                android:textColor="@color/app_origin"
+                android:textColor="@color/white"
                 android:textSize="15sp"
                 geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
