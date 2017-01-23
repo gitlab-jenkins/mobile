@@ -2,6 +2,8 @@ package xyz.homapay.hampay.mobile.android.fragment.pending;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -102,6 +104,7 @@ public class FrgPendingRequests extends Fragment implements PendingPaymentView, 
     private PendingFundListAdapter adapter;
     private int position;
     private MaterialSheetFab materialSheetFab;
+    private Handler countDownHandler;
 
     public static FrgPendingRequests newInstance() {
         FrgPendingRequests fragment = new FrgPendingRequests();
@@ -227,6 +230,20 @@ public class FrgPendingRequests extends Fragment implements PendingPaymentView, 
         });
         pendingPayment.getList(AppManager.getFundType(filterState));
         pullToRefresh.setOnRefreshListener(() -> pendingPayment.getList(AppManager.getFundType(filterState)));
+        countDownHandler = new Handler(Looper.getMainLooper());
+        countDownHandler.postDelayed(() -> {
+            if (adapter != null)
+                adapter.notifyDataSetChanged();
+        }, 1000);
+
+        countDownHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (adapter != null && adapter.getCount() > 0)
+                    adapter.notifyDataSetChanged();
+                countDownHandler.postDelayed(this, 1000);
+            }
+        }, 1000);
         return rootView;
     }
 
