@@ -40,9 +40,20 @@ android {
         versionName "HamPay-Develop-V1.3-HAMPAY-2534"
         multiDexEnabled true
     }
+
+    signingConfigs {
+        release {
+            storeFile file(project.property("keyPath") + "hampay.jks")
+            storePassword "HaMpAY-HoMA@#!aPP"
+            keyAlias "hampay-app"
+            keyPassword "HaMpAY-HoMA@#!aPP"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
