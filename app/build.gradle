@@ -43,7 +43,7 @@ android {
 
     signingConfigs {
         release {
-            storeFile file(project.property("keyPath") + "hampay.jks")
+            storeFile file("hampay.jks")
             storePassword "HaMpAY-HoMA@#!aPP"
             keyAlias "hampay-app"
             keyPassword "HaMpAY-HoMA@#!aPP"
