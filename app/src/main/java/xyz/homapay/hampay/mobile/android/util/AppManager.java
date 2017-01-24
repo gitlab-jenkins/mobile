@@ -108,4 +108,28 @@ public class AppManager {
     public static final void setMobileTimeout(Context ctx) {
         AppSettings.setValue(ctx, Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
     }
+
+    public static final void setRegisterIdToken(Context ctx, String userIdToken) {
+        AppSettings.setValue(ctx, Constants.REGISTERED_USER_ID_TOKEN, userIdToken);
+    }
+
+    public static final String getRegisterIdToken(Context ctx) {
+        return AppSettings.getString(ctx, Constants.REGISTERED_USER_ID_TOKEN, "");
+    }
+
+    public static void setRegisterUserName(Context ctx, String userName) {
+        AppSettings.setValue(ctx, Constants.REGISTERED_USER_NAME, userName);
+    }
+
+    public static final String getRegisterUserName(Context ctx) {
+        return AppSettings.getString(ctx, Constants.REGISTERED_USER_NAME, "");
+    }
+
+    public static void setRegisterUserEmail(Context ctx, String userEmail) {
+        AppSettings.setValue(ctx, Constants.REGISTERED_USER_EMAIL, userEmail);
+    }
+
+    public static final String getRegisterUserEmail(Context ctx) {
+        return AppSettings.getString(ctx, Constants.REGISTERED_USER_EMAIL, "");
+    }
 }

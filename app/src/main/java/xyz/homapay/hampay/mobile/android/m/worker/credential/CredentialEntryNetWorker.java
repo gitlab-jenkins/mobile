@@ -2,7 +2,6 @@ package xyz.homapay.hampay.mobile.android.m.worker.credential;
 
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-import retrofit2.Call;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.response.RegistrationCredentialsResponse;
 import xyz.homapay.hampay.mobile.android.m.common.KeyAgreementModel;
@@ -17,14 +16,13 @@ import xyz.homapay.hampay.mobile.android.m.worker.common.NetWorker;
 
 public class CredentialEntryNetWorker extends NetWorker<CredentialService> {
 
-    public CredentialEntryNetWorker(ModelLayer modelLayer, KeyAgreementModel keyAgreementModel){
+    public CredentialEntryNetWorker(ModelLayer modelLayer, KeyAgreementModel keyAgreementModel) {
         super(modelLayer, CredentialService.class, keyAgreementModel, true, true);
     }
 
-    public void credential(String body, final OnNetworkLoadListener<ResponseMessage<RegistrationCredentialsResponse>> listener){
+    public void credential(String body, final OnNetworkLoadListener<ResponseMessage<RegistrationCredentialsResponse>> listener) {
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/plain; charset=utf-8"), body);
-        Call<ResponseMessage<RegistrationCredentialsResponse>> call = service.credential(requestBody);
-        execute(call, listener);
+        execute(service.credential(requestBody), listener);
     }
 
 

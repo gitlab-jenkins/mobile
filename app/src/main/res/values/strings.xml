@@ -760,5 +760,6 @@
     <string name="bills_top_up_activity_title">قبض و شارژ</string>
     <string name="bills_header_title">پرداخت قبوض</string>
     <string name="top_up_header_title">شارژ سیم کارت</string>
+    <string name="err_general_sms_text">در ارسال پیامک برای تلفن همراه شما خطایی رخ داده است</string>
 
 </resources>

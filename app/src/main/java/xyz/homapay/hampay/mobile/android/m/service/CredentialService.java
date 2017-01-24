@@ -12,6 +12,8 @@ import xyz.homapay.hampay.common.core.model.response.RegistrationCredentialsResp
  */
 
 public interface CredentialService {
+
     @POST("users/reg-credential-entry")
     Call<ResponseMessage<RegistrationCredentialsResponse>> credential(@Body RequestBody body);
+
 }

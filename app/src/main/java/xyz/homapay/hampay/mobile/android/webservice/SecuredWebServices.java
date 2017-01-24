@@ -13,11 +13,9 @@ import java.net.URL;
 import java.util.UUID;
 
 import xyz.homapay.hampay.common.common.encrypt.EncryptionException;
-import xyz.homapay.hampay.common.common.request.KeyAgreementRequest;
 import xyz.homapay.hampay.common.common.request.LoginRequest;
 import xyz.homapay.hampay.common.common.request.LogoutRequest;
 import xyz.homapay.hampay.common.common.request.RequestMessage;
-import xyz.homapay.hampay.common.common.response.KeyAgreementResponse;
 import xyz.homapay.hampay.common.common.response.LoginResponse;
 import xyz.homapay.hampay.common.common.response.LogoutResponse;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
@@ -26,7 +24,6 @@ import xyz.homapay.hampay.common.core.model.request.BusinessPaymentConfirmReques
 import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
 import xyz.homapay.hampay.common.core.model.request.CalcFeeChargeRequest;
 import xyz.homapay.hampay.common.core.model.request.CalculateVatRequest;
-import xyz.homapay.hampay.common.core.model.request.CancelFundRequest;
 import xyz.homapay.hampay.common.core.model.request.CardProfileRequest;
 import xyz.homapay.hampay.common.core.model.request.ChangeEmailRequest;
 import xyz.homapay.hampay.common.core.model.request.ChangeMemorableWordRequest;
@@ -46,14 +43,9 @@ import xyz.homapay.hampay.common.core.model.request.MobileRegistrationIdEntryReq
 import xyz.homapay.hampay.common.core.model.request.PSPResultRequest;
 import xyz.homapay.hampay.common.core.model.request.PaymentDetailRequest;
 import xyz.homapay.hampay.common.core.model.request.PendingCountRequest;
-import xyz.homapay.hampay.common.core.model.request.PendingFundListRequest;
-import xyz.homapay.hampay.common.core.model.request.PendingPOListRequest;
 import xyz.homapay.hampay.common.core.model.request.PurchaseDetailRequest;
 import xyz.homapay.hampay.common.core.model.request.PurchaseInfoRequest;
 import xyz.homapay.hampay.common.core.model.request.RecentPendingFundRequest;
-import xyz.homapay.hampay.common.core.model.request.RegistrationCredentialsRequest;
-import xyz.homapay.hampay.common.core.model.request.RegistrationEntryRequest;
-import xyz.homapay.hampay.common.core.model.request.RegistrationSendSmsTokenRequest;
 import xyz.homapay.hampay.common.core.model.request.RegistrationVerifyMobileRequest;
 import xyz.homapay.hampay.common.core.model.request.RemoveUserImageRequest;
 import xyz.homapay.hampay.common.core.model.request.SignToPayRequest;
@@ -73,7 +65,6 @@ import xyz.homapay.hampay.common.core.model.response.BusinessListResponse;
 import xyz.homapay.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
 import xyz.homapay.hampay.common.core.model.response.CalcFeeChargeResponse;
 import xyz.homapay.hampay.common.core.model.response.CalculateVatResponse;
-import xyz.homapay.hampay.common.core.model.response.CancelFundResponse;
 import xyz.homapay.hampay.common.core.model.response.CardProfileResponse;
 import xyz.homapay.hampay.common.core.model.response.ChangeEmailResponse;
 import xyz.homapay.hampay.common.core.model.response.ChangeMemorableWordResponse;
@@ -93,14 +84,9 @@ import xyz.homapay.hampay.common.core.model.response.MobileRegistrationIdEntryRe
 import xyz.homapay.hampay.common.core.model.response.PSPResultResponse;
 import xyz.homapay.hampay.common.core.model.response.PaymentDetailResponse;
 import xyz.homapay.hampay.common.core.model.response.PendingCountResponse;
-import xyz.homapay.hampay.common.core.model.response.PendingFundListResponse;
-import xyz.homapay.hampay.common.core.model.response.PendingPOListResponse;
 import xyz.homapay.hampay.common.core.model.response.PurchaseDetailResponse;
 import xyz.homapay.hampay.common.core.model.response.PurchaseInfoResponse;
 import xyz.homapay.hampay.common.core.model.response.RecentPendingFundResponse;
-import xyz.homapay.hampay.common.core.model.response.RegistrationCredentialsResponse;
-import xyz.homapay.hampay.common.core.model.response.RegistrationEntryResponse;
-import xyz.homapay.hampay.common.core.model.response.RegistrationSendSmsTokenResponse;
 import xyz.homapay.hampay.common.core.model.response.RegistrationVerifyMobileResponse;
 import xyz.homapay.hampay.common.core.model.response.RemoveUserImageResponse;
 import xyz.homapay.hampay.common.core.model.response.SignToPayResponse;
@@ -168,29 +154,6 @@ public class SecuredWebServices {
 
     }
 
-    public ResponseMessage<KeyAgreementResponse> keyAgreement(KeyAgreementRequest keyAgreementRequest) throws Exception {
-
-        ResponseMessage<KeyAgreementResponse> responseMessage = null;
-        url = new URL(serviceURL + "/security/agree-key");
-        SecuredProxyService proxyService = new SecuredProxyService(context, connectionType, ConnectionMethod.POST, url);
-        RequestMessage<KeyAgreementRequest> message = new RequestMessage<>(keyAgreementRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
-
-        Type requestType = new TypeToken<RequestMessage<KeyAgreementRequest>>() {
-        }.getType();
-        String jsonRequest = new Gson().toJson(message, requestType);
-
-        proxyService.setJsonBody(jsonRequest);
-
-        Gson gson = new Gson();
-
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<KeyAgreementResponse>>() {
-        }.getType());
-
-        proxyService.closeConnection();
-
-        return responseMessage;
-    }
-
     public ResponseMessage<IllegalAppListResponse> getIllegalAppList() throws IOException, EncryptionException {
 
         ResponseMessage<IllegalAppListResponse> responseMessage = null;
@@ -207,32 +170,6 @@ public class SecuredWebServices {
         responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<IllegalAppListResponse>>() {
         }.getType());
         proxyService.closeConnection();
-        return responseMessage;
-    }
-
-    public ResponseMessage<RegistrationEntryResponse> registrationEntry(RegistrationEntryRequest registrationEntryRequest) throws IOException, EncryptionException {
-
-        ResponseMessage<RegistrationEntryResponse> responseMessage = null;
-        url = new URL(serviceURL + "/users/reg-entry");
-        SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url, true);
-
-        registrationEntryRequest.setRequestUUID(UUID.randomUUID().toString());
-
-        RequestMessage<RegistrationEntryRequest> message = new RequestMessage<>(registrationEntryRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
-
-        Type requestType = new TypeToken<RequestMessage<RegistrationEntryRequest>>() {
-        }.getType();
-        String jsonRequest = new Gson().toJson(message, requestType);
-
-        proxyService.setJsonBody(jsonRequest);
-
-        Gson gson = new Gson();
-
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<RegistrationEntryResponse>>() {
-        }.getType());
-
-        proxyService.closeConnection();
-
         return responseMessage;
     }
 
@@ -262,31 +199,6 @@ public class SecuredWebServices {
 
     }
 
-    public ResponseMessage<RegistrationSendSmsTokenResponse> registrationSendSmsToken(RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest) throws IOException, EncryptionException {
-
-        ResponseMessage<RegistrationSendSmsTokenResponse> responseMessage = null;
-        url = new URL(serviceURL + "/users/reg-sms-token");
-        SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
-
-        registrationSendSmsTokenRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<RegistrationSendSmsTokenRequest> message = new RequestMessage<>(registrationSendSmsTokenRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
-
-        Type requestType = new TypeToken<RequestMessage<RegistrationSendSmsTokenRequest>>() {
-        }.getType();
-        String jsonRequest = new Gson().toJson(message, requestType);
-        proxyService.setJsonBody(jsonRequest);
-
-        Gson gson = new Gson();
-
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<RegistrationSendSmsTokenResponse>>() {
-        }.getType());
-
-        proxyService.closeConnection();
-
-        return responseMessage;
-    }
-
-
     public ResponseMessage<RegistrationVerifyMobileResponse> registrationVerifyMobileResponse(RegistrationVerifyMobileRequest registrationVerifyMobileRequest) throws IOException, EncryptionException {
 
         ResponseMessage<RegistrationVerifyMobileResponse> responseMessage = null;
@@ -310,31 +222,6 @@ public class SecuredWebServices {
 
         return responseMessage;
     }
-
-
-    public ResponseMessage<RegistrationCredentialsResponse> registrationCredentialsResponse(RegistrationCredentialsRequest registrationCredentialsRequest) throws IOException, EncryptionException {
-
-        ResponseMessage<RegistrationCredentialsResponse> responseMessage = null;
-        url = new URL(serviceURL + "/users/reg-credential-entry");
-        SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url, true);
-        registrationCredentialsRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<RegistrationCredentialsRequest> message = new RequestMessage<>(registrationCredentialsRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
-
-        Type requestType = new TypeToken<RequestMessage<RegistrationCredentialsRequest>>() {
-        }.getType();
-        String jsonRequest = new Gson().toJson(message, requestType);
-        proxyService.setJsonBody(jsonRequest);
-
-        Gson gson = new Gson();
-
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<RegistrationCredentialsResponse>>() {
-        }.getType());
-
-        proxyService.closeConnection();
-
-        return responseMessage;
-    }
-
 
     public ResponseMessage<MobileRegistrationIdEntryResponse> registrationDeviceRegId(MobileRegistrationIdEntryRequest mobileRegistrationIdEntryRequest) throws IOException, EncryptionException {
 
@@ -684,7 +571,6 @@ public class SecuredWebServices {
     }
 
 
-
     public ResponseMessage<UnlinkUserResponse> unlinkUserResponse(UnlinkUserRequest unlinkUserRequest) throws IOException, EncryptionException {
 
         ResponseMessage<UnlinkUserResponse> responseMessage = null;
@@ -811,30 +697,6 @@ public class SecuredWebServices {
 
         return responseMessage;
     }
-
-    public ResponseMessage<CancelFundResponse> cancelFund(CancelFundRequest cancelFundRequest) throws IOException, EncryptionException {
-
-        ResponseMessage<CancelFundResponse> responseMessage = null;
-        url = new URL(serviceURL + "/fund/cancel");
-        SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
-
-        cancelFundRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<CancelFundRequest> message = new RequestMessage<>(cancelFundRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
-
-        Type requestType = new TypeToken<RequestMessage<CancelFundRequest>>() {
-        }.getType();
-        String jsonRequest = new Gson().toJson(message, requestType);
-        proxyService.setJsonBody(jsonRequest);
-
-        Gson gson = builder.getDatebuilder().create();
-
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<CancelFundResponse>>() {
-        }.getType());
-        proxyService.closeConnection();
-
-        return responseMessage;
-    }
-
 
     public ResponseMessage<UserPaymentResponse> userPaymentResponse(UserPaymentRequest userPaymentRequest) throws IOException, EncryptionException {
 
@@ -1074,30 +936,6 @@ public class SecuredWebServices {
         return responseMessage;
     }
 
-    public ResponseMessage<PendingPOListResponse> pendingPOList(PendingPOListRequest pendingPOListRequest) throws IOException, EncryptionException {
-
-        ResponseMessage<PendingPOListResponse> responseMessage = null;
-        url = new URL(serviceURL + "/payment/pending-po-list");
-        SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
-
-        pendingPOListRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<PendingPOListRequest> message = new RequestMessage<>(pendingPOListRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
-
-        Type requestType = new TypeToken<RequestMessage<PendingPOListRequest>>() {
-        }.getType();
-        String jsonRequest = new Gson().toJson(message, requestType);
-        proxyService.setJsonBody(jsonRequest);
-
-        Gson gson = builder.getDatebuilder().create();
-
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PendingPOListResponse>>() {
-        }.getType());
-
-        proxyService.closeConnection();
-
-        return responseMessage;
-    }
-
     public ResponseMessage<CalculateVatResponse> calculateVAT(CalculateVatRequest calculateVatRequest) throws IOException, EncryptionException {
 
         ResponseMessage<CalculateVatResponse> responseMessage = null;
@@ -1166,23 +1004,6 @@ public class SecuredWebServices {
 
         proxyService.closeConnection();
 
-        return responseMessage;
-    }
-
-    public ResponseMessage<PendingFundListResponse> fundListResponse(PendingFundListRequest pendingFundListRequest) throws IOException, EncryptionException {
-        ResponseMessage<PendingFundListResponse> responseMessage = null;
-        url = new URL(serviceURL + "/fund/pending-list");
-        SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
-        pendingFundListRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<PendingFundListRequest> message = new RequestMessage<>(pendingFundListRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
-        Type requestType = new TypeToken<RequestMessage<PendingFundListRequest>>() {
-        }.getType();
-        String jsonRequest = new Gson().toJson(message, requestType);
-        proxyService.setJsonBody(jsonRequest);
-        Gson gson = builder.getDatebuilder().create();
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<PendingFundListResponse>>() {
-        }.getType());
-        proxyService.closeConnection();
         return responseMessage;
     }
 
@@ -1308,11 +1129,13 @@ public class SecuredWebServices {
         SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
         request.setRequestUUID(UUID.randomUUID().toString());
         RequestMessage<SignToPayRequest> message = new RequestMessage<>(request, authToken, Constants.API_LEVEL, System.currentTimeMillis());
-        Type requestType = new TypeToken<RequestMessage<SignToPayRequest>>() {}.getType();
+        Type requestType = new TypeToken<RequestMessage<SignToPayRequest>>() {
+        }.getType();
         String jsonRequest = new Gson().toJson(message, requestType);
         proxyService.setJsonBody(jsonRequest);
         Gson gson = new Gson();
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<SignToPayResponse>>() {}.getType());
+        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<SignToPayResponse>>() {
+        }.getType());
         proxyService.closeConnection();
         return responseMessage;
     }
@@ -1348,7 +1171,7 @@ public class SecuredWebServices {
         responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<UtilityBillDetailResponse>>() {
         }.getType());
         proxyService.closeConnection();
-        return  responseMessage;
+        return responseMessage;
     }
 
 }

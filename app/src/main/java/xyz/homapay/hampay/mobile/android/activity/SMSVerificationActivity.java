@@ -38,7 +38,6 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import xyz.homapay.hampay.mobile.android.async.RequestRegistrationSendSmsToken;
 import xyz.homapay.hampay.mobile.android.async.RequestVerifyMobile;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
@@ -47,13 +46,18 @@ import xyz.homapay.hampay.mobile.android.dialog.permission.PermissionContactDial
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.p.auth.SMSSender;
+import xyz.homapay.hampay.mobile.android.p.auth.SMSSenderImpl;
+import xyz.homapay.hampay.mobile.android.p.auth.SMSSenderView;
 import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.ModelLayerImpl;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.ScaleConverter;
 
-public class SMSVerificationActivity extends AppCompatActivity implements View.OnClickListener, PermissionContactDialog.PermissionContactDialogListener {
+public class SMSVerificationActivity extends AppCompatActivity implements View.OnClickListener, PermissionContactDialog.PermissionContactDialogListener, SMSSenderView {
 
     private final Handler handler = new Handler();
     @BindView(R.id.digit_1)
@@ -107,7 +111,6 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
     private String receivedSmsValue = "";
     private Context context;
     private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
-    private RequestRegistrationSendSmsToken requestRegistrationSendSmsToken;
     private RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest;
     private SharedPreferences.Editor editor;
     private HamPayDialog hamPayDialog;
@@ -126,6 +129,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
     private int minutes = 0;
     private int seconds = 0;
     private PersianEnglishDigit persianEnglishDigit;
+    private SMSSender smsSender;
 
     @Override
     protected void onPause() {
@@ -209,6 +213,7 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
 
         context = this;
         persianEnglishDigit = new PersianEnglishDigit();
+        smsSender = new SMSSenderImpl(new ModelLayerImpl(context), this);
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         editor.putString(Constants.RECEIVED_SMS_ACTIVATION, "");
@@ -394,8 +399,8 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                 if (sendSmsCounter < 3) {
                     if (sendSmsPermission) {
                         sendSmsPermission = false;
-                        requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
-                        requestRegistrationSendSmsToken.execute(registrationSendSmsTokenRequest);
+                        // TODO
+                        smsSender.send(AppManager.getRegisterIdToken(activity));
                     }
                 } else {
                     Toast.makeText(context, getString(R.string.sms_upper_reach_sms), Toast.LENGTH_LONG).show();
@@ -497,6 +502,45 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         }
     }
 
+    @Override
+    public void showProgress() {
+        hamPayDialog.showWaitingDialog("");
+    }
+
+    @Override
+    public void cancelProgress() {
+        hamPayDialog.dismisWaitingDialog();
+    }
+
+    @Override
+    public void onError() {
+        hamPayDialog.showFailRegistrationSendSmsTokenDialog(smsSender, activity.getString(R.string.err_general), activity.getString(R.string.err_general_sms_text));
+    }
+
+    @Override
+    public void onSMSSent(boolean state, ResponseMessage<RegistrationSendSmsTokenResponse> data, String message) {
+        LogEvent logEvent = new LogEvent(context);
+        if (state) {
+            ServiceEvent serviceName;
+            if (data != null) {
+                if (data.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    serviceName = ServiceEvent.REGISTRATION_SEND_SMS_TOKEN_SUCCESS;
+                    resend_active_code.setVisibility(View.GONE);
+                    progress_layout.setVisibility(View.VISIBLE);
+                    startTimer();
+                } else {
+                    serviceName = ServiceEvent.REGISTRATION_SEND_SMS_TOKEN_FAILURE;
+                    new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(smsSender, data.getService().getResultStatus().getCode(), data.getService().getResultStatus().getDescription());
+                }
+
+            } else {
+                serviceName = ServiceEvent.REGISTRATION_SEND_SMS_TOKEN_FAILURE;
+                new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(smsSender, Constants.LOCAL_ERROR_CODE, getString(R.string.mgs_fail_registration_send_sms_token));
+            }
+            logEvent.log(serviceName);
+        }
+    }
+
     public class RequestRegistrationVerifyMobileTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationVerifyMobileResponse>> {
         ServiceEvent serviceName;
         LogEvent logEvent = new LogEvent(context);
@@ -545,41 +589,4 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
         }
     }
 
-    public class RequestRegistrationSendSmsTokenTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<RegistrationSendSmsTokenResponse>> {
-        @Override
-        public void onTaskComplete(ResponseMessage<RegistrationSendSmsTokenResponse> registrationSendSmsTokenResponse) {
-
-            ServiceEvent serviceName;
-            LogEvent logEvent = new LogEvent(context);
-
-            hamPayDialog.dismisWaitingDialog();
-
-            if (registrationSendSmsTokenResponse != null) {
-                if (registrationSendSmsTokenResponse.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    serviceName = ServiceEvent.REGISTRATION_SEND_SMS_TOKEN_SUCCESS;
-                    resend_active_code.setVisibility(View.GONE);
-                    progress_layout.setVisibility(View.VISIBLE);
-                    startTimer();
-                } else {
-                    serviceName = ServiceEvent.REGISTRATION_SEND_SMS_TOKEN_FAILURE;
-                    requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
-                    new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
-                            registrationSendSmsTokenResponse.getService().getResultStatus().getCode(),
-                            registrationSendSmsTokenResponse.getService().getResultStatus().getDescription());
-                }
-
-            } else {
-                serviceName = ServiceEvent.REGISTRATION_SEND_SMS_TOKEN_FAILURE;
-                requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(context, new RequestRegistrationSendSmsTokenTaskCompleteListener());
-                new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(requestRegistrationSendSmsToken, registrationSendSmsTokenRequest,
-                        Constants.LOCAL_ERROR_CODE,
-                        getString(R.string.mgs_fail_registration_send_sms_token));
-            }
-            logEvent.log(serviceName);
-        }
-
-        @Override
-        public void onTaskPreRun() {
-        }
-    }
 }

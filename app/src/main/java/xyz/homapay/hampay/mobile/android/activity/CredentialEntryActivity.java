@@ -20,13 +20,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
-import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
 import xyz.homapay.hampay.common.core.model.request.RegistrationCredentialsRequest;
 import xyz.homapay.hampay.common.core.model.response.RegistrationCredentialsResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Manifest;
 import xyz.homapay.hampay.mobile.android.R;
-import xyz.homapay.hampay.mobile.android.async.RequestCredentialEntry;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.edittext.MemorableTextWatcher;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
@@ -36,9 +34,9 @@ import xyz.homapay.hampay.mobile.android.dialog.permission.PermissionDeviceDialo
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
-import xyz.homapay.hampay.mobile.android.p.Credential.CredentialEntry;
-import xyz.homapay.hampay.mobile.android.p.Credential.CredentialEntryImpl;
-import xyz.homapay.hampay.mobile.android.p.Credential.CredentialEntryView;
+import xyz.homapay.hampay.mobile.android.p.credential.CredentialEntry;
+import xyz.homapay.hampay.mobile.android.p.credential.CredentialEntryImpl;
+import xyz.homapay.hampay.mobile.android.p.credential.CredentialEntryView;
 import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
 import xyz.homapay.hampay.mobile.android.util.AppManager;
@@ -241,12 +239,12 @@ public class CredentialEntryActivity extends AppCompatActivity implements Creden
     }
 
     @Override
-    public void showProgressDialog() {
+    public void showProgress() {
         hamPayDialog.showWaitingDialog("");
     }
 
     @Override
-    public void dismissProgressDialog() {
+    public void cancelProgress() {
         hamPayDialog.dismisWaitingDialog();
     }
 

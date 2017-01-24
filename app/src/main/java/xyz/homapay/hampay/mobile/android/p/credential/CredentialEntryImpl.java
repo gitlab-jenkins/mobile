@@ -1,4 +1,4 @@
-package xyz.homapay.hampay.mobile.android.p.Credential;
+package xyz.homapay.hampay.mobile.android.p.credential;
 
 import com.google.gson.Gson;
 
@@ -31,13 +31,13 @@ public class CredentialEntryImpl extends Presenter<CredentialEntryView> implemen
     private String authToken;
     private boolean permission;
 
-    public CredentialEntryImpl(ModelLayer modelLayer, CredentialEntryView view){
+    public CredentialEntryImpl(ModelLayer modelLayer, CredentialEntryView view) {
         super(modelLayer, view);
     }
 
     private void onError() {
         try {
-            view.dismissProgressDialog();
+            view.cancelProgress();
             view.onError();
         } catch (Exception e) {
             e.printStackTrace();
@@ -50,14 +50,14 @@ public class CredentialEntryImpl extends Presenter<CredentialEntryView> implemen
         try {
 
             List<ContactDTO> contacts;
-            if (permission){
+            if (permission) {
                 contacts = modelLayer.getUserContacts();
-            }else {
+            } else {
                 contacts = new ArrayList<>();
             }
             registrationCredentialsRequest.setContacts(contacts);
             registrationCredentialsRequest.setRequestUUID(UUID.randomUUID().toString());
-            RequestMessage<RegistrationCredentialsRequest> message = new RequestMessage<RegistrationCredentialsRequest>(registrationCredentialsRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
+            RequestMessage<RegistrationCredentialsRequest> message = new RequestMessage<>(registrationCredentialsRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
             String strJson = messageEncryptor.encryptRequest(new Gson().toJson(message), getKey(), getIv(), getEncId());
 
             new CredentialEntryNetWorker(modelLayer, getKeyAgreementModel()).credential(strJson, this);
@@ -79,7 +79,7 @@ public class CredentialEntryImpl extends Presenter<CredentialEntryView> implemen
     @Override
     public void credential(RegistrationCredentialsRequest registrationCredentialsRequest, String authToken, boolean permission) {
         try {
-            view.showProgressDialog();
+            view.showProgress();
             messageEncryptor = new AESMessageEncryptor();
             this.registrationCredentialsRequest = registrationCredentialsRequest;
             this.authToken = authToken;
@@ -94,7 +94,7 @@ public class CredentialEntryImpl extends Presenter<CredentialEntryView> implemen
     @Override
     public void onNetworkLoad(boolean status, ResponseMessage<RegistrationCredentialsResponse> data, String message) {
         try {
-            view.dismissProgressDialog();
+            view.cancelProgress();
             view.onRegisterResponse(status, status ? data : null, status ? message : "Failed");
         } catch (Exception e) {
             e.printStackTrace();
