@@ -1,4 +1,4 @@
-package xyz.homapay.hampay.mobile.android.p.Credential;
+package xyz.homapay.hampay.mobile.android.p.credential;
 
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.response.RegistrationCredentialsResponse;

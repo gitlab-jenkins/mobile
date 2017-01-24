@@ -36,7 +36,7 @@ public class RegisterEntryImpl extends Presenter<RegisterEntryView> implements R
 
     private void onError() {
         try {
-            view.dismissProgressDialog();
+            view.cancelProgress();
             view.onError();
         } catch (Exception e) {
             e.printStackTrace();
@@ -87,7 +87,7 @@ public class RegisterEntryImpl extends Presenter<RegisterEntryView> implements R
     @Override
     public void register(RegistrationEntryRequest registrationEntryRequest, String authToken) {
         try {
-            view.showProgressDialog();
+            view.showProgress();
             messageEncryptor = new AESMessageEncryptor();
             this.registrationEntryRequest = registrationEntryRequest;
             this.authToken = authToken;
@@ -101,7 +101,7 @@ public class RegisterEntryImpl extends Presenter<RegisterEntryView> implements R
     @Override
     public void onNetworkLoad(boolean status, ResponseMessage<RegistrationEntryResponse> data, String message) {
         try {
-            view.dismissProgressDialog();
+            view.cancelProgress();
             view.onRegisterResponse(status, status ? data : null, status ? message : "Failed");
         } catch (Exception e) {
             e.printStackTrace();

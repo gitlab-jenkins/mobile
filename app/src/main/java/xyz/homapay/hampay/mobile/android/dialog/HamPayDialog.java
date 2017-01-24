@@ -62,7 +62,6 @@ import xyz.homapay.hampay.mobile.android.adapter.charge.ChargeAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestChangePassCode;
 import xyz.homapay.hampay.mobile.android.async.RequestContactHampayEnabled;
-import xyz.homapay.hampay.mobile.android.async.RequestCredentialEntry;
 import xyz.homapay.hampay.mobile.android.async.RequestHamPayBusiness;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPurchase;
@@ -82,11 +81,16 @@ import xyz.homapay.hampay.mobile.android.component.edittext.EmailTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
-import xyz.homapay.hampay.mobile.android.p.Credential.CredentialEntry;
 import xyz.homapay.hampay.mobile.android.p.auth.RegisterEntry;
+import xyz.homapay.hampay.mobile.android.p.auth.SMSSender;
+import xyz.homapay.hampay.mobile.android.p.auth.SMSSenderImpl;
+import xyz.homapay.hampay.mobile.android.p.auth.SMSSenderView;
+import xyz.homapay.hampay.mobile.android.p.credential.CredentialEntry;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.EmailVerification;
+import xyz.homapay.hampay.mobile.android.util.ModelLayerImpl;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.font.FontFace;
 import xyz.homapay.hampay.mobile.android.webservice.SecuredWebServices;
@@ -107,6 +111,7 @@ public class HamPayDialog {
     RequestRegistrationSendSmsToken requestRegistrationSendSmsToken;
     RegistrationSendSmsTokenRequest registrationSendSmsTokenRequest;
     private CurrencyFormatter currencyFormatter;
+    private SMSSender smsSender = null;
 
     public HamPayDialog(Activity activity) {
 
@@ -415,6 +420,33 @@ public class HamPayDialog {
         retry_registration_sms_token.setOnClickListener(v -> {
             dialog.dismiss();
             requestRegistrationSendSmsToken.execute(registrationEntryRequest);
+        });
+
+        cancel_request.setOnClickListener(v -> dialog.dismiss());
+
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
+    }
+
+    public void showFailRegistrationSendSmsTokenDialog(final SMSSender smsSender,
+                                                       final String code,
+                                                       final String message) {
+
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_registration_send_sms_token, null);
+
+        FacedTextView responseMessage = (FacedTextView) view.findViewById(R.id.responseMessage);
+
+        responseMessage.setText(activity.getString(R.string.error_code, code) + "\n" + message);
+
+        FacedTextView retry_registration_sms_token = (FacedTextView) view.findViewById(R.id.retry_registration_sms_token);
+        FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
+
+        retry_registration_sms_token.setOnClickListener(v -> {
+            dialog.dismiss();
+            smsSender.send(AppManager.getRegisterIdToken(activity));
         });
 
         cancel_request.setOnClickListener(v -> dialog.dismiss());
@@ -898,18 +930,56 @@ public class HamPayDialog {
         FacedTextView confirmation = (FacedTextView) view.findViewById(R.id.confirmation);
         FacedTextView dis_confirmation = (FacedTextView) view.findViewById(R.id.dis_confirmation);
 
-        confirmation.setOnClickListener(v -> {
-            dialog.dismiss();
-            registrationSendSmsTokenRequest = new RegistrationSendSmsTokenRequest();
-            registrationSendSmsTokenRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
-            requestRegistrationSendSmsToken = new RequestRegistrationSendSmsToken(activity, new RequestRegistrationSendSmsTokenTaskCompleteListener(cellNumber));
-            requestRegistrationSendSmsToken.execute(registrationSendSmsTokenRequest);
-        });
-
-
         dis_confirmation.setOnClickListener(v -> dialog.dismiss());
 
         view.setMinimumWidth((int) (rect.width() * 0.85f));
+
+        final HamPayDialog dlg = new HamPayDialog(activity);
+        confirmation.setOnClickListener(v -> {
+            dialog.dismiss();
+            smsSender = new SMSSenderImpl(new ModelLayerImpl(activity), new SMSSenderView() {
+                @Override
+                public void onSMSSent(boolean state, ResponseMessage<RegistrationSendSmsTokenResponse> data, String message) {
+                    if (state) {
+                        if (data != null) {
+                            if (data.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                                Intent intent = new Intent();
+                                intent.setClass(activity, SMSVerificationActivity.class);
+                                intent.putExtra(Constants.REGISTERED_CELL_NUMBER, cellNumber);
+                                activity.startActivity(intent);
+                            } else {
+                                new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(smsSender, data.getService().getResultStatus().getCode(), data.getService().getResultStatus().getDescription());
+                            }
+
+                        }
+                    } else {
+                        dlg.showFailRegistrationSendSmsTokenDialog(smsSender, activity.getString(R.string.err_general), activity.getString(R.string.err_general_sms_text));
+                    }
+                }
+
+                @Override
+                public void showProgress() {
+                    dlg.showWaitingDialog("");
+                }
+
+                @Override
+                public void cancelProgress() {
+                    dlg.dismisWaitingDialog();
+                }
+
+                @Override
+                public void onError() {
+                    try {
+                        dlg.dismisWaitingDialog();
+                        dlg.showFailRegistrationSendSmsTokenDialog(smsSender, activity.getString(R.string.err_general), activity.getString(R.string.err_general_sms_text));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            smsSender.send(AppManager.getRegisterIdToken(activity));
+        });
+
         if (!activity.isFinishing()) {
             dialog = new HamPayCustomDialog(view, activity, 0);
             dialog.show();

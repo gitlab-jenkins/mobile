@@ -1,4 +1,4 @@
-package xyz.homapay.hampay.mobile.android.p.Credential;
+package xyz.homapay.hampay.mobile.android.p.credential;
 
 import com.google.gson.Gson;
 

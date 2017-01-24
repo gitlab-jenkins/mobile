@@ -34,9 +34,9 @@ import xyz.homapay.hampay.mobile.android.dialog.permission.PermissionDeviceDialo
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
-import xyz.homapay.hampay.mobile.android.p.Credential.CredentialEntry;
-import xyz.homapay.hampay.mobile.android.p.Credential.CredentialEntryImpl;
-import xyz.homapay.hampay.mobile.android.p.Credential.CredentialEntryView;
+import xyz.homapay.hampay.mobile.android.p.credential.CredentialEntry;
+import xyz.homapay.hampay.mobile.android.p.credential.CredentialEntryImpl;
+import xyz.homapay.hampay.mobile.android.p.credential.CredentialEntryView;
 import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
 import xyz.homapay.hampay.mobile.android.util.AppManager;

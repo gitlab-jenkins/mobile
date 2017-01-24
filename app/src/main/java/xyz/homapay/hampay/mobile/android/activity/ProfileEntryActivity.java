@@ -319,7 +319,7 @@ public class ProfileEntryActivity extends ActivityParentBase implements Permissi
             View view = getCurrentFocus();
             if (view != null) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(
-                        ctx.INPUT_METHOD_SERVICE);
+                        INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
 
@@ -385,10 +385,9 @@ public class ProfileEntryActivity extends ActivityParentBase implements Permissi
         ServiceEvent serviceName;
         if (state && data != null) {
             if (data.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                editor.putString(Constants.REGISTERED_USER_NAME, fullUserName);
-                editor.putString(Constants.REGISTERED_USER_ID_TOKEN, data.getService().getUserIdToken());
-                editor.putString(Constants.REGISTERED_USER_EMAIL, emailValue.getText().toString().trim());
-                editor.commit();
+                AppManager.setRegisterIdToken(ctx, data.getService().getUserIdToken());
+                AppManager.setRegisterUserName(ctx, fullUserName);
+                AppManager.setRegisterUserEmail(ctx, emailValue.getText().toString().trim());
                 hamPayDialog.smsConfirmDialog(getString(R.string.iran_prefix_cell_number) + cellNumberValue.getText().toString());
                 serviceName = ServiceEvent.REGISTRATION_ENTRY_SUCCESS;
             } else {
@@ -404,12 +403,12 @@ public class ProfileEntryActivity extends ActivityParentBase implements Permissi
     }
 
     @Override
-    public void showProgressDialog() {
+    public void showProgress() {
         hamPayDialog.showWaitingDialog("");
     }
 
     @Override
-    public void dismissProgressDialog() {
+    public void cancelProgress() {
         hamPayDialog.dismisWaitingDialog();
     }
 
