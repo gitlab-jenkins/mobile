@@ -20,8 +20,8 @@ import java.util.List;
 import br.com.goncalves.pugnotification.notification.PugNotification;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.activity.ActivityPendingRequestList;
 import xyz.homapay.hampay.mobile.android.activity.InvoicePendingConfirmationActivity;
-import xyz.homapay.hampay.mobile.android.activity.PendingPurchasePaymentListActivity;
 import xyz.homapay.hampay.mobile.android.activity.RequestBusinessPayDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.TransactionsListActivity;
 import xyz.homapay.hampay.mobile.android.activity.WelcomeActivity;
@@ -33,7 +33,7 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 /**
  * Created by amir on 9/15/15.
  */
-public class GcmMessageHandler extends IntentService{
+public class GcmMessageHandler extends IntentService {
 
     private Handler handler;
     private String googleMessageType;
@@ -43,109 +43,9 @@ public class GcmMessageHandler extends IntentService{
     private Long notificationValue;
     private String notificationCallerCellNumber;
     private String purchaseCode;
-    private SharedPreferences prefs;
-
-
-
-    public GcmMessageHandler() {
-        super("GcmMessageHandler");
-    }
-
-    @Override
-    public void onCreate() {
-        // TODO Auto-generated method stub
-        super.onCreate();
-        handler = new Handler();
-        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
-    }
-    @Override
-    protected void onHandleIntent(Intent intent) {
-        Bundle extras = intent.getExtras();
-
-        if (!prefs.getBoolean(Constants.NOTIFICATION_STATUS, false)){
-            return;
-        }
-
-        GoogleCloudMessaging googleCloudMessaging = GoogleCloudMessaging.getInstance(this);
-
-        googleMessageType = googleCloudMessaging.getMessageType(intent);
-
-        if (extras.getString("type").equalsIgnoreCase(NotificationMessageType.APP_UPDATE.getNotificationMessageType())){
-            Intent intentNotification = new Intent("notification.intent.MAIN").putExtra("get_update", true);
-            sendBroadcast(intentNotification);
-            notificationMessageType = NotificationMessageType.APP_UPDATE;
-            sendMessage();
-            GcmBroadcastReceiver.completeWakefulIntent(intent);
-        }else if (extras.getString("type").equalsIgnoreCase(NotificationMessageType.JOINT.getNotificationMessageType())){
-            Intent intentNotification = new Intent("notification.intent.MAIN").putExtra("get_update", true);
-            sendBroadcast(intentNotification);
-            notificationMessageType = NotificationMessageType.JOINT;
-            notificationMessage = extras.getString("message");
-            notificationName = extras.getString("name");
-            sendMessage();
-            GcmBroadcastReceiver.completeWakefulIntent(intent);
-        }else if (extras.getString("type").equalsIgnoreCase(NotificationMessageType.PAYMENT.getNotificationMessageType())){
-            Intent intentNotification = new Intent("notification.intent.MAIN").putExtra("get_update", true);
-            sendBroadcast(intentNotification);
-            notificationMessageType = NotificationMessageType.PAYMENT;
-            sendMessage();
-            GcmBroadcastReceiver.completeWakefulIntent(intent);
-        }else if (extras.getString("type").equalsIgnoreCase(NotificationMessageType.CREDIT_REQUEST.getNotificationMessageType())){
-            Intent intentNotification = new Intent("notification.intent.MAIN").putExtra("get_update", true);
-            sendBroadcast(intentNotification);
-            notificationMessageType = NotificationMessageType.CREDIT_REQUEST;
-            notificationMessage = extras.getString("message");
-            notificationName = extras.getString("name");
-            notificationValue = extras.getLong("amount");
-            notificationCallerCellNumber = extras.getString("callerCellNumber");
-            sendMessage();
-            GcmBroadcastReceiver.completeWakefulIntent(intent);
-        }else if (extras.getString("type").equalsIgnoreCase(NotificationMessageType.PURCHASE.getNotificationMessageType())){
-            Intent intentNotification = new Intent("notification.intent.MAIN").putExtra("get_update", true);
-            sendBroadcast(intentNotification);
-            notificationMessageType = NotificationMessageType.PURCHASE;
-            notificationMessage = extras.getString("message");
-            notificationName = extras.getString("name");
-            notificationValue = extras.getLong("amount");
-            notificationCallerCellNumber = extras.getString("callerCellNumber");
-            purchaseCode = extras.getString("purchaseCode");
-            sendMessage();
-            GcmBroadcastReceiver.completeWakefulIntent(intent);
-        }else if (extras.getString("type").equalsIgnoreCase(NotificationMessageType.USER_PAYMENT_CONFIRM.getNotificationMessageType())){
-            Intent intentNotification = new Intent("notification.intent.MAIN").putExtra("get_update", true);
-            sendBroadcast(intentNotification);
-            notificationMessageType = NotificationMessageType.USER_PAYMENT_CONFIRM;
-            notificationMessage = extras.getString("message");
-            notificationName = extras.getString("name");
-            sendMessage();
-            GcmBroadcastReceiver.completeWakefulIntent(intent);
-        }else if (extras.getString("type").equalsIgnoreCase(NotificationMessageType.USER_PAYMENT_CANCEL.getNotificationMessageType())){
-            Intent intentNotification = new Intent("notification.intent.MAIN").putExtra("get_update", true);
-            sendBroadcast(intentNotification);
-            notificationMessageType = NotificationMessageType.USER_PAYMENT_CANCEL;
-            notificationMessage = extras.getString("message");
-            notificationName = extras.getString("name");
-            sendMessage();
-            GcmBroadcastReceiver.completeWakefulIntent(intent);
-        }else if (extras.getString("type").equalsIgnoreCase(NotificationMessageType.IMAGE_UPDATED.getNotificationMessageType())){
-            notificationMessageType = NotificationMessageType.IMAGE_UPDATED;
-        }
-
-    }
-
-    public void sendMessage(){
-        handler.post(new Runnable() {
-            public void run() {
-                notificationHandler.sendEmptyMessage(0);
-            }
-        });
-
-    }
-
-    private final Handler notificationHandler = new Handler(){
+    private final Handler notificationHandler = new Handler() {
         @Override
-        public void handleMessage(Message message)
-        {
+        public void handleMessage(Message message) {
 
             try {
                 Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -156,22 +56,20 @@ public class GcmMessageHandler extends IntentService{
             }
 
             AppState appState = AppState.Stoped;
-            ActivityManager activityManager = (ActivityManager) getSystemService( ACTIVITY_SERVICE );
+            ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
             List<ActivityManager.RunningTaskInfo> runningTaskInfos = activityManager.getRunningTasks(1024);
-            for(int i = 0; i < runningTaskInfos.size(); i++)
-            {
-                if(runningTaskInfos.get(i).baseActivity.getPackageName().equalsIgnoreCase(getApplicationContext().getPackageName()))
-                {
-                    if (runningTaskInfos.get(i).baseActivity.getShortClassName().contains("HamPayLoginActivity")){
+            for (int i = 0; i < runningTaskInfos.size(); i++) {
+                if (runningTaskInfos.get(i).baseActivity.getPackageName().equalsIgnoreCase(getApplicationContext().getPackageName())) {
+                    if (runningTaskInfos.get(i).baseActivity.getShortClassName().contains("HamPayLoginActivity")) {
                         appState = AppState.Stoped;
-                    }else {
+                    } else {
                         appState = AppState.Resumed;
                     }
                     break;
                 }
             }
             Bundle bundle = new Bundle();
-            switch (notificationMessageType){
+            switch (notificationMessageType) {
 
                 case JOINT:
                     PugNotification.with(getApplicationContext())
@@ -217,7 +115,7 @@ public class GcmMessageHandler extends IntentService{
 
                 case PAYMENT:
 
-                    switch (appState){
+                    switch (appState) {
                         case Stoped:
                             bundle.putBoolean(Constants.HAS_NOTIFICATION, true);
                             bundle.putString(Constants.NOTIFICATION_TYPE, notificationMessageType.getNotificationMessageType());
@@ -253,7 +151,7 @@ public class GcmMessageHandler extends IntentService{
                                     .message(notificationMessage)
                                     .bigTextStyle(notificationMessage)
                                     .smallIcon(R.mipmap.ic_notification)
-                                    .click(PendingPurchasePaymentListActivity.class, bundle)
+                                    .click(ActivityPendingRequestList.class, bundle)
                                     .color(R.color.colorPrimary)
                                     .lights(Color.rgb(Constants.HAMPAY_RED, Constants.HAMPAY_GREEN, Constants.HAMPAY_BLUE), 2000, 1000)
                                     .ticker(Constants.NOTIFICATION_PAYMENT)
@@ -268,7 +166,7 @@ public class GcmMessageHandler extends IntentService{
 
                 case CREDIT_REQUEST:
 
-                    switch (appState){
+                    switch (appState) {
                         case Stoped:
                             bundle.putBoolean(Constants.HAS_NOTIFICATION, true);
                             bundle.putString(Constants.NOTIFICATION_TYPE, notificationMessageType.getNotificationMessageType());
@@ -322,7 +220,7 @@ public class GcmMessageHandler extends IntentService{
                     bundle.putBoolean(Constants.HAS_NOTIFICATION, true);
                     bundle.putString(Constants.NOTIFICATION_TYPE, notificationMessageType.getNotificationMessageType());
                     bundle.putString(Constants.BUSINESS_PURCHASE_CODE, purchaseCode);
-                    switch (appState){
+                    switch (appState) {
                         case Stoped:
                             PugNotification.with(getApplicationContext())
                                     .load()
@@ -362,7 +260,7 @@ public class GcmMessageHandler extends IntentService{
                     break;
 
                 case USER_PAYMENT_CONFIRM:
-                    switch (appState){
+                    switch (appState) {
                         case Stoped:
                             bundle.putBoolean(Constants.HAS_NOTIFICATION, true);
                             bundle.putString(Constants.NOTIFICATION_TYPE, notificationMessageType.getNotificationMessageType());
@@ -402,7 +300,7 @@ public class GcmMessageHandler extends IntentService{
                     break;
 
                 case USER_PAYMENT_CANCEL:
-                    switch (appState){
+                    switch (appState) {
                         case Stoped:
                             bundle.putBoolean(Constants.HAS_NOTIFICATION, true);
                             bundle.putString(Constants.NOTIFICATION_TYPE, notificationMessageType.getNotificationMessageType());
@@ -444,9 +342,102 @@ public class GcmMessageHandler extends IntentService{
                 case IMAGE_UPDATED:
                     break;
             }
-            if (HamPayApplication.getAppState() == AppState.Stoped){
+            if (HamPayApplication.getAppState() == AppState.Stoped) {
             }
         }
     };
+    private SharedPreferences prefs;
+
+    public GcmMessageHandler() {
+        super("GcmMessageHandler");
+    }
+
+    @Override
+    public void onCreate() {
+        // TODO Auto-generated method stub
+        super.onCreate();
+        handler = new Handler();
+        prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+    }
+
+    @Override
+    protected void onHandleIntent(Intent intent) {
+        Bundle extras = intent.getExtras();
+
+        if (!prefs.getBoolean(Constants.NOTIFICATION_STATUS, false)) {
+            return;
+        }
+
+        GoogleCloudMessaging googleCloudMessaging = GoogleCloudMessaging.getInstance(this);
+
+        googleMessageType = googleCloudMessaging.getMessageType(intent);
+
+        if (extras.getString("type").equalsIgnoreCase(NotificationMessageType.APP_UPDATE.getNotificationMessageType())) {
+            Intent intentNotification = new Intent("notification.intent.MAIN").putExtra("get_update", true);
+            sendBroadcast(intentNotification);
+            notificationMessageType = NotificationMessageType.APP_UPDATE;
+            sendMessage();
+            GcmBroadcastReceiver.completeWakefulIntent(intent);
+        } else if (extras.getString("type").equalsIgnoreCase(NotificationMessageType.JOINT.getNotificationMessageType())) {
+            Intent intentNotification = new Intent("notification.intent.MAIN").putExtra("get_update", true);
+            sendBroadcast(intentNotification);
+            notificationMessageType = NotificationMessageType.JOINT;
+            notificationMessage = extras.getString("message");
+            notificationName = extras.getString("name");
+            sendMessage();
+            GcmBroadcastReceiver.completeWakefulIntent(intent);
+        } else if (extras.getString("type").equalsIgnoreCase(NotificationMessageType.PAYMENT.getNotificationMessageType())) {
+            Intent intentNotification = new Intent("notification.intent.MAIN").putExtra("get_update", true);
+            sendBroadcast(intentNotification);
+            notificationMessageType = NotificationMessageType.PAYMENT;
+            sendMessage();
+            GcmBroadcastReceiver.completeWakefulIntent(intent);
+        } else if (extras.getString("type").equalsIgnoreCase(NotificationMessageType.CREDIT_REQUEST.getNotificationMessageType())) {
+            Intent intentNotification = new Intent("notification.intent.MAIN").putExtra("get_update", true);
+            sendBroadcast(intentNotification);
+            notificationMessageType = NotificationMessageType.CREDIT_REQUEST;
+            notificationMessage = extras.getString("message");
+            notificationName = extras.getString("name");
+            notificationValue = extras.getLong("amount");
+            notificationCallerCellNumber = extras.getString("callerCellNumber");
+            sendMessage();
+            GcmBroadcastReceiver.completeWakefulIntent(intent);
+        } else if (extras.getString("type").equalsIgnoreCase(NotificationMessageType.PURCHASE.getNotificationMessageType())) {
+            Intent intentNotification = new Intent("notification.intent.MAIN").putExtra("get_update", true);
+            sendBroadcast(intentNotification);
+            notificationMessageType = NotificationMessageType.PURCHASE;
+            notificationMessage = extras.getString("message");
+            notificationName = extras.getString("name");
+            notificationValue = extras.getLong("amount");
+            notificationCallerCellNumber = extras.getString("callerCellNumber");
+            purchaseCode = extras.getString("purchaseCode");
+            sendMessage();
+            GcmBroadcastReceiver.completeWakefulIntent(intent);
+        } else if (extras.getString("type").equalsIgnoreCase(NotificationMessageType.USER_PAYMENT_CONFIRM.getNotificationMessageType())) {
+            Intent intentNotification = new Intent("notification.intent.MAIN").putExtra("get_update", true);
+            sendBroadcast(intentNotification);
+            notificationMessageType = NotificationMessageType.USER_PAYMENT_CONFIRM;
+            notificationMessage = extras.getString("message");
+            notificationName = extras.getString("name");
+            sendMessage();
+            GcmBroadcastReceiver.completeWakefulIntent(intent);
+        } else if (extras.getString("type").equalsIgnoreCase(NotificationMessageType.USER_PAYMENT_CANCEL.getNotificationMessageType())) {
+            Intent intentNotification = new Intent("notification.intent.MAIN").putExtra("get_update", true);
+            sendBroadcast(intentNotification);
+            notificationMessageType = NotificationMessageType.USER_PAYMENT_CANCEL;
+            notificationMessage = extras.getString("message");
+            notificationName = extras.getString("name");
+            sendMessage();
+            GcmBroadcastReceiver.completeWakefulIntent(intent);
+        } else if (extras.getString("type").equalsIgnoreCase(NotificationMessageType.IMAGE_UPDATED.getNotificationMessageType())) {
+            notificationMessageType = NotificationMessageType.IMAGE_UPDATED;
+        }
+
+    }
+
+    public void sendMessage() {
+        handler.post(() -> notificationHandler.sendEmptyMessage(0));
+
+    }
 
 }

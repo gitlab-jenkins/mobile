@@ -31,15 +31,17 @@ import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.PendingPOAdapter;
-import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
-import xyz.homapay.hampay.mobile.android.async.RequestPendingPOList;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.p.payment.PendingPOList;
+import xyz.homapay.hampay.mobile.android.p.payment.PendingPOListImpl;
+import xyz.homapay.hampay.mobile.android.p.payment.PendingPOListView;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.ModelLayerImpl;
 
-public class PaymentRequestListActivity extends AppCompatActivity {
+public class PaymentRequestListActivity extends AppCompatActivity implements PendingPOListView {
 
     @BindView(R.id.paymentRequestList)
     ListView paymentRequestList;
@@ -60,10 +62,10 @@ public class PaymentRequestListActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor;
     private String authToken = "";
     private PendingPOAdapter pendingPOAdapter;
-    private RequestPendingPOList requestPendingPOList;
     private PendingPOListRequest pendingPOListRequest;
     private HamPayDialog hamPayDialog;
     private InputMethodManager inputMethodManager;
+    private PendingPOList pendingPOList;
 
     public void backActionBar(View view) {
         finish();
@@ -103,7 +105,7 @@ public class PaymentRequestListActivity extends AppCompatActivity {
         context = this;
         activity = PaymentRequestListActivity.this;
         hamPayDialog = new HamPayDialog(activity);
-
+        pendingPOList = new PendingPOListImpl(new ModelLayerImpl(context), this);
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
@@ -116,15 +118,8 @@ public class PaymentRequestListActivity extends AppCompatActivity {
         spannableStringBuilder.setSpan(is, 39, 42, 0);
         nullPendingText.setText(spannableStringBuilder);
 
-        pendingPOListRequest = new PendingPOListRequest();
-        requestPendingPOList = new RequestPendingPOList(activity, new RequestPendingPOListTaskCompleteListener());
-        requestPendingPOList.execute(pendingPOListRequest);
-
-        pullToRefresh.setOnRefreshListener(() -> {
-            pendingPOListRequest = new PendingPOListRequest();
-            requestPendingPOList = new RequestPendingPOList(activity, new RequestPendingPOListTaskCompleteListener());
-            requestPendingPOList.execute(pendingPOListRequest);
-        });
+        pendingPOList.getList();
+        pullToRefresh.setOnRefreshListener(() -> pendingPOList.getList());
         search_text.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -183,38 +178,44 @@ public class PaymentRequestListActivity extends AppCompatActivity {
         }
     }
 
-    public class RequestPendingPOListTaskCompleteListener implements
-            AsyncTaskCompleteListener<ResponseMessage<PendingPOListResponse>> {
-        @Override
-        public void onTaskComplete(ResponseMessage<PendingPOListResponse> pendingPOListResponseResponseMessage) {
-            hamPayDialog.dismisWaitingDialog();
-            paymentRequestList.setAdapter(null);
-            pullToRefresh.setRefreshing(false);
-            if (pendingPOListResponseResponseMessage != null) {
-                if (pendingPOListResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    paymentInfoList = pendingPOListResponseResponseMessage.getService().getPendingList();
-                    if (paymentInfoList.size() > 0) {
-                        pendingPOAdapter = new PendingPOAdapter(activity, paymentInfoList, authToken);
-                        paymentRequestList.setAdapter(pendingPOAdapter);
-                        nullPendingText.setVisibility(View.GONE);
-                        search_bar.setVisibility(View.VISIBLE);
-                    } else {
-                        nullPendingText.setVisibility(View.VISIBLE);
-                        search_bar.setVisibility(View.INVISIBLE);
-                    }
-                } else if (pendingPOListResponseResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    forceLogout();
+    @Override
+    public void showProgress() {
+        hamPayDialog.showWaitingDialog("");
+    }
+
+    @Override
+    public void cancelProgress() {
+        hamPayDialog.dismisWaitingDialog();
+    }
+
+    @Override
+    public void onError() {
+        hamPayDialog.showErrorGeneral();
+    }
+
+    @Override
+    public void onListLoaded(boolean state, ResponseMessage<PendingPOListResponse> data, String message) {
+        paymentRequestList.setAdapter(null);
+        pullToRefresh.setRefreshing(false);
+        if (data != null) {
+            if (data.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                paymentInfoList = data.getService().getPendingList();
+                if (paymentInfoList.size() > 0) {
+                    pendingPOAdapter = new PendingPOAdapter(activity, paymentInfoList, authToken);
+                    paymentRequestList.setAdapter(pendingPOAdapter);
+                    nullPendingText.setVisibility(View.GONE);
+                    search_bar.setVisibility(View.VISIBLE);
                 } else {
                     nullPendingText.setVisibility(View.VISIBLE);
+                    search_bar.setVisibility(View.INVISIBLE);
                 }
+            } else if (data.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                forceLogout();
             } else {
                 nullPendingText.setVisibility(View.VISIBLE);
             }
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        } else {
+            nullPendingText.setVisibility(View.VISIBLE);
         }
     }
 }
