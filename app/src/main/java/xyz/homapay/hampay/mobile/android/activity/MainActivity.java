@@ -293,6 +293,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         if (prefs.getBoolean(Constants.SHOW_WALK_THROUGH, true)) {
             wtContainer.setVisibility(View.VISIBLE);
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }
 
         user_image_layout.setOnClickListener(v -> {
@@ -336,6 +337,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
     public void onDrawerItemSelected(View view, int position) {
         if (wtContainer.getVisibility() == View.VISIBLE) {
             wtContainer.setVisibility(View.GONE);
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         }
         if (currentFragment != position || position == 4 || position == 6 || position == 7 || position == 8 || position == 9) {
             displayView(position);
@@ -401,6 +403,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 fragmentTitle = getString(R.string.title_main_fragment);
                 wtFirstLayout.setVisibility(View.VISIBLE);
                 wtContainer.setVisibility(View.VISIBLE);
+                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                 break;
 
             case 5:
@@ -508,6 +511,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                         wtSevenLayout.setVisibility(View.GONE);
                         wtEightLayout.setVisibility(View.GONE);
                         wtContainer.setVisibility(View.GONE);
+                        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                         break;
                 }
 
@@ -564,6 +568,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 wtSevenLayout.setVisibility(View.GONE);
                 wtEightLayout.setVisibility(View.GONE);
                 wtContainer.setVisibility(View.GONE);
+                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                 editor.putBoolean(Constants.SHOW_WALK_THROUGH, false).commit();
                 break;
 
@@ -586,6 +591,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
 
         if (wtContainer.getVisibility() == View.VISIBLE) {
             wtContainer.setVisibility(View.GONE);
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             return;
         }
 
