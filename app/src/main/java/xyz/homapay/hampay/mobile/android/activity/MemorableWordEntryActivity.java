@@ -122,16 +122,14 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                             boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS);
                             if (showRationale) {
-                                handler.post(new Runnable() {
-                                    public void run() {
-                                        PermissionContactDialog permissionContactDialog = new PermissionContactDialog();
-                                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                                        fragmentTransaction.add(permissionContactDialog, null);
-                                        fragmentTransaction.commitAllowingStateLoss();
-                                    }
+                                handler.post(() -> {
+                                    PermissionContactDialog permissionContactDialog = new PermissionContactDialog();
+                                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                                    fragmentTransaction.add(permissionContactDialog, null);
+                                    fragmentTransaction.commitAllowingStateLoss();
                                 });
                             } else {
-                                contacts = new ArrayList<ContactDTO>();
+                                contacts = new ArrayList<>();
                                 registrationCredentialsRequest.setContacts(contacts);
                                 registrationCredentialsRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
                                 registrationCredentialsRequest.setDeviceId(new DeviceInfo(activity).getAndroidId());
@@ -143,13 +141,11 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
                                 requestCredentialEntry.execute(registrationCredentialsRequest);
                             }
                         } else {
-                            handler.post(new Runnable() {
-                                public void run() {
-                                    PermissionDeviceDialog permissionDeviceDialog = new PermissionDeviceDialog();
-                                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                                    fragmentTransaction.add(permissionDeviceDialog, null);
-                                    fragmentTransaction.commitAllowingStateLoss();
-                                }
+                            handler.post(() -> {
+                                PermissionDeviceDialog permissionDeviceDialog = new PermissionDeviceDialog();
+                                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                                fragmentTransaction.add(permissionDeviceDialog, null);
+                                fragmentTransaction.commitAllowingStateLoss();
                             });
                         }
                     }
@@ -190,7 +186,7 @@ public class MemorableWordEntryActivity extends AppCompatActivity implements Per
                 requestAndLoadUserContact();
                 break;
             case DENY:
-                contacts = new ArrayList<ContactDTO>();
+                contacts = new ArrayList<>();
                 registrationCredentialsRequest.setContacts(contacts);
                 registrationCredentialsRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
                 registrationCredentialsRequest.setDeviceId(new DeviceInfo(activity).getAndroidId());
