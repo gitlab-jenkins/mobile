@@ -41,6 +41,7 @@ import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
 import xyz.homapay.hampay.common.core.model.response.BusinessListResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.BusinessDTO;
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.activity.BusinessPaymentInfoActivity;
 import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.adapter.HamPayBusinessesAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
@@ -232,6 +233,12 @@ public class BusinessNameFragment extends Fragment {
         });
         etSearchPhraseText = (FacedEditText) rootView.findViewById(R.id.etSearchPhraseText);
         businessListView = (ListView) rootView.findViewById(R.id.businessListView);
+        businessListView.setOnItemClickListener((parent, view, position, id) -> {
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), BusinessPaymentInfoActivity.class);
+            intent.putExtra(Constants.BUSINESS_INFO, businessDTOs.get(position));
+            getActivity().startActivity(intent);
+        });
         pullToRefresh = (SwipeRefreshLayout) rootView.findViewById(R.id.pullToRefresh);
         hamPayDialog = new HamPayDialog(getActivity());
         businessDTOs = new ArrayList<>();
