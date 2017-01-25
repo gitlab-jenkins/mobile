@@ -64,24 +64,32 @@ android {
             buildConfigField "String", "HTTPS_BASE_URL", "\"https://sit.hampay.ir\""
             buildConfigField "String", "HTTP_BASE_URL", "\"http://sit.hampay.ir\""
             buildConfigField "String", "PURE_SERVER_URL", "\"sit.hampay.ir\""
+
+            manifestPlaceholders = [appName: "SIT_hampay"]
         }
 
         uat {
             buildConfigField "String", "HTTPS_BASE_URL", "\"https://uat.hampay.ir\""
             buildConfigField "String", "HTTP_BASE_URL", "\"http://uat.hampay.ir\""
             buildConfigField "String", "PURE_SERVER_URL", "\"uat.hampay.ir\""
+
+            manifestPlaceholders = [appName: "UAT_hampay"]
         }
 
         dev2 {
             buildConfigField "String", "HTTPS_BASE_URL", "\"https://mobile.hampay.ir\""
             buildConfigField "String", "HTTP_BASE_URL", "\"http://mobile.hampay.ir\""
             buildConfigField "String", "PURE_SERVER_URL", "\"mobile.hampay.ir\""
+
+            manifestPlaceholders = [appName: "DEV2_hampay"]
         }
 
         live {
             buildConfigField "String", "HTTPS_BASE_URL", "\"https://mobile.hampay.homapay.com\""
             buildConfigField "String", "HTTP_BASE_URL", "\"http://mobile.hampay.homapay.com\""
             buildConfigField "String", "PURE_SERVER_URL", "\"mobile.hampay.homapay.com\""
+
+            manifestPlaceholders = [appName: "HamPay"]
         }
     }
 
