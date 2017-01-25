@@ -119,10 +119,10 @@ public class Constants {
     public static final String CHARGE_TYPE = "charge_type";
     public static final int READ_EXTERNAL_STORAGE = 4;
     //    public static String SERVER = "176.58.104.158";//England Server
-    public static String SERVER = "mobile.hampay.ir";//Prod Server
+//    public static String SERVER = "mobile.hampay.ir";//Prod Server
 //        public static String SERVER = "sit.hampay.ir";//SIT/27 Server
 //    public static String SERVER = "139.162.147.189";//DEV2 Server
-//    public static String SERVER = "sit.hampay.ir";//SIT/27 Server
+    public static String SERVER = "sit.hampay.ir";//SIT/27 Server
 // public static String SERVER = "uat.hampay.ir";//UAT Server
 //  public static String SERVER = "uat.hampay.ir";//UAT Server
 //    public static String SERVER = "mobile.hampay.homapay.com";//LIVE Server
