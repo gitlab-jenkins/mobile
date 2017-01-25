@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -1211,30 +1213,32 @@ public class HamPayDialog {
 
     public void showNoNetwork() {
 
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_no_network, null);
+        new Handler(Looper.getMainLooper()).post(() -> {
+            View view = activity.getLayoutInflater().inflate(R.layout.dialog_no_network, null);
 
-        FacedTextView networkSetting = (FacedTextView) view.findViewById(R.id.network_setting);
-        FacedTextView networkCancel = (FacedTextView) view.findViewById(R.id.network_cancel);
+            FacedTextView networkSetting = (FacedTextView) view.findViewById(R.id.network_setting);
+            FacedTextView networkCancel = (FacedTextView) view.findViewById(R.id.network_cancel);
 
-        networkSetting.setOnClickListener(v -> {
-            try {
+            networkSetting.setOnClickListener(v -> {
+                try {
+                    dialog.dismiss();
+                    activity.startActivity(new Intent(Settings.ACTION_SETTINGS));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+            networkCancel.setOnClickListener(v -> {
                 dialog.dismiss();
-                activity.startActivity(new Intent(Settings.ACTION_SETTINGS));
-            } catch (Exception e) {
-                e.printStackTrace();
+                activity.finish();
+            });
+
+            view.setMinimumWidth((int) (rect.width() * 0.85f));
+            if (!activity.isFinishing()) {
+                dialog = new HamPayCustomDialog(view, activity, 0);
+                dialog.show();
             }
         });
-
-        networkCancel.setOnClickListener(v -> {
-            dialog.dismiss();
-            activity.finish();
-        });
-
-        view.setMinimumWidth((int) (rect.width() * 0.85f));
-        if (!activity.isFinishing()) {
-            dialog = new HamPayCustomDialog(view, activity, 0);
-            dialog.show();
-        }
     }
 
     public void showUnknownIban() {
@@ -1400,6 +1404,28 @@ public class HamPayDialog {
             dialog = new HamPayCustomDialog(view, activity, 0);
             dialog.show();
         }
+    }
+
+    public void showNoServerConnection() {
+        new Handler(Looper.getMainLooper()).post(() -> {
+            View view = activity.getLayoutInflater().inflate(R.layout.dialog_no_server_connection, null);
+
+            FacedTextView btnOk = (FacedTextView) view.findViewById(R.id.btnOk);
+
+            btnOk.setOnClickListener(v -> {
+                try {
+                    dialog.dismiss();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+            view.setMinimumWidth((int) (rect.width() * 0.85f));
+            if (!activity.isFinishing()) {
+                dialog = new HamPayCustomDialog(view, activity, 0);
+                dialog.show();
+            }
+        });
     }
 
     public class HttpContactUs extends AsyncTask<ContactUsRequest, Void, String> {

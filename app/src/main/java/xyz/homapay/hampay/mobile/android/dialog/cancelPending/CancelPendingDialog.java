@@ -54,7 +54,7 @@ public class CancelPendingDialog extends DialogFragment implements TextView.OnEd
 
     @Override
     public void onClick(View v) {
-        CancelPendingDialogListener activity = (CancelPendingDialogListener) getActivity();
+        CancelPendingDialogListener activity = (CancelPendingDialogListener) getFrg();
         activity.onFinishEditDialog(ActionPending.CANCEL);
         this.dismiss();
     }

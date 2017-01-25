@@ -1,7 +1,5 @@
 package xyz.homapay.hampay.mobile.android.m.common;
 
-import java.io.IOException;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,8 +32,13 @@ public class MyCallBack<T> implements Callback<T> {
     @Override
     public void onFailure(Call<T> call, Throwable t) {
         try {
-            if (t != null && t instanceof IOException)
-                modelLayer.showNoNetworkDialog();
+            if (t != null) {
+                if (t instanceof NoNetworkException) {
+                    modelLayer.showNoNetworkDialog();
+                } else {
+                    modelLayer.showServerConnectionError();
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

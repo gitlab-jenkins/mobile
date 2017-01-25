@@ -761,5 +761,7 @@
     <string name="bills_header_title">پرداخت قبوض</string>
     <string name="top_up_header_title">شارژ سیم کارت</string>
     <string name="err_general_sms_text">در ارسال پیامک برای تلفن همراه شما خطایی رخ داده است</string>
+    <string name="not_connectivity_to_server">در حال حاضر هم پی قادر به برقراری ارتباط با سرور نمی باشد لطفا مجددا تلاش کنید</string>
+    <string name="str_ok_button">تایید</string>
 
 </resources>

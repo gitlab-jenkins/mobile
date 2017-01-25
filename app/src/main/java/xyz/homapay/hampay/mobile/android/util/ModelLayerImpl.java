@@ -58,7 +58,6 @@ public class ModelLayerImpl implements ModelLayer {
     }
 
 
-
     @Override
     public String getAuthToken() {
         return AppManager.getAuthToken(ctx);
@@ -69,6 +68,25 @@ public class ModelLayerImpl implements ModelLayer {
         UserContacts userContacts = new UserContacts(ctx);
         List<ContactDTO> contacts = userContacts.read();
         return contacts;
+    }
+
+    @Override
+    public boolean canUseStaticKeys() {
+        return AppManager.canUseStaticKeys(ctx);
+    }
+
+    @Override
+    public void requestUseStaticKeys() {
+        AppManager.requestUseStaticKeys(ctx, true);
+    }
+
+    @Override
+    public void showServerConnectionError() {
+        try {
+            new HamPayDialog((Activity) ctx).showNoServerConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

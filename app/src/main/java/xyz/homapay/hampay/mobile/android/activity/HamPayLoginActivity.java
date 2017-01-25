@@ -604,6 +604,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
             hamPayDialog.dismisWaitingDialog();
             if (keyExchange.getKey() != null && keyExchange.getIv() != null) {
                 requestAndLoadPhoneState();
+                AppManager.requestUseStaticKeys(context, false);
             } else {
                 Toast.makeText(activity, getString(R.string.system_connectivity), Toast.LENGTH_SHORT).show();
             }

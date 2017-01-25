@@ -123,9 +123,9 @@ public class TrustedOkHttpClient {
 
     private static Interceptor provideConnectivityInterceptor(ModelLayer modelLayer) {
         return chain -> {
+            if (!modelLayer.isConnected())
+                throw new NoNetworkException();
             try {
-                if (!modelLayer.isConnected())
-                    modelLayer.showNoNetworkDialog();
                 return chain.proceed(chain.request());
             } catch (IOException e) {
                 e.printStackTrace();

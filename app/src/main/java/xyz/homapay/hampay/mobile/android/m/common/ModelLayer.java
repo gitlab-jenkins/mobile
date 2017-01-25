@@ -31,4 +31,9 @@ public interface ModelLayer {
 
     List<ContactDTO> getUserContacts();
 
+    boolean canUseStaticKeys();
+
+    void requestUseStaticKeys();
+
+    void showServerConnectionError();
 }

@@ -11,12 +11,12 @@ import xyz.homapay.hampay.mobile.android.p.security.KeyExchangerImpl;
 
 public abstract class Presenter<T> implements KeyExchangeView {
 
+    private static byte[] key;
+    private static byte[] iv;
+    private static String encId;
     protected T view;
     protected ModelLayer modelLayer;
-    protected byte[] key;
-    protected byte[] iv;
-    protected String encId;
-    protected KeyAgreementModel keyAgreementModel;
+    private KeyAgreementModel keyAgreementModel;
     private KeyExchangerImpl keyExchanger;
 
     public Presenter(ModelLayer modelLayer, T view) {
@@ -25,18 +25,23 @@ public abstract class Presenter<T> implements KeyExchangeView {
     }
 
     protected void keyExchange() {
-        keyExchanger = new KeyExchangerImpl(modelLayer, this);
-        keyExchanger.exchange();
+        if (modelLayer.canUseStaticKeys() && key != null && iv != null && encId != null && keyAgreementModel != null) {
+            onKeyExchangeDone();
+        } else {
+            keyExchanger = new KeyExchangerImpl(modelLayer, this);
+            keyExchanger.exchange();
+        }
     }
 
     @Override
     public void onExchangeDone(boolean state, KeyAgreementModel data, String message) {
         try {
             if (state) {
-                this.key = data.getKey();
-                this.iv = data.getIv();
-                this.encId = data.getEncId();
-                this.keyAgreementModel = data;
+                setKey(data.getKey());
+                setIv(data.getIv());
+                setEncId(data.getEncId());
+                setKeyAgreementModel(data);
+                modelLayer.requestUseStaticKeys();
                 onKeyExchangeDone();
             } else {
                 onKeyExchangeError();
@@ -55,15 +60,31 @@ public abstract class Presenter<T> implements KeyExchangeView {
         return key;
     }
 
+    public static void setKey(byte[] key) {
+        Presenter.key = key;
+    }
+
     public byte[] getIv() {
         return iv;
+    }
+
+    public static void setIv(byte[] iv) {
+        Presenter.iv = iv;
     }
 
     public String getEncId() {
         return encId;
     }
 
+    public static void setEncId(String encId) {
+        Presenter.encId = encId;
+    }
+
     public KeyAgreementModel getKeyAgreementModel() {
         return keyAgreementModel;
+    }
+
+    public void setKeyAgreementModel(KeyAgreementModel keyAgreementModel) {
+        this.keyAgreementModel = keyAgreementModel;
     }
 }
