@@ -25,7 +25,7 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PreferencesManager;
 import xyz.homapay.hampay.mobile.android.util.RootUtil;
 
-public class WelcomeActivity extends AppCompatActivity {
+public class IntroActivity extends AppCompatActivity {
 
     private ViewPager viewPager;
     private WelcomeAdapter welcomeAdapter;
@@ -84,7 +84,7 @@ public class WelcomeActivity extends AppCompatActivity {
         LogEvent logEvent = new LogEvent(this);
         logEvent.log(appEvent);
 
-        activity = WelcomeActivity.this;
+        activity = IntroActivity.this;
 
         rootUtil = new RootUtil(activity);
         if (rootUtil.checkRootedDevice()) {
@@ -160,7 +160,7 @@ public class WelcomeActivity extends AppCompatActivity {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
         }
 
-        setContentView(R.layout.activity_welcome);
+        setContentView(R.layout.activity_intro);
 
         viewPager = (ViewPager) findViewById(R.id.view_pager);
         dotsLayout = (LinearLayout) findViewById(R.id.layoutDots);
@@ -221,12 +221,12 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private void launchRegisterScreen() {
         preferencesManager.setFirstTimeLaunch(false);
-        startActivity(new Intent(WelcomeActivity.this, ProfileEntryActivity.class));
+        startActivity(new Intent(IntroActivity.this, ProfileEntryActivity.class));
         finish();
     }
 
     private void launchLoginScreen() {
-        startActivity(new Intent(WelcomeActivity.this, HamPayLoginActivity.class));
+        startActivity(new Intent(IntroActivity.this, HamPayLoginActivity.class));
         finish();
     }
 
