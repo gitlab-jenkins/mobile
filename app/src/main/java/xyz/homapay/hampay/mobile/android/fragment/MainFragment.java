@@ -29,10 +29,10 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.ActivityBillsTopUp;
 import xyz.homapay.hampay.mobile.android.activity.ActivityBusiness;
 import xyz.homapay.hampay.mobile.android.activity.ActivityPendingRequestList;
+import xyz.homapay.hampay.mobile.android.activity.HamPayContactsActivity;
 import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.activity.IbanIntronActivity;
 import xyz.homapay.hampay.mobile.android.activity.PaymentRequestDetailActivity;
-import xyz.homapay.hampay.mobile.android.activity.PaymentRequestListActivity;
 import xyz.homapay.hampay.mobile.android.activity.TransactionsListActivity;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
@@ -303,8 +303,8 @@ public class MainFragment extends Fragment implements View.OnClickListener {
                     hamPayDialog.preventPaymentRequest();
                 } else {
                     if ((prefs.getBoolean(Constants.SETTING_CHANGE_IBAN_STATUS, false)) || userProfile.getIbanDTO() != null && userProfile.getIbanDTO().getIban() != null && userProfile.getIbanDTO().getIban().length() > 0) {
-                        intent.setClass(getActivity(), PaymentRequestListActivity.class);
-                        intent.putExtra(Constants.USER_PROFILE, userProfile);
+                        intent = new Intent();
+                        intent.setClass(getActivity(), HamPayContactsActivity.class);
                         startActivity(intent);
                     } else {
                         intent.setClass(getActivity(), IbanIntronActivity.class);
@@ -401,8 +401,7 @@ public class MainFragment extends Fragment implements View.OnClickListener {
         if (requestCode == Constants.IBAN_CHANGE_RESULT_CODE) {
             if (resultCode == getActivity().RESULT_OK) {
                 Intent intent = new Intent();
-                intent.setClass(getActivity(), PaymentRequestListActivity.class);
-                intent.putExtra(Constants.USER_PROFILE, userProfile);
+                intent.setClass(context, HamPayContactsActivity.class);
                 startActivity(intent);
             }
         } else if (requestCode == Constants.IBAN_PAYMENT_REQUEST_CODE) {

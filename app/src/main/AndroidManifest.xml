@@ -87,11 +87,6 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.PaymentRequestListActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
             android:name=".activity.PendingPODetailActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
@@ -269,7 +264,7 @@
         <activity
             android:name=".activity.CredentialEntryActivity"
             android:label="@string/title_activity_credentioal_entry"
-            android:theme="@style/MyMaterialTheme"/>
+            android:theme="@style/MyMaterialTheme" />
     </application>
 
 </manifest>
