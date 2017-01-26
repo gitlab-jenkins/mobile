@@ -763,5 +763,7 @@
     <string name="err_general_sms_text">در ارسال پیامک برای تلفن همراه شما خطایی رخ داده است</string>
     <string name="not_connectivity_to_server">در حال حاضر هم پی قادر به برقراری ارتباط با سرور نمی باشد لطفا مجددا تلاش کنید</string>
     <string name="str_ok_button">تایید</string>
+    <string name="err_cvv_lenght">لطفا cvv2 خود را به صورت کامل وارد نمایید</string>
+    <string name="err_pin_lenght">لطفا رمز دوم خود را کامل وارد نمایید</string>
 
 </resources>

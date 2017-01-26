@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -257,8 +258,10 @@ public class FrgTopUp extends Fragment implements View.OnClickListener, TopUpInf
     }
 
     private void createPayment() {
-        if (!isNumberOk())
+        if (!isNumberOk()) {
+            Toast.makeText(getActivity(), R.string.err_cell_phone_invalid, Toast.LENGTH_SHORT).show();
             return;
+        }
         if (chargeType != null && amount != 0) {
             ChargePackage chargePackage = null;
             for (xyz.homapay.hampay.common.common.TopUpInfo item : infos) {
@@ -533,7 +536,6 @@ public class FrgTopUp extends Fragment implements View.OnClickListener, TopUpInf
                             }
                         }
                     }
-
                 }
                 break;
         }

@@ -14,9 +14,9 @@ public abstract class Presenter<T> implements KeyExchangeView {
     private static byte[] key;
     private static byte[] iv;
     private static String encId;
+    private static KeyAgreementModel keyAgreementModel;
     protected T view;
     protected ModelLayer modelLayer;
-    private KeyAgreementModel keyAgreementModel;
     private KeyExchangerImpl keyExchanger;
 
     public Presenter(ModelLayer modelLayer, T view) {
@@ -24,8 +24,15 @@ public abstract class Presenter<T> implements KeyExchangeView {
         this.modelLayer = modelLayer;
     }
 
+    public static final void invalidateKeys() {
+        key = null;
+        iv = null;
+        encId = null;
+        keyAgreementModel = null;
+    }
+
     protected void keyExchange() {
-        if (modelLayer.canUseStaticKeys() && key != null && iv != null && encId != null && keyAgreementModel != null) {
+        if (key != null && iv != null && encId != null && keyAgreementModel != null) {
             onKeyExchangeDone();
         } else {
             keyExchanger = new KeyExchangerImpl(modelLayer, this);
@@ -37,11 +44,10 @@ public abstract class Presenter<T> implements KeyExchangeView {
     public void onExchangeDone(boolean state, KeyAgreementModel data, String message) {
         try {
             if (state) {
-                setKey(data.getKey());
-                setIv(data.getIv());
-                setEncId(data.getEncId());
-                setKeyAgreementModel(data);
-                modelLayer.requestUseStaticKeys();
+                key = data.getKey();
+                iv = data.getIv();
+                encId = data.getEncId();
+                keyAgreementModel = data;
                 onKeyExchangeDone();
             } else {
                 onKeyExchangeError();
@@ -60,31 +66,15 @@ public abstract class Presenter<T> implements KeyExchangeView {
         return key;
     }
 
-    public static void setKey(byte[] key) {
-        Presenter.key = key;
-    }
-
     public byte[] getIv() {
         return iv;
-    }
-
-    public static void setIv(byte[] iv) {
-        Presenter.iv = iv;
     }
 
     public String getEncId() {
         return encId;
     }
 
-    public static void setEncId(String encId) {
-        Presenter.encId = encId;
-    }
-
     public KeyAgreementModel getKeyAgreementModel() {
         return keyAgreementModel;
-    }
-
-    public void setKeyAgreementModel(KeyAgreementModel keyAgreementModel) {
-        this.keyAgreementModel = keyAgreementModel;
     }
 }

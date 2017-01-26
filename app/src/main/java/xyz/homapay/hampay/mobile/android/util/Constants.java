@@ -128,7 +128,6 @@ public class Constants {
 //  public static String SERVER = "uat.hampay.ir";//UAT Server
 //    public static String SERVER = "mobile.hampay.homapay.com";//LIVE Server
     public static final String PSP_SOAP_SERVICE_URL = BuildConfig.PURE_SERVER_URL;
-    public static final String CAN_USE_STATIC_KEYS = "can_use_static_keys";
     public static String URL_PREFIX = "/hampay";
     public static final String HTTP_OPENAM_LOGIN_URL = BuildConfig.HTTP_BASE_URL + URL_PREFIX + "/auth";
     public static final String HTTP_OPENAM_LOGOUT_URL = BuildConfig.HTTP_BASE_URL + URL_PREFIX + "/unauth";

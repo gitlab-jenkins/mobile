@@ -133,11 +133,4 @@ public class AppManager {
         return AppSettings.getString(ctx, Constants.REGISTERED_USER_EMAIL, "");
     }
 
-    public static final boolean canUseStaticKeys(Context ctx) {
-        return AppSettings.getBoolean(ctx, Constants.CAN_USE_STATIC_KEYS, false);
-    }
-
-    public static final void requestUseStaticKeys(Context ctx, boolean permissionToUseStaticKeys) {
-        AppSettings.setValue(ctx, Constants.CAN_USE_STATIC_KEYS, permissionToUseStaticKeys);
-    }
 }

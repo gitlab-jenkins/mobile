@@ -71,16 +71,6 @@ public class ModelLayerImpl implements ModelLayer {
     }
 
     @Override
-    public boolean canUseStaticKeys() {
-        return AppManager.canUseStaticKeys(ctx);
-    }
-
-    @Override
-    public void requestUseStaticKeys() {
-        AppManager.requestUseStaticKeys(ctx, true);
-    }
-
-    @Override
     public void showServerConnectionError() {
         try {
             new HamPayDialog((Activity) ctx).showNoServerConnection();

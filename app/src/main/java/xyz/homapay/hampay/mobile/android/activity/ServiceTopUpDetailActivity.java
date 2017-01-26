@@ -230,8 +230,15 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
 
             if (topUpInfo == null) return;
 
-            if (cvvText.getText().toString().trim().length() < 3 || pinText.getText().toString().trim().length() < 5)
+            if (cvvText.getText().toString().trim().length() < 3) {
+                Toast.makeText(context, R.string.err_cvv_lenght, Toast.LENGTH_SHORT).show();
                 return;
+            }
+
+            if (pinText.getText().toString().trim().length() < 5) {
+                Toast.makeText(context, R.string.err_pin_lenght, Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             if (selectedCardIdIndex == -1 || (topUpInfo.getCardList().get(selectedCardIdIndex) != null && topUpInfo.getCardList().get(selectedCardIdIndex).getCardId() == null) || (topUpInfo.getChargePackage().getAmount() + topUpInfo.getFeeCharge() >= Constants.SOAP_AMOUNT_MAX)) {
                 Intent intent1 = new Intent();

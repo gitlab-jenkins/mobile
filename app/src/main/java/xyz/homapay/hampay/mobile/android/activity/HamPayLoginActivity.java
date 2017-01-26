@@ -57,6 +57,7 @@ import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
+import xyz.homapay.hampay.mobile.android.p.common.Presenter;
 import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
 import xyz.homapay.hampay.mobile.android.security.KeyExchange;
@@ -604,7 +605,7 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
             hamPayDialog.dismisWaitingDialog();
             if (keyExchange.getKey() != null && keyExchange.getIv() != null) {
                 requestAndLoadPhoneState();
-                AppManager.requestUseStaticKeys(context, false);
+                Presenter.invalidateKeys();
             } else {
                 Toast.makeText(activity, getString(R.string.system_connectivity), Toast.LENGTH_SHORT).show();
             }
