@@ -132,7 +132,7 @@ public class HttpLoggerLayer {
             response = chain.proceed(request);
         } catch (Exception e) {
             logger.log("<-- HTTP FAILED: " + e);
-            throw e;
+            throw new ServerException();
         }
         long tookMs = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startNs);
 

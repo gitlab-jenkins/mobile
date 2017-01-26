@@ -4,7 +4,6 @@ import android.os.Build;
 import android.util.Log;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
 
@@ -36,7 +35,6 @@ public class TrustedOkHttpClient {
     private static Interceptor provideOfflineCacheInterceptor() {
         return chain -> {
             Request request = chain.request();
-            Response response = null;
             try {
                 CacheControl cacheControl;
                 cacheControl = new CacheControl.Builder()
@@ -46,11 +44,12 @@ public class TrustedOkHttpClient {
                 request = request.newBuilder()
                         .cacheControl(cacheControl)
                         .build();
-                response = chain.proceed(request);
+                Response response = chain.proceed(request);
+                return response;
             } catch (Exception e) {
                 e.printStackTrace();
+                throw new ServerException();
             }
-            return response;
         };
     }
 
@@ -67,7 +66,7 @@ public class TrustedOkHttpClient {
                         .build();
             } catch (Exception e) {
                 e.printStackTrace();
-                return null;
+                throw new ServerException();
             }
         };
     }
@@ -75,18 +74,19 @@ public class TrustedOkHttpClient {
     private static Interceptor provideDecryptor(KeyAgreementModel keyAgreementModel, boolean gzip) {
         return chain -> {
             try {
-                Response response = chain.proceed(chain.request());
+                Request original = chain.request();
+                Response response = chain.proceed(original);
                 DecryptedResponseInfo decryptedResponseInfo = new AESMessageEncryptor().decryptResponse(deflateGzip(response, gzip), keyAgreementModel.getKey(), keyAgreementModel.getIv());
                 if (decryptedResponseInfo.getResponseCode() == 0) {
                     Response.Builder resBuilder = response.newBuilder();
                     resBuilder.body(ResponseBody.create(MediaType.parse("application/json"), decryptedResponseInfo.getPayload()));
                     return resBuilder.build();
                 } else {
-                    return null;
+                    throw new ServerException();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                return null;
+                throw new ServerException();
             }
         };
     }
@@ -127,9 +127,9 @@ public class TrustedOkHttpClient {
                 throw new NoNetworkException();
             try {
                 return chain.proceed(chain.request());
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
-                return null;
+                throw new ServerException();
             }
         };
     }
@@ -155,8 +155,8 @@ public class TrustedOkHttpClient {
             final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
             builder.connectTimeout(10, TimeUnit.SECONDS)
-                    .writeTimeout(60, TimeUnit.SECONDS)
-                    .readTimeout(60, TimeUnit.SECONDS)
+                    .writeTimeout(10, TimeUnit.SECONDS)
+                    .readTimeout(10, TimeUnit.SECONDS)
                     .retryOnConnectionFailure(true)
                     .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustedCerts[0])
                     .addNetworkInterceptor(provideLogInterceptor())

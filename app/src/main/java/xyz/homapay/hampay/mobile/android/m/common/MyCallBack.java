@@ -35,7 +35,7 @@ public class MyCallBack<T> implements Callback<T> {
             if (t != null) {
                 if (t instanceof NoNetworkException) {
                     modelLayer.showNoNetworkDialog();
-                } else {
+                } else if (t instanceof ServerException) {
                     modelLayer.showServerConnectionError();
                 }
             }

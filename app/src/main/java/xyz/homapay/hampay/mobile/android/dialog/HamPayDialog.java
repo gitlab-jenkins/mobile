@@ -149,19 +149,23 @@ public class HamPayDialog {
 
     public void showWaitingDialog(String hampayUser) {
 
-        dismisWaitingDialog();
+        try {
+            dismisWaitingDialog();
 
-        View view = activity.getLayoutInflater().inflate(R.layout.dialog_waiting, null);
-        FacedTextView waiting_text = (FacedTextView) view.findViewById(R.id.waiting_text);
-        FacedTextView userName = (FacedTextView) view.findViewById(R.id.userName);
-        if (hampayUser.length() != 0) {
-            userName.setText(hampayUser);
-            waiting_text.setText(activity.getString(R.string.dialog_hampay_user_waiting));
-        }
-        view.setMinimumWidth((int) (rect.width() * 0.85f));
-        if (!activity.isFinishing()) {
-            dialog = new HamPayCustomDialog(view, activity, 0);
-            dialog.show();
+            View view = activity.getLayoutInflater().inflate(R.layout.dialog_waiting, null);
+            FacedTextView waiting_text = (FacedTextView) view.findViewById(R.id.waiting_text);
+            FacedTextView userName = (FacedTextView) view.findViewById(R.id.userName);
+            if (hampayUser.length() != 0) {
+                userName.setText(hampayUser);
+                waiting_text.setText(activity.getString(R.string.dialog_hampay_user_waiting));
+            }
+            view.setMinimumWidth((int) (rect.width() * 0.85f));
+            if (!activity.isFinishing()) {
+                dialog = new HamPayCustomDialog(view, activity, 0);
+                dialog.show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
