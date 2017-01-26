@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
-        android:src="@drawable/intro_slide_4" />
+        android:src="@drawable/intro_slide_5" />
 
 
     <LinearLayout
@@ -24,7 +24,7 @@
             android:layout_width="84dp"
             android:layout_height="84dp"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/slider_expectation_icon" />
+            android:src="@drawable/slider_transaction_icon" />
 
         <LinearLayout
             android:id="@+id/intro_title"
@@ -48,7 +48,7 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="4dp"
                 android:gravity="center"
-                android:text="@string/intro_4"
+                android:text="@string/intro_5"
                 android:textColor="@android:color/white"
                 android:textSize="18dp"
                 geekui:customTypeface="fonts/vazir_regular_bold.ttf" />

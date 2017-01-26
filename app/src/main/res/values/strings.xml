@@ -13,10 +13,12 @@
     <string name="intro_4_title">با هم‌پی</string>
     <string name="intro_4_text">صمیمیت، راحتی و امنیت را در کنار دوستانتان تجربه کنید</string>
 
-
+    <string name="intro_1">پرداخت مدرن، ساده و مطمئن</string>
+    <string name="intro_2">پرداخت به کسب و کارهای گوناگون</string>
     <string name="intro_3">درخواست پرداخت</string>
     <string name="intro_4">فهرست پرداخت‌های در انتظار</string>
     <string name="intro_5">نمایش پرداخت‌ها و دریافت‌های گذشته</string>
+
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
     <string name="nav_item_main_fragment">صفحه اصلی</string>

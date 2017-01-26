@@ -1,55 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:geekui="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/transparency">
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/intro_slide_0" />
 
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
-        
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+
         <ImageView
-            android:id="@+id/intro"
-            android:layout_width="245dp"
-            android:layout_height="260dp"
-            android:src="@drawable/intro_hampay"/>
+            android:layout_width="144dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/homapay_logo" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_centerHorizontal="true"
-            android:foregroundGravity="bottom"
-            android:gravity="center"
-            android:layout_alignBottom="@id/intro"
-            android:layout_marginBottom="50dp">
+        <WebView
+            android:id="@+id/webview"
+            android:layout_width="140dp"
+            android:layout_height="45dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp" />
 
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/app_name_slider"
-                android:textColor="@color/intro_text"
-                android:textSize="20dp"
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
+    </LinearLayout>
 
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="2dp"
-                android:text="@string/intro_0_text"
-                android:textColor="@color/intro_text"
-                android:textSize="15dp"
-                android:layout_marginTop="12dp"
-                geekui:customTypeface="fonts/vazir_regular.ttf" />
-
-
-        </LinearLayout>
-        
-    </RelativeLayout>
-    
 
 </RelativeLayout>
