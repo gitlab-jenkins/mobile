@@ -11,31 +11,30 @@
         android:paddingTop="1dp">
 
         <TextView
-            android:id="@+id/urlText"
+            android:id="@+id/tvUrlText"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:textColor="@color/normal_text"
-            android:background="@android:color/white"
-            android:padding="6dp"
             android:layout_marginRight="40dp"
-            android:gravity="center_vertical"/>
+            android:background="@android:color/white"
+            android:fadeScrollbars="true"
+            android:gravity="center_vertical"
+            android:padding="6dp"
+            android:scrollHorizontally="true"
+            android:textColor="@color/normal_text" />
 
         <ImageView
-            android:id="@+id/reload"
+            android:id="@+id/imgReload"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_alignParentRight="true"
-            android:src="@drawable/slider_hm"
             android:layout_centerVertical="true"
-            android:layout_margin="4dp" />
-
+            android:layout_margin="4dp"
+            android:src="@drawable/slider_hm" />
 
     </RelativeLayout>
 
-
-
     <WebView
-        android:id="@+id/bankWebView"
+        android:id="@+id/wvBank"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

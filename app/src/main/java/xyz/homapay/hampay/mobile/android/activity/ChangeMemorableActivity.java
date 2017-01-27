@@ -8,22 +8,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
-import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
-public class ChangeMemorableActivity extends AppCompatActivity {
+public class ChangeMemorableActivity extends AppCompatActivity implements View.OnClickListener {
 
-    FacedTextView keepOn_button;
     SharedPreferences prefs;
+    @BindView(R.id.memorable_value)
     FacedEditText memorable_value;
-
     private Context context;
 
-    public void backActionBar(View view){
+    public void backActionBar(View view) {
         finish();
     }
 
@@ -68,35 +68,27 @@ public class ChangeMemorableActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_memorable);
-
+        ButterKnife.bind(this);
         context = this;
-
-        memorable_value = (FacedEditText)findViewById(R.id.memorable_value);
-
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+    }
 
-        keepOn_button = (FacedTextView) findViewById(R.id.keepOn_button);
-        keepOn_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (memorable_value.getText().toString().length() > 1){
+
+    @Override
+    public void onClick(View view) {
+        switch (R.id.keepOn_button) {
+            case R.id.keepOn_button:
+                if (memorable_value.getText().toString().length() > 1) {
                     Intent intent = new Intent();
                     intent.setClass(ChangeMemorableActivity.this, ChangeMemorablePassActivity.class);
                     intent.putExtra("currentMemorable", prefs.getString(Constants.MEMORABLE_WORD, ""));
                     intent.putExtra("newMemorable", memorable_value.getText().toString());
                     startActivity(intent);
                     finish();
-                }else {
+                } else {
                     Toast.makeText(getApplicationContext(), getString(R.string.msg_memorable_incorrect), Toast.LENGTH_SHORT).show();
                 }
-
-            }
-        });
-
-
-
+                break;
+        }
     }
-
-
-
 }

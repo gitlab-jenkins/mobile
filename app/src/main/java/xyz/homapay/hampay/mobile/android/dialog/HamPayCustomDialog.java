@@ -14,16 +14,10 @@ public class HamPayCustomDialog extends Dialog {
 
     public HamPayCustomDialog(View view, Context context, int themeResId) {
         super(context, themeResId);
-
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         setContentView(view);
         setTitle(null);
         setCanceledOnTouchOutside(false);
-
-
     }
-
-
-
 }

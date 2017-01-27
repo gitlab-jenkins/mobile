@@ -6,9 +6,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.UserManualActivity;
 import xyz.homapay.hampay.mobile.android.adapter.GuideAdapter;
@@ -19,7 +20,7 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
  */
 public class GuideFragment extends Fragment {
 
-
+    @BindView(R.id.guideListView)
     ListView guideListView;
     GuideAdapter guideAdapter;
 
@@ -37,13 +38,10 @@ public class GuideFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_guide, container, false);
-
-        guideListView = (ListView) rootView.findViewById(R.id.guideListView);
+        ButterKnife.bind(this, rootView);
 
         guideAdapter = new GuideAdapter(getActivity());
-
         guideListView.setAdapter(guideAdapter);
-
         guideListView.setOnItemClickListener((parent, view, position, id) -> {
 
             Intent intent = new Intent();

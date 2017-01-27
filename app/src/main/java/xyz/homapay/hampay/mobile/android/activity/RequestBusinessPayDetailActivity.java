@@ -20,6 +20,8 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import java.io.Serializable;
 
 import br.com.goncalves.pugnotification.notification.PugNotification;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.PSPName;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
@@ -61,6 +63,7 @@ import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.model.PaymentType;
 import xyz.homapay.hampay.mobile.android.model.SucceedPayment;
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
@@ -70,33 +73,72 @@ import xyz.homapay.hampay.mobile.android.webservice.psp.CBUArrayOfKeyValueOfstri
 
 public class RequestBusinessPayDetailActivity extends AppCompatActivity implements View.OnClickListener, CardNumberDialog.SelectCardDialogListener, OnTaskCompleted {
 
+    @BindView(R.id.pay_to_business_button)
+    ImageView pay_to_business_button;
+    @BindView(R.id.business_name)
+    FacedTextView business_name;
+    @BindView(R.id.business_image)
+    ImageView business_image;
+    @BindView(R.id.input_digit_1)
+    FacedTextView input_digit_1;
+    @BindView(R.id.input_digit_2)
+    FacedTextView input_digit_2;
+    @BindView(R.id.input_digit_3)
+    FacedTextView input_digit_3;
+    @BindView(R.id.input_digit_4)
+    FacedTextView input_digit_4;
+    @BindView(R.id.input_digit_5)
+    FacedTextView input_digit_5;
+    @BindView(R.id.input_digit_6)
+    FacedTextView input_digit_6;
+    @BindView(R.id.purchase_status_layout)
+    LinearLayout purchase_status_layout;
+    @BindView(R.id.purchase_payer_name_layout)
+    LinearLayout purchase_payer_name_layout;
+    @BindView(R.id.purchase_payer_cell_layout)
+    LinearLayout purchase_payer_cell_layout;
+    @BindView(R.id.purchase_status)
+    FacedTextView purchase_status;
+    @BindView(R.id.purchase_payer_name)
+    FacedTextView purchase_payer_name;
+    @BindView(R.id.purchase_payer_cell)
+    FacedTextView purchase_payer_cell;
+    @BindView(R.id.paymentPriceValue)
+    FacedTextView paymentPriceValue;
+    @BindView(R.id.paymentVAT)
+    FacedTextView paymentVAT;
+    @BindView(R.id.paymentFeeValue)
+    FacedTextView paymentFeeValue;
+    @BindView(R.id.paymentTotalValue)
+    FacedTextView paymentTotalValue;
+    @BindView(R.id.cardNumberValue)
+    FacedTextView cardNumberValue;
+    @BindView(R.id.bankName)
+    FacedTextView bankName;
+    @BindView(R.id.keyboard)
+    LinearLayout keyboard;
+    @BindView(R.id.pin_layout)
+    RelativeLayout pinLayout;
+    @BindView(R.id.pin_text)
+    FacedTextView pinText;
+    @BindView(R.id.cvv_layout)
+    RelativeLayout cvvLayout;
+    @BindView(R.id.cvv_text)
+    FacedTextView cvvText;
+    @BindView(R.id.paymentScroll)
+    ScrollView paymentScroll;
+    @BindView(R.id.cardPlaceHolder)
+    RelativeLayout cardPlaceHolder;
+    @BindView(R.id.selectCardText)
+    FacedTextView selectCardText;
+    @BindView(R.id.cardSelect)
+    LinearLayout cardSelect;
     private DatabaseHelper dbHelper;
-    private ImageView pay_to_business_button;
     private Context context;
     private Activity activity;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
     private HamPayDialog hamPayDialog;
-    private FacedTextView business_name;
-    private ImageView business_image;
-    private FacedTextView input_digit_1;
-    private FacedTextView input_digit_2;
-    private FacedTextView input_digit_3;
-    private FacedTextView input_digit_4;
-    private FacedTextView input_digit_5;
-    private FacedTextView input_digit_6;
-    private LinearLayout purchase_status_layout;
-    private LinearLayout purchase_payer_name_layout;
-    private LinearLayout purchase_payer_cell_layout;
-    private FacedTextView purchase_status;
-    private FacedTextView purchase_payer_name;
-    private FacedTextView purchase_payer_cell;
-    private FacedTextView paymentPriceValue;
-    private FacedTextView paymentVAT;
-    private FacedTextView paymentFeeValue;
-    private FacedTextView paymentTotalValue;
-    private FacedTextView cardNumberValue;
-    private FacedTextView bankName;
     private RequestLatestPurchase requestLatestPurchase;
     private LatestPurchaseRequest latestPurchaseRequest;
     private PurchaseInfoDTO purchaseInfo = null;
@@ -109,20 +151,11 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
     private RequestPurchaseInfo requestPurchaseInfo;
     private PurchaseInfoRequest purchaseInfoRequest;
     private CurrencyFormatter currencyFormatter;
-    private LinearLayout keyboard;
-    private RelativeLayout pinLayout;
-    private FacedTextView pinText;
-    private RelativeLayout cvvLayout;
-    private FacedTextView cvvText;
     private boolean pinCodeFocus = false;
     private boolean cvvFocus = false;
     private String userPinCode = "";
     private String userCVV2 = "";
-    private ScrollView paymentScroll;
-    private RelativeLayout cardPlaceHolder;
     private int selectedCardIdIndex = -1;
-    private FacedTextView selectCardText;
-    private LinearLayout cardSelect;
     private PersianEnglishDigit persian = new PersianEnglishDigit();
     private String signature;
     private String authToken = "";
@@ -175,7 +208,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_requets_business_pay_detail);
-
+        ButterKnife.bind(this);
         context = this;
         activity = RequestBusinessPayDetailActivity.this;
         PugNotification.with(context).cancel(Constants.MERCHANT_NOTIFICATION_IDENTIFIER);
@@ -194,58 +227,21 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
             return;
         }
 
-        keyboard = (LinearLayout) findViewById(R.id.keyboard);
-        pinLayout = (RelativeLayout) findViewById(R.id.pin_layout);
-        pinText = (FacedTextView) findViewById(R.id.pin_text);
         pinText.setOnClickListener(this);
-        cvvLayout = (RelativeLayout) findViewById(R.id.cvv_layout);
-        cvvText = (FacedTextView) findViewById(R.id.cvv_text);
         cvvText.setOnClickListener(this);
-        paymentScroll = (ScrollView) findViewById(R.id.paymentScroll);
 
         hamPayDialog = new HamPayDialog(activity);
 
         currencyFormatter = new CurrencyFormatter();
 
-        input_digit_1 = (FacedTextView) findViewById(R.id.input_digit_1);
-        input_digit_2 = (FacedTextView) findViewById(R.id.input_digit_2);
-        input_digit_3 = (FacedTextView) findViewById(R.id.input_digit_3);
-        input_digit_4 = (FacedTextView) findViewById(R.id.input_digit_4);
-        input_digit_5 = (FacedTextView) findViewById(R.id.input_digit_5);
-        input_digit_6 = (FacedTextView) findViewById(R.id.input_digit_6);
-        business_name = (FacedTextView) findViewById(R.id.business_name);
-        business_image = (ImageView) findViewById(R.id.business_image);
-
-        paymentPriceValue = (FacedTextView) findViewById(R.id.paymentPriceValue);
-        purchase_status_layout = (LinearLayout) findViewById(R.id.purchase_status_layout);
-        purchase_payer_name_layout = (LinearLayout) findViewById(R.id.purchase_payer_name_layout);
-        purchase_payer_cell_layout = (LinearLayout) findViewById(R.id.purchase_payer_cell_layout);
-        purchase_status = (FacedTextView) findViewById(R.id.purchase_status);
-        purchase_payer_cell = (FacedTextView) findViewById(R.id.purchase_payer_cell);
-        purchase_payer_name = (FacedTextView) findViewById(R.id.purchase_payer_name);
-        paymentVAT = (FacedTextView) findViewById(R.id.paymentVAT);
-        paymentFeeValue = (FacedTextView) findViewById(R.id.paymentFeeValue);
-        bankName = (FacedTextView) findViewById(R.id.bankName);
-        cardNumberValue = (FacedTextView) findViewById(R.id.cardNumberValue);
-        paymentTotalValue = (FacedTextView) findViewById(R.id.paymentTotalValue);
-        pay_to_business_button = (ImageView) findViewById(R.id.pay_to_business_button);
-        bankName = (FacedTextView) findViewById(R.id.bankName);
-        cardNumberValue = (FacedTextView) findViewById(R.id.cardNumberValue);
-        selectCardText = (FacedTextView) findViewById(R.id.selectCardText);
-        cardSelect = (LinearLayout) findViewById(R.id.cardSelect);
-
-        cardPlaceHolder = (RelativeLayout) findViewById(R.id.cardPlaceHolder);
-        cardPlaceHolder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CardNumberDialog cardNumberDialog = new CardNumberDialog();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(Constants.CARD_LIST, (Serializable) purchaseInfo.getCardList());
-                cardNumberDialog.setArguments(bundle);
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.add(cardNumberDialog, null);
-                fragmentTransaction.commitAllowingStateLoss();
-            }
+        cardPlaceHolder.setOnClickListener(v -> {
+            CardNumberDialog cardNumberDialog = new CardNumberDialog();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(Constants.CARD_LIST, (Serializable) purchaseInfo.getCardList());
+            cardNumberDialog.setArguments(bundle);
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.add(cardNumberDialog, null);
+            fragmentTransaction.commitAllowingStateLoss();
         });
 
         Intent intent = getIntent();
@@ -259,7 +255,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
         if (purchaseInfo != null) {
             fillPurchase(purchaseInfo);
         } else if (purchaseCode != null) {
-            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            AppManager.setMobileTimeout(context);
             editor.commit();
             requestPurchaseInfo = new RequestPurchaseInfo(activity, new RequestPurchaseInfoTaskCompleteListener());
             purchaseInfoRequest = new PurchaseInfoRequest();
@@ -272,113 +268,120 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
             requestPurchaseDetail.execute(purchaseDetailRequest);
 
         } else {
-            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            AppManager.setMobileTimeout(context);
             editor.commit();
             requestLatestPurchase = new RequestLatestPurchase(activity, new RequestLatestPurchaseTaskCompleteListener());
             latestPurchaseRequest = new LatestPurchaseRequest();
             requestLatestPurchase.execute(latestPurchaseRequest);
         }
 
-        pay_to_business_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        pay_to_business_button.setOnClickListener(v -> {
 
-                if (pspInfoDTO == null) return;
+            if (pspInfoDTO == null) return;
 
-                if (selectedCardIdIndex == -1 || (purchaseInfo.getCardList().get(selectedCardIdIndex) != null && purchaseInfo.getCardList().get(selectedCardIdIndex).getCardId() == null) || (purchaseInfo.getAmount() + purchaseInfo.getFeeCharge() + purchaseInfo.getVat() >= Constants.SOAP_AMOUNT_MAX)) {
-                    Intent intent = new Intent();
-                    intent.setClass(activity, BankWebPaymentActivity.class);
-                    intent.putExtra(Constants.PURCHASE_INFO, purchaseInfo);
-                    intent.putExtra(Constants.PSP_INFO, pspInfoDTO);
-                    startActivityForResult(intent, 45);
-                } else {
-                    pay_to_business_button.setEnabled(false);
-                    if (pinText.getText().toString().length() <= 4) {
-                        Toast.makeText(context, getString(R.string.msg_pin2_incorrect), Toast.LENGTH_LONG).show();
-                        pay_to_business_button.setEnabled(true);
-                        return;
-                    }
-                    if (!(cvvText.getText().toString().length() >= 3 && cvvText.getText().toString().length() <= 4)) {
-                        Toast.makeText(context, getString(R.string.msg_cvv2_incorrect), Toast.LENGTH_SHORT).show();
-                        pay_to_business_button.setEnabled(true);
-                        return;
-                    }
-                    editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-                    editor.commit();
-                    requestPurchase = new RequestPurchase(activity, new RequestPurchaseTaskCompleteListener(), purchaseInfo.getPspInfo().getPayURL());
+            if (cvvText.getText().toString().trim().length() < 3) {
+                Toast.makeText(context, R.string.err_cvv_lenght, Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                    DoWorkInfo doWorkInfo = new DoWorkInfo();
-                    doWorkInfo.setUserName("appstore");
-                    doWorkInfo.setPassword("sepapp");
-                    doWorkInfo.setCellNumber(pspInfoDTO.getCellNumber().substring(1, pspInfoDTO.getCellNumber().length()));
-                    doWorkInfo.setLangAByte((byte) 0);
-                    doWorkInfo.setLangABoolean(false);
-                    CBUArrayOfKeyValueOfstringstring vectorstring2stringMapEntry = new CBUArrayOfKeyValueOfstringstring();
-                    CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+            if (pinText.getText().toString().trim().length() < 5) {
+                Toast.makeText(context, R.string.err_pin_lenght, Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                    s2sMapEntry.Key = "Amount";
-                    s2sMapEntry.Value = String.valueOf(purchaseInfo.getAmount() + purchaseInfo.getFeeCharge() + purchaseInfo.getVat());
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "Pin2";
-                    s2sMapEntry.Value = userPinCode;
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "ThirdParty";
-                    s2sMapEntry.Value = purchaseInfo.getProductCode();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "TerminalId";
-                    s2sMapEntry.Value = pspInfoDTO.getTerminalId();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "CardId";
-                    s2sMapEntry.Value = purchaseInfo.getCardList().get(selectedCardIdIndex).getCardId();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "SenderTerminalId";
-                    s2sMapEntry.Value = pspInfoDTO.getSenderTerminalId();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "IPAddress";
-                    s2sMapEntry.Value = pspInfoDTO.getIpAddress();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "Email";
-                    s2sMapEntry.Value = "";
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "CVV2";
-                    s2sMapEntry.Value = userCVV2;
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "ExpDate";
-                    s2sMapEntry.Value = purchaseInfo.getCardList().get(selectedCardIdIndex).getExpireDate();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "ResNum";
-                    s2sMapEntry.Value = purchaseInfo.getProductCode();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "Signature";
-                    s2sMapEntry.Value = signature;
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    doWorkInfo.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
-                    requestPurchase.execute(doWorkInfo);
-
+            if (selectedCardIdIndex == -1 || (purchaseInfo.getCardList().get(selectedCardIdIndex) != null && purchaseInfo.getCardList().get(selectedCardIdIndex).getCardId() == null) || (purchaseInfo.getAmount() + purchaseInfo.getFeeCharge() + purchaseInfo.getVat() >= Constants.SOAP_AMOUNT_MAX)) {
+                Intent intent1 = new Intent();
+                intent1.setClass(activity, BankWebPaymentActivity.class);
+                intent1.putExtra(Constants.PURCHASE_INFO, purchaseInfo);
+                intent1.putExtra(Constants.PSP_INFO, pspInfoDTO);
+                startActivityForResult(intent1, 45);
+            } else {
+                pay_to_business_button.setEnabled(false);
+                if (pinText.getText().toString().length() <= 4) {
+                    Toast.makeText(context, getString(R.string.msg_pin2_incorrect), Toast.LENGTH_LONG).show();
+                    pay_to_business_button.setEnabled(true);
+                    return;
                 }
+                if (!(cvvText.getText().toString().length() >= 3 && cvvText.getText().toString().length() <= 4)) {
+                    Toast.makeText(context, getString(R.string.msg_cvv2_incorrect), Toast.LENGTH_SHORT).show();
+                    pay_to_business_button.setEnabled(true);
+                    return;
+                }
+                AppManager.setMobileTimeout(context);
+                editor.commit();
+                requestPurchase = new RequestPurchase(activity, new RequestPurchaseTaskCompleteListener(), purchaseInfo.getPspInfo().getPayURL());
+
+                DoWorkInfo doWorkInfo = new DoWorkInfo();
+                doWorkInfo.setUserName("appstore");
+                doWorkInfo.setPassword("sepapp");
+                doWorkInfo.setCellNumber(pspInfoDTO.getCellNumber().substring(1, pspInfoDTO.getCellNumber().length()));
+                doWorkInfo.setLangAByte((byte) 0);
+                doWorkInfo.setLangABoolean(false);
+                CBUArrayOfKeyValueOfstringstring vectorstring2stringMapEntry = new CBUArrayOfKeyValueOfstringstring();
+                CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+
+                s2sMapEntry.Key = "Amount";
+                s2sMapEntry.Value = String.valueOf(purchaseInfo.getAmount() + purchaseInfo.getFeeCharge() + purchaseInfo.getVat());
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "Pin2";
+                s2sMapEntry.Value = userPinCode;
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "ThirdParty";
+                s2sMapEntry.Value = purchaseInfo.getProductCode();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "TerminalId";
+                s2sMapEntry.Value = pspInfoDTO.getTerminalId();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "CardId";
+                s2sMapEntry.Value = purchaseInfo.getCardList().get(selectedCardIdIndex).getCardId();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "SenderTerminalId";
+                s2sMapEntry.Value = pspInfoDTO.getSenderTerminalId();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "IPAddress";
+                s2sMapEntry.Value = pspInfoDTO.getIpAddress();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "Email";
+                s2sMapEntry.Value = "";
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "CVV2";
+                s2sMapEntry.Value = userCVV2;
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "ExpDate";
+                s2sMapEntry.Value = purchaseInfo.getCardList().get(selectedCardIdIndex).getExpireDate();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "ResNum";
+                s2sMapEntry.Value = purchaseInfo.getProductCode();
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                s2sMapEntry.Key = "Signature";
+                s2sMapEntry.Value = signature;
+                vectorstring2stringMapEntry.add(s2sMapEntry);
+
+                doWorkInfo.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
+                requestPurchase.execute(doWorkInfo);
+
             }
         });
     }
@@ -583,7 +586,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
         business_name.setText(persian.E2P(purchaseInfo.getMerchantName()));
 
         if (purchaseInfo.getMerchantImageId() != null) {
-            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            AppManager.setMobileTimeout(context);
             editor.commit();
             business_image.setTag(purchaseInfo.getMerchantImageId());
             ImageHelper.getInstance(context).imageLoader(purchaseInfo.getMerchantImageId(), business_image, R.drawable.user_placeholder);
@@ -685,15 +688,15 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                             startActivityForResult(intent, 45);
                         }
                         resultStatus = ResultStatus.SUCCESS;
-                    } else if (responseCode.equalsIgnoreCase("17") || responseCode.equalsIgnoreCase("25") || responseCode.equalsIgnoreCase("27") || responseCode.equalsIgnoreCase("56")){
+                    } else if (responseCode.equalsIgnoreCase("17") || responseCode.equalsIgnoreCase("25") || responseCode.equalsIgnoreCase("27") || responseCode.equalsIgnoreCase("56")) {
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.token_special_issue));
                         resultStatus = ResultStatus.FAILURE;
                     } else {
                         serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
                         PspCode pspCode = new PspCode(context);
-                        if (pspCode.getDescription(responseCode) == null){
+                        if (pspCode.getDescription(responseCode) == null) {
                             new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.token_special_issue));
-                        }else {
+                        } else {
                             new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(responseCode));
                         }
                         resultStatus = ResultStatus.FAILURE;
@@ -724,7 +727,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                     new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
                 }
 
-                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                AppManager.setMobileTimeout(context);
                 editor.commit();
 
                 Intent returnIntent = new Intent();

@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
@@ -20,13 +22,19 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class PaymentCompletedActivity extends AppCompatActivity {
 
-    private FacedTextView amountValue;
-    private FacedTextView paymentCode;
-    private FacedTextView traceCode;
-    private FacedTextView confirmButton;
+    @BindView(R.id.amount_value)
+    FacedTextView amountValue;
+    @BindView(R.id.payment_code)
+    FacedTextView paymentCode;
+    @BindView(R.id.trace_code)
+    FacedTextView traceCode;
+    @BindView(R.id.confirm_button)
+    FacedTextView confirmButton;
 
-    private FacedTextView tvCellPhoneOrChargeCodeTitle;
-    private FacedTextView tvCellPhoneOrChargeCode;
+    @BindView(R.id.tvCellPhoneOrChargeCodeTitle)
+    FacedTextView tvCellPhoneOrChargeCodeTitle;
+    @BindView(R.id.tvCellPhoneOrChargeCode)
+    FacedTextView tvCellPhoneOrChargeCode;
 
     private PersianEnglishDigit persianEnglishDigit;
     private CurrencyFormatter formatter;
@@ -41,12 +49,15 @@ public class PaymentCompletedActivity extends AppCompatActivity {
 
         if (succeedPayment.getPaymentType() == PaymentType.PAYMENT || succeedPayment.getPaymentType() == PaymentType.PURCHASE) {
             setContentView(R.layout.activity_payment_completed);
+            ButterKnife.bind(this);
             initRegular();
         } else if (succeedPayment.getPaymentType() == PaymentType.BILLS) {
             setContentView(R.layout.activity_bills_completed);
+            ButterKnife.bind(this);
             initRegular();
         } else if (succeedPayment.getPaymentType() == PaymentType.TOP_UP) {
             setContentView(R.layout.activity_top_up_completed);
+            ButterKnife.bind(this);
             initCharge();
         }
     }
@@ -55,11 +66,6 @@ public class PaymentCompletedActivity extends AppCompatActivity {
         Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         vibrator.vibrate(100);
 
-        amountValue = (FacedTextView) findViewById(R.id.amount_value);
-        paymentCode = (FacedTextView) findViewById(R.id.payment_code);
-        traceCode = (FacedTextView) findViewById(R.id.trace_code);
-
-        confirmButton = (FacedTextView) findViewById(R.id.confirm_button);
         persianEnglishDigit = new PersianEnglishDigit();
         formatter = new CurrencyFormatter();
 

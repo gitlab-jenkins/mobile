@@ -6,19 +6,25 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
+
+import com.gordonwong.materialsheetfab.MaterialSheetFab;
+import com.gordonwong.materialsheetfab.MaterialSheetFabEventListener;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.goncalves.pugnotification.notification.PugNotification;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.TnxSortFactor;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
@@ -31,6 +37,8 @@ import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.UserTransactionAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestUserTransaction;
+import xyz.homapay.hampay.mobile.android.common.messages.MessageSheetStateChanged;
+import xyz.homapay.hampay.mobile.android.component.CustomTextView;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.doblist.DobList;
 import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoEmptyViewException;
@@ -38,37 +46,49 @@ import xyz.homapay.hampay.mobile.android.component.doblist.exceptions.NoListview
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
-import xyz.homapay.hampay.mobile.android.m.common.Const;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.font.FontFace;
 
-public class TransactionsListActivity extends AppCompatActivity implements View.OnClickListener {
+public class TransactionsListActivity extends AppCompatActivity {
 
-    UserTransactionAdapter userTransactionAdapter;
-    HamPayDialog hamPayDialog;
+    @BindView(R.id.no_transaction)
     FacedTextView no_transaction;
-    RequestUserTransaction requestUserTransaction;
-    TransactionListRequest transactionListRequest;
-    int requestPageNumber = 0;
-    TnxSortFactor sortFactor = TnxSortFactor.DEFAULT;
-    SharedPreferences prefs;
-    SharedPreferences.Editor editor;
-    DobList dobList;
-    private SwipeRefreshLayout pullToRefresh;
-    private ListView transactionListView;
+    @BindView(R.id.pullToRefresh)
+    SwipeRefreshLayout pullToRefresh;
+    @BindView(R.id.transactionListView)
+    ListView transactionListView;
+    @BindView(R.id.loading)
+    ProgressBar loading;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    @BindView(R.id.fab_sheet)
+    View fab_sheet;
+    @BindView(R.id.overlay)
+    View overlay;
+    @BindView(R.id.fab_sheet_item_all)
+    CustomTextView fabAll;
+    @BindView(R.id.fab_sheet_item_business)
+    CustomTextView fabBusiness;
+    @BindView(R.id.fab_sheet_item_individual)
+    CustomTextView fabIndividual;
+    private TnxSortFactor sortFactor = TnxSortFactor.DEFAULT;
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
+    private DobList dobList;
+    private UserTransactionAdapter userTransactionAdapter;
+    private HamPayDialog hamPayDialog;
+    private RequestUserTransaction requestUserTransaction;
+    private TransactionListRequest transactionListRequest;
+    private int requestPageNumber = 0;
     private boolean FINISHED_SCROLLING = false;
     private boolean onLoadMore = false;
     private List<TransactionDTO> transactionDTOs;
-    private ProgressBar loading;
     private Context context;
     private Activity activity;
-    private RelativeLayout full_transaction;
-    private RelativeLayout business_transaction;
-    private RelativeLayout invoice_transaction;
-    private ImageView full_triangle;
-    private ImageView business_triangle;
-    private ImageView invoice_triangle;
     private UserProfileDTO userProfile;
+    private MaterialSheetFab materialSheetFab;
 
     @Override
     protected void onResume() {
@@ -114,37 +134,131 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transactions_list);
+        ButterKnife.bind(this);
 
         context = this;
         activity = TransactionsListActivity.this;
 
-        PugNotification.with(context).cancel(Constants.TRANSACTIONS_NOTIFICATION_IDENTIFIER);
+        int sheetColor = ContextCompat.getColor(activity, R.color.app_origin);
+        int fabColor = ContextCompat.getColor(activity, R.color.white);
+        materialSheetFab = new MaterialSheetFab(fab, fab_sheet, overlay, sheetColor, fabColor);
+        materialSheetFab.setEventListener(new MaterialSheetFabEventListener() {
+            @Override
+            public void onShowSheet() {
+                super.onShowSheet();
+                EventBus.getDefault().post(new MessageSheetStateChanged(true));
+                switch (sortFactor) {
+                    case DEFAULT:
+                        fabAll.setTypeface(FontFace.getInstance(activity).getVAZIR_BOLD());
+                        fabBusiness.setTypeface(FontFace.getInstance(activity).getVAZIR());
+                        fabIndividual.setTypeface(FontFace.getInstance(activity).getVAZIR());
+                        //
+                        fabAll.setTextColor(ContextCompat.getColor(activity, R.color.app_origin));
+                        fabBusiness.setTextColor(ContextCompat.getColor(activity, R.color.black));
+                        fabIndividual.setTextColor(ContextCompat.getColor(activity, R.color.black));
+                        break;
+                    case COMMERCIAL:
+                        fabAll.setTypeface(FontFace.getInstance(activity).getVAZIR());
+                        fabBusiness.setTypeface(FontFace.getInstance(activity).getVAZIR_BOLD());
+                        fabIndividual.setTypeface(FontFace.getInstance(activity).getVAZIR());
+                        //
+                        fabAll.setTextColor(ContextCompat.getColor(activity, R.color.black));
+                        fabBusiness.setTextColor(ContextCompat.getColor(activity, R.color.app_origin));
+                        fabIndividual.setTextColor(ContextCompat.getColor(activity, R.color.black));
+                        break;
+                    case INDIVIDUAL:
+                        fabAll.setTypeface(FontFace.getInstance(activity).getVAZIR());
+                        fabBusiness.setTypeface(FontFace.getInstance(activity).getVAZIR());
+                        fabIndividual.setTypeface(FontFace.getInstance(activity).getVAZIR_BOLD());
+                        //
+                        fabAll.setTextColor(ContextCompat.getColor(activity, R.color.black));
+                        fabBusiness.setTextColor(ContextCompat.getColor(activity, R.color.black));
+                        fabIndividual.setTextColor(ContextCompat.getColor(activity, R.color.app_origin));
+                        break;
+                }
+            }
 
+            @Override
+            public void onHideSheet() {
+                super.onHideSheet();
+                EventBus.getDefault().post(new MessageSheetStateChanged(false));
+            }
+        });
+
+
+
+        fabAll.setOnClickListener(view -> {
+            materialSheetFab.hideSheet();
+            if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING) {
+                requestUserTransaction.cancel(true);
+            }
+            AppManager.setMobileTimeout(context);
+            editor.commit();
+            FINISHED_SCROLLING = false;
+            onLoadMore = false;
+            userTransactionAdapter.clear();
+            transactionDTOs.clear();
+            requestPageNumber = 0;
+            sortFactor = TnxSortFactor.DEFAULT;
+            transactionListRequest = new TransactionListRequest();
+            transactionListRequest.setPageNumber(requestPageNumber);
+            transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+            transactionListRequest.setSortFactor(sortFactor);
+            requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
+            requestUserTransaction.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, transactionListRequest);
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        });
+        fabBusiness.setOnClickListener(view -> {
+            materialSheetFab.hideSheet();
+            if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING) {
+                requestUserTransaction.cancel(true);
+            }
+            AppManager.setMobileTimeout(context);
+            editor.commit();
+            FINISHED_SCROLLING = false;
+            onLoadMore = false;
+            userTransactionAdapter.clear();
+            transactionDTOs.clear();
+            requestPageNumber = 0;
+            sortFactor = TnxSortFactor.COMMERCIAL;
+            transactionListRequest = new TransactionListRequest();
+            transactionListRequest.setPageNumber(requestPageNumber);
+            transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+            transactionListRequest.setSortFactor(sortFactor);
+            requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
+            requestUserTransaction.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, transactionListRequest);
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        });
+        fabIndividual.setOnClickListener(view -> {
+            materialSheetFab.hideSheet();
+            if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING) {
+                requestUserTransaction.cancel(true);
+            }
+            AppManager.setMobileTimeout(context);
+            editor.commit();
+            FINISHED_SCROLLING = false;
+            onLoadMore = false;
+            userTransactionAdapter.clear();
+            transactionDTOs.clear();
+            requestPageNumber = 0;
+            sortFactor = TnxSortFactor.INDIVIDUAL;
+            transactionListRequest = new TransactionListRequest();
+            transactionListRequest.setPageNumber(requestPageNumber);
+            transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+            transactionListRequest.setSortFactor(sortFactor);
+            requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
+            requestUserTransaction.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, transactionListRequest);
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        });
+
+        PugNotification.with(context).cancel(Constants.TRANSACTIONS_NOTIFICATION_IDENTIFIER);
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-
         userProfile = (UserProfileDTO) getIntent().getSerializableExtra(Constants.USER_PROFILE);
-
         hamPayDialog = new HamPayDialog(activity);
-
-        loading = (ProgressBar) findViewById(R.id.loading);
-        full_transaction = (RelativeLayout) findViewById(R.id.full_transaction);
-        full_transaction.setOnClickListener(this);
-        business_transaction = (RelativeLayout) findViewById(R.id.business_transaction);
-        business_transaction.setOnClickListener(this);
-        invoice_transaction = (RelativeLayout) findViewById(R.id.invoice_transaction);
-        invoice_transaction.setOnClickListener(this);
-        full_triangle = (ImageView) findViewById(R.id.full_triangle);
-        business_triangle = (ImageView) findViewById(R.id.business_triangle);
-        invoice_triangle = (ImageView) findViewById(R.id.invoice_triangle);
 
         transactionDTOs = new ArrayList<>();
         userTransactionAdapter = new UserTransactionAdapter(activity);
-
-        no_transaction = (FacedTextView) findViewById(R.id.no_transaction);
-
-        transactionListView = (ListView) findViewById(R.id.transactionListView);
-        pullToRefresh = (SwipeRefreshLayout) findViewById(R.id.pullToRefresh);
         pullToRefresh.setOnRefreshListener(() -> {
             if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING) {
                 requestUserTransaction.cancel(true);
@@ -173,7 +287,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
             }
         });
 
-        editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+        AppManager.setMobileTimeout(context);
         editor.commit();
         requestPageNumber = 0;
         transactionListRequest = new TransactionListRequest();
@@ -190,107 +304,6 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
 
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.full_transaction:
-                if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING) {
-                    requestUserTransaction.cancel(true);
-                }
-                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-                editor.commit();
-                FINISHED_SCROLLING = false;
-                onLoadMore = false;
-                userTransactionAdapter.clear();
-                transactionDTOs.clear();
-                requestPageNumber = 0;
-                sortFactor = TnxSortFactor.DEFAULT;
-                transactionListRequest = new TransactionListRequest();
-                transactionListRequest.setPageNumber(requestPageNumber);
-                transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-                transactionListRequest.setSortFactor(sortFactor);
-                requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
-                requestUserTransaction.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, transactionListRequest);
-                hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-                changeTab(1);
-                break;
-
-            case R.id.business_transaction:
-                if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING) {
-                    requestUserTransaction.cancel(true);
-                }
-                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-                editor.commit();
-                FINISHED_SCROLLING = false;
-                onLoadMore = false;
-                userTransactionAdapter.clear();
-                transactionDTOs.clear();
-                requestPageNumber = 0;
-                sortFactor = TnxSortFactor.COMMERCIAL;
-                transactionListRequest = new TransactionListRequest();
-                transactionListRequest.setPageNumber(requestPageNumber);
-                transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-                transactionListRequest.setSortFactor(sortFactor);
-                requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
-                requestUserTransaction.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, transactionListRequest);
-                hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-                changeTab(2);
-                break;
-
-            case R.id.invoice_transaction:
-                if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING) {
-                    requestUserTransaction.cancel(true);
-                }
-                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-                editor.commit();
-                FINISHED_SCROLLING = false;
-                onLoadMore = false;
-                userTransactionAdapter.clear();
-                transactionDTOs.clear();
-                requestPageNumber = 0;
-                sortFactor = TnxSortFactor.INDIVIDUAL;
-                transactionListRequest = new TransactionListRequest();
-                transactionListRequest.setPageNumber(requestPageNumber);
-                transactionListRequest.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-                transactionListRequest.setSortFactor(sortFactor);
-                requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
-                requestUserTransaction.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, transactionListRequest);
-                hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-                changeTab(3);
-                break;
-        }
-    }
-
-    private void changeTab(int index) {
-        switch (index) {
-            case 1:
-                full_transaction.setBackgroundColor(ContextCompat.getColor(context, R.color.app_origin));
-                business_transaction.setBackgroundColor(ContextCompat.getColor(context, R.color.transaction_unselected_tab));
-                invoice_transaction.setBackgroundColor(ContextCompat.getColor(context, R.color.transaction_unselected_tab));
-                full_triangle.setVisibility(View.VISIBLE);
-                business_triangle.setVisibility(View.GONE);
-                invoice_triangle.setVisibility(View.GONE);
-                break;
-            case 2:
-                full_transaction.setBackgroundColor(ContextCompat.getColor(context, R.color.transaction_unselected_tab));
-                business_transaction.setBackgroundColor(ContextCompat.getColor(context, R.color.app_origin));
-                invoice_transaction.setBackgroundColor(ContextCompat.getColor(context, R.color.transaction_unselected_tab));
-                full_triangle.setVisibility(View.GONE);
-                business_triangle.setVisibility(View.VISIBLE);
-                invoice_triangle.setVisibility(View.GONE);
-                break;
-
-            case 3:
-                full_transaction.setBackgroundColor(ContextCompat.getColor(context, R.color.transaction_unselected_tab));
-                business_transaction.setBackgroundColor(ContextCompat.getColor(context, R.color.transaction_unselected_tab));
-                invoice_transaction.setBackgroundColor(ContextCompat.getColor(context, R.color.app_origin));
-                full_triangle.setVisibility(View.GONE);
-                business_triangle.setVisibility(View.GONE);
-                invoice_triangle.setVisibility(View.VISIBLE);
-                break;
-        }
-    }
-
     private void initDobList(ListView listView) {
 
         dobList = new DobList();
@@ -302,7 +315,7 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
             dobList.setOnLoadMoreListener(totalItemCount -> {
                 onLoadMore = true;
                 if (!FINISHED_SCROLLING) {
-                    editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                    AppManager.setMobileTimeout(context);
                     editor.commit();
                     transactionListRequest.setPageNumber(requestPageNumber);
                     requestUserTransaction = new RequestUserTransaction(activity, new RequestUserTransactionsTaskCompleteListener());
@@ -427,7 +440,6 @@ public class TransactionsListActivity extends AppCompatActivity implements View.
             }
             logEvent.log(serviceName);
         }
-
 
         @Override
         public void onTaskPreRun() {

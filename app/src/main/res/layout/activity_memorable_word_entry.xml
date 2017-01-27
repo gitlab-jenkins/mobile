@@ -5,7 +5,6 @@
     android:orientation="vertical">
 
 
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -15,6 +14,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:background="@color/app_origin"
             android:gravity="center_vertical">
 
             <ImageView
@@ -32,7 +32,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginRight="8dp"
                 android:text="@string/remember_phrase"
-                android:textColor="@color/app_origin"
+                android:textColor="@color/white"
                 android:textSize="18sp"
                 geekui:customTypeface="fonts/vazir_regular.ttf" />
 
@@ -65,9 +65,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/lock_info_green"
-                        />
-
+                        android:src="@drawable/lock_info_green" />
 
 
                     <ImageView
@@ -75,8 +73,7 @@
                         android:layout_height="32dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/box_forward_tt"
-                        />
+                        android:src="@drawable/box_forward_tt" />
 
 
                 </RelativeLayout>
@@ -97,15 +94,14 @@
                         android:layout_width="16dp"
                         android:layout_height="32dp"
                         android:background="@android:color/white"
-                        android:src="@drawable/box_forward_tg"/>
+                        android:src="@drawable/box_forward_tg" />
 
                     <ImageView
                         android:layout_width="16dp"
                         android:layout_height="32dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/box_forward_wt"
-                        />
+                        android:src="@drawable/box_forward_wt" />
 
 
                 </RelativeLayout>
@@ -127,7 +123,7 @@
                         android:layout_width="16dp"
                         android:layout_height="32dp"
                         android:background="@android:color/white"
-                        android:src="@drawable/box_forward_tg"/>
+                        android:src="@drawable/box_forward_tg" />
 
 
                 </RelativeLayout>
@@ -270,8 +266,6 @@
 
                         </LinearLayout>
 
-
-
                         <xyz.homapay.hampay.mobile.android.component.FacedTextView
                             android:id="@+id/keepOn_button"
                             android:layout_width="wrap_content"
@@ -280,6 +274,7 @@
                             android:layout_marginTop="16dp"
                             android:background="@drawable/registration_button_style"
                             android:gravity="center"
+                            android:onClick="onClick"
                             android:paddingLeft="16dp"
                             android:paddingRight="16dp"
                             android:text="@string/confirm"

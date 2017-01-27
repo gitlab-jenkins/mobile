@@ -23,6 +23,9 @@ public class FontFace {
     @Nullable
     private Typeface VAZIR = null;
 
+    @Nullable
+    private Typeface VAZIR_BOLD = null;
+
     /**
      * Private Constructor of this class
      *
@@ -51,8 +54,16 @@ public class FontFace {
             e.printStackTrace();
         }
         try {
-            IRANSANS = Typeface.createFromAsset(ctx.getResources().getAssets(),
+            VAZIR = Typeface.createFromAsset(ctx.getResources().getAssets(),
                     "fonts/vazir_regular.ttf");
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        try {
+            VAZIR_BOLD = Typeface.createFromAsset(ctx.getResources().getAssets(),
+                    "fonts/vazir_regular_bold.ttf");
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -101,5 +112,10 @@ public class FontFace {
     @Nullable
     public Typeface getVAZIR() {
         return VAZIR;
+    }
+
+    @Nullable
+    public Typeface getVAZIR_BOLD() {
+        return VAZIR_BOLD;
     }
 }

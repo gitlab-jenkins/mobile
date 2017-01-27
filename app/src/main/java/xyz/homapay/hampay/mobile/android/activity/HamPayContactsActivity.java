@@ -13,19 +13,18 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
@@ -44,17 +43,25 @@ import xyz.homapay.hampay.mobile.android.dialog.permission.PermissionContactDial
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.UserContacts;
 
-public class HamPayContactsActivity extends AppCompatActivity implements PermissionContactDialog.PermissionContactDialogListener{
+public class HamPayContactsActivity extends AppCompatActivity implements PermissionContactDialog.PermissionContactDialogListener {
 
+    private final Handler handler = new Handler();
+    @BindView(R.id.paymentRequestList)
+    ListView paymentRequestList;
+    @BindView(R.id.pullToRefresh)
+    SwipeRefreshLayout pullToRefresh;
+    @BindView(R.id.search_text)
+    FacedEditText search_text;
+    @BindView(R.id.hampayContactShare)
+    LinearLayout hampayContactShare;
     private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
     private String authToken;
     private Context context;
     private Activity activity;
-    private ListView paymentRequestList;
-    private SwipeRefreshLayout pullToRefresh;
     private List<ContactDTO> contacts;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
@@ -62,15 +69,13 @@ public class HamPayContactsActivity extends AppCompatActivity implements Permiss
     private ContactsHampayEnabledRequest contactsHampayEnabledRequest;
     private RequestContactHampayEnabled requestContactHampayEnabled;
     private InputMethodManager inputMethodManager;
-    private FacedEditText search_text;
     private HamPayDialog hamPayDialog;
     private String searchPhrase = "";
-    private LinearLayout hampayContactShare;
-    private final Handler handler = new Handler();
 
-    public void backActionBar(View view){
+    public void backActionBar(View view) {
         finish();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -120,49 +125,42 @@ public class HamPayContactsActivity extends AppCompatActivity implements Permiss
     private void requestAndLoadUserContact() {
         String[] permissions = new String[]{Manifest.permission.READ_CONTACTS};
 
-        permissionListeners = new RequestPermissions().request(activity, Constants.READ_CONTACTS, permissions, new PermissionListener() {
-            @Override
-            public boolean onResult(int requestCode, String[] requestPermissions, int[] grantResults) {
-                if (requestCode == Constants.READ_CONTACTS) {
-                    if (grantResults.length > 0 && requestPermissions[0].equals(Manifest.permission.READ_CONTACTS) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        UserContacts userContacts = new UserContacts(context);
-                        contacts = userContacts.read();
-                        contactsHampayEnabledRequest.setContacts(contacts);
-                        requestContactHampayEnabled = new RequestContactHampayEnabled(activity, new RequestContactHampayEnabledTaskCompleteListener());
-                        requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
-                    } else {
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                            boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS);
-                            if (showRationale){
-                                handler.post(new Runnable() {
-                                    public void run() {
-                                        PermissionContactDialog permissionContactDialog = new PermissionContactDialog();
-                                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                                        fragmentTransaction.add(permissionContactDialog, null);
-                                        fragmentTransaction.commitAllowingStateLoss();
-                                    }
-                                });
-                            }else {
-                                contacts = new ArrayList<ContactDTO>();
-                                contactsHampayEnabledRequest.setContacts(contacts);
-                                requestContactHampayEnabled = new RequestContactHampayEnabled(activity, new RequestContactHampayEnabledTaskCompleteListener());
-                                requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
-                            }
-                        }else {
-                            handler.post(new Runnable() {
-                                public void run() {
-                                    PermissionContactDialog permissionContactDialog = new PermissionContactDialog();
-                                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                                    fragmentTransaction.add(permissionContactDialog, null);
-                                    fragmentTransaction.commitAllowingStateLoss();
-                                }
+        permissionListeners = new RequestPermissions().request(activity, Constants.READ_CONTACTS, permissions, (requestCode, requestPermissions, grantResults) -> {
+            if (requestCode == Constants.READ_CONTACTS) {
+                if (grantResults.length > 0 && requestPermissions[0].equals(Manifest.permission.READ_CONTACTS) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    UserContacts userContacts = new UserContacts(context);
+                    contacts = userContacts.read();
+                    contactsHampayEnabledRequest.setContacts(contacts);
+                    requestContactHampayEnabled = new RequestContactHampayEnabled(activity, new RequestContactHampayEnabledTaskCompleteListener());
+                    requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
+                } else {
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                        boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS);
+                        if (showRationale) {
+                            handler.post(() -> {
+                                PermissionContactDialog permissionContactDialog = new PermissionContactDialog();
+                                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                                fragmentTransaction.add(permissionContactDialog, null);
+                                fragmentTransaction.commitAllowingStateLoss();
                             });
+                        } else {
+                            contacts = new ArrayList<>();
+                            contactsHampayEnabledRequest.setContacts(contacts);
+                            requestContactHampayEnabled = new RequestContactHampayEnabled(activity, new RequestContactHampayEnabledTaskCompleteListener());
+                            requestContactHampayEnabled.execute(contactsHampayEnabledRequest);
                         }
+                    } else {
+                        handler.post(() -> {
+                            PermissionContactDialog permissionContactDialog = new PermissionContactDialog();
+                            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                            fragmentTransaction.add(permissionContactDialog, null);
+                            fragmentTransaction.commitAllowingStateLoss();
+                        });
                     }
-                    return true;
                 }
-                return false;
+                return true;
             }
+            return false;
         });
     }
 
@@ -170,46 +168,38 @@ public class HamPayContactsActivity extends AppCompatActivity implements Permiss
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hampay_contacts);
+        ButterKnife.bind(this);
 
         context = this;
         activity = HamPayContactsActivity.this;
         hamPayDialog = new HamPayDialog(activity);
-
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
-        hampayContactShare = (LinearLayout) findViewById(R.id.hampayContactShare);
-        hampayContactShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.hampay_share_text) + "https://play.google.com/store/apps/details?id=" + getPackageName());
-                startActivity(Intent.createChooser(intent, getString(R.string.app_name)));
-            }
+        hampayContactShare.setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.hampay_share_text) + "https://play.google.com/store/apps/details?id=" + getPackageName());
+            startActivity(Intent.createChooser(intent, getString(R.string.app_name)));
         });
-        pullToRefresh = (SwipeRefreshLayout)findViewById(R.id.pullToRefresh);
-        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                contactsHampayEnabledRequest = new ContactsHampayEnabledRequest();
-                requestAndLoadUserContact();
-            }
+        pullToRefresh.setOnRefreshListener(() -> {
+            contactsHampayEnabledRequest = new ContactsHampayEnabledRequest();
+            requestAndLoadUserContact();
         });
-        paymentRequestList = (ListView)findViewById(R.id.paymentRequestList);
-        View footerView =  ((LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.hampay_contact_footer, null, false);
+        View footerView = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.hampay_contact_footer, null, false);
         paymentRequestList.removeFooterView(footerView);
         paymentRequestList.addFooterView(footerView, null, false);
         inputMethodManager = (InputMethodManager) getSystemService(
                 Context.INPUT_METHOD_SERVICE);
-        search_text = (FacedEditText)findViewById(R.id.search_text);
         search_text.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -233,29 +223,23 @@ public class HamPayContactsActivity extends AppCompatActivity implements Permiss
             }
         });
 
-        search_text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    inputMethodManager.hideSoftInputFromWindow(search_text.getWindowToken(), 0);
-                    return true;
-                }
-                return false;
+        search_text.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                inputMethodManager.hideSoftInputFromWindow(search_text.getWindowToken(), 0);
+                return true;
             }
+            return false;
         });
 
-        editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+        AppManager.setMobileTimeout(context);
         editor.commit();
 
 
-        paymentRequestList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent();
-                intent.setClass(activity, PaymentRequestDetailActivity.class);
-                intent.putExtra(Constants.HAMPAY_CONTACT, contacts.get(position));
-                startActivityForResult(intent, 1024);
-            }
+        paymentRequestList.setOnItemClickListener((parent, view, position, id) -> {
+            Intent intent = new Intent();
+            intent.setClass(activity, PaymentRequestDetailActivity.class);
+            intent.putExtra(Constants.HAMPAY_CONTACT, contacts.get(position));
+            startActivityForResult(intent, 1024);
         });
 
         contactsHampayEnabledRequest = new ContactsHampayEnabledRequest();
@@ -265,52 +249,8 @@ public class HamPayContactsActivity extends AppCompatActivity implements Permiss
     @Override
     protected void onPause() {
         super.onPause();
-        InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(search_text.getWindowToken(), 0);
-    }
-
-
-    public class RequestContactHampayEnabledTaskCompleteListener implements
-            AsyncTaskCompleteListener<ResponseMessage<ContactsHampayEnabledResponse>> {
-        @Override
-        public void onTaskComplete(ResponseMessage<ContactsHampayEnabledResponse> contactsHampayEnabledResponseMessage) {
-
-            hamPayDialog.dismisWaitingDialog();
-            pullToRefresh.setRefreshing(false);
-
-            if (contactsHampayEnabledResponseMessage != null){
-                if (contactsHampayEnabledResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
-
-                    contacts = contactsHampayEnabledResponseMessage.getService().getContacts();
-                    if (contacts.size() == 0){
-                        paymentRequestList.setVisibility(View.GONE);
-                    }else {
-                        hamPayContactsAdapter = new HamPayContactsAdapter(activity, contacts, authToken);
-                        paymentRequestList.setAdapter(hamPayContactsAdapter);
-                    }
-                }else if (contactsHampayEnabledResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE){
-                    forceLogout();
-                }
-                else {
-                    requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());
-                    new HamPayDialog(activity).showFailContactsHamPayEnabledDialog(requestContactHampayEnabled, contactsHampayEnabledRequest,
-                            contactsHampayEnabledResponseMessage.getService().getResultStatus().getCode(),
-                            contactsHampayEnabledResponseMessage.getService().getResultStatus().getDescription());
-
-                }
-            }else {
-                requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());
-                new HamPayDialog(activity).showFailContactsHamPayEnabledDialog(requestContactHampayEnabled, contactsHampayEnabledRequest,
-                        Constants.LOCAL_ERROR_CODE,
-                        getString(R.string.msg_fail_contacts_enabled));
-
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
     }
 
     private void forceLogout() {
@@ -322,6 +262,48 @@ public class HamPayContactsActivity extends AppCompatActivity implements Permiss
         if (activity != null) {
             finish();
             startActivity(intent);
+        }
+    }
+
+    public class RequestContactHampayEnabledTaskCompleteListener implements
+            AsyncTaskCompleteListener<ResponseMessage<ContactsHampayEnabledResponse>> {
+        @Override
+        public void onTaskComplete(ResponseMessage<ContactsHampayEnabledResponse> contactsHampayEnabledResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+            pullToRefresh.setRefreshing(false);
+
+            if (contactsHampayEnabledResponseMessage != null) {
+                if (contactsHampayEnabledResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+
+                    contacts = contactsHampayEnabledResponseMessage.getService().getContacts();
+                    if (contacts.size() == 0) {
+                        paymentRequestList.setVisibility(View.GONE);
+                    } else {
+                        hamPayContactsAdapter = new HamPayContactsAdapter(activity, contacts, authToken);
+                        paymentRequestList.setAdapter(hamPayContactsAdapter);
+                    }
+                } else if (contactsHampayEnabledResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    forceLogout();
+                } else {
+                    requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());
+                    new HamPayDialog(activity).showFailContactsHamPayEnabledDialog(requestContactHampayEnabled, contactsHampayEnabledRequest,
+                            contactsHampayEnabledResponseMessage.getService().getResultStatus().getCode(),
+                            contactsHampayEnabledResponseMessage.getService().getResultStatus().getDescription());
+
+                }
+            } else {
+                requestContactHampayEnabled = new RequestContactHampayEnabled(context, new RequestContactHampayEnabledTaskCompleteListener());
+                new HamPayDialog(activity).showFailContactsHamPayEnabledDialog(requestContactHampayEnabled, contactsHampayEnabledRequest,
+                        Constants.LOCAL_ERROR_CODE,
+                        getString(R.string.msg_fail_contacts_enabled));
+
+            }
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 

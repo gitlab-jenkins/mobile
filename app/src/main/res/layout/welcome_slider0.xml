@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:geekui="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent">
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/intro_slide_0"
-        android:scaleType="fitXY"/>
+        android:scaleType="fitXY"
+        android:src="@drawable/intro_slide_0" />
 
 
     <LinearLayout
@@ -22,17 +21,17 @@
         <ImageView
             android:layout_width="144dp"
             android:layout_height="48dp"
-            android:src="@drawable/homapay_logo"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="12dp"/>
+            android:layout_marginTop="12dp"
+            android:src="@drawable/homapay_logo" />
 
         <WebView
             android:id="@+id/webview"
             android:layout_width="140dp"
             android:layout_height="45dp"
-            android:layout_gravity="center_horizontal"
             android:layout_centerInParent="true"
-            android:layout_marginTop="8dp"/>
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp" />
 
     </LinearLayout>
 

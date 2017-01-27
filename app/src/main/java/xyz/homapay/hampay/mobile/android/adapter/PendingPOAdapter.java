@@ -30,7 +30,6 @@ public class PendingPOAdapter extends BaseAdapter {
     private ViewHolder viewHolder;
 
     public PendingPOAdapter(Activity activity, List<PaymentInfoDTO> paymentInfoList, String authToken) {
-        // TODO Auto-generated method stub
         this.activity = activity;
         this.paymentInfoList = paymentInfoList;
         persianEnglishDigit = new PersianEnglishDigit();
@@ -38,24 +37,18 @@ public class PendingPOAdapter extends BaseAdapter {
     }
 
     public int getCount() {
-        // TODO Auto-generated method stub
         return paymentInfoList.size();
     }
 
-    public Object getItem(int position) {
-        // TODO Auto-generated method stub
-        return position;
+    public PaymentInfoDTO getItem(int position) {
+        return paymentInfoList.get(position);
     }
 
     public long getItemId(int position) {
-        // TODO Auto-generated method stub
         return position;
     }
 
     public View getView(final int position, View convertView, ViewGroup parent) {
-        // TODO Auto-generated method stub
-
-
         LayoutInflater inflater = (LayoutInflater) activity
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 

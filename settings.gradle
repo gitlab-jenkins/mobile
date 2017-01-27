@@ -1,1 +1,2 @@
-include ':app'
+include ':hampay'
+project(":hampay").projectDir = new File("app")

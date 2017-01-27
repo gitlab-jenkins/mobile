@@ -19,6 +19,8 @@ import com.nineoldandroids.animation.ObjectAnimator;
 import java.io.Serializable;
 
 import br.com.goncalves.pugnotification.notification.PugNotification;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.PSPName;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
@@ -54,6 +56,7 @@ import xyz.homapay.hampay.mobile.android.model.PaymentType;
 import xyz.homapay.hampay.mobile.android.model.SucceedPayment;
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
 import xyz.homapay.hampay.mobile.android.model.TopUpTokenDoWork;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
@@ -64,44 +67,64 @@ import xyz.homapay.hampay.mobile.android.webservice.psp.topup.HHBArrayOfKeyValue
 
 public class ServiceTopUpDetailActivity extends AppCompatActivity implements View.OnClickListener, CardNumberDialog.SelectCardDialogListener, OnTaskCompleted {
 
+    @BindView(R.id.pay_button)
+    ImageView pay_button;
+    @BindView(R.id.imgOperator)
+    ImageView imgOperator;
+    @BindView(R.id.tvTopUpName)
+    FacedTextView tvTopUpName;
+    @BindView(R.id.topUpDate)
+    FacedTextView topUpDate;
+    @BindView(R.id.tvCellNumber)
+    FacedTextView tvCellNumber;
+    @BindView(R.id.tvAmount)
+    FacedTextView tvAmount;
+    @BindView(R.id.tvTopUpTax)
+    FacedTextView tvTopUpTax;
+    @BindView(R.id.hampayFee)
+    FacedTextView hampayFee;
+    @BindView(R.id.tvTopUpTotalAmount)
+    FacedTextView tvTopUpTotalAmount;
+    @BindView(R.id.bankName)
+    FacedTextView bankName;
+    @BindView(R.id.cardNumberValue)
+    FacedTextView cardNumberValue;
+    @BindView(R.id.keyboard)
+    LinearLayout keyboard;
+    @BindView(R.id.pin_layout)
+    RelativeLayout pinLayout;
+    @BindView(R.id.pin_text)
+    FacedTextView pinText;
+    @BindView(R.id.cvv_layout)
+    RelativeLayout cvvLayout;
+    @BindView(R.id.cvv_text)
+    FacedTextView cvvText;
+    @BindView(R.id.paymentScroll)
+    ScrollView paymentScroll;
+    @BindView(R.id.cardPlaceHolder)
+    RelativeLayout cardPlaceHolder;
+    @BindView(R.id.selectCardText)
+    FacedTextView selectCardText;
+    @BindView(R.id.cardSelect)
+    LinearLayout cardSelect;
     private DatabaseHelper dbHelper;
-    private ImageView pay_button;
-    private ImageView imgOperator;
-    private FacedTextView tvTopUpName;
-    private FacedTextView topUpDate;
-    private FacedTextView tvCellNumber;
-    private FacedTextView tvAmount;
-    private FacedTextView tvTopUpTax;
-    private FacedTextView hampayFee;
-    private FacedTextView tvTopUpTotalAmount;
     private PSPResultRequest pspResultRequest;
     private RequestPSPResult requestPSPResult;
     private RequestTokenTopUp requestTokenBills;
-    private FacedTextView bankName;
-    private FacedTextView cardNumberValue;
     private CurrencyFormatter currencyFormatter;
     private Context context;
     private Activity activity;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
-    private LinearLayout keyboard;
-    private RelativeLayout pinLayout;
-    private FacedTextView pinText;
-    private RelativeLayout cvvLayout;
-    private FacedTextView cvvText;
     private boolean pinCodeFocus = false;
     private boolean cvvFocus = false;
     private String userPinCode = "";
     private String userCVV2 = "";
-    private ScrollView paymentScroll;
     private PersianEnglishDigit persian = new PersianEnglishDigit();
     private HamPayDialog hamPayDialog;
     private TopUpInfoDTO topUpInfo = null;
     private TopUpTokenDoWork topUpTokenDoWork;
-    private RelativeLayout cardPlaceHolder;
     private int selectedCardIdIndex = -1;
-    private FacedTextView selectCardText;
-    private LinearLayout cardSelect;
     private String signature;
     private String providerId = null;
     private String authToken = "";
@@ -154,11 +177,11 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_top_up_detail);
+        ButterKnife.bind(this);
 
         context = this;
         activity = ServiceTopUpDetailActivity.this;
         dbHelper = new DatabaseHelper(context);
-
 
         PugNotification.with(context).cancel(Constants.INVOICE_NOTIFICATION_IDENTIFIER);
 
@@ -175,35 +198,10 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
             startActivity(intent);
             return;
         }
-
-        keyboard = (LinearLayout) findViewById(R.id.keyboard);
-        pinLayout = (RelativeLayout) findViewById(R.id.pin_layout);
-        pinText = (FacedTextView) findViewById(R.id.pin_text);
-        keyboard = (LinearLayout) findViewById(R.id.keyboard);
-        pinLayout = (RelativeLayout) findViewById(R.id.pin_layout);
-        pinText = (FacedTextView) findViewById(R.id.pin_text);
         pinText.setOnClickListener(this);
-        cvvLayout = (RelativeLayout) findViewById(R.id.cvv_layout);
-        cvvText = (FacedTextView) findViewById(R.id.cvv_text);
         cvvText.setOnClickListener(this);
-        paymentScroll = (ScrollView) findViewById(R.id.paymentScroll);
         hamPayDialog = new HamPayDialog(activity);
-
         currencyFormatter = new CurrencyFormatter();
-        imgOperator = (ImageView) findViewById(R.id.imgOperator);
-        tvTopUpName = (FacedTextView) findViewById(R.id.tvTopUpName);
-        topUpDate = (FacedTextView) findViewById(R.id.topUpDate);
-        tvCellNumber = (FacedTextView) findViewById(R.id.tvCellNumber);
-        tvAmount = (FacedTextView) findViewById(R.id.tvAmount);
-        tvTopUpTax = (FacedTextView) findViewById(R.id.tvTopUpTax);
-        hampayFee = (FacedTextView) findViewById(R.id.hampayFee);
-        tvTopUpTotalAmount = (FacedTextView) findViewById(R.id.tvTopUpTotalAmount);
-
-        bankName = (FacedTextView) findViewById(R.id.bankName);
-        cardNumberValue = (FacedTextView) findViewById(R.id.cardNumberValue);
-        selectCardText = (FacedTextView) findViewById(R.id.selectCardText);
-        cardSelect = (LinearLayout) findViewById(R.id.cardSelect);
-
         Intent intent = getIntent();
         topUpInfo = (TopUpInfoDTO) intent.getSerializableExtra(Constants.TOP_UP_INFO);
         fundDTO = (FundDTO) intent.getSerializableExtra(Constants.FUND_DTO);
@@ -217,7 +215,6 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
             new UtilityBillDetailTask(activity, ServiceTopUpDetailActivity.this, utilityBillDetailRequest, authToken).execute();
         }
 
-        cardPlaceHolder = (RelativeLayout) findViewById(R.id.cardPlaceHolder);
         cardPlaceHolder.setOnClickListener(v -> {
             CardNumberDialog cardNumberDialog = new CardNumberDialog();
             if (topUpInfo == null) return;
@@ -229,11 +226,19 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
             fragmentTransaction.commitAllowingStateLoss();
         });
 
-
-        pay_button = (ImageView) findViewById(R.id.pay_button);
         pay_button.setOnClickListener(v -> {
 
             if (topUpInfo == null) return;
+
+            if (cvvText.getText().toString().trim().length() < 3) {
+                Toast.makeText(context, R.string.err_cvv_lenght, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (pinText.getText().toString().trim().length() < 5) {
+                Toast.makeText(context, R.string.err_pin_lenght, Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             if (selectedCardIdIndex == -1 || (topUpInfo.getCardList().get(selectedCardIdIndex) != null && topUpInfo.getCardList().get(selectedCardIdIndex).getCardId() == null) || (topUpInfo.getChargePackage().getAmount() + topUpInfo.getFeeCharge() >= Constants.SOAP_AMOUNT_MAX)) {
                 Intent intent1 = new Intent();
@@ -249,7 +254,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
                     Toast.makeText(context, getString(R.string.msg_cvv2_incorrect), Toast.LENGTH_SHORT).show();
                     return;
                 }
-                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                AppManager.setMobileTimeout(context);
                 editor.commit();
                 requestTokenBills = new RequestTokenTopUp(activity, new RequestPurchaseTaskCompleteListener(), topUpInfo.getPspInfo().getPayURL());
 
@@ -653,9 +658,9 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
                     } else {
                         serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
                         PspCode pspCode = new PspCode(context);
-                        if (pspCode.getDescription(responseCode) == null){
+                        if (pspCode.getDescription(responseCode) == null) {
                             new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.token_special_issue));
-                        }else {
+                        } else {
                             new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(responseCode));
                         }
                         resultStatus = ResultStatus.FAILURE;
@@ -685,7 +690,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
                 } else {
                     new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
                 }
-                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                AppManager.setMobileTimeout(context);
                 editor.commit();
 
                 Intent returnIntent = new Intent();

@@ -18,6 +18,8 @@ import com.nineoldandroids.animation.ObjectAnimator;
 
 import java.io.Serializable;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.PSPName;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
@@ -50,6 +52,7 @@ import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.model.PaymentType;
 import xyz.homapay.hampay.mobile.android.model.SucceedPayment;
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
@@ -59,42 +62,60 @@ import xyz.homapay.hampay.mobile.android.webservice.psp.CBUArrayOfKeyValueOfstri
 
 public class BusinessPaymentConfirmActivity extends AppCompatActivity implements View.OnClickListener, CardNumberDialog.SelectCardDialogListener, OnTaskCompleted {
 
+    @BindView(R.id.business_name)
+    FacedTextView business_name;
+    @BindView(R.id.business_image)
+    ImageView business_image;
+    @BindView(R.id.paymentScroll)
+    ScrollView paymentScroll;
+    @BindView(R.id.paymentPriceValue)
+    FacedTextView paymentPriceValue;
+    @BindView(R.id.paymentFeeValue)
+    FacedTextView paymentFeeValue;
+    @BindView(R.id.paymentVAT)
+    FacedTextView paymentVAT;
+    @BindView(R.id.paymentTotalValue)
+    FacedTextView paymentTotalValue;
+    @BindView(R.id.cardNumberValue)
+    FacedTextView cardNumberValue;
+    @BindView(R.id.bankName)
+    FacedTextView bankName;
+    @BindView(R.id.pin_layout)
+    RelativeLayout pinLayout;
+    @BindView(R.id.cardPlaceHolder)
+    RelativeLayout cardPlaceHolder;
+    @BindView(R.id.selectCardText)
+    FacedTextView selectCardText;
+    @BindView(R.id.cardSelect)
+    LinearLayout cardSelect;
+    @BindView(R.id.pay_to_business_button)
+    ImageView pay_to_business_button;
+    @BindView(R.id.keyboard)
+    LinearLayout keyboard;
+    @BindView(R.id.pin_text)
+    FacedTextView pinText;
+    @BindView(R.id.cvv_layout)
+    RelativeLayout cvvLayout;
+    @BindView(R.id.cvv_text)
+    FacedTextView cvvText;
     private DatabaseHelper dbHelper;
-    private ImageView pay_to_business_button;
     private Context context;
     private Activity activity;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
     private CurrencyFormatter formatter;
     private HamPayDialog hamPayDialog;
-    private FacedTextView business_name;
-    private ImageView business_image;
-    private FacedTextView paymentPriceValue;
-    private FacedTextView paymentFeeValue;
-    private FacedTextView paymentVAT;
-    private FacedTextView paymentTotalValue;
-    private FacedTextView cardNumberValue;
-    private FacedTextView bankName;
     private PaymentInfoDTO paymentInfo = null;
     private PspInfoDTO pspInfoDTO = null;
     private RequestPurchase requestPurchase;
     private DoWorkInfo doWorkInfo;
     private RequestPSPResult requestPSPResult;
     private PSPResultRequest pspResultRequest;
-    private LinearLayout keyboard;
-    private RelativeLayout pinLayout;
-    private FacedTextView pinText;
-    private RelativeLayout cvvLayout;
-    private FacedTextView cvvText;
     private boolean pinCodeFocus = false;
     private boolean cvvFocus = false;
     private String userPinCode = "";
     private String userCVV2 = "";
-    private ScrollView paymentScroll;
-    private RelativeLayout cardPlaceHolder;
     private int selectedCardIdIndex = -1;
-    private FacedTextView selectCardText;
-    private LinearLayout cardSelect;
     private PersianEnglishDigit persian = new PersianEnglishDigit();
     private String signature;
     private String authToken = "";
@@ -145,55 +166,16 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_business_payment_confirm);
+        ButterKnife.bind(this);
 
         context = this;
         activity = BusinessPaymentConfirmActivity.this;
-
         dbHelper = new DatabaseHelper(context);
-
         formatter = new CurrencyFormatter();
-
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
-
         hamPayDialog = new HamPayDialog(activity);
-
-        business_name = (FacedTextView) findViewById(R.id.business_name);
-        business_image = (ImageView) findViewById(R.id.business_image);
-        paymentPriceValue = (FacedTextView) findViewById(R.id.paymentPriceValue);
-        paymentFeeValue = (FacedTextView) findViewById(R.id.paymentFeeValue);
-        paymentVAT = (FacedTextView) findViewById(R.id.paymentVAT);
-        paymentTotalValue = (FacedTextView) findViewById(R.id.paymentTotalValue);
-        cardNumberValue = (FacedTextView) findViewById(R.id.cardNumberValue);
-        bankName = (FacedTextView) findViewById(R.id.bankName);
-        keyboard = (LinearLayout) findViewById(R.id.keyboard);
-        pinLayout = (RelativeLayout) findViewById(R.id.pin_layout);
-        pinText = (FacedTextView) findViewById(R.id.pin_text);
-        pinText.setOnClickListener(this);
-        cvvLayout = (RelativeLayout) findViewById(R.id.cvv_layout);
-        cvvText = (FacedTextView) findViewById(R.id.cvv_text);
-        cvvText.setOnClickListener(this);
-        paymentScroll = (ScrollView) findViewById(R.id.paymentScroll);
-        bankName = (FacedTextView) findViewById(R.id.bankName);
-        cardNumberValue = (FacedTextView) findViewById(R.id.cardNumberValue);
-        selectCardText = (FacedTextView) findViewById(R.id.selectCardText);
-        cardSelect = (LinearLayout) findViewById(R.id.cardSelect);
-
-        cardPlaceHolder = (RelativeLayout) findViewById(R.id.cardPlaceHolder);
-        cardPlaceHolder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CardNumberDialog cardNumberDialog = new CardNumberDialog();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(Constants.CARD_LIST, (Serializable) paymentInfo.getCardList());
-                cardNumberDialog.setArguments(bundle);
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.add(cardNumberDialog, null);
-                fragmentTransaction.commitAllowingStateLoss();
-            }
-        });
 
         Intent intent = getIntent();
 
@@ -211,7 +193,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
             paymentTotalValue.setText(persianEnglishDigit.E2P(String.valueOf(formatter.format(paymentInfo.getAmount() + paymentInfo.getVat() + paymentInfo.getFeeCharge()))));
 
             if (paymentInfo.getImageId() != null) {
-                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                AppManager.setMobileTimeout(context);
                 editor.commit();
                 business_image.setTag(paymentInfo.getImageId());
                 ImageHelper.getInstance(activity).imageLoader(paymentInfo.getImageId(), business_image, R.drawable.user_placeholder);
@@ -232,13 +214,81 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
                 }
             }
         }
+    }
 
-        pay_to_business_button = (ImageView) findViewById(R.id.pay_to_business_button);
-        pay_to_business_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 46) {
+            if (resultCode == Activity.RESULT_OK) {
+                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, -1);
+                if (result == 0) {
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra(Constants.ACTIVITY_RESULT, ResultStatus.SUCCESS.ordinal());
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    finish();
+                }
+
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+            }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (keyboard.getVisibility() == View.VISIBLE) {
+            new Collapse(keyboard).animate();
+            ObjectAnimator.ofInt(paymentScroll, "scrollY", paymentScroll.getTop()).setDuration(400).start();
+            return;
+        }
+        finish();
+    }
+
+    @Override
+    public void onClick(View view) {
+        ObjectAnimator.ofInt(paymentScroll, "scrollY", paymentScroll.getBottom()).setDuration(400).start();
+        if (keyboard.getVisibility() == View.GONE) {
+            new Expand(keyboard).animate();
+        }
+        switch (view.getId()) {
+            case R.id.pin_text:
+                pinText.setText("");
+                pinLayout.setBackgroundResource(R.drawable.card_info_entry_placeholder);
+                cvvLayout.setBackgroundResource(R.drawable.card_info_empty_placeholder);
+                pinCodeFocus = true;
+                cvvFocus = false;
+                break;
+
+            case R.id.cvv_text:
+                cvvText.setText("");
+                pinLayout.setBackgroundResource(R.drawable.card_info_empty_placeholder);
+                cvvLayout.setBackgroundResource(R.drawable.card_info_entry_placeholder);
+                pinCodeFocus = false;
+                cvvFocus = true;
+                break;
+            case R.id.cardPlaceHolder:
+                CardNumberDialog cardNumberDialog = new CardNumberDialog();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(Constants.CARD_LIST, (Serializable) paymentInfo.getCardList());
+                cardNumberDialog.setArguments(bundle);
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.add(cardNumberDialog, null);
+                fragmentTransaction.commitAllowingStateLoss();
+                break;
+            case R.id.pay_to_business_button:
                 if (pspInfoDTO == null) return;
+
+                if (cvvText.getText().toString().trim().length() < 3) {
+                    Toast.makeText(context, R.string.err_cvv_lenght, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (pinText.getText().toString().trim().length() < 5) {
+                    Toast.makeText(context, R.string.err_pin_lenght, Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 if (selectedCardIdIndex == -1 || (paymentInfo.getCardList().get(selectedCardIdIndex) != null && paymentInfo.getCardList().get(selectedCardIdIndex).getCardId() == null) || (paymentInfo.getAmount() + paymentInfo.getFeeCharge() + paymentInfo.getVat() >= Constants.SOAP_AMOUNT_MAX)) {
                     Intent intent = new Intent();
@@ -335,61 +385,6 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
                     requestPurchase.execute(doWorkInfo);
 
                 }
-            }
-        });
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (requestCode == 46) {
-            if (resultCode == Activity.RESULT_OK) {
-                int result = data.getIntExtra(Constants.ACTIVITY_RESULT, -1);
-                if (result == 0) {
-                    Intent returnIntent = new Intent();
-                    returnIntent.putExtra(Constants.ACTIVITY_RESULT, ResultStatus.SUCCESS.ordinal());
-                    setResult(Activity.RESULT_OK, returnIntent);
-                    finish();
-                }
-
-            }
-            if (resultCode == Activity.RESULT_CANCELED) {
-            }
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (keyboard.getVisibility() == View.VISIBLE) {
-            new Collapse(keyboard).animate();
-            ObjectAnimator.ofInt(paymentScroll, "scrollY", paymentScroll.getTop()).setDuration(400).start();
-            return;
-        }
-        finish();
-    }
-
-    @Override
-    public void onClick(View view) {
-        ObjectAnimator.ofInt(paymentScroll, "scrollY", paymentScroll.getBottom()).setDuration(400).start();
-        if (keyboard.getVisibility() == View.GONE) {
-            new Expand(keyboard).animate();
-        }
-        switch (view.getId()) {
-            case R.id.pin_text:
-                pinText.setText("");
-                pinLayout.setBackgroundResource(R.drawable.card_info_entry_placeholder);
-                cvvLayout.setBackgroundResource(R.drawable.card_info_empty_placeholder);
-                pinCodeFocus = true;
-                cvvFocus = false;
-                break;
-
-            case R.id.cvv_text:
-                cvvText.setText("");
-                pinLayout.setBackgroundResource(R.drawable.card_info_empty_placeholder);
-                cvvLayout.setBackgroundResource(R.drawable.card_info_entry_placeholder);
-                pinCodeFocus = false;
-                cvvFocus = true;
                 break;
         }
     }
@@ -552,15 +547,15 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
                             logEvent.log(serviceName);
                         }
                         resultStatus = ResultStatus.SUCCESS;
-                    } else if (responseCode.equalsIgnoreCase("17") || responseCode.equalsIgnoreCase("25") || responseCode.equalsIgnoreCase("27") || responseCode.equalsIgnoreCase("56")){
+                    } else if (responseCode.equalsIgnoreCase("17") || responseCode.equalsIgnoreCase("25") || responseCode.equalsIgnoreCase("27") || responseCode.equalsIgnoreCase("56")) {
                         new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.token_special_issue));
                         resultStatus = ResultStatus.FAILURE;
                     } else {
                         serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
                         PspCode pspCode = new PspCode(context);
-                        if (pspCode.getDescription(responseCode) == null){
+                        if (pspCode.getDescription(responseCode) == null) {
                             new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.token_special_issue));
-                        }else {
+                        } else {
                             new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(responseCode));
                         }
                         resultStatus = ResultStatus.FAILURE;
@@ -591,7 +586,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
                     new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
                 }
 
-                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                AppManager.setMobileTimeout(context);
                 editor.commit();
 
 

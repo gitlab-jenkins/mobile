@@ -11,12 +11,12 @@ import xyz.homapay.hampay.mobile.android.p.security.KeyExchangerImpl;
 
 public abstract class Presenter<T> implements KeyExchangeView {
 
+    private static byte[] key;
+    private static byte[] iv;
+    private static String encId;
+    private static KeyAgreementModel keyAgreementModel;
     protected T view;
     protected ModelLayer modelLayer;
-    protected byte[] key;
-    protected byte[] iv;
-    protected String encId;
-    protected KeyAgreementModel keyAgreementModel;
     private KeyExchangerImpl keyExchanger;
 
     public Presenter(ModelLayer modelLayer, T view) {
@@ -24,19 +24,30 @@ public abstract class Presenter<T> implements KeyExchangeView {
         this.modelLayer = modelLayer;
     }
 
+    public static final void invalidateKeys() {
+        key = null;
+        iv = null;
+        encId = null;
+        keyAgreementModel = null;
+    }
+
     protected void keyExchange() {
-        keyExchanger = new KeyExchangerImpl(modelLayer, this);
-        keyExchanger.exchange();
+        if (key != null && iv != null && encId != null && keyAgreementModel != null) {
+            onKeyExchangeDone();
+        } else {
+            keyExchanger = new KeyExchangerImpl(modelLayer, this);
+            keyExchanger.exchange();
+        }
     }
 
     @Override
     public void onExchangeDone(boolean state, KeyAgreementModel data, String message) {
         try {
             if (state) {
-                this.key = data.getKey();
-                this.iv = data.getIv();
-                this.encId = data.getEncId();
-                this.keyAgreementModel = data;
+                key = data.getKey();
+                iv = data.getIv();
+                encId = data.getEncId();
+                keyAgreementModel = data;
                 onKeyExchangeDone();
             } else {
                 onKeyExchangeError();

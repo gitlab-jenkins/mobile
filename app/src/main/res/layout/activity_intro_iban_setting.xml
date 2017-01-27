@@ -15,6 +15,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:background="@color/app_origin"
             android:gravity="center_vertical">
 
             <ImageView
@@ -22,7 +23,8 @@
                 android:layout_height="48dp"
                 android:onClick="backActionBar"
                 android:padding="12dp"
-                android:src="@drawable/back" />
+                android:src="@drawable/back"
+                android:tint="@color/white" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 android:layout_width="wrap_content"
@@ -32,7 +34,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginRight="8dp"
                 android:text="@string/iban_intro_setting"
-                android:textColor="@color/app_origin"
+                android:textColor="@color/white"
                 android:textSize="18sp"
                 geekui:customTypeface="fonts/vazir_regular.ttf" />
 
@@ -87,7 +89,6 @@
                         android:maxLength="30"
                         android:maxLines="1"
                         android:padding="8dp"
-                        android:singleLine="true"
                         android:textColor="@android:color/black"
                         android:textSize="14dp" />
 
@@ -114,7 +115,6 @@
                         android:maxLength="30"
                         android:maxLines="1"
                         android:padding="8dp"
-                        android:singleLine="true"
                         android:textColor="@android:color/black"
                         android:textSize="14dp" />
 
@@ -160,8 +160,8 @@
                                 android:background="@color/transparency"
                                 android:gravity="center"
                                 android:inputType="number"
+                                android:lines="1"
                                 android:maxLength="2"
-                                android:singleLine="true"
                                 android:textColor="@android:color/black"
                                 android:textSize="15dp"
                                 geekui:customTypeface="fonts/vazir_regular.ttf" />
@@ -184,8 +184,8 @@
                                 android:background="@color/transparency"
                                 android:gravity="center"
                                 android:inputType="number"
+                                android:lines="1"
                                 android:maxLength="4"
-                                android:singleLine="true"
                                 android:textColor="@android:color/black"
                                 android:textSize="15dp"
                                 geekui:customTypeface="fonts/vazir_regular.ttf" />
@@ -209,8 +209,8 @@
                                 android:background="@color/transparency"
                                 android:gravity="center"
                                 android:inputType="number"
+                                android:lines="1"
                                 android:maxLength="4"
-                                android:singleLine="true"
                                 android:textColor="@android:color/black"
                                 android:textSize="15dp"
                                 geekui:customTypeface="fonts/vazir_regular.ttf" />
@@ -233,8 +233,8 @@
                                 android:background="@color/transparency"
                                 android:gravity="center"
                                 android:inputType="number"
+                                android:lines="1"
                                 android:maxLength="4"
-                                android:singleLine="true"
                                 android:textColor="@android:color/black"
                                 android:textSize="15dp"
                                 geekui:customTypeface="fonts/vazir_regular.ttf" />
@@ -257,8 +257,8 @@
                                 android:background="@color/transparency"
                                 android:gravity="center"
                                 android:inputType="number"
+                                android:lines="1"
                                 android:maxLength="4"
-                                android:singleLine="true"
                                 android:textColor="@android:color/black"
                                 android:textSize="15dp"
                                 geekui:customTypeface="fonts/vazir_regular.ttf" />
@@ -281,8 +281,8 @@
                                 android:background="@color/transparency"
                                 android:gravity="center"
                                 android:inputType="number"
+                                android:lines="1"
                                 android:maxLength="4"
-                                android:singleLine="true"
                                 android:textColor="@android:color/black"
                                 android:textSize="15dp"
                                 geekui:customTypeface="fonts/vazir_regular.ttf" />
@@ -305,8 +305,8 @@
                                 android:background="@color/transparency"
                                 android:gravity="center"
                                 android:inputType="number"
+                                android:lines="1"
                                 android:maxLength="2"
-                                android:singleLine="true"
                                 android:textColor="@android:color/black"
                                 android:textSize="15dp"
                                 geekui:customTypeface="fonts/vazir_regular.ttf" />
@@ -348,7 +348,7 @@
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:src="@drawable/user_placeholder"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
 
                     <xyz.homapay.hampay.mobile.android.component.FacedTextView
                         android:id="@+id/bank_name"

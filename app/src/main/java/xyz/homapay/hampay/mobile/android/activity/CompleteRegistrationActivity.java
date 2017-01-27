@@ -11,6 +11,8 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
@@ -20,17 +22,16 @@ import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PreferencesManager;
 
-public class CompleteRegistrationActivity extends AppCompatActivity {
+public class CompleteRegistrationActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private FacedTextView hampay_login_button;
+    @BindView(R.id.congrats_text)
+    FacedTextView congrats_text;
     private Activity activity;
     private SharedPreferences.Editor editor;
-    private FacedTextView congrats_text;
     private PreferencesManager preferencesManager;
     private AppEvent appEvent = AppEvent.REGISTER;
 
-
-    public void userManual(View view){
+    public void userManual(View view) {
         Intent intent = new Intent();
         intent.setClass(activity, UserManualActivity.class);
         intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_complete);
@@ -59,8 +60,9 @@ public class CompleteRegistrationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_complete_registration);
+        ButterKnife.bind(this);
+
         preferencesManager = new PreferencesManager(this);
         preferencesManager.setRegistered(true);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
@@ -68,24 +70,23 @@ public class CompleteRegistrationActivity extends AppCompatActivity {
         editor.commit();
         LogEvent logEvent = new LogEvent(this);
         logEvent.log(appEvent);
-        congrats_text = (FacedTextView)findViewById(R.id.congrats_text);
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getString(R.string.complete_registarion_text_1));
         ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.rgb(109, 7, 109));
         spannableStringBuilder.setSpan(foregroundColorSpan, 21, 26, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         congrats_text.setText(spannableStringBuilder);
-
         activity = CompleteRegistrationActivity.this;
+    }
 
-        hampay_login_button = (FacedTextView) findViewById(R.id.hampay_login_button);
-        hampay_login_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.hampay_login_button:
                 Intent intent = new Intent();
                 intent.setClass(CompleteRegistrationActivity.this, HamPayLoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 finish();
                 startActivity(intent);
-            }
-        });
+                break;
+        }
     }
 }

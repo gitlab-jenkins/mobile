@@ -13,6 +13,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:background="@color/app_origin"
             android:gravity="center_vertical">
 
             <ImageView
@@ -20,7 +21,8 @@
                 android:layout_height="48dp"
                 android:onClick="backActionBar"
                 android:padding="12dp"
-                android:src="@drawable/back" />
+                android:src="@drawable/back"
+                android:tint="@color/white" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 android:layout_width="wrap_content"
@@ -30,7 +32,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginRight="8dp"
                 android:text="@string/invoice_payment_confirm"
-                android:textColor="@color/app_origin"
+                android:textColor="@color/white"
                 android:textSize="18sp"
                 geekui:customTypeface="fonts/vazir_regular.ttf" />
 
@@ -178,8 +180,6 @@
                                     geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
                             </LinearLayout>
-
-
 
 
                         </RelativeLayout>
@@ -430,8 +430,9 @@
                                     android:gravity="center"
                                     android:hint="@string/user_pin2"
                                     android:inputType="number"
-                                    android:maxLength="20"
-                                    android:singleLine="true"
+                                    android:lines="1"
+                                    android:maxLength="12"
+                                    android:onClick="onClick"
                                     android:textColor="@color/account_details_text"
                                     android:textSize="15dp"
                                     geekui:customTypeface="fonts/vazir_regular.ttf" />
@@ -455,8 +456,9 @@
                                     android:gravity="center"
                                     android:hint="@string/user_cvv2"
                                     android:inputType="number"
+                                    android:lines="1"
                                     android:maxLength="4"
-                                    android:singleLine="true"
+                                    android:onClick="onClick"
                                     android:textColor="@color/account_details_text"
                                     android:textSize="15dp"
                                     geekui:customTypeface="fonts/vazir_regular.ttf" />

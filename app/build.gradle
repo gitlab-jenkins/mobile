@@ -36,14 +36,60 @@ android {
         applicationId "xyz.homapay.hampay.mobile.android"
         minSdkVersion 14
         targetSdkVersion 25
-        versionCode 16
-        versionName "HamPay-V1.1"
+        versionCode 17
+        versionName "HamPay-V1.1.1"
         multiDexEnabled true
     }
+
+    signingConfigs {
+        release {
+            storeFile file("hampay.jks")
+            storePassword "HaMpAY-HoMA@#!aPP"
+            keyAlias "hampay-app"
+            keyPassword "HaMpAY-HoMA@#!aPP"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    productFlavors {
+
+        sit {
+            buildConfigField "String", "HTTPS_BASE_URL", "\"https://sit.hampay.ir\""
+            buildConfigField "String", "HTTP_BASE_URL", "\"http://sit.hampay.ir\""
+            buildConfigField "String", "PURE_SERVER_URL", "\"sit.hampay.ir\""
+
+            manifestPlaceholders = [appName: "SIT_hampay"]
+        }
+
+        uat {
+            buildConfigField "String", "HTTPS_BASE_URL", "\"https://uat.hampay.ir\""
+            buildConfigField "String", "HTTP_BASE_URL", "\"http://uat.hampay.ir\""
+            buildConfigField "String", "PURE_SERVER_URL", "\"uat.hampay.ir\""
+
+            manifestPlaceholders = [appName: "UAT_hampay"]
+        }
+
+        dev2 {
+            buildConfigField "String", "HTTPS_BASE_URL", "\"https://mobile.hampay.ir\""
+            buildConfigField "String", "HTTP_BASE_URL", "\"http://mobile.hampay.ir\""
+            buildConfigField "String", "PURE_SERVER_URL", "\"mobile.hampay.ir\""
+
+            manifestPlaceholders = [appName: "DEV2_hampay"]
+        }
+
+        live {
+            buildConfigField "String", "HTTPS_BASE_URL", "\"https://mobile.hampay.homapay.com\""
+            buildConfigField "String", "HTTP_BASE_URL", "\"http://mobile.hampay.homapay.com\""
+            buildConfigField "String", "PURE_SERVER_URL", "\"mobile.hampay.homapay.com\""
+
+            manifestPlaceholders = [appName: "HamPay"]
         }
     }
 
@@ -87,5 +133,10 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'org.greenrobot:eventbus:3.0.0'
+    // View injection dependencies
+    compile 'com.jakewharton:butterknife:8.4.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile 'com.gordonwong:material-sheet-fab:1.2.1'
+    compile 'com.android.support:cardview-v7:25.0.1'
 }
 apply plugin: 'com.google.gms.google-services'
