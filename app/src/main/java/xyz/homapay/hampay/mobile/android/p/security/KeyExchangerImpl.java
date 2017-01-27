@@ -62,6 +62,7 @@ public class KeyExchangerImpl extends Presenter<KeyExchangeView> implements KeyE
             view.onExchangeDone(status, status ? keyAgreementModel : null, status ? message : "Failed to get request");
         } catch (Exception e) {
             e.printStackTrace();
+            view.onExchangeDone(false, null, "Failed to get request");
         }
     }
 }

@@ -290,7 +290,10 @@ public class FrgPendingRequests extends Fragment implements PendingPaymentView, 
                 if (adapter != null)
                     adapter.clear();
                 tvNodata.setVisibility(View.VISIBLE);
+                dlg.dismisWaitingDialog();
             }
+        } else {
+            dlg.dismisWaitingDialog();
         }
     }
 
@@ -305,6 +308,8 @@ public class FrgPendingRequests extends Fragment implements PendingPaymentView, 
     public void onCancelDone(boolean state, ResponseMessage<CancelFundResponse> data, String message) {
         if (state && data != null && data.getService() != null) {
             pendingPayment.getList(AppManager.getFundType(filterState));
+        } else {
+            dlg.dismisWaitingDialog();
         }
     }
 
@@ -319,6 +324,7 @@ public class FrgPendingRequests extends Fragment implements PendingPaymentView, 
             intent.putExtra(Constants.FUND_DTO, adapter.getItem(position));
             startActivityForResult(intent, 48);
         } else {
+            dlg.dismisWaitingDialog();
             dlg.showFailPendingPaymentDialog(data.getService().getResultStatus().getCode(), data.getService().getResultStatus().getDescription());
         }
     }

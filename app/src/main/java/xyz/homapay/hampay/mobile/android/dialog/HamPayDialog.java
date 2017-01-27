@@ -944,7 +944,7 @@ public class HamPayDialog {
                 public void onError() {
                     try {
                         dlg.dismisWaitingDialog();
-                        dlg.showFailRegistrationSendSmsTokenDialog(smsSender, activity.getString(R.string.err_general), activity.getString(R.string.err_general_sms_text));
+                        Toast.makeText(activity, activity.getString(R.string.err_general_sms_text), Toast.LENGTH_SHORT).show();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -1069,7 +1069,6 @@ public class HamPayDialog {
 
         retry_contacts_enabled.setOnClickListener(v -> {
             dialog.dismiss();
-//                requestLatestPayment.execute(latestPaymentRequest);
         });
         cancel_request.setOnClickListener(v -> {
             dialog.dismiss();

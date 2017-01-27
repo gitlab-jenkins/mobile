@@ -86,7 +86,7 @@
     <string name="pay_id_transaction">شناسه پرداخت: </string>
     <string name="bills_service_payment">شناسه پرداخت</string>
     <string name="msg_invalid_bills_pay_id">شناسه قبض یا شناسه پرداخت نادرست است. لطفا مجددا تلاش نمائید.</string>
-    <string name="main_fragment_pending_payment">پرداخت‌های در انتظار</string>
+    <string name="main_fragment_pending_payment">صف انتظار</string>
     <string name="main_fragment_bill_top_up">قبض و شارژ</string>
     <string name="main_fragment_transactions">تراکنش‌ها</string>
     <string name="transaction_history_title">تراکنش‌ها</string>

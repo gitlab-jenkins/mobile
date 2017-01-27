@@ -105,6 +105,8 @@ public class FrgPendingRecieved extends Fragment implements PendingPOListView {
             } else if (data.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                 AppManager.logOut(getActivity());
             }
+        } else {
+            dlg.dismisWaitingDialog();
         }
     }
 }

@@ -404,8 +404,12 @@ public class BusinessNameFragment extends Fragment {
                                 if (newBusinessDTOs != null)
                                     addDummyData(newBusinessDTOs.size());
                             } else {
-                                initDobList(getActivity().getWindow().getDecorView().getRootView(), businessListView);
-                                businessListView.setAdapter(hamPayBusinessesAdapter);
+                                try {
+                                    initDobList(businessListView);
+                                    businessListView.setAdapter(hamPayBusinessesAdapter);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
                     }
@@ -462,7 +466,7 @@ public class BusinessNameFragment extends Fragment {
         public void onTaskPreRun() {
         }
 
-        private void initDobList(View rootView, ListView listView) {
+        private void initDobList(ListView listView) {
 
             dobList = new DobList();
             try {

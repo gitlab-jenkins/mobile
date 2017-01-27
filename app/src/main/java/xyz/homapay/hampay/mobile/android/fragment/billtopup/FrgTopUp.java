@@ -294,8 +294,9 @@ public class FrgTopUp extends Fragment implements View.OnClickListener, TopUpInf
 
     @Override
     public void onError() {
+        dlg.dismisWaitingDialog();
         btnTopUpPay.setEnabled(true);
-        dlg.showFailPendingPaymentDialog(getString(R.string.err_general), getString(R.string.err_general_text));
+        Toast.makeText(getActivity(), getString(R.string.err_general_text), Toast.LENGTH_SHORT).show();
     }
 
     @Override

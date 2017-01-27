@@ -514,7 +514,8 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
 
     @Override
     public void onError() {
-        hamPayDialog.showFailRegistrationSendSmsTokenDialog(smsSender, activity.getString(R.string.err_general), activity.getString(R.string.err_general_sms_text));
+        hamPayDialog.dismisWaitingDialog();
+        Toast.makeText(this, activity.getString(R.string.err_general_sms_text), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -532,12 +533,14 @@ public class SMSVerificationActivity extends AppCompatActivity implements View.O
                     serviceName = ServiceEvent.REGISTRATION_SEND_SMS_TOKEN_FAILURE;
                     new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(smsSender, data.getService().getResultStatus().getCode(), data.getService().getResultStatus().getDescription());
                 }
-
             } else {
+                hamPayDialog.dismisWaitingDialog();
                 serviceName = ServiceEvent.REGISTRATION_SEND_SMS_TOKEN_FAILURE;
                 new HamPayDialog(activity).showFailRegistrationSendSmsTokenDialog(smsSender, Constants.LOCAL_ERROR_CODE, getString(R.string.mgs_fail_registration_send_sms_token));
             }
             logEvent.log(serviceName);
+        } else {
+            hamPayDialog.dismisWaitingDialog();
         }
     }
 

@@ -199,6 +199,7 @@ public class CredentialEntryActivity extends AppCompatActivity implements Creden
 
     @Override
     public void onError() {
+        hamPayDialog.dismisWaitingDialog();
         Toast.makeText(context, R.string.err_message_registration, Toast.LENGTH_SHORT).show();
     }
 
@@ -229,6 +230,7 @@ public class CredentialEntryActivity extends AppCompatActivity implements Creden
                         data.getService().getResultStatus().getDescription(), contactPermission);
             }
         } else {
+            hamPayDialog.dismisWaitingDialog();
             serviceName = ServiceEvent.REGISTRATION_CREDENTIALS_FAILURE;
             new HamPayDialog(activity).showFailMemorableEntryDialog(credentialEntry, registrationCredentialsRequest,
                     AppManager.getAuthToken(context),

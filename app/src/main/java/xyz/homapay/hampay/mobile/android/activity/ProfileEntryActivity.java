@@ -375,6 +375,7 @@ public class ProfileEntryActivity extends ActivityParentBase implements Permissi
 
     @Override
     public void onError() {
+        hamPayDialog.dismisWaitingDialog();
         keepOn_button.setEnabled(true);
         Toast.makeText(ctx, R.string.err_message_registration, Toast.LENGTH_SHORT).show();
     }
@@ -397,6 +398,7 @@ public class ProfileEntryActivity extends ActivityParentBase implements Permissi
                         data.getService().getResultStatus().getDescription());
             }
         } else {
+            hamPayDialog.dismisWaitingDialog();
             serviceName = ServiceEvent.REGISTRATION_ENTRY_FAILURE;
         }
         new LogEvent(ctx).log(serviceName);
