@@ -133,7 +133,6 @@
 
                 </RelativeLayout>
 
-
                 <ImageView
                     android:layout_width="12dp"
                     android:layout_height="24dp"
