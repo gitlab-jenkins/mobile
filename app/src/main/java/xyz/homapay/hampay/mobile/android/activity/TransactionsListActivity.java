@@ -186,7 +186,6 @@ public class TransactionsListActivity extends AppCompatActivity {
         });
 
 
-
         fabAll.setOnClickListener(view -> {
             materialSheetFab.hideSheet();
             if (requestUserTransaction.getStatus() == AsyncTask.Status.RUNNING) {

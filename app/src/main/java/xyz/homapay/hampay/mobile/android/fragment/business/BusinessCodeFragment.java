@@ -1,13 +1,10 @@
 package xyz.homapay.hampay.mobile.android.fragment.business;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +22,6 @@ import xyz.homapay.hampay.common.core.model.response.PurchaseInfoResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
 import xyz.homapay.hampay.mobile.android.R;
-import xyz.homapay.hampay.mobile.android.activity.BusinessPurchaseActivity;
 import xyz.homapay.hampay.mobile.android.activity.BusinessesListActivity;
 import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.activity.RequestBusinessPayDetailActivity;
@@ -45,7 +41,6 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class BusinessCodeFragment extends Fragment implements View.OnClickListener {
 
-    private View rootView;
     @BindView(R.id.keyboard)
     LinearLayout keyboard;
     String inputPurchaseCode = "";
@@ -71,6 +66,7 @@ public class BusinessCodeFragment extends Fragment implements View.OnClickListen
     LinearLayout displayKeyboard;
     @BindView(R.id.payment_button)
     ImageView payment_button;
+    private View rootView;
     private PurchaseInfoDTO purchaseInfoDTO = null;
     private PspInfoDTO pspInfoDTO = null;
     private SharedPreferences.Editor editor;
@@ -87,7 +83,7 @@ public class BusinessCodeFragment extends Fragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_business_code, container, false);
 
-        ButterKnife.bind(this ,rootView);
+        ButterKnife.bind(this, rootView);
 
         displayKeyboard.setOnClickListener(this);
         payment_button.setOnClickListener(this);
@@ -100,9 +96,9 @@ public class BusinessCodeFragment extends Fragment implements View.OnClickListen
     }
 
     @OnClick({R.id.digit_1, R.id.digit_2, R.id.digit_3, R.id.digit_4, R.id.digit_5, R.id.digit_6, R.id.digit_7, R.id.digit_8, R.id.digit_9, R.id.digit_0, R.id.switch_letter,
-    R.id.letter_q, R.id.letter_w, R.id.letter_e, R.id.letter_r, R.id.letter_t, R.id.letter_y, R.id.letter_u, R.id.letter_i, R.id.letter_o, R.id.letter_p, R.id.letter_a, R.id.letter_s, R.id.letter_d
+            R.id.letter_q, R.id.letter_w, R.id.letter_e, R.id.letter_r, R.id.letter_t, R.id.letter_y, R.id.letter_u, R.id.letter_i, R.id.letter_o, R.id.letter_p, R.id.letter_a, R.id.letter_s, R.id.letter_d
             , R.id.letter_f, R.id.letter_g, R.id.letter_h, R.id.letter_j, R.id.letter_k, R.id.letter_l, R.id.letter_z, R.id.letter_x, R.id.letter_c, R.id.letter_v, R.id.letter_b, R.id.letter_n, R.id.letter_m, R.id.switch_digit,
-    R.id.backspace, R.id.letter_backspace})
+            R.id.backspace, R.id.letter_backspace})
     public void pressKey(View view) {
         if (view.getTag().toString().equals("-")) {
             letter_layout.setVisibility(View.GONE);
@@ -159,58 +155,6 @@ public class BusinessCodeFragment extends Fragment implements View.OnClickListen
                 break;
         }
     }
-    public class RequestPurchaseInfoTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PurchaseInfoResponse>> {
-
-        @Override
-        public void onTaskComplete(ResponseMessage<PurchaseInfoResponse> purchaseInfoResponseMessage) {
-
-            hamPayDialog.dismisWaitingDialog();
-            ServiceEvent serviceName;
-            LogEvent logEvent = new LogEvent(getActivity());
-
-            if (purchaseInfoResponseMessage != null) {
-                if (purchaseInfoResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    serviceName = ServiceEvent.PURCHASE_INFO_SUCCESS;
-                    purchaseInfoDTO = purchaseInfoResponseMessage.getService().getPurchaseInfo();
-                    pspInfoDTO = purchaseInfoResponseMessage.getService().getPurchaseInfo().getPspInfo();
-
-                    if (purchaseInfoDTO != null) {
-                        Intent intent = new Intent();
-                        intent.putExtra(Constants.PURCHASE_INFO, purchaseInfoDTO);
-                        intent.putExtra(Constants.PSP_INFO, pspInfoDTO);
-                        intent.setClass(getActivity(), RequestBusinessPayDetailActivity.class);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(getActivity(), getString(R.string.msg_not_found_pending_payment_code), Toast.LENGTH_LONG).show();
-                        getActivity().finish();
-                    }
-
-                } else if (purchaseInfoResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceEvent.PURCHASE_INFO_FAILURE;
-                    forceLogout();
-                } else {
-                    serviceName = ServiceEvent.PURCHASE_INFO_FAILURE;
-                    requestPurchaseInfo = new RequestPurchaseInfo(getActivity(), new RequestPurchaseInfoTaskCompleteListener());
-                    new HamPayDialog(getActivity()).showFailPurchaseInfoDialog(
-                            purchaseInfoResponseMessage.getService().getResultStatus().getCode(),
-                            purchaseInfoResponseMessage.getService().getResultStatus().getDescription());
-                }
-            } else {
-                serviceName = ServiceEvent.PURCHASE_INFO_FAILURE;
-                requestPurchaseInfo = new RequestPurchaseInfo(getActivity(), new RequestPurchaseInfoTaskCompleteListener());
-                new HamPayDialog(getActivity()).showFailPurchaseInfoDialog(
-                        Constants.LOCAL_ERROR_CODE,
-                        getString(R.string.msg_fail_fetch_latest_payment));
-            }
-            logEvent.log(serviceName);
-
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
-    }
 
     private void forceLogout() {
         editor.remove(Constants.LOGIN_TOKEN_ID);
@@ -223,19 +167,6 @@ public class BusinessCodeFragment extends Fragment implements View.OnClickListen
             startActivity(intent);
         }
     }
-
-
-//    public void pressKey(View view) {
-//        if (view.getTag().toString().equals("-")) {
-//            letter_layout.setVisibility(View.GONE);
-//            digit_layout.setVisibility(View.VISIBLE);
-//        } else if (view.getTag().toString().equals("+")) {
-//            letter_layout.setVisibility(View.VISIBLE);
-//            digit_layout.setVisibility(View.GONE);
-//        } else {
-//            inputDigit(view.getTag().toString());
-//        }
-//    }
 
     private void inputDigit(String digit) {
         if (inputPurchaseCode.length() <= 5) {
@@ -325,6 +256,72 @@ public class BusinessCodeFragment extends Fragment implements View.OnClickListen
             if (inputPurchaseCode.length() <= 5) {
                 inputPurchaseCode += digit;
             }
+        }
+    }
+
+
+//    public void pressKey(View view) {
+//        if (view.getTag().toString().equals("-")) {
+//            letter_layout.setVisibility(View.GONE);
+//            digit_layout.setVisibility(View.VISIBLE);
+//        } else if (view.getTag().toString().equals("+")) {
+//            letter_layout.setVisibility(View.VISIBLE);
+//            digit_layout.setVisibility(View.GONE);
+//        } else {
+//            inputDigit(view.getTag().toString());
+//        }
+//    }
+
+    public class RequestPurchaseInfoTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PurchaseInfoResponse>> {
+
+        @Override
+        public void onTaskComplete(ResponseMessage<PurchaseInfoResponse> purchaseInfoResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+            ServiceEvent serviceName;
+            LogEvent logEvent = new LogEvent(getActivity());
+
+            if (purchaseInfoResponseMessage != null) {
+                if (purchaseInfoResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    serviceName = ServiceEvent.PURCHASE_INFO_SUCCESS;
+                    purchaseInfoDTO = purchaseInfoResponseMessage.getService().getPurchaseInfo();
+                    pspInfoDTO = purchaseInfoResponseMessage.getService().getPurchaseInfo().getPspInfo();
+
+                    if (purchaseInfoDTO != null) {
+                        Intent intent = new Intent();
+                        intent.putExtra(Constants.PURCHASE_INFO, purchaseInfoDTO);
+                        intent.putExtra(Constants.PSP_INFO, pspInfoDTO);
+                        intent.setClass(getActivity(), RequestBusinessPayDetailActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(getActivity(), getString(R.string.msg_not_found_pending_payment_code), Toast.LENGTH_LONG).show();
+                        getActivity().finish();
+                    }
+
+                } else if (purchaseInfoResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceEvent.PURCHASE_INFO_FAILURE;
+                    forceLogout();
+                } else {
+                    serviceName = ServiceEvent.PURCHASE_INFO_FAILURE;
+                    requestPurchaseInfo = new RequestPurchaseInfo(getActivity(), new RequestPurchaseInfoTaskCompleteListener());
+                    new HamPayDialog(getActivity()).showFailPurchaseInfoDialog(
+                            purchaseInfoResponseMessage.getService().getResultStatus().getCode(),
+                            purchaseInfoResponseMessage.getService().getResultStatus().getDescription());
+                }
+            } else {
+                serviceName = ServiceEvent.PURCHASE_INFO_FAILURE;
+                requestPurchaseInfo = new RequestPurchaseInfo(getActivity(), new RequestPurchaseInfoTaskCompleteListener());
+                new HamPayDialog(getActivity()).showFailPurchaseInfoDialog(
+                        Constants.LOCAL_ERROR_CODE,
+                        getString(R.string.msg_fail_fetch_latest_payment));
+            }
+            logEvent.log(serviceName);
+
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 

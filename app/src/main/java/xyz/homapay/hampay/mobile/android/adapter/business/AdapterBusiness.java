@@ -8,8 +8,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.fragment.business.BusinessCodeFragment;
 import xyz.homapay.hampay.mobile.android.fragment.business.BusinessNameFragment;
-import xyz.homapay.hampay.mobile.android.fragment.pending.FrgPendingRecieved;
-import xyz.homapay.hampay.mobile.android.fragment.pending.FrgPendingRequests;
 
 /**
  * Created by amir on 1/22/17.
