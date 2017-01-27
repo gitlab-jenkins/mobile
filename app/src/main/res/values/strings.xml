@@ -284,7 +284,7 @@
     <string name="purchase_payment_payer_cell">همراه پرداخت کننده: </string>
     <string name="user_pin2">رمز دوم کارت</string>
     <string name="user_cvv2">CVV2</string>
-    <string name="shaparak_privacy_message">(طبق الزامات شاپرک رمز دوم کارت در هم‌پی ذخیره نمی‌شود)</string>
+    <string name="shaparak_privacy_message">(طبق الزامات شاپرک رمز دوم و cvv2 کارت در هم‌پی ذخیره نمی‌شود)</string>
     <string name="msg_payment_success">پرداخت شما با موفقیت انجام شد</string>
     <string name="payment_info">اطلاعات پرداخت</string>
     <string name="payment_success_amount">مبلغ: </string>
