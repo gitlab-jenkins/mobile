@@ -26,10 +26,10 @@ public class AdapterBusiness extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         Fragment frg = null;
         switch (position) {
-            case 0:
+            case 1:
                 frg = BusinessNameFragment.newInstance();
                 break;
-            case 1:
+            case 0:
                 frg = BusinessCodeFragment.newInstance();
                 break;
         }
@@ -45,10 +45,10 @@ public class AdapterBusiness extends FragmentStatePagerAdapter {
     public CharSequence getPageTitle(int position) {
         CharSequence title = "";
         switch (position) {
-            case 0:
+            case 1:
                 title = ctx.getString(R.string.business_payment_per_name);
                 break;
-            case 1:
+            case 0:
                 title = ctx.getString(R.string.business_payment_per_code);
                 break;
         }
