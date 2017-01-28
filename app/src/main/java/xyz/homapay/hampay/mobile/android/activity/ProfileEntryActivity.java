@@ -23,7 +23,11 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.stephentuso.welcome.WelcomeActivity;
+import com.stephentuso.welcome.WelcomeHelper;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,7 +44,9 @@ import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.dialog.permission.ActionPermission;
 import xyz.homapay.hampay.mobile.android.dialog.permission.PermissionDeviceDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
+import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
+import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
 import xyz.homapay.hampay.mobile.android.p.auth.RegisterEntry;
 import xyz.homapay.hampay.mobile.android.p.auth.RegisterEntryImpl;
 import xyz.homapay.hampay.mobile.android.p.auth.RegisterEntryView;
@@ -51,6 +57,8 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.ModelLayerImpl;
 import xyz.homapay.hampay.mobile.android.util.NationalCodeVerification;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
+import xyz.homapay.hampay.mobile.android.util.PreferencesManager;
+import xyz.homapay.hampay.mobile.android.util.RootUtil;
 
 public class ProfileEntryActivity extends ActivityParentBase implements PermissionDeviceDialog.PermissionDeviceDialogListener, RegisterEntryView {
 
@@ -93,6 +101,12 @@ public class ProfileEntryActivity extends ActivityParentBase implements Permissi
     private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
     private String fullUserName = "";
     private RegisterEntry registerer;
+    private RootUtil rootUtil;
+    private Bundle bundle;
+    private Intent intent;
+    private PreferencesManager preferencesManager;
+    private List<ScreenItem> welcomeScreens = new ArrayList<>();
+    private static final int REQUEST_WELCOME_SCREEN_RESULT = 13;
 
     public void userManual(View view) {
         Intent intent = new Intent();
@@ -163,10 +177,85 @@ public class ProfileEntryActivity extends ActivityParentBase implements Permissi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_entry);
-        ButterKnife.bind(this);
 
         activity = this;
+
+        LogEvent logEvent = new LogEvent(this);
+        AppEvent appEvent = AppEvent.LAUNCH;
+        logEvent.log(appEvent);
+
+        rootUtil = new RootUtil(activity);
+        if (rootUtil.checkRootedDevice()) {
+            new HamPayDialog(activity).showPreventRootDeviceDialog();
+            return;
+        }
+
+        bundle = getIntent().getExtras();
+        if (bundle != null) {
+            if (bundle.getBoolean(Constants.HAS_NOTIFICATION)) {
+
+                if (HamPayLoginActivity.instance != null) {
+                    try {
+                        HamPayLoginActivity.instance.finish();
+                    } catch (Exception e) {
+                    }
+                }
+
+                NotificationMessageType notificationMessageType;
+                notificationMessageType = NotificationMessageType.valueOf(bundle.getString(Constants.NOTIFICATION_TYPE));
+
+                switch (notificationMessageType) {
+                    case PAYMENT:
+                        intent = getIntent();
+                        intent.setClass(activity, HamPayLoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        finish();
+                        startActivity(intent);
+                        break;
+
+                    case CREDIT_REQUEST:
+                        intent = getIntent();
+                        intent.setClass(activity, HamPayLoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        finish();
+                        startActivity(intent);
+                        break;
+                    case PURCHASE:
+                        intent = getIntent();
+                        intent.setClass(activity, HamPayLoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        finish();
+                        startActivity(intent);
+                        break;
+
+                    case USER_PAYMENT_CONFIRM:
+                        intent = getIntent();
+                        intent.setClass(activity, HamPayLoginActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        finish();
+                        startActivity(intent);
+                        break;
+                }
+
+            }
+        }
+
+        if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
+            finish();
+            return;
+        }
+
+        preferencesManager = new PreferencesManager(this);
+        if (preferencesManager.isRegistered()) {
+            launchLoginScreen();
+        } else if (preferencesManager.isFirstTimeLaunch()) {
+            launchRegisterScreen();
+        }
+
+        setContentView(R.layout.activity_profile_entry);
+
+        ButterKnife.bind(this);
+
         registerer = new RegisterEntryImpl(new ModelLayerImpl(activity), this);
         persianEnglishDigit = new PersianEnglishDigit();
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
@@ -419,6 +508,60 @@ public class ProfileEntryActivity extends ActivityParentBase implements Permissi
         keepOn_button.setEnabled(true);
         keepOn_button.setBackgroundResource(R.drawable.disable_button_style);
         Toast.makeText(activity, getString(R.string.system_connectivity), Toast.LENGTH_LONG).show();
+    }
+
+    private void launchRegisterScreen() {
+        welcomeScreens.add(new ScreenItem(R.string.title_included_pages, R.string.description_included_pages, IncludedPagesWelcomeActivity.class, REQUEST_WELCOME_SCREEN_RESULT));
+        final ScreenItem item = welcomeScreens.get(0);
+        if (item.requestCode != null) {
+            item.helper.forceShow(item.requestCode);
+        } else {
+            item.helper.forceShow();
+        }
+    }
+
+    private void launchLoginScreen() {
+        startActivity(new Intent(ProfileEntryActivity.this, HamPayLoginActivity.class));
+        finish();
+    }
+
+    private class ScreenItem {
+
+        String title;
+        String description;
+        WelcomeHelper helper;
+        Integer requestCode;
+
+        ScreenItem(int titleRes, int descriptionRes, Class<? extends WelcomeActivity> activityClass) {
+            this(titleRes, descriptionRes, activityClass, null);
+        }
+
+        ScreenItem(int titleRes, int descriptionRes, Class<? extends WelcomeActivity> activityClass, Integer requestCode) {
+            this(titleRes, descriptionRes, new WelcomeHelper(ProfileEntryActivity.this, activityClass), requestCode);
+        }
+
+        ScreenItem(int titleRes, int descriptionRes, WelcomeHelper helper, Integer requestCode) {
+            this.title = getString(titleRes);
+            this.description = getString(descriptionRes);
+            this.helper = helper;
+            this.requestCode = requestCode;
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_WELCOME_SCREEN_RESULT) {
+
+            if (resultCode == RESULT_OK) {
+                preferencesManager.setFirstTimeLaunch(false);
+            } else if (resultCode == RESULT_CANCELED) {
+            }
+
+        }
+
     }
 
 }

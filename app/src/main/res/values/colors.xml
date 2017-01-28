@@ -11,6 +11,7 @@
     <color name="navigation_banner_start">#9E248A</color>
     <color name="navigation_banner_center">#6B246C</color>
     <color name="navigation_banner_end">#371F59</color>
+    <color name="red_background">#D32F2F</color>
 
     <color name="register_btn_color">#36ac3f</color>
     <color name="user_change_status">#0095ff</color>
@@ -63,6 +64,14 @@
     </array>
 
 
+
+    <color name="blue_background">#1976D2</color>
+    <color name="teal_background">#00796B</color>
+    <color name="orange_background">#F57C00</color>
+    <color name="purple_background">#7B1FA2</color>
+
+    <color name="transparent_button_pressed">#44444444</color>
+    <color name="transparent_button_focused">#44666666</color>
 
 
 </resources>

@@ -267,7 +267,7 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
                     databaseHelper.deleteAllDataBase();
 
                     Intent intent = new Intent();
-                    intent.setClass(getApplicationContext(), WelcomeActivity.class);
+                    intent.setClass(getApplicationContext(), ProfileEntryActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 } else if (unlinkUserResponseResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {

@@ -24,7 +24,7 @@ import xyz.homapay.hampay.mobile.android.activity.ActivityPendingRequestList;
 import xyz.homapay.hampay.mobile.android.activity.InvoicePendingConfirmationActivity;
 import xyz.homapay.hampay.mobile.android.activity.RequestBusinessPayDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.TransactionsListActivity;
-import xyz.homapay.hampay.mobile.android.activity.WelcomeActivity;
+import xyz.homapay.hampay.mobile.android.activity.ProfileEntryActivity;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
 import xyz.homapay.hampay.mobile.android.receiver.GcmBroadcastReceiver;
@@ -128,7 +128,7 @@ public class GcmMessageHandler extends IntentService {
                                     .message(notificationMessage)
                                     .bigTextStyle(notificationMessage)
                                     .smallIcon(R.mipmap.ic_notification)
-                                    .click(WelcomeActivity.class, bundle)
+                                    .click(ProfileEntryActivity.class, bundle)
                                     .color(R.color.colorPrimary)
                                     .lights(Color.rgb(Constants.HAMPAY_RED, Constants.HAMPAY_GREEN, Constants.HAMPAY_BLUE), 2000, 1000)
                                     .ticker(Constants.NOTIFICATION_PAYMENT)
@@ -180,7 +180,7 @@ public class GcmMessageHandler extends IntentService {
                                     .message(notificationMessage)
                                     .bigTextStyle(notificationMessage)
                                     .smallIcon(R.mipmap.ic_notification)
-                                    .click(WelcomeActivity.class, bundle)
+                                    .click(ProfileEntryActivity.class, bundle)
                                     .color(R.color.colorPrimary)
                                     .lights(Color.rgb(Constants.HAMPAY_RED, Constants.HAMPAY_GREEN, Constants.HAMPAY_BLUE), 2000, 1000)
                                     .ticker(Constants.NOTIFICATION_CREDIT_REQUEST)
@@ -229,7 +229,7 @@ public class GcmMessageHandler extends IntentService {
                                     .message(notificationMessage)
                                     .bigTextStyle(notificationMessage)
                                     .smallIcon(R.mipmap.ic_notification)
-                                    .click(WelcomeActivity.class, bundle)
+                                    .click(ProfileEntryActivity.class, bundle)
                                     .color(R.color.colorPrimary)
                                     .lights(Color.rgb(Constants.HAMPAY_RED, Constants.HAMPAY_GREEN, Constants.HAMPAY_BLUE), 2000, 1000)
                                     .ticker(Constants.NOTIFICATION_CREDIT_REQUEST)
@@ -271,7 +271,7 @@ public class GcmMessageHandler extends IntentService {
                                     .message(notificationMessage)
                                     .bigTextStyle(notificationMessage)
                                     .smallIcon(R.mipmap.ic_notification)
-                                    .click(WelcomeActivity.class, bundle)
+                                    .click(ProfileEntryActivity.class, bundle)
                                     .color(R.color.colorPrimary)
                                     .lights(Color.rgb(Constants.HAMPAY_RED, Constants.HAMPAY_GREEN, Constants.HAMPAY_BLUE), 2000, 1000)
                                     .ticker(Constants.NOTIFICATION_USER_PAYMENT_CONFIRM)
@@ -311,7 +311,7 @@ public class GcmMessageHandler extends IntentService {
                                     .message(notificationMessage)
                                     .bigTextStyle(notificationMessage)
                                     .smallIcon(R.mipmap.ic_notification)
-                                    .click(WelcomeActivity.class, bundle)
+                                    .click(ProfileEntryActivity.class, bundle)
                                     .color(R.color.colorPrimary)
                                     .lights(Color.rgb(Constants.HAMPAY_RED, Constants.HAMPAY_GREEN, Constants.HAMPAY_BLUE), 2000, 1000)
                                     .ticker(Constants.NOTIFICATION_USER_PAYMENT_CANCEL)
