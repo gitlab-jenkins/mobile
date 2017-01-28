@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.BusinessPaymentConfirmRequest;
@@ -36,21 +38,24 @@ import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.img.ImageHelper;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
-public class BusinessPaymentInfoActivity extends AppCompatActivity {
-
+public class BusinessPaymentInfoActivity extends AppCompatActivity implements View.OnClickListener {
 
     PersianEnglishDigit persianEnglishDigit;
 
+    @BindView(R.id.business_name)
     FacedTextView business_name;
+    @BindView(R.id.business_hampay_id)
     FacedTextView business_hampay_id;
+    @BindView(R.id.business_image)
     ImageView business_image;
-
+    @BindView(R.id.payment_buttonpayment_button)
     ImageView payment_button;
-
+    @BindView(R.id.amount_value)
     FacedEditText amount_value;
     boolean creditValueValidation = false;
 
@@ -64,16 +69,19 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
     Long MaxXferAmount = 0L;
     Long MinXferAmount = 0L;
     HamPayDialog hamPayDialog;
+    @BindView(R.id.add_vat)
+    LinearLayout add_vat;
+    @BindView(R.id.vat_icon)
+    ImageView vat_icon;
+    @BindView(R.id.vat_value)
+    FacedTextView vat_value;
+    @BindView(R.id.amount_total)
+    FacedTextView amount_total;
     private RequestBusinessPaymentConfirm requestBusinessPaymentConfirm;
     private BusinessPaymentConfirmRequest businessPaymentConfirmRequest;
     private BusinessDTO businessDTO;
-
-    private LinearLayout add_vat;
     private Long calculatedVat = 0L;
-    private ImageView vat_icon;
-    private FacedTextView amount_total;
     private CurrencyFormatter formatter;
-    private FacedTextView vat_value;
 
     public void backActionBar(View view) {
         finish();
@@ -121,37 +129,29 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_business_payment_info);
+        ButterKnife.bind(this);
 
         persianEnglishDigit = new PersianEnglishDigit();
         formatter = new CurrencyFormatter();
         context = this;
         activity = BusinessPaymentInfoActivity.this;
-
         hamPayDialog = new HamPayDialog(activity);
-
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
 
         try {
             MaxXferAmount = prefs.getLong(Constants.MAX_BUSINESS_XFER_AMOUNT, 0);
             MinXferAmount = prefs.getLong(Constants.MIN_BUSINESS_XFER_AMOUNT, 0);
-
         } catch (Exception ex) {
             Log.e("Error", ex.getStackTrace().toString());
         }
 
         Intent intent = getIntent();
         businessDTO = (BusinessDTO) intent.getSerializableExtra(Constants.BUSINESS_INFO);
-
-        business_name = (FacedTextView) findViewById(R.id.business_name);
         business_name.setText(persianEnglishDigit.E2P(businessDTO.getTitle()));
-        business_image = (ImageView) findViewById(R.id.business_image);
-
-        business_hampay_id = (FacedTextView) findViewById(R.id.business_hampay_id);
         business_hampay_id.setText(getString(R.string.business_id) + persianEnglishDigit.E2P(businessDTO.getCode()));
-
         if (businessDTO.getBusinessImageId() != null) {
-            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            AppManager.setMobileTimeout(context);
             editor.commit();
             business_image.setTag(businessDTO.getBusinessImageId());
             ImageHelper.getInstance(activity).imageLoader(businessDTO.getBusinessImageId(), business_image, R.drawable.user_placeholder);
@@ -159,8 +159,6 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
             business_image.setImageResource(R.drawable.user_placeholder);
         }
 
-
-        amount_value = (FacedEditText) findViewById(R.id.amount_value);
         amount_value.addTextChangedListener(new CurrencyFormatterTextWatcher(amount_value));
         amount_value.addTextChangedListener(new TextWatcher() {
             @Override
@@ -181,25 +179,36 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
                 amount_total.setText(amount_value.getText().toString());
             }
         });
-        amount_value.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    creditValueValidation = amount_value.getText().toString().length() != 0;
-                } else {
-                }
-
+        amount_value.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                creditValueValidation = amount_value.getText().toString().length() != 0;
+            } else {
             }
         });
+    }
 
-        vat_value = (FacedTextView) findViewById(R.id.vat_value);
-        vat_icon = (ImageView) findViewById(R.id.vat_icon);
-        amount_total = (FacedTextView) findViewById(R.id.amount_total);
-        add_vat = (LinearLayout) findViewById(R.id.add_vat);
-        add_vat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+    @Override
+    protected void onUserLeaveHint() {
+        super.onUserLeaveHint();
+    }
+
+    private void forceLogout() {
+        editor.remove(Constants.LOGIN_TOKEN_ID);
+        editor.commit();
+        Intent intent = new Intent();
+        intent.setClass(context, HamPayLoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        if (activity != null) {
+            finish();
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.add_vat:
+                AppManager.setMobileTimeout(context);
                 editor.commit();
                 if (amount_value.getText().toString().length() > 0) {
                     if (amount_value.getText().toString().indexOf("٬") != -1) {
@@ -219,15 +228,9 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
                         amount_total.setText(persianEnglishDigit.E2P(formatter.format(amountValue)));
                     }
                 }
-            }
-        });
-
-        payment_button = (ImageView) findViewById(R.id.payment_button);
-        payment_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+                break;
+            case R.id.payment_buttonpayment_button:
                 amount_value.clearFocus();
-
                 if (amount_value.getText().toString().length() == 0) {
                     payment_button.setEnabled(false);
                     Toast.makeText(activity, getString(R.string.msg_null_amount), Toast.LENGTH_SHORT).show();
@@ -235,7 +238,7 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
                     return;
                 }
                 if (creditValueValidation) {
-                    editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                    AppManager.setMobileTimeout(context);
                     editor.commit();
                     if (amount_value.getText().toString().indexOf("٬") != -1) {
                         amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace("٬", "")));
@@ -255,25 +258,7 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity {
 
                     }
                 }
-            }
-        });
-
-    }
-
-    @Override
-    protected void onUserLeaveHint() {
-        super.onUserLeaveHint();
-    }
-
-    private void forceLogout() {
-        editor.remove(Constants.LOGIN_TOKEN_ID);
-        editor.commit();
-        Intent intent = new Intent();
-        intent.setClass(context, HamPayLoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        if (activity != null) {
-            finish();
-            startActivity(intent);
+                break;
         }
     }
 

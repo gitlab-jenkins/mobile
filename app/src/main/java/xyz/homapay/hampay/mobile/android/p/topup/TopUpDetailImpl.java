@@ -63,7 +63,7 @@ public class TopUpDetailImpl extends Presenter<TopUpDetailView> implements TopUp
     @Override
     public void onNetworkLoad(boolean status, ResponseMessage<TopUpResponse> data, String message) {
         try {
-            view.dissmisProgress();
+            view.cancelProgress();
             view.onDetailLoaded(status, data, status ? message : "Failed");
         } catch (Exception e) {
             e.printStackTrace();

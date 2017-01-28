@@ -5,8 +5,7 @@
     android:background="@drawable/about_background"
     android:orientation="vertical">
 
-    <xyz.homapay.hampay.mobile.android.component.slidinguppanel.SlidingUpPanelLayout
-        xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    <xyz.homapay.hampay.mobile.android.component.slidinguppanel.SlidingUpPanelLayout xmlns:sothree="http://schemas.android.com/apk/res-auto"
         android:id="@+id/sliding_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -37,7 +36,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
                         android:scaleType="fitXY"
-                        android:src="@drawable/main_fragment_banner"/>
+                        android:src="@drawable/main_fragment_banner" />
 
                     <LinearLayout
                         android:id="@+id/good_message"
@@ -67,11 +66,9 @@
                             android:gravity="center"
                             android:textColor="@android:color/white"
                             android:textSize="12dp"
-                            geekui:customTypeface="fonts/vazir_regular_bold.ttf"
-                            />
+                            geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
                     </LinearLayout>
-
 
 
                 </RelativeLayout>
@@ -111,7 +108,7 @@
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/entry_field_color"/>
+                        android:background="@color/entry_field_color" />
 
 
                 </LinearLayout>
@@ -145,7 +142,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/entry_field_color"/>
+                    android:background="@color/entry_field_color" />
 
                 <LinearLayout
                     android:id="@+id/billAndTopUp"
@@ -224,13 +221,12 @@
                     </RelativeLayout>
 
 
-
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/entry_field_color"/>
+                    android:background="@color/entry_field_color" />
 
                 <LinearLayout
                     android:id="@+id/user_transaction_history"
@@ -261,7 +257,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/entry_field_color"/>
+                    android:background="@color/entry_field_color" />
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/user_last_login"
@@ -278,7 +274,7 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"/>
+                    android:layout_height="40dp" />
 
             </LinearLayout>
 
@@ -303,7 +299,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/entry_field_color"/>
+                    android:background="@color/entry_field_color" />
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:layout_width="wrap_content"

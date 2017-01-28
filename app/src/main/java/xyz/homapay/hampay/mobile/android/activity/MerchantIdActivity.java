@@ -19,6 +19,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.request.UserMerchantInquiryRequest;
 import xyz.homapay.hampay.common.core.model.request.UserMerchantRequest;
@@ -38,20 +40,21 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompleted, View.OnClickListener {
 
+    @BindView(R.id.requestLayout)
+    LinearLayout requestLayout;
+    @BindView(R.id.statusLayout)
+    LinearLayout statusLayout;
+    @BindView(R.id.merchant_id_text)
+    FacedTextView merchantIdText;
+    HamPayDialog hamPayDialog;
+    @BindView(R.id.step_1_text)
+    FacedTextView step1Text;
+    @BindView(R.id.step_2_text)
+    FacedTextView step2Text;
     private Activity activity;
     private SharedPreferences prefs;
     private Context context;
-    private LinearLayout requestLayout;
-    private LinearLayout statusLayout;
-    private FacedTextView requestMerchantIdBtn;
-    private FacedTextView closeRequestMerchantId;
-    private FacedTextView closeMerchantIdBtn;
-    private FacedTextView closeViewMerchantId;
     private String authToken = "";
-    private FacedTextView merchantIdText;
-    private HamPayDialog hamPayDialog;
-    private FacedTextView step1Text;
-    private FacedTextView step2Text;
 
     public void backActionBar(View view) {
         finish();
@@ -98,30 +101,13 @@ public class MerchantIdActivity extends AppCompatActivity implements OnTaskCompl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_merchant_id);
+        ButterKnife.bind(this);
+
         activity = MerchantIdActivity.this;
         context = this;
         hamPayDialog = new HamPayDialog(activity);
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
-
-        merchantIdText = (FacedTextView) findViewById(R.id.merchant_id_text);
-        requestLayout = (LinearLayout) findViewById(R.id.requestLayout);
-        statusLayout = (LinearLayout) findViewById(R.id.statusLayout);
-
-        requestMerchantIdBtn = (FacedTextView) findViewById(R.id.requestMerchantId);
-        requestMerchantIdBtn.setOnClickListener(this);
-
-        closeRequestMerchantId = (FacedTextView) findViewById(R.id.closeRequestMerchantId);
-        closeRequestMerchantId.setOnClickListener(this);
-
-        closeMerchantIdBtn = (FacedTextView) findViewById(R.id.closeMerchantId);
-        closeMerchantIdBtn.setOnClickListener(this);
-
-        closeViewMerchantId = (FacedTextView) findViewById(R.id.closeViewMerchantId);
-        closeViewMerchantId.setOnClickListener(this);
-
-        step1Text = (FacedTextView) findViewById(R.id.step_1_text);
-        step2Text = (FacedTextView) findViewById(R.id.step_2_text);
 
         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getString(R.string.merchant_id_not_set));
         ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.rgb(Constants.HAMPAY_RED, Constants.HAMPAY_GREEN, Constants.HAMPAY_BLUE));

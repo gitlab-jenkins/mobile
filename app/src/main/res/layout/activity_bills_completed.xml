@@ -183,6 +183,18 @@
             </LinearLayout>
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/tvCellPhoneOrChargeCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/tvCellPhoneOrChargeCodeTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
                 android:id="@+id/confirm_button"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"

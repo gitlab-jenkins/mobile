@@ -26,6 +26,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.UploadImageRequest;
@@ -35,7 +37,6 @@ import xyz.homapay.hampay.mobile.android.Manifest;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestUploadImage;
-import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.cropper.CropImageView;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.dialog.permission.ActionPermission;
@@ -46,12 +47,13 @@ import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.permission.PermissionListener;
 import xyz.homapay.hampay.mobile.android.permission.RequestPermissions;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
 
-public class ChangeUserImageActivity extends AppCompatActivity implements PermissionStorageDialog.PermissionStorageDialogListener, PermissionCameraDialog.PermissionCameraDialogListener {
+public class ChangeUserImageActivity extends AppCompatActivity implements View.OnClickListener, PermissionStorageDialog.PermissionStorageDialogListener, PermissionCameraDialog.PermissionCameraDialogListener {
 
-
+    private final Handler handler = new Handler();
     Bitmap croppedImage;
     Bitmap resizedImage;
     UploadImageRequest uploadImageRequest;
@@ -61,15 +63,26 @@ public class ChangeUserImageActivity extends AppCompatActivity implements Permis
     Activity activity;
     SharedPreferences.Editor editor;
     SharedPreferences prefs;
+    @BindView(R.id.cropImageView)
+    CropImageView cropImageView;
     private Bundle bundle;
     private String user_selected_source;
-    private CropImageView cropImageView;
-    private FacedTextView user_profile_image_cancel;
-    private FacedTextView user_profile_image_select;
     private int mAspectRatioX = Constants.DEFAULT_ASPECT_RATIO_VALUES;
     private int mAspectRatioY = Constants.DEFAULT_ASPECT_RATIO_VALUES;
     private ArrayList<PermissionListener> permissionListeners = new ArrayList<>();
-    private final Handler handler = new Handler();
+
+    public static Bitmap scaleDown(Bitmap realImage, float maxImageSize,
+                                   boolean filter) {
+        float ratio = Math.min(
+                maxImageSize / realImage.getWidth(),
+                maxImageSize / realImage.getHeight());
+        int width = Math.round(ratio * realImage.getWidth());
+        int height = Math.round(ratio * realImage.getHeight());
+
+        Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
+                height, filter);
+        return newBitmap;
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
@@ -152,19 +165,6 @@ public class ChangeUserImageActivity extends AppCompatActivity implements Permis
         });
     }
 
-    public static Bitmap scaleDown(Bitmap realImage, float maxImageSize,
-                                   boolean filter) {
-        float ratio = Math.min(
-                maxImageSize / realImage.getWidth(),
-                maxImageSize / realImage.getHeight());
-        int width = Math.round(ratio * realImage.getWidth());
-        int height = Math.round(ratio * realImage.getHeight());
-
-        Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
-                height, filter);
-        return newBitmap;
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -225,64 +225,15 @@ public class ChangeUserImageActivity extends AppCompatActivity implements Permis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_user_image);
-
+        ButterKnife.bind(this);
 
         context = this;
         activity = ChangeUserImageActivity.this;
         hamPayDialog = new HamPayDialog(activity);
-
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-
-
-        cropImageView = (CropImageView) findViewById(R.id.cropImageView);
-
-
-        user_profile_image_cancel = (FacedTextView) findViewById(R.id.user_profile_image_cancel);
-        user_profile_image_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        user_profile_image_select = (FacedTextView) findViewById(R.id.user_profile_image_select);
-        user_profile_image_select.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
-                editor.commit();
-                try {
-                    croppedImage = cropImageView.getCroppedImage();
-                    resizedImage = scaleDown(croppedImage, 100, true);
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    resizedImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                    byte[] resizedImageByteArray = stream.toByteArray();
-                    if (resizedImageByteArray.length <= 1024 * 1024) {
-                        ImageView croppedImageView = (ImageView) findViewById(R.id.croppedImageView);
-                        cropImageView.setVisibility(View.INVISIBLE);
-                        if (croppedImage != null) {
-                            croppedImageView.setImageBitmap(croppedImage);
-                        }
-                        uploadImageRequest = new UploadImageRequest();
-                        requestUploadImage = new RequestUploadImage(context, new RequestUploadImageTaskCompleteListener());
-                        uploadImageRequest.setImage(resizedImageByteArray);
-                        requestUploadImage.execute(uploadImageRequest);
-                    } else {
-                        Toast.makeText(context, getString(R.string.msg_violation_image_size), Toast.LENGTH_LONG).show();
-                    }
-                } catch (Exception ex) {
-                    Log.e("Error", "Error");
-                }
-
-            }
-        });
-
-
         bundle = getIntent().getExtras();
-
         user_selected_source = bundle.getString(Constants.IMAGE_PROFILE_SOURCE);
-
         if (user_selected_source.equalsIgnoreCase(Constants.CAMERA_SELECT)) {
             requestCamera();
         } else if (user_selected_source.equalsIgnoreCase(Constants.CONTENT_SELECT)) {
@@ -397,7 +348,7 @@ public class ChangeUserImageActivity extends AppCompatActivity implements Permis
 
     @Override
     public void onFinishEditDialog(ActionPermission actionPermission) {
-        switch (actionPermission){
+        switch (actionPermission) {
             case GRANT:
                 requestStorage();
                 break;
@@ -409,11 +360,46 @@ public class ChangeUserImageActivity extends AppCompatActivity implements Permis
 
     @Override
     public void onFinishCameraDialog(ActionPermission actionPermission) {
-        switch (actionPermission){
+        switch (actionPermission) {
             case GRANT:
                 requestCamera();
                 break;
             case DENY:
+                finish();
+                break;
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.user_profile_image_select:
+                AppManager.setMobileTimeout(context);
+                editor.commit();
+                try {
+                    croppedImage = cropImageView.getCroppedImage();
+                    resizedImage = scaleDown(croppedImage, 100, true);
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    resizedImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    byte[] resizedImageByteArray = stream.toByteArray();
+                    if (resizedImageByteArray.length <= 1024 * 1024) {
+                        ImageView croppedImageView = (ImageView) findViewById(R.id.croppedImageView);
+                        cropImageView.setVisibility(View.INVISIBLE);
+                        if (croppedImage != null) {
+                            croppedImageView.setImageBitmap(croppedImage);
+                        }
+                        uploadImageRequest = new UploadImageRequest();
+                        requestUploadImage = new RequestUploadImage(context, new RequestUploadImageTaskCompleteListener());
+                        uploadImageRequest.setImage(resizedImageByteArray);
+                        requestUploadImage.execute(uploadImageRequest);
+                    } else {
+                        Toast.makeText(context, getString(R.string.msg_violation_image_size), Toast.LENGTH_LONG).show();
+                    }
+                } catch (Exception ex) {
+                    Log.e("Error", "Error");
+                }
+                break;
+            case R.id.user_profile_image_cancel:
                 finish();
                 break;
         }

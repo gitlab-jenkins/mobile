@@ -73,7 +73,7 @@ public class TopUpInfoImplMock extends Presenter<TopUpInfoView> implements TopUp
                 response.setTopUpInfoList(lstInfo);
 
                 ResponseMessage<TopUpInfoResponse> responseResponseMessage = new ResponseMessage<>(response);
-                view.dismissProgress();
+                view.cancelProgress();
                 view.onInfoLoaded(true, responseResponseMessage, "ok");
             }, 2000);
 

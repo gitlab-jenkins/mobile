@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.mobile.android.BuildConfig;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
@@ -16,7 +18,11 @@ import xyz.homapay.hampay.mobile.android.component.FacedTextView;
  */
 public class AboutFragment extends Fragment {
 
+    @BindView(R.id.version)
     FacedTextView version;
+
+    @BindView(R.id.webview)
+    WebView webview;
 
     public AboutFragment() {
         // Required empty public constructor
@@ -29,21 +35,16 @@ public class AboutFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_about, container, false);
+        ButterKnife.bind(this, rootView);
 
-        version = (FacedTextView)rootView.findViewById(R.id.version);
-
-        version.setText(getString(R.string.about_text_7, BuildConfig.VERSION_NAME + " - "+ BuildConfig.VERSION_CODE));
-
-        WebView webView = (WebView)rootView.findViewById(R.id.webview);
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl("file:///android_asset/certification.html");
+        version.setText(getString(R.string.about_text_7, BuildConfig.VERSION_NAME + " - " + BuildConfig.VERSION_CODE));
+        webview.getSettings().setJavaScriptEnabled(true);
+        webview.loadUrl("file:///android_asset/certification.html");
 
         return rootView;
     }
-
 
     @Override
     public void onDetach() {

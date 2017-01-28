@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
@@ -23,20 +25,28 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class PendingPODetailActivity extends AppCompatActivity {
 
+    @BindView(R.id.caller_name)
+    FacedTextView caller_name;
+    @BindView(R.id.caller_phone_number)
+    FacedTextView caller_phone_number;
+    @BindView(R.id.amount_value)
+    FacedTextView amount_value;
+    @BindView(R.id.payment_request_code)
+    FacedTextView payment_request_code;
+    @BindView(R.id.create_date)
+    FacedTextView create_date;
+    @BindView(R.id.message_text)
+    FacedTextView message_text;
+    @BindView(R.id.re_payment_request)
+    LinearLayout re_payment_request;
+    @BindView(R.id.user_image)
+    ImageView user_image;
     private PaymentInfoDTO paymentInfo;
     private PersianEnglishDigit persianEnglishDigit;
     private Context context;
     private Activity activity;
     private SharedPreferences prefs;
     private CurrencyFormatter formatter;
-    private FacedTextView caller_name;
-    private FacedTextView caller_phone_number;
-    private FacedTextView amount_value;
-    private FacedTextView payment_request_code;
-    private FacedTextView create_date;
-    private FacedTextView message_text;
-    private LinearLayout re_payment_request;
-    private ImageView user_image;
 
     public void backActionBar(View view) {
         finish();
@@ -84,6 +94,7 @@ public class PendingPODetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pending_po_detail);
+        ButterKnife.bind(this);
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         persianEnglishDigit = new PersianEnglishDigit();
@@ -93,8 +104,6 @@ public class PendingPODetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         paymentInfo = (PaymentInfoDTO) intent.getSerializableExtra(Constants.PAYMENT_INFO);
 
-        caller_name = (FacedTextView) findViewById(R.id.caller_name);
-        user_image = (ImageView) findViewById(R.id.user_image);
         caller_name.setText(paymentInfo.getCalleeName());
         if (paymentInfo.getImageId() != null) {
             user_image.setTag(paymentInfo.getImageId());
@@ -102,26 +111,17 @@ public class PendingPODetailActivity extends AppCompatActivity {
         } else {
             user_image.setImageResource(R.drawable.user_placeholder);
         }
-        caller_phone_number = (FacedTextView) findViewById(R.id.caller_phone_number);
         caller_phone_number.setText(persianEnglishDigit.E2P(paymentInfo.getCalleePhoneNumber()));
-        amount_value = (FacedTextView) findViewById(R.id.amount_value);
         amount_value.setText(persianEnglishDigit.E2P(formatter.format(paymentInfo.getAmount() + paymentInfo.getVat())));
-        payment_request_code = (FacedTextView) findViewById(R.id.payment_request_code);
         payment_request_code.setText(persianEnglishDigit.E2P(paymentInfo.getProductCode()));
-        create_date = (FacedTextView) findViewById(R.id.create_date);
         create_date.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(paymentInfo.getCreatedBy())));
-        message_text = (FacedTextView) findViewById(R.id.message_text);
         message_text.setText("پیام: " + paymentInfo.getMessage());
 
-        re_payment_request = (LinearLayout) findViewById(R.id.re_payment_request);
-        re_payment_request.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.putExtra(Constants.PAYMENT_INFO, paymentInfo);
-                intent.setClass(activity, PaymentRequestDetailActivity.class);
-                startActivity(intent);
-            }
+        re_payment_request.setOnClickListener(v -> {
+            Intent intent1 = new Intent();
+            intent1.putExtra(Constants.PAYMENT_INFO, paymentInfo);
+            intent1.setClass(activity, PaymentRequestDetailActivity.class);
+            startActivity(intent1);
         });
 
 

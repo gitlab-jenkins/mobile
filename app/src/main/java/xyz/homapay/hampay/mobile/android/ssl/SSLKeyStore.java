@@ -26,11 +26,11 @@ public class SSLKeyStore {
     public KeyStore getAppKeyStore() {
         try {
             CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-//            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/live.cer"));
+            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/live.cer"));
 //            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/sit-http-v1.crt"));
 //            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/prod-http-v1.crt"));
 //            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/sit-http-v1.crt"));
-            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/uat.crt"));
+//            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/uat.crt"));
 //            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/nginx.crt"));
             Certificate certificate = certificateFactory.generateCertificate(caInput);
             String keyStoreType = KeyStore.getDefaultType();
@@ -54,8 +54,8 @@ public class SSLKeyStore {
     public KeyStore getTokenPayKeyStore() {
         try {
             CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
-            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/token_pay.cer"));
-//            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/token_pay_new.crt"));
+//            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/token_pay.cer"));
+            InputStream caInput = new BufferedInputStream(context.getAssets().open("cert/token_pay_new.crt"));
             Certificate certificate = certificateFactory.generateCertificate(caInput);
             String keyStoreType = KeyStore.getDefaultType();
             KeyStore keyStore = KeyStore.getInstance(keyStoreType);

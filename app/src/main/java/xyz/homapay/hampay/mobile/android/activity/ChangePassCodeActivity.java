@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.ChangePassCodeRequest;
@@ -25,32 +27,40 @@ import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
 import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PasswordComplexity;
 
 public class ChangePassCodeActivity extends AppCompatActivity implements View.OnClickListener {
 
+    @BindView(R.id.input_digit_1)
+    FacedTextView input_digit_1;
+    @BindView(R.id.input_digit_2)
+    FacedTextView input_digit_2;
+    @BindView(R.id.input_digit_3)
+    FacedTextView input_digit_3;
+    @BindView(R.id.input_digit_4)
+    FacedTextView input_digit_4;
+    @BindView(R.id.input_digit_5)
+    FacedTextView input_digit_5;
+    @BindView(R.id.keyboard)
+    LinearLayout keyboard;
+    @BindView(R.id.pass_code_change_text)
+    FacedTextView pass_code_change_text;
     private HamPayDialog hamPayDialog;
     private String currentPassword = "";
     private String inputPasswordValue = "";
     private String inputRePasswordValue = "";
-    private FacedTextView input_digit_1;
-    private FacedTextView input_digit_2;
-    private FacedTextView input_digit_3;
-    private FacedTextView input_digit_4;
-    private FacedTextView input_digit_5;
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
-    private LinearLayout keyboard;
     private LinearLayout password_holder;
     private RequestChangePassCode requestChangePassCode;
     private ChangePassCodeRequest changePassCodeRequest;
-    private FacedTextView pass_code_change_text;
     private int passCodeChangeStep = 0;
     private Context context;
     private Activity activity;
 
-    public void backActionBar(View view){
+    public void backActionBar(View view) {
         finish();
     }
 
@@ -95,27 +105,18 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_pass_code);
-
+        ButterKnife.bind(this);
         context = this;
         activity = ChangePassCodeActivity.this;
         hamPayDialog = new HamPayDialog(activity);
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-        keyboard = (LinearLayout)findViewById(R.id.keyboard);
-        password_holder = (LinearLayout)findViewById(R.id.password_holder);
-        password_holder.setOnClickListener(this);
-        input_digit_1 = (FacedTextView)findViewById(R.id.input_digit_1);
-        input_digit_2 = (FacedTextView)findViewById(R.id.input_digit_2);
-        input_digit_3 = (FacedTextView)findViewById(R.id.input_digit_3);
-        input_digit_4 = (FacedTextView)findViewById(R.id.input_digit_4);
-        input_digit_5 = (FacedTextView)findViewById(R.id.input_digit_5);
-        pass_code_change_text = (FacedTextView)findViewById(R.id.pass_code_change_text);
     }
 
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.password_holder:
                 if (keyboard.getVisibility() != View.VISIBLE)
                     new Expand(keyboard).animate();
@@ -127,62 +128,7 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
         }
     }
 
-    public class RequestChangePassCodeTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<ChangePassCodeResponse>> {
-        @Override
-        public void onTaskComplete(ResponseMessage<ChangePassCodeResponse> changePassCodeResponseMessage)
-        {
-
-            hamPayDialog.dismisWaitingDialog();
-            ServiceEvent serviceName;
-            LogEvent logEvent = new LogEvent(context);
-
-            if (changePassCodeResponseMessage != null) {
-                if (changePassCodeResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    editor.putString(Constants.LOGIN_API_LEVEL, Constants.API_LEVEL).commit();
-                    serviceName = ServiceEvent.CHANGE_PASS_CODE_SUCCESS;
-                    passCodeChangeStep = 1;
-                    pass_code_change_text.setText(getString(R.string.change_pass_code_text_1));
-                    currentPassword = "";
-                    inputPasswordValue = "";
-                    inputRePasswordValue = "";
-                    input_digit_1.setBackgroundResource(R.drawable.pass_value_empty);
-                    input_digit_2.setBackgroundResource(R.drawable.pass_value_empty);
-                    input_digit_3.setBackgroundResource(R.drawable.pass_value_empty);
-                    input_digit_4.setBackgroundResource(R.drawable.pass_value_empty);
-                    input_digit_5.setBackgroundResource(R.drawable.pass_value_empty);
-                    new HamPayDialog(activity).showSuccessChangeSettingDialog(changePassCodeResponseMessage.getService().getResultStatus().getDescription(), false);
-
-                }else if (changePassCodeResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceEvent.CHANGE_PASS_CODE_FAILURE;
-                    forceLogout();
-                }
-                else {
-                    serviceName = ServiceEvent.CHANGE_PASS_CODE_FAILURE;
-                    resetLayout();
-                    requestChangePassCode = new RequestChangePassCode(context, new RequestChangePassCodeTaskCompleteListener());
-                    new HamPayDialog(activity).showFailChangePassCodeDialog(requestChangePassCode, changePassCodeRequest,
-                            changePassCodeResponseMessage.getService().getResultStatus().getCode(),
-                            changePassCodeResponseMessage.getService().getResultStatus().getDescription());
-                }
-            }else {
-                serviceName = ServiceEvent.CHANGE_PASS_CODE_FAILURE;
-                resetLayout();
-                requestChangePassCode = new RequestChangePassCode(context, new RequestChangePassCodeTaskCompleteListener());
-                new HamPayDialog(activity).showFailChangePassCodeDialog(requestChangePassCode, changePassCodeRequest,
-                        Constants.LOCAL_ERROR_CODE,
-                        getString(R.string.msg_fail_change_pass_code));
-            }
-            logEvent.log(serviceName);
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
-    }
-
-
-    private void resetLayout(){
+    private void resetLayout() {
         passCodeChangeStep = 0;
         pass_code_change_text.setText(getString(R.string.change_pass_code_text_1));
         currentPassword = "";
@@ -199,10 +145,9 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
     @Override
     public void onBackPressed() {
 
-        if (keyboard.getVisibility() == View.VISIBLE){
+        if (keyboard.getVisibility() == View.VISIBLE) {
             new Collapse(keyboard).animate();
-        }
-        else {
+        } else {
             finish();
         }
     }
@@ -219,46 +164,40 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
         }
     }
 
-    public void pressKey(View view){
-        if (view.getTag().toString().equals("*")){
+    public void pressKey(View view) {
+        if (view.getTag().toString().equals("*")) {
             new Collapse(keyboard).animate();
-        }
-        else {
+        } else {
             inputDigit(view.getTag().toString());
         }
     }
 
-    private void inputDigit(String digit){
+    private void inputDigit(String digit) {
 
-        switch (passCodeChangeStep){
+        switch (passCodeChangeStep) {
             case 0:
-                if (digit.contains("d")){
+                if (digit.contains("d")) {
                     if (currentPassword.length() > 0) {
                         currentPassword = currentPassword.substring(0, currentPassword.length() - 1);
-                        if (currentPassword.length() == 4){
+                        if (currentPassword.length() == 4) {
                             input_digit_5.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_5.setText("");
-                        }
-                        else if (currentPassword.length() == 3){
+                        } else if (currentPassword.length() == 3) {
                             input_digit_4.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_4.setText("");
-                        }
-                        else if (currentPassword.length() == 2){
+                        } else if (currentPassword.length() == 2) {
                             input_digit_3.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_3.setText("");
-                        }
-                        else if (currentPassword.length() == 1){
+                        } else if (currentPassword.length() == 1) {
                             input_digit_2.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_2.setText("");
-                        }
-                        else if (currentPassword.length() == 0){
+                        } else if (currentPassword.length() == 0) {
                             input_digit_1.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_1.setText("");
                         }
                     }
                     return;
-                }
-                else {
+                } else {
                     if (currentPassword.length() <= 5) {
                         currentPassword += digit;
                     }
@@ -304,33 +243,28 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                 break;
 
             case 1:
-                if (digit.contains("d")){
+                if (digit.contains("d")) {
                     if (inputPasswordValue.length() > 0) {
                         inputPasswordValue = inputPasswordValue.substring(0, inputPasswordValue.length() - 1);
-                        if (inputPasswordValue.length() == 4){
+                        if (inputPasswordValue.length() == 4) {
                             input_digit_5.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_5.setText("");
-                        }
-                        else if (inputPasswordValue.length() == 3){
+                        } else if (inputPasswordValue.length() == 3) {
                             input_digit_4.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_4.setText("");
-                        }
-                        else if (inputPasswordValue.length() == 2){
+                        } else if (inputPasswordValue.length() == 2) {
                             input_digit_3.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_3.setText("");
-                        }
-                        else if (inputPasswordValue.length() == 1){
+                        } else if (inputPasswordValue.length() == 1) {
                             input_digit_2.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_2.setText("");
-                        }
-                        else if (inputPasswordValue.length() == 0){
+                        } else if (inputPasswordValue.length() == 0) {
                             input_digit_1.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_1.setText("");
                         }
                     }
                     return;
-                }
-                else {
+                } else {
                     if (inputPasswordValue.length() <= 5) {
                         inputPasswordValue += digit;
                     }
@@ -369,7 +303,7 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                             input_digit_4.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_5.setBackgroundResource(R.drawable.pass_value_empty);
                             int passwordComplexity = new PasswordComplexity(inputPasswordValue).check();
-                            if (passwordComplexity != 1){
+                            if (passwordComplexity != 1) {
                                 inputPasswordValue = "";
                                 Toast.makeText(activity, getString(passwordComplexity), Toast.LENGTH_SHORT).show();
                                 return;
@@ -383,33 +317,28 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                 break;
 
             case 2:
-                if (digit.contains("d")){
+                if (digit.contains("d")) {
                     if (inputRePasswordValue.length() > 0) {
                         inputRePasswordValue = inputRePasswordValue.substring(0, inputRePasswordValue.length() - 1);
-                        if (inputRePasswordValue.length() == 4){
+                        if (inputRePasswordValue.length() == 4) {
                             input_digit_5.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_5.setText("");
-                        }
-                        else if (inputRePasswordValue.length() == 3){
+                        } else if (inputRePasswordValue.length() == 3) {
                             input_digit_4.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_4.setText("");
-                        }
-                        else if (inputRePasswordValue.length() == 2){
+                        } else if (inputRePasswordValue.length() == 2) {
                             input_digit_3.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_3.setText("");
-                        }
-                        else if (inputRePasswordValue.length() == 1){
+                        } else if (inputRePasswordValue.length() == 1) {
                             input_digit_2.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_2.setText("");
-                        }
-                        else if (inputRePasswordValue.length() == 0){
+                        } else if (inputRePasswordValue.length() == 0) {
                             input_digit_1.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_1.setText("");
                         }
                     }
                     return;
-                }
-                else {
+                } else {
                     if (inputRePasswordValue.length() <= 5) {
                         inputRePasswordValue += digit;
                     }
@@ -446,7 +375,7 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                                 new Collapse(keyboard).animate();
 
                             if (inputPasswordValue.equalsIgnoreCase(inputRePasswordValue)) {
-                                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                                AppManager.setMobileTimeout(context);
                                 editor.commit();
                                 changePassCodeRequest = new ChangePassCodeRequest();
                                 changePassCodeRequest.setCurrentPassCode(currentPassword);
@@ -455,7 +384,7 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                                 String loginApiLevel = prefs.getString(Constants.LOGIN_API_LEVEL, null);
                                 if (loginApiLevel == null) {
                                     loginApiLevel = "2.0";
-                                }else {
+                                } else {
                                     loginApiLevel = Constants.API_LEVEL;
                                 }
                                 changePassCodeRequest.setPreviousVersion(loginApiLevel);
@@ -469,6 +398,58 @@ public class ChangePassCodeActivity extends AppCompatActivity implements View.On
                     }
                 }
                 break;
+        }
+    }
+
+    public class RequestChangePassCodeTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<ChangePassCodeResponse>> {
+        @Override
+        public void onTaskComplete(ResponseMessage<ChangePassCodeResponse> changePassCodeResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+            ServiceEvent serviceName;
+            LogEvent logEvent = new LogEvent(context);
+
+            if (changePassCodeResponseMessage != null) {
+                if (changePassCodeResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    editor.putString(Constants.LOGIN_API_LEVEL, Constants.API_LEVEL).commit();
+                    serviceName = ServiceEvent.CHANGE_PASS_CODE_SUCCESS;
+                    passCodeChangeStep = 1;
+                    pass_code_change_text.setText(getString(R.string.change_pass_code_text_1));
+                    currentPassword = "";
+                    inputPasswordValue = "";
+                    inputRePasswordValue = "";
+                    input_digit_1.setBackgroundResource(R.drawable.pass_value_empty);
+                    input_digit_2.setBackgroundResource(R.drawable.pass_value_empty);
+                    input_digit_3.setBackgroundResource(R.drawable.pass_value_empty);
+                    input_digit_4.setBackgroundResource(R.drawable.pass_value_empty);
+                    input_digit_5.setBackgroundResource(R.drawable.pass_value_empty);
+                    new HamPayDialog(activity).showSuccessChangeSettingDialog(changePassCodeResponseMessage.getService().getResultStatus().getDescription(), false);
+
+                } else if (changePassCodeResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceEvent.CHANGE_PASS_CODE_FAILURE;
+                    forceLogout();
+                } else {
+                    serviceName = ServiceEvent.CHANGE_PASS_CODE_FAILURE;
+                    resetLayout();
+                    requestChangePassCode = new RequestChangePassCode(context, new RequestChangePassCodeTaskCompleteListener());
+                    new HamPayDialog(activity).showFailChangePassCodeDialog(requestChangePassCode, changePassCodeRequest,
+                            changePassCodeResponseMessage.getService().getResultStatus().getCode(),
+                            changePassCodeResponseMessage.getService().getResultStatus().getDescription());
+                }
+            } else {
+                serviceName = ServiceEvent.CHANGE_PASS_CODE_FAILURE;
+                resetLayout();
+                requestChangePassCode = new RequestChangePassCode(context, new RequestChangePassCodeTaskCompleteListener());
+                new HamPayDialog(activity).showFailChangePassCodeDialog(requestChangePassCode, changePassCodeRequest,
+                        Constants.LOCAL_ERROR_CODE,
+                        getString(R.string.msg_fail_change_pass_code));
+            }
+            logEvent.log(serviceName);
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
 

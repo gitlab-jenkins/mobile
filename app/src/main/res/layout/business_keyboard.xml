@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:geekui="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:layout_alignParentBottom="true"
     android:background="@android:color/white"
-    xmlns:geekui="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical">
 
 
     <LinearLayout
@@ -24,165 +23,175 @@
 
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
+                android:id="@+id/letter_q"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
-                android:layout_weight="0.1"
-                android:textColor="@color/keyboard_border_text"
-                android:textSize="20sp"
-                android:gravity="center"
                 android:layout_gravity="center"
-                android:text="Q"
-                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
+                android:layout_weight="0.1"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
                 android:tag="Q"
-                android:onClick="pressKey"
-                android:clickable="true"/>
+                android:text="Q"
+                android:textColor="@color/keyboard_border_text"
+                android:textSize="20sp"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
+                android:id="@+id/letter_w"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
-                android:layout_weight="0.1"
-                android:textColor="@color/keyboard_border_text"
-                android:textSize="20sp"
-                android:gravity="center"
                 android:layout_gravity="center"
-                android:text="W"
-                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
+                android:layout_weight="0.1"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
                 android:tag="W"
-                android:onClick="pressKey"
-                android:clickable="true"/>
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
-                android:layout_width="0dip"
-                android:layout_height="56dp"
-                android:layout_weight="0.1"
+                android:text="W"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_e"
+                android:layout_width="0dip"
+                android:layout_height="56dp"
                 android:layout_gravity="center"
-                android:text="E"
-                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
+                android:layout_weight="0.1"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
                 android:tag="E"
-                android:onClick="pressKey"
-                android:clickable="true"/>
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
-                android:layout_width="0dip"
-                android:layout_height="56dp"
-                android:layout_weight="0.1"
+                android:text="E"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_r"
+                android:layout_width="0dip"
+                android:layout_height="56dp"
                 android:layout_gravity="center"
-                android:text="R"
-                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
+                android:layout_weight="0.1"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
                 android:tag="R"
-                android:onClick="pressKey"
-                android:clickable="true"/>
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
-                android:layout_width="0dip"
-                android:layout_height="56dp"
-                android:layout_weight="0.1"
+                android:text="R"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_t"
+                android:layout_width="0dip"
+                android:layout_height="56dp"
                 android:layout_gravity="center"
-                android:text="T"
-                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
+                android:layout_weight="0.1"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
                 android:tag="T"
-                android:onClick="pressKey"
-                android:clickable="true"/>
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
-                android:layout_width="0dip"
-                android:layout_height="56dp"
-                android:layout_weight="0.1"
+                android:text="T"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_y"
+                android:layout_width="0dip"
+                android:layout_height="56dp"
                 android:layout_gravity="center"
-                android:text="Y"
-                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
+                android:layout_weight="0.1"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
                 android:tag="Y"
-                android:onClick="pressKey"
-                android:clickable="true"/>
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
-                android:layout_width="0dip"
-                android:layout_height="56dp"
-                android:layout_weight="0.1"
+                android:text="Y"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_u"
+                android:layout_width="0dip"
+                android:layout_height="56dp"
                 android:layout_gravity="center"
-                android:text="U"
-                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
+                android:layout_weight="0.1"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
                 android:tag="U"
-                android:onClick="pressKey"
-                android:clickable="true"/>
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
-                android:layout_width="0dip"
-                android:layout_height="56dp"
-                android:layout_weight="0.1"
+                android:text="U"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_i"
+                android:layout_width="0dip"
+                android:layout_height="56dp"
                 android:layout_gravity="center"
-                android:text="I"
-                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
+                android:layout_weight="0.1"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
                 android:tag="I"
-                android:onClick="pressKey"
-                android:clickable="true"/>
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
-                android:layout_width="0dip"
-                android:layout_height="56dp"
-                android:layout_weight="0.1"
+                android:text="I"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_o"
+                android:layout_width="0dip"
+                android:layout_height="56dp"
                 android:layout_gravity="center"
-                android:text="O"
-                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
+                android:layout_weight="0.1"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
                 android:tag="O"
-                android:onClick="pressKey"
-                android:clickable="true"/>
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
-                android:layout_width="0dip"
-                android:layout_height="56dp"
-                android:layout_weight="0.1"
+                android:text="O"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_p"
+                android:layout_width="0dip"
+                android:layout_height="56dp"
                 android:layout_gravity="center"
-                android:text="P"
-                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
+                android:layout_weight="0.1"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
                 android:tag="P"
-                android:onClick="pressKey"
-                android:clickable="true"/>
+                android:text="P"
+                android:textColor="@color/keyboard_border_text"
+                android:textSize="20sp"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
         </LinearLayout>
 
@@ -194,169 +203,178 @@
 
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
+                android:layout_gravity="center"
                 android:layout_weight="0.05"
+                android:gravity="center"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
-                android:layout_gravity="center" />
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
+                android:id="@+id/letter_a"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
-                android:layout_weight="0.1"
-                android:textColor="@color/keyboard_border_text"
-                android:textSize="20sp"
-                android:gravity="center"
                 android:layout_gravity="center"
-                android:text="A"
-                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
+                android:layout_weight="0.1"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
                 android:tag="A"
-                android:onClick="pressKey"
-                android:clickable="true"/>
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
-                android:layout_width="0dip"
-                android:layout_height="56dp"
-                android:layout_weight="0.1"
+                android:text="A"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_s"
+                android:layout_width="0dip"
+                android:layout_height="56dp"
                 android:layout_gravity="center"
-                android:text="S"
-                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
+                android:layout_weight="0.1"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
                 android:tag="S"
-                android:onClick="pressKey"
-                android:clickable="true"/>
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
-                android:layout_width="0dip"
-                android:layout_height="56dp"
-                android:layout_weight="0.1"
+                android:text="S"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_d"
+                android:layout_width="0dip"
+                android:layout_height="56dp"
                 android:layout_gravity="center"
-                android:text="D"
-                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
+                android:layout_weight="0.1"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
                 android:tag="D"
-                android:onClick="pressKey"
-                android:clickable="true"/>
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
-                android:layout_width="0dip"
-                android:layout_height="56dp"
-                android:layout_weight="0.1"
+                android:text="D"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_f"
+                android:layout_width="0dip"
+                android:layout_height="56dp"
                 android:layout_gravity="center"
-                android:text="F"
-                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
+                android:layout_weight="0.1"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
                 android:tag="F"
-                android:onClick="pressKey"
-                android:clickable="true"/>
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
-                android:layout_width="0dip"
-                android:layout_height="56dp"
-                android:layout_weight="0.1"
+                android:text="F"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_g"
+                android:layout_width="0dip"
+                android:layout_height="56dp"
                 android:layout_gravity="center"
-                android:text="G"
-                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
+                android:layout_weight="0.1"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
                 android:tag="G"
-                android:onClick="pressKey"
-                android:clickable="true"/>
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
-                android:layout_width="0dip"
-                android:layout_height="56dp"
-                android:layout_weight="0.1"
+                android:text="G"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_h"
+                android:layout_width="0dip"
+                android:layout_height="56dp"
                 android:layout_gravity="center"
-                android:text="H"
-                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
+                android:layout_weight="0.1"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
                 android:tag="H"
-                android:onClick="pressKey"
-                android:clickable="true"/>
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
-                android:layout_width="0dip"
-                android:layout_height="56dp"
-                android:layout_weight="0.1"
+                android:text="H"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_j"
+                android:layout_width="0dip"
+                android:layout_height="56dp"
                 android:layout_gravity="center"
-                android:text="J"
-                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
+                android:layout_weight="0.1"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
                 android:tag="J"
-                android:onClick="pressKey"
-                android:clickable="true"/>
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
-                android:layout_width="0dip"
-                android:layout_height="56dp"
-                android:layout_weight="0.1"
+                android:text="J"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_k"
+                android:layout_width="0dip"
+                android:layout_height="56dp"
                 android:layout_gravity="center"
-                android:text="K"
-                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
+                android:layout_weight="0.1"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
                 android:tag="K"
-                android:onClick="pressKey"
-                android:clickable="true"/>
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
-                android:layout_width="0dip"
-                android:layout_height="56dp"
-                android:layout_weight="0.1"
+                android:text="K"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_l"
+                android:layout_width="0dip"
+                android:layout_height="56dp"
                 android:layout_gravity="center"
-                android:text="L"
-                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
-                android:tag="L"
+                android:layout_weight="0.1"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
                 android:onClick="pressKey"
-                android:clickable="true"/>
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
-                android:layout_width="0dip"
-                android:layout_height="56dp"
-                android:layout_weight="0.05"
+                android:tag="L"
+                android:text="L"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:layout_width="0dip"
+                android:layout_height="56dp"
+                android:layout_gravity="center"
+                android:layout_weight="0.05"
                 android:gravity="center"
-                android:layout_gravity="center" />
+                android:textColor="@color/keyboard_border_text"
+                android:textSize="20sp"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
         </LinearLayout>
 
@@ -369,160 +387,164 @@
 
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
+                android:id="@+id/switch_digit"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
+                android:layout_gravity="center"
+                android:layout_margin="1dp"
                 android:layout_weight="0.15"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
+                android:tag="-"
+                android:text="123"
                 android:textColor="@color/app_origin"
                 android:textSize="20sp"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:text="123"
-                android:background="@drawable/keyboard_button_selector"
-                android:layout_margin="1dp"
-                android:tag="-"
-                android:onClick="pressKey"
-                android:clickable="true"/>
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
+                android:id="@+id/letter_z"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
-                android:layout_weight="0.1"
-                android:textColor="@color/keyboard_border_text"
-                android:textSize="20sp"
-                android:gravity="center"
                 android:layout_gravity="center"
-                android:text="Z"
-                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
+                android:layout_weight="0.1"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
                 android:tag="Z"
-                android:onClick="pressKey"
-                android:clickable="true"/>
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
-                android:layout_width="0dip"
-                android:layout_height="56dp"
-                android:layout_weight="0.1"
+                android:text="Z"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_x"
+                android:layout_width="0dip"
+                android:layout_height="56dp"
                 android:layout_gravity="center"
-                android:text="X"
-                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
+                android:layout_weight="0.1"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
                 android:tag="X"
-                android:onClick="pressKey"
-                android:clickable="true"/>
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
-                android:layout_width="0dip"
-                android:layout_height="56dp"
-                android:layout_weight="0.1"
+                android:text="X"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_c"
+                android:layout_width="0dip"
+                android:layout_height="56dp"
                 android:layout_gravity="center"
-                android:text="C"
-                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
+                android:layout_weight="0.1"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
                 android:tag="C"
-                android:onClick="pressKey"
-                android:clickable="true"/>
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
-                android:layout_width="0dip"
-                android:layout_height="56dp"
-                android:layout_weight="0.1"
+                android:text="C"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_v"
+                android:layout_width="0dip"
+                android:layout_height="56dp"
                 android:layout_gravity="center"
-                android:text="V"
-                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
+                android:layout_weight="0.1"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
                 android:tag="V"
-                android:onClick="pressKey"
-                android:clickable="true"/>
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
-                android:layout_width="0dip"
-                android:layout_height="56dp"
-                android:layout_weight="0.1"
+                android:text="V"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_b"
+                android:layout_width="0dip"
+                android:layout_height="56dp"
                 android:layout_gravity="center"
-                android:text="B"
-                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
+                android:layout_weight="0.1"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
                 android:tag="B"
-                android:onClick="pressKey"
-                android:clickable="true"/>
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
-                android:layout_width="0dip"
-                android:layout_height="56dp"
-                android:layout_weight="0.1"
+                android:text="B"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_n"
+                android:layout_width="0dip"
+                android:layout_height="56dp"
                 android:layout_gravity="center"
-                android:text="N"
-                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
+                android:layout_weight="0.1"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
                 android:tag="N"
-                android:onClick="pressKey"
-                android:clickable="true"/>
-
-            <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
-                android:layout_width="0dip"
-                android:layout_height="56dp"
-                android:layout_weight="0.1"
+                android:text="N"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
+
+            <xyz.homapay.hampay.mobile.android.component.FacedTextView
+                android:id="@+id/letter_m"
+                android:layout_width="0dip"
+                android:layout_height="56dp"
                 android:layout_gravity="center"
-                android:text="M"
-                android:background="@drawable/keyboard_button_selector"
                 android:layout_margin="1dp"
-                android:tag="M"
+                android:layout_weight="0.1"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
                 android:onClick="pressKey"
-                android:clickable="true"/>
+                android:tag="M"
+                android:text="M"
+                android:textColor="@color/keyboard_border_text"
+                android:textSize="20sp"
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <RelativeLayout
                 android:id="@+id/letter_backspace"
                 android:layout_width="0dip"
                 android:layout_height="56dp"
+                android:layout_margin="1dp"
                 android:layout_weight="0.15"
                 android:background="@drawable/keyboard_button_selector"
-                android:layout_margin="1dp"
-                android:tag="d"
+                android:clickable="true"
                 android:onClick="pressKey"
-                android:clickable="true">
+                android:tag="d">
 
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:layout_centerInParent="true"
-                    android:src="@drawable/backsplace"
-                    android:background="@color/app_origin"/>
+                    android:background="@color/app_origin"
+                    android:src="@drawable/backsplace" />
 
             </RelativeLayout>
 
         </LinearLayout>
 
     </LinearLayout>
-
-
-
-
 
 
     <LinearLayout
@@ -540,56 +562,56 @@
 
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
                 android:id="@+id/digit_1"
                 android:layout_width="0dip"
                 android:layout_height="42dp"
+                android:layout_gravity="center"
+                android:layout_margin="1dp"
                 android:layout_weight="0.3"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
+                android:tag="1"
+                android:text="1"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:text="1"
-                android:background="@drawable/keyboard_button_selector"
-                android:layout_margin="1dp"
-                android:tag="1"
-                android:onClick="pressKey"
-                android:clickable="true"/>
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
                 android:id="@+id/digit_2"
                 android:layout_width="0dip"
                 android:layout_height="42dp"
+                android:layout_gravity="center"
+                android:layout_margin="1dp"
                 android:layout_weight="0.3"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
+                android:tag="2"
+                android:text="2"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:text="2"
-                android:background="@drawable/keyboard_button_selector"
-                android:layout_margin="1dp"
-                android:tag="2"
-                android:onClick="pressKey"
-                android:clickable="true"/>
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
                 android:id="@+id/digit_3"
                 android:layout_width="0dip"
                 android:layout_height="42dp"
+                android:layout_gravity="center"
+                android:layout_margin="1dp"
                 android:layout_weight="0.3"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
+                android:tag="3"
+                android:text="3"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:text="3"
-                android:background="@drawable/keyboard_button_selector"
-                android:layout_margin="1dp"
-                android:tag="3"
-                android:onClick="pressKey"
-                android:clickable="true"/>
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
         </LinearLayout>
 
@@ -601,56 +623,56 @@
 
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
                 android:id="@+id/digit_4"
                 android:layout_width="0dip"
                 android:layout_height="42dp"
+                android:layout_gravity="center"
+                android:layout_margin="1dp"
                 android:layout_weight="0.3"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
+                android:tag="4"
+                android:text="4"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:text="4"
-                android:background="@drawable/keyboard_button_selector"
-                android:layout_margin="1dp"
-                android:tag="4"
-                android:onClick="pressKey"
-                android:clickable="true"/>
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
                 android:id="@+id/digit_5"
                 android:layout_width="0dip"
                 android:layout_height="42dp"
+                android:layout_gravity="center"
+                android:layout_margin="1dp"
                 android:layout_weight="0.3"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
+                android:tag="5"
+                android:text="5"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:text="5"
-                android:background="@drawable/keyboard_button_selector"
-                android:layout_margin="1dp"
-                android:tag="5"
-                android:onClick="pressKey"
-                android:clickable="true"/>
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
                 android:id="@+id/digit_6"
                 android:layout_width="0dip"
                 android:layout_height="42dp"
+                android:layout_gravity="center"
+                android:layout_margin="1dp"
                 android:layout_weight="0.3"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
+                android:tag="6"
+                android:text="6"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:text="6"
-                android:background="@drawable/keyboard_button_selector"
-                android:layout_margin="1dp"
-                android:tag="6"
-                android:onClick="pressKey"
-                android:clickable="true"/>
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
         </LinearLayout>
 
@@ -662,56 +684,56 @@
 
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
                 android:id="@+id/digit_7"
                 android:layout_width="0dip"
                 android:layout_height="42dp"
+                android:layout_gravity="center"
+                android:layout_margin="1dp"
                 android:layout_weight="0.3"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
+                android:tag="7"
+                android:text="7"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:text="7"
-                android:background="@drawable/keyboard_button_selector"
-                android:layout_margin="1dp"
-                android:tag="7"
-                android:onClick="pressKey"
-                android:clickable="true"/>
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
                 android:id="@+id/digit_8"
                 android:layout_width="0dip"
                 android:layout_height="42dp"
+                android:layout_gravity="center"
+                android:layout_margin="1dp"
                 android:layout_weight="0.3"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
+                android:tag="8"
+                android:text="8"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:text="8"
-                android:background="@drawable/keyboard_button_selector"
-                android:layout_margin="1dp"
-                android:tag="8"
-                android:onClick="pressKey"
-                android:clickable="true"/>
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
                 android:id="@+id/digit_9"
                 android:layout_width="0dip"
                 android:layout_height="42dp"
+                android:layout_gravity="center"
+                android:layout_margin="1dp"
                 android:layout_weight="0.3"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
+                android:tag="9"
+                android:text="9"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:text="9"
-                android:background="@drawable/keyboard_button_selector"
-                android:layout_margin="1dp"
-                android:tag="9"
-                android:onClick="pressKey"
-                android:clickable="true"/>
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
         </LinearLayout>
 
@@ -723,56 +745,57 @@
 
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
+                android:id="@+id/switch_letter"
                 android:layout_width="0dip"
                 android:layout_height="42dp"
+                android:layout_gravity="center"
+                android:layout_margin="1dp"
                 android:layout_weight="0.3"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
+                android:tag="+"
+                android:text="ABC"
                 android:textColor="@color/app_origin"
                 android:textSize="20sp"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:text="ABC"
-                android:background="@drawable/keyboard_button_selector"
-                android:layout_margin="1dp"
-                android:onClick="pressKey"
-                android:clickable="true"
-                android:tag="+"/>
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular_bold.ttf"
                 android:id="@+id/digit_0"
                 android:layout_width="0dip"
                 android:layout_height="42dp"
+                android:layout_gravity="center"
+                android:layout_margin="1dp"
                 android:layout_weight="0.3"
+                android:background="@drawable/keyboard_button_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="pressKey"
+                android:tag="0"
+                android:text="0"
                 android:textColor="@color/keyboard_border_text"
                 android:textSize="20sp"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:text="0"
-                android:background="@drawable/keyboard_button_selector"
-                android:layout_margin="1dp"
-                android:tag="0"
-                android:onClick="pressKey"
-                android:clickable="true"/>
+                geekui:customTypeface="fonts/vazir_regular_bold.ttf" />
 
             <RelativeLayout
                 android:id="@+id/backspace"
                 android:layout_width="0dip"
                 android:layout_height="42dp"
+                android:layout_margin="1dp"
                 android:layout_weight="0.3"
                 android:background="@drawable/keyboard_button_selector"
-                android:layout_margin="1dp"
-                android:tag="d"
+                android:clickable="true"
                 android:onClick="pressKey"
-                android:clickable="true">
+                android:tag="d">
 
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:layout_centerInParent="true"
-                    android:src="@drawable/backsplace"
-                    android:background="@color/app_origin"/>
+                    android:background="@color/app_origin"
+                    android:src="@drawable/backsplace" />
 
             </RelativeLayout>
 

@@ -37,8 +37,8 @@ public class WelcomeAdapter extends PagerAdapter {
         View view = layoutInflater.inflate(layouts[position], container, false);
 
 
-        if (position == 0){
-            WebView webView = (WebView)view.findViewById(R.id.webview);
+        if (position == 0) {
+            WebView webView = (WebView) view.findViewById(R.id.webview);
             webView.getSettings().setJavaScriptEnabled(true);
             webView.loadUrl("file:///android_asset/certification.html");
         }

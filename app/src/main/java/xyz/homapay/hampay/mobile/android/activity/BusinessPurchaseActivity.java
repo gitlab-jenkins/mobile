@@ -8,11 +8,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.PurchaseInfoRequest;
@@ -34,31 +34,36 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class BusinessPurchaseActivity extends AppCompatActivity implements View.OnClickListener {
 
-    ImageView payment_button;
-    LinearLayout displayKeyboard;
+    @BindView(R.id.keyboard)
     LinearLayout keyboard;
     String inputPurchaseCode = "";
+    @BindView(R.id.input_digit_1)
     FacedTextView input_digit_1;
+    @BindView(R.id.input_digit_2)
     FacedTextView input_digit_2;
+    @BindView(R.id.input_digit_3)
     FacedTextView input_digit_3;
+    @BindView(R.id.input_digit_4)
     FacedTextView input_digit_4;
+    @BindView(R.id.input_digit_5)
     FacedTextView input_digit_5;
+    @BindView(R.id.input_digit_6)
     FacedTextView input_digit_6;
     SharedPreferences prefs;
     HamPayDialog hamPayDialog;
-    RelativeLayout businesses_list;
+    @BindView(R.id.letter_layout)
+    LinearLayout letter_layout;
+    @BindView(R.id.digit_layout)
+    LinearLayout digit_layout;
     private PurchaseInfoDTO purchaseInfoDTO = null;
     private PspInfoDTO pspInfoDTO = null;
     private SharedPreferences.Editor editor;
-    private LinearLayout letter_layout;
-    private LinearLayout digit_layout;
     private Context context;
     private Activity activity;
     private RequestPurchaseInfo requestPurchaseInfo;
     private PurchaseInfoRequest purchaseInfoRequest;
 
-
-    public void backActionBar(View view){
+    public void backActionBar(View view) {
         finish();
     }
 
@@ -92,10 +97,9 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
     @Override
     public void onBackPressed() {
 
-        if (keyboard.getVisibility() == View.VISIBLE){
+        if (keyboard.getVisibility() == View.VISIBLE) {
             new Collapse(keyboard).animate();
-        }
-        else {
+        } else {
             finish();
         }
     }
@@ -111,34 +115,13 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_business_purchase);
+        ButterKnife.bind(this);
 
         context = this;
         activity = BusinessPurchaseActivity.this;
-
-        letter_layout = (LinearLayout)findViewById(R.id.letter_layout);
-        digit_layout = (LinearLayout)findViewById(R.id.digit_layout);
-
-
-        payment_button = (ImageView)findViewById(R.id.payment_button);
-        payment_button.setOnClickListener(this);
-
-        keyboard = (LinearLayout)findViewById(R.id.keyboard);
-        displayKeyboard = (LinearLayout)findViewById(R.id.displayKeyboard);
-        displayKeyboard.setOnClickListener(this);
-        input_digit_1 = (FacedTextView)findViewById(R.id.input_digit_1);
-        input_digit_2 = (FacedTextView) findViewById(R.id.input_digit_2);
-        input_digit_3 = (FacedTextView) findViewById(R.id.input_digit_3);
-        input_digit_4 = (FacedTextView) findViewById(R.id.input_digit_4);
-        input_digit_5 = (FacedTextView) findViewById(R.id.input_digit_5);
-        input_digit_6 = (FacedTextView) findViewById(R.id.input_digit_6);
-
-        businesses_list = (RelativeLayout)findViewById(R.id.businesses_list);
-        businesses_list.setOnClickListener(this);
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-
         hamPayDialog = new HamPayDialog(activity);
-
     }
 
     @Override
@@ -146,7 +129,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
 
         Intent intent;
 
-        switch (v.getId()){
+        switch (v.getId()) {
 
             case R.id.businesses_list:
                 intent = new Intent();
@@ -170,7 +153,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                     input_digit_5.setText("");
                     input_digit_6.setText("");
                     inputPurchaseCode = "";
-                }else {
+                } else {
                     Toast.makeText(context, getString(R.string.msg_incorrect_pending_payment_code), Toast.LENGTH_LONG).show();
                 }
                 break;
@@ -187,7 +170,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
         }
     }
 
-    private void inputDigit(String digit){
+    private void inputDigit(String digit) {
         if (inputPurchaseCode.length() <= 5) {
 
             switch (inputPurchaseCode.length()) {
@@ -253,45 +236,39 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
 
         }
 
-        if (digit.contains("d")){
+        if (digit.contains("d")) {
             if (inputPurchaseCode.length() > 0) {
                 inputPurchaseCode = inputPurchaseCode.substring(0, inputPurchaseCode.length() - 1);
-                if (inputPurchaseCode.length() == 5){
+                if (inputPurchaseCode.length() == 5) {
                     input_digit_6.setText("");
                 }
-                if (inputPurchaseCode.length() == 4){
+                if (inputPurchaseCode.length() == 4) {
                     input_digit_5.setText("");
-                }
-                else if (inputPurchaseCode.length() == 3){
+                } else if (inputPurchaseCode.length() == 3) {
                     input_digit_4.setText("");
-                }
-                else if (inputPurchaseCode.length() == 2){
+                } else if (inputPurchaseCode.length() == 2) {
                     input_digit_3.setText("");
-                }
-                else if (inputPurchaseCode.length() == 1){
+                } else if (inputPurchaseCode.length() == 1) {
                     input_digit_2.setText("");
-                }
-                else if (inputPurchaseCode.length() == 0){
+                } else if (inputPurchaseCode.length() == 0) {
                     input_digit_1.setText("");
                 }
             }
-        }
-        else {
+        } else {
             if (inputPurchaseCode.length() <= 5) {
                 inputPurchaseCode += digit;
             }
         }
     }
 
-    public void pressKey(View view){
-        if (view.getTag().toString().equals("-")){
+    public void pressKey(View view) {
+        if (view.getTag().toString().equals("-")) {
             letter_layout.setVisibility(View.GONE);
             digit_layout.setVisibility(View.VISIBLE);
-        }else if (view.getTag().toString().equals("+")) {
+        } else if (view.getTag().toString().equals("+")) {
             letter_layout.setVisibility(View.VISIBLE);
             digit_layout.setVisibility(View.GONE);
-        }
-        else {
+        } else {
             inputDigit(view.getTag().toString());
         }
     }
@@ -317,8 +294,8 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
             ServiceEvent serviceName;
             LogEvent logEvent = new LogEvent(context);
 
-            if (purchaseInfoResponseMessage != null){
-                if (purchaseInfoResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS){
+            if (purchaseInfoResponseMessage != null) {
+                if (purchaseInfoResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     serviceName = ServiceEvent.PURCHASE_INFO_SUCCESS;
                     purchaseInfoDTO = purchaseInfoResponseMessage.getService().getPurchaseInfo();
                     pspInfoDTO = purchaseInfoResponseMessage.getService().getPurchaseInfo().getPspInfo();
@@ -329,24 +306,22 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
                         intent.putExtra(Constants.PSP_INFO, pspInfoDTO);
                         intent.setClass(context, RequestBusinessPayDetailActivity.class);
                         startActivity(intent);
-                    }
-                    else {
+                    } else {
                         Toast.makeText(context, getString(R.string.msg_not_found_pending_payment_code), Toast.LENGTH_LONG).show();
                         finish();
                     }
 
-                }else if (purchaseInfoResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                } else if (purchaseInfoResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     serviceName = ServiceEvent.PURCHASE_INFO_FAILURE;
                     forceLogout();
-                }
-                else {
+                } else {
                     serviceName = ServiceEvent.PURCHASE_INFO_FAILURE;
                     requestPurchaseInfo = new RequestPurchaseInfo(context, new RequestPurchaseInfoTaskCompleteListener());
                     new HamPayDialog(activity).showFailPurchaseInfoDialog(
                             purchaseInfoResponseMessage.getService().getResultStatus().getCode(),
                             purchaseInfoResponseMessage.getService().getResultStatus().getDescription());
                 }
-            }else {
+            } else {
                 serviceName = ServiceEvent.PURCHASE_INFO_FAILURE;
                 requestPurchaseInfo = new RequestPurchaseInfo(context, new RequestPurchaseInfoTaskCompleteListener());
                 new HamPayDialog(activity).showFailPurchaseInfoDialog(

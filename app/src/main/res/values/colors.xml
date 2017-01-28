@@ -2,7 +2,7 @@
 <resources>
 
     <color name="app_origin">#6D096D</color>
-
+    <color name="app_intro_bg">#f0f0f0</color>
     <color name="colorPrimary">@color/app_origin</color>
     <color name="colorPrimaryDark">@color/app_origin</color>
     <color name="textColorPrimary">#FFFFFF</color>
@@ -26,6 +26,7 @@
     <color name="navigation_green">#8fc547</color>
     <color name="navigation_gray">#d1d3d4</color>
     <color name="disable_button">#d1d3d4</color>
+    <color name="disable_tab_header">#D6B3D4</color>
     <color name="register_border">#eeefef</color>
     <color name="register_badge_bg">#757575</color>
     <color name="keyboard_border_text">#737375</color>
@@ -49,15 +50,16 @@
     <color name="tool_bar_selected">#6D096D</color>
     <color name="tool_bar_unselected">#bcbec0</color>
     <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
 
     <!--Slider colors-->
-
+    <color name="intro_text">#4f4f4f</color>
     <array name="array_dot_active">
-        <item>@android:color/white</item>
+        <item>@color/app_origin</item>
     </array>
 
     <array name="array_dot_inactive">
-        <item>#8f8c8f</item>
+        <item>#cccccc</item>
     </array>
 
 

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <bitmap
+            android:id="@+id/Idofbg5"
+            android:gravity="fill"
+            android:src="@drawable/intro_clouds_1" />
+    </item>
+    <item>
+        <bitmap
+            android:id="@+id/Idofbg4"
+            android:gravity="fill"
+            android:src="@drawable/intro_clouds_2" />
+    </item>
+
+    <item>
+        <bitmap
+            android:id="@+id/Idofbg3"
+            android:gravity="fill"
+            android:src="@drawable/intro_clouds_3" />
+    </item>
+    <item>
+        <bitmap
+            android:id="@+id/Idofbg2"
+            android:gravity="fill"
+            android:src="@drawable/intro_clouds_4" />
+    </item>
+    <item>
+        <bitmap
+            android:id="@+id/Idofbg1"
+            android:gravity="fill"
+            android:src="@drawable/intro_clouds_5" />
+    </item>
+
+</layer-list>

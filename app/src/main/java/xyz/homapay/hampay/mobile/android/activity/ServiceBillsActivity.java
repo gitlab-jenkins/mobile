@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.request.UtilityBillRequest;
 import xyz.homapay.hampay.common.core.model.response.UtilityBillResponse;
@@ -29,18 +31,21 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class ServiceBillsActivity extends AppCompatActivity implements View.OnClickListener, OnTaskCompleted {
 
+    @BindView(R.id.keyboard)
+    LinearLayout keyboard;
+    @BindView(R.id.billId)
+    FacedTextView billIdText;
+    @BindView(R.id.billIdLayout)
+    RelativeLayout billIdLayout;
+    @BindView(R.id.payId)
+    FacedTextView payIdText;
+    @BindView(R.id.payIdLayout)
+    RelativeLayout payIdLayout;
     private SharedPreferences prefs;
     private Context context;
     private PersianEnglishDigit persian;
-    private LinearLayout barCodeScanner;
-    private LinearLayout keyboard;
-    private FacedTextView billIdText;
-    private RelativeLayout billIdLayout;
-    private FacedTextView payIdText;
-    private RelativeLayout payIdLayout;
     private boolean billServiceIdFocus = false;
     private boolean billServicePaymentFocus = false;
-    private FacedTextView billsMobileButton;
     private Activity activity;
     private HamPayDialog hamPayDialog;
     private String authToken;
@@ -90,6 +95,7 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_bills);
+        ButterKnife.bind(this);
 
         context = this;
         activity = ServiceBillsActivity.this;
@@ -97,22 +103,8 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
         authToken = prefs.getString(Constants.LOGIN_TOKEN_ID, "");
         persian = new PersianEnglishDigit();
         hamPayDialog = new HamPayDialog(activity);
-
-        barCodeScanner = (LinearLayout) findViewById(R.id.barCodeScanner);
-        barCodeScanner.setOnClickListener(this);
-
-        keyboard = (LinearLayout) findViewById(R.id.keyboard);
         billServiceIdFocus = true;
         billServicePaymentFocus = false;
-        billIdText = (FacedTextView) findViewById(R.id.billId);
-        billIdText.setOnClickListener(this);
-        billIdLayout = (RelativeLayout) findViewById(R.id.billIdLayout);
-        payIdLayout = (RelativeLayout) findViewById(R.id.payIdLayout);
-        payIdLayout.setOnClickListener(this);
-        payIdText = (FacedTextView) findViewById(R.id.payId);
-        payIdText.setOnClickListener(this);
-        billsMobileButton = (FacedTextView) findViewById(R.id.billsMobileButton);
-        billsMobileButton.setOnClickListener(this);
     }
 
     @Override
@@ -178,13 +170,13 @@ public class ServiceBillsActivity extends AppCompatActivity implements View.OnCl
                 String payId = payIdText.getText().toString();
 
                 BillsValidator billsValidator = new BillsValidator();
-                if (!billsValidator.validateBillId(billId)){
+                if (!billsValidator.validateBillId(billId)) {
                     Toast.makeText(activity, getString(R.string.msg_invalid_bills_pay_id), Toast.LENGTH_SHORT).show();
                     return;
-                }else if (!billsValidator.validatePayId(payId)){
+                } else if (!billsValidator.validatePayId(payId)) {
                     Toast.makeText(activity, getString(R.string.msg_invalid_bills_pay_id), Toast.LENGTH_SHORT).show();
                     return;
-                }else if (!billsValidator.validatePayAndBillId(billId, payId)){
+                } else if (!billsValidator.validatePayAndBillId(billId, payId)) {
                     Toast.makeText(activity, getString(R.string.msg_invalid_bills_pay_id), Toast.LENGTH_SHORT).show();
                     return;
                 }

@@ -3,11 +3,22 @@
     <string name="app_name_slider">هم‌پی</string>
     <string name="hampay_network">شبکه پرداخت همراه هم‌پی</string>
     <string name="hampay_user">کاربر هم‌پی</string>
+    <string name="intro_0_text">پرداخت مدرن، ساده و مطمئن</string>
+    <string name="intro_1_title">پرداخت به کسب و کار</string>
+    <string name="intro_1_text">پرداخت به کسب و کارهای اینترنتی و فروشگاه‌ها</string>
+    <string name="intro_2_title">درخواست پرداخت</string>
+    <string name="intro_2_text">ارسال درخواست پرداخت فردی و گروهی</string>
+    <string name="intro_3_title">پرداخت قبض و خرید شارژ</string>
+    <string name="intro_3_text">پرداخت قبوض خدماتی و خرید شارژ تلفن همراه</string>
+    <string name="intro_4_title">با هم‌پی</string>
+    <string name="intro_4_text">صمیمیت، راحتی و امنیت را در کنار دوستانتان تجربه کنید</string>
+
     <string name="intro_1">پرداخت مدرن، ساده و مطمئن</string>
     <string name="intro_2">پرداخت به کسب و کارهای گوناگون</string>
     <string name="intro_3">درخواست پرداخت</string>
     <string name="intro_4">فهرست پرداخت‌های در انتظار</string>
     <string name="intro_5">نمایش پرداخت‌ها و دریافت‌های گذشته</string>
+
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
     <string name="nav_item_main_fragment">صفحه اصلی</string>
@@ -75,7 +86,7 @@
     <string name="pay_id_transaction">شناسه پرداخت: </string>
     <string name="bills_service_payment">شناسه پرداخت</string>
     <string name="msg_invalid_bills_pay_id">شناسه قبض یا شناسه پرداخت نادرست است. لطفا مجددا تلاش نمائید.</string>
-    <string name="main_fragment_pending_payment">پرداخت‌های در انتظار</string>
+    <string name="main_fragment_pending_payment">صف انتظار</string>
     <string name="main_fragment_bill_top_up">قبض و شارژ</string>
     <string name="main_fragment_transactions">تراکنش‌ها</string>
     <string name="transaction_history_title">تراکنش‌ها</string>
@@ -91,7 +102,7 @@
     </string>
     <string name="business_purchase_title">پرداخت به کسب و کار</string>
     <string name="business_id">شناسه: </string>
-    <string name="pending_purchase_payment_title">پرداخت‌های در انتظار</string>
+    <string name="pending_purchase_payment_title">صف انتظار</string>
     <string name="detail_transaction">جزئیات تراکنش</string>
     <string name="cell_number">شماره همراه: </string>
     <string name="mobile_no_entry">شماره همراه </string>
@@ -273,7 +284,7 @@
     <string name="purchase_payment_payer_cell">همراه پرداخت کننده: </string>
     <string name="user_pin2">رمز دوم کارت</string>
     <string name="user_cvv2">CVV2</string>
-    <string name="shaparak_privacy_message">(طبق الزامات شاپرک رمز دوم کارت در هم‌پی ذخیره نمی‌شود)</string>
+    <string name="shaparak_privacy_message">(طبق الزامات شاپرک رمز دوم و cvv2 کارت در هم‌پی ذخیره نمی‌شود)</string>
     <string name="msg_payment_success">پرداخت شما با موفقیت انجام شد</string>
     <string name="payment_info">اطلاعات پرداخت</string>
     <string name="payment_success_amount">مبلغ: </string>
@@ -296,9 +307,10 @@
     <string name="iban_notice_setting">لطفا اطلاعات حساب بانکی جدید را جهت دریافت مبالغ واریزی وارد نمایید</string>
     <string name="iban_verify">تایید</string>
     <string name="iban_user_name">نام صاحب حساب</string>
-    <string name="user_name_restriction"> ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzاآبپتثجچحخدذرزژسشصضطظعغفقکگلمنوهئی</string>
+    <string name="user_name_restriction"> A BCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzاآبپتثجچحخدذرزژسشصضطظعغفقکگلمنوهئی</string>
     <string name="iban_user_family">نام خانوادگی صاحب حساب</string>
     <string name="null_pending_business">در حال حاضر پرداخت در انتظاری وجود ندارد</string>
+    <string name="null_pending_business_recieved">در حال حاضر دریافت در انتظاری وجود ندارد</string>
     <string name="hampay_contact_share">دعوت دوستان</string>
     <string name="hampay_share_text">
         اپلیکیشن هم‌پی رو نصب کن!
@@ -686,20 +698,12 @@
  در آیتم "تور هم‌پی" در منو کشویی می‌توانید دوباره این موارد را بررسی نمایید.
     </string>
 
-    <string name="wt_note_2">
-        برای دریافت وجه از مخاطبین خود در هم‌پی لازم است ابتدا برای آنها درخواست پرداخت ارسال کنید. بدین منظور دکمه + را انتخاب کنید تا لیست مخاطبین به شما نمایش داده شود، سپس مبلغ مورد نظر را وارد و پس از تایید اطلاعات، درخواست پرداخت خود را ارسال کنید. به علاوه درخواست پرداخت هایی که ارسال کرده اید در این بخش نمایش داده می شود.
-    </string>
+    <string name="wt_note_2">برای دریافت وجه از مخاطبین خود در هم‌پی لازم است ابتدا برای آنها درخواست پرداخت ارسال کنید. بدین منظور پس از ورود به لیست مخاطبین، مبلغ مورد نظر را وارد کرده و پس از تایید اطلاعات، درخواست پرداخت خود را ارسال کنید. به علاوه درخواست پرداخت هایی که ارسال کرده‌اید در قسمت صف انتظار نمایش داده می‌شود.</string>
 
-    <string name="wt_note_3">
-        پس از تکمیل خرید و انتخاب روش پرداخت هم پـی در فروشگاه های اینترنتی طرف قرارداد با هم‌پی، یک کد یکتــا ۶  رقمی به شما نمـایش داده می شود که این امکان وجود دارد با وارد کردن آن کد در این بخش اطلاعات پرداخت آن خرید را مشاهده نمائید. شما می توانید در هر لحظه پرداخت خود را تنها با وارد کردن رمز دوم کارت بانکی خود انجام دهید.
-    </string>
+    <string name="wt_note_3">پس از تکمیل خرید و انتخاب روش پرداخت هم‌پی، یک کد یکتا ۶ رقمی به شما نمایش داده می‌شود که این امکان وجود دارد با وارد کردن این کد در این بخش اطلاعات پرداخت آن خرید را مشاهده نمایید. شما می‌توانید در هر لحظه پرداخت خود را با وارد کردن رمز دوم و CVV2 کارت بانکی خود انجام دهید.</string>
 
-    <string name="wt_note_4">
-        برای پرداخت وجه به فروشگاه ها و خیریه های طرف قرارداد با هم‌پی می توانید نام یا شناسه یکتا هر کسب و کار یا خیریه را جستجو کرده و پس از انتخاب، مبلغ مورد نظر و رمز دوم کارت بانکی خود را وارد کرده و پرداخت خود را نهایی کنید.
-    </string>
-    <string name="wt_note_5">
-        درخواست پرداخت هایی که از مخاطبین هم‌پی و فروشگاه های اینترنتی برای شما ارسال می شود در این بخش نمایش داده می شود. کافیست برای پرداخت آنها پس از انتخاب هر کدام، رمز دوم کارت بانکی خود را وارد کرده و دکمه هم‌پی را فشار دهید.
-    </string>
+    <string name="wt_note_4">برای پرداخت به فروشگاه‌ها و خیریه‌های طرف قرارداد به هم‌پی می‌توانید نام یا شناسه یکتا هر کسب و کار یا خیریه را جستجو کرده و پس از انتخاب و مبلغ مورد نظر و رمز دوم و CVV2 کارت بانکی خود را وارد کرده و پرداخت خود را نهایی کنید.</string>
+    <string name="wt_note_5">درخواست پرداخت‌هایی که از مخاطبین هم‌پی و فروشگاه‌های اینترنتی برای شما ارسال می‌شود و برای مخاطبین خود ارسال می نمایید در این بخش نمایش داده می‌شود. کافیست برای پرداخت درخواست پرداخت ها، رمز دوم و CVV2 کارت بانکی خود را وارد کرده و دکمه هم‌پی را فشار دهید.</string>
     <string name="wt_note_6">
         اطلاعات پرداخت ها و دریافت های گذشته در این بخش نمایش داده می شود. برای مشاهده جزییات هر تراکنش مانند کد پیگیری، کافیست تراکنش مورد نظر را انتخاب نمایید و اطلاعات کامل آن را مشاهده نمایید. همچنین پرداخت های در انتظاری که مهلت پرداخت آنها به پایان می رسد و یا توسط شما حذف می گردد، در این بخش با عنوان ناموفق به شما نمایش داده خواهد شد.
     </string>
@@ -738,5 +742,22 @@
     <string name="iban_settelment">تسویه حساب در هم پی حداکثر در سیکل پایا انجام خواهد شد.</string>
     <string name="amount_charge">مبلغ شارژ</string>
     <string name="type_charge">نوع شارژ</string>
+    <string name="pending_title_all">همه</string>
+    <string name="pending_title_commercial">تجاری</string>
+    <string name="pending_title_personal">شخصی</string>
+    <string name="pending_requests">پرداخت</string>
+    <string name="pending_recieved">دریافت</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_credentioal_entry">CredentioalEntryActivity</string>
+    <string name="bills_top_up_activity_title">قبض و شارژ</string>
+    <string name="bills_header_title">پرداخت قبوض</string>
+    <string name="top_up_header_title">شارژ سیم کارت</string>
+    <string name="err_general_sms_text">در ارسال پیامک برای تلفن همراه شما خطایی رخ داده است</string>
+    <string name="not_connectivity_to_server">در حال حاضر هم پی قادر به برقراری ارتباط با سرور نمی باشد لطفا مجددا تلاش کنید</string>
+    <string name="str_ok_button">تایید</string>
+    <string name="err_cvv_lenght">لطفا cvv2 خود را به صورت کامل وارد نمایید</string>
+    <string name="err_pin_lenght">لطفا رمز دوم خود را کامل وارد نمایید</string>
 
 </resources>

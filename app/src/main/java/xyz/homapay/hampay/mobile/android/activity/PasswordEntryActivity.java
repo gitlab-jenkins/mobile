@@ -9,6 +9,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
@@ -19,24 +21,30 @@ import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.PasswordComplexity;
 
-public class PasswordEntryActivity extends AppCompatActivity implements View.OnClickListener{
+public class PasswordEntryActivity extends AppCompatActivity implements View.OnClickListener {
 
+    @BindView(R.id.input_digit_1)
+    FacedTextView input_digit_1;
+    @BindView(R.id.input_digit_2)
+    FacedTextView input_digit_2;
+    @BindView(R.id.input_digit_3)
+    FacedTextView input_digit_3;
+    @BindView(R.id.input_digit_4)
+    FacedTextView input_digit_4;
+    @BindView(R.id.input_digit_5)
+    FacedTextView input_digit_5;
+    @BindView(R.id.password_1_rl)
+    RelativeLayout password_1_rl;
+    @BindView(R.id.password_2_rl)
+    RelativeLayout password_2_rl;
+    @BindView(R.id.keyboard)
+    LinearLayout keyboard;
     private Activity activity;
     private int passwordMode = 0;
     private String inputPasswordValue = "";
     private String inputRePasswordValue = "";
-    private FacedTextView input_digit_1;
-    private FacedTextView input_digit_2;
-    private FacedTextView input_digit_3;
-    private FacedTextView input_digit_4;
-    private FacedTextView input_digit_5;
-    private RelativeLayout password_1_rl;
-    private RelativeLayout password_2_rl;
-    private LinearLayout keyboard;
-    private LinearLayout password_holder;
 
-
-    public void userManual(View view){
+    public void userManual(View view) {
         Intent intent = new Intent();
         intent.setClass(activity, UserManualActivity.class);
         intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_pass_code_entry);
@@ -67,27 +75,14 @@ public class PasswordEntryActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password_entry);
+        ButterKnife.bind(this);
 
         activity = PasswordEntryActivity.this;
-
-        keyboard = (LinearLayout)findViewById(R.id.keyboard);
-        password_holder = (LinearLayout)findViewById(R.id.password_holder);
-        password_holder.setOnClickListener(this);
-
-        password_1_rl = (RelativeLayout)findViewById(R.id.password_1_rl);
-        password_2_rl = (RelativeLayout)findViewById(R.id.password_2_rl);
-
-        input_digit_1 = (FacedTextView)findViewById(R.id.input_digit_1);
-        input_digit_2 = (FacedTextView)findViewById(R.id.input_digit_2);
-        input_digit_3 = (FacedTextView)findViewById(R.id.input_digit_3);
-        input_digit_4 = (FacedTextView)findViewById(R.id.input_digit_4);
-        input_digit_5 = (FacedTextView)findViewById(R.id.input_digit_5);
     }
-
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
 
             case R.id.password_holder:
                 if (keyboard.getVisibility() != View.VISIBLE)
@@ -102,54 +97,47 @@ public class PasswordEntryActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onBackPressed() {
-        if (keyboard.getVisibility() == View.VISIBLE){
+        if (keyboard.getVisibility() == View.VISIBLE) {
             new Collapse(keyboard).animate();
-        }
-        else {
+        } else {
             new HamPayDialog(activity).exitRegistrationDialog();
         }
     }
 
-    public void pressKey(View view){
-        if (view.getTag().toString().equals("*")){
+    public void pressKey(View view) {
+        if (view.getTag().toString().equals("*")) {
             new Collapse(keyboard).animate();
-        }
-        else {
+        } else {
             inputDigit(view.getTag().toString());
         }
     }
 
-    private void inputDigit(String digit){
+    private void inputDigit(String digit) {
 
-        switch (passwordMode){
+        switch (passwordMode) {
             case 0:
-                if (digit.contains("d")){
+                if (digit.contains("d")) {
                     if (inputPasswordValue.length() > 0) {
                         inputPasswordValue = inputPasswordValue.substring(0, inputPasswordValue.length() - 1);
-                        if (inputPasswordValue.length() == 4){
+                        if (inputPasswordValue.length() == 4) {
                             input_digit_5.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_5.setText("");
-                        }
-                        else if (inputPasswordValue.length() == 3){
+                        } else if (inputPasswordValue.length() == 3) {
                             input_digit_4.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_4.setText("");
-                        }
-                        else if (inputPasswordValue.length() == 2){
+                        } else if (inputPasswordValue.length() == 2) {
                             input_digit_3.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_3.setText("");
-                        }
-                        else if (inputPasswordValue.length() == 1){
+                        } else if (inputPasswordValue.length() == 1) {
                             input_digit_2.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_2.setText("");
-                        }
-                        else if (inputPasswordValue.length() == 0){
+                        } else if (inputPasswordValue.length() == 0) {
                             input_digit_1.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_1.setText("");
                         }
                     }
                     return;
-                }
-                else {
+                } else {
                     if (inputPasswordValue.length() <= 5) {
                         inputPasswordValue += digit;
                     }
@@ -188,11 +176,11 @@ public class PasswordEntryActivity extends AppCompatActivity implements View.OnC
                             input_digit_4.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_5.setBackgroundResource(R.drawable.pass_value_empty);
                             int passwordComplexity = new PasswordComplexity(inputPasswordValue).check();
-                            if (passwordComplexity != 1){
+                            if (passwordComplexity != 1) {
                                 inputPasswordValue = "";
                                 Toast.makeText(activity, getString(passwordComplexity), Toast.LENGTH_SHORT).show();
                                 return;
-                            }else {
+                            } else {
                                 passwordMode = 1;
                                 password_1_rl.setVisibility(View.GONE);
                                 password_2_rl.setVisibility(View.VISIBLE);
@@ -203,33 +191,28 @@ public class PasswordEntryActivity extends AppCompatActivity implements View.OnC
                 break;
 
             case 1:
-                if (digit.contains("d")){
+                if (digit.contains("d")) {
                     if (inputRePasswordValue.length() > 0) {
                         inputRePasswordValue = inputRePasswordValue.substring(0, inputRePasswordValue.length() - 1);
-                        if (inputRePasswordValue.length() == 4){
+                        if (inputRePasswordValue.length() == 4) {
                             input_digit_5.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_5.setText("");
-                        }
-                        else if (inputRePasswordValue.length() == 3){
+                        } else if (inputRePasswordValue.length() == 3) {
                             input_digit_4.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_4.setText("");
-                        }
-                        else if (inputRePasswordValue.length() == 2){
+                        } else if (inputRePasswordValue.length() == 2) {
                             input_digit_3.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_3.setText("");
-                        }
-                        else if (inputRePasswordValue.length() == 1){
+                        } else if (inputRePasswordValue.length() == 1) {
                             input_digit_2.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_2.setText("");
-                        }
-                        else if (inputRePasswordValue.length() == 0){
+                        } else if (inputRePasswordValue.length() == 0) {
                             input_digit_1.setBackgroundResource(R.drawable.pass_value_empty);
                             input_digit_1.setText("");
                         }
                     }
                     return;
-                }
-                else {
+                } else {
                     if (inputRePasswordValue.length() <= 5) {
                         inputRePasswordValue += digit;
                     }
@@ -265,7 +248,7 @@ public class PasswordEntryActivity extends AppCompatActivity implements View.OnC
                             new Collapse(keyboard).animate();
                             if (inputPasswordValue.equalsIgnoreCase(inputRePasswordValue)) {
                                 Intent intent = new Intent();
-                                intent.setClass(PasswordEntryActivity.this, MemorableWordEntryActivity.class);
+                                intent.setClass(PasswordEntryActivity.this, CredentialEntryActivity.class);
                                 intent.putExtra(Constants.USER_ENTRY_PASSWORD, inputPasswordValue);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 finish();

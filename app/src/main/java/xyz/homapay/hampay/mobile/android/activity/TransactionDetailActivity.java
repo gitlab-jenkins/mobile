@@ -7,18 +7,18 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.TransactionDetailRequest;
 import xyz.homapay.hampay.common.core.model.response.TransactionDetailResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.TnxDetailDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.TransactionDTO;
-import xyz.homapay.hampay.common.core.model.response.dto.UserInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.UserProfileDTO;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
@@ -37,6 +37,56 @@ import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class TransactionDetailActivity extends AppCompatActivity {
 
+    @BindView(R.id.status_text)
+    FacedTextView status_text;
+    @BindView(R.id.callee_name)
+    FacedTextView callee_name;
+    @BindView(R.id.image)
+    ImageView image;
+    @BindView(R.id.total_amount_value)
+    FacedTextView total_amount_value;
+    @BindView(R.id.amount_value)
+    FacedTextView amount_value;
+    @BindView(R.id.more_amount)
+    LinearLayout moreAmount;
+    @BindView(R.id.vat_value)
+    FacedTextView vat_value;
+    @BindView(R.id.fee_charge_value)
+    FacedTextView fee_charge_value;
+    @BindView(R.id.fee_charge_text)
+    FacedTextView fee_charge_text;
+    @BindView(R.id.payment_request_code)
+    FacedTextView payment_request_code;
+    @BindView(R.id.reference_code)
+    FacedTextView reference_code;
+    @BindView(R.id.date_time)
+    FacedTextView date_time;
+    @BindView(R.id.cell_number)
+    FacedTextView cell_number;
+    @BindView(R.id.message)
+    FacedTextView message;
+    @BindView(R.id.detail_text)
+    FacedTextView detail_text;
+    @BindView(R.id.pay_button)
+    LinearLayout pay_button;
+    @BindView(R.id.bills_info)
+    LinearLayout billsInfo;
+    @BindView(R.id.billsId)
+    FacedTextView billsId;
+    @BindView(R.id.payId)
+    FacedTextView payId;
+    @BindView(R.id.tvCellNumber)
+    FacedTextView tvCellNumber;
+    @BindView(R.id.tvChargeType)
+    FacedTextView tvChargeType;
+    @BindView(R.id.llCellNumber)
+    LinearLayout llCellNumber;
+    @BindView(R.id.llChargeType)
+    LinearLayout llChrageType;
+    @BindView(R.id.indicatorChargeType)
+    View indicatorChargeType;
+    @BindView(R.id.indicatorCellNumber)
+    View indicatorCellNumber;
     private TransactionDTO transaction;
     private PersianEnglishDigit persian;
     private Context context;
@@ -48,33 +98,6 @@ public class TransactionDetailActivity extends AppCompatActivity {
     private TransactionDetailRequest transactionDetailRequest;
     private RequestTransactionDetail requestTransactionDetail;
     private CurrencyFormatter formatter;
-    private FacedTextView status_text;
-    private FacedTextView callee_name;
-    private ImageView image;
-    private FacedTextView total_amount_value;
-    private FacedTextView amount_value;
-    private LinearLayout moreAmount;
-    private FacedTextView vat_value;
-    private FacedTextView fee_charge_value;
-    private FacedTextView fee_charge_text;
-    private FacedTextView payment_request_code;
-    private FacedTextView reference_code;
-    private FacedTextView date_time;
-    private FacedTextView cell_number;
-    private FacedTextView message;
-    private FacedTextView detail_text;
-    private LinearLayout pay_button;
-    private LinearLayout billsInfo;
-    private FacedTextView billsId;
-    private FacedTextView payId;
-
-    private FacedTextView tvCellNumber;
-    private FacedTextView tvChargeType;
-
-    private LinearLayout llCellNumber;
-    private LinearLayout llChrageType;
-    private View indicatorChargeType;
-    private View indicatorCellNumber;
     private UserProfileDTO userProfile;
 
     public void backActionBar(View view) {
@@ -123,48 +146,16 @@ public class TransactionDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction_detail);
+        ButterKnife.bind(this);
 
         persian = new PersianEnglishDigit();
         formatter = new CurrencyFormatter();
         userProfile = (UserProfileDTO) getIntent().getSerializableExtra(Constants.USER_PROFILE);
-
         context = this;
         activity = TransactionDetailActivity.this;
-
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
-
         hamPayDialog = new HamPayDialog(activity);
-
-        status_text = (FacedTextView) findViewById(R.id.status_text);
-        callee_name = (FacedTextView) findViewById(R.id.callee_name);
-        image = (ImageView) findViewById(R.id.image);
-        total_amount_value = (FacedTextView) findViewById(R.id.total_amount_value);
-        amount_value = (FacedTextView) findViewById(R.id.amount_value);
-        moreAmount = (LinearLayout) findViewById(R.id.more_amount);
-        vat_value = (FacedTextView) findViewById(R.id.vat_value);
-        fee_charge_value = (FacedTextView) findViewById(R.id.fee_charge_value);
-        fee_charge_text = (FacedTextView) findViewById(R.id.fee_charge_text);
-        payment_request_code = (FacedTextView) findViewById(R.id.payment_request_code);
-        reference_code = (FacedTextView) findViewById(R.id.reference_code);
-        date_time = (FacedTextView) findViewById(R.id.date_time);
-        cell_number = (FacedTextView) findViewById(R.id.cell_number);
-        message = (FacedTextView) findViewById(R.id.message);
-        billsInfo = (LinearLayout) findViewById(R.id.bills_info);
-        billsId = (FacedTextView) findViewById(R.id.billsId);
-        payId = (FacedTextView) findViewById(R.id.payId);
-        pay_button = (LinearLayout) findViewById(R.id.pay_button);
-
-        llCellNumber = (LinearLayout) findViewById(R.id.llCellNumber);
-        llChrageType = (LinearLayout) findViewById(R.id.llChargeType);
-
-        indicatorCellNumber = findViewById(R.id.indicatorCellNumber);
-        indicatorChargeType = findViewById(R.id.indicatorChargeType);
-
-        detail_text = (FacedTextView) findViewById(R.id.detail_text);
-
-        tvCellNumber = (FacedTextView) findViewById(R.id.tvCellNumber);
-        tvChargeType = (FacedTextView) findViewById(R.id.tvChargeType);
 
         Intent intent = getIntent();
         transaction = (TransactionDTO) intent.getSerializableExtra(Constants.USER_TRANSACTION_DTO);
@@ -200,21 +191,21 @@ public class TransactionDetailActivity extends AppCompatActivity {
 
     }
 
-            @Override
-        public void onActivityResult(int requestCode, int resultCode, Intent data) {
-            super.onActivityResult(requestCode, resultCode, data);
-            if (requestCode == Constants.IBAN_PAYMENT_REQUEST_CODE){
-                if (resultCode == RESULT_OK) {
-                    Intent intent = new Intent();
-                    intent.setClass(activity, PaymentRequestDetailActivity.class);
-                    intent.putExtra(Constants.CONTACT_NAME, transaction.getPersonName());
-                    intent.putExtra(Constants.CONTACT_PHONE_NO, tnxDetail.getCellNumber());
-                    intent.putExtra(Constants.IMAGE_ID, transaction.getImageId());
-                    startActivity(intent);
-                }
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.IBAN_PAYMENT_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Intent intent = new Intent();
+                intent.setClass(activity, PaymentRequestDetailActivity.class);
+                intent.putExtra(Constants.CONTACT_NAME, transaction.getPersonName());
+                intent.putExtra(Constants.CONTACT_PHONE_NO, tnxDetail.getCellNumber());
+                intent.putExtra(Constants.IMAGE_ID, transaction.getImageId());
+                startActivity(intent);
             }
+
         }
+    }
 
     public class RequestTransactionDetailTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<TransactionDetailResponse>> {
 
@@ -296,7 +287,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
                         tvChargeType.setText(transactionDetailResponseMessage.getService().getTransactionDetail().getDescription());
                     }
 
-                    if (transaction.getPaymentType() != TransactionDTO.PaymentType.TOP_UP){
+                    if (transaction.getPaymentType() != TransactionDTO.PaymentType.TOP_UP) {
                         llCellNumber.setVisibility(View.GONE);
                         llChrageType.setVisibility(View.GONE);
                         indicatorCellNumber.setVisibility(View.GONE);

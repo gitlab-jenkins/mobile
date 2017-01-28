@@ -6,11 +6,12 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
@@ -20,14 +21,17 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 
 public class GuideDetailActivity extends AppCompatActivity {
 
-    private WebView guide_webview;
+    @BindView(R.id.guide_webview)
+    WebView guide_webview;
+    @BindView(R.id.title)
+    FacedTextView title;
+    @BindView(R.id.close_tc_privacy)
+    FacedTextView close_tc_privacy;
     private Bundle bundle;
     private String webPageUrl;
     private HamPayDialog hamPayDialog;
     private SharedPreferences prefs;
     private Context context;
-    private FacedTextView title;
-    private FacedTextView close_tc_privacy;
 
     @Override
     protected void onPause() {
@@ -50,7 +54,8 @@ public class GuideDetailActivity extends AppCompatActivity {
             intent.setClass(context, HamPayLoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             finish();
-            startActivity(intent);        }
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -62,21 +67,21 @@ public class GuideDetailActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             finish();
             startActivity(intent);
-        }    }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guide_detail);
+        ButterKnife.bind(this);
+
         context = this;
         bundle = getIntent().getExtras();
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         webPageUrl = bundle.getString(Constants.WEB_PAGE_ADDRESS);
-        title = (FacedTextView)findViewById(R.id.title);
         title.setText(bundle.getString(Constants.TAC_PRIVACY_TITLE));
-        close_tc_privacy = (FacedTextView)findViewById(R.id.close_tc_privacy);
         close_tc_privacy.setOnClickListener(v -> finish());
-        guide_webview = (WebView)findViewById(R.id.guide_webview);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             guide_webview.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         hamPayDialog = new HamPayDialog(this);

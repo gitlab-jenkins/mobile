@@ -10,6 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import br.com.goncalves.pugnotification.notification.PugNotification;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.UnlinkUserRequest;
@@ -27,20 +30,27 @@ import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.app.AppEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 
-public class UnlinkPassActivity extends AppCompatActivity implements View.OnClickListener{
+public class UnlinkPassActivity extends AppCompatActivity implements View.OnClickListener {
 
-
+    @BindView(R.id.input_digit_1)
+    FacedTextView input_digit_1;
+    @BindView(R.id.input_digit_2)
+    FacedTextView input_digit_2;
+    @BindView(R.id.input_digit_3)
+    FacedTextView input_digit_3;
+    @BindView(R.id.input_digit_4)
+    FacedTextView input_digit_4;
+    @BindView(R.id.input_digit_5)
+    FacedTextView input_digit_5;
+    @BindView(R.id.keyboard)
+    LinearLayout keyboard;
+    @BindView(R.id.password_holder)
+    LinearLayout password_holder;
     private HamPayDialog hamPayDialog;
     private String inputPasswordValue = "";
-    private FacedTextView input_digit_1;
-    private FacedTextView input_digit_2;
-    private FacedTextView input_digit_3;
-    private FacedTextView input_digit_4;
-    private FacedTextView input_digit_5;
-    private LinearLayout keyboard;
-    private LinearLayout password_holder;
     private RequestUnlinkUser requestUnlinkUser;
     private UnlinkUserRequest unlinkUserRequest;
     private Context context;
@@ -50,7 +60,7 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
     private DatabaseHelper databaseHelper;
     private AppEvent appEvent = AppEvent.UNLINK;
 
-    public void backActionBar(View view){
+    public void backActionBar(View view) {
         finish();
     }
 
@@ -65,7 +75,7 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
         super.onStop();
         HamPayApplication.setAppSate(AppState.Stoped);
 
-        if (requestUnlinkUser != null){
+        if (requestUnlinkUser != null) {
             if (!requestUnlinkUser.isCancelled())
                 requestUnlinkUser.cancel(true);
         }
@@ -100,32 +110,21 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_unlink_user_pass);
+        ButterKnife.bind(this);
 
         databaseHelper = new DatabaseHelper(this);
-
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
-
-
         context = this;
         activity = UnlinkPassActivity.this;
-
         hamPayDialog = new HamPayDialog(activity);
 
-        keyboard = (LinearLayout)findViewById(R.id.keyboard);
-        password_holder = (LinearLayout)findViewById(R.id.password_holder);
         password_holder.setOnClickListener(this);
-
-        input_digit_1 = (FacedTextView)findViewById(R.id.input_digit_1);
-        input_digit_2 = (FacedTextView)findViewById(R.id.input_digit_2);
-        input_digit_3 = (FacedTextView)findViewById(R.id.input_digit_3);
-        input_digit_4 = (FacedTextView)findViewById(R.id.input_digit_4);
-        input_digit_5 = (FacedTextView)findViewById(R.id.input_digit_5);
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.password_holder:
                 if (keyboard.getVisibility() != View.VISIBLE)
                     new Expand(keyboard).animate();
@@ -137,64 +136,12 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-    public class RequestUnlinkUserTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<UnlinkUserResponse>> {
-        @Override
-        public void onTaskComplete(ResponseMessage<UnlinkUserResponse> unlinkUserResponseResponseMessage)
-        {
-
-            hamPayDialog.dismisWaitingDialog();
-            ServiceEvent serviceName;
-            LogEvent logEvent = new LogEvent(context);
-
-            if (unlinkUserResponseResponseMessage != null) {
-                if (unlinkUserResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
-                    serviceName = ServiceEvent.UNLINK_USER_SUCCESS;
-                    logEvent.log(appEvent);
-                    editor.clear().commit();
-                    editor.commit();
-
-                    databaseHelper.deleteAllDataBase();
-
-                    Intent intent = new Intent();
-                    intent.setClass(getApplicationContext(), WelcomeActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                }else if (unlinkUserResponseResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceEvent.UNLINK_USER_FAILURE;
-                    forceLogout();
-                }
-                else {
-                    serviceName = ServiceEvent.UNLINK_USER_FAILURE;
-                    requestUnlinkUser = new RequestUnlinkUser(context, new RequestUnlinkUserTaskCompleteListener());
-                    new HamPayDialog(activity).showFailUnlinkDialog(
-                            unlinkUserResponseResponseMessage.getService().getResultStatus().getCode(),
-                            unlinkUserResponseResponseMessage.getService().getResultStatus().getDescription());
-                }
-            }else {
-                serviceName = ServiceEvent.UNLINK_USER_FAILURE;
-                requestUnlinkUser = new RequestUnlinkUser(context, new RequestUnlinkUserTaskCompleteListener());
-                new HamPayDialog(activity).showFailUnlinkDialog(
-                        Constants.LOCAL_ERROR_CODE,
-                        getString(R.string.msg_fail_unlink_user));
-            }
-            logEvent.log(serviceName);
-            resetLayout();
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
-    }
-
-
     @Override
     public void onBackPressed() {
 
-        if (keyboard.getVisibility() == View.VISIBLE){
+        if (keyboard.getVisibility() == View.VISIBLE) {
             new Collapse(keyboard).animate();
-        }
-        else {
+        } else {
             finish();
         }
     }
@@ -211,44 +158,38 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-    public void pressKey(View view){
-        if (view.getTag().toString().equals("*")){
+    public void pressKey(View view) {
+        if (view.getTag().toString().equals("*")) {
             new Collapse(keyboard).animate();
-        }
-        else {
+        } else {
             inputDigit(view.getTag().toString());
         }
     }
 
-    private void inputDigit(String digit){
+    private void inputDigit(String digit) {
 
-        if (digit.contains("d")){
+        if (digit.contains("d")) {
             if (inputPasswordValue.length() > 0) {
                 inputPasswordValue = inputPasswordValue.substring(0, inputPasswordValue.length() - 1);
-                if (inputPasswordValue.length() == 4){
+                if (inputPasswordValue.length() == 4) {
                     input_digit_5.setBackgroundResource(R.drawable.pass_value_empty);
                     input_digit_5.setText("");
-                }
-                else if (inputPasswordValue.length() == 3){
+                } else if (inputPasswordValue.length() == 3) {
                     input_digit_4.setBackgroundResource(R.drawable.pass_value_empty);
                     input_digit_4.setText("");
-                }
-                else if (inputPasswordValue.length() == 2){
+                } else if (inputPasswordValue.length() == 2) {
                     input_digit_3.setBackgroundResource(R.drawable.pass_value_empty);
                     input_digit_3.setText("");
-                }
-                else if (inputPasswordValue.length() == 1){
+                } else if (inputPasswordValue.length() == 1) {
                     input_digit_2.setBackgroundResource(R.drawable.pass_value_empty);
                     input_digit_2.setText("");
-                }
-                else if (inputPasswordValue.length() == 0){
+                } else if (inputPasswordValue.length() == 0) {
                     input_digit_1.setBackgroundResource(R.drawable.pass_value_empty);
                     input_digit_1.setText("");
                 }
             }
             return;
-        }
-        else {
+        } else {
             if (inputPasswordValue.length() <= 5) {
                 inputPasswordValue += digit;
             }
@@ -281,7 +222,7 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
                     break;
                 case 5:
                     input_digit_5.setBackgroundResource(R.drawable.pass_value_placeholder);
-                    editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                    AppManager.setMobileTimeout(context);
                     editor.commit();
                     unlinkUserRequest = new UnlinkUserRequest();
                     unlinkUserRequest.setPassCode(inputPasswordValue);
@@ -293,7 +234,7 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-    private void resetLayout(){
+    private void resetLayout() {
         inputPasswordValue = "";
 
         input_digit_1.setBackgroundResource(R.drawable.pass_value_empty);
@@ -301,6 +242,59 @@ public class UnlinkPassActivity extends AppCompatActivity implements View.OnClic
         input_digit_3.setBackgroundResource(R.drawable.pass_value_empty);
         input_digit_4.setBackgroundResource(R.drawable.pass_value_empty);
         input_digit_5.setBackgroundResource(R.drawable.pass_value_empty);
+    }
+
+    public class RequestUnlinkUserTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<UnlinkUserResponse>> {
+        @Override
+        public void onTaskComplete(ResponseMessage<UnlinkUserResponse> unlinkUserResponseResponseMessage) {
+
+            hamPayDialog.dismisWaitingDialog();
+            ServiceEvent serviceName;
+            LogEvent logEvent = new LogEvent(context);
+
+            if (unlinkUserResponseResponseMessage != null) {
+                if (unlinkUserResponseResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                    serviceName = ServiceEvent.UNLINK_USER_SUCCESS;
+                    logEvent.log(appEvent);
+                    editor.clear().commit();
+                    editor.commit();
+                    PugNotification.with(context).cancel(Constants.COMMON_NOTIFICATION_IDENTIFIER);
+                    PugNotification.with(context).cancel(Constants.INVOICE_NOTIFICATION_IDENTIFIER);
+                    PugNotification.with(context).cancel(Constants.MERCHANT_NOTIFICATION_IDENTIFIER);
+                    PugNotification.with(context).cancel(Constants.TRANSACTIONS_NOTIFICATION_IDENTIFIER);
+                    PugNotification.with(context).cancel(Constants.PAYMENT_NOTIFICATION_IDENTIFIER);
+
+                    databaseHelper.deleteAllDataBase();
+
+                    Intent intent = new Intent();
+                    intent.setClass(getApplicationContext(), WelcomeActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                } else if (unlinkUserResponseResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
+                    serviceName = ServiceEvent.UNLINK_USER_FAILURE;
+                    forceLogout();
+                } else {
+                    serviceName = ServiceEvent.UNLINK_USER_FAILURE;
+                    requestUnlinkUser = new RequestUnlinkUser(context, new RequestUnlinkUserTaskCompleteListener());
+                    new HamPayDialog(activity).showFailUnlinkDialog(
+                            unlinkUserResponseResponseMessage.getService().getResultStatus().getCode(),
+                            unlinkUserResponseResponseMessage.getService().getResultStatus().getDescription());
+                }
+            } else {
+                serviceName = ServiceEvent.UNLINK_USER_FAILURE;
+                requestUnlinkUser = new RequestUnlinkUser(context, new RequestUnlinkUserTaskCompleteListener());
+                new HamPayDialog(activity).showFailUnlinkDialog(
+                        Constants.LOCAL_ERROR_CODE,
+                        getString(R.string.msg_fail_unlink_user));
+            }
+            logEvent.log(serviceName);
+            resetLayout();
+        }
+
+        @Override
+        public void onTaskPreRun() {
+            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
+        }
     }
 
 }

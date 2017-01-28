@@ -37,7 +37,6 @@
             </LinearLayout>
 
 
-
             <ImageView
                 android:id="@+id/nav_icon"
                 android:layout_width="32dp"
@@ -88,7 +87,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="visible">
-            <include layout="@layout/wt_1_layout"/>
+
+            <include layout="@layout/wt_1_layout" />
         </RelativeLayout>
 
 
@@ -97,7 +97,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="invisible">
-            <include layout="@layout/wt_2_layout"/>
+
+            <include layout="@layout/wt_2_layout" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -105,7 +106,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="invisible">
-            <include layout="@layout/wt_3_layout"/>
+
+            <include layout="@layout/wt_3_layout" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -113,7 +115,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="invisible">
-            <include layout="@layout/wt_4_layout"/>
+
+            <include layout="@layout/wt_4_layout" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -121,7 +124,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="invisible">
-            <include layout="@layout/wt_5_layout"/>
+
+            <include layout="@layout/wt_5_layout" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -147,7 +151,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="invisible">
-            <include layout="@layout/wt_end_layout"/>
+
+            <include layout="@layout/wt_end_layout" />
         </RelativeLayout>
 
     </RelativeLayout>

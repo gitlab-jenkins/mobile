@@ -1,9 +1,6 @@
-<android.support.design.widget.CoordinatorLayout
-    android:id="@+id/coordinatorLayout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:geekui="http://schemas.android.com/apk/res-auto"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -21,21 +18,21 @@
             <ImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@drawable/back"
                 android:onClick="backActionBar"
-                android:padding="12dp"/>
+                android:padding="12dp"
+                android:src="@drawable/back" />
 
             <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                geekui:customTypeface="fonts/vazir_regular.ttf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginRight="8dp"
+                android:text="@string/pending_purchase_payment_title"
                 android:textColor="@color/app_origin"
                 android:textSize="18sp"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/pending_purchase_payment_title"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="8dp"
-                android:layout_centerVertical="true"/>
+                geekui:customTypeface="fonts/vazir_regular.ttf" />
 
         </RelativeLayout>
 
@@ -49,28 +46,29 @@
                 android:id="@+id/invoice_pending"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
+                android:layout_marginRight="1dp"
                 android:layout_weight="0.33"
                 android:background="@color/transaction_unselected_tab"
-                android:layout_marginRight="1dp">
+                android:onClick="onClick">
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                    geekui:customTypeface="fonts/vazir_regular.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
-                    android:textSize="16sp"
+                    android:layout_centerInParent="true"
                     android:layout_gravity="center_horizontal"
                     android:text="@string/sort_transaction_individual"
-                    android:layout_centerInParent="true"/>
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    geekui:customTypeface="fonts/vazir_regular.ttf" />
 
                 <ImageView
                     android:id="@+id/invoice_triangle"
                     android:layout_width="10dp"
                     android:layout_height="10dp"
-                    android:src="@drawable/ic_triangle"
-                    android:layout_centerHorizontal="true"
                     android:layout_alignParentBottom="true"
-                    android:visibility="gone"/>
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_triangle"
+                    android:visibility="gone" />
 
             </RelativeLayout>
 
@@ -78,29 +76,30 @@
                 android:id="@+id/purchase_pending"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="0.5dp"
+                android:layout_marginRight="0.5dp"
                 android:layout_weight="0.33"
                 android:background="@color/transaction_unselected_tab"
-                android:layout_marginRight="0.5dp"
-                android:layout_marginLeft="0.5dp">
+                android:onClick="onClick">
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                    geekui:customTypeface="fonts/vazir_regular.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
-                    android:textSize="16sp"
+                    android:layout_centerInParent="true"
                     android:layout_gravity="center_horizontal"
                     android:text="@string/sort_transaction_business"
-                    android:layout_centerInParent="true"/>
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    geekui:customTypeface="fonts/vazir_regular.ttf" />
 
                 <ImageView
                     android:id="@+id/business_triangle"
                     android:layout_width="10dp"
                     android:layout_height="10dp"
-                    android:src="@drawable/ic_triangle"
-                    android:layout_centerHorizontal="true"
                     android:layout_alignParentBottom="true"
-                    android:visibility="gone"/>
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_triangle"
+                    android:visibility="gone" />
 
             </RelativeLayout>
 
@@ -108,28 +107,29 @@
                 android:id="@+id/full_pending"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="1dp"
                 android:layout_weight="0.33"
                 android:background="@color/app_origin"
-                android:layout_marginLeft="1dp">
+                android:onClick="onClick">
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
-                    geekui:customTypeface="fonts/vazir_regular.ttf"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
-                    android:textSize="16sp"
+                    android:layout_centerInParent="true"
                     android:layout_gravity="center_horizontal"
                     android:text="@string/sort_transaction_default"
-                    android:layout_centerInParent="true"/>
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    geekui:customTypeface="fonts/vazir_regular.ttf" />
 
                 <ImageView
                     android:id="@+id/full_triangle"
                     android:layout_width="10dp"
                     android:layout_height="10dp"
-                    android:src="@drawable/ic_triangle"
-                    android:layout_centerHorizontal="true"
                     android:layout_alignParentBottom="true"
-                    android:visibility="visible"/>
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_triangle"
+                    android:visibility="visible" />
 
             </RelativeLayout>
 
@@ -137,26 +137,27 @@
 
         <xyz.homapay.hampay.mobile.android.component.FacedTextView
             android:id="@+id/nullPendingText"
-            geekui:customTypeface="fonts/vazir_regular.ttf"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/normal_text"
-            android:textSize="15dp"
-            android:text="@string/null_pending_business"
-            android:gravity="center"
             android:layout_gravity="center"
             android:layout_marginTop="24dp"
-            android:visibility="gone"/>
+            android:gravity="center"
+            android:text="@string/null_pending_business"
+            android:textColor="@color/normal_text"
+            android:textSize="15dp"
+            android:visibility="gone"
+            geekui:customTypeface="fonts/vazir_regular.ttf" />
 
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/pullToRefresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <ListView
                 android:id="@+id/pendingListView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
         </android.support.v4.widget.SwipeRefreshLayout>
 
 

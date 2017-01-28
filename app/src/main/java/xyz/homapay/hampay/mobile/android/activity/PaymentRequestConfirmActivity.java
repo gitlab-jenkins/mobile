@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.dto.ContactDTO;
@@ -27,21 +29,28 @@ import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.img.ImageHelper;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 
 public class PaymentRequestConfirmActivity extends AppCompatActivity {
 
-
+    @BindView(R.id.payment_request_button)
     FacedTextView payment_request_button;
     PersianEnglishDigit persianEnglishDigit;
+    @BindView(R.id.contact_name)
     FacedTextView contact_name;
+    @BindView(R.id.cell_number)
     FacedTextView cell_number;
+    @BindView(R.id.contact_message)
     FacedTextView contact_message;
     String contactMssage = "";
+    @BindView(R.id.amount_value)
     FacedTextView amount_value;
+    @BindView(R.id.fee_value)
     FacedTextView fee_value;
+    @BindView(R.id.vat_value)
     FacedTextView vat_value;
     boolean intentContact = false;
     Context context;
@@ -51,19 +60,21 @@ public class PaymentRequestConfirmActivity extends AppCompatActivity {
     RequestUserPayment requestUserPayment;
     UserPaymentRequest userPaymentRequest;
     HamPayDialog hamPayDialog;
+    @BindView(R.id.user_image)
+    ImageView user_image;
+    @BindView(R.id.amount_total)
+    FacedTextView amount_total;
     private ContactDTO hamPayContact;
     private PaymentInfoDTO paymentInfo;
     private String displayName;
     private String cellNumber;
     private String imageId;
     private long contactAmount = 0;
-    private ImageView user_image;
     private long amountValue = 0;
     private long calcFeeCharge = 0;
     private long MaxXferAmount = 0;
     private long MinXferAmount = 0;
     private long calculatedVat = 0;
-    private FacedTextView amount_total;
     private CurrencyFormatter formatter;
 
     public void backActionBar(View view) {
@@ -111,6 +122,7 @@ public class PaymentRequestConfirmActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_request_confirm);
+        ButterKnife.bind(this);
 
         context = this;
         activity = PaymentRequestConfirmActivity.this;
@@ -127,21 +139,8 @@ public class PaymentRequestConfirmActivity extends AppCompatActivity {
         } catch (Exception ex) {
             Log.e("Error", ex.getStackTrace().toString());
         }
-
         hamPayDialog = new HamPayDialog(activity);
-
-        amount_value = (FacedTextView) findViewById(R.id.amount_value);
-        fee_value = (FacedTextView) findViewById(R.id.fee_value);
-
-        vat_value = (FacedTextView) findViewById(R.id.vat_value);
-        amount_total = (FacedTextView) findViewById(R.id.amount_total);
-        contact_message = (FacedTextView) findViewById(R.id.contact_message);
-        contact_name = (FacedTextView) findViewById(R.id.contact_name);
-        cell_number = (FacedTextView) findViewById(R.id.cell_number);
-        user_image = (ImageView) findViewById(R.id.user_image);
-
         Intent intent = getIntent();
-
 
         hamPayContact = (ContactDTO) intent.getSerializableExtra(Constants.HAMPAY_CONTACT);
         paymentInfo = (PaymentInfoDTO) intent.getSerializableExtra(Constants.PAYMENT_INFO);
@@ -184,7 +183,7 @@ public class PaymentRequestConfirmActivity extends AppCompatActivity {
             }
 
             if (imageId != null) {
-                editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+                AppManager.setMobileTimeout(context);
                 editor.commit();
                 user_image.setTag(imageId);
                 ImageHelper.getInstance(activity).imageLoader(imageId, user_image, R.drawable.user_placeholder);
@@ -194,8 +193,6 @@ public class PaymentRequestConfirmActivity extends AppCompatActivity {
         } else {
         }
 
-
-        payment_request_button = (FacedTextView) findViewById(R.id.payment_request_button);
         payment_request_button.setOnClickListener(v -> {
             amount_value.clearFocus();
             if (amount_value.getText().toString().length() == 0) {
@@ -205,7 +202,7 @@ public class PaymentRequestConfirmActivity extends AppCompatActivity {
 
             contactMssage = contact_message.getText().toString();
             contactMssage = contactMssage.replaceAll(Constants.ENTER_CHARACTERS_REGEX, " ");
-            editor.putLong(Constants.MOBILE_TIME_OUT, System.currentTimeMillis());
+            AppManager.setMobileTimeout(context);
             editor.commit();
             if (amount_value.getText().toString().indexOf("٬") != -1) {
                 amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace("٬", "")));
