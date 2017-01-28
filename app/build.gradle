@@ -66,6 +66,8 @@ android {
             buildConfigField "String", "PURE_SERVER_URL", "\"sit.hampay.ir\""
 
             manifestPlaceholders = [appName: "SIT_hampay"]
+
+            applicationIdSuffix ".sit"
         }
 
         uat {
@@ -74,6 +76,8 @@ android {
             buildConfigField "String", "PURE_SERVER_URL", "\"uat.hampay.ir\""
 
             manifestPlaceholders = [appName: "UAT_hampay"]
+
+            applicationIdSuffix ".uat"
         }
 
         dev2 {
@@ -82,6 +86,8 @@ android {
             buildConfigField "String", "PURE_SERVER_URL", "\"mobile.hampay.ir\""
 
             manifestPlaceholders = [appName: "DEV2_hampay"]
+
+            applicationIdSuffix ".dev2"
         }
 
         live {
