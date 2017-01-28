@@ -37,8 +37,7 @@ import xyz.homapay.hampay.common.common.request.LogoutRequest;
 import xyz.homapay.hampay.common.common.response.LogoutResponse;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
-import xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
-import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
+import xyz.homapay.hampay.common.core.model.enums.BizSortFactor;
 import xyz.homapay.hampay.common.core.model.request.ChangePassCodeRequest;
 import xyz.homapay.hampay.common.core.model.request.ContactUsRequest;
 import xyz.homapay.hampay.common.core.model.request.ContactsHampayEnabledRequest;
@@ -63,11 +62,9 @@ import xyz.homapay.hampay.mobile.android.adapter.charge.ChargeAdapter;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestChangePassCode;
 import xyz.homapay.hampay.mobile.android.async.RequestContactHampayEnabled;
-import xyz.homapay.hampay.mobile.android.async.RequestHamPayBusiness;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestNewLogout;
-import xyz.homapay.hampay.mobile.android.async.RequestSearchHamPayBusiness;
 import xyz.homapay.hampay.mobile.android.async.RequestTAC;
 import xyz.homapay.hampay.mobile.android.async.RequestUploadImage;
 import xyz.homapay.hampay.mobile.android.async.RequestUserProfile;
@@ -85,6 +82,8 @@ import xyz.homapay.hampay.mobile.android.p.auth.RegisterEntry;
 import xyz.homapay.hampay.mobile.android.p.auth.SMSSender;
 import xyz.homapay.hampay.mobile.android.p.auth.SMSSenderImpl;
 import xyz.homapay.hampay.mobile.android.p.auth.SMSSenderView;
+import xyz.homapay.hampay.mobile.android.p.business.BusinessList;
+import xyz.homapay.hampay.mobile.android.p.business.BusinessSearch;
 import xyz.homapay.hampay.mobile.android.p.credential.CredentialEntry;
 import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
@@ -645,8 +644,8 @@ public class HamPayDialog {
         }
     }
 
-    public void showFailBusinessListDialog(final RequestHamPayBusiness requestHamPayBusiness,
-                                           final BusinessListRequest businessListRequest,
+    public void showFailBusinessListDialog(final BusinessList businessList,
+                                           final BizSortFactor sortFactor,
                                            final String code,
                                            final String message) {
         View view = activity.getLayoutInflater().inflate(R.layout.dialog_fail_business_list, null);
@@ -659,7 +658,7 @@ public class HamPayDialog {
 
         retry_business_list.setOnClickListener(v -> {
             dialog.dismiss();
-            requestHamPayBusiness.execute(businessListRequest);
+            businessList.load(sortFactor);
         });
         cancel_request.setOnClickListener(v -> dialog.dismiss());
 
@@ -670,8 +669,9 @@ public class HamPayDialog {
         }
     }
 
-    public void showFailBusinessSearchListDialog(final RequestSearchHamPayBusiness requestSearchHamPayBusiness,
-                                                 final BusinessSearchRequest businessSearchRequest,
+    public void showFailBusinessSearchListDialog(final BusinessSearch businessSearch,
+                                                 final String searchTerm,
+                                                 final BizSortFactor sortFactor,
                                                  final String code,
                                                  final String message) {
 
@@ -682,7 +682,7 @@ public class HamPayDialog {
         FacedTextView cancel_request = (FacedTextView) view.findViewById(R.id.cancel_request);
         retry_business_search_list.setOnClickListener(v -> {
             dialog.dismiss();
-            requestSearchHamPayBusiness.execute(businessSearchRequest);
+            businessSearch.search(searchTerm, sortFactor, true);
         });
         cancel_request.setOnClickListener(v -> dialog.dismiss());
 

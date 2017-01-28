@@ -19,9 +19,7 @@ import xyz.homapay.hampay.common.common.request.RequestMessage;
 import xyz.homapay.hampay.common.common.response.LoginResponse;
 import xyz.homapay.hampay.common.common.response.LogoutResponse;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
-import xyz.homapay.hampay.common.core.model.request.BusinessListRequest;
 import xyz.homapay.hampay.common.core.model.request.BusinessPaymentConfirmRequest;
-import xyz.homapay.hampay.common.core.model.request.BusinessSearchRequest;
 import xyz.homapay.hampay.common.core.model.request.CalcFeeChargeRequest;
 import xyz.homapay.hampay.common.core.model.request.CalculateVatRequest;
 import xyz.homapay.hampay.common.core.model.request.CardProfileRequest;
@@ -61,7 +59,6 @@ import xyz.homapay.hampay.common.core.model.request.UserPaymentRequest;
 import xyz.homapay.hampay.common.core.model.request.UserProfileRequest;
 import xyz.homapay.hampay.common.core.model.request.UtilityBillDetailRequest;
 import xyz.homapay.hampay.common.core.model.request.UtilityBillRequest;
-import xyz.homapay.hampay.common.core.model.response.BusinessListResponse;
 import xyz.homapay.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
 import xyz.homapay.hampay.common.core.model.response.CalcFeeChargeResponse;
 import xyz.homapay.hampay.common.core.model.response.CalculateVatResponse;
@@ -451,31 +448,6 @@ public class SecuredWebServices {
         return responseMessage;
     }
 
-
-    public ResponseMessage<BusinessListResponse> getHamPayBusinesses(BusinessListRequest businessListRequest) throws IOException, EncryptionException {
-
-        ResponseMessage<BusinessListResponse> responseMessage = null;
-        url = new URL(serviceURL + "/businesses");
-        SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
-
-        businessListRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<BusinessListRequest> message = new RequestMessage<>(businessListRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
-
-        Type requestType = new TypeToken<RequestMessage<BusinessListRequest>>() {
-        }.getType();
-        String jsonRequest = new Gson().toJson(message, requestType);
-        proxyService.setJsonBody(jsonRequest);
-
-        Gson gson = builder.getDatebuilder().create();
-
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<BusinessListResponse>>() {
-        }.getType());
-        proxyService.closeConnection();
-
-        return responseMessage;
-    }
-
-
     public ResponseMessage<BusinessPaymentConfirmResponse> businessPaymentConfirm(BusinessPaymentConfirmRequest businessPaymentConfirmRequest) throws IOException, EncryptionException {
 
         ResponseMessage<BusinessPaymentConfirmResponse> responseMessage = null;
@@ -498,31 +470,6 @@ public class SecuredWebServices {
 
         return responseMessage;
     }
-
-
-    public ResponseMessage<BusinessListResponse> searchBusinessList(BusinessSearchRequest businessSearchRequest) throws IOException, EncryptionException {
-
-        ResponseMessage<BusinessListResponse> responseMessage = null;
-        url = new URL(serviceURL + "/businesses/search");
-        SecuredProxyService proxyService = new SecuredProxyService(true, context, connectionType, ConnectionMethod.POST, url);
-
-        businessSearchRequest.setRequestUUID(UUID.randomUUID().toString());
-        RequestMessage<BusinessSearchRequest> message = new RequestMessage<>(businessSearchRequest, authToken, Constants.API_LEVEL, System.currentTimeMillis());
-
-        Type requestType = new TypeToken<RequestMessage<BusinessListRequest>>() {
-        }.getType();
-        String jsonRequest = new Gson().toJson(message, requestType);
-        proxyService.setJsonBody(jsonRequest);
-
-        Gson gson = builder.getDatebuilder().create();
-
-        responseMessage = gson.fromJson(proxyService.getResponse(), new TypeToken<ResponseMessage<BusinessListResponse>>() {
-        }.getType());
-        proxyService.closeConnection();
-
-        return responseMessage;
-    }
-
 
     public ResponseMessage<ChangePassCodeResponse> changePassCodeResponse(ChangePassCodeRequest changePassCodeRequest) throws IOException, EncryptionException {
 

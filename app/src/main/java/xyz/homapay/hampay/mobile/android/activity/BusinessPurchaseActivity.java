@@ -133,7 +133,7 @@ public class BusinessPurchaseActivity extends AppCompatActivity implements View.
 
             case R.id.businesses_list:
                 intent = new Intent();
-                intent.setClass(activity, BusinessesListActivity.class);
+                intent.setClass(activity, ActivityBusiness.class);
                 startActivity(intent);
                 break;
 

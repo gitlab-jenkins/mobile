@@ -22,7 +22,7 @@ import xyz.homapay.hampay.common.core.model.response.PurchaseInfoResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PurchaseInfoDTO;
 import xyz.homapay.hampay.mobile.android.R;
-import xyz.homapay.hampay.mobile.android.activity.BusinessesListActivity;
+import xyz.homapay.hampay.mobile.android.activity.ActivityBusiness;
 import xyz.homapay.hampay.mobile.android.activity.HamPayLoginActivity;
 import xyz.homapay.hampay.mobile.android.activity.RequestBusinessPayDetailActivity;
 import xyz.homapay.hampay.mobile.android.animation.Collapse;
@@ -119,7 +119,7 @@ public class BusinessCodeFragment extends Fragment implements View.OnClickListen
 
             case R.id.businesses_list:
                 intent = new Intent();
-                intent.setClass(getActivity(), BusinessesListActivity.class);
+                intent.setClass(getActivity(), ActivityBusiness.class);
                 startActivity(intent);
                 break;
 
