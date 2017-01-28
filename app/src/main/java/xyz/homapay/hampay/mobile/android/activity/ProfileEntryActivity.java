@@ -62,6 +62,7 @@ import xyz.homapay.hampay.mobile.android.util.RootUtil;
 
 public class ProfileEntryActivity extends ActivityParentBase implements PermissionDeviceDialog.PermissionDeviceDialogListener, RegisterEntryView {
 
+    private static final int REQUEST_WELCOME_SCREEN_RESULT = 13;
     private final Handler handler = new Handler();
     @BindView(R.id.keepOn_button)
     FacedTextView keepOn_button;
@@ -106,7 +107,6 @@ public class ProfileEntryActivity extends ActivityParentBase implements Permissi
     private Intent intent;
     private PreferencesManager preferencesManager;
     private List<ScreenItem> welcomeScreens = new ArrayList<>();
-    private static final int REQUEST_WELCOME_SCREEN_RESULT = 13;
 
     public void userManual(View view) {
         Intent intent = new Intent();
@@ -185,10 +185,10 @@ public class ProfileEntryActivity extends ActivityParentBase implements Permissi
         logEvent.log(appEvent);
 
         rootUtil = new RootUtil(activity);
-        if (rootUtil.checkRootedDevice()) {
-            new HamPayDialog(activity).showPreventRootDeviceDialog();
-            return;
-        }
+//        if (rootUtil.checkRootedDevice()) {
+//            new HamPayDialog(activity).showPreventRootDeviceDialog();
+//            return;
+//        }
 
         bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -220,6 +220,7 @@ public class ProfileEntryActivity extends ActivityParentBase implements Permissi
                         finish();
                         startActivity(intent);
                         break;
+
                     case PURCHASE:
                         intent = getIntent();
                         intent.setClass(activity, HamPayLoginActivity.class);
@@ -525,6 +526,21 @@ public class ProfileEntryActivity extends ActivityParentBase implements Permissi
         finish();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_WELCOME_SCREEN_RESULT) {
+
+            if (resultCode == RESULT_OK) {
+                preferencesManager.setFirstTimeLaunch(false);
+            } else if (resultCode == RESULT_CANCELED) {
+            }
+
+        }
+
+    }
+
     private class ScreenItem {
 
         String title;
@@ -545,21 +561,6 @@ public class ProfileEntryActivity extends ActivityParentBase implements Permissi
             this.description = getString(descriptionRes);
             this.helper = helper;
             this.requestCode = requestCode;
-        }
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_WELCOME_SCREEN_RESULT) {
-
-            if (resultCode == RESULT_OK) {
-                preferencesManager.setFirstTimeLaunch(false);
-            } else if (resultCode == RESULT_CANCELED) {
-            }
-
         }
 
     }

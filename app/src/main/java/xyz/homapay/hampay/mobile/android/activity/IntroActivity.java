@@ -174,22 +174,14 @@ public class IntroActivity extends AppCompatActivity {
         viewPager.setAdapter(welcomeAdapter);
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
 
-        btnSkip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchRegisterScreen();
-            }
-        });
+        btnSkip.setOnClickListener(v -> launchRegisterScreen());
 
-        btnNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int current = getItem(+1);
-                if (current < layouts.length) {
-                    viewPager.setCurrentItem(current);
-                } else {
-                    launchRegisterScreen();
-                }
+        btnNext.setOnClickListener(v -> {
+            int current = getItem(+1);
+            if (current < layouts.length) {
+                viewPager.setCurrentItem(current);
+            } else {
+                launchRegisterScreen();
             }
         });
 
