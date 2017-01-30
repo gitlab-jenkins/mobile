@@ -3,6 +3,7 @@ package xyz.homapay.hampay.mobile.android;
 import android.support.multidex.MultiDexApplication;
 
 import com.crashlytics.android.Crashlytics;
+import com.github.tamir7.contacts.Contacts;
 
 import io.fabric.sdk.android.Fabric;
 import xyz.homapay.hampay.mobile.android.model.AppState;
@@ -28,6 +29,7 @@ public class HamPayApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
+        Contacts.initialize(this);
     }
 
     @Override

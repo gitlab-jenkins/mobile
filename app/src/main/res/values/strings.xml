@@ -39,6 +39,7 @@
         <item>@string/nav_item_main_fragment</item>
         <item>@string/nav_item_account_detail</item>
         <item>@string/nav_item_settings</item>
+        <item>@string/nav_item_contacts</item>
         <item>@string/nav_item_help</item>
         <item>@string/nav_item_tour</item>
         <item>@string/nav_item_hampay_about</item>
@@ -752,6 +753,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_credentioal_entry">CredentioalEntryActivity</string>
     <string name="bills_top_up_activity_title">قبض و شارژ</string>
+    <string name="friends_invitation_activity_title">دفترچه تلفن</string>
     <string name="bills_header_title">پرداخت قبوض</string>
     <string name="top_up_header_title">شارژ سیم کارت</string>
     <string name="err_general_sms_text">در ارسال پیامک برای تلفن همراه شما خطایی رخ داده است</string>
@@ -796,6 +798,8 @@
 
     <string name="title_previous_button">Previous Button/Action Bar</string>
     <string name="description_previous_button">Shows a previous button on all but the first page. Back button exits.</string>
+    <string name="nav_item_contacts">دعوت دوستان</string>
+    <string name="send_invitation_text">ارسال دعوت</string>
 
 
 </resources>

@@ -208,11 +208,15 @@ public class HamPayLoginActivity extends AppCompatActivity implements View.OnCli
             public boolean onResult(int requestCode, String[] requestPermissions, int[] grantResults) {
                 if (requestCode == Constants.READ_PHONE_STATE) {
                     if (grantResults.length > 0 && requestPermissions[0].equals(Manifest.permission.READ_PHONE_STATE) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        requestRecentPendingFund = new RequestRecentPendingFund(activity, new RequestRecentFundTaskCompleteListener());
-                        recentPendingFundRequest = new RecentPendingFundRequest();
-                        recentPendingFundRequest.setImei(new DeviceInfo(activity).getIMEI());
-                        recentPendingFundRequest.setUsername(userIdToken);
-                        requestRecentPendingFund.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, recentPendingFundRequest);
+                        try {
+                            requestRecentPendingFund = new RequestRecentPendingFund(activity, new RequestRecentFundTaskCompleteListener());
+                            recentPendingFundRequest = new RecentPendingFundRequest();
+                            recentPendingFundRequest.setImei(new DeviceInfo(activity).getIMEI());
+                            recentPendingFundRequest.setUsername(userIdToken);
+                            requestRecentPendingFund.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, recentPendingFundRequest);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     } else {
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                             boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE);

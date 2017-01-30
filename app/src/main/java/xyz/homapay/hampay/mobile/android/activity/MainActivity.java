@@ -381,15 +381,17 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 }
                 fragmentTitle = getString(R.string.title_settings);
                 break;
-
             case 3:
+                startActivity(new Intent(context , ActivityFriendsInvitation.class));
+                break;
+            case 4:
                 currentFragment = 3;
                 user_manual.setVisibility(View.GONE);
                 fragment = new GuideFragment();
                 fragmentTitle = getString(R.string.title_guide);
                 break;
 
-            case 4:
+            case 5:
                 currentFragment = 0;
                 user_manual.setVisibility(View.VISIBLE);
                 fragment = new MainFragment();
@@ -406,24 +408,24 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
                 break;
 
-            case 5:
+            case 6:
                 currentFragment = 4;
                 user_manual.setVisibility(View.GONE);
                 fragment = new AboutFragment();
                 fragmentTitle = getString(R.string.title_hampay_about);
                 break;
 
-            case 6:
+            case 7:
                 new HamPayDialog(activity).fetchContactUsInfo();
                 break;
 
-            case 7:
+            case 8:
                 intent.setClass(activity, GuideDetailActivity.class);
                 intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/users/tac-file");
                 intent.putExtra(Constants.TAC_PRIVACY_TITLE, activity.getString(R.string.tac_title_activity));
                 activity.startActivity(intent);
                 break;
-            case 8:
+            case 9:
                 intent.setClass(activity, GuideDetailActivity.class);
                 intent.putExtra(Constants.WEB_PAGE_ADDRESS, Constants.HTTPS_SERVER_IP + "/users/privacy-file");
                 Log.e("URL", Constants.HTTPS_SERVER_IP + "/users/privacy-file");
@@ -431,7 +433,7 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                 activity.startActivity(intent);
                 break;
 
-            case 9:
+            case 10:
                 LogoutData logoutData = new LogoutData();
                 logoutData.setIplanetDirectoryPro(prefs.getString(Constants.LOGIN_TOKEN_ID, null));
                 new HamPayDialog(activity).showLogoutDialog();

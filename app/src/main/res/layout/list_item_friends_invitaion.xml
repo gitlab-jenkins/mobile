@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:geekui="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rlMain"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:id="@+id/frmAvatar"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_alignParentRight="true">
+
+        <ImageView
+            android:id="@+id/imgAvatar"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_gravity="center"
+            android:background="@color/page_title"
+            android:scaleType="fitXY"
+            android:src="@drawable/user_placeholder" />
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/curve_images" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/rlText"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_toLeftOf="@+id/frmAvatar"
+        android:layout_toRightOf="@+id/rlCheck"
+        android:gravity="right|center_vertical"
+        android:orientation="vertical"
+        android:padding="2dp"
+        android:weightSum="2">
+
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            geekui:customTypeface="fonts/vazir_regular.ttf" />
+
+        <xyz.homapay.hampay.mobile.android.component.FacedTextView
+            android:id="@+id/tvNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            geekui:customTypeface="fonts/vazir_regular.ttf" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlCheck"
+        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp">
+
+        <CheckBox
+            android:id="@+id/chkSelected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:button="@drawable/tac_privacy_checkbox" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

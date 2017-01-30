@@ -31,10 +31,9 @@ public class FragmentDrawer extends Fragment {
     private static String[] titles;
     private static int icons[] = {
             R.drawable.ic_home,
-
             R.drawable.ic_account,
             R.drawable.ic_settings,
-
+            R.mipmap.invitation,
             R.drawable.ic_help,
             R.drawable.ic_tour,
             R.drawable.ic_about,
