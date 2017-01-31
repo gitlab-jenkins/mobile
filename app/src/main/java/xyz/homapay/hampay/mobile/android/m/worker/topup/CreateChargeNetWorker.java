@@ -1,7 +1,5 @@
 package xyz.homapay.hampay.mobile.android.m.worker.topup;
 
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.response.TopUpResponse;
 import xyz.homapay.hampay.mobile.android.m.common.KeyAgreementModel;
@@ -21,12 +19,10 @@ public class CreateChargeNetWorker extends NetWorker<TopUpService> {
     }
 
     public void createTopUp(String body, OnNetworkLoadListener<ResponseMessage<TopUpResponse>> listener) {
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/plain; charset=utf-8"), body);
-        execute(service.topUpCreate(requestBody), listener);
+        execute(service.topUpCreate(getPlainBodyRequest(body)), listener);
     }
 
     public void topUpGetDetail(String body, OnNetworkLoadListener<ResponseMessage<TopUpResponse>> listener) {
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/plain; charset=utf-8"), body);
-        execute(service.topUpGetDetail(requestBody), listener);
+        execute(service.topUpGetDetail(getPlainBodyRequest(body)), listener);
     }
 }

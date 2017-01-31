@@ -564,6 +564,17 @@ public class HamPayDialog {
         }
     }
 
+    public void showSuccessFriendsInvitation(Runnable job) {
+        View view = activity.getLayoutInflater().inflate(R.layout.dialog_success_friends_invitation, null);
+        FacedTextView btnOk = (FacedTextView) view.findViewById(R.id.btnOk);
+        btnOk.setOnClickListener(v -> job.run());
+        view.setMinimumWidth((int) (rect.width() * 0.85f));
+        if (!activity.isFinishing()) {
+            dialog = new HamPayCustomDialog(view, activity, 0);
+            dialog.show();
+        }
+    }
+
     public void showFailChangePassCodeDialog(final RequestChangePassCode requestChangePassCode,
                                              final ChangePassCodeRequest changePassCodeRequest,
                                              final String code,

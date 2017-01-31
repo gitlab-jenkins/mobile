@@ -20,34 +20,48 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import xyz.homapay.hampay.common.common.response.ResponseMessage;
+import xyz.homapay.hampay.common.common.response.ResultStatus;
+import xyz.homapay.hampay.common.core.model.response.FriendsInvitationResponse;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.friendsinvitation.AdapterFriendsInvitation;
 import xyz.homapay.hampay.mobile.android.common.friendsinvitation.FriendsObject;
+import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.MyTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.p.invitation.FriendsInvitation;
+import xyz.homapay.hampay.mobile.android.p.invitation.FriendsInvitationImpl;
+import xyz.homapay.hampay.mobile.android.p.invitation.FriendsInvitationView;
+import xyz.homapay.hampay.mobile.android.util.ModelLayerImpl;
 import xyz.homapay.hampay.mobile.android.util.TelephonyUtils;
 
 /**
  * Created by mohammad on 1/30/17.
  */
 
-public class ActivityFriendsInvitation extends ActivityParent implements View.OnClickListener {
+public class ActivityFriendsInvitation extends ActivityParent implements View.OnClickListener, FriendsInvitationView {
 
     @BindView(R.id.etSearchPhraseText)
     FacedEditText etSearchPhraseText;
-
     @BindView(R.id.lst)
     RecyclerView lst;
 
+    @BindView(R.id.tvSend)
+    FacedTextView tvSend;
+
     AdapterFriendsInvitation adapterFriendsInvitation;
     HamPayDialog dialog;
+
+    private FriendsInvitation friendsInvitation;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends_invitation);
         ButterKnife.bind(this);
+        tvSend.setOnClickListener(this);
+        friendsInvitation = new FriendsInvitationImpl(new ModelLayerImpl(ctx), this);
         dialog = new HamPayDialog(this);
         dialog.showWaitingDialog("");
         LinearLayoutManager manager = new LinearLayoutManager(ctx, LinearLayoutManager.VERTICAL, false);
@@ -71,7 +85,18 @@ public class ActivityFriendsInvitation extends ActivityParent implements View.On
                 }, throwable -> onError());
     }
 
-    private void onError() {
+    @Override
+    public void showProgress() {
+        dialog.showWaitingDialog("");
+    }
+
+    @Override
+    public void cancelProgress() {
+        dialog.dismisWaitingDialog();
+    }
+
+    @Override
+    public void onError() {
         dialog.dismisWaitingDialog();
         Toast.makeText(ctx, R.string.err_general_text, Toast.LENGTH_SHORT).show();
     }
@@ -96,7 +121,14 @@ public class ActivityFriendsInvitation extends ActivityParent implements View.On
                         }, throwable -> onError());
                 break;
             case R.id.tvSend:
-                // TODO call network
+                if (adapterFriendsInvitation != null && adapterFriendsInvitation.getItemCount() > 0) {
+                    List<String> items = new ArrayList<>();
+                    for (FriendsObject item : adapterFriendsInvitation.getItems()) {
+                        if (item.isSelected())
+                            items.add(item.getNormalizedNumber());
+                    }
+                    friendsInvitation.invite(items);
+                }
                 break;
         }
     }
@@ -142,4 +174,14 @@ public class ActivityFriendsInvitation extends ActivityParent implements View.On
         lst.setAdapter(adapterFriendsInvitation);
     }
 
+    @Override
+    public void onSendInvitation(boolean state, ResponseMessage<FriendsInvitationResponse> data, String message) {
+        if (state) {
+            if (data.getService() != null && data.getService().getResultStatus() == ResultStatus.SUCCESS) {
+                dialog.showSuccessFriendsInvitation(() -> onBackPressed());
+            }
+        } else {
+            onError();
+        }
+    }
 }

@@ -26,6 +26,9 @@ public class CompleteRegistrationActivity extends AppCompatActivity implements V
 
     @BindView(R.id.congrats_text)
     FacedTextView congrats_text;
+    @BindView(R.id.hampay_login_button)
+    FacedTextView hampay_login_button;
+
     private Activity activity;
     private SharedPreferences.Editor editor;
     private PreferencesManager preferencesManager;
@@ -75,6 +78,7 @@ public class CompleteRegistrationActivity extends AppCompatActivity implements V
         spannableStringBuilder.setSpan(foregroundColorSpan, 21, 26, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         congrats_text.setText(spannableStringBuilder);
         activity = CompleteRegistrationActivity.this;
+        hampay_login_button.setOnClickListener(this);
     }
 
     @Override

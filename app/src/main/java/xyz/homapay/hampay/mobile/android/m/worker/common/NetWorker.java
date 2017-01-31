@@ -1,5 +1,7 @@
 package xyz.homapay.hampay.mobile.android.m.worker.common;
 
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -32,5 +34,9 @@ public class NetWorker<T> {
 
     protected void execute(Call call, OnNetworkLoadListener listener) {
         call.enqueue(new MyCallBack(modelLayer, listener));
+    }
+
+    protected RequestBody getPlainBodyRequest(final String body) {
+        return RequestBody.create(MediaType.parse("application/plain; charset=utf-8"), body);
     }
 }

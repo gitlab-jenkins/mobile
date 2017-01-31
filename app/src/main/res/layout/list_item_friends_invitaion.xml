@@ -9,9 +9,9 @@
         android:id="@+id/frmAvatar"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginTop="5dp"
+        android:layout_alignParentRight="true"
         android:layout_marginRight="5dp"
-        android:layout_alignParentRight="true">
+        android:layout_marginTop="5dp">
 
         <ImageView
             android:id="@+id/imgAvatar"
@@ -67,11 +67,11 @@
 
     <RelativeLayout
         android:id="@+id/rlCheck"
-        android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:layout_alignParentLeft="true"
         android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp">
 
@@ -80,7 +80,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:button="@drawable/tac_privacy_checkbox" />
+            android:button="@drawable/tac_privacy_checkbox"
+            android:clickable="false" />
 
     </RelativeLayout>
 

@@ -1,7 +1,5 @@
 package xyz.homapay.hampay.mobile.android.m.worker.business;
 
-import okhttp3.MediaType;
-import okhttp3.RequestBody;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.core.model.response.BusinessListResponse;
 import xyz.homapay.hampay.mobile.android.m.common.KeyAgreementModel;
@@ -21,12 +19,10 @@ public class BusinessNetWorker extends NetWorker<BusinesService> {
     }
 
     public void businessList(String body, OnNetworkLoadListener<ResponseMessage<BusinessListResponse>> listener) {
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/plain; charset=utf-8"), body);
-        execute(service.businessList(requestBody), listener);
+        execute(service.businessList(getPlainBodyRequest(body)), listener);
     }
 
     public void businessSearch(String body, OnNetworkLoadListener<ResponseMessage<BusinessListResponse>> listener) {
-        RequestBody requestBody = RequestBody.create(MediaType.parse("application/plain; charset=utf-8"), body);
-        execute(service.businessSearch(requestBody), listener);
+        execute(service.businessSearch(getPlainBodyRequest(body)), listener);
     }
 }

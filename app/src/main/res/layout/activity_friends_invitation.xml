@@ -74,7 +74,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/tvSend"
         android:layout_below="@+id/rlSearchLayout"
-        android:layout_marginTop="5dp" />
+        android:layout_marginTop="5dp"
+        android:onClick="onClick" />
 
     <xyz.homapay.hampay.mobile.android.component.FacedTextView
         android:id="@+id/tvSend"
@@ -83,7 +84,6 @@
         android:layout_alignParentBottom="true"
         android:background="@color/app_origin"
         android:gravity="center"
-        android:onClick="onClick"
         android:padding="10dp"
         android:text="@string/send_invitation_text"
         android:textColor="@color/white"

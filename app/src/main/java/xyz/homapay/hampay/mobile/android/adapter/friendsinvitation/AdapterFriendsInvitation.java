@@ -79,6 +79,10 @@ public class AdapterFriendsInvitation extends RecyclerView.Adapter<AdapterFriend
         notifyDataSetChanged();
     }
 
+    public List<FriendsObject> getItems() {
+        return items;
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder {
 
         RelativeLayout rlMain;

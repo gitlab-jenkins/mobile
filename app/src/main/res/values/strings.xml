@@ -259,6 +259,7 @@
     <string name="msg_failed_bill_info">اطلاعات قبض شما دریافت نشد. لطفا مجدد بررسی کنید.</string>
     <string name="msg_memorable_incorrect">کلمه یادآوری باید بیشتر از ۲ حرف باشد</string>
     <string name="msg_success_change_setting">خواسته شما با موفقیت انجام شد.</string>
+    <string name="msg_success_friends_invitation">دوستان شما به هم‌پی دعوت شدند.</string>
     <string name="retry_registration_entry">تلاش مجدد</string>
     <string name="cancel_registration_entry">انصراف</string>
     <string name="no_transaction">درحال حاضر تراکنشی وجود ندارد</string>

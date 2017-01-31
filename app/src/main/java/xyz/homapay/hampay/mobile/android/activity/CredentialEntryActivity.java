@@ -25,6 +25,7 @@ import xyz.homapay.hampay.common.core.model.response.RegistrationCredentialsResp
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Manifest;
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.component.edittext.MemorableTextWatcher;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
@@ -44,11 +45,15 @@ import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.DeviceInfo;
 import xyz.homapay.hampay.mobile.android.util.ModelLayerImpl;
 
-public class CredentialEntryActivity extends AppCompatActivity implements CredentialEntryView, PermissionContactDialog.PermissionContactDialogListener {
+public class CredentialEntryActivity extends AppCompatActivity implements View.OnClickListener, CredentialEntryView, PermissionContactDialog.PermissionContactDialogListener {
 
     private final Handler handler = new Handler();
     @BindView(R.id.memorable_value)
     FacedEditText memorable_value;
+
+    @BindView(R.id.keepOn_button)
+    FacedTextView keepOn_button;
+
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
     private Context context;
@@ -100,56 +105,49 @@ public class CredentialEntryActivity extends AppCompatActivity implements Creden
     private void requestAndLoadUserContact() {
         String[] permissions = new String[]{Manifest.permission.READ_CONTACTS};
 
-        permissionListeners = new RequestPermissions().request(activity, Constants.READ_CONTACTS, permissions, new PermissionListener() {
-            @Override
-            public boolean onResult(int requestCode, String[] requestPermissions, int[] grantResults) {
-                if (requestCode == Constants.READ_CONTACTS) {
-                    if (grantResults.length > 0 && requestPermissions[0].equals(Manifest.permission.READ_CONTACTS) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                        registrationCredentialsRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
-                        registrationCredentialsRequest.setDeviceId(new DeviceInfo(activity).getAndroidId());
-                        Uuid = UUID.randomUUID().toString();
-                        registrationCredentialsRequest.setInstallationToken(Uuid);
-                        registrationCredentialsRequest.setMemorableKey(memorable_value.getText().toString());
-                        registrationCredentialsRequest.setPassCode(userEntryPassword);
-                        contactPermission = true;
-                        credentialEntry.credential(registrationCredentialsRequest, AppManager.getAuthToken(context), contactPermission);
-                    } else {
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                            boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS);
-                            if (showRationale) {
-                                handler.post(new Runnable() {
-                                    public void run() {
-                                        PermissionContactDialog permissionContactDialog = new PermissionContactDialog();
-                                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                                        fragmentTransaction.add(permissionContactDialog, null);
-                                        fragmentTransaction.commitAllowingStateLoss();
-                                    }
-                                });
-                            } else {
-                                registrationCredentialsRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
-                                registrationCredentialsRequest.setDeviceId(new DeviceInfo(activity).getAndroidId());
-                                Uuid = UUID.randomUUID().toString();
-                                registrationCredentialsRequest.setInstallationToken(Uuid);
-                                registrationCredentialsRequest.setMemorableKey(memorable_value.getText().toString());
-                                registrationCredentialsRequest.setPassCode(userEntryPassword);
-                                registrationCredentialsRequest.setPassCode(userEntryPassword);
-                                credentialEntry.credential(registrationCredentialsRequest, AppManager.getAuthToken(context), contactPermission);
-                            }
-                        } else {
-                            handler.post(new Runnable() {
-                                public void run() {
-                                    PermissionDeviceDialog permissionDeviceDialog = new PermissionDeviceDialog();
-                                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                                    fragmentTransaction.add(permissionDeviceDialog, null);
-                                    fragmentTransaction.commitAllowingStateLoss();
-                                }
+        permissionListeners = new RequestPermissions().request(activity, Constants.READ_CONTACTS, permissions, (requestCode, requestPermissions, grantResults) -> {
+            if (requestCode == Constants.READ_CONTACTS) {
+                if (grantResults.length > 0 && requestPermissions[0].equals(Manifest.permission.READ_CONTACTS) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    registrationCredentialsRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
+                    registrationCredentialsRequest.setDeviceId(new DeviceInfo(activity).getAndroidId());
+                    Uuid = UUID.randomUUID().toString();
+                    registrationCredentialsRequest.setInstallationToken(Uuid);
+                    registrationCredentialsRequest.setMemorableKey(memorable_value.getText().toString());
+                    registrationCredentialsRequest.setPassCode(userEntryPassword);
+                    contactPermission = true;
+                    credentialEntry.credential(registrationCredentialsRequest, AppManager.getAuthToken(context), contactPermission);
+                } else {
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                        boolean showRationale = shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS);
+                        if (showRationale) {
+                            handler.post(() -> {
+                                PermissionContactDialog permissionContactDialog = new PermissionContactDialog();
+                                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                                fragmentTransaction.add(permissionContactDialog, null);
+                                fragmentTransaction.commitAllowingStateLoss();
                             });
+                        } else {
+                            registrationCredentialsRequest.setUserIdToken(prefs.getString(Constants.REGISTERED_USER_ID_TOKEN, ""));
+                            registrationCredentialsRequest.setDeviceId(new DeviceInfo(activity).getAndroidId());
+                            Uuid = UUID.randomUUID().toString();
+                            registrationCredentialsRequest.setInstallationToken(Uuid);
+                            registrationCredentialsRequest.setMemorableKey(memorable_value.getText().toString());
+                            registrationCredentialsRequest.setPassCode(userEntryPassword);
+                            registrationCredentialsRequest.setPassCode(userEntryPassword);
+                            credentialEntry.credential(registrationCredentialsRequest, AppManager.getAuthToken(context), contactPermission);
                         }
+                    } else {
+                        handler.post(() -> {
+                            PermissionDeviceDialog permissionDeviceDialog = new PermissionDeviceDialog();
+                            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                            fragmentTransaction.add(permissionDeviceDialog, null);
+                            fragmentTransaction.commitAllowingStateLoss();
+                        });
                     }
-                    return true;
                 }
-                return false;
+                return true;
             }
+            return false;
         });
     }
 
@@ -176,10 +174,12 @@ public class CredentialEntryActivity extends AppCompatActivity implements Creden
 
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
         memorable_value.addTextChangedListener(new MemorableTextWatcher(memorable_value));
+        keepOn_button.setOnClickListener(this);
 
         editor = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE).edit();
     }
 
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.keepOn_button:
