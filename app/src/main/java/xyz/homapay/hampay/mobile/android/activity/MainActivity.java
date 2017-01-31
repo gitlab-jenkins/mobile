@@ -480,14 +480,14 @@ public class MainActivity extends AppCompatActivity implements FragmentDrawer.Fr
                     case 4:
                         wtFourthLayout.setVisibility(View.GONE);
                         wtFifthLayout.setVisibility(View.VISIBLE);
-                        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getString(R.string.wt_note_6));
-                        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.rgb(117, 198, 219));
-                        spannableStringBuilder.setSpan(foregroundColorSpan, 8, 14, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                        foregroundColorSpan = new ForegroundColorSpan(Color.rgb(114, 189, 119));
-                        spannableStringBuilder.setSpan(foregroundColorSpan, 20, 26, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                        foregroundColorSpan = new ForegroundColorSpan(Color.rgb(213, 61, 66));
-                        spannableStringBuilder.setSpan(foregroundColorSpan, 300, 307, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                        transactionNote.setText(spannableStringBuilder);
+//                        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(getString(R.string.wt_note_5));
+//                        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.rgb(117, 198, 219));
+//                        spannableStringBuilder.setSpan(foregroundColorSpan, 8, 14, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+//                        foregroundColorSpan = new ForegroundColorSpan(Color.rgb(114, 189, 119));
+//                        spannableStringBuilder.setSpan(foregroundColorSpan, 20, 26, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+//                        foregroundColorSpan = new ForegroundColorSpan(Color.rgb(213, 61, 66));
+//                        spannableStringBuilder.setSpan(foregroundColorSpan, 300, 307, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+//                        transactionNote.setText(spannableStringBuilder);
                         break;
                     case 5:
                         wtFifthLayout.setVisibility(View.GONE);

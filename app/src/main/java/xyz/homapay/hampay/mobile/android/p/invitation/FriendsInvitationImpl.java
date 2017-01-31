@@ -15,7 +15,6 @@ import xyz.homapay.hampay.mobile.android.m.common.OnNetworkLoadListener;
 import xyz.homapay.hampay.mobile.android.m.worker.invitation.FriendsInvitationNetWorker;
 import xyz.homapay.hampay.mobile.android.p.common.Presenter;
 import xyz.homapay.hampay.mobile.android.util.Constants;
-import xyz.homapay.hampay.mobile.android.util.GZip;
 
 /**
  * Created by mohammad on 1/31/17.
@@ -49,8 +48,7 @@ public class FriendsInvitationImpl extends Presenter<FriendsInvitationView> impl
 
             RequestMessage<FriendsInvitationRequest> friendsInvitationRequest = new RequestMessage<>(request, modelLayer.getAuthToken(), Constants.API_LEVEL, System.currentTimeMillis());
             String strJson = new AESMessageEncryptor().encryptRequest(new Gson().toJson(friendsInvitationRequest), getKey(), getIv(), getEncId());
-            GZip gZip = new GZip(strJson.getBytes());
-            new FriendsInvitationNetWorker(modelLayer, getKeyAgreementModel(), true, false).sendInvitation(new String(gZip.compress()), this);
+            new FriendsInvitationNetWorker(modelLayer, getKeyAgreementModel(), true, false).sendInvitation(strJson, this);
         } catch (Exception e) {
             e.printStackTrace();
         }

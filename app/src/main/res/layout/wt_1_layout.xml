@@ -28,8 +28,8 @@
                     android:layout_height="160dp"
                     android:layout_centerHorizontal="true"
                     android:layout_margin="12dp"
-                    android:src="@drawable/wt_payment_request"
-                    android:scaleType="center"/>
+                    android:src="@mipmap/wt_payment_request"
+                    android:scaleType="fitCenter"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"

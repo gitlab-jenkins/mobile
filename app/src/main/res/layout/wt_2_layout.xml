@@ -28,8 +28,8 @@
                     android:layout_height="160dp"
                     android:layout_centerHorizontal="true"
                     android:layout_margin="12dp"
-                    android:src="@drawable/wt_business_code"
-                    android:scaleType="center"/>
+                    android:src="@mipmap/wt_business_code"
+                    android:scaleType="fitCenter"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
