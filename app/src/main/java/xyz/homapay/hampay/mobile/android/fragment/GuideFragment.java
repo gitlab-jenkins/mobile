@@ -24,14 +24,9 @@ public class GuideFragment extends Fragment {
     ListView guideListView;
     GuideAdapter guideAdapter;
 
-    public GuideFragment() {
-        // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+    public static GuideFragment newInstance() {
+        GuideFragment fragment = new GuideFragment();
+        return fragment;
     }
 
     @Override
@@ -110,11 +105,16 @@ public class GuideFragment extends Fragment {
                     break;
 
                 case 12:
+                    intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_friends_invitation);
+                    intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_friends_invitation);
+                    break;
+
+                case 13:
                     intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_unlink);
                     intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_unlink);
                     break;
 
-                case 13:
+                case 14:
                     intent.putExtra(Constants.USER_MANUAL_TEXT, R.string.user_manual_text_contact_us);
                     intent.putExtra(Constants.USER_MANUAL_TITLE, R.string.user_manual_title_contact_us);
                     break;
@@ -125,12 +125,6 @@ public class GuideFragment extends Fragment {
         });
 
         return rootView;
-    }
-
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
     }
 }
 
