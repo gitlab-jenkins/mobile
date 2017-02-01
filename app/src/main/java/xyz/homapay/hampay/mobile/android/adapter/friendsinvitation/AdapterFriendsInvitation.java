@@ -13,6 +13,8 @@ import android.widget.RelativeLayout;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import xyz.homapay.hampay.mobile.android.R;
@@ -25,6 +27,7 @@ import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 
 public class AdapterFriendsInvitation extends RecyclerView.Adapter<AdapterFriendsInvitation.ViewHolder> {
 
+    private static HashMap<String, FriendsObject> SELECTED = new HashMap<>();
     private Context ctx;
     private LayoutInflater li;
     private List<FriendsObject> items;
@@ -33,6 +36,18 @@ public class AdapterFriendsInvitation extends RecyclerView.Adapter<AdapterFriend
         this.ctx = ctx;
         this.li = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.items = items;
+    }
+
+    public static List<String> getSelected() {
+        List<String> lstSelectedItems = new ArrayList<>();
+        for (FriendsObject item : SELECTED.values()) {
+            lstSelectedItems.add(item.getNormalizedNumber());
+        }
+        return lstSelectedItems;
+    }
+
+    public static void invalidateSelected() {
+        SELECTED.clear();
     }
 
     @Override
@@ -45,7 +60,7 @@ public class AdapterFriendsInvitation extends RecyclerView.Adapter<AdapterFriend
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.tvNumber.setText(items.get(position).getNormalizedNumber());
         holder.tvName.setText(items.get(position).getContact().getDisplayName());
-        holder.chkSelected.setChecked(items.get(position).isSelected());
+        holder.chkSelected.setChecked(SELECTED.containsKey(items.get(position).getNormalizedNumber()));
         Log.i("XXXX-item", items.get(position).isSelected() + "");
         try {
             if (items.get(position).getContact().getPhotoUri() != null)
@@ -56,8 +71,13 @@ public class AdapterFriendsInvitation extends RecyclerView.Adapter<AdapterFriend
             else
                 holder.imgAvatar.setImageResource(R.drawable.user_placeholder);
             holder.rlMain.setOnClickListener(view -> {
-                items.get(position).setSelected(!items.get(position).isSelected());
-                holder.chkSelected.setChecked(!holder.chkSelected.isChecked());
+                boolean currentState = items.get(position).isSelected();
+                if (!currentState)
+                    SELECTED.put(items.get(position).getNormalizedNumber(), items.get(position));
+                else
+                    SELECTED.remove(items.get(position).getNormalizedNumber());
+                items.get(position).setSelected(!currentState);
+                holder.chkSelected.setChecked(!currentState);
             });
         } catch (Exception e) {
             e.printStackTrace();

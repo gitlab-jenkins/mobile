@@ -66,8 +66,8 @@ public class BusinessNameFragment extends Fragment implements BusinessListView {
     View overlay;
     @BindView(R.id.fab_sheet_item_all)
     CustomTextView fabAll;
-    @BindView(R.id.fab_sheet_item_popular)
-    CustomTextView fabPoular;
+    //    @BindView(R.id.fab_sheet_item_popular)
+//    CustomTextView fabPoular;
     @BindView(R.id.fab_sheet_item_recent)
     CustomTextView fabRecent;
     @BindView(R.id.businessListView)
@@ -126,31 +126,31 @@ public class BusinessNameFragment extends Fragment implements BusinessListView {
                 EventBus.getDefault().post(new MessageSheetStateChanged(true));
                 switch (bizSortFactor) {
                     case DATE:
-                        fabAll.setTypeface(FontFace.getInstance(getActivity()).getVAZIR_BOLD());
-                        fabPoular.setTypeface(FontFace.getInstance(getActivity()).getVAZIR());
-                        fabRecent.setTypeface(FontFace.getInstance(getActivity()).getVAZIR());
-                        //
-                        fabAll.setTextColor(ContextCompat.getColor(getActivity(), R.color.app_origin));
-                        fabPoular.setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
-                        fabRecent.setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
-                        break;
-                    case NAME:
                         fabAll.setTypeface(FontFace.getInstance(getActivity()).getVAZIR());
-                        fabPoular.setTypeface(FontFace.getInstance(getActivity()).getVAZIR_BOLD());
-                        fabRecent.setTypeface(FontFace.getInstance(getActivity()).getVAZIR());
-                        //
-                        fabAll.setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
-                        fabPoular.setTextColor(ContextCompat.getColor(getActivity(), R.color.app_origin));
-                        fabRecent.setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
-                        break;
-                    default:
-                        fabAll.setTypeface(FontFace.getInstance(getActivity()).getVAZIR());
-                        fabPoular.setTypeface(FontFace.getInstance(getActivity()).getVAZIR());
+//                        fabPoular.setTypeface(FontFace.getInstance(getActivity()).getVAZIR());
                         fabRecent.setTypeface(FontFace.getInstance(getActivity()).getVAZIR_BOLD());
                         //
                         fabAll.setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
-                        fabPoular.setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
+//                        fabPoular.setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
                         fabRecent.setTextColor(ContextCompat.getColor(getActivity(), R.color.app_origin));
+                        break;
+                    case NAME:
+                        fabAll.setTypeface(FontFace.getInstance(getActivity()).getVAZIR_BOLD());
+//                        fabPoular.setTypeface(FontFace.getInstance(getActivity()).getVAZIR_BOLD());
+                        fabRecent.setTypeface(FontFace.getInstance(getActivity()).getVAZIR());
+                        //
+                        fabAll.setTextColor(ContextCompat.getColor(getActivity(), R.color.app_origin));
+//                        fabPoular.setTextColor(ContextCompat.getColor(getActivity(), R.color.app_origin));
+                        fabRecent.setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
+                        break;
+                    default:
+                        fabAll.setTypeface(FontFace.getInstance(getActivity()).getVAZIR_BOLD());
+//                        fabPoular.setTypeface(FontFace.getInstance(getActivity()).getVAZIR_BOLD());
+                        fabRecent.setTypeface(FontFace.getInstance(getActivity()).getVAZIR());
+                        //
+                        fabAll.setTextColor(ContextCompat.getColor(getActivity(), R.color.app_origin));
+//                        fabPoular.setTextColor(ContextCompat.getColor(getActivity(), R.color.app_origin));
+                        fabRecent.setTextColor(ContextCompat.getColor(getActivity(), R.color.black));
                         break;
                 }
             }
@@ -164,15 +164,17 @@ public class BusinessNameFragment extends Fragment implements BusinessListView {
 
         fabAll.setOnClickListener(view -> {
             materialSheetFab.hideSheet();
-            businessList.load(BizSortFactor.NAME);
+            bizSortFactor = BizSortFactor.NAME;
+            businessList.load(bizSortFactor);
         });
-        fabPoular.setOnClickListener(view -> {
-            materialSheetFab.hideSheet();
-            businessList.load(BizSortFactor.NAME);
-        });
+//        fabPoular.setOnClickListener(view -> {
+//            materialSheetFab.hideSheet();
+//            businessList.load(BizSortFactor.NAME);
+//        });
         fabRecent.setOnClickListener(view -> {
             materialSheetFab.hideSheet();
-            businessList.load(BizSortFactor.NAME);
+            bizSortFactor = BizSortFactor.DATE;
+            businessList.load(bizSortFactor);
         });
 
         imgSearchImage.setOnClickListener(v -> {
@@ -195,9 +197,9 @@ public class BusinessNameFragment extends Fragment implements BusinessListView {
 
         pullToRefresh.setOnRefreshListener(() -> {
             hamPayBusinessesAdapter.clear();
-            businessList.load(BizSortFactor.NAME);
+            businessList.load(bizSortFactor);
         });
-        businessList.load(BizSortFactor.NAME);
+        businessList.load(bizSortFactor);
         inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         etSearchPhraseText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
@@ -209,7 +211,7 @@ public class BusinessNameFragment extends Fragment implements BusinessListView {
 
         etSearchPhraseText.addTextChangedListener(new MyTextWatcher(text -> {
             if (text.length() == 0) {
-                businessList.load(BizSortFactor.NAME);
+                businessList.load(bizSortFactor);
             }
         }));
 
@@ -219,7 +221,7 @@ public class BusinessNameFragment extends Fragment implements BusinessListView {
     private void performBusinessSearch(String searchTerm) {
         AppManager.setMobileTimeout(getActivity());
         inputMethodManager.hideSoftInputFromWindow(etSearchPhraseText.getWindowToken(), 0);
-        businessSearch.search(searchTerm, BizSortFactor.NAME, true);
+        businessSearch.search(searchTerm, bizSortFactor, true);
     }
 
     @Subscribe

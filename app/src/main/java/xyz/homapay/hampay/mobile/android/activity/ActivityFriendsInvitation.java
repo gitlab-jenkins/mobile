@@ -14,6 +14,7 @@ import com.github.tamir7.contacts.Contacts;
 import com.github.tamir7.contacts.Query;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -51,10 +52,9 @@ public class ActivityFriendsInvitation extends ActivityParent implements View.On
 
     @BindView(R.id.tvSend)
     FacedTextView tvSend;
-
     AdapterFriendsInvitation adapterFriendsInvitation;
     HamPayDialog dialog;
-
+    private HashMap<String, FriendsObject> selected_items = new HashMap();
     private FriendsInvitation friendsInvitation;
 
     @Override
@@ -124,11 +124,7 @@ public class ActivityFriendsInvitation extends ActivityParent implements View.On
                 break;
             case R.id.tvSend:
                 if (adapterFriendsInvitation != null && adapterFriendsInvitation.getItemCount() > 0) {
-                    List<String> items = new ArrayList<>();
-                    for (FriendsObject item : adapterFriendsInvitation.getItems()) {
-                        if (item.isSelected())
-                            items.add(item.getNormalizedNumber());
-                    }
+                    List<String> items = AdapterFriendsInvitation.getSelected();
                     if (items.size() == 0) {
                         Toast.makeText(ctx, R.string.err_no_contact_selected, Toast.LENGTH_LONG).show();
                         return;
@@ -156,6 +152,12 @@ public class ActivityFriendsInvitation extends ActivityParent implements View.On
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        AdapterFriendsInvitation.invalidateSelected();
+        super.onDestroy();
     }
 
     private List<FriendsObject> searchLoad(String searchTerm) {
