@@ -61,7 +61,8 @@
             android:background="@android:color/transparent"
             android:hint="@string/search_phrase"
             android:imeOptions="actionSearch"
-            android:lines="1"
+            android:inputType="text"
+            android:maxLines="1"
             android:padding="6dp"
             android:textColor="@color/normal_text"
             android:textSize="12dp" />

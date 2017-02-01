@@ -1,10 +1,12 @@
 package xyz.homapay.hampay.mobile.android.activity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.github.tamir7.contacts.Contact;
@@ -127,6 +129,10 @@ public class ActivityFriendsInvitation extends ActivityParent implements View.On
                         if (item.isSelected())
                             items.add(item.getNormalizedNumber());
                     }
+                    if (items.size() == 0) {
+                        Toast.makeText(ctx, R.string.err_no_contact_selected, Toast.LENGTH_LONG).show();
+                        return;
+                    }
                     friendsInvitation.invite(items);
                 }
                 break;
@@ -140,6 +146,16 @@ public class ActivityFriendsInvitation extends ActivityParent implements View.On
         List<Contact> contacts = q.find();
         initList(items, contacts);
         return items;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     private List<FriendsObject> searchLoad(String searchTerm) {

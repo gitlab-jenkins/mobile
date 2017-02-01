@@ -753,7 +753,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_credentioal_entry">CredentioalEntryActivity</string>
     <string name="bills_top_up_activity_title">قبض و شارژ</string>
-    <string name="friends_invitation_activity_title">دفترچه تلفن</string>
+    <string name="friends_invitation_activity_title">دفتر تلفن</string>
     <string name="bills_header_title">پرداخت قبوض</string>
     <string name="top_up_header_title">شارژ سیم کارت</string>
     <string name="err_general_sms_text">در ارسال پیامک برای تلفن همراه شما خطایی رخ داده است</string>
@@ -802,6 +802,7 @@
     <string name="send_invitation_text">ارسال دعوت</string>
     <string name="user_manual_title_friends_invitation">دعوت دوستان</string>
     <string name="user_manual_text_friends_invitation">جهت دعوت دوستان خود به هم‌پی می‌توانید به منو کشویی مراجعه نموده و پس از ورود به بخش دعوت دوستان، نام دوستان مورد نظر را انتخاب نموده و آنها را به هم‌پی دعوت نمایید. پیامکی از جانب شما توسط هم‌پی به همراه لینک دانلود اپلیکیشن هم‌پی برای دوستان شما ارسال خواهد شد. لازم به ذکر است به محض تکمیل فرآیند ثبت‌نام هر یک از دوستان شما، نوتیفیکیشنی از هم‌پی به دریافت می‌کنید و از حضور دوستان خود در هم‌پی مطلع خواهید شد.</string>
+    <string name="err_no_contact_selected">لطفا یکی از مخاطبین خود را انتخاب نمایید</string>
 
 
 </resources>

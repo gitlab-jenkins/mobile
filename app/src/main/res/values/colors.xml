@@ -72,6 +72,7 @@
 
     <color name="transparent_button_pressed">#44444444</color>
     <color name="transparent_button_focused">#44666666</color>
+    <color name="line_seperator">#CCCCCC</color>
 
 
 </resources>

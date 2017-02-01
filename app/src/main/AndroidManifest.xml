@@ -212,7 +212,7 @@
             android:name=".activity.ActivityFriendsInvitation"
             android:label="@string/app_name"
             android:theme="@style/MyMaterialTheme"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <receiver
             android:name=".receiver.GcmBroadcastReceiver"
