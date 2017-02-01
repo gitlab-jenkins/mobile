@@ -5,8 +5,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.tamir7.contacts.Contact;
@@ -74,6 +77,15 @@ public class ActivityFriendsInvitation extends ActivityParent implements View.On
                 load();
             }
         }));
+        etSearchPhraseText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if (etSearchPhraseText.getText().toString().trim().length() == 0) {
+                    load();
+                }
+                return true;
+            }
+            return false;
+        });
     }
 
     private void load() {
