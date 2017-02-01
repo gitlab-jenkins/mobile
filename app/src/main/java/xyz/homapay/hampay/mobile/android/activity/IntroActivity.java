@@ -187,6 +187,7 @@ public class IntroActivity extends AppCompatActivity {
 
     }
 
+    @SuppressWarnings("deprecation")
     private void addBottomDots(int currentPage) {
         dots = new TextView[layouts.length - 1];
 

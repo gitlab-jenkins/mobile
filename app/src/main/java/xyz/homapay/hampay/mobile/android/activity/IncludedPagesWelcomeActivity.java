@@ -16,7 +16,7 @@ public class IncludedPagesWelcomeActivity extends WelcomeActivity {
     protected WelcomeConfiguration configuration() {
         return new WelcomeConfiguration.Builder(this)
                 .defaultBackgroundColor(R.color.colorPrimary)
-                .swipeToDismiss(true)
+                .swipeToDismiss(false)
                 .canSkip(false)
                 .defaultTitleTypefacePath("fonts/vazir_regular_bold.ttf")
                 .defaultHeaderTypefacePath("fonts/vazir_regular_bold.ttf")

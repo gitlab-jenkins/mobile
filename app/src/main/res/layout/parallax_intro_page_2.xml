@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipChildren="false">
@@ -17,7 +18,8 @@
         android:layout_width="200dp"
         android:layout_height="150dp"
         android:layout_centerInParent="true"
-        app:srcCompat="@drawable/intro_merchant" />
+        app:srcCompat="@drawable/intro_merchant"
+        tools:ignore="VectorDrawableCompat" />
 
 
     <ImageView
@@ -27,7 +29,8 @@
         android:layout_centerHorizontal="true"
         app:srcCompat="@drawable/intro_large_line"
         android:layout_above="@id/centerImage"
-        android:layout_marginBottom="30dp"/>
+        android:layout_marginBottom="30dp"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageView
         android:id="@+id/image2"
@@ -37,7 +40,8 @@
         android:layout_toRightOf="@+id/image1"
         android:layout_above="@+id/centerImage"
         android:layout_marginBottom="30dp"
-        android:layout_marginLeft="30dp"/>
+        android:layout_marginLeft="30dp"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageView
         android:id="@+id/image3"
@@ -46,7 +50,8 @@
         app:srcCompat="@drawable/intro_large_line"
         android:layout_above="@id/centerImage"
         android:layout_toRightOf="@+id/image2"
-        android:layout_marginLeft="20dp"/>
+        android:layout_marginLeft="20dp"
+        tools:ignore="VectorDrawableCompat" />
 
 
     <ImageView
@@ -56,7 +61,8 @@
         app:srcCompat="@drawable/ic_intro_circle"
         android:layout_above="@+id/centerImage"
         android:layout_toRightOf="@+id/image3"
-        android:layout_marginLeft="10dp"/>
+        android:layout_marginLeft="10dp"
+        tools:ignore="VectorDrawableCompat" />
 
 
     <ImageView
@@ -66,7 +72,8 @@
         app:srcCompat="@drawable/ic_intro_plus"
         android:layout_alignRight="@+id/centerImage"
         android:layout_below="@+id/image4"
-        android:layout_marginTop="15dp"/>
+        android:layout_marginTop="15dp"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageView
         android:id="@+id/image6"
@@ -75,7 +82,8 @@
         app:srcCompat="@drawable/intro_large_line"
         android:layout_toRightOf="@+id/centerImage"
         android:layout_below="@+id/image5"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageView
         android:id="@+id/image7"
@@ -84,7 +92,8 @@
         app:srcCompat="@drawable/ic_intro_plus"
         android:layout_toRightOf="@+id/centerImage"
         android:layout_below="@+id/image6"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageView
         android:id="@+id/image8"
@@ -93,7 +102,8 @@
         app:srcCompat="@drawable/ic_intro_small_line"
         android:layout_toRightOf="@+id/centerImage"
         android:layout_below="@+id/image7"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageView
         android:id="@+id/image10"
@@ -102,7 +112,8 @@
         app:srcCompat="@drawable/ic_intro_small_line"
         android:layout_toRightOf="@+id/centerImage"
         android:layout_below="@+id/image7"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageView
         android:id="@+id/image9"
@@ -112,7 +123,8 @@
         android:layout_above="@+id/centerImage"
         android:layout_toLeftOf="@+id/image1"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="40dp"/>
+        android:layout_marginBottom="40dp"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageView
         android:id="@+id/image11"
@@ -122,7 +134,8 @@
         android:layout_above="@+id/centerImage"
         android:layout_toLeftOf="@+id/image9"
         android:layout_marginRight="20dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="10dp"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageView
         android:id="@+id/image12"
@@ -131,7 +144,8 @@
         app:srcCompat="@drawable/ic_intro_cross"
         android:layout_toLeftOf="@+id/centerImage"
         android:layout_alignTop="@id/centerImage"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="20dp"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageView
         android:id="@+id/image13"
@@ -140,7 +154,8 @@
         app:srcCompat="@drawable/ic_intro_small_line"
         android:layout_toLeftOf="@+id/centerImage"
         android:layout_below="@+id/image12"
-        android:layout_marginTop="30dp"/>
+        android:layout_marginTop="30dp"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageView
         android:id="@+id/image14"
@@ -150,7 +165,8 @@
         android:layout_toLeftOf="@id/centerImage"
         android:layout_below="@+id/image13"
         android:layout_marginTop="5dp"
-        android:layout_marginRight="20dp"/>
+        android:layout_marginRight="20dp"
+        tools:ignore="VectorDrawableCompat" />
 
 
     <ImageView
@@ -161,7 +177,8 @@
         android:layout_toLeftOf="@+id/centerImage"
         android:layout_below="@+id/image14"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageView
         android:id="@+id/image16"
@@ -171,6 +188,7 @@
         android:layout_toLeftOf="@+id/centerImage"
         android:layout_below="@+id/image15"
         android:layout_marginTop="10dp"
-        android:layout_marginRight="15dp"/>
+        android:layout_marginRight="15dp"
+        tools:ignore="VectorDrawableCompat" />
 
 </RelativeLayout>

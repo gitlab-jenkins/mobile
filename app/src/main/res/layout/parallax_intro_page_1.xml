@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipChildren="false">
@@ -9,160 +10,176 @@
         android:id="@+id/cloud"
         android:layout_width="245dp"
         android:layout_height="260dp"
-        android:src="@drawable/intro_clouds_1"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:src="@drawable/intro_clouds_1" />
 
     <ImageView
         android:id="@+id/centerImage"
         android:layout_width="150dp"
         android:layout_height="75dp"
         android:layout_centerInParent="true"
-        app:srcCompat="@drawable/intro_hampay" />
+        app:srcCompat="@drawable/intro_hampay"
+        tools:ignore="VectorDrawableCompat" />
 
 
     <ImageView
         android:id="@+id/image14"
         android:layout_width="10dp"
         android:layout_height="10dp"
-        app:srcCompat="@drawable/ic_intro_cross"
         android:layout_above="@+id/image11"
+        android:layout_alignLeft="@+id/image11"
         android:layout_marginBottom="20dp"
-        android:layout_alignLeft="@+id/image11"/>
+        app:srcCompat="@drawable/ic_intro_cross"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageView
         android:id="@+id/image11"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_centerVertical="true"
-        app:srcCompat="@drawable/intro_large_line"
+        android:layout_marginRight="20dp"
         android:layout_toLeftOf="@+id/centerImage"
-        android:layout_marginRight="20dp"/>
+        app:srcCompat="@drawable/intro_large_line"
+        tools:ignore="VectorDrawableCompat" />
 
 
     <ImageView
         android:id="@+id/image13"
         android:layout_width="10dp"
         android:layout_height="10dp"
-        app:srcCompat="@drawable/ic_intro_circle"
-        android:layout_toLeftOf="@+id/image2"
+        android:layout_alignBottom="@+id/image2"
         android:layout_marginRight="30dp"
-        android:layout_alignBottom="@+id/image2"/>
+        android:layout_toLeftOf="@+id/image2"
+        app:srcCompat="@drawable/ic_intro_circle"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageView
         android:id="@+id/image12"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        app:srcCompat="@drawable/intro_large_line"
         android:layout_below="@+id/image13"
+        android:layout_marginRight="20dp"
         android:layout_toLeftOf="@+id/image13"
-        android:layout_marginRight="20dp"/>
+        app:srcCompat="@drawable/intro_large_line"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageView
         android:id="@+id/image10"
         android:layout_width="10dp"
         android:layout_height="10dp"
-        app:srcCompat="@drawable/ic_intro_plus"
-        android:layout_below="@+id/image12"
         android:layout_alignRight="@+id/image12"
-        android:layout_marginTop="5dp"/>
+        android:layout_below="@+id/image12"
+        android:layout_marginTop="5dp"
+        app:srcCompat="@drawable/ic_intro_plus"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageView
         android:id="@+id/image1"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_centerHorizontal="true"
-        app:srcCompat="@drawable/intro_large_line"
         android:layout_above="@id/centerImage"
-        android:layout_marginBottom="30dp"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        app:srcCompat="@drawable/intro_large_line"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageView
         android:id="@+id/image2"
         android:layout_width="10dp"
         android:layout_height="10dp"
-        android:layout_centerHorizontal="true"
-        app:srcCompat="@drawable/ic_intro_cross"
         android:layout_above="@id/image1"
-        android:layout_marginBottom="10dp"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        app:srcCompat="@drawable/ic_intro_cross"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageView
         android:id="@+id/image3"
         android:layout_width="10dp"
         android:layout_height="10dp"
-        app:srcCompat="@drawable/ic_intro_plus"
-        android:layout_toRightOf="@id/image1"
         android:layout_above="@+id/centerImage"
         android:layout_marginBottom="10dp"
-        android:layout_marginLeft="50dp"/>
+        android:layout_marginLeft="50dp"
+        android:layout_toRightOf="@id/image1"
+        app:srcCompat="@drawable/ic_intro_plus"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageView
         android:id="@+id/image4"
         android:layout_width="10dp"
         android:layout_height="10dp"
-        app:srcCompat="@drawable/ic_intro_small_line"
         android:layout_alignBottom="@id/imageView3"
-        android:layout_toRightOf="@id/image1"
         android:layout_below="@+id/image3"
-        android:layout_marginLeft="50dp"/>
+        android:layout_marginLeft="50dp"
+        android:layout_toRightOf="@id/image1"
+        app:srcCompat="@drawable/ic_intro_small_line"
+        tools:ignore="VectorDrawableCompat" />
 
 
     <ImageView
         android:id="@+id/image5"
         android:layout_width="10dp"
         android:layout_height="10dp"
-        app:srcCompat="@drawable/ic_intro_circle"
         android:layout_centerVertical="true"
+        android:layout_marginLeft="50dp"
         android:layout_toRightOf="@id/centerImage"
-        android:layout_marginLeft="50dp"/>
+        app:srcCompat="@drawable/ic_intro_circle"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageView
         android:id="@+id/image6"
         android:layout_width="10dp"
         android:layout_height="10dp"
-        app:srcCompat="@drawable/ic_intro_small_line"
         android:layout_alignBottom="@id/imageView3"
-        android:layout_toRightOf="@id/centerImage"
         android:layout_below="@+id/image5"
         android:layout_marginLeft="50dp"
-        android:layout_marginTop="40dp"/>
+        android:layout_marginTop="40dp"
+        android:layout_toRightOf="@id/centerImage"
+        app:srcCompat="@drawable/ic_intro_small_line"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageView
         android:id="@+id/image7"
         android:layout_width="10dp"
         android:layout_height="10dp"
-        app:srcCompat="@drawable/ic_intro_cross"
-        android:layout_toRightOf="@id/centerImage"
+        android:layout_below="@+id/image6"
         android:layout_marginLeft="10dp"
-        android:layout_below="@+id/image6"/>
+        android:layout_toRightOf="@id/centerImage"
+        app:srcCompat="@drawable/ic_intro_cross"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageView
         android:id="@+id/image8"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_centerHorizontal="true"
-        app:srcCompat="@drawable/intro_large_line"
         android:layout_below="@id/centerImage"
-        android:layout_marginTop="30dp"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        app:srcCompat="@drawable/intro_large_line"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageView
         android:id="@+id/image9"
         android:layout_width="10dp"
         android:layout_height="10dp"
-        android:layout_centerHorizontal="true"
-        app:srcCompat="@drawable/ic_intro_small_line"
         android:layout_below="@id/centerImage"
-        android:layout_toRightOf="@+id/image8"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="20dp"/>
+        android:layout_toRightOf="@+id/image8"
+        app:srcCompat="@drawable/ic_intro_small_line"
+        tools:ignore="VectorDrawableCompat" />
 
     <ImageView
-        android:id="@+id/image10"
+        android:id="@+id/image15"
         android:layout_width="10dp"
         android:layout_height="10dp"
-        app:srcCompat="@drawable/ic_intro_plus"
-        android:layout_toLeftOf="@id/image8"
         android:layout_below="@+id/centerImage"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="30dp"
-        android:layout_marginRight="20dp"/>
+        android:layout_toLeftOf="@id/image8"
+        app:srcCompat="@drawable/ic_intro_plus"
+        tools:ignore="VectorDrawableCompat" />
 
 </RelativeLayout>

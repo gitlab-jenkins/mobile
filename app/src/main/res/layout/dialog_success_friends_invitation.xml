@@ -46,7 +46,7 @@
         android:gravity="center"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:text="@string/confirm_success_payment"
+        android:text="@string/merchant_id_close"
         android:textColor="@android:color/white"
         android:textSize="20sp"
         geekui:customTypeface="fonts/vazir_regular.ttf" />

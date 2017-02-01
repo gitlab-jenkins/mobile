@@ -1,5 +1,6 @@
 package xyz.homapay.hampay.mobile.android.util;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -178,16 +179,25 @@ public class DeviceInfo {
 
     }
 
-
     public String getNetworkOperatorName() {
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         return telephonyManager.getNetworkOperatorName();
     }
 
     public String getLocale() {
-        Locale locale = context.getResources().getConfiguration().locale;
+        Locale locale = getCurrentLocale();
         return locale.getLanguage();
 
+    }
+
+    @TargetApi(Build.VERSION_CODES.N)
+    public Locale getCurrentLocale() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return context.getResources().getConfiguration().getLocales().get(0);
+        } else {
+            //noinspection deprecation
+            return context.getResources().getConfiguration().locale;
+        }
     }
 
     public String getAndroidId() {
