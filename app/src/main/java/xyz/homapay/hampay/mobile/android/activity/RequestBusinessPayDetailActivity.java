@@ -133,6 +133,8 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
     FacedTextView selectCardText;
     @BindView(R.id.cardSelect)
     LinearLayout cardSelect;
+    @BindView(R.id.creditInfo)
+    LinearLayout creditInfo;
     private DatabaseHelper dbHelper;
     private Context context;
     private Activity activity;
@@ -531,6 +533,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                 purchase_payer_name_layout.setVisibility(View.VISIBLE);
                 purchase_payer_cell_layout.setVisibility(View.VISIBLE);
                 pay_to_business_button.setVisibility(View.GONE);
+                creditInfo.setVisibility(View.GONE);
                 break;
             case FAILED:
                 purchase_status.setText(getString(R.string.purchase_status_failed));
@@ -542,6 +545,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                 purchase_payer_name_layout.setVisibility(View.GONE);
                 purchase_payer_cell_layout.setVisibility(View.GONE);
                 pay_to_business_button.setVisibility(View.GONE);
+                creditInfo.setVisibility(View.GONE);
                 break;
             case PROCESSING:
                 purchase_status.setText(getString(R.string.purchase_status_processing));
@@ -553,6 +557,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                 purchase_payer_name_layout.setVisibility(View.GONE);
                 purchase_payer_cell_layout.setVisibility(View.GONE);
                 pay_to_business_button.setVisibility(View.GONE);
+                creditInfo.setVisibility(View.GONE);
                 break;
             case PENDING:
                 purchase_status.setText(getString(R.string.purchase_status_pending));
@@ -564,6 +569,7 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
                 purchase_payer_name_layout.setVisibility(View.GONE);
                 purchase_payer_cell_layout.setVisibility(View.GONE);
                 pay_to_business_button.setVisibility(View.VISIBLE);
+                creditInfo.setVisibility(View.VISIBLE);
                 if (purchaseInfo.getCardList().size() > 0) {
                     if (purchaseInfo.getCardList().get(0).getCardId() != null && (this.purchaseInfo.getAmount() + this.purchaseInfo.getFeeCharge() + this.purchaseInfo.getVat() < Constants.SOAP_AMOUNT_MAX)) {
                         cardNumberValue.setText(persian.E2P(purchaseInfo.getCardList().get(0).getLast4Digits()));
