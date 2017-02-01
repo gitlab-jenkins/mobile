@@ -50,12 +50,9 @@ public class PermissionContactDialog extends DialogFragment implements TextView.
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         FacedTextView permission_grant = (FacedTextView)view.findViewById(R.id.permission_grant);
-        permission_grant.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-                activity.onFinishEditDialog(ActionPermission.GRANT);
-            }
+        permission_grant.setOnClickListener(v -> {
+            dismiss();
+            activity.onFinishEditDialog(ActionPermission.GRANT);
         });
 
         FacedTextView permission_deny = (FacedTextView)view.findViewById(R.id.permission_deny);

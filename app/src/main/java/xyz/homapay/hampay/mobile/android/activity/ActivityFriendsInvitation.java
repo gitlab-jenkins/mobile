@@ -1,15 +1,18 @@
 package xyz.homapay.hampay.mobile.android.activity;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.tamir7.contacts.Contact;
@@ -17,7 +20,6 @@ import com.github.tamir7.contacts.Contacts;
 import com.github.tamir7.contacts.Query;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -29,6 +31,7 @@ import io.reactivex.schedulers.Schedulers;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.response.FriendsInvitationResponse;
+import xyz.homapay.hampay.mobile.android.Manifest;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.adapter.friendsinvitation.AdapterFriendsInvitation;
 import xyz.homapay.hampay.mobile.android.common.friendsinvitation.FriendsObject;
@@ -36,6 +39,8 @@ import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.MyTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
 import xyz.homapay.hampay.mobile.android.dialog.HamPayDialog;
+import xyz.homapay.hampay.mobile.android.dialog.permission.ActionPermission;
+import xyz.homapay.hampay.mobile.android.dialog.permission.PermissionContactDialog;
 import xyz.homapay.hampay.mobile.android.p.invitation.FriendsInvitation;
 import xyz.homapay.hampay.mobile.android.p.invitation.FriendsInvitationImpl;
 import xyz.homapay.hampay.mobile.android.p.invitation.FriendsInvitationView;
@@ -46,18 +51,17 @@ import xyz.homapay.hampay.mobile.android.util.TelephonyUtils;
  * Created by mohammad on 1/30/17.
  */
 
-public class ActivityFriendsInvitation extends ActivityParent implements View.OnClickListener, FriendsInvitationView {
+public class ActivityFriendsInvitation extends ActivityParent implements View.OnClickListener, FriendsInvitationView, PermissionContactDialog.PermissionContactDialogListener {
 
+    private static final int RC_CONTACTS = 5000;
     @BindView(R.id.etSearchPhraseText)
     FacedEditText etSearchPhraseText;
     @BindView(R.id.lst)
     RecyclerView lst;
-
     @BindView(R.id.tvSend)
     FacedTextView tvSend;
     AdapterFriendsInvitation adapterFriendsInvitation;
     HamPayDialog dialog;
-    private HashMap<String, FriendsObject> selected_items = new HashMap();
     private FriendsInvitation friendsInvitation;
 
     @Override
@@ -65,6 +69,20 @@ public class ActivityFriendsInvitation extends ActivityParent implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends_invitation);
         ButterKnife.bind(this);
+
+        init();
+    }
+
+    private void init() {
+        if (ContextCompat.checkSelfPermission(ctx, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            innerInit();
+        } else {
+            String[] perms = {Manifest.permission.READ_CONTACTS};
+            ActivityCompat.requestPermissions(this, perms, RC_CONTACTS);
+        }
+    }
+
+    private void innerInit() {
         tvSend.setOnClickListener(this);
         friendsInvitation = new FriendsInvitationImpl(new ModelLayerImpl(ctx), this);
         dialog = new HamPayDialog(this);
@@ -212,6 +230,30 @@ public class ActivityFriendsInvitation extends ActivityParent implements View.On
             }
         } else {
             onError();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // Forward results to EasyPermissions
+        if (requestCode == RC_CONTACTS) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                init();
+            } else {
+                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.add(new PermissionContactDialog(), null);
+                fragmentTransaction.commitAllowingStateLoss();
+            }
+        }
+    }
+
+    @Override
+    public void onFinishEditDialog(ActionPermission actionPermission) {
+        if (actionPermission == ActionPermission.GRANT) {
+            init();
+        } else {
+            finish();
         }
     }
 }
