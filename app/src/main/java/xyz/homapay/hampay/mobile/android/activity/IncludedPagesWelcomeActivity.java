@@ -12,6 +12,8 @@ import xyz.homapay.hampay.mobile.android.R;
 
 public class IncludedPagesWelcomeActivity extends WelcomeActivity {
 
+    private boolean isRealBackWantExit = false;
+
     @Override
     protected WelcomeConfiguration configuration() {
         return new WelcomeConfiguration.Builder(this)
@@ -31,4 +33,17 @@ public class IncludedPagesWelcomeActivity extends WelcomeActivity {
                 .build();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        int currentIndex = getNextPageIndex() - 1;
+        if (currentIndex == 0) {
+            if (isRealBackWantExit) {
+                setResult(RESULT_CANCELED);
+                finish();
+            } else {
+                isRealBackWantExit = true;
+            }
+        }
+    }
 }

@@ -535,6 +535,7 @@ public class ProfileEntryActivity extends ActivityParentBase implements Permissi
             if (resultCode == RESULT_OK) {
                 preferencesManager.setFirstTimeLaunch(false);
             } else if (resultCode == RESULT_CANCELED) {
+                finish();
             }
 
         }
