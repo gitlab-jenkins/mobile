@@ -185,10 +185,10 @@ public class ProfileEntryActivity extends ActivityParentBase implements Permissi
         logEvent.log(appEvent);
 
         rootUtil = new RootUtil(activity);
-//        if (rootUtil.checkRootedDevice()) {
-//            new HamPayDialog(activity).showPreventRootDeviceDialog();
-//            return;
-//        }
+        if (rootUtil.checkRootedDevice()) {
+            new HamPayDialog(activity).showPreventRootDeviceDialog();
+            return;
+        }
 
         bundle = getIntent().getExtras();
         if (bundle != null) {

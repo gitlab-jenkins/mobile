@@ -63,6 +63,7 @@ public class ActivityFriendsInvitation extends ActivityParent implements View.On
     AdapterFriendsInvitation adapterFriendsInvitation;
     HamPayDialog dialog;
     private FriendsInvitation friendsInvitation;
+    private boolean showRationale;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,6 +100,19 @@ public class ActivityFriendsInvitation extends ActivityParent implements View.On
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 if (etSearchPhraseText.getText().toString().trim().length() == 0) {
                     load();
+                }
+                if (etSearchPhraseText.getText().toString().trim().length() != 0) {
+                    String searchText = etSearchPhraseText.getText().toString().trim();
+                    if (!searchText.equals("")) {
+                        Observable.create((ObservableOnSubscribe<List<FriendsObject>>) observableEmitter -> observableEmitter.onNext(searchLoad(searchText)))
+                                .subscribeOn(Schedulers.io())
+                                .doOnSubscribe(disposable -> dialog.showWaitingDialog(""))
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(friendsObjects -> {
+                                    dialog.dismisWaitingDialog();
+                                    makeAdapter(friendsObjects);
+                                }, throwable -> onError());
+                    }
                 }
                 return true;
             }
@@ -236,24 +250,30 @@ public class ActivityFriendsInvitation extends ActivityParent implements View.On
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        // Forward results to EasyPermissions
         if (requestCode == RC_CONTACTS) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                init();
+            showRationale = ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_CONTACTS);
+            if (!showRationale) {
+                // Do nothing
             } else {
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.add(new PermissionContactDialog(), null);
-                fragmentTransaction.commitAllowingStateLoss();
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    init();
+                } else {
+                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.add(new PermissionContactDialog(), null);
+                    fragmentTransaction.commitAllowingStateLoss();
+                }
             }
         }
     }
 
     @Override
     public void onFinishEditDialog(ActionPermission actionPermission) {
-        if (actionPermission == ActionPermission.GRANT) {
-            init();
-        } else {
-            finish();
+        if (showRationale) {
+            if (actionPermission == ActionPermission.GRANT) {
+                init();
+            } else {
+                finish();
+            }
         }
     }
 }
