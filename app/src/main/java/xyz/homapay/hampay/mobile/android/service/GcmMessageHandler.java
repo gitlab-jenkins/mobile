@@ -13,6 +13,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
+import com.github.tamir7.contacts.Contact;
+import com.github.tamir7.contacts.Contacts;
+import com.github.tamir7.contacts.Query;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.util.List;
@@ -22,9 +25,9 @@ import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.activity.ActivityPendingRequestList;
 import xyz.homapay.hampay.mobile.android.activity.InvoicePendingConfirmationActivity;
+import xyz.homapay.hampay.mobile.android.activity.ProfileEntryActivity;
 import xyz.homapay.hampay.mobile.android.activity.RequestBusinessPayDetailActivity;
 import xyz.homapay.hampay.mobile.android.activity.TransactionsListActivity;
-import xyz.homapay.hampay.mobile.android.activity.ProfileEntryActivity;
 import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
 import xyz.homapay.hampay.mobile.android.receiver.GcmBroadcastReceiver;
@@ -43,6 +46,8 @@ public class GcmMessageHandler extends IntentService {
     private Long notificationValue;
     private String notificationCallerCellNumber;
     private String purchaseCode;
+    private SharedPreferences prefs;
+    private String cellNumber;
     private final Handler notificationHandler = new Handler() {
         @Override
         public void handleMessage(Message message) {
@@ -72,20 +77,24 @@ public class GcmMessageHandler extends IntentService {
             switch (notificationMessageType) {
 
                 case JOINT:
-                    PugNotification.with(getApplicationContext())
-                            .load()
-                            .identifier(Constants.PAYMENT_NOTIFICATION_IDENTIFIER)
-                            .title(notificationName)
-                            .message(notificationMessage)
-                            .message(notificationMessage)
-                            .bigTextStyle(notificationMessage)
-                            .smallIcon(R.mipmap.ic_notification)
-                            .color(R.color.colorPrimary)
-                            .lights(Color.rgb(Constants.HAMPAY_RED, Constants.HAMPAY_GREEN, Constants.HAMPAY_BLUE), 2000, 1000)
-                            .ticker(notificationName)
-                            .autoCancel(true)
-                            .simple()
-                            .build();
+                    if (cellNumber != null && !cellNumber.equals("")) {
+                        if (isThisCellPhoneInContacts()) {
+                            PugNotification.with(getApplicationContext())
+                                    .load()
+                                    .identifier(Constants.PAYMENT_NOTIFICATION_IDENTIFIER)
+                                    .title(notificationName)
+                                    .message(notificationMessage)
+                                    .message(notificationMessage)
+                                    .bigTextStyle(notificationMessage)
+                                    .smallIcon(R.mipmap.ic_notification)
+                                    .color(R.color.colorPrimary)
+                                    .lights(Color.rgb(Constants.HAMPAY_RED, Constants.HAMPAY_GREEN, Constants.HAMPAY_BLUE), 2000, 1000)
+                                    .ticker(notificationName)
+                                    .autoCancel(true)
+                                    .simple()
+                                    .build();
+                        }
+                    }
                     break;
 
                 case APP_UPDATE:
@@ -346,7 +355,6 @@ public class GcmMessageHandler extends IntentService {
             }
         }
     };
-    private SharedPreferences prefs;
 
     public GcmMessageHandler() {
         super("GcmMessageHandler");
@@ -358,6 +366,13 @@ public class GcmMessageHandler extends IntentService {
         super.onCreate();
         handler = new Handler();
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
+    }
+
+    private boolean isThisCellPhoneInContacts() {
+        Query query = Contacts.getQuery();
+        query.hasPhoneNumber();
+        query.whereContains(Contact.Field.PhoneNumber, cellNumber);
+        return query.find().size() == 0 ? false : true;
     }
 
     @Override
@@ -384,6 +399,7 @@ public class GcmMessageHandler extends IntentService {
             notificationMessageType = NotificationMessageType.JOINT;
             notificationMessage = extras.getString("message");
             notificationName = extras.getString("name");
+            cellNumber = extras.getString("cellNumber");
             sendMessage();
             GcmBroadcastReceiver.completeWakefulIntent(intent);
         } else if (extras.getString("type").equalsIgnoreCase(NotificationMessageType.PAYMENT.getNotificationMessageType())) {
