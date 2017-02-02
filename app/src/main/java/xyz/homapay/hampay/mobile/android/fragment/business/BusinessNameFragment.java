@@ -35,6 +35,7 @@ import xyz.homapay.hampay.mobile.android.activity.BusinessPaymentInfoActivity;
 import xyz.homapay.hampay.mobile.android.adapter.HamPayBusinessesAdapter;
 import xyz.homapay.hampay.mobile.android.common.messages.MessageOnBackPressed;
 import xyz.homapay.hampay.mobile.android.common.messages.MessageSheetStateChanged;
+import xyz.homapay.hampay.mobile.android.common.messages.MessageTabChanged;
 import xyz.homapay.hampay.mobile.android.component.CustomTextView;
 import xyz.homapay.hampay.mobile.android.component.EndlessScrollListener;
 import xyz.homapay.hampay.mobile.android.component.MyTextWatcher;
@@ -97,6 +98,8 @@ public class BusinessNameFragment extends Fragment implements BusinessListView {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!EventBus.getDefault().isRegistered(this))
+            EventBus.getDefault().register(this);
         businessList = new BusinessListImpl(new ModelLayerImpl(getActivity()), this);
         businessSearch = new BusinessSearchImpl(new ModelLayerImpl(getActivity()), this);
     }
@@ -274,6 +277,14 @@ public class BusinessNameFragment extends Fragment implements BusinessListView {
                 data.getService() != null &&
                 data.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
             AppManager.logOut(getActivity());
+        }
+    }
+
+    @Subscribe
+    public void tabChanged(MessageTabChanged messageTabChanged) {
+        if (messageTabChanged.getSelectedPosition() == 0) {
+            if (materialSheetFab.isSheetVisible())
+                materialSheetFab.hideSheet();
         }
     }
 

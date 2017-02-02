@@ -7,7 +7,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 
+import org.greenrobot.eventbus.EventBus;
+
 import xyz.homapay.hampay.mobile.android.R;
+import xyz.homapay.hampay.mobile.android.common.messages.MessageTabChanged;
 
 /**
  * Created by mohammad on 1/22/17.
@@ -46,6 +49,7 @@ public class CustomTab extends TabLayout {
             public void onTabSelected(Tab tab) {
                 CustomTextView tvHeader = (CustomTextView) tab.getCustomView().findViewById(R.id.header);
                 tvHeader.setTextColor(ContextCompat.getColor(getContext(), R.color.white));
+                EventBus.getDefault().post(new MessageTabChanged(tab.getPosition()));
             }
 
             @Override
