@@ -112,7 +112,7 @@ public class PendingPODetailActivity extends AppCompatActivity {
             user_image.setImageResource(R.drawable.user_placeholder);
         }
         caller_phone_number.setText(persianEnglishDigit.E2P(paymentInfo.getCalleePhoneNumber()));
-        amount_value.setText(persianEnglishDigit.E2P(formatter.format(paymentInfo.getAmount() + paymentInfo.getVat())));
+        amount_value.setText(persianEnglishDigit.E2P(formatter.format(paymentInfo.getAmount())));
         payment_request_code.setText(persianEnglishDigit.E2P(paymentInfo.getProductCode()));
         create_date.setText(persianEnglishDigit.E2P(new JalaliConvert().GregorianToPersian(paymentInfo.getCreatedBy())));
         message_text.setText("پیام: " + paymentInfo.getMessage());

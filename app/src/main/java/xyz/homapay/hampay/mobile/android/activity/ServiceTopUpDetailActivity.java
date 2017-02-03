@@ -79,8 +79,6 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
     FacedTextView tvCellNumber;
     @BindView(R.id.tvAmount)
     FacedTextView tvAmount;
-    @BindView(R.id.tvTopUpTax)
-    FacedTextView tvTopUpTax;
     @BindView(R.id.hampayFee)
     FacedTextView hampayFee;
     @BindView(R.id.tvTopUpTotalAmount)
@@ -480,7 +478,6 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
 
         tvCellNumber.setText(persian.E2P(topUInfo.getCellNumber()));
         tvAmount.setText(persian.E2P(persian.E2P(currencyFormatter.format(topUInfo.getChargePackage().getAmount()))));
-        tvTopUpTax.setText(persian.E2P(currencyFormatter.format(topUInfo.getVat())));
         hampayFee.setText(persian.E2P(currencyFormatter.format(topUInfo.getFeeCharge())));
 
         tvTopUpTotalAmount.setText(persian.E2P(currencyFormatter.format(topUInfo.getChargePackage().getAmount() + topUInfo.getFeeCharge())));

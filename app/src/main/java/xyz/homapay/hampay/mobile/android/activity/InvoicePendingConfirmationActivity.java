@@ -86,8 +86,6 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
     FacedTextView create_date;
     @BindView(R.id.paymentPriceValue)
     FacedTextView paymentPriceValue;
-    @BindView(R.id.paymentVAT)
-    FacedTextView paymentVAT;
     @BindView(R.id.paymentFeeValue)
     FacedTextView paymentFeeValue;
     @BindView(R.id.paymentTotalValue)
@@ -301,7 +299,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
                     return;
                 }
 
-                if (selectedCardIdIndex == -1 || (paymentInfoDTO.getCardList().get(selectedCardIdIndex) != null && paymentInfoDTO.getCardList().get(selectedCardIdIndex).getCardId() == null) || (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + paymentInfoDTO.getVat() >= Constants.SOAP_AMOUNT_MAX)) {
+                if (selectedCardIdIndex == -1 || (paymentInfoDTO.getCardList().get(selectedCardIdIndex) != null && paymentInfoDTO.getCardList().get(selectedCardIdIndex).getCardId() == null) || (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() >= Constants.SOAP_AMOUNT_MAX)) {
                     Intent intent1 = new Intent();
                     intent1.setClass(activity, BankWebPaymentActivity.class);
                     intent1.putExtra(Constants.PAYMENT_INFO, paymentInfoDTO);
@@ -332,7 +330,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
 
 
                     s2sMapEntry.Key = "Amount";
-                    s2sMapEntry.Value = String.valueOf(paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + paymentInfoDTO.getVat());
+                    s2sMapEntry.Value = String.valueOf(paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge());
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
@@ -472,12 +470,11 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
             received_message.setText(paymentInfo.getMessage().trim());
         }
         paymentPriceValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfo.getAmount())));
-        paymentVAT.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfo.getVat())));
         paymentFeeValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfo.getFeeCharge())));
-        paymentTotalValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfo.getAmount() + paymentInfo.getVat() + paymentInfo.getFeeCharge())));
+        paymentTotalValue.setText(persianEnglishDigit.E2P(currencyFormatter.format(paymentInfo.getAmount() + paymentInfo.getFeeCharge())));
 
         if (paymentInfo.getCardList().size() > 0) {
-            if (paymentInfo.getCardList().get(0).getCardId() != null && (paymentInfo.getAmount() + paymentInfo.getFeeCharge() + paymentInfo.getVat() < Constants.SOAP_AMOUNT_MAX)) {
+            if (paymentInfo.getCardList().get(0).getCardId() != null && (paymentInfo.getAmount() + paymentInfo.getFeeCharge() < Constants.SOAP_AMOUNT_MAX)) {
                 cardNumberValue.setText(persian.E2P(paymentInfo.getCardList().get(0).getLast4Digits()));
                 bankName.setText(paymentInfo.getCardList().get(0).getBankName());
             }
@@ -491,7 +488,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
         }
 
         if (paymentInfo.getCardList().size() > 0) {
-            if (paymentInfo.getCardList().get(0).getCardId() != null && (paymentInfo.getAmount() + paymentInfo.getFeeCharge() + paymentInfo.getVat() < Constants.SOAP_AMOUNT_MAX)) {
+            if (paymentInfo.getCardList().get(0).getCardId() != null && (paymentInfo.getAmount() + paymentInfo.getFeeCharge() < Constants.SOAP_AMOUNT_MAX)) {
                 cardNumberValue.setText(persian.E2P(paymentInfo.getCardList().get(0).getLast4Digits()));
                 bankName.setText(paymentInfo.getCardList().get(0).getBankName());
                 selectedCardIdIndex = 0;
@@ -587,7 +584,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
                         if (paymentInfoDTO != null) {
                             Intent intent = new Intent(context, PaymentCompletedActivity.class);
                             SucceedPayment succeedPayment = new SucceedPayment();
-                            succeedPayment.setAmount(paymentInfoDTO.getAmount() + paymentInfoDTO.getVat() + paymentInfoDTO.getFeeCharge());
+                            succeedPayment.setAmount(paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge());
                             succeedPayment.setCode(paymentInfoDTO.getProductCode());
                             succeedPayment.setTrace(pspInfoDTO.getProviderId());
                             succeedPayment.setPaymentType(PaymentType.PAYMENT);

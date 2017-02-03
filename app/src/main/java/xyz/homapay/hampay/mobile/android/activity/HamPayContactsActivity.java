@@ -71,6 +71,7 @@ public class HamPayContactsActivity extends AppCompatActivity implements Permiss
     private InputMethodManager inputMethodManager;
     private HamPayDialog hamPayDialog;
     private String searchPhrase = "";
+    List<ContactDTO> searchContacts = new ArrayList<>();
 
     public void backActionBar(View view) {
         finish();
@@ -204,7 +205,7 @@ public class HamPayContactsActivity extends AppCompatActivity implements Permiss
             @Override
             public void afterTextChanged(Editable s) {
                 searchPhrase = s.toString();
-                List<ContactDTO> searchContacts = new ArrayList<>();
+                searchContacts = new ArrayList<>();
                 if (contacts != null) {
                     for (ContactDTO contact : contacts) {
                         if (searchPhrase.length() == 0 || searchPhrase.length() == 1) {
@@ -238,7 +239,11 @@ public class HamPayContactsActivity extends AppCompatActivity implements Permiss
         paymentRequestList.setOnItemClickListener((parent, view, position, id) -> {
             Intent intent = new Intent();
             intent.setClass(activity, PaymentRequestDetailActivity.class);
-            intent.putExtra(Constants.HAMPAY_CONTACT, contacts.get(position));
+            if (search_text.getText().toString().length() > 0){
+                intent.putExtra(Constants.HAMPAY_CONTACT, searchContacts.get(position));
+            }else {
+                intent.putExtra(Constants.HAMPAY_CONTACT, contacts.get(position));
+            }
             startActivityForResult(intent, 1024);
         });
 

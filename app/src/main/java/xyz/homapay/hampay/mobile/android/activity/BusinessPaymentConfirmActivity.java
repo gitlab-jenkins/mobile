@@ -72,8 +72,6 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
     FacedTextView paymentPriceValue;
     @BindView(R.id.paymentFeeValue)
     FacedTextView paymentFeeValue;
-    @BindView(R.id.paymentVAT)
-    FacedTextView paymentVAT;
     @BindView(R.id.paymentTotalValue)
     FacedTextView paymentTotalValue;
     @BindView(R.id.cardNumberValue)
@@ -188,9 +186,8 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
 
             business_name.setText(paymentInfo.getCallerName());
             paymentPriceValue.setText(persianEnglishDigit.E2P(String.valueOf(formatter.format(paymentInfo.getAmount()))));
-            paymentVAT.setText(persianEnglishDigit.E2P(String.valueOf(formatter.format(paymentInfo.getVat()))));
             paymentFeeValue.setText(persianEnglishDigit.E2P(String.valueOf(formatter.format(paymentInfo.getFeeCharge()))));
-            paymentTotalValue.setText(persianEnglishDigit.E2P(String.valueOf(formatter.format(paymentInfo.getAmount() + paymentInfo.getVat() + paymentInfo.getFeeCharge()))));
+            paymentTotalValue.setText(persianEnglishDigit.E2P(String.valueOf(formatter.format(paymentInfo.getAmount() + paymentInfo.getFeeCharge()))));
 
             if (paymentInfo.getImageId() != null) {
                 AppManager.setMobileTimeout(context);
@@ -203,7 +200,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
         }
 
         if (paymentInfo.getCardList().size() > 0) {
-            if (paymentInfo.getCardList().get(0).getCardId() != null && (paymentInfo.getAmount() + paymentInfo.getFeeCharge() + paymentInfo.getVat() < Constants.SOAP_AMOUNT_MAX)) {
+            if (paymentInfo.getCardList().get(0).getCardId() != null && (paymentInfo.getAmount() + paymentInfo.getFeeCharge() < Constants.SOAP_AMOUNT_MAX)) {
                 cardNumberValue.setText(persian.E2P(paymentInfo.getCardList().get(0).getLast4Digits()));
                 bankName.setText(paymentInfo.getCardList().get(0).getBankName());
                 selectedCardIdIndex = 0;
@@ -290,7 +287,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
                     return;
                 }
 
-                if (selectedCardIdIndex == -1 || (paymentInfo.getCardList().get(selectedCardIdIndex) != null && paymentInfo.getCardList().get(selectedCardIdIndex).getCardId() == null) || (paymentInfo.getAmount() + paymentInfo.getFeeCharge() + paymentInfo.getVat() >= Constants.SOAP_AMOUNT_MAX)) {
+                if (selectedCardIdIndex == -1 || (paymentInfo.getCardList().get(selectedCardIdIndex) != null && paymentInfo.getCardList().get(selectedCardIdIndex).getCardId() == null) || (paymentInfo.getAmount() + paymentInfo.getFeeCharge() >= Constants.SOAP_AMOUNT_MAX)) {
                     Intent intent = new Intent();
                     intent.setClass(activity, BankWebPaymentActivity.class);
                     intent.putExtra(Constants.PAYMENT_INFO, paymentInfo);
@@ -323,7 +320,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
                     CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
 
                     s2sMapEntry.Key = "Amount";
-                    s2sMapEntry.Value = String.valueOf(paymentInfo.getAmount() + paymentInfo.getFeeCharge() + paymentInfo.getVat());
+                    s2sMapEntry.Value = String.valueOf(paymentInfo.getAmount() + paymentInfo.getFeeCharge());
                     vectorstring2stringMapEntry.add(s2sMapEntry);
 
                     s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
@@ -537,7 +534,7 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
                         if (paymentInfo != null) {
                             Intent intent = new Intent(context, PaymentCompletedActivity.class);
                             SucceedPayment succeedPayment = new SucceedPayment();
-                            succeedPayment.setAmount(paymentInfo.getAmount() + paymentInfo.getVat() + paymentInfo.getFeeCharge());
+                            succeedPayment.setAmount(paymentInfo.getAmount() + paymentInfo.getFeeCharge());
                             succeedPayment.setCode(paymentInfo.getProductCode());
                             succeedPayment.setTrace(pspInfoDTO.getProviderId());
                             succeedPayment.setPaymentType(PaymentType.PAYMENT);

@@ -49,8 +49,6 @@ public class TransactionDetailActivity extends AppCompatActivity {
     FacedTextView amount_value;
     @BindView(R.id.more_amount)
     LinearLayout moreAmount;
-    @BindView(R.id.vat_value)
-    FacedTextView vat_value;
     @BindView(R.id.fee_charge_value)
     FacedTextView fee_charge_value;
     @BindView(R.id.fee_charge_text)
@@ -258,6 +256,7 @@ public class TransactionDetailActivity extends AppCompatActivity {
                             if (tnxDetail.getCellNumber() != null) {
                                 cell_number.setText(persian.E2P(tnxDetail.getCellNumber()));
                             }
+                            moreAmount.setVisibility(View.GONE);
                         }
                         if (tnxDetail.getMessage() != null) {
                             message.setText(tnxDetail.getMessage());
@@ -295,17 +294,15 @@ public class TransactionDetailActivity extends AppCompatActivity {
                     }
 
                     if (transaction.getTransactionType() == TransactionDTO.TransactionType.CREDIT) {
-                        total_amount_value.setText(persian.E2P(formatter.format(tnxDetail.getAmount() + tnxDetail.getVat())));
+                        total_amount_value.setText(persian.E2P(formatter.format(tnxDetail.getAmount())));
                         amount_value.setText(persian.E2P(formatter.format(tnxDetail.getAmount())));
 
-                        vat_value.setText(persian.E2P(formatter.format(tnxDetail.getVat())));
                         fee_charge_value.setVisibility(View.INVISIBLE);
                         fee_charge_text.setVisibility(View.INVISIBLE);
                         fee_charge_value.setText(persian.E2P(formatter.format(tnxDetail.getFeeCharge())));
                     } else if (transaction.getTransactionType() == TransactionDTO.TransactionType.DEBIT) {
-                        total_amount_value.setText(persian.E2P(formatter.format(tnxDetail.getAmount() + tnxDetail.getFeeCharge() + tnxDetail.getVat())));
+                        total_amount_value.setText(persian.E2P(formatter.format(tnxDetail.getAmount() + tnxDetail.getFeeCharge())));
                         amount_value.setText(persian.E2P(formatter.format(tnxDetail.getAmount())));
-                        vat_value.setText(persian.E2P(formatter.format(tnxDetail.getVat())));
                         fee_charge_value.setText(persian.E2P(formatter.format(tnxDetail.getFeeCharge())));
                         fee_charge_value.setVisibility(View.VISIBLE);
                         fee_charge_text.setVisibility(View.VISIBLE);

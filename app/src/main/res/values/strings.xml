@@ -33,7 +33,6 @@
     <string name="nav_item_privacy">حریم خصوصی و امنیت</string>
     <string name="transaction_tacking_code">کد پیگیری: </string>
     <string name="transaction_amount">مبلغ: </string>
-    <string name="transaction_vat">مالیات بر ارزش افزوده:</string>
     <string name="transaction_fee_charge">کارمزد: </string>
     <string-array name="nav_drawer_labels">
         <item>@string/nav_item_main_fragment</item>
@@ -278,7 +277,6 @@
     <string name="request_pay_detail">جزییات پرداخت</string>
     <string name="card_number">شماره کارت: </string>
     <string name="request_payment_rial">مبلغ: </string>
-    <string name="request_payment_vat">مالیات بر ارزش افزوده: </string>
     <string name="request_payment_hampay_fee">کارمزد هم‌پی: </string>
     <string name="request_payment_fee">کارمزد هم‌پی: </string>
     <string name="request_payment_total">مبلغ نهایی: </string>
@@ -391,7 +389,6 @@
     <string name="msg_login_failure">رمز ورودی اشتباه می‌باشد، شما %1$s بار دیگر فرصت ورود رمز را دارید.</string>
     <string name="msg_failure_payment_request"> ارسال درخواست پرداخت موفقیت آمیز نبود. لطفا دوباره تلاش کنید</string>
     <string name="msg_unlink_user">تمامی اطلاعات شما پاک خواهد شد و برای استفاده مجدد از "هم‌پی" باید دوباره ثبت نام کنید</string>
-    <string name="vat">مالیات بر ارزش افزوده</string>
     <string name="payment_request_code">کد درخواست پرداخت: </string>
     <string name="pending_po_details">جزییات درخواست پرداخت</string>
     <string name="pending_po_status">وضعیت: </string>
@@ -737,7 +734,6 @@
     <string name="err_general_text">خطا در دریافت اطلاعات</string>
     <string name="top_up_service_id">شماره همراه</string>
     <string name="top_up_amount">مبلغ :</string>
-    <string name="top_up_tax">مالیات بر ارزش افزوده :</string>
     <string name="charge_code">رمز شارژ</string>
     <string name="charge_type">نوع شارژ :</string>
     <string name="iban_settelment">تسویه حساب در هم پی حداکثر در سیکل پایا انجام خواهد شد.</string>

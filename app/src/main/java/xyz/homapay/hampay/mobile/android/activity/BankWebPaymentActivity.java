@@ -170,7 +170,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                     "ResNum4=" + pspInfoDTO.getCellNumber() +
                             "&ResNum3=" + paymentInfoDTO.getPspInfo().getSmsToken() +
                             "&RedirectURL=" + redirectedURL +
-                            "&Amount=" + (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + paymentInfoDTO.getVat()) +
+                            "&Amount=" + (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge()) +
                             "&ResNum=" + paymentInfoDTO.getProductCode() +
                             "&TerminalId=" + pspInfoDTO.getSenderTerminalId();
 
@@ -181,7 +181,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                     "ResNum4=" + pspInfoDTO.getCellNumber() +
                             "&ResNum3=" + purchaseInfoDTO.getPspInfo().getSmsToken() +
                             "&RedirectURL=" + redirectedURL +
-                            "&Amount=" + (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge() + purchaseInfoDTO.getVat()) +
+                            "&Amount=" + (purchaseInfoDTO.getAmount() + purchaseInfoDTO.getFeeCharge()) +
                             "&ResNum=" + purchaseInfoDTO.getProductCode() +
                             "&TerminalId=" + pspInfoDTO.getSenderTerminalId();
         } else if (billInfo != null) {
@@ -205,7 +205,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                     "ResNum4=" + pspInfoDTO.getCellNumber() +
                             "&ResNum3=" + pspInfoDTO.getSmsToken() +
                             "&RedirectURL=" + redirectedURL +
-                            "&Amount=" + (topUpInfo.getChargePackage().getAmount() + topUpInfo.getFeeCharge() + topUpInfo.getVat()) +
+                            "&Amount=" + (topUpInfo.getChargePackage().getAmount() + topUpInfo.getFeeCharge()) +
                             "&ResNum=" + topUpInfo.getProductCode() +
                             "&ReceivedChargeType=" + "0" +
                             "&CellNumber=" + topUpInfo.getCellNumber() +
@@ -261,7 +261,7 @@ public class BankWebPaymentActivity extends AppCompatActivity {
                             Intent intent = new Intent(context, PaymentCompletedActivity.class);
                             SucceedPayment succeedPayment = new SucceedPayment();
                             if (paymentInfoDTO != null) {
-                                succeedPayment.setAmount(paymentInfoDTO.getAmount() + paymentInfoDTO.getVat() + paymentInfoDTO.getFeeCharge());
+                                succeedPayment.setAmount(paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge());
                                 succeedPayment.setCode(paymentInfoDTO.getProductCode());
                                 succeedPayment.setPaymentType(PaymentType.PAYMENT);
                             } else if (purchaseInfoDTO != null) {

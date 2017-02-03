@@ -50,8 +50,6 @@ public class PaymentRequestConfirmActivity extends AppCompatActivity {
     FacedTextView amount_value;
     @BindView(R.id.fee_value)
     FacedTextView fee_value;
-    @BindView(R.id.vat_value)
-    FacedTextView vat_value;
     boolean intentContact = false;
     Context context;
     Activity activity;
@@ -62,8 +60,6 @@ public class PaymentRequestConfirmActivity extends AppCompatActivity {
     HamPayDialog hamPayDialog;
     @BindView(R.id.user_image)
     ImageView user_image;
-    @BindView(R.id.amount_total)
-    FacedTextView amount_total;
     private ContactDTO hamPayContact;
     private PaymentInfoDTO paymentInfo;
     private String displayName;
@@ -151,9 +147,7 @@ public class PaymentRequestConfirmActivity extends AppCompatActivity {
         calculatedVat = intent.getLongExtra(Constants.CONTACT_VAT, 0);
         calcFeeCharge = intent.getLongExtra(Constants.CONTACT_FEE, 0);
         amount_value.setText(persianEnglishDigit.E2P(formatter.format(contactAmount)));
-        vat_value.setText(persianEnglishDigit.E2P(formatter.format(calculatedVat)));
         fee_value.setText(persianEnglishDigit.E2P(formatter.format(calcFeeCharge)));
-        amount_total.setText(persianEnglishDigit.E2P(formatter.format(contactAmount + calculatedVat + calcFeeCharge)));
         contact_message.setText(intent.getStringExtra(Constants.CONTACT_MESSAGE));
 
         if (hamPayContact != null) {

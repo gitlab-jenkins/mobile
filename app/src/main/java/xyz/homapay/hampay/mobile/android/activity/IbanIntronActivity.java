@@ -7,6 +7,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -111,6 +114,13 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(ibanUserName.getWindowToken(), 0);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         HamPayApplication.setAppSate(AppState.Resumed);
@@ -167,12 +177,69 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
         segmentRelativeLayouts[5] = iban_sixth_segment_l;
         segmentRelativeLayouts[6] = iban_seventh_segment_l;
 
+        ibanUserName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                ibanUserName.removeTextChangedListener(this);
+
+                for (int i = 0; i < s.length(); i++){
+                    if (getString(R.string.user_name_restriction).contains(s.charAt(i) + "")){
+                    }else {
+                        String str = s.toString();
+                        str = str.replace(s.charAt(i) + "", "");
+                        ibanUserName.setText(str);
+                        ibanUserName.setSelection(str.length());
+                    }
+                }
+
+                ibanUserName.addTextChangedListener(this);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
         ibanUserName.setOnTouchListener((v, event) -> {
             ibanUserName.setCursorVisible(true);
             ibanUserFamily.setCursorVisible(false);
             new Collapse(keyboard).animate();
             return false;
         });
+
+        ibanUserFamily.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                ibanUserFamily.removeTextChangedListener(this);
+
+                for (int i = 0; i < s.length(); i++){
+                    if (getString(R.string.user_name_restriction).contains(s.charAt(i) + "")){
+                    }else {
+                        String str = s.toString();
+                        str = str.replace(s.charAt(i) + "", "");
+                        ibanUserFamily.setText(str);
+                        ibanUserFamily.setSelection(str.length());
+                    }
+                }
+
+                ibanUserFamily.addTextChangedListener(this);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
         ibanUserFamily.setOnTouchListener((v, event) -> {
             ibanUserName.setCursorVisible(false);
             ibanUserFamily.setCursorVisible(true);
@@ -197,8 +264,8 @@ public class IbanIntronActivity extends AppCompatActivity implements OnTaskCompl
         ibanVerifyButton.setOnClickListener(v -> {
 
             String userBank = bankName.getText().toString().trim();
-            String userName = ibanUserName.getText().toString().trim();
-            String userFamily = ibanUserFamily.getText().toString().trim();
+            String userName = ibanUserName.getText().toString().trim().replaceAll("^ +| +$|( )+", "$1");
+            String userFamily = ibanUserFamily.getText().toString().trim().replaceAll("^ +| +$|( )+", "$1");
 
             if (userName.length() <= 1) {
                 Toast.makeText(activity, getString(R.string.iban_empty_name), Toast.LENGTH_SHORT).show();

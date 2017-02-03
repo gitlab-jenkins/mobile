@@ -6,12 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import butterknife.BindView;
@@ -19,9 +16,7 @@ import butterknife.ButterKnife;
 import xyz.homapay.hampay.common.common.response.ResponseMessage;
 import xyz.homapay.hampay.common.common.response.ResultStatus;
 import xyz.homapay.hampay.common.core.model.request.BusinessPaymentConfirmRequest;
-import xyz.homapay.hampay.common.core.model.request.CalculateVatRequest;
 import xyz.homapay.hampay.common.core.model.response.BusinessPaymentConfirmResponse;
-import xyz.homapay.hampay.common.core.model.response.CalculateVatResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.BusinessDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
@@ -29,7 +24,6 @@ import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.R;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestBusinessPaymentConfirm;
-import xyz.homapay.hampay.mobile.android.async.RequestCalculateVat;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
 import xyz.homapay.hampay.mobile.android.component.edittext.CurrencyFormatterTextWatcher;
 import xyz.homapay.hampay.mobile.android.component.edittext.FacedEditText;
@@ -69,19 +63,9 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity implements Vi
     Long MaxXferAmount = 0L;
     Long MinXferAmount = 0L;
     HamPayDialog hamPayDialog;
-    @BindView(R.id.add_vat)
-    LinearLayout add_vat;
-    @BindView(R.id.vat_icon)
-    ImageView vat_icon;
-    @BindView(R.id.vat_value)
-    FacedTextView vat_value;
-    @BindView(R.id.amount_total)
-    FacedTextView amount_total;
     private RequestBusinessPaymentConfirm requestBusinessPaymentConfirm;
     private BusinessPaymentConfirmRequest businessPaymentConfirmRequest;
     private BusinessDTO businessDTO;
-    private Long calculatedVat = 0L;
-    private CurrencyFormatter formatter;
 
     public void backActionBar(View view) {
         finish();
@@ -132,7 +116,6 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity implements Vi
         ButterKnife.bind(this);
 
         persianEnglishDigit = new PersianEnglishDigit();
-        formatter = new CurrencyFormatter();
         context = this;
         activity = BusinessPaymentInfoActivity.this;
         hamPayDialog = new HamPayDialog(activity);
@@ -160,25 +143,6 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity implements Vi
         }
 
         amount_value.addTextChangedListener(new CurrencyFormatterTextWatcher(amount_value));
-        amount_value.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                vat_icon.setImageResource(R.drawable.add_vat);
-                vat_value.setText("۰");
-                calculatedVat = 0L;
-                amount_total.setText(amount_value.getText().toString());
-            }
-        });
         amount_value.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
                 creditValueValidation = amount_value.getText().toString().length() != 0;
@@ -207,28 +171,6 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity implements Vi
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.add_vat:
-                AppManager.setMobileTimeout(context);
-                editor.commit();
-                if (amount_value.getText().toString().length() > 0) {
-                    if (amount_value.getText().toString().indexOf("٬") != -1) {
-                        amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace("٬", "")));
-                    } else if (amount_value.getText().toString().indexOf(",") != -1) {
-                        amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace(",", "")));
-                    }
-                    if (calculatedVat == 0) {
-                        CalculateVatRequest calculateVatRequest = new CalculateVatRequest();
-                        calculateVatRequest.setAmount(amountValue);
-                        RequestCalculateVat requestCalculateVat = new RequestCalculateVat(activity, new RequestCalculateVatTaskCompleteListener());
-                        requestCalculateVat.execute(calculateVatRequest);
-                    } else {
-                        vat_icon.setImageResource(R.drawable.add_vat);
-                        vat_value.setText("۰");
-                        calculatedVat = 0L;
-                        amount_total.setText(persianEnglishDigit.E2P(formatter.format(amountValue)));
-                    }
-                }
-                break;
             case R.id.payment_buttonpayment_button:
                 amount_value.clearFocus();
                 if (amount_value.getText().toString().length() == 0) {
@@ -245,11 +187,10 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity implements Vi
                     } else if (amount_value.getText().toString().indexOf(",") != -1) {
                         amountValue = Long.parseLong(persianEnglishDigit.P2E(amount_value.getText().toString().replace(",", "")));
                     }
-                    if (amountValue + calculatedVat >= MinXferAmount && amountValue + calculatedVat <= MaxXferAmount) {
+                    if (amountValue  >= MinXferAmount && amountValue <= MaxXferAmount) {
                         hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
                         businessPaymentConfirmRequest = new BusinessPaymentConfirmRequest();
                         businessPaymentConfirmRequest.setAmount(amountValue);
-                        businessPaymentConfirmRequest.setVat(calculatedVat);
                         businessPaymentConfirmRequest.setBusinessCode(businessDTO.getCode());
                         requestBusinessPaymentConfirm = new RequestBusinessPaymentConfirm(context, new RequestBusinessPaymentConfirmTaskCompleteListener());
                         requestBusinessPaymentConfirm.execute(businessPaymentConfirmRequest);
@@ -305,40 +246,4 @@ public class BusinessPaymentInfoActivity extends AppCompatActivity implements Vi
         public void onTaskPreRun() {
         }
     }
-
-    public class RequestCalculateVatTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<CalculateVatResponse>> {
-        public RequestCalculateVatTaskCompleteListener() {
-        }
-
-        @Override
-        public void onTaskComplete(ResponseMessage<CalculateVatResponse> calculateVatResponseMessage) {
-
-            ServiceEvent serviceName;
-            LogEvent logEvent = new LogEvent(context);
-            hamPayDialog.dismisWaitingDialog();
-            ResultStatus resultStatus;
-            if (calculateVatResponseMessage != null) {
-                resultStatus = calculateVatResponseMessage.getService().getResultStatus();
-                if (resultStatus == ResultStatus.SUCCESS) {
-                    serviceName = ServiceEvent.CALCULATE_VAT_SUCCESS;
-                    vat_value.setText(persianEnglishDigit.E2P(formatter.format(calculateVatResponseMessage.getService().getAmount())));
-                    calculatedVat = calculateVatResponseMessage.getService().getAmount();
-                    amount_total.setText(persianEnglishDigit.E2P(formatter.format(calculatedVat + amountValue)));
-                    vat_icon.setImageResource(R.drawable.remove_vat);
-                } else if (calculateVatResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
-                    serviceName = ServiceEvent.CALCULATE_VAT_FAILURE;
-                    forceLogout();
-                } else {
-                    serviceName = ServiceEvent.CALCULATE_VAT_FAILURE;
-                }
-                logEvent.log(serviceName);
-            }
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
-    }
-
 }
