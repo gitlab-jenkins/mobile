@@ -2,7 +2,6 @@ package xyz.homapay.hampay.mobile.android.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -126,11 +125,6 @@ public class PendingFundListAdapter extends BaseAdapter {
             viewHolder.code_digit_6.setText(fund.getProductCode());
         } else if (fund.getPaymentType() == FundDTO.PaymentType.TOP_UP) {
             viewHolder.code_digit_6.setText(fund.getProductCode());
-        }
-
-        if (fund.getExpirationDate().getTime() < currentDate.getTime()) {
-            Log.e("Expired", "Expired");
-            fundList.remove(position);
         }
 
         viewHolder.remaining_time.setText(dateUtil.remainingTime(fund.getExpirationDate(), currentDate));
