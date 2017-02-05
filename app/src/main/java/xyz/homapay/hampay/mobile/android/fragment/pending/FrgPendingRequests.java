@@ -285,6 +285,7 @@ public class FrgPendingRequests extends Fragment implements PendingPaymentView, 
         if (state) {
             if (data != null && data.getService() != null && data.getService().getFundDTOList() != null && data.getService().getFundDTOList().size() > 0) {
                 adapter = new PendingFundListAdapter(getActivity(), data.getService().getFundDTOList(), AppManager.getAuthToken(getActivity()));
+                tvNodata.setVisibility(View.GONE);
                 lst.setAdapter(adapter);
             } else {
                 if (adapter != null)
