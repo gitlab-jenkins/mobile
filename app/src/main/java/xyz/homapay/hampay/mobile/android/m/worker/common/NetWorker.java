@@ -24,10 +24,22 @@ public class NetWorker<T> {
 
     public NetWorker(final ModelLayer modelLayer, final Class<T> tClass, KeyAgreementModel keyAgreementModel, boolean encryption, boolean gZip) {
         this.modelLayer = modelLayer;
+        TrustedOkHttpClient trustedOkHttpClient = new TrustedOkHttpClient(ServiceType.OWN);
         retrofit = new Retrofit.Builder()
                 .baseUrl(modelLayer.getBaseUrl() + "/")
                 .addConverterFactory(GsonConverterFactory.create(new DateGsonBuilder().getDatebuilder().create()))
-                .client(TrustedOkHttpClient.getTrustedOkHttpClient(modelLayer, keyAgreementModel, encryption, gZip))
+                .client(trustedOkHttpClient.getTrustedOkHttpClient(modelLayer, keyAgreementModel, encryption, gZip))
+                .build();
+        service = retrofit.create(tClass);
+    }
+
+    public NetWorker(final ModelLayer modelLayer, final Class<T> tClass, byte[] encKey, byte[] ivKey, boolean encryption, boolean gZip, ServiceType serviceType) {
+        this.modelLayer = modelLayer;
+        TrustedOkHttpClient trustedOkHttpClient = new TrustedOkHttpClient(serviceType);
+        retrofit = new Retrofit.Builder()
+                .baseUrl(modelLayer.getPspBaseUrl() + "/")
+                .addConverterFactory(GsonConverterFactory.create(new DateGsonBuilder().getDatebuilder().create()))
+                .client(trustedOkHttpClient.getTrustedOkHttpClient(modelLayer, encKey, ivKey, encryption, gZip))
                 .build();
         service = retrofit.create(tClass);
     }

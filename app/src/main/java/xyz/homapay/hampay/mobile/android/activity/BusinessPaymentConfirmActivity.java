@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,6 +31,8 @@ import xyz.homapay.hampay.common.core.model.response.PSPResultResponse;
 import xyz.homapay.hampay.common.core.model.response.SignToPayResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.PaymentInfoDTO;
 import xyz.homapay.hampay.common.core.model.response.dto.PspInfoDTO;
+import xyz.homapay.hampay.common.pspproxy.model.request.NetPayRequest;
+import xyz.homapay.hampay.common.pspproxy.model.response.NetPayResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
@@ -52,15 +55,19 @@ import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.model.PaymentType;
 import xyz.homapay.hampay.mobile.android.model.SucceedPayment;
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
+import xyz.homapay.hampay.mobile.android.p.netpay.NetPay;
+import xyz.homapay.hampay.mobile.android.p.netpay.NetPayImpl;
+import xyz.homapay.hampay.mobile.android.p.netpay.NetPayView;
 import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
+import xyz.homapay.hampay.mobile.android.util.ModelLayerImpl;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.PspCode;
 import xyz.homapay.hampay.mobile.android.webservice.psp.CBUArrayOfKeyValueOfstringstring;
 import xyz.homapay.hampay.mobile.android.webservice.psp.CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring;
 
-public class BusinessPaymentConfirmActivity extends AppCompatActivity implements View.OnClickListener, CardNumberDialog.SelectCardDialogListener, OnTaskCompleted {
+public class BusinessPaymentConfirmActivity extends AppCompatActivity implements NetPayView, View.OnClickListener, CardNumberDialog.SelectCardDialogListener, OnTaskCompleted {
 
     @BindView(R.id.business_name)
     FacedTextView business_name;
@@ -117,6 +124,8 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
     private PersianEnglishDigit persian = new PersianEnglishDigit();
     private String signature;
     private String authToken = "";
+    private NetPay netPay;
+    private NetPayRequest netPayRequest;
 
     public void backActionBar(View view) {
         finish();
@@ -168,6 +177,10 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
 
         context = this;
         activity = BusinessPaymentConfirmActivity.this;
+
+        netPay = new NetPayImpl(new ModelLayerImpl(activity), this);
+        netPayRequest = new NetPayRequest();
+
         dbHelper = new DatabaseHelper(context);
         formatter = new CurrencyFormatter();
         prefs = getSharedPreferences(Constants.APP_PREFERENCE_NAME, MODE_PRIVATE);
@@ -308,78 +321,93 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
                         return;
                     }
 
-                    requestPurchase = new RequestPurchase(activity, new RequestPurchaseTaskCompleteListener(), paymentInfo.getPspInfo().getPayURL());
+                    netPayRequest.setCardId(paymentInfo.getCardList().get(selectedCardIdIndex).getCardId());
+                    netPayRequest.setCvv2(userCVV2);
+                    netPayRequest.setExpirationDate(paymentInfo.getCardList().get(selectedCardIdIndex).getExpireDate());
+                    netPayRequest.setAmount(paymentInfo.getAmount() + paymentInfo.getFeeCharge());
+                    netPayRequest.setCellNumber(pspInfoDTO.getCellNumber().substring(1, pspInfoDTO.getCellNumber().length()));
+                    netPayRequest.setDigitalSignature(signature);
+                    netPayRequest.setIpAddress(pspInfoDTO.getIpAddress());
+                    netPayRequest.setPin2(userPinCode);
+                    netPayRequest.setProductCode(paymentInfo.getProductCode());
+                    netPayRequest.setSenderTerminalId(pspInfoDTO.getSenderTerminalId());
+                    netPayRequest.setTerminalId(pspInfoDTO.getTerminalId());
 
-                    doWorkInfo = new DoWorkInfo();
-                    doWorkInfo.setUserName("appstore");
-                    doWorkInfo.setPassword("sepapp");
-                    doWorkInfo.setCellNumber(pspInfoDTO.getCellNumber().substring(1, pspInfoDTO.getCellNumber().length()));
-                    doWorkInfo.setLangAByte((byte) 0);
-                    doWorkInfo.setLangABoolean(false);
-                    CBUArrayOfKeyValueOfstringstring vectorstring2stringMapEntry = new CBUArrayOfKeyValueOfstringstring();
-                    CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+                    netPay.netPay(netPayRequest, AppManager.getAuthToken(context), paymentInfo.getPspInfo().getPspEncKey(), paymentInfo.getPspInfo().getIvKey());
 
-                    s2sMapEntry.Key = "Amount";
-                    s2sMapEntry.Value = String.valueOf(paymentInfo.getAmount() + paymentInfo.getFeeCharge());
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
 
-                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "Pin2";
-                    s2sMapEntry.Value = userPinCode;
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "ThirdParty";
-                    s2sMapEntry.Value = paymentInfo.getProductCode();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "TerminalId";
-                    s2sMapEntry.Value = pspInfoDTO.getTerminalId();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "CardId";
-                    s2sMapEntry.Value = paymentInfo.getCardList().get(selectedCardIdIndex).getCardId();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "SenderTerminalId";
-                    s2sMapEntry.Value = pspInfoDTO.getSenderTerminalId();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "IPAddress";
-                    s2sMapEntry.Value = pspInfoDTO.getIpAddress();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "Email";
-                    s2sMapEntry.Value = "";
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "CVV2";
-                    s2sMapEntry.Value = userCVV2;
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "ExpDate";
-                    s2sMapEntry.Value = paymentInfo.getCardList().get(selectedCardIdIndex).getExpireDate();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "ResNum";
-                    s2sMapEntry.Value = paymentInfo.getProductCode();
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                    s2sMapEntry.Key = "Signature";
-                    s2sMapEntry.Value = signature;
-                    vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                    doWorkInfo.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
-                    requestPurchase.execute(doWorkInfo);
+//                    requestPurchase = new RequestPurchase(activity, new RequestPurchaseTaskCompleteListener(), paymentInfo.getPspInfo().getPayURL());
+//
+//                    doWorkInfo = new DoWorkInfo();
+//                    doWorkInfo.setUserName("appstore");
+//                    doWorkInfo.setPassword("sepapp");
+//                    doWorkInfo.setCellNumber(pspInfoDTO.getCellNumber().substring(1, pspInfoDTO.getCellNumber().length()));
+//                    doWorkInfo.setLangAByte((byte) 0);
+//                    doWorkInfo.setLangABoolean(false);
+//                    CBUArrayOfKeyValueOfstringstring vectorstring2stringMapEntry = new CBUArrayOfKeyValueOfstringstring();
+//                    CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+//
+//                    s2sMapEntry.Key = "Amount";
+//                    s2sMapEntry.Value = String.valueOf(paymentInfo.getAmount() + paymentInfo.getFeeCharge());
+//                    vectorstring2stringMapEntry.add(s2sMapEntry);
+//
+//                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+//                    s2sMapEntry.Key = "Pin2";
+//                    s2sMapEntry.Value = userPinCode;
+//                    vectorstring2stringMapEntry.add(s2sMapEntry);
+//
+//                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+//                    s2sMapEntry.Key = "ThirdParty";
+//                    s2sMapEntry.Value = paymentInfo.getProductCode();
+//                    vectorstring2stringMapEntry.add(s2sMapEntry);
+//
+//                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+//                    s2sMapEntry.Key = "TerminalId";
+//                    s2sMapEntry.Value = pspInfoDTO.getTerminalId();
+//                    vectorstring2stringMapEntry.add(s2sMapEntry);
+//
+//                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+//                    s2sMapEntry.Key = "CardId";
+//                    s2sMapEntry.Value = paymentInfo.getCardList().get(selectedCardIdIndex).getCardId();
+//                    vectorstring2stringMapEntry.add(s2sMapEntry);
+//
+//                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+//                    s2sMapEntry.Key = "SenderTerminalId";
+//                    s2sMapEntry.Value = pspInfoDTO.getSenderTerminalId();
+//                    vectorstring2stringMapEntry.add(s2sMapEntry);
+//
+//                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+//                    s2sMapEntry.Key = "IPAddress";
+//                    s2sMapEntry.Value = pspInfoDTO.getIpAddress();
+//                    vectorstring2stringMapEntry.add(s2sMapEntry);
+//
+//                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+//                    s2sMapEntry.Key = "Email";
+//                    s2sMapEntry.Value = "";
+//                    vectorstring2stringMapEntry.add(s2sMapEntry);
+//
+//                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+//                    s2sMapEntry.Key = "CVV2";
+//                    s2sMapEntry.Value = userCVV2;
+//                    vectorstring2stringMapEntry.add(s2sMapEntry);
+//
+//                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+//                    s2sMapEntry.Key = "ExpDate";
+//                    s2sMapEntry.Value = paymentInfo.getCardList().get(selectedCardIdIndex).getExpireDate();
+//                    vectorstring2stringMapEntry.add(s2sMapEntry);
+//
+//                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+//                    s2sMapEntry.Key = "ResNum";
+//                    s2sMapEntry.Value = paymentInfo.getProductCode();
+//                    vectorstring2stringMapEntry.add(s2sMapEntry);
+//
+//                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
+//                    s2sMapEntry.Key = "Signature";
+//                    s2sMapEntry.Value = signature;
+//                    vectorstring2stringMapEntry.add(s2sMapEntry);
+//
+//                    doWorkInfo.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
+//                    requestPurchase.execute(doWorkInfo);
 
                 }
                 break;
@@ -500,6 +528,32 @@ public class BusinessPaymentConfirmActivity extends AppCompatActivity implements
                 userCVV2 += digit;
             }
         }
+    }
+
+    @Override
+    public void showProgress() {
+        hamPayDialog.showWaitingDialog("");
+    }
+
+    @Override
+    public void cancelProgress() {
+        hamPayDialog.dismisWaitingDialog();
+    }
+
+    @Override
+    public void onError() {
+        hamPayDialog.dismisWaitingDialog();
+        Toast.makeText(context, R.string.msg_soap_timeout, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNetPayResponse(boolean state, ResponseMessage<NetPayResponse> data, String message) {
+        Log.e("", "");
+    }
+
+    @Override
+    public void keyExchangeProblem() {
+
     }
 
     public class RequestPurchaseTaskCompleteListener implements AsyncTaskCompleteListener<CBUArrayOfKeyValueOfstringstring> {

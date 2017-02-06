@@ -32,4 +32,6 @@ public interface ModelLayer {
     List<ContactDTO> getUserContacts();
 
     void showServerConnectionError();
+
+    String getPspBaseUrl();
 }

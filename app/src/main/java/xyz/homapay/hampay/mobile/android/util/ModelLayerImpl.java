@@ -80,6 +80,11 @@ public class ModelLayerImpl implements ModelLayer {
     }
 
     @Override
+    public String getPspBaseUrl() {
+        return Constants.HTTPS_PSP_IP;
+    }
+
+    @Override
     public void showNoNetworkDialog() {
         try {
             new HamPayDialog((Activity) ctx).showNoNetwork();
@@ -92,5 +97,6 @@ public class ModelLayerImpl implements ModelLayer {
     public File getCacheDir() {
         return ctx.getCacheDir();
     }
+
 
 }

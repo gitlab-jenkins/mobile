@@ -139,6 +139,7 @@ public class Constants {
     public static String TOKEN_PAYMENT = "https://mobile.hampay.com/saman/psp/pay";
     public static ConnectionType CONNECTION_TYPE = ConnectionType.HTTPS;
     public static String HTTPS_SERVER_IP = BuildConfig.HTTPS_BASE_URL + URL_PREFIX;//England Server
+    public static String HTTPS_PSP_IP = BuildConfig.PSP_SERVER_URL;
     public static final String HTTPS_OPENAM_LOGIN_URL = HTTPS_SERVER_IP + "/auth";
     public static final String HTTPS_OPENAM_LOGOUT_URL = HTTPS_SERVER_IP + "/unauth";
 

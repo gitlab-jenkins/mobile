@@ -4,6 +4,7 @@ import android.os.Build;
 import android.util.Log;
 
 import java.io.ByteArrayInputStream;
+import java.math.BigInteger;
 import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
 
@@ -22,6 +23,7 @@ import okhttp3.ResponseBody;
 import xyz.homapay.hampay.common.common.encrypt.AESMessageEncryptor;
 import xyz.homapay.hampay.common.common.response.DecryptedResponseInfo;
 import xyz.homapay.hampay.mobile.android.img.CacheProvider;
+import xyz.homapay.hampay.mobile.android.m.worker.common.ServiceType;
 import xyz.homapay.hampay.mobile.android.ssl.HamPayX509TrustManager;
 
 /**
@@ -29,6 +31,11 @@ import xyz.homapay.hampay.mobile.android.ssl.HamPayX509TrustManager;
  */
 
 public class TrustedOkHttpClient {
+
+    private static ServiceType serviceType;
+    public TrustedOkHttpClient(ServiceType serviceType){
+        this.serviceType = serviceType;
+    }
 
     private static final String CACHE_CONTROL = "Cache-Control";
 
@@ -77,6 +84,26 @@ public class TrustedOkHttpClient {
                 Request original = chain.request();
                 Response response = chain.proceed(original);
                 DecryptedResponseInfo decryptedResponseInfo = new AESMessageEncryptor().decryptResponse(deflateGzip(response, gzip), keyAgreementModel.getKey(), keyAgreementModel.getIv());
+                if (decryptedResponseInfo.getResponseCode() == 0) {
+                    Response.Builder resBuilder = response.newBuilder();
+                    resBuilder.body(ResponseBody.create(MediaType.parse("application/json"), decryptedResponseInfo.getPayload()));
+                    return resBuilder.build();
+                } else {
+                    throw new ServerException();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new ServerException();
+            }
+        };
+    }
+
+    private static Interceptor provideDecryptor(byte[] encKey, byte[] ivKey, boolean gzip) {
+        return chain -> {
+            try {
+                Request original = chain.request();
+                Response response = chain.proceed(original);
+                DecryptedResponseInfo decryptedResponseInfo = new AESMessageEncryptor().decryptResponse(deflateGzip(response, gzip), encKey, ivKey);
                 if (decryptedResponseInfo.getResponseCode() == 0) {
                     Response.Builder resBuilder = response.newBuilder();
                     resBuilder.body(ResponseBody.create(MediaType.parse("application/json"), decryptedResponseInfo.getPayload()));
@@ -167,10 +194,48 @@ public class TrustedOkHttpClient {
                 builder.addNetworkInterceptor(provideCacheInterceptor());
             else
                 builder.addInterceptor(provideOfflineCacheInterceptor());
-
-            if (encryption)
+            if (encryption) {
                 builder.addInterceptor(provideDecryptor(keyAgreementModel, gZip));
+            }
+            return builder.build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
+    public static OkHttpClient getTrustedOkHttpClient(ModelLayer modelLayer, byte[] encKey, byte[] ivKey, boolean encryption, boolean gZip) {
+        try {
+            // Create a trust manager that does not validate certificate chains
+            final TrustManager[] trustedCerts = new X509TrustManager[]{new HamPayX509TrustManager(modelLayer.getSSLKeyStore().getAppKeyStore())};
+
+            // Install the all-trusting trust manager
+            final SSLContext sslContext;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                sslContext = SSLContext.getInstance("TLSv1.2");
+            } else {
+                sslContext = SSLContext.getInstance("TLS");
+            }
+            sslContext.init(null, trustedCerts, new java.security.SecureRandom());
+
+            final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+            OkHttpClient.Builder builder = new OkHttpClient.Builder();
+            builder.connectTimeout(10, TimeUnit.SECONDS)
+                    .writeTimeout(10, TimeUnit.SECONDS)
+                    .readTimeout(10, TimeUnit.SECONDS)
+                    .retryOnConnectionFailure(true)
+                    .sslSocketFactory(sslSocketFactory, (X509TrustManager) trustedCerts[0])
+                    .addNetworkInterceptor(provideLogInterceptor())
+                    .addInterceptor(provideConnectivityInterceptor(modelLayer))
+                    .cache(CacheProvider.getInstance(modelLayer).provideCache());
+
+            if (modelLayer.isConnected())
+                builder.addNetworkInterceptor(provideCacheInterceptor());
+            else
+                builder.addInterceptor(provideOfflineCacheInterceptor());
+            if (encryption) {
+                builder.addInterceptor(provideDecryptor(encKey, ivKey, gZip));
+            }
             return builder.build();
         } catch (Exception e) {
             e.printStackTrace();
