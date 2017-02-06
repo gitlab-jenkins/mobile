@@ -73,10 +73,11 @@
         android:id="@+id/image14"
         android:layout_width="8dp"
         android:layout_height="8dp"
-        android:layout_marginLeft="70dp"
-        android:layout_marginTop="130dp"
         app:srcCompat="@drawable/ic_intro_cross"
-        tools:ignore="VectorDrawableCompat" />
+        tools:ignore="VectorDrawableCompat"
+        android:layout_alignTop="@+id/centerImage"
+        android:layout_alignLeft="@+id/image8"
+        android:layout_alignStart="@+id/image8" />
 
     <ImageView
         android:id="@+id/image10"
