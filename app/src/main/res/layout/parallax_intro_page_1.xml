@@ -12,7 +12,7 @@
         android:layout_height="232dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="75dp"
-        android:src="@drawable/intro_clouds_1" />
+        android:src="@drawable/intro_clouds_1" />icon_lock
 
     <ImageView
         android:id="@+id/centerImage"

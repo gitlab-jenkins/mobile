@@ -36,7 +36,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
                         android:scaleType="fitXY"
-                        android:src="@drawable/main_fragment_banner" />
+                        android:src="@mipmap/main_fragment_banner" />
 
                     <LinearLayout
                         android:id="@+id/good_message"
@@ -100,7 +100,6 @@
                         <ImageView
                             android:layout_width="52dp"
                             android:layout_height="52dp"
-                            android:background="@color/app_origin"
                             android:src="@drawable/factor_icon" />
 
                     </LinearLayout>
@@ -134,7 +133,6 @@
                     <ImageView
                         android:layout_width="52dp"
                         android:layout_height="52dp"
-                        android:background="@color/page_title"
                         android:src="@drawable/business_icon" />
 
                 </LinearLayout>
@@ -166,7 +164,6 @@
                         android:layout_width="52dp"
                         android:layout_height="52dp"
                         android:layout_alignParentRight="true"
-                        android:background="@color/page_title"
                         android:src="@drawable/billsandtopup" />
 
                 </LinearLayout>
@@ -202,7 +199,6 @@
                             android:layout_width="52dp"
                             android:layout_height="52dp"
                             android:layout_alignParentRight="true"
-                            android:background="@color/page_title"
                             android:src="@drawable/expectation_icon" />
 
                         <xyz.homapay.hampay.mobile.android.component.FacedTextView
@@ -249,7 +245,6 @@
                     <ImageView
                         android:layout_width="52dp"
                         android:layout_height="52dp"
-                        android:background="@color/page_title"
                         android:src="@drawable/transaction_icon" />
 
                 </LinearLayout>

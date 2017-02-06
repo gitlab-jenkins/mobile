@@ -32,7 +32,7 @@
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:onClick="userManual"
-                    android:src="@drawable/help_gray" />
+                    android:src="@drawable/help" />
 
             </LinearLayout>
 

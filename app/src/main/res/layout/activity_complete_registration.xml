@@ -25,10 +25,10 @@
                 <ImageView
                     android:layout_width="28dp"
                     android:layout_height="28dp"
+                    android:tint="@color/white"
                     android:layout_marginLeft="8dp"
-                    android:background="@color/app_origin"
                     android:onClick="userManual"
-                    android:src="@drawable/help_transparent" />
+                    android:src="@drawable/help" />
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:layout_width="wrap_content"
@@ -152,7 +152,6 @@
             <ImageView
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:background="@color/app_origin"
                 android:src="@drawable/start_cycle" />
 
             <LinearLayout

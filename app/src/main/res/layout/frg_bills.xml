@@ -25,7 +25,6 @@
         <ImageView
             android:layout_width="52dp"
             android:layout_height="26dp"
-            android:background="@color/app_origin"
             android:src="@drawable/bills_service" />
 
     </LinearLayout>

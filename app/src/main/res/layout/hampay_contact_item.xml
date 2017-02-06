@@ -54,7 +54,6 @@
                     android:layout_height="44dp"
                     android:src="@drawable/user_placeholder"
                     android:scaleType="fitXY"
-                    android:background="@color/page_title"
                     android:layout_gravity="center"/>
 
                 <ImageView

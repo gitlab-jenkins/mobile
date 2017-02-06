@@ -37,8 +37,8 @@
                     android:layout_height="60dp"
                     android:src="@drawable/user_placeholder"
                     android:scaleType="fitXY"
+                    android:tint="@color/white"
                     android:layout_gravity="center"
-                    android:background="@color/app_origin"
                     android:visibility="visible"/>
 
                 <ImageView

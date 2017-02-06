@@ -112,7 +112,6 @@
                                 android:layout_width="45dp"
                                 android:layout_height="45dp"
                                 android:layout_gravity="center"
-                                android:background="@color/page_title"
                                 android:scaleType="fitXY"
                                 android:src="@drawable/user_placeholder" />
 

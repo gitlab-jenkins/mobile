@@ -464,11 +464,11 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Vie
             if (topUInfo.getImageId() != null) {
                 imgOperator.setTag(topUInfo.getImageId());
                 if (topUInfo.getImageId().equals("MCI")) {
-                    imgOperator.setImageResource(R.mipmap.hamrah_active);
+                    imgOperator.setImageResource(R.drawable.hamrah_active);
                 } else if (topUInfo.getImageId().equals("MTN")) {
-                    imgOperator.setImageResource(R.mipmap.irancell_active);
+                    imgOperator.setImageResource(R.drawable.irancell_active);
                 } else if (topUInfo.getImageId().equals("RAYTEL")) {
-                    imgOperator.setImageResource(R.mipmap.rightel_active);
+                    imgOperator.setImageResource(R.drawable.rightel_active);
                 }
             } else {
                 imgOperator.setImageResource(R.drawable.user_placeholder);

@@ -29,16 +29,16 @@ public class AppManager {
         int resId;
         switch (operator) {
             case MCI:
-                resId = R.mipmap.hamrah_active;
+                resId = R.drawable.hamrah_active;
                 break;
             case MTN:
-                resId = R.mipmap.irancell_active;
+                resId = R.drawable.irancell_active;
                 break;
             case RAYTEL:
-                resId = R.mipmap.rightel_active;
+                resId = R.drawable.rightel_active;
                 break;
             default:
-                resId = R.mipmap.hamrah_active;
+                resId = R.drawable.hamrah_active;
                 break;
         }
         return resId;

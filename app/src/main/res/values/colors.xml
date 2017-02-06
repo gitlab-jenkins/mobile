@@ -24,7 +24,7 @@
     <color name="slider_button_bg">#fafafa</color>
     <color name="page_title">@color/app_origin</color>
     <color name="start_page_text">#231f20</color>
-    <color name="navigation_green">#8fc547</color>
+    <color name="navigation_green">#00bc0a</color>
     <color name="navigation_gray">#d1d3d4</color>
     <color name="disable_button">#d1d3d4</color>
     <color name="disable_tab_header">#D6B3D4</color>

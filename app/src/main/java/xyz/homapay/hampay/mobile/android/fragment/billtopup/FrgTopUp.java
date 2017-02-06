@@ -454,24 +454,24 @@ public class FrgTopUp extends Fragment implements View.OnClickListener, TopUpInf
             changeInfoFromNetwork();
         switch (operator) {
             case MCI:
-                imgMCI.setImageResource(R.mipmap.hamrah_active);
-                imgMTN.setImageResource(R.mipmap.irancell_inactive);
-                imgRIGHTEL.setImageResource(R.mipmap.rightel_inactive);
+                imgMCI.setImageResource(R.drawable.hamrah_active);
+                imgMTN.setImageResource(R.drawable.irancell_inactive);
+                imgRIGHTEL.setImageResource(R.drawable.rightel_inactive);
                 break;
             case MTN:
-                imgMCI.setImageResource(R.mipmap.hamrah_inactive);
-                imgMTN.setImageResource(R.mipmap.irancell_active);
-                imgRIGHTEL.setImageResource(R.mipmap.rightel_inactive);
+                imgMCI.setImageResource(R.drawable.hamrah_inactive);
+                imgMTN.setImageResource(R.drawable.irancell_active);
+                imgRIGHTEL.setImageResource(R.drawable.rightel_inactive);
                 break;
             case RAYTEL:
-                imgMCI.setImageResource(R.mipmap.hamrah_inactive);
-                imgMTN.setImageResource(R.mipmap.irancell_inactive);
-                imgRIGHTEL.setImageResource(R.mipmap.rightel_active);
+                imgMCI.setImageResource(R.drawable.hamrah_inactive);
+                imgMTN.setImageResource(R.drawable.irancell_inactive);
+                imgRIGHTEL.setImageResource(R.drawable.rightel_active);
                 break;
             default:
-                imgMCI.setImageResource(R.mipmap.hamrah_inactive);
-                imgMTN.setImageResource(R.mipmap.irancell_inactive);
-                imgRIGHTEL.setImageResource(R.mipmap.rightel_inactive);
+                imgMCI.setImageResource(R.drawable.hamrah_inactive);
+                imgMTN.setImageResource(R.drawable.irancell_inactive);
+                imgRIGHTEL.setImageResource(R.drawable.rightel_inactive);
                 break;
         }
     }
@@ -546,9 +546,9 @@ public class FrgTopUp extends Fragment implements View.OnClickListener, TopUpInf
                 if (resultCode == Activity.RESULT_OK) {
                     cellNumberText.setText("");
                     cellNumberIcon.setImageDrawable(null);
-                    imgMCI.setImageResource(R.mipmap.hamrah_inactive);
-                    imgMTN.setImageResource(R.mipmap.irancell_inactive);
-                    imgRIGHTEL.setImageResource(R.mipmap.rightel_inactive);
+                    imgMCI.setImageResource(R.drawable.hamrah_inactive);
+                    imgMTN.setImageResource(R.drawable.irancell_inactive);
+                    imgRIGHTEL.setImageResource(R.drawable.rightel_inactive);
                     cellNumber = "";
                     try {
                         MCI_INFO = null;
