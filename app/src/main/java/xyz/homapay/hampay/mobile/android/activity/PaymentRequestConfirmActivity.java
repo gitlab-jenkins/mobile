@@ -148,7 +148,11 @@ public class PaymentRequestConfirmActivity extends AppCompatActivity {
         calcFeeCharge = intent.getLongExtra(Constants.CONTACT_FEE, 0);
         amount_value.setText(persianEnglishDigit.E2P(formatter.format(contactAmount)));
         fee_value.setText(persianEnglishDigit.E2P(formatter.format(calcFeeCharge)));
-        contact_message.setText(intent.getStringExtra(Constants.CONTACT_MESSAGE));
+        String message = intent.getStringExtra(Constants.CONTACT_MESSAGE);
+        if (message != null && !message.equals(""))
+            contact_message.setText(message);
+        else
+            contact_message.setVisibility(View.GONE);
 
         if (hamPayContact != null) {
             displayName = hamPayContact.getDisplayName();
