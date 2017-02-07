@@ -76,7 +76,7 @@
     <string name="bills_service_text">شناسه قبض و شناسه پرداخت قبض مورد نظر را وارد نموده و یا بارکد آن را اسکن نمائید.</string>
     <string name="topup_text">شماره تلفن همراه مورد نظر را وارد نموده و سپس مبلغ و نوع شارژ را انتخاب نمائید.</string>
     <string name="scan_barcode">اسکن بارکد</string>
-    <string name="bills_service">پرداخت قبض</string>
+    <string name="bills_service">قبوض خدماتی</string>
     <string name="bills_end_term">پایان دوره</string>
     <string name="bills_mid_term">میان دوره</string>
     <string name="topup_amount">مبلغ شارژ</string>
