@@ -207,10 +207,10 @@
                     android:layout_height="80dp"
                     android:layout_alignParentRight="true"
                     android:layout_margin="8dp"
-                    android:textColor="@color/main_menu_title"
+                    android:background="#f5f5f5"
+                    android:textColor="@color/app_origin"
                     android:textSize="14sp"
-                    geekui:customTypeface="fonts/vazir_regular.ttf"
-                    android:background="#f5f5f5"/>
+                    geekui:customTypeface="fonts/vazir_regular.ttf" />
 
                 <xyz.homapay.hampay.mobile.android.component.FacedTextView
                     android:id="@+id/payment_request_button"

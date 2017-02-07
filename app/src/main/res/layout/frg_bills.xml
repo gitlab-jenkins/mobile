@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_gravity="center_horizontal"
-            android:text="@string/bills_service"
+            android:text="@string/bills_service_title"
             android:textColor="@color/main_menu_title"
             android:textSize="16sp"
             geekui:customTypeface="fonts/vazir_regular.ttf" />

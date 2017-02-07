@@ -32,6 +32,7 @@ import xyz.homapay.hampay.mobile.android.model.AppState;
 import xyz.homapay.hampay.mobile.android.model.NotificationMessageType;
 import xyz.homapay.hampay.mobile.android.receiver.GcmBroadcastReceiver;
 import xyz.homapay.hampay.mobile.android.util.Constants;
+import xyz.homapay.hampay.mobile.android.util.TelephonyUtils;
 
 /**
  * Created by amir on 9/15/15.
@@ -51,14 +52,6 @@ public class GcmMessageHandler extends IntentService {
     private final Handler notificationHandler = new Handler() {
         @Override
         public void handleMessage(Message message) {
-
-            try {
-                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                Ringtone ringtone = RingtoneManager.getRingtone(getApplicationContext(), notification);
-                ringtone.play();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
 
             AppState appState = AppState.Stoped;
             ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
@@ -93,6 +86,7 @@ public class GcmMessageHandler extends IntentService {
                                     .autoCancel(true)
                                     .simple()
                                     .build();
+                            ring();
                         }
                     }
                     break;
@@ -120,6 +114,7 @@ public class GcmMessageHandler extends IntentService {
                             .autoCancel(true)
                             .simple()
                             .build();
+                    ring();
                     break;
 
                 case PAYMENT:
@@ -144,7 +139,7 @@ public class GcmMessageHandler extends IntentService {
                                     .autoCancel(true)
                                     .simple()
                                     .build();
-
+                            ring();
                             break;
 
 
@@ -167,6 +162,7 @@ public class GcmMessageHandler extends IntentService {
                                     .autoCancel(true)
                                     .simple()
                                     .build();
+                            ring();
                             break;
 
                     }
@@ -196,12 +192,10 @@ public class GcmMessageHandler extends IntentService {
                                     .autoCancel(true)
                                     .simple()
                                     .build();
-
+                            ring();
                             break;
 
-
                         case Resumed:
-
                             bundle.putString(Constants.CONTACT_PHONE_NO, notificationCallerCellNumber);
                             bundle.putString(Constants.CONTACT_NAME, notificationName);
 
@@ -219,6 +213,7 @@ public class GcmMessageHandler extends IntentService {
                                     .autoCancel(true)
                                     .simple()
                                     .build();
+                            ring();
                             break;
 
                     }
@@ -245,7 +240,7 @@ public class GcmMessageHandler extends IntentService {
                                     .autoCancel(true)
                                     .simple()
                                     .build();
-
+                            ring();
                             break;
                         case Resumed:
                             PugNotification.with(getApplicationContext())
@@ -262,6 +257,7 @@ public class GcmMessageHandler extends IntentService {
                                     .autoCancel(true)
                                     .simple()
                                     .build();
+                            ring();
                             break;
 
                     }
@@ -287,6 +283,7 @@ public class GcmMessageHandler extends IntentService {
                                     .autoCancel(true)
                                     .simple()
                                     .build();
+                            ring();
 
                             break;
                         case Resumed:
@@ -304,6 +301,7 @@ public class GcmMessageHandler extends IntentService {
                                     .autoCancel(true)
                                     .simple()
                                     .build();
+                            ring();
                             break;
                     }
                     break;
@@ -327,6 +325,7 @@ public class GcmMessageHandler extends IntentService {
                                     .autoCancel(true)
                                     .simple()
                                     .build();
+                            ring();
 
                             break;
                         case Resumed:
@@ -344,6 +343,7 @@ public class GcmMessageHandler extends IntentService {
                                     .autoCancel(true)
                                     .simple()
                                     .build();
+                            ring();
                             break;
                     }
                     break;
@@ -351,6 +351,7 @@ public class GcmMessageHandler extends IntentService {
                 case IMAGE_UPDATED:
                     break;
             }
+
             if (HamPayApplication.getAppState() == AppState.Stoped) {
             }
         }
@@ -358,6 +359,16 @@ public class GcmMessageHandler extends IntentService {
 
     public GcmMessageHandler() {
         super("GcmMessageHandler");
+    }
+
+    private void ring() {
+        try {
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Ringtone ringtone = RingtoneManager.getRingtone(getApplicationContext(), notification);
+            ringtone.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -371,7 +382,9 @@ public class GcmMessageHandler extends IntentService {
     private boolean isThisCellPhoneInContacts() {
         Query query = Contacts.getQuery();
         query.hasPhoneNumber();
-        query.whereContains(Contact.Field.PhoneNumber, cellNumber);
+        String newPhone = TelephonyUtils.fixPhoneNumber(this, cellNumber).substring(1);
+        newPhone = "+98" + newPhone;
+        query.whereContains(Contact.Field.PhoneNormalizedNumber, newPhone);
         return query.find().size() == 0 ? false : true;
     }
 

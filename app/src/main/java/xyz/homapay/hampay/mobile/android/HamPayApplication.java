@@ -1,12 +1,14 @@
 package xyz.homapay.hampay.mobile.android;
 
 import android.support.multidex.MultiDexApplication;
+import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.github.tamir7.contacts.Contacts;
 
 import io.fabric.sdk.android.Fabric;
 import xyz.homapay.hampay.mobile.android.model.AppState;
+import xyz.homapay.hampay.mobile.android.util.TelephonyUtils;
 
 /**
  * Created by amir on 7/10/15.
