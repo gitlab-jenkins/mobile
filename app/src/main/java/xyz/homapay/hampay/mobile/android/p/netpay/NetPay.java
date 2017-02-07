@@ -8,6 +8,6 @@ import xyz.homapay.hampay.common.pspproxy.model.request.NetPayRequest;
 
 public interface NetPay {
 
-    void netPay(NetPayRequest registrationCredentialsRequest, String authToken, byte[] encKey, byte[] ivKey);
+    void netPay(NetPayRequest netPayRequest, String authToken, byte[] encKey, byte[] ivKey);
 
 }

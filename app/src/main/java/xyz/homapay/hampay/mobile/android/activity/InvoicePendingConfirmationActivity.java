@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,7 +46,6 @@ import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPayment;
 import xyz.homapay.hampay.mobile.android.async.RequestPSPResult;
 import xyz.homapay.hampay.mobile.android.async.RequestPaymentDetail;
-import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
 import xyz.homapay.hampay.mobile.android.async.task.SignToPayTask;
 import xyz.homapay.hampay.mobile.android.async.task.impl.OnTaskCompleted;
 import xyz.homapay.hampay.mobile.android.component.FacedTextView;
@@ -58,11 +56,9 @@ import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.img.ImageHelper;
 import xyz.homapay.hampay.mobile.android.model.AppState;
-import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.model.PaymentType;
 import xyz.homapay.hampay.mobile.android.model.SucceedPayment;
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
-import xyz.homapay.hampay.mobile.android.p.credential.CredentialEntryImpl;
 import xyz.homapay.hampay.mobile.android.p.netpay.NetPay;
 import xyz.homapay.hampay.mobile.android.p.netpay.NetPayImpl;
 import xyz.homapay.hampay.mobile.android.p.netpay.NetPayView;
@@ -72,9 +68,6 @@ import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.ModelLayerImpl;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
-import xyz.homapay.hampay.mobile.android.util.PspCode;
-import xyz.homapay.hampay.mobile.android.webservice.psp.CBUArrayOfKeyValueOfstringstring;
-import xyz.homapay.hampay.mobile.android.webservice.psp.CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring;
 
 public class InvoicePendingConfirmationActivity extends AppCompatActivity implements NetPayView, View.OnClickListener, CardNumberDialog.SelectCardDialogListener, OnTaskCompleted {
 
@@ -130,11 +123,9 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
     private String userCVV2 = "";
     private PersianEnglishDigit persian = new PersianEnglishDigit();
     private HamPayDialog hamPayDialog;
-    private PaymentInfoDTO paymentInfoDTO = null;
+    private PaymentInfoDTO paymentInfo = null;
     private PspInfoDTO pspInfoDTO = null;
     private String providerId = null;
-    private RequestPurchase requestPurchase;
-    private DoWorkInfo doWorkInfo;
     private PersianEnglishDigit persianEnglishDigit;
     private RequestPSPResult requestPSPResult;
     private PSPResultRequest pspResultRequest;
@@ -227,8 +218,8 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
         Intent intent = getIntent();
         providerId = intent.getStringExtra(Constants.PROVIDER_ID);
 
-        if (paymentInfoDTO != null) {
-            fillPayment(paymentInfoDTO, pspInfoDTO);
+        if (paymentInfo != null) {
+            fillPayment(paymentInfo, pspInfoDTO);
         } else if (providerId != null) {
             PaymentDetailRequest paymentDetailRequest = new PaymentDetailRequest();
             paymentDetailRequest.setProviderId(providerId);
@@ -296,7 +287,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
             case R.id.cardPlaceHolder:
                 CardNumberDialog cardNumberDialog = new CardNumberDialog();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(Constants.CARD_LIST, (Serializable) paymentInfoDTO.getCardList());
+                bundle.putSerializable(Constants.CARD_LIST, (Serializable) paymentInfo.getCardList());
                 cardNumberDialog.setArguments(bundle);
                 FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.add(cardNumberDialog, null);
@@ -315,10 +306,10 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
                     return;
                 }
 
-                if (selectedCardIdIndex == -1 || (paymentInfoDTO.getCardList().get(selectedCardIdIndex) != null && paymentInfoDTO.getCardList().get(selectedCardIdIndex).getCardId() == null) || (paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() >= Constants.SOAP_AMOUNT_MAX)) {
+                if (selectedCardIdIndex == -1 || (paymentInfo.getCardList().get(selectedCardIdIndex) != null && paymentInfo.getCardList().get(selectedCardIdIndex).getCardId() == null) || (paymentInfo.getAmount() + paymentInfo.getFeeCharge() >= Constants.SOAP_AMOUNT_MAX)) {
                     Intent intent1 = new Intent();
                     intent1.setClass(activity, BankWebPaymentActivity.class);
-                    intent1.putExtra(Constants.PAYMENT_INFO, paymentInfoDTO);
+                    intent1.putExtra(Constants.PAYMENT_INFO, paymentInfo);
                     intent1.putExtra(Constants.PSP_INFO, pspInfoDTO);
                     startActivityForResult(intent1, 46);
                 } else {
@@ -333,94 +324,18 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
                     AppManager.setMobileTimeout(context);
                     editor.commit();
 
-                    netPayRequest.setCardId(paymentInfoDTO.getCardList().get(selectedCardIdIndex).getCardId());
+                    netPayRequest.setCardId(paymentInfo.getCardList().get(selectedCardIdIndex).getCardId());
                     netPayRequest.setCvv2(userCVV2);
-                    netPayRequest.setExpirationDate(paymentInfoDTO.getCardList().get(selectedCardIdIndex).getExpireDate());
-                    netPayRequest.setAmount(paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge());
-                    netPayRequest.setCellNumber(pspInfoDTO.getCellNumber().substring(1, pspInfoDTO.getCellNumber().length()));
+                    netPayRequest.setExpirationDate(paymentInfo.getCardList().get(selectedCardIdIndex).getExpireDate());
+                    netPayRequest.setAmount(paymentInfo.getAmount() + paymentInfo.getFeeCharge());
+                    netPayRequest.setCellNumber(pspInfoDTO.getCellNumber());
                     netPayRequest.setDigitalSignature(signature);
                     netPayRequest.setIpAddress(pspInfoDTO.getIpAddress());
                     netPayRequest.setPin2(userPinCode);
-                    netPayRequest.setProductCode(paymentInfoDTO.getProductCode());
+                    netPayRequest.setProductCode(paymentInfo.getProductCode());
                     netPayRequest.setSenderTerminalId(pspInfoDTO.getSenderTerminalId());
                     netPayRequest.setTerminalId(pspInfoDTO.getTerminalId());
-
-                    netPay.netPay(netPayRequest, AppManager.getAuthToken(context), paymentInfoDTO.getPspInfo().getPspEncKey(), paymentInfoDTO.getPspInfo().getIvKey());
-
-//                    requestPurchase = new RequestPurchase(activity, new RequestPurchaseTaskCompleteListener(), paymentInfoDTO.getPspInfo().getPayURL());
-//
-//                    doWorkInfo = new DoWorkInfo();
-//                    doWorkInfo.setUserName("appstore");
-//                    doWorkInfo.setPassword("sepapp");
-//                    doWorkInfo.setCellNumber(pspInfoDTO.getCellNumber().substring(1, pspInfoDTO.getCellNumber().length()));
-//                    doWorkInfo.setLangAByte((byte) 0);
-//                    doWorkInfo.setLangABoolean(false);
-//                    CBUArrayOfKeyValueOfstringstring vectorstring2stringMapEntry = new CBUArrayOfKeyValueOfstringstring();
-//                    CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-//
-//
-//                    s2sMapEntry.Key = "Amount";
-//                    s2sMapEntry.Value = String.valueOf(paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge() + paymentInfoDTO.getVat());
-//                    vectorstring2stringMapEntry.add(s2sMapEntry);
-//
-//                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-//                    s2sMapEntry.Key = "Pin2";
-//                    s2sMapEntry.Value = userPinCode;
-//                    vectorstring2stringMapEntry.add(s2sMapEntry);
-//
-//                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-//                    s2sMapEntry.Key = "ThirdParty";
-//                    s2sMapEntry.Value = paymentInfoDTO.getProductCode();
-//                    vectorstring2stringMapEntry.add(s2sMapEntry);
-//
-//                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-//                    s2sMapEntry.Key = "TerminalId";
-//                    s2sMapEntry.Value = pspInfoDTO.getTerminalId();
-//                    vectorstring2stringMapEntry.add(s2sMapEntry);
-//
-//                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-//                    s2sMapEntry.Key = "CardId";
-//                    s2sMapEntry.Value = paymentInfoDTO.getCardList().get(selectedCardIdIndex).getCardId();
-//                    vectorstring2stringMapEntry.add(s2sMapEntry);
-//
-//                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-//                    s2sMapEntry.Key = "SenderTerminalId";
-//                    s2sMapEntry.Value = pspInfoDTO.getSenderTerminalId();
-//                    vectorstring2stringMapEntry.add(s2sMapEntry);
-//
-//                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-//                    s2sMapEntry.Key = "IPAddress";
-//                    s2sMapEntry.Value = pspInfoDTO.getIpAddress();
-//                    vectorstring2stringMapEntry.add(s2sMapEntry);
-//
-//                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-//                    s2sMapEntry.Key = "Email";
-//                    s2sMapEntry.Value = "";
-//                    vectorstring2stringMapEntry.add(s2sMapEntry);
-//
-//                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-//                    s2sMapEntry.Key = "CVV2";
-//                    s2sMapEntry.Value = userCVV2;
-//                    vectorstring2stringMapEntry.add(s2sMapEntry);
-//
-//                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-//                    s2sMapEntry.Key = "ExpDate";
-//                    s2sMapEntry.Value = paymentInfoDTO.getCardList().get(selectedCardIdIndex).getExpireDate();
-//                    vectorstring2stringMapEntry.add(s2sMapEntry);
-//
-//                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-//                    s2sMapEntry.Key = "ResNum";
-//                    s2sMapEntry.Value = paymentInfoDTO.getProductCode();
-//                    vectorstring2stringMapEntry.add(s2sMapEntry);
-//
-//                    s2sMapEntry = new CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-//                    s2sMapEntry.Key = "Signature";
-//                    s2sMapEntry.Value = signature;
-//                    vectorstring2stringMapEntry.add(s2sMapEntry);
-//
-//                    doWorkInfo.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
-//                    requestPurchase.execute(doWorkInfo);
-
+                    netPay.netPay(netPayRequest, AppManager.getAuthToken(context), paymentInfo.getPspInfo().getPspEncKey(), paymentInfo.getPspInfo().getIvKey());
                 }
                 break;
         }
@@ -434,18 +349,18 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
                 userPinCode = "";
                 pinText.setText("");
                 cvvText.setText("");
-                if (paymentInfoDTO != null) {
+                if (paymentInfo != null) {
                     selectedCardIdIndex = position;
-                    cardNumberValue.setText(persian.E2P(paymentInfoDTO.getCardList().get(position).getLast4Digits()));
-                    bankName.setText(paymentInfoDTO.getCardList().get(position).getBankName());
+                    cardNumberValue.setText(persian.E2P(paymentInfo.getCardList().get(position).getLast4Digits()));
+                    bankName.setText(paymentInfo.getCardList().get(position).getBankName());
                     selectCardText.setVisibility(View.GONE);
                     cardSelect.setVisibility(View.VISIBLE);
-                    if (paymentInfoDTO.getCardList().get(position).getDigitalSignature() != null && paymentInfoDTO.getCardList().get(position).getDigitalSignature().length() > 0) {
-                        signature = paymentInfoDTO.getCardList().get(position).getDigitalSignature();
+                    if (paymentInfo.getCardList().get(position).getDigitalSignature() != null && paymentInfo.getCardList().get(position).getDigitalSignature().length() > 0) {
+                        signature = paymentInfo.getCardList().get(position).getDigitalSignature();
                     } else {
                         SignToPayRequest signToPayRequest = new SignToPayRequest();
-                        signToPayRequest.setCardId(paymentInfoDTO.getCardList().get(position).getCardId());
-                        signToPayRequest.setProductCode(paymentInfoDTO.getProductCode());
+                        signToPayRequest.setCardId(paymentInfo.getCardList().get(position).getCardId());
+                        signToPayRequest.setProductCode(paymentInfo.getProductCode());
                         signToPayRequest.setFundType(FundType.PAYMENT);
                         new SignToPayTask(activity, InvoicePendingConfirmationActivity.this, signToPayRequest, authToken).execute();
                     }
@@ -455,7 +370,7 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
             case ADD:
                 Intent intent = new Intent();
                 intent.setClass(activity, BankWebPaymentActivity.class);
-                intent.putExtra(Constants.PAYMENT_INFO, paymentInfoDTO);
+                intent.putExtra(Constants.PAYMENT_INFO, paymentInfo);
                 intent.putExtra(Constants.PSP_INFO, pspInfoDTO);
                 startActivityForResult(intent, 46);
                 break;
@@ -595,113 +510,78 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
     @Override
     public void onError() {
         hamPayDialog.dismisWaitingDialog();
-        Toast.makeText(context, R.string.msg_soap_timeout, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onNetPayResponse(boolean state, ResponseMessage<NetPayResponse> data, String message) {
-        Log.e("", "");
+
+        String pspResponseCode = null;
+        String description;
+        String pspTrackingCode = null;
+        ResultStatus resultStatus = ResultStatus.FAILURE;
+        ServiceEvent serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
+        LogEvent logEvent = new LogEvent(context);
+
+        if (data != null) {
+            pspResponseCode = data.getService().getPspResponseCode();
+            pspTrackingCode = data.getService().getPspTrackingCode();
+            description = data.getService().getResultStatus().getDescription();
+            switch (data.getService().getResultStatus()) {
+                case SUCCESS:
+                    pspResultRequest = new PSPResultRequest();
+                    serviceName = ServiceEvent.PSP_PAYMENT_SUCCESS;
+                    if (paymentInfo != null) {
+                        Intent intent = new Intent(context, PaymentCompletedActivity.class);
+                        SucceedPayment succeedPayment = new SucceedPayment();
+                        succeedPayment.setAmount(paymentInfo.getAmount() + paymentInfo.getFeeCharge());
+                        succeedPayment.setCode(paymentInfo.getProductCode());
+                        succeedPayment.setTrace(pspInfoDTO.getProviderId());
+                        succeedPayment.setPaymentType(PaymentType.PAYMENT);
+                        intent.putExtra(Constants.SUCCEED_PAYMENT_INFO, succeedPayment);
+                        startActivityForResult(intent, 46);
+                    }
+                    resultStatus = ResultStatus.SUCCESS;
+                    break;
+                default:
+                    new HamPayDialog(activity).pspFailResultDialog(pspResponseCode, description);
+                    break;
+            }
+        }else {
+            new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
+        }
+
+        logEvent.log(serviceName);
+        SyncPspResult syncPspResult = new SyncPspResult();
+        syncPspResult.setResponseCode(pspResponseCode);
+        syncPspResult.setProductCode(paymentInfo.getProductCode());
+        syncPspResult.setType("PAYMENT");
+        syncPspResult.setSwTrace(pspTrackingCode);
+        syncPspResult.setTimestamp(System.currentTimeMillis());
+        syncPspResult.setStatus(0);
+        syncPspResult.setPspName(PSPName.SAMAN.getCode());
+        syncPspResult.setCardId(paymentInfo.getCardList().get(selectedCardIdIndex).getCardId());
+        dbHelper.createSyncPspResult(syncPspResult);
+
+        pspResultRequest.setPspResponseCode(pspResponseCode);
+        pspResultRequest.setProductCode(paymentInfo.getProductCode());
+        pspResultRequest.setTrackingCode(pspTrackingCode);
+        pspResultRequest.setResultType(PSPResultRequest.ResultType.PAYMENT);
+        pspResultRequest.setCardDTO(paymentInfo.getCardList().get(selectedCardIdIndex));
+        pspResultRequest.setPspName(PSPName.SAMAN);
+        requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(paymentInfo.getProductCode()));
+        requestPSPResult.execute(pspResultRequest);
+
+
+        AppManager.setMobileTimeout(context);
+        editor.commit();
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra(Constants.ACTIVITY_RESULT, resultStatus.ordinal());
+        setResult(Activity.RESULT_OK, returnIntent);
     }
 
     @Override
     public void keyExchangeProblem() {
 
-    }
-
-    public class RequestPurchaseTaskCompleteListener implements AsyncTaskCompleteListener<CBUArrayOfKeyValueOfstringstring> {
-
-        @Override
-        public void onTaskComplete(CBUArrayOfKeyValueOfstringstring purchaseResponseResponseMessage) {
-
-            hamPayDialog.dismisWaitingDialog();
-
-            String responseCode = null;
-            String description = null;
-            String SWTraceNum = null;
-            ResultStatus resultStatus = ResultStatus.FAILURE;
-            ServiceEvent serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
-            LogEvent logEvent = new LogEvent(context);
-
-            if (purchaseResponseResponseMessage != null) {
-                pspResultRequest = new PSPResultRequest();
-                for (CBUArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry : purchaseResponseResponseMessage) {
-                    if (s2sMapEntry.Key.equalsIgnoreCase("ResponseCode")) {
-                        responseCode = s2sMapEntry.Value;
-                    } else if (s2sMapEntry.Key.equalsIgnoreCase("Description")) {
-                        description = s2sMapEntry.Value;
-                    } else if (s2sMapEntry.Key.equalsIgnoreCase("SWTraceNum")) {
-                        SWTraceNum = s2sMapEntry.Value;
-                    }
-                }
-
-                if (responseCode != null) {
-                    if (responseCode.equalsIgnoreCase("2000")) {
-                        serviceName = ServiceEvent.PSP_PAYMENT_SUCCESS;
-                        if (paymentInfoDTO != null) {
-                            Intent intent = new Intent(context, PaymentCompletedActivity.class);
-                            SucceedPayment succeedPayment = new SucceedPayment();
-                            succeedPayment.setAmount(paymentInfoDTO.getAmount() + paymentInfoDTO.getFeeCharge());
-                            succeedPayment.setCode(paymentInfoDTO.getProductCode());
-                            succeedPayment.setTrace(pspInfoDTO.getProviderId());
-                            succeedPayment.setPaymentType(PaymentType.PAYMENT);
-                            intent.putExtra(Constants.SUCCEED_PAYMENT_INFO, succeedPayment);
-                            startActivityForResult(intent, 46);
-                        }
-                        resultStatus = ResultStatus.SUCCESS;
-                    } else if (responseCode.equalsIgnoreCase("17") || responseCode.equalsIgnoreCase("25") || responseCode.equalsIgnoreCase("27") || responseCode.equalsIgnoreCase("56")) {
-                        new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.token_special_issue));
-                        resultStatus = ResultStatus.FAILURE;
-                    } else {
-                        serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
-                        PspCode pspCode = new PspCode(context);
-                        if (pspCode.getDescription(responseCode) == null) {
-                            new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.token_special_issue));
-                        } else {
-                            new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(responseCode));
-                        }
-                        resultStatus = ResultStatus.FAILURE;
-                    }
-                    logEvent.log(serviceName);
-
-                    SyncPspResult syncPspResult = new SyncPspResult();
-                    syncPspResult.setResponseCode(responseCode);
-                    syncPspResult.setProductCode(paymentInfoDTO.getProductCode());
-                    syncPspResult.setType("PAYMENT");
-                    syncPspResult.setSwTrace(SWTraceNum);
-                    syncPspResult.setTimestamp(System.currentTimeMillis());
-                    syncPspResult.setStatus(0);
-                    syncPspResult.setPspName(PSPName.SAMAN.getCode());
-                    syncPspResult.setCardId(paymentInfoDTO.getCardList().get(selectedCardIdIndex).getCardId());
-                    dbHelper.createSyncPspResult(syncPspResult);
-
-                    pspResultRequest.setPspResponseCode(responseCode);
-                    pspResultRequest.setProductCode(paymentInfoDTO.getProductCode());
-                    pspResultRequest.setTrackingCode(SWTraceNum);
-                    pspResultRequest.setResultType(PSPResultRequest.ResultType.PAYMENT);
-                    pspResultRequest.setCardDTO(paymentInfoDTO.getCardList().get(selectedCardIdIndex));
-                    pspResultRequest.setPspName(PSPName.SAMAN);
-                    requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(paymentInfoDTO.getProductCode()));
-                    requestPSPResult.execute(pspResultRequest);
-
-                } else {
-                    new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
-                }
-                AppManager.setMobileTimeout(context);
-                editor.commit();
-
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra(Constants.ACTIVITY_RESULT, resultStatus.ordinal());
-                setResult(Activity.RESULT_OK, returnIntent);
-            } else {
-                new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
-            }
-
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
     }
 
     public class RequestPSPResultTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> {
@@ -753,18 +633,18 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
             if (latestPaymentResponseMessage != null) {
                 if (latestPaymentResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     serviceName = ServiceEvent.GET_LATEST_PAYMENT_SUCCESS;
-                    paymentInfoDTO = latestPaymentResponseMessage.getService().getPaymentInfoDTO();
+                    paymentInfo = latestPaymentResponseMessage.getService().getPaymentInfoDTO();
                     pspInfoDTO = latestPaymentResponseMessage.getService().getPaymentInfoDTO().getPspInfo();
-                    if (paymentInfoDTO == null) {
+                    if (paymentInfo == null) {
                         new HamPayDialog(activity).showFailPendingPaymentDialog(requestLatestPayment, latestPaymentRequest,
                                 Constants.LOCAL_ERROR_CODE,
                                 getString(R.string.msg_pending_not_found));
                         return;
                     }
 
-                    fillPayment(paymentInfoDTO, pspInfoDTO);
+                    fillPayment(paymentInfo, pspInfoDTO);
 
-                    dbHelper.createViewedPaymentRequest(paymentInfoDTO.getProductCode());
+                    dbHelper.createViewedPaymentRequest(paymentInfo.getProductCode());
 
                 } else if (latestPaymentResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     serviceName = ServiceEvent.GET_LATEST_PAYMENT_FAILURE;
@@ -806,9 +686,9 @@ public class InvoicePendingConfirmationActivity extends AppCompatActivity implem
                 if (paymentDetailResponseMessage.getService().getResultStatus() == ResultStatus.SUCCESS) {
                     serviceName = ServiceEvent.PAYMENT_DETAIL_SUCCESS;
                     pay_button.setVisibility(View.VISIBLE);
-                    paymentInfoDTO = paymentDetailResponseMessage.getService().getPaymentInfo();
+                    paymentInfo = paymentDetailResponseMessage.getService().getPaymentInfo();
                     pspInfoDTO = paymentDetailResponseMessage.getService().getPaymentInfo().getPspInfo();
-                    fillPayment(paymentInfoDTO, pspInfoDTO);
+                    fillPayment(paymentInfo, pspInfoDTO);
                 } else if (paymentDetailResponseMessage.getService().getResultStatus() == ResultStatus.AUTHENTICATION_FAILURE) {
                     serviceName = ServiceEvent.PAYMENT_DETAIL_FAILURE;
                     forceLogout();

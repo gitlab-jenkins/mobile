@@ -32,6 +32,8 @@ import xyz.homapay.hampay.common.core.model.response.PSPResultResponse;
 import xyz.homapay.hampay.common.core.model.response.SignToPayResponse;
 import xyz.homapay.hampay.common.core.model.response.UtilityBillDetailResponse;
 import xyz.homapay.hampay.common.core.model.response.dto.BillInfoDTO;
+import xyz.homapay.hampay.common.pspproxy.model.request.BillRequest;
+import xyz.homapay.hampay.common.pspproxy.model.response.BillResponse;
 import xyz.homapay.hampay.mobile.android.HamPayApplication;
 import xyz.homapay.hampay.mobile.android.Helper.DatabaseHelper;
 import xyz.homapay.hampay.mobile.android.R;
@@ -55,16 +57,20 @@ import xyz.homapay.hampay.mobile.android.model.BillsTokenDoWork;
 import xyz.homapay.hampay.mobile.android.model.PaymentType;
 import xyz.homapay.hampay.mobile.android.model.SucceedPayment;
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
+import xyz.homapay.hampay.mobile.android.p.billsPay.BillsPay;
+import xyz.homapay.hampay.mobile.android.p.billsPay.BillsPayImpl;
+import xyz.homapay.hampay.mobile.android.p.billsPay.BillsPayView;
 import xyz.homapay.hampay.mobile.android.util.AppManager;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
+import xyz.homapay.hampay.mobile.android.util.ModelLayerImpl;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
 import xyz.homapay.hampay.mobile.android.util.PspCode;
 import xyz.homapay.hampay.mobile.android.webservice.psp.bills.MKAArrayOfKeyValueOfstringstring;
 import xyz.homapay.hampay.mobile.android.webservice.psp.bills.MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring;
 
-public class ServiceBillsDetailActivity extends AppCompatActivity implements View.OnClickListener, CardNumberDialog.SelectCardDialogListener, OnTaskCompleted {
+public class ServiceBillsDetailActivity extends AppCompatActivity implements BillsPayView, View.OnClickListener, CardNumberDialog.SelectCardDialogListener, OnTaskCompleted {
 
     @BindView(R.id.pay_button)
     ImageView pay_button;
@@ -127,6 +133,8 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
     private String signature;
     private String providerId = null;
     private String authToken = "";
+    private BillsPay billsPay;
+    private BillRequest billRequest;
 
     public void backActionBar(View view) {
         finish();
@@ -178,6 +186,10 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
         ButterKnife.bind(this);
         context = this;
         activity = ServiceBillsDetailActivity.this;
+
+        billsPay = new BillsPayImpl(new ModelLayerImpl(activity), this);
+        billRequest = new BillRequest();
+
         dbHelper = new DatabaseHelper(context);
 
         PugNotification.with(context).cancel(Constants.INVOICE_NOTIFICATION_IDENTIFIER);
@@ -252,90 +264,20 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                 }
                 AppManager.setMobileTimeout(context);
                 editor.commit();
-                requestTokenBills = new RequestTokenBills(activity, new RequestPurchaseTaskCompleteListener(), billsInfo.getPspInfo().getPayURL());
 
-                billsTokenDoWork = new BillsTokenDoWork();
-                billsTokenDoWork.setUserName("appstore");
-                billsTokenDoWork.setPassword("sepapp");
-                billsTokenDoWork.setCellNumber(billsInfo.getPspInfo().getCellNumber().substring(1, billsInfo.getPspInfo().getCellNumber().length()));
-                billsTokenDoWork.setLangAByte((byte) 0);
-                billsTokenDoWork.setLangABoolean(false);
-                MKAArrayOfKeyValueOfstringstring vectorstring2stringMapEntry = new MKAArrayOfKeyValueOfstringstring();
-                MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-
-                s2sMapEntry.Key = "Amount";
-                s2sMapEntry.Value = String.valueOf(billsInfo.getAmount() + billsInfo.getFeeCharge());
-                vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                s2sMapEntry.Key = "Pin2";
-                s2sMapEntry.Value = userPinCode;
-                vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                s2sMapEntry.Key = "ThirdParty";
-                s2sMapEntry.Value = billsInfo.getProductCode();
-                vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                s2sMapEntry.Key = "TerminalId";
-                s2sMapEntry.Value = billsInfo.getPspInfo().getTerminalId();
-                vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                s2sMapEntry.Key = "SenderTerminalId";
-                s2sMapEntry.Value = billsInfo.getPspInfo().getSenderTerminalId();
-                vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                s2sMapEntry.Key = "Email";
-                s2sMapEntry.Value = "";
-                vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                s2sMapEntry.Key = "IPAddress";
-                s2sMapEntry.Value = billsInfo.getPspInfo().getIpAddress();
-                vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                s2sMapEntry.Key = "CVV2";
-                s2sMapEntry.Value = userCVV2;
-                vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                s2sMapEntry.Key = "ExpDate";
-                s2sMapEntry.Value = billsInfo.getCardList().get(selectedCardIdIndex).getExpireDate();
-                vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                s2sMapEntry.Key = "CardId";
-                s2sMapEntry.Value = billsInfo.getCardList().get(selectedCardIdIndex).getCardId();
-                vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                s2sMapEntry.Key = "ResNum";
-                s2sMapEntry.Value = billsInfo.getProductCode();
-                vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                s2sMapEntry.Key = "BillId";
-                s2sMapEntry.Value = billsInfo.getBillId();
-                vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                s2sMapEntry.Key = "PayId";
-                s2sMapEntry.Value = billsInfo.getPayId();
-                vectorstring2stringMapEntry.add(s2sMapEntry);
-
-                s2sMapEntry = new MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring();
-                s2sMapEntry.Key = "Signature";
-                s2sMapEntry.Value = signature;
-                vectorstring2stringMapEntry.add(s2sMapEntry);
-
-
-                billsTokenDoWork.setVectorstring2stringMapEntry(vectorstring2stringMapEntry);
-                requestTokenBills.execute(billsTokenDoWork);
-
+                billRequest.setAmount(billsInfo.getAmount() + billsInfo.getFeeCharge());
+                billRequest.setPin2(userPinCode);
+                billRequest.setProductCode(billsInfo.getProductCode());
+                billRequest.setTerminalId(billsInfo.getPspInfo().getTerminalId());
+                billRequest.setSenderTerminalId(billsInfo.getPspInfo().getSenderTerminalId());
+                billRequest.setIpAddress(billsInfo.getPspInfo().getIpAddress());
+                billRequest.setCvv2(userCVV2);
+                billRequest.setExpirationDate(billsInfo.getCardList().get(selectedCardIdIndex).getExpireDate());
+                billRequest.setCardId(billsInfo.getCardList().get(selectedCardIdIndex).getCardId());
+                billRequest.setBillId(billsInfo.getBillId());
+                billRequest.setPayId(billsInfo.getPayId());
+                billRequest.setDigitalSignature(signature);
+                billsPay.billsPay(billRequest, AppManager.getAuthToken(context), billsInfo.getPspInfo().getPspEncKey(), billsInfo.getPspInfo().getIvKey());
             }
         });
     }
@@ -555,6 +497,92 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Vie
                 userCVV2 += digit;
             }
         }
+    }
+
+    @Override
+    public void showProgress() {
+        hamPayDialog.showWaitingDialog("");
+    }
+
+    @Override
+    public void cancelProgress() {
+        hamPayDialog.dismisWaitingDialog();
+    }
+
+    @Override
+    public void onError() {
+        hamPayDialog.dismisWaitingDialog();
+    }
+
+    @Override
+    public void onBillPayResponse(boolean state, ResponseMessage<BillResponse> data, String message) {
+        String pspResponseCode = null;
+        String description;
+        String pspTrackingCode = null;
+        ResultStatus resultStatus = ResultStatus.FAILURE;
+        ServiceEvent serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
+        LogEvent logEvent = new LogEvent(context);
+
+        if (data != null) {
+            pspResponseCode = data.getService().getPspResponseCode();
+            pspTrackingCode = data.getService().getPspTrackingCode();
+            description = data.getService().getResultStatus().getDescription();
+            switch (data.getService().getResultStatus()) {
+                case SUCCESS:
+                    pspResultRequest = new PSPResultRequest();
+                    serviceName = ServiceEvent.PSP_PAYMENT_SUCCESS;
+                    if (billsInfo != null) {
+                        Intent intent = new Intent(context, PaymentCompletedActivity.class);
+                        SucceedPayment succeedPayment = new SucceedPayment();
+                        succeedPayment.setAmount(billsInfo.getAmount() + billsInfo.getFeeCharge());
+                        succeedPayment.setCode(billsInfo.getBillId());
+                        succeedPayment.setTrace(billsInfo.getPspInfo().getProviderId());
+                        succeedPayment.setPaymentType(PaymentType.BILLS);
+                        intent.putExtra(Constants.SUCCEED_PAYMENT_INFO, succeedPayment);
+                        startActivityForResult(intent, 47);
+                    }
+                    resultStatus = ResultStatus.SUCCESS;
+                    break;
+                default:
+                    new HamPayDialog(activity).pspFailResultDialog(pspResponseCode, description);
+                    break;
+            }
+        }else {
+            new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
+        }
+
+        logEvent.log(serviceName);
+        SyncPspResult syncPspResult = new SyncPspResult();
+        syncPspResult.setResponseCode(pspResponseCode);
+        syncPspResult.setProductCode(billsInfo.getProductCode());
+        syncPspResult.setType("UTILITY_BILL");
+        syncPspResult.setSwTrace(pspTrackingCode);
+        syncPspResult.setTimestamp(System.currentTimeMillis());
+        syncPspResult.setStatus(0);
+        syncPspResult.setPspName(PSPName.SAMAN.getCode());
+        syncPspResult.setCardId(billsInfo.getCardList().get(selectedCardIdIndex).getCardId());
+        dbHelper.createSyncPspResult(syncPspResult);
+
+        pspResultRequest.setPspResponseCode(pspResponseCode);
+        pspResultRequest.setProductCode(billsInfo.getProductCode());
+        pspResultRequest.setTrackingCode(pspTrackingCode);
+        pspResultRequest.setResultType(PSPResultRequest.ResultType.UTILITY_BILL);
+        pspResultRequest.setCardDTO(billsInfo.getCardList().get(selectedCardIdIndex));
+        pspResultRequest.setPspName(PSPName.SAMAN);
+        requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(billsInfo.getProductCode()));
+        requestPSPResult.execute(pspResultRequest);
+
+
+        AppManager.setMobileTimeout(context);
+        editor.commit();
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra(Constants.ACTIVITY_RESULT, resultStatus.ordinal());
+        setResult(Activity.RESULT_OK, returnIntent);
+    }
+
+    @Override
+    public void keyExchangeProblem() {
+
     }
 
     public class RequestPSPResultTaskCompleteListener implements AsyncTaskCompleteListener<ResponseMessage<PSPResultResponse>> {

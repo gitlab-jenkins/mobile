@@ -15,7 +15,7 @@ import xyz.homapay.hampay.mobile.android.m.worker.common.ServiceType;
 public class NetPayNetWorker extends NetWorker<NetPayService> {
 
     public NetPayNetWorker(ModelLayer modelLayer, byte[] encKey, byte[] ivKey) {
-        super(modelLayer, NetPayService.class, encKey, ivKey, true, true, ServiceType.PSP);
+        super(modelLayer, NetPayService.class, encKey, ivKey, true, false, ServiceType.PSP);
     }
 
     public void netPay(String body, final OnNetworkLoadListener<ResponseMessage<NetPayResponse>> listener) {

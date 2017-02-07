@@ -207,7 +207,7 @@ public class TrustedOkHttpClient {
     public static OkHttpClient getTrustedOkHttpClient(ModelLayer modelLayer, byte[] encKey, byte[] ivKey, boolean encryption, boolean gZip) {
         try {
             // Create a trust manager that does not validate certificate chains
-            final TrustManager[] trustedCerts = new X509TrustManager[]{new HamPayX509TrustManager(modelLayer.getSSLKeyStore().getAppKeyStore())};
+            final TrustManager[] trustedCerts = new X509TrustManager[]{new HamPayX509TrustManager(modelLayer.getSSLKeyStore().getTokenPayKeyStore())};
 
             // Install the all-trusting trust manager
             final SSLContext sslContext;
