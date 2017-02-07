@@ -359,7 +359,7 @@ public class GcmMessageHandler extends IntentService {
     public GcmMessageHandler() {
         super("GcmMessageHandler");
     }
-
+    //Test
     @Override
     public void onCreate() {
         // TODO Auto-generated method stub
