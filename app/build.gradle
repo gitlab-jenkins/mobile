@@ -83,7 +83,7 @@ android {
             buildConfigField "String", "HTTPS_BASE_URL", "\"https://mobile.hampay.ir\""
             buildConfigField "String", "HTTP_BASE_URL", "\"http://mobile.hampay.ir\""
             buildConfigField "String", "PURE_SERVER_URL", "\"mobile.hampay.ir\""
-            buildConfigField "String", "PSP_SERVER_URL", "\"mobile.hampay.com\""
+            buildConfigField "String", "PSP_SERVER_URL", "\"https://mobile.hampay.com\""
 
             manifestPlaceholders = [appName: "DEV2_hampay"]
 
