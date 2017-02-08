@@ -99,20 +99,10 @@ import xyz.homapay.hampay.common.core.model.response.UnlinkUserResponse;
 import xyz.homapay.hampay.common.core.model.response.UploadImageResponse;
 import xyz.homapay.hampay.common.core.model.response.UserPaymentResponse;
 import xyz.homapay.hampay.common.core.model.response.UserProfileResponse;
-import xyz.homapay.hampay.mobile.android.model.BillsTokenDoWork;
-import xyz.homapay.hampay.mobile.android.model.DoWorkInfo;
 import xyz.homapay.hampay.mobile.android.model.LogoutData;
 import xyz.homapay.hampay.mobile.android.model.LogoutResponse;
-import xyz.homapay.hampay.mobile.android.model.TopUpTokenDoWork;
-import xyz.homapay.hampay.mobile.android.ssl.AllowHamPaySSL;
 import xyz.homapay.hampay.mobile.android.util.Constants;
 import xyz.homapay.hampay.mobile.android.util.UserContacts;
-import xyz.homapay.hampay.mobile.android.webservice.psp.CBUArrayOfKeyValueOfstringstring;
-import xyz.homapay.hampay.mobile.android.webservice.psp.CBUBasicHttpBinding_IGeneralService;
-import xyz.homapay.hampay.mobile.android.webservice.psp.bills.MKAArrayOfKeyValueOfstringstring;
-import xyz.homapay.hampay.mobile.android.webservice.psp.bills.MKABasicHttpBinding_IGeneralService;
-import xyz.homapay.hampay.mobile.android.webservice.psp.topup.HHBArrayOfKeyValueOfstringstring;
-import xyz.homapay.hampay.mobile.android.webservice.psp.topup.HHBBasicHttpBinding_IGeneralService;
 
 /**
  * Created by amir on 6/6/15.
@@ -681,42 +671,6 @@ public class WebServices  {
         proxyService.closeConnection();
         return bitmap;
     }
-
-
-    public CBUArrayOfKeyValueOfstringstring purchaseResponse(DoWorkInfo doWorkInfo, String tokenPayUrl) throws Exception {
-
-        AllowHamPaySSL allowHamPaySSL = new AllowHamPaySSL(context);
-        allowHamPaySSL.enableHamPaySSL();
-
-//        CBUBasicHttpBinding_IGeneralService basicHttpBinding_iTokenPay = new CBUBasicHttpBinding_IGeneralService(null,"https://" + HpConstants.SERVER + "/saman/psp/pay");
-//        CBUBasicHttpBinding_IGeneralService basicHttpBinding_iTokenPay = new CBUBasicHttpBinding_IGeneralService(null, "https://" + "uat.hampay.ir" + "/saman/psp/netpay");
-        CBUBasicHttpBinding_IGeneralService basicHttpBinding_iTokenPay = new CBUBasicHttpBinding_IGeneralService(null, tokenPayUrl);
-        CBUArrayOfKeyValueOfstringstring responseMessage = basicHttpBinding_iTokenPay.DoWork(doWorkInfo.getUserName(), doWorkInfo.getPassword(), doWorkInfo.getCellNumber(),null,doWorkInfo.getVectorstring2stringMapEntry());
-
-        return responseMessage;
-    }
-
-
-    public MKAArrayOfKeyValueOfstringstring tokenBills(BillsTokenDoWork doWorkInfo, String payUrl) throws Exception {
-
-        AllowHamPaySSL allowHamPaySSL = new AllowHamPaySSL(context);
-        allowHamPaySSL.enableHamPaySSL();
-        MKABasicHttpBinding_IGeneralService basicHttpBinding_iTokenPay = new MKABasicHttpBinding_IGeneralService(null, payUrl);
-        MKAArrayOfKeyValueOfstringstring responseMessage = basicHttpBinding_iTokenPay.DoWork(doWorkInfo.getUserName(), doWorkInfo.getPassword(), doWorkInfo.getCellNumber(), null, doWorkInfo.getVectorstring2stringMapEntry());
-
-        return responseMessage;
-    }
-
-    public HHBArrayOfKeyValueOfstringstring tokenTopUp(TopUpTokenDoWork doWorkInfo, String payUrl) throws Exception {
-
-        AllowHamPaySSL allowHamPaySSL = new AllowHamPaySSL(context);
-        allowHamPaySSL.enableHamPaySSL();
-        HHBBasicHttpBinding_IGeneralService basicHttpBinding_iTokenPay = new HHBBasicHttpBinding_IGeneralService(null, payUrl);
-        HHBArrayOfKeyValueOfstringstring responseMessage = basicHttpBinding_iTokenPay.DoWork(doWorkInfo.getUserName(), doWorkInfo.getPassword(), doWorkInfo.getCellNumber(), null, doWorkInfo.getVectorstring2stringMapEntry());
-
-        return responseMessage;
-    }
-
 
     public ResponseMessage<LatestPurchaseResponse> latestUserPurchase(LatestPurchaseRequest latestPurchaseRequest) throws IOException{
 

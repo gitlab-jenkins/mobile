@@ -48,7 +48,6 @@ import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestLatestPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestPSPResult;
-import xyz.homapay.hampay.mobile.android.async.RequestPurchase;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchaseDetail;
 import xyz.homapay.hampay.mobile.android.async.RequestPurchaseInfo;
 import xyz.homapay.hampay.mobile.android.async.task.SignToPayTask;
@@ -149,7 +148,6 @@ public class RequestBusinessPayDetailActivity extends AppCompatActivity implemen
     private String providerId = null;
     private RequestPSPResult requestPSPResult;
     private PSPResultRequest pspResultRequest;
-    private RequestPurchase requestPurchase;
     private RequestPurchaseInfo requestPurchaseInfo;
     private PurchaseInfoRequest purchaseInfoRequest;
     private CurrencyFormatter currencyFormatter;

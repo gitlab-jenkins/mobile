@@ -41,7 +41,6 @@ import xyz.homapay.hampay.mobile.android.animation.Collapse;
 import xyz.homapay.hampay.mobile.android.animation.Expand;
 import xyz.homapay.hampay.mobile.android.async.AsyncTaskCompleteListener;
 import xyz.homapay.hampay.mobile.android.async.RequestPSPResult;
-import xyz.homapay.hampay.mobile.android.async.RequestTokenBills;
 import xyz.homapay.hampay.mobile.android.async.task.SignToPayTask;
 import xyz.homapay.hampay.mobile.android.async.task.UtilityBillDetailTask;
 import xyz.homapay.hampay.mobile.android.async.task.impl.OnTaskCompleted;
@@ -53,7 +52,6 @@ import xyz.homapay.hampay.mobile.android.firebase.LogEvent;
 import xyz.homapay.hampay.mobile.android.firebase.service.ServiceEvent;
 import xyz.homapay.hampay.mobile.android.img.ImageHelper;
 import xyz.homapay.hampay.mobile.android.model.AppState;
-import xyz.homapay.hampay.mobile.android.model.BillsTokenDoWork;
 import xyz.homapay.hampay.mobile.android.model.PaymentType;
 import xyz.homapay.hampay.mobile.android.model.SucceedPayment;
 import xyz.homapay.hampay.mobile.android.model.SyncPspResult;
@@ -66,9 +64,6 @@ import xyz.homapay.hampay.mobile.android.util.CurrencyFormatter;
 import xyz.homapay.hampay.mobile.android.util.JalaliConvert;
 import xyz.homapay.hampay.mobile.android.util.ModelLayerImpl;
 import xyz.homapay.hampay.mobile.android.util.PersianEnglishDigit;
-import xyz.homapay.hampay.mobile.android.util.PspCode;
-import xyz.homapay.hampay.mobile.android.webservice.psp.bills.MKAArrayOfKeyValueOfstringstring;
-import xyz.homapay.hampay.mobile.android.webservice.psp.bills.MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring;
 
 public class ServiceBillsDetailActivity extends AppCompatActivity implements BillsPayView, View.OnClickListener, CardNumberDialog.SelectCardDialogListener, OnTaskCompleted {
 
@@ -115,7 +110,6 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Bil
     private DatabaseHelper dbHelper;
     private PSPResultRequest pspResultRequest;
     private RequestPSPResult requestPSPResult;
-    private RequestTokenBills requestTokenBills;
     private CurrencyFormatter currencyFormatter;
     private Context context;
     private Activity activity;
@@ -128,7 +122,6 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Bil
     private PersianEnglishDigit persian = new PersianEnglishDigit();
     private HamPayDialog hamPayDialog;
     private BillInfoDTO billsInfo = null;
-    private BillsTokenDoWork billsTokenDoWork;
     private int selectedCardIdIndex = -1;
     private String signature;
     private String providerId = null;
@@ -621,106 +614,4 @@ public class ServiceBillsDetailActivity extends AppCompatActivity implements Bil
             hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
         }
     }
-
-    public class RequestPurchaseTaskCompleteListener implements AsyncTaskCompleteListener<MKAArrayOfKeyValueOfstringstring> {
-
-        @Override
-        public void onTaskComplete(MKAArrayOfKeyValueOfstringstring purchaseResponseResponseMessage) {
-
-            hamPayDialog.dismisWaitingDialog();
-
-            String responseCode = null;
-            String description = null;
-            String SWTraceNum = null;
-            ResultStatus resultStatus = ResultStatus.FAILURE;
-            ServiceEvent serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
-            LogEvent logEvent = new LogEvent(context);
-
-            if (purchaseResponseResponseMessage != null) {
-                pspResultRequest = new PSPResultRequest();
-                for (MKAArrayOfKeyValueOfstringstring_KeyValueOfstringstring s2sMapEntry : purchaseResponseResponseMessage) {
-                    if (s2sMapEntry.Key.equalsIgnoreCase("ResponseCode")) {
-                        responseCode = s2sMapEntry.Value;
-                    } else if (s2sMapEntry.Key.equalsIgnoreCase("Description")) {
-                        description = s2sMapEntry.Value;
-                    } else if (s2sMapEntry.Key.equalsIgnoreCase("SWTraceNum")) {
-                        SWTraceNum = s2sMapEntry.Value;
-                    }
-                }
-
-                if (responseCode != null) {
-                    if (responseCode.equalsIgnoreCase("1") && SWTraceNum != null) {
-                        serviceName = ServiceEvent.PSP_PAYMENT_SUCCESS;
-                        if (billsInfo != null) {
-                            Intent intent = new Intent(context, PaymentCompletedActivity.class);
-                            SucceedPayment succeedPayment = new SucceedPayment();
-                            succeedPayment.setAmount(billsInfo.getAmount() + billsInfo.getFeeCharge());
-                            succeedPayment.setCode(billsInfo.getBillId());
-                            succeedPayment.setTrace(billsInfo.getPspInfo().getProviderId());
-                            succeedPayment.setPaymentType(PaymentType.BILLS);
-                            intent.putExtra(Constants.SUCCEED_PAYMENT_INFO, succeedPayment);
-                            startActivityForResult(intent, 47);
-                        }
-                        resultStatus = ResultStatus.SUCCESS;
-                    } else if (responseCode.equalsIgnoreCase("27")) {
-                        new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.bill_already_paid));
-                        resultStatus = ResultStatus.FAILURE;
-                    } else if (responseCode.equalsIgnoreCase("17") || responseCode.equalsIgnoreCase("25") || responseCode.equalsIgnoreCase("56")) {
-                        new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.token_special_issue));
-                        resultStatus = ResultStatus.FAILURE;
-                    } else {
-                        serviceName = ServiceEvent.PSP_PAYMENT_FAILURE;
-                        PspCode pspCode = new PspCode(context);
-                        if (pspCode.getDescription(responseCode) == null) {
-                            new HamPayDialog(activity).pspFailResultDialog(responseCode, getString(R.string.token_special_issue));
-                        } else {
-                            new HamPayDialog(activity).pspFailResultDialog(responseCode, pspCode.getDescription(responseCode));
-                        }
-                        resultStatus = ResultStatus.FAILURE;
-                    }
-                    logEvent.log(serviceName);
-
-                    SyncPspResult syncPspResult = new SyncPspResult();
-                    syncPspResult.setResponseCode(responseCode);
-                    syncPspResult.setProductCode(billsInfo.getProductCode());
-                    syncPspResult.setType("UTILITY_BILL");
-                    syncPspResult.setSwTrace(SWTraceNum);
-                    syncPspResult.setTimestamp(System.currentTimeMillis());
-                    syncPspResult.setStatus(0);
-                    syncPspResult.setPspName(PSPName.SAMAN.getCode());
-                    syncPspResult.setCardId(billsInfo.getCardList().get(selectedCardIdIndex).getCardId());
-                    dbHelper.createSyncPspResult(syncPspResult);
-
-                    pspResultRequest.setPspResponseCode(responseCode);
-                    pspResultRequest.setProductCode(billsInfo.getProductCode());
-                    pspResultRequest.setTrackingCode(SWTraceNum);
-                    pspResultRequest.setResultType(PSPResultRequest.ResultType.UTILITY_BILL);
-                    pspResultRequest.setCardDTO(billsInfo.getCardList().get(selectedCardIdIndex));
-                    pspResultRequest.setPspName(PSPName.SAMAN);
-                    syncPspResult.setPspName(PSPName.SAMAN.getCode());
-                    syncPspResult.setCardId(billsInfo.getCardList().get(selectedCardIdIndex).getCardId());
-                    requestPSPResult = new RequestPSPResult(context, new RequestPSPResultTaskCompleteListener(billsInfo.getProductCode()));
-                    requestPSPResult.execute(pspResultRequest);
-
-                } else {
-                    new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
-                }
-                AppManager.setMobileTimeout(context);
-                editor.commit();
-
-                Intent returnIntent = new Intent();
-                returnIntent.putExtra(Constants.ACTIVITY_RESULT, resultStatus.ordinal());
-                setResult(Activity.RESULT_OK, returnIntent);
-            } else {
-                new HamPayDialog(activity).pspFailResultDialog(Constants.LOCAL_ERROR_CODE, getString(R.string.msg_soap_timeout));
-            }
-
-        }
-
-        @Override
-        public void onTaskPreRun() {
-            hamPayDialog.showWaitingDialog(prefs.getString(Constants.REGISTERED_USER_NAME, ""));
-        }
-    }
-
 }
