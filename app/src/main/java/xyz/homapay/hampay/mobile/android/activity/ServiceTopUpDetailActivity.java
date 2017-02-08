@@ -265,7 +265,7 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Top
                 topupRequest.setCellNumber(topUpInfo.getCellNumber().substring(1, topUpInfo.getCellNumber().length()));
                 topupRequest.setChargeType(topUpInfo.getChargeType());
                 topupRequest.setProductCode(topUpInfo.getProductCode());
-                topupRequest.setSenderTerminalId(topUpInfo.getPspInfo().getTerminalId());
+                topupRequest.setSenderTerminalId(topUpInfo.getPspInfo().getSenderTerminalId());
                 topupRequest.setIpAddress(topUpInfo.getPspInfo().getIpAddress());
                 topupRequest.setCvv2(userCVV2);
                 topupRequest.setExpirationDate(topUpInfo.getCardList().get(selectedCardIdIndex).getExpireDate());
@@ -513,12 +513,12 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Top
 
     @Override
     public void cancelProgress() {
-        hamPayDialog.dismisWaitingDialog();
+//        hamPayDialog.dismisWaitingDialog();
     }
 
     @Override
     public void onError() {
-        hamPayDialog.dismisWaitingDialog();
+//        hamPayDialog.dismisWaitingDialog();
     }
 
 
@@ -552,7 +552,8 @@ public class ServiceTopUpDetailActivity extends AppCompatActivity implements Top
                     resultStatus = ResultStatus.SUCCESS;
                     break;
                 default:
-                    new HamPayDialog(activity).pspFailResultDialog(pspResponseCode, description);
+                    hamPayDialog.dismisWaitingDialog();
+                    hamPayDialog.pspFailResultDialog(pspResponseCode, description);
                     break;
             }
         }else {
