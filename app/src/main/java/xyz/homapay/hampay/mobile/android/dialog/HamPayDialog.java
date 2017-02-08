@@ -1006,12 +1006,8 @@ public class HamPayDialog {
         if (!activity.isFinishing()) {
             dialog = new HamPayCustomDialog(view, activity, 0);
             dialog.show();
+            dialog.setOnDismissListener(dialog1 -> activity.finish());
         }
-
-        dialog.setOnDismissListener(dialog1 -> {
-            activity.finish();
-        });
-
     }
 
     public void showFailPendingPurchaseDialog(final RequestLatestPurchase requestLatestPurchase,
